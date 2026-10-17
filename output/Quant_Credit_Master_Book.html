@@ -212,10 +212,36 @@
 <h1 class="title">Systematic &amp; Quantitative Credit: From PJT RSSG to
 the Automated Desk</h1>
 <p class="subtitle">Mathematical Foundations, Microstructure, LMT Game
-Theory, and Alpha Isolation (Edition 1, Build: 2026-10-17 23:04 UTC)</p>
+Theory, and Alpha Isolation (Edition 1, Build: 2026-10-17 23:22 UTC)</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
+<li><a
+href="#preface-read-the-credit-agreement-then-take-the-derivative"
+id="toc-preface-read-the-credit-agreement-then-take-the-derivative">Preface:
+Read the Credit Agreement, Then Take the Derivative</a>
+<ul>
+<li><a href="#why-this-book-exists" id="toc-why-this-book-exists">Why
+this book exists</a></li>
+<li><a href="#who-this-is-for" id="toc-who-this-is-for">Who this is
+for</a></li>
+<li><a href="#three-ways-through-the-book"
+id="toc-three-ways-through-the-book">Three ways through the
+book</a></li>
+<li><a href="#the-cast" id="toc-the-cast">The cast</a></li>
+<li><a href="#how-a-chapter-is-built"
+id="toc-how-a-chapter-is-built">How a chapter is built</a></li>
+<li><a
+href="#a-note-on-how-this-book-is-made-and-why-you-should-check-the-build-stamp"
+id="toc-a-note-on-how-this-book-is-made-and-why-you-should-check-the-build-stamp">A
+note on how this book is made, and why you should check the build
+stamp</a></li>
+<li><a href="#the-integrity-pledge" id="toc-the-integrity-pledge">The
+integrity pledge</a></li>
+</ul></li>
+<li><a href="#part-i-the-cognitive-bridge-the-state-of-quant-credit"
+id="toc-part-i-the-cognitive-bridge-the-state-of-quant-credit">Part I:
+The Cognitive Bridge &amp; The State of Quant Credit</a></li>
 <li><a
 href="#chapter-1-the-anthology-of-the-desk-the-modern-quant-credit-landscape"
 id="toc-chapter-1-the-anthology-of-the-desk-the-modern-quant-credit-landscape">Chapter
@@ -234,8 +260,466 @@ Hybrid PJT RSSG + Quant Architect Owns the Future</a></li>
 id="toc-evaluating-the-market-set-in-quantitative-credit">1.2 Evaluating
 the Market Set in Quantitative Credit</a></li>
 </ul></li>
+<li><a
+href="#part-ii-mathematical-probabilistic-foundations-for-ai-specifiers"
+id="toc-part-ii-mathematical-probabilistic-foundations-for-ai-specifiers">Part
+II: Mathematical &amp; Probabilistic Foundations for AI
+Specifiers</a></li>
+<li><a href="#part-iii-isolating-idiosyncratic-alpha-ido-factors-trend"
+id="toc-part-iii-isolating-idiosyncratic-alpha-ido-factors-trend">Part
+III: Isolating Idiosyncratic Alpha (IDO), Factors &amp; Trend</a></li>
+<li><a href="#part-iv-quantifying-special-situations-pjt-rssg-mechanics"
+id="toc-part-iv-quantifying-special-situations-pjt-rssg-mechanics">Part
+IV: Quantifying Special Situations &amp; PJT RSSG Mechanics</a></li>
+<li><a href="#part-v-market-microstructure-portfolio-trading-etfs-loans"
+id="toc-part-v-market-microstructure-portfolio-trading-etfs-loans">Part
+V: Market Microstructure, Portfolio Trading, ETFs &amp; Loans</a></li>
+<li><a href="#part-vi-capital-structure-arbitrage-volatility-surfaces"
+id="toc-part-vi-capital-structure-arbitrage-volatility-surfaces">Part
+VI: Capital Structure Arbitrage &amp; Volatility Surfaces</a></li>
+<li><a href="#part-vii-alternative-data-nlp-ai-systems"
+id="toc-part-vii-alternative-data-nlp-ai-systems">Part VII: Alternative
+Data, NLP, AI &amp; Systems</a></li>
+<li><a href="#part-viii-the-portfolio-managers-playbook"
+id="toc-part-viii-the-portfolio-managers-playbook">Part VIII: The
+Portfolio Manager’s Playbook</a></li>
+<li><a href="#appendix-a-notation-units-conventions"
+id="toc-appendix-a-notation-units-conventions">Appendix A: Notation,
+Units &amp; Conventions</a>
+<ul>
+<li><a href="#a.1-three-questions-to-ask-of-every-symbol"
+id="toc-a.1-three-questions-to-ask-of-every-symbol">A.1 Three questions
+to ask of every symbol</a></li>
+<li><a href="#a.2-the-master-notation-table"
+id="toc-a.2-the-master-notation-table">A.2 The master notation
+table</a></li>
+<li><a href="#a.3-collisions-and-how-the-book-resolves-them"
+id="toc-a.3-collisions-and-how-the-book-resolves-them">A.3 Collisions
+and how the book resolves them</a></li>
+<li><a href="#a.4-time-dates-and-day-counts"
+id="toc-a.4-time-dates-and-day-counts">A.4 Time, dates, and day
+counts</a></li>
+<li><a href="#a.5-prices-yields-and-spreads"
+id="toc-a.5-prices-yields-and-spreads">A.5 Prices, yields, and
+spreads</a></li>
+<li><a href="#a.6-recovery-conventions"
+id="toc-a.6-recovery-conventions">A.6 Recovery conventions</a></li>
+<li><a href="#a.7-return-conventions"
+id="toc-a.7-return-conventions">A.7 Return conventions</a></li>
+<li><a href="#a.8-sizes-signs-and-desk-arithmetic"
+id="toc-a.8-sizes-signs-and-desk-arithmetic">A.8 Sizes, signs, and desk
+arithmetic</a></li>
+<li><a href="#a.9-glossary-of-desk-and-restructuring-terms"
+id="toc-a.9-glossary-of-desk-and-restructuring-terms">A.9 Glossary of
+desk and restructuring terms</a></li>
+</ul></li>
 </ul>
 </nav>
+<section id="preface-read-the-credit-agreement-then-take-the-derivative"
+class="level1">
+<h1>Preface: Read the Credit Agreement, Then Take the Derivative</h1>
+<p>At 2:58 p.m. on a Friday, three weeks into his new job, Theo Marsh
+gets a request for quote. A client wants a bid on $15 million of a
+single-B bond issued by a company whose lender call is on Monday. Theo
+knows this company. In a previous life he read its credit agreement
+twice, in a conference room, over cold Thai food, and he can still tell
+you the Available Amount builder basket’s starting dollar amount and
+which section of Article VII the sponsor would use to move the
+crown-jewel subsidiary out of the collateral package. He also knows that
+the person on the other end of this RFQ might know all of that too. Or
+might be a mutual fund rebalancing into month-end. He has three seconds
+to decide. His old job gave him three weeks.</p>
+<p>“What’s the pot,” says Ines Okafor from the next seat, not looking
+up, “what are the odds, and who at this table knows more than you?”</p>
+<p>Theo’s first instinct is to ask what the credit agreement says. That
+instinct is correct. At this clock speed it is also useless, unless
+somebody has already turned the credit agreement into a number. This
+book is about how to be that somebody.</p>
+<section id="why-this-book-exists" class="level2">
+<h2>Why this book exists</h2>
+<p>There are two tribes in credit, and they have been talking past each
+other for about twenty years.</p>
+<p>The first tribe sits in restructuring and special situations groups,
+at PJT Partners’ RSSG and the handful of places like it. Its unit of
+work is the bespoke legal bottleneck. It spends ninety hours building a
+13-week cash flow model, reads 350-page credit agreements for sport,
+knows where the trapdoors are (Restricted Payments baskets, J.Crew-style
+unrestricted-subsidiary drop-downs, Serta-style non-pro-rata uptiers,
+EBITDA add-back caps, springing maturities), and understands Chapter 11
+as a repeated game with exclusivity periods, DIP roll-ups, ad hoc
+groups, and 363 sales. Its edge is information that does not live in a
+time series. Its weakness is that it treats every credit as an artisanal
+snowflake and has never been forced to write its judgment down as a
+probability.</p>
+<p>The second tribe sits on systematic market-making desks and in
+multi-strategy quant pods. Its unit of work is conditional expected
+value per unit of inventory variance per day. It prices adverse
+selection in three seconds, hedges in CDX and Treasury futures, measures
+its own mistakes with markouts, and runs factor models across two
+thousand issuers. Its edge is turning information into a repeatable,
+sized, hedged, measured bet. Its weakness is that it treats CUSIPs as
+exchangeable time series, and so it finds out about uptiers from the
+price.</p>
+<p>The thesis of this book is that these are the same job performed at
+different clock speeds. Both tribes estimate a distribution of outcomes
+conditional on what they know, and then price it. The banker does it in
+weeks with a spreadsheet and a lawyer; the market maker does it in
+seconds with a model and a hedge. The bridge between them is
+codification: turning legal prose into state-space variables, process
+knowledge into transition matrices, and judgment into priors that a
+model can update. A desk that has done this can price the Friday RFQ
+correctly. A desk that has not is the counterparty the informed seller
+was looking for.</p>
+<p>Two trends make this the right moment to build the bridge, and trends
+are a preoccupation of this book. The first is electronification.
+Between TRACE in 2002 and today’s all-to-all platforms, portfolio
+trades, and ETF baskets, corporate credit went from a market where
+prices were discovered by phone and by grudge (Mags Dunleavy’s phrase,
+and she was there) to one that produces data exhaust at a rate that
+makes systematic strategies possible. Chapter 2 dates and sources that
+story. The second trend is that AI coding agents have made the specifier
+the scarce resource. The person who can write a correct specification
+for a priming-risk model, with units, boundary conditions, and edge
+cases, now matters more than the person who can type it. The ex-RSSG
+banker who learns to specify is suddenly holding something a pure
+mathematician cannot buy: a decade of knowing which clause matters.</p>
+<p>So the book is addressed to a technical practitioner sitting in, or
+leaving, an elite fundamental restructuring seat for a top-tier
+systematic desk or quant credit pod, and it teaches that reader how to
+weaponize what they already know. Everyone else is welcome; you will
+just be reading over Theo’s shoulder.</p>
+</section>
+<section id="who-this-is-for" class="level2">
+<h2>Who this is for</h2>
+<p>In rough order of how hard we are thinking about you:</p>
+<ol type="1">
+<li><strong>The RSSG banker going systematic.</strong> You know credit
+agreements cold and have never priced adverse selection in three
+seconds. The math is taught from first principles up through stochastic
+calculus and machine learning, and every model is tied back to a clause,
+a docket entry, or a trade you already understand.</li>
+<li><strong>The quant moving into credit.</strong> You know the math and
+have been quietly losing money on structural breaks. This book explains
+where the breaks come from, in enough legal detail that you can model
+them, and in no more.</li>
+<li><strong>The AI-agent specifier.</strong> You direct coding agents
+and need to know <em>why</em> an objective function is written the way
+it is, <em>where</em> the numerics blow up (ill-conditioned covariance
+matrices of stale bonds, barrier-crossing bias in Monte Carlo, hazard
+bootstraps that go negative), and <em>how</em> to write a specification
+tight enough that a model builds the right engine the first time.</li>
+<li><strong>The desk head or PM</strong> building a team out of
+ex-bankers and PhDs who, at present, cannot understand each other at
+lunch. Part VIII is yours.</li>
+</ol>
+<p>It is not for anyone who wants sell-side fluff, a qualitative
+narrative without a probability attached, or a gut feeling that has not
+been written down. We despise those things, warmly.</p>
+</section>
+<section id="three-ways-through-the-book" class="level2">
+<h2>Three ways through the book</h2>
+<p>The book has eight parts and twenty-eight chapters in its first
+edition, plus three appendices, and it will grow. You do not have to
+read it in order. Three reading paths, one per tribe:</p>
+<p><strong>Path 1: the RSSG banker.</strong> Read Part I straight
+through; Chapter 3 is written for you specifically, and the RSSG Edge
+Ledger in it is the inventory of what you are bringing to the new desk.
+Then jump to Part IV (Chapters 13–17), which is your home turf with the
+numbers attached: liability management transactions as game theory, the
+default cycle as a regime shift, change-of-control puts as options,
+post-reorg equity as forced-seller flow, and private credit as the thing
+eating your old job. Only then go back to Part II (Chapters 5–7). You
+will be tempted to skip Chapter 6 because someone once told you that
+Merton models do not work in distressed credit. That person was half
+right, and the half they were wrong about is where the money is. Finish
+with Parts III, V, VI, VII, and VIII in order. Keep Appendix A open the
+whole time.</p>
+<p><strong>Path 2: the quant.</strong> Start with Chapter 3 to see what
+the other tribe knows, then read Chapter 13 and Chapter 25 back to back:
+the first is what an uptier does to your return distribution, the second
+is how to parse the document that permitted it. Then take Part V and
+Part VI, which are your home turf, and notice where credit
+microstructure departs from what Avellaneda–Stoikov assumed
+(jump-to-default, RFQs instead of limit order books, bonds that have not
+traded in nine days). Part II will mostly be review, but Chapter 5’s
+treatment of recovery distributions and Chapter 7’s issuer-grouped
+cross-validation contain the traps that have been quietly eating your
+Sharpe ratio. Read Part IV last, slowly. Then Part VIII.</p>
+<p><strong>Path 3: the AI-agent specifier.</strong> Read this preface,
+then Appendix A, then go through every
+<code>### Specification for AI Implementation</code> block in the book
+in order, starting with Chapters 5–8 (distributions, structural models,
+labeling, decomposition), then Chapter 13 (the Priming Risk Score),
+Chapters 18–19 (quoting and basket pricing), and Chapters 25–27
+(document parsing, agent workflows, and system architecture). Chapter 26
+is the operating manual for directing coding agents and should be read
+before you direct one. Then go back and read the prose, because a spec
+you do not understand is a spec you cannot debug, and the prose is where
+we explain why the robot was told what it was told.</p>
+<p>There is also a fourth, unofficial path for the reader who is here
+for the trends: Chapters 2, 4, 10, 14, 17, 21, 22, and 26, each marked
+TREND in the table of contents, followed by Appendix C, the Trend
+Tracker. Everything on that path is dated and sourced.</p>
+</section>
+<section id="the-cast" class="level2">
+<h2>The cast</h2>
+<p>Twenty-eight chapters written by a committee tend to read like
+twenty-eight chapters written by a committee. To keep one voice and one
+set of arguments running through the whole book, we use a small
+recurring cast. They are fictional. Every line of dialogue in the book
+belongs to them. Real firms, real cases, and real people appear only
+with verifiable facts attached and never with invented quotes.</p>
+<p><strong>Theo Marsh</strong> (he/him) is you, or the version of you
+who is three weeks into a systematic credit desk after years at PJT
+RSSG. He carries his old 13-week cash flow model on a USB stick “for
+emotional support.” He asks, “But what does the credit agreement say?”
+He is usually right, which is annoying for everyone else and the reason
+he was hired.</p>
+<p><strong>Ines Okafor</strong> (she/her) runs credit market making and
+used to play poker professionally, which she regards as the same job
+with worse coffee. She frames every problem as a hand: what’s the pot,
+what are the odds, and who at this table knows more than you? She calls
+markouts “the hand history” and reviews them the way other people review
+their text messages at 1 a.m.</p>
+<p><strong>Dr. Kasimir “Kaz” Lind</strong> (they/them) holds a PhD in
+stochastic analysis and builds the desk’s models. Kaz is brilliant and
+has never read a credit agreement. They once asked whether “sacred
+rights” required a priest. Kaz’s opening move in any derivation is
+“let’s just assume Gaussian,” and Kaz’s second move is regret. You will
+learn a great deal from watching Kaz be wrong in precise ways.</p>
+<p><strong>Marguerite “Mags” Dunleavy</strong> (she/her) has run
+distressed money since the 1990s and remembers pricing bonds by phone
+and by grudge. Her creed: “Price is what you pay. Recovery is what you
+get, eventually, after the lawyers.” She is deeply suspicious of
+anything called “adjusted,” she greets every new technology with a story
+about how it used to be worse, and she is grudgingly, eventually,
+impressed.</p>
+<p><strong>ROBO</strong> (it/its) is the AI coding agent Theo specifies
+work to. ROBO implements exactly what it was asked, which is the
+problem. Told to “minimize drawdown,” it holds cash forever. It never
+complains and never guesses, and it is therefore the most honest
+reviewer of a specification you will ever meet. Every “Spec You Hand the
+Robot” box in this book is an attempt to say something to ROBO that
+cannot be misread.</p>
+<p><strong>The Ad Hoc Group</strong> is a Greek chorus of lenders,
+always “represented by counsel.” It speaks in unison, mostly in Rule
+2019 statements. It forms, it splits, it signs cooperation agreements,
+and the book keeps a running count of those, because someone should.</p>
+<p>A few other things recur on purpose. Theo’s 13-week model refuses to
+die: it comes back as a survival curve in Part II, as a state-space
+feature in Chapters 3 and 25, as the liquidity-runway variable inside
+the Priming Risk Score in Chapter 13, and finally as the PM dashboard in
+Chapter 28. “Open market purchase” is the most expensive three words in
+finance and will keep showing up until the courts stop making it so. And
+the desk motto is “IDO or it didn’t happen”: until you have stripped
+carry, rates, and factor beta out of a return, you have not found alpha,
+you have found a benchmark with a hat on.</p>
+</section>
+<section id="how-a-chapter-is-built" class="level2">
+<h2>How a chapter is built</h2>
+<p>Every chapter (and most sections) carries six elements, in a
+recognizable order, so that you always know where you are:</p>
+<ol type="1">
+<li><strong>Intuitive desk framing.</strong> How a market maker or an
+RSSG partner sees the problem in plain, ruthless trading terms, usually
+with the cast in the room. If you only read one thing per section, read
+this and the Desk Debrief.</li>
+<li><strong>Rigorous mathematical derivation.</strong> Full equations,
+step by step, every Greek letter defined, boundary conditions stated,
+using the single notation table in Appendix A. The joke, if there is
+one, comes after the load-bearing step, never inside it.</li>
+<li><strong>A specification for AI implementation.</strong> A block
+headed <code>### Specification for AI Implementation</code> with data
+schemas, tensor shapes, edge cases, numerical-stability guards, and a
+reference implementation in Python (written to run on numpy, scipy, and
+pandas as given) or a sketch in C++ or Rust where latency matters. It
+often opens with what ROBO built from the vague version of the request,
+followed by the precise version.</li>
+<li><strong>Source extraction.</strong> Short exact quotations from the
+fourteen books and papers on our shelf, each cited to a page and
+followed by a longer annotation in our own words about why it matters on
+a 2026 desk and where the modern desk departs from it.</li>
+<li><strong>A deep-dive case study.</strong> Serta, J.Crew, Incora,
+Carvana, SVB, Hertz, Windstream, March 2020, May 2005: tranches, price
+paths, dollar values (sourced or marked approximate), and what a
+systematic desk would have flagged and traded.</li>
+<li><strong>A Deep-Dive Resource Graph.</strong> Podcasts, practitioner
+writing, academic papers, and data and code repositories, grouped, so
+you can keep going after we stop.</li>
+</ol>
+<p>Between those elements you will find a small set of boxes, each with
+a fixed label: <strong>Desk Myth vs. Desk Reality</strong>,
+<strong>Poker Table</strong> (game-theory intuition, usually Ines),
+<strong>Docket Diary</strong> (court process with dates, often with
+commentary from the Ad Hoc Group), <strong>Ways This Blows Up</strong>
+(numerical instability, model failure, operational risk), and
+<strong>Trend Watch</strong>.</p>
+<p>Trend Watch boxes deserve a paragraph of their own, because “trend”
+means two things in this book and we care about both. The first meaning
+is the structural trends reshaping credit markets: electronification,
+portfolio trading, ETF-led liquidity, the LMT era, private credit, the
+regulatory agenda. Every chapter includes at least one Trend Watch box
+with dated, sourced figures showing how its topic changed over
+2018–2026, and Appendix C stitches them into a single timeline. The
+second meaning is trend as a strategy: time-series momentum in credit
+indices and excess returns, cross-asset lead–lag, trend combined with
+carry, and how it behaved in 2008, 2020, and 2022. That gets a whole
+chapter (Chapter 10) and a recurring role in Parts III and VIII. If a
+chapter does not tell you what changed and when, we consider it
+unfinished.</p>
+<p>Each chapter opens with a cold-open desk scene ending on the question
+the chapter answers, states what you will be able to do by the end, and
+closes with a Desk Debrief (takeaways sharp enough to tape to a
+monitor), a compact Spec You Hand the Robot, and a handful of exercises,
+some of them funny, all of them real.</p>
+</section>
+<section
+id="a-note-on-how-this-book-is-made-and-why-you-should-check-the-build-stamp"
+class="level2">
+<h2>A note on how this book is made, and why you should check the build
+stamp</h2>
+<p>Honesty requires a disclosure. This book is not written by a person
+at a desk. It is grown by an autonomous loop of AI agents: a showrunner
+that keeps the voice and the notation consistent, writer agents assigned
+to chapters, and advisor agents running on Anthropic’s Fable model that
+research each target (the shelf, the web, the dockets, the papers, the
+trend data) and hand the writer a brief before a word is written. The
+loop reads its own state, picks the next most valuable thing to write,
+writes it, rebuilds the book, updates its notes to itself, and goes
+again. It never stops on its own. Somebody has to tell it to.</p>
+<p>The book therefore ships in <strong>editions</strong>. Edition 1 is
+the first complete draft of every chapter in the table of contents. Each
+later edition is a research pass that deepens chapters, adds the
+chapters and sections the latest research says are missing, and
+refreshes the Trend Tracker. Because the loop rebuilds the whole text
+every few hours, the title page carries a build stamp in the subtitle, a
+date and time in UTC. Please look at it. A trend figure dated 2025 in a
+build from 2027 is a figure nobody has refreshed yet, and a court ruling
+described as “pending” may no longer be. Where the agents were unsure
+they have said so in the text, usually with the word
+<em>approximate</em>, occasionally with a parenthetical that reads like
+someone leaving a note for their future self, because that is what it
+is.</p>
+<p>Two consequences are worth stating plainly. First, the book will
+sometimes repeat itself across chapters, because chapters are written by
+different agents from the same brief. We trim this in later editions; in
+the meantime, think of it as spaced repetition. Second, the book’s
+priorities are, in order: research, net-new writing, growing the table
+of contents, polish, and only then checking that every code example
+runs. That ordering is deliberate. It means a bug can survive an
+edition. It also means the book gets deeper every cycle instead of
+prettier every cycle, and we think that is the right trade for a
+reference work on a market that changes this fast.</p>
+<p>If you find an error, you are almost certainly right. The repository
+that produces this book keeps a state directory and a continuation
+prompt; the next edition reads both.</p>
+</section>
+<section id="the-integrity-pledge" class="level2">
+<h2>The integrity pledge</h2>
+<p>Because an autonomous loop can generate plausible-looking nonsense at
+scale, we hold it to rules a human author might get away with
+bending:</p>
+<ul>
+<li><strong>Sourced or labeled.</strong> Every historical price, spread,
+recovery, volume, and dollar amount is either cited to a source or
+explicitly marked <em>illustrative</em> or <em>approximate</em>. If a
+number has neither, it is a bug; treat it as illustrative and tell
+us.</li>
+<li><strong>No invented identifiers.</strong> No fabricated CUSIPs,
+ISINs, SSRN numbers, DOIs, podcast episode numbers, or URLs. Tranches
+are identified descriptively (“Serta Simmons 2016 First Lien Term Loan
+due 2023”). A link appears only if it was verified when that passage was
+written or is a stable canonical root; otherwise you get title, author,
+and year, and a search engine.</li>
+<li><strong>No fake quotes.</strong> Real people and firms appear with
+verifiable facts only. All dialogue belongs to the fictional cast.</li>
+<li><strong>Code written to run.</strong> Every Python reference
+implementation is written to execute as given on numpy, scipy, and
+pandas, with seeded randomness and built-in sanity checks (Monte Carlo
+against closed form, a waterfall that conserves value, a hazard curve
+that stays non-negative). Execution checks are a low-priority cleanup
+pass, so a bug can survive an edition; the specification around the code
+is written so that you, or ROBO, can find it.</li>
+<li><strong>Every joke rides on a correct idea.</strong> If a line is
+funny but wrong, the line goes. If a derivation is correct but dull, we
+try harder.</li>
+</ul>
+<p>Theo is still staring at the RFQ. The clock in the corner of the
+screen says 2.1 seconds. Turn the page.</p>
+<hr />
+</section>
+</section>
+<section id="part-i-the-cognitive-bridge-the-state-of-quant-credit"
+class="level1">
+<h1>Part I: The Cognitive Bridge &amp; The State of Quant Credit</h1>
+<p><em>Chapters 1–4</em></p>
+<p>Every immigrant story starts at customs. Theo Marsh arrives at the
+systematic credit desk with one carry-on: a USB stick holding his
+13-week cash flow model. “Anything to declare?” “A liquidity forecast.”
+“Is it for personal use?” “Emotional support.” He is waved through, and
+the first thing he notices is that everyone here speaks a language that
+sounds like his own but has a different grammar. They say “spread” and
+mean a random variable. They say “flow” and mean a probability of being
+picked off. They say “the credit agreement” rarely, and when they do,
+they say it the way you would mention a relative who lives abroad.</p>
+<p>Part I is the arrival kit: a phrasebook, a short history of how the
+country got electricity, a set of language lessons, and a census.</p>
+<p><strong>Chapter 1, The Anthology of the Desk &amp; the Modern Quant
+Credit Landscape,</strong> is the phrasebook and the map. It compiles
+the load-bearing ideas from the fourteen books and papers on our shelf
+(DTS and spread-volatility scaling, distance-to-default, credit factors,
+intensity models, the distressed process, portfolio construction) with
+short quotations and long annotations, and then draws the ecosystem as a
+flow graph of who is a forced seller to whom: CLOs with CCC buckets,
+insurers with ratings constraints, ETFs with redemptions, mutual funds
+with outflows, and the market makers, factor pods, and capital-structure
+arbitrageurs who harvest each flow. Alpha in credit is mostly standing
+where someone else has to sell.</p>
+<p><strong>Chapter 2, The Revolutions in Credit Trading
+(TREND),</strong> is the history of the electrification. From TRACE in
+2002 through all-to-all trading, RFQ automation, portfolio trading, and
+ETF-driven liquidity to the non-bank liquidity providers who now quote
+next to the banks, it dates and sources the market-structure story for
+2018–2026, following Man Group’s 2023 framework, and explains why a
+market that produces data exhaust is a market where systematic
+strategies can finally live.</p>
+<p><strong>Chapter 3, Cognitive Rewiring, From PJT RSSG to Systematic
+Desk Head,</strong> is the language course, and it is the chapter the
+title of this book promises. It takes the questions a restructuring
+banker asks (will this company survive the quarter? who controls the
+vote? where is the fulcrum?) and rewrites each one as a distribution. It
+adapts Glosten–Milgrom to the RFQ, teaches markouts as the empirical
+test of whether you were picked off, builds the RSSG Edge Ledger (every
+skill you brought with you, mapped to a codable feature, a data source,
+and a decay horizon), and shows what order flow looks like in the weeks
+before a liability management transaction, when some counterparties know
+and most do not.</p>
+<p><strong>Chapter 4, Inside the Systematic Credit Industry (TREND +
+FRAMEWORKS),</strong> is the census. It lays the five industry
+frameworks on our shelf (Man Group’s 2022 and 2023 papers, Blackstone’s
+systematic platform, BlackRock’s defensive high yield, Nuveen’s
+multi-asset framework) side by side with AQR, Robeco, and the rest,
+along the axes of alpha families, data stack, portfolio construction,
+execution, capacity, and risk. The comparative map it produces is the
+exploratory space for everything that follows, and the AUM and
+launch-date trends it sources show that systematic credit has stopped
+being a white paper and become an industry.</p>
+<p>The trend that defines this part is electronification, and the reason
+it matters is epistemological rather than technological. A phone market
+produces anecdotes; an electronic market produces a dataset. Once the
+dataset exists, the restructuring banker’s knowledge stops being an
+anecdote too. It becomes a feature, with a timestamp, that can be tested
+against the hand history. That is the whole bridge, and Part I is where
+we pour the footings.</p>
+<p>A warning that applies to the whole book and especially here: the two
+tribes fail in mirror-image ways. The quant treats bonds as exchangeable
+time series and is surprised by the uptier. The banker treats every
+credit as unique and cannot size, hedge, or measure. Theo’s job, and
+yours, is to be surprised by neither. Ines puts it more simply. “You
+already know who at the table knows more than you. You just never wrote
+it down.”</p>
+<hr />
+</section>
 <section
 id="chapter-1-the-anthology-of-the-desk-the-modern-quant-credit-landscape"
 class="level1">
@@ -403,6 +887,1723 @@ on structural default models, and
 distressed investing process. Expand Section 1.3 into a 6,000-word
 compilation of foundational texts with full mathematical commentary.</p>
 </blockquote>
+<hr />
+</section>
+</section>
+<section
+id="part-ii-mathematical-probabilistic-foundations-for-ai-specifiers"
+class="level1">
+<h1>Part II: Mathematical &amp; Probabilistic Foundations for AI
+Specifiers</h1>
+<p><em>Chapters 5–7</em></p>
+<p>Here is the thing nobody tells you about becoming an architect: you
+stop pouring concrete. ROBO pours the concrete now. ROBO pours it fast,
+cleanly, and exactly where you pointed, including the time Theo pointed
+at the wrong wall. Theo told ROBO to “make the model less volatile.”
+ROBO set <span class="math inline">\(\sigma_V\)</span> to zero. The
+model-implied spread on every bond in the book went to zero, the desk
+was briefly the safest financial institution on earth, and Kaz spent the
+afternoon explaining to a very patient machine that volatility was not a
+bug.</p>
+<p>Part II is the building code. It teaches you which walls are
+load-bearing in credit mathematics, so that when you direct a coding
+agent you can tell it what to knock out and what to leave alone. You
+will not be asked to pour the concrete yourself. You will be asked to
+know, before the robot starts, where the roof will fall if it gets the
+sign of <span class="math inline">\(d_2\)</span> wrong.</p>
+<p><strong>Chapter 5, Probability Distributions in Distressed &amp;
+High-Yield Credit,</strong> is about the shape of outcomes, which is the
+first thing a specifier must write down and the first thing most specs
+get wrong. A bond’s return is a mixture: with probability <span
+class="math inline">\(S(t)\)</span> it survives and the spread wiggles,
+and with probability <span class="math inline">\(1 - S(t)\)</span> it
+jumps to recovery. The upside is capped by the call price; the downside
+has a floor at recovery and a very long corridor in between. The chapter
+builds that mixture with closed-form moments, separates the Lévy and
+jump-diffusion machinery that earns its place on a desk from the
+machinery that is decoration, models recovery as a Beta distribution
+conditioned on collateral and seniority (because “40 percent” is a CDS
+convention, not a fact), and fits tails with extreme-value tools. It
+also keeps price, spread, and return distributions apart, and physical
+and risk-neutral recovery apart, which sounds pedantic until you have
+paid for mixing them.</p>
+<p><strong>Chapter 6, Stochastic Calculus, Intensity Models &amp;
+Structural Frameworks,</strong> is where Theo’s 13-week model is reborn
+as a survival curve. It starts with Itô’s lemma as the tax code of
+stochastic calculus, the <span
+class="math inline">\(\tfrac{1}{2}\sigma^2\)</span> correction that the
+IRS of randomness collects whether you like it or not, and builds up
+through Merton (equity is a call on the firm; debt is a riskless bond
+short a put), KMV distance-to-default, Black–Cox first passage with
+covenant barriers, Jarrow–Turnbull and Duffie–Singleton reduced-form
+models, CIR intensities in closed form, and bootstrapping a hazard curve
+from CDS quotes. The credit triangle <span class="math inline">\(s
+\approx \lambda(1-R)\)</span> shows up here and never leaves. So do the
+traps: equity vol used as asset vol, <span
+class="math inline">\(\mathbb{P}\)</span> and <span
+class="math inline">\(\mathbb{Q}\)</span> in the same equation, and the
+Monte Carlo barrier bias that makes a naive first-passage simulation
+underprice default.</p>
+<p><strong>Chapter 7, Machine Learning on Small-Sample, Non-Stationary
+Credit Data,</strong> is the honest chapter about why corporate credit
+is the worst dataset in finance: stale TRACE marks, survivorship through
+calls and exchanges, forty-seven bonds from one issuer that are one data
+point wearing forty-seven hats, regimes that change under you, and
+fundamentals that arrive with a lag. It adapts the small-sample toolkit
+(fractional differentiation, triple-barrier labels in DTS-scaled spread
+space, meta-labeling, purged and issuer-grouped cross-validation, the
+deflated Sharpe ratio) to credit, and surveys the 2019–2026 research
+frontier on machine learning for bond returns, including the replication
+fights.</p>
+<p>The trend that defines this part runs in two directions at once. In
+research, the question of whether machine learning finds anything in
+bond returns beyond what a handful of characteristics explain is live
+and contested, and Chapter 7 keeps score. On the desk, the arrival of
+capable coding agents has moved the bottleneck from implementation to
+specification, which is why every section in this part ends with a block
+written for a machine. Kaz, who has spent a career writing the
+implementation, finds this disorienting. “Let’s just assume Gaussian,”
+they say, and Theo, who has now read Chapter 5, says: “Which part? The
+spread, the recovery, or the day the sponsor moves the IP?”</p>
+<hr />
+</section>
+<section id="part-iii-isolating-idiosyncratic-alpha-ido-factors-trend"
+class="level1">
+<h1>Part III: Isolating Idiosyncratic Alpha (IDO), Factors &amp;
+Trend</h1>
+<p><em>Chapters 8–12</em></p>
+<p>Picture a mixing desk. A bond’s return comes in on a dozen tracks at
+once: a rates track, a carry track, a credit-beta track, a few factor
+tracks (value, momentum, quality, low-risk, size), a liquidity track,
+and somewhere underneath, if you are lucky and the issuer is
+interesting, a track that is only this bond. Everyone who has ever
+pitched a credit has pointed at the mix and said “listen to that.” Part
+III teaches you to press mute on every track but one and find out what
+is actually there.</p>
+<p>The first time Theo did it, the solo channel was silent. The bond he
+loved, the one whose capital structure he could draw from memory, had
+returned 9 percent over the year, and every basis point of it was
+duration and carry. The desk motto was taped to his monitor by the
+following morning: <em>IDO or it didn’t happen.</em></p>
+<p><strong>Chapter 8, Stripping Beta to Isolate Pure IDO,</strong> is
+the mute button. It decomposes a bond’s return with the signs right
+(<span class="math inline">\(-D\,\Delta y\)</span>, not <span
+class="math inline">\(+\)</span>), separates OAS carry from yield carry,
+and explains the most useful empirical fact in high yield: measured
+duration is much shorter than analytical duration, and for CCC bonds it
+turns negative, because spreads and rates move against each other. It
+covers DTS, the betas you compute when prices are stale (Dimson and
+Scholes–Williams lag sums), and the hedge matrix across CDX, Treasury
+futures, HYG and JNK, and equity puts, which is a constrained
+least-squares problem so ill-conditioned that ridge regularization is a
+safety feature rather than a style choice. The 2022 rates sell-off is
+the case study, because it was the year everyone’s duration hedge was
+wrong in the same direction.</p>
+<p><strong>Chapter 9, Factor Investing in Corporate Credit,</strong> is
+the factor tracks: value, momentum, quality, carry, low-risk, size and
+liquidity, and the “informed investor” factor from Man Group’s 2022
+framework. The chapter is about construction more than discovery,
+because in credit the construction is the alpha: neutralization within
+rating, sector, and maturity buckets, DTS-neutral versus
+market-value-neutral portfolios, long-only constraints, liquidity cost
+scores that eat the paper return, crowding, and the 2019–2026 debate
+over whether published credit factors replicate.</p>
+<p><strong>Chapter 10, Trend-Following &amp; Time-Series Momentum in
+Credit (TREND),</strong> is the track that is itself a trend, and the
+one readers who came for trends should turn to first. It applies the
+time-series-momentum framework to CDX, iTraxx, and credit excess
+returns, studies the equity-to-credit lead–lag that makes cross-asset
+trend work, combines trend with carry, scales by volatility, and looks
+hard at the crisis years, 2008, 2020, and 2022, where trend’s drawdown
+behavior is the entire reason anyone allocates to it. It also asks what
+trend does in a market where returns jump, which is a polite way of
+describing the LMT era.</p>
+<p><strong>Chapter 11, Defensive Systematic High Yield,</strong> follows
+BlackRock’s framework: default avoidance, downside mitigation, the CCC
+problem (where most of the index’s defaults and most of its negative
+convexity live), quality and low-risk tilts, the arithmetic of upside
+and downside capture, and the capacity question that decides whether any
+of this scales.</p>
+<p><strong>Chapter 12, Multi-Asset Credit Allocation,</strong> zooms out
+to Nuveen’s framework for rotating across high yield, loans,
+emerging-market debt, preferreds, securitized credit, and private
+credit: regimes, valuation per unit of default loss and per unit of
+volatility, risk budgets, and liquidity tiers, so that the allocation
+can be unwound in the order the market will let you.</p>
+<p>The trend that defines this part is that systematic credit has grown
+a track record. Factor and trend strategies in credit used to be
+backtests in white papers; they now have live performance through two
+full drawdowns, and the sourced figures in these chapters let you judge
+them. Mags remains unconvinced. “Back in my day we had one factor. It
+was called ‘I know the CFO.’” Then she asks to see the momentum chart
+again.</p>
+<hr />
+</section>
+<section id="part-iv-quantifying-special-situations-pjt-rssg-mechanics"
+class="level1">
+<h1>Part IV: Quantifying Special Situations &amp; PJT RSSG
+Mechanics</h1>
+<p><em>Chapters 13–17</em></p>
+<p>Imagine a building whose floors can be reordered by a vote of 50.1
+percent of the residents while the rest are asleep. Imagine the
+furniture can be carried out through a door that was in the blueprint
+all along, in a clause nobody read because it was called “Permitted
+Investments.” Imagine the same sofa can be pledged to two different
+lenders at once, and that this is, after a fashion, legal. Welcome to
+the capital structure of a sponsor-owned leveraged company in the 2020s.
+Theo grew up in this building. Kaz, on hearing the phrase “fulcrum
+security,” asked whether it was a physics thing. “It’s where the value
+breaks,” said Mags, “and where the lawyers start.”</p>
+<p>Part IV is Theo’s home turf, which is exactly why it is the most
+dangerous part of the book for him. He knows these mechanics the way a
+native speaker knows grammar: fluently, and without being able to state
+the rules. The job here is to state them, as probabilities, transition
+matrices, payoff tables, and features a model can read.</p>
+<p><strong>Chapter 13, Codifying Liability Management Transactions
+(LMTs),</strong> builds the Priming Risk Score, <span
+class="math inline">\(\text{PRS} \in [0,1]\)</span>, from document
+features and Bayesian priors: basket capacity, blocker language, sponsor
+history, maturity walls, and the liquidity-runway variable that is
+Theo’s 13-week model in a new coat. It treats non-pro-rata uptiers
+(Serta, Boardriders, Mitel, Incora) and drop-downs (J.Crew, PetSmart and
+Chewy, Envision) as an n-player threshold game in which the sponsor
+auctions a priming premium between lender groups, and builds a
+multi-obligor waterfall engine for double-dips and pari-plus structures
+that, unlike several real ones, conserves value. “Open market purchase”
+enters the book here as the most expensive three words in finance, and
+the cooperation-agreement counter starts at zero.</p>
+<p><strong>Chapter 14, The Default &amp; Recovery Cycle in the LMT Era
+(TREND),</strong> is where the mechanics become statistics. Distressed
+exchanges now account for a large and sourced share of defaults,
+re-default rates after exchanges are high, recoveries have compressed,
+cooperation agreements have proliferated, and the 2024–2026 court
+rulings have redrawn what a majority may do to a minority. The chapter
+models each of these as a regime shift in the default and recovery
+distributions of Chapter 5, so that a desk’s PD and LGD inputs stop
+assuming it is 2006.</p>
+<p><strong>Chapter 15, Event-Driven M&amp;A, Regulatory Spreads &amp;
+Change-of-Control,</strong> prices the 101 change-of-control put as an
+option that pays only if the deal closes <em>and</em> the trigger is
+met, treats portability as a short option written by bondholders,
+handles special mandatory redemptions on escrowed acquisition debt, and
+models antitrust timelines as survival analysis, with Kaplan–Meier and
+Cox proportional hazards doing the work that “the lawyers think second
+half” used to do.</p>
+<p><strong>Chapter 16, Post-Reorganization Equities, Rights Offerings
+&amp; Bankruptcy Claims,</strong> follows the value out the far side of
+the process: the forced CLO selling and orphan-equity dynamics that make
+post-reorg stocks systematically mispriced, rights offerings as options
+plus a backstop premium, the difference between a 503(b)(9) claim and a
+general unsecured one, and Hertz in 2020 as the case where the equity
+was not, in fact, worthless.</p>
+<p><strong>Chapter 17, Private Credit &amp; the Public–Private
+Convergence (TREND),</strong> closes the part with the trend that is
+eating the old job: the growth of private credit, BDC marks against
+public comparables, private-to-public refinancings, systematic
+approaches to a market with no TRACE, and what a public-markets quant
+desk can actually arbitrage.</p>
+<p>The trend that defines this part is the replacement of the bankruptcy
+by the exchange. The modal default is no longer a petition in Delaware
+or Houston; it is a transaction, negotiated among a subset of lenders,
+that leaves the rest holding a different instrument than they bought.
+For the quant, this means the return distribution has a new mass point
+and the historical recovery data has a new bias. For the banker, it
+means the thing you did for a living is now a feature. The Ad Hoc Group,
+represented by counsel, declines to comment, but reserves all
+rights.</p>
+<hr />
+</section>
+<section id="part-v-market-microstructure-portfolio-trading-etfs-loans"
+class="level1">
+<h1>Part V: Market Microstructure, Portfolio Trading, ETFs &amp;
+Loans</h1>
+<p><em>Chapters 18–22</em></p>
+<p>Equities are a supermarket. Every item has a price tag, there is one
+checkout, and the queue is visible to everyone. Corporate credit is a
+bazaar. There are no price tags; every price is a negotiation; the
+merchant studies your face while you study the rug; and if you ask three
+stalls for a quote on the same rug, all three now know something about
+you. Electronification is the slow installation of barcode scanners, one
+stall at a time. The ETF is a supermarket built next to the bazaar that
+sells sealed boxes of bazaar goods at a posted price, and the people who
+open the boxes for a living are called authorized participants. The loan
+market is the stall at the back where you agree a price today and the
+rug arrives in three weeks, maybe.</p>
+<p>Ines runs this part of the book, because it is a poker room with
+worse lighting. “In the bazaar the merchant reads your face,” she says.
+“On the RFQ, the merchant reads your hand history. Be the merchant.”</p>
+<p><strong>Chapter 18, OTC Credit Microstructure &amp; the Market
+Maker’s Equations,</strong> is the core derivation of the book’s
+market-making half. It walks through Harris’s taxonomy of traders, the
+Roll, Glosten–Milgrom, and Kyle models of the spread, and then the
+Avellaneda–Stoikov and Guéant–Lehalle–Fernandez-Tapia machinery in full
+(the HJB equation, the exponential-utility ansatz, the reservation price
+<span class="math inline">\(r^{\text{res}}\)</span>, the optimal spread)
+before adapting it to the thing credit actually is: RFQs rather than
+limit order books, win probabilities that depend on the distance to a
+composite price, inventory that cannot be unwound at will, and a
+jump-to-default term that adds <span class="math inline">\(q\lambda
+J\)</span> to the reservation price. It decodes TRACE, measures RFQ hit
+rates, and treats BWIC leakage as the information problem it is.</p>
+<p><strong>Chapter 19, Portfolio Trading &amp; Basket Pricing
+Engines,</strong> prices a 150-line portfolio trade in ninety seconds:
+the sum of fair values, less liquidation costs, less a risk charge on
+the residual covariance over the unwind horizon, which requires a
+covariance matrix for bonds that have not traded this month, a factor
+model and shrinkage to make it invertible, an eviction rule for the
+lines you refuse, a stress model for liquidity that becomes correlated
+exactly when you need it not to, and a healthy fear of the mystery box,
+the basket assembled by someone who knows which lines are the
+problem.</p>
+<p><strong>Chapter 20, Credit ETF Creation/Redemption Arbitrage (HYG,
+JNK, LQD, BKLN),</strong> explains how the sealed boxes get made and
+unmade: authorized participants, custom baskets, bid-side NAV, the
+arbitrage bands set by creation and redemption costs, ETF price as the
+market’s real-time estimate when the bonds themselves are not trading,
+and March 2020, when the boxes traded at discounts that looked like a
+malfunction and were in fact the only honest price on the screen.</p>
+<p><strong>Chapter 21, Leveraged Loans, CLOs &amp; Loan-Market
+Microstructure (TREND),</strong> is the back stall: settlement that
+takes weeks, CLO constraints (CCC buckets, overcollateralization and
+interest-coverage tests) that turn vehicles into forced sellers on a
+schedule, repricing waves, the halting arrival of loan e-trading, and
+the loan and CLO ETFs that now sit on top of a market never designed for
+daily liquidity.</p>
+<p><strong>Chapter 22, Market-Structure Regulation &amp; the Forces
+Reshaping Liquidity (TREND),</strong> takes each rule that changed the
+plumbing (TRACE reporting-time changes, T+1 settlement, the Treasury
+clearing mandate, Basel III endgame and dealer capital, CDS reporting
+and clearing) and works through what it did to the economics of a
+desk.</p>
+<p>The trend that defines this part is that the basket became the unit
+of liquidity. Single bonds still trade one at a time, by negotiation,
+but an increasing share of risk moves in portfolios and ETF creation
+units, priced by engines in seconds, and the data exhaust from those
+trades is the raw material for everything in Part III. Mags, asked about
+this, says that back in her day you could get a two-way market on a
+single bond by calling someone who owed you a favor, and that it was
+worse, and that she misses it.</p>
+<hr />
+</section>
+<section id="part-vi-capital-structure-arbitrage-volatility-surfaces"
+class="level1">
+<h1>Part VI: Capital Structure Arbitrage &amp; Volatility Surfaces</h1>
+<p><em>Chapters 23–24</em></p>
+<p>One patient, four doctors. The equity market, the equity options
+market, the CDS market, and the bond market each examine the same firm
+and each issue a diagnosis: a stock price, an implied volatility
+surface, a CDS spread, a bond price. Merton’s insight was that all four
+are looking at the same thing, the firm’s asset value <span
+class="math inline">\(V_t\)</span> and its volatility <span
+class="math inline">\(\sigma_V\)</span>, and that their diagnoses must
+therefore be consistent. Capital structure arbitrage is the bet that
+when the doctors disagree, they will eventually agree, and that you know
+which one is right. Its risk is that you are wrong about which doctor,
+or that the patient contracts a disease none of the doctors had a word
+for. In May 2005 the patient was General Motors, the credit market said
+“downgrade,” the equity market said “takeover bid,” and a large number
+of funds that were long the bonds and short the stock discovered that
+the doctors can disagree for a very long time.</p>
+<p>Kaz is at home in this part, because it is almost entirely math, and
+uneasy in it, because the math keeps bumping into documents. “A
+springing lien,” they ask, “is a lien that… springs?” Mags nods.
+“Usually at you.”</p>
+<p><strong>Chapter 23, Cross-Asset Convexity &amp; the Volatility
+Surface,</strong> links the surfaces. It derives <span
+class="math inline">\(\sigma_E E = \sigma_V V\, N(d_1)\)</span> and uses
+it to turn equity volatility into a credit spread, covers the
+CreditGrades model that commercialized the idea, and follows Carr and Wu
+in reading deep out-of-the-money puts as credit instruments and the skew
+as a market price for jump-to-default. It expresses the Greeks in spread
+terms so a bond trader can use them, treats convertible and
+capital-structure arbitrage as trades on the same surface, and takes two
+autopsies: May 2005, when the cross-asset hedge failed in both legs at
+once, and Silicon Valley Bank in March 2023, when the equity, options,
+and credit markets priced the same balance sheet at three different
+speeds.</p>
+<p><strong>Chapter 24, Bond-to-CDS Basis &amp; Deliverable Obligation
+Mechanics,</strong> is the CDS doctor’s chart, read closely. It prices
+the premium and protection legs, defines the risky annuity, handles
+standard coupons and upfronts, and then works through the several things
+people mean by “basis” (against Z-spread, against asset swap, against
+par-equivalent CDS spread), the funding and repo terms that explain most
+of a negative basis, the cheapest-to-deliver option, and the two-stage
+auction. The last third is where the chart gets interesting: orphaned
+CDS when the debt moves and the reference entity does not, the
+manufactured credit events at Hovnanian and the Windstream fight, the
+2019 ISDA narrowly-tailored-credit-event supplement that followed, and
+what liability management transactions have done to the definition of a
+credit event.</p>
+<p>The trend that defines this part is a migration. Single-name CDS
+liquidity has thinned and concentrated, index CDS and equity options
+have become the practical instruments for expressing a view on credit
+volatility, and the legal boundary of what counts as a credit event has
+been tested by people who read the definitions more carefully than the
+drafters did. The quant consequence is that the “arbitrage” in capital
+structure arbitrage is increasingly a bet on the relative speed of four
+markets rather than on a true mispricing, and the desk that measures
+those speeds, with the lead–lag tools from Chapter 10 and the hedge
+matrices from Chapter 8, is the desk that gets paid. Ines’s summary is
+shorter. “Four players, one deck, and one of them has read the rules.
+Figure out which.”</p>
+<hr />
+</section>
+<section id="part-vii-alternative-data-nlp-ai-systems" class="level1">
+<h1>Part VII: Alternative Data, NLP, AI &amp; Systems</h1>
+<p><em>Chapters 25–27</em></p>
+<p>A credit agreement is a program. It has variables (“Consolidated
+EBITDA”), functions (“Permitted Investments”), conditionals (“so long as
+no Event of Default shall have occurred and be continuing”), recursion
+(Consolidated EBITDA is defined in terms of Consolidated Net Income,
+which excludes items defined by reference to Consolidated EBITDA), and a
+type system that two law firms will argue about for eighteen months.
+What it does not have is a compiler. For forty years the runtime was a
+lawyer. Part VII builds the compiler, then builds the machine it runs
+on.</p>
+<p>Theo’s first specification for ROBO in this part read: “compute the
+capacity of the general Restricted Payments basket.” ROBO returned “$50
+million.” The basket was “the greater of $50 million and 100 percent of
+Consolidated EBITDA,” and Consolidated EBITDA that quarter was negative,
+so ROBO was, infuriatingly, correct. Theo rewrote the spec. It now has
+units, a definition graph, a fiscal-quarter lookup, and a test case
+named after the quarter in question.</p>
+<p><strong>Chapter 25, NLP for Credit Agreements, Indentures &amp; PACER
+Dockets,</strong> parses the program. It treats defined terms as nodes
+in a graph and finds the cycles, segments the document, extracts
+definitions, normalizes “greater of” baskets into capacity functions of
+EBITDA, uses language models for extraction with schema validation and
+mandatory citations back to the page, and feeds the result into the
+capacity calculator and the Priming Risk Score features of Chapter 13.
+It then turns to the court docket: EDGAR for the documents,
+CourtListener and RECAP for the filings, Rule 2019 statements as a time
+series of who holds what and when the Ad Hoc Group formed, split, or
+re-formed, claims registers as a map of the unsecured pool, and DIP
+roll-ups as the first move of the endgame. It uses synthetic agreement
+text throughout, and it studies how fast each of these signals decays
+once the market has read the same filing.</p>
+<p><strong>Chapter 26, AI Agents &amp; LLMs on the Credit Desk
+(TREND),</strong> is the operating manual for the specifier, which is to
+say for the reader. It covers the pricing and research tools that
+language models have made possible, agentic workflows for research and
+surveillance, evaluation and hallucination controls (a citation that
+cannot be checked is a hallucination with a footnote), document
+question-answering with provenance, and the discipline of writing a spec
+a machine cannot misread: units, boundary conditions, edge cases,
+deterministic replay, and tests that fail loudly. It tracks adoption on
+desks from 2023 through 2026, with dates.</p>
+<p><strong>Chapter 27, System Construction, Low-Latency Infrastructure
+&amp; ASICs/FPGAs,</strong> is the machine. It is honest about latency
+economics: a bond RFQ gives you seconds, but the hedge and the
+quote-pull happen in microseconds, and a desk that is slow to pull its
+quotes when Treasuries gap is a desk that has donated money to someone
+faster. It covers the ingestion pipeline, the security master (an LMT
+exchange creates new identifiers, and a security master that does not
+know this will price the wrong bond), pricing and risk engines, the OMS
+and EMS, FIX, FPGA trigger tables that evaluate <span
+class="math inline">\(\Delta P = -D\,\Delta y\)</span> per bond against
+a threshold without asking a CPU, kernel bypass, latency budgets as a
+queueing problem, and the kill switch, with Knight Capital in 2012 as
+the reason the kill switch is not optional.</p>
+<p>The trend that defines this part is the arrival of language models on
+the desk and the quiet reassignment of work that followed: reading moved
+to machines, specifying moved to humans, and the humans who could
+specify best turned out to be the ones who had read the most documents
+by hand. Mags observes that back in her day you read the indenture
+yourself and were wrong in private. Theo observes that ROBO is wrong in
+public, instantly, and with a stack trace, and that he has come to
+prefer it.</p>
+<hr />
+</section>
+<section id="part-viii-the-portfolio-managers-playbook" class="level1">
+<h1>Part VIII: The Portfolio Manager’s Playbook</h1>
+<p><em>Chapter 28 and the Appendices</em></p>
+<p>The pit boss does not play hands. The pit boss decides which tables
+are open, what the limits are, how many chips each dealer is holding,
+when a dealer is tilting, and when to close the floor. Ines, who has
+been both the player and the pit boss, says the promotion feels like
+being asked to stop breathing and supervise breathing instead. Part VIII
+is for the reader who is about to be promoted into that chair, or who
+already sits in it and wants to know why the ex-RSSG analyst and the
+stochastic-analysis PhD cannot agree on what “risk” means at lunch.</p>
+<p>Theo’s 13-week cash flow model makes its final appearance here. It
+began as a spreadsheet on a USB stick, became a survival curve in Part
+II, a state-space feature in Chapters 3 and 25, and the liquidity-runway
+variable inside the Priming Risk Score in Part IV. In Chapter 28 it is
+the PM dashboard: the desk’s own 13-week forecast of capital, liquidity,
+and drawdown room, with the same question it always asked (do we make it
+to the other side of the quarter?) now pointed at the portfolio rather
+than the issuer. Mags, shown the dashboard, says it is the first
+adjusted number she has ever trusted, and then asks who adjusted it.</p>
+<p><strong>Chapter 28, What a Desk Head / Senior PM Must Know to Extract
+Maximum Alpha,</strong> is a single long chapter built on Paleologo’s
+portfolio-management framework and the sharper edges of credit. It
+allocates risk across signal horizons, from the three-second RFQ to the
+three-month factor tilt to the three-year restructuring, and shows why
+the Fundamental Law’s <span class="math inline">\(\text{IR} =
+\text{IC}\sqrt{\text{BR}}\)</span> overstates breadth when forty-seven
+bonds share one issuer. It derives Kelly sizing for a bet with
+jump-to-default and a recovery floor, then applies the fractional-Kelly
+haircut that estimation error demands, because full Kelly on a default
+bet is the gambler’s ruin problem wearing a suit. It covers drawdown
+control when bid-ask spreads widen fivefold, liquidity-adjusted VaR and
+days-to-liquidate, mark-to-bid discipline, the drawdown rules commonly
+reported at multi-strategy pods (labeled as such), and the construction
+of a team in which ex-RSSG analysts and PhDs produce one model instead
+of two arguments.</p>
+<p>After Chapter 28 come the appendices, which are not optional reading
+so much as optional location. <strong>Appendix A, Notation, Units &amp;
+Conventions,</strong> is the single notation table the whole book uses,
+with units, typical magnitudes, day counts, spread and recovery
+conventions, and a glossary of the desk and restructuring vocabulary.
+<strong>Appendix B, the Data &amp; API Atlas,</strong> maps the data
+sources and interfaces (TRACE, EDGAR, CourtListener, CME, OPRA, vendor
+composites, open datasets) that the specifications assume.
+<strong>Appendix C, the Trend Tracker,</strong> is the dated, sourced
+timeline of every Trend Watch box in the book, refreshed each edition,
+and the first place to look if you want to know what changed since the
+build stamp on the title page.</p>
+<p>The trend that defines this part is the pod. The multi-strategy
+platform, with its tight drawdown limits, its centralized risk, and its
+appetite for uncorrelated idiosyncratic return, has become the dominant
+employer of systematic credit talent, and its constraints shape what a
+PM can hold, for how long, and at what size. Under those constraints the
+motto is no longer a slogan. IDO or it didn’t happen is the allocation
+rule: capital goes to the horizons and the people who produce return
+that survives the mute button of Part III.</p>
+<p>Ines closes the floor. “You’ve seen the hand history. You know the
+pot. Go run the table.”</p>
+<hr />
+</section>
+<section id="appendix-a-notation-units-conventions" class="level1">
+<h1>Appendix A: Notation, Units &amp; Conventions</h1>
+<p>This appendix is the reader-facing edition of the book’s internal
+style sheet. Every chapter uses the symbols below with the meanings,
+units, and conventions below. When a chapter has to deviate, it says so
+in a sentence at the point of deviation. The appendix is kept in sync
+with the house style bible every edition; if a symbol appears in a
+chapter and not here, one of the two is wrong, and it is probably the
+chapter.</p>
+<p>Mags’s advice applies to notation as much as to bonds: price is what
+you pay, and units are what you get, eventually, after the
+debugging.</p>
+<section id="a.1-three-questions-to-ask-of-every-symbol" class="level2">
+<h2>A.1 Three questions to ask of every symbol</h2>
+<p>Most errors in quantitative credit are not errors of mathematics.
+They are errors of units and conventions, and they survive because a
+number with the wrong units looks exactly like a number with the right
+ones. Before you use any quantity in this book, in a formula or in a
+specification handed to ROBO, ask:</p>
+<ol type="1">
+<li><strong>Which measure?</strong> Physical (<span
+class="math inline">\(\mathbb{P}\)</span>) or risk-neutral (<span
+class="math inline">\(\mathbb{Q}\)</span>)? A default intensity backed
+out of CDS is a <span class="math inline">\(\mathbb{Q}\)</span> quantity
+and is systematically larger than the <span
+class="math inline">\(\mathbb{P}\)</span> intensity you would estimate
+from default history. Mixing them is the most common single bug in
+credit models, and it is invisible until a stress test.</li>
+<li><strong>Which units?</strong> Decimal, percent, basis points, points
+of par, years, dollars? A spread of 350 basis points is <span
+class="math inline">\(0.035\)</span> in a formula and “350bp” in prose,
+never “3.5” and never “0.35%” unless you want ROBO to build a desk that
+quotes bonds at a spread of 35,000bp.</li>
+<li><strong>Which convention?</strong> Clean or dirty price? Recovery of
+face, market value, or Treasury? Excess return over Treasuries or over
+swaps? Annualized or not? Each has a correct answer in context, and the
+context must be written down.</li>
+</ol>
+<p>ROBO asks all three questions every time. It just does not tell you
+that it asked, and it picks an answer. Tell it the answer first.</p>
+</section>
+<section id="a.2-the-master-notation-table" class="level2">
+<h2>A.2 The master notation table</h2>
+<p>Typical magnitudes are illustrative and regime-dependent; they are
+here so you can sanity-check an output, not so you can cite them.</p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Symbol</th>
+<th style="text-align: left;">Meaning</th>
+<th style="text-align: left;">Units</th>
+<th style="text-align: left;">Typical magnitude (illustrative)</th>
+<th style="text-align: left;">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span
+class="math inline">\(\mathbb{P}\)</span>, <span
+class="math inline">\(\mathbb{Q}\)</span></td>
+<td style="text-align: left;">Physical and risk-neutral probability
+measures</td>
+<td style="text-align: left;">none</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Every expectation names its measure: <span
+class="math inline">\(\mathbb{E}^{\mathbb{Q}}[\cdot]\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span
+class="math inline">\(\mathcal{F}_t\)</span></td>
+<td style="text-align: left;">Filtration: information available at time
+<span class="math inline">\(t\)</span></td>
+<td style="text-align: left;">none</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">The conditioning set for every price.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span
+class="math inline">\(\mathbb{E}[\cdot]\)</span></td>
+<td style="text-align: left;">Expectation</td>
+<td style="text-align: left;">as its argument</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Never written “EV”; that is enterprise
+value.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(t\)</span>,
+<span class="math inline">\(T\)</span></td>
+<td style="text-align: left;">Time, maturity</td>
+<td style="text-align: left;">years</td>
+<td style="text-align: left;"><span class="math inline">\(T - t\)</span>
+of <span class="math inline">\(0.25\)</span> to <span
+class="math inline">\(10\)</span></td>
+<td style="text-align: left;">Day count stated when it matters
+(§A.4).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span
+class="math inline">\(V_t\)</span></td>
+<td style="text-align: left;">Firm asset value (structural models)</td>
+<td style="text-align: left;">$ or $mm</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Unobservable; inferred from <span
+class="math inline">\(E_t\)</span> and <span
+class="math inline">\(\sigma_E\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span
+class="math inline">\(F\)</span></td>
+<td style="text-align: left;">Face value of debt (structural
+models)</td>
+<td style="text-align: left;">$ or $mm</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Never <span
+class="math inline">\(D\)</span>, which is duration. Unsubscripted <span
+class="math inline">\(F\)</span> only.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span
+class="math inline">\(E_t\)</span></td>
+<td style="text-align: left;">Equity market value</td>
+<td style="text-align: left;">$ or $mm</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span
+class="math inline">\(\sigma_V\)</span>, <span
+class="math inline">\(\sigma_E\)</span></td>
+<td style="text-align: left;">Asset and equity volatility</td>
+<td style="text-align: left;">annualized, decimal</td>
+<td style="text-align: left;"><span
+class="math inline">\(\sigma_E\)</span> of <span
+class="math inline">\(0.25\)</span> to <span
+class="math inline">\(0.60\)</span> for HY issuers; <span
+class="math inline">\(\sigma_V\)</span> lower by leverage</td>
+<td style="text-align: left;">Equity vol is not asset vol; see Chapters
+6 and 23.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(r\)</span>,
+<span class="math inline">\(r_t\)</span></td>
+<td style="text-align: left;">Risk-free rate, short rate</td>
+<td style="text-align: left;">annualized decimal, continuously
+compounded</td>
+<td style="text-align: left;"><span class="math inline">\(0.03\)</span>
+to <span class="math inline">\(0.055\)</span> (2023–2026, approx.)</td>
+<td style="text-align: left;">Stated if discretely compounded.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span
+class="math inline">\(\tau\)</span></td>
+<td style="text-align: left;">Default time</td>
+<td style="text-align: left;">years</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Never time to maturity; that is <span
+class="math inline">\(T - t\)</span>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span
+class="math inline">\(\lambda_t\)</span></td>
+<td style="text-align: left;">Default intensity (hazard rate)</td>
+<td style="text-align: left;">per year</td>
+<td style="text-align: left;">IG <span
+class="math inline">\(0.001\)</span> to <span
+class="math inline">\(0.01\)</span>; single-B <span
+class="math inline">\(0.03\)</span> to <span
+class="math inline">\(0.08\)</span>; CCC <span
+class="math inline">\(0.10\)</span> to <span
+class="math inline">\(0.30\)</span> and up, under <span
+class="math inline">\(\mathbb{Q}\)</span></td>
+<td style="text-align: left;">Reserved for default. Order arrival uses
+<span class="math inline">\(\Lambda\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span
+class="math inline">\(S(t)\)</span></td>
+<td style="text-align: left;">Survival probability, <span
+class="math inline">\(\mathbb{Q}(\tau &gt; t)\)</span></td>
+<td style="text-align: left;">probability</td>
+<td style="text-align: left;"><span class="math inline">\(e^{-\lambda
+t}\)</span> under constant intensity</td>
+<td style="text-align: left;"><span
+class="math inline">\(S^{\mathbb{P}}(t)\)</span> for physical.
+Parentheses, not a subscript.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(R\)</span>,
+<span class="math inline">\(L = 1 - R\)</span></td>
+<td style="text-align: left;">Recovery rate, loss given default</td>
+<td style="text-align: left;">fraction of par unless stated</td>
+<td style="text-align: left;"><span class="math inline">\(R =
+0.40\)</span> is the senior-unsecured CDS convention</td>
+<td style="text-align: left;">Convention (RFV, RMV, RT) named explicitly
+(§A.6).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span
+class="math inline">\(s\)</span></td>
+<td style="text-align: left;">Credit spread</td>
+<td style="text-align: left;">decimal in formulas, bp in prose</td>
+<td style="text-align: left;">IG <span class="math inline">\(70\)</span>
+to <span class="math inline">\(150\)</span>bp; BB <span
+class="math inline">\(200\)</span> to <span
+class="math inline">\(350\)</span>bp; B <span
+class="math inline">\(300\)</span> to <span
+class="math inline">\(500\)</span>bp; CCC <span
+class="math inline">\(700\)</span> to <span
+class="math inline">\(1{,}200\)</span>bp and up (approx.)</td>
+<td style="text-align: left;">Measure named: OAS, <span
+class="math inline">\(Z\)</span>, G, ASW, or PECS (§A.5).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span
+class="math inline">\(\text{OAS}\)</span>, <span
+class="math inline">\(Z\)</span></td>
+<td style="text-align: left;">Option-adjusted spread, Z-spread</td>
+<td style="text-align: left;">bp</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><span class="math inline">\(\text{OAS} \le
+Z\)</span> for callables.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span
+class="math inline">\(D^{\text{mod}}\)</span>, <span
+class="math inline">\(D^{\text{spr}}\)</span>, <span
+class="math inline">\(D^{\text{emp}}\)</span></td>
+<td style="text-align: left;">Modified, spread, and empirical
+duration</td>
+<td style="text-align: left;">years (per unit of decimal yield)</td>
+<td style="text-align: left;">IG <span class="math inline">\(6\)</span>
+to <span class="math inline">\(8\)</span>; HY <span
+class="math inline">\(3\)</span> to <span
+class="math inline">\(5\)</span>; <span
+class="math inline">\(D^{\text{emp}} \ll D^{\text{mod}}\)</span> in HY,
+near zero or negative for CCC</td>
+<td style="text-align: left;">Chapter 8.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\text{DTS}_i =
+D^{\text{spr}}_i \cdot s_i\)</span></td>
+<td style="text-align: left;">Duration times spread</td>
+<td style="text-align: left;">years times bp</td>
+<td style="text-align: left;">IG <span class="math inline">\(7 \times
+100 = 700\)</span>; HY <span class="math inline">\(4 \times 400 =
+1{,}600\)</span></td>
+<td style="text-align: left;">Spread volatility scales with DTS (Ben
+Dor).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(y\)</span>,
+<span class="math inline">\(y^{\text{TSY}}\)</span></td>
+<td style="text-align: left;">Yield, Treasury yield</td>
+<td style="text-align: left;">annualized decimal</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Semi-annual bond-equivalent for US
+corporates unless stated.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span
+class="math inline">\(P\)</span></td>
+<td style="text-align: left;">Bond price</td>
+<td style="text-align: left;">per 100 of par, clean unless stated</td>
+<td style="text-align: left;"><span class="math inline">\(0\)</span> to
+<span class="math inline">\(110\)</span>; distressed below <span
+class="math inline">\(70\)</span></td>
+<td style="text-align: left;">Defaulted bonds trade flat (§A.5).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span
+class="math inline">\(S_t\)</span></td>
+<td style="text-align: left;">Generic mid price or underlying</td>
+<td style="text-align: left;">price units</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Market-making chapters. Subscript, not
+parentheses.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span
+class="math inline">\(q\)</span></td>
+<td style="text-align: left;">Inventory</td>
+<td style="text-align: left;">$ notional (or units)</td>
+<td style="text-align: left;">plus or minus $5mm to $50mm per line</td>
+<td style="text-align: left;">Signed: long positive.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span
+class="math inline">\(\gamma\)</span></td>
+<td style="text-align: left;">Risk aversion</td>
+<td style="text-align: left;">inverse price</td>
+<td style="text-align: left;">calibrated to inventory limits</td>
+<td style="text-align: left;">Not the option Greek, which is <span
+class="math inline">\(\Gamma\)</span>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span
+class="math inline">\(\Lambda(\delta) = A e^{-k\delta}\)</span></td>
+<td style="text-align: left;">Order-arrival intensity at quote distance
+<span class="math inline">\(\delta\)</span></td>
+<td style="text-align: left;">arrivals per day</td>
+<td style="text-align: left;"><span class="math inline">\(A\)</span> of
+<span class="math inline">\(0.5\)</span> to <span
+class="math inline">\(20\)</span> per day per bond</td>
+<td style="text-align: left;"><span class="math inline">\(k\)</span> in
+inverse distance units; written <span
+class="math inline">\(k_\Lambda\)</span> if a factor index <span
+class="math inline">\(k\)</span> is nearby.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span
+class="math inline">\(\delta\)</span></td>
+<td style="text-align: left;">Quote distance from mid</td>
+<td style="text-align: left;">price units or bp</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Not the option delta, which is <span
+class="math inline">\(\Delta\)</span>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span
+class="math inline">\(r^{\text{res}}\)</span></td>
+<td style="text-align: left;">Reservation price</td>
+<td style="text-align: left;">price units</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Not <span
+class="math inline">\(r\)</span>, the interest rate.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(W_t\)</span>,
+<span class="math inline">\(N_t\)</span></td>
+<td style="text-align: left;">Brownian motion, Poisson process</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><span
+class="math inline">\(N(\cdot)\)</span> with parentheses is the standard
+normal CDF.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span
+class="math inline">\(J\)</span></td>
+<td style="text-align: left;">Jump size on default (price points
+lost)</td>
+<td style="text-align: left;">points of par</td>
+<td style="text-align: left;"><span class="math inline">\(P -
+100R\)</span></td>
+<td style="text-align: left;">Appears in the <span
+class="math inline">\(q\lambda J\)</span> term.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span
+class="math inline">\(F_{k,t}\)</span>, <span
+class="math inline">\(\beta_{i,k}\)</span>, <span
+class="math inline">\(\epsilon_{i,t}\)</span></td>
+<td style="text-align: left;">Factor return, loading, idiosyncratic
+return</td>
+<td style="text-align: left;">decimal</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Subscripted <span
+class="math inline">\(F\)</span> is a factor; unsubscripted <span
+class="math inline">\(F\)</span> is face.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">IDO</td>
+<td style="text-align: left;">Idiosyncratic return</td>
+<td style="text-align: left;">decimal or bp</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">The residual after rates, carry, and
+factors.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\text{PRS} \in
+[0,1]\)</span></td>
+<td style="text-align: left;">Priming Risk Score</td>
+<td style="text-align: left;">probability</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Chapter 13.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span
+class="math inline">\(\text{EV}\)</span></td>
+<td style="text-align: left;">Enterprise value</td>
+<td style="text-align: left;">$mm</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Restructuring valuation; never expected
+value.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">IC, IR, BR</td>
+<td style="text-align: left;">Information coefficient, information
+ratio, breadth</td>
+<td style="text-align: left;">none</td>
+<td style="text-align: left;">IC <span
+class="math inline">\(0.02\)</span> to <span
+class="math inline">\(0.10\)</span>; live IR <span
+class="math inline">\(0.3\)</span> to <span
+class="math inline">\(1.0\)</span></td>
+<td style="text-align: left;">Chapter 28; breadth corrected for issuer
+clustering.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span
+class="math inline">\(\Sigma\)</span>, <span
+class="math inline">\(\mathbf{w}\)</span></td>
+<td style="text-align: left;">Covariance matrix, portfolio weights</td>
+<td style="text-align: left;">decimal squared, decimal</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Shrinkage is mandatory for stale bonds
+(Chapter 19).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span
+class="math inline">\(h\)</span></td>
+<td style="text-align: left;">Markout horizon</td>
+<td style="text-align: left;">minutes to days</td>
+<td style="text-align: left;">5 minutes, 1 hour, 1 day, 5 days</td>
+<td style="text-align: left;">§A.7.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span
+class="math inline">\(\rho\)</span></td>
+<td style="text-align: left;">Correlation</td>
+<td style="text-align: left;">none</td>
+<td style="text-align: left;">spread–rate <span
+class="math inline">\(\rho &lt; 0\)</span> in HY</td>
+<td style="text-align: left;">Chapter 8.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span
+class="math inline">\(\mathcal{N}(\mu,\sigma^2)\)</span>, <span
+class="math inline">\(N(\cdot)\)</span>, <span
+class="math inline">\(\phi(\cdot)\)</span></td>
+<td style="text-align: left;">Normal distribution, its CDF, its
+density</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Kaz’s opening move.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(d_1\)</span>,
+<span class="math inline">\(d_2\)</span></td>
+<td style="text-align: left;">Black–Scholes–Merton arguments</td>
+<td style="text-align: left;">none</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Signs verified in Chapter 6.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="a.3-collisions-and-how-the-book-resolves-them"
+class="level2">
+<h2>A.3 Collisions and how the book resolves them</h2>
+<p>Any symbol set this large collides with itself. The rule is:
+distinguish by decoration, and say so in the text. The standing
+resolutions:</p>
+<ul>
+<li><span class="math inline">\(F\)</span> (face value) versus <span
+class="math inline">\(F_{k,t}\)</span> (factor return): the factor
+always carries subscripts.</li>
+<li><span class="math inline">\(k\)</span> (factor index) versus <span
+class="math inline">\(k\)</span> (arrival-intensity decay): when both
+appear in one section, the decay parameter becomes <span
+class="math inline">\(k_\Lambda\)</span>.</li>
+<li><span class="math inline">\(r\)</span> (rate) versus <span
+class="math inline">\(r^{\text{res}}\)</span> (reservation price) versus
+returns: returns are written <span
+class="math inline">\(\text{TR}\)</span>, <span
+class="math inline">\(\text{XR}\)</span>, or <span
+class="math inline">\(x_{i,t}\)</span> (§A.7); if a chapter borrows
+<span class="math inline">\(r_{i,t}\)</span> for a return, it moves the
+rate to <span class="math inline">\(r_f\)</span> for that section and
+says so.</li>
+<li><span class="math inline">\(\lambda\)</span> is default intensity,
+always. Arrivals are <span class="math inline">\(\Lambda\)</span>.
+Kyle’s lambda, when it appears in Chapter 18, is <span
+class="math inline">\(\lambda^{\text{Kyle}}\)</span>.</li>
+<li><span class="math inline">\(D\)</span> is duration, always. Debt
+face is <span class="math inline">\(F\)</span>; debt market value, when
+needed, is <span class="math inline">\(B_t\)</span>.</li>
+<li><span class="math inline">\(S(t)\)</span> (survival, parentheses)
+versus <span class="math inline">\(S_t\)</span> (mid price, subscript).
+When a market-making section needs both, survival is written in full as
+<span class="math inline">\(S^{\mathbb{Q}}(t)\)</span>.</li>
+<li><span class="math inline">\(\sigma\)</span> with no subscript is the
+mid-price volatility in price units per square-root year in
+market-making sections and an annualized decimal in structural sections;
+each section says which in its first equation.</li>
+<li><span class="math inline">\(\gamma\)</span> (risk aversion) versus
+the option gamma, which is <span class="math inline">\(\Gamma\)</span>;
+<span class="math inline">\(\delta\)</span> (quote distance) versus the
+option delta, which is <span class="math inline">\(\Delta\)</span>.</li>
+<li>EV is enterprise value; <span
+class="math inline">\(\mathbb{E}[\cdot]\)</span> is expectation. “The EV
+of the trade” is a phrase the book does not use.</li>
+<li><span class="math inline">\(\tau\)</span> is the default time, never
+time to maturity (that is <span class="math inline">\(T - t\)</span>)
+and never a transaction-cost parameter.</li>
+</ul>
+</section>
+<section id="a.4-time-dates-and-day-counts" class="level2">
+<h2>A.4 Time, dates, and day counts</h2>
+<p><span class="math inline">\(t\)</span> is measured in years
+everywhere. Converting calendar time into years requires a day-count
+basis, and the basis depends on the instrument. When a formula mixes
+instruments, convert each to a year fraction on its own basis and say
+so. A specification that says “time in years” without a basis is a
+specification ROBO will fill in with calendar days over 365, which is
+right for none of the instruments below.</p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Instrument</th>
+<th style="text-align: left;">Day count</th>
+<th style="text-align: left;">Coupon or payment</th>
+<th style="text-align: left;">Settlement</th>
+<th style="text-align: left;">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">US corporate bonds (fixed)</td>
+<td style="text-align: left;">30/360</td>
+<td style="text-align: left;">semi-annual</td>
+<td style="text-align: left;">T+1 (since May 28, 2024; T+2 before)</td>
+<td style="text-align: left;">Quoted clean, settled dirty.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">US Treasuries</td>
+<td style="text-align: left;">ACT/ACT</td>
+<td style="text-align: left;">semi-annual</td>
+<td style="text-align: left;">T+1</td>
+<td style="text-align: left;">Benchmark for G-spread and excess
+returns.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CDS (SNAC)</td>
+<td style="text-align: left;">ACT/360</td>
+<td style="text-align: left;">quarterly on 20 March, June, September,
+December</td>
+<td style="text-align: left;">T+1, with upfront</td>
+<td style="text-align: left;">Fixed coupon of 100bp (IG) or 500bp (HY);
+accrued rebated at trade; indices roll in March and September.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Leveraged loans</td>
+<td style="text-align: left;">ACT/360</td>
+<td style="text-align: left;">per interest period (often 1 or 3 months)
+at term SOFR plus margin, often with a floor</td>
+<td style="text-align: left;">T+7 par, T+20 distressed (LSTA convention;
+delayed compensation thereafter)</td>
+<td style="text-align: left;">Chapter 21.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Money market, repo</td>
+<td style="text-align: left;">ACT/360</td>
+<td style="text-align: left;">at maturity</td>
+<td style="text-align: left;">T+0 or T+1</td>
+<td style="text-align: left;">The funding leg of the basis.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Equity options</td>
+<td style="text-align: left;">calendar days over 365 for expiry; 252
+trading days for volatility</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">T+1</td>
+<td style="text-align: left;">Chapter 23.</td>
+</tr>
+</tbody>
+</table>
+<p>Calendar conventions the restructuring chapters rely on: Chapter 11
+deadlines run in calendar days from the petition date, with the debtor’s
+exclusive period to file a plan at 120 days and to solicit acceptances
+at 180 days, each extendable by the court to a cap of 18 and 20 months
+respectively. Credit-agreement test dates are fiscal-quarter ends, and
+the quarter that matters for basket capacity is the most recently ended
+one for which financial statements have been delivered, which is rarely
+the one you were thinking of.</p>
+</section>
+<section id="a.5-prices-yields-and-spreads" class="level2">
+<h2>A.5 Prices, yields, and spreads</h2>
+<p><strong>Price.</strong> Per 100 of par. One point is one percent of
+par, or $10,000 per $1 million of face. The integer part of a price is
+its “handle.” Bonds are quoted clean (excluding accrued interest) and
+settle dirty (clean plus accrued). Bonds in default trade flat: no
+accrued interest is added, and the price embeds whatever claim to
+accrued the holder has. Loans quote on price per 100 plus a margin over
+the reference rate.</p>
+<p><strong>Yield.</strong> US corporates quote a semi-annual
+bond-equivalent yield; formulas in this book use continuous compounding
+unless they say otherwise. The conversion is <span
+class="math inline">\(r^{\text{cc}} = 2 \ln\!\left(1 +
+\tfrac{y}{2}\right)\)</span>. Callable bonds quote yield-to-worst, the
+lowest yield across all call and maturity dates on the assumption that
+the issuer exercises against you, which it will.</p>
+<p><strong>Basis points.</strong> 1bp <span class="math inline">\(=
+0.01\% = 0.0001\)</span>. Spreads are written in basis points in prose
+and tables and in decimal in formulas, and code carries the unit in the
+variable name (<code>spread_bp</code>, <code>spread_dec</code>).
+“Spreads widened 25bp,” never “0.25%.”</p>
+<p><strong>Dollar sensitivities.</strong> DV01 is the dollar change in a
+position’s value for a one-basis-point move in yield; CS01 is the same
+for spread. For a bullet bond,</p>
+<p><span class="math display">\[\text{DV01} \approx D^{\text{mod}}
+\times \frac{P}{100} \times \text{Face} \times 0.0001 .\]</span></p>
+<p>A $10 million position at a price of 95 with <span
+class="math inline">\(D^{\text{mod}} = 6\)</span> has a DV01 of about
+<span class="math inline">\(6 \times 0.95 \times 10{,}000{,}000 \times
+0.0001 = 5{,}700\)</span> dollars per basis point
+<em>(illustrative)</em>.</p>
+<p><strong>Spread measures.</strong> “The spread” is at least five
+different numbers, and the basis between a bond and its CDS depends on
+which one you chose.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Measure</th>
+<th style="text-align: left;">Definition</th>
+<th style="text-align: left;">Use</th>
+<th style="text-align: left;">Trap</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">G-spread</td>
+<td style="text-align: left;">Yield minus the interpolated Treasury
+yield at the same maturity</td>
+<td style="text-align: left;">Quick IG comparisons</td>
+<td style="text-align: left;">Ignores curve shape and coupon.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">I-spread</td>
+<td style="text-align: left;">Yield minus the interpolated swap
+rate</td>
+<td style="text-align: left;">Swap-funded investors</td>
+<td style="text-align: left;">The swap curve (SOFR) choice matters.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Z-spread (<span
+class="math inline">\(Z\)</span>)</td>
+<td style="text-align: left;">Constant spread added to every zero rate
+on a discount curve so that discounted cash flows equal the dirty
+price</td>
+<td style="text-align: left;">Bullet bonds; the standard input to a
+basis</td>
+<td style="text-align: left;">Name the curve (Treasury or swap). Ignores
+embedded options.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">OAS</td>
+<td style="text-align: left;">Z-spread after removing option value with
+an interest-rate model</td>
+<td style="text-align: left;">Callable and putable bonds; HY index
+analytics</td>
+<td style="text-align: left;">Model-dependent; <span
+class="math inline">\(\text{OAS} \le Z\)</span> for callables, the gap
+being option cost in bp.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ASW (par-par)</td>
+<td style="text-align: left;">Margin over floating such that a package
+of the bond bought at par plus a coupon-for-floating swap is worth
+zero</td>
+<td style="text-align: left;">Funded investors; basis against CDS</td>
+<td style="text-align: left;">Diverges from <span
+class="math inline">\(Z\)</span> when price is far from par; a
+market-value variant exists.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PECS</td>
+<td style="text-align: left;">The flat CDS spread whose implied survival
+curve, with the CDS recovery assumption, reprices the bond</td>
+<td style="text-align: left;">The right bond spread for a CDS basis</td>
+<td style="text-align: left;">Depends on the assumed recovery.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Discount margin</td>
+<td style="text-align: left;">For floaters and loans, the spread over
+the reference rate that equates PV to price, assuming forwards equal the
+current rate</td>
+<td style="text-align: left;">Loans and FRNs</td>
+<td style="text-align: left;">State whether the floor is priced.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CDS quoted spread</td>
+<td style="text-align: left;">A quoting convention converted to an
+upfront payment by the ISDA Standard Model under a flat hazard rate and
+a fixed recovery</td>
+<td style="text-align: left;">Quoting</td>
+<td style="text-align: left;">Not the par spread of a term-structure
+model; the upfront is the traded number.</td>
+</tr>
+</tbody>
+</table>
+<p>The book’s <strong>basis</strong> is <span
+class="math inline">\(\text{basis} = s^{\text{CDS}} -
+s^{\text{bond}}\)</span>, with the bond measure named (<span
+class="math inline">\(Z\)</span> or PECS). Negative basis means the bond
+is cheap relative to protection: buy the bond, buy protection, and
+discover what funding costs in a crisis (Chapter 24).</p>
+<p><strong>Price versus spread quoting.</strong> Bonds trade on spread
+while a spread is informative and on price once it is not. The common
+rule of thumb is that a spread above roughly 1,000bp, or a price in the
+low 80s or below, means the bond is “trading on price” <em>(convention;
+approximate)</em>, because the yield-to-maturity arithmetic assumes the
+coupons will be paid, and at that point nobody believes it.</p>
+<p><strong>Spread duration versus modified duration.</strong> <span
+class="math inline">\(D^{\text{spr}}\)</span> is the sensitivity of
+price to spread; <span class="math inline">\(D^{\text{mod}}\)</span> to
+yield. For fixed-rate bullets they are nearly equal. For floaters, <span
+class="math inline">\(D^{\text{mod}}\)</span> is roughly the time to the
+next reset while <span class="math inline">\(D^{\text{spr}}\)</span> is
+roughly the remaining life, which is why loans have almost no rate risk
+and plenty of credit risk.</p>
+<p><strong>DTS.</strong> <span class="math inline">\(\text{DTS} =
+D^{\text{spr}} \times s\)</span> with <span
+class="math inline">\(s\)</span> in basis points, in units of years
+times bp. Its justification is empirical: relative spread changes have
+similar volatility across bonds, so absolute excess-return volatility is
+proportional to DTS. A bond with DTS 1,600 is about twice as risky as
+one with DTS 800, regardless of which has the longer duration (Chapter
+8).</p>
+</section>
+<section id="a.6-recovery-conventions" class="level2">
+<h2>A.6 Recovery conventions</h2>
+<p>Recovery is a rate, a convention, and an argument, in that order.</p>
+<p><strong>Symbol.</strong> <span class="math inline">\(R\)</span> is
+the recovery rate and <span class="math inline">\(L = 1 - R\)</span> the
+loss given default, both as fractions of the relevant base. The base is
+the convention:</p>
+<ul>
+<li><strong>Recovery of face value (RFV).</strong> On default the holder
+receives <span class="math inline">\(R\)</span> times face (plus, in
+some setups, accrued). This is how CDS settle (the auction yields a
+price per 100 of par) and how the book prices bonds unless it says
+otherwise. It makes a bond’s default payoff independent of its coupon
+and maturity, which is realistic for claims in bankruptcy.</li>
+<li><strong>Recovery of market value (RMV).</strong> On default the
+holder receives <span class="math inline">\(R\)</span> times the bond’s
+market value an instant before default (Duffie–Singleton). It produces
+the elegant risky discount rate <span class="math inline">\(r + \lambda
+L\)</span>, which lets you price defaultable cash flows on a
+spread-adjusted curve as if they were riskless. “Forty percent of
+whatever it was worth a second ago” is not what happens in a courtroom,
+but the mathematics is clean enough that it is worth knowing when the
+approximation is harmless (Chapter 6).</li>
+<li><strong>Recovery of Treasury (RT).</strong> On default the holder
+receives <span class="math inline">\(R\)</span> times the value of an
+otherwise identical riskless bond (Jarrow–Turnbull). Useful in
+rating-transition models; rare on a desk.</li>
+</ul>
+<p><strong>Market conventions.</strong> The ISDA Standard Model converts
+quoted CDS spreads to upfront payments using assumed recoveries of 40
+percent for senior unsecured and 20 percent for subordinated North
+American corporate reference entities. These are quoting conventions,
+not forecasts, and a desk that treats 40 percent as an expected recovery
+for a CCC retailer with a drop-down in progress has confused a unit with
+a fact.</p>
+<p><strong>Realized recoveries.</strong> Two different measurements
+share the name: the trading price of the defaulted instrument about 30
+days after default, and the ultimate recovery at emergence, discounted
+back to the default date. They can differ substantially and in either
+direction. Any cited recovery statistic in this book names which one it
+is. Recoveries fall with seniority and collateral (first-lien loans at
+the top, subordinated bonds at the bottom); the sourced numbers and
+their dispersion are in Chapter 5, where recovery is modeled as a Beta
+distribution with mass points at zero and one.</p>
+<p><strong>Physical versus risk-neutral.</strong> A recovery backed out
+of market prices is a <span class="math inline">\(\mathbb{Q}\)</span>
+quantity. The credit triangle <span class="math inline">\(s \approx
+\lambda(1 - R)\)</span> shows why this matters: one observed spread is
+consistent with infinitely many <span class="math inline">\((\lambda,
+R)\)</span> pairs, and the market’s split between them is not identified
+from the spread alone. Recovery locks exist to trade the split
+directly.</p>
+<p><strong>Recovery in the LMT era.</strong> Recovery is now a property
+of the instrument and the transaction, not the issuer. A priming
+transaction changes <span class="math inline">\(R\)</span> for
+left-behind lenders without any default occurring, which is why the
+default and recovery distributions of Chapter 5 are re-estimated under
+the regime shifts of Chapter 14.</p>
+</section>
+<section id="a.7-return-conventions" class="level2">
+<h2>A.7 Return conventions</h2>
+<ul>
+<li><strong>Total return</strong> (<span
+class="math inline">\(\text{TR}\)</span>): price change plus coupon
+income plus reinvestment over the period, per unit of starting dirty
+price, in decimal.</li>
+<li><strong>Excess return</strong> (<span
+class="math inline">\(\text{XR}\)</span>): total return minus the return
+of a duration-matched Treasury portfolio over the same period. Matching
+is ideally by key-rate duration, not by a single number. This is the
+book’s default meaning of “excess return” in Part III. Excess return
+over swaps is used for asset-swap-based analysis and is named as
+such.</li>
+<li><strong>Spread return approximation:</strong> <span
+class="math inline">\(\text{XR} \approx -D^{\text{spr}}\,\Delta s +
+\tfrac{1}{2} C^{\text{spr}} (\Delta s)^2 + \text{carry}\)</span>, with
+<span class="math inline">\(s\)</span> in decimal and <span
+class="math inline">\(C^{\text{spr}}\)</span> the spread convexity.
+<strong>OAS carry</strong> is <span class="math inline">\(\text{OAS}
+\times \Delta t\)</span>; <strong>yield carry</strong> includes the
+Treasury component; <strong>roll-down</strong> is reported
+separately.</li>
+<li><strong>Simple versus log returns:</strong> simple returns aggregate
+across positions; log returns aggregate across time. Each chapter says
+which it is using.</li>
+<li><strong>Annualization:</strong> means by 252 (daily) or 12
+(monthly); volatilities by <span
+class="math inline">\(\sqrt{252}\)</span> or <span
+class="math inline">\(\sqrt{12}\)</span>. Bonds with stale prices
+understate short-horizon volatility and correlation, which is why
+Chapter 8 uses lag-sum betas and Chapter 19 shrinks covariances.</li>
+<li><strong>Markout:</strong> <span
+class="math inline">\(\text{markout}_h = \text{side} \times
+\left(m_{t+h} - P_{\text{trade}}\right)\)</span>, with <span
+class="math inline">\(\text{side} = +1\)</span> when the desk bought and
+<span class="math inline">\(-1\)</span> when it sold, <span
+class="math inline">\(m\)</span> the composite mid, and <span
+class="math inline">\(h\)</span> the horizon (5 minutes, 1 hour, 1 day,
+5 days). Reported in bp of price or bp of spread, stated which. A
+persistently negative average markout on a counterparty’s flow is the
+definition of toxic flow. Ines calls the markout log the hand history
+and reads it before she reads anything else.</li>
+<li><strong>Sharpe ratio and information ratio:</strong> annualized;
+Sharpe in excess of funding, IR relative to the named benchmark; always
+reported with the sample length, and in Chapter 7 with the deflated
+version that accounts for the number of strategies tried.</li>
+<li><strong>IDO:</strong> the residual <span
+class="math inline">\(\epsilon_{i,t}\)</span> after removing rates,
+carry, and factor exposures (Chapter 8). Reported in bp per period. The
+desk’s unit of alpha.</li>
+<li><strong>DTS-scaled returns:</strong> <span
+class="math inline">\(\text{XR} / \text{DTS}\)</span>, making bonds of
+different risk comparable.</li>
+<li><strong>In code:</strong> returns and spreads are decimals inside
+arrays; conversion to bp and percent happens at the input and output
+boundaries; variable names carry units.</li>
+</ul>
+</section>
+<section id="a.8-sizes-signs-and-desk-arithmetic" class="level2">
+<h2>A.8 Sizes, signs, and desk arithmetic</h2>
+<ul>
+<li><strong>Units of size.</strong> $mm is millions and $bn is billions.
+Face (notional) and market value are different numbers: $10mm face at a
+price of 60 is $6mm of market value and $10mm of claim.</li>
+<li><strong>Risk is reported four ways:</strong> DV01 (rates), CS01
+(spread), DTS-weighted market value (proportional spread risk), and
+jump-to-default, <span class="math inline">\(\text{JTD} = \text{MV} - R
+\times \text{Face}\)</span> for a long position, the loss if the issuer
+defaults now.</li>
+<li><strong>Sign conventions.</strong> Long credit means long the bond
+or short protection; the protection buyer pays the premium and is short
+credit. Spreads up means prices down means long credit loses. In a
+return decomposition the rate term is <span
+class="math inline">\(-D\,\Delta y\)</span>; a plus sign there is the
+most common bug in a first implementation.</li>
+<li><strong>Rounding.</strong> Bond prices in decimals (historically
+eighths); spreads to the basis point; CDS upfronts to a hundredth of a
+point.</li>
+<li><strong>TRACE dissemination.</strong> Prints above the dissemination
+caps display with a capped size; the caps and reporting times have
+changed over the period this book covers and are detailed in Chapters 18
+and 22.</li>
+</ul>
+</section>
+<section id="a.9-glossary-of-desk-and-restructuring-terms"
+class="level2">
+<h2>A.9 Glossary of desk and restructuring terms</h2>
+<p>One line each, alphabetical, with a joke where the term can bear
+one.</p>
+<ul>
+<li><strong>363 sale.</strong> A sale of a debtor’s assets under Section
+363 of the Bankruptcy Code, outside the ordinary course and “free and
+clear” of liens, usually with a stalking-horse bidder and an auction.
+Faster than a plan, which is why buyers like it and some creditors do
+not.</li>
+<li><strong>503(b)(9) claim.</strong> An administrative-expense priority
+claim for the value of goods (not services) a debtor received in the 20
+days before filing. The one time in bankruptcy when being a late
+supplier is good news.</li>
+<li><strong>Absolute priority rule.</strong> Under Section 1129(b), a
+dissenting class must be paid in full before any junior class receives
+anything. Honored in principle, negotiated in practice, and the reason
+the fulcrum matters.</li>
+<li><strong>Ad hoc group.</strong> An informal group of creditors
+holding the same instrument who hire common counsel to negotiate
+collectively. Disclosed in Rule 2019 statements. Speaks in unison,
+mostly in footnotes.</li>
+<li><strong>Adequate protection.</strong> Compensation a secured
+creditor receives in bankruptcy for the diminution in value of its
+collateral while the automatic stay is in effect. “Adequate” is doing a
+lot of work in that sentence.</li>
+<li><strong>All-to-all trading.</strong> An electronic protocol in which
+any participant, not only dealers, can respond to a request for quote.
+The moment the bazaar got a second set of stalls.</li>
+<li><strong>Asset swap (ASW).</strong> A package of a fixed-rate bond
+and an interest-rate swap converting its coupon to floating; the asset
+swap spread is the margin over the floating rate that makes the package
+worth par.</li>
+<li><strong>Authorized participant (AP).</strong> A dealer permitted to
+create and redeem ETF shares in kind with the fund, exchanging baskets
+of bonds for creation units. The people who open the sealed boxes.</li>
+<li><strong>Available Amount basket.</strong> A builder basket for
+restricted payments and investments whose capacity grows with retained
+earnings (or a fraction of net income or EBITDA) since closing. Capacity
+you did not know the sponsor had.</li>
+<li><strong>Backstop.</strong> A commitment, usually by an ad hoc group,
+to purchase any portion of a rights offering not taken up by other
+holders, in exchange for a fee and often a discount. The committed
+capital is real; so is the fee.</li>
+<li><strong>Basis (CDS–bond).</strong> The difference between the CDS
+spread and the bond’s spread on a comparable measure (Z, ASW, or PECS).
+Negative basis: bond cheap to CDS. The trade that works until funding
+disappears.</li>
+<li><strong>Blocker.</strong> A covenant provision drafted after a
+famous transaction to prevent the next one: a J.Crew blocker (restricts
+transfers of material IP to unrestricted subsidiaries), a Serta blocker
+(requires pro rata treatment in any uptier), a Chewy blocker (restricts
+guarantor release via partial equity sales). Named like hurricanes, for
+the damage.</li>
+<li><strong>BWIC / OWIC.</strong> Bids (or offers) wanted in
+competition: a list of bonds or loans put out for auction, typically by
+a fund or CLO. Every dealer who sees the list learns something, which is
+the leakage problem.</li>
+<li><strong>CCC bucket.</strong> The maximum share (commonly 7.5
+percent) of a CLO’s portfolio that may be rated CCC or below before
+excess holdings are carried at market value for overcollateralization
+tests. The reason CLOs sell at the worst time.</li>
+<li><strong>CDX / iTraxx.</strong> The standardized credit default swap
+indices for North America (CDX IG, 125 names; CDX HY, 100 names) and
+Europe (iTraxx Main and Crossover), rolling to a new series each March
+and September. The most liquid thing in credit; the hedge everyone uses
+and nobody loves.</li>
+<li><strong>Change-of-control (CoC) put.</strong> The bondholder’s right
+to put bonds to the issuer at 101 upon a change of control, often
+coupled with a ratings-decline trigger. An option that pays only if the
+deal closes and the trigger is met.</li>
+<li><strong>Cheapest-to-deliver (CTD).</strong> In CDS settlement, the
+protection buyer’s right to deliver (or the auction’s tendency to price)
+the lowest-priced qualifying obligation. A free option embedded in a
+product sold as insurance.</li>
+<li><strong>Clean / dirty price.</strong> Clean excludes accrued
+interest; dirty includes it. Bonds are quoted clean and settled dirty.
+Defaulted bonds trade flat.</li>
+<li><strong>CLO.</strong> Collateralized loan obligation: a vehicle that
+buys leveraged loans and issues tranches from AAA to equity, managed
+subject to coverage and quality tests during a reinvestment period. The
+largest buyer of loans and a mechanical seller under stress.</li>
+<li><strong>Composite price.</strong> A vendor’s estimate of a bond’s
+current mid built from TRACE prints, dealer quotes, and models. Several
+named products exist; the book calls them composites. Not a price; a
+prior.</li>
+<li><strong>Cooperation agreement.</strong> An agreement among lenders
+to act together and not to participate in a non-pro-rata transaction
+without the group. Increments the counter.</li>
+<li><strong>Covenant-lite.</strong> A loan without financial maintenance
+covenants, relying on incurrence tests only. “Lite” refers to the
+lender’s protection, not the document’s weight.</li>
+<li><strong>Cram-down.</strong> Confirmation of a plan over the
+objection of an impaired class under Section 1129(b), subject to the
+absolute priority rule and the fair-and-equitable test. Nobody gets
+crammed up.</li>
+<li><strong>Creation unit.</strong> The block size (often tens of
+thousands of shares) in which an ETF’s shares are created or redeemed by
+authorized participants.</li>
+<li><strong>Credit event.</strong> The ISDA-defined triggers for CDS:
+bankruptcy, failure to pay, and (where applicable) restructuring, plus
+others for sovereigns. Determined by a Determinations Committee, and the
+subject of more creative lawyering than the drafters anticipated.</li>
+<li><strong>Cross-default / cross-acceleration.</strong> A default under
+one debt instrument triggers a default under another (cross-default), or
+does so only once the first debt is actually accelerated
+(cross-acceleration). The difference is a quarter of negotiation.</li>
+<li><strong>Custom basket.</strong> A creation or redemption basket that
+differs from a pro rata slice of the fund, permitted under the 2019 ETF
+rule. How bond ETFs stay liquid when their bonds are not.</li>
+<li><strong>D2C / D2D.</strong> Dealer-to-client and dealer-to-dealer
+trading. TRACE flags which is which; the information content
+differs.</li>
+<li><strong>Debtor-in-possession (DIP) financing.</strong> New money
+lent to a debtor in bankruptcy with super-priority status, often with
+liens priming prepetition lenders. The first-mover advantage in Chapter
+11.</li>
+<li><strong>DIP roll-up.</strong> A DIP structured so that prepetition
+loans held by the DIP lenders are converted into (rolled into) the
+super-priority DIP. The lenders who provide new money get their old
+money promoted.</li>
+<li><strong>Discount margin.</strong> For a floating-rate instrument,
+the spread over the reference rate that equates the present value of
+cash flows to the price, assuming forward rates equal the current
+rate.</li>
+<li><strong>Distressed exchange.</strong> An out-of-court transaction in
+which creditors accept new securities or cash worth less than the
+original claim, to avoid a bankruptcy. Counted as a default by the
+rating agencies; counted as a feature by the sponsor.</li>
+<li><strong>Double-dip.</strong> A structure that gives new lenders two
+claims against the same credit group: one direct (or via a guarantee)
+and one via an intercompany loan from the borrowing entity. Two tickets,
+one seat.</li>
+<li><strong>Drop-down.</strong> The transfer of assets (classically
+intellectual property) to an unrestricted subsidiary outside the
+collateral package, which then raises new debt against them. J.Crew,
+2016. The door was in the blueprint.</li>
+<li><strong>DTS (Duration Times Spread).</strong> Spread duration
+multiplied by spread, in years times bp. The best single measure of a
+bond’s credit risk, because spread volatility scales with spread
+level.</li>
+<li><strong>DV01 / CS01.</strong> The dollar change in a position for a
+one-basis-point move in yield (DV01) or credit spread (CS01).</li>
+<li><strong>EBITDA add-backs.</strong> Adjustments to EBITDA permitted
+by the credit agreement, including projected cost savings and synergies,
+often capped at a percentage of EBITDA, and often not. Mags’s least
+favorite word is “adjusted.”</li>
+<li><strong>Exclusivity period.</strong> The window (initially 120 days
+from the petition date to file a plan and 180 days to solicit
+acceptances, extendable up to 18 and 20 months) during which only the
+debtor may propose a plan. The clock the whole case runs on.</li>
+<li><strong>Fallen angel / rising star.</strong> A bond downgraded from
+investment grade to high yield (fallen angel) or upgraded the other way
+(rising star). Forced-seller flow in both directions.</li>
+<li><strong>First-day motions.</strong> The motions a debtor files at
+the start of a case to keep operating: cash management, wages, critical
+vendors, DIP approval. The first signal of who is in charge.</li>
+<li><strong>Fulcrum security.</strong> The class in the capital
+structure at which value runs out, which therefore receives most of the
+reorganized equity. Not a physics thing, Kaz.</li>
+<li><strong>General unsecured claim (GUC).</strong> A claim with no
+collateral and no statutory priority; the residual class, usually paid
+in cents, stock, or litigation-trust interests.</li>
+<li><strong>Hit rate.</strong> The share of RFQs a dealer wins. A high
+hit rate is good news until the markouts arrive.</li>
+<li><strong>IDO.</strong> Idiosyncratic return: what remains of a bond’s
+return after removing rates, carry, and factor exposure. The desk’s unit
+of alpha. IDO or it didn’t happen.</li>
+<li><strong>iNAV.</strong> The intraday indicative value of an ETF,
+published periodically during the trading day from the fund’s basket. A
+number that is correct about a basket nobody can trade.</li>
+<li><strong>Impaired class.</strong> A class of claims whose legal
+rights are altered by the plan; only impaired classes vote. Being
+unimpaired sounds nice and means you have no say.</li>
+<li><strong>Incurrence vs. maintenance covenant.</strong> A maintenance
+covenant must be satisfied at every test date; an incurrence covenant is
+tested only when the borrower takes an action (incurs debt, pays a
+dividend). Covenant-lite means the maintenance covenants went away.</li>
+<li><strong>Investment grade / high yield.</strong> Rated Baa3/BBB- or
+better by the agencies, or not. The boundary with the most forced
+sellers on either side.</li>
+<li><strong>J.Crew trapdoor.</strong> The combination of investment
+baskets that allowed J.Crew in 2016 to move intellectual property into
+an unrestricted subsidiary and borrow against it. Now a common
+noun.</li>
+<li><strong>Jump-to-default (JTD).</strong> The loss a position suffers
+if the issuer defaults immediately: market value minus recovery times
+face. The risk that no diffusion model sees coming.</li>
+<li><strong>Key-rate duration.</strong> The sensitivity of price to a
+move in one maturity point of the yield curve, holding the others fixed.
+The thing a “duration-matched” hedge usually is not.</li>
+<li><strong>Liability management transaction (LMT).</strong> An
+out-of-court transaction (uptier, drop-down, double-dip, exchange) that
+changes the priority or collateral of existing debt, typically with the
+consent of a majority but not all lenders. The genus, not the
+species.</li>
+<li><strong>Liquidity cost score (LCS).</strong> A bond-level estimate
+of round-trip transaction cost as a fraction of price, built from quotes
+and trades (Barclays methodology; Ben Dor). The number that turns paper
+alpha into real alpha, or does not.</li>
+<li><strong>Markout.</strong> The change in a composite mid after a
+trade, signed by the dealer’s side, at a fixed horizon. The hand
+history: it tells you whether the counterparty knew something.</li>
+<li><strong>Most-favored-nation (MFN).</strong> A provision requiring
+that if the borrower issues new pari passu debt at a wider spread,
+existing lenders’ spread is raised to match, often subject to a cushion
+and a sunset. A spread floor with an expiry date.</li>
+<li><strong>NAV.</strong> Net asset value of a fund per share, struck
+once a day from the fund’s marks; for bond ETFs, usually a bid-side
+valuation.</li>
+<li><strong>Negative pledge.</strong> A covenant barring the borrower
+from granting liens to others without equally securing the covenanted
+creditor. Plain-vanilla bonds have them; the exceptions are where the
+structuring happens.</li>
+<li><strong>OAS (option-adjusted spread).</strong> The constant spread
+over the discount curve that reprices the bond after accounting for
+embedded options under an interest-rate model.</li>
+<li><strong>OC / IC tests.</strong> Overcollateralization and
+interest-coverage tests in a CLO; failing one diverts cash flows from
+junior tranches to pay down senior notes. The automatic deleveraging
+that makes CLOs sell loans into weakness.</li>
+<li><strong>Open market purchase.</strong> The exception in many credit
+agreements allowing a borrower to buy back loans from individual lenders
+without a pro rata offer. The three words on which the Serta uptier
+rested; the Fifth Circuit disagreed on the last day of 2024. The most
+expensive three words in finance.</li>
+<li><strong>Orphaned CDS.</strong> A credit default swap whose reference
+entity no longer has deliverable debt, usually after a refinancing at a
+different entity, leaving protection that pays nothing on a default that
+cannot technically occur.</li>
+<li><strong>Pari passu.</strong> Of equal rank. The thing minority
+lenders believed they were until the amendment passed.</li>
+<li><strong>Pari-plus.</strong> A liability management structure in
+which new debt ranks pari passu with existing debt at the original
+borrower and also holds an additional claim elsewhere in the group. A
+double-dip with better branding.</li>
+<li><strong>PECS (par-equivalent CDS spread).</strong> A bond’s spread
+restated as the flat CDS spread that would reprice it under the CDS
+survival curve and recovery assumption, so that bond and CDS can be
+compared directly.</li>
+<li><strong>PIK (payment-in-kind).</strong> Interest paid by issuing
+more of the same instrument rather than cash. The borrower’s way of
+saying “later.”</li>
+<li><strong>Plan of reorganization.</strong> The document that specifies
+how claims are classified, treated, and paid in a Chapter 11 case;
+confirmed by the court after creditor voting.</li>
+<li><strong>Portability.</strong> A provision allowing a change of
+control without triggering the CoC put if a leverage or ratings test is
+met. A short option bondholders wrote without being asked.</li>
+<li><strong>Portfolio trade (PT).</strong> A single transaction in which
+a basket of bonds (often 50 to several hundred lines) is bought or sold
+at one price with one counterparty, typically a dealer who hedges with
+ETF creation or redemption. The basket is now the unit of
+liquidity.</li>
+<li><strong>Pre-pack / pre-negotiated.</strong> A bankruptcy in which
+the plan is negotiated (and in a pre-pack, voted) before filing, so that
+the case lasts weeks instead of years.</li>
+<li><strong>Priming.</strong> Placing new debt ahead of existing debt in
+priority or collateral, whether by a DIP, an uptier, or a drop-down. The
+Priming Risk Score estimates its probability.</li>
+<li><strong>Priming Risk Score (PRS).</strong> This book’s model-based
+probability, in <span class="math inline">\([0,1]\)</span>, that an
+issuer executes a priming transaction within a horizon, built from
+document features, sponsor behavior, and liquidity runway. Defined in
+Chapter 13.</li>
+<li><strong>Pro rata sharing.</strong> The requirement that payments and
+collateral proceeds be shared among lenders in proportion to holdings. A
+sacred right in most agreements; the thing the uptier is designed to
+route around.</li>
+<li><strong>Recovery lock.</strong> A derivative fixing the recovery
+rate on a reference entity, isolating recovery risk from default-timing
+risk. Exists because the credit triangle has two unknowns.</li>
+<li><strong>Reinvestment period.</strong> The years (commonly four to
+five) during which a CLO manager may reinvest principal proceeds in new
+loans; after it ends, the vehicle amortizes. The age at which CLOs stop
+buying.</li>
+<li><strong>Request for quote (RFQ).</strong> An electronic request to
+one or more dealers for a price on a specified size, with a response
+window. The unit of interaction on the modern credit desk; the
+adverse-selection problem in three seconds.</li>
+<li><strong>Restricted payments (RP) basket.</strong> Capacity under the
+credit agreement for dividends, distributions, and certain investments,
+built from fixed amounts, builder amounts, and ratio-based tests. Where
+the money leaves.</li>
+<li><strong>Restricted / unrestricted subsidiary.</strong> Subsidiaries
+inside the covenant and collateral package (restricted) or designated
+outside it (unrestricted). Assets that move from one to the other have
+left the building.</li>
+<li><strong>Rights offering.</strong> An offering of new equity in a
+reorganized company to existing claimholders, often at a discount to
+plan value and usually backstopped. The entry fee for the post-reorg
+equity.</li>
+<li><strong>Risky PV01 (RPV01).</strong> The present value of one basis
+point of CDS premium paid until default or maturity: the
+survival-weighted annuity. The number that converts a spread into an
+upfront.</li>
+<li><strong>Rule 2019 statement.</strong> A disclosure under Federal
+Rule of Bankruptcy Procedure 2019 by a group or committee representing
+multiple creditors, listing members and their holdings. The Ad Hoc
+Group’s only unscripted speech.</li>
+<li><strong>Sacred rights.</strong> Amendments that require the consent
+of each affected lender rather than a majority: pro rata sharing,
+payment terms, release of all or substantially all collateral. No priest
+is involved.</li>
+<li><strong>SNAC (Standard North American Corporate) contract.</strong>
+The post-2009 CDS contract with fixed coupons (100 or 500 basis points),
+standardized dates, and an upfront payment, enabling fungibility and
+central clearing.</li>
+<li><strong>Special mandatory redemption (SMR).</strong> A provision
+requiring the issuer to redeem acquisition-financing bonds, usually at
+101, if the acquisition fails to close by a deadline. An option on the
+deal breaking.</li>
+<li><strong>Springing lien / springing maturity.</strong> A lien that
+attaches, or a maturity that accelerates, upon a trigger such as a
+ratings change or the failure to refinance another tranche by a date.
+Yes, Kaz, it springs. At you.</li>
+<li><strong>Succession event.</strong> ISDA rules determining which
+entity a CDS references after a merger, spin-off, or debt transfer.
+Where orphaned CDS are born.</li>
+<li><strong>Toxic flow.</strong> Order flow whose counterparties, on
+average, know more than the market maker, so that filling it loses money
+after the fact. Measured by markouts; priced by the adverse-selection
+penalty.</li>
+<li><strong>TRACE.</strong> FINRA’s Trade Reporting and Compliance
+Engine, which has disseminated corporate bond transaction prices since
+2002. The origin of the dataset, and thus of this book.</li>
+<li><strong>Uptier.</strong> A transaction in which a majority of
+lenders amend the agreement to allow new super-priority debt, exchange
+their holdings into it, and leave non-participating lenders
+subordinated. Serta, 2020. The floors were reordered overnight.</li>
+<li><strong>Waterfall.</strong> The ordered allocation of value among
+claims by priority and collateral, under a plan, a CLO indenture, or an
+intercreditor agreement. A correct waterfall conserves value; test
+yours.</li>
+<li><strong>Yield-to-worst.</strong> The lowest yield across all call
+and maturity dates for a callable bond, assuming the issuer exercises
+against you. The yield you should assume.</li>
+<li><strong>Z-spread.</strong> The constant spread added to every point
+on a zero-coupon discount curve so that discounted cash flows equal the
+bond’s dirty price.</li>
+<li><strong>Zero floor.</strong> A minimum level (often zero, sometimes
+higher) for the reference rate in a floating-rate loan, so the coupon
+cannot fall below margin plus floor. An interest-rate option the
+borrower sold without pricing it.</li>
+</ul>
 <hr />
 </section>
 </section>
