@@ -8,7 +8,17 @@ Every workflow, what it owns, and where its output lands. Check this before laun
 | :--- | :--- | :--- | :--- |
 | 2026-10-17 ~23:25 | About 36 concurrent agents exhausted the session usage limit (reset 23:30) | All in-flight agents died. Lost: the research held in agent context (≈49 dossiers), every chapter writer, and 9 advisors. Survived: everything already on disk (13 briefs, 4 trend dossiers, front matter). | Durability rules (PROCESS.md): incremental writes, completion markers, resume-not-restart, status-driven relaunch, pacing at ~20 agents, a limit-handling playbook |
 
-## Edition 1: live runs (restarted 2026-10-17 23:40 UTC with the resilient scripts)
+## Pacing event (2026-10-17 23:48 UTC)
+
+Usage reached 30% of the window in about 15 minutes, about 75% of it from Fable research loops. All 12 workflows were stopped (no data lost: every brief and partial chapter was on disk). Replaced by a paced pool of 4 lean Opus writers with a background pace guard. Briefs for Ch 13 and 15–28 are PARTIAL but substantive (6–11k words, all sections drafted; Ch 20 is thinner at 4k) and are used as-is.
+
+| Run | Owns | Status |
+| :--- | :--- | :--- |
+| writers-paced-A | Ch 1, 5, 13, 15 (resume), then 2, 6, 9, 11, 14, 16, 18, 20, 22, 24, 27 | running (2 writers) |
+| writers-paced-B | Ch 3, 7, 26 (resume), then 4, 8, 10, 12, 17, 19, 21, 23, 25, 28 | running (2 writers) |
+| pace-guard | Background usage guard (target 88%) | running |
+
+## Edition 1: superseded runs (restarted 2026-10-17 23:40 UTC, stopped 23:48 for pacing)
 
 | Run | Stage | Owns | Status |
 | :--- | :--- | :--- | :--- |

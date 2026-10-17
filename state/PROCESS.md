@@ -40,3 +40,14 @@ How the book gets made, edition after edition. Every stage has one owner, one se
 7. **Retry once.** Workflow scripts retry a failed agent once. Persistent failures are returned in the result and recorded in the ledger.
 8. **Snapshots.** A background auto-commit runs every 10 minutes, plus a commit at every turn boundary, so partial files reach the remote within 10 minutes.
 9. **Let unsaved work finish.** Do not kill a running agent that holds unsaved research unless it is duplicating other work. A stopped agent's context is lost.
+
+## Usage Economics & Pacing Playbook (measured 2026-10-17)
+
+*Measured with `tools/usage_meter.py`, calibrated to the user's reading of 30% at 23:46 UTC in a 5-hour window.*
+
+- **Long Fable research loops are the expensive thing.** Twelve Fable advisors at xhigh effort, doing web research, burned about 1.0% of the window per minute, with about 1M cache-write tokens per agent every 10 minutes. Opus writers cost a fraction of that per agent.
+- **So Fable does judgment, not legwork.** Use Fable for short, high-judgment passes over prepared material: dissection from a dossier, mapping, engagement and foundations reviews, and edition planning. Give it digests and dossiers rather than open-ended web research.
+- **Bulk research goes to Sonnet researchers.** Fact-gathering dossiers are written to disk with sources; a short Fable pass then turns the dossier into a brief.
+- **Writers stay on Opus but work lean.** They read only the style bible, their brief, and the needed SYSTEM_PROMPT sections. They write in 3–5 large passes, make at most about 6 web calls, and run no builds or code (the orchestrator builds centrally).
+- **Pace to the window.** Sustainable rate = (target − used) / minutes left. `tools/pace_guard.py` runs in the background and wakes the orchestrator only on TOO_FAST, SLACK, or NEAR_CAP. Start at about 4 Opus writers and adjust on its signals.
+- **Before every launch, check the meter.** `python3 tools/usage_meter.py`. When the user reports a reading, recalibrate with `--calibrate PCT AT_ISO`.
