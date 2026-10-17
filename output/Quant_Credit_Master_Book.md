@@ -1,6 +1,6 @@
 ---
 title: 'Systematic & Quantitative Credit: From PJT RSSG to the Automated Desk'
-subtitle: 'Mathematical Foundations, Microstructure, LMT Game Theory, and Alpha Isolation (Edition 1, Build: 2026-10-17 23:23 UTC)'
+subtitle: 'Mathematical Foundations, Microstructure, LMT Game Theory, and Alpha Isolation (Edition 1, Build: 2026-10-17 23:24 UTC)'
 toc: true
 toc-depth: 3
 ---
@@ -8,7 +8,7 @@ toc-depth: 3
 
 # Preface: Read the Credit Agreement, Then Take the Derivative
 
-At 2:58 p.m. on a Friday, three weeks into his new job, Theo Marsh gets a request for quote. A client wants a bid on \$15 million of a single-B bond issued by a company whose lender call is on Monday. Theo knows this company. In a previous life he read its credit agreement twice, in a conference room, over cold Thai food, and he can still tell you the Available Amount builder basket's starting dollar amount and which section of Article VII the sponsor would use to move the crown-jewel subsidiary out of the collateral package. He also knows that the person on the other end of this RFQ might know all of that too. Or might be a mutual fund rebalancing into month-end. He has three seconds to decide. His old job gave him three weeks.
+At 2:58 p.m. on a Friday, three weeks into his new job, Theo Marsh gets a request for quote. A client wants a bid on \$15 million of a single-B bond issued by a company whose lender call is on Monday. Theo knows this company. In a previous life he read its credit agreement twice, in a conference room, over cold Thai food, and he can still tell you the Available Amount basket's starting dollar amount and which section of Article VII lets the sponsor move the crown-jewel subsidiary out of the collateral package. He also knows that the person on the other end of this RFQ might know all of that too. Or might be a mutual fund rebalancing into month-end. He has three seconds to decide. His old job gave him three weeks.
 
 "What's the pot," says Ines Okafor from the next seat, not looking up, "what are the odds, and who at this table knows more than you?"
 
@@ -39,11 +39,11 @@ It is not for anyone who wants sell-side fluff, a qualitative narrative without 
 
 ## Three ways through the book
 
-The book has eight parts and twenty-eight chapters in its first edition, plus three appendices, and it will grow. You do not have to read it in order. Three reading paths, one per tribe:
+Eight parts, twenty-eight chapters, three appendices, and growing. You do not have to read it in order. Three paths, one per tribe:
 
-**Path 1: the RSSG banker.** Read Part I straight through; Chapter 3 is written for you specifically, and the RSSG Edge Ledger in it is the inventory of what you are bringing to the new desk. Then jump to Part IV (Chapters 13–17), which is your home turf with the numbers attached: liability management transactions as game theory, the default cycle as a regime shift, change-of-control puts as options, post-reorg equity as forced-seller flow, and private credit as the thing eating your old job. Only then go back to Part II (Chapters 5–7). You will be tempted to skip Chapter 6 because someone once told you that Merton models do not work in distressed credit. That person was half right, and the half they were wrong about is where the money is. Finish with Parts III, V, VI, VII, and VIII in order. Keep Appendix A open the whole time.
+**Path 1: the RSSG banker.** Read Part I straight through; Chapter 3 is written for you specifically, and the RSSG Edge Ledger in it is the inventory of what you are bringing to the new desk. Then jump to Part IV (Chapters 13–17), which is your home turf with the numbers attached: liability management transactions as game theory, the default cycle as a regime shift, change-of-control puts as options, post-reorg equity as forced-seller flow, and private credit as the thing eating your old job. Only then go back to Part II (Chapters 5–7). You will be tempted to skip Chapter 6 because someone once told you that Merton models do not work in distressed credit. That person was half right, and the half they were wrong about is where the money is. Then Parts III, V, VI, VII, and VIII. Keep Appendix A open the whole time.
 
-**Path 2: the quant.** Start with Chapter 3 to see what the other tribe knows, then read Chapter 13 and Chapter 25 back to back: the first is what an uptier does to your return distribution, the second is how to parse the document that permitted it. Then take Part V and Part VI, which are your home turf, and notice where credit microstructure departs from what Avellaneda–Stoikov assumed (jump-to-default, RFQs instead of limit order books, bonds that have not traded in nine days). Part II will mostly be review, but Chapter 5's treatment of recovery distributions and Chapter 7's issuer-grouped cross-validation contain the traps that have been quietly eating your Sharpe ratio. Read Part IV last, slowly. Then Part VIII.
+**Path 2: the quant.** Start with Chapter 3 to see what the other tribe knows, then read Chapter 13 and Chapter 25 back to back: the first is what an uptier does to your return distribution, the second is how to parse the document that permitted it. Then take Part V and Part VI, which are your home turf, and notice where credit departs from what Avellaneda–Stoikov assumed: jump-to-default, RFQs instead of order books, bonds that have not traded in nine days. Part II will mostly be review, but Chapter 5's treatment of recovery distributions and Chapter 7's issuer-grouped cross-validation contain the traps that have been quietly eating your Sharpe ratio. Read Part IV last, slowly. Then Part VIII.
 
 **Path 3: the AI-agent specifier.** Read this preface, then Appendix A, then go through every `### Specification for AI Implementation` block in the book in order, starting with Chapters 5–8 (distributions, structural models, labeling, decomposition), then Chapter 13 (the Priming Risk Score), Chapters 18–19 (quoting and basket pricing), and Chapters 25–27 (document parsing, agent workflows, and system architecture). Chapter 26 is the operating manual for directing coding agents and should be read before you direct one. Then go back and read the prose: a spec you do not understand is a spec you cannot debug.
 
@@ -74,13 +74,13 @@ Every chapter (and most sections) carries six elements, in a recognizable order,
 1. **Intuitive desk framing.** How a market maker or an RSSG partner sees the problem in plain, ruthless trading terms, usually with the cast in the room.
 2. **Rigorous mathematical derivation.** Full equations, step by step, every Greek letter defined, boundary conditions stated, using the single notation table in Appendix A. The joke, if there is one, comes after the load-bearing step, never inside it.
 3. **A specification for AI implementation.** A block headed `### Specification for AI Implementation` with data schemas, tensor shapes, edge cases, numerical-stability guards, and a reference implementation in Python (written to run on numpy, scipy, and pandas as given) or a sketch in C++ or Rust where latency matters. It often opens with what ROBO built from the vague version of the request, followed by the precise version.
-4. **Source extraction.** Short exact quotations from the fourteen books and papers on our shelf, each cited to a page and followed by a longer annotation in our own words about why it matters on a 2026 desk and where the modern desk departs from it.
+4. **Source extraction.** Short exact quotations from the fourteen books and papers on our shelf, each cited to a page and followed by a longer annotation on why it matters on a 2026 desk and where the modern desk departs from it.
 5. **A deep-dive case study.** Serta, J.Crew, Incora, Carvana, SVB, Hertz, Windstream, March 2020, May 2005: tranches, price paths, dollar values (sourced or marked approximate), and what a systematic desk would have flagged and traded.
 6. **A Deep-Dive Resource Graph.** Podcasts, practitioner writing, academic papers, and data and code repositories, grouped, so you can keep going after we stop.
 
 Between those elements you will find a small set of boxes, each with a fixed label: **Desk Myth vs. Desk Reality**, **Poker Table** (game-theory intuition, usually Ines), **Docket Diary** (court process with dates, often with commentary from the Ad Hoc Group), **Ways This Blows Up** (numerical instability, model failure, operational risk), and **Trend Watch**.
 
-Trend Watch boxes deserve a paragraph of their own, because "trend" means two things in this book and we care about both. The first meaning is the structural trends reshaping credit markets: electronification, portfolio trading, ETF-led liquidity, the LMT era, private credit, the regulatory agenda. Every chapter includes at least one Trend Watch box with dated, sourced figures showing how its topic changed over 2018–2026, and Appendix C stitches them into a single timeline. The second meaning is trend as a strategy: time-series momentum in credit indices and excess returns, cross-asset lead–lag, trend combined with carry, and how it behaved in 2008, 2020, and 2022. That gets a whole chapter (Chapter 10) and a recurring role in Parts III and VIII. If a chapter does not tell you what changed and when, we consider it unfinished.
+Trend Watch boxes deserve a paragraph of their own, because "trend" means two things in this book and we care about both. The first meaning is the structural trends reshaping credit markets: electronification, portfolio trading, ETF-led liquidity, the LMT era, private credit, the regulatory agenda. Every chapter includes at least one Trend Watch box with dated, sourced figures showing how its topic changed over 2018–2026, and Appendix C stitches them into a single timeline. The second meaning is trend as a strategy: time-series momentum in credit indices and excess returns, cross-asset lead–lag, trend combined with carry, and how it behaved in 2008, 2020, and 2022. That gets Chapter 10 to itself and recurs through Parts III and VIII. If a chapter does not tell you what changed and when, we consider it unfinished.
 
 Each chapter opens with a cold-open desk scene and closes with a Desk Debrief (takeaways sharp enough to tape to a monitor), a compact Spec You Hand the Robot, and a few exercises, some of them funny, all of them real.
 
@@ -616,7 +616,7 @@ Staleness does not remove risk. It spreads today's risk over the following days.
 
 > **[SOURCE EXTRACTION]** *Ben_Dor_Quantitative_Credit_Portfolio_Management p.208:* "we attempt to directly identify and exclude observations that possibly reflect stale prices. Specifically, all bonds comprising the Corporate and High Yield indexes with a sequence of five or more unchanged quotes in any month are excluded from the eligible population of bonds for that month."
 >
-> **Annotation.** The Barclays team used two fixes. Sampling biweekly instead of daily lowers the effective $\theta$, and a run-length filter removes bonds whose quotes don't move. The run-length rule still works as a first screen on *evaluated* prices, because those repeat when nothing new arrives. A price carried forward from TRACE trades doesn't look like "unchanged quotes," though. It is a single trade price copied onto later rows, so our schema carries an explicit `days_stale` counter instead (§B.16). The derivation shows what the filter buys you: dropping the bonds with high $\theta$ pushes measured variance and beta back toward the truth. The price is a tilt toward liquid names, which is a factor exposure of its own (Chapter 9).
+> **Annotation.** The Barclays team used two fixes. Sampling biweekly instead of daily lowers the effective $\theta$, and a run-length filter removes bonds whose quotes don't move. The run-length rule still screens *evaluated* prices well, but a TRACE price carried forward is one old trade copied onto later rows, so our schema carries an explicit `days_stale` counter (§B.16). The derivation shows what the filter buys you: dropping the bonds with high $\theta$ pushes measured variance and beta back toward the truth. The price is a tilt toward liquid names, which is a factor exposure of its own (Chapter 9).
 
 **Sin 2: Look-ahead.** A feature $X_{i,t}$ is admissible only if $X_{i,t}\in\mathcal{F}_t$. In code, that means you join on `knowledge_ts` (when you could have known it), never `effective_ts` (the date the value refers to). Some examples. A TRACE print executed at 4:58 p.m. and reported at 5:12 p.m. is known at 5:12. A downgrade effective Tuesday and published Thursday is known Thursday. An XBRL fact is known when the filing is accepted. Restated values must not overwrite originals in a backtest.
 
@@ -630,7 +630,7 @@ Staleness does not remove risk. It spreads today's risk over the following days.
 
 ## B.1 FINRA TRACE: The Tape
 
-**What it is.** FINRA's reporting and dissemination system for OTC fixed-income trades. It launched July 1, 2002, with a 75-minute reporting deadline. The deadline fell to 45 minutes (October 1, 2003), then 30 (October 1, 2004), then 15 (July 1, 2005). Every public corporate trade has been disseminated as soon as it is received since January 9, 2006. Later additions: agency debentures and primary-market trades (March 1, 2010); ABS/MBS reporting (May 16, 2011); dissemination of 144A trades (June 30, 2014) and ABS (June 1, 2015); Treasuries reportable for regulatory purposes (July 10, 2017). *(Source: FINRA, TRACE Fact Book 2025, <https://www.finra.org/sites/default/files/2026-02/TRACE_FactBook_2025.pdf>.)*
+**What it is.** FINRA's reporting and dissemination system for OTC fixed-income trades. It launched July 1, 2002, with a 75-minute deadline that fell to 15 minutes by July 1, 2005. All public corporate trades have been disseminated on receipt since January 9, 2006. Agency and primary-market trades were added in 2010, ABS/MBS in 2011, 144A dissemination in 2014, and Treasury reporting in 2017. *(Source: FINRA, TRACE Fact Book 2025, <https://www.finra.org/sites/default/files/2026-02/TRACE_FactBook_2025.pdf>.)*
 
 **Access & cost.** TRACE comes in four layers, from freshest to most complete:
 
@@ -662,7 +662,7 @@ Most researchers get TRACE Standard, Enhanced, and 144A tables through **WRDS**.
 
 **Used in.** Chapters 2, 3, 7, 8, 9, 18, 19, 20, 22.
 
-> **Trend Watch. The tape that almost got faster (2018–2026).** FINRA added transparency at the edges. Covered depository institutions began reporting Treasury, agency, and MBS trades on September 1, 2022. The portfolio-trade modifier and 60-minute Treasury reporting arrived May 15, 2023, and USD foreign sovereigns became reportable on November 6, 2023 (TRACE Fact Book 2025). End-of-day transaction data for on-the-run Treasuries began March 25, 2024. The historical corporate lag shrank from 18 months to 6. The core corporate tape, though, went in a circle. One-minute reporting was approved September 20, 2024, never implemented, and replaced on September 16, 2025, by a 15-minute limit plus aggregate allocation reporting. The SEC approved the MSRB's matching rollback the same day (SR-MSRB-2025-01, Release No. 34-103987). Cap increases have been proposed since the SEC Fixed Income Market Structure Advisory Committee's 2018 block-trade pilot recommendation (higher caps, up to \$10mm for IG, with delayed dissemination), but they have not changed the public tape. **Desk implication:** the 15-minute window and the caps are the information asymmetry your market-making model prices (Chapter 18). Treat both as fixed until a rule changes them. Keep the PT flag as a feature, because PT prints are priced as part of a basket, not bond by bond (Chapter 19).
+> **Trend Watch. The tape that almost got faster (2018–2026).** FINRA added transparency at the edges. Covered depository institutions began reporting Treasury, agency, and MBS trades on September 1, 2022. The portfolio-trade modifier and 60-minute Treasury reporting arrived May 15, 2023, and USD foreign sovereigns became reportable on November 6, 2023 (TRACE Fact Book 2025). End-of-day transaction data for on-the-run Treasuries began March 25, 2024. The historical corporate lag shrank from 18 months to 6. The core corporate tape, though, went in a circle. One-minute reporting was approved September 20, 2024, never implemented, and replaced on September 16, 2025, by a 15-minute limit plus aggregate allocation reporting. The MSRB rolled back the same day (SR-MSRB-2025-01). The 2018 SEC advisory-committee proposal to raise caps (up to \$10mm IG) has not changed the public tape. **Desk implication:** the 15-minute window and the caps are the information asymmetry your market-making model prices (Chapter 18). Treat both as fixed until a rule changes them. Keep the PT flag as a feature, because PT prints are priced as part of a basket, not bond by bond (Chapter 19).
 
 ## B.2 SEC EDGAR: The Legal Prose Warehouse
 
@@ -701,7 +701,7 @@ XBRL endpoints usually lag under a minute. There is no CORS support, so run your
 
 **Key fields.** Dockets: court, case number, `pacer_case_id`, filing date, judge, parties, attorneys. Entries: number, date, description, and documents with `pacer_doc_id`. Claims: claim number, creditor, debtor entity, amount, priority (secured, 503(b)(9), priority, GUC), date filed. Rule 2019 statements become a time series of who is in the ad hoc group (Chapter 25).
 
-> **Docket Diary.** A document is in RECAP only if someone with the extension bought it. Coverage is therefore biased toward cases that people with money care about. Mega-case first-day declarations are almost always there. The small-cap Chapter 11 your model actually needs often isn't. *The Ad Hoc Group, represented by counsel, notes that its Rule 2019 statement was amended four times and RECAP holds two of the versions.*
+> **Docket Diary.** A document is in RECAP only if someone with the extension bought it, so coverage favors mega-cases and misses the small-cap Chapter 11 your model needs. *The Ad Hoc Group, represented by counsel, notes that its Rule 2019 statement was amended four times and RECAP holds two of the versions.*
 
 **Gotchas.** Docket text is free-form, so the same motion can carry a dozen different descriptions. Claim amounts are as *asserted*, not as allowed, and duplicate claims filed against several debtor entities inflate the totals. For look-ahead purposes, the right timestamp is when the entry appeared on the docket, not the date printed inside the PDF.
 
@@ -752,7 +752,7 @@ XBRL endpoints usually lag under a minute. There is no CORS support, so run your
 - *Index prices are evaluated, bid-side prices* (§B.8). Index OAS is smoothed, so §B.0 applies.
 - *Excess-return definitions differ.* Some families use duration-matched Treasuries, others swaps. Don't mix them in one regression.
 - *CDX rolls.* An on-the-run series jumps in level on the roll date, so splice explicitly.
-- *FRED is shrinking.* The series notes now say "Starting in April 2026, this series will only include 3 years of observations. For more data, go to the source." They also say "Copyright, 2023, ICE Data Indices. Reproduction of this data in any form is prohibited," and the data is "provided for your internal use only."
+- *FRED is shrinking.* The series notes now say "Starting in April 2026, this series will only include 3 years of observations. For more data, go to the source." ICE's notes add that the data is "provided for your internal use only."
 
 **Used in.** Chapters 2, 8, 9, 10, 11, 12, 20.
 
@@ -772,7 +772,6 @@ XBRL endpoints usually lag under a minute. There is no CORS support, so run your
 - *Circularity.* Composites are built partly from TRACE. If you train on composite labels with TRACE features, part of what you predict is your own input. Validate on *subsequent* trades (markouts).
 - *Staleness.* A bond with no new information follows its comparables, so its $\theta$ sits well above zero. Use the score field to set observation weights.
 - *Bid-side NAVs.* Credit ETF NAVs are struck from bid-side evaluated prices. In March 2020, part of the "discount" of HYG and LQD to NAV was the NAV being stale (Chapter 20).
-- *Licensing.* Composite contracts often forbid long histories or index-building. Read them before you build a 20-year backtest.
 
 **Used in.** Chapters 7, 18, 19, 20.
 
@@ -818,7 +817,7 @@ XBRL endpoints usually lag under a minute. There is no CORS support, so run your
 
 ## B.13 CDS Public Data (Brief)
 
-Swap data repositories disseminate index CDS under CFTC rules. Single-name CDS have been disseminated under the SEC's Regulation SBSR since early 2022 *(approximate; check the SBSR compliance schedule)*. Sizes are capped and reference-entity mapping is painful. Use these tapes for activity signals and basis studies (Chapter 24), and buy levels from a vendor.
+Index CDS (CFTC swap repositories) and, since early 2022, single-name CDS (SEC Regulation SBSR; *date approximate*) have public tapes, with capped sizes and painful entity mapping. Use them for activity and basis signals (Chapter 24) and buy levels from a vendor.
 
 ## B.14 Open-Source Tooling
 
@@ -835,7 +834,7 @@ Swap data repositories disseminate index CDS under CFTC rules. Single-name CDS h
 
 ## B.15 Case Study: A Fallen Angel Through Every Lens
 
-Here is what a fallen angel looks like as data, using the synthetic bond `SYN-IG-B` from the code below (all numbers *illustrative*). The rating agency's downgrade from BBB- to BB+ takes effect on June 10 and is published on June 12. On EDGAR, an 8-K Item 2.03 filing earlier in the year attached an amendment as EX-10.1 with its pricing grid redacted. On the TRACE tape, large prints switch from `5MM+` to `1MM+` on June 12, not June 10. A model that joins on effective date "knows" about the cap change two days early. Index data keeps the bond in the IG index until the June month-end rebalance, which is when forced selling clusters. The ETF holdings file shows the IG fund's position disappearing at the rebalance, and the HY fund's holdings file shows the bond showing up the next day. Composites mark it down gradually, because they move with the comparables at a $\theta$ well above zero. Daily returns built from composites understate the move's volatility, and a Dimson-summed beta to HYG recovers it.
+Take the synthetic `SYN-IG-B` from the code below (all numbers *illustrative*). Its downgrade from BBB- to BB+ takes effect June 10 and is published June 12. TRACE prints switch from `5MM+` to `1MM+` on June 12. Join on effective date and you "know" the cap change two days early. The index keeps the bond until the June month-end rebalance, which is when forced selling clusters, and the ETF holdings files show it moving from the IG fund to the HY fund across that date. Composites mark it down slowly, at high $\theta$, so composite-based daily returns understate the move's volatility. A Dimson-summed beta to HYG recovers it.
 
 The desk's job is to line these five clocks up by `knowledge_ts`. That alignment is a feature in its own right. The gap between the downgrade's knowledge time and the index rebalance is the forced-selling window that Chapters 9 and 20 trade.
 
@@ -862,10 +861,8 @@ from scipy.optimize import brentq
 
 RNG = np.random.default_rng(20261017)
 IG_CAP, HY_CAP = 5_000_000, 1_000_000          # dissemination caps (par $)
-RATING_SCALE = {"AAA": 1, "AA+": 2, "AA": 3, "AA-": 4, "A+": 5, "A": 6, "A-": 7,
-                "BBB+": 8, "BBB": 9, "BBB-": 10, "BB+": 11, "BB": 12, "BB-": 13,
-                "B+": 14, "B": 15, "B-": 16, "CCC+": 17, "CCC": 18, "CCC-": 19,
-                "CC": 20, "C": 21, "D": 22}
+RATING_SCALE = {r: k + 1 for k, r in enumerate(
+    "AAA AA+ AA AA- A+ A A- BBB+ BBB BBB- BB+ BB BB- B+ B B- CCC+ CCC CCC- CC C D".split())}
 IG_MAX_NUM = RATING_SCALE["BBB-"]
 
 # ---------------------------------------------------------------- 1. security master
@@ -1186,7 +1183,6 @@ print(monthly.to_string(index=False, float_format=lambda v: f"{v:.4f}"))
 2. Fit a Pareto tail to `qty_true` above \$1mm for HY prints. Impute sizes for `1MM+` prints and measure the bias you remove from a capped VWAP.
 3. Using the EDGAR full-text syntax, write a query for 8-K exhibits that pair "unrestricted subsidiary" with "intellectual property," and list three ways it gives false positives.
 4. Kaz insists the frames API is fine for backtests "because restatements are rare." Design a test that measures how often a `companyfacts` value for a debt tag changes between its first and last `filed` date.
-5. ROBO keeps refreshing a 6,000-entry docket on PACER every hour. Estimate the quarterly PACER bill and redesign the job around CourtListener webhooks and claims-agent sites.
 
 ### Deep-Dive Resource Graph
 
@@ -1196,7 +1192,7 @@ print(monthly.to_string(index=False, float_format=lambda v: f"{v:.4f}"))
 
 **Academic Papers.** Dick-Nielsen (2009), *Liquidity Biases in TRACE*; Dick-Nielsen (2014), *How to Clean Enhanced TRACE Data*; Dimson (1979), *Risk Measurement When Shares Are Subject to Infrequent Trading*; Getmansky, Lo & Makarov (2004), *An Econometric Model of Serial Correlation and Illiquidity in Hedge Fund Returns*; Edwards, Harris & Piwowar (2007), *Corporate Bond Market Transaction Costs and Transparency*; Bessembinder, Kahle, Maxwell & Xu (2009), *Measuring Abnormal Bond Performance*; Bai, Bali & Wen (2019), *Common Risk Factors in the Cross-Section of Corporate Bond Returns*; Dickerson, Mueller & Robotti (2023), *Priced Risk in Corporate Bonds*; Dickerson, Robotti & Rossetti, *The Corporate Bond Factor Replication Crisis* (working paper).
 
-**Data & Code.** FINRA TRACE historic and academic data (<https://www.finra.org/filing-reporting/trace/historic-academic-data>); FINRA Rules 6730 and 6750 (<https://www.finra.org/rules-guidance/rulebooks/finra-rules/6730>, <https://www.finra.org/rules-guidance/rulebooks/finra-rules/6750>); SEC EDGAR APIs (<https://www.sec.gov/edgar/sec-api-documentation>) and fair access (<https://www.sec.gov/os/accessing-edgar-data>); RECAP Fetch (<https://wiki.free.law/c/courtlistener/help/api/rest/v4/recap>); PACER fees (<https://pacer.uscourts.gov/pacer-pricing-how-fees-work>); EMMA (<https://emma.msrb.org/>); OPRA (<https://www.opraplan.com/>); Cboe DataShop (<https://datashop.cboe.com/>); FRED HY OAS (<https://fred.stlouisfed.org/series/BAMLH0A0HYM2>); OBAP (<https://openbondassetpricing.com/>) and its pipeline (<https://github.com/Alexander-M-Dickerson/trace-data-pipeline>); WRDS Bond Returns (<https://wrds-www.wharton.upenn.edu/pages/grid-items/wrds-bond-returns/>); edgartools (<https://github.com/dgunning/edgartools>); OpenBB (<https://github.com/OpenBB-finance/OpenBB>).
+**Data & Code.** FINRA TRACE historic data (<https://www.finra.org/filing-reporting/trace/historic-academic-data>); SEC EDGAR APIs (<https://www.sec.gov/edgar/sec-api-documentation>); RECAP Fetch (<https://wiki.free.law/c/courtlistener/help/api/rest/v4/recap>); FRED HY OAS (<https://fred.stlouisfed.org/series/BAMLH0A0HYM2>); OBAP pipeline (<https://github.com/Alexander-M-Dickerson/trace-data-pipeline>); edgartools (<https://github.com/dgunning/edgartools>); OpenBB (<https://github.com/OpenBB-finance/OpenBB>). All other verified links appear inline above.
 
 
 ---

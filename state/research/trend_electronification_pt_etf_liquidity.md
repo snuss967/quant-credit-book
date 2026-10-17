@@ -98,19 +98,19 @@ The Tradeweb newsroom and SSRN returned 403. Platform numbers are company estima
 
 ### 3.2 Drivers
 
-1. **Dealer balance-sheet economics.** Dealers earn 26% of IG revenue from electronic channels on 48% of volume (Greenwich 2024), so they let small, liquid flow go electronic and protect voice for blocks and illiquid risk. Electronification is therefore *dealer-permitted*, not just client-demanded.
-2. **Algorithmic market making plus composites.** Auto-quoters need a fair-value anchor. CP+ and Ai-Price supply it, which makes no-touch execution of small RFQs possible: Trumid executes 88% of eligible line items no-touch.
-3. **ETF and index plumbing.** ETF creation and redemption, index rebalances and month-end flows produce standardized basket demand, which is exactly what PT services. The month-end PT share jumped 67% in 2021.
-4. **Systematic and quant demand.** Systematic strategies run under 2% of FI (Blackstone). Tradeweb attributes the +59.5% credit-derivatives ADV in Q1-2026 to "hedge fund and systematic account activity." Quants need certainty of execution and modelable costs (Man 2023, p.4).
-5. **Volatility as accelerant.** E-share jumped in 2020, 2022, April 2025 and March 2026. Stress pushes clients to electronic protocols and ETFs, even as automation parameters widen.
-6. **Non-bank entrants.** Citadel Securities moved from rates into credit, pushing banks to "compete harder" (Tradeweb CEO, June 2025). Nonbanks already take about 10% of credit market-making revenue.
+1. **Dealer economics.** Dealers earn 26% of IG revenue electronically on 48% of volume, so they let small, liquid flow go electronic and keep voice for blocks. Electronification is *dealer-permitted*.
+2. **Algorithmic market making plus composites.** Auto-quoters need a fair-value anchor (CP+, Ai-Price), which is what makes no-touch execution of small RFQs possible.
+3. **ETF and index plumbing.** Creation and redemption, rebalances and month-ends generate standardized basket demand, which is exactly what PT services.
+4. **Systematic demand.** Quants need certainty of execution and modelable costs (Man 2023, p.4). Tradeweb credits "hedge fund and systematic account activity" for the +59.5% credit-derivatives ADV in Q1-2026.
+5. **Volatility as accelerant.** E-share jumped in 2020, 2022, April 2025 and March 2026.
+6. **Non-bank entrants.** Citadel's move into credit pushed banks to "compete harder" (Tradeweb CEO). Nonbanks already take about 10% of credit market-making revenue.
 
 ### 3.3 Where it heads (2026–2028)
 
 - **IG e-share at 55–65% on the Greenwich definition by 2028; HY stays below 40% unless PT and session protocols are counted.** Barclays' ceiling estimate is about 80%.
 - **PT reaches 15%+ of US IG and 18–20% of EUR IG** (Barclays forecast), and grows faster in HY (MarketAxess HY PT +93% YoY in Q2-2026). PT spread-trading in Europe (Tradeweb, Q2-2026) points to PT moving from price-based to spread-based baskets.
-- **Post-close, ICE–MarketAxess will bundle evaluated pricing, indices (ICE BofA), CP+ and Open Trading.** Expect antitrust scrutiny (the outside date runs to 2028), fee pressure, and possibly reduced public disclosure of venue statistics.
-- **RFQ 2.0.** FILS Europe panelists predict that RFQ "in its current form" becomes obsolete, replaced by hybrids of RFQ with pre-trade data, request-for-market (RFM), one-click RFQ, and streaming plus click-to-trade.
+- **ICE–MarketAxess bundles evaluated pricing, indices, CP+ and Open Trading.** Expect antitrust scrutiny (the outside date runs to 2028) and thinner public venue statistics.
+- **RFQ 2.0.** FILS panelists predict that RFQ "in its current form" becomes obsolete, replaced by pre-trade-data hybrids, RFM, one-click RFQ and streaming.
 - **Data cleanup.** The affiliate indicator (mandatory 2027-08-02) and aggregate allocation reports change TRACE volume series *mid-sample*, and the EU and UK bond tapes go live. Liquidity models fit on 2020–2026 TRACE volume will see a structural break.
 - **Listed credit.** Credit index futures block activity (Cboe) and record ETF options and volume point to a growing listed hedging layer for systematic books.
 
@@ -143,11 +143,11 @@ The Tradeweb newsroom and SSRN returned 403. Platform numbers are company estima
 
 ### 4.2 What to trade
 
-- **Liquidity provision on all-to-all.** Quant books can earn the Open Trading liquidity-provider price improvement, which MarketAxess estimated at $171.6m in 2025, measured against CP+. The risk is adverse selection by better-informed takers; see the RSSG note below.
-- **Month-end, index-rebalance and ETF-basket flow.** These are predictable demand for standardized baskets. PT and ETF creation and redemption concentrate it, and the month-end effect was measurable in 2021–2022.
-- **ETF ↔ cash ↔ futures basis in stress.** Discounts were large in March 2020 and April 2025 ($99bn ETF day). The arbitrage is capital-intensive and needs AP or LP access.
-- **Evicted and orphan bonds.** Bonds that PT dealers and ETF redemption baskets push out (redemption baskets are shorter and less liquid, per BIS) are a recurring supply of mispriced paper.
-- **The new-issue window.** Trumid handled 42% of secondary trading in the first two days after issuance (Sept 2025). Systematic new-issue-concession strategies now execute electronically.
+- **All-to-all liquidity provision.** MarketAxess estimated liquidity-provider price improvement at $171.6m in 2025, measured against CP+. The cost is adverse selection.
+- **Month-end, rebalance and ETF-basket flow.** This is predictable demand for standardized baskets.
+- **ETF ↔ cash ↔ futures basis in stress.** Capital-intensive, and it needs AP or LP access.
+- **Evicted and orphan bonds.** PT and ETF redemption baskets push out short, illiquid paper (BIS).
+- **The new-issue window.** Trumid handled 42% of trading in the first two days after issuance, so new-issue-concession strategies now execute electronically.
 
 ### 4.3 What to worry about
 

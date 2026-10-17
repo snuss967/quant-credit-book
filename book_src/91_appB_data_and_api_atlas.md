@@ -28,7 +28,7 @@ Staleness does not remove risk. It spreads today's risk over the following days.
 
 > **[SOURCE EXTRACTION]** *Ben_Dor_Quantitative_Credit_Portfolio_Management p.208:* "we attempt to directly identify and exclude observations that possibly reflect stale prices. Specifically, all bonds comprising the Corporate and High Yield indexes with a sequence of five or more unchanged quotes in any month are excluded from the eligible population of bonds for that month."
 >
-> **Annotation.** The Barclays team used two fixes. Sampling biweekly instead of daily lowers the effective $\theta$, and a run-length filter removes bonds whose quotes don't move. The run-length rule still works as a first screen on *evaluated* prices, because those repeat when nothing new arrives. A price carried forward from TRACE trades doesn't look like "unchanged quotes," though. It is a single trade price copied onto later rows, so our schema carries an explicit `days_stale` counter instead (§B.16). The derivation shows what the filter buys you: dropping the bonds with high $\theta$ pushes measured variance and beta back toward the truth. The price is a tilt toward liquid names, which is a factor exposure of its own (Chapter 9).
+> **Annotation.** The Barclays team used two fixes. Sampling biweekly instead of daily lowers the effective $\theta$, and a run-length filter removes bonds whose quotes don't move. The run-length rule still screens *evaluated* prices well, but a TRACE price carried forward is one old trade copied onto later rows, so our schema carries an explicit `days_stale` counter (§B.16). The derivation shows what the filter buys you: dropping the bonds with high $\theta$ pushes measured variance and beta back toward the truth. The price is a tilt toward liquid names, which is a factor exposure of its own (Chapter 9).
 
 **Sin 2: Look-ahead.** A feature $X_{i,t}$ is admissible only if $X_{i,t}\in\mathcal{F}_t$. In code, that means you join on `knowledge_ts` (when you could have known it), never `effective_ts` (the date the value refers to). Some examples. A TRACE print executed at 4:58 p.m. and reported at 5:12 p.m. is known at 5:12. A downgrade effective Tuesday and published Thursday is known Thursday. An XBRL fact is known when the filing is accepted. Restated values must not overwrite originals in a backtest.
 
@@ -164,7 +164,7 @@ XBRL endpoints usually lag under a minute. There is no CORS support, so run your
 - *Index prices are evaluated, bid-side prices* (§B.8). Index OAS is smoothed, so §B.0 applies.
 - *Excess-return definitions differ.* Some families use duration-matched Treasuries, others swaps. Don't mix them in one regression.
 - *CDX rolls.* An on-the-run series jumps in level on the roll date, so splice explicitly.
-- *FRED is shrinking.* The series notes now say "Starting in April 2026, this series will only include 3 years of observations. For more data, go to the source." They also say "Copyright, 2023, ICE Data Indices. Reproduction of this data in any form is prohibited," and the data is "provided for your internal use only."
+- *FRED is shrinking.* The series notes now say "Starting in April 2026, this series will only include 3 years of observations. For more data, go to the source." ICE's notes add that the data is "provided for your internal use only."
 
 **Used in.** Chapters 2, 8, 9, 10, 11, 12, 20.
 
@@ -184,7 +184,6 @@ XBRL endpoints usually lag under a minute. There is no CORS support, so run your
 - *Circularity.* Composites are built partly from TRACE. If you train on composite labels with TRACE features, part of what you predict is your own input. Validate on *subsequent* trades (markouts).
 - *Staleness.* A bond with no new information follows its comparables, so its $\theta$ sits well above zero. Use the score field to set observation weights.
 - *Bid-side NAVs.* Credit ETF NAVs are struck from bid-side evaluated prices. In March 2020, part of the "discount" of HYG and LQD to NAV was the NAV being stale (Chapter 20).
-- *Licensing.* Composite contracts often forbid long histories or index-building. Read them before you build a 20-year backtest.
 
 **Used in.** Chapters 7, 18, 19, 20.
 
@@ -247,7 +246,7 @@ Index CDS (CFTC swap repositories) and, since early 2022, single-name CDS (SEC R
 
 ## B.15 Case Study: A Fallen Angel Through Every Lens
 
-Here is what a fallen angel looks like as data, using the synthetic bond `SYN-IG-B` from the code below (all numbers *illustrative*). The rating agency's downgrade from BBB- to BB+ takes effect on June 10 and is published on June 12. On EDGAR, an 8-K Item 2.03 filing earlier in the year attached an amendment as EX-10.1 with its pricing grid redacted. On the TRACE tape, large prints switch from `5MM+` to `1MM+` on June 12, not June 10. A model that joins on effective date "knows" about the cap change two days early. Index data keeps the bond in the IG index until the June month-end rebalance, which is when forced selling clusters. The ETF holdings file shows the IG fund's position disappearing at the rebalance, and the HY fund's holdings file shows the bond showing up the next day. Composites mark it down gradually, because they move with the comparables at a $\theta$ well above zero. Daily returns built from composites understate the move's volatility, and a Dimson-summed beta to HYG recovers it.
+Take the synthetic `SYN-IG-B` from the code below (all numbers *illustrative*). Its downgrade from BBB- to BB+ takes effect June 10 and is published June 12. TRACE prints switch from `5MM+` to `1MM+` on June 12. Join on effective date and you "know" the cap change two days early. The index keeps the bond until the June month-end rebalance, which is when forced selling clusters, and the ETF holdings files show it moving from the IG fund to the HY fund across that date. Composites mark it down slowly, at high $\theta$, so composite-based daily returns understate the move's volatility. A Dimson-summed beta to HYG recovers it.
 
 The desk's job is to line these five clocks up by `knowledge_ts`. That alignment is a feature in its own right. The gap between the downgrade's knowledge time and the index rebalance is the forced-selling window that Chapters 9 and 20 trade.
 
@@ -274,10 +273,8 @@ from scipy.optimize import brentq
 
 RNG = np.random.default_rng(20261017)
 IG_CAP, HY_CAP = 5_000_000, 1_000_000          # dissemination caps (par $)
-RATING_SCALE = {"AAA": 1, "AA+": 2, "AA": 3, "AA-": 4, "A+": 5, "A": 6, "A-": 7,
-                "BBB+": 8, "BBB": 9, "BBB-": 10, "BB+": 11, "BB": 12, "BB-": 13,
-                "B+": 14, "B": 15, "B-": 16, "CCC+": 17, "CCC": 18, "CCC-": 19,
-                "CC": 20, "C": 21, "D": 22}
+RATING_SCALE = {r: k + 1 for k, r in enumerate(
+    "AAA AA+ AA AA- A+ A A- BBB+ BBB BBB- BB+ BB BB- B+ B B- CCC+ CCC CCC- CC C D".split())}
 IG_MAX_NUM = RATING_SCALE["BBB-"]
 
 # ---------------------------------------------------------------- 1. security master
