@@ -13,7 +13,7 @@ Every workflow, what it owns, and where its output lands. Check this before laun
 | ch-group-5 | 2–3 | Ch 5, 12, 19, 26 | briefs + chapters | running |
 | ch-group-6 | 2–3 | Ch 6, 13, 20, 27 | briefs + chapters | running |
 | ch-group-7 | 2–3 | Ch 7, 14, 21, 28 | briefs + chapters | running |
-| front-matter | 3 | Preface, 8 part openers, App A (notation), App B (data atlas) | `book_src/00_00_*`, `*_00_part_*`, `90_appA_*`, `91_appB_*` | running |
+| front-matter | 3 | Preface, 8 part openers, App A (notation), App B (data atlas) | `book_src/00_00_*`, `*_00_part_*`, `90_appA_*`, `91_appB_*` | **done** (preface 3.0k, 8 openers ~0.6k each, App A 6.7k, App B 8.0k words) |
 | trend-A | 1 | electronification/PT/ETF liquidity; systematic credit industry; trend/TSMOM; academic frontier; AI/LLMs | `state/research/trend_*.md`, `exploratory_space_A.md` | running |
 | trend-B | 1 | LMT/default/recovery cycle; private credit; loans/CLOs; market-structure regulation; dealers/CDS/index | `state/research/trend_*.md`, `exploratory_space_B.md` | running |
 | cases-lmt | 1 | Serta; J.Crew; Incora/Wesco; Mitel; double-dip/pari-plus; 2024–26 LMT wave | `state/research/case_*.md`, `map_case_lmt.md` | running |

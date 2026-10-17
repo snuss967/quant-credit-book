@@ -10,7 +10,7 @@ Mags Dunleavy, coat on: "Back in my day the data source was a guy named Lenny. L
 
 ROBO, asked to "get all the bond data," has queued 4.1 million requests to `data.sec.gov` with no User-Agent header. It is about to find out what a 403 is.
 
-This appendix is the reference to keep open next to every other chapter. By the end of it you will be able to: (i) say, for each major credit data source, what it is, who pays for it, and which fields carry signal; (ii) list how each one misleads you: stale prices, survivorship, look-ahead, caps, licensing; (iii) quantify how stale prices distort variance and beta, and correct for it; and (iv) give ROBO a strict, testable schema for a tidy bond panel. Every URL below was checked on 2026-10-17. Where we could not check a source, it has no link.
+Keep this appendix open next to every other chapter. By the end you will be able to name each source's access, cost, and signal-carrying fields; list how each one lies (staleness, survivorship, look-ahead, caps, licensing); quantify and undo stale-price bias; and give ROBO a testable bond-panel schema. Every URL was checked on 2026-10-17. Sources we could not check have no link.
 
 ## B.0 How to Read an Atlas Entry (and Four Ways Data Lies)
 
@@ -30,7 +30,7 @@ Staleness does not remove risk. It spreads today's risk over the following days.
 >
 > **Annotation.** The Barclays team used two fixes. Sampling biweekly instead of daily lowers the effective $\theta$, and a run-length filter removes bonds whose quotes don't move. The run-length rule still screens *evaluated* prices well, but a TRACE price carried forward is one old trade copied onto later rows, so our schema carries an explicit `days_stale` counter (§B.16). The derivation shows what the filter buys you: dropping the bonds with high $\theta$ pushes measured variance and beta back toward the truth. The price is a tilt toward liquid names, which is a factor exposure of its own (Chapter 9).
 
-**Sin 2: Look-ahead.** A feature $X_{i,t}$ is admissible only if $X_{i,t}\in\mathcal{F}_t$. In code, that means you join on `knowledge_ts` (when you could have known it), never `effective_ts` (the date the value refers to). Some examples. A TRACE print executed at 4:58 p.m. and reported at 5:12 p.m. is known at 5:12. A downgrade effective Tuesday and published Thursday is known Thursday. An XBRL fact is known when the filing is accepted. Restated values must not overwrite originals in a backtest.
+**Sin 2: Look-ahead.** A feature $X_{i,t}$ is admissible only if $X_{i,t}\in\mathcal{F}_t$. In code, that means you join on `knowledge_ts` (when you could have known it), never `effective_ts` (the date the value refers to). Some examples. A TRACE print executed at 4:58 p.m. and reported at 5:12 p.m. is known at 5:12. A downgrade effective Tuesday and published Thursday is known Thursday. An XBRL fact is known when the filing is accepted.
 
 **Sin 3: Survivorship.** The universe at date $t$ is every bond that existed and was eligible at $t$, including bonds that later defaulted, were called, tendered, or matured. Today's index constituents, today's ETF holdings, and any "active securities" table are survivor-biased. In credit, the bonds that drop out are the defaulted ones, and they *are* the left tail.
 
@@ -61,7 +61,7 @@ Most researchers get TRACE Standard, Enhanced, and 144A tables through **WRDS**.
 >
 > **Annotation.** "Censored" is the statistically correct word. A capped print is right-censored, so volume sums and VWAPs built from the public tape are skewed toward small trades, and small trades tend to print on the wrong side of the spread. A 2026 desk does three things about it. It flags every capped print. It imputes true size from a tail fitted to EHD, for example a Pareto tail conditional on exceeding the cap. And it never trains on public-tape volumes while scoring on EHD volumes. One more trap: the cap depends on the rating *at trade time*. A fallen angel's cap drops from \$5mm to \$1mm on the day the downgrade becomes known, and §B.16 tests for exactly this.
 
-**Reporting timing: the one-minute saga.** The 15-minute outer limit has applied to corporates since 2005. On September 20, 2024, the SEC approved SR-FINRA-2024-004, which cut the limit to one minute for fully electronic trades. Manual trades got a phase-in (15 minutes, then 10, then 5), and firms with fewer than 4,000 reported trades a year were exempt. "FINRA has not implemented the changes approved in File No. SR-FINRA-2024-004." Members pointed to allocations, portfolio trades, and voice or chat workflows. On September 16, 2025, the SEC approved SR-FINRA-2025-008, which *keeps* the 15-minute limit. The same filing lets dual broker-dealer/investment-adviser firms report the allocations of an aggregate order as a single report that includes the number of accounts (Release No. 34-103986, <https://public-inspection.federalregister.gov/2025-18147.pdf>). The record shows 82.9% of eligible trades executed between 8:00 a.m. and 6:15 p.m. were already reported within one minute in 2022. The rule mainly targeted the slow 17%, which is mostly blocks and voice trades, and those are the trades that carry information. Rule 6730 also sets 60 minutes for Treasuries, post-issuance CMOs, and specified pools; same day for CDOs and CMBS executed by 5:00 p.m.; and T+1 for List/Fixed Offering Price and Takedown trades (<https://www.finra.org/rules-guidance/rulebooks/finra-rules/6730>).
+**Reporting timing: the one-minute saga.** The 15-minute outer limit has applied to corporates since 2005. On September 20, 2024, the SEC approved SR-FINRA-2024-004, which cut the limit to one minute for fully electronic trades. Manual trades got a phase-in (15 minutes, then 10, then 5), and firms with fewer than 4,000 reported trades a year were exempt. "FINRA has not implemented the changes approved in File No. SR-FINRA-2024-004." On September 16, 2025, the SEC approved SR-FINRA-2025-008, which *keeps* the 15-minute limit. The same filing lets dual broker-dealer/investment-adviser firms report the allocations of an aggregate order as a single report that includes the number of accounts (Release No. 34-103986, <https://public-inspection.federalregister.gov/2025-18147.pdf>). The record shows 82.9% of eligible trades executed between 8:00 a.m. and 6:15 p.m. were already reported within one minute in 2022. The rule targeted the slow 17%: blocks and voice trades, where the information is. Rule 6730 also sets 60 minutes for Treasuries, post-issuance CMOs, and specified pools; same day for CDOs and CMBS executed by 5:00 p.m.; and T+1 for List/Fixed Offering Price and Takedown trades (<https://www.finra.org/rules-guidance/rulebooks/finra-rules/6730>).
 
 **What is *not* disseminated.** Under Rule 6750 (<https://www.finra.org/rules-guidance/rulebooks/finra-rules/6750>): affiliate trades; certain M&A transfers; List/Fixed Offering Price and Takedown trades; CMBS, CDOs, and CMOs that don't qualify for periodic dissemination; foreign sovereigns; and Treasuries other than on-the-run nominal coupons. Those on-the-run coupons have been disseminated end-of-day since March 25, 2024, with size caps, no participant IDs, and free next-day access for non-professional use (Regulatory Notice 24-06). CLO tranches fall under the CDO exclusion. They are *reported* to TRACE but not disseminated by transaction, so no public CLO tape exists.
 
@@ -88,7 +88,7 @@ Most researchers get TRACE Standard, Enhanced, and 144A tables through **WRDS**.
 
 XBRL endpoints usually lag under a minute. There is no CORS support, so run your code server-side. Fair-access rules (<https://www.sec.gov/os/accessing-edgar-data>): "Current max request rate: 10 requests/second," and every request must carry a declared User-Agent of the form `Sample Company Name AdminContact@<sample company domain>.com`.
 
-**Full-text search** (<https://www.sec.gov/edgar/search/efts-faq.html>) covers all electronic filings "since 2001," including "all attachments (such as exhibits)." It supports exact phrases, `OR`, `NOT`, `NEAR(n)` (default 10 words), and trailing wildcards. The JSON endpoint behind it on `efts.sec.gov` is undocumented, so assume it can change. This is the tool for a J.Crew-blocker screen: every exhibit since 2018 with *unrestricted subsidiary* within five words of *intellectual property* (Chapter 13).
+**Full-text search** (<https://www.sec.gov/edgar/search/efts-faq.html>) covers all electronic filings "since 2001," including "all attachments (such as exhibits)." It supports exact phrases, `OR`, `NOT`, `NEAR(n)` (default 10 words), and trailing wildcards. Its backing JSON endpoint (`efts.sec.gov`) is undocumented. Use it for J.Crew-blocker screens, e.g., *unrestricted subsidiary* NEAR(5) *intellectual property* (Chapter 13).
 
 **Credit-document exhibits** (Regulation S-K Item 601, <https://www.law.cornell.edu/cfr/text/17/229.601>): **EX-4** (indentures, supplemental indentures); **EX-10** ("every contract not made in the ordinary course of business that is material," which includes credit agreements, amendments, intercreditors, and joinders, usually attached to an 8-K under Item 1.01 or 2.03, or to a 10-Q); **EX-21** (subsidiaries, your starting point for the restricted/unrestricted map).
 
@@ -129,9 +129,9 @@ XBRL endpoints usually lag under a minute. There is no CORS support, so run your
 
 ## B.5 CME Treasury Futures, MDP 3.0, and BrokerTec
 
-**What it is.** CME lists the Treasury futures used for rate hedging (2-, 5-, and 10-year, Ultra 10-year, Bond, and Ultra Bond). It also owns **BrokerTec**, the inter-dealer central limit order book for cash Treasuries and repo, acquired with NEX Group in 2018. The real-time protocol is **MDP 3.0**: UDP multicast, Simple Binary Encoding (SBE), incremental and snapshot-recovery channels, and market-by-price and market-by-order books. History is sold through CME DataMine. CME's site returned HTTP 503 to automated requests this session, so we give no deep links.
+**What it is.** CME lists the Treasury futures used for rate hedging (2-, 5-, and 10-year, Ultra 10-year, Bond, and Ultra Bond). It also owns **BrokerTec**, the inter-dealer central limit order book for cash Treasuries and repo, acquired with NEX Group in 2018. The real-time protocol is **MDP 3.0**: UDP multicast, Simple Binary Encoding (SBE), incremental and snapshot-recovery channels, and market-by-price and market-by-order books. History is sold through CME DataMine. CME's site blocked automated checks this session, so no deep links.
 
-**Access & cost.** Exchange licensing is per device or per enterprise, and an algorithm consuming the feed triggers non-display fees. DataMine is priced per dataset. Many shops buy normalized data rather than decode raw SBE.
+**Access & cost.** Exchange licensing is per device or per enterprise, and an algorithm consuming the feed triggers non-display fees. DataMine is priced per dataset.
 
 **Key fields.** Contract and expiry, book levels and sizes, trades with the aggressor side, sequence numbers, exchange timestamps, settlement prices, and open interest. Add the deliverable basket and conversion factors, which you need for cheapest-to-deliver (CTD) and futures DV01 (Chapters 8, 24).
 
@@ -145,7 +145,7 @@ XBRL endpoints usually lag under a minute. There is no CORS support, so run your
 
 **Access & cost.** OPRA charges vendor and subscriber fees under its fee schedule. For credit work, a daily or 3:45 p.m. surface snapshot per issuer is enough for Merton/CreditGrades inputs, put-vs-CDS comparisons, and skew-implied jump-to-default (Chapter 23).
 
-**Gotchas.** The options "close" is a quote snapshot, and it isn't synchronized with the equity close, which produces false put-call parity violations. Early exercise and dividends bias naive Black–Scholes implied vols in the deep out-of-the-money puts that carry the default signal. Corporate actions change contract terms.
+**Gotchas.** The options "close" is a quote snapshot, and it isn't synchronized with the equity close, which produces false put-call parity violations. Early exercise and dividends bias naive Black–Scholes implied vols in the deep out-of-the-money puts that carry the default signal.
 
 **Used in.** Chapters 8, 23, 27.
 
@@ -157,7 +157,7 @@ XBRL endpoints usually lag under a minute. There is no CORS support, so run your
 - **iBoxx, CDX, iTraxx** belong to S&P Global since its 2022 merger with IHS Markit. HYG tracks the iBoxx USD Liquid High Yield Index. CDX and iTraxx roll to a new series every six months.
 - **FRED** republishes ICE BofA OAS: **BAMLH0A0HYM2** (HY, <https://fred.stlouisfed.org/series/BAMLH0A0HYM2>) and **BAMLC0A0CM** (IG, <https://fred.stlouisfed.org/series/BAMLC0A0CM>). On 2026-10-15 they were 3.23% and 0.84%, i.e., 323 bp and 84 bp (FRED, accessed 2026-10-17). The FRED API (<https://fred.stlouisfed.org/docs/api/fred/>) includes `fred/series/vintagedates` for real-time vintages.
 
-**Access & cost.** Constituent-level data (weights, prices, OAS, duration, ratings by bond) is licensed and expensive. Index-level series are cheaper.
+**Access & cost.** Constituent-level data is licensed and expensive; index-level series are cheaper.
 
 **Gotchas.**
 - *Month-end rebalancing.* A bond downgraded mid-month stays in the IG index until the month-end rebalance, and fallen-angel selling clusters on those dates (Chapter 9).
@@ -187,7 +187,7 @@ XBRL endpoints usually lag under a minute. There is no CORS support, so run your
 
 **Used in.** Chapters 7, 18, 19, 20.
 
-> **Trend Watch. Pricing became a product (2018–2026).** Trading venues turned their order-flow data into pricing products (CP+, Ai-Price), and evaluated-pricing vendors sped up their updates. A portfolio trade, flagged in TRACE since May 15, 2023, is priced against composite mids, and the dealer's markup is measured against them (Chapter 19). **Desk implication:** your pricing engine competes with the composites. Log both prices on every RFQ, and show the edge as better markouts on the same trades.
+> **Trend Watch. Pricing became a product (2018–2026).** Venues turned order-flow data into pricing products (CP+, Ai-Price). Portfolio trades, flagged in TRACE since May 15, 2023, are priced and marked up against composite mids (Chapter 19). **Desk implication:** your engine competes with the composites. Log both on every RFQ and prove your edge in markouts.
 
 ## B.9 Ratings-Agency Default Studies
 
@@ -213,7 +213,7 @@ XBRL endpoints usually lag under a minute. There is no CORS support, so run your
 
 **What it is.** There is no public loan tape. In *Kirschner v. JPMorgan Chase* (2d Cir. 2023), the court held that the syndicated term-loan notes at issue were not securities. The sources you have: the **LSTA** (<https://www.lsta.org/>), which publishes market analysis such as its *BSL Market Monthly* (built on the Morningstar LSTA Leveraged Loan Index), settlement standards, and documentation; PitchBook LCD for new issues and defaults; and dealer-quote mark services such as LSEG's. CLO data comes from Intex (waterfalls), monthly trustee reports (collateral, OC/IC tests, CCC buckets), rating-agency surveillance, and Creditflux's CLO-i. TRACE collects CLO tranche trades but does not disseminate them (§B.1).
 
-**Gotchas.** Loan "prices" are averages of dealer quotes, not trades. Settlement takes days to weeks. Repricings and amend-and-extends change a loan's terms without changing its identifier. Trustee reports arrive monthly and late, so the forced-seller signal from a CCC bucket (Chapter 21) is about a month stale.
+**Gotchas.** Loan "prices" are averages of dealer quotes, not trades. Repricings and amend-and-extends change a loan's terms without changing its identifier. Trustee reports arrive monthly and late, so the forced-seller signal from a CCC bucket (Chapter 21) is about a month stale.
 
 **Used in.** Chapters 12, 16, 17, 21.
 
@@ -221,9 +221,9 @@ XBRL endpoints usually lag under a minute. There is no CORS support, so run your
 
 **What it is.** Under SEC Rule 6c-11 (2019), most US ETFs post full holdings every day. iShares pages include "Download latest fund holdings CSV data." HYG (<https://www.ishares.com/us/products/239565/ishares-iboxx-high-yield-corporate-bond-etf>) launched April 4, 2007. SPDR pages offer a daily `.xlsx`. JNK (<https://www.ssga.com/us/en/intermediary/etfs/spdr-bloomberg-high-yield-bond-etf-jnk>) launched November 28, 2007. The files are free to download, and each sponsor's terms govern redistribution.
 
-**Key fields.** As-of date, name, identifiers (ISIN, sometimes CUSIP), par, market value, weight, price, and sector, plus coupon, maturity, duration, and yield for bond funds. Layouts differ by sponsor, so write one parser per sponsor and test each against a stored sample file.
+**Key fields.** As-of date, name, identifiers (ISIN, sometimes CUSIP), par, market value, weight, price, and sector, plus coupon, maturity, duration, and yield for bond funds. Layouts differ, so write and test one parser per sponsor.
 
-**Gotchas.** The holdings file is not the creation basket, because custom baskets are allowed (Chapter 20). Each file overwrites the last one. If you don't archive daily, you have no history and every backtest is survivor-biased. Cash, futures, and CDS overlays need special handling. File prices are the sponsor's evaluated prices, not trades.
+**Gotchas.** The holdings file is not the creation basket, because custom baskets are allowed (Chapter 20). Each file overwrites the last one. If you don't archive daily, you have no history and every backtest is survivor-biased. Cash, futures, and CDS overlays need special handling.
 
 **Used in.** Chapters 2, 19, 20.
 
@@ -240,13 +240,12 @@ Index CDS (CFTC swap repositories) and, since early 2022, single-name CDS (SEC R
 | `pandas-datareader` (<https://pandas-datareader.readthedocs.io/en/latest/>) | Remote readers, including FRED | 0.11.2 dev build in the docs (July 2026); FRED now returns 3 years for ICE series |
 | `juriscraper` | Court and PACER parsing | BSD-2; Python 3.11+ |
 | trace-data-pipeline / PyBondLab | TRACE cleaning, analytics, factors | MIT; Stages 0–1 need WRDS |
-| `wrds`, `QuantLib`, `fredapi` | WRDS SQL; bond math; FRED client | Not re-verified this session |
 
 > **Ways This Blows Up.** When a provider changes its terms (FRED's window, CourtListener's limits, EDGAR's User-Agent rule), the wrappers break *quietly*. A call that returns three years of OAS where it used to return thirty raises no exception. It just deletes 2008 from your regime model. Assert row counts and date ranges on every pull, and fail the job if history shrinks.
 
 ## B.15 Case Study: A Fallen Angel Through Every Lens
 
-Take the synthetic `SYN-IG-B` from the code below (all numbers *illustrative*). Its downgrade from BBB- to BB+ takes effect June 10 and is published June 12. TRACE prints switch from `5MM+` to `1MM+` on June 12. Join on effective date and you "know" the cap change two days early. The index keeps the bond until the June month-end rebalance, which is when forced selling clusters, and the ETF holdings files show it moving from the IG fund to the HY fund across that date. Composites mark it down slowly, at high $\theta$, so composite-based daily returns understate the move's volatility. A Dimson-summed beta to HYG recovers it.
+Take the synthetic `SYN-IG-B` from the code below (all numbers *illustrative*). Its downgrade from BBB- to BB+ takes effect June 10 and is published June 12. TRACE prints switch from `5MM+` to `1MM+` on June 12. Join on effective date and you "know" the cap change two days early. The index keeps the bond until the June month-end rebalance, which is when forced selling clusters. Composites mark it down slowly, at high $\theta$, so composite-based daily returns understate the move's volatility. A Dimson-summed beta to HYG recovers it.
 
 The desk's job is to line these five clocks up by `knowledge_ts`. That alignment is a feature in its own right. The gap between the downgrade's knowledge time and the index rebalance is the forced-selling window that Chapters 9 and 20 trade.
 
@@ -574,7 +573,7 @@ assert abs(var_ratio - (1 - theta) / (1 + theta)) < 0.01 and abs(rho1 - theta) <
 print(f"messages={len(msgs)}, clean trades={len(trades)}, capped prints={int(trades.qty_capped.sum())}")
 print(f"daily panel rows={len(daily)}, stale share={daily.is_stale.mean():.1%}")
 print(f"var ratio={var_ratio:.4f} (theory {(1-theta)/(1+theta):.4f}), rho1={rho1:.4f}")
-print(monthly.to_string(index=False, float_format=lambda v: f"{v:.4f}"))
+print(monthly.head(8).to_string(index=False, float_format=lambda v: f"{v:.4f}"))
 ```
 
 ## B.17 Desk Debrief
@@ -594,11 +593,10 @@ print(monthly.to_string(index=False, float_format=lambda v: f"{v:.4f}"))
 1. Estimate $\theta$ for each bond in `daily` from $\rho_1$ of returns on days with trades. Compare it with the variance-ratio estimate. Which one is more robust when trading days are irregular?
 2. Fit a Pareto tail to `qty_true` above \$1mm for HY prints. Impute sizes for `1MM+` prints and measure the bias you remove from a capped VWAP.
 3. Using the EDGAR full-text syntax, write a query for 8-K exhibits that pair "unrestricted subsidiary" with "intellectual property," and list three ways it gives false positives.
-4. Kaz insists the frames API is fine for backtests "because restatements are rare." Design a test that measures how often a `companyfacts` value for a debt tag changes between its first and last `filed` date.
 
 ### Deep-Dive Resource Graph
 
-**Podcasts.** Bloomberg's *Odd Lots* (market-structure, TRACE, and portfolio-trading episodes); *Flirting with Models* (Corey Hoffstein) on systematic data hygiene.
+**Podcasts.** Bloomberg's *Odd Lots* (bond market-structure episodes); *Flirting with Models* (Corey Hoffstein).
 
 **Practitioner Writing.** Matt Levine, *Money Stuff* (on bond-market transparency and the "price" of untraded bonds); MarketAxess TraX and CP+ research; Free Law Project's CourtListener documentation (<https://wiki.free.law/c/courtlistener/help/api/rest/v4/overview>).
 

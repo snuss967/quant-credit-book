@@ -153,9 +153,9 @@ The Tradeweb newsroom and SSRN returned 403. Platform numbers are company estima
 
 - **Fair-weather liquidity.** Platforms and ELPs "help mainly in normal markets." EUR IG's March 2026 bid-ask spike and its 13-week EUR HY recovery mean backtests using 2023–2025 costs understate stress costs. Run LVaR with a 3–5× cost multiplier (Ch 28).
 - **Composite reflexivity.** When auto-quoters, price-improvement benchmarks and PT reference prices all key off the same composite, composite error becomes correlated execution error.
-- **Venue concentration and data access.** ICE–MarketAxess could change fees, data licensing and disclosure. MarketAxess's monthly data has already gone dark, and Tradeweb's data distribution runs through an LSEG license to October 2028.
-- **Measurement error in "liquidity."** Duplicate prints (up to 8% of HG volume), "electronically processed" volume and estimated electronic shares (Trumid at 60–71%) bias volume-based liquidity scores.
-- **Crowding of systematic execution.** Many quants routing the same liquid names through the same auto-ex protocols at the same times (month-end, lunch, August) shrinks the "liquidity sweet spot."
+- **Venue concentration and data access.** MarketAxess's monthly data has already gone dark, and Tradeweb's data distribution runs through an LSEG license to October 2028.
+- **Measurement error.** Duplicate prints (up to 8% of HG volume) and "processed" volume bias volume-based liquidity scores.
+- **Crowded execution.** Quants auto-routing the same names at the same times shrink the "liquidity sweet spot."
 
 ### 4.4 For the RSSG-to-quant reader specifically
 

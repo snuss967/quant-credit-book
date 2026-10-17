@@ -24,4 +24,5 @@ How the book gets made, edition after edition. Every stage has one owner, one se
 4. **Research and writing first; checking last.** Do not run or debug code examples while research or writing remains (Stage 7 only).
 5. **Concurrency.** Each workflow runs 2 agents at once on this machine, so parallelism comes from running several workflows side by side. Target about 30–36 live agents. Never launch a workflow whose outputs overlap a running one.
 6. **Canonical homes.** Each case study and each foundation concept has exactly one canonical chapter, set in `state/reviews/edN/preflight_*.md`. Every other chapter cross-references it instead of retelling it.
-7. **Commit early, commit often.** Snapshot agent output to git at every turn boundary. Ship each edition as a single tagged commit message ("Ship Edition N").
+7. **Web search is shared and rate-limited.** Search before you fetch only when you don't know the primary source. Prefer WebFetch on known primary URLs (regulators, courts, exchanges, papers). Never repeat a search whose answer already sits in `state/research/`. If search is throttled, fall back to fetching primary sources directly.
+8. **Commit early, commit often.** Snapshot agent output to git at every turn boundary. Ship each edition as a single tagged commit message ("Ship Edition N").
