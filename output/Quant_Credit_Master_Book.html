@@ -161,6 +161,70 @@
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
   </style>
   <style>
     :root {
@@ -212,7 +276,7 @@
 <h1 class="title">Systematic &amp; Quantitative Credit: From PJT RSSG to
 the Automated Desk</h1>
 <p class="subtitle">Mathematical Foundations, Microstructure, LMT Game
-Theory, and Alpha Isolation (Edition 1, Build: 2026-10-17 23:22 UTC)</p>
+Theory, and Alpha Isolation (Edition 1, Build: 2026-10-17 23:23 UTC)</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -313,6 +377,68 @@ arithmetic</a></li>
 id="toc-a.9-glossary-of-desk-and-restructuring-terms">A.9 Glossary of
 desk and restructuring terms</a></li>
 </ul></li>
+<li><a href="#appendix-b-the-data-api-atlas"
+id="toc-appendix-b-the-data-api-atlas">Appendix B: The Data &amp; API
+Atlas</a>
+<ul>
+<li><a href="#b.0-how-to-read-an-atlas-entry-and-four-ways-data-lies"
+id="toc-b.0-how-to-read-an-atlas-entry-and-four-ways-data-lies">B.0 How
+to Read an Atlas Entry (and Four Ways Data Lies)</a></li>
+<li><a href="#b.1-finra-trace-the-tape"
+id="toc-b.1-finra-trace-the-tape">B.1 FINRA TRACE: The Tape</a></li>
+<li><a href="#b.2-sec-edgar-the-legal-prose-warehouse"
+id="toc-b.2-sec-edgar-the-legal-prose-warehouse">B.2 SEC EDGAR: The
+Legal Prose Warehouse</a></li>
+<li><a href="#b.3-courtlistener-recap-pacer-and-the-claims-agents"
+id="toc-b.3-courtlistener-recap-pacer-and-the-claims-agents">B.3
+CourtListener, RECAP, PACER, and the Claims Agents</a></li>
+<li><a href="#b.4-msrb-emma" id="toc-b.4-msrb-emma">B.4 MSRB
+EMMA</a></li>
+<li><a href="#b.5-cme-treasury-futures-mdp-3.0-and-brokertec"
+id="toc-b.5-cme-treasury-futures-mdp-3.0-and-brokertec">B.5 CME Treasury
+Futures, MDP 3.0, and BrokerTec</a></li>
+<li><a href="#b.6-opra-cboe-and-options-data"
+id="toc-b.6-opra-cboe-and-options-data">B.6 OPRA, Cboe, and Options
+Data</a></li>
+<li><a href="#b.7-index-data-ice-bofa-bloomberg-iboxxcdxitraxx-and-fred"
+id="toc-b.7-index-data-ice-bofa-bloomberg-iboxxcdxitraxx-and-fred">B.7
+Index Data: ICE BofA, Bloomberg, iBoxx/CDX/iTraxx, and FRED</a></li>
+<li><a
+href="#b.8-composite-and-evaluated-pricing-model-outputs-dressed-as-prices"
+id="toc-b.8-composite-and-evaluated-pricing-model-outputs-dressed-as-prices">B.8
+Composite and Evaluated Pricing: Model Outputs Dressed as
+Prices</a></li>
+<li><a href="#b.9-ratings-agency-default-studies"
+id="toc-b.9-ratings-agency-default-studies">B.9 Ratings-Agency Default
+Studies</a></li>
+<li><a
+href="#b.10-academic-bond-panels-obap-wrds-bond-returns-mergent-fisd"
+id="toc-b.10-academic-bond-panels-obap-wrds-bond-returns-mergent-fisd">B.10
+Academic Bond Panels: OBAP, WRDS Bond Returns, Mergent FISD</a></li>
+<li><a href="#b.11-leveraged-loans-and-clos"
+id="toc-b.11-leveraged-loans-and-clos">B.11 Leveraged Loans and
+CLOs</a></li>
+<li><a href="#b.12-etf-holdings-files"
+id="toc-b.12-etf-holdings-files">B.12 ETF Holdings Files</a></li>
+<li><a href="#b.13-cds-public-data-brief"
+id="toc-b.13-cds-public-data-brief">B.13 CDS Public Data
+(Brief)</a></li>
+<li><a href="#b.14-open-source-tooling"
+id="toc-b.14-open-source-tooling">B.14 Open-Source Tooling</a></li>
+<li><a href="#b.15-case-study-a-fallen-angel-through-every-lens"
+id="toc-b.15-case-study-a-fallen-angel-through-every-lens">B.15 Case
+Study: A Fallen Angel Through Every Lens</a></li>
+<li><a
+href="#b.16-specification-for-ai-implementation-the-tidy-bond-panel"
+id="toc-b.16-specification-for-ai-implementation-the-tidy-bond-panel">B.16
+Specification for AI Implementation: The Tidy Bond Panel</a></li>
+<li><a href="#b.17-desk-debrief" id="toc-b.17-desk-debrief">B.17 Desk
+Debrief</a>
+<ul>
+<li><a href="#deep-dive-resource-graph"
+id="toc-deep-dive-resource-graph">Deep-Dive Resource Graph</a></li>
+</ul></li>
+</ul></li>
 </ul>
 </nav>
 <section id="preface-read-the-credit-agreement-then-take-the-derivative"
@@ -344,13 +470,12 @@ at PJT Partners’ RSSG and the handful of places like it. Its unit of
 work is the bespoke legal bottleneck. It spends ninety hours building a
 13-week cash flow model, reads 350-page credit agreements for sport,
 knows where the trapdoors are (Restricted Payments baskets, J.Crew-style
-unrestricted-subsidiary drop-downs, Serta-style non-pro-rata uptiers,
-EBITDA add-back caps, springing maturities), and understands Chapter 11
-as a repeated game with exclusivity periods, DIP roll-ups, ad hoc
-groups, and 363 sales. Its edge is information that does not live in a
-time series. Its weakness is that it treats every credit as an artisanal
-snowflake and has never been forced to write its judgment down as a
-probability.</p>
+drop-downs, Serta-style uptiers, EBITDA add-back caps), and understands
+Chapter 11 as a repeated game with exclusivity periods, DIP roll-ups, ad
+hoc groups, and 363 sales. Its edge is information that does not live in
+a time series. Its weakness is that it treats every credit as an
+artisanal snowflake and has never been forced to write its judgment down
+as a probability.</p>
 <p>The second tribe sits on systematic market-making desks and in
 multi-strategy quant pods. Its unit of work is conditional expected
 value per unit of inventory variance per day. It prices adverse
@@ -383,11 +508,6 @@ for a priming-risk model, with units, boundary conditions, and edge
 cases, now matters more than the person who can type it. The ex-RSSG
 banker who learns to specify is suddenly holding something a pure
 mathematician cannot buy: a decade of knowing which clause matters.</p>
-<p>So the book is addressed to a technical practitioner sitting in, or
-leaving, an elite fundamental restructuring seat for a top-tier
-systematic desk or quant credit pod, and it teaches that reader how to
-weaponize what they already know. Everyone else is welcome; you will
-just be reading over Theo’s shoulder.</p>
 </section>
 <section id="who-this-is-for" class="level2">
 <h2>Who this is for</h2>
@@ -453,19 +573,17 @@ labeling, decomposition), then Chapter 13 (the Priming Risk Score),
 Chapters 18–19 (quoting and basket pricing), and Chapters 25–27
 (document parsing, agent workflows, and system architecture). Chapter 26
 is the operating manual for directing coding agents and should be read
-before you direct one. Then go back and read the prose, because a spec
-you do not understand is a spec you cannot debug, and the prose is where
-we explain why the robot was told what it was told.</p>
+before you direct one. Then go back and read the prose: a spec you do
+not understand is a spec you cannot debug.</p>
 <p>There is also a fourth, unofficial path for the reader who is here
 for the trends: Chapters 2, 4, 10, 14, 17, 21, 22, and 26, each marked
 TREND in the table of contents, followed by Appendix C, the Trend
-Tracker. Everything on that path is dated and sourced.</p>
+Tracker.</p>
 </section>
 <section id="the-cast" class="level2">
 <h2>The cast</h2>
 <p>Twenty-eight chapters written by a committee tend to read like
-twenty-eight chapters written by a committee. To keep one voice and one
-set of arguments running through the whole book, we use a small
+twenty-eight chapters written by a committee. So we use a small
 recurring cast. They are fictional. Every line of dialogue in the book
 belongs to them. Real firms, real cases, and real people appear only
 with verifiable facts attached and never with invented quotes.</p>
@@ -522,8 +640,7 @@ recognizable order, so that you always know where you are:</p>
 <ol type="1">
 <li><strong>Intuitive desk framing.</strong> How a market maker or an
 RSSG partner sees the problem in plain, ruthless trading terms, usually
-with the cast in the room. If you only read one thing per section, read
-this and the Desk Debrief.</li>
+with the cast in the room.</li>
 <li><strong>Rigorous mathematical derivation.</strong> Full equations,
 step by step, every Greek letter defined, boundary conditions stated,
 using the single notation table in Appendix A. The joke, if there is
@@ -567,11 +684,10 @@ carry, and how it behaved in 2008, 2020, and 2022. That gets a whole
 chapter (Chapter 10) and a recurring role in Parts III and VIII. If a
 chapter does not tell you what changed and when, we consider it
 unfinished.</p>
-<p>Each chapter opens with a cold-open desk scene ending on the question
-the chapter answers, states what you will be able to do by the end, and
-closes with a Desk Debrief (takeaways sharp enough to tape to a
-monitor), a compact Spec You Hand the Robot, and a handful of exercises,
-some of them funny, all of them real.</p>
+<p>Each chapter opens with a cold-open desk scene and closes with a Desk
+Debrief (takeaways sharp enough to tape to a monitor), a compact Spec
+You Hand the Robot, and a few exercises, some of them funny, all of them
+real.</p>
 </section>
 <section
 id="a-note-on-how-this-book-is-made-and-why-you-should-check-the-build-stamp"
@@ -600,19 +716,16 @@ they have said so in the text, usually with the word
 <em>approximate</em>, occasionally with a parenthetical that reads like
 someone leaving a note for their future self, because that is what it
 is.</p>
-<p>Two consequences are worth stating plainly. First, the book will
-sometimes repeat itself across chapters, because chapters are written by
-different agents from the same brief. We trim this in later editions; in
-the meantime, think of it as spaced repetition. Second, the book’s
-priorities are, in order: research, net-new writing, growing the table
-of contents, polish, and only then checking that every code example
-runs. That ordering is deliberate. It means a bug can survive an
-edition. It also means the book gets deeper every cycle instead of
-prettier every cycle, and we think that is the right trade for a
-reference work on a market that changes this fast.</p>
-<p>If you find an error, you are almost certainly right. The repository
-that produces this book keeps a state directory and a continuation
-prompt; the next edition reads both.</p>
+<p>Two consequences follow. The book will sometimes repeat itself across
+chapters, because different agents wrote from the same brief; think of
+it as spaced repetition until we trim it. And its priorities are, in
+order, research, net-new writing, growing the table of contents, polish,
+and only then checking that every code example runs, so a bug can
+survive an edition. The book gets deeper every cycle rather than
+prettier, which we think is the right trade for a market that changes
+this fast. If you find an error, you are almost certainly right; the
+next edition reads the repository’s state notes and continuation
+prompt.</p>
 </section>
 <section id="the-integrity-pledge" class="level2">
 <h2>The integrity pledge</h2>
@@ -638,8 +751,8 @@ implementation is written to execute as given on numpy, scipy, and
 pandas, with seeded randomness and built-in sanity checks (Monte Carlo
 against closed form, a waterfall that conserves value, a hazard curve
 that stays non-negative). Execution checks are a low-priority cleanup
-pass, so a bug can survive an edition; the specification around the code
-is written so that you, or ROBO, can find it.</li>
+pass; the specification around the code is written so that you, or ROBO,
+can find what survived.</li>
 <li><strong>Every joke rides on a correct idea.</strong> If a line is
 funny but wrong, the line goes. If a derivation is correct but dull, we
 try harder.</li>
@@ -2605,6 +2718,1399 @@ cannot fall below margin plus floor. An interest-rate option the
 borrower sold without pricing it.</li>
 </ul>
 <hr />
+</section>
+</section>
+<section id="appendix-b-the-data-api-atlas" class="level1">
+<h1>Appendix B: The Data &amp; API Atlas</h1>
+<p>It is 11:40 p.m. Theo Marsh has fourteen browser tabs open and a
+spreadsheet called <code>data_sources_FINAL_v3.xlsx</code>.</p>
+<p>“TRACE has every corporate bond trade,” he says. “EDGAR has every
+credit agreement. FRED has the high-yield spread back to the nineties.
+So I can rebuild the credit market from public data and go home.”</p>
+<p>Ines Okafor doesn’t look up. “Which of those rows did you check this
+week? A trade over $5 million shows up on the tape as <code>5MM+</code>.
+The credit agreement is filed with its schedules left out and the
+pricing grid redacted. And since April, the FRED series you love keeps
+only three years of history. Every dataset is a hand history with some
+cards face down. Your job is to know which ones.”</p>
+<p>Mags Dunleavy, coat on: “Back in my day the data source was a guy
+named Lenny. Lenny had survivorship bias too. He only remembered the
+trades that worked.”</p>
+<p>ROBO, asked to “get all the bond data,” has queued 4.1 million
+requests to <code>data.sec.gov</code> with no User-Agent header. It is
+about to find out what a 403 is.</p>
+<p>This appendix is the reference to keep open next to every other
+chapter. By the end of it you will be able to: (i) say, for each major
+credit data source, what it is, who pays for it, and which fields carry
+signal; (ii) list how each one misleads you: stale prices, survivorship,
+look-ahead, caps, licensing; (iii) quantify how stale prices distort
+variance and beta, and correct for it; and (iv) give ROBO a strict,
+testable schema for a tidy bond panel. Every URL below was checked on
+2026-10-17. Where we could not check a source, it has no link.</p>
+<section id="b.0-how-to-read-an-atlas-entry-and-four-ways-data-lies"
+class="level2">
+<h2>B.0 How to Read an Atlas Entry (and Four Ways Data Lies)</h2>
+<p>Each entry gives <strong>what it is</strong>, <strong>access &amp;
+cost</strong>, <strong>key fields</strong>, <strong>gotchas</strong>,
+and <strong>used in</strong>. Four failure modes come up in almost every
+entry, so we state them formally once. ROBO cannot enforce a vibe.</p>
+<p><strong>Sin 1: Stale prices.</strong> Let <span
+class="math inline">\(r_t\)</span> be the true log return, i.i.d. with
+variance <span class="math inline">\(\sigma^2\)</span>. Suppose the
+observed price only partially adjusts each day: <span
+class="math inline">\(p^{o}_t = (1-\theta)\,p_t +
+\theta\,p^{o}_{t-1}\)</span>, where <span
+class="math inline">\(\theta\in[0,1)\)</span> measures staleness.
+Then</p>
+<p><span class="math display">\[r^{o}_t = (1-\theta)\sum_{k=0}^{\infty}
+\theta^{k} r_{t-k}, \qquad \operatorname{Var}(r^{o}_t) = (1-\theta)^2
+\sigma^2 \sum_{k=0}^{\infty}\theta^{2k} =
+\frac{1-\theta}{1+\theta}\,\sigma^2 .\]</span></p>
+<p>The lag-<span class="math inline">\(h\)</span> autocovariance is
+<span class="math inline">\(\gamma_h =
+\theta^{h}\operatorname{Var}(r^o_t)\)</span>, so <span
+class="math inline">\(\rho_1=\theta\)</span>. The long-run variance is
+untouched:</p>
+<p><span class="math display">\[\sum_{h=-\infty}^{\infty}\gamma_h =
+\frac{1-\theta}{1+\theta}\sigma^2\Big(1 + \tfrac{2\theta}{1-\theta}\Big)
+= \sigma^2 .\]</span></p>
+<p>Staleness does not remove risk. It spreads today’s risk over the
+following days. With <span class="math inline">\(\theta=0.6\)</span>, a
+bond shows 25% of its true daily variance (half the volatility) and 60%
+first-order autocorrelation. Betas take the same hit. If <span
+class="math inline">\(r_t=\beta f_t+\epsilon_t\)</span> and the factor
+is observed fresh, then <span
+class="math inline">\(\operatorname{Cov}(r^o_t,f_{t-k})=(1-\theta)\theta^k\beta\sigma_f^2\)</span>.
+A contemporaneous regression recovers only <span
+class="math inline">\((1-\theta)\beta\)</span>. The Dimson (1979) sum of
+lagged betas recovers <span class="math inline">\(\beta\)</span>,
+because <span class="math inline">\(\sum_k(1-\theta)\theta^k=1\)</span>.
+This is part of why high-yield bonds look rate-insensitive in daily data
+(Chapter 8). A stale price is a calm price, and calm is the most
+expensive thing to be wrong about.</p>
+<blockquote>
+<p><strong>[SOURCE EXTRACTION]</strong>
+<em>Ben_Dor_Quantitative_Credit_Portfolio_Management p.208:</em> “we
+attempt to directly identify and exclude observations that possibly
+reflect stale prices. Specifically, all bonds comprising the Corporate
+and High Yield indexes with a sequence of five or more unchanged quotes
+in any month are excluded from the eligible population of bonds for that
+month.”</p>
+<p><strong>Annotation.</strong> The Barclays team used two fixes.
+Sampling biweekly instead of daily lowers the effective <span
+class="math inline">\(\theta\)</span>, and a run-length filter removes
+bonds whose quotes don’t move. The run-length rule still works as a
+first screen on <em>evaluated</em> prices, because those repeat when
+nothing new arrives. A price carried forward from TRACE trades doesn’t
+look like “unchanged quotes,” though. It is a single trade price copied
+onto later rows, so our schema carries an explicit
+<code>days_stale</code> counter instead (§B.16). The derivation shows
+what the filter buys you: dropping the bonds with high <span
+class="math inline">\(\theta\)</span> pushes measured variance and beta
+back toward the truth. The price is a tilt toward liquid names, which is
+a factor exposure of its own (Chapter 9).</p>
+</blockquote>
+<p><strong>Sin 2: Look-ahead.</strong> A feature <span
+class="math inline">\(X_{i,t}\)</span> is admissible only if <span
+class="math inline">\(X_{i,t}\in\mathcal{F}_t\)</span>. In code, that
+means you join on <code>knowledge_ts</code> (when you could have known
+it), never <code>effective_ts</code> (the date the value refers to).
+Some examples. A TRACE print executed at 4:58 p.m. and reported at 5:12
+p.m. is known at 5:12. A downgrade effective Tuesday and published
+Thursday is known Thursday. An XBRL fact is known when the filing is
+accepted. Restated values must not overwrite originals in a
+backtest.</p>
+<p><strong>Sin 3: Survivorship.</strong> The universe at date <span
+class="math inline">\(t\)</span> is every bond that existed and was
+eligible at <span class="math inline">\(t\)</span>, including bonds that
+later defaulted, were called, tendered, or matured. Today’s index
+constituents, today’s ETF holdings, and any “active securities” table
+are survivor-biased. In credit, the bonds that drop out are the
+defaulted ones, and they <em>are</em> the left tail.</p>
+<p><strong>Sin 4: Licensing.</strong> Ratings, CUSIPs, index levels, and
+composites come with contracts that limit storage, redistribution, and
+derived products. If you can’t legally keep the data behind a backtest,
+you can’t audit the backtest. That is a model risk.</p>
+<blockquote>
+<p><strong>[SOURCE EXTRACTION]</strong>
+<em>Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.20:</em> “It is
+necessary to combine information from a number of different data sources
+in order to build up a picture of the price landscape in the credit
+markets. These include data from market runs, electronic platforms,
+TRACE data and dealer information.”</p>
+<p><strong>Annotation.</strong> No single source gives you the price.
+This appendix sorts the sources into three kinds: <em>public and
+lagged</em> (TRACE), <em>proprietary and fresh</em> (platform RFQs,
+dealer runs), and <em>model outputs</em> (composites, evaluated prices).
+If a model treats all three as interchangeable “prices,” the noise in
+one leaks into labels built from another.</p>
+</blockquote>
+</section>
+<section id="b.1-finra-trace-the-tape" class="level2">
+<h2>B.1 FINRA TRACE: The Tape</h2>
+<p><strong>What it is.</strong> FINRA’s reporting and dissemination
+system for OTC fixed-income trades. It launched July 1, 2002, with a
+75-minute reporting deadline. The deadline fell to 45 minutes (October
+1, 2003), then 30 (October 1, 2004), then 15 (July 1, 2005). Every
+public corporate trade has been disseminated as soon as it is received
+since January 9, 2006. Later additions: agency debentures and
+primary-market trades (March 1, 2010); ABS/MBS reporting (May 16, 2011);
+dissemination of 144A trades (June 30, 2014) and ABS (June 1, 2015);
+Treasuries reportable for regulatory purposes (July 10, 2017).
+<em>(Source: FINRA, TRACE Fact Book 2025, <a
+href="https://www.finra.org/sites/default/files/2026-02/TRACE_FactBook_2025.pdf"
+class="uri">https://www.finra.org/sites/default/files/2026-02/TRACE_FactBook_2025.pdf</a>.)</em></p>
+<p><strong>Access &amp; cost.</strong> TRACE comes in four layers, from
+freshest to most complete:</p>
+<ol type="1">
+<li><strong>Real-time feeds.</strong> The Bond Trade Dissemination
+Service (BTDS) is the real-time corporate feed. Agency,
+securitized-product, and 144A trades have their own feeds. You license
+it from FINRA or, more often, through a market-data vendor, and it is
+priced like professional market data. We could not retrieve the current
+BTDS spec or fee schedule this session, so check both before you build a
+feed handler.</li>
+<li><strong>Free views.</strong> FINRA’s site shows disseminated trades
+for individual bonds. The API Developer Center (<a
+href="https://developer.finra.org/"
+class="uri">https://developer.finra.org/</a>) has a Query API and a
+dataset catalog. This is the public tape: sizes are capped and dealers
+are not identified.</li>
+<li><strong>Enhanced Historical Data (EHD).</strong> EHD includes
+“information previously not disseminated to the public, such as buy/sell
+indicators and counterparty (dealer or customer) information,” and
+quantity “as reported and not subject to dissemination caps.” FINRA
+“makes historical data available 6 months (18 months for Securitized
+Products) after the transaction date and publishes the information
+quarterly” (FINRA EHD product sheet, <a
+href="https://www.finra.org/sites/default/files/TRACE_Enhanced_Historical_Data.pdf"
+class="uri">https://www.finra.org/sites/default/files/TRACE_Enhanced_Historical_Data.pdf</a>).
+Coverage: corporate and 144A from July 1, 2002, agency from April 2010,
+structured products from May 2011. You need a Historical Data Agreement
+and pay fees. CUSIP and non-CUSIP versions are offered, the latter “for
+customers without a CUSIP license” (<a
+href="https://www.finra.org/filing-reporting/trace/historic-academic-data"
+class="uri">https://www.finra.org/filing-reporting/trace/historic-academic-data</a>).
+Materials from 2016–2017 quote an 18-month corporate lag. The current
+page says 6.</li>
+<li><strong>Academic Corporate Bond TRACE Data.</strong> Available only
+to higher-education institutions, “on a 36-month delayed basis,” with
+“masked identifying information regarding the dealer reporting each
+transaction.” It includes 144A and non-disseminated trades. At launch
+the fee was $500 per year plus a $500 one-time set-up fee (FINRA
+Regulatory Notice 16-43, <a
+href="https://www.finra.org/sites/default/files/notice_doc_file_ref/Regulatory-Notice-16-43.pdf"
+class="uri">https://www.finra.org/sites/default/files/notice_doc_file_ref/Regulatory-Notice-16-43.pdf</a>).
+Masked dealer IDs make dealer-network and inventory research possible,
+but nothing like them exists in production. Keep it on the research side
+of the wall.</li>
+</ol>
+<p>Most researchers get TRACE Standard, Enhanced, and 144A tables
+through <strong>WRDS</strong>.</p>
+<p><strong>Key fields.</strong> CUSIP and FINRA symbol; execution date
+and time; <em>report</em> date and time; price; yield; quantity (capped
+publicly, true in EHD); buy/sell side; reporting- and contra-party type
+(dealer or customer); principal or agency capacity; commission flag;
+trade status and message sequence numbers; as-of and special-condition
+flags; ATS identifier; and the portfolio-trade modifier (from May 15,
+2023).</p>
+<p><strong>Dissemination caps.</strong> On the public tape,
+investment-grade and unrated trades above $5 million print as
+<code>5MM+</code>, and high-yield trades above $1 million print as
+<code>1MM+</code>. True sizes appear only in historical products.</p>
+<blockquote>
+<p><strong>[SOURCE EXTRACTION]</strong>
+<em>Ben_Dor_Quantitative_Credit_Portfolio_Management p.162:</em> “TRACE
+… disseminates trade-by-trade corporate bond execution information
+within 15 minutes to all market participants. At this time, TRACE data
+are censored at $5 million for investment grade and $1 million for
+high-yield securities.”</p>
+<p><strong>Annotation.</strong> “Censored” is the statistically correct
+word. A capped print is right-censored, so volume sums and VWAPs built
+from the public tape are skewed toward small trades, and small trades
+tend to print on the wrong side of the spread. A 2026 desk does three
+things about it. It flags every capped print. It imputes true size from
+a tail fitted to EHD, for example a Pareto tail conditional on exceeding
+the cap. And it never trains on public-tape volumes while scoring on EHD
+volumes. One more trap: the cap depends on the rating <em>at trade
+time</em>. A fallen angel’s cap drops from $5mm to $1mm on the day the
+downgrade becomes known, and §B.16 tests for exactly this.</p>
+</blockquote>
+<p><strong>Reporting timing: the one-minute saga.</strong> The 15-minute
+outer limit has applied to corporates since 2005. On September 20, 2024,
+the SEC approved SR-FINRA-2024-004, which cut the limit to one minute
+for fully electronic trades. Manual trades got a phase-in (15 minutes,
+then 10, then 5), and firms with fewer than 4,000 reported trades a year
+were exempt. “FINRA has not implemented the changes approved in File
+No. SR-FINRA-2024-004.” Members pointed to allocations, portfolio
+trades, and voice or chat workflows. On September 16, 2025, the SEC
+approved SR-FINRA-2025-008, which <em>keeps</em> the 15-minute limit.
+The same filing lets dual broker-dealer/investment-adviser firms report
+the allocations of an aggregate order as a single report that includes
+the number of accounts (Release No. 34-103986, <a
+href="https://public-inspection.federalregister.gov/2025-18147.pdf"
+class="uri">https://public-inspection.federalregister.gov/2025-18147.pdf</a>).
+The record shows 82.9% of eligible trades executed between 8:00 a.m. and
+6:15 p.m. were already reported within one minute in 2022. The rule
+mainly targeted the slow 17%, which is mostly blocks and voice trades,
+and those are the trades that carry information. Rule 6730 also sets 60
+minutes for Treasuries, post-issuance CMOs, and specified pools; same
+day for CDOs and CMBS executed by 5:00 p.m.; and T+1 for List/Fixed
+Offering Price and Takedown trades (<a
+href="https://www.finra.org/rules-guidance/rulebooks/finra-rules/6730"
+class="uri">https://www.finra.org/rules-guidance/rulebooks/finra-rules/6730</a>).</p>
+<p><strong>What is <em>not</em> disseminated.</strong> Under Rule 6750
+(<a
+href="https://www.finra.org/rules-guidance/rulebooks/finra-rules/6750"
+class="uri">https://www.finra.org/rules-guidance/rulebooks/finra-rules/6750</a>):
+affiliate trades; certain M&amp;A transfers; List/Fixed Offering Price
+and Takedown trades; CMBS, CDOs, and CMOs that don’t qualify for
+periodic dissemination; foreign sovereigns; and Treasuries other than
+on-the-run nominal coupons. Those on-the-run coupons have been
+disseminated end-of-day since March 25, 2024, with size caps, no
+participant IDs, and free next-day access for non-professional use
+(Regulatory Notice 24-06). CLO tranches fall under the CDO exclusion.
+They are <em>reported</em> to TRACE but not disseminated by transaction,
+so no public CLO tape exists.</p>
+<p><strong>Gotchas.</strong></p>
+<ul>
+<li><em>The tape is messages, not trades.</em> Cancellations,
+corrections, and reversals must be matched to the original by message
+sequence number. The rules differ before and after FINRA’s February 2012
+re-platform (Dick-Nielsen 2009, 2014).</li>
+<li><em>Double counting.</em> An inter-dealer trade is reported by both
+sides, and agency trades can print twice.</li>
+<li><em>Fat fingers.</em> Decimal shifts (1012.5 for 101.25) and
+one-print spikes that bounce back need explicit screens.</li>
+<li><em>Two clocks.</em> Execution time and report time differ. A late
+report on a block is information in itself.</li>
+<li><em>Settlement.</em> US corporates settle T+1 since May 28, 2024.
+Accrue interest to settlement date.</li>
+</ul>
+<p><strong>Used in.</strong> Chapters 2, 3, 7, 8, 9, 18, 19, 20, 22.</p>
+<blockquote>
+<p><strong>Trend Watch. The tape that almost got faster
+(2018–2026).</strong> FINRA added transparency at the edges. Covered
+depository institutions began reporting Treasury, agency, and MBS trades
+on September 1, 2022. The portfolio-trade modifier and 60-minute
+Treasury reporting arrived May 15, 2023, and USD foreign sovereigns
+became reportable on November 6, 2023 (TRACE Fact Book 2025). End-of-day
+transaction data for on-the-run Treasuries began March 25, 2024. The
+historical corporate lag shrank from 18 months to 6. The core corporate
+tape, though, went in a circle. One-minute reporting was approved
+September 20, 2024, never implemented, and replaced on September 16,
+2025, by a 15-minute limit plus aggregate allocation reporting. The SEC
+approved the MSRB’s matching rollback the same day (SR-MSRB-2025-01,
+Release No. 34-103987). Cap increases have been proposed since the SEC
+Fixed Income Market Structure Advisory Committee’s 2018 block-trade
+pilot recommendation (higher caps, up to $10mm for IG, with delayed
+dissemination), but they have not changed the public tape. <strong>Desk
+implication:</strong> the 15-minute window and the caps are the
+information asymmetry your market-making model prices (Chapter 18).
+Treat both as fixed until a rule changes them. Keep the PT flag as a
+feature, because PT prints are priced as part of a basket, not bond by
+bond (Chapter 19).</p>
+</blockquote>
+</section>
+<section id="b.2-sec-edgar-the-legal-prose-warehouse" class="level2">
+<h2>B.2 SEC EDGAR: The Legal Prose Warehouse</h2>
+<p><strong>What it is.</strong> The SEC’s filing system, holding 10-K
+and 10-Q financials (with XBRL), 8-K event disclosures, and the debt
+contracts filed as exhibits.</p>
+<p><strong>Access &amp; cost.</strong> Free. The
+<code>data.sec.gov</code> APIs “do not require any authentication or API
+keys to access” (<a
+href="https://www.sec.gov/edgar/sec-api-documentation"
+class="uri">https://www.sec.gov/edgar/sec-api-documentation</a>).
+<code>CIK##########</code> below is the zero-padded 10-digit CIK.</p>
+<ul>
+<li>Submissions:
+<code>https://data.sec.gov/submissions/CIK##########.json</code>
+(“typical processing delay of less than a second”).</li>
+<li>Company facts:
+<code>https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json</code>.
+Company concept:
+<code>.../api/xbrl/companyconcept/CIK##########/us-gaap/&lt;Tag&gt;.json</code>.</li>
+<li>Frames:
+<code>https://data.sec.gov/api/xbrl/frames/us-gaap/AccountsPayableCurrent/USD/CY2019Q1I.json</code>.
+Periods are written <code>CY2019</code> (annual), <code>CY2019Q1</code>
+(quarterly), and <code>CY2019Q1I</code> (instantaneous).</li>
+<li>Bulk files <code>companyfacts.zip</code> and
+<code>submissions.zip</code> are rebuilt nightly (around 3:00 a.m. ET).
+Use them for any large pull.</li>
+</ul>
+<p>XBRL endpoints usually lag under a minute. There is no CORS support,
+so run your code server-side. Fair-access rules (<a
+href="https://www.sec.gov/os/accessing-edgar-data"
+class="uri">https://www.sec.gov/os/accessing-edgar-data</a>): “Current
+max request rate: 10 requests/second,” and every request must carry a
+declared User-Agent of the form
+<code>Sample Company Name AdminContact@&lt;sample company domain&gt;.com</code>.</p>
+<p><strong>Full-text search</strong> (<a
+href="https://www.sec.gov/edgar/search/efts-faq.html"
+class="uri">https://www.sec.gov/edgar/search/efts-faq.html</a>) covers
+all electronic filings “since 2001,” including “all attachments (such as
+exhibits).” It supports exact phrases, <code>OR</code>,
+<code>NOT</code>, <code>NEAR(n)</code> (default 10 words), and trailing
+wildcards. The JSON endpoint behind it on <code>efts.sec.gov</code> is
+undocumented, so assume it can change. This is the tool for a
+J.Crew-blocker screen: every exhibit since 2018 with <em>unrestricted
+subsidiary</em> within five words of <em>intellectual property</em>
+(Chapter 13).</p>
+<p><strong>Credit-document exhibits</strong> (Regulation S-K Item 601,
+<a href="https://www.law.cornell.edu/cfr/text/17/229.601"
+class="uri">https://www.law.cornell.edu/cfr/text/17/229.601</a>):
+<strong>EX-4</strong> (indentures, supplemental indentures);
+<strong>EX-10</strong> (“every contract not made in the ordinary course
+of business that is material,” which includes credit agreements,
+amendments, intercreditors, and joinders, usually attached to an 8-K
+under Item 1.01 or 2.03, or to a 10-Q); <strong>EX-21</strong>
+(subsidiaries, your starting point for the restricted/unrestricted
+map).</p>
+<p><strong>Gotchas.</strong></p>
+<ul>
+<li><em>The 10% hole.</em> Long-term debt that “does not exceed 10
+percent of the total assets of the registrant and its subsidiaries on a
+consolidated basis” need not be filed (Item 601(b)(4)(iii)(A)).</li>
+<li><em>Redactions.</em> Schedules may be omitted if they are listed
+(Item 601(a)(5)). Terms that are “both not material and is the type that
+the registrant treats as private or confidential” may be redacted (Item
+601(b)(10)(iv)). Pricing grids often show up as <code>[***]</code>, so
+give your parser a redaction token.</li>
+<li><em>Private issuers.</em> Issuers whose debt is 144A-for-life file
+nothing. Their documents sit in lender data rooms, on the private
+side.</li>
+<li><em>XBRL look-ahead.</em> Frames returns, for each entity, the fact
+“that is last filed,” so restatements overwrite originals. Rebuild
+point-in-time values from <code>companyfacts</code> using each fact’s
+accession number and <code>filed</code> date, or better, the acceptance
+timestamp from submissions. Debt details often sit in custom extension
+tags that frames won’t return.</li>
+</ul>
+<p><strong>Used in.</strong> Chapters 11, 13, 15, 25, 26.</p>
+</section>
+<section id="b.3-courtlistener-recap-pacer-and-the-claims-agents"
+class="level2">
+<h2>B.3 CourtListener, RECAP, PACER, and the Claims Agents</h2>
+<p><strong>What it is.</strong> PACER is the judiciary’s pay-per-page
+docket system. Free Law Project’s CourtListener hosts the <strong>RECAP
+Archive</strong>, which mirrors PACER documents that users of the RECAP
+browser extension have already paid for. Claims agents run free case
+websites with dockets and claims registers.</p>
+<p><strong>Access &amp; cost.</strong></p>
+<ul>
+<li><strong>PACER</strong> (<a
+href="https://pacer.uscourts.gov/pacer-pricing-how-fees-work"
+class="uri">https://pacer.uscourts.gov/pacer-pricing-how-fees-work</a>):
+$0.10 per page, capped at $3 per document. The cap does not cover search
+results or reports that aren’t case-specific. Audio is $2.40 a file and
+opinions are free. Fees are waived in any quarter where you spend $30 or
+less. Every docket refresh is billed again, so pull mega-case dockets
+incrementally with date filters.</li>
+<li><strong>CourtListener REST API v4</strong> (docs now on the Free Law
+Project wiki, <a
+href="https://wiki.free.law/c/courtlistener/help/api/rest/v4/overview"
+class="uri">https://wiki.free.law/c/courtlistener/help/api/rest/v4/overview</a>).
+Base URL <code>https://www.courtlistener.com/api/rest/v4/</code>.
+Authenticate with the header
+<code>Authorization: Token &lt;token&gt;</code>; the docs warn that “a
+common mistake is to forget the word ‘Token’.” Current defaults:
+“authenticated users may make up to 5 requests per minute, 50 requests
+per hour, and 125 requests per day,” on a rolling window, with higher
+limits available through membership or commercial agreements. Use
+webhooks for docket alerts rather than polling.</li>
+<li><strong>RECAP Fetch</strong> (<a
+href="https://wiki.free.law/c/courtlistener/help/api/rest/v4/recap"
+class="uri">https://wiki.free.law/c/courtlistener/help/api/rest/v4/recap</a>):
+<code>POST /api/rest/v4/recap-fetch/</code> with
+<code>request_type</code> 1 (docket), 2 (PDF), or 3 (attachment page).
+It “uses your PACER credentials to purchase and download PACER content,”
+runs asynchronously, and allows 30 requests a minute. The upload
+endpoint is “not available to the public.”</li>
+<li><strong>Python.</strong> <code>juriscraper</code> (<a
+href="https://github.com/freelawproject/juriscraper"
+class="uri">https://github.com/freelawproject/juriscraper</a>, BSD-2,
+Python 3.11+) parses court sites and “a variety of pages and reports
+within the PACER system.”</li>
+<li><strong>Claims agents.</strong> Stretto (<a
+href="https://cases.stretto.com/"
+class="uri">https://cases.stretto.com/</a>), Epiq (<a
+href="https://dm.epiq11.com/" class="uri">https://dm.epiq11.com/</a>),
+and Verita Global (<a href="https://www.veritaglobal.com/"
+class="uri">https://www.veritaglobal.com/</a>), whose CaseView links
+point to the legacy KCC domain. Kroll Restructuring Administration
+(formerly Prime Clerk) and Omni Agent Solutions are the other majors; we
+could not open their sites this session. Agent sites are free, usually
+update faster than RECAP, and post claims registers in structured
+form.</li>
+</ul>
+<p><strong>Key fields.</strong> Dockets: court, case number,
+<code>pacer_case_id</code>, filing date, judge, parties, attorneys.
+Entries: number, date, description, and documents with
+<code>pacer_doc_id</code>. Claims: claim number, creditor, debtor
+entity, amount, priority (secured, 503(b)(9), priority, GUC), date
+filed. Rule 2019 statements become a time series of who is in the ad hoc
+group (Chapter 25).</p>
+<blockquote>
+<p><strong>Docket Diary.</strong> A document is in RECAP only if someone
+with the extension bought it. Coverage is therefore biased toward cases
+that people with money care about. Mega-case first-day declarations are
+almost always there. The small-cap Chapter 11 your model actually needs
+often isn’t. <em>The Ad Hoc Group, represented by counsel, notes that
+its Rule 2019 statement was amended four times and RECAP holds two of
+the versions.</em></p>
+</blockquote>
+<p><strong>Gotchas.</strong> Docket text is free-form, so the same
+motion can carry a dozen different descriptions. Claim amounts are as
+<em>asserted</em>, not as allowed, and duplicate claims filed against
+several debtor entities inflate the totals. For look-ahead purposes, the
+right timestamp is when the entry appeared on the docket, not the date
+printed inside the PDF.</p>
+<p><strong>Used in.</strong> Chapters 13, 14, 16, 25.</p>
+</section>
+<section id="b.4-msrb-emma" class="level2">
+<h2>B.4 MSRB EMMA</h2>
+<p><strong>What it is.</strong> EMMA (<a href="https://emma.msrb.org/"
+class="uri">https://emma.msrb.org/</a>) is the MSRB’s free site for
+municipal trade data, official statements, continuing disclosures,
+statistics, and yield curves. Real-time and historical feeds are sold as
+MSRB subscriptions. Rule G-14 requires reporting to RTRS “as soon as
+practicable but no later than 15 minutes after the Time of Trade” (<a
+href="https://www.msrb.org/Rules-and-Interpretations/MSRB-Rules/General/Rule-G-14"
+class="uri">https://www.msrb.org/Rules-and-Interpretations/MSRB-Rules/General/Rule-G-14</a>).
+One-minute amendments were approved September 20, 2024, and rescinded
+September 16, 2025.</p>
+<p><strong>Gotchas.</strong> Munis mask large trade sizes under their
+own conventions, so check RTRS dissemination rules before reusing TRACE
+cleaning code. Most issues almost never trade, which makes staleness
+worse than in HY corporates. A late continuing-disclosure filing is
+itself a credit signal.</p>
+<p><strong>Used in.</strong> Chapters 12, 22.</p>
+</section>
+<section id="b.5-cme-treasury-futures-mdp-3.0-and-brokertec"
+class="level2">
+<h2>B.5 CME Treasury Futures, MDP 3.0, and BrokerTec</h2>
+<p><strong>What it is.</strong> CME lists the Treasury futures used for
+rate hedging (2-, 5-, and 10-year, Ultra 10-year, Bond, and Ultra Bond).
+It also owns <strong>BrokerTec</strong>, the inter-dealer central limit
+order book for cash Treasuries and repo, acquired with NEX Group in
+2018. The real-time protocol is <strong>MDP 3.0</strong>: UDP multicast,
+Simple Binary Encoding (SBE), incremental and snapshot-recovery
+channels, and market-by-price and market-by-order books. History is sold
+through CME DataMine. CME’s site returned HTTP 503 to automated requests
+this session, so we give no deep links.</p>
+<p><strong>Access &amp; cost.</strong> Exchange licensing is per device
+or per enterprise, and an algorithm consuming the feed triggers
+non-display fees. DataMine is priced per dataset. Many shops buy
+normalized data rather than decode raw SBE.</p>
+<p><strong>Key fields.</strong> Contract and expiry, book levels and
+sizes, trades with the aggressor side, sequence numbers, exchange
+timestamps, settlement prices, and open interest. Add the deliverable
+basket and conversion factors, which you need for cheapest-to-deliver
+(CTD) and futures DV01 (Chapters 8, 24).</p>
+<p><strong>Gotchas.</strong> When you see a sequence gap, recover from
+the snapshot channel; never interpolate across it. Futures DV01 jumps
+when the CTD changes. Rolls move liquidity between contracts, and
+back-adjusted series give correct returns but wrong levels. BrokerTec
+shows only the inter-dealer market. Client flow, which is where the
+information is, trades on dealer-to-client RFQ platforms.</p>
+<p><strong>Used in.</strong> Chapters 8, 22, 24, 27.</p>
+</section>
+<section id="b.6-opra-cboe-and-options-data" class="level2">
+<h2>B.6 OPRA, Cboe, and Options Data</h2>
+<p><strong>What it is.</strong> <strong>OPRA</strong> (<a
+href="https://www.opraplan.com/"
+class="uri">https://www.opraplan.com/</a>) is the securities information
+processor for US listed options. It disseminates consolidated “last sale
+and quotation information,” volume, open interest, and end-of-day
+summaries from BOX, Cboe, MEMX, MIAX, Nasdaq, and NYSE options venues.
+Its 2026 notices add IEX Options and MX2 Options, extend trading hours
+effective September 21, 2026, and upgrade hardware. <strong>Cboe
+DataShop</strong> (<a href="https://datashop.cboe.com/"
+class="uri">https://datashop.cboe.com/</a>) sells Option EOD Summary
+(with a 3:45 p.m. ET snapshot), interval Option Quotes, and Option
+Trades, with optional implied volatility and Greeks and an academic
+discount. OptionMetrics IvyDB, usually through WRDS, is the academic
+standard for volatility surfaces.</p>
+<p><strong>Access &amp; cost.</strong> OPRA charges vendor and
+subscriber fees under its fee schedule. For credit work, a daily or 3:45
+p.m. surface snapshot per issuer is enough for Merton/CreditGrades
+inputs, put-vs-CDS comparisons, and skew-implied jump-to-default
+(Chapter 23).</p>
+<p><strong>Gotchas.</strong> The options “close” is a quote snapshot,
+and it isn’t synchronized with the equity close, which produces false
+put-call parity violations. Early exercise and dividends bias naive
+Black–Scholes implied vols in the deep out-of-the-money puts that carry
+the default signal. Corporate actions change contract terms.</p>
+<p><strong>Used in.</strong> Chapters 8, 23, 27.</p>
+</section>
+<section id="b.7-index-data-ice-bofa-bloomberg-iboxxcdxitraxx-and-fred"
+class="level2">
+<h2>B.7 Index Data: ICE BofA, Bloomberg, iBoxx/CDX/iTraxx, and FRED</h2>
+<p><strong>What it is.</strong></p>
+<ul>
+<li><strong>ICE BofA</strong> (<a
+href="https://www.ice.com/fixed-income-data-services/index-solutions"
+class="uri">https://www.ice.com/fixed-income-data-services/index-solutions</a>):
+“over 6,000” fixed-income indices, including US High Yield (H0A0) and US
+Corporate (C0A0). ICE says its index history on Snowflake Marketplace
+spans “50 years.”</li>
+<li><strong>Bloomberg</strong> (the former Lehman/Barclays family):
+Aggregate, Corporate, High Yield, and the Very Liquid versions. JNK
+tracks the Bloomberg High Yield Very Liquid Index.</li>
+<li><strong>iBoxx, CDX, iTraxx</strong> belong to S&amp;P Global since
+its 2022 merger with IHS Markit. HYG tracks the iBoxx USD Liquid High
+Yield Index. CDX and iTraxx roll to a new series every six months.</li>
+<li><strong>FRED</strong> republishes ICE BofA OAS:
+<strong>BAMLH0A0HYM2</strong> (HY, <a
+href="https://fred.stlouisfed.org/series/BAMLH0A0HYM2"
+class="uri">https://fred.stlouisfed.org/series/BAMLH0A0HYM2</a>) and
+<strong>BAMLC0A0CM</strong> (IG, <a
+href="https://fred.stlouisfed.org/series/BAMLC0A0CM"
+class="uri">https://fred.stlouisfed.org/series/BAMLC0A0CM</a>). On
+2026-10-15 they were 3.23% and 0.84%, i.e., 323 bp and 84 bp (FRED,
+accessed 2026-10-17). The FRED API (<a
+href="https://fred.stlouisfed.org/docs/api/fred/"
+class="uri">https://fred.stlouisfed.org/docs/api/fred/</a>) includes
+<code>fred/series/vintagedates</code> for real-time vintages.</li>
+</ul>
+<p><strong>Access &amp; cost.</strong> Constituent-level data (weights,
+prices, OAS, duration, ratings by bond) is licensed and expensive.
+Index-level series are cheaper.</p>
+<p><strong>Gotchas.</strong></p>
+<ul>
+<li><em>Month-end rebalancing.</em> A bond downgraded mid-month stays in
+the IG index until the month-end rebalance, and fallen-angel selling
+clusters on those dates (Chapter 9).</li>
+<li><em>Index prices are evaluated, bid-side prices</em> (§B.8). Index
+OAS is smoothed, so §B.0 applies.</li>
+<li><em>Excess-return definitions differ.</em> Some families use
+duration-matched Treasuries, others swaps. Don’t mix them in one
+regression.</li>
+<li><em>CDX rolls.</em> An on-the-run series jumps in level on the roll
+date, so splice explicitly.</li>
+<li><em>FRED is shrinking.</em> The series notes now say “Starting in
+April 2026, this series will only include 3 years of observations. For
+more data, go to the source.” They also say “Copyright, 2023, ICE Data
+Indices. Reproduction of this data in any form is prohibited,” and the
+data is “provided for your internal use only.”</li>
+</ul>
+<p><strong>Used in.</strong> Chapters 2, 8, 9, 10, 11, 12, 20.</p>
+<blockquote>
+<p><strong>Trend Watch. Free data giveth, and free data taketh away
+(2018–2026).</strong> In 2018 one line of <code>pandas-datareader</code>
+pulled decades of daily HY OAS from FRED. Since April 2026, FRED keeps
+three years and sends you “to the source,” while ICE sells 50 years of
+history on Snowflake. CourtListener’s default authenticated allowance is
+now 125 requests a day. Academic open data went the other way. The Open
+Source Bond Asset Pricing project released TRACE-based panels and factor
+libraries, with its Stage 1 daily panel in public beta on 2025-12-11,
+and FINRA’s EHD corporate lag fell to 6 months. <strong>Desk
+implication:</strong> cache everything free in a versioned,
+point-in-time local store, because free data disappears. License what
+production depends on. Reconcile the open panels against vendor data so
+you notice when either one drifts.</p>
+</blockquote>
+</section>
+<section
+id="b.8-composite-and-evaluated-pricing-model-outputs-dressed-as-prices"
+class="level2">
+<h2>B.8 Composite and Evaluated Pricing: Model Outputs Dressed as
+Prices</h2>
+<p><strong>What it is.</strong></p>
+<ul>
+<li><strong>MarketAxess CP+</strong> (<a
+href="https://www.marketaxess.com/price/cp-plus"
+class="uri">https://www.marketaxess.com/price/cp-plus</a>) covers IG,
+HY, EM, loans, munis, sovereigns, and rates. It is built from
+“proprietary MarketAxess trading activity, TRACE, TraX, and other market
+signals,” including inquiries that never traded. MarketAxess says it
+prices “80% more bonds than public sources alone,” and delivers via FIX
+API, OMS feeds, and an Excel add-in.</li>
+<li><strong>Tradeweb Ai-Price</strong> is a machine-learning price for
+bonds that haven’t traded recently, with confidence measures.
+<strong>Bloomberg BVAL</strong> is an evaluated price with a BVAL Score
+that grades how much market evidence supports it. <strong>ICE evaluated
+pricing</strong>, including continuous evaluated pricing, is the
+incumbent for fund NAVs. Others include S&amp;P Global and LSEG
+evaluated pricing and BondCliQ quotes. We could not open the Tradeweb,
+Bloomberg, or ICE pricing pages this session, so read their methodology
+documents before you depend on them.</li>
+</ul>
+<p><strong>Access &amp; cost.</strong> Enterprise licenses, with limits
+on redistribution and on how long you may store the data.</p>
+<p><strong>Key fields.</strong> Bid, mid, and ask; timestamp; confidence
+or score; methodology tier (based on trades vs. based on comparable
+bonds).</p>
+<p><strong>Gotchas.</strong></p>
+<ul>
+<li><em>Circularity.</em> Composites are built partly from TRACE. If you
+train on composite labels with TRACE features, part of what you predict
+is your own input. Validate on <em>subsequent</em> trades
+(markouts).</li>
+<li><em>Staleness.</em> A bond with no new information follows its
+comparables, so its <span class="math inline">\(\theta\)</span> sits
+well above zero. Use the score field to set observation weights.</li>
+<li><em>Bid-side NAVs.</em> Credit ETF NAVs are struck from bid-side
+evaluated prices. In March 2020, part of the “discount” of HYG and LQD
+to NAV was the NAV being stale (Chapter 20).</li>
+<li><em>Licensing.</em> Composite contracts often forbid long histories
+or index-building. Read them before you build a 20-year backtest.</li>
+</ul>
+<p><strong>Used in.</strong> Chapters 7, 18, 19, 20.</p>
+<blockquote>
+<p><strong>Trend Watch. Pricing became a product (2018–2026).</strong>
+Trading venues turned their order-flow data into pricing products (CP+,
+Ai-Price), and evaluated-pricing vendors sped up their updates. A
+portfolio trade, flagged in TRACE since May 15, 2023, is priced against
+composite mids, and the dealer’s markup is measured against them
+(Chapter 19). <strong>Desk implication:</strong> your pricing engine
+competes with the composites. Log both prices on every RFQ, and show the
+edge as better markouts on the same trades.</p>
+</blockquote>
+</section>
+<section id="b.9-ratings-agency-default-studies" class="level2">
+<h2>B.9 Ratings-Agency Default Studies</h2>
+<p><strong>What it is.</strong> S&amp;P Global Ratings publishes an
+annual global corporate default and rating-transition study. Moody’s
+publishes an annual study of corporate default and recovery rates since
+1920. Fitch publishes default studies and loan and HY default indices.
+SEC Rule 17g-7(b) requires rating agencies to publish their
+rating-action histories in XBRL, with a lag, which gives you free (if
+awkward) point-in-time ratings.</p>
+<p><strong>Access &amp; cost.</strong> Summaries are often free after
+registration. Full data and production rating feeds are licensed. The
+trace-data-pipeline public download leaves out some columns “because
+agency ratings are licensed.”</p>
+<p><strong>Gotchas.</strong> Results depend on how a study handles
+withdrawn ratings. Distressed exchanges count as defaults (S&amp;P “SD”;
+Moody’s distressed exchanges). In the LMT era that changes the recovery
+distribution and leads to re-defaults (Chapter 14). Default rates are
+physical-measure, through-the-cycle numbers. Using them as <span
+class="math inline">\(\mathbb{Q}\)</span> hazards without a risk premium
+understates spreads, which is the credit spread puzzle (Chapter 6). Join
+ratings on publication time, not effective date.</p>
+<p><strong>Used in.</strong> Chapters 5, 6, 11, 14.</p>
+</section>
+<section
+id="b.10-academic-bond-panels-obap-wrds-bond-returns-mergent-fisd"
+class="level2">
+<h2>B.10 Academic Bond Panels: OBAP, WRDS Bond Returns, Mergent
+FISD</h2>
+<p><strong>Open Source Bond Asset Pricing</strong> (<a
+href="https://openbondassetpricing.com/"
+class="uri">https://openbondassetpricing.com/</a>), run by Alexander
+Dickerson and coauthors, publishes “108 Bond Factors,” 341 factors from
+<em>Factor Investing with Delays</em>, a bond-level ML panel with 341
+predictors (2002-07 to 2022-12), duration-matched Treasury returns, and
+replication packages. Its <strong>trace-data-pipeline</strong> (<a
+href="https://github.com/Alexander-M-Dickerson/trace-data-pipeline"
+class="uri">https://github.com/Alexander-M-Dickerson/trace-data-pipeline</a>,
+MIT license) works in stages. Stage 0 turns Enhanced, Standard, and 144A
+TRACE into daily panels using Dick-Nielsen (2009, 2014) and van
+Binsbergen–Nozawa–Schwert (2025) filters, a decimal-shift corrector
+(10×, 0.1×, 100×, 0.01×), a bounce-back filter, agency de-duplication,
+and an ultra-distressed flag. Stage 1 adds QuantLib analytics, ratings,
+and FISD terms. Stage 2 builds 108 monthly signals. Stages 0–1 need
+WRDS. §B.16 is a teaching-scale version of Stages 0–1.</p>
+<p><strong>WRDS Bond Returns</strong> (<a
+href="https://wrds-www.wharton.upenn.edu/pages/grid-items/wrds-bond-returns/"
+class="uri">https://wrds-www.wharton.upenn.edu/pages/grid-items/wrds-bond-returns/</a>)
+is a monthly panel of prices, returns, coupons, and yields built from
+TRACE Standard and Enhanced, starting July 2002, with a bond-to-equity
+link table built through CRSP. Its month-end price rule, meaning which
+late-month trade counts as the month-end price, moves measured reversal
+and factor premia. That sensitivity is the subject of Dickerson et al.,
+<em>The Corporate Bond Factor Replication Crisis</em>.</p>
+<p><strong>Mergent FISD</strong> (via WRDS) is the academic security
+master. It holds offering terms, coupon type, maturity, seniority, 144A
+and convertible flags, call, put, and sink schedules, covenant
+indicators, and histories of amount outstanding and ratings.
+<strong>Gotchas:</strong> coverage of small and private issues is
+patchy. Amount-outstanding updates lag tenders and exchanges, and in an
+LMT the change in amount outstanding <em>is</em> the event. CUSIPs are
+licensed.</p>
+<p><strong>Used in.</strong> Chapters 7, 9, 10, 11.</p>
+</section>
+<section id="b.11-leveraged-loans-and-clos" class="level2">
+<h2>B.11 Leveraged Loans and CLOs</h2>
+<p><strong>What it is.</strong> There is no public loan tape. In
+<em>Kirschner v. JPMorgan Chase</em> (2d Cir. 2023), the court held that
+the syndicated term-loan notes at issue were not securities. The sources
+you have: the <strong>LSTA</strong> (<a href="https://www.lsta.org/"
+class="uri">https://www.lsta.org/</a>), which publishes market analysis
+such as its <em>BSL Market Monthly</em> (built on the Morningstar LSTA
+Leveraged Loan Index), settlement standards, and documentation;
+PitchBook LCD for new issues and defaults; and dealer-quote mark
+services such as LSEG’s. CLO data comes from Intex (waterfalls), monthly
+trustee reports (collateral, OC/IC tests, CCC buckets), rating-agency
+surveillance, and Creditflux’s CLO-i. TRACE collects CLO tranche trades
+but does not disseminate them (§B.1).</p>
+<p><strong>Gotchas.</strong> Loan “prices” are averages of dealer
+quotes, not trades. Settlement takes days to weeks. Repricings and
+amend-and-extends change a loan’s terms without changing its identifier.
+Trustee reports arrive monthly and late, so the forced-seller signal
+from a CCC bucket (Chapter 21) is about a month stale.</p>
+<p><strong>Used in.</strong> Chapters 12, 16, 17, 21.</p>
+</section>
+<section id="b.12-etf-holdings-files" class="level2">
+<h2>B.12 ETF Holdings Files</h2>
+<p><strong>What it is.</strong> Under SEC Rule 6c-11 (2019), most US
+ETFs post full holdings every day. iShares pages include “Download
+latest fund holdings CSV data.” HYG (<a
+href="https://www.ishares.com/us/products/239565/ishares-iboxx-high-yield-corporate-bond-etf"
+class="uri">https://www.ishares.com/us/products/239565/ishares-iboxx-high-yield-corporate-bond-etf</a>)
+launched April 4, 2007. SPDR pages offer a daily <code>.xlsx</code>. JNK
+(<a
+href="https://www.ssga.com/us/en/intermediary/etfs/spdr-bloomberg-high-yield-bond-etf-jnk"
+class="uri">https://www.ssga.com/us/en/intermediary/etfs/spdr-bloomberg-high-yield-bond-etf-jnk</a>)
+launched November 28, 2007. The files are free to download, and each
+sponsor’s terms govern redistribution.</p>
+<p><strong>Key fields.</strong> As-of date, name, identifiers (ISIN,
+sometimes CUSIP), par, market value, weight, price, and sector, plus
+coupon, maturity, duration, and yield for bond funds. Layouts differ by
+sponsor, so write one parser per sponsor and test each against a stored
+sample file.</p>
+<p><strong>Gotchas.</strong> The holdings file is not the creation
+basket, because custom baskets are allowed (Chapter 20). Each file
+overwrites the last one. If you don’t archive daily, you have no history
+and every backtest is survivor-biased. Cash, futures, and CDS overlays
+need special handling. File prices are the sponsor’s evaluated prices,
+not trades.</p>
+<p><strong>Used in.</strong> Chapters 2, 19, 20.</p>
+</section>
+<section id="b.13-cds-public-data-brief" class="level2">
+<h2>B.13 CDS Public Data (Brief)</h2>
+<p>Swap data repositories disseminate index CDS under CFTC rules.
+Single-name CDS have been disseminated under the SEC’s Regulation SBSR
+since early 2022 <em>(approximate; check the SBSR compliance
+schedule)</em>. Sizes are capped and reference-entity mapping is
+painful. Use these tapes for activity signals and basis studies (Chapter
+24), and buy levels from a vendor.</p>
+</section>
+<section id="b.14-open-source-tooling" class="level2">
+<h2>B.14 Open-Source Tooling</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Tool</th>
+<th style="text-align: left;">What it does</th>
+<th style="text-align: left;">Verified notes (2026-10-17)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>edgartools</code> (<a
+href="https://github.com/dgunning/edgartools"
+class="uri">https://github.com/dgunning/edgartools</a>)</td>
+<td style="text-align: left;">EDGAR filings, XBRL statements, full-text
+search</td>
+<td style="text-align: left;">MIT; Python 3.11+; call
+<code>set_identity("name@example.com")</code> first; stays within 10
+req/s</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">OpenBB Open Data Platform (<a
+href="https://github.com/OpenBB-finance/OpenBB"
+class="uri">https://github.com/OpenBB-finance/OpenBB</a>)</td>
+<td style="text-align: left;">One data layer for public and licensed
+providers (Python, REST, MCP)</td>
+<td style="text-align: left;"><code>pip install openbb</code>;
+Apache-2.0; Python 3.10–3.14; <code>openbb-api</code> serves on port
+6900</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>pandas-datareader</code> (<a
+href="https://pandas-datareader.readthedocs.io/en/latest/"
+class="uri">https://pandas-datareader.readthedocs.io/en/latest/</a>)</td>
+<td style="text-align: left;">Remote readers, including FRED</td>
+<td style="text-align: left;">0.11.2 dev build in the docs (July 2026);
+FRED now returns 3 years for ICE series</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>juriscraper</code></td>
+<td style="text-align: left;">Court and PACER parsing</td>
+<td style="text-align: left;">BSD-2; Python 3.11+</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">trace-data-pipeline / PyBondLab</td>
+<td style="text-align: left;">TRACE cleaning, analytics, factors</td>
+<td style="text-align: left;">MIT; Stages 0–1 need WRDS</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>wrds</code>, <code>QuantLib</code>,
+<code>fredapi</code></td>
+<td style="text-align: left;">WRDS SQL; bond math; FRED client</td>
+<td style="text-align: left;">Not re-verified this session</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Ways This Blows Up.</strong> When a provider changes its
+terms (FRED’s window, CourtListener’s limits, EDGAR’s User-Agent rule),
+the wrappers break <em>quietly</em>. A call that returns three years of
+OAS where it used to return thirty raises no exception. It just deletes
+2008 from your regime model. Assert row counts and date ranges on every
+pull, and fail the job if history shrinks.</p>
+</blockquote>
+</section>
+<section id="b.15-case-study-a-fallen-angel-through-every-lens"
+class="level2">
+<h2>B.15 Case Study: A Fallen Angel Through Every Lens</h2>
+<p>Here is what a fallen angel looks like as data, using the synthetic
+bond <code>SYN-IG-B</code> from the code below (all numbers
+<em>illustrative</em>). The rating agency’s downgrade from BBB- to BB+
+takes effect on June 10 and is published on June 12. On EDGAR, an 8-K
+Item 2.03 filing earlier in the year attached an amendment as EX-10.1
+with its pricing grid redacted. On the TRACE tape, large prints switch
+from <code>5MM+</code> to <code>1MM+</code> on June 12, not June 10. A
+model that joins on effective date “knows” about the cap change two days
+early. Index data keeps the bond in the IG index until the June
+month-end rebalance, which is when forced selling clusters. The ETF
+holdings file shows the IG fund’s position disappearing at the
+rebalance, and the HY fund’s holdings file shows the bond showing up the
+next day. Composites mark it down gradually, because they move with the
+comparables at a <span class="math inline">\(\theta\)</span> well above
+zero. Daily returns built from composites understate the move’s
+volatility, and a Dimson-summed beta to HYG recovers it.</p>
+<p>The desk’s job is to line these five clocks up by
+<code>knowledge_ts</code>. That alignment is a feature in its own right.
+The gap between the downgrade’s knowledge time and the index rebalance
+is the forced-selling window that Chapters 9 and 20 trade.</p>
+</section>
+<section
+id="b.16-specification-for-ai-implementation-the-tidy-bond-panel"
+class="level2">
+<h2>B.16 Specification for AI Implementation: The Tidy Bond Panel</h2>
+<p><strong>The Spec You Hand the Robot.</strong> <em>What ROBO built
+from the vague version (“make me a daily bond price table”):</em> it
+took the last trade of each day and forward-filled across holidays and
+weekends. It dropped the defaulted bond because its yield failed to
+solve. It joined ratings on effective date. Every one of those choices
+ships a bias into production. Here is the precise version.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Table</th>
+<th style="text-align: left;">Key</th>
+<th style="text-align: left;">Required columns (units)</th>
+<th style="text-align: left;">Rules</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>secmaster</code></td>
+<td style="text-align: left;"><code>bond_id</code></td>
+<td style="text-align: left;">coupon (decimal), maturity, offering_amt
+($ par), security_level, rule_144a, freq, day_count</td>
+<td style="text-align: left;">One row per bond; IDs are synthetic in
+tests, CUSIPs in production (licensed)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>ratings</code></td>
+<td style="text-align: left;">(<code>bond_id</code>,
+<code>knowledge_ts</code>)</td>
+<td style="text-align: left;">effective_ts, knowledge_ts, rating,
+rating_num (1 = AAA … 22 = D)</td>
+<td style="text-align: left;">As-of join on <code>knowledge_ts</code>
+only</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>msgs</code></td>
+<td style="text-align: left;"><code>msg_seq</code></td>
+<td style="text-align: left;">trc_st ∈ {T, X, C}, orig_msg_seq, exec_ts,
+report_ts, price (% of par), qty_true ($ par), side ∈ {B, S, D}</td>
+<td style="text-align: left;">Simplified status codes; map FINRA’s real
+codes per vintage (pre/post 2012)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>trades</code></td>
+<td style="text-align: left;"><code>msg_seq</code></td>
+<td style="text-align: left;">+ rating at trade, cap, qty_dissem,
+qty_capped, flags</td>
+<td style="text-align: left;">No cancelled or corrected originals;
+screens for decimal shifts and bounce-backs</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>daily</code></td>
+<td style="text-align: left;">(<code>bond_id</code>,
+<code>date</code>)</td>
+<td style="text-align: left;">px_clean, px_vwap_dissem, n_trades,
+par_volume, days_stale, is_stale, status, accrued, ytm, dur_mod, spread
+(decimal), dts (yr·bp)</td>
+<td style="text-align: left;">Full business-day grid until maturity;
+defaulted bonds kept, flagged <code>trades_flat</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>monthly</code></td>
+<td style="text-align: left;">(<code>bond_id</code>,
+<code>month_end</code>)</td>
+<td style="text-align: left;">px_eom, accrued, cpn_paid, ret_total</td>
+<td style="text-align: left;">Month-end price only if
+<code>days_stale</code> ≤ 5; else NaN, never filled</td>
+</tr>
+</tbody>
+</table>
+<p>Edge cases the code must handle: settlement on T+1 business day;
+30/360 accrual to settlement; flat trading (zero accrued, no yield)
+after default; caps keyed to point-in-time rating; Brent bracket of
+<span class="math inline">\([-5\%, 500\%]\)</span> for distressed
+yields. Sanity checks: price–yield round trip to <span
+class="math inline">\(10^{-8}\)</span>; analytic vs. finite-difference
+duration to <span class="math inline">\(10^{-6}\)</span>; a par bond
+priced on a coupon date equals 100; and a Monte Carlo check of the §B.0
+result <span
+class="math inline">\(\operatorname{Var}(r^o)/\sigma^2=(1-\theta)/(1+\theta)\)</span>,
+<span class="math inline">\(\rho_1=\theta\)</span>. The spread is a
+curve-interpolated G-spread against an <em>illustrative</em>
+Nelson–Siegel curve, not OAS. Requires pandas ≥ 2.2.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tidy bond panel from a synthetic TRACE-like tape. Bond ids are synthetic labels, NOT CUSIPs.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> brentq</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>RNG <span class="op">=</span> np.random.default_rng(<span class="dv">20261017</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>IG_CAP, HY_CAP <span class="op">=</span> <span class="dv">5_000_000</span>, <span class="dv">1_000_000</span>          <span class="co"># dissemination caps (par $)</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>RATING_SCALE <span class="op">=</span> {<span class="st">&quot;AAA&quot;</span>: <span class="dv">1</span>, <span class="st">&quot;AA+&quot;</span>: <span class="dv">2</span>, <span class="st">&quot;AA&quot;</span>: <span class="dv">3</span>, <span class="st">&quot;AA-&quot;</span>: <span class="dv">4</span>, <span class="st">&quot;A+&quot;</span>: <span class="dv">5</span>, <span class="st">&quot;A&quot;</span>: <span class="dv">6</span>, <span class="st">&quot;A-&quot;</span>: <span class="dv">7</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;BBB+&quot;</span>: <span class="dv">8</span>, <span class="st">&quot;BBB&quot;</span>: <span class="dv">9</span>, <span class="st">&quot;BBB-&quot;</span>: <span class="dv">10</span>, <span class="st">&quot;BB+&quot;</span>: <span class="dv">11</span>, <span class="st">&quot;BB&quot;</span>: <span class="dv">12</span>, <span class="st">&quot;BB-&quot;</span>: <span class="dv">13</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;B+&quot;</span>: <span class="dv">14</span>, <span class="st">&quot;B&quot;</span>: <span class="dv">15</span>, <span class="st">&quot;B-&quot;</span>: <span class="dv">16</span>, <span class="st">&quot;CCC+&quot;</span>: <span class="dv">17</span>, <span class="st">&quot;CCC&quot;</span>: <span class="dv">18</span>, <span class="st">&quot;CCC-&quot;</span>: <span class="dv">19</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;CC&quot;</span>: <span class="dv">20</span>, <span class="st">&quot;C&quot;</span>: <span class="dv">21</span>, <span class="st">&quot;D&quot;</span>: <span class="dv">22</span>}</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>IG_MAX_NUM <span class="op">=</span> RATING_SCALE[<span class="st">&quot;BBB-&quot;</span>]</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------- 1. security master</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>secmaster <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;bond_id&quot;</span>:        [<span class="st">&quot;SYN-IG-A&quot;</span>, <span class="st">&quot;SYN-IG-B&quot;</span>, <span class="st">&quot;SYN-HY-C&quot;</span>, <span class="st">&quot;SYN-HY-D&quot;</span>],</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;issuer_id&quot;</span>:      [<span class="st">&quot;ISS1&quot;</span>, <span class="st">&quot;ISS2&quot;</span>, <span class="st">&quot;ISS3&quot;</span>, <span class="st">&quot;ISS4&quot;</span>],</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;coupon&quot;</span>:         [<span class="fl">0.0450</span>, <span class="fl">0.0525</span>, <span class="fl">0.07875</span>, <span class="fl">0.0950</span>],</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;maturity&quot;</span>:       pd.to_datetime([<span class="st">&quot;2033-06-15&quot;</span>, <span class="st">&quot;2031-03-01&quot;</span>, <span class="st">&quot;2030-09-15&quot;</span>, <span class="st">&quot;2029-12-01&quot;</span>]),</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;offering_date&quot;</span>:  pd.to_datetime([<span class="st">&quot;2023-06-15&quot;</span>, <span class="st">&quot;2021-03-01&quot;</span>, <span class="st">&quot;2022-09-15&quot;</span>, <span class="st">&quot;2021-12-01&quot;</span>]),</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;offering_amt&quot;</span>:   [<span class="dv">1_500_000_000</span>, <span class="dv">750_000_000</span>, <span class="dv">600_000_000</span>, <span class="dv">400_000_000</span>],</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;security_level&quot;</span>: [<span class="st">&quot;SEN&quot;</span>, <span class="st">&quot;SEN&quot;</span>, <span class="st">&quot;SEN&quot;</span>, <span class="st">&quot;SUB&quot;</span>],</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;rule_144a&quot;</span>:      [<span class="va">False</span>, <span class="va">False</span>, <span class="va">True</span>, <span class="va">False</span>],</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;freq&quot;</span>:           [<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>],</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;day_count&quot;</span>:      [<span class="st">&quot;30/360&quot;</span>] <span class="op">*</span> <span class="dv">4</span>,</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------- 2. point-in-time ratings history</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="co"># join on knowledge_ts (publication), never effective_ts</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>ratings <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;bond_id&quot;</span>:      [<span class="st">&quot;SYN-IG-A&quot;</span>, <span class="st">&quot;SYN-IG-B&quot;</span>, <span class="st">&quot;SYN-IG-B&quot;</span>, <span class="st">&quot;SYN-HY-C&quot;</span>, <span class="st">&quot;SYN-HY-D&quot;</span>, <span class="st">&quot;SYN-HY-D&quot;</span>],</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;effective_ts&quot;</span>: pd.to_datetime([<span class="st">&quot;2023-06-01&quot;</span>, <span class="st">&quot;2021-02-20&quot;</span>, <span class="st">&quot;2026-06-10&quot;</span>, <span class="st">&quot;2022-09-01&quot;</span>,</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;2021-11-20&quot;</span>, <span class="st">&quot;2026-08-14&quot;</span>]),</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;knowledge_ts&quot;</span>: pd.to_datetime([<span class="st">&quot;2023-06-01&quot;</span>, <span class="st">&quot;2021-02-20&quot;</span>, <span class="st">&quot;2026-06-12&quot;</span>, <span class="st">&quot;2022-09-01&quot;</span>,</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;2021-11-20&quot;</span>, <span class="st">&quot;2026-08-17&quot;</span>]),</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;rating&quot;</span>:       [<span class="st">&quot;A-&quot;</span>, <span class="st">&quot;BBB-&quot;</span>, <span class="st">&quot;BB+&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;CCC&quot;</span>, <span class="st">&quot;D&quot;</span>],</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>ratings[<span class="st">&quot;rating_num&quot;</span>] <span class="op">=</span> ratings[<span class="st">&quot;rating&quot;</span>].<span class="bu">map</span>(RATING_SCALE).astype(<span class="st">&quot;int64&quot;</span>)</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>DEFAULT_DATE <span class="op">=</span> {<span class="st">&quot;SYN-HY-D&quot;</span>: pd.Timestamp(<span class="st">&quot;2026-08-14&quot;</span>)}</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------------- 3. bond math (30/360)</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> d30360(d1, d2):</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;US 30/360 (bond basis) day count between two Timestamps.&quot;&quot;&quot;</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    D1 <span class="op">=</span> <span class="bu">min</span>(d1.day, <span class="dv">30</span>)</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    D2 <span class="op">=</span> d2.day</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> D2 <span class="op">==</span> <span class="dv">31</span> <span class="kw">and</span> D1 <span class="op">&gt;=</span> <span class="dv">30</span>:</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>        D2 <span class="op">=</span> <span class="dv">30</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">360</span> <span class="op">*</span> (d2.year <span class="op">-</span> d1.year) <span class="op">+</span> <span class="dv">30</span> <span class="op">*</span> (d2.month <span class="op">-</span> d1.month) <span class="op">+</span> (D2 <span class="op">-</span> D1)</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> coupon_dates(maturity, freq<span class="op">=</span><span class="dv">2</span>, start<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>    months <span class="op">=</span> <span class="dv">12</span> <span class="op">//</span> freq</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>    out, d, k <span class="op">=</span> [], maturity, <span class="dv">0</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> start <span class="kw">is</span> <span class="va">None</span> <span class="kw">or</span> d <span class="op">&gt;</span> start <span class="op">-</span> pd.DateOffset(months<span class="op">=</span>months):</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>        out.append(d)</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>        k <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>        d <span class="op">=</span> maturity <span class="op">-</span> pd.DateOffset(months<span class="op">=</span>months <span class="op">*</span> k)</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> start <span class="kw">is</span> <span class="va">None</span> <span class="kw">and</span> k <span class="op">&gt;</span> <span class="dv">400</span>:</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sorted</span>(out)</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> schedule(settle, maturity, freq<span class="op">=</span><span class="dv">2</span>):</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;(previous coupon date, list of future coupon dates) relative to settle.&quot;&quot;&quot;</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>    dates <span class="op">=</span> coupon_dates(maturity, freq, start<span class="op">=</span>settle)</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>    future <span class="op">=</span> [d <span class="cf">for</span> d <span class="kw">in</span> dates <span class="cf">if</span> d <span class="op">&gt;</span> settle]</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>    past <span class="op">=</span> [d <span class="cf">for</span> d <span class="kw">in</span> dates <span class="cf">if</span> d <span class="op">&lt;=</span> settle]</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>    prev <span class="op">=</span> past[<span class="op">-</span><span class="dv">1</span>] <span class="cf">if</span> past <span class="cf">else</span> future[<span class="dv">0</span>] <span class="op">-</span> pd.DateOffset(months<span class="op">=</span><span class="dv">12</span> <span class="op">//</span> freq)</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> prev, future</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> accrued(settle, maturity, coupon, freq<span class="op">=</span><span class="dv">2</span>):</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>    prev, _ <span class="op">=</span> schedule(settle, maturity, freq)</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fl">100.0</span> <span class="op">*</span> coupon <span class="op">/</span> freq <span class="op">*</span> d30360(prev, settle) <span class="op">/</span> (<span class="fl">360.0</span> <span class="op">/</span> freq)</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dirty_from_yield(y, settle, maturity, coupon, freq<span class="op">=</span><span class="dv">2</span>):</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>    prev, fut <span class="op">=</span> schedule(settle, maturity, freq)</span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>    w <span class="op">=</span> d30360(settle, fut[<span class="dv">0</span>]) <span class="op">/</span> (<span class="fl">360.0</span> <span class="op">/</span> freq)          <span class="co"># fraction of period to next coupon</span></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>    k <span class="op">=</span> np.arange(<span class="bu">len</span>(fut))</span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>    cf <span class="op">=</span> np.full(<span class="bu">len</span>(fut), <span class="fl">100.0</span> <span class="op">*</span> coupon <span class="op">/</span> freq)</span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>    cf[<span class="op">-</span><span class="dv">1</span>] <span class="op">+=</span> <span class="fl">100.0</span></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">float</span>(np.<span class="bu">sum</span>(cf <span class="op">/</span> (<span class="fl">1.0</span> <span class="op">+</span> y <span class="op">/</span> freq) <span class="op">**</span> (w <span class="op">+</span> k)))</span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> clean_from_yield(y, settle, maturity, coupon, freq<span class="op">=</span><span class="dv">2</span>):</span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dirty_from_yield(y, settle, maturity, coupon, freq) <span class="op">-</span> accrued(settle, maturity, coupon, freq)</span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> yield_from_clean(p_clean, settle, maturity, coupon, freq<span class="op">=</span><span class="dv">2</span>):</span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a>    f <span class="op">=</span> <span class="kw">lambda</span> y: clean_from_yield(y, settle, maturity, coupon, freq) <span class="op">-</span> p_clean</span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> brentq(f, <span class="op">-</span><span class="fl">0.05</span>, <span class="fl">5.0</span>, xtol<span class="op">=</span><span class="fl">1e-12</span>)              <span class="co"># bracket: -5% to 500%</span></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mod_duration(y, settle, maturity, coupon, freq<span class="op">=</span><span class="dv">2</span>):</span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a>    prev, fut <span class="op">=</span> schedule(settle, maturity, freq)</span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>    w <span class="op">=</span> d30360(settle, fut[<span class="dv">0</span>]) <span class="op">/</span> (<span class="fl">360.0</span> <span class="op">/</span> freq)</span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> w <span class="op">+</span> np.arange(<span class="bu">len</span>(fut))</span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a>    cf <span class="op">=</span> np.full(<span class="bu">len</span>(fut), <span class="fl">100.0</span> <span class="op">*</span> coupon <span class="op">/</span> freq)</span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a>    cf[<span class="op">-</span><span class="dv">1</span>] <span class="op">+=</span> <span class="fl">100.0</span></span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>    pv <span class="op">=</span> cf <span class="op">/</span> (<span class="fl">1.0</span> <span class="op">+</span> y <span class="op">/</span> freq) <span class="op">**</span> n</span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a>    macaulay_years <span class="op">=</span> np.<span class="bu">sum</span>((n <span class="op">/</span> freq) <span class="op">*</span> pv) <span class="op">/</span> np.<span class="bu">sum</span>(pv)</span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">float</span>(macaulay_years <span class="op">/</span> (<span class="fl">1.0</span> <span class="op">+</span> y <span class="op">/</span> freq))</span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> tsy_curve(T, b0<span class="op">=</span><span class="fl">0.042</span>, b1<span class="op">=-</span><span class="fl">0.005</span>, b2<span class="op">=</span><span class="fl">0.010</span>, tau<span class="op">=</span><span class="fl">2.0</span>):</span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Synthetic Nelson-Siegel par curve (illustrative), bond-equivalent decimal.&quot;&quot;&quot;</span></span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a>    T <span class="op">=</span> np.maximum(np.asarray(T, dtype<span class="op">=</span><span class="bu">float</span>), <span class="fl">1e-6</span>)</span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> T <span class="op">/</span> tau</span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> b0 <span class="op">+</span> b1 <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> np.exp(<span class="op">-</span>x)) <span class="op">/</span> x <span class="op">+</span> b2 <span class="op">*</span> ((<span class="dv">1</span> <span class="op">-</span> np.exp(<span class="op">-</span>x)) <span class="op">/</span> x <span class="op">-</span> np.exp(<span class="op">-</span>x))</span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a><span class="co"># ----------------------------------------------- 4. simulate &quot;true&quot; paths and a tape</span></span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>bdays <span class="op">=</span> pd.bdate_range(<span class="st">&quot;2026-03-02&quot;</span>, <span class="st">&quot;2026-09-30&quot;</span>)</span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>y0 <span class="op">=</span> {<span class="st">&quot;SYN-IG-A&quot;</span>: <span class="fl">0.0480</span>, <span class="st">&quot;SYN-IG-B&quot;</span>: <span class="fl">0.0590</span>, <span class="st">&quot;SYN-HY-C&quot;</span>: <span class="fl">0.0760</span>, <span class="st">&quot;SYN-HY-D&quot;</span>: <span class="fl">0.1350</span>}</span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a>vol <span class="op">=</span> {<span class="st">&quot;SYN-IG-A&quot;</span>: <span class="fl">0.0006</span>, <span class="st">&quot;SYN-IG-B&quot;</span>: <span class="fl">0.0010</span>, <span class="st">&quot;SYN-HY-C&quot;</span>: <span class="fl">0.0020</span>, <span class="st">&quot;SYN-HY-D&quot;</span>: <span class="fl">0.0060</span>}</span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>lam <span class="op">=</span> {<span class="st">&quot;SYN-IG-A&quot;</span>: <span class="fl">6.0</span>, <span class="st">&quot;SYN-IG-B&quot;</span>: <span class="fl">4.0</span>, <span class="st">&quot;SYN-HY-C&quot;</span>: <span class="fl">2.0</span>, <span class="st">&quot;SYN-HY-D&quot;</span>: <span class="fl">1.5</span>}</span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a>half_spread <span class="op">=</span> {<span class="st">&quot;SYN-IG-A&quot;</span>: <span class="fl">0.10</span>, <span class="st">&quot;SYN-IG-B&quot;</span>: <span class="fl">0.20</span>, <span class="st">&quot;SYN-HY-C&quot;</span>: <span class="fl">0.40</span>, <span class="st">&quot;SYN-HY-D&quot;</span>: <span class="fl">1.00</span>}</span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a>rows, seq <span class="op">=</span> [], <span class="dv">0</span></span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _, b <span class="kw">in</span> secmaster.iterrows():</span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> y0[b.bond_id]</span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> d <span class="kw">in</span> bdays:</span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a>        y <span class="op">+=</span> vol[b.bond_id] <span class="op">*</span> RNG.standard_normal()</span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> b.bond_id <span class="op">==</span> <span class="st">&quot;SYN-IG-B&quot;</span> <span class="kw">and</span> d <span class="op">&gt;=</span> pd.Timestamp(<span class="st">&quot;2026-06-10&quot;</span>):</span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a>            y <span class="op">+=</span> <span class="fl">0.0004</span>                                   <span class="co"># fallen-angel drift</span></span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a>        settle <span class="op">=</span> d <span class="op">+</span> pd.offsets.BDay(<span class="dv">1</span>)                   <span class="co"># US corporates settle T+1</span></span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a>        defaulted <span class="op">=</span> b.bond_id <span class="kw">in</span> DEFAULT_DATE <span class="kw">and</span> d <span class="op">&gt;=</span> DEFAULT_DATE[b.bond_id]</span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> defaulted:</span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a>            true_px <span class="op">=</span> <span class="fl">31.0</span> <span class="op">+</span> <span class="fl">2.0</span> <span class="op">*</span> RNG.standard_normal()  <span class="co"># trades flat near recovery</span></span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a>            true_px <span class="op">=</span> clean_from_yield(<span class="bu">max</span>(y, <span class="fl">0.0</span>), settle, b.maturity, b.coupon)</span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(RNG.poisson(lam[b.bond_id] <span class="op">*</span> (<span class="fl">2.0</span> <span class="cf">if</span> defaulted <span class="cf">else</span> <span class="fl">1.0</span>))):</span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a>            side <span class="op">=</span> RNG.choice([<span class="st">&quot;B&quot;</span>, <span class="st">&quot;S&quot;</span>, <span class="st">&quot;D&quot;</span>], p<span class="op">=</span>[<span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.2</span>])   <span class="co"># cust buy/sell, dealer</span></span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a>            sgn <span class="op">=</span> {<span class="st">&quot;B&quot;</span>: <span class="fl">1.0</span>, <span class="st">&quot;S&quot;</span>: <span class="op">-</span><span class="fl">1.0</span>, <span class="st">&quot;D&quot;</span>: <span class="fl">0.0</span>}[side]</span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a>            px <span class="op">=</span> <span class="bu">round</span>(true_px <span class="op">+</span> sgn <span class="op">*</span> half_spread[b.bond_id] <span class="op">+</span> <span class="fl">0.05</span> <span class="op">*</span> RNG.standard_normal(), <span class="dv">3</span>)</span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a>            median_qty <span class="op">=</span> <span class="dv">1_000_000</span> <span class="cf">if</span> b.bond_id.startswith(<span class="st">&quot;SYN-IG&quot;</span>) <span class="cf">else</span> <span class="dv">500_000</span></span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a>            qty <span class="op">=</span> <span class="bu">float</span>(np.clip(np.<span class="bu">round</span>(RNG.lognormal(np.log(median_qty), <span class="fl">1.0</span>), <span class="op">-</span><span class="dv">3</span>), <span class="dv">1_000</span>, <span class="dv">25_000_000</span>))</span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a>            exec_ts <span class="op">=</span> d <span class="op">+</span> pd.Timedelta(hours<span class="op">=</span><span class="dv">9</span>, minutes<span class="op">=</span><span class="dv">30</span>) <span class="op">+</span> pd.Timedelta(seconds<span class="op">=</span><span class="bu">int</span>(RNG.integers(<span class="dv">0</span>, <span class="fl">6.5</span> <span class="op">*</span> <span class="dv">3600</span>)))</span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a>            seq <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a>            rows.append(<span class="bu">dict</span>(msg_seq<span class="op">=</span>seq, orig_msg_seq<span class="op">=</span>np.nan, trc_st<span class="op">=</span><span class="st">&quot;T&quot;</span>, bond_id<span class="op">=</span>b.bond_id,</span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a>                             exec_ts<span class="op">=</span>exec_ts, report_ts<span class="op">=</span>exec_ts <span class="op">+</span> pd.Timedelta(seconds<span class="op">=</span><span class="bu">int</span>(RNG.integers(<span class="dv">1</span>, <span class="dv">900</span>))),</span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a>                             price<span class="op">=</span>px, qty_true<span class="op">=</span>qty, side<span class="op">=</span>side))</span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a>msgs <span class="op">=</span> pd.DataFrame(rows)</span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a><span class="co"># inject tape pathologies: cancels, corrections, a decimal shift, a bounce-back print</span></span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a>t_idx <span class="op">=</span> msgs.index[msgs.trc_st <span class="op">==</span> <span class="st">&quot;T&quot;</span>]</span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a>cancel_targets <span class="op">=</span> RNG.choice(t_idx, size<span class="op">=</span><span class="dv">6</span>, replace<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a>fix_targets <span class="op">=</span> RNG.choice(np.setdiff1d(t_idx, cancel_targets), size<span class="op">=</span><span class="dv">6</span>, replace<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a>extra <span class="op">=</span> []</span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> cancel_targets:</span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> msgs.loc[i].to_dict()<span class="op">;</span> seq <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a>    r.update(msg_seq<span class="op">=</span>seq, orig_msg_seq<span class="op">=</span>msgs.at[i, <span class="st">&quot;msg_seq&quot;</span>], trc_st<span class="op">=</span><span class="st">&quot;X&quot;</span>)</span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a>    extra.append(r)</span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> fix_targets:</span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> msgs.loc[i].to_dict()<span class="op">;</span> seq <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a>    r.update(msg_seq<span class="op">=</span>seq, orig_msg_seq<span class="op">=</span>msgs.at[i, <span class="st">&quot;msg_seq&quot;</span>], trc_st<span class="op">=</span><span class="st">&quot;C&quot;</span>, price<span class="op">=</span><span class="bu">round</span>(r[<span class="st">&quot;price&quot;</span>] <span class="op">+</span> <span class="fl">0.25</span>, <span class="dv">3</span>))</span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a>    extra.append(r)</span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a>msgs <span class="op">=</span> pd.concat([msgs, pd.DataFrame(extra)], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a>ig_a <span class="op">=</span> msgs.index[(msgs.bond_id <span class="op">==</span> <span class="st">&quot;SYN-IG-A&quot;</span>) <span class="op">&amp;</span> (msgs.trc_st <span class="op">==</span> <span class="st">&quot;T&quot;</span>)]</span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a>msgs.loc[ig_a[<span class="dv">100</span>], <span class="st">&quot;price&quot;</span>] <span class="op">*=</span> <span class="fl">10.0</span>                      <span class="co"># decimal-shift typo</span></span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a>msgs.loc[ig_a[<span class="dv">200</span>], <span class="st">&quot;price&quot;</span>] <span class="op">+=</span> <span class="fl">7.0</span>                       <span class="co"># bounce-back spike</span></span>
+<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a>msgs[<span class="st">&quot;orig_msg_seq&quot;</span>] <span class="op">=</span> msgs[<span class="st">&quot;orig_msg_seq&quot;</span>].astype(<span class="st">&quot;Int64&quot;</span>)</span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------- 5. point-in-time rating join (no look-ahead allowed)</span></span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> pit_rating(df, ts_col):</span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a>    left <span class="op">=</span> df.sort_values(ts_col)</span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>    right <span class="op">=</span> ratings.sort_values(<span class="st">&quot;knowledge_ts&quot;</span>)[[<span class="st">&quot;bond_id&quot;</span>, <span class="st">&quot;knowledge_ts&quot;</span>, <span class="st">&quot;rating&quot;</span>, <span class="st">&quot;rating_num&quot;</span>]]</span>
+<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a>    out <span class="op">=</span> pd.merge_asof(left, right, left_on<span class="op">=</span>ts_col, right_on<span class="op">=</span><span class="st">&quot;knowledge_ts&quot;</span>, by<span class="op">=</span><span class="st">&quot;bond_id&quot;</span>,</span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a>                        direction<span class="op">=</span><span class="st">&quot;backward&quot;</span>, allow_exact_matches<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> (out[<span class="st">&quot;knowledge_ts&quot;</span>] <span class="op">&lt;=</span> out[ts_col]).<span class="bu">all</span>(), <span class="st">&quot;look-ahead in rating join&quot;</span></span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> out</span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a><span class="co"># --------------------------------------------- 6. clean the tape (Dick-Nielsen-lite)</span></span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> clean_tape(m):</span>
+<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a>    m <span class="op">=</span> m.copy()</span>
+<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a>    cancelled <span class="op">=</span> <span class="bu">set</span>(m.loc[m.trc_st <span class="op">==</span> <span class="st">&quot;X&quot;</span>, <span class="st">&quot;orig_msg_seq&quot;</span>].dropna().astype(<span class="bu">int</span>))</span>
+<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a>    corrected <span class="op">=</span> <span class="bu">set</span>(m.loc[m.trc_st <span class="op">==</span> <span class="st">&quot;C&quot;</span>, <span class="st">&quot;orig_msg_seq&quot;</span>].dropna().astype(<span class="bu">int</span>))</span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a>    keep <span class="op">=</span> (m.trc_st.isin([<span class="st">&quot;T&quot;</span>, <span class="st">&quot;C&quot;</span>])) <span class="op">&amp;</span> <span class="op">~</span>m.msg_seq.isin(cancelled <span class="op">|</span> corrected)</span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> m.loc[keep].copy()</span>
+<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> t.sort_values([<span class="st">&quot;bond_id&quot;</span>, <span class="st">&quot;exec_ts&quot;</span>]).reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a>    <span class="co"># decimal-shift and bounce-back screens against a rolling median of neighbours</span></span>
+<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a>    med <span class="op">=</span> t.groupby(<span class="st">&quot;bond_id&quot;</span>)[<span class="st">&quot;price&quot;</span>].transform(<span class="kw">lambda</span> s: s.rolling(<span class="dv">11</span>, center<span class="op">=</span><span class="va">True</span>, min_periods<span class="op">=</span><span class="dv">3</span>).median())</span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a>    ratio <span class="op">=</span> t[<span class="st">&quot;price&quot;</span>] <span class="op">/</span> med</span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a>    t[<span class="st">&quot;flag_decimal&quot;</span>] <span class="op">=</span> (ratio <span class="op">&gt;</span> <span class="dv">5</span>) <span class="op">|</span> (ratio <span class="op">&lt;</span> <span class="fl">0.2</span>)</span>
+<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a>    prev_ <span class="op">=</span> t.groupby(<span class="st">&quot;bond_id&quot;</span>)[<span class="st">&quot;price&quot;</span>].shift(<span class="dv">1</span>)</span>
+<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a>    next_ <span class="op">=</span> t.groupby(<span class="st">&quot;bond_id&quot;</span>)[<span class="st">&quot;price&quot;</span>].shift(<span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a>    jump_out <span class="op">=</span> (t[<span class="st">&quot;price&quot;</span>] <span class="op">-</span> prev_).<span class="bu">abs</span>()</span>
+<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a>    jump_back <span class="op">=</span> (next_ <span class="op">-</span> t[<span class="st">&quot;price&quot;</span>]).<span class="bu">abs</span>()</span>
+<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a>    t[<span class="st">&quot;flag_bounce&quot;</span>] <span class="op">=</span> (jump_out <span class="op">&gt;</span> <span class="fl">3.0</span>) <span class="op">&amp;</span> (jump_back <span class="op">&gt;</span> <span class="fl">3.0</span>) <span class="op">&amp;</span> ((next_ <span class="op">-</span> prev_).<span class="bu">abs</span>() <span class="op">&lt;</span> <span class="fl">1.0</span>) <span class="op">&amp;</span> <span class="op">~</span>t[<span class="st">&quot;flag_decimal&quot;</span>]</span>
+<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> t.loc[<span class="op">~</span>(t.flag_decimal <span class="op">|</span> t.flag_bounce)].copy()</span>
+<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a>    <span class="co"># point-in-time rating -&gt; dissemination cap the public tape would have shown</span></span>
+<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> pit_rating(t, <span class="st">&quot;exec_ts&quot;</span>)</span>
+<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a>    t[<span class="st">&quot;cap&quot;</span>] <span class="op">=</span> np.where(t[<span class="st">&quot;rating_num&quot;</span>] <span class="op">&lt;=</span> IG_MAX_NUM, IG_CAP, HY_CAP)</span>
+<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a>    t[<span class="st">&quot;qty_dissem&quot;</span>] <span class="op">=</span> np.minimum(t[<span class="st">&quot;qty_true&quot;</span>], t[<span class="st">&quot;cap&quot;</span>])</span>
+<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a>    t[<span class="st">&quot;qty_capped&quot;</span>] <span class="op">=</span> t[<span class="st">&quot;qty_true&quot;</span>] <span class="op">&gt;</span> t[<span class="st">&quot;cap&quot;</span>]</span>
+<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a>    t[<span class="st">&quot;date&quot;</span>] <span class="op">=</span> t[<span class="st">&quot;exec_ts&quot;</span>].dt.normalize()</span>
+<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> t</span>
+<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a>trades <span class="op">=</span> clean_tape(msgs)</span>
+<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------ 7. bond-day panel on a full grid</span></span>
+<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> vwap(g, qty_col):</span>
+<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">float</span>(np.<span class="bu">sum</span>(g[<span class="st">&quot;price&quot;</span>] <span class="op">*</span> g[qty_col]) <span class="op">/</span> np.<span class="bu">sum</span>(g[qty_col]))</span>
+<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a>agg <span class="op">=</span> (trades.groupby([<span class="st">&quot;bond_id&quot;</span>, <span class="st">&quot;date&quot;</span>])</span>
+<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a>       .<span class="bu">apply</span>(<span class="kw">lambda</span> g: pd.Series({</span>
+<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;px_vwap_true&quot;</span>: vwap(g, <span class="st">&quot;qty_true&quot;</span>),</span>
+<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;px_vwap_dissem&quot;</span>: vwap(g, <span class="st">&quot;qty_dissem&quot;</span>),</span>
+<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;px_last&quot;</span>: g.sort_values(<span class="st">&quot;exec_ts&quot;</span>)[<span class="st">&quot;price&quot;</span>].iloc[<span class="op">-</span><span class="dv">1</span>],</span>
+<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;n_trades&quot;</span>: <span class="bu">len</span>(g),</span>
+<span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;par_volume&quot;</span>: g[<span class="st">&quot;qty_true&quot;</span>].<span class="bu">sum</span>(),</span>
+<span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;n_capped&quot;</span>: <span class="bu">int</span>(g[<span class="st">&quot;qty_capped&quot;</span>].<span class="bu">sum</span>()),</span>
+<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;cust_buy_par&quot;</span>: g.loc[g.side <span class="op">==</span> <span class="st">&quot;B&quot;</span>, <span class="st">&quot;qty_true&quot;</span>].<span class="bu">sum</span>(),</span>
+<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;cust_sell_par&quot;</span>: g.loc[g.side <span class="op">==</span> <span class="st">&quot;S&quot;</span>, <span class="st">&quot;qty_true&quot;</span>].<span class="bu">sum</span>(),</span>
+<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a>       }), include_groups<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a>       .reset_index())</span>
+<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a>grid <span class="op">=</span> pd.MultiIndex.from_product([secmaster.bond_id, bdays], names<span class="op">=</span>[<span class="st">&quot;bond_id&quot;</span>, <span class="st">&quot;date&quot;</span>]).to_frame(index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a>daily <span class="op">=</span> grid.merge(agg, on<span class="op">=</span>[<span class="st">&quot;bond_id&quot;</span>, <span class="st">&quot;date&quot;</span>], how<span class="op">=</span><span class="st">&quot;left&quot;</span>).merge(secmaster, on<span class="op">=</span><span class="st">&quot;bond_id&quot;</span>, how<span class="op">=</span><span class="st">&quot;left&quot;</span>)</span>
+<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a>daily <span class="op">=</span> daily.loc[daily[<span class="st">&quot;date&quot;</span>] <span class="op">&lt;</span> daily[<span class="st">&quot;maturity&quot;</span>]].copy()      <span class="co"># never drop defaulted bonds</span></span>
+<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a>daily <span class="op">=</span> daily.sort_values([<span class="st">&quot;bond_id&quot;</span>, <span class="st">&quot;date&quot;</span>]).reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a>daily[<span class="st">&quot;traded&quot;</span>] <span class="op">=</span> daily[<span class="st">&quot;n_trades&quot;</span>].fillna(<span class="dv">0</span>).astype(<span class="st">&quot;int64&quot;</span>) <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb1-215"><a href="#cb1-215" aria-hidden="true" tabindex="-1"></a>daily[<span class="st">&quot;n_trades&quot;</span>] <span class="op">=</span> daily[<span class="st">&quot;n_trades&quot;</span>].fillna(<span class="dv">0</span>).astype(<span class="st">&quot;int64&quot;</span>)</span>
+<span id="cb1-216"><a href="#cb1-216" aria-hidden="true" tabindex="-1"></a>daily[<span class="st">&quot;par_volume&quot;</span>] <span class="op">=</span> daily[<span class="st">&quot;par_volume&quot;</span>].fillna(<span class="fl">0.0</span>)</span>
+<span id="cb1-217"><a href="#cb1-217" aria-hidden="true" tabindex="-1"></a>daily[<span class="st">&quot;last_trade_date&quot;</span>] <span class="op">=</span> daily[<span class="st">&quot;date&quot;</span>].where(daily[<span class="st">&quot;traded&quot;</span>])</span>
+<span id="cb1-218"><a href="#cb1-218" aria-hidden="true" tabindex="-1"></a>daily[<span class="st">&quot;last_trade_date&quot;</span>] <span class="op">=</span> daily.groupby(<span class="st">&quot;bond_id&quot;</span>)[<span class="st">&quot;last_trade_date&quot;</span>].ffill()</span>
+<span id="cb1-219"><a href="#cb1-219" aria-hidden="true" tabindex="-1"></a>daily[<span class="st">&quot;px_clean&quot;</span>] <span class="op">=</span> daily.groupby(<span class="st">&quot;bond_id&quot;</span>)[<span class="st">&quot;px_vwap_true&quot;</span>].ffill()          <span class="co"># carried price</span></span>
+<span id="cb1-220"><a href="#cb1-220" aria-hidden="true" tabindex="-1"></a>daily[<span class="st">&quot;days_stale&quot;</span>] <span class="op">=</span> [np.busday_count(l.date(), d.date()) <span class="cf">if</span> pd.notna(l) <span class="cf">else</span> np.nan</span>
+<span id="cb1-221"><a href="#cb1-221" aria-hidden="true" tabindex="-1"></a>                       <span class="cf">for</span> l, d <span class="kw">in</span> <span class="bu">zip</span>(daily[<span class="st">&quot;last_trade_date&quot;</span>], daily[<span class="st">&quot;date&quot;</span>])]</span>
+<span id="cb1-222"><a href="#cb1-222" aria-hidden="true" tabindex="-1"></a>daily[<span class="st">&quot;days_stale&quot;</span>] <span class="op">=</span> daily[<span class="st">&quot;days_stale&quot;</span>].astype(<span class="st">&quot;float64&quot;</span>)</span>
+<span id="cb1-223"><a href="#cb1-223" aria-hidden="true" tabindex="-1"></a>daily[<span class="st">&quot;is_stale&quot;</span>] <span class="op">=</span> daily[<span class="st">&quot;days_stale&quot;</span>] <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb1-224"><a href="#cb1-224" aria-hidden="true" tabindex="-1"></a>daily[<span class="st">&quot;status&quot;</span>] <span class="op">=</span> np.where([b <span class="kw">in</span> DEFAULT_DATE <span class="kw">and</span> d <span class="op">&gt;=</span> DEFAULT_DATE[b] <span class="cf">for</span> b, d <span class="kw">in</span> <span class="bu">zip</span>(daily.bond_id, daily.date)],</span>
+<span id="cb1-225"><a href="#cb1-225" aria-hidden="true" tabindex="-1"></a>                           <span class="st">&quot;defaulted&quot;</span>, <span class="st">&quot;performing&quot;</span>)</span>
+<span id="cb1-226"><a href="#cb1-226" aria-hidden="true" tabindex="-1"></a>daily[<span class="st">&quot;trades_flat&quot;</span>] <span class="op">=</span> daily[<span class="st">&quot;status&quot;</span>].eq(<span class="st">&quot;defaulted&quot;</span>)</span>
+<span id="cb1-227"><a href="#cb1-227" aria-hidden="true" tabindex="-1"></a>daily <span class="op">=</span> pit_rating(daily, <span class="st">&quot;date&quot;</span>).sort_values([<span class="st">&quot;bond_id&quot;</span>, <span class="st">&quot;date&quot;</span>]).reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-228"><a href="#cb1-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-229"><a href="#cb1-229" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> analytics(r):</span>
+<span id="cb1-230"><a href="#cb1-230" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> pd.isna(r.px_clean):</span>
+<span id="cb1-231"><a href="#cb1-231" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> pd.Series({<span class="st">&quot;accrued&quot;</span>: np.nan, <span class="st">&quot;ytm&quot;</span>: np.nan, <span class="st">&quot;dur_mod&quot;</span>: np.nan, <span class="st">&quot;tsy_yld&quot;</span>: np.nan,</span>
+<span id="cb1-232"><a href="#cb1-232" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&quot;spread&quot;</span>: np.nan, <span class="st">&quot;dts&quot;</span>: np.nan})</span>
+<span id="cb1-233"><a href="#cb1-233" aria-hidden="true" tabindex="-1"></a>    settle <span class="op">=</span> r.date <span class="op">+</span> pd.offsets.BDay(<span class="dv">1</span>)</span>
+<span id="cb1-234"><a href="#cb1-234" aria-hidden="true" tabindex="-1"></a>    ai <span class="op">=</span> <span class="fl">0.0</span> <span class="cf">if</span> r.trades_flat <span class="cf">else</span> accrued(settle, r.maturity, r.coupon)</span>
+<span id="cb1-235"><a href="#cb1-235" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> r.trades_flat:                                   <span class="co"># yields are meaningless once flat</span></span>
+<span id="cb1-236"><a href="#cb1-236" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> pd.Series({<span class="st">&quot;accrued&quot;</span>: ai, <span class="st">&quot;ytm&quot;</span>: np.nan, <span class="st">&quot;dur_mod&quot;</span>: np.nan, <span class="st">&quot;tsy_yld&quot;</span>: np.nan,</span>
+<span id="cb1-237"><a href="#cb1-237" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&quot;spread&quot;</span>: np.nan, <span class="st">&quot;dts&quot;</span>: np.nan})</span>
+<span id="cb1-238"><a href="#cb1-238" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> yield_from_clean(r.px_clean, settle, r.maturity, r.coupon)</span>
+<span id="cb1-239"><a href="#cb1-239" aria-hidden="true" tabindex="-1"></a>    dmod <span class="op">=</span> mod_duration(y, settle, r.maturity, r.coupon)</span>
+<span id="cb1-240"><a href="#cb1-240" aria-hidden="true" tabindex="-1"></a>    T <span class="op">=</span> (r.maturity <span class="op">-</span> settle).days <span class="op">/</span> <span class="fl">365.25</span></span>
+<span id="cb1-241"><a href="#cb1-241" aria-hidden="true" tabindex="-1"></a>    ty <span class="op">=</span> <span class="bu">float</span>(tsy_curve(T))</span>
+<span id="cb1-242"><a href="#cb1-242" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> y <span class="op">-</span> ty</span>
+<span id="cb1-243"><a href="#cb1-243" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.Series({<span class="st">&quot;accrued&quot;</span>: ai, <span class="st">&quot;ytm&quot;</span>: y, <span class="st">&quot;dur_mod&quot;</span>: dmod, <span class="st">&quot;tsy_yld&quot;</span>: ty, <span class="st">&quot;spread&quot;</span>: s,</span>
+<span id="cb1-244"><a href="#cb1-244" aria-hidden="true" tabindex="-1"></a>                      <span class="st">&quot;dts&quot;</span>: dmod <span class="op">*</span> s <span class="op">*</span> <span class="fl">1e4</span>})          <span class="co"># DTS in years x bp</span></span>
+<span id="cb1-245"><a href="#cb1-245" aria-hidden="true" tabindex="-1"></a>daily <span class="op">=</span> pd.concat([daily, daily.<span class="bu">apply</span>(analytics, axis<span class="op">=</span><span class="dv">1</span>)], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb1-246"><a href="#cb1-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-247"><a href="#cb1-247" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------- 8. monthly returns (stale-aware rule)</span></span>
+<span id="cb1-248"><a href="#cb1-248" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> monthly_returns(dp, max_stale_days<span class="op">=</span><span class="dv">5</span>):</span>
+<span id="cb1-249"><a href="#cb1-249" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> dp.copy()</span>
+<span id="cb1-250"><a href="#cb1-250" aria-hidden="true" tabindex="-1"></a>    d[<span class="st">&quot;month_end&quot;</span>] <span class="op">=</span> d[<span class="st">&quot;date&quot;</span>] <span class="op">+</span> pd.offsets.BMonthEnd(<span class="dv">0</span>)</span>
+<span id="cb1-251"><a href="#cb1-251" aria-hidden="true" tabindex="-1"></a>    me <span class="op">=</span> d.loc[d[<span class="st">&quot;date&quot;</span>] <span class="op">==</span> d[<span class="st">&quot;month_end&quot;</span>]].copy()</span>
+<span id="cb1-252"><a href="#cb1-252" aria-hidden="true" tabindex="-1"></a>    ok <span class="op">=</span> me[<span class="st">&quot;days_stale&quot;</span>] <span class="op">&lt;=</span> max_stale_days</span>
+<span id="cb1-253"><a href="#cb1-253" aria-hidden="true" tabindex="-1"></a>    me[<span class="st">&quot;px_eom&quot;</span>] <span class="op">=</span> np.where(ok, me[<span class="st">&quot;px_clean&quot;</span>], np.nan)</span>
+<span id="cb1-254"><a href="#cb1-254" aria-hidden="true" tabindex="-1"></a>    me <span class="op">=</span> me.sort_values([<span class="st">&quot;bond_id&quot;</span>, <span class="st">&quot;month_end&quot;</span>])</span>
+<span id="cb1-255"><a href="#cb1-255" aria-hidden="true" tabindex="-1"></a>    me[<span class="st">&quot;px_prev&quot;</span>] <span class="op">=</span> me.groupby(<span class="st">&quot;bond_id&quot;</span>)[<span class="st">&quot;px_eom&quot;</span>].shift(<span class="dv">1</span>)</span>
+<span id="cb1-256"><a href="#cb1-256" aria-hidden="true" tabindex="-1"></a>    me[<span class="st">&quot;ai_prev&quot;</span>] <span class="op">=</span> me.groupby(<span class="st">&quot;bond_id&quot;</span>)[<span class="st">&quot;accrued&quot;</span>].shift(<span class="dv">1</span>)</span>
+<span id="cb1-257"><a href="#cb1-257" aria-hidden="true" tabindex="-1"></a>    <span class="co"># coupon paid in (prev, this]: detected by an accrued-interest reset (approximation)</span></span>
+<span id="cb1-258"><a href="#cb1-258" aria-hidden="true" tabindex="-1"></a>    me[<span class="st">&quot;cpn_paid&quot;</span>] <span class="op">=</span> np.where((me[<span class="st">&quot;accrued&quot;</span>] <span class="op">&lt;</span> me[<span class="st">&quot;ai_prev&quot;</span>]) <span class="op">&amp;</span> <span class="op">~</span>me[<span class="st">&quot;trades_flat&quot;</span>],</span>
+<span id="cb1-259"><a href="#cb1-259" aria-hidden="true" tabindex="-1"></a>                              <span class="fl">100.0</span> <span class="op">*</span> me[<span class="st">&quot;coupon&quot;</span>] <span class="op">/</span> me[<span class="st">&quot;freq&quot;</span>], <span class="fl">0.0</span>)</span>
+<span id="cb1-260"><a href="#cb1-260" aria-hidden="true" tabindex="-1"></a>    me[<span class="st">&quot;ret_total&quot;</span>] <span class="op">=</span> (me[<span class="st">&quot;px_eom&quot;</span>] <span class="op">+</span> me[<span class="st">&quot;accrued&quot;</span>] <span class="op">+</span> me[<span class="st">&quot;cpn_paid&quot;</span>]) <span class="op">/</span> (me[<span class="st">&quot;px_prev&quot;</span>] <span class="op">+</span> me[<span class="st">&quot;ai_prev&quot;</span>]) <span class="op">-</span> <span class="fl">1.0</span></span>
+<span id="cb1-261"><a href="#cb1-261" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> me[[<span class="st">&quot;bond_id&quot;</span>, <span class="st">&quot;month_end&quot;</span>, <span class="st">&quot;px_eom&quot;</span>, <span class="st">&quot;accrued&quot;</span>, <span class="st">&quot;cpn_paid&quot;</span>, <span class="st">&quot;ret_total&quot;</span>,</span>
+<span id="cb1-262"><a href="#cb1-262" aria-hidden="true" tabindex="-1"></a>               <span class="st">&quot;days_stale&quot;</span>, <span class="st">&quot;rating&quot;</span>, <span class="st">&quot;status&quot;</span>, <span class="st">&quot;spread&quot;</span>, <span class="st">&quot;dur_mod&quot;</span>, <span class="st">&quot;dts&quot;</span>]].reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-263"><a href="#cb1-263" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-264"><a href="#cb1-264" aria-hidden="true" tabindex="-1"></a>monthly <span class="op">=</span> monthly_returns(daily)</span>
+<span id="cb1-265"><a href="#cb1-265" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-266"><a href="#cb1-266" aria-hidden="true" tabindex="-1"></a><span class="co"># --------------------------------------------------------- 9. schema + sanity checks</span></span>
+<span id="cb1-267"><a href="#cb1-267" aria-hidden="true" tabindex="-1"></a>DAILY_SCHEMA <span class="op">=</span> {<span class="st">&quot;bond_id&quot;</span>: <span class="st">&quot;str&quot;</span>, <span class="st">&quot;date&quot;</span>: <span class="st">&quot;datetime&quot;</span>, <span class="st">&quot;px_clean&quot;</span>: <span class="st">&quot;float&quot;</span>,</span>
+<span id="cb1-268"><a href="#cb1-268" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;px_vwap_dissem&quot;</span>: <span class="st">&quot;float&quot;</span>, <span class="st">&quot;n_trades&quot;</span>: <span class="st">&quot;int&quot;</span>, <span class="st">&quot;par_volume&quot;</span>: <span class="st">&quot;float&quot;</span>,</span>
+<span id="cb1-269"><a href="#cb1-269" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;days_stale&quot;</span>: <span class="st">&quot;float&quot;</span>, <span class="st">&quot;is_stale&quot;</span>: <span class="st">&quot;bool&quot;</span>, <span class="st">&quot;rating&quot;</span>: <span class="st">&quot;str&quot;</span>,</span>
+<span id="cb1-270"><a href="#cb1-270" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;rating_num&quot;</span>: <span class="st">&quot;int&quot;</span>, <span class="st">&quot;status&quot;</span>: <span class="st">&quot;str&quot;</span>, <span class="st">&quot;accrued&quot;</span>: <span class="st">&quot;float&quot;</span>,</span>
+<span id="cb1-271"><a href="#cb1-271" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;ytm&quot;</span>: <span class="st">&quot;float&quot;</span>, <span class="st">&quot;dur_mod&quot;</span>: <span class="st">&quot;float&quot;</span>, <span class="st">&quot;spread&quot;</span>: <span class="st">&quot;float&quot;</span>, <span class="st">&quot;dts&quot;</span>: <span class="st">&quot;float&quot;</span>}</span>
+<span id="cb1-272"><a href="#cb1-272" aria-hidden="true" tabindex="-1"></a>KIND_CHECK <span class="op">=</span> {<span class="st">&quot;str&quot;</span>: pd.api.types.is_string_dtype, <span class="st">&quot;datetime&quot;</span>: pd.api.types.is_datetime64_any_dtype,</span>
+<span id="cb1-273"><a href="#cb1-273" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;float&quot;</span>: pd.api.types.is_float_dtype, <span class="st">&quot;int&quot;</span>: pd.api.types.is_integer_dtype,</span>
+<span id="cb1-274"><a href="#cb1-274" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;bool&quot;</span>: pd.api.types.is_bool_dtype}</span>
+<span id="cb1-275"><a href="#cb1-275" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col, kind <span class="kw">in</span> DAILY_SCHEMA.items():</span>
+<span id="cb1-276"><a href="#cb1-276" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> col <span class="kw">in</span> daily.columns, <span class="ss">f&quot;missing column </span><span class="sc">{</span>col<span class="sc">}</span><span class="ss">&quot;</span></span>
+<span id="cb1-277"><a href="#cb1-277" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> KIND_CHECK[kind](daily[col]), <span class="ss">f&quot;</span><span class="sc">{</span>col<span class="sc">}</span><span class="ss">: dtype </span><span class="sc">{</span>daily[col]<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss"> is not </span><span class="sc">{</span>kind<span class="sc">}</span><span class="ss">&quot;</span></span>
+<span id="cb1-278"><a href="#cb1-278" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> daily.duplicated([<span class="st">&quot;bond_id&quot;</span>, <span class="st">&quot;date&quot;</span>]).<span class="bu">any</span>(), <span class="st">&quot;panel key not unique&quot;</span></span>
+<span id="cb1-279"><a href="#cb1-279" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (daily[<span class="st">&quot;date&quot;</span>] <span class="op">&lt;</span> daily[<span class="st">&quot;maturity&quot;</span>]).<span class="bu">all</span>()</span>
+<span id="cb1-280"><a href="#cb1-280" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="st">&quot;SYN-HY-D&quot;</span> <span class="kw">in</span> <span class="bu">set</span>(monthly.loc[monthly.status <span class="op">==</span> <span class="st">&quot;defaulted&quot;</span>, <span class="st">&quot;bond_id&quot;</span>]), <span class="st">&quot;survivorship: defaulted bond dropped&quot;</span></span>
+<span id="cb1-281"><a href="#cb1-281" aria-hidden="true" tabindex="-1"></a><span class="co"># no cancelled or corrected originals survive</span></span>
+<span id="cb1-282"><a href="#cb1-282" aria-hidden="true" tabindex="-1"></a>dead <span class="op">=</span> <span class="bu">set</span>(msgs.loc[msgs.trc_st.isin([<span class="st">&quot;X&quot;</span>, <span class="st">&quot;C&quot;</span>]), <span class="st">&quot;orig_msg_seq&quot;</span>].dropna().astype(<span class="bu">int</span>))</span>
+<span id="cb1-283"><a href="#cb1-283" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> trades[<span class="st">&quot;msg_seq&quot;</span>].isin(dead).<span class="bu">any</span>()</span>
+<span id="cb1-284"><a href="#cb1-284" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> trades[<span class="st">&quot;price&quot;</span>].gt(<span class="dv">200</span>).<span class="bu">any</span>(), <span class="st">&quot;decimal-shift print survived&quot;</span></span>
+<span id="cb1-285"><a href="#cb1-285" aria-hidden="true" tabindex="-1"></a><span class="co"># price-yield round trip and duration vs finite difference</span></span>
+<span id="cb1-286"><a href="#cb1-286" aria-hidden="true" tabindex="-1"></a>s0, m0, c0 <span class="op">=</span> pd.Timestamp(<span class="st">&quot;2026-04-15&quot;</span>), pd.Timestamp(<span class="st">&quot;2031-03-01&quot;</span>), <span class="fl">0.0525</span></span>
+<span id="cb1-287"><a href="#cb1-287" aria-hidden="true" tabindex="-1"></a>y_rt <span class="op">=</span> yield_from_clean(<span class="fl">97.25</span>, s0, m0, c0)</span>
+<span id="cb1-288"><a href="#cb1-288" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(clean_from_yield(y_rt, s0, m0, c0) <span class="op">-</span> <span class="fl">97.25</span>) <span class="op">&lt;</span> <span class="fl">1e-8</span></span>
+<span id="cb1-289"><a href="#cb1-289" aria-hidden="true" tabindex="-1"></a>h <span class="op">=</span> <span class="fl">1e-6</span></span>
+<span id="cb1-290"><a href="#cb1-290" aria-hidden="true" tabindex="-1"></a>fd <span class="op">=</span> <span class="op">-</span>(dirty_from_yield(y_rt <span class="op">+</span> h, s0, m0, c0) <span class="op">-</span> dirty_from_yield(y_rt <span class="op">-</span> h, s0, m0, c0)) <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> h) <span class="op">/</span> dirty_from_yield(y_rt, s0, m0, c0)</span>
+<span id="cb1-291"><a href="#cb1-291" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(fd <span class="op">-</span> mod_duration(y_rt, s0, m0, c0)) <span class="op">&lt;</span> <span class="fl">1e-6</span></span>
+<span id="cb1-292"><a href="#cb1-292" aria-hidden="true" tabindex="-1"></a><span class="co"># par bond on a coupon date prices at par</span></span>
+<span id="cb1-293"><a href="#cb1-293" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(clean_from_yield(<span class="fl">0.0525</span>, pd.Timestamp(<span class="st">&quot;2026-03-01&quot;</span>), m0, c0) <span class="op">-</span> <span class="fl">100.0</span>) <span class="op">&lt;</span> <span class="fl">1e-9</span></span>
+<span id="cb1-294"><a href="#cb1-294" aria-hidden="true" tabindex="-1"></a><span class="co"># fallen angel: the cap switches from $5mm to $1mm once the downgrade is KNOWN</span></span>
+<span id="cb1-295"><a href="#cb1-295" aria-hidden="true" tabindex="-1"></a>fa <span class="op">=</span> trades.loc[trades.bond_id <span class="op">==</span> <span class="st">&quot;SYN-IG-B&quot;</span>]</span>
+<span id="cb1-296"><a href="#cb1-296" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (fa.loc[fa.exec_ts <span class="op">&lt;</span> <span class="st">&quot;2026-06-12&quot;</span>, <span class="st">&quot;cap&quot;</span>] <span class="op">==</span> IG_CAP).<span class="bu">all</span>()</span>
+<span id="cb1-297"><a href="#cb1-297" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (fa.loc[fa.exec_ts <span class="op">&gt;=</span> <span class="st">&quot;2026-06-13&quot;</span>, <span class="st">&quot;cap&quot;</span>] <span class="op">==</span> HY_CAP).<span class="bu">all</span>()</span>
+<span id="cb1-298"><a href="#cb1-298" aria-hidden="true" tabindex="-1"></a><span class="co"># stale-price theorem check: EWMA smoothing shrinks variance by (1-theta)/(1+theta)</span></span>
+<span id="cb1-299"><a href="#cb1-299" aria-hidden="true" tabindex="-1"></a>theta, n <span class="op">=</span> <span class="fl">0.6</span>, <span class="dv">400_000</span></span>
+<span id="cb1-300"><a href="#cb1-300" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> RNG.standard_normal(n)</span>
+<span id="cb1-301"><a href="#cb1-301" aria-hidden="true" tabindex="-1"></a>ro <span class="op">=</span> np.empty(n)<span class="op">;</span> ro[<span class="dv">0</span>] <span class="op">=</span> (<span class="dv">1</span> <span class="op">-</span> theta) <span class="op">*</span> r[<span class="dv">0</span>]</span>
+<span id="cb1-302"><a href="#cb1-302" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, n):</span>
+<span id="cb1-303"><a href="#cb1-303" aria-hidden="true" tabindex="-1"></a>    ro[i] <span class="op">=</span> theta <span class="op">*</span> ro[i <span class="op">-</span> <span class="dv">1</span>] <span class="op">+</span> (<span class="dv">1</span> <span class="op">-</span> theta) <span class="op">*</span> r[i]</span>
+<span id="cb1-304"><a href="#cb1-304" aria-hidden="true" tabindex="-1"></a>var_ratio <span class="op">=</span> ro[<span class="dv">1000</span>:].var() <span class="op">/</span> r[<span class="dv">1000</span>:].var()</span>
+<span id="cb1-305"><a href="#cb1-305" aria-hidden="true" tabindex="-1"></a>rho1 <span class="op">=</span> np.corrcoef(ro[<span class="dv">1001</span>:], ro[<span class="dv">1000</span>:<span class="op">-</span><span class="dv">1</span>])[<span class="dv">0</span>, <span class="dv">1</span>]</span>
+<span id="cb1-306"><a href="#cb1-306" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(var_ratio <span class="op">-</span> (<span class="dv">1</span> <span class="op">-</span> theta) <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> theta)) <span class="op">&lt;</span> <span class="fl">0.01</span> <span class="kw">and</span> <span class="bu">abs</span>(rho1 <span class="op">-</span> theta) <span class="op">&lt;</span> <span class="fl">0.01</span></span>
+<span id="cb1-307"><a href="#cb1-307" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-308"><a href="#cb1-308" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;messages=</span><span class="sc">{</span><span class="bu">len</span>(msgs)<span class="sc">}</span><span class="ss">, clean trades=</span><span class="sc">{</span><span class="bu">len</span>(trades)<span class="sc">}</span><span class="ss">, capped prints=</span><span class="sc">{</span><span class="bu">int</span>(trades.qty_capped.<span class="bu">sum</span>())<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb1-309"><a href="#cb1-309" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;daily panel rows=</span><span class="sc">{</span><span class="bu">len</span>(daily)<span class="sc">}</span><span class="ss">, stale share=</span><span class="sc">{</span>daily<span class="sc">.</span>is_stale<span class="sc">.</span>mean()<span class="sc">:.1%}</span><span class="ss">&quot;</span>)</span>
+<span id="cb1-310"><a href="#cb1-310" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;var ratio=</span><span class="sc">{</span>var_ratio<span class="sc">:.4f}</span><span class="ss"> (theory </span><span class="sc">{</span>(<span class="dv">1</span><span class="op">-</span>theta)<span class="op">/</span>(<span class="dv">1</span><span class="op">+</span>theta)<span class="sc">:.4f}</span><span class="ss">), rho1=</span><span class="sc">{</span>rho1<span class="sc">:.4f}</span><span class="ss">&quot;</span>)</span>
+<span id="cb1-311"><a href="#cb1-311" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(monthly.to_string(index<span class="op">=</span><span class="va">False</span>, float_format<span class="op">=</span><span class="kw">lambda</span> v: <span class="ss">f&quot;</span><span class="sc">{</span>v<span class="sc">:.4f}</span><span class="ss">&quot;</span>))</span></code></pre></div>
+</section>
+<section id="b.17-desk-debrief" class="level2">
+<h2>B.17 Desk Debrief</h2>
+<ul>
+<li><strong>Every price has a clock.</strong> Store
+<code>exec_ts</code>, <code>report_ts</code>, and
+<code>knowledge_ts</code> separately, and join only on knowledge.</li>
+<li><strong>Staleness hides risk; it doesn’t remove it.</strong>
+Observed variance shrinks by <span
+class="math inline">\((1-\theta)/(1+\theta)\)</span>, and summing lagged
+betas brings the full beta back.</li>
+<li><strong>The public TRACE tape is censored</strong> at $5mm IG and
+$1mm HY. The cap follows the bond’s point-in-time rating.</li>
+<li><strong>The 15-minute window survived.</strong> One-minute reporting
+was approved in 2024 and abandoned in 2025, for both TRACE and the
+MSRB.</li>
+<li><strong>EDGAR misses the 10% hole, the redactions, and every
+144A-for-life issuer.</strong> Your covenant model has a coverage map
+whether you draw it or not.</li>
+<li><strong>Free data shrinks.</strong> FRED’s ICE series now keep 3
+years and CourtListener allows 125 requests a day by default. Cache,
+version, and assert row counts.</li>
+<li><strong>Composites are model outputs.</strong> Validate against
+later trades, never against themselves.</li>
+<li><strong>IDO or it didn’t happen</strong>, and IDO on stale prices
+didn’t happen either.</li>
+</ul>
+<p><strong>The Spec You Hand the Robot (summary).</strong> “Build
+<code>daily</code> on a full business-day grid per bond until maturity.
+Never drop defaulted bonds; flag them <code>trades_flat</code>. Clean
+messages by matching X and C records to originals by
+<code>orig_msg_seq</code>. Join ratings by <code>merge_asof</code> on
+<code>knowledge_ts</code> and assert there is no look-ahead. Compute
+caps from point-in-time ratings. Carry prices forward only with an
+explicit <code>days_stale</code>, and leave a month-end return as NaN
+when <code>days_stale</code> &gt; 5. Enforce dtypes by kind, keep keys
+unique, and pass the price–yield, duration, par, and staleness checks,
+or fail the build.”</p>
+<p><strong>Exercises.</strong></p>
+<ol type="1">
+<li>Estimate <span class="math inline">\(\theta\)</span> for each bond
+in <code>daily</code> from <span class="math inline">\(\rho_1\)</span>
+of returns on days with trades. Compare it with the variance-ratio
+estimate. Which one is more robust when trading days are irregular?</li>
+<li>Fit a Pareto tail to <code>qty_true</code> above $1mm for HY prints.
+Impute sizes for <code>1MM+</code> prints and measure the bias you
+remove from a capped VWAP.</li>
+<li>Using the EDGAR full-text syntax, write a query for 8-K exhibits
+that pair “unrestricted subsidiary” with “intellectual property,” and
+list three ways it gives false positives.</li>
+<li>Kaz insists the frames API is fine for backtests “because
+restatements are rare.” Design a test that measures how often a
+<code>companyfacts</code> value for a debt tag changes between its first
+and last <code>filed</code> date.</li>
+<li>ROBO keeps refreshing a 6,000-entry docket on PACER every hour.
+Estimate the quarterly PACER bill and redesign the job around
+CourtListener webhooks and claims-agent sites.</li>
+</ol>
+<section id="deep-dive-resource-graph" class="level3">
+<h3>Deep-Dive Resource Graph</h3>
+<p><strong>Podcasts.</strong> Bloomberg’s <em>Odd Lots</em>
+(market-structure, TRACE, and portfolio-trading episodes); <em>Flirting
+with Models</em> (Corey Hoffstein) on systematic data hygiene.</p>
+<p><strong>Practitioner Writing.</strong> Matt Levine, <em>Money
+Stuff</em> (on bond-market transparency and the “price” of untraded
+bonds); MarketAxess TraX and CP+ research; Free Law Project’s
+CourtListener documentation (<a
+href="https://wiki.free.law/c/courtlistener/help/api/rest/v4/overview"
+class="uri">https://wiki.free.law/c/courtlistener/help/api/rest/v4/overview</a>).</p>
+<p><strong>Academic Papers.</strong> Dick-Nielsen (2009), <em>Liquidity
+Biases in TRACE</em>; Dick-Nielsen (2014), <em>How to Clean Enhanced
+TRACE Data</em>; Dimson (1979), <em>Risk Measurement When Shares Are
+Subject to Infrequent Trading</em>; Getmansky, Lo &amp; Makarov (2004),
+<em>An Econometric Model of Serial Correlation and Illiquidity in Hedge
+Fund Returns</em>; Edwards, Harris &amp; Piwowar (2007), <em>Corporate
+Bond Market Transaction Costs and Transparency</em>; Bessembinder,
+Kahle, Maxwell &amp; Xu (2009), <em>Measuring Abnormal Bond
+Performance</em>; Bai, Bali &amp; Wen (2019), <em>Common Risk Factors in
+the Cross-Section of Corporate Bond Returns</em>; Dickerson, Mueller
+&amp; Robotti (2023), <em>Priced Risk in Corporate Bonds</em>;
+Dickerson, Robotti &amp; Rossetti, <em>The Corporate Bond Factor
+Replication Crisis</em> (working paper).</p>
+<p><strong>Data &amp; Code.</strong> FINRA TRACE historic and academic
+data (<a
+href="https://www.finra.org/filing-reporting/trace/historic-academic-data"
+class="uri">https://www.finra.org/filing-reporting/trace/historic-academic-data</a>);
+FINRA Rules 6730 and 6750 (<a
+href="https://www.finra.org/rules-guidance/rulebooks/finra-rules/6730"
+class="uri">https://www.finra.org/rules-guidance/rulebooks/finra-rules/6730</a>,
+<a
+href="https://www.finra.org/rules-guidance/rulebooks/finra-rules/6750"
+class="uri">https://www.finra.org/rules-guidance/rulebooks/finra-rules/6750</a>);
+SEC EDGAR APIs (<a
+href="https://www.sec.gov/edgar/sec-api-documentation"
+class="uri">https://www.sec.gov/edgar/sec-api-documentation</a>) and
+fair access (<a href="https://www.sec.gov/os/accessing-edgar-data"
+class="uri">https://www.sec.gov/os/accessing-edgar-data</a>); RECAP
+Fetch (<a
+href="https://wiki.free.law/c/courtlistener/help/api/rest/v4/recap"
+class="uri">https://wiki.free.law/c/courtlistener/help/api/rest/v4/recap</a>);
+PACER fees (<a
+href="https://pacer.uscourts.gov/pacer-pricing-how-fees-work"
+class="uri">https://pacer.uscourts.gov/pacer-pricing-how-fees-work</a>);
+EMMA (<a href="https://emma.msrb.org/"
+class="uri">https://emma.msrb.org/</a>); OPRA (<a
+href="https://www.opraplan.com/"
+class="uri">https://www.opraplan.com/</a>); Cboe DataShop (<a
+href="https://datashop.cboe.com/"
+class="uri">https://datashop.cboe.com/</a>); FRED HY OAS (<a
+href="https://fred.stlouisfed.org/series/BAMLH0A0HYM2"
+class="uri">https://fred.stlouisfed.org/series/BAMLH0A0HYM2</a>); OBAP
+(<a href="https://openbondassetpricing.com/"
+class="uri">https://openbondassetpricing.com/</a>) and its pipeline (<a
+href="https://github.com/Alexander-M-Dickerson/trace-data-pipeline"
+class="uri">https://github.com/Alexander-M-Dickerson/trace-data-pipeline</a>);
+WRDS Bond Returns (<a
+href="https://wrds-www.wharton.upenn.edu/pages/grid-items/wrds-bond-returns/"
+class="uri">https://wrds-www.wharton.upenn.edu/pages/grid-items/wrds-bond-returns/</a>);
+edgartools (<a href="https://github.com/dgunning/edgartools"
+class="uri">https://github.com/dgunning/edgartools</a>); OpenBB (<a
+href="https://github.com/OpenBB-finance/OpenBB"
+class="uri">https://github.com/OpenBB-finance/OpenBB</a>).</p>
+<hr />
+</section>
 </section>
 </section>
 </body>
