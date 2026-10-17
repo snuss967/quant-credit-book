@@ -17,3 +17,5 @@ Part I is the arrival kit: a phrasebook, a short history of how the country got 
 The trend that defines this part is electronification, and the reason it matters is epistemological rather than technological. A phone market produces anecdotes; an electronic market produces a dataset. Once the dataset exists, the restructuring banker's knowledge stops being an anecdote too. It becomes a feature, with a timestamp, that can be tested against the hand history. That is the whole bridge, and Part I is where we pour the footings.
 
 A warning that applies to the whole book and especially here: the two tribes fail in mirror-image ways. The quant treats bonds as exchangeable time series and is surprised by the uptier. The banker treats every credit as unique and cannot size, hedge, or measure. Theo's job, and yours, is to be surprised by neither. Ines puts it more simply. "You already know who at the table knows more than you. You just never wrote it down."
+
+<!-- STATUS: COMPLETE -->

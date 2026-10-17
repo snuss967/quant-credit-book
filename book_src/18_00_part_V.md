@@ -17,3 +17,5 @@ Ines runs this part of the book, because it is a poker room with worse lighting.
 **Chapter 22, Market-Structure Regulation & the Forces Reshaping Liquidity (TREND),** takes each rule that changed the plumbing (TRACE reporting-time changes, T+1 settlement, the Treasury clearing mandate, Basel III endgame and dealer capital, CDS reporting and clearing) and works through what it did to the economics of a desk.
 
 The trend that defines this part is that the basket became the unit of liquidity. Single bonds still trade one at a time, by negotiation, but an increasing share of risk moves in portfolios and ETF creation units, priced by engines in seconds, and the data exhaust from those trades is the raw material for everything in Part III. Mags, asked about this, says that back in her day you could get a two-way market on a single bond by calling someone who owed you a favor, and that it was worse, and that she misses it.
+
+<!-- STATUS: COMPLETE -->

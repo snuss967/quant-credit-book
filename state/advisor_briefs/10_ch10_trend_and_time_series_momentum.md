@@ -260,3 +260,5 @@ Supporting pages: `Dynkin pp.608–609` (EMC 6.34%/yr, IR 1.56; 9.71%/yr Jul 200
 9. **Exchange-traded credit futures.** CME's Bloomberg corporate index futures (CHECK launch dates, open interest, CTA adoption) for Appendix C and Ch 22.
 10. **Private credit marks and spurious momentum.** Smoothed BDC/private marks create untradable serial correlation (Ch 17 box).
 11. **Appendix C Trend Tracker entries from this brief:** every dated figure in §6.3 and §6.4, plus CTA AUM ≈$340bn (flat vs $317bn in 2014), SG Trend 2008 +20.9% and 2022 +27.4%, the 2024–25 drawdown (−20.4%/−21.8%), CTAs slower and more dispersed since 2007, and synthetic credit indices as a standard "alternative market."
+
+<!-- STATUS: COMPLETE -->

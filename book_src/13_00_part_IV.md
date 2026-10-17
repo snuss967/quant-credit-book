@@ -17,3 +17,5 @@ Part IV is Theo's home turf, which is exactly why it is the most dangerous part 
 **Chapter 17, Private Credit & the Public–Private Convergence (TREND),** closes the part with the trend that is eating the old job: the growth of private credit, BDC marks against public comparables, private-to-public refinancings, systematic approaches to a market with no TRACE, and what a public-markets quant desk can actually arbitrage.
 
 The trend that defines this part is the replacement of the bankruptcy by the exchange. The modal default is no longer a petition in Delaware or Houston; it is a transaction, negotiated among a subset of lenders, that leaves the rest holding a different instrument than they bought. For the quant, this means the return distribution has a new mass point and the historical recovery data has a new bias. For the banker, it means the thing you did for a living is now a feature. The Ad Hoc Group, represented by counsel, declines to comment, but reserves all rights.
+
+<!-- STATUS: COMPLETE -->

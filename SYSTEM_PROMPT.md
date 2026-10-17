@@ -52,6 +52,12 @@ Throughout the book, explicitly teach the reader how to weaponize their PJT RSSG
 - **Label illustrative numbers.** Historical prices, spreads, recoveries, and dollar amounts must be either sourced (cite the source) or explicitly marked *illustrative* / *approximate*.
 - **Code written to run.** Write every Python reference implementation so it executes as written on numpy/scipy/pandas, with seeded randomness, and include numerical sanity checks (e.g., Monte Carlo vs. closed-form Merton spread) in the code. *Executing and debugging examples is the lowest priority:* it happens in cleanup passes, never at the expense of research or new writing.
 
+### Durability Rules (Non-Negotiable; agents die without warning when usage limits hit)
+- **Write early, write often.** Create your output file in your first few tool calls (skeleton with headings), then append each section the moment it is drafted. Never hold more than ~1,500 words of prose or ~10 sourced facts only in your context; append research facts to your file as you find them.
+- **Completion marker.** Your final action is appending `<!-- STATUS: COMPLETE -->` as the last line of your output file. No marker means the file is partial.
+- **Resume, never restart.** If your output file already exists, read it first. If it ends with the marker, stop and report. If not, continue from the last finished section without rewriting existing content.
+- Check `python3 tools/status.py` to see what is complete, partial, or missing.
+
 ---
 
 ## 3. ARCHITECTURAL PILLARS & MASTER TABLE OF CONTENTS

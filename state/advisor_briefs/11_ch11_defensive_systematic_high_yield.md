@@ -335,3 +335,5 @@ ICE BofA US HY Total Return Index, FRED BAMLHYH0A0HYM2TRIV (CSV https://fred.stl
 7. **Capital-aware defensive HY for insurers.** Blackstone p.2 (Solvency II capital-charge optimization); NAIC designations; the low-risk tilt as a capital-efficiency play; Trend Watch on insurer HY allocations.
 8. **Default clustering and breadth.** Bolder p.324: asset correlation decreasing in PD means CCC risk is largely idiosyncratic, which is the formal case for breadth over concentration in systematic CCC; connect to Vasicek single-factor loss distributions and the Ch 28 Kelly-with-JTD sizing.
 9. **Trend Tracker entries for Appendix C:** HY index 62% BB and 3.1y duration at YE2025 (State Street); distressed exchanges 65% of 2025 defaults (Moody's) and 94% of D/SD downgrades in the 12 months to Feb 2026 (The DESK, CHECK attribution); CCC OAS 12.78% vs HY 3.23% on 15 Oct 2026 (FRED); private credit default rate 6% April 2026 (Fitch via The DESK); Man Numeric >90% electronic order flow (May 2023).
+
+<!-- STATUS: COMPLETE -->

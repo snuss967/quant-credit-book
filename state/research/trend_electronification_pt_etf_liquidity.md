@@ -290,3 +290,5 @@ The electronic market is the market for *boring* risk. Your edge sits in the 20�
 - https://www.fi-desk.com/back-to-school-credits-september-report-card-and-q4-starts-with-a-bang/
 
 **Not verified this session (search budget exhausted; SSRN 403):** the academic PT, all-to-all and ETF-basket literature. That includes O'Hara–Zhou (2021) on electronic evolution, Hendershott–Livdan–Schürhoff on all-to-all, Koont–Ma–Pástor–Zeng on bond ETF basket management, and Barclays/academic PT-cost studies. Edition 2 should fetch these before citing them.
+
+<!-- STATUS: COMPLETE -->

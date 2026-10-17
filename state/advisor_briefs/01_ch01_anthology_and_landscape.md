@@ -323,3 +323,5 @@ Also useful but not for quotation: Moyer p.55 Figure 2-18 (CDO share of low-rate
 8. **April 2025 tariff volatility as a liquidity case study.** PT monthly record \$172bn; HY PT 20% of activity on some days; e-trading held up (Man 2023's thesis that stress accelerates electronification). Ch 19–20 case study candidate.
 9. **Quant credit in distressed.** Man 2022 p.42 says it has not happened; the book's Part IV is the argument that it can. Chapter 1 should promise it and Ch 13–16 should deliver the codification.
 10. **Open research questions to chase next edition:** Fed Z.1 holder shares (exact 2025 numbers); the May 12, 2020 SMCCF ETF purchase date; Jane Street/Citadel Securities credit shares from a non-self-reported source; the Altice France CLO exposure figures; the Robeco/eVestment 6.5% quant share; a verified Odd Lots episode list on credit market structure; CDX index volumes 2025; HYG/LQD/JAAA AUM at YE2025.
+
+<!-- STATUS: COMPLETE -->

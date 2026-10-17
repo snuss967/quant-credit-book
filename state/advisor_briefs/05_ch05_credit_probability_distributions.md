@@ -296,3 +296,5 @@ The PitchBook headline "Leveraged loan default rate jumps as First Brands takes 
 8. **§ in Ch 11, "Return Distributions Under a Sell Discipline."** Dynkin's long-horizon return model conditioned on spread regime and sell rules (p.353–354, p.400): the distribution a defensive HY mandate actually faces, including the fallen-angel forced-sale penalty.
 9. **§ in Ch 12, "Dispersion as a Mixture-Weight Signal."** CCC/HY OAS ratio history (FRED) as a regime indicator for multi-asset credit allocation.
 10. **Appendix C Trend Tracker entries to add:** DE share of defaults by year (2022: 45–50%; 2024: 59.3% S&P / record Moody's; 2025: ~65%); first-lien recovery by year (Moody's series 2020–2024, CHECK) and the 55% projection (Sept 2026); LME counts (23/34/28 for 2023/2024/2025, Octus); ruling dates (§6.5); private-credit AUM (\$158bn 2010 → ~\$2tn 2024 → >\$2tn 2026).
+
+<!-- STATUS: COMPLETE -->

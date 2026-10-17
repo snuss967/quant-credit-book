@@ -13,3 +13,5 @@ After Chapter 28 come the appendices, which are not optional reading so much as 
 The trend that defines this part is the pod. The multi-strategy platform, with its tight drawdown limits, its centralized risk, and its appetite for uncorrelated idiosyncratic return, has become the dominant employer of systematic credit talent, and its constraints shape what a PM can hold, for how long, and at what size. Under those constraints the motto is no longer a slogan. IDO or it didn't happen is the allocation rule: capital goes to the horizons and the people who produce return that survives the mute button of Part III.
 
 Ines closes the floor. "You've seen the hand history. You know the pot. Go run the table."
+
+<!-- STATUS: COMPLETE -->

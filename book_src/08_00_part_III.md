@@ -17,3 +17,5 @@ The first time Theo did it, the solo channel was silent. The bond he loved, the 
 **Chapter 12, Multi-Asset Credit Allocation,** zooms out to Nuveen's framework for rotating across high yield, loans, emerging-market debt, preferreds, securitized credit, and private credit: regimes, valuation per unit of default loss and per unit of volatility, risk budgets, and liquidity tiers, so that the allocation can be unwound in the order the market will let you.
 
 The trend that defines this part is that systematic credit has grown a track record. Factor and trend strategies in credit used to be backtests in white papers; they now have live performance through two full drawdowns, and the sourced figures in these chapters let you judge them. Mags remains unconvinced. "Back in my day we had one factor. It was called 'I know the CFO.'" Then she asks to see the momentum chart again.
+
+<!-- STATUS: COMPLETE -->

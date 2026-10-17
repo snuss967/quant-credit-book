@@ -355,3 +355,5 @@ Facts (Man p.29–30, anonymized issuer): 2016 company events (customer retentio
 8. **Systematic active credit ETFs and model portfolios (TREND).** SSGA's conversions (Dec 2023) and the broader move of factor credit into ETF wrappers; needs fresh AUM and launch-date research (web budget was exhausted this session).
 9. **ML factor zoos for bonds.** OBAP's 341-predictor panel (2002–2022) and the DJM Bayesian-model-averaged SDF (OOS Sharpe 1.5–1.8) as the Ch 7 frontier: purged, issuer-grouped CV applied to the bond zoo, and the deflated Sharpe for 108 signals.
 10. **The RSSG feature set as a factor.** Convert Ch 13's Priming Risk Score and Ch 25's covenant-capacity variables into a cross-sectional "document-risk" factor; test whether it is spanned by value/quality or is new. This is the book's own contribution and should be queued as a research target with a synthetic-panel first draft.
+
+<!-- STATUS: COMPLETE -->

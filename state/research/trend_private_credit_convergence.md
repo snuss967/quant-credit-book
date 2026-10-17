@@ -230,3 +230,5 @@ The response to the stress has been infrastructure, not retreat. Institutional f
 - Jefferies 2025 Global Secondary Market Review (10 Feb 2026), via the Wikipedia secondary-market page.
 
 **Shelf:** `Nuveen_Multi_Asset_Credit_Quant_Framework` pp. 2, 5, 6, 9; `Man_Quantitative_Credit_Alpha_Early_Mover_2022` p. 41.
+
+<!-- STATUS: COMPLETE -->

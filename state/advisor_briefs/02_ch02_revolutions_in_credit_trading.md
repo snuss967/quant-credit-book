@@ -255,3 +255,5 @@ $P^{\text{ETF}}_t - \mathrm{NAV}_t = -\,\mathcal{C}^{\text{redeem}}_t + \eta_t$,
 8. **Odd lots and retail (new section):** average trade size \$323k–\$381k, 125k trades/day, retail-platform flow and what it does to TRACE-based signals.
 9. **Trend Tracker (App C) seeds:** TRACE milestones; e-share and PT-share tables; bond-ETF AUM; non-bank share; the one-minute saga; the 2025 record days; SIFMA 2026 YTD ADV.
 10. **Open questions for the next edition:** first electronic PT dates; SMCCF purchase start dates and peak holdings from primary Fed documents; Greenwich full-year 2025 e-share; Trumid's 2026 PT page; the Hendershott–Madhavan saving figure; podcast verification.
+
+<!-- STATUS: COMPLETE -->

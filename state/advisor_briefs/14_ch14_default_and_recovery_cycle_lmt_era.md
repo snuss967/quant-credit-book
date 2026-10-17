@@ -325,3 +325,5 @@ Secondary pages the writer may draw on without quoting: Moyer p.336 (prepacks <7
 8. **Litigation claims as a recovery tranche.** Serta's \$261mm plus 9% is a six-year zero-coupon with judicial optionality; a section on valuing and trading excluded-lender claims (and litigation finance in restructurings) would be new to the shelf.
 9. **Recovery by coalition membership: a dataset chapter.** Collect, for every LME since 2016, the participating vs. excluded recovery outcomes at emergence; estimate $(\pi,\mu_{in},\mu_{out})$ by year and by LME type. This would be the book's most-cited table if built.
 10. **Prediction markets and insolvency (HBRT, 13 Oct 2026, Organek & Packin).** An oddity worth a Trend Watch in Ch 26 or 28: market-implied bankruptcy probabilities from prediction venues vs. CDS and our hazard models.
+
+<!-- STATUS: COMPLETE -->

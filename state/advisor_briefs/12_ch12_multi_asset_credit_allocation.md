@@ -196,3 +196,5 @@ SEC Rule 22e-4, adopted Oct 13, 2016 (https://www.sec.gov/rules-regulations/2016
 - **New chapter candidate, "Cross-sector style factors."** Carry, value (spread per expected loss), momentum and defensive tilts across credit sectors rather than within them (Brooks–Palhares–Richardson, *Style Investing in Fixed Income*, JPM 2018; TITLE-ONLY), with the AQR R² result as the null hypothesis.
 - **New section, "Structural breaks in the mean-reversion target."** The HY index quality migration (37% → 51% → 53.55% BB), the office-CMBS reset (Nuveen p.4), and composition-adjusted z-scores; connect to Chapter 7's fractional differentiation and regime labels.
 - **Trend Tracker entries for Appendix C:** Apr 7–9, 2025 spread peaks; Sep 2025 First Brands/Tricolor; Oct 14, 2025 "cockroach" call; Nov 17, 2025 22e-4 reporting compliance; Q1 2026 first net BDC outflows; Mar 27–30, 2026 volatility spike; Oct 2026 CCC OAS above 12.8% with the 10Y above 5%.
+
+<!-- STATUS: COMPLETE -->

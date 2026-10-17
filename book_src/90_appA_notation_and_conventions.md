@@ -258,3 +258,5 @@ One line each, alphabetical, with a joke where the term can bear one.
 - **Yield-to-worst.** The lowest yield across all call and maturity dates for a callable bond, assuming the issuer exercises against you. The yield you should assume.
 - **Z-spread.** The constant spread added to every point on a zero-coupon discount curve so that discounted cash flows equal the bond's dirty price.
 - **Zero floor.** A minimum level (often zero, sometimes higher) for the reference rate in a floating-rate loan, so the coupon cannot fall below margin plus floor. An interest-rate option the borrower sold without pricing it.
+
+<!-- STATUS: COMPLETE -->

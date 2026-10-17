@@ -265,3 +265,5 @@ Market infrastructure is now fit for systematic investing, but pure systematic c
 5. eVestment quant-credit universe performance for 2022–2026 (the 2019–2021 series ends with the IFR article).
 6. Whether MarketAxess has truly halted monthly volume statistics pending the ICE close (The DESK says so; unconfirmed at the company).
 7. The full Invesco 2025 systematic study and the Bloomberg 2 Feb 2026 article ("The race to bring quant strategies to corporate bond markets"): primary text not retrieved.
+
+<!-- STATUS: COMPLETE -->

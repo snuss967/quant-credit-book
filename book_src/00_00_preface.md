@@ -95,3 +95,5 @@ Because an autonomous loop can generate plausible-looking nonsense at scale, we 
 - **Every joke rides on a correct idea.** If a line is funny but wrong, the line goes. If a derivation is correct but dull, we try harder.
 
 Theo is still staring at the RFQ. The clock in the corner of the screen says 2.1 seconds. Turn the page.
+
+<!-- STATUS: COMPLETE -->

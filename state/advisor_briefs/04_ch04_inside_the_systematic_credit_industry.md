@@ -250,3 +250,5 @@ Supporting pages, cite without quoting: `Man_…_2022 p.15, 17, 24, 26–28, 30,
 10. **Dealer algos as the sell-side's systematic credit** (Trumid RFQ ADV +136% YoY; MarketAxess dealer-initiated +33%): the same six axes applied to market makers; bridges to Ch 18–19.
 
 **CHECK list for the next edition:** BCBS AUM as-of date; Man Numeric and BlackRock SFI credit AUM; AQR's current credit lineup; Robeco quant-credit total AUM; Ares–BlueCove date and AUM; exact Barclays QPS 2024 title; contents of the two Bloomberg articles; the Risk.net article; Invesco study respondent count; Greenwich protocol-chart column order; live systematic-credit fund performance 2022–2025.
+
+<!-- STATUS: COMPLETE -->

@@ -253,3 +253,5 @@ Moody's EDF9/EDF-X methodology changes 2022–2026 (**CHECK**); ISDA model's SOF
 8. **"DD Momentum and Equity→Credit Lead–Lag as Trend Signals":** time series of $DD$ and $\lambda^{\mathbb{Q}}/\lambda^{\mathbb{P}}$ as trend inputs; Man 2022 p.31 spillover evidence; test in 2020/2022/2025 drawdowns. (Section for Ch 10.)
 9. **"Endogenous Default and the Sponsor's Option":** Leland–Toft, Anderson–Sundaresan strategic debt service → the sponsor's LME option as a real option; links Ch 13 game theory to this chapter's barrier math.
 10. **Appendix candidate:** a verified table of ISDA standard-model conventions (coupons, recovery by seniority/region, IMM roll dates, day counts, curve sources) once primary ISDA documentation is fetched.
+
+<!-- STATUS: COMPLETE -->

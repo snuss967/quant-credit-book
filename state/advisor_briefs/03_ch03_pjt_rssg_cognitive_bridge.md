@@ -285,3 +285,5 @@ Dec 31, 2024: Fifth Circuit (Serta) says no; N.Y. Appellate Division (Mitel) say
 8. **New Trend Tracker thread (App C): "Blocker adoption."** J.Crew/Serta/Chewy protection shares by quarter (Covenant Review/CreditSights, 9fin, Octus figures above, all CHECK) as a covenant-quality time series feeding Ch 25's parser outputs.
 9. **Ch 2/22 thread: "Auto-X and the de-skilling of small tickets."** The 2016 (19% IG electronic) → 2024 (30% of dealer volume no-touch; 57%/70% at top-tier and NBLPs) → 2025 (36% of client RFQ tickets automated) arc is a structural trend with desk-economics consequences (who makes money on odd lots now, and what the human trader's marginal product is).
 10. **Open research question for Edition 2:** an event study of secondary loan prices and dealer quotes in the 60 trading days before announced uptiers and drop-downs (Serta, Boardriders, TriMark, Mitel, Incora, Pluralsight, Robertshaw), using Rule 2019 statements and 8-Ks as event dates. If Buccola & Nini (or anyone) has done it, cite it; if not, the book should.
+
+<!-- STATUS: COMPLETE -->

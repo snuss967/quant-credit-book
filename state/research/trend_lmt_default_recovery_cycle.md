@@ -296,3 +296,5 @@ The cognitive shift is from asking "will this deal get done and what is my recov
 - S&P: Aug 15, 2024 DDE study; Sept 24, 2026 Credit Conditions; Aug 20, 2026 forecast; Aug 13, 2026 private credit
 - Fitch: private credit default rate releases of 30 Jul and 13 Aug 2026
 - SSRN: 6103369, 5247506, 4821620, 4143928, 5014946, 4854111, 6204978
+
+<!-- STATUS: COMPLETE -->

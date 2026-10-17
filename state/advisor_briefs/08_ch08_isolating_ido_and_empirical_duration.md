@@ -259,3 +259,5 @@ Episode levels (FRED, percent): 2021-12-31 10y 1.52, 2y 0.73 → 2022-12-30 10y 
 8. **Ch 14/13 link: hedge ratios around LMT events.** The Alltel event-study logic (hedge ratio collapses before the downgrade) applied to priming events: does a bond's rate beta drop before a Serta-style uptier is announced? If yes, it is a free early-warning feature for the Priming Risk Score.
 
 *End of brief.*
+
+<!-- STATUS: COMPLETE -->

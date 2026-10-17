@@ -251,3 +251,5 @@ Facts (DRR 2026): STR premium −0.99%/month (t = −4.46) with month-end prices
 8. **Section: Transfer and panel learning across markets.** EUR/EM corporates, loans (Refinitiv/IHS daily pricing on 6,500 facilities per Man 2022 p.41), CDS as a cleaner label source; equity-to-bond transfer (Man 2022 p.31 on equity momentum spillover).
 9. **Trend thread for Appendix C.** Dated milestones: TRACE 2002; CP+ May 2017; BBW 2019; DMR/retraction 2023; openbondassetpricing WRDS panels 2023–2026; Glass Box JFE 2026; DRR April 2026. Add the FRED dispersion fact (CCC 12.78% vs HY 3.23%, 2026-10-15) as a regime marker to revisit.
 10. **Open research questions to chase next edition.** Confirm the 23% figure in Dick-Nielsen et al.; confirm Feng et al.'s Sharpe is gross; find López de Prado's and Campbell Harvey's podcast episodes; verify 2020/2022/2008 HY OAS extremes from a full-history FRED pull; obtain the Bai–Bali–Wen retraction notice text; confirm the Kelly–Malamud–Zhou DOI; check whether Dickerson–Nozawa–Robotti "Factor Investing with Delays" quantifies ratings/fundamentals lags usable as a feature-timing rule.
+
+<!-- STATUS: COMPLETE -->

@@ -26,3 +26,17 @@ How the book gets made, edition after edition. Every stage has one owner, one se
 6. **Canonical homes.** Each case study and each foundation concept has exactly one canonical chapter, set in `state/reviews/edN/preflight_*.md`. Every other chapter cross-references it instead of retelling it.
 7. **Web search is shared and rate-limited.** Search before you fetch only when you don't know the primary source. Prefer WebFetch on known primary URLs (regulators, courts, exchanges, papers). Never repeat a search whose answer already sits in `state/research/`. If search is throttled, fall back to fetching primary sources directly.
 8. **Commit early, commit often.** Snapshot agent output to git at every turn boundary. Ship each edition as a single tagged commit message ("Ship Edition N").
+
+## Durability & Restart Rules
+
+*Added after the 2026-10-17 outage. Around 36 concurrent agents exhausted the session usage limit near 23:25 UTC, and every in-flight agent died. Files on disk survived. Research and drafts held only in agent context were lost: about 49 research dossiers, every chapter writer, and 9 advisors.*
+
+1. **Write early, write often.** Every agent creates its output file within its first few tool calls, as a skeleton with headings, then appends each section as soon as it is drafted. Never hold more than about 1,500 words of prose or about 10 sourced facts only in context. Researchers append facts to the dossier's evidence table as they find them.
+2. **Completion marker.** An agent's final action is appending `<!-- STATUS: COMPLETE -->` as the file's last line. A file without the marker is PARTIAL by definition.
+3. **Resume, never restart.** An agent whose output file already exists reads it first. If it is COMPLETE, the agent returns immediately. If it is PARTIAL, the agent continues from the last finished section and does not rewrite what exists.
+4. **Status-driven relaunch.** Restarts are built from `python3 tools/status.py --json`: COMPLETE items are skipped, PARTIAL items resumed, MISSING items started. Never relaunch from memory.
+5. **Usage pacing.** Cap live agents at about 20 (about 10 workflows). Priority order: (a) the current edition's chapters, (b) research feeding the next edition, (c) reviews, (d) cleanup. Launch a lower tier only when the higher tiers are already running.
+6. **Limit handling.** When agents fail with a session or usage limit, stop launching. Record the reset time in the ledger, schedule a resume (`send_later`) for reset + 2 minutes, and resume from `tools/status.py`.
+7. **Retry once.** Workflow scripts retry a failed agent once. Persistent failures are returned in the result and recorded in the ledger.
+8. **Snapshots.** A background auto-commit runs every 10 minutes, plus a commit at every turn boundary, so partial files reach the remote within 10 minutes.
+9. **Let unsaved work finish.** Do not kill a running agent that holds unsaved research unless it is duplicating other work. A stopped agent's context is lost.

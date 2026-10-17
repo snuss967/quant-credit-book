@@ -67,6 +67,12 @@ INITIAL_STATE = {
     "expansion_queue": [],
 }
 
+DURABILITY = """DURABILITY (non-negotiable; you can be killed at any moment by a usage limit):
+- Create your output file in your first few tool calls and append each section as soon as it is drafted; never hold more than ~1,500 words or ~10 sourced facts only in context.
+- If your output file already exists, read it first: if it ends with `<!-- STATUS: COMPLETE -->` and your task is new writing, report and stop; if it is partial, continue from the last finished section without rewriting.
+- When EXPANDING a complete file, first delete its `<!-- STATUS: COMPLETE -->` line, then append, then restore the marker as the last line when done.
+- Your final action is appending `<!-- STATUS: COMPLETE -->` as the last line of your output file."""
+
 _stop = False
 
 
@@ -166,7 +172,9 @@ Strategize and dissect, then write:
 2. Grow the TOC in ./SYSTEM_PROMPT.md section 3 using the growth rule (new chapters as NN_chNNb_slug.md), and update ./state/exploratory_space.md.
 3. Replace `expansion_queue` in ./state/book_state.json with 20–40 targets in the form "FILE.md: description", ordered by leverage, with new chapters and trend threads first. Set "edition" to {edition + 1}. Leave `iteration`, `last_build_timestamp`, `chapters`, and `attempts` alone.
 4. Append the Edition {edition + 1} plan to ./CHANGELOG.md.
-Research and planning are your job; do not run code examples."""
+Research and planning are your job; do not run code examples.
+
+{DURABILITY}"""
 
 
 def advisor_prompt(task, target_file, stem, brief_path, edition):
@@ -186,7 +194,9 @@ Your priority is RESEARCH: web searches for the latest dated, sourced trend data
 7. 5–10 jokes, analogies, or running-gag beats that each teach a correct idea, in the style bible's voice and cast.
 8. Resource-graph candidates flagged VERIFIED-URL or TITLE-ONLY.
 9. Two follow-up expansion targets ("FILE.md: description") and any new TOC chapters the research justifies.
-Modify no other files except new research notes in ./state/research/."""
+Modify no other files except new research notes in ./state/research/.
+
+{DURABILITY}"""
 
 
 def writer_prompt(iteration, edition, task, target_file, briefs):
@@ -200,7 +210,9 @@ INSTRUCTIONS FOR THIS TURN (research and writing first; do not spend turns runni
 3. Write at least 3,000–5,000 words of new, dense, rigorous, and entertaining content into ./book_src/{target_file}: LaTeX derivations, Trend Watch boxes, a `### Specification for AI Implementation` block with carefully written Python, a deep case study, and a `### Deep-Dive Resource Graph`. Expand; never delete valid content. If the chapter would exceed 15,000 words, continue in a new file that sorts right after it (e.g. NN_chNNb_...md).
 4. If your research shows the TOC is missing a chapter or section, add it to SYSTEM_PROMPT.md section 3 (growth rule) and queue it.
 5. Run `BUILD_PDF=0 ./build_book.sh`; it must succeed.
-6. Update ./state/book_state.json: remove the completed task from the front of `expansion_queue`, append it to `completed_modules`, record new case studies under `case_studies`, and append 2 new granular sub-topics ("FILE.md: description") to the end of `expansion_queue`. Leave `edition`, `iteration`, `last_build_timestamp`, `chapters`, and `attempts` alone; the orchestrator owns them."""
+6. Update ./state/book_state.json: remove the completed task from the front of `expansion_queue`, append it to `completed_modules`, record new case studies under `case_studies`, and append 2 new granular sub-topics ("FILE.md: description") to the end of `expansion_queue`. Leave `edition`, `iteration`, `last_build_timestamp`, `chapters`, and `attempts` alone; the orchestrator owns them.
+
+{DURABILITY}"""
 
 
 # ------------------------------------------------------------- iteration ---
