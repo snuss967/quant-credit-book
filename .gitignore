@@ -1,0 +1,6 @@
+# Derived page text of the source library: large, regenerable (python3 index_pdfs.py)
+state/pdf_pages/
+state/*.bak
+__pycache__/
+*.pyc
+.scratch/

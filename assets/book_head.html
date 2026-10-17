@@ -1,0 +1,41 @@
+<style>
+  :root {
+    --ink: #1d1f23; --paper: #fbfaf7; --muted: #5f646d; --rule: #dedbd2;
+    --accent: #8a3b12; --box: #f2efe6; --code: #f4f2ec; --link: #1f5fa8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #e7e5df; --paper: #16171a; --muted: #a2a6ad; --rule: #34363b;
+      --accent: #f0a46b; --box: #212328; --code: #1d1f23; --link: #7fb2ef;
+    }
+  }
+  html { background: var(--paper); }
+  body {
+    max-width: 46em; margin: 0 auto; padding: 2em 16px 6em;
+    background: var(--paper); color: var(--ink);
+    font: 17px/1.62 "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  }
+  a { color: var(--link); }
+  h1, h2, h3, h4 { font-family: "Avenir Next", "Segoe UI", Helvetica, Arial, sans-serif; line-height: 1.25; }
+  h1 { color: var(--accent); border-bottom: 2px solid var(--rule); padding-bottom: .3em; margin-top: 3em; }
+  h1.title { border: none; margin-top: 1em; font-size: 2.1em; }
+  p.subtitle { color: var(--muted); font-style: italic; }
+  blockquote {
+    background: var(--box); border-left: 4px solid var(--accent); margin: 1.4em 0;
+    padding: .7em 1.1em; color: var(--ink);
+  }
+  pre, code { font-family: "JetBrains Mono", Menlo, Consolas, monospace; font-size: .86em; }
+  pre { background: var(--code); padding: .9em; overflow-x: auto; border-radius: 4px; border: 1px solid var(--rule); }
+  table { border-collapse: collapse; display: block; overflow-x: auto; font-size: .9em; margin: 1.2em 0; }
+  th, td { border: 1px solid var(--rule); padding: .35em .6em; vertical-align: top; }
+  th { background: var(--box); }
+  hr { border: none; border-top: 1px dashed var(--rule); margin: 4em 0; }
+  nav#TOC { background: var(--box); padding: 1em 1.5em; border-radius: 6px; font-size: .92em; }
+  nav#TOC ul { padding-left: 1.2em; }
+  mjx-container[display="true"], math[display="block"] { overflow-x: auto; overflow-y: hidden; }
+  @media print {
+    body { max-width: none; font-size: 11pt; }
+    h1 { page-break-before: always; }
+    pre, blockquote, table { page-break-inside: avoid; }
+  }
+</style>
