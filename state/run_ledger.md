@@ -22,18 +22,18 @@ Usage reached 30% of the window in about 15 minutes, about 75% of it from Fable 
 
 | Run | Stage | Owns | Status |
 | :--- | :--- | :--- | :--- |
-| resilient-ch-1 | 2–3 | Ch 1 (resume seed), 2, 16 | running |
-| resilient-ch-2 | 2–3 | Ch 3, 4, 17 | running |
-| resilient-ch-3 | 2–3 | Ch 5, 6, 18 | running |
-| resilient-ch-4 | 2–3 | Ch 7, 8, 19 | running |
-| resilient-ch-5 | 2–3 | Ch 9, 10, 20, 21 | running |
-| resilient-ch-6 | 2–3 | Ch 11, 12, 22, 23 | running |
-| resilient-ch-7 | 2–3 | Ch 14, 24, 25 | running |
-| resilient-ch-8 | 2–3 | Ch 27, 28 | running |
-| legacy g6 | 2–3 | Ch 13 (advisor survived the outage; its writer follows) | running (pre-durability prompt) |
-| legacy g1 | 2–3 | Ch 15 (advisor survived; writer follows) | running (pre-durability prompt) |
-| legacy g5 | 2–3 | Ch 26 (advisor survived; writer follows) | running (pre-durability prompt) |
-| research-trends-AB | 1 | TSMOM in credit; loans/CLOs; market-structure regulation; dealers/CDS/index; academic frontier; AI/LLMs; then the Fable map `exploratory_space_trends_AB.md` | running |
+| resilient-ch-1 | 2–3 | Ch 1 (resume seed), 2, 16 | stopped 23:48 (outputs on disk) |
+| resilient-ch-2 | 2–3 | Ch 3, 4, 17 | stopped 23:48 (outputs on disk) |
+| resilient-ch-3 | 2–3 | Ch 5, 6, 18 | stopped 23:48 (outputs on disk) |
+| resilient-ch-4 | 2–3 | Ch 7, 8, 19 | stopped 23:48 (outputs on disk) |
+| resilient-ch-5 | 2–3 | Ch 9, 10, 20, 21 | stopped 23:48 (outputs on disk) |
+| resilient-ch-6 | 2–3 | Ch 11, 12, 22, 23 | stopped 23:48 (outputs on disk) |
+| resilient-ch-7 | 2–3 | Ch 14, 24, 25 | stopped 23:48 (outputs on disk) |
+| resilient-ch-8 | 2–3 | Ch 27, 28 | stopped 23:48 (outputs on disk) |
+| legacy g6 | 2–3 | Ch 13 (advisor survived the outage; its writer follows) | stopped 23:48 (writer partial on disk) |
+| legacy g1 | 2–3 | Ch 15 (advisor survived; writer follows) | stopped 23:48 (writer partial on disk) |
+| legacy g5 | 2–3 | Ch 26 (advisor survived; writer follows) | stopped 23:48 (writer partial on disk) |
+| research-trends-AB | 1 | TSMOM in credit; loans/CLOs; market-structure regulation; dealers/CDS/index; academic frontier; AI/LLMs; then the Fable map `exploratory_space_trends_AB.md` | stopped 23:48 (outputs on disk) |
 
 ## Edition 1: completed
 
