@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Quantitative Credit Master Book</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <style>
+    :root {
+      --ink: #1d1f23; --paper: #fbfaf7; --muted: #5f646d; --rule: #dedbd2;
+      --accent: #8a3b12; --box: #f2efe6; --code: #f4f2ec; --link: #1f5fa8;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --ink: #e7e5df; --paper: #16171a; --muted: #a2a6ad; --rule: #34363b;
+        --accent: #f0a46b; --box: #212328; --code: #1d1f23; --link: #7fb2ef;
+      }
+    }
+    html { background: var(--paper); }
+    body {
+      max-width: 46em; margin: 0 auto; padding: 2em 16px 6em;
+      background: var(--paper); color: var(--ink);
+      font: 17px/1.62 "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    }
+    a { color: var(--link); }
+    h1, h2, h3, h4 { font-family: "Avenir Next", "Segoe UI", Helvetica, Arial, sans-serif; line-height: 1.25; }
+    h1 { color: var(--accent); border-bottom: 2px solid var(--rule); padding-bottom: .3em; margin-top: 3em; }
+    h1.title { border: none; margin-top: 1em; font-size: 2.1em; }
+    p.subtitle { color: var(--muted); font-style: italic; }
+    blockquote {
+      background: var(--box); border-left: 4px solid var(--accent); margin: 1.4em 0;
+      padding: .7em 1.1em; color: var(--ink);
+    }
+    pre, code { font-family: "JetBrains Mono", Menlo, Consolas, monospace; font-size: .86em; }
+    pre { background: var(--code); padding: .9em; overflow-x: auto; border-radius: 4px; border: 1px solid var(--rule); }
+    table { border-collapse: collapse; display: block; overflow-x: auto; font-size: .9em; margin: 1.2em 0; }
+    th, td { border: 1px solid var(--rule); padding: .35em .6em; vertical-align: top; }
+    th { background: var(--box); }
+    hr { border: none; border-top: 1px dashed var(--rule); margin: 4em 0; }
+    nav#TOC { background: var(--box); padding: 1em 1.5em; border-radius: 6px; font-size: .92em; }
+    nav#TOC ul { padding-left: 1.2em; }
+    mjx-container[display="true"], math[display="block"] { overflow-x: auto; overflow-y: hidden; }
+    @media print {
+      body { max-width: none; font-size: 11pt; }
+      h1 { page-break-before: always; }
+      pre, blockquote, table { page-break-inside: avoid; }
+    }
+  </style>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="/usr/share/javascript/mathjax/MathJax.js"
+  type="text/javascript"></script>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Systematic &amp; Quantitative Credit: From PJT RSSG to
+the Automated Desk</h1>
+<p class="subtitle">Mathematical Foundations, Microstructure, LMT Game
+Theory, and Alpha Isolation (Edition 1, Build: 2026-10-17 23:04 UTC)</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a
+href="#chapter-1-the-anthology-of-the-desk-the-modern-quant-credit-landscape"
+id="toc-chapter-1-the-anthology-of-the-desk-the-modern-quant-credit-landscape">Chapter
+1: The Anthology of the Desk &amp; The Modern Quant Credit Landscape</a>
+<ul>
+<li><a
+href="#the-epistemological-clash-pjt-rssg-vs.-the-automated-market-maker"
+id="toc-the-epistemological-clash-pjt-rssg-vs.-the-automated-market-maker">1.1
+The Epistemological Clash: PJT RSSG vs. The Automated Market Maker</a>
+<ul>
+<li><a href="#why-the-hybrid-pjt-rssg-quant-architect-owns-the-future"
+id="toc-why-the-hybrid-pjt-rssg-quant-architect-owns-the-future">Why the
+Hybrid PJT RSSG + Quant Architect Owns the Future</a></li>
+</ul></li>
+<li><a href="#evaluating-the-market-set-in-quantitative-credit"
+id="toc-evaluating-the-market-set-in-quantitative-credit">1.2 Evaluating
+the Market Set in Quantitative Credit</a></li>
+</ul></li>
+</ul>
+</nav>
+<section
+id="chapter-1-the-anthology-of-the-desk-the-modern-quant-credit-landscape"
+class="level1">
+<h1>Chapter 1: The Anthology of the Desk &amp; The Modern Quant Credit
+Landscape</h1>
+<section
+id="the-epistemological-clash-pjt-rssg-vs.-the-automated-market-maker"
+class="level2">
+<h2>1.1 The Epistemological Clash: PJT RSSG vs. The Automated Market
+Maker</h2>
+<p>Walk onto the restructuring floor at PJT Partners (RSSG) in Midtown
+Manhattan, and the unit of account is the <strong>bespoke legal
+bottleneck</strong>. An analyst spends 90 hours modeling a 13-week cash
+flow forecast, reading a 350-page Senior Secured Credit Agreement from
+2019, calculating exact dollar capacity inside the <em>Available
+Amount</em> builder basket under Section 7.06, and determining whether
+an ad-hoc group holding <span class="math inline">\(50.1\%\)</span> of
+the Term Loan B can strip collateral coverage via an amendment and drop
+intellectual property into an unrestricted subsidiary. Time moves in
+weeks; alpha is extracted by structuring a private non-pro-rata
+transaction where your client captures a <span
+class="math inline">\(20\text{-point}\)</span> priming premium over
+left-behind minority lenders.</p>
+<p>Now walk onto the quantitative credit and cross-asset market-making
+floor at Susquehanna International Group (SIG) in Bala Cynwyd, or a
+systematic credit pod at Citadel or DE Shaw. The unit of account is
+<strong>conditional expected value per unit of inventory variance per
+day</strong>. Nobody is reading a single indenture cover-to-cover during
+market hours. Instead, an automated pricing engine ingests real-time
+FINRA TRACE prints, CME Treasury futures ticks, OPRA single-stock option
+implied volatility surfaces, and HYG/LQD ETF creation-redemption
+baskets. When a client sends an all-to-all Request for Quote (RFQ) on
+MarketAxess asking for a bid on <span class="math inline">\(\$15\text{
+million}\)</span> notional of a stressed <span
+class="math inline">\(B3/B-\)</span> high-yield bond, the desk has
+<strong>less than 3 seconds</strong> to solve an adverse selection
+problem:</p>
+<p><span class="math display">\[\text{Quote Bid } B^* =
+\mathbb{E}[V_{t+\Delta t} \mid \mathcal{F}_t, \text{Order Flow }
+\mathcal{O}_t] - \frac{1}{2}\gamma \sigma^2_{\text{IDO}} (2q + \Delta q)
+- \Lambda_{\text{tox}}(\mathcal{O}_t)\]</span></p>
+<p>Where:</p>
+<ul>
+<li><span class="math inline">\(\mathbb{E}[V_{t+\Delta t} \mid
+\mathcal{F}_t, \mathcal{O}_t]\)</span> is the posterior fair value
+conditioned on public filtration <span
+class="math inline">\(\mathcal{F}_t\)</span> and the event that a
+counterparty is actively trying to sell size <span
+class="math inline">\(\Delta q\)</span>.</li>
+<li><span class="math inline">\(\gamma\)</span> is the desk’s
+risk-aversion parameter, <span
+class="math inline">\(\sigma^2_{\text{IDO}}\)</span> is the unhedged
+idiosyncratic variance of the bond after stripping Treasury duration and
+CDX beta, and <span class="math inline">\(q\)</span> is current desk
+inventory.</li>
+<li><span
+class="math inline">\(\Lambda_{\text{tox}}(\mathcal{O}_t)\)</span> is
+the <strong>Adverse Selection Penalty</strong>: the probability that the
+seller has just left a lender call or analyzed a covenant trapdoor and
+knows an LMT or earnings miss is imminent.</li>
+</ul>
+<section id="why-the-hybrid-pjt-rssg-quant-architect-owns-the-future"
+class="level3">
+<h3>Why the Hybrid PJT RSSG + Quant Architect Owns the Future</h3>
+<p>Pure quantitative researchers trained in equity stat-arb fail in
+distressed and high-yield credit because they treat cusips as
+exchangeable time series. When a company executes a Serta-style uptier
+or a J.Crew trapdoor drop-down, historical price correlations break down
+instantaneously—a structural discontinuity occurs that a standard Kalman
+filter or GARCH model cannot anticipate.</p>
+<p>Conversely, traditional fundamental restructuring analysts fail on a
+systematic desk because they treat every credit as an artisanal
+snowflake, refusing to codify their intuition into continuous
+probability distributions. <strong>The ultimate alpha in modern credit
+belongs to the architect who can translate PJT RSSG legal and structural
+mechanics into state-space features that feed an automated pricing and
+risk engine.</strong></p>
+<hr />
+</section>
+</section>
+<section id="evaluating-the-market-set-in-quantitative-credit"
+class="level2">
+<h2>1.2 Evaluating the Market Set in Quantitative Credit</h2>
+<p>To extract maximum alpha and isolate pure Idiosyncratic Return
+(<strong>IDO</strong>), a Desk Head or Portfolio Manager must first map
+the structural players in the ecosystem and understand their mechanical
+constraints:</p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Strategy / Desk Archetype</th>
+<th style="text-align: left;">Representative Firms</th>
+<th style="text-align: left;">Holding Horizon</th>
+<th style="text-align: left;">Primary Edge</th>
+<th style="text-align: left;">Structural Vulnerability (How You Arb
+Them)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Automated OTC Market Makers &amp;
+PT Desks</strong></td>
+<td style="text-align: left;">SIG, Jane Street, Citadel Securities, Flow
+Traders</td>
+<td style="text-align: left;">Milliseconds to 10 Days</td>
+<td style="text-align: left;">ETF Creation/Redemption loops, Portfolio
+Trading (PT) pricing speed, cross-asset latency</td>
+<td style="text-align: left;">Exposed to <strong>toxic fundamental
+flow</strong> on bespoke LMTs, covenant priming, and bankruptcy docket
+surprises</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Systematic Factor Credit
+Pods</strong></td>
+<td style="text-align: left;">AQR, Man Numeric, BlackRock Systematic,
+Two Sigma</td>
+<td style="text-align: left;">1 to 6 Months</td>
+<td style="text-align: left;">Cross-sectional factor harvesting (Value,
+Equity-to-Credit Momentum, Carry, Quality) across 2,000+ issuers</td>
+<td style="text-align: left;">Slow to react to discrete structural
+breaks (M&amp;A CoC waivers, drop-down rumors); mechanical rebalancing
+creates predictable flow</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Capital Structure &amp; Volatility
+Arbitrage</strong></td>
+<td style="text-align: left;">DE Shaw, Saba Capital, Elliott (Trading),
+Millennium pods</td>
+<td style="text-align: left;">5 Days to 6 Months</td>
+<td style="text-align: left;">Merton-model dislocations, Equity Put Skew
+vs. High-Yield Spreads, CDS-to-Bond Basis, Orphan CDS</td>
+<td style="text-align: left;">Vulnerable to squeeze dynamics in
+repo/borrow markets and basis blowouts during liquidity crunches</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>CLO Vehicles (Par-Constrained
+Institutional Buyers)</strong></td>
+<td style="text-align: left;">Blackstone, Carlyle, Palmer Square,
+Ares</td>
+<td style="text-align: left;">Buy-and-Hold (Reinvestment Period)</td>
+<td style="text-align: left;">Structural leverage via AAA-to-Equity
+tranche arbitrage</td>
+<td style="text-align: left;"><strong>Forced mechanical sellers</strong>
+when CCC buckets exceed <span class="math inline">\(7.5\%\)</span> or
+upon default; cannot easily fund new-money post-reorg equity rights
+offerings</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>[AGENT EXPANSION DIRECTIVE FOR NEXT ITERATION]:</strong> Pull
+cited excerpts from
+<code>/state/pdf_pages/Ben_Dor_Quantitative_Credit_Portfolio_Management/</code>
+on DTS (Duration Times Spread) and empirical duration,
+<code>/state/pdf_pages/Bohn_Stein_Active_Credit_Portfolio_Management/</code>
+on structural default models, and
+<code>/state/pdf_pages/Moyer_Distressed_Debt_Analysis/</code> on the
+distressed investing process. Expand Section 1.3 into a 6,000-word
+compilation of foundational texts with full mathematical commentary.</p>
+</blockquote>
+<hr />
+</section>
+</section>
+</body>
+</html>
