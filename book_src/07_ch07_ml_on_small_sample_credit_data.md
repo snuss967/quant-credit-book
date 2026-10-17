@@ -300,3 +300,441 @@ And then there is the footnote that every credit modeler should have taped to th
 
 > **Ways This Blows Up.** *Four ways a purged CV still leaks.* (1) Purging on calendar months while labels are event-timed: a label that closed early at a barrier has a shorter interval, and one that closed late (a stale mark held it open) has a longer one. Purge on the recorded $t_{1,i}$, not on the nominal horizon. (2) Forgetting that fractional differentiation (§7.3) has a window of up to $K \approx 280$ days, which is a feature lookback and therefore sets the embargo. (3) Hyperparameter search *outside* the CV loop: choosing the tree depth on the full sample and then cross-validating the chosen depth. Nest the search inside each training fold. (4) Cross-sectional standardization (z-scoring features by date) is safe; *global* standardization with full-sample means and standard deviations is a small look-ahead that compounds with everything else.
 
+## 7.8 Multiple Testing and the Deflated Sharpe Ratio
+
+Purging makes one evaluation honest. It does not make the *best of many* evaluations honest. Kaz tried about 3,000 configurations, so the right question about the winner is Ines's: how good would the best of 3,000 hands look if every hand were dealt at random?
+
+> **Poker Table.** "The deflated Sharpe ratio asks the only question that matters about a guy showing you his winning hands: how many did he fold first? And the embargo is the dealer burning a card. You don't get to see the card right after the one you bet on, because that card is correlated with yours."
+
+**The expected maximum of noise.** Suppose $N$ strategies have true Sharpe zero and their estimated Sharpe ratios are roughly normal with variance $V = \operatorname{Var}[\widehat{SR}_n]$ across trials. Extreme-value theory gives the expected maximum (Bailey and López de Prado, *The Deflated Sharpe Ratio*, 2014; the bound is the "false strategy theorem" of their 2021 paper):
+
+$$
+SR^\ast \;=\; \mathbb{E}\Big[\max_n \widehat{SR}_n\Big] \;\approx\; \sqrt{V}\,\Big[(1-\gamma)\,\Phi^{-1}\!\Big(1 - \tfrac1N\Big) + \gamma\,\Phi^{-1}\!\Big(1 - \tfrac{1}{N e}\Big)\Big],
+$$
+
+where $\gamma \approx 0.5772$ is the Euler–Mascheroni constant and $e$ is Euler's number. Put in Kaz's numbers *(illustrative)*: $N = 3{,}000$ trials on $T = 240$ months gives $V \approx 1/T$ for monthly Sharpe ratios near zero, so $\sqrt V \approx 0.065$. The quantiles are $\Phi^{-1}(1 - 1/3000) \approx 3.40$ and $\Phi^{-1}(1 - 1/8155) \approx 3.67$, so
+
+$$
+SR^\ast \approx 0.065 \times (0.423 \times 3.40 + 0.577 \times 3.67) \approx 0.065 \times 3.56 \approx 0.23 \text{ per month} \approx 0.80 \text{ annualized}.
+$$
+
+The best of 3,000 *pure-noise* strategies over 20 years shows an annualized Sharpe of about 0.8. That is the bar *before* the model has done anything.
+
+**The probabilistic and deflated Sharpe ratios.** With $T$ observations, sample Sharpe $\widehat{SR}$ (per period), sample skewness $\hat\gamma_3$, and sample kurtosis $\hat\gamma_4$ (not excess), the probability that the true Sharpe exceeds a benchmark $SR_0$ is
+
+$$
+\widehat{\text{PSR}}(SR_0) \;=\; \Phi\!\left[\frac{(\widehat{SR} - SR_0)\sqrt{T-1}}{\sqrt{1 - \hat\gamma_3\,\widehat{SR} + \frac{\hat\gamma_4 - 1}{4}\,\widehat{SR}^2}}\right].
+$$
+
+The denominator is the standard error of a Sharpe estimate under non-normal returns: negative skew ($\hat\gamma_3 < 0$) and fat tails ($\hat\gamma_4 > 3$) both widen it, and monthly high-yield excess returns have both. The *deflated* Sharpe ratio sets the benchmark to the noise maximum, $\widehat{\text{DSR}} = \widehat{\text{PSR}}(SR^\ast)$. Run Kaz's winner through it: with $\widehat{SR} = 0.23$, $T = 240$, $\hat\gamma_3 = -0.5$, $\hat\gamma_4 = 5$ *(illustrative)*, the denominator is $\sqrt{1 + 0.115 + 0.053} \approx 1.08$ and $\widehat{\text{PSR}}(0) = \Phi(0.23 \times 15.5 / 1.08) = \Phi(3.3) \approx 0.9995$. A naive report says 99.95% confident. The deflated ratio, with $SR_0 = SR^\ast = 0.23$, is $\Phi(0) = 0.5$: a coin flip. The best noise strategy is, by construction, about as good as the expected best noise strategy.
+
+Two companion statistics belong in every report. The **minimum track record length** is the number of periods needed for $\widehat{\text{PSR}}(SR_0)$ to reach confidence $1-\alpha$:
+
+$$
+T^\ast = 1 + \Big[1 - \hat\gamma_3\,\widehat{SR} + \tfrac{\hat\gamma_4 - 1}{4}\,\widehat{SR}^2\Big]\left(\frac{z_{1-\alpha}}{\widehat{SR} - SR_0}\right)^2.
+$$
+
+The **probability of backtest overfitting** (PBO; Bailey, Borwein, López de Prado, and Zhu 2017) uses combinatorially symmetric cross-validation (CSCV). Split the $T \times N$ matrix of trial returns into $S$ time blocks. For each of the $\binom{S}{S/2}$ ways to choose half the blocks as "in-sample," find the in-sample best trial $n^\ast$, compute its relative rank $\bar\omega \in (0,1)$ among all trials out of sample, and take the logit $\ell = \log\big(\bar\omega/(1-\bar\omega)\big)$. PBO is the share of splits with $\ell \le 0$: how often the in-sample winner is below median out of sample. Noise gives PBO near 0.5. Skill gives PBO near 0.
+
+**Thresholds from the literature.** Harvey, Liu, and Zhu (*Review of Financial Studies*, 2016) catalogued 316 equity factors and argued that a new factor should clear $t > 3.0$, not 2.0. Chordia, Goyal, and Saretto (*RFS*, 2020), using more than two million random strategies, put the bar near $t \approx 3.8$ for time-series tests and $3.4$ for cross-sectional ones. The 2026 bond audit used Benjamini–Hochberg false-discovery control and found that 6% of specifications survive (§7.2). Paleologo frames the same discipline for the PM seat:
+
+> **[SOURCE EXTRACTION]** *Paleologo_Advanced_Portfolio_Management p.159:* "there are ways to assign a "Sharpe haircut" to a backtested strategy. This is a quantitative topic and you could work with a quantitative analyst to establish some selection principle"
+>
+> **Annotation.** The surrounding page draws the line that matters: a *confirmatory* test (you believe a specific dataset improves a specific estimate, so you add it and check) versus an *exploratory* search (you try many combinations and keep the best). Confirmatory tests deserve something close to their nominal $t$-statistic; exploratory searches deserve a haircut that grows with the number of trials, and the deflated Sharpe ratio is one explicit form of that haircut. For the ex-RSSG reader, this is the most transferable idea in the chapter: a covenant-driven primary model (§7.5) is confirmatory by nature, because the hypothesis ("loose open-market-purchase language predicts uptier losses") was written down before the data was touched, while a gradient-boosted search over 81 features is exploratory by nature. Report them differently. Where the modern desk goes further: the trial count $N$ must include *every* configuration evaluated, by anyone on the team, on the same data, and correlated trials should be collapsed by clustering the trial-return correlation matrix into an effective number of independent trials, so that 400 near-identical momentum variants count as a handful, not as 400.
+
+> **Ways This Blows Up.** *Your Sharpe is inflated before you deflate it.* Smoothed marks lower measured volatility (§7.1), so a backtest on evaluated prices overstates $\widehat{SR}$, and positive autocorrelation from staleness means the usual $\sqrt{12}$ annualization overstates it again (the variance of a sum of positively autocorrelated returns exceeds the sum of variances). Unsmooth returns first, or compute Sharpe from executable prices only, and use an autocorrelation-adjusted annualization. Deflation corrects for *search*; it cannot correct for a numerator and denominator that were both measured on rumors.
+
+## 7.9 The Two Biases That Built the Bond-Factor Zoo
+
+Kaz's contribution to this section came on a Tuesday. Kaz had found the TRACE field `As Of Indicator`, seen that a value of `R` means "reversal," and spent the morning building a short-term-reversal factor out of trade cancellations. Theo had to explain that in FINRA's historic TRACE layout, a reversal is the cancellation of a trade reported more than 20 business days earlier, which is a data-cleaning event, and that a reversal *factor* is a different thing. Both, he added, would ruin your month. Then he realized the joke had a serious point, because the second kind of reversal had been built out of something almost as accidental as the first.
+
+**Latent implementation bias: noise in both the signal and the return.** Let the observed log price be the true log price plus noise, $\tilde p_t = p_t + \delta_t$, where $\delta_t$ is i.i.d. with variance $\sigma_\delta^2$ (bid–ask bounce, a stale mark, a dealer-side mix). The observed returns are
+
+$$
+\tilde r_t = r_t + \delta_t - \delta_{t-1},
+\qquad
+\tilde r_{t+1} = r_{t+1} + \delta_{t+1} - \delta_t .
+$$
+
+The two returns share $\delta_t$ with opposite signs. With the true returns independent of the noise,
+
+$$
+\operatorname{Cov}(\tilde r_t, \tilde r_{t+1}) \;=\; \operatorname{Cov}(r_t, r_{t+1}) \;-\; \sigma_\delta^2 .
+$$
+
+Pure noise manufactures reversal. A portfolio that buys last month's losers and sells last month's winners is, in part, buying bonds whose month-end price was recorded too *low* ($\delta_t < 0$) and selling bonds recorded too *high*, then collecting $-\delta_t$ when the next price is drawn fresh. The premium is real in the data and unavailable in the market, because you cannot buy at the mis-recorded price. This is Roll's (1984) bid–ask model wearing a factor's clothes: Chapter 18 uses the same covariance to *estimate* the spread, as $2\sqrt{-\operatorname{Cov}}$. Dickerson, Robotti, and Rossetti (2026) call the general problem latent implementation bias, because the same noisy price sits in the sort and in the denominator of the next return.
+
+**The fix is a gap.** Form the signal from the month-end price, but measure the return from the first feasible execution price the next month (the "month-begin" price), so the two prices are different draws of noise:
+
+$$
+\tilde r^{\text{gap}}_{t+1} = (p_{t+1} + \delta_{t+1}) - (p_{t^+} + \delta'_{t^+}),
+\qquad
+\operatorname{Cov}(\delta'_{t^+}, \delta_t) = 0
+\;\Longrightarrow\;
+\operatorname{Cov}(\tilde r_t, \tilde r^{\text{gap}}_{t+1}) = \operatorname{Cov}(r_t, r_{t^+ \to t+1}).
+$$
+
+The 2026 numbers show how much of the zoo the gap removes. Short-term reversal goes from −0.99% per month to −0.09%, so more than 90% of the documented effect was bias. Across the zoo, 43–67% of the 30 price-based factors show a significant gap between month-end and month-begin premia, against 10–18% of the 78 non-price-based factors. That asymmetry is the fingerprint of noise rather than economics: if the premia were real compensation for risk, the timing of the first trade would not matter much.
+
+**Look-ahead bias in the return filter.** The second bias is quieter. Researchers winsorize or trim extreme returns to protect against data errors, which is reasonable. But if the thresholds are percentiles computed from the *full sample*, the filter uses future information. If the trimming is *asymmetric* (cutting the left tail harder than the right, or deleting returns around defaults), it deletes exactly the outcomes a long-short portfolio is most exposed to, and it chooses them with knowledge of which bonds were about to crash. Dickerson, Robotti, and Rossetti report that 6-month momentum's 0.30% per month premium comes entirely from asymmetric ex-post winsorization and is zero without it, and that 57–78% of the alpha of idiosyncratic-volatility and downside-risk factors comes from ex-post filtering. Their measure of "researcher degrees of freedom" is also worth knowing: across 648 filtering configurations, the interquartile range of factor premia averages 0.35% per month against an average premium of 0.33%. The choice of cleaning rule moves the answer by more than the answer.
+
+The fix is ex-ante filtering: thresholds computed only from data available at the formation date, applied symmetrically, with returns around defaults *kept* (Dick-Nielsen and coauthors made the same choice). A model that never sees a default in training will be very confident about bonds that are about to default. That is not caution; it is a CLO manager's nightmare with a nice ROC curve.
+
+## 7.10 Trend Watch: The ML-for-Bonds Frontier and the Data Stack
+
+> **Trend Watch.** *Machine learning reaches corporate bonds, 2017–2026.*
+>
+> - **May 2017.** MarketAxess launches Composite+ (CP+), an ML-built pricing engine, after about 18 months of experimentation; by the company's later account it covers more than 350,000 bonds and refreshes as often as every 15 seconds (company claims, reported by FI Desk). The SMU Cox study cited in §7.1 (March 2026) finds CP+ more informative about future trade prices than the last trade, tracking efficient prices well in March 2020 but converging slowly during fire sales. AI composites are now both a *feature* (a better denominator than the last print, which shrinks latent implementation bias) and a *counterparty* (the price a market maker is adversely selected against; Chapter 18).
+> - **2021.** Bianchi, Büchner, and Tamoni, "Bond Risk Premiums with Machine Learning," *RFS* 34(2), on Treasuries, followed by a corrigendum in the same volume (§7.11).
+> - **2023.** Kelly, Palhares, and Pruitt, "Modeling Corporate Bond Returns," *Journal of Finance* 78(4): a conditional five-factor model (IPCA) with loadings driven by bond characteristics. Robeco (23 June 2023) describes regression-tree fair-value models for credit value investing, with the main benefit reported as lower active risk, especially in high yield.
+> - **2025.** Feng, He, Wang, and Wu, "Predicting individual corporate bond returns," *Journal of Banking & Finance* 171, report an out-of-sample $R^2$ of 4.48%; their leading predictors include downside risk, short-term reversal, and skewness, three of the price-based signals the 2026 audit flags for latent implementation bias. BondBERT (arXiv:2511.01869, October 2025) fine-tunes a language model on about 30,000 UK bond-news articles, because good news for a company's equity is often bad news for its bonds.
+> - **2026.** Bell, Kakhbod, Lettau, and Nazemi, "Glass Box Machine Learning and Corporate Bond Returns" (NBER WP 33320; *JFE* 181, 2026), use an explainable boosting machine with 81 predictors on 1,207 firms (July 2002–August 2020), with a deliberately long nine-year test window; the value-weighted 10−1 portfolio earns 0.67% per month with an alpha of 0.55% ($t = 4.22$). The most important interaction is financial-uncertainty shocks times spread, which is a structural-model prediction (Chapter 6) rediscovered by a model that can show its work.
+> - **Market plumbing.** SIFMA reports US corporate-bond average daily volume of \$66.7 billion through September 2026, up 13.4% year on year (fetched 2026-10-17). Man Group's 2022 paper notes that, per one data provider, less than \$150 billion of US bonds had been traded electronically by quantitative investors in the prior year (Man 2022 p.3).
+>
+> *What it means for the desk.* The frontier moved from "can ML predict bond returns?" (2019–2021) to "can we trust the inputs?" (2023–2026) to "can the model explain itself?" (2026). The models that held up share three traits: long, untouched test windows; firm-level aggregation (one hat per issuer); and economic structure built in (Merton links, interpretable shape functions).
+
+> **[SOURCE EXTRACTION]** *Blackstone_Systematic_Credit p.2:* "While systematic strategies manage roughly 20% of global equities, they account for less than 2% of the fixed-income universe."
+>
+> **Annotation.** The adoption gap is the commercial case for this chapter and also a warning. A tenfold gap means the field is early, and early fields reward the managers who get the data right: Blackstone's own paper credits electronic trading, better pricing data, and computing power for closing it. But the same gap means most of the published evidence was produced on short samples by people who had never traded the bonds, which is how a four-factor model got retracted. Man Group's 2022 forecast was that "the future of quant credit will be one of increasing data sophistication, of the increasing use of machine learning" (Man 2022 p.41); the 2023–2026 record says the order of those two clauses matters. Data sophistication comes first.
+
+## 7.11 Case Studies: Three Autopsies of Credit-ML Failure
+
+### Case Study A: The One-Month Lead (Bai–Bali–Wen, 2019–2023)
+
+*What happened.* A four-factor model published in the *JFE* in 2019 became a benchmark. During replication, Dickerson, Mueller, and Robotti found that two factor return series were misdated by one month in one direction and a third by one month in the other, and that some extreme losses had been removed; the paper was retracted in 2023, the journal's only retraction according to Warwick Business School's 9 September 2024 account. Robotti's summary of the corrected factors: they provided "no investment advantage at all."
+
+*How the desk would have caught it.* A purged walk-forward on the *published* factor series cannot catch a misalignment buried inside that series; the leak is upstream of the CV. What catches it is an *implementation audit*: rebuild one factor from raw TRACE with explicit availability timestamps, trade it from month-begin prices, and compare. A one-month lead shows up immediately as a premium that disappears when the return window moves one month later. *Lesson for Theo:* label timestamps are covenants. Read them the way you would read the definition of "Consolidated EBITDA."
+
+### Case Study B: The Honest Corrigendum (Bianchi–Büchner–Tamoni, 2021)
+
+*What happened.* The *RFS* published both the original paper and, in the same volume, a corrigendum with an added coauthor (Hoogteijling) that corrects the analysis for "using information not available when the forecasts were made." Out-of-sample $R^2$ fell; predictability remained significant.
+
+*Why it matters.* This is the gold standard of error handling, and it shows that look-ahead is usually a *pipeline* property (data vintages, revised macro series, forward-filled values), not a modeling choice. Pair it with Bohn and Stein's footnote 31 in §7.7: most leaks are things the researcher did not know they knew. The desk control is a point-in-time feature store in which every value carries the timestamp at which it became available, and ROBO is forbidden to join on anything else.
+
+### Case Study C: How a Bid–Ask Bounce Became a Factor (Short-Term Reversal, 2026)
+
+*What happened.* Measured with month-end prices in both the signal and the return, corporate-bond short-term reversal earned −0.99% per month ($t = -4.46$), one of the strongest results in the zoo. With a month-begin return, it earned −0.09% ($t = -0.51$). The covariance identity in §7.9 explains the whole gap.
+
+*How the desk would have traded it, and why it would have lost.* On an RFQ desk you cannot buy at last month's stale print; the first executable price already reflects the bounce. Ines replayed the hand history: "Every 'loser' we bought in this backtest was a bond whose last print was a small dealer selling to a large one at the bid. We would have paid the offer. The factor was the bid–ask spread, and we would have been on the wrong side of it." Chapter 9 picks up what survives (value and some equity-informed signals), and Chapter 10 rebuilds credit momentum on clean returns.
+
+## 7.12 The Credit ML Lab: A Reference Implementation
+
+### Specification for AI Implementation
+
+**What ROBO built from the vague version.** Theo's first spec said: "Find a strategy with a Sharpe above 2." ROBO ran 12,000 feature combinations overnight and returned the best one: in-sample Sharpe 2.1, deflated Sharpe ratio 0.48. It had done exactly what was asked. The precise spec below asks for something else: every reported result must carry its trial count $N$, the cross-trial Sharpe variance $V$, the deflated Sharpe ratio, the probability of backtest overfitting, and the effective sample size $N_{\text{eff}}$, and the pipeline must refuse to print a Sharpe ratio without them.
+
+**Data schemas (all arrays NumPy `float64` unless stated; day index $t = 0, \ldots, T-1$).**
+
+| Object | Shape / type | Meaning and units |
+| :--- | :--- | :--- |
+| `xs` | `[T, NB]` | Daily excess return per bond from *marks* (decimal); `xs[0] = 0`; zero after exit |
+| `spread`, `dts` | `[T, NB]` | Spread (decimal) and $\text{DTS} = D^{\text{spr}} \cdot s$ (years × decimal) |
+| `issuer_of` | `[NB]` int | Ultimate-parent id (not ticker) |
+| `exit_day` | `[NB]` int | Day of call, tender, maturity, or exchange; `T + 1` means never |
+| `labels` | DataFrame | `bond, issuer, t0, t1` (int days, `t1` inclusive), `label` ∈ {−1, 0, 1}, `ret`, `touch` ∈ {upper, lower, vertical, exit}, `censored` (bool), `u` (uniqueness) |
+| `X` | `[n_labels, F]` | Features using information available at `t0` only (point-in-time) |
+| `R` | `[T_m, N]` | Returns of *every* trial evaluated, for DSR and PBO |
+
+**Edge cases ROBO must handle, not guess.** Labels whose vertical barrier falls after the last date are not formed (never forward-fill). Single-bond parents have uniqueness from time overlap only. A fold with no positive labels is skipped and reported. Kurtosis with fewer than 30 observations is not estimated; the DSR is reported as unavailable. Bet-size probabilities are clipped to $[10^{-6}, 1 - 10^{-6}]$. FFD warm-up rows are NaN and are dropped, never zero-filled. The embargo is at least the longest feature lookback, including the FFD window.
+
+The six blocks below run in order in one interpreter (NumPy, SciPy, pandas only), are seeded, and end each step with numerical sanity checks. The synthetic panel's parameters are illustrative.
+
+```python
+import numpy as np
+import pandas as pd
+from itertools import combinations
+from scipy import special, stats
+
+# ---------- 1. Fractional differentiation with a fixed-width window (Section 7.3) ----------
+def ffd_weights(d, tau=1e-4, k_max=100_000):
+    """w_0 = 1, w_k = -w_{k-1} (d - k + 1) / k, truncated once |w_k| < tau."""
+    w = [1.0]
+    for k in range(1, k_max):
+        w_k = -w[-1] * (d - k + 1) / k
+        if abs(w_k) < tau:
+            break
+        w.append(w_k)
+    return np.array(w)
+
+def frac_diff(x, d, tau=1e-4):
+    """x_tilde_t = sum_k w_k x_{t-k}. The first K values are NaN (warm-up), never zero."""
+    x = np.asarray(x, dtype=float)
+    w = ffd_weights(d, tau)
+    K = len(w) - 1
+    out = np.full(len(x), np.nan)
+    if len(x) > K:
+        out[K:] = np.convolve(x, w, mode="valid")
+    return out
+
+DF_CRIT_5PCT = -2.86  # approximate Dickey-Fuller 5% critical value (constant, no trend)
+
+def df_tstat(x):
+    """t-stat of b in dx_t = a + b x_{t-1} + e_t (no augmentation lags)."""
+    x = np.asarray(x, dtype=float)
+    x = x[~np.isnan(x)]
+    dx, xl = np.diff(x), x[:-1]
+    X = np.column_stack([np.ones_like(xl), xl])
+    beta, *_ = np.linalg.lstsq(X, dx, rcond=None)
+    resid = dx - X @ beta
+    s2 = resid @ resid / (len(dx) - 2)
+    return beta[1] / np.sqrt(s2 * np.linalg.inv(X.T @ X)[1, 1])
+
+def min_d(x, grid=np.round(np.arange(0.0, 1.0001, 0.05), 2), tau=1e-4):
+    """Smallest d whose FFD series rejects a unit root -> (d_star, memory correlation)."""
+    x = np.asarray(x, dtype=float)
+    for d in grid:
+        xd = frac_diff(x, d, tau)
+        ok = ~np.isnan(xd)
+        if ok.sum() > 100 and df_tstat(xd) < DF_CRIT_5PCT:
+            return float(d), float(np.corrcoef(xd[ok], x[ok])[0, 1])
+    return 1.0, float("nan")
+
+w = ffd_weights(0.5)
+k = np.arange(len(w))
+assert np.allclose(w, (-1.0) ** k * special.binom(0.5, k), rtol=0, atol=1e-12)  # recursion = binomial
+K = len(w) - 1
+assert abs(w.sum() - (-1.0) ** K * special.binom(0.5 - 1, K)) < 1e-9             # partial-sum identity
+assert 0 < w.sum() < 0.1                                   # the 'memory sliver' truncation keeps
+assert 250 <= len(ffd_weights(0.4, 1e-4)) - 1 <= 320       # ~280-day warm-up at tau = 1e-4
+assert 45 <= len(ffd_weights(0.4, 1e-3)) - 1 <= 65         # ~54-day warm-up at tau = 1e-3
+rw = np.cumsum(np.random.default_rng(1).normal(0, 0.02, 2000))   # log-spread-like random walk
+assert np.allclose(frac_diff(rw, 1.0)[1:], np.diff(rw))          # d = 1 is ordinary differencing
+assert df_tstat(frac_diff(rw, 1.0)) < -10 < df_tstat(rw)         # change stationary, level not
+print("FFD on a random walk: d* = %.2f, memory retained rho = %.2f" % min_d(rw))
+```
+
+```python
+# ---------- 2. Synthetic credit panel with smoothed (stale) marks (Section 7.1) ----------
+def simulate_panel(n_issuers=120, T=1260, seed=11):
+    rng = np.random.default_rng(seed)
+    n_bonds = 1 + rng.poisson(2.0, n_issuers)                       # bonds per ultimate parent
+    issuer_of = np.repeat(np.arange(n_issuers), n_bonds)
+    NB = issuer_of.size
+    base = np.exp(rng.uniform(np.log(0.01), np.log(0.08), n_issuers))  # 100-800bp (illustrative)
+    D = rng.uniform(2.0, 8.0, NB)                                   # spread duration, years
+    theta = rng.uniform(0.2, 1.0, NB)                               # mark adjustment speed; 1 = live
+    basis = rng.normal(0.0, 0.05, NB)
+    f, a, e = np.zeros(T), np.zeros((T, n_issuers)), np.zeros((T, NB))
+    for t in range(1, T):
+        f[t] = 0.995 * f[t - 1] + rng.normal(0, 0.010)             # common log-spread factor
+        jump = (rng.random(n_issuers) < 0.10 / 252) * 0.5           # LMT/downgrade-style jump
+        a[t] = 0.99 * a[t - 1] + rng.normal(0, 0.012, n_issuers) + jump
+        e[t] = 0.95 * e[t - 1] + rng.normal(0, 0.010, NB)           # bond-level basis noise
+    L_true = np.log(base)[issuer_of] + basis + f[:, None] + a[:, issuer_of] + e
+    L_mark = np.empty_like(L_true)
+    L_mark[0] = L_true[0]
+    for t in range(1, T):                                           # partial adjustment = smoothing
+        L_mark[t] = L_mark[t - 1] + theta * (L_true[t] - L_mark[t - 1])
+    s_true, s_mark = np.exp(L_true), np.exp(L_mark)
+
+    def excess(s):                                                  # carry minus D * spread change
+        xs = np.zeros_like(s)
+        xs[1:] = s[:-1] / 252 - D * (s[1:] - s[:-1])
+        return xs
+
+    xs_true, xs = excess(s_true), excess(s_mark)
+    exit_day = np.full(NB, T + 1)
+    leaves = rng.random(NB) < 0.30
+    exit_day[leaves] = rng.integers(T // 4, T, leaves.sum())
+    tender = rng.random(NB) < 2 / 3                                 # otherwise a distressed exchange
+    for b in np.flatnonzero(leaves):
+        xs[exit_day[b], b] += 0.02 if tender[b] else -0.15          # illustrative exit returns
+        xs[exit_day[b] + 1:, b] = 0.0
+    return dict(xs=xs, xs_true=xs_true, spread=s_mark, dts=D * s_mark, issuer_of=issuer_of,
+                exit_day=exit_day, theta=theta, T=T, NB=NB, n_issuers=n_issuers)
+
+P = simulate_panel()
+stay = np.flatnonzero(P["exit_day"] > P["T"])
+b_slow = stay[np.argmin(P["theta"][stay])]
+lag1 = lambda x: np.corrcoef(x[1:-1], x[2:])[0, 1]
+assert P["xs"][1:, b_slow].std() < 0.8 * P["xs_true"][1:, b_slow].std()   # marks understate vol
+assert lag1(P["xs"][:, b_slow]) > lag1(P["xs_true"][:, b_slow]) + 0.2     # and fake autocorrelation
+```
+
+```python
+# ---------- 3. Triple-barrier labels in DTS space with exit censoring (Section 7.4) ----------
+def triple_barrier(xs, dts, issuer_of, exit_day, h=63, step=10, m_up=1.0, m_dn=1.0, sigma_rel_m=0.09):
+    T, NB = xs.shape
+    C = np.cumsum(xs, axis=0)                          # cumulative excess return through day t
+    scale = sigma_rel_m * np.sqrt(h / 21.0)            # monthly relative vol -> horizon (21 d/month)
+    cols, frames = np.arange(NB), []
+    for t0 in range(0, T - h, step):                   # vertical barrier always inside the sample
+        alive = exit_day > t0
+        path = C[t0 + 1:t0 + h + 1] - C[t0]            # (h, NB): X(u), u = 1..h
+        width = scale * dts[t0]                        # barrier half-width, decimal return
+        days = np.arange(t0 + 1, t0 + h + 1)[:, None]
+        hits = {"upper": path >= m_up * width, "lower": path <= -m_dn * width,
+                "exit": days >= exit_day[None, :]}
+        first = {name: np.where(M.any(0), M.argmax(0), h) for name, M in hits.items()}
+        k_ev = np.minimum(np.minimum(first["upper"], first["lower"]), first["exit"])
+        k_end = np.where(k_ev >= h, h - 1, k_ev)
+        touch = np.where(k_ev >= h, "vertical",
+                         np.where(first["exit"] == k_ev, "exit",
+                                  np.where(first["lower"] == k_ev, "lower", "upper")))
+        ret = path[k_end, cols]
+        label = np.where(touch == "upper", 1, np.where(touch == "lower", -1, np.sign(ret))).astype(int)
+        frames.append(pd.DataFrame({"bond": cols, "issuer": issuer_of, "t0": t0, "t1": t0 + 1 + k_end,
+                                    "label": label, "ret": ret, "touch": touch})[alive])
+    out = pd.concat(frames, ignore_index=True)
+    out["censored"] = out["touch"].eq("exit")
+    return out
+
+labels = triple_barrier(P["xs"], P["dts"], P["issuer_of"], P["exit_day"])
+assert labels["label"].isin([-1, 0, 1]).all() and (labels["t1"] > labels["t0"]).all()
+assert labels.loc[labels.touch == "upper", "ret"].min() > 0 > labels.loc[labels.touch == "lower", "ret"].max()
+shares = labels["touch"].value_counts(normalize=True)
+assert 0.05 < shares.get("vertical", 0.0) < 0.95 and shares.get("exit", 0.0) > 0
+print("touch shares:", shares.round(3).to_dict())
+```
+
+```python
+# ---------- 4. Parent-level average uniqueness and the hat count (Section 7.6) ----------
+def issuer_uniqueness(labels, T):
+    u = np.empty(len(labels))
+    t0_all, t1_all = labels["t0"].values, labels["t1"].values
+    for _, idx in labels.groupby("issuer").indices.items():
+        t0, t1 = t0_all[idx], t1_all[idx]
+        diff = np.zeros(T + 2)
+        np.add.at(diff, t0, 1.0)
+        np.add.at(diff, t1 + 1, -1.0)
+        conc = np.cumsum(diff)[:T + 1]                 # live labels of this parent on each day
+        inv = np.concatenate([[0.0], np.cumsum(1.0 / np.maximum(conc, 1.0))])
+        u[idx] = (inv[t1 + 1] - inv[t0]) / (t1 - t0 + 1)
+    return u
+
+toy = pd.DataFrame({"issuer": [0, 0, 1], "t0": [0, 0, 0], "t1": [9, 9, 9]})
+assert np.allclose(issuer_uniqueness(toy, 20), [0.5, 0.5, 1.0])   # siblings share a hat; others don't
+labels["u"] = issuer_uniqueness(labels, P["T"])
+n_eff = labels["u"].sum()
+assert ((labels["u"] > 0) & (labels["u"] <= 1 + 1e-12)).all() and n_eff < 0.25 * len(labels)
+print(f"label rows {len(labels):,}   N_eff {n_eff:,.0f}   ratio {n_eff / len(labels):.3f}")
+```
+
+```python
+# ---------- 5. Purged, embargoed, parent-grouped CV vs shuffled K-fold (Section 7.7) ----------
+def shuffled_kfold(n, k=5, seed=0):
+    fold = np.random.default_rng(seed).permutation(n) % k
+    for i in range(k):
+        yield np.flatnonzero(fold != i), np.flatnonzero(fold == i)
+
+def purged_group_kfold(t0, t1, groups, n_group_folds=5, n_time_blocks=4, embargo=21, seed=0):
+    """Test = (parents in group fold g) x (time block m). Train = other parents whose label
+    windows neither overlap the test span nor start within `embargo` days after it."""
+    t0, t1, groups = np.asarray(t0), np.asarray(t1), np.asarray(groups)
+    parents = np.unique(groups)
+    gfold = pd.Series(np.random.default_rng(seed).permutation(parents.size) % n_group_folds, index=parents)
+    gf = gfold.loc[groups].values
+    edges = np.linspace(t0.min(), t0.max() + 1, n_time_blocks + 1)
+    for g in range(n_group_folds):
+        for m in range(n_time_blocks):
+            test = (gf == g) & (t0 >= edges[m]) & (t0 < edges[m + 1])
+            if not test.any():
+                continue
+            T0, T1 = t0[test].min(), t1[test].max()
+            leaks = (t0 <= T1 + embargo) & (t1 >= T0)      # purge and embargo in one condition
+            yield np.flatnonzero((gf != g) & ~leaks), np.flatnonzero(test)
+
+def knn_scores(Xtr, ytr, Xte, k=10, batch=500):            # a flexible model that can memorize
+    sq, out = (Xtr ** 2).sum(1), np.empty(len(Xte))
+    for s in range(0, len(Xte), batch):
+        xb = Xte[s:s + batch]
+        d2 = (xb ** 2).sum(1)[:, None] + sq[None, :] - 2.0 * xb @ Xtr.T
+        out[s:s + batch] = ytr[np.argpartition(d2, k, axis=1)[:, :k]].mean(1)
+    return out
+
+def auc(y, score):
+    r = stats.rankdata(score)
+    n1 = y.sum()
+    n0 = len(y) - n1
+    return (r[y == 1].sum() - n1 * (n1 + 1) / 2) / (n1 * n0)
+
+def cv_auc(X, y, splits, k=10):
+    score = np.full(len(y), np.nan)
+    for tr, te in splits:
+        if len(tr) > k and len(te) > 0:
+            score[te] = knn_scores(X[tr], y[tr], X[te], k)
+    ok = ~np.isnan(score)
+    return auc(y[ok], score[ok])
+
+rng = np.random.default_rng(23)
+keep = rng.choice(P["n_issuers"], 25, replace=False)
+L = labels[labels["issuer"].isin(keep)].reset_index(drop=True)
+F = 4
+z_parent = rng.normal(0.0, 1.0, (P["n_issuers"], F))                     # persistent parent traits
+drift = np.cumsum(rng.normal(0.0, 0.02, (P["T"], P["NB"], F)), axis=0)   # slowly wandering noise
+drift += rng.normal(0.0, 0.3, (1, P["NB"], F))
+X = z_parent[L["issuer"].values] + drift[L["t0"].values, L["bond"].values]   # PURE NOISE features
+y = (L["label"].values > 0).astype(int)
+auc_naive = cv_auc(X, y, shuffled_kfold(len(y)))
+auc_purged = cv_auc(X, y, purged_group_kfold(L["t0"], L["t1"], L["issuer"]))
+print(f"pure-noise AUC: shuffled K-fold {auc_naive:.3f}   purged + grouped {auc_purged:.3f}")
+assert auc_naive > auc_purged + 0.03          # overlapping labels leak through shuffled folds
+assert abs(auc_purged - 0.5) < 0.06           # the honest splitter finds nothing, correctly
+```
+
+```python
+# ---------- 6. Meta-label bet sizing, deflated Sharpe, MinTRL, PBO (Sections 7.5, 7.8) ----------
+def bet_size(p, side):
+    """Secondary-model probability -> size in [0, 1), times the primary model's side."""
+    p = np.clip(p, 1e-6, 1 - 1e-6)
+    z = (p - 0.5) / np.sqrt(p * (1 - p))
+    return np.maximum(2 * stats.norm.cdf(z) - 1, 0.0) * side
+
+assert abs(bet_size(0.75, 1) - 0.4364) < 1e-3 and abs(bet_size(0.9, -1) + 0.8176) < 1e-3
+assert bet_size(0.4, 1) == 0.0                # the meta-model may veto, never reverse
+
+EULER_GAMMA = 0.5772156649015329
+
+def sharpe(R):
+    return R.mean(0) / R.std(0, ddof=1)
+
+def psr(sr, T, skew, kurt, sr0=0.0):
+    return stats.norm.cdf((sr - sr0) * np.sqrt(T - 1) / np.sqrt(1 - skew * sr + (kurt - 1) / 4 * sr ** 2))
+
+def expected_max_sr(n_trials, var_sr):
+    g = EULER_GAMMA
+    return np.sqrt(var_sr) * ((1 - g) * stats.norm.ppf(1 - 1 / n_trials)
+                              + g * stats.norm.ppf(1 - 1 / (n_trials * np.e)))
+
+def deflated_sharpe(R):
+    """R: (T, N) returns of EVERY trial evaluated; reports the best trial, deflated."""
+    T, N = R.shape
+    srs = sharpe(R)
+    b = int(np.argmax(srs))
+    sk, ku = stats.skew(R[:, b]), stats.kurtosis(R[:, b], fisher=False)
+    sr_star = expected_max_sr(N, srs.var(ddof=1))
+    return dict(sr=srs[b], sr_star=sr_star, psr0=psr(srs[b], T, sk, ku), dsr=psr(srs[b], T, sk, ku, sr_star))
+
+def min_trl(sr, sr0, skew, kurt, alpha=0.05):
+    return 1 + (1 - skew * sr + (kurt - 1) / 4 * sr ** 2) * (stats.norm.ppf(1 - alpha) / (sr - sr0)) ** 2
+
+def pbo_cscv(R, S=10):
+    T, N = R.shape
+    blocks = np.array_split(np.arange(T), S)
+    logits = []
+    for ins in combinations(range(S), S // 2):
+        tr = np.concatenate([blocks[i] for i in ins])
+        te = np.concatenate([blocks[i] for i in range(S) if i not in ins])
+        n_star = np.argmax(sharpe(R[tr]))
+        omega = stats.rankdata(sharpe(R[te]))[n_star] / (N + 1)
+        logits.append(np.log(omega / (1 - omega)))
+    return float(np.mean(np.array(logits) <= 0))
+
+rng = np.random.default_rng(42)
+T_m, N_tr = 120, 1000                                         # 10 years of months, 1,000 trials
+maxes = [sharpe(rng.normal(0, 0.02, (T_m, N_tr))).max() for _ in range(40)]
+assert abs(np.mean(maxes) / expected_max_sr(N_tr, 1 / T_m) - 1) < 0.10    # extreme-value formula holds
+noise = rng.normal(0, 0.02, (T_m, N_tr))
+rep = deflated_sharpe(noise)
+assert rep["psr0"] > 0.95 and rep["dsr"] < 0.95               # 'significant' naively; a coin flip deflated
+print({key: round(float(val), 3) for key, val in rep.items()})
+pbo_noise = pbo_cscv(noise[:, :200])
+skilled = np.column_stack([noise[:, :200], rng.normal(0.012, 0.02, T_m)])   # one real edge, SR 0.6/month
+pbo_skill = pbo_cscv(skilled)
+assert 0.10 < pbo_noise < 0.90 and pbo_skill < 0.25
+print(f"PBO noise {pbo_noise:.2f}   PBO with one real strategy {pbo_skill:.2f}   "
+      f"MinTRL(SR 0.3 vs 0.1, skew -0.5, kurt 5) {min_trl(0.3, 0.1, -0.5, 5):.0f} months")
+```
+
+What the blocks demonstrate, in desk language. Block 2 shows that smoothed marks cut measured volatility and manufacture autocorrelation, which is Defect 1 in code. Block 4 prints a hat count roughly an order of magnitude below the label count. Block 5 is the chapter's central experiment: with features that are *pure noise by construction*, shuffled K-fold reports an AUC well above 0.5 because each test label's nearest neighbors are its own overlapping siblings in time, while the purged, embargoed, parent-grouped splitter reports about 0.5, which is the truth. Block 6 shows the best of 1,000 noise strategies looking significant at a naive 95% and looking like a coin flip once deflated. Port the same functions to the real panel by replacing `simulate_panel` with the point-in-time TRACE and pricing-composite feed (Appendix B) and keeping every assert as a production test.
+

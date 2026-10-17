@@ -9,23 +9,156 @@
 
 ## 1. Thesis and the "aha"
 
-(pending)
+**Thesis.** Every rule in this chapter is a tax or a subsidy on one of the three things a dealer actually sells: **balance sheet** (leverage and risk-based capital, clearing and netting), **time** (the settlement cycle, the reporting delay), and **information** (TRACE and SBSR dissemination). A systematic desk does not "comply with" these rules; it *prices* them. The market maker's reservation price from Chapter 18 acquires a regulatory cost-of-carry term, the quoted half-spread acquires a capital charge times a hurdle rate times an expected holding period, and the regulatory calendar becomes a list of dated structural breaks in every series the desk trains on. That is the whole chapter: regulation as a vector of prices and a vector of dates.
+
+**The "aha" moments, in the order the chapter should land them:**
+
+1. **Regulation is the market's credit agreement, and the reader already knows how to read one.** An SEC adopting release has effective dates, phase-ins, carve-outs ("natural persons," "sovereign entities," "inter-affiliate"), and a compliance date that slips (Treasury clearing: cash 2025-12-31 → 2026-12-31; repo 2026-06-30 → 2027-06-30). A PJT RSSG banker reads a 300-page credit agreement for trapdoors; the same skill, pointed at Rule 17ad-22 or Rule 6730, finds where the liquidity will and will not be. Bohn & Stein's line that institutions "scramble to respond to (and sometimes try to arbitrage) the rules" (`Bohn_Stein p.25`) is the LMT game played against a regulator instead of a lender group.
+
+2. **The binding price of balance sheet is the leverage ratio, not the risk weight.** Under a leverage ratio every dollar of inventory, Treasury or CCC, costs the same Tier 1. At a 5% eSLR and a 12% ROE hurdle, holding \$100mm of anything costs roughly 60bp of notional per year, or about 1.2bp for a one-week hold *(illustrative)*. For a 2033 BBB with a 25bp bid-ask that is noise; for a 2-year Treasury with a sub-basis-point bid-ask it is the whole business. That single inequality explains why dealers went agency in Treasuries first, why the April 2020 SLR exclusion was the Fed's first market-structure tool, and why the November 2025 eSLR rule was sold as "Treasury market intermediation." It also predicts the end state the data now show: primary dealers net *short* corporate bonds in 2026 (SEARCH-LISTED; CHECK vs NY Fed data). The inventory function has moved to the customer (all-to-all, ETFs, portfolio trades); the dealer is a router with a risk budget.
+
+3. **The T+1 margin saving is the square-root-of-time rule, observed in the wild.** Clearing-fund margin scales like $\sigma\sqrt{H}$ in the horizon $H$. Going from T+2 to T+1 cuts $H$ by one day; with a one-day close-out the predicted reduction is $1-\sqrt{2/3}\approx 18\%$, without it $1-\sqrt{1/2}\approx 29\%$. DTCC measured 29% in the first quarter snapshot and 23% on a three-month average. A one-line derivation, a published number, and the reader never forgets why settlement cycles matter.
+
+4. **Transparency lowers the average cost and raises the tail cost, and the tail is where the desk lives.** TRACE cut trading costs across the board (Asquith–Covert–Pathak: HY costs −22.9%) while cutting HY trading activity by their measure (−71.1%). A reporting delay is an option the block dealer holds on its own information; shorten the delay and the block spread widens. That is why the 1-minute rule, approved by the SEC in 2024, was abandoned by FINRA in December 2025, and why the \$5mm/\$1mm dissemination caps have not moved since Ben Dor's 2010 footnote (`Ben_Dor p.162`). The 2019 FIMSAC block pilot (caps to \$10mm/\$5mm plus a 48-hour delay) went nowhere for the same reason, from the other side.
+
+5. **Clearing converts counterparty risk into liquidity risk and buys back balance sheet with netting.** Multilateral netting across $N$ symmetric dealers shrinks gross exposure to roughly $1/\sqrt{N-1}$ of itself; the price is initial margin, which must be funded. The Treasury mandate is therefore a trade: give up bilateral netting-set optionality and post IM, get a balance sheet that can hold a \$28trn-and-growing market. FICC already clears \$11.8trn on a peak day and about half the repo the mandate covers.
+
+6. **For the TREND thread:** index CDS set a record \$41.8trn in 2025 while single-name stayed near \$2.8trn; 78.1% of index and 63.1% of single-name notional in the US was cleared; SBSR has published every single-name print since 2022-02-14. Credit's most liquid instrument is a cleared, publicly reported, index swap. The regulatory stack is not a drag on systematic credit; it is what produced the data the desk runs on. The chapter should say so plainly, then show the two places where the stack *removes* liquidity (blocks and stress) and how to price them.
+
+**The PJT bridge in one line.** A restructuring banker prices covenants; a systematic desk prices rules. Both are legal prose converted into state variables with effective dates.
 
 ## 2. Section outline, anatomy mapping, Trend Watch boxes
 
-(pending)
+Legend: **DF** desk framing · **DER** derivation · **SPEC** AI-coder spec · **SRC** source extraction · **CASE** case study · **RG** resource graph (close every major section) · **TW** Trend Watch.
+
+**Cold open (≤400 words).** Thursday, 3:41 p.m., the last business day of the quarter. Theo asks why the desk's bid for \$15mm of a 2033 BBB industrial is three-eighths wider than the same bid on Tuesday, with the same CDS, the same equity, the same news. Ines: "The pot didn't change. The table did: the balance sheet is full on quarter-end, the trade settles tomorrow not the day after, and whoever buys this from us has to show the print inside fifteen minutes, which, you will be relieved to hear, is still fifteen." Kaz: "I assumed regulation was a constant." Mags: "In my day it was a phone call from the Fed and a fax." Question: *how do you put a price on a rule, and how do you know when the rule changed the data?* Then: "By the end of this chapter you will be able to..." (price balance sheet, time, and information; build the regime-flag layer; run the event study).
+
+- **22.1 A rule is a price: taxes on balance sheet, time, and information (DF, DER, SRC).** The three-input view of a dealer. The regulatory cost-of-carry term in the reservation price (D1). `Bohn_Stein p.25` on regulatory vs economic capital; `Schmid p.163` on funding cost "and any regulatory capital charge" with BIS risk weights; `Dynkin p.348` (Konstantinovsky–Phelps: 13bp/yr). **TW #1: Dealer inventories, 2007 → 2026** (~\$235bn peak → ~\$16bn 2017 average → net short ~\$4bn in 2026; FR 2004 caveats; the "agency or riskless principal" market). *Desk Myth vs. Desk Reality:* myth, "regulation killed liquidity"; reality, it re-priced inventory and moved it. RG.
+- **22.2 TRACE, 2002–2027: the transparency ledger (DF, DER, SPEC, SRC, CASE).** Dissemination history (2002, 2006-01-09 immediate dissemination, caps \$5mm/\$1mm, 2017 Treasuries, 2023-05-15 PT modifier, 2024 Treasury end-of-day product, 2026-06-08 allocation reports, 2026-08-31/2027-08-02 affiliate indicator). The delayed-publication block model and the censored-size model (D2). `Ben_Dor p.162, p.364`; `Man_Quantitative p.31`; `Moyer p.416` for the gag. Academic ledger: Bessembinder–Maxwell–Venkataraman 2006, Edwards–Harris–Piwowar 2007, Goldstein–Hotchkiss–Sirri 2007, Asquith–Covert–Pathak 2013/2019. **CASE: the 1-minute rule that died** (Jan 2024 filing → Oct 2024 approval → 2025-12-04 Notice 25-17). **SPEC:** TRACE regime-flag and de-duplication layer. **TW #2: TRACE regime changes 2023–2027 as a table of structural breaks.** *Ways This Blows Up:* a liquidity model fit on 2020–2026 volume that straddles the PT modifier and the affiliate indicator. RG.
+- **22.3 T+1 and the settlement clock (DF, DER, SRC, CASE).** SEC 2023-02-15 adoption, 2024-05-28 go-live; the $\sqrt{H}$ margin derivation and the DTCC numbers (D3); affirmation 73% → 94.55%; CNS fails 1.90–2.12%; fails charge economics (`Veronesi p.57`); the funding mismatch with T+2 FX and with ETF create/redeem (cross-ref Ch 20) and loan settlement (Ch 21); EU/UK 2027-10-11. **CASE: May 28–29, 2024 after-action.** RG.
+- **22.4 The Treasury clearing mandate: netting, margin, and the price of a \$28trn market (DF, DER, SPEC, CASE).** Rule 17ad-22 (2023-12-13), the scope (IDB cash, dealer-to-dealer cash, all member repo), exemptions, the 2025-02-25 extension, CME (Dec 2025) and ICE (Jan 2026) approvals, done-away access. Netting factor $1/\sqrt{N-1}$ and the IM-vs-balance-sheet trade (D4). Duffie et al. capacity utilization (D5). **CASE: March 2020 dash for cash** (utilization 96% on 2020-03-12; SLR exclusion 2020-04-01; expiry 2021-03-31). **SPEC:** netting and margin simulator. **TW #3: FICC volumes 2024–2026 and the compliance-date path.** RG.
+- **22.5 Dealer capital: Volcker, SLR/eSLR, Basel III endgame, and the breakeven holding period (DF, DER, SRC, CASE).** Capital per unit inventory under RWA vs leverage; breakeven hold vs bid-ask (D1 numerics); the Volcker RENTD logic as an inventory-turnover constraint; `Bolder p.317, p.329` (formulaic regulatory capital; Basel IRB code) and `Bohn_Stein p.25`. **CASE: the endgame saga** (2023-07-27 +16%; 2024-09-10 +9% for G-SIBs; 2026-03-19 "modestly decrease"; eSLR final 2025-11-25, effective 2026-04-01). **TW #4: the capital-rule timeline 2013–2026 and what each did to dealer corporate inventories.** *Poker Table:* Ines on why the eSLR made a Treasury "an ante you pay to sit down." RG.
+- **22.6 CDS: from the 2013 index clearing mandate to SBSR, Rule 9j-1, and the single-name renaissance (DF, DER, SRC, CASE).** CFTC 2012-11-28 determination (CDX IG/HY, iTraxx; 2013-03-11); SEC SBSR public dissemination 2022-02-14; 9j-1 (2023-06-07) against manufactured credit events (cross-ref Ch 24, Hovnanian/Windstream); 10B-1 not adopted; the SEC dealer rule adopted 2024-02-06 and vacated 2024-11-21. Cleared-vs-uncleared economics (D6). `Schmid p.163`; `Man_Quantitative p.11` (manufactured credit events, per the LMT dossier). **CASE: 2023 banking stress** (single-name +84.8% vs index +4.5%) vs **April 2025 tariffs** (index +20.9%, single-name −20.7%). **TW #5: ISDA 2021–H1 2026 CDS activity and clearing rates.** RG.
+- **22.7 The regulated venue: ICE–MarketAxess, EU/UK tapes, and the non-bank market-maker question (DF, short).** The \$6bn ICE–MarketAxess deal (H1-2027 close, per the industry dossier); Ediphy fairCT bond tape (selected 2025-07-03); UK bond regime live 2025-12-01; the AFME vs Citadel Securities debate on regulating non-bank liquidity providers after the dealer rule died. **TW #6 (optional): venue share and data-cost regime.** RG.
+- **22.8 The regulatory event-study engine (SPEC, CASE).** Difference-in-differences around effective dates with treated/control bond sets; placebo dates; the PT modifier (2023-05-15) as a worked example; a dated regime table that every other chapter's features consume. RG.
+- **22.9 Desk Debrief, The Spec You Hand the Robot, exercises.**
+
+Word budget (target 8,500): open 400 · 22.1 900 · 22.2 1,600 · 22.3 900 · 22.4 1,300 · 22.5 1,200 · 22.6 1,100 · 22.7 400 · 22.8 500 · close 500. If the writer must cut, shorten 22.7 and fold 22.8's code into 22.2's spec; never cut the two case studies in 22.4 and 22.6.
 
 ## 3. Derivation skeletons
 
-(pending)
+All inventory-risk and liquidity statements are under $\mathbb{P}$; capital ratios are accounting identities, not probabilities; the only $\mathbb{Q}$ objects are the CDS annuity in D6 and any option-style valuation of the reporting delay. Say so in the chapter.
+
+### D1. The regulatory cost of carry in the reservation price
+
+Setup: a dealer holds inventory $q$ (units of notional, signed) of a bond at mid $S_t$. Capital consumed:
+$$
+K(q) = |q|\,S_t\,\max\!\big(\kappa_{\text{RWA}}\cdot \text{RW},\ \kappa_{\text{LR}}\big),
+$$
+where $\kappa_{\text{RWA}}$ is the risk-based minimum plus buffers, $\text{RW}$ the risk weight (or the FRTB-style standardized charge per unit notional, written as an equivalent RW), and $\kappa_{\text{LR}}$ the leverage requirement (SLR 3%; eSLR 5% pre-2026; $3\% + \tfrac12\cdot\text{G-SIB surcharge}$ from 2026-04-01; depository cap 4%). With a hurdle return on Tier 1 of $h$ per year, the carrying cost rate is $c_{\text{reg}} = h\cdot\max(\kappa_{\text{RWA}}\text{RW}, \kappa_{\text{LR}})$ per dollar-year of inventory.
+
+Adding this to the Avellaneda–Stoikov reservation price of Chapter 18 (horizon $T$, risk aversion $\gamma$, mid vol $\sigma$):
+$$
+r^{\text{res}}_t = S_t - q\,\gamma\sigma^2 (T-t) - \operatorname{sgn}(q)\, c_{\text{reg}}\, S_t\,(T-t),
+\qquad
+\delta^*_t = \tfrac{2}{\gamma}\ln\!\big(1+\tfrac{\gamma}{k}\big) + \gamma\sigma^2 (T-t) + c_{\text{reg}}\,S_t\,\tau^{\text{hold}}.
+$$
+The last term is the regulatory half-spread: capital charge times hurdle times expected holding period $\tau^{\text{hold}}$. **Numerics (illustrative):** $\kappa_{\text{LR}}=5\%$, $h=12\%$ gives $c_{\text{reg}}=60$bp/yr; a 7-day hold costs $60\times 7/365\approx 1.15$bp of notional; at $\kappa_{\text{LR}}=3.75\%$ (3% + half of a 1.5% surcharge) it is 45bp/yr and 0.86bp per week. Compare with bid-ask: a 2y Treasury (sub-1bp) is dominated by $c_{\text{reg}}$; a BBB 10y (20–30bp) is not. **Breakeven holding period:** $\tau^{\ast} = \tfrac{s_{\text{bid-ask}}/2}{c_{\text{reg}}S}$; below it, principal market making beats agency.
+
+*Error-prone spots:* (i) units: $c_{\text{reg}}$ is annual, $\tau$ in years; (ii) shorts consume balance sheet too (repo/borrow gross-up), so use $|q|$ not $q$; (iii) do not double count funding spread and capital hurdle: $h$ is the *excess* return on capital over the funding rate; (iv) leverage charges apply to gross, risk charges to net-of-hedge, so a hedged inventory is cheap on RWA and expensive on LR; (v) quarter-end snapshots (the cold open) mean $\kappa$ is effectively time-varying: model it as a calendar feature.
+
+### D2. Reporting delay as an option, and censored size
+
+Kyle-style linear impact $\lambda$ per unit of signed block size. A dealer buys a block $Q$ at $t=0$ at a concession $\tfrac{s_B}{2}Q$ and works it out linearly over $T_u$ (its unwind time). The print becomes public at delay $\Delta$ (15 minutes today; 1 minute under the abandoned rule; end-of-day for on-the-run Treasuries), after which the market mid moves by $\lambda Q$ against the remaining inventory. Expected P&L:
+$$
+\Pi(\Delta) = \tfrac{s_B}{2}\,Q - \lambda Q^2\Big(1-\tfrac{\Delta}{T_u}\Big)^+ - \tfrac12\gamma\sigma^2 Q^2\,\tfrac{T_u}{3},
+$$
+(the last term is the inventory variance of a linear unwind). Zero-profit block half-spread:
+$$
+\tfrac{s_B^\ast}{2}(\Delta) = \lambda Q\Big(1-\tfrac{\Delta}{T_u}\Big)^+ + \tfrac{\gamma\sigma^2 Q T_u}{6},
+\qquad
+\frac{\partial s_B^\ast}{\partial \Delta} = -\frac{2\lambda Q}{T_u} < 0 \ \text{for } \Delta < T_u .
+$$
+Shorter delay, wider block spread; the effect is proportional to $Q$ and vanishes for trades the dealer can unwind inside the delay (small tickets), which is why auto-ex RFQs did not care about one minute and block desks did.
+
+**Censored size.** Printed size is $\tilde Q = \min(Q, C)$ with a flag ($C$ = \$5mm IG, \$1mm HY). If $Q \mid Q>C$ is Pareto with tail index $\alpha>1$, the market's update uses $\mathbb{E}[Q\mid Q>C] = \tfrac{\alpha}{\alpha-1}C$, so the impact of a "5MM+" print is a constant $\lambda\tfrac{\alpha}{\alpha-1}C$ regardless of true size. The desk that knows $Q$ (it did the trade) has an information edge of $\lambda\,(Q - \tfrac{\alpha}{\alpha-1}C)$ for the window until the uncapped historic file appears (six months after quarter end). *Error-prone:* estimate $\alpha$ from the uncapped historic set, never from the capped live feed; treat Ben Dor's imputed caps (\$12.5mm IG, \$4mm HY from aggregate-volume matching, `Ben_Dor p.364`) as a sanity check on $\alpha$.
+
+### D3. Settlement cycle, margin, and fails
+
+Clearing-fund margin covers the loss on open positions over the horizon from trade to close-out: $H = T_{\text{settle}} + T_{\text{co}}$ days. Under a random-walk price, $\text{IM} \propto \sigma\sqrt{H}$, so
+$$
+\frac{\text{IM}_{T+1}}{\text{IM}_{T+2}} = \sqrt{\frac{1+T_{\text{co}}}{2+T_{\text{co}}}} =
+\begin{cases} 0.707 & (T_{\text{co}}=0): \ -29\% \\ 0.816 & (T_{\text{co}}=1): \ -18\% \end{cases}
+$$
+DTCC: −29% (quarter snapshot, \$12.8bn → \$9.1bn) and −23% (three-month average, to \$9.8bn). The chapter should show both brackets and let the number land between them; it is an honest fit, not a cherry-pick. *Error-prone:* NSCC margin has a volatility component and other add-ons, so apply the ratio to the volatility component only.
+
+Fails: the TMPG-style charge is $\text{Charge} = \max(0,\ 3\% - r^{\text{ref}})\cdot \text{Par}\cdot \tfrac{\text{days}}{360}$ (Veronesi p.57 for the 2009 Fed rule; the TMPG practice parameters: CHECK the current reference rate). At $r^{\text{ref}}\approx 4\%$ the charge is zero and the fail is "free" except for reputational and capital costs; at $r^{\text{ref}}=0$ it is 3%/yr, which is why specials went negative in May 2009. Shorter settlement reduces the fail *window* but raises the fail *probability* (less time to source bonds), so model fails as $p_{\text{fail}}(T_{\text{settle}})\times\text{Charge}$ and note that CNS fail rates were flat (2.01% → 1.90–2.12%).
+
+### D4. Multilateral netting and the IM-for-balance-sheet trade
+
+$N$ dealers; $x_{ij}$ the signed exposure from $i$ to $j$, i.i.d. with mean zero and scale $\sigma_x$. Bilateral gross for dealer $i$: $G_i = \sum_{j\ne i}|x_{ij}|$, with $\mathbb{E}G_i = (N-1)\sigma_x\sqrt{2/\pi}$ under normality. Novated to a CCP, dealer $i$'s exposure is $|\sum_{j\ne i} x_{ij}|$ with $\mathbb{E} = \sqrt{N-1}\,\sigma_x\sqrt{2/\pi}$. Netting factor:
+$$
+\phi(N) = \frac{\mathbb{E}\,|\textstyle\sum_j x_{ij}|}{\mathbb{E}\,\textstyle\sum_j |x_{ij}|} = \frac{1}{\sqrt{N-1}}, \qquad \phi(25)=0.204 .
+$$
+With directional flow (a common component $m$ in every $x_{ij}$, the basis-trade case where every fund is long cash/short futures against the same dealers), $\phi \to \tfrac{|m|}{\mathbb{E}|x|}$ as $N$ grows: netting stops helping exactly when the market is one-way. Balance-sheet saved per dealer: $(1-\phi)\,\mathbb{E}G_i\cdot\kappa_{\text{LR}}\cdot h$ per year. Cost: $\text{IM}\cdot f$ where $f$ is the funding spread on margin collateral, plus the default-fund contribution. The mandate is net positive iff $(1-\phi)\,G\,\kappa_{\text{LR}}\,h > \text{IM}\,f + \text{DF}$. *Error-prone:* (i) netting sets: done-with vs done-away trades land in different sets; (ii) FICC–CME cross-margining changes IM, not $\phi$; (iii) sponsored repo already nets at the sponsor, so the marginal gain of the mandate is smaller than the gross numbers suggest (DTCC says it clears "nearly half" of covered repo already).
+
+### D5. Dealer capacity as a convex liquidity state variable (Duffie et al. 2023)
+
+$$
+\text{Illiq}_t = a + b\,\sigma^{y}_t + c\,\big(U_t - U^\ast\big)^+ + \epsilon_t,
+$$
+with $U_t\in[0,1]$ the capacity utilization (risk-adjusted gross positions relative to a sample-record scale) and $U^\ast\approx 0.3$–$0.4$. Their estimates: from 40% to 80% utilization, illiquidity rises ~3 standard deviations beyond the volatility-predicted level; at 60%, ~2 standard deviations; on 2020-03-12 utilization hit 96%. For the desk this is a feature, not a paper: proxy $U_t$ with FR 2004 positions, FICC volumes, and your own hit-rate decay, and let the liquidity-cost model (Ch 19's $\text{LCS}$-style term) be convex in it. *Error-prone:* $U_t$ is weekly and published with a lag; use it as a slow state, not a trade trigger.
+
+### D6. Cleared vs uncleared CDS economics
+
+Uncleared: the protection buyer carries $\text{CVA} \approx (1-R^{\text{cp}})\int_0^T \mathbb{E}^{\mathbb{Q}}[\text{EE}(t)]\, d\text{PD}^{\text{cp}}(t)$ plus bilateral IM under the uncleared-margin rules. Cleared: CVA $\to$ CCP default-fund exposure, IM $= \text{VaR}_{99\%}$ over a 5-day MPOR (CHECK ICE Clear Credit parameters), funded at $f$. Per \$1 of notional and year, cleared is cheaper when $\text{CVA rate} + \text{IM}^{\text{bil}} f > \text{IM}^{\text{CCP}} f + \text{DF} + \text{clearing fee}$. Index CDS clears at 78.1% and single-name at 63.1% because portfolio margining across the index and its constituents at one CCP lowers $\text{IM}^{\text{CCP}}$ most for dealers who hold both. The chapter needs only the inequality and the ISDA numbers; the full CVA machinery lives in Ch 24.
 
 ## 4. Code spec and sanity check
 
-(pending)
+**Module:** `reg_cost_engine.py` (numpy, pandas only; seeded). One file, five pure functions, one `__main__` that prints the sanity table. "The Spec You Hand the Robot" opens with ROBO's literal reading of "minimize regulatory capital" (it closes the desk: zero inventory, zero capital, zero revenue), then the real spec.
+
+1. `regulatory_carry_bp(notional, kappa_rwa, risk_weight, kappa_lr, hurdle, holding_days) -> float`
+   Returns $10^4\cdot h\cdot\max(\kappa_{\text{RWA}}\text{RW}, \kappa_{\text{LR}})\cdot \text{holding\_days}/365$, in bp of notional. Inputs are decimals; validate $0\le\kappa\le1$, `holding_days > 0`. Vectorize over a `pd.DataFrame` of positions with columns `[cusip, notional, rw, holding_days]`.
+2. `breakeven_holding_days(bid_ask_bp, kappa_lr, hurdle) -> float` from D1; raise if `hurdle <= 0`.
+3. `block_half_spread(lam, Q, delay, unwind_time, gamma, sigma) -> float` implementing D2 with the positive-part guard; also `censored_impact(lam, cap, alpha)` returning $\lambda\frac{\alpha}{\alpha-1}C$ with a guard `alpha > 1`.
+4. `margin_ratio(t_old, t_new, closeout_days) -> float` $=\sqrt{(t_{\text{new}}+T_{co})/(t_{\text{old}}+T_{co})}$.
+5. `netting_factor_mc(n_dealers, n_sims, seed, common_component=0.0) -> dict` with keys `{"mc": ..., "theory": 1/sqrt(N-1), "directional_floor": ...}`; exposures `rng.standard_normal` plus `common_component`.
+6. `trace_regime_flags(trades: pd.DataFrame) -> pd.DataFrame` adding boolean columns from a dated table: `pt_modifier_live` (≥ 2023-05-15), `alloc_reports_live` (≥ 2026-06-08), `affiliate_ind_voluntary` (≥ 2026-08-31), `affiliate_ind_mandatory` (≥ 2027-08-02), `t_plus_1` (≥ 2024-05-28), `sbsr_public` (≥ 2022-02-14), `one_minute_rule` (always False, with a comment citing Notice 25-17), `size_capped` (`size == cap` and flag). Schema in: `trade_dt (datetime64[ns, America/New_York]), cusip (str), size (float), side (str), price (float), rating_bucket ({"IG","HY"})`. Edge cases: timezone-naive timestamps rejected; caps looked up by `rating_bucket`.
+7. `event_study_did(panel, event_date, treated_mask, window=(-60, 60)) -> pd.DataFrame` returning pre/post means for treated and control and the DiD estimate with a block-bootstrap standard error (block = cusip), and a `placebo(dates)` helper.
+
+**Sanity checks (printed by `__main__`, asserted in code):**
+- `regulatory_carry_bp(1e8, 0.105, 1.0, 0.05, 0.12, 7)` ≈ 1.15bp (leverage binds at RW = 100%? No: $0.105\times1.0 = 10.5\% > 5\%$, so RWA binds at 2.4bp; the test must use a Treasury: `risk_weight=0.0` → 1.15bp). Both cases printed; this is the pedagogical point.
+- `margin_ratio(2, 1, 0)` = 0.7071 and `margin_ratio(2, 1, 1)` = 0.8165; DTCC's 0.71–0.77 lies between them.
+- `netting_factor_mc(25, 20000, seed=7)["mc"]` within 2% of 0.204; with `common_component=1.0` the factor rises toward the directional floor.
+- `block_half_spread` is non-increasing in `delay` and equals the pure inventory term when `delay >= unwind_time`.
+- `trace_regime_flags` on a 3-row frame straddling 2023-05-15 flips exactly one flag.
+- `event_study_did` on a synthetic panel with an injected 2bp post-event treated shift recovers 2bp ± bootstrap SE.
 
 ## 5. Source map (shelf pages, exact quotations)
 
-(pending)
+Page numbers are PDF page indices from `tools/pdf_search.py`, which is what `[SOURCE EXTRACTION]` cites. Each quotation is ≤60 words; the writer annotates in our own words.
+
+| # | Citation | Use in chapter | Exact quotation |
+| :-- | :-- | :-- | :-- |
+| 1 | `Ben_Dor_Quantitative_Credit_Portfolio_Management p.162` (n.3) | §22.2 opener: TRACE as it stood in 2010, caps unchanged since | "Trade Reporting and Compliance Engine (TRACE) ... disseminates trade-by-trade corporate bond execution information within 15 minutes to all market participants. At this time, TRACE data are censored at $5 million for investment grade and $1 million for high-yield securities." |
+| 2 | `Ben_Dor p.364` (n.8) | §22.2 censored-size model (D2) | "TRACE truncates the sizes of large transactions at $1 million and $5 million for high-yield and investment-grade bonds, respectively ... Alternative transaction caps can be imputed based on equating the sum of individual trades with the aggregate volume figures reported by TRACE. This procedure yields higher transaction limits of $4 million and $12.5 million" |
+| 3 | `Ben_Dor p.120` | §22.2 why transparency ≠ a bid-ask series; inventory-skewed quotes | "for most bonds the time between a broker-dealer buy and sell transaction for a given CUSIP can be very long, so it is difficult to calculate an accurate bid-ask spread using TRACE." |
+| 4 | `Dynkin_Systematic_Investing_in_Credit p.348` (n.1) | §22.1 TW #1: the price of lost inventory | "Konstantinovsky and Phelps (2012) document the decline in US corporate bond market liquidity as dealer inventories have fallen since 2008 in response to various regulatory changes. They estimate that the inventory decline led to an 18% drop in illiquidity, which translates to approximately 13bp/year in additional transaction cost for a portfolio with 100% yearly turnover." |
+| 5 | `Dynkin p.166` | §22.1 inventory risk premium as the thing regulation re-prices | "the increased risk premium demanded by dealers for holding the security in their inventory" |
+| 6 | `Dynkin p.730` (n.17) | §22.2 competition across dealers vs quoted LCS | "In practice, investors face competing bid–offer quotes from several broker dealers, so effective market bid–offer spreads are usually tighter than those implied by LCS, resulting in lower costs." |
+| 7 | `Man_Revolutions_in_Credit_Trading_2023 p.3` | §22.5 QT, volatility and balance-sheet commitment (2022) | "The new market environment of higher volatility and quantitative tightening may also have left dealers inclined to commit less of their balance sheets to bond trading." |
+| 8 | `Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.19` | §22.2 non-firm runs; "if filled" | "Corporate bond bid/ask prices are indicated by dealer runs that are not firm and actionable and therefore market participants often find that trades that appear profitable in practice are unprofitable once transaction costs are factored in." |
+| 9 | `Man_Quantitative p.31` | §22.2 TRACE fields a quant uses (capped/uncapped) | "the availability of FINRA's Trade Reporting and Compliance Engine (TRACE) data which track OTC bond transactions by registered broker-dealers in the US. This includes date, time, quantity (capped/uncapped), price, direction and other fields." |
+| 10 | `Bohn_Stein_Active_Credit_Portfolio_Management p.25` | §22.1 and §22.5: regulatory vs economic capital; the arbitrage instinct | "we view bank regulation similarly to financial accounting—something that has to be done, both for the sake of the bank and the broader financial system, but not something that should be the main driver of an institution's business decisions." Also: "financial institutions scramble to respond to (and sometimes try to arbitrage) the rules." |
+| 11 | `Bolder_Credit_Risk_Modelling p.317` | §22.5 why regulatory capital is formulaic (and therefore priceable) | "This argues for a simplified, formulaic approach to determining appropriate levels of regulatory capital. BCBS' principal job is to find a balance between fairness, comparability, and complexity while still attaining its societally important objectives." |
+| 12 | `Bolder p.329` | §22.5 Basel IRB as code; portfolio invariance | "The Basel IRB approach ... is a broad, formulaic, one-size-fits-all methodology for the computation of default-risk capital requirements. Its underlying assumption of portfolio invariance ... is nevertheless not particularly well suited for serious risk management and assessment." |
+| 13 | `Schmid_Credit_Risk_Pricing_Models p.163` | §22.1 D1 anchor: funding + regulatory capital charge; risk weights | "the cost of the trade will depend mainly on the funding cost of the total return payer and any regulatory capital charge incurred ... If the total return payer is a bank, it also depends on the BIS risk weight of the asset, with 20% for OECD bank debt and 100% for corporate debt." |
+| 14 | `Veronesi_Fixed_Income_Securities p.57` | §22.3 fails charge and negative specials | "Starting May 1, 2009, the Federal Reserve imposed a penalty charge of 3% over its Fed funds rate for failing to deliver the bonds in the repo transactions the Federal Reserve conducts daily in its open market operations." And: "on May 1, 2009, the repo rate for some Treasury securities that were on special became negative." |
+| 15 | `Moyer_Distressed_Debt_Analysis p.416` (n.62) | §22.2 gag and a dated fact: TRACE in 2005 as seen from a distressed desk | "The National Association of Securities Dealers requires that trades in specified bonds, usually larger issue sizes or of large capitalization firms, be electronically recorded by broker-dealers into the Trade Reporting and Comparison Entry Source (TRACE). However, most of the securities required to be posted do not constitute distressed securities." *(The acronym is Trade Reporting and Compliance Engine; the mis-expansion is Moyer's. Immediate dissemination of all public corporates began 2006-01-09.)* |
+| 16 | `Blackstone_Systematic_Credit p.2` | §22.7 and the Ch 22-B hook: the customer's regulatory capital drives flow | "dynamically adjust portfolios to minimize capital charges for insurance clients under regulatory frameworks like Solvency II" |
+| 17 | `Nuveen_Multi_Asset_Credit_Quant_Framework p.5` | same hook | "limit exposure to certain sectors due to regulatory capital requirements" |
+
+Non-shelf anchors to cite by title (no page numbers): Duffie (2012) *Market Making Under the Proposed Volcker Rule*; Duffie (2020) *Still the World's Safe Haven?* (Hutchins Center); Duffie, Fleming, Keane, Nelson, Shachar & Van Tassel (2023), NY Fed Staff Report 1070 (VERIFIED URL); Asquith, Covert & Pathak (2013/2019), NBER w19417 (VERIFIED URL).
 
 ## 6. RESEARCH DOSSIER (dated, sourced; CHECK where unconfirmed)
 

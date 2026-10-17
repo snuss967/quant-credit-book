@@ -509,7 +509,7 @@ $$
 
 ### 5.7.3 The bounded-support trap
 
-The Pickands–Balkema–de Haan theorem sorts distributions into three domains by $\xi$: Fréchet ($\xi > 0$, power tail), Gumbel ($\xi = 0$, exponential-type tails), and Weibull ($\xi < 0$, bounded support). A single bond's loss is bounded, so it is in the Weibull domain. Run Hill on it and $\hat{\alpha}_k$ drifts with $k$: for small $k$ it is measuring the spread of recoveries within the default lump; for $k$ near $nq$ it is measuring the gap between the lump and the survival world. Neither is a tail index. The spec in §5.9 makes `hill_estimator` refuse, with a warning, when the sample maximum sits at the support bound.
+Extreme-value theory (Fisher–Tippett–Gnedenko for maxima, and its threshold counterpart Pickands–Balkema–de Haan, which is what justifies the GPD) sorts distributions into three domains by $\xi$: Fréchet ($\xi > 0$, power tail), Gumbel ($\xi = 0$, exponential-type tails), and Weibull ($\xi < 0$, bounded support). A single bond's loss is bounded, so it is in the Weibull domain. Run Hill on it and $\hat{\alpha}_k$ drifts with $k$: for small $k$ it is measuring the spread of recoveries within the default lump; for $k$ near $nq$ it is measuring the gap between the lump and the survival world. Neither is a tail index. The spec in §5.9 makes `hill_estimator` refuse, with a warning, when the sample maximum sits at the support bound.
 
 ### 5.7.4 Diversification eats skew, correlation feeds it back
 

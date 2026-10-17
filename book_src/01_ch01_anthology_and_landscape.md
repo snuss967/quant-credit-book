@@ -75,11 +75,10 @@ To extract maximum alpha and isolate pure Idiosyncratic Return (**IDO**), a Desk
 | **Capital Structure & Volatility Arbitrage** | DE Shaw, Saba Capital, Elliott (Trading), Millennium pods | 5 Days to 6 Months | Merton-model dislocations, Equity Put Skew vs. High-Yield Spreads, CDS-to-Bond Basis, Orphan CDS | Vulnerable to squeeze dynamics in repo/borrow markets and basis blowouts during liquidity crunches | Unwind when borrow is recalled, margin rises, or the basis breaches a stop. Clock: days, and always at the worst time. |
 | **CLO Vehicles (Par-Constrained Institutional Buyers)** | Blackstone, Carlyle, Palmer Square, Ares | Buy-and-Hold (Reinvestment Period) | Structural leverage via AAA-to-Equity tranche arbitrage | **Forced mechanical sellers** when CCC buckets exceed $7.5\%$ or upon default; cannot easily fund new-money post-reorg equity rights offerings | Carry CCC excess at market value in OC tests; divert cash to senior notes on breach; sell or stop reinvesting to cure. Clock: the next test or payment date. |
 | **Insurers & Annuity Writers (Ratings- and Capital-Constrained)** | MetLife, Prudential, Athene, Corebridge | Hold to maturity (liability-matched, 5 to 30 years) | Liability-matched spread capture; illiquidity premium from private placements | Capital charges jump at the IG/HY line, so downgrades produce slow, concentrated selling of the same bonds by many holders | Sell, or hold more capital, after a downgrade to speculative grade. Clock: quarters, not days. |
-| **Open-End HY Funds & Bond ETFs (NAV-Redemption Sellers)** | iShares (HYG, LQD), SPDR (JNK), Vanguard and other HY mutual fund complexes | Daily liquidity to end-investors | Cheap beta delivery; daily liquidity on illiquid assets | Liquidity mismatch: they sell what is liquid, not what is expensive; ETF prices gap below NAV when authorized participants stop arbitraging | Index funds sell fallen angels at the month-end rebalance and buy them at HY index inclusion; open-end funds meet redemptions within days. Clock: a known calendar date, or the day after a bad headline. |
+| **Open-End HY Funds & Bond ETFs (NAV-Redemption Sellers)** | iShares (HYG, LQD), SPDR (JNK), Vanguard and other HY mutual fund complexes | Daily liquidity to end-investors | Cheap beta delivery; daily liquidity on illiquid assets | Liquidity mismatch: they sell what is liquid, not what is expensive; ETF prices gap below NAV when authorized participants stop arbitraging | IG index funds sell fallen angels at the month-end rebalance and HY index funds buy them at inclusion; open-end funds meet redemptions within days. Clock: a known calendar date, or the day after a bad headline. |
 
 Everyone in that table is smart. Most of them are not the problem. The problem is the last column: every row has a trigger that converts a rating, a test, or a redemption into a sale, at a time you can often predict and in a size you can often estimate. A forced sale is **information-free about the bond and information-rich about the seller**. The rest of this chapter is about telling those two kinds of information apart, at speed, for money.
 
-> **[AGENT EXPANSION DIRECTIVE FOR NEXT ITERATION]:** Pull cited excerpts from `/state/pdf_pages/Ben_Dor_Quantitative_Credit_Portfolio_Management/` on DTS (Duration Times Spread) and empirical duration, `/state/pdf_pages/Bohn_Stein_Active_Credit_Portfolio_Management/` on structural default models, and `/state/pdf_pages/Moyer_Distressed_Debt_Analysis/` on the distressed investing process. Expand Section 1.3 into a 6,000-word compilation of foundational texts with full mathematical commentary.
 
 ---
 
@@ -163,7 +162,7 @@ This is the seed's equation from §1.1 with the per-horizon variance written out
 
 **What ROBO built from the vague version.** Spec: "write a function that gives a fair bid for an RFQ." ROBO returned `return mid`, with a docstring noting that the mid is, by construction, fair. It is. It is also the price at which the cold open loses \$2mm.
 
-**The Spec You Hand the Robot.** Implement equation (1.2) as `reservation_bid(S, q, dq, gamma, sigma_ido, h_years, pi, J, c)`. Units are part of the contract: `S`, `J`, `c` in price points per 100 par; `sigma_ido` in points per $\sqrt{\text{year}}$, *post-hedge*; `q`, `dq` in \$mm par, long positive, `dq > 0` meaning the client sells to us; `gamma` in $1/(\$\text{mm}\cdot\text{pt})$; `h_years` in years. Raise `ValueError` on `dq <= 0`, `pi` outside $[0,1]$, `h_years <= 0`, or negative `gamma`, `sigma_ido`, `J`, `c`. Do **not** condition twice: if `S` already comes from a model that conditions on the RFQ, pass `pi = 0`. Implement `posterior_informed(mu, log_lr)` as the logit-additive Bayes update. Implement `glosten_milgrom_markout(pi, J, sigma_ido, h_years, n, seed)` as a seeded simulation of seller types whose mean markout must equal $-\pi J$ within three standard errors. Implement `jump_penalty_ratio(gamma, q, ell)`, the exact CARA jump penalty divided by its quadratic approximation, and assert that it tends to 1 as $\gamma q\ell \to 0$ and increases in $q$. Edge cases: a short desk ($q < 0$) may bid above $S - c$, which is correct and must not be clipped; `pi = 1` is legal and means "the bid is $S - J$ minus costs."
+**The Spec You Hand the Robot.** Implement (1.2) as `reservation_bid(S, q, dq, gamma, sigma_ido, h_years, pi, J, c)`. Units are part of the contract: points per 100 par for `S`, `J`, `c`; points per $\sqrt{\text{year}}$, *post-hedge*, for `sigma_ido`; \$mm par for `q`, `dq` (long positive; `dq > 0` means the client sells to us); $1/(\$\text{mm}\cdot\text{pt})$ for `gamma`; years for `h_years`. Raise on `dq <= 0`, `pi` outside $[0,1]$, `h_years <= 0`, or negative scale inputs. Never condition twice: if `S` already conditions on the RFQ, pass `pi = 0`. Never clip a short desk's bid above $S - c$; it is correct. Add `posterior_informed` (logit-form Bayes), a seeded `glosten_milgrom_markout` whose mean must equal $-\pi J$ within three standard errors, and `jump_penalty_ratio`, which must tend to 1 as $\gamma q\ell \to 0$ and rise with $q$.
 
 ```python
 import numpy as np
@@ -253,10 +252,10 @@ The numerical guards are deliberate. `np.expm1` keeps the jump penalty accurate 
 
 ### Deep-Dive Resource Graph
 
-- **Podcasts.** Bloomberg *Odd Lots* has run several conversations on how corporate bonds actually trade (search the show's archive for its corporate-bond market-structure and portfolio-trading episodes; we do not cite episode numbers). *Flirting with Models* (Corey Hoffstein), https://www.flirtingwithmodels.com/ , for systematic-investing practitioners talking process.
-- **Practitioner Writing.** Man Institute, Robert Lam and Paul Kamenski, *The Revolutions in Credit Trading* (2023), https://www.man.com/insights/revolutions-in-credit-trading , on why execution, not ideas, was the binding constraint. Matt Levine, *Money Stuff* (Bloomberg Opinion), passim on information and dealer inventory.
-- **Academic Papers.** Glosten and Milgrom (1985), *Bid, Ask and Transaction Prices in a Specialist Market with Heterogeneously Informed Traders*, Journal of Financial Economics. Ho and Stoll (1981), *Optimal Dealer Pricing under Transactions and Return Uncertainty*, Journal of Financial Economics. Avellaneda and Stoikov (2008), *High-Frequency Trading in a Limit Order Book*, Quantitative Finance. Guéant, Lehalle and Fernandez-Tapia (2013), *Dealing with the Inventory Risk: A Solution to the Market Making Problem*, Mathematics and Financial Economics.
-- **Data & Code.** FINRA TRACE, https://www.finra.org/filing-reporting/trace , the post-trade tape every markout is computed against.
+- **Podcasts.** *Flirting with Models* (Corey Hoffstein), https://www.flirtingwithmodels.com/ , systematic practitioners on process.
+- **Practitioner Writing.** Man Institute (Robert Lam and Paul Kamenski), *The Revolutions in Credit Trading* (2023), https://www.man.com/insights/revolutions-in-credit-trading .
+- **Academic Papers.** Glosten and Milgrom (1985), *Bid, Ask and Transaction Prices in a Specialist Market with Heterogeneously Informed Traders*, JFE. Ho and Stoll (1981), *Optimal Dealer Pricing under Transactions and Return Uncertainty*, JFE. Avellaneda and Stoikov (2008), *High-Frequency Trading in a Limit Order Book*, Quantitative Finance.
+- **Data & Code.** FINRA TRACE, https://www.finra.org/filing-reporting/trace , the tape every markout is computed against.
 
 ---
 
@@ -439,3 +438,206 @@ The third question: *is there a systematic way to be on the other side of forced
 > **[SOURCE EXTRACTION]** *Paleologo_Advanced_Portfolio_Management p.111:* "Performance can be decomposed into systematic and idiosyncratic components. Most importantly, these components are investable." ... "your investors are not paying you to replicate the market, ride momentum, or short already shorted stocks."
 >
 > **Annotation.** Paleologo writes about equities; the logic transfers whole. Theo, proudly: "Fallen angels beat high yield by three percent a year." Kaz: "Strip the HY beta, the DTS, and the index-inclusion bid, then tell me." IDO or it didn't happen. Part of the fallen-angel premium is plain spread beta (fallen angels are long-duration BBs), part is the liquidity premium you are paid for being there on the rebalance date, and only the residual is skill. Paleologo's sharper version (p.139) is the desk motto's parent: "factors can find infinite ways to mar your performance, but cannot tell you how to be profitable." The bid equation's $\sigma_{\text{IDO}}$ is that decomposition applied to a single trade.
+
+---
+
+## 1.7 The Anthology, Part D: Where the Flows End Up (Moyer; Houlihan Lokey)
+
+The last question: *when the company breaks, who is left holding what, and who has to sell it?* This is home turf for the reader, and Moyer's distressed-debt classic is honest about how far the quants had come when it was written.
+
+> **[SOURCE EXTRACTION]** *Moyer_Distressed_Debt_Analysis p.275:* "As much as the quantitative approach of financial econometricians would suggest that investing is fundamentally a science, in distressed investing it is more of an art." ... "This is why knowledge of the process, experience, and judgment are often more critical to investment success than tedious hours of financial modeling."
+>
+> **Annotation.** This book agrees with every word and draws the opposite conclusion. "Knowledge of the process" is exactly what can be written down: exclusivity periods, voting thresholds, DIP roll-ups, plan classes, and which creditor has the hold-up value. Once written down, process knowledge becomes features, transition probabilities, and a prior over $J$ in the bid equation. What stays an art is the judgment about which features matter in *this* case, and that is the job description for the human in Man's quote from §1.1. Moyer also tells us where to look for mispricing: "when the news is very bad, the market often will trade down to the worst-case scenario valuations" (p.257), because sellers who need out meet buyers who demand a discount for uncertainty. That is a forced-seller edge with a docket number.
+
+> **[SOURCE EXTRACTION]** *Moyer_Distressed_Debt_Analysis p.370:* "Banks and collateralized debt obligations (CDOs) are not natural holders of equity securities." ... "when such entities are known to be large holders of the postreorganization equity, other market participants will certainly consider their net sell disposition."
+>
+> **Annotation.** The forced-seller graph does not end at default; it rewires. Loans convert into post-reorganization equity, and the holders of those loans (CLOs, banks) are often barred from, or penalized for, holding equity. So the most predictable seller of a newly reorganized stock is its largest holder, and everybody knows it. Moyer's other forced seller is smaller and sadder: the trade creditor who "may not have the financial wherewithal to wait until the completion of a bankruptcy case to realize full value of the claim and thus is a forced seller" (p.310). Claims trading is that edge in pure form (Chapter 16).
+
+> **[SOURCE EXTRACTION]** *Houlihan_Lokey_Distressed_MA p.35:* "Under Section 363, for example, a debtor with Court approval may sell assets free and clear of all liens, claims and encumbrances (which attach only to the proceeds of such sales)."
+>
+> **Annotation.** One clause, and it converts the *assets* of a broken firm into a clean asset sale while the *claims* follow the cash. For the flow graph, a 363 sale is a node where the holder set changes completely: the buyer gets the assets with no legacy creditors, and the old creditors get a claim on a pot whose size the auction sets. Pricing the claim means pricing the auction.
+
+Kaz, reading over Theo's shoulder: "A fulcrum is where a lever balances. So the fulcrum security is the tranche with zero duration?" Mags: "It's the tranche that gets the equity and the lawsuits." (The fulcrum is the class whose recovery straddles the enterprise value: everything senior is covered, everything junior is out of the money, and the fulcrum becomes the new owner. It has more duration than anything, measured in years of litigation.)
+
+---
+
+## 1.8 The Ecosystem as a Forced-Seller Flow Graph
+
+Put the four parts of the anthology together and the market stops looking like a crowd and starts looking like plumbing. Each holder type is a node. Each trigger (a downgrade to HY, a downgrade to CCC, a default, a redemption wave) opens a set of edges with a known direction, an estimable size, and a response window. Blackstone's systematic credit paper describes the machine built to sit at the end of those edges, in the vendor's own words: "The systematic optimizer naturally acts as a contrarian liquidity provider. When credit spreads widen aggressively (often due to market panic rather than fundamental deterioration), the model algorithmically increases credit exposure" (*Blackstone_Systematic_Credit p.1*). The parenthesis is the whole bet: that the seller is forced, not informed.
+
+### 1.8.1 The model (measure: $\mathbb{P}$)
+
+Let holder types be $i = 1,\dots,n$, bond segments $k$, and triggers $\tau$. Holdings $H_{k,i}$ are in \$bn of par; $f_i(\tau)\in[0,1]$ is the fraction holder $i$ must sell after trigger $\tau$, over a window $w_i(\tau)$ (insurers: quarters; index funds: the month-end rebalance; CLOs: the next test date; open-end funds: days). Natural absorbers $j$ have capacity $A_{k,j}(\tau)$: HY index funds that must *buy* at inclusion (Moyer p.35's "forced" buyers), fallen-angel programs, crossover and distressed funds, and dealers' balance sheets. Then
+
+$$
+Q^{\text{sell}}_k(\tau) = \sum_i H_{k,i}\,f_i(\tau), \qquad
+I_k(\tau) = Q^{\text{sell}}_k(\tau) - \sum_j A_{k,j}(\tau). \tag{1.6}
+$$
+
+The positive part of the imbalance $I_k$ must be absorbed at a price concession. Model the price as a fundamental value $p^*$ minus a temporary pressure term that decays at rate $\theta$ (per day) after the trigger date $t_0$:
+
+$$
+p_t = p^* - \kappa\,\frac{\max(I_k,0)}{\text{ADV}_k}\,e^{-\theta(t-t_0)}, \qquad t \ge t_0, \tag{1.7}
+$$
+
+where $\text{ADV}_k$ is the segment's average daily volume and $\kappa$ is price impact in points per day of volume. The absorber who buys at $t_0$ and holds for $T$ days earns the recovered pressure, $\kappa\,(I_k^+/\text{ADV}_k)(1-e^{-\theta T})$. That is the drop-and-reversal that Ben Dor (p.349) and Dynkin (p.158) document for fallen angels, and that Ellul, Jotikasthira and Lundblad (2011) tie to insurers' regulatory constraints. Note what (1.7) leaves out: a *permanent* component. If the seller is informed, part of the drop never reverses, and that is the toxicity term $\pi J$ from (1.2). The forced-seller graph prices the temporary component; the RFQ model prices the permanent one. A desk needs both.
+
+**Where this blows up.** Holders get double-counted (a loan inside a CLO is not also on the bank's books). Windows get misaligned (insurer selling is slow; index selling is a date). $\kappa$ is not stable across regimes. Above all, absorption capacity is *state-dependent*: it collapses exactly when supply peaks, because the absorbers are also being redeemed. A model with constant $A$ is a fair-weather model. Moyer (p.55) gives the CLO version of the trigger: "When an investment in the portfolio is downgraded to B– or CCC, the manager may be forced to sell something (again without regard to the portfolio manager's view of fair value) to remain in compliance with the CDO-ORs." A CLO is a buy-and-hold investor with a 7.5% allergy. It does not sell because it wants to; it sells because the indenture sneezes.
+
+> **Trend Watch: Who holds credit now, 1993–2026.** *What changed:* the holder graph got more mechanical. CDOs and CLOs held about 3% of low-rated loans and bonds in 1993 and more than 20% by the early 2000s (*Moyer_Distressed_Debt_Analysis p.55*, Figure 2-18); by 2026 US CLOs held roughly \$1tn, about 65% of a roughly \$1.5tn institutional leveraged loan market (Maples/Nuveen Q&A, 13 Apr 2026). CLO ETFs went from \$2.25bn in 2023 to more than \$20bn at end-2024 (Deutsche Bank flow, 11 Feb 2025). US fixed income ETF assets reached about \$2tn in June 2025 (The Daily Upside, 2 Jul 2025). Life insurers' private placements rose from 14% (2016) to 22% (2024) of their corporate bond holdings (Chicago Fed Insights, May 2026), and privately placed bonds reached 48.4% of life-industry bonds at YE2025 against 37.4% five years earlier (S&P Global Market Intelligence via Insurance Business, 10 Aug 2026). Dealers, meanwhile, set a record *net short* position in corporate bonds in early 2026 (Coalition Greenwich, 17 Feb 2026). And the fallen-angel pipeline reopened: about \$30bn entered fallen-angel indices in 2026 through mid-year, the most since 2020 (Insight Investment/BNY, Aug 2026). *What it means for the desk:* more of the market sits with holders whose sales are triggered by rules (CLO tests, ETF flows, NAIC capital), and less with dealers whose balance sheet used to absorb them. More predictable forced supply, less natural absorption: that is a bigger $I_k$ for the same shock, and a bigger premium for whoever has the capacity.
+
+### Specification for AI Implementation
+
+**What ROBO built from the vague version.** Spec: "map the forced sellers." ROBO returned a graph with one node, labeled "Everyone, March 2020," and a self-loop.
+
+**The Spec You Hand the Robot.** Build `ForcedSellerGraph(holdings, rules, capacity)`. `holdings`: a DataFrame, index = segment, columns = holder, values in \$bn par, all $\ge 0$. `rules`: `{holder: {trigger: (fraction, window_days)}}` with `0 <= fraction <= 1` and `window_days > 0`; a holder with no rule for a trigger sells nothing. `capacity`: `{trigger: DataFrame(index = segment, columns = absorber)}` in \$bn, all $\ge 0$. `run(trigger, segment, stress=False)` returns sells by holder, buys by absorber, `dealer_residual` (the positive imbalance), and a list of `(seller, buyer, size)` edges, allocating supply to absorbers pro rata to capacity and the remainder to `dealer_residual`. Assertions that must hold on every call: (a) **conservation**, total sells equal total buys plus `dealer_residual` to $10^{-9}$, and the edge sizes sum to total sells; (b) no holder sells more than it holds; (c) `price_path` per (1.7) returns to within 0.01 points of $p^*$ by `10/theta` days; (d) `stress=True` zeroes all capacity, and then `dealer_residual` equals forced supply exactly. All numbers in the demo are *illustrative*.
+
+```python
+class ForcedSellerGraph:
+    """Holder x trigger forced-supply engine: eqs. (1.6)-(1.7). Units: $bn par, days, points."""
+
+    def __init__(self, holdings, rules, capacity):
+        self.H = holdings.astype(float)
+        if (self.H.values < 0).any():
+            raise ValueError("holdings must be non-negative")
+        for holder, by_trigger in rules.items():
+            for trig, (frac, window) in by_trigger.items():
+                if not 0.0 <= frac <= 1.0:
+                    raise ValueError(f"{holder}/{trig}: fraction must lie in [0, 1]")
+                if window <= 0:
+                    raise ValueError(f"{holder}/{trig}: window_days must be > 0")
+        for trig, cap in capacity.items():
+            if (cap.values < 0).any():
+                raise ValueError(f"{trig}: capacity must be non-negative")
+        self.rules, self.capacity = rules, capacity
+
+    def forced_supply(self, trigger, segment):
+        """Q^sell_k(tau) by holder, eq. (1.6)."""
+        frac = {h: self.rules.get(h, {}).get(trigger, (0.0, 1))[0] for h in self.H.columns}
+        return self.H.loc[segment] * pd.Series(frac)
+
+    def run(self, trigger, segment, stress=False):
+        sells = self.forced_supply(trigger, segment)
+        assert (sells <= self.H.loc[segment] + 1e-12).all()             # (b)
+        Q = float(sells.sum())
+        cap = self.capacity.get(trigger)
+        caps = cap.loc[segment].astype(float) if cap is not None else pd.Series(dtype=float)
+        if stress:
+            caps = caps * 0.0                                            # March 2020 toggle
+        total_cap = float(caps.sum())
+        absorbed = min(Q, total_cap)
+        buys = caps * (absorbed / total_cap) if total_cap > 0 else caps * 0.0
+        residual = Q - float(buys.sum())
+        edges = []
+        if Q > 0:
+            for s, sz in sells[sells > 0].items():
+                edges += [(s, b, sz * bz / Q) for b, bz in buys[buys > 0].items()]
+                if residual > 0:
+                    edges.append((s, "dealer_residual", sz * residual / Q))
+        assert abs(Q - (buys.sum() + residual)) < 1e-9                   # (a) conservation
+        assert abs(sum(e[2] for e in edges) - Q) < 1e-9
+        return {"sells": sells, "buys": buys, "dealer_residual": residual, "edges": edges}
+
+    @staticmethod
+    def price_path(imbalance, adv, kappa, theta, days, p_star=100.0):
+        """Eq. (1.7): temporary price pressure decaying at rate theta per day."""
+        if adv <= 0 or theta <= 0:
+            raise ValueError("adv and theta must be > 0")
+        t = np.arange(days + 1, dtype=float)
+        return p_star - kappa * max(imbalance, 0.0) / adv * np.exp(-theta * t)
+
+
+# --- a Ford-sized fallen angel, March 2020 style (all numbers illustrative) ---
+seg = "BBB- auto issuer, $36bn"
+holdings = pd.DataFrame({"insurers": [12.0], "ig_active_funds": [8.0], "ig_index_funds_etfs": [5.0],
+                         "banks_foreign_other": [9.0], "hy_funds": [2.0]}, index=[seg])
+rules = {"insurers": {"IG_to_HY": (0.25, 90)}, "ig_active_funds": {"IG_to_HY": (0.50, 30)},
+         "ig_index_funds_etfs": {"IG_to_HY": (1.00, 5)}, "banks_foreign_other": {"IG_to_HY": (0.10, 60)}}
+capacity = {"IG_to_HY": pd.DataFrame({"hy_index_inclusion": [3.0], "fallen_angel_programs": [1.5],
+                                      "crossover_distressed": [2.0]}, index=[seg])}
+g = ForcedSellerGraph(holdings, rules, capacity)
+base_run, stress_run = g.run("IG_to_HY", seg), g.run("IG_to_HY", seg, stress=True)
+Q = float(g.forced_supply("IG_to_HY", seg).sum())
+assert abs(Q - 12.9) < 1e-12 and abs(base_run["dealer_residual"] - 6.4) < 1e-9
+assert abs(stress_run["dealer_residual"] - Q) < 1e-12                    # (d)
+
+theta = 1 / 20                                                           # ~14-day half-life
+path = ForcedSellerGraph.price_path(base_run["dealer_residual"], adv=0.5, kappa=0.4, theta=theta,
+                                    days=int(10 / theta))
+assert abs(path[-1] - 100.0) < 0.01                                      # (c) reversal
+drop, recovered_60d = 100.0 - path[0], path[60] - path[0]
+assert abs(recovered_60d - drop * (1 - np.exp(-theta * 60))) < 1e-9     # absorber's expected gain
+assert reservation_bid(**base, pi=0.5, J=13.0) < reservation_bid(**base, pi=0.4, J=13.0)
+print(f"forced supply {Q:.1f}bn | dealer residual {base_run['dealer_residual']:.1f}bn "
+      f"(stress {stress_run['dealer_residual']:.1f}bn) | drop {drop:.2f}pt | 60d reversal {recovered_60d:.2f}pt")
+```
+
+### 1.8.2 Case Study A: Ford and the March 2020 Fallen-Angel Wave
+
+March 2020 is the flow graph with every edge lit. More than \$90bn of debt fell from investment grade in that one month, nearly twice the prior monthly record of \$48bn set in 2005, and the first half of 2020 reached \$197bn, the largest on record (J.P. Morgan data via T. Rowe Price, Nov 2020). The headline was Ford: S&P cut it to BB+ on 25 March 2020 (as reported by Bloomberg), and with two high-yield ratings roughly \$36bn of Ford debt left the IG index at the month-end rebalance (T. Rowe Price). Man's paper describes the mechanism exactly: "When a company is downgraded to below investment grade status by the ratings agencies, it drops out of the index at the next monthly rebalancing and there is a significant wave of forced selling around the event" (*Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.38*).
+
+Walk the graph. *Who sells, and when:* IG index funds and ETFs on the rebalance date (a date anyone could read off a calendar); IG active funds over weeks; insurers over quarters, because higher capital charges make holding costly but not impossible. *Who buys:* HY index funds, forced to add the bond at inclusion, which made Ford one of the largest issuers in HY indices overnight; fallen-angel programs; crossover funds. *What broke:* absorption capacity, because HY funds were themselves facing record outflows. *What changed it:* the Federal Reserve. The Secondary Market Corporate Credit Facility was established on 23 March 2020, and in April the Fed extended its corporate facilities to issuers that had been investment grade as of 22 March, which covered Ford. A forced-seller event became a forced-buyer event by announcement. In (1.6), a new absorber with very large $A$ appeared, and $I_k$ went from huge to manageable before most of the selling had happened.
+
+*How a systematic desk would have flagged it:* distance to default collapsing through February and March as equity fell and equity volatility rose (§1.5); Ford's equity in the bottom momentum decile (§1.6); the rating-agency watch list giving the trigger date, and the index calendar giving the window. *How it would have traded it:* estimate $Q^{\text{sell}}$ by holder, stand ready to absorb at the rebalance with a bid that charged for inventory and cost but put $\pi$ near zero (index funds are the textbook uninformed seller), and size it with DTS rather than duration. IDO or it didn't happen: the profit that followed was mostly the Fed and spread beta, and a desk that booked it as alpha learned nothing.
+
+### 1.8.3 Case Study B: 12 March 2020, LQD at a 5% Discount
+
+On 12 March 2020, the iShares iBoxx \$ Investment Grade Corporate Bond ETF (LQD) closed at a 5.0% discount to its net asset value; the next day the discount was 0.19%, while VCIT and SPIB had shown discounts of 3.2% and 3.1% (WealthManagement.com, 16 Mar 2020). Kaz's first instinct was arbitrage: buy the ETF, short the basket, collect five points. The problem was the basket. The NAV was computed from evaluated bond prices that had not traded, so it was stale, and the ETF price was the only live price in the market. Authorized participants stopped closing the gap because they could not sell the underlying bonds at NAV either. The ETF was not mispriced; the NAV was.
+
+In the bid equation, both the inventory term and the cost term exploded at once: $\sigma_{\text{IDO}}$ jumped because DTS-scaled volatility jumps in a crisis (Ben Dor p.26), and $c(\Delta q)$ jumped because the exit was the same crowded door. In the flow graph, open-end funds and ETFs became sellers of whatever was liquid, and the absorber of last resort arrived only by announcement: the SMCCF was established on 23 March 2020, began buying ETFs on 12 May 2020 (New York Fed, 11 May 2020) and corporate bonds in June, and ceased purchases on 31 December 2020 (Federal Reserve). Chapter 20 rebuilds the creation–redemption arbitrage band and shows why it widens exactly when you want to use it.
+
+### Deep-Dive Resource Graph
+
+- **Podcasts.** Bloomberg *Odd Lots* has covered fallen angels, credit ETFs and the March 2020 dash for cash in several episodes (search the archive by topic; we do not cite episode numbers).
+- **Practitioner Writing.** T. Rowe Price, *Navigating the Fallen Angels in the Post-Coronavirus Landscape* (Nov 2020), https://www.troweprice.com/institutional/ch/en/insights/articles/2020/q4/navigating-fallen-angels-post-coronavirus-landscape.html . WealthManagement.com on IG ETF discounts (16 Mar 2020), https://www.wealthmanagement.com/etfs/under-market-stress-fixed-income-etfs-trade-with-wide-discount . Vontobel, *CLOs: Lessons from the Past* (20 Mar 2020), https://am.vontobel.com/insights/clos-lessons-from-the-past . Chicago Fed Insights on life insurers' interconnectedness (May 2026), https://www.chicagofed.org/publications/chicago-fed-insights/2026/assessing-life-insurers-interconnectedness . Insight Investment (BNY), *Hidden in Plain Sight: Seeking Opportunities in Fallen Angels* (Aug 2026), https://www.bny.com/investments/us/en/institutional/articles/fixed-income/hidden-in-plain-sight-seeking-opportunities-in-fallen-angels.html .
+- **Academic Papers.** Ellul, Jotikasthira and Lundblad (2011), *Regulatory Pressure and Fire Sales in the Corporate Bond Market*, Journal of Financial Economics 101(3). Ambrose, Cai and Helwege (2008), *Forced Selling of Fallen Angels*, Journal of Fixed Income. Coval and Stafford (2007), *Asset Fire Sales (and Purchases) in Equity Markets*, Journal of Financial Economics. Haddad, Moreira and Muir (2021), *When Selling Becomes Viral: Disruptions in Debt Markets in the COVID-19 Crisis and the Fed's Response*, Review of Financial Studies. O'Hara and Zhou (2021), *Anatomy of a Liquidity Crisis: Corporate Bonds in the COVID-19 Crisis*, Journal of Financial Economics. Kargar, Lester, Lindsay, Liu, Weill and Zúñiga (2021), *Corporate Bond Liquidity during the COVID-19 Crisis*, Review of Financial Studies 34(11).
+- **Data & Code.** Federal Reserve, Secondary Market Corporate Credit Facility, https://www.federalreserve.gov/monetarypolicy/smccf.htm . New York Fed SMCCF notice of 11 May 2020, https://www.newyorkfed.org/newsevents/news/markets/2020/20200511 . Federal Reserve Z.1 Financial Accounts (holders of corporate bonds by sector), https://www.federalreserve.gov/releases/z1/ .
+
+---
+
+## 1.9 Toxic Flow: When the Seller Knows
+
+The forced-seller graph is the good news: flows you can see coming, from sellers who know nothing. The cold open was the bad news: a seller who knew everything. The difference between them is the permanent component that (1.7) leaves out and (1.2) charges for.
+
+### 1.9.1 Case Study C: Serta Simmons, 2016–2026 (the Counterparty Who Knew)
+
+> **Docket Diary.** *November 2016:* Serta Simmons Bedding borrows under a \$1.95bn first-lien term loan. *June 2020:* a majority group holding about 52.6% of the roughly \$1.887bn first-lien loans exchanges about \$992mm of them into about \$734mm of new super-priority "first lien second out" debt, alongside \$200mm of new money; the excluded lenders, about 47.4% (roughly \$895mm), are primed. *31 December 2024:* the Fifth Circuit holds that the exchange was not an "open market purchase" and that the excluded lenders' sacred right to pro rata sharing was breached. *7 July 2026:* on remand, the participating lenders are held liable for \$261.13mm of damages as of 22 June 2020, plus 9% New York prejudgment interest, with the cashless exchange treated as a "payment" (Mayer Brown, July 2026). The Ad Hoc Group, in unison: "We were represented by counsel. We were not, the Fifth Circuit has now clarified, represented in an open market."
+
+The same day the Fifth Circuit ruled on Serta, New York's Appellate Division upheld Mitel's uptier, because Mitel's agreement let it "purchase" loans with no "open market" qualifier at all (Mayer Brown, May 2025); and in December 2025 a federal district court reversed the bankruptcy court and blessed the multi-step Wesco/Incora uptier (Mayer Brown, January 2026). Three courts, three documents, three outcomes. "Open market purchase" has become the most expensive three words in finance: on the Serta remand they were priced at \$261.13mm plus nine percent a year since June 2020, for a phrase nobody had defined.
+
+**The market maker's version.** Forget the litigation and replay the RFQs. In the weeks before 22 June 2020, a sell RFQ on Serta first-lien paper could come from two kinds of account: a lender outside the negotiating group (uninformed, perhaps a CLO trimming a CCC name), or a lender *inside* it, offloading exposure it was about to prime, or that it knew would be left behind. The second is the purest toxic flow in credit: the jump $J$ is the priming loss, and the seller knows its sign and roughly its size. Equation (1.2) says the right bid depends on $\pi(\mathbf{x})$, and the Bayes step of §1.3.3 says $\pi$ is a function of *who is on the call*: membership in the group, Rule 2019 disclosures once a case is filed, the timing relative to lender meetings, the account's markout history. None of that is in the bond's price history. All of it is in the documents and the docket, which is where Theo comes in. Ines's hand history closes the loop: bucket every RFQ by those features, compute five-day markouts, and the average markout per bucket is your estimate of $-\pi J$. Chapter 3 builds the toxicity model; Chapter 13 builds the Priming Risk Score that feeds it.
+
+> **Trend Watch: Liability management takes over the default statistics, 2024–2026.** *What changed:* most "defaults" are now negotiated. Distressed exchanges were more than 60% of default volume in 2024 through mid-December, the highest share since at least 2000; the 2024 HY default rate was 1.4% including distressed exchanges against 0.3% excluding them, and for loans 4.0% against 1.5% (Marquette Associates, 18 Dec 2024). Moody's (18 May 2026) put distressed restructurings at about 65% of 2025 corporate defaults, and in its 1,173-event history of soft credit events since 1979, about one in four ended in a hard default, with more than 70% of eventual hard defaults arriving within two years. *What it means for the desk:* the jump $J$ in the bid equation is increasingly a *negotiated* jump, timed by lender calls and documents rather than by a missed coupon, which makes counterparty state the dominant feature in $\pi(\mathbf{x})$ and makes "default" a poor label for anything you train on. Chapter 14 models the regime shift.
+
+---
+
+## 1.10 Desk Debrief
+
+- **Every bid is three bets.** Fair value, inventory, toxicity: $B^* = S_t - \pi J - \tfrac12\gamma\sigma^2_{\text{IDO}}h(2q+\Delta q) - c$. Kaz's engine got two of them right; the third cost \$2mm.
+- **A forced sale is information-free about the bond and information-rich about the seller.** Price the seller, not just the CUSIP.
+- **$\pi$ is a function of who is on the call.** The Bayes step turns counterparty state into a logistic regression; markouts by feature bucket are how you estimate it.
+- **Risk scales with spread.** Use DTS, not spread duration, and remember that the slope steepens in a crisis. Below about 70, stop quoting spreads and start modeling recoveries.
+- **Calibrate, don't just rank.** A Gaussian DD of 4 says 0.003%; an empirical map says almost 1%. Feed only $\mathbb{Q}$ quantities into the credit triangle.
+- **The holder graph is getting more mechanical.** CLOs (about 65% of loans), ETFs (about \$2tn), insurers' private placements (48% of life-industry bonds) and record dealer net shorts mean more rule-driven supply and less natural absorption.
+- **Execution made it possible; replication will decide what survives.** Half of IG trades electronically and PT is 15% of volume, but most published bond factors fail on clean data. Flows paid for by someone's mandate are sturdier than factors found in a regression.
+- **IDO or it didn't happen.**
+
+### The Spec You Hand the Robot
+
+> Build a Python module `desk_core` (numpy, pandas, scipy; seeded; no I/O). (1) `reservation_bid(S, q, dq, gamma, sigma_ido, h_years, pi, J, c)` per eq. (1.2), measure $\mathbb{P}$; units: points per 100 par, \$mm par (long positive; `dq > 0` = client sells), $1/(\$\text{mm}\cdot\text{pt})$, years; raise on `dq <= 0`, `pi` outside $[0,1]$, `h_years <= 0`, negative scale inputs; never clip a short desk's bid. (2) `posterior_informed(mu, log_lr)` in logit form; reject `mu` in $\{0,1\}$. (3) `dts_vol(D_spr, s_bp, sigma_rel)` per eq. (1.3), result in bp per period; `lcs()` with spread-quoted and price-quoted branches. (4) `ForcedSellerGraph(holdings, rules, capacity)` per eqs. (1.6)–(1.7) with pro rata absorption, a `dealer_residual` node, `edges`, and `price_path`. Mandatory assertions: comparative statics of the bid ($\partial B/\partial q<0$, $\partial B/\partial\pi<0$, $\partial B/\partial\Delta q<0$); simulated markout equals $-\pi J$ within 3 s.e.; lognormal Monte Carlo reproduces DTS·$\sigma_{\text{rel}}$ within 2%; conservation of flow to $10^{-9}$; stress toggle sends all supply to `dealer_residual`; price path reverts to within 0.01 points by `10/theta` days. Do not condition on the RFQ twice. Label every demo number illustrative.
+
+### Exercises
+
+1. **(Derivation.)** Derive the dealer's *ask* for a client buying $\Delta q$, and show that the bid–ask midpoint for a two-sided quote of size $\Delta q$ equals the reservation mid $r^{\text{res}} = m - \gamma\sigma^2_{\text{IDO}}h\,q$ when both sides carry the same $m$. What happens to the midpoint when the buy-side RFQ carries a different toxicity $\pi'$?
+2. **(Bayes, with a poker face.)** The prior share of informed sellers is 3%. An account in a known ad hoc group sells 58 minutes after a lender call, which you estimate multiplies the likelihood ratio by 12, and shows the bond to five dealers, which multiplies it by 1.5. Compute $\pi$. At $J = 13$ points, how many points does toxicity take off the bid? Would you rather know the jump size or the counterparty?
+3. **(DTS.)** A portfolio holds equal market values of a 10-year BBB at 140 bp and a 3-year CCC quoted at 68. Explain why DTS is meaningful for the first and not the second, and propose a single risk measure that covers both (hint: Ben Dor's two-branch LCS is a clue).
+4. **(Flow graph.)** Re-run the Ford-sized example with the Fed added as an absorber with \$5bn of capacity from day 10. Modify `run` so capacity can arrive on a date, and show how the drop and the 60-day reversal change. Who earned the reversal: the desk, or the central bank?
+5. **(ROBO literalism.)** Write the one-sentence vague spec that would make ROBO fit a toxicity model with a perfect in-sample markout and zero out-of-sample value. Then write the two clauses that prevent it (one concerns issuer-grouped cross-validation, Chapter 7; the other concerns the label window).
+6. **(Courtroom quant.)** Using the Serta and Mitel facts, write a binary feature "credit agreement permits non-pro-rata purchases without an open-market qualifier," and argue whether it belongs in $\pi(\mathbf{x})$, in $J$, or in both.
+
+### Deep-Dive Resource Graph
+
+- **Podcasts.** Bloomberg *Odd Lots* episodes on corporate bond market structure, portfolio trading, liability management and private credit (search by topic; episode numbers deliberately omitted). *Flirting with Models* (Corey Hoffstein), https://www.flirtingwithmodels.com/ .
+- **Practitioner Writing.** Coalition Greenwich, *U.S. corporate bond trading in 2025 by the numbers* (27 Jan 2026), https://www.greenwich.com/node/158274 , and *Dealer net short in corporate bonds sets record* (17 Feb 2026), https://www.greenwich.com/node/158326 . The DESK on 2025 credit e-trading (30 Jan 2026), https://www.fi-desk.com/?p=27374 , and on portfolio trading (19 Feb 2026), https://www.fi-desk.com/ig-credit-sees-portfolio-trading-plateau-while-hy-hits-records/ . IFR, *Portfolio trading continues dizzying growth* (2025), https://www.ifre.com/topic-codes/2293541/portfolio-trading-continues-dizzying-growth . Mayer Brown on Serta's damages ruling (Jul 2026), https://www.mayerbrown.com/en/insights/publications/2026/07/serta-simmons-bedding-the-fifth-circuits-uptier-decision-and-the-landmark-damages-ruling-on-remand , on Serta and Mitel (May 2025), https://www.mayerbrown.com/en/insights/publications/2025/05/serta-and-mitel-the-latest-major-court-decisions-on-uptier-transactions , and on Wesco (Jan 2026), https://www.mayerbrown.com/en/insights/publications/2026/01/the-state-of-play-on-uptiers-district-court-reversal-in-wesco-blesses-multistep-transactions . Proskauer, *The End of Non-Pro Rata Uptiers?* (2 Jan 2025), https://www.proskauer.com/alert/the-end-of-non-pro-rata-uptiers . Marquette Associates, *A Damsel in Distress* (18 Dec 2024), https://www.marquetteassociates.com/damsel-in-distress/ . Moody's, *Lend, extend, and then...* (18 May 2026), https://www.moodys.com/web/en/us/insights/credit-risk/private-credit/lend-extend-and-then.html . Matt Levine, *Money Stuff* (Bloomberg Opinion), on uptiers and "open market purchases"; *Petition* on restructuring.
+- **Academic Papers.** Dickerson, Robotti and Rossetti (2026), *The Corporate Bond Factor Replication Crisis*, arXiv:2604.07880, https://arxiv.org/abs/2604.07880 . Dickerson, Mueller and Robotti (2023), *Priced Risk in Corporate Bonds*, Journal of Financial Economics 150(2). Jostova, Nikolova, Philipov and Stahel (2013), *Momentum in Corporate Bond Returns*, Review of Financial Studies 26(7). Kelly, Palhares and Pruitt (2023), *Modeling Corporate Bond Returns*, Journal of Finance 78(4). Houweling and van Zundert (2017), *Factor Investing in the Corporate Bond Market*, Financial Analysts Journal 73(2). Israel, Palhares and Richardson (2018), *Common Factors in Corporate Bond Returns*, Journal of Investment Management 16(2).
+- **Data & Code.** Open Source Bond Asset Pricing (error-corrected TRACE and bond factors), https://openbondassetpricing.com/ . FINRA TRACE, https://www.finra.org/filing-reporting/trace . SEC EDGAR, https://www.sec.gov/edgar . CourtListener REST API, https://www.courtlistener.com/help/api/ .
