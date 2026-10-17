@@ -1,16 +1,538 @@
 # Chapter 5: Probability Distributions in Distressed & High-Yield Credit
 
-<!-- SKELETON: sections below are appended as drafted.
-## Cold open
+> *"Any quantitative analysis of credit begins with the skewed, non-normal return distributions typical of both individual credit exposures and portfolios of those exposures."* (Bohn_Stein_Active_Credit_Portfolio_Management p.18)
+
+## Cold Open: The Fourteen-Sigma Tuesday
+
+Theo's first risk report on the new desk is a thing of beauty. It is a single page. It has a heat map. It says that the desk's position in a B3 retail issuer's 8% senior notes, bought at 92, has an annualized volatility of 4.1%, computed from sixty days of TRACE marks, and that the probability of losing fifteen points over the next year is, under the normal distribution, about one in twenty-nine thousand.
+
+"So it's safe," Theo says, in the tone of a man who has spent six years reading credit agreements and three weeks being told that is not a personality.
+
+Mags does not look up from her screen. "It loses fifty-two points, once. It goes from 92 to 40 in an afternoon, after a lender call you weren't on. Your model calls that a fourteen-sigma event. We had three of those in the book last year."
+
+"Let's just assume Gaussian," Kaz says, from behind two monitors and a whiteboard covered in Itô integrals. "For tractability. We can add jumps later."
+
+Ines pulls a chair over and turns Theo's heat map face down, the way you turn over a card you have already read. "What's the pot, Theo? What are the odds? And who at this table knows more than you?" She taps the number 4.1%. "This isn't the hand. This is how much the chips wobble while nobody's betting. The hand is whether the dealer pays you par plus coupon, or 40 cents, or, if the sponsor has found a friend, 2.4 cents."
+
+Theo opens his laptop and plugs in the USB stick with his old thirteen-week cash flow model, for emotional support. The model says the issuer has eleven weeks of liquidity. "Eleven weeks," he says. "That's not a volatility. That's a probability of not making it."
+
+"Now you're pricing," Ines says. "Write it down so ROBO can't get it wrong."
+
+ROBO, consulted, offers to minimize the portfolio's kurtosis. It proposes to sell everything and buy three-month bills, whose kurtosis is indeed zero. So is their credit spread. ROBO considers this a feature.
+
+**The question this chapter answers:** *what is the right shape for a high-yield or distressed credit return, and how do you specify it precisely enough that a literal-minded coding agent cannot build the wrong one?*
+
+By the end of this chapter you will be able to: write a high-yield bond's horizon return as a survive-or-jump mixture and compute its first four moments in closed form; explain why "skew is minus one over root PD"; keep the price, spread, and return distributions in separate ledgers; separate the jump and Lévy machinery that earns its keep on a desk from the machinery that is decoration; model recovery as a Beta random variable conditioned on collateral, seniority, debt cushion, and (since 2020) which side of the cooperation agreement you signed; treat a distressed exchange as a third mixture component with its own re-default hazard; and use extreme-value tools only where they belong, which is not on a single bond.
+
 ## 5.1 One Bond, Two Worlds: The Survive-or-Jump Mixture
+
+### 5.1.1 Desk framing: two hands dealt from one deck
+
+Ines's framing is the right one, and it is worth saying slowly. Over a one-year horizon, a high-yield bond does one of two different things. In the world where the issuer survives, the bond collects its coupon, rolls toward par, and its price wobbles as spreads move: a small, roughly symmetric, roughly Gaussian distribution of returns that sits a few points either side of the carry. In the world where the issuer defaults (or, in the 2020s, "executes a liability management transaction that the rating agencies classify as a distressed exchange"), the bond jumps to a recovery value, and the size of the jump has nothing to do with the wobble.
+
+Theo's 4.1% is a perfectly good estimate of the first world's wobble. It is not an estimate of anything in the second world, because sixty days of TRACE marks on a bond that has not defaulted contain zero observations of a default. This is the most important sentence in the chapter, so here it is again in poker terms: *the volatility you measure while nobody is betting tells you nothing about the size of the pot.*
+
+The RSSG reader already knows this. You have built recovery waterfalls for years. What you have not done is put both worlds into one random variable, with probabilities attached, and computed what that does to the mean, the variance, the skew, and the tail. That is what a desk risk system needs, and it is what ROBO will get wrong unless you write it down.
+
+### 5.1.2 The mixture and its moments
+
+Fix a horizon of $h$ years and measure everything per unit of par. Let $P_0$ be the full price today. Let $D \sim \text{Bernoulli}(q)$ be the default indicator over the horizon, where
+
+$$
+q = 1 - S^{\mathbb{P}}(h)
+$$
+
+is the **physical** default probability. (We are building a risk distribution, so $\mathbb{P}$; Chapter 6 does pricing under $\mathbb{Q}$, and §5.5.6 explains why mixing them is the most common expensive mistake in this chapter.)
+
+In the survival world, the rates-hedged excess return is
+
+$$
+X = s\,h + \text{roll} - D^{\text{spr}}\,\Delta s + \tfrac{1}{2}C^{\text{spr}}(\Delta s)^2,
+$$
+
+where $s$ is the spread (decimal), $D^{\text{spr}}$ the spread duration, $C^{\text{spr}}$ the spread convexity, and $\Delta s$ the spread change over the horizon. Ben Dor's Duration Times Spread result says spread changes scale with the spread level, so a natural specification is $\sigma_{\Delta s} = \kappa\,s\,\sqrt{h}$ with $\kappa$ the annualized volatility of *relative* spread changes (see Chapter 8 for the DTS machinery). Call the survival leg's mean, variance, third central moment, and fourth central moment $\mu_X$, $\sigma_X^2$, $\mu_{3,X}$, $\mu_{4,X}$.
+
+In the default world, the bond is worth its recovery $R$ (fraction of par), so the return is
+
+$$
+Y = \frac{R}{P_0} - 1, \qquad R \sim \text{Beta}(a, b) \text{ (refined in §5.5)},
+$$
+
+with moments $\mu_Y$, $\sigma_Y^2$, $\mu_{3,Y}$, $\mu_{4,Y}$. Note the denominator. A bond bought at 60 that recovers 40 lost a third of its value, not 60%. ROBO, asked for "the loss given default," will return $1 - R$ every time unless told otherwise, which is why the spec in §5.9 names the price basis explicitly.
+
+The horizon return is the mixture
+
+$$
+R_h = (1 - D)\,X + D\,Y.
+$$
+
+Define the **jump size** $J \equiv \mu_X - \mu_Y$, the distance between the centers of the two worlds. Conditioning on $D$ and using the law of total expectation and total variance:
+
+$$
+\mathbb{E}[R_h] = (1-q)\mu_X + q\mu_Y = \mu_X - qJ,
+$$
+
+$$
+\operatorname{Var}[R_h] = \underbrace{(1-q)\sigma_X^2 + q\sigma_Y^2}_{\text{within-world}} + \underbrace{q(1-q)J^2}_{\text{between-world}}.
+$$
+
+The second term is the one Theo's report missed. It is the variance of a coin flip whose two faces are $J$ apart. For a high-yield bond it is usually the largest term.
+
+For the higher moments, center each world at the mixture mean. The survival world's center sits $+qJ$ above the mixture mean and the default world's sits $-(1-q)J$ below it. Expanding $(X - \mathbb{E}R_h)^3$ and $(Y - \mathbb{E}R_h)^3$ around those offsets and collecting terms gives the third central moment
+
+$$
+\mu_3 = -q(1-q)(1-2q)J^3 + 3q(1-q)J\left(\sigma_X^2 - \sigma_Y^2\right) + (1-q)\mu_{3,X} + q\,\mu_{3,Y},
+$$
+
+and the fourth central moment
+
+$$
+\mu_4 = (1-q)\left[q^4J^4 + 6q^2J^2\sigma_X^2 + 4qJ\mu_{3,X} + \mu_{4,X}\right] + q\left[(1-q)^4J^4 + 6(1-q)^2J^2\sigma_Y^2 - 4(1-q)J\mu_{3,Y} + \mu_{4,Y}\right].
+$$
+
+Skewness is $\mu_3/\operatorname{Var}^{3/2}$ and excess kurtosis is $\mu_4/\operatorname{Var}^2 - 3$. Two checks you should always run on formulas like these, and should make ROBO run too: at $q = 0$ they collapse to the survival world's moments, and at $q = 1$ to the default world's. Both hold here by inspection.
+
+### 5.1.3 Skew is minus one over root PD
+
+Now strip the mixture to its skeleton. Let both worlds be points: $\sigma_X = \sigma_Y = 0$ and no higher moments. Then $R_h = \mu_X - J\,D$, an affine function of a Bernoulli, and the moment formulas reduce to
+
+$$
+\text{skew}(R_h) = -\frac{1 - 2q}{\sqrt{q(1-q)}} \approx -\frac{1}{\sqrt{q}}, \qquad \text{exkurt}(R_h) = \frac{1 - 6q(1-q)}{q(1-q)} \approx \frac{1}{q}.
+$$
+
+At a 1% default probability the skew is about $-9.8$ and the excess kurtosis about $95$. At 4% they are $-4.7$ and $20$. Notice what is *not* in these formulas: $J$. The size of the jump sets the variance, but the shape of the distribution (its skew and kurtosis) is pinned by the default probability alone. Safer bonds are *more* skewed, not less. An A-rated bond with a 0.05% annual default probability has a skew of roughly $-45$. It almost never surprises you, and when it does, it surprises you completely.
+
+This is why Kaz's "let's just assume Gaussian" is not a simplification but a different asset. A Gaussian has a skew of zero and a kurtosis of three, at every default probability. It is a fine description of the survival world. It is a description of the wrong bond.
+
+> **Desk Myth vs. Desk Reality.** *Myth:* "Investment-grade bonds have well-behaved, nearly normal returns; it's high yield that is fat-tailed." *Reality:* Per bond, the opposite. Skew scales like $-1/\sqrt{q}$, so the lower the default probability, the more extreme the shape. IG *portfolios* look well-behaved because they hold hundreds of names with low default correlation and the $1/\sqrt{N}$ of diversification goes to work on the jump term (§5.7.4). The bond did not get more normal. The book got bigger.
+
+### 5.1.4 The fourteen-sigma Tuesday, priced
+
+Return to Theo's bond with illustrative inputs. Price $P_0 = 0.92$; survival leg Gaussian with $\mu_X = 7\%$ (coupon carry plus pull to par, net of expected spread drift) and $\sigma_X = 4.1\%$, Theo's number, now correctly labeled as the *survival-world* volatility; physical one-year default probability $q = 4\%$; recovery Beta with mean 40% and standard deviation 27.5% (the Moody's senior unsecured moments reproduced on Schmid p.103, which we use again in §5.5). All numbers are *illustrative*; the moments are the author's arithmetic from the formulas above, and the Monte Carlo in §5.9 reproduces them.
+
+| Quantity | Theo's Gaussian | Survive-or-jump mixture |
+| :--- | ---: | ---: |
+| Mean one-year return | 7.0% | 4.5% |
+| Volatility | 4.1% | 14.4% |
+| Skewness | 0 | $-5.1$ |
+| Excess kurtosis | 0 | 28 |
+| $\Pr(\text{lose} > 15 \text{ points})$ | 1 in 29,000 | 1 in 29 |
+| 95% one-year VaR (return) | $+0.3\%$ (a gain) | $-2.2\%$ |
+| 99% one-year VaR (return) | $-2.5\%$ | $-83\%$ |
+| 99% expected shortfall | $-3.9\%$ | $-92\%$ |
+| $\Pr(\text{return} > \text{mean})$ | 50% | 70% |
+
+Four rows deserve a sentence each.
+
+The **volatility** more than triples, and about four-fifths of the increase comes from the between-world term $q(1-q)J^2$, which is 75% of the total variance. The survival leg's own variance, the only thing Theo's report measured, contributes about 8%.
+
+The **probability of losing fifteen points** is off by a factor of about a thousand. Mags's "three of those last year" in a book of a hundred such names is not bad luck; it is the mixture's expected count.
+
+The **95% VaR is blind.** With $q = 4\% < 5\%$, the 5th percentile of the mixture sits inside the survival world, so VaR at 95% reports a loss of 2.2% on a bond with a 4% chance of losing 57%. Move to 99% and VaR falls off a cliff to $-83\%$. A VaR model on high-yield credit is a speedometer that works perfectly below the speed limit. This is why every serious credit risk system in this book reports expected shortfall and jump-to-default (JTD) exposure alongside VaR.
+
+The **last row** is Bohn and Stein's unintuitive result in miniature: most of the time, you beat the average.
+
+> **[SOURCE EXTRACTION]** *Bohn_Stein_Active_Credit_Portfolio_Management p.513:* "There is always a large probability of relatively small losses, and a small probability of rather large losses. This skewness leads to an unintuitive result: A very high percentage of the time (say 80 percent), the actual losses will be less than the average loss (expected loss)."
+>
+> **Annotation.** Bohn and Stein are writing about portfolio loss distributions at a bank, but the statement is exact for a single bond too, and it is the source of a specific behavioral failure on systematic desks. A strategy that harvests a credit risk premium will, most months, beat its expected return, and the people running it will conclude that they are skilled. Our worked bond beats its mean 70% of the time. If you evaluate a credit PM or a credit signal on hit rate, you are rewarding the person who sold the most jump risk. The desk fix is to evaluate on IDO (carry, rates, and factor beta stripped; Chapter 8) *and* on a JTD-adjusted denominator. The modern departure from the bank-portfolio framing: on a trading desk, the "small probability of rather large losses" is no longer a single default event but a menu of events (hard default, distressed exchange, non-pro-rata uptier), each with its own recovery distribution. §5.6 turns the Bernoulli into a categorical variable.
+
+> **Poker Table.** Ines plays it as a hand. "You're in a pot with ninety-six percent equity. The board pays you seven. The other four percent of the time it costs you fifty-seven. Your expected value is plus four and a half, and you'll win most nights, and you will feel like a genius right up until the river. The pros don't ask whether they're winning. They ask whether they're getting paid enough for the river." The required spread is a pot-odds calculation: under $\mathbb{P}$, the expected cost of the river is $qJ$ in return space, about 2.5 points a year here, and the rest of the 5.5% spread is the risk premium plus liquidity premium plus the price of being wrong about $q$. Hand history: replay the trade through markouts against the five-day CDS move, and you will see that the bonds clients were keenest to sell you were the ones whose $q$ had just gone up.
+
+### 5.1.5 The 13-week model, reborn as a hazard rate
+
+Theo's USB stick deserves a formal promotion, because it is a physical-measure survival model in disguise. Thirteen weekly ending cash balances $C_1, \dots, C_{13}$ under a base case, plus a downside case, define a first-passage time
+
+$$
+\hat{\tau} = \min\{w : C_w < C_{\min}\},
+$$
+
+where $C_{\min}$ is the minimum liquidity covenant or the operating cash floor. If you run the cash model under a distribution of revenue and collections shocks instead of a single base case (Theo's downside case is one sample from that distribution), the fraction of paths with $\hat{\tau} \le w$ is an empirical estimate of $1 - S^{\mathbb{P}}(w/52)$, and the conditional probabilities of hitting the floor in week $w$ given survival to $w-1$ are a discrete-time hazard curve. The 13-week model is a hazard rate with a spreadsheet problem. Chapter 6 turns that curve into an intensity $\lambda_t$; here it gives us $q$ for the mixture.
+
+Two warnings for the specifier. First, the cash model is a $\mathbb{P}$ object built by management, and management's base case has a well-documented optimism bias; the RSSG habit of running a "lender case" is a crude but useful haircut. Second, a liquidity runway is not the only exit: a sponsor-backed borrower with eleven weeks of liquidity and a permissive credit agreement is at least as likely to execute an LMT as to file. The survival model needs a competing-risks structure, which is §5.6.
+
+### Deep-Dive Resource Graph
+
+- **Podcasts:** Bloomberg *Odd Lots* episodes on high-yield defaults and liability management (2023–2025; titles to be confirmed before linking).
+- **Practitioner Writing:** Man Group, *Quantitative Credit Alpha: An Early Mover Advantage* (2022), on the asymmetric nature of jump risk in credit (shelf: Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.16, p.26).
+- **Academic Papers:** Merton (1974), *On the Pricing of Corporate Debt: The Risk Structure of Interest Rates*, Journal of Finance; Ben Dor, Dynkin, Hyman, Houweling, van Leeuwen, Penninga (2007), *DTS (Duration Times Spread)*, Journal of Portfolio Management; Giesecke, Longstaff, Schaefer, Strebulaev (2011), *Corporate Bond Default Risk: A 150-Year Perspective*, Journal of Financial Economics.
+- **Data & Code:** FRED, ICE BofA US High Yield OAS (series BAMLH0A0HYM2), https://fred.stlouisfed.org/series/BAMLH0A0HYM2 ; the `mixture_moments` reference implementation in §5.9.
+
 ## 5.2 Price, Spread, Return: Three Distributions That Are Not the Same
+
+### 5.2.1 Desk framing: three people, three ledgers
+
+On a credit desk, three people look at the same bond and see three different random variables. The trader quotes **price**, because that is what the RFQ asks for and what TRACE prints. The PM and the hedger think in **spread**, because spread is what CDX and the factor model are denominated in and what DTS scales. The investor, and the risk system that answers to the investor, eats **return**. These three distributions have different supports, different skews, and different tails, and most of the bugs that reach production in credit risk systems come from computing a moment in one ledger and reporting it in another.
+
+### 5.2.2 Price: a bounded interval with a cap and a floor
+
+A bond's price lives on a bounded interval. On the left, the floor is recovery: no matter how bad the news, a senior claim on a company with assets is worth something, and in the limit $P \to R$ at default. On the right, for a callable bond (most high-yield bonds are callable after a non-call period), the price is capped near the call price $K_{\text{call}}$:
+
+$$
+P(s) = P^{\text{straight}}(s) - C^{\text{call}}(s), \qquad \lim_{s \downarrow 0} P(s) \approx K_{\text{call}}, \qquad \lim_{s \downarrow 0} \frac{\partial P}{\partial s} = 0.
+$$
+
+The issuer's call option $C^{\text{call}}$ gains value exactly when spreads tighten, so the bond's upside is sold to the issuer. That is negative convexity, the same mechanism as mortgage prepayment in Veronesi's treatment of MBS, and it means the right tail of the price distribution is truncated. "The bond is 102 bid; what's my upside?" is a question with a cap: about a point and a half to a 103.5 first call, plus carry.
+
+> **[SOURCE EXTRACTION]** *Veronesi_Fixed_Income_Securities p.669:* "the distribution is heavily negatively skewed, meaning that the probability of large losses is higher than the probability of symmetrically large gains."
+>
+> **Annotation.** Veronesi is describing the profit-and-loss distribution of a range note, a structured product in which the investor implicitly sells an option in exchange for yield enhancement. A callable high-yield bond is the same trade in a cheaper suit: the investor is short the issuer's call (which caps the right tail) and short the issuer's default put (which opens the left tail), and is paid for both in the coupon. Veronesi's general lesson, that a sold option produces a negatively skewed P&L whose risk VaR understates and expected shortfall captures, is the operating principle of high-yield risk management. Where the modern desk departs: in Veronesi's range note the sold option is priced off a liquid rate surface; in high yield, the default put has no listed market, and its "implied vol" has to be backed out of the CDS curve, the equity options surface (Chapter 23), or a structural model (Chapter 6), each of which disagrees with the others in exactly the names you care about.
+
+Over a long horizon, then, the price distribution of a single bond looks like a Beta on the shifted interval $[R_{\min}, K_{\text{call}}]$, with a point mass near par (the bond survives and is called or matures) and a recovery lump at the bottom. The chapter's code (§5.9) simulates it this way rather than as a lognormal price, which would allow a high-yield bond to trade at 140.
+
+### 5.2.3 Spread: right-skewed, roughly lognormal
+
+Spreads live on $(0, \infty)$ and, by the DTS result, their changes scale with their level: $\sigma(\Delta s) \propto s$. If relative spread changes have constant volatility $\kappa$, the natural model is
+
+$$
+\frac{ds_t}{s_t} = \kappa\, dW_t \quad\Longrightarrow\quad s_h = s_0 \exp\!\left(-\tfrac{1}{2}\kappa^2 h + \kappa\sqrt{h}\,Z\right), \quad Z \sim N(0,1),
+$$
+
+the lognormal, whose skewness is
+
+$$
+\text{skew}(s_h) = \left(e^{\kappa^2 h} + 2\right)\sqrt{e^{\kappa^2 h} - 1}.
+$$
+
+With $\kappa = 0.35$ and $h = 1$ (an *illustrative* relative spread vol in the range the DTS literature reports), the spread distribution has skewness of about $+1.1$. Spreads gap wider more than they gap tighter, even in the survival world.
+
+### 5.2.4 Return: left-skewed in the survival world, sign-flipping in distress
+
+Because the return is approximately $-D^{\text{spr}}\Delta s$ plus carry, a right-skewed spread produces a **left-skewed return** of about $-1.1$ from the survival world alone. Positive spread convexity pushes back a little for non-callable bonds; negative convexity from the call pushes the other way and makes the left skew worse. Then the default world adds the $-1/\sqrt{q}$ term of §5.1.3 on top.
+
+Now the twist that every distressed investor knows and every Gaussian risk model gets backwards. The Bernoulli skew formula
+
+$$
+\text{skew} = -\frac{1 - 2q}{\sqrt{q(1-q)}}
+$$
+
+**changes sign at $q = \tfrac{1}{2}$**. A bond whose default probability is above one-half, trading near its expected recovery, has a *right-skewed* return: the downside is a few points to the recovery floor, and the "jump" that matters is the survival world, a rally from 35 to par if the company refinances. Dynkin's discount-bond observation is the price-space version of the same fact.
+
+> **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.426:* "bonds trading at a discount are better shielded from default risk by recovery values."
+>
+> **Annotation.** Dynkin and coauthors make the point in the context of coupon effects and empirical duration: a low-coupon bond trading at a discount has less distance to fall before it hits the recovery floor, so its spread is lower and its sensitivity to rates is asymmetric. Read it as a statement about the mixture and it becomes the most important regime boundary in high yield. As $P_0 \to \mathbb{E}[R]$, the jump size $J$ in return space shrinks on the downside and grows on the upside, and at some point the bond stops being a credit and becomes an option on the enterprise. This is why a CCC bond is an equity option that wears a tie to work, and why a systematic HY book that ranks on spread will mechanically load on the names where the shape of the return distribution has flipped. The desk departure from Dynkin's framework: post-2020, "shielded by recovery values" assumes the recovery value is a property of the bond. In an LMT world it is a property of the bond *and* of your seat at the negotiating table (§5.5.5).
+
+The practical rule for the specifier: the risk model must carry the **price level relative to expected recovery** as a state variable, because it determines the sign of the skew. A model that estimates one skew per rating bucket will be wrong in both directions at once, too optimistic on the B3 bond at 92 and too pessimistic on the Caa3 bond at 38.
+
+> **Ways This Blows Up.** *The stale-price smoother.* TRACE prints on high-yield bonds are sparse, and evaluated prices fill the gaps with smooth interpolations. A volatility computed from evaluated marks is biased down, and the bias is worst exactly in the names approaching distress, where trading dries up before the jump. Theo's 4.1% was computed from sixty days of marks, of which (on inspection) eleven were trades. Chapter 7 and Chapter 8 treat stale-price betas formally (Dimson and Scholes–Williams lag sums); for this chapter, the rule is that a survival-world volatility estimated from marks is a lower bound, and the default-world parameters cannot be estimated from the bond's own history at all.
+
+> **Trend Watch.** *Dispersion: the mixture weight moved to the bottom of the stack (2023–2026).* On October 15, 2026, the ICE BofA US High Yield Index OAS was 323 bp, the BB sub-index 197 bp, the single-B 326 bp, and the CCC & Lower sub-index 1,278 bp (FRED series BAMLH0A0HYM2, BAMLH0A1HYBB, BAMLH0A2HYB, BAMLH0A3HYC; fetched October 17, 2026). Over the three years FRED currently serves for these series (from October 17, 2023), the CCC-to-HY OAS ratio rose from a low of 2.24 (October 20, 2023) to a high of 4.06 (September 11, 2026); at quarter-ends it was 2.66 (December 2023), 2.55 (December 2024), 3.15 (December 2025), 3.53 (June 2026), and 3.78 (September 2026). The BB OAS touched 150 bp on August 28, 2026, while the CCC OAS hit 1,282 bp on October 14, 2026: the top of the high-yield market priced near its tightest levels of the window at the same time the bottom priced its widest. The index-level peak in the window, 461 bp on April 7, 2025, came with the April 2025 tariff shock. *(Ratios, extremes, and quarter-end values are the author's computations from the FRED series.)* What it means for the mixture: run the credit triangle of Chapter 6 backwards with a 40% recovery convention and the CCC sub-index spread implies a risk-neutral annual default intensity of roughly $0.1278/0.6 \approx 21\%$, against about 3% for BB (author's arithmetic; $\mathbb{Q}$-measure, so it includes risk and liquidity premia). An index spread of 323 bp is therefore not a statement about a typical bond. It is a weighted average of a BB carry trade and a CCC jump lottery, and the weight on the lottery's bad outcome is concentrated in loan-only, sponsor-backed capital structures, which is where Moody's located the distress in 2025 (Moody's Analytics, *US Credit Review & Outlook*, July 2025). For a systematic desk this is a regime signal (Chapter 12 uses the CCC/HY ratio as a mixture-weight indicator) and a reminder that "the market" has no single return distribution.
+
+### Deep-Dive Resource Graph
+
+- **Podcasts:** Bloomberg *Odd Lots* coverage of high-yield bifurcation and CCC stress (2025–2026; episode titles to be confirmed).
+- **Practitioner Writing:** Dynkin, Hyman, and coauthors, *Systematic Investing in Credit* (Wiley), chapters on coupon effects and empirical duration (shelf: Dynkin_Systematic_Investing_in_Credit p.426); Veronesi, *Fixed Income Securities*, on negative convexity and option-induced skew (shelf: Veronesi_Fixed_Income_Securities p.669).
+- **Academic Papers:** Ben Dor, Dynkin, Hyman, Houweling, van Leeuwen, Penninga (2007), *DTS (Duration Times Spread)*, Journal of Portfolio Management; Dimson (1979), *Risk Measurement When Shares Are Subject to Infrequent Trading*, Journal of Financial Economics.
+- **Data & Code:** FRED ICE BofA OAS series: https://fred.stlouisfed.org/series/BAMLH0A0HYM2 and https://fred.stlouisfed.org/series/BAMLH0A3HYC ; FINRA TRACE (see Appendix B for access and dissemination caps).
+
 ## 5.3 Jumps in Continuous Time: Merton, Kou, and the Short End
+
+### 5.3.1 Desk framing: the bond does not care how long it has left
+
+The mixture of §5.1 is a one-period object. Desks need a continuous-time version for three reasons: to price instruments of different maturities consistently, to simulate paths for risk (a bond can default in month 2 or month 11, and you collect different coupons), and to get the short end of the credit curve right. That last reason is the one Kaz cares about.
+
+> **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.465:* "Jump to defaults would typically trigger price to expected recovery values with little relationship to the maturity of the bond."
+>
+> **Annotation.** Dynkin and coauthors make this remark while explaining why downgrade losses do not scale cleanly with duration across maturity buckets. Its implication for risk systems is sharper than it first looks. A jump to default takes every bond of the issuer, short or long, to roughly the same recovery (they are typically pari passu claims of the same face in bankruptcy, accrued interest aside), so the jump-to-default loss on bond $i$ is $P_i - R$ *in points*, independent of duration. The 2-year bond at 98 has more JTD exposure per unit of face than the 8-year bond at 85, even though the 8-year has four times the spread duration. Two consequences for the desk: a duration-neutral curve trade (long the short bond, short the long bond, DTS-matched) is not JTD-neutral, and is in fact long default risk in points; and any risk model that represents a bond only by DTS has no column in which to put its JTD. Chapter 28's limit framework carries JTD as a separate risk axis for exactly this reason.
+
+### 5.3.2 Merton (1976): Gaussian diffusion plus compound Poisson jumps
+
+A notation collision first. The book reserves $\lambda$ for the default intensity. In a structural jump model, the asset value jumps at some rate, and only some jumps cause default; we write the asset-jump arrival rate as $\lambda^{V}$ and keep $\lambda$ for the resulting default intensity, which we derive below.
+
+Merton's jump-diffusion for firm asset value is
+
+$$
+\frac{dV_t}{V_{t^-}} = \left(\mu - \lambda^{V} k\right)dt + \sigma_V\, dW_t + \left(e^{Y} - 1\right)dN_t,
+$$
+
+where $N_t$ is a Poisson process with rate $\lambda^{V}$, each jump multiplies $V$ by $e^{Y}$ with $Y \sim N(\mu_J, \sigma_J^2)$ i.i.d., and $k = \mathbb{E}[e^{Y} - 1] = e^{\mu_J + \sigma_J^2/2} - 1$ is the mean proportional jump, subtracted from the drift so that $\mu$ remains the total expected return. Conditional on $n$ jumps in $[0, T]$, the log-return $x = \ln(V_T/V_0)$ is Gaussian, so the unconditional density is a Poisson-weighted mixture of Gaussians:
+
+$$
+f(x) = \sum_{n=0}^{\infty} \frac{e^{-\lambda^{V} T}\left(\lambda^{V} T\right)^n}{n!}\;\phi\!\left(x;\; \left(\mu - \tfrac{1}{2}\sigma_V^2 - \lambda^{V} k\right)T + n\mu_J,\;\; \sigma_V^2 T + n\sigma_J^2\right),
+$$
+
+with $\phi(x; m, v)$ the normal density with mean $m$ and variance $v$. Read it as §5.1's mixture with infinitely many worlds: zero jumps, one jump, two jumps, each a Gaussian with its own center. For credit, the $n = 0$ and $n = 1$ terms carry nearly all the weight over horizons of a year or less, which is why the one-period mixture is a good approximation.
+
+**Implementation note for the specifier.** Truncate the sum at $n_{\max}$ where the Poisson tail mass $1 - \sum_{n \le n_{\max}} \Pr(N_T = n)$ is below $10^{-12}$, compute the Poisson weights in log space (`scipy.stats.poisson.logpmf`), and never let ROBO pick $n_{\max} = 10$ "because it looked converged" on a parameter set with $\lambda^{V}T = 30$.
+
+### 5.3.3 Kou (2002): double-exponential jumps, and why memorylessness is a gift
+
+Merton's Gaussian jump sizes make first-passage problems (default when $V$ hits a barrier $B$) intractable. Kou's double-exponential jumps fix this. The log-jump $Y$ has density
+
+$$
+f_Y(y) = p\,\eta_1 e^{-\eta_1 y}\,\mathbf{1}_{\{y \ge 0\}} + (1 - p)\,\eta_2 e^{\eta_2 y}\,\mathbf{1}_{\{y < 0\}}, \qquad \eta_1 > 1,\; \eta_2 > 0,
+$$
+
+so an upward jump is exponential with mean $1/\eta_1$ and a downward jump is exponential with mean $1/\eta_2$; $p$ is the probability that a jump is upward. The condition $\eta_1 > 1$ keeps $\mathbb{E}[e^{Y}] = p\eta_1/(\eta_1 - 1) + (1-p)\eta_2/(\eta_2 + 1)$ finite. The exponential distribution's memorylessness is the key: if a downward jump has to exceed a distance $d$ to cross the barrier, then given that it does, the *overshoot* beyond the barrier is again exponential with the same rate.
+
+Two results fall out, and both are worth deriving because they are the cleanest bridge between structural models and the recovery distribution.
+
+**Result 1: jump-to-default intensity and a non-zero short spread.** Let the firm sit at $V > B$, with log-distance to default $d = \ln(V/B)$. In the next instant $dt$, the diffusion cannot reach the barrier (the probability is exponentially small in $d^2/dt$, so it is $o(dt)$). A jump arrives with probability $\lambda^{V}dt$; it is downward with probability $1-p$; and it crosses the barrier if its size exceeds $d$, which for an exponential with rate $\eta_2$ has probability $e^{-\eta_2 d} = (B/V)^{\eta_2}$. Therefore the instantaneous default intensity is
+
+$$
+\lambda = \lambda^{V}(1 - p)\left(\frac{B}{V}\right)^{\eta_2}.
+$$
+
+Under $\mathbb{Q}$, the short-maturity credit spread is intensity times loss, $s(0^{+}) = \lambda^{\mathbb{Q}} L^{\mathbb{Q}}$, which is *strictly positive*. The diffusion-only Merton (1974) model, by contrast, gives a short spread of zero, a famous embarrassment that Chapter 6 treats in detail: a firm one day from maturity with a positive distance to default cannot diffuse into default fast enough to matter, so the model says one-week paper of a CCC issuer should trade at Treasuries. Kaz once asked, reasonably, whether the market could simply be wrong about this. It cannot. The market is pricing the jump.
+
+**Result 2: recovery given a jump default, in closed form.** At default, the asset value is the barrier times an exponential undershoot: $V_\tau = B\,e^{-U}$ with $U \sim \text{Exp}(\eta_2)$ by memorylessness. Hence
+
+$$
+\mathbb{E}\!\left[\frac{V_\tau}{B}\right] = \mathbb{E}\!\left[e^{-U}\right] = \frac{\eta_2}{1 + \eta_2}.
+$$
+
+If creditors recover the post-default asset value net of a proportional bankruptcy cost $\alpha$, per unit of face $F$, the expected recovery given a jump default is
+
+$$
+\mathbb{E}[R \mid \text{jump default}] = (1 - \alpha)\,\frac{B}{F}\,\frac{\eta_2}{1 + \eta_2}.
+$$
+
+Now look at what one parameter does. Fatter downward jumps (smaller $\eta_2$) raise the default intensity through $(B/V)^{\eta_2}$ *and* lower the recovery through $\eta_2/(1+\eta_2)$. The model produces **PD–LGD correlation for free**, from a single structural assumption: the shocks that kill firms are the shocks that destroy asset value. That is the micro-foundation of the downturn-LGD effect that Altman and coauthors measure in the data (§5.5.4).
+
+*Illustrative numbers* (author's arithmetic). Take $V/B = 1.5$, $\lambda^{V} = 0.5$ per year, $p = 0.4$, $B = F$, $\alpha = 0.3$:
+
+| $\eta_2$ (mean down-jump $1/\eta_2$ in log terms) | Jump-default intensity $\lambda$ | $\mathbb{E}[R \mid \text{jump default}]$ | Short spread $\lambda L$ |
+| :--- | ---: | ---: | ---: |
+| 4 (25%) | 5.9% | 56.0% | 261 bp |
+| 3 (33%) | 8.9% | 52.5% | 422 bp |
+| 2 (50%) | 13.3% | 46.7% | 711 bp |
+
+Moving $\eta_2$ from 4 to 2 more than doubles the default intensity and costs nine points of recovery. A desk that models PD and recovery as independent, with recovery fixed at 40%, will price the 711 bp name as though it were cheap relative to the 260 bp name by a ratio that ignores half the story.
+
+### 5.3.4 What the jump model is for on a desk, and what it is not
+
+The jump-diffusion's job on a desk is threefold: (i) it gives a consistent term structure from the short end out, which matters for pricing two-year paper against CDS; (ii) it gives a path simulator for JTD and expected shortfall in which recovery and default timing are joint outputs; and (iii) it lets the desk map an equity-options skew to a credit view (Chapter 23), because jumps are what make deep out-of-the-money puts expensive.
+
+Its job is *not* to be calibrated from a single bond's price history. Bohn and Stein make the point bluntly when surveying structural models with jumps: implementation founders on the instability of the jump-risk parameters, because credit data are rare-event data and the estimates move a lot with the sample (Bohn_Stein_Active_Credit_Portfolio_Management p.182, paraphrased). The desk resolution is a division of labor: estimate $\lambda^{V}$, $p$, $\eta_2$ from cross-sections and liquid markets (CDS curves, equity option surfaces, index tranches), and then *condition* on issuer features. Never estimate a jump intensity from one issuer's sixty days of TRACE marks, which contain, as noted, zero jumps.
+
+> **[SOURCE EXTRACTION]** *Bolder_Credit_Risk_Modelling p.45:* "Default is a binary event. It either happens or it doesn’t. Once it happens, default is also typically a permanent state. After arrival in default, exit is, in general, a slow and messy process."
+>
+> **Annotation.** Bolder's three sentences are the specification of the default state in a Markov chain: an absorbing state, entered by a jump, exited slowly if at all. Two things have changed since this framing became standard, and both matter for the code. First, the "binary" event is no longer binary. A distressed exchange is a default for rating-agency purposes but not for the bond's cash flows in the way a bankruptcy is, and the issuer frequently re-enters the default state later; Moody's 2026 study of 1,173 soft-event borrowers found that roughly one in four ended in a hard default (§5.6). The default state is therefore absorbing only for the *hard* default; the soft default is a transient state with a high outbound hazard. Second, "slow and messy" exit is where the RSSG reader's process knowledge (exclusivity periods, DIP roll-ups, plan valuation fights) becomes a recovery model input: the time to emergence is a random variable correlated with the recovery itself, and the post-default trading price is a $\mathbb{Q}$-expectation over that whole messy process (§5.5.6).
+
+> **Ways This Blows Up.** *Three classic jump-model failures.* (1) *Measure confusion:* jump intensities calibrated to CDS spreads are $\mathbb{Q}$ quantities that embed a jump-risk premium; using them in a $\mathbb{P}$ risk simulation overstates expected losses and makes every long look terrible. Keep `lambda_Q` and `lambda_P` as different fields, never one field with a comment. (2) *Discretization bias:* simulating first passage on a weekly grid misses diffusive barrier crossings between grid points; the Brownian-bridge correction (Chapter 6) fixes the diffusion part, while the jump part needs exact jump times drawn from the Poisson process, not "a jump this week with probability $\lambda^{V}\Delta t$." (3) *Identification:* with only a CDS curve, $\lambda^{V}$, $p$, and $\eta_2$ are not separately identified; ROBO will happily return a minimum on a flat ridge and report three significant figures for each.
+
+### Deep-Dive Resource Graph
+
+- **Podcasts:** Corey Hoffstein, *Flirting with Models* (episodes on tail risk and jump hedging; titles to be confirmed).
+- **Practitioner Writing:** Bohn and Stein, *Active Credit Portfolio Management in Practice* (Wiley), structural models with jumps (shelf: Bohn_Stein_Active_Credit_Portfolio_Management p.182).
+- **Academic Papers:** Merton (1976), *Option Pricing When Underlying Stock Returns Are Discontinuous*, Journal of Financial Economics; Kou (2002), *A Jump-Diffusion Model for Option Pricing*, Management Science; Kou and Wang (2003), *First Passage Times of a Jump Diffusion Process*, Advances in Applied Probability; Zhou (2001), *The Term Structure of Credit Spreads with Jump Risk*, Journal of Banking & Finance; Chen and Kou (2009), *Credit Spreads, Optimal Capital Structure, and Implied Volatility with Endogenous Default and Jump Risk*, Mathematical Finance.
+- **Data & Code:** `simulate_kou_jd` and its short-maturity intensity check in §5.9.
+
 ## 5.4 Lévy Processes: What Is Useful and What Is Decoration
+
+Kaz loves the variance gamma process. Ines's question about any model is the same: "What does it change about the bid?" This section answers her, briefly, because the honest answer for single-name high yield is "not much," and the honest answer for indices, ETFs, and options is "quite a lot."
+
+A **Lévy process** is any process with independent, stationary increments. Its characteristic function has the Lévy–Khintchine form $\mathbb{E}[e^{iuX_t}] = e^{t\psi(u)}$ with
+
+$$
+\psi(u) = i b u - \tfrac{1}{2}\sigma^2 u^2 + \int_{\mathbb{R}\setminus\{0\}} \left(e^{iux} - 1 - iux\,\mathbf{1}_{\{|x|<1\}}\right)\Pi(dx),
+$$
+
+a drift, a Gaussian part, and a jump measure $\Pi$ that says how many jumps of each size arrive per unit time. Merton and Kou are the *finite-activity* case: $\Pi$ has finite total mass $\lambda^{V}$, so jumps are rare events you can count. The *infinite-activity* models put infinite mass near zero: infinitely many tiny jumps, which replace the diffusion.
+
+**Variance gamma** (Madan and Seneta 1990; Madan, Carr, and Chang 1998) runs a Brownian motion with drift on a random gamma clock: $X_t = \theta G_t + \sigma W_{G_t}$, where $G_t$ is a gamma process with mean $t$ and variance rate $\nu$ (a VG parameter, not to be confused with anything else in this chapter). Its characteristic function is $(1 - iu\theta\nu + \tfrac{1}{2}\sigma^2\nu u^2)^{-t/\nu}$, its variance is $(\sigma^2 + \theta^2\nu)t$, and for $\theta = 0$ its excess kurtosis is $3\nu/t$. **Normal inverse Gaussian** (Barndorff-Nielsen 1997) does the same with an inverse-Gaussian clock and has closed-form moments: with $\gamma_{\text{NIG}} = \sqrt{\alpha^2 - \beta^2}$, skewness $3\beta/(\alpha\sqrt{\delta\gamma_{\text{NIG}}})$ and excess kurtosis $3(1 + 4\beta^2/\alpha^2)/(\delta\gamma_{\text{NIG}})$ per unit time. (The subscript avoids a collision with the book's risk-aversion $\gamma$.)
+
+> **[SOURCE EXTRACTION]** *Bolder_Credit_Risk_Modelling p.229:* "Since neither the gamma nor the generalized inverse-Gaussian laws possess a power tail, sadly these models do not exhibit positive tail dependence."
+>
+> **Annotation.** Bolder is discussing normal-variance-mixture threshold models for portfolio default, in which a common mixing variable scales every obligor's latent variable. His point, stated two pages earlier in the same chapter, is that tail dependence (the probability that two names default together in the extreme) comes from a *power-tailed* mixing variable, as in the $t$ distribution, and not from leptokurtosis as such. VG and NIG have fat-looking, thin-waisted densities and plenty of kurtosis, but their tails decay exponentially, so they do not make joint extreme defaults more likely in the limit. For the desk this is a specification rule: if the purpose of the model is portfolio jump-to-default clustering, choose the mixing law for its tail, not its kurtosis. The departure: practitioners now calibrate dependence to observed default clustering by sector and sponsor (Chapter 14), and a sponsor's portfolio of loan-only borrowers is a cluster that no symmetric mixing variable captures.
+
+Two more facts settle the verdict. The excess kurtosis of VG decays like $1/t$, so a model fitted to daily returns says almost nothing about the quarterly horizon at which a credit book actually takes its losses. And infinite-activity models need dense, clean price data to calibrate, which CDX options, HYG and JNK, and equity option surfaces have, and which single-name high-yield bonds, with their stale TRACE prints, do not.
+
+| Model | Use it for | Decoration when used for |
+| :--- | :--- | :--- |
+| Gaussian diffusion | Survival-world spread wiggle, short horizons | Anything that includes default |
+| Compound Poisson + Gaussian (Merton) | Single-name return mixtures, JTD simulation | Fitting a single bond's daily history |
+| Kou double-exponential | Analytic first passage, short-end spreads, PD–LGD link | Precise calibration of $\eta_1$ from bond data |
+| VG / NIG | CDX option skews, ETF daily returns, equity-to-credit vol maps | Single-name HY bond returns from TRACE |
+| $t$ or power-tailed mixtures | Portfolio tail dependence, default clustering | Recovery modeling (bounded support) |
+
+Kaz's summary, after an afternoon of trying to calibrate VG to a B2 bond with nine trades in a month: "It fits beautifully. It fits anything. That's the problem."
+
 ## 5.5 Recovery as a Random Variable: Beta Models Conditioned on Collateral and Seniority
+
+### 5.5.1 Desk framing: the waterfall was always a distribution
+
+"Price is what you pay," Mags says. "Recovery is what you get, eventually, after the lawyers." She means that recovery is uncertain in three dimensions at once: how much, when, and in what currency (cash, new debt, or post-reorg equity of uncertain value).
+
+The RSSG reader's aha is that you have been building recovery distributions for years and calling them waterfalls. Moyer's plan-outcome tables are recovery *functions*: choose an enterprise value multiple, run absolute priority, read off recovery by class.
+
+> **[SOURCE EXTRACTION]** *Moyer_Distressed_Debt_Analysis p.251:* "Again, note that the valuation assumption determines the total amount of recovery, particularly to junior classes. This should reinforce why the issue of valuation is so hotly contested in the plan negotiation."
+>
+> **Annotation.** Moyer's tables compare plan outcomes under low and high valuations and show junior classes swinging from near zero to meaningful recoveries. The quant's recovery model is the same object with one more step: put a probability distribution on $\text{EV}$ and integrate the waterfall over it. Recovery for class $j$ is then $R_j = W_j(\text{EV})$, a piecewise-linear, monotone function of a random variable, and its distribution inherits a point mass at zero (EV below the class's attachment point), a point mass at one (EV above its detachment point), and a continuous middle. Moody's loss-given-default methodology (August 2006) did exactly this, drawing firm-wide recovery from a Beta distribution on $[0, 1.2]$ of liabilities with mean 50.21% and standard deviation 26.46% and pushing it through the priority-of-claims waterfall. The modern departure is that "priority" is no longer fixed at issuance: in an uptier, the waterfall itself is redrawn, and the attachment point of your class becomes a random variable too.
+
+Kaz, reading over Theo's shoulder, asks what the "debt cushion" line is, and whether it is an ergonomic benefit. Mags: "It's the junior debt that gets wiped out before you do. There used to be some." The debt cushion (the share of the capital structure junior to your claim) is the single best predictor of a class's recovery in most empirical studies, and its disappearance is the subject of this section's Trend Watch.
+
+### 5.5.2 The Beta distribution and the method of moments
+
+The Beta density on $(0,1)$ is
+
+$$
+f(r; a, b) = \frac{r^{a-1}(1-r)^{b-1}}{B(a,b)}, \qquad a, b > 0,
+$$
+
+with mean $\mu = a/(a+b)$ and variance $\sigma^2 = \mu(1-\mu)/(a+b+1)$. Inverting gives the method-of-moments estimator
+
+$$
+a = \mu\left[\frac{\mu(1-\mu)}{\sigma^2} - 1\right], \qquad b = (1-\mu)\left[\frac{\mu(1-\mu)}{\sigma^2} - 1\right],
+$$
+
+which exists only if $\sigma^2 < \mu(1-\mu)$, the variance of a Bernoulli with the same mean. A recovery sample whose variance is at or above that bound is telling you it is all-or-nothing, and the code must raise, not clip.
+
+> **[SOURCE EXTRACTION]** *Bohn_Stein_Active_Credit_Portfolio_Management p.297:* "Note the characteristic U-shape of the ultimate recoveries, suggesting that in many cases, recovery can be an all-or-nothing process."
+>
+> **Annotation.** Bohn and Stein are describing Moody's data on ultimate (settlement) recoveries, which pile up near zero and near par, unlike 30-day post-default trading prices, which are more hump-shaped because the market averages over the outcomes it cannot yet see. The U-shape is what a waterfall integrated over a wide EV distribution produces: most classes are either in the money or out of it. The Beta family can produce a U (both $a, b < 1$), a J at either end (one parameter below one), or a hump (both above one), which is why Bohn and Stein call it the common choice for LGD (p.313) and Bolder notes that its support, like default severity, is the unit interval (Bolder_Credit_Risk_Modelling p.84). The departure for 2026: the LMT era adds a *third* lump in the middle of the first-lien distribution, the excluded lender's recovery, which a single Beta cannot produce. §5.6 handles it as a mixture of Betas.
+
+Three method-of-moments fits show the range (*author's arithmetic from stated moments; illustrative*):
+
+| Population | Mean, s.d. | $(a, b)$ | Shape |
+| :--- | :--- | :--- | :--- |
+| Senior unsecured bonds, Moody's 1970–2002Q2 (Schmid p.103) | 40.07%, 27.50% | (0.87, 1.30) | Spike at zero |
+| First-lien loan book (illustrative) | 70%, 30% | (0.93, 0.40) | U-shape, heavy at par |
+| Moody's family recovery, rescaled from $[0, 1.2]$ | 50.21%, 26.46% | (1.68, 2.33) | Interior hump |
+
+### 5.5.3 Beta regression and inflated masses: conditioning on what the RSSG reader knows
+
+A table of Betas by seniority is a lookup table, and Schmid's complaint about lookup tables applies: recovery is "estimated by appealing to historical averages although the extreme range of the historical data makes one doubt about its use" (Schmid_Credit_Risk_Pricing_Models p.96). The fix is to let the Beta's mean depend on covariates. In the Ferrari and Cribari-Neto (2004) parameterization, $r_i \sim \text{Beta}(\mu_i\phi, (1-\mu_i)\phi)$ with precision $\phi > 0$ and
+
+$$
+\operatorname{logit}(\mu_i) = x_i^{\top}\beta,
+$$
+
+so the per-observation log-likelihood is
+
+$$
+\ell_i = \ln\Gamma(\phi) - \ln\Gamma(\mu_i\phi) - \ln\Gamma\big((1-\mu_i)\phi\big) + (\mu_i\phi - 1)\ln r_i + \big((1-\mu_i)\phi - 1\big)\ln(1 - r_i).
+$$
+
+The covariate vector $x_i$ is where the RSSG seat pays. A pure quant has seniority and industry. You have: collateral coverage (collateral value over claim, continuous), debt cushion (share of the stack junior to the claim), loan-only flag, cov-lite flag, sponsor flag, prior-LMT flag, industry-distress indicator (Acharya, Bharath, and Srinivasan 2007 show defaulted firms in distressed industries recover less), the trailing speculative-grade default rate, jurisdiction, and, since 2020, **participation status** in the last LMT. A loan-only, cov-lite, sponsor-backed "first lien" with no debt cushion is a senior unsecured bond wearing a name tag that says FIRST LIEN, and the regression should be allowed to read the name tag and then ignore it.
+
+Exact zeros and ones break the plain Beta: $\ln r_i = -\infty$ at $r_i = 0$. The **zero-one-inflated Beta** (Ospina and Ferrari 2010) adds point masses:
+
+$$
+\Pr(r = 0) = \pi_0, \qquad \Pr(r = 1) = \pi_1, \qquad r \mid r \in (0,1) \sim \text{Beta}\big(\mu\phi, (1-\mu)\phi\big),
+$$
+
+with $(\pi_0, \pi_1)$ modeled by a multinomial logit on the same covariates. Bohn and Stein describe the two-stage industrial version: a probit for whether the loss is positive, then a regression for its size (p.316). An FDIC working paper comparing LGD models (Li, Zhang, and Zhao 2018) found that mean predictions are similar across OLS, fractional response, and Beta-family models, but that the models that respect bimodality win clearly on the *predicted distribution*, which is the object a mixture risk model consumes.
+
+### 5.5.4 Downturn recovery: PD and LGD share a factor
+
+Recoveries fall when defaults rise. Schmid summarizes Altman, Brady, Resti, and Sironi (2005): "one can explain 51% of the variation in the annual recovery rates with the level of default rates in a linear model, and approximately 60% with logarithmic and power relationships" (Schmid_Credit_Risk_Pricing_Models p.103), and the Moody's table on the same page shows mean recoveries of 27.85% in recessions versus 43.10% in expansions. The specification is a shared systematic factor $Z_t$ that drives both default and recovery,
+
+$$
+\operatorname{logit}(\mu_{i,t}) = x_i^{\top}\beta - \kappa_R Z_t, \qquad \Pr(D_{i,t} = 1 \mid Z_t) = \Phi\!\left(\frac{\Phi^{-1}(q_i) + \sqrt{\rho}\,Z_t}{\sqrt{1-\rho}}\right),
+$$
+
+in the spirit of Frye's "collateral damage" model, where $Z_t > 0$ is a bad state, $\rho$ the asset correlation, and $\kappa_R > 0$ the recovery loading (the subscript separates it from the DTS $\kappa$ of §5.1). Kou's model in §5.3.3 gave the same correlation structurally. Ignore it and your portfolio's 99th-percentile loss is too small twice: too few defaults in the bad state, each too cheap.
+
+### 5.5.5 Participation status: the covariate with the biggest coefficient
+
+In a non-pro-rata uptier, two lenders holding the same tranche, with the same collateral and the same seniority label, end up with different claims. The covariate "participant in the last LMT" therefore has a coefficient that, in the cases that reached court, is larger than seniority's. The Case Study in §5.6.2 puts numbers on it.
+
+### 5.5.6 $\mathbb{P}$ recovery, $\mathbb{Q}$ recovery, and the 40% that is neither
+
+> **[SOURCE EXTRACTION]** *Bohn_Stein_Active_Credit_Portfolio_Management p.300:* "When using post-default prices of recovery, either in a look-up table or through the use of a model, the predicted value is a risk-neutral measure of the expected discounted future recovery."
+>
+> **Annotation.** This is the sentence that keeps two datasets out of one regression. The 30-day post-default trading price is a market price, so it is a $\mathbb{Q}$-expectation of the discounted ultimate recovery, net of a risk premium for the messy, slow exit Bolder described. The ultimate discounted recovery is a $\mathbb{P}$ realization. They differ systematically, and a model fitted to one and used as the other will be biased in a direction that depends on the cycle. The spec in §5.9 makes `target` a required argument and refuses to fit a panel that mixes the two. The modern departure: on a desk, the post-default price is also the price at which a forced seller (a CLO with a CCC bucket problem, a ratings-constrained insurer) sells to you, so it contains a liquidity discount that is a trading opportunity, not a forecast.
+
+And the famous 40%? Dynkin is candid about what it is: "A representative average recovery rate of 40% is assumed, such that a loss of 60% is assumed to be incurred with the specified probability" (Dynkin_Systematic_Investing_in_Credit p.354). In CDS, the standard model uses a fixed recovery to convert running spreads into upfronts (Chapter 24); it is a conversion convention. A CDS spread identifies only the product $\lambda^{\mathbb{Q}}L^{\mathbb{Q}}$ (the credit triangle, Chapter 6), and separating the two requires recovery locks, digital CDS, or term-structure restrictions (Pan and Singleton 2008; Doshi, Elkamhi, and Ornthanalai 2018). Mags remembers the old days: "We assumed 40 because the bonds were actually senior to something. Now the first lien is senior to the other first lien, depending on counsel."
+
+> **Trend Watch.** *Recovery compression and the death of the debt cushion (2019–2026).* Long-run baselines, Moody's data as reproduced by the Bermuda Monetary Authority (September 5, 2024): trading-price recoveries 1983–2023 of 65% for first-lien bank loans, 55% for first-lien bonds, and 38% for senior unsecured bonds; ultimate recoveries 1987–2023 of 87% for revolvers, 71% for term loans, 62% for senior secured bonds, and 47% for senior unsecured bonds. The same report cites S&P that first-lien and priority debt now make up more than 75% of total debt in typical structures. Fitch's 2023 *Annual Manual* (March 30, 2023) put first-lien institutional leveraged loan 30-day post-default prices for 2007–2022 at an average of 59.5% (median 62.8%), with recovery ratings migrating down "as companies increasingly relied on first-lien heavy structures." S&P (*CreditWeek*, February 20, 2025, via search summary) reported that its first-lien recovery ratings had fallen to the mid-to-low 60% range over six years, against long-term realized averages of 75%–80%, citing higher leverage, shrinking junior debt cushions, and cov-lite structures. Moody's data reported by Bloomberg Law (April 23, 2025) put first-lien distressed-exchange recoveries at 71% at end-2024, up from 55% in 2023, and Moody's September 22, 2026 *Corporate Defaults and Recoveries* report (via American Banker, September 28, 2026) projected first-lien loan recoveries "declining to 55%." What it means for the model: the long-run 71%–76% first-lien ultimate recovery is a property of a capital structure that had a junior cushion. The Beta regression's debt-cushion and loan-only coefficients are not static; refit them on post-2019 defaults, and treat any recovery prior drawn from pre-2015 data as an upper bound for sponsor-backed, loan-only borrowers.
+
+### Deep-Dive Resource Graph
+
+- **Podcasts:** Bloomberg Intelligence, *The Credit Edge* (episodes on recoveries and LMEs; titles to be confirmed).
+- **Practitioner Writing:** Moody's, *Loss Given Default Rating Methodology* (August 2006), mirror at https://care-mendoza.nd.edu/assets/152347/loss-given-default-rating-methodology.pdf ; Bermuda Monetary Authority, *Private Credit: Deep Dive on Direct Loans, CLOs and Private Placements* (September 5, 2024), https://cdn.bma.bm/documents/2024-09-05-11-50-00-Private-Credit---Deep-dive-on-Direct-Loans-CLOs-and-Private-Placements.pdf ; Fitch, *The 2023 Annual Manual: A Primer on the U.S. Leveraged Finance Market* (March 30, 2023).
+- **Academic Papers:** Ferrari and Cribari-Neto (2004), *Beta Regression for Modelling Rates and Proportions*, Journal of Applied Statistics; Ospina and Ferrari (2010), *Inflated Beta Distributions*, Statistical Papers; Altman, Brady, Resti, and Sironi (2005), *The Link between Default and Recovery Rates*, Journal of Business, https://ideas.repec.org/a/ucp/jnlbus/v78y2005i6p2203-2228.html ; Acharya, Bharath, and Srinivasan (2007), *Does Industry-Wide Distress Affect Defaulted Firms?*, Journal of Financial Economics; Jankowitsch, Nagler, and Subrahmanyam (2014), *The Determinants of Recovery Rates in the US Corporate Bond Market*, Journal of Financial Economics; Altman and Kalotay (2014), *Ultimate Recovery Mixtures*, Journal of Banking & Finance; Frye (2000), *Collateral Damage*, Risk; Li, Zhang, and Zhao (2018), *Modeling Loss Given Default*, FDIC CFR WP 2018-03, https://www.fdic.gov/analysis/cfr/working-papers/2018/cfr-wp2018-03.pdf ; Berd (2005), *Recovery Swaps*, Journal of Credit Risk, https://arxiv.org/abs/1001.0783 .
+- **Data & Code:** Moody's Default & Recovery Database and Ultimate Recovery Database (subscription); `beta_mom` and `fit_beta_regression` in §5.9.
+
 ## 5.6 The Default Is Now a Negotiation: Distressed Exchanges, Re-Default, and Regime Mixtures
+
+### 5.6.1 The Bernoulli becomes a categorical variable
+
+"We are represented by counsel," says the Ad Hoc Group, in unison. "Our recovery is seventy-three point seven to one hundred. Yours is a rounding error."
+
+The chorus is quoting a real plan (§5.6.2), and it is telling the modeler that the default leg of §5.1 is itself a mixture. Replace the Bernoulli $D$ with a categorical event $E \in \{\text{survive}, \text{DE}, \text{HD}\}$, where DE is a distressed exchange or LMT classified as a default and HD is a hard default (payment default or bankruptcy), with probabilities $(1 - q_{\text{DE}} - q_{\text{HD}}, q_{\text{DE}}, q_{\text{HD}})$. A DE is not absorbing: it moves the issuer into a transient state with a front-loaded re-default hazard. Moody's 2026 re-default study supplies a calibration. If a fraction $\pi_{\text{re}} \approx 0.25$ of soft events end in hard default, and more than 70% of those arrive within two years, an exponential re-default clock with rate $\theta$ satisfying $1 - e^{-2\theta} = 0.7$ gives $\theta \approx 0.60$ per year and
+
+$$
+\Pr(\text{HD by } t \mid \text{DE at } 0) = \pi_{\text{re}}\left(1 - e^{-\theta t}\right) \approx 0.25\left(1 - e^{-0.60\,t}\right)
+$$
+
+(*author's calibration, illustrative*). The DE leg's recovery is then a mixture too: the exchange value $R_{\text{DE}}$ if the issuer cures, and a second, lower recovery on the *new* paper if it re-defaults, with Moody's noting that recoveries "tend to decline further" in that case. For participants and non-participants in the same tranche, $R_{\text{DE}}$ is two different random variables, which is why the recovery leg needs a two-component Beta mixture,
+
+$$
+f_R(r) = w_{\text{in}}\,\text{Beta}(r; a_{\text{in}}, b_{\text{in}}) + (1 - w_{\text{in}})\,\text{Beta}(r; a_{\text{out}}, b_{\text{out}}),
+$$
+
+where $w_{\text{in}}$ is the probability that your tranche ends up inside the deal. For a passive holder of a widely held loan with a permissive credit agreement, $w_{\text{in}}$ is not the share of lenders who participate; it is the probability that *you* are invited, which is a function of your position size, your relationships, and whether you are already in the group. Regime-switching versions, in which the Beta parameters move with a hidden credit-cycle state, follow Bruche and González-Aguado (2010).
+
+> **Trend Watch.** *The distressed exchange became the modal default (2022–2026).* Fitch's 2023 *Annual Manual* reported that distressed debt exchanges "accounted for 45% and 50% of the 2022 defaults in volume and count, respectively." S&P (as cited by FTI Consulting, October 9, 2026) found DDEs at about half of rated US corporate defaults for three consecutive years, against 32% for 2010–2023. Moody's Analytics (*US Credit Review & Outlook*, July 2025) reported that distressed exchanges were 64% of defaults in the first half of 2025, "about the same pace as all of 2024, which itself was the highest annual share on record," and that the June 2025 high-yield issuer default rate of 5.8% fell to 2.1% once 51 distressed restructurings were removed. Moody's (*Lend, Extend, and Then?*, May 18, 2026) put distressed exchanges at about 65% of 2025 corporate defaults and, in a study of 1,173 soft-event borrowers from 1979 to 2026, found that roughly one in four ended in a hard default and that more than 70% of eventual hard defaults came within two years. Moody's September 22, 2026 report (via American Banker) put DEs and LMEs at "roughly 70% of defaults since early 2022," with the default rate at 5.3% in August 2026. What it means for the model: a default probability with no event type attached is now an ambiguous number. The 5.8%-versus-2.1% gap is the difference between two definitions of $q$, and a backtest trained on one and scored on the other will look either brilliant or broken.
+
+> **Docket Diary.** *Rulings that moved recovery distributions.* March 28, 2023: the Serta bankruptcy court (S.D. Tex.) grants summary judgment that the 2020 uptier fell within "open market purchase." December 31, 2024: the Fifth Circuit reverses (125 F.4th 555, revised February 14, 2025), holding that the privately negotiated exchange was not an open market purchase and excising the plan's indemnity for participating lenders. Same day, the New York Appellate Division, First Department, permits the Mitel uptier (*Ocean Trails CLO VII v. MLN Topco*). January 2025: the Wesco/Incora bankruptcy court finds that the 2022 transactions violated the 2026 notes indenture; December 8, 2025: the district court reverses. September 2025: in ConvergeOne, the district court reverses plan confirmation because an exclusive backstop for majority lenders violated §1123(a)(4). July 2026: on remand in Serta, participating lenders are held liable for \$261.13mm plus prejudgment interest, with the excluded loans valued at \$0.25 (Mayer Brown, July 2026). The Ad Hoc Group, through counsel, notes its disappointment. (Cooperation agreements signed in this book so far: 0. Part IV will fix that.)
+
+### 5.6.2 Case Study: Serta Simmons and Hertz, the two ends of the recovery distribution
+
+**Serta Simmons (2020–2026): recovery conditioned on a signature.** In June 2020, a majority group of Serta's first- and second-lien lenders provided about \$200mm of new-money first-out debt and exchanged their existing loans into roughly \$875mm of second-out super-priority debt, leaving the non-participating first-lien lenders subordinated to more than \$1bn of new priming debt (Proskauer, January 2, 2025). Serta filed Chapter 11 in January 2023. The proposed plan offered participating lenders recoveries of 73.7%–100% and non-participating lenders and other unsecured creditors 0.6%–2.4% (Norton Rose Fulbright, Q3 2023). Same original tranche, same collateral, same seniority label: two recovery distributions separated by a factor of thirty or more. In Beta-regression terms (§5.5.3), the participation coefficient swamps everything else in $x_i$, and a model with only seniority and collateral would have assigned both groups the same mean.
+
+What a systematic desk could have flagged *before* June 2020, using the RSSG reader's conditioning set: the credit agreement permitted debt buybacks via "open market purchase" (the most expensive three words in finance) with only majority-lender consent for the relevant amendments; the borrower was sponsor-owned with a single-B-or-lower rating and pandemic-hit revenue; and competing lender groups were reported to be organizing. Each is a feature in the Priming Risk Score of Chapter 13, and together they shift $w_{\text{in}}$ for a small passive holder sharply down. Ines replays the hand through markouts: "The week before the uptier, who was buying the loan, and who was quietly selling it to you? The group that knew it was getting the 73.7 was not selling."
+
+**Hertz (2020–2026): the right tail, where $R > 1$.** Hertz filed in May 2020, and the used-car market and an equity rally then made it a solvent debtor. The plan paid unsecured noteholders in full and delivered about \$1.1bn of value to old equity; the noteholders then litigated for make-whole premiums and post-petition interest at the contract rate. The Third Circuit (2024, 120 F.4th 1181) held that the make-wholes were unmatured interest disallowed under §502(b)(2) but that, because the debtor was solvent, the noteholders were entitled to the premium amounts and contract-rate interest anyway, worth more than a quarter of a billion dollars; the Supreme Court denied certiorari on January 12, 2026 (Nelson Mullins, April 10, 2026). For the model, Hertz is a recovery above par in an unsecured class, driven by a systematic factor, which is why Moody's put family recovery on $[0, 1.2]$ rather than $[0, 1]$ and why the spec allows `support_max > 1`. It is also a reminder that the recovery of an unsecured claim on a cyclical business is a call option on the cycle.
+
+### Deep-Dive Resource Graph
+
+- **Podcasts:** Bloomberg *Odd Lots* episodes on "creditor-on-creditor violence" and liability management (2023–2025; titles to be confirmed); Octus and Petition coverage of the Serta and Mitel rulings.
+- **Practitioner Writing:** Moody's, *Lend, Extend, and Then?* (May 18, 2026), https://www.moodys.com/web/en/us/insights/credit-risk/private-credit/lend-extend-and-then.html ; Moody's Analytics, *US Credit Review & Outlook* (July 2025), https://www.moodys.com/web/en/us/insights/resources/us-report-july-2025.pdf ; Norton Rose Fulbright, *Liability Management Transactions* (2023), https://www.nortonrosefulbright.com/en-us/knowledge/publications/e245aa48/liability-management-transactions ; Holwell Shuster & Goldberg, *Liability Management Exercises and the Courts in 2025* (December 22, 2025), https://www.hsgllp.com/about-news-Liability-Management-Exercises-and-the-Courts-in-2025 ; Octus, *The Year in LMEs* (January 8, 2026), https://octus.com/resources/articles/the-year-in-lmes/ ; Matt Levine, *Money Stuff* columns on Serta and "open market purchase" (Bloomberg Opinion).
+- **Academic Papers:** Bruche and González-Aguado (2010), *Recovery Rates, Default Probabilities, and the Credit Cycle*, Journal of Banking & Finance; Calabrese (2014), *Downturn Loss Given Default: Mixture Distribution Estimation*, European Journal of Operational Research.
+- **Data & Code:** CourtListener REST API, https://www.courtlistener.com/help/api/ (dockets for Serta, Wesco/Incora, ConvergeOne); SEC EDGAR, https://www.sec.gov/edgar (credit agreements as 8-K and 10-K exhibits).
+
 ## 5.7 Tails: Hill, Peaks-over-Threshold, and Why Single Bonds Have No Power Tail
-## 5.8 Case Study: Serta Simmons and Hertz
-## 5.9 Specification for AI Implementation (credit_mixture_lab)
-## 5.10 Desk Debrief / Spec You Hand the Robot / Exercises / Deep-Dive Resource Graph
--->
+
+### 5.7.1 Desk framing: which objects have tails worth estimating
+
+> **[SOURCE EXTRACTION]** *Paleologo_Advanced_Portfolio_Management p.76:* "Factor returns are heavier-tailed than the norm."
+>
+> **Annotation.** Paleologo shows this with a momentum factor's quantile plot, whose left tail sits well below the Gaussian line. The sentence is the reason extreme-value theory belongs in a credit risk stack: factor returns, index returns, ETF returns, and spread *changes* are unbounded or nearly so, and their tails are heavier than normal in a way that a power law describes well. The credit-specific departure is what the sentence does *not* cover: a single bond's loss is bounded by $1 - R_{\min}/P_0 \le 1$, and a bounded variable has no power tail. Applying EVT to one bond is like fitting a Pareto distribution to the number of floors in a building.
+
+### 5.7.2 Hill and peaks-over-threshold
+
+Sort losses $X_{(1)} \ge X_{(2)} \ge \dots \ge X_{(n)}$. If the tail is Pareto, $\Pr(X > x) \sim C x^{-\alpha}$, the Hill (1975) estimator of the tail index from the top $k$ order statistics is
+
+$$
+\hat{\alpha}_k = \left[\frac{1}{k}\sum_{i=1}^{k} \ln\frac{X_{(i)}}{X_{(k+1)}}\right]^{-1}, \qquad \hat{\xi}_k = 1/\hat{\alpha}_k.
+$$
+
+Peaks-over-threshold fits a generalized Pareto distribution (GPD) with shape $\xi$ and scale $\beta_{\text{GPD}}$ to the $N_u$ exceedances over a threshold $u$, giving (for $\xi < 1$, $\xi \ne 0$)
+
+$$
+\text{VaR}_p = u + \frac{\beta_{\text{GPD}}}{\xi}\left[\left(\frac{n}{N_u}(1-p)\right)^{-\xi} - 1\right], \qquad \text{ES}_p = \frac{\text{VaR}_p}{1-\xi} + \frac{\beta_{\text{GPD}} - \xi u}{1-\xi}.
+$$
+
+(The subscript on $\beta_{\text{GPD}}$ keeps it apart from factor loadings.) It is called a Hill plot because you climb it, look around, and still cannot see the threshold: $\hat{\alpha}_k$ is plotted against $k$, and you look for a plateau, which in real data is a matter of faith.
+
+### 5.7.3 The bounded-support trap
+
+The Pickands–Balkema–de Haan theorem sorts distributions into three domains by $\xi$: Fréchet ($\xi > 0$, power tail), Gumbel ($\xi = 0$, exponential-type tails), and Weibull ($\xi < 0$, bounded support). A single bond's loss is bounded, so it is in the Weibull domain. Run Hill on it and $\hat{\alpha}_k$ drifts with $k$: for small $k$ it is measuring the spread of recoveries within the default lump; for $k$ near $nq$ it is measuring the gap between the lump and the survival world. Neither is a tail index. The spec in §5.9 makes `hill_estimator` refuse, with a warning, when the sample maximum sits at the support bound.
+
+### 5.7.4 Diversification eats skew, correlation feeds it back
+
+For the average return of $N$ independent, identical bonds, cumulants add, so
+
+$$
+\text{skew}(\bar{R}) = \frac{\text{skew}(R)}{\sqrt{N}}, \qquad \text{exkurt}(\bar{R}) = \frac{\text{exkurt}(R)}{N}.
+$$
+
+A single bond with skew $-10$ becomes a 1,000-name portfolio with skew $-0.32$. Correlation stops the decay: with a common factor (§5.5.4), conditional on $Z_t$ the names are independent, but $Z_t$ itself moves every default probability and every recovery at once, so the portfolio inherits the skew of the *mixture over* $Z_t$. Bolder's verdict on threshold models makes the point.
+
+> **[SOURCE EXTRACTION]** *Bolder_Credit_Risk_Modelling p.222:* "even in the case of a Gaussian joint distribution for the risk factor, the loss distribution is no longer Gaussian. In fact, it is highly skewed and heavily fat-tailed."
+>
+> **Annotation.** Bolder shows that a Gaussian copula with modest correlation already produces a strongly skewed, fat-tailed portfolio default-loss distribution; the Gaussian factor is not the Gaussian outcome. The desk lesson: portfolio loss tails are where EVT and copula choice belong, and Bolder's further point (p.227) is that only a power-tailed mixing variable, such as the $t$-copula's, produces *tail dependence*. For a $t$-copula with correlation $\rho$ and $\nu$ degrees of freedom, the coefficient of tail dependence is $\lambda_U = 2\,t_{\nu+1}\!\left(-\sqrt{(\nu+1)(1-\rho)/(1+\rho)}\right)$, where $t_{\nu+1}$ is the Student-$t$ distribution function (and $\lambda_U$ is a tail-dependence coefficient, not an intensity; the subscript marks it). For the Gaussian copula it is zero. The departure: in 2026 the cluster that matters is often the sponsor or the lender group rather than the industry, so the dependence structure should be specified on those graphs (Chapter 14).
+
+The FRED data agree with the algebra. Using daily ICE BofA total-return indices from October 17, 2023 to October 15, 2026 (series BAMLHYH0A0HYM2TRIV, BAMLHYH0A3CMTRIV, BAMLHYH0A1BBTRIV; *author's computation from FRED data*), the High Yield index had daily skewness of about $+0.1$ and excess kurtosis of about 7.3; the CCC & Lower index had skewness of $-0.5$ (weekly $-0.9$) and excess kurtosis of 9.4. All three indices had their worst day of the window on April 4, 2025 (HY $-1.2\%$, CCC $-2.1\%$). The index is nearly symmetric because diversification ate the single-name skew; it is still fat-tailed because common shocks, such as the April 2025 tariff week, hit everything at once. The CCC index keeps its negative skew because its constituents' default probabilities are high and correlated. That is the object on which Hill and GPD earn their fee.
+
+> **Ways This Blows Up.** *Fake thin tails and fake fat ones.* (1) Stale evaluated prices smooth returns, thinning the empirical tail and inflating autocorrelation; estimate tails on traded indices, CDX, or ETFs, not on marks. (2) Volatility clustering inflates kurtosis: de-GARCH first and run Hill on standardized residuals, or you are estimating the tail of the volatility regime, not of the shock. (3) Thresholds chosen after looking at the answer: fix $k$ or $u$ by rule (for example, the top 5% of observations) in the spec, and report sensitivity, not a single number.
+
+### Deep-Dive Resource Graph
+
+- **Podcasts:** *Flirting with Models* episodes on tail hedging and crisis alpha (titles to be confirmed).
+- **Practitioner Writing:** Paleologo, *Advanced Portfolio Management* (Wiley), factor return tails (shelf: Paleologo_Advanced_Portfolio_Management p.76); Bolder, *Credit-Risk Modelling* (Springer), threshold models and tail dependence (shelf: Bolder_Credit_Risk_Modelling p.222, p.227, p.229).
+- **Academic Papers:** Hill (1975), *A Simple General Approach to Inference About the Tail of a Distribution*, Annals of Statistics; McNeil, Frey, and Embrechts (2015), *Quantitative Risk Management*, 2nd ed., Princeton University Press; Embrechts, Klüppelberg, and Mikosch (1997), *Modelling Extremal Events*, Springer.
+- **Data & Code:** FRED ICE BofA total-return series (search the series IDs above at https://fred.stlouisfed.org/); `hill_estimator`, `gpd_var_es`, and `t_copula_tail_dep` in §5.9.
 
