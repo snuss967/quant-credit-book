@@ -305,32 +305,11 @@ Secondary pages the writer may draw on without quoting: Moyer p.336 (prepacks <7
 - *Bloomberg Odd Lots* episodes on creditor-on-creditor violence and LMEs — TITLE-ONLY, **CHECK** exact titles/dates before citing (Apple Podcasts page fetch did not surface them).
 - *Petition* (petition11.com) — site VERIFIED (archive at https://www.petition11.com/archive); specific LME posts not captured → cite the site root only.
 
-**Practitioner writing (VERIFIED-URL unless noted)**
-- Moody's AMR, 6 Mar 2025; 7 Aug 2025; 28 Apr 2026; 18 May 2026 (URLs in §6).
-- 9fin, co-op crash course; H1 2026 LME update; BDC watchlist Q2 26 (URLs in §6).
-- Cleary Gottlieb, *Cooperation, Not a Cartel* (18 Dec 2025) — VERIFIED-URL.
-- Harvard Law School Bankruptcy Roundtable, Seaton (14 Apr 2026) — VERIFIED-URL.
-- Law-firm memos on Serta/Mitel: Jones Day, DLA Piper, Sidley, Duane Morris, Mayer Brown (×2), ABI feed item — VERIFIED-URL (listed in §6.5).
-- Baker McKenzie LevFin Annual Report 2026 — VERIFIED-URL (PDF).
-- FTI 2026 Leveraged Loan Market Survey — VERIFIED-URL.
-- PitchBook/LCD Fitch-recovery article and co-op "false sense of security" piece — TITLE-ONLY (403).
-- S&P Global Ratings DE/repeat-defaulter notes (Apr, Jun, Aug, Oct 2024; Mar 2025) — TITLE-ONLY (403).
+**Practitioner writing.** VERIFIED-URL (all URLs in §6): Moody's AMR (6 Mar 2025, 7 Aug 2025, 28 Apr 2026, 18 May 2026); 9fin (co-op crash course, H1 2026 LME update, BDC watchlist Q2 26); Cleary Gottlieb (18 Dec 2025); HLS Bankruptcy Roundtable / Seaton (14 Apr 2026); Serta–Mitel memos from Jones Day, DLA Piper, Sidley, Duane Morris, Mayer Brown (×2), ABI; Baker McKenzie LevFin Annual Report 2026 (PDF); FTI 2026 survey. TITLE-ONLY (403 this session): PitchBook/LCD Fitch-recovery and co-op pieces; S&P Global Ratings DE and repeat-defaulter notes (Apr, Jun, Aug, Oct 2024; Mar 2025).
 
-**Academic papers**
-- Buccola & Nini (2024) 53 J. Legal Stud. 489 — VERIFIED citation, no URL.
-- Buccola (2023) 171 U. Pa. L. Rev. 1859; Buccola (2023) 90 U. Chi. L. Rev. 1; Dick (2021) 96 Wash. L. Rev. 1333; Lubben (2022) 96 Am. Bankr. L.J. 1; Parikh (2023) 73 Duke L.J. Online 1 — VERIFIED citations via the Fifth Circuit opinion, no URLs.
-- Ellias & Stark (2020) — VERIFIED-URL.
-- Altman et al. (2005), Jankowitsch et al. (2014), Fine & Gray (1999) — DOIs VERIFIED to resolve.
-- Franks & Torous (1994) — VERIFIED citation via shelf.
-- Seaton SSRN 5247506 — VERIFIED-URL (listing).
-- Altman & Karlin (2009), Gupton & Stein (2002/2005), Frye (2000), Schuermann (2004), Hamilton (1989), Farewell (1982), Aalen & Johansen (1978) — TITLE-ONLY.
+**Academic papers.** VERIFIED citations without URLs (via the Fifth Circuit opinion or the shelf): Buccola & Nini (2024) 53 J. Legal Stud. 489; Buccola (2023) 171 U. Pa. L. Rev. 1859; Buccola (2023) 90 U. Chi. L. Rev. 1; Dick (2021) 96 Wash. L. Rev. 1333; Lubben (2022) 96 Am. Bankr. L.J. 1; Parikh (2023) 73 Duke L.J. Online 1; Franks & Torous (1994) JFE 35. VERIFIED-URL/DOI: Ellias & Stark (2020); Altman et al. (2005); Jankowitsch et al. (2014); Fine & Gray (1999); Seaton SSRN 5247506 (listing only). TITLE-ONLY: Altman & Karlin (2009), Gupton & Stein (2002/2005), Frye (2000), Schuermann (2004), Hamilton (1989), Farewell (1982), Aalen & Johansen (1978).
 
-**Data & code**
-- CourtListener REST API (canonical root https://www.courtlistener.com/help/api/) — used this session for every docket date above; v4 search endpoint works unauthenticated, opinion-text endpoint requires a token.
-- Fifth Circuit opinions root https://www.ca5.uscourts.gov/ (PDF VERIFIED).
-- SEC EDGAR root https://www.sec.gov/edgar for 8-Ks announcing LMEs.
-- Federal Reserve FEDS Notes (URLs in §6.6).
-- Moody's Default & Recovery Database, Fitch Leveraged Finance recovery studies, LCD/PitchBook default tracker, 9fin LME tracker — named as vendor datasets, no URLs.
+**Data & code.** CourtListener REST API (canonical root https://www.courtlistener.com/help/api/; the v4 search endpoint worked unauthenticated for every docket date above, the opinion-text endpoint needs a token); Fifth Circuit opinions root https://www.ca5.uscourts.gov/ (PDF VERIFIED); SEC EDGAR root https://www.sec.gov/edgar for LME 8-Ks; Federal Reserve FEDS Notes (URLs in §6.6); Moody's Default & Recovery Database, Fitch Leveraged Finance recovery studies, LCD/PitchBook default tracker, 9fin LME tracker as named vendor datasets without URLs.
 
 ---
 
