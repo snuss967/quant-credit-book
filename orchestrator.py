@@ -1,27 +1,30 @@
 # orchestrator.py
-"""The infinite book factory: expand the book forever, recompile it every 6 hours.
+"""The infinite book factory: research, write, and ship the book in editions, forever.
 
 Each iteration:
-  1. Pick the target: expansion_queue[0], or (queue empty) the thinnest chapter.
-  2. FABLE ADVISOR pass: a `claude` call on the advisor model strategizes and dissects
+  1. Pick the target: expansion_queue[0]. If the queue is empty, the edition is done:
+     a FABLE EDITION PLANNER reads the research and the book, grows the TOC, writes
+     state/continuation_prompt.md and a fresh queue, bumps the edition, and the book rebuilds.
+  2. FABLE ADVISOR pass: a `claude` call on the advisor model researches and dissects
      the target and writes state/advisor_briefs/<stem>__itNNNN.md.
-  3. WRITER pass: a `claude` call expands the chapter from SYSTEM_PROMPT.md, the style
-     bible, and the advisor brief(s); it calls a Fable referee for the hardest math.
-  4. Guard rails: restore book_state.json if the agent corrupted it, lint the chapter and
-     execute its Python, recount words, log the iteration, queue a fix if code broke,
-     optionally git commit/push.
+  3. WRITER pass: a `claude` call researches further and expands the chapter.
+  4. Guard rails: restore book_state.json if the agent corrupted it, recount words, log the
+     iteration, optionally git commit/push. Running chapter code is OFF by default (it is the
+     lowest priority); set RUN_CODE_CHECKS=1 to execute it and queue fixes at the END of the queue.
   5. If 6 hours have passed since the last build, run ./build_book.sh.
 
 Usage:
   python3 orchestrator.py                # run forever (Ctrl-C finishes the current step and exits)
   python3 orchestrator.py --once         # one iteration, then exit
   python3 orchestrator.py --build-only   # just compile the book
+  python3 orchestrator.py --plan-edition # close the current edition and plan the next one now
 
 Environment:
   AGENT_CMD            agent CLI (default: claude)
-  ADVISOR_MODEL        model for the advisor pass (default: claude-fable-5-1)
+  ADVISOR_MODEL        model for advisor/planner passes (default: claude-fable-5-1)
   WRITER_MODEL         model for the writer pass (default: the CLI's default)
   ITERATION_TIMEOUT_S  per-agent-call timeout in seconds (default: 5400)
+  RUN_CODE_CHECKS=1    execute chapter Python after each iteration (low priority)
   AUTO_COMMIT=1        git commit after every iteration;  AUTO_PUSH=1 also pushes
 """
 import argparse
@@ -44,6 +47,7 @@ STATE_FILE = "./state/book_state.json"
 STATE_BACKUP = STATE_FILE + ".bak"
 LOG_FILE = "./state/iteration_log.jsonl"
 BRIEF_DIR = "./state/advisor_briefs"
+CONTINUATION = "./state/continuation_prompt.md"
 TARGET_RE = re.compile(r"^\s*([\w.-]+\.md)\s*:\s*(.*)$", re.S)
 MIN_WORD_GAIN = 500  # below this, the iteration counts as a failed attempt
 
@@ -53,25 +57,14 @@ WRITER_MODEL = os.environ.get("WRITER_MODEL") or None
 ITERATION_TIMEOUT_S = int(os.environ.get("ITERATION_TIMEOUT_S", "5400"))
 
 INITIAL_STATE = {
+    "edition": 1,
     "iteration": 0,
     "last_build_timestamp": 0,
     "completed_modules": [],
     "case_studies": [],
     "chapters": {},
     "attempts": {},
-    "expansion_queue": [
-        "01_ch01_anthology_and_landscape.md: Compile opening anthology with cited excerpts from the shelf + map the modern quant credit ecosystem",
-        "02_ch02_pjt_rssg_cognitive_bridge.md: Convert PJT RSSG restructuring expertise (LMTs, covenants, DIP mechanics) into state-space representations and adverse selection filters",
-        "03_ch03_credit_probability_distributions.md: Derive jump-diffusion, skewed recovery Beta distributions, and tail-risk math for AI coding specifiers",
-        "04_ch04_merton_and_intensity_models.md: Full stochastic calculus derivations of Merton, Black-Cox covenant barrier models, and Duffie-Singleton hazard rates with Python simulation engines",
-        "06_ch06_isolating_ido_and_empirical_duration.md: Empirical Duration across BB/B/CCC, cross-asset beta stripping, and isolating pure IDO alpha",
-        "08_ch08_codifying_lmt_game_theory.md: Serta, J.Crew, Incora, and Carvana case studies with quantitative Priming Risk Scores and prisoner's dilemma matrices",
-        "11_ch11_otc_microstructure_and_avellaneda_stoikov.md: Adapt Avellaneda-Stoikov to OTC corporate bond quoting, TRACE parsing, and RFQ adverse selection",
-        "12_ch12_portfolio_trading_pricing_engines.md: Portfolio Trading (PT) pricing engines",
-        "13_ch13_credit_etf_creation_redemption_arb.md: HYG/JNK/LQD/BKLN creation-redemption arbitrage loops",
-        "16_ch16_nlp_pacer_and_covenant_scraping.md: Legal AST parsing of indentures, SEC EDGAR 8-Ks, and PACER Rule 2019 filings",
-        "17_ch17_system_architecture_and_asics.md: FPGA/ASIC tick-to-trade pipelines for cross-asset credit quoting and production system construction",
-    ],
+    "expansion_queue": [],
 }
 
 _stop = False
@@ -101,10 +94,18 @@ def save_state(state):
     os.replace(tmp, STATE_FILE)
 
 
+def reload_state_or_restore():
+    try:
+        return load_state()
+    except (json.JSONDecodeError, OSError):
+        print(f"[{now()}] book_state.json corrupted by the agent; restoring backup.")
+        shutil.copyfile(STATE_BACKUP, STATE_FILE)
+        return load_state()
+
+
 def ensure_workspace():
-    os.makedirs("./state", exist_ok=True)
-    os.makedirs("./book_src", exist_ok=True)
-    os.makedirs(BRIEF_DIR, exist_ok=True)
+    for d in ("./state", "./book_src", BRIEF_DIR, "./state/research"):
+        os.makedirs(d, exist_ok=True)
     if not os.path.exists(STATE_FILE):
         save_state(INITIAL_STATE)
     if not glob.glob("./state/pdf_pages/*/page_0001.txt"):
@@ -123,7 +124,7 @@ def word_counts():
 # ---------------------------------------------------------------- build ----
 
 def rebuild_book(state):
-    print(f"\n[{now()}] >>> REBUILDING MASTER BOOK...")
+    print(f"\n[{now()}] >>> REBUILDING MASTER BOOK (Edition {state.get('edition', 1)})...")
     subprocess.run(["./build_book.sh"], check=False)
     state["last_build_timestamp"] = time.time()
     save_state(state)
@@ -153,51 +154,53 @@ def run_agent(prompt, model=None, label="agent"):
         sys.exit(f"Agent CLI '{AGENT_CMD}' not found. Install Claude Code or set AGENT_CMD.")
 
 
-def pick_target(state):
-    if state["expansion_queue"]:
-        return state["expansion_queue"][0]
-    counts = {k: v for k, v in word_counts().items() if re.match(r"^\d\d_ch\d\d", k)}
-    thinnest = min(counts, key=counts.get) if counts else "99_appZ_new_material.md"
-    return (
-        f"{thinnest}: This is currently the thinnest chapter. Add a brand-new 4,000-word sub-chapter with a new "
-        "historical distressed/quant case study, cited source extractions from ./state/pdf_pages/, production Python "
-        "specs, and a rich resource graph of podcasts, blogs, and SSRN papers. Then add 3 new deep-dive topics to "
-        "expansion_queue."
-    )
+def edition_planner_prompt(edition):
+    return f"""You are the FABLE EDITION PLANNER for the book in this repository. Edition {edition} is complete; plan Edition {edition + 1}.
+
+Read ./SYSTEM_PROMPT.md (TOC + growth rule), ./state/book_state.json, ./state/continuation_prompt.md (if present), ./state/exploratory_space.md and everything in ./state/research/, and skim ./book_src/ (word counts, section headings, Trend Watch boxes).
+
+Then research what has changed in credit markets and quant credit since the last edition: run web searches for fresh trend data, rulings, papers, and market-structure news. Save new findings to ./state/research/ with dated, sourced facts.
+
+Strategize and dissect, then write:
+1. ./state/continuation_prompt.md: a self-contained prompt for Edition {edition + 1}. Cover its theme, the TOC changes, per-chapter expansion targets, new chapters to write, open research questions, unverified facts to chase, and new trend threads.
+2. Grow the TOC in ./SYSTEM_PROMPT.md section 3 using the growth rule (new chapters as NN_chNNb_slug.md), and update ./state/exploratory_space.md.
+3. Replace `expansion_queue` in ./state/book_state.json with 20–40 targets in the form "FILE.md: description", ordered by leverage, with new chapters and trend threads first. Set "edition" to {edition + 1}. Leave `iteration`, `last_build_timestamp`, `chapters`, and `attempts` alone.
+4. Append the Edition {edition + 1} plan to ./CHANGELOG.md.
+Research and planning are your job; do not run code examples."""
 
 
-def advisor_prompt(task, target_file, stem, brief_path):
+def advisor_prompt(task, target_file, stem, brief_path, edition):
     chapter_brief = os.path.join(BRIEF_DIR, f"{stem}.md")
-    return f"""You are a FABLE ADVISOR on the editorial board of the book in this repository.
+    return f"""You are a FABLE ADVISOR on the editorial board of the book in this repository (Edition {edition}).
 TARGET: {task}
 
-Read ./SYSTEM_PROMPT.md, ./state/style_bible.md, ./book_src/{target_file} (if it exists), and {chapter_brief} (the chapter's founding brief, if it exists).
+Read ./SYSTEM_PROMPT.md, ./state/continuation_prompt.md, ./state/style_bible.md, ./book_src/{target_file} (if it exists), {chapter_brief} (the chapter's founding brief, if it exists), and any relevant files in ./state/research/.
 
-Do NOT write book prose. Strategize and dissect. Write {brief_path} containing:
+Your priority is RESEARCH: web searches for the latest dated, sourced trend data, papers, rulings, and deal facts, plus shelf pages via `python3 tools/pdf_search.py`. Then strategize and dissect. Do NOT write book prose and do NOT run code. Write {brief_path} containing:
 1. The one-sentence thesis and the "aha" reframing for an ex-PJT-RSSG reader.
-2. An outline for 3,000-5,000 NEW words that does not duplicate what the chapter already covers.
-3. Derivation skeletons with final LaTeX formulas, assumptions, measure (P vs Q), and error-prone spots; verify closed forms numerically in a scratch directory and say which you verified.
-4. Code spec: functions, data schema, numerical guards, and the sanity check that proves the code right.
-5. 3-8 source pages (book_id p.N) located with `python3 tools/pdf_search.py`, one line each on why.
-6. Case-study facts, each marked VERIFIED (with source) or CHECK. Never invent CUSIPs, URLs, or episode numbers.
-7. 5-10 jokes, analogies, or running-gag beats that each teach a correct idea, in the style bible's voice and cast.
+2. An outline for 3,000–5,000 NEW words that does not duplicate what the chapter already covers, with at least one Trend Watch box.
+3. Derivation skeletons with final LaTeX formulas, assumptions, measure (P vs Q), and error-prone spots.
+4. A code spec and the sanity check that would prove the code right.
+5. 3–8 source pages (book_id p.N), each with the exact short quotation to use.
+6. A research dossier of dated, sourced facts, each with a URL or citation. Mark unconfirmed ones CHECK. Never invent CUSIPs, URLs, or episode numbers.
+7. 5–10 jokes, analogies, or running-gag beats that each teach a correct idea, in the style bible's voice and cast.
 8. Resource-graph candidates flagged VERIFIED-URL or TITLE-ONLY.
-9. Two follow-up expansion targets in the form "FILE.md: description".
-Modify no other files."""
+9. Two follow-up expansion targets ("FILE.md: description") and any new TOC chapters the research justifies.
+Modify no other files except new research notes in ./state/research/."""
 
 
-def writer_prompt(iteration, task, target_file, briefs):
+def writer_prompt(iteration, edition, task, target_file, briefs):
     brief_list = ", ".join(briefs) if briefs else "(none found)"
-    return f"""ITERATION #{iteration}
+    return f"""EDITION {edition}, ITERATION #{iteration}
 CURRENT TARGET: {task}
 
-INSTRUCTIONS FOR THIS TURN:
-1. Read ./SYSTEM_PROMPT.md, ./state/style_bible.md, ./state/book_state.json, and the Fable advisor brief(s): {brief_list}.
-2. Locate relevant pages with `python3 tools/pdf_search.py` and quote them briefly in `> [SOURCE EXTRACTION]` blocks with book_id p.N citations, annotated in depth.
-3. Write at least 3,000-5,000 words of new, dense, rigorous, and entertaining content into ./book_src/{target_file}: LaTeX derivations, a `### Specification for AI Implementation` block with runnable Python, a deep case study, and a `### Deep-Dive Resource Graph`. Expand; never delete valid content. If the chapter would exceed 15,000 words, continue in a new file that sorts right after it (e.g. NN_chNNb_...md).
-4. For the hardest derivation you wrote, spawn a Fable referee (Agent tool, model "fable") to check the math and code; fix what it finds.
-5. Run `python3 tools/check_book.py --file book_src/<each file you touched> --run-code` and `./build_book.sh`; both must pass.
-6. Update ./state/book_state.json: remove the completed task from the front of `expansion_queue`, append it to `completed_modules`, record new case studies under `case_studies`, and append 2 new granular sub-topics ("FILE.md: description") to the end of `expansion_queue` so the book grows forever. Leave `iteration`, `last_build_timestamp`, `chapters`, and `attempts` alone; the orchestrator owns them."""
+INSTRUCTIONS FOR THIS TURN (research and writing first; do not spend turns running or debugging code examples):
+1. Read ./SYSTEM_PROMPT.md, ./state/continuation_prompt.md, ./state/style_bible.md, ./state/book_state.json, and the Fable advisor brief(s): {brief_list}.
+2. Research: do web searches wherever the brief is thin, especially for fresh, dated trend data. Use `python3 tools/pdf_search.py` to find shelf pages and quote them briefly in `> **[SOURCE EXTRACTION]**` blocks with book_id p.N citations, annotated in depth.
+3. Write at least 3,000–5,000 words of new, dense, rigorous, and entertaining content into ./book_src/{target_file}: LaTeX derivations, Trend Watch boxes, a `### Specification for AI Implementation` block with carefully written Python, a deep case study, and a `### Deep-Dive Resource Graph`. Expand; never delete valid content. If the chapter would exceed 15,000 words, continue in a new file that sorts right after it (e.g. NN_chNNb_...md).
+4. If your research shows the TOC is missing a chapter or section, add it to SYSTEM_PROMPT.md section 3 (growth rule) and queue it.
+5. Run `BUILD_PDF=0 ./build_book.sh`; it must succeed.
+6. Update ./state/book_state.json: remove the completed task from the front of `expansion_queue`, append it to `completed_modules`, record new case studies under `case_studies`, and append 2 new granular sub-topics ("FILE.md: description") to the end of `expansion_queue`. Leave `edition`, `iteration`, `last_build_timestamp`, `chapters`, and `attempts` alone; the orchestrator owns them."""
 
 
 # ------------------------------------------------------------- iteration ---
@@ -216,12 +219,11 @@ def lint_file(target_file):
         return {"file": target_file, "code": {"ok": False, "tail": proc.stderr[-800:]}}
 
 
-def git_commit(iteration, task):
+def git_commit(message):
     if os.environ.get("AUTO_COMMIT") != "1":
         return
-    subprocess.run(["git", "add", "-A", "book_src", "state", "output"], check=False)
-    msg = f"Book iteration #{iteration}: {task[:120]}"
-    subprocess.run(["git", "commit", "-q", "-m", msg], check=False)
+    subprocess.run(["git", "add", "-A", "book_src", "state", "output", "SYSTEM_PROMPT.md", "CHANGELOG.md"], check=False)
+    subprocess.run(["git", "commit", "-q", "-m", message], check=False)
     if os.environ.get("AUTO_PUSH") == "1":
         branch = subprocess.run(["git", "branch", "--show-current"], capture_output=True, text=True).stdout.strip()
         for delay in (0, 2, 4, 8, 16):
@@ -230,69 +232,86 @@ def git_commit(iteration, task):
                 break
 
 
+def plan_next_edition():
+    state = load_state()
+    edition = state.get("edition", 1)
+    shutil.copyfile(STATE_FILE, STATE_BACKUP)
+    print(f"\n[{now()}] Edition {edition} complete: convening the Fable edition planner.")
+    rebuild_book(state)  # ship the finished edition before planning the next
+    git_commit(f"Ship Edition {edition} of the book")
+    run_agent(edition_planner_prompt(edition), model=ADVISOR_MODEL, label="fable-planner")
+    state = reload_state_or_restore()
+    if state.get("edition", edition) == edition:  # planner forgot; keep the loop moving anyway
+        state["edition"] = edition + 1
+    if not state["expansion_queue"]:
+        counts = {k: v for k, v in word_counts().items() if re.match(r"^\d\d_ch\d\d", k)}
+        state["expansion_queue"] = [
+            f"{f}: Edition {state['edition']} research-driven expansion: fresh trend data, a new case study, deeper derivations"
+            for f in sorted(counts, key=counts.get)
+        ]
+    save_state(state)
+    git_commit(f"Plan Edition {state['edition']}")
+
+
 def run_agent_iteration():
     state = load_state()
+    if not state["expansion_queue"]:
+        plan_next_edition()
+        state = load_state()
+    edition = state.get("edition", 1)
     iteration = state["iteration"] + 1
-    task = pick_target(state)
+    task = state["expansion_queue"][0]
     m = TARGET_RE.match(task)
     target_file = m.group(1) if m else "99_appZ_new_material.md"
     stem = target_file[:-3]
     words_before = word_counts().get(target_file, 0)
     shutil.copyfile(STATE_FILE, STATE_BACKUP)
-    print(f"\n[{now()}] Iteration #{iteration}: {task[:160]}")
+    print(f"\n[{now()}] Edition {edition}, iteration #{iteration}: {task[:160]}")
 
-    # Pass 1: the Fable advisor dissects the target.
+    # Pass 1: the Fable advisor researches and dissects the target.
     brief_path = os.path.join(BRIEF_DIR, f"{stem}__it{iteration:04d}.md")
-    run_agent(advisor_prompt(task, target_file, stem, brief_path), model=ADVISOR_MODEL, label="fable-advisor")
+    run_agent(advisor_prompt(task, target_file, stem, brief_path, edition), model=ADVISOR_MODEL, label="fable-advisor")
     briefs = [p for p in (os.path.join(BRIEF_DIR, f"{stem}.md"), brief_path) if os.path.exists(p)]
 
-    # Pass 2: the writer expands the book.
-    rc = run_agent(writer_prompt(iteration, task, target_file, briefs), model=WRITER_MODEL, label="writer")
+    # Pass 2: the writer researches further and expands the book.
+    rc = run_agent(writer_prompt(iteration, edition, task, target_file, briefs), model=WRITER_MODEL, label="writer")
 
-    # Guard rails: the agent may have mangled the state file.
-    try:
-        state = load_state()
-    except (json.JSONDecodeError, OSError):
-        print(f"[{now()}] book_state.json corrupted by the agent; restoring backup.")
-        shutil.copyfile(STATE_BACKUP, STATE_FILE)
-        state = load_state()
-
+    state = reload_state_or_restore()
     counts = word_counts()
     gained = counts.get(target_file, 0) - words_before
-    lint = lint_file(target_file)
-    code_ok = bool(lint and lint.get("code", {}).get("ok", True))
-
     state["iteration"] = iteration
     state["chapters"] = counts
     attempts = state.setdefault("attempts", {})
-    is_fix = task.startswith(f"{target_file}: FIX")
-    failed = gained < MIN_WORD_GAIN or (is_fix and not code_ok)
-    if failed and state["expansion_queue"] and state["expansion_queue"][0] == task:
+    if gained < MIN_WORD_GAIN and state["expansion_queue"] and state["expansion_queue"][0] == task:
         attempts[task] = attempts.get(task, 0) + 1
         if attempts[task] >= 2:  # stuck: rotate it to the back so the loop keeps moving
             state["expansion_queue"].append(state["expansion_queue"].pop(0))
             attempts.pop(task)
-    if lint and not code_ok:
-        fix = f"{target_file}: FIX the chapter's Python so `tools/check_book.py --run-code` passes. Last error: {lint['code']['tail'][-400:]}"
-        if not any(t.startswith(f"{target_file}: FIX") for t in state["expansion_queue"][:1]):
-            state["expansion_queue"].insert(0, fix)
+
+    code_ok = None
+    if os.environ.get("RUN_CODE_CHECKS") == "1":  # lowest priority: fixes go to the END of the queue
+        lint = lint_file(target_file)
+        code_ok = bool(lint and lint.get("code", {}).get("ok", True))
+        fix = f"{target_file}: FIX the chapter's Python so `tools/check_book.py --run-code` passes"
+        if lint and not code_ok and not any(t.startswith(fix) for t in state["expansion_queue"]):
+            state["expansion_queue"].append(f"{fix}. Last error: {lint['code']['tail'][-400:]}")
     save_state(state)
 
     with open(LOG_FILE, "a", encoding="utf-8") as f:
         f.write(json.dumps({
-            "iteration": iteration, "time": now(), "task": task, "writer_rc": rc,
-            "words_gained": gained, "total_words": sum(counts.values()),
-            "code_ok": code_ok, "missing_anatomy": (lint or {}).get("missing"),
+            "edition": edition, "iteration": iteration, "time": now(), "task": task, "writer_rc": rc,
+            "words_gained": gained, "total_words": sum(counts.values()), "code_ok": code_ok,
         }) + "\n")
-    print(f"[{now()}] Iteration #{iteration} done: +{gained} words in {target_file}; code {'OK' if code_ok else 'FAILED'}; "
+    print(f"[{now()}] Iteration #{iteration} done: +{gained} words in {target_file}; "
           f"book total {sum(counts.values()):,} words.")
-    git_commit(iteration, task)
+    git_commit(f"Edition {edition}, iteration #{iteration}: {task[:120]}")
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--once", action="store_true", help="run a single iteration")
     ap.add_argument("--build-only", action="store_true", help="compile the book and exit")
+    ap.add_argument("--plan-edition", action="store_true", help="close this edition and plan the next")
     args = ap.parse_args()
 
     signal.signal(signal.SIGINT, _request_stop)
@@ -301,6 +320,9 @@ def main():
 
     if args.build_only:
         rebuild_book(load_state())
+        return
+    if args.plan_edition:
+        plan_next_edition()
         return
     maybe_rebuild_book()  # first run builds immediately (timestamp 0); restarts respect the 6-hour clock
     while not _stop:

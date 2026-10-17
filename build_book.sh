@@ -18,8 +18,9 @@ BODY_MD="$(mktemp)"
 PRINT_HTML="$(mktemp --suffix=.html)"
 trap 'rm -f "$BODY_MD" "$PRINT_HTML"' EXIT
 
+EDITION=$(python3 -c "import json; print(json.load(open('state/book_state.json')).get('edition', 1))" 2>/dev/null || echo 1)
 TITLE="Systematic & Quantitative Credit: From PJT RSSG to the Automated Desk"
-SUBTITLE="Mathematical Foundations, Microstructure, LMT Game Theory, and Alpha Isolation (Build: $TIMESTAMP)"
+SUBTITLE="Mathematical Foundations, Microstructure, LMT Game Theory, and Alpha Isolation (Edition $EDITION, Build: $TIMESTAMP)"
 
 shopt -s nullglob
 CHAPTERS=(./book_src/*.md)
@@ -79,4 +80,4 @@ else
 fi
 
 WORD_COUNT=$(cat "${CHAPTERS[@]}" | wc -w | tr -d ' ')
-echo "[$TIMESTAMP] Book compiled successfully: ${#CHAPTERS[@]} files, $WORD_COUNT words."
+echo "[$TIMESTAMP] Edition $EDITION compiled successfully: ${#CHAPTERS[@]} files, $WORD_COUNT words."

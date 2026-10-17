@@ -6787,5 +6787,61 @@
         833
       ]
     ]
+  },
+  "BlackRock_Systematic_High_Yield_Credit": {
+    "file": "BlackRock_Systematic_High_Yield_Credit.pdf",
+    "mtime": 1792277579.3476517,
+    "total_pages": 10,
+    "low_text_page_count": 0,
+    "toc": []
+  },
+  "Blackstone_Systematic_Credit": {
+    "file": "Blackstone_Systematic_Credit.pdf",
+    "mtime": 1792277575.8909032,
+    "total_pages": 2,
+    "low_text_page_count": 0,
+    "toc": [
+      [
+        1,
+        "1. The Engine: The DCI Heritage and Structural Models ",
+        1
+      ],
+      [
+        1,
+        "2. The Core Return Drivers ",
+        1
+      ],
+      [
+        1,
+        "3. Portfolio Construction and Optimization ",
+        1
+      ],
+      [
+        1,
+        "4. The \"Equitification\" of Credit ",
+        2
+      ]
+    ]
+  },
+  "Man_Quantitative_Credit_Alpha_Early_Mover_2022": {
+    "file": "Man_Quantitative_Credit_Alpha_Early_Mover_2022.pdf",
+    "mtime": 1792277575.8962603,
+    "total_pages": 45,
+    "low_text_page_count": 0,
+    "toc": []
+  },
+  "Man_Revolutions_in_Credit_Trading_2023": {
+    "file": "Man_Revolutions_in_Credit_Trading_2023.pdf",
+    "mtime": 1792277575.8993406,
+    "total_pages": 7,
+    "low_text_page_count": 0,
+    "toc": []
+  },
+  "Nuveen_Multi_Asset_Credit_Quant_Framework": {
+    "file": "Nuveen_Multi_Asset_Credit_Quant_Framework.pdf",
+    "mtime": 1792277575.8933568,
+    "total_pages": 9,
+    "low_text_page_count": 0,
+    "toc": []
   }
 }
