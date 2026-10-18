@@ -57,12 +57,13 @@ def fig_effective_breadth():
                 arrowprops=dict(arrowstyle="-", color=INK_2, linewidth=0.9, shrinkA=2, shrinkB=6,
                                 connectionstyle="arc3,rad=0"), bbox=BACK, zorder=7)
     ax.set_xlim(0, 1)
-    ax.set_ylim(0, 1.0)
+    ax.set_ylim(0, 1.16)
+    ax.set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1.0])
     ax.set_xlabel("Within-issuer residual correlation ρ")
     ax.set_ylabel("Effective breadth, as a share of bond count\n(BR$_{\\mathrm{eff}}$ / N)")
     ax.yaxis.set_major_formatter(lambda v, _: f"{v:.1f}")
-    ax.text(0.01, 0.03, "bonds per issuer m;  ρ = 0: every bond is a bet;  ρ = 1: one bet per issuer",
-            transform=ax.transAxes, fontsize=8, color=INK_2, ha="left", va="bottom", bbox=BACK, zorder=6)
+    ax.text(0.99, 0.085, "ρ = 0: every bond is a bet;  ρ = 1: one bet per issuer",
+            transform=ax.transAxes, fontsize=8, color=INK_2, ha="right", va="center", zorder=6)
     return finish(fig, "ch04_effective_breadth")
 
 
@@ -105,64 +106,53 @@ def fig_truncation_bias():
     cut = u <= zq
     a.fill_between(u[cut], 0, f[cut], color=DIVERGING(0.82), zorder=2)
     a.fill_between(u[~cut], 0, f[~cut], color=SEQ_BLUE(0.12), zorder=1)
-    a.annotate("worst 1% of months,\ndeleted ($u < -2.33$)", (zq - 0.15, 0.012), xytext=(-3.9, 0.20),
-               ha="left", va="center", fontsize=8.5, color=INK,
+    a.annotate("worst 1% of\nmonths deleted\n(u < −2.33)", (zq - 0.12, 0.010), xytext=(-3.95, 0.175),
+               ha="left", va="center", fontsize=8.3, color=INK,
                arrowprops=dict(arrowstyle="-", color=INK_2, linewidth=0.9, shrinkA=1, shrinkB=1))
-    a.annotate("what is left:\n99% of months", (1.0, 0.24), ha="left", va="center", fontsize=8.5, color=INK)
+    a.text(0.0, 0.095, "what is left:\n99% of months", ha="center", va="center", fontsize=8.3, color=INK)
     a.set_ylim(0, 0.43)
     a.set_xlim(-4, 4)
-    a.set_xlabel("Monthly return, in standard deviations from the mean")
+    a.set_yticks([0, 0.1, 0.2, 0.3, 0.4])
+    a.set_xlabel("Monthly return (σ from the mean)")
     a.set_ylabel("Density")
     a.yaxis.set_major_formatter(lambda v, _: f"{v:.1f}")
-    # balance points, zoomed in on an inset: they sit only 0.027 sigma apart
-    ins = a.inset_axes([0.62, 0.50, 0.36, 0.30])
-    ins.set_xlim(-0.03, 0.06)
+    # balance points, magnified on an inset: they sit only 0.027 sigma apart
+    ins = a.inset_axes([0.64, 0.56, 0.34, 0.28])
+    ins.set_xlim(-0.036, 0.058)
     ins.set_ylim(0, 1)
     ins.grid(False)
     ins.set_yticks([])
     ins.set_xticks([0, 0.027])
     ins.set_xticklabels(["0", "0.027"], fontsize=8)
-    for sp in ("left",):
-        ins.spines[sp].set_visible(False)
-    ins.plot([0], [0.12], "^", color=INK_2, markersize=8, clip_on=False, zorder=4)
-    ins.plot([0.027], [0.12], "^", color=BLUE, markersize=8, clip_on=False, zorder=4)
-    ins.text(0.0, 0.46, "before", ha="right", va="bottom", fontsize=8, color=INK_2)
-    ins.text(0.027, 0.46, "after", ha="left", va="bottom", fontsize=8, color=INK_2)
-    ins.set_title("balance point (zoom, $\\sigma$)", fontsize=8, color=INK_2, fontweight="normal", pad=3)
+    ins.spines["left"].set_visible(False)
+    ins.plot([0], [0.16], "^", color=INK_2, markersize=8, clip_on=False, zorder=4)
+    ins.plot([0.027], [0.16], "^", color=BLUE, markersize=8, clip_on=False, zorder=4)
+    ins.text(0.004, 0.42, "before", ha="right", va="bottom", fontsize=8, color=INK_2)
+    ins.text(0.023, 0.42, "after", ha="left", va="bottom", fontsize=8, color=INK_2)
+    ins.set_title("the mean, magnified (σ)", fontsize=8, color=INK_2, fontweight="normal", pad=3)
 
     # (b) the manufactured premium against the fraction deleted
     qs = np.linspace(0.001, 0.05, 80)
-    cases = [("normal", BLUE, shift_normal, "-"),
-             ("fat-tailed (Student t, 4 d.f.)", ORANGE, shift_student, "-"),
-             ("left-skewed (2% distress months)", AQUA, shift_mixture, "-")]
+    cases = [("normal", BLUE, shift_normal), ("fat-tailed", ORANGE, shift_student), ("left-skewed", AQUA, shift_mixture)]
     vals = {}
-    for name, col, fn, ls in cases:
+    for name, col, fn in cases:
         y = np.array([fn(q) for q in qs])
-        b.plot(100 * qs, y, color=col, linewidth=LW, linestyle=ls, zorder=3)
+        b.plot(100 * qs, y, color=col, linewidth=LW, zorder=3)
         v1 = fn(0.01)
         vals[name] = v1
         b.plot([1.0], [v1], "o", color=col, markersize=6, zorder=5)
+        b.annotate(f"{v1:.3f}σ", (1.0, v1), xytext=(9, -1), textcoords="offset points", ha="left", va="center",
+                   fontsize=8.2, color=INK, bbox=BACK, zorder=6)
+        label_end(b, 5.0, fn(0.05), name, col, dx=5)
     assert abs(vals["normal"] - 0.027) < 5e-4
     b.axvline(1.0, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
-    b.text(1.12, 0.168, "q = 1%", fontsize=8, color=INK_2, ha="left", va="center")
-    b.set_xlim(0, 5)
+    b.text(1.1, 0.178, "q = 1%", fontsize=8, color=INK_2, ha="left", va="center")
+    b.set_xlim(0, 5.05)
     b.set_ylim(0, 0.19)
+    b.set_yticks([0, 0.05, 0.10, 0.15])
     b.set_xlabel("Share of worst months deleted, q (%)")
-    b.set_ylabel("Premium manufactured per month ($\\sigma$)")
+    b.set_ylabel("Premium manufactured per month (σ)")
     b.yaxis.set_major_formatter(lambda v, _: f"{v:.2f}")
-    # direct labels at the right-hand end (the curves fan out there)
-    ends = {name: fn(0.05) for name, _c, fn, _l in cases}
-    b.annotate("left-skewed", (5.0, ends["left-skewed (2% distress months)"]), xytext=(-5, 7),
-               textcoords="offset points", ha="right", va="bottom", fontsize=8.5, color=INK_2)
-    b.annotate("fat-tailed", (5.0, ends["fat-tailed (Student t, 4 d.f.)"]), xytext=(-5, 7),
-               textcoords="offset points", ha="right", va="bottom", fontsize=8.5, color=INK_2)
-    b.annotate("normal", (5.0, ends["normal"]), xytext=(-5, -9), textcoords="offset points", ha="right",
-               va="top", fontsize=8.5, color=INK_2)
-    # the q = 1% values, in basis points a month at 4% monthly volatility
-    txt = "\n".join(f"{n.split(' (')[0]:<12} {v:.3f}σ = {v * 4 * 100:.0f}bp a month".replace("  ", " ")
-                    for n, v in vals.items())
-    b.text(0.02, 0.97, "At q = 1%, on 4% monthly volatility:\n" + txt, transform=b.transAxes, ha="left", va="top",
-           fontsize=7.8, color=INK_2, bbox=BACK, zorder=7)
     return finish(fig, "ch04_truncation_bias")
 
 
@@ -208,16 +198,14 @@ def fig_factor_zoo():
         else:
             s = f"{v}"
         b.text(v + 0.35, yi, s, va="center", ha="left", fontsize=9, color=INK, fontweight="bold" if v else "normal")
-    b.set_xlim(0, 24)
+    b.set_xlim(0, 26.5)
     b.set_xlabel("Survivors (26 in all)")
     b.grid(axis="y", visible=False)
     b.grid(axis="x", visible=True)
     b.set_axisbelow(True)
-    b.plot([0.9], [3.52], "s", color=BLUE, markersize=6, clip_on=False)
-    b.text(1.4, 3.52, "within-firm: 25 of 26", fontsize=8.5, color=INK_2, va="center", ha="left")
-    b.plot([13.0], [3.52], "s", color=ORANGE, markersize=6, clip_on=False)
-    b.text(13.5, 3.52, "single-sort: 1", fontsize=8.5, color=INK_2, va="center", ha="left")
-    b.set_ylim(-0.55, 3.8)
+    b.plot([19.2, 19.6, 19.6, 19.2], [3.0, 3.0, 2.0, 2.0], color=INK_2, linewidth=1.0, clip_on=False)
+    b.text(20.1, 2.5, "25 of the 26\nare within-\nfirm sorts", fontsize=8.3, color=INK, va="center", ha="left")
+    b.set_ylim(-0.55, 3.5)
     return finish(fig, "ch04_factor_zoo_survivors")
 
 
@@ -232,8 +220,8 @@ def capacity(alpha0, T, c0, eta, L):
 
 def fig_capacity():
     c0, eta, L = 0.0025, 0.02, 20.0           # 25bp half-spread, impact coefficient, USD 20bn of liquidity a year
-    cases = [dict(name="HY long/short multi-factor", alpha0=0.015, T=0.6, col=BLUE, unit="bn", scale=1.0, xmax=4.6),
-             dict(name="Equity-momentum signal", alpha0=0.04, T=2.5, col=ORANGE, unit="mm", scale=1000.0, xmax=0.34)]
+    cases = [dict(name="HY long/short", alpha0=0.015, T=0.6, col=BLUE, unit="bn", scale=1.0, xmax=4.6),
+             dict(name="Equity momentum", alpha0=0.04, T=2.5, col=ORANGE, unit="mm", scale=1000.0, xmax=0.34)]
     fig, axes = new_figure("panel2", ncols=2)
     out = {}
     for ax, c in zip(axes, cases):
@@ -256,36 +244,35 @@ def fig_capacity():
                                      arrowstyle="<|-|>", mutation_scale=8, linewidth=1.0, color=INK_2,
                                      shrinkA=3, shrinkB=0, zorder=5))
         ax.set_xlabel(f"Assets under management (USD {c['unit']})")
-        ax.set_title(f"{c['name']}:  α₀ = {c['alpha0'] * 1e4:.0f}bp,  T = {c['T']:g}", fontsize=9, pad=6)
+        ax.set_title(f"{c['name']}:  α₀ {c['alpha0'] * 1e4:.0f}bp, T = {c['T']:g}", fontsize=9, pad=6)
+        ax.set_ylabel("Dollar alpha (USD mm a year)")
         c["g"], c["a_star"], c["a0"], c["p_star"], c["e_star"] = g, a_star, a0, p_star, e_star
 
+    arrow = dict(arrowstyle="-", color=INK_2, linewidth=0.9, shrinkA=0, shrinkB=5)
     a, b = axes
     # left panel annotations
     c = cases[0]
     a.set_xlim(0, c["xmax"])
     a.set_ylim(0, 27)
-    a.set_ylabel("Dollar alpha (USD mm a year)")
-    a.text(c["a_star"] + 0.12, c["p_star"] * 0.55, f"top at A* ≈ ${c['a_star']:.2f}bn\nclient keeps {c['g'] * 1e4 / 3:.0f}bp\n= g/3, a third of {c['g'] * 1e4:.0f}bp",
-           ha="left", va="center", fontsize=8.2, color=INK, bbox=BACK, zorder=7)
-    a.text(c["a_star"] - 0.1, (c["p_star"] + c["e_star"]) / 2, "impact takes\ntwo thirds", ha="right", va="center",
+    a.text(c["a_star"] + 0.55, 25.4, f"top at A* ≈ ${c['a_star']:.2f}bn: the client\nkeeps {c['g'] * 1e4 / 3:.0f}bp, g/3, a third\nof the {c['g'] * 1e4:.0f}bp left after the spread",
+           ha="left", va="top", fontsize=8.2, color=INK, bbox=BACK, zorder=7)
+    a.text(c["a_star"] + 0.1, (c["p_star"] + c["e_star"]) / 2, "impact takes\ntwo thirds", ha="left", va="center",
            fontsize=8.2, color=INK_2, bbox=BACK, zorder=7)
-    a.annotate(f"edge gone at A₀ = 9/4 A* ≈ ${c['a0']:.1f}bn", (c["a0"], 0), xytext=(c["a0"] - 0.1, 3.3),
-               ha="right", va="bottom", fontsize=8.2, color=INK, bbox=BACK, zorder=7,
-               arrowprops=dict(arrowstyle="-", color=INK_2, linewidth=0.9, shrinkA=0, shrinkB=5))
-    a.text(0.07, 25.8, "before impact: g × A", fontsize=8.2, color=INK_2, ha="left", va="top", rotation=0, bbox=BACK, zorder=7)
+    a.annotate(f"edge gone at A₀ = 9/4 A*\n≈ ${c['a0']:.1f}bn", (c["a0"], 0), xytext=(c["a0"] + 0.4, 8.6),
+               ha="right", va="bottom", fontsize=8.2, color=INK, bbox=BACK, zorder=7, arrowprops=arrow)
+    a.text(0.07, 25.9, "before impact: g × A", fontsize=8.2, color=INK_2, ha="left", va="top", bbox=BACK, zorder=7)
     # right panel annotations
     c = cases[1]
-    b.set_xlim(0, c["xmax"] * c["scale"])
+    xs = c["scale"]
+    b.set_xlim(0, c["xmax"] * xs)
     b.set_ylim(0, 4.6)
-    b.set_ylabel("Dollar alpha (USD mm a year)")
-    b.text(c["a_star"] * c["scale"] + 18, c["p_star"] * 0.52,
-           f"top at A* ≈ ${c['a_star'] * 1000:.0f}mm\nclient keeps {c['g'] * 1e4 / 3:.0f}bp = g/3,\na third of {c['g'] * 1e4:.0f}bp",
-           ha="left", va="center", fontsize=8.2, color=INK, bbox=BACK, zorder=7)
-    b.text(c["a_star"] * c["scale"] - 6, (c["p_star"] + c["e_star"]) / 2, "impact takes\ntwo thirds", ha="right",
+    b.text(c["a_star"] * xs + 52, 4.4, f"top at A* ≈ ${c['a_star'] * 1000:.0f}mm: the client\nkeeps {c['g'] * 1e4 / 3:.0f}bp, g/3, a third\nof the {c['g'] * 1e4:.0f}bp left after the spread",
+           ha="left", va="top", fontsize=8.2, color=INK, bbox=BACK, zorder=7)
+    b.text(c["a_star"] * xs + 8, (c["p_star"] + c["e_star"]) / 2, "impact takes\ntwo thirds", ha="left",
            va="center", fontsize=8.2, color=INK_2, bbox=BACK, zorder=7)
-    b.annotate(f"edge gone at ${c['a0'] * 1000:.0f}mm", (c["a0"] * c["scale"], 0),
-               xytext=(c["a0"] * c["scale"] - 10, 1.55), ha="right", va="bottom", fontsize=8.2, color=INK, bbox=BACK, zorder=7,
-               arrowprops=dict(arrowstyle="-", color=INK_2, linewidth=0.9, shrinkA=0, shrinkB=5))
+    b.annotate(f"edge gone at\n9/4 A* ≈ ${c['a0'] * 1000:.0f}mm", (c["a0"] * xs, 0), xytext=(c["a0"] * xs + 28, 0.95),
+               ha="right", va="bottom", fontsize=8.2, color=INK, bbox=BACK, zorder=7, arrowprops=arrow)
+    b.text(4, 4.5, "before impact: g × A", fontsize=8.2, color=INK_2, ha="left", va="top", bbox=BACK, zorder=7)
     # the chapter's published numbers
     g0, as0, a00 = out[cases[0]["name"]]
     g1, as1, a01 = out[cases[1]["name"]]
@@ -324,7 +311,8 @@ def fig_empty_cells():
             ax.add_patch(Rectangle((j + gap, y + gap), 1 - 2 * gap, 1 - 2 * gap, facecolor=LEVEL_FILL[lv],
                                    edgecolor="none", zorder=2))
             if lv == X:
-                ax.text(j + 0.5, y + 0.5, words.get(j, "silent"), ha="center", va="center", fontsize=7.6,
+                w = words.get(j, "silent")
+                ax.text(j + 0.5, y + 0.5, w, ha="center", va="center", fontsize=7.6 if len(w) < 9 else 6.9,
                         color=INK_2, style="italic", zorder=3)
     for j, h in enumerate(COLS):
         ax.text(j + 0.5, -0.12, h, ha="center", va="bottom", fontsize=8.8, color=INK, linespacing=1.05)
@@ -339,12 +327,11 @@ def fig_empty_cells():
     # legend
     ly = y9 + 1.55
     items = [(F, "specific feature or method"), (S, "stated, no method"), (X, "silent")]
-    x = 0.0
-    for lv, lab in items:
+    xs_leg = [0.0, 2.75, 4.95]
+    for (lv, lab), x in zip(items, xs_leg):
         ax.add_patch(Rectangle((x, ly), 0.3, 0.32, facecolor=LEVEL_FILL[lv], edgecolor=NEUTRAL if lv == X else "none",
                                linewidth=0.6, zorder=2))
         ax.text(x + 0.42, ly + 0.16, lab, ha="left", va="center", fontsize=8.2, color=INK_2)
-        x += 2.0
     ax.set_xlim(-2.55, n_c)
     ax.set_ylim(ly + 0.5, -0.95)
     # silence tallies, asserted against the table

@@ -15,8 +15,8 @@
 - [x] 13. [4B.6 The curve] MATH-GENTLY (bootstrapping as peeling) — peeling box; Wednesday 6:30 whiteboard; ASW derivation moved below.
 - [x] 14. [4B.6 Discount margin] ANOTHER-SEAT (CLO manager, generic, no firm named) — generic CLO seat: WAS, par build, floor, CCC bucket, WARF.
 - [x] 15. [4B.6 PECS] BRIDGE — hazard-rate gloss sentence added before PECS display.
-- [ ] 16. [4B.7 Yield-to-worst and the Poker Table] WHEN-TO-APPLY inside the scene
-- [ ] 17. [4B.7 The production lattice] MATH-GENTLY (what "risk-neutral" means) + FULL-DERIVATION-MOVE + LIST-TO-NARRATIVE
+- [x] 16. [4B.7 Yield-to-worst and the Poker Table] WHEN-TO-APPLY inside the scene — Theo objects (covenants, M&A); Ines and Kaz answer; annotation confirms.
+- [x] 17. [4B.7 The production lattice] MATH-GENTLY (what "risk-neutral" means) + FULL-DERIVATION-MOVE + LIST-TO-NARRATIVE — one-step Q box; theta fitting moved; four asserts; compounding bug.
 - [ ] 18. [4B.7 Negative convexity] BRIDGE
 - [ ] 19. [4B.8 Case Study, promote to `#### Long Scene: One Month, Six Rulers, One Pot` with `####` beat headings] EXPAND-SCENE (2,500–3,000 words) + SHOP-LIFE
 - [ ] 20. [4B.9 Specification] BRIDGE

@@ -2,9 +2,9 @@
 
 Started 2026-10-18 by revision writer.
 
-- [ ] 1. [Cold Open: Vega on a Book With No Options] · EXPAND-SCENE (to 1,000–1,300 words).
-- [ ] 2. [§6-B.1.1 Desk framing] · BRIDGE + MATH-GENTLY #1 (put–call parity, placed at §6-B.1.2).
-- [ ] 3. [§6-B.1.3 Digitals] · MATH-GENTLY #2 ("$\mathbb{Q}$ is the second derivative of the price list").
+- [x] 1. [Cold Open: Vega on a Book With No Options] · EXPAND-SCENE (to 1,000–1,300 words). — Note: dated, Kaz one-line vega beat, ROBO residual line, inventory cut.
+- [x] 2. [§6-B.1.1 Desk framing] · BRIDGE + MATH-GENTLY #1 (put–call parity, placed at §6-B.1.2). — Note: Wolfspeed promise line, lunchbox parity box, body trimmed to statement.
+- [x] 3. [§6-B.1.3 Digitals] · MATH-GENTLY #2 ("$\mathbb{Q}$ is the second derivative of the price list"). — Note: butterfly box 14/8/4, body duplicate removed, Q-belief line boxed.
 - [ ] 4. [§6-B.1.4 The capital structure as a ladder of call spreads] · LIST-TO-NARRATIVE.
 - [ ] 5. [NEW §6-B.1.5, `#### Long Scene: Wolfspeed, 23 Jun 2025, one distribution and four strikes`] · NEW-SCENE (2,200–2,800 words), labeled *(a replay; the desk's trades and dialogue are fictional; every Wolfspeed fact is from the company's 8-Ks, 10-Ks and disclosure statement cited in WOLF §3)*.
 - [ ] 6. [§6-B.2.2 One period, two states] · MATH-GENTLY #3, two parts.

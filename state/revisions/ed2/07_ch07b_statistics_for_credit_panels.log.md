@@ -6,9 +6,9 @@
 - [x] 4. [new `#### Long Scene: One March, Counted Once`] NEW-SCENE. Note: 2,430 words; PB-03 card; pointer §9.6.1 not §9.4 (fallen angels live there).
 - [x] 5. [7-B.1 Ways This Blows Up] LIST-TO-NARRATIVE. Note: Theo's CUSIP evening dramatized; box rows kept, row 1 shortened.
 - [x] 6. [7-B.2] MATH-GENTLY box 2 + Full Derivation. Note: rumor box h=3; limit moved to Beat 3; Trend Watch last.
-- [ ] 7. [7-B.3 Desk framing] LIST-TO-NARRATIVE + MATH-GENTLY (box 3).
-- [ ] 8. [7-B.3 Calibration] MATH-GENTLY (box 4) + ANOTHER-SEAT.
-- [ ] 9. [7-B.4 Desk framing + Censoring and truncation] MATH-GENTLY (box 5, two parts).
+- [x] 7. [7-B.3 Desk framing] LIST-TO-NARRATIVE + box 3. Note: three screens, kitchen-scale log-odds, IRLS to Full Derivation.
+- [x] 8. [7-B.3 Calibration] box 4 + ANOTHER-SEAT. Note: two weathermen, Brier 0.21 vs 0.12; dealer win-curve seat.
+- [x] 9. [7-B.4 Desk framing] box 5 two parts. Note: ten issuers 0.771, binomial coin; desk framing replaced by bridge.
 - [ ] 10. [new `#### Long Scene: The Chapter 22 Cohort` after Three functions that are one object, before Kaplan–Meier, derived] NEW-SCENE (2,400–3,000 words), the chapter's second long scene.
 - [ ] 11. [7-B.4 Kaplan–Meier, derived + Cox] FULL-DERIVATION-MOVE + MATH-GENTLY (box 6).
 - [ ] 12. [7-B.4 Check the proportionality] WHEN-TO-APPLY inside the scene.

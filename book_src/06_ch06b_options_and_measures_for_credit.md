@@ -1,10 +1,12 @@
 # Chapter 6-B: Options for Credit People: Replication, Black–Scholes, Greeks, Jump-to-Default and the Two Measures
 
-> **Prerequisites.** Itô's lemma and the volatility tax (§6.1); the Merton payoff and the closed forms it produces (§6.2, where they are stated and then used); default as a surprise with an intensity (§6.6). Spread duration and CS01 come from Chapter 4-B. Nothing else. Read this chapter after Chapter 6 and before Chapter 7. Every later chapter that prices an option, quotes a hazard or says "$\mathbb{Q}$" points back here.
+> **Prerequisites.** Itô's lemma and the volatility tax (§6.1); the Merton payoff and the closed forms it produces (§6.2, where they are stated and then used); default as a surprise with an intensity (§6.6). Spread duration and CS01 come from Chapter 4-B. Nothing else. Chapter 6 already owns the gentle explanations of distributions, random walks, Itô's $\tfrac12\sigma^2$, "risk-neutral" in plain words, Girsanov for a Brownian motion, hazard rates and the Poisson clock, and Chapter 4-B owns "an implied number is a question asked backwards"; this chapter glosses each in a sentence and points back. Read it after Chapter 6 and before Chapter 7. Every later chapter that prices an option, quotes a hazard or says "$\mathbb{Q}$" points back here.
 
 ## Cold Open: Vega on a Book With No Options
 
-*Monday, 7:12 a.m.* Theo's first risk report has eleven columns, and he understands eight of them. The ninth says **VEGA (per vol pt): −\$41k**. The tenth says **JTD: −\$6.3mm**. The eleventh says **MEASURE: Q**, in a font that suggests it has been shouted before.
+*Live, Monday 12 October 2026, the Monday after Chapter 1's lender call. The desk, Theo's book and every number on its risk report are fictional and illustrative.*
+
+*Monday, 7:12 a.m.* Theo's first risk report has eleven columns, and he understands eight of them. Market value, he knows. DV01 and CS01 he learned in his first week, from Chapter 4-B and from Kaz, in that order of patience. DTS, carry, roll-down, the index beta and the sector bucket he could have explained to a client at his old job, if any client had asked. The ninth says **VEGA (per vol pt): −\$41k**. The tenth says **JTD: −\$6.3mm**. The eleventh says **MEASURE: Q**, in a font that suggests it has been shouted before.
 
 "Who sold options in my book?" he asks. His book is forty-one high-yield bonds and a short CDX hedge. He has never sold an option. He has barely bought lunch.
 
@@ -12,27 +14,49 @@
 
 Kaz is already at the whiteboard, writing $V_0N(d_1)-Fe^{-rT}N(d_2)$ with the speed of someone who has written it four thousand times and been asked what it means twice. "It's just Black–Scholes on the firm," they say. "Assume the assets are lognormal and tradeable."
 
+"Then show me where forty-one thousand dollars comes from," Theo says. "One line. Not the theory."
+
+Kaz sorts the report by the ninth column and points at the top row. Twenty million face of a double-B industrial, the bond the desk's structural model maps onto the §6.2.4 firm: assets of 100 against debt of 80, asset volatility 25%, one year, a 216 bp spread. "Bond vega on that firm is minus 0.199 points per asset-vol point, per 100 face. You own two hundred thousand hundreds of face." They write it underneath the formula: $-0.199\times200{,}000=-\$39{,}800$. "That's ninety-seven percent of your number, from one bond."
+
+"And the other forty?"
+
+"Short vol, every one of them, the way a short put is. But you bought index protection last Tuesday, and bought protection is a long put on the same assets, so it's long vol. Forty bonds and one hedge net to about minus twelve hundred dollars." Kaz shrugs. "Nobody sized it to do that. You sized the CDX to your spread risk, and it quietly cancelled your vol risk on the side."
+
+Theo looks at the column again. "So my vega is one bond."
+
+"Your vega is one bond and a coincidence," Kaz says. "Coincidences don't roll."
+
+Theo's hand goes to his pocket, where the USB stick with his 13-week cash flow model lives, for emotional support. The model has a row for every receipt and every disbursement a client's treasurer could name, a revolver availability line, a minimum-liquidity covenant shaded red, and not one cell anywhere that asks how *uncertain* any of it is. At his old job the uncertainty was the client's problem, solved by a range of three cases on page four. Here it is a number in the ninth column with a minus sign, and it has a dollar unit, and somebody will ask him about it at the 8:00 risk meeting. He writes on his pad, under the date: *vega = one bond + one accident*.
+
 "You cannot short a factory," Mags says. "In 1994 we measured vega by calling the guy who sold us the bonds and asking whether he sounded nervous. One parameter, and he answered the phone."
 
 ROBO, asked on Friday to "remove the vega from Theo's book," had produced a one-line execution plan: sell all forty-one bonds. Vega: zero. Carry: zero. Theo: horrified. ROBO, as always, did exactly what was asked.
 
+Nobody had read the plan's second line. Ines scrolls to it now and reads it aloud, in the flat voice she uses for hand histories. "*Residual JTD: \$0. Residual carry: \$0. Residual Theo: not modelled.*"
+
+"That's the most honest risk report on the floor," Mags says. "It knows what it doesn't measure."
+
+"It measured the jump, though," Theo says, pointing at the tenth column on his own report. "Minus six point three million. What is that a derivative of?"
+
+"Nothing," Ines says. "That's why it's the only line I read first. Hold the thought until a week from Wednesday." She means a replay; she does not say which, and Theo has learned not to ask.
+
 "But what does the credit agreement say?" Theo asks, because that is what he asks.
 
-"It says you are short a put to the shareholders," Ines says. "Your loans say you're short a call to the borrower. Your 101 put is long an option that only works if two rating agencies agree. Your portability clause is a digital you sold to the sponsor. Your backstop is a put you sold to the plan. The CLO you sell loans to is running an option book it calls a compliance test. Price them."
+"It says you are short a put to the shareholders," Ines says. "And everything else on your book is an option of some kind, written by a lawyer who did not use the word. Price them." (She does, instrument by instrument, in §6-B.7.)
 
 Theo looks at the eleventh column. "And which probabilities do I use? Mine, or the market's?"
 
-Nobody answers immediately, which on this desk is how you know a question is good.
+Nobody answers immediately, which on this desk is how you know a question is good. Kaz caps the marker. Mags goes back to her screen. Ines writes something on a sticky note, folds it in half and puts it in her drawer, which Theo will learn is where she keeps answers she wants him to find on his own.
 
 **If every instrument on a credit desk is an option, where is the one page that shows how to price one, what each risk-report line means, what happens when the underlying can jump to zero, and whose probabilities go into the expectation?**
 
-By the end of this chapter you will be able to: build any credit payoff from calls, puts and digitals; derive Black–Scholes by replication and say why $N(d_2)$ is a probability nobody believes; read every Greek as a risk-report line, including the one that is not a derivative; explain the left wing of a high-yield vol surface; add a jump to default and get the Carr–Wu result of §23.3 as a corollary with an error term; change measure for an *intensity*; and use the hazard multiplier and the premium ratio as traded quantities, always saying which measure you are in.
+This chapter builds that page, from the hockey stick to the hazard multiplier, through two replays (Wolfspeed's 2025 restructuring and SVB's March 2023) and one Monday afternoon on Halvorsen. By the end you will be able to price any credit payoff by replication, read every line of the risk report including the one that is not a derivative, add a jump to default, change measure for an intensity, and say which measure every number you hand anyone is in.
 
 ## 6-B.1 Payoffs First: The Hockey Stick Is the Atom
 
 ### 6-B.1.1 Desk framing: every document is a payoff function
 
-RSSG trained Theo to read a waterfall: who gets paid, in what order, from what pot. An options desk reads the same thing as a function $g(\cdot)$ from a terminal value to a cash flow. Once you can write $g$, pricing is a separate and much more boring problem, and most credit-desk errors happen at the first step: the wrong $g$, written from the summary of the indenture instead of the definitions (Law 8, App E).
+RSSG trained Theo to read a waterfall: who gets paid, in what order, from what pot. An options desk reads the same thing as a function $g(\cdot)$ from a terminal value to a cash flow. Once you can write $g$, pricing is a separate and much more boring problem, and most credit-desk errors happen at the first step: the wrong $g$, written from the summary of the indenture instead of the definitions (Law 8, App E). In June 2025 a restructuring support agreement did exactly this to a listed stock, rewriting its $g$ overnight while the ticker kept trading as if nothing had happened; §6-B.1.5 replays the evening.
 
 Three atoms build every payoff in this book. Let $S_T$ be the value of some underlying at date $T$: a share price, a firm's asset value $V_T$, a post-close bond price, a pool's adjusted par.
 
@@ -44,15 +68,19 @@ $$
 
 ### 6-B.1.2 Put–call parity: the only theorem that needs no model
 
-The identity $(S_T-K)^+-(K-S_T)^+=S_T-K$ holds in every state of the world. A portfolio long a call and short a put therefore pays the same as one share minus $K$ in cash at $T$. If two portfolios pay the same thing in every state, they must cost the same today, or someone buys the cheap one, sells the dear one and goes home early. With a constant riskless rate $r$ and no dividends,
+> **Math, Gently.** *Two lunchboxes.* Pack one lunchbox with a call struck at $K$ and enough cash to grow into $K$ by expiry, which today is $Ke^{-rT}$. Pack the other with a put struck at the same $K$ and one share. Open both at $T$. If the share finished above $K$, the first box holds a call worth $S_T-K$ plus $K$ of cash, which is $S_T$; the second holds a worthless put and a share worth $S_T$. If the share finished below $K$, the first box holds a dead call and $K$; the second holds a put worth $K-S_T$ and a share worth $S_T$, which is $K$. Every state, same contents. Whoever charges more for one box than the other gets arbitraged by lunchtime. *A number you can check in the margin:* $S_0=100$, $K=100$, $r=4\%$, $T=1$. The cash today is $100e^{-0.04}=96.08$, so call minus put must be $100-96.08=3.92$. If the call is 13.75, the put must be 9.83, whatever anyone thinks the stock will do. No volatility, no distribution and no drift went into that; no model was used, which is why this is the first test in every engine (§6-B.9).
+
+The identity $(S_T-K)^+-(K-S_T)^+=S_T-K$ holds in every state of the world, so a call minus a put is a share minus $K$ in cash at $T$. With a constant riskless rate $r$ and no dividends,
 
 $$
 C(K)-\text{Put}(K)=S_0-Ke^{-rT}.
 $$
 
-No volatility, no distribution, no drift. Parity is the first sanity check in every engine in this book: if your call and put disagree with it, the bug is in your code or in your data, never in the market. (Listed single-stock options are American and pay attention to dividends and borrow. Parity then becomes a pair of inequalities, and the size of the violation is how §23.4 backs out the borrow fee.)
+When a call and a put in a desk's data disagree with it, the desk has learned something about its code or its data, never about the market. (Listed single-stock options are American and pay attention to dividends and borrow. Parity then becomes a pair of inequalities, and the size of the violation is how §23.4 backs out the borrow fee.)
 
 ### 6-B.1.3 Digitals, and the density hidden in the strike axis
+
+> **Math, Gently.** *$\mathbb{Q}$ is the second derivative of the price list.* Buy one call struck at 90, sell two at 100, buy one at 110. Draw the payoff at expiry and you get a tent: zero below 90, rising a dollar for every dollar the stock climbs to a peak of 10 at exactly 100, falling back to zero at 110, and zero above. This butterfly is a bet that the stock lands *near 100* and nowhere else. Now read three prices off a screen, say calls at 14, 8 and 4 *(illustrative)*. The butterfly costs $14-2\times8+4=2$. Divide by its peak payout of 10 and you have the price of a claim that pays about a dollar if the stock finishes in a ten-dollar bin around 100: 0.20. Undo the discounting and that is, near enough, the market's probability of the bin, 20%, read off three prices and no beliefs. Slide the tent along the strike axis and you map the whole distribution, one bin at a time; shrink its wings and you get a density. Nobody's forecast, utility function or mood went into it. **$\mathbb{Q}$ is not a belief. It is the second derivative of the price list.** The formula is next.
 
 Differentiate the call payoff in its strike: $\partial_K(S_T-K)^+=-\mathbf 1_{\{S_T>K\}}$. Take expectations under any pricing rule that is linear and discounts at $r$:
 
@@ -60,7 +88,7 @@ $$
 \text{Dig}(K)=e^{-rT}\,\mathbb{Q}(S_T>K)=-\frac{\partial C}{\partial K},\qquad \frac{\partial^2C}{\partial K^2}=e^{-rT}f^{\mathbb{Q}}(K),
 $$
 
-where $f^{\mathbb{Q}}$ is the density of $S_T$ under the pricing measure. The second identity is Breeden and Litzenberger (1978). Read it carefully, because it is the cleanest definition of $\mathbb{Q}$ a desk will ever get: **$\mathbb{Q}$ is not a belief. It is the second derivative of the price list.** If you have calls at every strike, you have the risk-neutral density, and you did not have to assume anything about anybody's utility function to get it.
+where $f^{\mathbb{Q}}$ is the density of $S_T$ under the pricing measure. The second identity is Breeden and Litzenberger (1978), and it is the butterfly in the box with its wings shrunk to nothing and its price divided by the width squared: the cleanest definition of $\mathbb{Q}$ a desk will ever get. Calls at every strike give the whole risk-neutral density, with no assumption about anybody's utility function.
 
 Two consequences. A digital is the limit of a tight call spread, $\big[C(K-\epsilon)-C(K+\epsilon)\big]/(2\epsilon)$, so its gamma is unbounded at the strike near expiry, which is why portability (§15.3) and every other pass-or-fail clause is hard to hedge. And a probability extracted from prices is a $\mathbb{Q}$ probability, always (§6-B.6).
 

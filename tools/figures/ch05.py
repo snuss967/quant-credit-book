@@ -38,9 +38,9 @@ NEG_TINT = "#e66767"      # DIVERGING red end, used as a light tint for a loss r
 MINUS = "−"
 
 
-def pct(x, d=1):
-    s = f"{abs(x):.{d}f}%"
-    return (MINUS + s) if x < 0 else s
+def sgn(x, d=1):
+    s = f"{abs(x):.{d}f}"
+    return (MINUS + s) if x < 0 else "+" + s
 
 
 # ----------------------------------------------------------------------------------------------------------------
@@ -61,17 +61,19 @@ def fig_skew_vs_pd():
     q = np.logspace(np.log10(0.0002), np.log10(0.95), 800)
     fig, ax = new_figure("wide")
     ax.set_xscale("log")
-    ax.axhspan(0, 8, color="#f4f3f0", zorder=0)
+    ax.axhspan(0, 14, color="#f4f3f0", zorder=0)
     ax.axhline(0, color=INK_2, linewidth=0.9, zorder=2)
-    ax.plot(q * 100, -1 / np.sqrt(q), color=NEUTRAL, linewidth=1.2, linestyle=(0, (3, 3)), zorder=2)
-    ax.plot(q * 100, skew_skeleton(q), color=BLUE, linewidth=2.0, zorder=3)
+    ax.plot(q * 100, -1 / np.sqrt(q), color=NEUTRAL, linewidth=1.3, linestyle=(0, (3, 3)), zorder=2,
+            label="The slogan, \u22121/\u221aq")
+    ax.plot(q * 100, skew_skeleton(q), color=BLUE, linewidth=2.0, zorder=3,
+            label="Exact skeleton, \u2212(1\u22122q)/\u221a(q(1\u2212q))")
     ax.axvline(50, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
 
     pts = [("A", 0.05, (7, -2)), ("BB", 0.8, (7, -3)), ("B3", 4.0, (7, -3)), ("CCC", 12.0, (7, -3))]
     for name, qq, off in pts:
         s = skew_skeleton(qq / 100)
         ax.plot([qq], [s], "o", color=BLUE, markersize=6, zorder=5, markeredgecolor="white", markeredgewidth=0.8)
-        ax.annotate(f"{name}, q = {qq:g}%\nskew {pct(s, 1 if abs(s) < 20 else 0)}", (qq, s), xytext=off,
+        ax.annotate(f"{name}, q = {qq:g}%\nskew {sgn(s, 1 if abs(s) < 10 else 0)}", (qq, s), xytext=off,
                     textcoords="offset points", va="top", fontsize=8.3, color=INK_2)
     s77 = skew_skeleton(0.77)
     ax.plot([77], [s77], "o", color=ORANGE, markersize=6.5, zorder=5, markeredgecolor="white", markeredgewidth=0.8)
@@ -79,13 +81,12 @@ def fig_skew_vs_pd():
                 ha="right", va="bottom", fontsize=8.3, color=INK_2)
     ax.annotate("q = ½: skew 0,\nthe sign flips", (50, -47), xytext=(-6, 0), textcoords="offset points",
                 ha="right", va="center", fontsize=8.3, color=INK_2)
-    ax.text(0.0215, 0.5, "Gaussian: skew 0 at every q", fontsize=8.3, color=INK_2, va="bottom", ha="left")
-    ax.text(0.0215, 6.6, "right-skewed: price near recovery", fontsize=8.3, color=MUTED, va="top", ha="left")
-    ax.annotate("−1/√q", (0.0215, -1 / np.sqrt(0.000215)), xytext=(6, 0), textcoords="offset points",
-                fontsize=8.3, color=MUTED, va="center", ha="left")
+    ax.text(0.0215, -1.2, "Gaussian: skew 0 at every q", fontsize=8.3, color=INK_2, va="top", ha="left")
+    ax.text(0.0215, 12.8, "right-skewed: price near recovery", fontsize=8.3, color=MUTED, va="top", ha="left")
+    ax.legend(loc="lower right", bbox_to_anchor=(1.0, 0.02), fontsize=8.3)
 
     ax.set_xlim(0.02, 95)
-    ax.set_ylim(-72, 8)
+    ax.set_ylim(-72, 14)
     ticks = [0.02, 0.05, 0.1, 0.5, 1, 5, 10, 50, 90]
     ax.xaxis.set_major_locator(FixedLocator(ticks))
     ax.xaxis.set_minor_locator(NullLocator())
@@ -138,31 +139,33 @@ def fig_two_worlds_mixture():
 
     fig, ax = new_figure("wide")
     ax.set_yscale("log")
+    ymin, ymax = 3e-6, 12.0
     ax.axvspan(-100, thr * 100, color=NEG_TINT, alpha=0.10, zorder=0)
     ax.plot(centers * 100, gau, color=ORANGE, linewidth=1.5, linestyle=(0, (4, 2)), zorder=4)
     ax.plot(centers * 100, mix, color=BLUE, linewidth=LW, zorder=3)
 
-    ax.axvline(-2.2, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
-    ax.axvline(-83, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
-    ax.annotate("95% VaR\n" + MINUS + "2.2%", (-2.2, 1.6e-6), xytext=(-4, 0), textcoords="offset points",
-                ha="right", va="bottom", fontsize=8.2, color=INK_2)
-    ax.annotate("99% VaR " + MINUS + "83%\n99% ES " + MINUS + "92%", (-83, 1.6e-6), xytext=(4, 0),
-                textcoords="offset points", ha="left", va="bottom", fontsize=8.2, color=INK_2)
-    ax.annotate("Survival world: 96% of the mass,\nTheo's 4.1% wobble", (7, 0.19), xytext=(46, 6),
-                textcoords="offset points", ha="left", va="center", fontsize=8.3, color=INK_2,
-                arrowprops=dict(arrowstyle="-", color=MUTED, linewidth=0.8, shrinkA=0, shrinkB=2))
-    ax.annotate("Default world: 4% of the mass,\nspread over 100 points of return", (-45, 1.0e-3), xytext=(0, 36),
+    # Risk marks: thin dashed stems up to their labels.
+    ax.plot([-2.2, -2.2], [ymin, 0.045], color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
+    ax.annotate("95% VaR " + MINUS + "2.2%:\ninside the body", (-2.2, 0.045), xytext=(-4, 0),
+                textcoords="offset points", ha="right", va="bottom", fontsize=8.2, color=INK_2)
+    ax.plot([-83, -83], [8e-4, 0.45], color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
+    ax.annotate("99% VaR " + MINUS + "83%\n99% ES " + MINUS + "92%:\ninside the default lump", (-83, 0.45),
+                xytext=(4, 0), textcoords="offset points", ha="left", va="bottom", fontsize=8.2, color=INK_2)
+    ax.annotate("Survival world: 96% of the mass,\nTheo's 4.1% wobble", (7, 0.19), xytext=(0, 20),
                 textcoords="offset points", ha="center", va="bottom", fontsize=8.3, color=INK_2,
                 arrowprops=dict(arrowstyle="-", color=MUTED, linewidth=0.8, shrinkA=0, shrinkB=2))
-    ax.text(-98, 0.5, "Lose more than 15 points\n(price below 77)\nmixture: 1 in 29\nGaussian: rarer than 1 in 29,000",
-            fontsize=8.3, color=INK_2, ha="left", va="top")
+    ax.annotate("Default world: 4% of the mass,\nspread over 100 points of return", (-52, 9.5e-4),
+                xytext=(0, 26), textcoords="offset points", ha="center", va="bottom", fontsize=8.3, color=INK_2,
+                arrowprops=dict(arrowstyle="-", color=MUTED, linewidth=0.8, shrinkA=0, shrinkB=2))
+    ax.text(-58, 2.2e-4, "Lose more than 15 points (price below 77):\nmixture 1 in 29;  Gaussian rarer than 1 in 29,000",
+            fontsize=8.3, color=INK_2, ha="center", va="center")
     ax.plot([], [], color=BLUE, linewidth=LW, label="Survive-or-jump mixture")
     ax.plot([], [], color=ORANGE, linewidth=1.5, linestyle=(0, (4, 2)), label="Theo's Gaussian N(7%, 4.1%)")
-    ax.legend(loc="upper right", bbox_to_anchor=(1.0, 1.0), fontsize=8.3)
+    ax.legend(loc="lower left", bbox_to_anchor=(0.0, 0.02), fontsize=8.3)
 
-    ax.set_xlim(-100, 20)
-    ax.set_ylim(2e-7, 1.2)
-    levels = [1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6]
+    ax.set_xlim(-100, 28)
+    ax.set_ylim(ymin, ymax)
+    levels = [1e-1, 1e-2, 1e-3, 1e-4, 1e-5]
     ax.yaxis.set_major_locator(FixedLocator(levels))
     ax.yaxis.set_minor_locator(NullLocator())
     ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: "1 in " + f"{1 / v:,.0f}"))

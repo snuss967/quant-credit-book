@@ -1,0 +1,10 @@
+# Resource Graph log (Edition 2, U3b): Chapter 14, Default and Recovery in the LMT Era
+
+Source dossier: state/research/media_episodes_posts_parts_III_IV.md, section 14_ch14_default_and_recovery_cycle_lmt_era (8 rows), plus the Ch 13 and Ch 17 rows that fit this chapter's sections (Cloud 9fin "Eat, sleep, drive"; Octus Download EP 28; Cloud 9fin "Co-op agreements through the eye of American Needle"; Mayer Brown Serta alert). Format kept local to Ch 14: new nested "Podcasts" and "Posts" bullets, each item as **"Title"** (show or author, date), one line on why, URL.
+
+Channel-level or homepage-only references found: (a) end-of-chapter graph, "Petition, restructuring writing and podcast" with only the /archive homepage; (b) end-of-chapter graph, Practitioner Writing, "Matt Levine, Money Stuff (Bloomberg Opinion), passim" with no column. The "Cloud 9fin" lead-in line in the end-of-chapter graph already carries six named episodes, so it was kept. The four graphs held no other channel-level items.
+
+## Graphs upgraded (one Edit per graph)
+
+- Section 14.1 graph: added 4 (Podcasts: Credit Edge, Davidson Kempner "$770 Billion Stressed Debt Opportunity," 2026-04-16; Credit Edge, Magnetar "$600 Billion Stressed Debt Pile," 2026-09-24. Posts: Moody's, Hamilton, "Lend, extend, and then...," 2026-05-18; Miller, "Liability Management Exercises Mature," HLS Roundtable, 2025-12-02). Existing Practitioner Writing (Moody's AMR, Wachtell PDF), Academic Papers and Data & Code kept.
+- Sections 14.3-14.4 graph: added 6. Podcasts: Credit Edge, Lumen CFO Stansbury "Moonshot Debt Deal That Worked" (2026-09-17); Cloud 9fin "Eat, sleep, drive" (2026-07-21); Octus Download EP 28 (2026-04-22; Ch 17 dossier row, matches the Pluralsight cross-holder marks in the direct-lender box). Posts: Wachtell et al., "Liability Management 2026: For Better or Worse," HLS Roundtable (2026-04-07); Miller, "Liability Management Exercises Mature" (2025-12-02); Mayer Brown Serta damages-on-remand alert (2026-07-31). Existing podcast, Moody's, Octus, Roe-Rotaru, academic and data items kept.

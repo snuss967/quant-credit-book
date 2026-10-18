@@ -267,21 +267,109 @@ Used in: §5.6 (the default as a negotiation), §13.1 (the LMT zoo), §13.3, §1
 
 ## 12B.5 Chapter 11 as a Timed State Machine
 
-"The first-day hearing is where you find out who's in charge," Mags says. "The confirmation hearing is where you find out what it cost." Almost all the value that changes hands in a Chapter 11 case changes hands at the two ends: in the first thirty days, through the DIP and the first-day orders, and in the last sixty, through the plan value and the votes. The middle is where the clocks run.
+"The first-day hearing is where you find out who's in charge," Mags says. "The confirmation hearing is where you find out what it cost." Almost all the value that changes hands in a Chapter 11 case changes hands at the two ends: in the first thirty days, through the DIP and the first-day orders, and in the last sixty, through the plan value and the votes. The middle is where the clocks run. The quickest way to see all three is a real case.
 
-The sub-machine has these states: Petition (the stay begins), First days (interim orders), Second days (final DIP order, committee in place), Case administration (claims, exclusivity, challenges), then one of two exits, the §363 sale path or the plan path (plan and disclosure statement filed, solicitation, confirmation hearing, confirmed, effective date). It also has two failure edges: conversion to Chapter 7 (§1112(b)) and dismissal.
+#### Long Scene: Saks Global, Five Months in Court
+
+*A replay. The desk, its cards and every word of dialogue are invented, and the desk never held these notes or spoke to anyone in the case. The Saks Global dates, amounts and terms are public, from the case trackers and trade press cited where they appear; named firms appear only as those sources report them, and nobody outside the desk is given a line.*
+
+*Friday 27 November 2026, 2:40 p.m.* The bond market closed at two, as it does on the day after Thanksgiving, and the floor has the feel of a school after the last bell. The three Halvorsen cards are in an envelope in Ines's drawer. On the big screen is a docket, and it is not Halvorsen's.
+
+"Six weeks ago we did Saks as a question about labels," Ines says. That replay (§11.4.3) ended in a courtroom. In August 2025 an exchange had moved about 98% of the company's 11% secured notes into a new stack of SPV, second-out and third-out notes, leaving about \$51mm of old notes outside it by one case summary, stripped of their covenants and sitting under everything new; Chapter 13-B tells that half of the story. "Today we start where that tape stopped and run it through Kaz's board. You've written your cards. Now watch a real case with the answers in it."
+
+She has cut the docket at four dates and will not let anyone scroll past the one on the screen.
+
+**Beat 1: the clock (December 2025 to 13 January 2026).** The first page is not a court filing. It is a covenant from the asset-based revolver, and Ines makes Theo read it aloud. The facility required the company to keep a minimum amount of undrawn availability, and the minimum stepped up on fixed dates: \$200mm, then \$375mm from 1 December 2025, then \$500mm from 16 December. Interest on the notes fell due on 30 December and went unpaid, more than \$100mm by Bloomberg Law's account and \$126mm by one case summary. S&P cut the issuer to SD again on 7 January 2026 (Retail Dive, 8 January 2026). On 13 January Saks Global filed for Chapter 11 in the Southern District of Texas, No. 26-90103, before Judge Alfredo Perez, with about \$3.4bn of funded debt (The Fashion Law's running case timeline).
+
+Kaz has the board from §12B.4 on the whiteboard and moves a magnet along it. "Missed coupon puts the token on Grace. Grace has a thirty-day egg timer. The petition is on day fourteen. So the timer didn't force anything."
+
+"Not that timer," Ines says. "Whose clock ran out?"
+
+Theo looks at the covenant again. Each step in the minimum availability was \$500mm of a revolver the company could see and could not touch, and a breach of a covenant like that, in the usual form of these facilities, lets the lenders stop funding and take control of the cash. The bondholders' clock was thirty days long, if the indenture had the customary grace. The bank's clock had no grace at all, and it had been ticking since the first of December. "The token left Grace by the petition arrow," he says, "because the revolver's invariant was about to fail, not the notes'."
+
+"The bank's calendar beat the bondholders' calendar," Mags says. "It usually does."
+
+Then Ines asks what changed at the moment the petition went in, and Theo answers the way he would have answered a client at 3 a.m., in the order the client would care about. Every clock that belongs to a creditor stopped. Every clock that belongs to the Code started. The automatic stay froze collection, enforcement and setoff in one instant, so the revolver lenders could no longer pull the cash and the noteholders whose grace period was still running found it no longer mattered. The only creditors still allowed to act were derivatives counterparties, who may terminate and net under the safe harbors (the plumbing of App D keeps working on day zero). On a name with traded CDS, the petition would also have been a Bankruptcy credit event, and a second clock, the auction's (§24.6), would have started beside the case.
+
+"So the petition is a reset on every clock and a freeze on every creditor," Kaz says, "except the ones with swaps."
+
+"Except the ones with swaps. Write that on the arrow."
+
+**Beat 2: the DIP (13 January to 20 February 2026).** The second cut is the financing. Saks Global asked the court for a \$1.75bn debtor-in-possession facility, with a \$1bn new-money first-out piece priced at SOFR plus 11% paid in kind, and got its final order on 20 February 2026 (The Fashion Law). The ad hoc group behind the money held about 72% of the SPV notes and about half of the second-out notes (case trackers' accounts).
+
+Mags taps the 72%. "Whoever lends the money after the petition writes the plan. That was my card on Halvorsen. Here it is with a docket number."
+
+"First-day hearing," Theo says, mostly to Kaz. "The company walks in and asks for permission to keep breathing: pay the wages, keep the cash-management system, pay the vendors it cannot live without, and borrow. The borrowing is the part that decides who is in charge." He draws a ladder beside the board. Nobody lends to a bankrupt company out of kindness, so the Code offers a ladder of inducements: first a place ahead of ordinary unsecured claims, then ahead of the other administrative claims, then liens on whatever is free, and at the top a lien that primes the existing secured lenders. "The top rung needs the primed lender to be protected, or to agree. The cheapest way to get a secured lender's consent to being primed is for the secured lender to be the one doing the priming."
+
+"So the group primed itself."
+
+"The group primed everyone in its class who didn't lend, and itself, and then it was ahead of itself. The question is what it got for the trouble."
+
+Kaz is still on the term sheet. "One thousand of new money. What is the other seven hundred and fifty?"
+
+Nobody can answer from the summary on the screen. A \$1.75bn facility with \$1bn of new money leaves \$750mm that came from somewhere, and the trackers do not say where. Ines writes on the whiteboard, under the ladder: *\$750mm: roll-up of the group's prepetition notes? Refinanced revolver? Read the DIP order before you price it.*
+
+"Two cases," she says. "If it refinanced the revolver, one senior lender replaced another, and the notes below don't care much. If it rolled up the group's own notes, those notes jumped from the prepetition class to the top of the case, and they come off the top of everyone in the class who didn't lend. Same seven hundred and fifty, two prices. Kaz will write the formula two pages from now, and you will price both cases with it, and you will not trade the headline."
+
+Kaz asks the other question that a DIP decides, the one about exits. "If the lenders wanted their money back, they'd sell the company. Then there'd be a stalking horse. Is the stalking horse the horse doing the stalking or the horse being stalked?"
+
+"Both," Mags says. "It sets the floor, and everyone else hunts it."
+
+Kaz considers this. "So the break-up fee is a premium paid to the bidder for writing a public floor."
+
+It is, and it is priced like one: the debtor pays a few percent to buy a put on its own sale price from the one bidder willing to go first. Saks's case took the other exit, the plan, and the trackers' cast list suggests why: the group that lent the money was the group that would end up owning the company. When the DIP lender means to own the house, nobody invites an auctioneer.
+
+**Beat 3: the deal and the vote (2 April to 5 June 2026).** The third cut jumps six weeks at a time. On 2 April 2026 the company signed a restructuring support agreement backed by \$500mm of exit financing. On 5 June the court confirmed the plan (Financier Worldwide, 9 June 2026; The Fashion Law). Funded debt fell from about \$3.4bn to about \$1.2bn. The old equity, held by HBC, Amazon, Authentic and G-III, was cancelled. Junior creditors owed about \$1.5bn were left with a \$20mm litigation trust. And, by the trade press's account of the plan, a class of old notes voted against it and was crammed down.
+
+"Five tests," Ines says. "The judge's checklist, §1129(a). Walk them against what's on the screen."
+
+Theo has walked this checklist more times than he has walked his own street, though never, he notes for the record, on this case. He starts with best interests, (a)(7). Every holder in an impaired class who did not vote yes must receive at least what a Chapter 7 liquidation would have paid. "A Chapter 7 of a department-store chain is a going-out-of-business sale with the landlords at the front of the line and the vendors right behind them. I haven't seen this liquidation analysis, but I've drafted twenty, and the juniors' line in a department-store liquidation is a dash." Measured per holder, the test is a floor: a put struck at liquidation value.
+
+"Written by the judge," Kaz says, "and handed to every holder for free."
+
+Then (a)(8): every class accepts or is unimpaired. At Saks one class of old notes rejected, so (a)(8) failed, and the plan had to survive the cramdown rules of §1129(b) instead, which §12B.6 prices. Then (a)(9): administrative and priority claims, the twenty-day goods claims of §503(b)(9) among them, are paid in full in cash on the effective date unless a holder agrees otherwise. "That's half of what the \$500mm exit facility is for," Theo says. "Somebody has to lend the cash that pays the administrative claims on day one." Then (a)(10): at least one impaired class, not counting insiders, accepts. "Which one did?" Kaz asks. The trackers do not list the vote by class, but the reading that fits every fact on the screen is the secured classes whose holders had signed the RSA and were taking the company. The rule exists so that a plan cannot be imposed on creditors who all said no; a single accepting impaired class is the ticket to cramdown. Last, (a)(11), feasibility: confirmation must not be likely to be followed by liquidation or another reorganization. "The exit lender is the feasibility test in one document," Theo says. "Five hundred million dollars saying the company survives."
+
+"Feasible means the judge doesn't expect to see you again," Mags says. "Judges are optimists for a living."
+
+Kaz has one more. "The equity was cancelled. Could the plan also have released the shareholders from whatever the creditors might sue them for?"
+
+"Not since June 2024," Theo says. "Not without the creditors' consent. That's a scene of its own." It is, and it comes after the DIP math, below.
+
+**Beat 4: the card (14 January to 26 June 2026).** Ines does not show the last cut. She rewinds the tape to the morning after the petition and deals four index cards, one face up in front of an empty chair.
+
+"Wednesday, 14 January 2026. The case is a day old. Someone offers you the old notes, the stub that stayed out of the exchange. What do you bid, in what size, and why?" She points at the empty chair. "That one's the reader's. Write it before you read on."
+
+Kaz writes quickly. A year and a half earlier the stub and the second-out notes had been the same bond, so Kaz bids the stub at a fixed fraction of wherever the second-out notes print, in \$5mm, and hedges by selling second-out notes against it. "Same issuer, same original paper. It's a ratio trade."
+
+Mags writes two words: *no bid*. "Twenty million over one and a half billion is 1.3 cents," she says, "before the lawyers. And it's the lawyers' trust."
+
+Theo bids small: \$1mm at 3 *(illustrative)*. "Not for the recovery. For the ballot. A claim in a class that's going to be impaired is a vote and standing to object. If the plan releases the old shareholders without consent, or pays a sister class better for the same claim, the objection is worth more than the paper."
+
+Then Ines plays the last date. On 26 June 2026 the company emerged as Exemplar Luxury Group, with Pentwater and Bracebridge, named as drivers of the plan, on the board (The Fashion Law; Financier Worldwide).
+
+The grading takes ten minutes. Kaz's ratio was a hedge ratio for a world with one class. The plan paid classes, not CUSIPs' family histories; by January the stub sat under the SPV notes, the second-out, the third-out and now a DIP, and its sister had become a different claim with a different distribution. A ratio set when the two were one bond was wrong in every state the case passed through, and the short leg Kaz sold against it was the half of the company that got the equity. "My hedge ratio was a function of the state," Kaz says, "and I evaluated it in the wrong state." Remember that sentence; §12B.9 ends with a fund that learns it with real money.
+
+Mags's card was right, and right for the right reason. Where exactly the stub sat in the plan's class table the trackers do not settle for us, but on the generous reading, where it shared pro rata in the juniors' trust, her arithmetic is the ceiling: about 1.3 cents on the dollar, paid in years, out of litigation, less fees.
+
+Theo's card was small and wrong, which Ines calls the second-best way to be wrong. The class rejected, which is what his ballot was for, and was crammed down anyway, which is what the cramdown rules are for. He had bought an option on the judge disagreeing with the plan, and she did not. Of the \$30,000 his card cost, about \$13,000 comes back at Mags's ceiling, eventually.
+
+And the empty chair's card is graded the same way. If you bid more than about a point and a half, you paid for an outcome that needed the cramdown to fail. If your size was more than you could hold through a litigation trust that pays over years, you would have become a forced seller of the one thing nobody buys. If you wrote "no bid," you are sitting next to Mags, which is not a bad place to sit.
+
+"Every card was about a price," Ines says, putting the cards back in the deck. "The case was about the order in which the pens were used. The bank's pen, then the DIP lender's, then the classes', then the judge's. Learn the order and the prices come later." She closes the docket. "Now the statutes, so you can find them again."
+
+The sub-machine the replay walked has these states: Petition (the stay begins), First days (interim orders), Second days (final DIP order, committee in place), Case administration (claims, exclusivity, challenges), then one of two exits, the §363 sale path or the plan path (plan and disclosure statement filed, solicitation, confirmation hearing, confirmed, effective date). It also has two failure edges: conversion to Chapter 7 (§1112(b)) and dismissal.
 
 ### The petition and the stay
 
-A voluntary petition is an order for relief (§301), and every statutory clock in the case starts on that date. The automatic stay (§362(a)) freezes collection, enforcement and setoff against the debtor at once. The exceptions are the safe harbors for securities contracts, repos and swaps (§§555, 559, 560, 561), which let derivative counterparties terminate and net even though everyone else is frozen. That is why the plumbing in App D keeps working on day zero while the term loan agent cannot so much as send a demand letter. The petition is also a Bankruptcy credit event for CDS, which starts the auction clock of §24.6 in parallel with the case.
+The citations the replay left out: a voluntary petition is an order for relief (§301), and every statutory clock in the case starts on that date. The automatic stay is §362(a). The safe harbors that let derivatives counterparties terminate and net are §§555, 559, 560 and 561, which is why the plumbing in App D keeps working on day zero while the term loan agent cannot so much as send a demand letter. The CDS auction clock that a Bankruptcy credit event starts is in §24.6.
 
 ### First days and Rule 6003
 
-For the first 21 days, Bankruptcy Rule 6003 bars the court from approving payment of prepetition claims, assumption of contracts, or sales outside the ordinary course, "except to the extent that relief is necessary to avoid immediate and irreparable harm." First-day relief is therefore *interim*, and the final orders come at the "second-day" hearing. The package covers cash management, wages (priority claims up to the §507(a)(4) cap), taxes, insurance, interim DIP or cash collateral, and **critical vendors**. A critical-vendor order lets the debtor pay the prepetition claims of suppliers who keep shipping on terms. For the vendor that is a jump from a general unsecured recovery to par, at the debtor's option, and it is the first trade-claim event a desk should model (§16.5). The other early clocks are in the table below. The U.S. Trustee also appoints an official unsecured creditors' committee (§1102).
+For the first 21 days, Bankruptcy Rule 6003 bars the court from approving payment of prepetition claims, assumption of contracts, or sales outside the ordinary course, "except to the extent that relief is necessary to avoid immediate and irreparable harm." First-day relief is therefore *interim*, and the final orders come at the "second-day" hearing. The package Theo described as permission to keep breathing covers cash management, wages (priority claims up to the §507(a)(4) cap), taxes, insurance, interim DIP or cash collateral, and **critical vendors**. A critical-vendor order lets the debtor pay the prepetition claims of suppliers who keep shipping on terms. For the vendor that is a jump from a general unsecured recovery to par, at the debtor's option, and it is the first trade-claim event on the desk's model (§16.5). The other early clocks are in the table below. The U.S. Trustee also appoints an official unsecured creditors' committee (§1102).
 
 ### DIP financing and the roll-up
 
-Section 364 is a ladder of inducements for post-petition lenders: administrative priority (§364(b)), then superpriority over all administrative expenses and liens on unencumbered assets or junior liens on encumbered ones (§364(c)), and finally a **priming lien** ahead of existing liens (§364(d)). A priming lien is available only if credit cannot be obtained otherwise and the primed lender is *adequately protected* (§361) against any decline in the value of its collateral. Protection comes as cash payments, replacement liens or, if it later proves inadequate, a §507(b) superpriority claim.
+The ladder Theo drew is §364: administrative priority (§364(b)), then superpriority over all administrative expenses and liens on unencumbered assets or junior liens on encumbered ones (§364(c)), and finally a **priming lien** ahead of existing liens (§364(d)). A priming lien is available only if credit cannot be obtained otherwise and the primed lender is *adequately protected* (§361) against any decline in the value of its collateral. Protection comes as cash payments, replacement liens or, if it later proves inadequate, a §507(b) superpriority claim.
 
 > **[SOURCE EXTRACTION]** *Moyer_Distressed_Debt_Analysis p.98:* "to avoid the risk of being primed, many prepetition secured lenders will offer to become DIP lenders. One benefit of becoming a DIP lender is that the prepetition lenders are sometimes able to effectively convert their prepetition claim into a postpetition claim in a process commonly referred to as a rollup."
 >
@@ -299,17 +387,11 @@ The transfer is zero when $W \ge F$: rolling up an oversecured claim costs nobod
 
 ### Two exits: the §363 sale and the plan
 
-**The sale path.** Section 363(b) lets the debtor sell assets outside the ordinary course with court approval, free and clear of liens and claims (§363(f)), with the liens attaching to the proceeds. A secured lender may *credit bid* its claim (§363(k)), though a court can limit a credit bid "for cause." The usual process is a stalking-horse purchase agreement with a break-up fee and expense reimbursement, then bidding procedures, an auction and a sale hearing. Kaz asks whether the stalking horse is the horse doing the stalking or the horse being stalked. "Both," Mags says. "It sets the floor, and everyone else hunts it." Kaz considers this. "So the break-up fee is a premium paid to the bidder for writing a public floor." It is, and it is priced like one: the debtor pays a few percent to buy a put on its own sale price from the one bidder willing to go first. A sale that leaves a pile of cash and no plan cannot be distributed out of priority order without consent; the Supreme Court said so in *Jevic* (2017).
+**The sale path.** Section 363(b) lets the debtor sell assets outside the ordinary course with court approval, free and clear of liens and claims (§363(f)), with the liens attaching to the proceeds. A secured lender may *credit bid* its claim (§363(k)), though a court can limit a credit bid "for cause." The usual process is a stalking-horse purchase agreement with a break-up fee and expense reimbursement (the put on its own sale price that Kaz priced in the replay), then bidding procedures, an auction and a sale hearing. A sale that leaves a pile of cash and no plan cannot be distributed out of priority order without consent; the Supreme Court said so in *Jevic* (2017).
 
 **The plan path.** The debtor has the exclusive right to file a plan for 120 days after the order for relief (§1121(b)). If its plan has not been accepted by every impaired class within 180 days, any party in interest may file one (§1121(c)(3)). The court may extend these periods, but never beyond 18 and 20 months (§1121(d)(2)), and it may shorten them for cause. A creditor group's motion to terminate exclusivity is therefore one of the most informative entries on a docket (§25.7.2). The plan travels with a **disclosure statement**, which needs court approval as containing "adequate information" (§1125) before anyone may solicit votes after the petition. Notice of the disclosure-statement and confirmation hearings runs 28 days (Rule 2002(b)). Votes are tallied by the rules of §12B.3.
 
-**Confirmation** (§1129(a)) requires, among other things:
-
-- **(a)(7) best interests:** every holder in an impaired class who did not accept receives at least what a Chapter 7 liquidation would pay. Per holder, that is a floor: a put struck at liquidation value.
-- **(a)(8):** every class accepts or is unimpaired. Failing that, the plan must satisfy the cramdown rules of §1129(b) (§12B.6).
-- **(a)(9):** administrative and priority claims, 503(b)(9) claims among them, are paid in full in cash on the effective date unless the holder agrees otherwise.
-- **(a)(10):** at least one impaired class, not counting insiders, accepts.
-- **(a)(11) feasibility:** confirmation is not likely to be followed by liquidation or another reorganization.
+**Confirmation** (§1129(a)) requires, among other things, the five tests Theo walked against Saks in Beat 3: best interests, a per-holder put struck at liquidation value ((a)(7)); acceptance by every class or else cramdown ((a)(8)); cash on the effective date for administrative and priority claims ((a)(9)); one accepting impaired class that is not an insider ((a)(10)); and feasibility ((a)(11)).
 
 After confirmation comes the **effective date**, the state that requires exit financing, regulatory approvals and other conditions precedent. On that date the discharge takes effect (§1141), distributions begin, and the claims-reconciliation machinery of §12B.8 keeps running, often for years, through a plan administrator or a litigation trust. Figure 12-B.2 lays the case's clocks on one day axis.
 

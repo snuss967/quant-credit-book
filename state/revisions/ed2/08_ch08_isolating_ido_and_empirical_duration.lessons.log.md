@@ -1,0 +1,74 @@
+# Lessons Pass (Edition 2): Chapter 8
+
+*Editor: lessons editor, Edition 2. File: `book_src/08_ch08_isolating_ido_and_empirical_duration.md` (1,233 lines at start). Inputs read: `state/user_directives_ed2.md` (item 12), `state/reviews/ed2/u2_lessons.md` (lessons 1–16 and the orchestrator ruling on lesson 1), `state/reviews/ed2/u2_quality_read.md` §§(b)–(d), the Ch 1 table in `state/reviews/ed2/u2_fixes_ch01_05_06.md`, `state/cast_bible.md` (Ch 8, 8-D, C5, C7), `state/style_bible.md` §8, `state/rv_thread.md`, `state/rv_pair_book.md`, `state/reviews/ed2/applied_factcheck_ch08_14.md` (Trend Watch wording). Verify report carries `STATUS: COMPLETE`. Line numbers below refer to the file at the start of this pass; every paragraph is one line, so re-grep the quoted phrase before editing.*
+
+## (a) Metric, before
+
+`python3 tools/prescriptiveness.py --pre 9ac1c379053d9d0254e9d524d9a40efdec4a2c71 book_src/08_ch08_isolating_ido_and_empirical_duration.md`
+
+| ver | words | bullets% | modal | imper | rule | dialog | mathgently | seat |
+| :-- | --: | --: | --: | --: | --: | --: | --: | --: |
+| pre (Ed 1) | 14,882 | 11.7 | 2.9 | 1.7 | 0.7 | 8.9 | 0 | 0 |
+| before this pass | 31,765 | 9.0 | 2.7 | 1.7 | 0.5 | 9.9 | 7 | 3 |
+
+Growth 31,765 / 14,882 = **2.13×** against the 1.6–1.9× target (23,811–28,276 words). `wc -w` 33,311. Section word counts (awk): §8.7 case studies 5,130; §8.9 engine 4,548; §8.6 3,672; §8.2 3,606; §8.3 3,067; §8.8 2,854; §8.5 2,533; §8.10 Debrief 2,428; §8.4 2,193; §8.1 2,079; cold open 1,084 (inside lesson 9's 800–1,500). Per the orchestrator ruling the merges below retire duplicate tellings only; no single-telling scene, sourced case or protected item is cut to reach the number.
+
+## (b) Duplication: a new scene retelling what an older paragraph still states
+
+- [ ] B1. §8.1 L137 ("a hedge of 232 futures would have converted a modestly hedged position into a short rates bet") retells Ines's cold-open line (L16, "your Treasury hedge isn't a hedge. It's a second position"). Survives: the cold open; L137 keeps the 34-cent question and a pointer to §8.8.
+- [ ] B2. §8.2 L227 annotation ("the replay in §8.7 sits the desk down at that table") and L241 ("The replay in §8.7 sits Theo down at this table") point to the same replay twice. Survives: L241; L227 keeps a bare §8.7 pointer.
+- [ ] B3. §8.2 slope box (L159) and L165 run the same arithmetic on Ben Dor's B numbers (ρ −0.56, σ_s 2.2%, σ_y 6.4 bp → −0.19% per bp, ℓ ≈ −19), which is also Exercise 1(a)'s input set. Survives: L165 (the derivation's telling); the box gets its own round numbers (see D2) and L165 drops "(the box's cloud)".
+- [ ] B4. §8.3 Alltel: the p.211 annotation (L381) restates the scene's two readings, Ines's bucket rule ("H is a function of rating bucket ... rating transition treated as a jump") and Theo/Mags's ("moved with the capital structure, not with the cash flows"). Survives: the scene; the annotation keeps only the new idea (the Chapter 13 priming early-warning feature).
+- [ ] B5. §8.7 Case A coda (L794) retells the Slok note quoted in the protected §8.2 Trend Watch (L257: 3 Dec 2022, "down 10% so far in 2022", attributed to duration, HY lost money on rates). Survives: the Trend Watch (protected); the coda points to it and keeps Ines putting it on the screen and Mags's reply.
+- [ ] B6. §8.7 Case A: the regime alarm firing in Q1 2022 is told at L758 and again at L798, where it is followed by a detached rule ("The desk's working rule is blunter ... hedge at least the full analytical duration"). Survives: L758; the rule moves into the scene as Ines's line at the decision point after Mags's "I'd have killed for a *screen*" (lesson 5); L798 keeps Theo's sticky-note line and the Chapter 10 pointer.
+- [ ] B7. Two-instrument hedge mechanics told four times: SVB L834 (Ines reads the four lines), L844 (grading: "the futures took the rate leg ... the CDX protection took the market part"), Case C L890 ("the futures took the rates, the CDX took the market's spread move, and what was left was the book against the index"), §8.8 L945 (the expository statement with DTS_i/DTS_CDX sizing and Ines's mandate line). Survives: L834 (scene) and L945 (exposition, sizing, mandate); L844 and L890 keep one clause each.
+- [ ] B8. §8.7 Case C: the three stretches of 2–11 April told in Table 8.3's "What the hedge did" column, L888's last sentence ("wrong on the first two days, right on the next one, and wrong again"), L890's grading arithmetic and Ines's hand history (L892). Survives: the table and L890's arithmetic; L888 drops its last sentence; Ines's hand history keeps its closing line only. L890's Ira Jersey sentence repeats two Resource Graph entries; cut (URL stays in the Graph).
+- [ ] B9. §8.6 Ways This Blows Up (L691) item (1) gives Ben Dor's 2008 numbers (37.5 bp, 87.3 bp) that the p.386 extraction quotes two paragraphs later (L695). Survives: the extraction (protected); item (1) keeps the pre-2008 baselines (5.0 and 12.1 bp), which only it carries, and points down.
+- [ ] B10. §8.8 four subtractions: the cold-open bond's numbers are told inside steps 1, 2 and 4 (L908 seventy cents, L913 −1.2% × 0.248 = 28 cents, L924 six cents), then again in the "answered" table (L930–939) and Figure 8.5. Survives: the table (with its inputs line) and the figure; steps 1, 2 and 4 lose their per-step arithmetic; step 3 keeps "the whisper was close to zero" (the table has no row for it).
+- [ ] B11. §8.8 L989 "Ask the three questions of the whole book ..." is a post-scene summary of Twelve Residuals (removes/remains/leaks), a fourth telling after Marcus, Wen and Dov. Survives: the scene; its last sentence ("idio is whatever the hedge leaves") becomes the scene's closing line.
+- [ ] B12. §8.8 L959 restates PB-03's construction in full ("long one credit, short another, matched on market-value DTS, the leftover beta trimmed in CDX, the leftover duration sold in Treasury futures"). Survives: §8.4's box; L959 points to it in a clause.
+- [ ] B13. Listing openings retell their sections: 8.1 (L1051, "A dropped minus sign ... foots, and hands the residual twice the error" = §8.1 Ways item 1); 8.3 (L1069, Ben Dor near zero vs FRED 2026 near one = §8.2 Trend Watch); 8.4 (L1079, September 2009 trading counts = §8.5 L467); 8.5 (L1089, two-year at +400 vs four-year at +200 = §8.4 L389 and the p.50 annotation); 8.6 (L1099, "At 2:58 ... could not short 'the market spread factor'" = §8.6 L580); 8.7 (L1109, Collin-Dufresne–Goldstein–Martin's common factor = §8.8 L902). Survives: the sections; each listing opens instead with the chapter moment that needed it (lesson 12): Kaz's drawer list; Elif's `hbucket_monthly`; Kaz's Wednesday Dimson run; the pod PM's orange line; Theo's four windows; Wen's Tuesday panel and Kaz's month-end slide.
+- [ ] B14. Duplicate Specs (lesson 11): §8.9 "Specification for AI Implementation" (L1033–1047: Module, Schemas, Hedge objective, Guards) repeats the §8.10 Spec line for line. Survives: the §8.10 Spec, gaining the two lines only §8.9 carries (one trading calendar; gross-budget check on `abs(h).sum()`) and the instrument sign list; §8.9 keeps "What ROBO built from the vague version", the sanity-check list (the Spec's TESTS line points to it) and a pointer.
+
+## (c) Templates and detached judgment paragraphs
+
+- [ ] C1. Cold open L68: syllabus sentence ("By the end of this chapter you will be able to split ..., to hedge ..., and to say ..."). Recast as the chapter answering the sticky note, without "you will be able to".
+- [ ] C2. Enumerators inside paragraphs (lesson 4): L141 annotation ("two hidden choices. First ... Second ..."), L329 annotation ("Two departures for 2026. First ... Second ..."), L1005 IDO ledger ("The first is ... The second is ... The third is ..."), L1119 Ways box ("kinder than the market in three ways"). Recast as prose; keep every point.
+- [ ] C3. Listing explanations on the U1 template (lesson 12): "Do not mistake it for" (L1055), "Use it every/on/these/when ..." (L1065, L1075, L1085, L1095, L1105), "The edge case that bites" ×7 (L1055, L1065, L1075, L1085, L1095, L1105, L1115), "Run it after" (L1115). Recast each in desk voice; keep every fact (shared RNG, 11.1 vs 0.111 yield, single-spread `lstsq`, `desmooth` start-up and root product, `dts_lag` promise, put bounds sign, whole-sample PCA look-ahead); where a scene already shows the point (Kaz's 2022 window for pooling across a sign change; §8.5's equity lag), point to it.
+- [ ] C4. Poker Table (L243) ends by restating itself ("If you have a view that spreads tighten when rates rise, the empirical hedge pays you nothing for being right" after "You were right, and you got paid nothing"). Keep "Pick the hedge that matches the bet you meant to make"; cut the repeat.
+
+## (d) Boxes
+
+Count at start: 7 Math, Gently (L78 tangent and bend, L159 regression slope, L295 memoryless clock, L391 spreads move in percent, L471 three envelopes, L618 ridge, L917 common whisper) in 31,765 words: inside the cap (≤10; ≤1 per 1,200 words), none adjacent. Runs of boxed elements: six runs of two (L139/143, L225/229, L453/457, L531/535, L555/559, L668/672), none of three or more. But three boxes repeat a concept whose first load-bearing box lives in an earlier chapter (lesson 6).
+
+- [ ] D1. Demote to one-to-two-sentence glosses with pointers, keeping each box's tiny number where the chapter uses it: L78 tangent and bend (owned by Ch 4-B §4B.3 "Duration is a slope" and §4B.4 convexity; keep 4.1 × 0.0018 = 0.74% ≈ 70¢ and the third-of-a-cent bend that explains the table's 0); L295 memoryless clock (owned by Ch 5 §5.3.3 and Ch 6 §6.1.4; keep e^{-0.21} ≈ 0.81 and the "quieter job" sentence); L391 spreads move in percent (owned by Ch 1 §1.4 "Additive moves and proportional moves" and Ch 1-B §1B.2 "Beta, residual, and why the ruler is DTS"; the DTS = 0.09 → 0.79% number moves into L411, which now says "the box above ran it"; L395 "The box makes two claims" becomes a plain statement).
+- [ ] D2. Kept boxes that reuse an exercise's or the derivation's numbers (lesson 7): L159 slope box uses Exercise 1(a)'s ρ, σ_s, σ_y and opens by re-defining a regression slope (Ch 1 §1.4's box) → point back to Ch 1 for "what a slope is", keep the ρσ_s/σ_y factoring and the orthogonal miss, switch to round numbers (ρ −0.5, σ_s 2%, σ_y 5 bp); L471 envelopes box uses the derivation's θ = (0.5, 0.3, 0.2) and prints Scholes–Williams's 0.8, which is Exercise 3's answer → switch to 60/25/15 (0.6, 0.85, 1.0; marked volatility ≈ 0.67) and drop the Scholes–Williams aside (Figure 8.3's caption and the listing paragraph carry 0.49/0.81/1.005).
+- [ ] D3. Update the Finder table's "Intuition (box)" cells for the three demoted boxes to point at the owning chapters. Re-run the box scan after D1–D2: expect four Math, Gently (§8.2, §8.5, §8.6, §8.8), none adjacent, no run above two.
+
+## (e) Research-note leaks and fiction labels
+
+- [ ] E1. Leak strings in non-protected text: L602 "*(approx.; check each venue's methodology)*"; L774 "*(approx.; secondary data summaries)*"; L782 "*(approx.; illustrative sizing on the secondary spread path)*"; L1190 "(paraphrased in the text; the transcript is machine-made)"; L1193 "Show and topic only, no episode verified: *ReSolve Riffs* ...; *Odd Lots* on the 2022 bond sell-off" (channel-level, no URL). Hedge the first four in reader voice; cut L1193 and log it for U3 in `state/open_items_ed2.md`. No "CHECK" fact flags (the four `CHECK` hits are the `CHECKS` dict). L257's "secondary summaries" is the fact-checked Trend Watch wording (applied_factcheck C1) and stays. L701's "should be checked against CME's own documentation" sits inside the protected Trend Watch; recast to reader voice without changing any fact.
+- [ ] E2. Fiction labels missing at the top of three desk beats that mix invented dialogue with sourced numbers: §8.5 the equity-lag printout (L543), §8.6 the four windows (L584; ETF and contract facts sourced), §8.8 the month-end meeting (L995). Add one italic label each.
+
+## (f) Reference layer
+
+- [ ] F1. The Finder table already heads the Debrief (eight rows, the five columns). Add one row for the regime alarm (rolling 60-day ρ sign change), the rule retired from L798 by B6, and the D3 pointer updates.
+- [ ] F2. Long scenes are already `####` headings (L726, L802, L953). Decision points are italic cards with no heading: add `#### Decision point:` headings before the cards at L736 (the close of Friday 31 December 2021), L814 (7 a.m., Thursday 9 March 2023) and L868 (the close, Friday 4 April 2025), matching Ch 1–3 and 7.
+
+## (g) Cast-bible contradictions
+
+- [ ] G1. §8.3 L323: Kaz repeats the Ch 1 fulcrum misread ("the fulcrum security is the one where the hedge ratio pivots through zero?" = Ch 1's "the tranche with zero duration"). C7 canon: one misread per term at first appearance; later uses are callbacks Kaz pre-empts. Recast as a pre-empted callback ("Not a duration. I was told.") that still asks the zero-hedge-ratio question, so Mags's "accidentally right" and Exercise 2 ("Kaz now claims ...") still land.
+- [ ] G2. Checked, no edit: Mags in 1994 ("the desk I joined two years later", C5), at a winding-down fund in 2022 (C5), her SVBFG holdco memories referenced not retold (Ch 6); Theo watched April 2025 from a PJT conference room, no mandate; Kaz on the desk in April 2025 (Ch 14: by Jan 2025) and they/them throughout; Dov, Wen, Marcus as in the Ch 8 and 8-D additions; PB-03 a 2020 replay closed in Ch 24. Noted for the bible: the month-end "small room with the blind that does not close" (L993) is Theo's desk's room, as in Ch 8-B's post-mortem; Ch 8-D also puts a broken-blind room at Vantress (open item, not this chapter's). Ch 10's 16 Oct 7:20 a.m. April 2025 replay (trend sleeve) and this chapter's April 2025 hedge card (late October) are two different cards; compatible.
+- [ ] G3. Record the pass in `state/cast_bible.md` (Ch 8 additions): the fulcrum callback (C7 applied) and the room note.
+
+## (h) Relative-value beat
+
+- [ ] H1. `state/rv_thread.md` assigns Ch 8 "Long Scene (new §8.8 subsection) + PB-03 opened in §8.4". Both are present (`> **The Pair.**` PB-03 box at L447; "Twelve Residuals" at L953) and `state/rv_pair_book.md` already carries PB-03 and the book-level ρ_resid line (0.28, 29 Sep 2026). No beat to write; confirm after edits that no PB-03 number or the 0.28 changed.
+
+## Out of scope, noted
+
+- The three per-section Deep-Dive Resource Graphs (§8.2, §8.5, §8.6) repeat many entries of the Debrief's consolidated Graph (Pflueger and Jersey three times each). Resource Graphs are U3 territory and carry verified URLs; left as they are.
+
+## Fix log
+
+(Items are ticked above as they are fixed, each with a ten-word note.)

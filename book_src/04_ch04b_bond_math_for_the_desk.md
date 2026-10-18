@@ -46,7 +46,7 @@ Ines did not take a side. She took an index card from the stack she keeps by the
 
 "Due when?"
 
-"Seven-forty tomorrow. Before Kaz rebuilds the columns." She picked up her coffee. "If you write it after, you'll write whatever Kaz built."
+"Six-thirty tomorrow. Before Kaz rebuilds the columns." She picked up her coffee. "If you write it after, you'll write whatever Kaz built."
 
 **By the end of this chapter you will be able to** build every number on that row, and every number behind it, from one list of cash flows and one curve: price and accrued, yield, the five durations, the three things "convexity" means, DV01, CS01 and DTS, the eight spreads, OAS on a calibrated lattice, and the make-whole. You will also be able to say which of them are the pot and which are counting conventions, and to ship `bondmath.py`, which Chapters 5, 8, 9, 10, 12, 15 and 19 import; the capabilities come back as the Finder table at the top of the Desk Debrief (§4B.10).
 
@@ -541,6 +541,16 @@ The yield-to-worst is 8.35%, to the par call. Within a window, if the call price
 
 > **Poker Table.** "Yield-to-worst," says Ines, "is putting the other player on the nuts every hand. It's a fine way to never lose more than you expected, and a terrible way to price, because he doesn't have the nuts every hand. Sometimes rates go up and the call is worthless. OAS is playing against his whole range." Her hand history: on bonds bought at YTW and later called, the markout at the call date is the difference between the YTW you were quoted and the OAS you were really earning. On bonds where rates rose instead, the call expired and you were paid the full coupon. Price the range.
 
+Theo had spent six years on the other side of these redemptions, and he had an objection. "None of the issuers I worked for called a bond because rates fell. They called to get out of a covenant, or to refinance ahead of a sale, or because a buyer wanted the debt gone at closing. The rate saving was the last bullet on the slide."
+
+"Then your issuers had a reason to call that isn't on anybody's tree," said Ines. "Put them on a range anyway. Just remember the range was drawn by someone who's never met them."
+
+"Everything you listed ends up in the OAS," said Kaz, "as residual. The tree prices the rate reason. Whatever is left over gets called a spread."
+
+"So an OAS is half a rate model and half my old job."
+
+"That," said Kaz, "is the most honest definition of a residual I've heard on this floor." Veronesi says the same thing in a textbook's voice in the extraction below the lattice.
+
 ### A lattice small enough to do by hand
 
 Take a three-year annual-pay 9% bond, callable at 101 (ex-coupon) at years one and two, on a binomial short-rate tree with risk-neutral probability $\tfrac12$ and spread $s$ added to every node's rate. To keep the hand arithmetic honest, discount with simple annual rates, $1/(1 + r + s)$, on a tree that is not fitted to any curve: $r = 4\%$ today; 5% or 3% at year one; 6%, 4% or 2% at year two. Work backward at $s = 5\%$.
@@ -551,20 +561,30 @@ Now invert. If the market price is 99.67, the OAS is 500bp *by construction*: it
 
 ### The production lattice
 
-Replace the toy with Ho–Lee: short rates $r_{i,j} = \theta_i + \sigma\sqrt{\Delta t}\,(2j - i)$ at step $i$, node $j = 0, \dots, i$, with normal volatility $\sigma$ (decimal per root-year) and continuous discounting $e^{-(r_{i,j} + s)\Delta t}$. Fit $\theta_i$ so that the tree reprices every zero-coupon bond. With Arrow–Debreu prices $Q_{i,j}$ (the value today of \$1 paid at node $(i,j)$, starting from $Q_{0,0} = 1$) and $x_{i,j} = \sigma\sqrt{\Delta t}(2j-i)$,
+> **Math, Gently.** *What "risk-neutral" means, on one branch.* The ½ on every branch of these trees is nobody's forecast. Here is why. Take a one-step tree: the one-year rate is 4% today and will be 6% or 2% next year, and the market prices a \$100 cheque due in two years at 92.49. At year one that cheque is worth $100/1.06 = 94.34$ if rates went up and $100/1.02 = 98.04$ if they went down. Weight the branches ½ and ½, discount at today's 4%, and you get $\tfrac12(94.34 + 98.04)/1.04 = 92.49$, the market's price. Weight them 70/30 because you are sure rates are going up and you get $(0.7 \times 94.34 + 0.3 \times 98.04)/1.04 = 91.78$, and your tree now disagrees by 0.71 with a bond anyone can buy. A tree that misprices the bonds you would hedge with misprices every option built from them, and the gap is a free lunch for whoever trades against the tree. So the probabilities are chosen to make the tree agree with the curve, and an option priced on it is priced by the cost of building it out of bonds, whatever anyone believes about rates. That is all "risk-neutral" ($\mathbb{Q}$) means: the probabilities that make prices consistent, not the ones that describe the world ($\mathbb{P}$). The production tree does the same fitting the other way round, holding the ½ fixed and moving the rates, next.
+
+Replace the toy with Ho–Lee: short rates $r_{i,j} = \theta_i + \sigma\sqrt{\Delta t}\,(2j - i)$ at step $i$, node $j = 0, \dots, i$, with normal volatility $\sigma$ (decimal per root-year) and continuous discounting $e^{-(r_{i,j} + s)\Delta t}$. The drifts $\theta_i$ are fitted, one step at a time, so that the tree reprices every zero-coupon bond on today's curve; the fitting needs no root-finding and is the derivation just below. Price backward from maturity: at each node the continuation value is $e^{-(r_{i,j}+s)\Delta t}\,\tfrac12(V_{i+1,j} + V_{i+1,j+1})$; on an exercise date the issuer replaces it with $\min(\text{continuation}, K(t_i))$; then add the coupon paid at $t_i$. The OAS is the root in $s$ of $V_{0,0}(s) = P^{\text{dirty}}$, unique because $V_{0,0}$ is decreasing in $s$.
+
+#### The Full Derivation: fitting the tree
+
+With Arrow–Debreu prices $Q_{i,j}$ (the value today of \$1 paid at node $(i,j)$, starting from $Q_{0,0} = 1$) and $x_{i,j} = \sigma\sqrt{\Delta t}(2j-i)$, the step-$i$ drift must make the tree's price of a zero maturing at step $i+1$ equal the curve's:
 
 $$
 \sum_j Q_{i,j}\,e^{-(\theta_i + x_{i,j})\Delta t} = d\big((i+1)\Delta t\big) \;\Longrightarrow\; \theta_i = -\frac{1}{\Delta t}\ln\frac{d\big((i+1)\Delta t\big)}{\sum_j Q_{i,j}\,e^{-x_{i,j}\Delta t}},
 $$
 
-then propagate $Q_{i+1,k} = \tfrac12 Q_{i,k}e^{-r_{i,k}\Delta t} + \tfrac12 Q_{i,k-1}e^{-r_{i,k-1}\Delta t}$. No root-finding is needed. Price backward from maturity: at each node the continuation value is $e^{-(r_{i,j}+s)\Delta t}\,\tfrac12(V_{i+1,j} + V_{i+1,j+1})$; on an exercise date the issuer replaces it with $\min(\text{continuation}, K(t_i))$; then add the coupon paid at $t_i$. The OAS is the root in $s$ of $V_{0,0}(s) = P^{\text{dirty}}$, unique because $V_{0,0}$ is decreasing in $s$.
+then propagate $Q_{i+1,k} = \tfrac12 Q_{i,k}e^{-r_{i,k}\Delta t} + \tfrac12 Q_{i,k-1}e^{-r_{i,k-1}\Delta t}$. Each step's $\theta_i$ is a closed form in quantities already known, so no root-finding is needed: the tree is peeled forward exactly as the curve was bootstrapped in §4B.6.
 
-Four identities make this lattice testable, and each is an assertion in §4B.9:
+#### The four asserts
+
+Kaz wrote four identities as asserts before the lattice was allowed to price anything real, on the theory that a tree you cannot test is a tree you cannot trust. Each is one of the tests in §4B.9:
 
 1. **No option, no adjustment.** Without a call, the value of a cash flow at $t_n$ is $e^{-s t_n}\sum_j Q_{n,j} = e^{-s t_n}d(t_n)$, so the OAS of a bullet equals its continuous Z-spread exactly.
 2. **Zero volatility is yield-to-worst.** As $\sigma \to 0$ the path is deterministic, backward induction picks the issuer's best date, and the OAS equals the spread to worst. YTW is the zero-volatility OAS written as a yield.
 3. **Curve shift equals spread shift (in Ho–Lee, with fixed strikes).** A parallel shift $h$ of the zero curve shifts every $\theta_i$ by exactly $h$ (substitute $d(t)e^{-ht}$ above and induct), so it is the same perturbation as $s \to s + h$, and $D^{\text{eff}} = D^{\text{OAS}}$. In a lognormal tree (Black–Derman–Toy, Black–Karasinski) the identity fails, and the desk stores both numbers (the `oasd` of §19.2 is the second).
 4. **Volatility lowers OAS.** With any exercise and $\sigma > 0$ the callable is worth less than the bullet at the same spread, so $\text{OAS} < Z$, and more volatility makes the gap wider.
+
+The first one failed at 1:10 on Wednesday morning. A plain bullet, no call anywhere, came back from the lattice with an OAS three basis points wider than its continuous Z-spread: three basis points of option cost, with the wrong sign, on a bond that had no option. Kaz spent half an hour suspecting the Arrow–Debreu propagation, which was innocent. The culprit was a convention. The tree charged the spread one step at a time as a simple discount, $1/(1 + s\,\Delta t)$, while the Z-spread solver used $e^{-s t}$, and the two differ by about $\tfrac12 s^2 \Delta t$ a year: at 804bp on a monthly grid, $\tfrac12 \times 0.0804^2/12 \approx 2.7$bp. Same compounding gap as the cold open's G and Z, one level down, inside a loop. The fix was one line. The assert stayed, and it is the reason the OAS row of Table 4B.1 can be read as Z and not merely compared with it.
 
 > **[SOURCE EXTRACTION]** *Veronesi_Fixed_Income_Securities p.467:* "It is also important to realize that the size of the OAS depends on the model used to compute it: It is possible that different term structure models may generate different OAS, in the same way they generate different values of options even when using the same inputs."
 >
