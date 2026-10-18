@@ -30,8 +30,10 @@ def main():
     ap.add_argument("--target", type=float, default=88.0)
     ap.add_argument("--slack", type=float, default=0.6)
     ap.add_argument("--check-every", type=int, default=180)
+    ap.add_argument("--cap-only", action="store_true", help="alert only at NEAR_CAP (throughput mode)")
+    ap.add_argument("--settle", type=int, default=600)
     args = ap.parse_args()
-    time.sleep(600)  # let the current mix settle before judging it
+    time.sleep(args.settle)  # let the current mix settle before judging it
     slack_since = None
     while True:
         used, rate, left, out = reading()
@@ -40,6 +42,9 @@ def main():
         if used >= args.target - 6:
             print(f"NEAR_CAP used={used:.1f}% rate={rate:.2f}%/min left={left:.0f}min\n{out}")
             return
+        if args.cap_only:
+            time.sleep(args.check_every)
+            continue
         if projected > args.target + 4 and rate > 1.3 * sustainable:
             print(f"TOO_FAST used={used:.1f}% rate={rate:.2f}%/min sustainable={sustainable:.2f}%/min projected={projected:.0f}%\n{out}")
             return

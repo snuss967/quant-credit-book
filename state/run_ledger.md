@@ -14,9 +14,12 @@ Usage reached 30% of the window in about 15 minutes, about 75% of it from Fable 
 
 | Run | Owns | Status |
 | :--- | :--- | :--- |
-| writers-paced-A | Ch 1, 5, 13, 15 (resume), then 2, 6, 9, 11, 14, 16, 18, 20, 22, 24, 27 | running (2 writers) |
-| writers-paced-B | Ch 3, 7, 26 (resume), then 4, 8, 10, 12, 17, 19, 21, 23, 25, 28 | running (2 writers) |
-| pace-guard | Background usage guard (target 88%) | running |
+| writers-paced-A/B | First paced pool | stopped 00:02 (finished Ch 1, 3, 7) |
+| throughput-W1 | Ch 5 (resume), 2, 9, 14, 19, 23, 28 | running (2 writers) |
+| throughput-W2 | Ch 13 (resume), 4, 10, 16, 20, 24 | running (2 writers) |
+| throughput-W3 | Ch 15 (resume), 6, 11, 17, 21, 25 | running (2 writers) |
+| throughput-W4 | Ch 26 (resume), 8, 12, 18, 22, 27 | running (2 writers) |
+| pace-guard | Cap-only guard; alarms at 84% | running |
 
 ## Edition 1: superseded runs (restarted 2026-10-17 23:40 UTC, stopped 23:48 for pacing)
 
