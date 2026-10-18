@@ -97,11 +97,11 @@ Adjacent pairs: l.669/671, l.685/687. Runs over two: l.281-291 (Math, Gently, Wa
 - [x] 12. §15.4.1: replay framing for the three-prospectus evening (C1); D1; Kaz pronoun (C8). Done: evening moved to replay night; quote points back; Kaz they.
 - [x] 13. §15.4.2: fold seesaw box into the duration paragraph and move its Full Derivation below it (D8); cut "When the gauge" to one Ines beat (D3-D6); Ways points to scenes. Done: seesaw in text; derivation follows; Ines ruler beat; Ways points back.
 - [x] 14. §15.4.2: D7 (delete l.536, trim l.527). Done: handbag line merged into four-deal paragraph; duplicate deleted.
-- [ ] 15. §15.4 listing: rewrite template, merge l.566 (D6).
-- [ ] 16. ICE scene: fiction label at top; promote decision point; trim; give Mags the "why is it pending" check (from l.713).
-- [ ] 17. §15.5.2: merge survival into the censoring box; demote distributions, Cox and Bayes boxes; delete l.713 (D12-D15).
-- [ ] 18. §15.5 listing: trim ROBO repeat; rewrite template; D15 pointer.
-- [ ] 19. §15.7: demote jump box into the text; Spirit fiction label; D17 cuts; cut the appended judgment (l.821).
+- [x] 15. §15.4 listing: rewrite template, merge l.566 (D6). Done: pipeline motive kept; tol guard tied to Ines's ruler.
+- [x] 16. ICE scene: fiction label at top; promote decision point; trim; give Mags the "why is it pending" check (from l.713). Done: label on top; card promoted; Mags's 'tell me why' check added.
+- [x] 17. §15.5.2: merge survival into the censoring box; demote distributions, Cox and Bayes boxes; delete l.713 (D12-D15). Done: survival folded into censoring box; Cox, Weibull, Bayes now prose; template gone.
+- [x] 18. §15.5 listing: trim ROBO repeat; rewrite template; D15 pointer. Done: ROBO repeat cut; Hana's singular-column event; 2.1 points back.
+- [x] 19. §15.7: demote jump box into the text; Spirit fiction label; D17 cuts; cut the appended judgment (l.821). Done: jump box into prose; label added; three Spirit repeats cut.
 - [ ] 20. §15.8 WBD: replay label (C1); D18, D19; leak at l.845; promote decision point; trim.
 - [ ] 21. Quant-Shop Life: rename Priya (C11); remove the USB-stick VP (C1); trim.
 - [ ] 22. Desk Debrief: Finder table; replay sticky note (C1).

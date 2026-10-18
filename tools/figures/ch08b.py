@@ -252,9 +252,9 @@ def fig_mixture_traps():
     a.plot([2.6], [p1], "o", color=INK, markersize=4, zorder=6)
     a.annotate("default plateau:\n0.099% of days,\nmean loss $7.56mm", (2.6, p1), xytext=(0, -8),
                textcoords="offset points", ha="center", va="top", fontsize=8.3, color=INK_2)
-    x_dot = 1.07
-    a.plot([x_dot], [3e-5], "o", color=C_SHORT, markersize=4, zorder=6)
-    a.annotate("one Gaussian,\nvariance folded in", (x_dot, 3e-5), xytext=(-6, 0),
+    x_dot = 1.03
+    a.plot([x_dot], [5e-5], "o", color=C_SHORT, markersize=4, zorder=6)
+    a.annotate("one Gaussian,\nvariance folded in", (x_dot, 5e-5), xytext=(-6, 0),
                textcoords="offset points", ha="right", va="center", fontsize=8.3, color=INK_2)
     # ---- right: ES on the mixture divided by sqrt(h) times the one-day ES
     hs = np.arange(1, 15.01, 0.25)
@@ -478,7 +478,7 @@ def fig_limit_sheet():
              labels=["Friday", "Monday"], loc="upper left", bbox_to_anchor=(0.0, 1.0), frameon=False,
              fontsize=8.3, handlelength=1.1, handleheight=0.9)
     b.annotate("40 bonds, 12 issuers\nmoved, nothing traded;\n10-day ES +11%",
-               (0.36, 0.98), ha="left", va="center", fontsize=8.3, color=INK_2)
+               (0.30, 0.98), ha="left", va="center", fontsize=8.1, color=INK_2)
     return finish(fig, "ch08b_limit_sheet")
 
 

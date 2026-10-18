@@ -37,30 +37,30 @@ Growth 32,426 / 12,505 = **2.59×** against the 1.6–1.9× target (20,008–23,
 
 ## (c) Templates and detached judgment paragraphs
 
-- [ ] C1. L75 "By the end of this chapter you will be able to: ..." (a syllabus). Replace with two sentences that point to Theo's four-factor sheet at 4:50; pose the 7:41 decision as a card at L71 (lesson 9).
-- [ ] C2. L103 "Two facts make this useful. First, ... Second, ..." Recast without enumerators.
-- [ ] C3. L155 "three questions ... First: ... Second: ... Third: ..." (a table in costume). Dramatize the denominator row only; the amend-the-amendment and lien-release rows become rows in the §13.2.1 feature table.
-- [ ] C4. L185 annotation "Two modern departures matter. First, ... Second, ..." Recast (annotation only; extraction untouched).
-- [ ] C5. L381 "When to reach for the digital put, and when it breaks" and L383. Delete: the large-minority break is L291's three regions, $\kappa$ is L274, the sale is Boardriders (§13.1) and Lumen (§13.5), lien restoration is Incora (§13.9). One Finder row.
-- [ ] C6. L627 "When to reach for the capped forward ... It breaks in three ways ... A seasoned reader checks". Delete: valuation clause is L586, guarantee leverage L623, integrated steps L625; fold STG's 12 Jan 2026 filing into L625. One Finder row.
-- [ ] C7. L745–747 "When the clearing engine is the right tool ... The seasoned habit". Delete; give the judgment ("it cannot tell you which one the judge picks") to Kaz in the L739 scene; the single-obligor point goes to the Finder.
-- [ ] C8. L794 label "When to trust the PRS, and when not to" and L796 "three things break the level. The first ... The second ... The third". Keep Ines's mirror scene under a narrative label; L796 becomes her ranking-versus-level line with pointers.
-- [ ] C9. Listing prose: L832, L844, L856 "Use it when ... Do not use it ... The edge case that bites" (×3) and openers L824, L836, L848 that retell sections. Open each with the chapter moment; state each edge case once.
-- [ ] C10. L448 bold label "When the knapsack is the wrong model" → a narrative label for the Robertshaw story (content kept).
+- [x] C1. L75 "By the end of this chapter you will be able to: ..." (a syllabus). Replace with two sentences that point to Theo's four-factor sheet at 4:50; pose the 7:41 decision as a card at L71 (lesson 9). **Done:** Syllabus replaced by four-factor foreshadowing; decision card added at 7:41.
+- [x] C2. L103 "Two facts make this useful. First, ... Second, ..." Recast without enumerators. **Done:** Enumerators removed; two clauses now joined by 'because' and 'and'.
+- [x] C3. L155 "three questions ... First: ... Second: ... Third: ..." (a table in costume). Dramatize the denominator row only; the amend-the-amendment and lien-release rows become rows in the §13.2.1 feature table. **Done:** Denominator dramatized for Larkspur; three new feature-table rows added.
+- [x] C4. L185 annotation "Two modern departures matter. First, ... Second, ..." Recast (annotation only; extraction untouched). **Done:** Annotation's 'First... Second' recast; extraction text left untouched.
+- [x] C5. L381 "When to reach for the digital put, and when it breaks" and L383. Delete: the large-minority break is L291's three regions, $\kappa$ is L274, the sale is Boardriders (§13.1) and Lumen (§13.5), lien restoration is Incora (§13.9). One Finder row. **Done:** Digital-put judgment paragraph deleted; each break already told elsewhere.
+- [x] C6. L627 "When to reach for the capped forward ... It breaks in three ways ... A seasoned reader checks". Delete: valuation clause is L586, guarantee leverage L623, integrated steps L625; fold STG's 12 Jan 2026 filing into L625. One Finder row. **Done:** Capped-forward judgment deleted; STG's 12 January 2026 filing moved.
+- [x] C7. L745–747 "When the clearing engine is the right tool ... The seasoned habit". Delete; give the judgment ("it cannot tell you which one the judge picks") to Kaz in the L739 scene; the single-obligor point goes to the Finder. **Done:** Both engine judgment paragraphs deleted; Kaz says it in scene.
+- [x] C8. L794 label "When to trust the PRS, and when not to" and L796 "three things break the level. The first ... The second ... The third". Keep Ines's mirror scene under a narrative label; L796 becomes her ranking-versus-level line with pointers. **Done:** Label now 'The Monday printout'; L796 rewritten under B19.
+- [x] C9. Listing prose: L832, L844, L856 "Use it when ... Do not use it ... The edge case that bites" (×3) and openers L824, L836, L848 that retell sections. Open each with the chapter moment; state each edge case once. **Done:** Seven listing paragraphs open on scene moments; templates and retellings gone.
+- [x] C10. L448 bold label "When the knapsack is the wrong model" → a narrative label for the Robertshaw story (content kept). **Done:** Bold label renamed 'Robertshaw: the bag that packed itself'; content kept.
 
 ## (d) Boxes
 
 Count: 14 Math, Gently (L101, 113, 254, 270, 400, 414, 436, 452, 516, 534, 671, 772, 776, 780) against a cap of 10 and one per 1,200 words. Clusters: §13.4 has four in about 3,000 words; §13.8 has three in about 1,500, with L772 and L776 one paragraph apart; §13.3 has L254 and L270 within 600 words. Runs of more than two boxed elements: none (maximum two: L400–402, L456–458, L514–516, L554–556); re-check after the CLO box moves.
 
-- [ ] D1. L113 distributions/lognormal: Ch 6 §6.1.1 (and Ch 5) owns it. One-sentence gloss with the 0.6%-below-zero number and a pointer.
-- [ ] D2. L270 partial expectations, ½s², risk-neutral: ½σ² belongs to Ch 5 §5.2.3 and Ch 6 §6.1, P/Q to Ch 5 §5.1.1 and Ch 6 §6.3. Fold the partial-expectation picture and its 2.3-point number into L268/L272; pointers.
-- [ ] D3. L400 payoff matrix: L398 already states weak dominance. Fold the 80/60/25 number into L398; delete the box.
-- [ ] D4. L414 knapsack: repeats L412. Fold greedy-overpays and the 4,096 bags into L412; delete the box.
-- [ ] D5. L671 fixed points: first load-bearing use in the book (Ch 16 and 25 come later). Keep; cut the slope-0.5 restatement (with B12).
-- [ ] D6. L772 hazard and Poisson clock: Ch 3, Ch 5 §5.1.5 and Ch 6 §6.1.4 own it. Gloss with the 10% → 0.105 number.
-- [ ] D7. L776 logistic link: Ch 5 §5.5.3 owns the logit. Gloss with 10.0% versus 10.5%.
-- [ ] D8. L780 Beta prior and shrinkage: Ch 5 §5.5.2 and Ch 3 §3.3.4 own them. Gloss with Beta(2, 38) and a thin-data pull.
-- [ ] D9. L436 auction box repeats L434's Bertrand sentence; trim, and vary the sign-off. Leaves 7 boxes: L101, 254, 436, 452, 516, 534, 671.
+- [x] D1. L113 distributions/lognormal: Ch 6 §6.1.1 (and Ch 5) owns it. One-sentence gloss with the 0.6%-below-zero number and a pointer. **Done:** Box now three-sentence gloss; 0.6% number kept; points to §6.1.1.
+- [x] D2. L270 partial expectations, ½s², risk-neutral: ½σ² belongs to Ch 5 §5.2.3 and Ch 6 §6.1, P/Q to Ch 5 §5.1.1 and Ch 6 §6.3. Fold the partial-expectation picture and its 2.3-point number into L268/L272; pointers. **Done:** Partial expectation folded into prose with 2.3-point arithmetic; pointers added.
+- [x] D3. L400 payoff matrix: L398 already states weak dominance. Fold the 80/60/25 number into L398; delete the box. **Done:** Box deleted; 80/60/25 cents now inside L398's weak-dominance sentence.
+- [x] D4. L414 knapsack: repeats L412. Fold greedy-overpays and the 4,096 bags into L412; delete the box. **Done:** Box deleted; greedy, 4,096 bags and trillion folded into L412.
+- [x] D5. L671 fixed points: first load-bearing use in the book (Ch 16 and 25 come later). Keep; cut the slope-0.5 restatement (with B12). **Done:** Kept as first load-bearing use; trimmed under B12, ends 'next'.
+- [x] D6. L772 hazard and Poisson clock: Ch 3, Ch 5 §5.1.5 and Ch 6 §6.1.4 own it. Gloss with the 10% → 0.105 number. **Done:** Hazard box now gloss: 10% PRS equals 0.105 clicks; pointers.
+- [x] D7. L776 logistic link: Ch 5 §5.5.3 owns the logit. Gloss with 10.0% versus 10.5%. **Done:** Logistic box deleted; 10.0% versus 10.5% folded into L774 paragraph.
+- [x] D8. L780 Beta prior and shrinkage: Ch 5 §5.5.2 and Ch 3 §3.3.4 own them. Gloss with Beta(2, 38) and a thin-data pull. **Done:** Beta box now gloss: Beta(2,38), 9-in-30 shrinks to 16%.
+- [x] D9. L436 auction box repeats L434's Bertrand sentence; trim, and vary the sign-off. Leaves 7 boxes: L101, 254, 436, 452, 516, 534, 671. **Done:** Bertrand restatement shortened; sign-off removed. Seven boxes remain; no runs over two.
 
 ## (e) Research-note leaks and fiction labels
 

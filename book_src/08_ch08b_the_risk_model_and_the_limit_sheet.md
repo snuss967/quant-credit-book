@@ -231,7 +231,9 @@ Mix the two and no single scaling works. Take a book with a one-day Gaussian sta
 
 *Table 8-B.2. One concentrated jump and a Gaussian book (illustrative). Over one day the jump is rarer than 1% and VaR cannot see it; over ten days its probability is about 1.5%, and it becomes the VaR.*
 
-The ten-day VaR is not three times the one-day VaR but nearly eight times, because over ten days the default has moved inside the worst 1%, and the ten-day ES is 30% above the shortcut. With a smaller jump the error flips sign: for an \$8mm JTD at 0.2% a day the shortcut *overstates* the ten-day ES (Exercise 2). The shortcut is neither conservative nor aggressive. It is a different model from the one the desk runs.
+The ten-day VaR is not three times the one-day VaR but nearly eight times, because over ten days the default has moved inside the worst 1%, and the ten-day ES is 30% above the shortcut. With a smaller jump the error flips sign: for an \$8mm JTD at 0.2% a day the shortcut *overstates* the ten-day ES (Exercise 2). The shortcut is neither conservative nor aggressive. It is a different model from the one the desk runs. Figure 8-B.2 shows both traps, Halvorsen's one-day loss on the left and the square-root shortcut on the right.
+
+![Figure 8-B.2: The two traps of §8B.6. Left: the chance that Halvorsen's one-day loss exceeds x; its 0.099% default plateau (mean loss 7.56mm) sits below the 1% line, so VaR (0.28) sees only the Gaussian wobble while ES (1.04) sees the plateau, and folding the jump into one Gaussian gives a VaR of 0.62 that matches no real day. Right: the mixture's ES and VaR against the square-root-of-time shortcut, which understates the Table 8-B.2 book and overstates the Exercise 2 book. Illustrative: computed from the §8B.5 Halvorsen inputs and the parameters of Table 8-B.2 and Exercise 2.](assets/figures/ch08b_mixture_traps.png)
 
 The engine computes the layers by different methods because they are different objects. The Gaussian layer is historical simulation: today's exposures times the past few years of factor returns, summed in $h$-day blocks rather than scaled by $\sqrt{h}$ (which keeps whatever autocorrelation the factors really have), plus idiosyncratic draws from the buckets. The jump layer is Monte Carlo: on each path every issuer's coin is flipped with probability $1 - e^{-\lambda^{\mathbb{P}}_i h}$, defaulted issuers draw recoveries from their Beta legs, and the JTD losses are added to that path's Gaussian draw. A 99% ES from 100,000 paths rests on the worst 1,000, and an issuer with a 0.1% one-day default probability defaults on only about 100 paths, so its contribution is noisy. The engine prints the standard error beside the number (§7-B.8) and switches to importance sampling, raising default probabilities in the simulation and reweighting, when the tail rests on too few draws.
 
@@ -261,7 +263,7 @@ The SVB row is the one in which both layers fail together. The rates leg of a he
 
 Each scenario runs on today's book and reports two columns, Gaussian and jump, which the committee sees separately before anyone adds them.
 
-![Figure 8-B.2: The book's P&L under each scenario of the stress library, with the factor-and-idiosyncratic loss and the jump-to-default overlay shown as separate bars. The constructed hedge-basis scenario is the worst on the factor bar; SVB and the 2026 decompression are the worst on the jump bar. Illustrative book.](assets/figures/ch08b_stress_library.png)
+![Figure 8-B.3: The book's P&L under each scenario of the stress library, with the factor-and-idiosyncratic loss and the jump-to-default overlay shown as separate bars. The constructed hedge-basis scenario is the worst on the factor bar; SVB and the 2026 decompression are the worst on the jump bar. Illustrative book.](assets/figures/ch08b_stress_library.png)
 
 The Ad Hoc Group, by letter of counsel, asked to be added to the risk factor list "as a matter of record." Kaz read the letter twice and replied that the Group was already in the model, as the jump layer. The Group's counsel replied that it reserved all rights.
 
@@ -289,7 +291,9 @@ $$
 \text{LR}_{\text{ind}} = -2\ln\frac{(1-\hat\pi)^{\,n_{00}+n_{10}}\,\hat\pi^{\,n_{01}+n_{11}}}{(1-\hat\pi_{01})^{\,n_{00}}\,\hat\pi_{01}^{\,n_{01}}\,(1-\hat\pi_{11})^{\,n_{10}}\,\hat\pi_{11}^{\,n_{11}}} = 13.49 \sim \chi^2_1, \qquad \hat\pi = \frac{n_{01}+n_{11}}{n_{00}+n_{01}+n_{10}+n_{11}},
 $$
 
-and conditional coverage, the sum, is $\text{LR}_{\text{cc}} = 5.50 + 13.49 = 18.98 \sim \chi^2_2$, against a 1% critical value of 9.21. The model fails, and the clustering says why: its memory is too long. A 60-day half-life took weeks to notice that October was not September, and a bucket assignment that updated monthly took longer still.
+and conditional coverage, the sum, is $\text{LR}_{\text{cc}} = 5.50 + 13.49 = 18.98 \sim \chi^2_2$, against a 1% critical value of 9.21. The model fails, and the clustering says why: its memory is too long. A 60-day half-life took weeks to notice that October was not September, and a bucket assignment that updated monthly took longer still. Figure 8-B.4 shows the count and the clusters.
+
+![Figure 8-B.4: Seven exceptions in 250 days is a 1.4% outcome for a correct 99% model, so Kupiec rejects at 5%, and the seven came in clusters: an exception made another 26 times as likely (43% against 1.7%), which Christoffersen's independence test rejects. Illustrative: the binomial and both statistics are computed from the chapter's counts (n00 = 238, n01 = 4, n10 = 4, n11 = 3); the calendar positions of the exceptions are drawn for illustration.](assets/figures/ch08b_backtest_exceptions.png)
 
 The backtest also runs bucket by bucket, as realized residual volatility over predicted, where a ratio near one means the bucket is honest. In October the sub-80 bucket's ratio was 2.6: the price-bucket bug of §8B.4, caught by its own statistics.
 
@@ -347,7 +351,7 @@ Early in the project ROBO had been asked to "set sensible limits." It set every 
 
 The committee's first question that Monday was the one every risk committee asks. "Why is the ten-day ES 11% higher than on Friday, when the desk sold bonds on Friday?" The model's change report had the answer at 7:30. On Friday evening one agency had finished a sector review of building products and downgraded twelve issuers, and the desk's rating convention (the middle of three agency ratings) had moved forty bonds from the B cells to the CCC cells, each with a larger cell sensitivity, a higher idiosyncratic bucket and a tighter JTD limit. Nothing had traded. The same bonds now meant something different, the DTS loading of §8B.2 working as designed. The committee chair wrote one word on her pad, which Theo later learned was *good*.
 
-![Figure 8-B.3: Tuesday's risk report grown into the limit sheet: each line's exposure against its soft and hard thresholds, with the three breaches of the cold open marked and the forty-bond migration shown as the before-and-after change in the CCC cells. Illustrative.](assets/figures/ch08b_limit_sheet.png)
+![Figure 8-B.5: Tuesday's risk report grown into the limit sheet: each line's exposure against its soft and hard thresholds, with the three breaches of the cold open marked and the forty-bond migration shown as the before-and-after change in the CCC cells. Illustrative.](assets/figures/ch08b_limit_sheet.png)
 
 *Builds on:* §4B.5 (CS01 and DV01), §16.2 (forced sellers), §21.4 (the OC test as a limit), §28.5 (days-to-liquidate). *Used in:* §28.9 (the dashboard's risk-versus-limits panel), Chapter 3-B (the 7:30 risk pack), Chapter 8-C.
 

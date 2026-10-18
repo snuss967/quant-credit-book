@@ -67,6 +67,7 @@ Greek chorus. Always "represented by counsel," speaks in unison, mostly Rule 201
 
 - **Hana**: junior quant, 18 months out of a master's program, owns `vol_60d` and the risk-data pipeline (Ch 5, 14).
 - **Priya**: three roles (!C11). **Dov, Rafe, Sunita** (ex-RSSG): Ch 28 PMs. **Harlan**: event-driven book (Ch 16).
+- **Dana** (she/her): second-year data analyst at a fictional systematic credit fund, not on the desk; spends a week reconciling a holder registry (Ch 16 §16.2.4 vignette). In Ch 16's cold open Kaz pre-empts the "fulcrum" misread as a callback ("I know it isn't a duration"), per C7; the old "gymnastics" reading is gone.
 - **Mags's unseen men.** Steve (dealer, Ch 2; seller, Ch 3), Sal (borrow desk 1998, Ch 9; dealer, Ch 10), Lenny (data, App B), Gerry (risk report, Ch 8-B).
 - **Fictional issuers.** Halvorsen (!C9), Brambleworth Packaging (Ch 3, 3-B), Larkspur Foam (Ch 7-B, 13), Quillfeather Packaging (Ch 14), Calloway Industrial (Ch 22), Halyard Holdings (Ch 7-B, 25).
 

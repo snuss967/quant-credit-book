@@ -104,6 +104,6 @@ Growth 34641 / 15148 = **2.29×**, against the 1.6–1.9× target (24,237–28,7
 - [x] 17. §16.8.1: week label; demote half-variance and mixture boxes into Kaz's dialogue and a gloss (b24, b25, d, e). Note: Kaz's coin 2.27/0.44/1.36 on board; mixture one gloss.
 - [x] 18. §16.8.2: retire the Kelly When-to; double-Kelly line to Ines; Full Derivation duplicate; Mags's "whole fund" line (b26, b27, c, g). Note: Ines carries double-Kelly; Mags "whole book", quarterly committee.
 - [x] 19. §16.8.3: one dramatized pair row; narration between Poker Table and dealer Seat; trim the dealer seat; rewrite the Listing 16.5 sentence (b28, c, d). Note: Mags's 30-versus-38 row dramatized; table carries four others.
-- [ ] 20. §16.9: Finder table at the top of the Desk Debrief (f).
-- [ ] 21. State: `state/research/open_items_ch16_ed2.md`; Dana in the cast bible (e, g).
+- [x] 20. §16.9: Finder table at the top of the Desk Debrief (f). Note: ten rows, concept to listing; judgments point to scenes.
+- [x] 21. State: `state/research/open_items_ch16_ed2.md`; Dana in the cast bible (e, g). Note: six open items logged; Dana and fulcrum callback recorded.
 - [ ] 22. Metric after; final greps (templates, leaks, box count, `$$` balance, last line).

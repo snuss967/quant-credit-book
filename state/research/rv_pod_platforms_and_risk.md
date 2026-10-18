@@ -311,3 +311,38 @@ Source keys [S#] and [P#] are defined in Sources. "Q" = my computation from the 
 | Q | Fee waterfall reproduces Mercer: net 0.48%/3.68%/6.88%/10.08%/13.28% at gross 5/10/15/20/25% | section 3.2 |
 | Q | Single HY long at 98 / 40 recovery: JTD $23.2m on $40m long = 11.6% of $200m capital | section 4.4 |
 
+## 9. Podcast episodes and posts (verified 18 Oct 2026)
+
+Each page returned HTTP 200 this session; dates are publisher metadata (Omny `PublishedUtc`, feed `pubDate`, or the on-page date). T = machine transcript read on podscripts.co (**CHECK** before quoting).
+
+| # | Title (show) | Date | URL | Use |
+| :-- | :-- | :-- | :-- | :-- |
+| P1 | "How the Rise of 'Pod Shops' Is Reshaping the Way Markets Trade" (*Odd Lots*, Krishna Kumar) T | 2024-02-26 | https://omny.fm/shows/odd-lots/022624-odd-lots-krishna-kumar-master-1 | Stop logic, LP 10% vs pod 3%; credit RV named as a sleeve |
+| P2 | "How to Succeed at Multi-Strategy Hedge Funds" (*Odd Lots*, Paleologo) T | 2024-05-20 | https://omny.fm/shows/odd-lots/how-to-succeed-at-multi-strategy-hedge-funds | Pass-through, factor x-ray, three risk jobs |
+| P3 | "How the Hottest Hedge Funds on Wall Street Really Manage Risk" (*Odd Lots*, Falk-Wallace) T | 2024-07-25 | https://omny.fm/shows/odd-lots/how-the-hottest-hedge-funds-on-wall-street-really | Leverage on the residual |
+| P4 | "How Hedge Funds Discover the Next Superstar Trader" (*Odd Lots*, Joe Peta) | 2024-09-05 | https://omny.fm/shows/odd-lots/how-hedge-funds-discover-the-next-superstar-trader | Talent selection |
+| P5 | "The Math That Explains How Multi-Strategy Hedge Funds Make Money" (*Odd Lots*, Dan Morillo) T | 2024-10-07 | https://omny.fm/shows/odd-lots/100724-odd-lots-dan-morillo-master | Sharpe cap, netting arithmetic, centre book |
+| P6 | "Why Asset Allocators Love Multi-Strategy Hedge Funds" (*Odd Lots*, Ronan Cosgrave, Albourne) T | 2025-05-26 | https://omny.fm/shows/odd-lots/why-asset-allocators-love-multi-strategy-hedge-funds | Netting cost, leverage needed to pay the layer |
+| P7 | "Giuseppe Paleologo on Quant Investing at Multi-Strat Hedge Funds" (*Odd Lots*, live 12 Jun 2025) | 2025-06-21 | https://omny.fm/shows/odd-lots/giuseppe-paleologo-on-quant-investing-at-multi-strat-hedge-funds | Quant role at a platform |
+| P8 | "How You Get and Actually Keep a Job at a Multi-Strat Hedge Fund" (*Odd Lots*, Brian Yelvington) T | 2025-07-07 | https://omny.fm/shows/odd-lots/how-you-get-and-actually-keep-a-job-at-a-multi-strat-hedge-fund | Stop numbers, scope, credit-trader lore |
+| P9 | "Gappy Paleologo" (*Money Stuff: The Podcast*) | 2025-07-04 | https://omny.fm/shows/money-stuff-the-podcast/gappy-paleologo | Factor models, garden leave |
+| P10 | "Loads of Vultures: Funds, Agents, Bets" (*Money Stuff: The Podcast*) | 2025-10-03 | https://omny.fm/shows/money-stuff-the-podcast/loads-of-vultures-funds-agents-bets | Multistrategy talent market |
+| P11 | "Bespokeness: AI, Passthrough, UST" (*Money Stuff: The Podcast*) | 2025-02-14 | https://omny.fm/shows/money-stuff-the-podcast/bespokeness-ai-passthrough-ust | Pass-through, "paying for hedge funds' photocopies" |
+| P12 | "Multi-Strategy Platform at BAM" (*Capital Allocators* EP.341, Dmitry Balyasny) | 2023-10-02 | https://www.capitalallocators.com/podcast/multi-strategy-platform-at-bam/ | Founder on pods, risk, talent |
+| P13 | "Inside Mercer Consulting" (*Capital Allocators* EP.345) | 2023-10-23 | https://www.capitalallocators.com/podcast/inside-mercer-consulting/ | Source of the overcrowding quote in Bloomberg, 30 Nov 2023 |
+| P14 | "Multi-Strategy Hedge Fund First Principles at Jain Global" (*Capital Allocators* EP.487) | 2026-02-16 | https://www.capitalallocators.com/podcast/multi-strategy-hedge-fund-first-principles-at-jain-global/ | A new platform's design |
+| P15 | "Disintermediating Pod Shops" (*Capital Allocators* EP.501) | 2026-05-11 | https://www.capitalallocators.com/podcast/disintermediating-pod-shops/ | Pod access for asset owners; capacity |
+| P16 | "Credit Microcycles at Diameter" (*Capital Allocators* EP.484) | 2026-02-02 | https://www.capitalallocators.com/podcast/credit-microcycles-at-diameter/ | Credit-focused hedge fund and dislocation |
+| P17 | "Private Credit Concerns" (*Capital Allocators* EP.494, Saba) | 2026-03-30 | https://www.capitalallocators.com/podcast/private-credit-concerns/ | Credit and equity dislocation trading |
+| P18 | "People, Process, and Fixed Income Arbitrage at Bracebridge" (*Capital Allocators* EP.517) | 2026-09-28 | https://www.capitalallocators.com/podcast/people-process-and-fixed-income-arbitrage-at-bracebridge/ | Fixed-income RV shop |
+| P19 | "Jeff Rosenberg - The Past, Present, and Future of Systematic Fixed Income (S7E19)" (*Flirting with Models*) | 2025-08-18 | https://www.flirtingwithmodels.com/episodes/8V74zBaN4jN | Chapter "Equity vs. fixed income: Comparing the pod shop model" |
+| P20 | "Inside a Long/Short Credit Hedge Fund: Sizing, Shorts and LME Risk" (*Fixed + Floating*, E18, Ironshield) | 2026-08-04 | https://podcasters.spotify.com/pod/show/fixedfloating/episodes/Inside-a-LongShort-Credit-Hedge-Fund-Sizing--Shorts-and-LME-Risk--Frits-Lieuw-Kie-Song-Ironshield-Capital-e3mncab ; post https://www.fixedandfloating.com/p/how-a-longshort-credit-hedge-fund | Sizing formula, shorts, perimeter |
+| P21 | "ALO25: Master Your Hedge Fund Allocation ft. John Jackson" (*Top Traders Unplugged*, Mercer) | 2024-08-14 | https://www.toptradersunplugged.com/captivate-podcast/alo25-master-your-hedge-fund-allocation-ft-john-jackson/ | Allocator's view |
+| P22 | "Boaz Weinstein" (*Money Stuff: The Podcast*) | 2026-03-19 | https://omny.fm/shows/money-stuff-the-podcast/boaz-weinstein | Credit and closed-end-fund dislocation |
+| B1 | "Bond Voyage: Industrialised alpha meets fixed income fragility" (Aviva Investors) | 2026-01-13 | https://www.avivainvestors.com/en-dk/views/aiq-investment-thinking/2026/01/bond-voyage/ | Pods in credit and rates plumbing |
+| B2 | "A New Generation Pod Shop" (*The Hedge Fund Journal*, Nickel Digital) | 2026-04-21 | https://thehedgefundjournal.com/nickel-digital-multi-manager-strategy-pod-shop/ | First-loss deferral, no centre book |
+| B3 | "Covenant Lite #8: Point72 and other Multistrats Enter the Private Credit Game" | 2025-02-23 | https://covenantlite.substack.com/p/covenant-lite-8-point72-and-other | Pass-through vs illiquid assets |
+| B4 | "Crowding Isn't One Trade. March Proved It." (Resonanz Capital) | 2026-07-13 | https://resonanzcapital.com/insights/crowding-isnt-one-trade.-march-proved-it | Secondary; **CHECK** |
+
+Also checked: *Flirting with Models* S7E11, "Giuseppe Paleologo - Multi-Manager Hedge Funds & Thinking Deeply About Simple Things", 2024-09-02, confirmed in the publisher feed only (episode page not located); *Odd Lots* "How Banks Turned Into Giant Synthetic Hedge Funds" (2025-02-21) is in the feed but I did not open it. Paywalled previews opened: Rupak Ghose, "Citadel is from Mars and Millennium is from Venus" (30 Mar 2025, https://rupakghose.substack.com/p/citadel-is-from-mars-and-millennium) and two Quant Enthusiasts posts.
+
