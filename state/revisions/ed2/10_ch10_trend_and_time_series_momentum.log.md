@@ -24,3 +24,5 @@
 - [x] 22. [10.9.1] MATH-GENTLY #10: Poisson jumps and variance adding. NOTE: hundred coins; beta 0.23 from Fig 10.2 data; logged.
 - [x] 23. [10.10 Lab] Open listing explanations with scene moments (10.1, 10.6). NOTE: all six open on scene moments; templates varied; Spec untouched.
 - [x] 24. [10.11 Debrief] Finder table + return to 4:02 p.m. card. NOTE: ten-row Finder; card read Friday 4:02, ungraded; bullets kept.
+
+<!-- STATUS: COMPLETE -->

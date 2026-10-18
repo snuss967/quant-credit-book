@@ -1,9 +1,9 @@
 {
- "note": "Stopped at the user's ~88% rule at 10:43 UTC (window 09:30-14:30). Resume each with Workflow({scriptPath, resumeFromRunId: runId, args}); agents are durable.",
+ "note": "Restarted 14:35 UTC (window 14:30-19:30). Resume with Workflow({scriptPath, resumeFromRunId, args}).",
  "runs": [
   {
    "name": "part-III-a",
-   "task": "wfbnk1w8c",
+   "task": "wkhblxney",
    "runId": "wf_b92bbb19-5ce",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
    "args": {
@@ -24,7 +24,7 @@
   },
   {
    "name": "part-III-b",
-   "task": "wigxyoqqm",
+   "task": "whczu9vre",
    "runId": "wf_bb2c1276-ba3",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
    "args": {
@@ -45,7 +45,7 @@
   },
   {
    "name": "part-III-c",
-   "task": "w7gcrqovx",
+   "task": "wra0xl4y8",
    "runId": "wf_5b507d53-841",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
    "args": {
@@ -66,7 +66,7 @@
   },
   {
    "name": "part-VII-u2",
-   "task": "wsvmbvdds",
+   "task": "wi1wgwn1n",
    "runId": "wf_803b0227-6ae",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
    "args": {
@@ -84,7 +84,7 @@
   },
   {
    "name": "lessons-rv-3-2-7",
-   "task": "w0qspn5hq",
+   "task": "wlidanyfd",
    "runId": "wf_6ac67a00-da1",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
    "args": {
@@ -102,7 +102,7 @@
   },
   {
    "name": "rv-partIV",
-   "task": "w91qhlhr4",
+   "task": "w47z641x7",
    "runId": "wf_3d4b0e7d-d18",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
    "args": {
@@ -120,7 +120,7 @@
   },
   {
    "name": "u2-V-a",
-   "task": "wc9sar225",
+   "task": "wektlkdhs",
    "runId": "wf_cbf26479-589",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
    "args": {
@@ -138,7 +138,7 @@
   },
   {
    "name": "u2-V-b",
-   "task": "wwl30ddf2",
+   "task": "wkrmp0n42",
    "runId": "wf_6a0bfcb4-22d",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
    "args": {
@@ -156,7 +156,7 @@
   },
   {
    "name": "u2-VI",
-   "task": "w7ocjapuq",
+   "task": "w1bwc0o4c",
    "runId": "wf_b0a1ad6d-370",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
    "args": {
@@ -174,7 +174,7 @@
   },
   {
    "name": "u2-VII-VIII",
-   "task": "w2d0b422q",
+   "task": "wrwwe5p20",
    "runId": "wf_555f9532-3bf",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
    "args": {
@@ -193,7 +193,7 @@
   },
   {
    "name": "lessons-rv-1",
-   "task": "w18khryre",
+   "task": "wm5vr9zt0",
    "runId": "wf_8a985a3f-9b4",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
    "args": {
@@ -209,7 +209,7 @@
   },
   {
    "name": "lessons-4",
-   "task": "w4d5ja0o2",
+   "task": "wdxhee1hj",
    "runId": "wf_a057e3f8-944",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
    "args": {
@@ -221,6 +221,87 @@
      "lessons"
     ]
    }
+  },
+  {
+   "name": "rv-newfiles",
+   "task": "wvsjasszl",
+   "runId": "wf_c551929c-6b5",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "03_ch03b_your_first_year_on_the_desk",
+     "08_ch08b_the_risk_model_and_the_limit_sheet",
+     "08_ch08c_the_morning_explain_pnl_attribution",
+     "12_ch12c_plan_valuation_dip_and_exit_as_derivatives"
+    ],
+    "stages": [
+     "rv"
+    ]
+   }
+  },
+  {
+   "name": "figs-8d-3-5-6",
+   "task": "wwq74cnva",
+   "runId": "wf_badbe5ce-057",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "08_ch08d_the_pair_book_long_one_credit_short_another",
+     "03_ch03_pjt_rssg_cognitive_bridge",
+     "05_ch05_credit_probability_distributions",
+     "06_ch06_merton_and_intensity_models"
+    ],
+    "stages": [
+     "figures",
+     "figcheck",
+     "resgraph"
+    ]
+   }
+  },
+  {
+   "name": "u2-primers-a",
+   "task": "wuxvihes2",
+   "runId": "wf_bdb3d70f-3ee",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "04_ch04b_bond_math_for_the_desk",
+     "06_ch06b_options_and_measures_for_credit"
+    ],
+    "stages": [
+     "brief",
+     "revise",
+     "verify"
+    ]
+   }
+  },
+  {
+   "name": "u2-primers-b",
+   "task": "w25wiy3wc",
+   "runId": "wf_65b018b4-c2b",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "07_ch07b_statistics_for_credit_panels",
+     "12_ch12b_the_restructuring_process_as_a_state_machine"
+    ],
+    "stages": [
+     "brief",
+     "revise",
+     "verify"
+    ]
+   }
+  },
+  {
+   "name": "newfiles-4d-2b-0002",
+   "task": "wewa62ywq",
+   "runId": "wf_d222286e-517",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/u3_research_and_new_chapters.js",
+   "args": "items [] + chapters 04_ch04d, 02_ch02b, 00_02 (see the 14:35 launch in the ledger)"
   }
  ]
 }

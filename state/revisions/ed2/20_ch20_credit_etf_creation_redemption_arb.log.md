@@ -20,4 +20,6 @@
 - [x] 18. [§20.7] LIST-TO-NARRATIVE. — Three warnings now one paragraph; all contents kept.
 - [x] 19. [§20.8 Desk Debrief] Finder table. — Eight-row Finder: equation, box, scene, Listing 20.1 block.
 - [x] 20. [whole chapter] WHEN-TO-APPLY inside scenes. — Band, staleness, psi, QP, runway judged by characters in scenes.
-- [ ] 21. [whole chapter] CHECK hygiene.
+- [x] 21. [whole chapter] CHECK hygiene. — No CHECKs remain; eight hedges logged in open_items_ch20_ed2.md.
+
+<!-- STATUS: COMPLETE -->

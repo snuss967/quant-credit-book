@@ -252,3 +252,7 @@ Status at the stop:
 7. Synthesis files 00_02, 4-D, 2-B; App A §A.10 dictionary; App Z last.
 8. Lessons pass for chapters revised before the lessons existed and not yet passed.
 9. Build and send the PDF.
+
+## Restart 14:35 UTC (window 14:30–19:30)
+
+All 12 stopped runs were resumed. New launches: rv for 3-B, 8-B, 8-C, 12-C (wvsjasszl); figures→figcheck→resgraph for 8-D, Ch 3, 5, 6 (wwq74cnva); U2 for primers 4-B and 6-B (wuxvihes2) and 7-B and 12-B (w25wiy3wc); synthesis files 4-D (Getting the Seat, with the pod-interview RV pitch), 2-B (TCA, with two-leg pair costs) and 00_02 (How to Use This Book, with the Pair Book route) (wewa62ywq). Pace guard byptqmpjt (alarm 88%). Autosnap b8kzig7kp. Still queued: figures and resgraph for Ch 1, 2, 4, 7 once their lessons/rv passes end; App A §A.10; App Z last; the cleanup queue (Stage 7).
