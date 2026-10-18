@@ -5,7 +5,7 @@
 - [x] 3. [7-B.1 The estimator … through Errors in variables] FULL-DERIVATION-MOVE. Note: one-line (7B.1–3), Full Derivation after EIV, DRR pointer.
 - [x] 4. [new `#### Long Scene: One March, Counted Once`] NEW-SCENE. Note: 2,430 words; PB-03 card; pointer §9.6.1 not §9.4 (fallen angels live there).
 - [x] 5. [7-B.1 Ways This Blows Up] LIST-TO-NARRATIVE. Note: Theo's CUSIP evening dramatized; box rows kept, row 1 shortened.
-- [ ] 6. [7-B.2 Desk framing + How much overlap] MATH-GENTLY (box 2) + WHEN-TO-APPLY.
+- [x] 6. [7-B.2] MATH-GENTLY box 2 + Full Derivation. Note: rumor box h=3; limit moved to Beat 3; Trend Watch last.
 - [ ] 7. [7-B.3 Desk framing] LIST-TO-NARRATIVE + MATH-GENTLY (box 3).
 - [ ] 8. [7-B.3 Calibration] MATH-GENTLY (box 4) + ANOTHER-SEAT.
 - [ ] 9. [7-B.4 Desk framing + Censoring and truncation] MATH-GENTLY (box 5, two parts).

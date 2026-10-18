@@ -321,7 +321,7 @@ $$
 
 For $h = 12$ the sum is $\frac{1}{144}\sum_{j=1}^{11} j^2 = \frac{506}{144} \approx 3.51$, so the multiplier is $1 + 2 \times 3.51 \approx 8.0$ against a truth of 12, and $\sqrt{12/8.0} \approx 1.22$ is the 22% by which the t-statistic stays too large. With $L = 23$ the weights become $1 - k/24$ on the same triangle, and the multiplier is about 10.0. For large $h$ with $L = h - 1$ the recovered share tends to two-thirds, which is why Kaz's $L = 59$ on sixty-day labels fell short by the same third.
 
-Kaz read the Trend Watch below off the back of Theo's printout, the one Ines had striped in green, and then read it again.
+Kaz borrowed Theo's copy of the Dickerson, Robotti and Rossetti printout that evening, found the table where every factor's premium was rebuilt hundreds of ways and its spread across the rebuilds set beside its ordinary standard error, and read it twice. The Trend Watch below has the numbers.
 
 "So the error bar has an error bar," Kaz said.
 

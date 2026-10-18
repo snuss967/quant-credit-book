@@ -43,7 +43,7 @@ def fig_effective_breadth():
         col = SEQ_BLUE(pos)
         lw = 2.4 if m == 2.25 else LW
         ax.plot(rho, 1 / (1 + (m - 1) * rho), color=col, linewidth=lw, zorder=3)
-        label_end(ax, 1.0, 1 / m, f"m = {m:g}", col, dx=6)
+        label_end(ax, 1.0, 1 / m, f"m = {m:g}" + (" bonds per issuer" if m == 1.5 else ""), col, dx=6)
     ax.plot(rho, 1 / (1 + 46 * rho), color=INK_2, linewidth=LW, linestyle=(0, (4, 3)), zorder=3)
     label_end(ax, 1.0, 1 / 47, "m = 47 (ROBO's issuer)", INK_2, dx=6)
 
@@ -53,7 +53,7 @@ def fig_effective_breadth():
     assert abs(y0 * 1800 - 960) < 1e-9
     ax.plot([r0], [y0], "o", color="white", markeredgecolor=INK, markeredgewidth=1.6, markersize=9, zorder=6)
     ax.annotate("1,800 bonds are worth 960 independent bets\n(m = 2.25, ρ = 0.7): IR 0.64 falls to 0.46",
-                (r0, y0), xytext=(0.30, 0.955), textcoords="data", ha="left", va="top", fontsize=8.5, color=INK,
+                (r0, y0), xytext=(0.30, 1.125), textcoords="data", ha="left", va="top", fontsize=8.5, color=INK,
                 arrowprops=dict(arrowstyle="-", color=INK_2, linewidth=0.9, shrinkA=2, shrinkB=6,
                                 connectionstyle="arc3,rad=0"), bbox=BACK, zorder=7)
     ax.set_xlim(0, 1)

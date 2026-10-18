@@ -70,3 +70,87 @@ Theo closed the laptop at 12:40 a.m. with one useful line written at the bottom 
 
 ![Figure 4-D.1: The funnel by business. Five columns (market maker, pod, systematic manager, bank desk, distressed fund) and six stages top to bottom (screen, puzzles, coding, pitch, portfolio, offer). Each cell names what that stage screens for in that business and the section of this book that trains it: for example, the market maker's puzzle stage screens for updating against a live counterparty (§3.2, §4D.3), the pod's pitch stage for naming the short leg and the ruler (§4D.6, Ch 8-D), the systematic manager's coding stage for point-in-time joins (§4D.8, §7.7), the bank desk's puzzle stage for "which measure?" (§4D.2), and the distressed fund's pitch stage for the plan as a distribution (§4D.10). Cells are shaded by how heavily each business weighs the stage *(illustrative composite; no firm's process)*.](assets/figures/ch04d_interview_funnel.png)
 
+## 4D.2 Monday: "In Which Measure?"
+
+The bank's credit-trading floor had the hum of a place that had been electronic for a decade and still kept a squawk box for sentimental reasons. The interview room's whiteboard had not been cleaned since someone's swap-spread trade, which was still there in three colors with an arrow labeled *why??* The interviewer ran high-yield flow, wore a fleece vest over a dress shirt, and opened without small talk.
+
+"A bond pays 100 in a year or 40 if the company defaults. Nothing in between. The market says 85. What default probability is the market quoting?"
+
+Theo did it in his head, the way he had done recovery math across a hundred boardroom tables. If $q$ is the default probability, the bond is worth $100(1-q) + 40q$, and setting that to 85 gives
+
+$$
+85 = 100 - 60\,q \quad\Longrightarrow\quad q = \frac{15}{60} = 25\%.
+$$
+
+"Twenty-five percent."
+
+"In which measure?"
+
+There was a pause long enough for the squawk box to say something about a new issue. In six years nobody had asked Theo which measure. At PJT a probability was a number you put in a sensitivity table, and the only question anyone asked about it was whether the client would accept it.
+
+What the interviewer wanted was a single sentence, and Theo found it on the way home. The 25% is the probability that makes the price fair to someone who does not care about risk. It is a *risk-neutral*, or $\mathbb{Q}$, number: the weight that balances the bond's two outcomes at the market price, with rates set to zero and one period to run. The physical, $\mathbb{P}$, probability that the company actually defaults is lower, by whatever amount the market pays people for holding a bond that can lose 60 points overnight. If the historical default rate for bonds like this one were 10% *(illustrative)*, the expected payoff in the real world would be $0.9 \times 100 + 0.1 \times 40 = 94$, and a buyer at 85 would expect to make about 10.6% for carrying the jump. The gap between 25% and 10% is not a forecasting error. It is the price of the risk.
+
+The interviewer added two follow-ups, and each one moved the number. "Rates are 4%." Then the 85 is a discounted value, and the undiscounted expectation is $85\,e^{0.04} = 88.47$, so $q = 11.53/60 = 19.2\%$: six points of "default probability" had been rates all along. "Now there's a third outcome. The company can do an exchange at 70." With three doors the price no longer pins down a default probability at all. Weights of 60% on par, 30% on the exchange and 10% on default also average to 85, and so do many other combinations. The two-point world called the bond a 25% default risk with a standard deviation of 26 points; this three-point world calls it a 10% default risk, a 40% chance of not being paid in full, and a standard deviation of 20 points (§3.1.1 and §3.1.2 do the variance bookkeeping). The price told Theo one number, the mean. Everything else was a model, and the model's most important input was whether an exchange door existed, which is a question about the credit agreement.
+
+"That last part," said the interviewer, "is why we interview bankers." Then he moved on to portfolio trading, and Theo spent the next twenty minutes being polite about it.
+
+> **Math, Gently.** *A distribution, and why one price has two sets of weights.* A distribution is a list of what can happen with a weight on each outcome, the weights adding to one. Picture a seesaw with a 40 at one end and a 100 at the other. Wherever the market puts the fulcrum, at 85, there is exactly one way to load the ends so that the seesaw balances there: three-quarters of the weight at 100 and a quarter at 40. Those balancing weights are the risk-neutral measure $\mathbb{Q}$. They are not a forecast. They are what the price *implies* if nobody needed paying for the risk. Your forecast of what will actually happen, the physical measure $\mathbb{P}$, is a second set of weights on the same two outcomes, and in credit it puts less weight on default than $\mathbb{Q}$ does, because the people who hold the jump want to be paid for it. One price, two loadings of the seesaw; the difference between them is the risk premium. Prices, hedges and relative value against CDS live in $\mathbb{Q}$; sizing, Kelly and your P&L forecast live in $\mathbb{P}$. The full version is in §5.1 and Chapter 6-B.
+
+The judgment that matters on a desk is knowing which set of weights a question wants. When the question is "what does the CDS curve say this bond is worth?", the answer is a $\mathbb{Q}$ number, and mixing in a historical default rate produces a mispricing that is really a confusion. When the question is "how much of this bond should I own?", the answer needs $\mathbb{P}$, and §4D.5 shows what happens when a $\mathbb{Q}$ number sneaks in instead. Theo would make exactly that mistake in his first week on the desk anyway (Chapter 6 has the receipt). Knowing a distinction and having it in your hands are different stages of the same education.
+
+## 4D.3 Monday, Continued: "I'll Sell You the Bond"
+
+The interviewer erased the swap-spread trade, which felt like a liberty, and drew two dots.
+
+"Forget the market. This bond is worth 100 or 40, fifty-fifty, and nobody knows which. Except some people do. One seller in five is informed and sells only if it's worth 40. Everyone else sells half the time for their own reasons: redemptions, rebalancing, a bad mood. I'm selling you the bond. What do you bid?"
+
+This one Theo knew had a name, because Ines's desk had sent him a reading list and §3.2's Glosten–Milgrom model was on it. He reasoned it through anyway, because he had learned on Sunday that he was going to be asked to.
+
+> **Math, Gently.** *Bayes as a posterior you can trade on.* Imagine a hundred days with this bond. On fifty of them it is secretly worth 40; on fifty it is worth 100. On a bad day the informed seller (one in five) always sells, and the uninformed sellers (four in five) sell half the time, so 20% + 40% = 60% of the time a sale arrives. On a good day only the uninformed sell, 40% of the time. Over the hundred days that is 30 sales on bad days and 20 on good ones. So when a sale arrives, it is a bad-day sale 30 times out of 50, or 60%, not the 50% you started with. The update came entirely from the fact that someone *chose* to sell to you. A dealer who bids the average value, 70, pays for that choice every time. The full version is in §3.2.1.
+
+So the bid, the value of the bond given that someone is selling it, is
+
+$$
+b = 0.6 \times 40 + 0.4 \times 100 = 64,
+$$
+
+six points below the mid of 70, and by the same argument for buyers the ask is 76. The spread is 12 points, and none of it is a fee. The dealer here has no inventory cost, no risk aversion and no funding bill; in the notation of (3.1) the half-spread is $\pi\sigma_V = 0.2 \times 30 = 6$. Every point of it is insurance against the one seller in five who knows.
+
+"Good. I sell you another one."
+
+Theo said 64 again, and he heard the problem as he said it. He had updated on the second sale as if it were the first, starting again from fifty-fifty when he had just spent a minute establishing that the odds were now 60–40. Each sale multiplies the odds of the bad state by the same likelihood ratio, $0.6/0.4 = 1.5$. One sale takes the odds from 1 to 1.5; a second takes them to 2.25, a posterior of $2.25/3.25 = 69\%$, and a bid of
+
+$$
+b_2 = 100 - 60 \times 0.692 = 58.5 .
+$$
+
+Forgetting the first update is the base-rate trap of §3.4.3 run in reverse: instead of ignoring the prior, he had ignored the posterior. "Most people do that," the interviewer said, with the cheerfulness of a man who had watched most people do that. Then he asked the question Theo spent the train ride on: "Does it matter if it's the same seller both times?" It does, and the answer surprised him (Exercise 3 has it): a repeat sale from one counterparty carries less fresh news than sales from two strangers, because an informed seller would have sold twice anyway.
+
+> **Poker Table.** Ines's version of this game, which Theo would hear on the desk in October, is shorter. "Every fill is a card face up. The hand history is the list of what you believed after each one." Figure 4-D.2 is that list for six sales. Against an informed seller who keeps selling, the posterior on the bad state climbs from 50% to 92% and the value of the bond falls from 70 to about 45. Against noise, sells and buys alternate and the posterior wanders around one-half. The part that surprises bankers is the width. The quote's spread is widest at fifty-fifty, where there is the most left to learn, and it *narrows* as the posterior heads toward certainty. Being hit should move the mid. It is not a reason to widen. Replay any hand on the desk's markout sheet (§3.3) and the same thing is visible: the dealer who widened after each fill paid the informed client at every step, and the dealer who moved the mid paid once.
+
+![Figure 4-D.2: The live-counterparty update. Left panel: the posterior probability that the bond is worth 40 after each of six trades, for an informed seller who sells six times (0.60, 0.69, 0.77, 0.84, 0.88, 0.92) and for a noise path of sell, buy, sell, sell, buy, buy (0.60, 0.50, 0.60, 0.69, 0.60, 0.50). Right panel: the bid and ask the dealer would quote for the next trade on each path, with the mid falling toward 45 on the informed path and the bid–ask spread *narrowing* from 12 points as the posterior moves away from one-half. Setup as in §4D.3: values 100 or 40, prior one-half, one seller in five informed, uninformed traders sell or buy with probability one-half *(illustrative)*.](assets/figures/ch04d_live_counterparty_update.png)
+
+## 4D.4 Thursday, Replayed Slowly: Make Me a Market
+
+Replay the cold open with Monday in hand, and Theo's three markets become a hand history with a diagnosis attached.
+
+His first market, 180–260, was a guess wearing a bid and an offer. A two-sided market on a number is a confidence interval with money on it, and the useful question is how often it should be wrong. The answer is not "never." An interval that never misses is too wide to trade on, and one that misses half the time is a coin toss with a spread. A reasonable target is an interval you expect to miss about one time in ten, and most people asked for one produce something much narrower. Psychologists have measured this for decades (Alpert and Raiffa's work in the 1970s and early 1980s is the classic): people's "90% intervals" miss far more often than one time in ten, because the interval feels like a claim of knowledge and narrowness feels like competence. For a document Theo had only seen on a screen, a page count he could defend at 90% would have run from something like 130 to 480 *(illustrative: a median of 250, uncertain by a factor of about 1.5 either way)*. That market is ugly. It is also honest, and an honest wide market loses less to someone who knows than a confident narrow one.
+
+His second market moved up 40 pages after a buy. That was the right direction and the wrong size. Monday's arithmetic says a single trade from someone who might be informed is evidence, and in a two-sided game against a person holding the document, the informed fraction is not one in five. It is closer to one in one. His third market widened instead of moving, which was the instinct Monday had just disproved: being lifted is news about the *level*, and widening protects you against uncertainty you have already lost.
+
+There is a second reason a market maker moves after being hit, and interviewers like to see a candidate separate it from the first. Avellaneda and Stoikov's dealer (§18.4) is risk-averse, and her reservation price slides with inventory,
+
+$$
+r^{\text{res}} = S_t - q\,\gamma\,\sigma^2\,(T - t),
+$$
+
+where $S_t$ is the mid, $q$ the inventory in lots, $\gamma$ risk aversion and $\sigma^2(T-t)$ the variance she expects to carry. Short two lots, $q = -2$, she quotes higher to get bought back in. With §18.4.2's bond numbers ($\gamma = 0.005$ per point-lot, $\sigma^2(T-t) = 1.27$ points squared for a one-week hold), two lots of inventory move the reservation price by $2 \times 0.005 \times 1.27 = 0.013$ points. That is pennies. The information update on Monday moved the value by six points on one trade. In a bond, inventory skew is the small correction and the client's information is the large one, which is why the formula needed §18.6 and §18.7 to be useful on a credit desk. A candidate who answers "make me a market" by skewing for inventory and not for information has the right formula for the wrong game.
+
+The third variant is the trap at the other end. A candidate who has been burned widens until nobody trades with him, and a market nobody trades on loses no money and learns nothing. Desks have a name for this, because the RFQ world punishes it twice: clients stop sending requests to a dealer who never wins, and a dealer who never wins has no fills to learn from. Section 18.7 prices the cost of staying at the table as a hit-ratio constraint with a shadow price per RFQ, the coupon a desk pays itself for turning up. Ines's phrasing for candidates is shorter: move the mid before you widen, and keep quoting.
+
+> **Ways This Blows Up.** *The number with a document answer.* Theo's real error in the cold open came before his first quote. A page count is not a random variable; it is a fact printed on a page, and the person asking may have the page. Credit desks meet this shape every week in a more expensive form: an RFQ on a bond whose indenture answers the question the price is asking (is the 2029 note structurally senior? does the exchange need the holder's consent?), sent by a client who has read it. The quote is a market on a number that has an answer, and the counterparty who keeps buying is telling you so. The defense is the sentence Theo eventually said out loud: name the fact that moves your number and which way, then go and read it.
+
+> **Desk Myth vs. Desk Reality.** *Myth:* the interview tests what you know. *Reality:* it tests how you update. Every game in this chapter has an answer key, and the answer key is the less interesting part of the grade.
+
+What Ines wrote on her pad, Theo found out in September, was four words: *moved late, moved right*. The desk's hiring notes, like its trade tickets, recorded the fill and the markout, and not much else.
+
