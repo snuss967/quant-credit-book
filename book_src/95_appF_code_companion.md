@@ -11142,7 +11142,7 @@ def pm_playbook_engine(book, desk):
     })
 
 
-DESK = {"nav_usd": 4e8, "dd_max": 0.075, "kappa_z": 4.0, "sharpe": 2.0, "r_min": 0.05, "mult": 5.8,
+DESK = {"nav_usd": 4e8, "dd_max": 0.075, "kappa_z": 4.0, "sharpe": 0.7, "r_min": 0.05, "mult": 5.8,
         "eta": 0.5, "stop_half": 0.05, "realized_dd": 0.01, "cash_usd": 6e7, "liquid_sleeve_usd": 1.5e8,
         "weekly_burn_usd": 8e6, "participation": 0.10, "rho_within": 0.9, "rho_across": 0.01,
         "edge_rel_se": 1.0}
