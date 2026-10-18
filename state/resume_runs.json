@@ -2,44 +2,6 @@
  "note": "Restarted 14:35 UTC (window 14:30-19:30). Resume with Workflow({scriptPath, resumeFromRunId, args}).",
  "runs": [
   {
-   "name": "figs-8d-3-5-6",
-   "task": "wwq74cnva",
-   "runId": "wf_badbe5ce-057",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "08_ch08d_the_pair_book_long_one_credit_short_another",
-     "03_ch03_pjt_rssg_cognitive_bridge",
-     "05_ch05_credit_probability_distributions",
-     "06_ch06_merton_and_intensity_models"
-    ],
-    "stages": [
-     "figures",
-     "figcheck",
-     "resgraph"
-    ]
-   }
-  },
-  {
-   "name": "u2-primers-b",
-   "task": "w25wiy3wc",
-   "runId": "wf_65b018b4-c2b",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "07_ch07b_statistics_for_credit_panels",
-     "12_ch12b_the_restructuring_process_as_a_state_machine"
-    ],
-    "stages": [
-     "brief",
-     "revise",
-     "verify"
-    ]
-   }
-  },
-  {
    "name": "missing-toc-chapters",
    "task": "wr9ksz5pq",
    "runId": "wf_88dd2b76-e50",
