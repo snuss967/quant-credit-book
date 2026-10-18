@@ -15,10 +15,15 @@ Usage reached 30% of the window in about 15 minutes, about 75% of it from Fable 
 | Run | Owns | Status |
 | :--- | :--- | :--- |
 | writers-paced-A/B | First paced pool | stopped 00:02 (finished Ch 1, 3, 7) |
-| throughput-W1 | Ch 5 (resume), 2, 9, 14, 19, 23, 28 | running (2 writers) |
-| throughput-W2 | Ch 13 (resume), 4, 10, 16, 20, 24 | running (2 writers) |
-| throughput-W3 | Ch 15 (resume), 6, 11, 17, 21, 25 | running (2 writers) |
-| throughput-W4 | Ch 26 (resume), 8, 12, 18, 22, 27 | running (2 writers) |
+| throughput (8 writers) | First throughput pool | stopped 00:11 and replaced by 16 lanes (partials on disk) |
+| wide-W1 | Ch 5, 9, 19, 28 | running |
+| wide-W2 | Ch 13, 10, 20 | running |
+| wide-W3 | Ch 15, 11, 21 | running |
+| wide-W4 | Ch 26, 12, 22 | running |
+| wide-W5 | Ch 4, 14, 23 | running |
+| wide-W6 | Ch 2, 16, 24 | running |
+| wide-W7 | Ch 6, 17, 25 | running |
+| wide-W8 | Ch 8, 18, 27 | running |
 | pace-guard | Cap-only guard; alarms at 84% | running |
 
 ## Edition 1: superseded runs (restarted 2026-10-17 23:40 UTC, stopped 23:48 for pacing)
