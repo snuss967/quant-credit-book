@@ -33,7 +33,7 @@ quant-credit-book/
 │   ├── pdf_index.json         # per-book TOC and page counts
 │   ├── iteration_log.jsonl    # one line per loop iteration
 │   └── pdf_pages/             # derived page text (gitignored; rebuilt by index_pdfs.py)
-├── book_src/                  # modular chapters, compiled in lexicographic order
+├── book_src/                  # modular chapters, compiled in lexicographic order; lib/ holds the shared modules (Edition 2)
 ├── assets/book_head.html      # reading styles for the HTML/PDF build
 └── output/                    # compiled book
 ```
@@ -57,9 +57,17 @@ After both passes it restores `book_state.json` if the agent corrupted it, execu
 
 The orchestrator runs the CLI with `--dangerously-skip-permissions`, so run it in a sandbox or container you are comfortable handing to an unattended agent.
 
+### Run the book's code
+
+The listings are written to be run; a reader who only reads them has done the easy half. You need Python 3.9 or newer (the floor set by the pinned packages, and by the `tuple[float, float]`-style annotations in the listings) and `pip install -r requirements.txt`. The chapters' own code imports only NumPy, SciPy, pandas and the standard library; `pymupdf` is for `index_pdfs.py`, not for reading.
+
+Within a chapter, the blocks accumulate. `tools/check_book.py` joins a chapter's ```` ```python ```` blocks, in order, into one script and runs it in a fresh temporary directory, so a later listing may use any name an earlier one defined, and a listing pasted alone fails with a `NameError` until you paste the ones above it. Check one chapter with `python3 tools/check_book.py --file book_src/<chapter>.md --run-code`. Nothing carries over from one chapter to the next.
+
+That is why the reusable engines (`bondmath.py`, `creditstats.py`, `risk_model.py` and their kin) are meant to live in `book_src/lib/`, where a later chapter can `import` them. The change that puts that directory on `sys.path` inside `check_book.py` is part of Edition 2 and has not landed. Until it does, export `PYTHONPATH` as the absolute path of `book_src/lib` before running the checker (it passes your environment through), or paste the defining listing above the chapter's blocks.
+
 ## House rules (summarized from SYSTEM_PROMPT.md)
 
 - **Six-part anatomy** in every chapter: desk framing, rigorous derivation, `### Specification for AI Implementation`, `> [SOURCE EXTRACTION]`, a case study, and a `### Deep-Dive Resource Graph`. `check_book.py` flags whichever are missing.
-- **Code that runs.** All of a chapter's ```` ```python ```` blocks run in order in one interpreter, so later blocks can use earlier definitions. Start a block with `# sketch` to exempt pseudo-code.
+- **Code that runs.** All of a chapter's ```` ```python ```` blocks run in order in one interpreter, so later blocks can use earlier definitions. Start a block with `# sketch` to exempt pseudo-code. Shared modules come from `book_src/lib/` (see "Run the book's code").
 - **Quote briefly, cite exactly.** Source extractions are short quotations with `book_id p.N` citations followed by our own analysis. Derivations are rebuilt, not transcribed.
 - **No fabrication.** CUSIPs, URLs, SSRN ids, and episode numbers appear only when verified. Historical numbers are either sourced or labeled illustrative.

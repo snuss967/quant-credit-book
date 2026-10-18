@@ -117,9 +117,9 @@ def fig_factor_tree():
     rows = [
         # (name, loading, colour, height, exposure lines)
         ("Key-rate DV01s", r"$-\,\mathrm{KRD}_{i,m}\,\Delta y_m$", C_GAUSS, 11,
-         [r"Net DV01, $k per bp (band ±15 soft, ±25 hard):".replace(r"±", "±"),
+         ["Net DV01, $k per bp (band ±15 soft, ±25 hard):",
           f"2y {MINUS}6    5y +9    10y +13    30y {MINUS}2"]),
-        ("Rating × sector spread cells", r"$-\,\mathrm{DTS}_i\,b_{g(i),k}\,F_k$", C_GAUSS, 18,
+        ("Rating × sector spread cells", r"$-\,\mathrm{DTS}_i\,b_{g(i),k}\,F_k$", C_GAUSS, 16,
          ["Loss for a 10% widening of the cell, $mm (soft 1.2, hard 1.5):",
           "B Industrials 1.62    B Consumer 0.98    B Healthcare 0.58",
           "BB Energy 0.77    BB Industrials 0.71",
@@ -129,13 +129,14 @@ def fig_factor_tree():
         ("Common residual (§8.8)", r"$\beta^{C}_i\,F^{C}$", C_GAUSS, 8,
          ["$0.30mm per 1σ day of the first residual component"]),
         ("Basis: CDX, ETF, futures", r"$\sum_j \beta^{B}_{i,j}\,F^{B}_j$", C_GAUSS, 11,
-         ["CDX–cash $25k per bp    ETF–NAV $150k per point",
+         ["CDX–cash \\$25k per bp    ETF–NAV \\$150k per point",
           "Treasury futures–cash curve $40k per bp"]),
-        ("Issuer residual", r"$\epsilon_{i}$: variance by rating × price bucket", C_IDIO, 8,
+        ("Issuer residual", r"$\epsilon_{i}$, by rating × price bucket", C_IDIO, 8,
          ["Book's one-day idiosyncratic σ: $0.38mm"]),
-        ("Jump layer", r"$\mathbf{1}\{\tau_i\leq h\}\,\mathrm{JTD}_i$, added path by path", C_JUMP, 11,
-         ["Issuer JTD, top ten, $mm: Halvorsen 7.56,",
-          "bank holdco 4.15, Brambleworth 2.20, seven more ≤ 1.9"]),
+        ("Jump layer", r"$\mathbf{1}\{\tau_i\leq h\}\,\mathrm{JTD}_i$, path by path", C_JUMP, 12,
+         ["Issuer JTD, top ten ($mm):",
+          "Halvorsen 7.56, bank holdco 4.15, Brambleworth 2.20,",
+          "seven more, each ≤ 1.9"]),
     ]
     gap, gap_group, top = 2.0, 3.0, 96.0
     y = top
@@ -144,7 +145,7 @@ def fig_factor_tree():
         if k == 5:
             y -= gap_group - gap
         y0 = y - h
-        ax.add_patch(FancyBboxPatch((20, y0), 30, h, boxstyle="round,pad=0,rounding_size=0.8",
+        ax.add_patch(FancyBboxPatch((20, y0), 33, h, boxstyle="round,pad=0,rounding_size=0.8",
                                     facecolor="#f6f5f2", edgecolor=NEUTRAL, linewidth=0.8, zorder=2))
         ax.add_patch(Rectangle((20, y0), 2.0, h, facecolor=col, edgecolor="none", zorder=3))
         ax.text(23.4, y - h * 0.30, name, fontsize=8.8, color=INK, fontweight="bold", va="center", zorder=4)
@@ -152,7 +153,7 @@ def fig_factor_tree():
         n = len(lines)
         for j, ln in enumerate(lines):
             yy = y - h / 2 + (n - 1) * 1.55 - j * 3.1 if n > 1 else y - h / 2
-            ax.text(53, yy, ln, fontsize=8, color=INK, va="center", zorder=4)
+            ax.text(56, yy, ln, fontsize=8, color=INK, va="center", zorder=4)
         centers.append(y - h / 2)
         y = y0 - gap
     # connectors from the root to every row
@@ -168,13 +169,13 @@ def fig_factor_tree():
     for c in centers:
         ax.plot([trunk_x, 20], [c, c], color=INK_2, lw=1.0, zorder=1)
     # breach chips on the two rows that carry Tuesday's hard and soft breaches
-    _chip(ax, 89.6, centers[1] + 4.6, "B Ind: HARD", C_HARD, "white", w=10.0)
-    _chip(ax, 89.6, centers[6] + 3.3, "Halvorsen: SOFT", C_SOFT, INK, w=10.0)
+    _chip(ax, 81.5, centers[1] - 4.65, "B Industrials: HARD", C_HARD, "white", w=16.5)
+    _chip(ax, 79.5, centers[6] + 3.1, "Halvorsen: SOFT", C_SOFT, INK, w=16.5)
     # legend
     ly = 2.2
     for x0, col, txt in [(1.0, C_GAUSS, "Gaussian layer: factors shared by every bond"),
-                         (40.0, C_IDIO, "Gaussian layer: leftover"),
-                         (66.0, C_JUMP, "Jump layer: charged once")]:
+                         (44.5, C_IDIO, "Gaussian layer: leftover"),
+                         (70.0, C_JUMP, "Jump layer: charged once")]:
         ax.add_patch(Rectangle((x0, ly - 1.0), 2.0, 2.0, facecolor=col, edgecolor="none"))
         ax.text(x0 + 3.0, ly, txt, fontsize=8, color=INK_2, va="center")
     return finish(fig, "ch08b_factor_tree")
