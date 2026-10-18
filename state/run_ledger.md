@@ -168,3 +168,15 @@ State on disk at the stop:
 The meter is recalibrated to 53% at 05:35. The user's rule: "estimate 110% as the drop dead stopping" (on the old meter scale). 110% old ≈ **62.8% actual**, so the pace guard (b2xbmwx7r) runs `--target 68.8 --cap-only --check-every 60` and alarms at 62.8%. If the user meant 97% actual, raise the target to 103.
 The user completed the cut-off note: **"It seems like there is a lot of prescriptiveness and not narrative."** It is recorded as directive 12. `tools/prescriptiveness.py` now measures bullets, modal and imperative density, and dialogue per 1,000 words. Writer prompts (VOICE) now carry the verdict, and the brief and revise prompts read `state/reviews/ed2/u2_lessons.md` once it exists.
 All 10 stopped runs were resumed (new task IDs in `state/resume_runs.json`), plus **u2-quality-read** (w0dq9p9lo, a Fable read of the revised Ch 1/5/6, producing a review, `u2_lessons.md`, and a fix list).
+
+## 05:46 UTC: user reading 59%. New rule: "run for another 50% on your scale ... don't stop until you hit 110% by your count, counting from 59% now"
+
+Read on the old overestimating scale (1.75×), +51 points there is about +29 actual, so the **stop is at about 88% actual**, below the 97% cap. The meter is recalibrated to 59% at 05:45. Pace guard b9kryba6o runs `--target 94.1 --cap-only --check-every 60` (alarm at 88.1%). The primers pipeline is done (4-B, 7-B, 12-B: U1, figures, checks).
+The chapter pipeline gained a `resgraph` stage (U3b: specific episodes and posts from the media dossiers replace channel-level references).
+
+| Run | Task ID | Stages | Owns |
+| :--- | :--- | :--- | :--- |
+| part-III-a | wr7mis8ev | figures → figcheck → resgraph → brief → revise → verify | Ch 8, 9 |
+| part-III-b | wklksowgz | same | Ch 10, 11 |
+| part-III-c | wu9xnpg9n | same | Ch 12, 17 |
+| figs-misc | wyz2ysvwc | figures → figcheck | Ch 28, 6-B, 3-B |

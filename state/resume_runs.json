@@ -188,30 +188,92 @@
    }
   },
   {
-   "name": "primers-pipeline",
-   "task": "wz3qypd1a",
-   "runId": "wf_a6d57981-bfe",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "07_ch07b_statistics_for_credit_panels",
-     "04_ch04b_bond_math_for_the_desk",
-     "12_ch12b_the_restructuring_process_as_a_state_machine"
-    ],
-    "stages": [
-     "u1",
-     "figures",
-     "figcheck"
-    ]
-   }
-  },
-  {
    "name": "u2-quality-read",
    "task": "w0dq9p9lo",
    "runId": "wf_5c19ff92-0be",
    "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/ed2-u2-quality-read-wf_5c19ff92-0be.js",
    "args": null
+  },
+  {
+   "name": "part-III-a",
+   "task": "wr7mis8ev",
+   "runId": "wf_b92bbb19-5ce",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "08_ch08_isolating_ido_and_empirical_duration",
+     "09_ch09_factor_investing_in_credit"
+    ],
+    "stages": [
+     "figures",
+     "figcheck",
+     "resgraph",
+     "brief",
+     "revise",
+     "verify"
+    ]
+   }
+  },
+  {
+   "name": "part-III-b",
+   "task": "wklksowgz",
+   "runId": "wf_bb2c1276-ba3",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "10_ch10_trend_and_time_series_momentum",
+     "11_ch11_defensive_systematic_high_yield"
+    ],
+    "stages": [
+     "figures",
+     "figcheck",
+     "resgraph",
+     "brief",
+     "revise",
+     "verify"
+    ]
+   }
+  },
+  {
+   "name": "part-III-c",
+   "task": "wu9xnpg9n",
+   "runId": "wf_5b507d53-841",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "12_ch12_multi_asset_credit_allocation",
+     "17_ch17_private_credit_public_private_convergence"
+    ],
+    "stages": [
+     "figures",
+     "figcheck",
+     "resgraph",
+     "brief",
+     "revise",
+     "verify"
+    ]
+   }
+  },
+  {
+   "name": "figs-misc",
+   "task": "wyz2ysvwc",
+   "runId": "wf_e4574d02-36e",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "28_ch28_pm_playbook",
+     "06_ch06b_options_and_measures_for_credit",
+     "03_ch03b_your_first_year_on_the_desk"
+    ],
+    "stages": [
+     "figures",
+     "figcheck"
+    ]
+   }
   }
  ]
 }

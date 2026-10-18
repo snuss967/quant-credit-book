@@ -4,9 +4,9 @@
 - [x] 2. [Opening, the $\mathbb{P}$ note] MATH-GENTLY: what "under $\mathbb{P}$" means, and what risk-neutral would mean. -- Weather forecast vs rain insurance box, 2% vs 4% added.
 - [x] 3. [§2.1 The Desk View] WHEN-TO-APPLY + BRIDGE. -- Theo "we just paid" bridge; feasible-set judgment vs distressed book.
 - [x] 4. [§2.2.1 Dissemination timeline] MATH-GENTLY: what a distribution is, and a mixture. -- Passport-queue mixture box; overnight third regime added, table intact.
-- [ ] 5. [§2.2.2 The caps] MATH-GENTLY (two boxes) + FULL-DERIVATION-MOVE.
-- [ ] 6. [§2.2.2, after Ways This Blows Up] SHOP-LIFE: "Shop Life: the TRACE loader" (~800 words, labeled fictional composite).
-- [ ] 7. [§2.3 Revolution 1] ANOTHER-SEAT + LIST-TO-NARRATIVE.
+- [x] 5. [§2.2.2 The caps] MATH-GENTLY (two boxes) + FULL-DERIVATION-MOVE. -- Censoring and distribution-shapes boxes; three derivations moved to Full Derivation.
+- [x] 6. [§2.2.2, after Ways This Blows Up] SHOP-LIFE: "Shop Life: the TRACE loader" (~800 words, labeled fictional composite). -- Femi traces 9% dip: capped drops, affiliate break, PT NaN.
+- [x] 7. [§2.3 Revolution 1] ANOTHER-SEAT + LIST-TO-NARRATIVE. -- Dealer-desk seat box; Ines teaches Theo reading the e-share table.
 - [ ] 8. [§2.3.1 S-curve] MATH-GENTLY + FULL-DERIVATION-MOVE + WHEN-TO-APPLY.
 - [ ] 9. [§2.3.2 RFQ as auction] MATH-GENTLY + FULL-DERIVATION-MOVE.
 - [ ] 10. [§2.4 All-to-All] MATH-GENTLY + ANOTHER-SEAT.

@@ -16,7 +16,7 @@
 - [x] 14. Selecta and Optimum suits dated, cast reaction, opportunistic-fund seat box.
 - [x] 15. Already present: capped-forward judgment passage and Priya holder_hhi vignette verified.
 - [x] 16. Kaz halving column, fixed-point box, clearing map moved to derivation.
-- [ ] 17. §13.7.1 Trinseo EXPAND-SCENE + decision point
+- [x] 17. Whiteboard rebuild, 2025 steps, gift, litigation counts, June decision.
 - [ ] 18. §13.7 Ways This Blows Up WHEN-TO-APPLY (two paragraphs before box)
 - [ ] 19. §13.8 opening Math, Gently #12, #13, #14 + Full Derivation move (MAP)
 - [ ] 20. §13.8 "What the desk prices" WHEN-TO-APPLY (trust PRS to rank)

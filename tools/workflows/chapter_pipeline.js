@@ -1,10 +1,11 @@
 export const meta = {
   name: 'ed2-chapter-pipeline',
-  description: 'Configurable per-chapter Edition 2 pipeline: U1 code explanations, U4 figures + figure check, U2 Fable brief + Opus revision + Sonnet verify (stages chosen by args.stages)',
+  description: 'Configurable per-chapter Edition 2 pipeline: U1 code explanations, U4 figures + figure check, U3b resource graphs, U2 Fable brief + Opus revision + Sonnet verify (stages chosen by args.stages)',
   phases: [
     { title: 'Explain code', detail: 'Sonnet: replace EXPLAIN stubs with prose (U1)', model: 'sonnet' },
     { title: 'Figures', detail: 'Sonnet: 3-5 house-style figures per chapter (U4)', model: 'sonnet' },
     { title: 'Figure check', detail: 'Sonnet: view every figure, check math, caption, legibility', model: 'sonnet' },
+    { title: 'Resources', detail: 'Sonnet: specific episodes and posts in the Resource Graphs (U3b)', model: 'sonnet' },
     { title: 'Brief', detail: 'Fable: revision brief per chapter', model: 'fable' },
     { title: 'Revise', detail: 'Opus: narrative revision per the brief (U2)' },
     { title: 'Verify', detail: 'Sonnet: nothing removed, new facts checked, hygiene', model: 'sonnet' },
@@ -101,10 +102,29 @@ Read the docstring of tools/figures/style.py (the house style). Then, for every 
 4. Embedding. The syntax is right, the file exists, figures are numbered in order, and the image sits next to the paragraph it illustrates.
 Fix problems directly (edit the script, re-run it, re-view, and fix the caption or placement with small Edits). Write the report as you go: a verdict per figure and the fixes made. Your FINAL action is appending a line containing exactly ${MARK} to the report. Return a 40-word summary.` }
 
+function mediaDossier(stem) {
+  const m = stem.match(/^(\d+)_/)
+  const n = m ? parseInt(m[1], 10) : 0
+  if (n >= 90) return 'state/research/media_episodes_posts_parts_V_VIII.md'
+  if (n <= 7) return 'state/research/media_episodes_posts_parts_I_II.md'
+  if (n <= 17) return 'state/research/media_episodes_posts_parts_III_IV.md'
+  return 'state/research/media_episodes_posts_parts_V_VIII.md'
+}
+const resgraph = stem => `You are a RESOURCE EDITOR (Edition 2, task U3b) for the book in ${ROOT}. Work from ${ROOT}. Chapter: book_src/${stem}.md. Log: state/revisions/ed2/${stem}.resgraph.md.
+FIRST: if the log ends with ${MARK}, stop and return "done".
+The user wants specific podcast EPISODES and blog POSTS throughout the book, not channels or homepages. The verified items are in ${mediaDossier(stem)}: grep -n "${stem}" to find this chapter's section (if there is none, use the items whose "why / section" fits this chapter's topics).
+For every "### Deep-Dive Resource Graph" (and any similar resource list) in the chapter:
+1. Replace each channel-level or homepage-only reference (a show, a blog, or a newsletter named without a specific episode or post) with the specific episode or post from the dossier that serves that section, keeping one line on why it is worth the reader's time.
+2. Add 3–6 specific items from the dossier that fit the section. Format each as: **Title** (show or author, date). One line on why. URL.
+3. Keep every existing specific item (papers, books, datasets, verified URLs). Remove nothing else.
+Use only items from the dossier (they were verified when it was written) or items you verify yourself by fetching the page (at most 6 web calls; load WebFetch via ToolSearch). Never invent titles, dates, or URLs.
+Each Resource Graph is one Edit. Log each graph you upgraded (section, items added or replaced) as you go. Your FINAL action is appending a line containing exactly ${MARK} to the log. Return a 40-word summary.`
+
 const STAGES = {
   u1: { make: u1, phase: 'Explain code', model: 'sonnet' },
   figures: { make: figures, phase: 'Figures', model: 'sonnet' },
   figcheck: { make: figcheck, phase: 'Figure check', model: 'sonnet' },
+  resgraph: { make: resgraph, phase: 'Resources', model: 'sonnet' },
   brief: { make: brief, phase: 'Brief', model: 'fable', effort: 'high' },
   revise: { make: revise, phase: 'Revise' },
   verify: { make: verify, phase: 'Verify', model: 'sonnet' },
