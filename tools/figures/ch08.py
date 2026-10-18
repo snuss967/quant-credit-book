@@ -80,7 +80,7 @@ def fig_hedge_ratio_by_rating():
                 textcoords="offset points", fontsize=8.5, color=INK_2,
                 arrowprops=dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8, shrinkA=0, shrinkB=4))
     ax.annotate(f"Ba {signed(at700['Ba'])}, B {signed(at700['B'])}, Caa {signed(at700['Caa'])}\n"
-                "(zero or negative at the same spread)", (700, 0.0), xytext=(38, 44),
+                "(near zero or negative at the same spread)", (700, 0.0), xytext=(38, 44),
                 textcoords="offset points", fontsize=8.5, color=INK_2,
                 arrowprops=dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8, shrinkA=0, shrinkB=4))
     ax.set_xlim(0, 3250)
@@ -180,6 +180,10 @@ def fig_stale_marks_beta():
     }
     sw_total = sum(sw.values())
     assert abs(sw_total - ns["beta_sw"] / beta_true) < 1e-9
+    totals = {"OLS\n(same day)": beta_ols / beta_true, "Scholes–Williams\n(lead + lag)": sw_total,
+              "Dimson\n(two lags)": beta_dim / beta_true}
+    for nm, parts_nm in parts.items():
+        assert abs(sum(parts_nm.values()) - totals[nm]) < 0.005        # drawn stack vs estimator: lead piece only
 
     fig, (a, b) = new_figure("wide", ncols=2)
     # left: a stretch of cumulative return, true against stale marks
@@ -187,10 +191,10 @@ def fig_stale_marks_beta():
     t = np.arange(hi - lo)
     cum_true = 100 * np.cumsum(rs[lo:hi])
     cum_obs = 100 * np.cumsum(ro[lo:hi])
-    a.plot(t, cum_true, color=INK_2, linewidth=LW, zorder=3)
-    a.plot(t, cum_obs, color=ORANGE, linewidth=LW, zorder=4)
-    label_end(a, t[-1], cum_true[-1], "true", INK_2, dx=5)
-    label_end(a, t[-1], cum_obs[-1], "stale\nmarks", ORANGE, dx=5, dy=-4)
+    a.plot(t, cum_true, color=C_TRUE, linewidth=LW, zorder=3)      # fig 2's roles: truth blue, stale/screen orange
+    a.plot(t, cum_obs, color=C_SCREEN, linewidth=LW, zorder=4)
+    label_end(a, t[-1], cum_true[-1], "true", C_TRUE, dx=5)
+    label_end(a, t[-1], cum_obs[-1], "stale\nmarks", C_SCREEN, dx=5, dy=-4)
     a.set_xlim(0, hi - lo - 1)
     a.set_xticks([0, 10, 20, 30, 40, 50])
     a.set_xlabel("Trading day")
@@ -213,7 +217,9 @@ def fig_stale_marks_beta():
                 b.text(xi, bottom + v / 2, f"{v:.2f}", ha="center", va="center", fontsize=8,
                        color=("white" if lag == 0 else INK))
             bottom += v
-        b.text(xi, bottom + 0.025, f"{bottom:.3f}", ha="center", va="bottom", fontsize=9, color=INK, fontweight="bold")
+        # the label is the estimator itself; for Scholes-Williams the (tiny, negative) lead piece is not drawn
+        b.text(xi, bottom + 0.025, f"{totals[nm]:.3f}", ha="center", va="bottom", fontsize=9, color=INK,
+               fontweight="bold")
     b.axhline(1.0, color=NEUTRAL, linewidth=1.0, linestyle=(0, (4, 3)), zorder=1)
     b.text(-0.5, 1.015, "true beta = 1", ha="left", va="bottom", fontsize=8, color=MUTED)
     b.set_xticks(xpos, names)

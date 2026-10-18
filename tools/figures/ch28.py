@@ -83,6 +83,9 @@ def fig_breadth():
     a.plot([300, 300], [0, neff_blocks(300, m, rw, 0.01)], color=INK_2, linewidth=0.8,
            linestyle=(0, (3, 3)), zorder=2)
     text_in(a, 318, 12, "Theo: 300 bonds,\n$N_{\\mathrm{eff}}$ = 39.7", ha="left", va="center")
+    a.legend(handles=[Line2D([0], [0], color=BLUE, lw=LW, label=r"$\rho_a=0.01$"),
+                      Line2D([0], [0], color=ORANGE, lw=LW, label=r"$\rho_a=0.03$")],
+             loc="upper left", bbox_to_anchor=(0.0, 0.86), handlelength=1.6, borderaxespad=0.4)
     a.set_title("(a) Breadth saturates", fontsize=9.5)
 
     # (b) IR against independent bets, at two hit rates
@@ -255,8 +258,8 @@ def fig_kelly_ruin():
     b.annotate("", xy=(fo, go - 0.25), xytext=(fo, 1.15), arrowprops=dict(arrowstyle="-", color=INK_2, lw=0.8),
                annotation_clip=False)
     text_in(b, 1 / jan["L"] + 0.03, -1.7, "ruin\n1.82", ha="left", va="center", fs=8)
-    text_in(b, 1 / octo["L"] - 0.03, -3.9, "ruin\n1.43", ha="right", va="center", fs=8)
-    note(b, "edge $c-\\lambda L$: 5.1% (Jan), 5.8% (Oct)", loc="lower left")
+    text_in(b, 1 / octo["L"] + 0.03, -3.9, "ruin\n1.43", ha="left", va="center", fs=8)
+    note(b, "edge $c-\\lambda L$:\n5.1% (Jan), 5.8% (Oct)", loc="lower left")
     b.set_title("(b) CCC bucket: edge up, Kelly down", fontsize=9.5)
     return finish(fig, "ch28_kelly_ruin")
 
@@ -303,12 +306,12 @@ def fig_mark_to_bid_stop():
     curves = [(0.5, BLUE, "Sharpe 0.5"), (1.0, ORANGE, "Sharpe 1"), (2.0, AQUA, "Sharpe 2")]
     for sr, col, _ in curves:
         b.plot(x * 100, prob_life(x, sr, sigma) * 100, color=col, zorder=3)
-    b.axvline(7.5, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
+    mark_event(b, 7.5, "exit 7.5%", y_frac=0.99)
     for sr, col, lab in curves:
         pv = prob_life(0.075, sr, sigma) * 100
         b.plot([7.5], [pv], "o", color=col, markersize=5.5, zorder=6)
         label_end(b, 12, prob_life(0.12, sr, sigma) * 100, lab, col)
-    for pv, txt in [(prob_life(0.075, 0.5, sigma) * 100, "29%"), (prob_life(0.075, 1.0, sigma) * 100, "8%"),
+    for pv, txt in [(prob_life(0.075, 0.5, sigma) * 100, "29%"), (prob_life(0.075, 1.0, sigma) * 100, "8.2%"),
                     (prob_life(0.075, 2.0, sigma) * 100, "0.7%")]:
         text_in(b, 7.7, pv * 1.75, txt, ha="left", va="center", fs=8)
     b.plot([x_eff * 100], [prob_life(x_eff, 1.0, sigma) * 100], "o", color=ORANGE, markersize=6.5,
@@ -354,6 +357,7 @@ def fig_leverage_band():
     _, ceil, speed = band(lcs, 0.05)
     x = lcs * 100
     fig, ax = new_figure("wide")
+    ax.set_axisbelow(True)
     ax.fill_between(x, f5, ceil, where=ceil >= f5, color=SEQ_BLUE(0.25), zorder=1, linewidth=0)
     ax.plot(x, speed, color=INK_2, linewidth=1.1, linestyle=(0, (4, 3)), zorder=2)
     ax.plot(x, ceil, color=ORANGE, zorder=4)

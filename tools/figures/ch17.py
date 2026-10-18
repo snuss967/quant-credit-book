@@ -85,8 +85,8 @@ def fig_smoothing_staircase():
     fig, (a1, a2) = new_figure("wide", ncols=2, gridspec_kw={"width_ratios": [1.35, 1]})
 
     # (a) simulated path
-    a1.plot(q, true_idx, color=ORANGE, linewidth=LW, label="True value")
     a1.plot(q, mark_idx, color=BLUE, linewidth=LW, label="Reported mark")
+    a1.plot(q, true_idx, color=ORANGE, linewidth=LW, label="True value")
     a1.set_xlim(0, N)
     a1.set_xlabel("Quarter")
     a1.set_ylabel("Value of 100 invested")
@@ -129,8 +129,8 @@ def fig_implied_markdown():
     d = np.linspace(-0.05, 0.56, 300)
     fig, ax = new_figure("wide")
     ax.plot(d * 100, d * 100, color=NEUTRAL, linewidth=1.2, linestyle=(0, (3, 3)), zorder=2)
-    ax.annotate("1 for 1: a 20% discount would\nmean 20% off the loans", (30, 30), xytext=(8, 2),
-                textcoords="offset points", ha="left", va="bottom", fontsize=8.2, color=INK_2)
+    ax.text(36.5, 33.6, "1 for 1: a 20% discount would\nmean 20% off the loans", ha="left", va="center",
+            fontsize=8.2, color=INK_2)
     cols = {0.6: SEQ_BLUE_STEPS[5], 1.1: SEQ_BLUE_STEPS[8], 1.6: SEQ_BLUE_STEPS[11]}
     for ell, c in cols.items():
         ax.plot(d * 100, implied_markdown(d, ell) * 100, color=c, linewidth=LW, zorder=3)
@@ -151,7 +151,7 @@ def fig_implied_markdown():
                     color=INK_2, arrowprops=dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8, shrinkA=1, shrinkB=4))
     ax.axvline(0, color=NEUTRAL, linewidth=0.9, zorder=1)
     ax.set_xlim(-5, 56)
-    ax.set_ylim(-1.5, 35)
+    ax.set_ylim(-1.5, 36.5)
     ax.set_xlabel("Discount of share price to NAV, 1 \u2212 P/NAV (%)")
     ax.set_ylabel("Implied markdown on the loans (%)")
     note(ax, "fee drag \u03c6 = 5%:\nno markdown until the\ndiscount exceeds 5%", loc="upper left")
@@ -189,6 +189,7 @@ def fig_medallia_marks():
     ax.set_xlim(d[0] - 25, d[-1] + 215)
     ax.set_ylim(34, 102)
     ax.set_ylabel("Fair value as % of par")
+    ax.set_xlabel("Quarter end (range = highest minus lowest mark, in points)")
     ax.annotate("BCRED, BXSL, HLEND, FS KKR:\n49 to 50", (d[-1], 49.8), xytext=(8, 0), textcoords="offset points",
                 va="center", fontsize=8.3, color=INK_2)
     ax.plot([d[-1] + 4], [49.8], "o", color=BLUE, markersize=4, clip_on=False, zorder=6)
@@ -228,6 +229,7 @@ def queue_path(a_new=0.10, c=0.05, T=8):
 def fig_redemption_queue():
     fig, (a1, a2) = new_figure((7.0, 3.9), ncols=2, gridspec_kw={"width_ratios": [1.5, 1]})
     qcol = [SEQ_BLUE_STEPS[2], SEQ_BLUE_STEPS[7], SEQ_BLUE_STEPS[11]]
+    MS5 = (8.5, 7.0, 5.5)
     n = len(REQUESTS)
     a1.axvline(5, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
     a1.annotate("5% cap", (5, n - 0.35), xytext=(3, 0), textcoords="offset points", fontsize=8, color=INK_2,
@@ -237,8 +239,8 @@ def fig_redemption_queue():
         vals = [(q1, 0), (q2, 1), (q3, 2)]
         have = [(v, k) for v, k in vals if v is not None]
         a1.plot([v for v, _ in have], [y] * len(have), color=NEUTRAL, linewidth=1.0, zorder=2)
-        for v, k in have:
-            a1.plot([v], [y], "o", color=qcol[k], markersize=6.5, zorder=4)
+        for v, k in have:   # nested sizes (Q1 largest, Q3 smallest) so coincident quarters stay visible
+            a1.plot([v], [y], "o", color=qcol[k], markersize=MS5[k], zorder=4 + k * 0.1)
         a1.text(47.5, y, f"{fill:.0f}%", ha="center", va="center", fontsize=8.5, color=INK_2)
     a1.text(47.5, n - 0.35, "Q2 fill", ha="center", va="center", fontsize=8, color=MUTED)
     a1.set_yticks(range(n))
@@ -251,7 +253,7 @@ def fig_redemption_queue():
     a1.set_xticks(range(0, 41, 10))
     a1.set_xlabel("Tender requests (% of shares outstanding)")
     from matplotlib.lines import Line2D
-    a1.legend(handles=[Line2D([], [], marker="o", linestyle="", color=qcol[k], markersize=6, label=l)
+    a1.legend(handles=[Line2D([], [], marker="o", linestyle="", color=qcol[k], markersize=MS5[k], label=l)
                        for k, l in enumerate(("Q1 2026", "Q2 2026", "Q3 2026 (prelim.)"))],
               loc="lower right", bbox_to_anchor=(0.86, 0.0), frameon=True, framealpha=1.0, facecolor=SURFACE,
               edgecolor="none", borderpad=0.3, fontsize=8, handletextpad=0.2, labelspacing=0.3)

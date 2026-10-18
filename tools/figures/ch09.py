@@ -22,6 +22,14 @@ from matplotlib.ticker import FuncFormatter, PercentFormatter  # noqa: E402
 from style import *  # noqa: E402,F401,F403
 
 VIOLET_TINT = "#d5cff3"
+BACK = dict(boxstyle="square,pad=0.15", fc="white", ec="none")   # hides gridlines behind a text label
+
+
+def ink_note(ax, text, loc="lower left"):
+    """Like style.note(), but in INK_2 (8 pt muted grey is under 4.5:1 on white) and on a white backing."""
+    x, ha = (0.01, "left") if "left" in loc else (0.99, "right")
+    y, va = (0.02, "bottom") if "lower" in loc else (0.98, "top")
+    ax.text(x, y, text, transform=ax.transAxes, ha=ha, va=va, fontsize=8, color=INK_2, bbox=BACK, zorder=6)
 
 
 # ---------------------------------------------------------------------------------------------
@@ -39,6 +47,7 @@ def fig_kaz_book():
     cols = [NEUTRAL, ORANGE, BLUE]
     x = np.arange(3)
     a.bar(x, vals, 0.66, color=cols)
+    a.set_axisbelow(True)                          # gridlines behind the bars
     for xi, v in zip(x, vals):
         a.text(xi, v - 0.35, f"{v:.1f}", ha="center", va="top", fontsize=9, color=INK, fontweight="bold")
     a.axhline(dts_l, color=MUTED, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
@@ -81,8 +90,8 @@ def fig_kaz_book():
                              label="Dollar-neutral: slope 0.6, carry +0.8%/yr"),
                       Line2D([0], [0], color=BLUE, marker="o", markersize=4.5, linewidth=LW,
                              label="DTS-neutral: slope 0.0, carry 0.0%/yr")],
-             loc="upper left", fontsize=7.6, handlelength=1.6, borderaxespad=0.2)
-    note(b, "No signal assumed: only beta and carry", loc="lower right")
+             loc="upper left", fontsize=8, handlelength=1.6, borderaxespad=0.2)
+    ink_note(b, "No signal assumed: only beta and carry", loc="lower right")
     return finish(fig, "ch09_kaz_book_dts_neutral")
 
 
@@ -116,9 +125,10 @@ def fig_decay_clock():
     a.yaxis.set_major_formatter(PercentFormatter(100, decimals=0))
     a.set_xlabel("Months since entering the top decile")
     a.set_ylabel("Still ranked in the top decile")
-    note(a, f"Markov chain: stay probability {p1:.2f} a month", loc="upper right")
+    ink_note(a, f"Markov chain, no re-entry:\nstay probability {p1:.2f} a month", loc="upper right")
 
     # (b) outperformance per month: bars span the months they cover
+    b.set_axisbelow(True)                          # gridlines behind the bars
     for i, v in enumerate(out_bp):
         b.bar(i + 0.5, v, 0.9, color=VIOLET)
         b.text(i + 0.5, v + 1.2, f"{v}", ha="center", va="bottom", fontsize=9, color=INK, fontweight="bold")
@@ -131,9 +141,9 @@ def fig_decay_clock():
     b.set_xticklabels(["1", "2", "3", "4–6"])
     b.set_xlabel("Months after the signal")
     b.tick_params(axis="x", length=0)
-    b.set_ylabel("Outperformance per month (bp)")
+    b.set_ylabel("High-minus-low (bp a month)")
     b.text(1.2, 41.5, f"{sum(out_bp)} of {out6}bp over six months\n({100 * sum(out_bp) / out6:.0f}%) arrives in the first quarter",
-           ha="left", va="top", fontsize=8.2, color=INK_2)
+           ha="left", va="top", fontsize=8.2, color=INK_2, bbox=BACK)
     return finish(fig, "ch09_momentum_decay_clock")
 
 
@@ -162,7 +172,7 @@ def fig_breakeven_cost():
                     color=INK_2, annotation_clip=False)
 
     ax.plot([to_barclays], [c_star], "o", color=VIOLET, markersize=8, zorder=6)
-    ax.annotate("Barclays top-decile EMC:\n73% a month, 6.34% a year\nbreak-even cost 0.72%",
+    ax.annotate("Barclays top-decile EMC:\n73% a month, 6.34% a year,\nbreak-even cost 0.72%",
                 (to_barclays, c_star), xytext=(62, 1.62), fontsize=8.2, color=INK, ha="center", va="center",
                 arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.8, shrinkA=2, shrinkB=5))
     ax.plot([to2], [c2], "o", color="white", markeredgecolor=INK_2, markeredgewidth=1.5, markersize=7, zorder=6)
@@ -217,7 +227,7 @@ def fig_equal_risk():
                linewidth=0, label="Published blend, plotted at the correlation\nit implies (IPR −0.05, Man 0.24)"),
         Line2D([0], [0], marker="D", color=INK_2, markersize=5.5, linewidth=0,
                label="Correlation at which the blend only ties the\nbest single factor (IPR 0.12, Man 0.36)")],
-        loc="lower left", fontsize=7.8, borderaxespad=0.2, handletextpad=0.5, labelspacing=0.8)
+        loc="lower left", fontsize=8, borderaxespad=0.2, handletextpad=0.5, labelspacing=0.8)
     ax.set_xlim(-0.2, 0.8)
     ax.set_ylim(0, 3.5)
     ax.set_xlabel("Average pairwise correlation between the four factors")
@@ -246,7 +256,7 @@ def fig_noisy_price():
     a.plot(100 * fine, 1e4 * fine ** 2, color=NEUTRAL, linewidth=LW, zorder=2)
     a.plot(100 * sig, bias_bp, "o", color=BLUE, markersize=5.5, zorder=4)
     a.annotate("$\\sigma_u$ = 3%: 9bp a month\n≈ 1.1% a year", (3.0, 9.0), xytext=(0.35, 19.5), fontsize=8.2,
-               color=INK_2, ha="left", va="center",
+               color=INK_2, ha="left", va="center", bbox=BACK,
                arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.8, shrinkA=2, shrinkB=5))
     a.set_xlim(0, 5.2)
     a.set_ylim(0, 28)
@@ -278,6 +288,7 @@ def fig_noisy_price():
     x = np.arange(len(lags))
     cols = [BLUE if lag == 1 else NEUTRAL for lag in lags]
     b.bar(x, mean_ls, 0.62, color=cols)
+    b.set_axisbelow(True)                                      # gridlines behind the bars
     b.errorbar(x, mean_ls, yerr=2 * np.array(se_ls), fmt="none", ecolor=INK_2, elinewidth=1.0, capsize=3, zorder=5)
     b.text(0, mean_ls[0] + 0.14, f"{mean_ls[0]:.2f}%", ha="center", va="bottom", fontsize=9, color=INK,
            fontweight="bold")
@@ -288,8 +299,8 @@ def fig_noisy_price():
     b.tick_params(axis="x", length=0)
     b.set_ylim(-0.25, 1.55)
     b.set_ylabel("Long–short return of the sort (% a month)")
-    note(b, "True returns are i.i.d.: any 'alpha' is\nthe pricing error ($\\sigma_u$ = 1%) giving itself back",
-         loc="upper right")
+    ink_note(b, "True returns are i.i.d.: any 'alpha' is\nthe pricing error ($\\sigma_u$ = 1%) giving itself back",
+             loc="upper right")
     return finish(fig, "ch09_noisy_price_premium")
 
 

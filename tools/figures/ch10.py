@@ -126,27 +126,26 @@ def months_fmt(ax):
 # Figure 10.1: the carry hurdle
 # --------------------------------------------------------------------------------------------------------------
 def fig_carry_hurdle():
-    fig, (a, b) = plt.subplots(1, 2, figsize=(7.0, 3.3), layout="constrained", gridspec_kw={"width_ratios": [1, 1.5]})
+    fig, (a, b) = plt.subplots(1, 2, figsize=(7.0, 3.6), layout="constrained", gridspec_kw={"width_ratios": [1, 1.5]})
 
     # Left: the hurdle of a 12-month return rule, s_bar / D, for an HY-like and an IG-like book (illustrative)
     sh = np.linspace(2.0, 8.0, 50)
     si = np.linspace(0.4, 2.0, 50)
-    a.plot(sh, sh * 100 / 4.0, color=C_HY, linewidth=LW)
-    a.plot(si, si * 100 / 7.0, color=C_IG, linewidth=LW)
+    a.plot(sh, sh * 100 / 4.0, color=C_HY, linewidth=LW, label="HY-like, D = 4")
+    a.plot(si, si * 100 / 7.0, color=C_IG, linewidth=LW, label="IG-like, D = 7")
     a.plot([4.5], [112.5], "o", color=C_HY, markersize=6, zorder=5)
     a.plot([1.0], [100 / 7.0], "o", color=C_IG, markersize=6, zorder=5)
-    a.annotate("HY: 4.5% spread, D = 4\nhurdle 112.5 bp", (4.5, 112.5), xytext=(-8, 16), textcoords="offset points",
+    a.annotate("4.5% spread:\n112.5 bp", (4.5, 112.5), xytext=(-8, 6), textcoords="offset points",
                ha="right", va="bottom", fontsize=8.3, color=INK_2)
-    a.annotate("IG: 1.0%, D = 7\nhurdle 14 bp", (1.0, 100 / 7.0), xytext=(8, 22), textcoords="offset points",
+    a.annotate("1.0%: 14 bp", (1.0, 100 / 7.0), xytext=(2, 12), textcoords="offset points",
                ha="left", va="bottom", fontsize=8.3, color=INK_2)
     a.set_xlim(0, 8.4)
     a.set_ylim(0, 215)
     a.set_xlabel("Average spread over the window (%)")
     a.set_ylabel("Carry hurdle $\\Delta s^*_{12}$ (bp)")
-    note(a, "12-month window: hurdle = average\nspread / spread duration", loc="upper left")
-    a.texts[-1].set_fontsize(7.6)
+    a.legend(loc="upper left", fontsize=8.3, handlelength=1.4)
 
-    # Right: real HY OAS, last two years available on FRED
+    # Right: real HY OAS, the last two years FRED serves
     h = load(P_HURDLE, parse_dates=["date"])
     x, d12, hur = h["date"].values, h["d12_bp"].values, h["hurdle_bp"].values
     top = np.maximum(d12, 0)
@@ -160,17 +159,16 @@ def fig_carry_hurdle():
     n_return = int((d12 > hur).sum())
     print(f"fig 10.1: {n} days, spread rule short {n_spread}, return rule short {n_return}, "
           f"disagree {n_spread - n_return}")
-    b.annotate("12-month change in OAS", (x[-1], d12[-1]), xytext=(-4, -30), textcoords="offset points",
-               ha="right", va="top", fontsize=8.5, color=INK_2)
-    b.annotate("carry hurdle (about 70 to 80 bp)", (x[len(x) // 2], hur[len(x) // 2]), xytext=(0, 16),
-               textcoords="offset points", ha="center", va="bottom", fontsize=8.5, color=INK_2)
-    b.legend(handles=[Patch(facecolor=TINT_ORANGE, label="spread rule short, return rule long"),
-                      Patch(facecolor=C_RETURN, alpha=0.55, label="both rules short")],
-             loc="lower left", fontsize=8, handlelength=1.1)
     b.set_ylim(-185, 160)
     b.set_ylabel("Change in HY OAS over 12 months (bp)")
     b.xaxis.set_major_locator(mdates.MonthLocator(bymonth=[1, 7]))
     b.xaxis.set_major_formatter(mdates.DateFormatter("%b\n%Y"))
+    handles = [Line2D([0], [0], color=C_SPREAD, linewidth=LW, label="12-month change in OAS"),
+               Line2D([0], [0], color=C_RETURN, linewidth=1.3, linestyle=(0, (4, 2)),
+                      label="carry hurdle (252-day mean OAS / 4)"),
+               Patch(facecolor=TINT_ORANGE, label="spread rule short, return rule long"),
+               Patch(facecolor=C_RETURN, alpha=0.55, label="both rules short")]
+    fig.legend(handles=handles, loc="outside lower center", ncol=2, fontsize=8, handlelength=1.6, frameon=False)
     return finish(fig, "ch10_carry_hurdle")
 
 
@@ -178,7 +176,7 @@ def fig_carry_hurdle():
 # Figure 10.2: volatility scaling is DTS scaling
 # --------------------------------------------------------------------------------------------------------------
 def fig_dts_vol_scaling():
-    fig, (a, b) = plt.subplots(1, 2, figsize=(7.0, 3.5), layout="constrained", gridspec_kw={"width_ratios": [1, 1.05]})
+    fig, (a, b) = plt.subplots(1, 2, figsize=(7.0, 3.6), layout="constrained", gridspec_kw={"width_ratios": [1, 1.05]})
 
     d = load(P_DTS)
     grp = {"AAA": C_IG, "AA": C_IG, "A": C_IG, "BBB": C_IG, "BB": C_HY, "B": C_HY, "CCC": C_CCC}
@@ -204,19 +202,17 @@ def fig_dts_vol_scaling():
     a.set_yticks([10, 30, 100, 300])
     a.set_yticklabels(["10", "30", "100", "300"])
     a.minorticks_off()
-    a.set_xlabel("Average OAS in the quarter (bp, log scale)")
+    a.set_xlabel("Average OAS in the quarter (bp, log)")
     a.set_ylabel("Volatility of daily OAS changes (bp a year, log)")
-    a.annotate("IG: AAA to BBB", (52, 15), xytext=(0, -20), textcoords="offset points", ha="center", va="top",
-               fontsize=8.3, color=INK_2)
-    a.annotate("BB, B", (330, 118), xytext=(6, 14), textcoords="offset points", ha="left", va="bottom",
-               fontsize=8.3, color=INK_2)
-    a.annotate("CCC", (900, 175), xytext=(0, -22), textcoords="offset points", ha="center", va="top",
-               fontsize=8.3, color=INK_2)
-    a.annotate("Q2 2025 (circled)", (x[gap][(d["bucket"][gap] == "B").values][0], y[gap][(d["bucket"][gap] == "B").values][0]),
-               xytext=(-10, 16), textcoords="offset points", ha="right", va="bottom", fontsize=8, color=INK_2)
-    a.text(0.97, 0.035, f"$\\hat\\beta^{{DTS}}$ = {beta:.2f}  (dashed: vol = $\\hat\\beta$ x OAS)", transform=a.transAxes,
-           ha="right", va="bottom", fontsize=7.8, color=MUTED)
     a.grid(axis="x", color=GRID, linewidth=0.5)
+    dot = lambda col: Line2D([0], [0], marker="o", color="none", markerfacecolor=col, markeredgewidth=0, markersize=6)  # noqa: E731
+    handles = [dot(C_IG), dot(C_HY), dot(C_CCC),
+               Line2D([0], [0], marker="o", color="none", markerfacecolor="none", markeredgecolor=INK, markersize=8),
+               Line2D([0], [0], color=INK_2, linewidth=1.1, linestyle=(0, (4, 2)))]
+    labels = ["IG: AAA, AA, A, BBB", "HY: BB, B", "CCC", "Q2 2025 (April gap)",
+              f"vol = {beta:.2f} x OAS"]
+    a.legend(handles, labels, loc="lower right", fontsize=7.8, handlelength=1.3, labelspacing=0.35,
+             borderaxespad=0.2)
 
     # Right: April 2025, the notional that keeps risk constant under two forecasts
     s = load(P_SIZING, parse_dates=["date"])
@@ -226,26 +222,22 @@ def fig_dts_vol_scaling():
     b.plot(t, s["ewma_notional"], color=C_RETURN, linewidth=LW, zorder=3)
     ev = np.datetime64("2025-04-02")
     b.axvline(ev, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
-    b.annotate("2 Apr:\nOAS 3.42%", (ev, 1.0), xytext=(-4, 6), textcoords="offset points", ha="right", va="bottom",
+    b.annotate("2 Apr: OAS 3.42%", (ev, 0.5), xytext=(-4, 0), textcoords="offset points", ha="right", va="bottom",
                fontsize=8, color=INK_2)
     ev2 = np.datetime64("2025-04-07")
     row7 = s[s["date"] == "2025-04-07"].iloc[0]
     b.plot([ev2], [row7["dts_notional"]], "o", color=C_SPREAD, markersize=5, zorder=5)
-    b.annotate(f"7 Apr, OAS 4.61%:\nDTS notional {row7['dts_notional']:.2f}", (ev2, row7["dts_notional"]),
-               xytext=(10, 8), textcoords="offset points", ha="left", va="bottom", fontsize=8, color=INK_2)
-    label_end(b, t[-1], s["dts_notional"].iloc[-1], "DTS forecast", C_SPREAD, dx=5)
-    label_end(b, t[-1], s["ewma_notional"].iloc[-1], "EWMA-60", C_RETURN, dx=5)
-    b.set_xlim(t[0], t[-1])
+    b.annotate(f"7 Apr: DTS {row7['dts_notional']:.2f}", (ev2, row7["dts_notional"]),
+               xytext=(8, -16), textcoords="offset points", ha="left", va="top", fontsize=8, color=INK_2)
+    t_end = np.datetime64("2025-06-30")
+    label_end(b, t_end, s["dts_notional"].iloc[-1], "DTS forecast", C_SPREAD, dx=5)
+    label_end(b, t_end, s["ewma_notional"].iloc[-1], "EWMA-60", C_RETURN, dx=5)
+    b.set_xlim(t[0], np.datetime64("2025-08-05"))
     b.set_ylim(0.45, 1.55)
-    b.margins(x=0)
     b.xaxis.set_major_locator(mdates.MonthLocator())
     b.xaxis.set_major_formatter(mdates.DateFormatter("%b"))
     b.set_ylabel("Notional for constant risk (2 Apr 2025 = 1.0)")
     b.set_xlabel("2025")
-    fig.get_layout_engine().set(w_pad=0.04, h_pad=0.04)
-    fig.canvas.draw()
-    # leave room on the right for the direct labels
-    b.set_position(b.get_position())
     return finish(fig, "ch10_dts_vol_scaling")
 
 
@@ -270,11 +262,9 @@ def fig_trend_smile():
         se = tf[sel].std() / math.sqrt(sel.sum())
         assert abs(tf[sel].mean() - smile(z0, rho)) < 4 * se + 0.01, (z0, tf[sel].mean(), smile(z0, rho))
 
-    fig, (a, b) = plt.subplots(1, 2, figsize=(7.0, 3.4), layout="constrained")
+    fig, (a, b) = plt.subplots(1, 2, figsize=(7.0, 3.5), layout="constrained")
     z = np.linspace(-3.4, 3.4, 400)
     a.plot(z, np.abs(z), color=NEUTRAL, linewidth=1.0, linestyle=(0, (4, 2)), zorder=1)
-    a.annotate("straddle limit |r|", (-3.3, 3.3), xytext=(2, -2), textcoords="offset points", ha="left", va="top",
-               fontsize=8, color=MUTED)
     rhos = [(0.5, SEQ_BLUE_STEPS[11]), (0.25, SEQ_BLUE_STEPS[8]), (0.1, SEQ_BLUE_STEPS[4])]
     for rho_i, col in rhos:
         a.plot(z, smile(z, rho_i), color=col, linewidth=LW, zorder=3)
@@ -284,27 +274,26 @@ def fig_trend_smile():
     a.annotate("$\\rho$ = 0", (3.4, 0), xytext=(4, 0), textcoords="offset points", ha="left", va="center",
                fontsize=8.5, color=INK_2)
     zz = np.linspace(-1.6, 1.6, 60)
-    a.plot(zz, math.sqrt(2 / math.pi) * 0.25 / math.sqrt(1 - 0.25 ** 2) * zz ** 2, color=INK_2, linewidth=1.0,
+    a.plot(zz, math.sqrt(2 / math.pi) * 0.25 / math.sqrt(1 - 0.25 ** 2) * zz ** 2, color=INK, linewidth=1.0,
            linestyle=(0, (1, 2)), zorder=4)
-    a.annotate("parabola for\nsmall moves ($\\rho$ = 0.25)", (-1.1, 0.25), xytext=(-70, 22), textcoords="offset points",
-               ha="center", va="bottom", fontsize=7.8, color=INK_2,
-               arrowprops=dict(arrowstyle="-", color=MUTED, linewidth=0.7))
+    a.text(0, 3.45, "dashed: straddle limit $|r|$\ndotted: small-move parabola, $\\rho$ = 0.25", ha="center",
+           va="top", fontsize=7.8, color=INK_2)
     a.set_xlim(-3.5, 4.5)
     a.set_ylim(-0.35, 3.5)
     a.set_xlabel("Next-period market return $r_{t+1}$ ($\\sigma_r$ units)")
     a.set_ylabel("Expected trend P&L given $r_{t+1}$ ($\\sigma_r$)")
 
-    # Right: 400 simulated rounds at rho = 0.25: outcomes sit between +|r| and -|r|, the smile is the tilt
+    # Right: 400 simulated rounds at rho = 0.25. Every round pays +|r| (right call) or -|r| (wrong call);
+    # the smile is the tilt toward right calls when the move is large.
     n = 400
     rng2 = np.random.default_rng(1012)
     m2 = rng2.standard_normal(n)
     r2 = 0.25 * m2 + math.sqrt(1 - 0.25 ** 2) * rng2.standard_normal(n)
     tf2 = np.sign(m2) * r2
-    zz = np.linspace(-3.2, 3.2, 200)
-    b.fill_between(zz, -np.abs(zz), np.abs(zz), color="#f4f3f0", linewidth=0, zorder=0)
+    zz = np.linspace(-3.4, 3.4, 200)
     b.plot(zz, np.abs(zz), color=NEUTRAL, linewidth=1.0, linestyle=(0, (4, 2)), zorder=1)
     b.plot(zz, -np.abs(zz), color=NEUTRAL, linewidth=1.0, linestyle=(0, (4, 2)), zorder=1)
-    b.plot(r2, tf2, "o", color=MUTED, markersize=3.6, alpha=0.45, markeredgewidth=0, zorder=2)
+    b.plot(r2, tf2, "o", color=MUTED, markersize=3.8, alpha=0.5, markeredgewidth=0, zorder=2)
     b.plot(zz, smile(zz, 0.25), color=C_SPREAD, linewidth=2.0, zorder=4)
     edges = np.quantile(r2, np.linspace(0, 1, 9))
     bx, by, be = [], [], []
@@ -315,16 +304,14 @@ def fig_trend_smile():
         be.append(tf2[sel].std(ddof=1) / math.sqrt(sel.sum()))
     b.errorbar(bx, by, yerr=be, fmt="D", color=C_RETURN, markersize=5.5, capsize=2.2, linewidth=1.1, zorder=5,
                markeredgewidth=0)
-    b.annotate("one round: sign($M_t$) x $r_{t+1}$", (2.2, -2.4), xytext=(0, 0), textcoords="offset points",
-               ha="center", va="center", fontsize=8, color=INK_2)
-    b.annotate("closed form, $\\rho$ = 0.25", (3.0, smile(3.0, 0.25)), xytext=(-4, 10), textcoords="offset points",
-               ha="right", va="bottom", fontsize=8.3, color=INK_2)
-    b.annotate("bin means $\\pm$ 1 s.e.\n(8 bins, 400 rounds)", (-2.2, 1.45), ha="center", va="bottom", fontsize=8.3,
-               color=INK_2)
-    b.set_xlim(-3.3, 3.3)
-    b.set_ylim(-3.4, 3.4)
+    b.text(3.2, 3.45, "right call: pays $+|r|$", ha="right", va="bottom", fontsize=8, color=INK_2)
+    b.text(3.2, -3.45, "wrong call: pays $-|r|$", ha="right", va="top", fontsize=8, color=INK_2)
+    b.text(-2.2, 0.0, "bin means\n$\\pm$ 1 s.e.\n(8 bins)", ha="center", va="center", fontsize=8, color=INK_2)
+    b.text(2.55, 0.8, "closed form,\n$\\rho$ = 0.25", ha="center", va="center", fontsize=8, color=INK_2)
+    b.set_xlim(-3.4, 3.4)
+    b.set_ylim(-3.9, 3.9)
     b.set_xlabel("Next-period market return $r_{t+1}$ ($\\sigma_r$ units)")
-    b.set_ylabel("Trend P&L in the round ($\\sigma_r$)")
+    b.set_ylabel("Trend P&L in one round ($\\sigma_r$)")
     return finish(fig, "ch10_trend_smile")
 
 
@@ -384,8 +371,8 @@ def fig_whipsaw_capture():
         ap.plot([T / 2 + L, T / 2 + L], [ypos - 0.34, ypos + 0.34], color=col, linewidth=1.6)
         ap.text(L + T / 4, ypos, "short", ha="center", va="center", fontsize=7.8, color=INK_2)
         ap.text(-5.6, ypos, "long", ha="left", va="center", fontsize=7.8, color=INK_2)
-        ap.text(26.4, ypos, f"{lab}\n{res * 100:+.0f}%".replace("-", "−"), ha="left", va="center", fontsize=8.2,
-                color=INK_2)
+        pct = f"{res * 100:+.0f}%".replace("-", "\u2212")
+        ap.text(26.4, ypos, f"{lab}\n{pct}", ha="left", va="center", fontsize=8.2, color=INK_2)
         ap.plot([26.1], [ypos], "o", color=col, markersize=5, clip_on=False, zorder=5)
     ap.set_ylim(-0.55, 1.55)
     ap.set_yticks([])
@@ -404,16 +391,13 @@ def fig_whipsaw_capture():
     for L, col, lab in lines:
         c = capture(Ts, L)
         ac.plot(Ts, c * 100, color=col, linewidth=LW, zorder=3)
-    ac.annotate("3-month signal", (48, capture(48, 1.5) * 100), xytext=(0, 5), textcoords="offset points", ha="right",
-                va="bottom", fontsize=8.3, color=INK_2)
-    ac.annotate("12-month signal", (48, capture(48, 6.0) * 100), xytext=(0, -6), textcoords="offset points", ha="right",
-                va="top", fontsize=8.3, color=INK_2)
-    ac.annotate("2-week lag", (48, capture(48, 0.5) * 100), xytext=(0, 5), textcoords="offset points", ha="right",
-                va="bottom", fontsize=8.3, color=INK_2)
+    fig.legend(handles=[Line2D([0], [0], color=col, linewidth=LW) for _, col, _ in lines],
+               labels=["2-week lag (L = 0.5 month)", "3-month signal (L = 1.5)", "12-month signal (L = 6)"],
+               loc="outside lower center", ncol=3, fontsize=8, handlelength=1.6, frameon=False)
     for L, col, _ in lines:
         ac.plot([4 * L], [0], "o", color=col, markersize=5, zorder=5)
-    ac.text(1.74, -118, "Apr 2025\nMar 2020", rotation=90, ha="center", va="bottom", fontsize=7.8, color=INK_2)
-    ac.text(25, -118, "2007-09", rotation=90, ha="left", va="bottom", fontsize=7.8, color=INK_2)
+    ac.text(1.74, 102, "Apr 2025, Mar 2020", rotation=90, ha="center", va="top", fontsize=7.8, color=INK_2)
+    ac.text(25.5, -118, "2007-09", rotation=90, ha="left", va="bottom", fontsize=7.8, color=INK_2)
     ac.set_xscale("log")
     ac.set_xlim(1.0, 48)
     ac.set_ylim(-120, 105)
@@ -422,8 +406,6 @@ def fig_whipsaw_capture():
     ac.minorticks_off()
     ac.set_xlabel("Duration of the V, $T$ (months, log)")
     ac.set_ylabel("Share of the round trip captured (%)")
-    ac.annotate("dots: break-even at $T$ = 4L", (6, 0), xytext=(-2, -18), textcoords="offset points", ha="left",
-                va="top", fontsize=7.8, color=MUTED)
     return finish(fig, "ch10_whipsaw_capture")
 
 
@@ -432,41 +414,47 @@ def fig_whipsaw_capture():
 # --------------------------------------------------------------------------------------------------------------
 def fig_episodes():
     baa = load(P_BAA, parse_dates=["observation_date"], index_col="observation_date")["BAA10Y"].dropna()
+    # title, panel start, episode window (as the case studies define it), descriptor, SG Trend result in the chapter
     eps = [
-        ("A  2007-09", "2007-06-01", "slow ramp, then a cliff", "SG Trend 2008: +20.9%"),
-        ("B  Feb-Jun 2020", "2019-12-01", "V in about two months", "SG Trend 2020: +6.24%"),
-        ("C  2022", "2021-12-01", "a grind, mostly rates", "SG Trend 2022: +27.4%"),
-        ("D  Apr 2025", "2024-08-01", "a gap that retraced", "SG Trend Apr 2025: −4.9%"),
+        ("A  2007-09", "2007-06-01", ("2007-07-01", "2009-12-31"), "slow ramp, then a cliff",
+         "SG Trend 2008: +20.9%"),
+        ("B  Feb-Jun 2020", "2019-12-01", ("2020-02-15", "2020-06-30"), "V in about two months",
+         "SG Trend 2020: +6.24%"),
+        ("C  2022", "2021-12-01", ("2022-01-01", "2022-10-31"), "a grind, mostly rates",
+         "SG Trend 2022: +27.4%"),
+        ("D  Apr 2025", "2024-05-01", ("2025-02-15", "2025-06-30"), "a gap that retraced",
+         "SG Trend Apr 2025: \u22124.9%"),
     ]
     span = 30
-    fig, axes = plt.subplots(1, 4, figsize=(7.0, 3.3), layout="constrained", sharey=True)
-    for ax, (ttl, start, desc, sg) in zip(axes, eps):
+    fig, axes = plt.subplots(1, 4, figsize=(7.0, 3.4), layout="constrained", sharey=True)
+    for ax, (ttl, start, win, desc, sg) in zip(axes, eps):
         t0 = pd.Timestamp(start)
         t1 = t0 + pd.DateOffset(months=span)
+        ax.axvspan(pd.Timestamp(win[0]), pd.Timestamp(win[1]), color="#f0efec", linewidth=0, zorder=0)
         g = baa.loc[t0:t1]
         ax.plot(g.index, g.values, color=C_SPREAD, linewidth=1.3, zorder=3)
         pk = g.idxmax()
         ax.plot([pk], [g.max()], "o", color=C_SPREAD, markersize=4.5, zorder=5)
-        ax.annotate(f"{g.max():.2f}%", (pk, g.max()), xytext=(5 if pk < g.index[len(g) // 2] else -5, 0),
-                    textcoords="offset points", ha="left" if pk < g.index[len(g) // 2] else "right", va="center",
-                    fontsize=8, color=INK_2)
+        ax.annotate(f"{g.max():.2f}%", (pk, g.max()), xytext=(0, 7), textcoords="offset points", ha="center",
+                    va="bottom", fontsize=8, color=INK_2)
         # lookback scale bars on the same time axis (months)
-        for yb, mths, col in ((1.25, 12, C_RETURN), (1.0, 3, C_SPREAD)):
+        for yb, mths, col in ((1.3, 12, C_RETURN), (1.0, 3, C_SPREAD)):
             ax.plot([t0, t0 + pd.DateOffset(months=mths)], [yb, yb], color=col, linewidth=3.0, solid_capstyle="butt",
                     zorder=4)
         ax.set_title(ttl, fontsize=8.8)
-        ax.text(0.03, 0.965, desc, transform=ax.transAxes, ha="left", va="top", fontsize=7.6, color=INK_2)
-        ax.text(0.03, 0.895, sg, transform=ax.transAxes, ha="left", va="top", fontsize=7.6, color=INK_2)
+        ax.text(0.03, 0.975, desc, transform=ax.transAxes, ha="left", va="top", fontsize=7.6, color=INK_2)
+        ax.text(0.03, 0.915, sg, transform=ax.transAxes, ha="left", va="top", fontsize=7.6, color=INK_2)
         ax.set_xlim(t0, t1)
         ax.xaxis.set_major_locator(mdates.YearLocator())
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
         ax.tick_params(axis="x", labelsize=7.8)
-    axes[0].set_ylim(0.8, 6.6)
+    axes[0].set_ylim(0.8, 8.0)
+    axes[0].set_yticks([1, 2, 3, 4, 5, 6])
     axes[0].set_ylabel("Baa less 10-year Treasury (%)")
-    axes[1].text(0.03, 1.25, "", transform=axes[1].transAxes)
     handles = [Line2D([0], [0], color=C_RETURN, linewidth=3.0, label="12-month lookback"),
-               Line2D([0], [0], color=C_SPREAD, linewidth=3.0, label="3-month lookback")]
-    fig.legend(handles=handles, loc="outside lower center", ncol=2, fontsize=8, handlelength=1.6, frameon=False)
+               Line2D([0], [0], color=C_SPREAD, linewidth=3.0, label="3-month lookback"),
+               Patch(facecolor="#e6e5e1", label="episode window")]
+    fig.legend(handles=handles, loc="outside lower center", ncol=3, fontsize=8, handlelength=1.6, frameon=False)
     return finish(fig, "ch10_episodes_baa_spread")
 
 

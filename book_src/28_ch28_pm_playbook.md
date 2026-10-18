@@ -397,7 +397,7 @@ How a systematic desk would have read it. Take a representative CCC bond at the 
 
 Figure 28.3 shows the Kelly curves behind these numbers, with Kaz's 93% beside them.
 
-![Figure 28.3: Expected log growth falls off a cliff at the ruin boundary 1/L, and between January and October the CCC bucket's Kelly fraction fell from 1.10 to 0.65 even as its edge rose from 5.1% to 5.8%. Illustrative: equations (28.9) and (28.10) at Kaz's inputs (c = 4.5%, q = 3.1%, L = 0.6) and at the section's CCC inputs (c = 8.4% and 12.8% from FRED BAMLH0A3HYC; λ = 6% and 10% and L = 0.55 and 0.70 assumed).](assets/figures/ch28_kelly_ruin.png)
+![Figure 28.3: Expected log growth falls off a cliff at the ruin boundary 1/L (dashed lines), which puts Merton's 1.93 for Kaz's bond beyond ruin, and between January and October the CCC bucket's Kelly fraction fell from 1.10 to 0.65 even as its edge rose from 5.1% to 5.8%. Illustrative: equations (28.9)–(28.11), with σ = 0 in the right panel, at Kaz's inputs (c = 4.5%, q = 3.1%, L = 0.6) and at the section's CCC inputs (c = 8.4% and 12.8% from FRED BAMLH0A3HYC; λ = 6% and 10% and L = 0.55 and 0.70 assumed).](assets/figures/ch28_kelly_ruin.png)
 
 Three refinements turn this into a trade. First, apply (28.13): with a relative standard error on the edge of about 1, bet half of each fraction. Second, cap each name at the ruin boundary implied by its *documents*, $1/L_{\max}$, which for LMT-permissive credits is $1.0$ or less, not $1/\mathbb{E}[L]$. Third, impose (28.14) on each cluster: the CCC bucket of one sector, or the issuers of one sponsor, share a common jump. What survives is a book that leaned into CCC carry in January, cut it as $\lambda$ and $L$ rose through the summer, and concentrated what remained in names where the analyst's reading of the documents put a floor under recovery. That last step is not quant. It is the RSSG seat, sized.
 
@@ -545,7 +545,7 @@ Theo's desk: $\overline{\text{LCS}} = 0.6\%$, $G = 5$, and the 2007–2008 multi
 
 Figure 28.4 sets the marks against the two thresholds and shows what they do to the odds of being stopped out.
 
-![Figure 28.4: A 5× book at a 0.6% round-trip cost loses 7.2% of NAV to marks alone at the 2007-08 multiple, almost the whole 7.5% exit, which leaves a Sharpe-1 PM a stop 0.3% away and a 90% lifetime chance of hitting it. Illustrative: equations (28.19) and (28.21) with σ = 6%, G = 5 and the stress multipliers of section 28.5.](assets/figures/ch28_mark_to_bid_stop.png)
+![Figure 28.4: A 5× book at a 0.6% round-trip cost loses 7.2% of NAV to marks alone at the 2007-08 multiple, almost the whole 7.5% exit, which leaves a Sharpe-1 PM a stop 0.3% away and a 90% lifetime chance of hitting it. Illustrative: equations (28.19), as its lifetime limit, and (28.21) with σ = 6%, G = 5 and the four stress multipliers of section 28.5, each applied to the same book.](assets/figures/ch28_mark_to_bid_stop.png)
 
 > **[SOURCE EXTRACTION]** *BlackRock_Systematic_High_Yield_Credit p.5:* "these managers gave up more excess return in subsequent "Very Positive" regimes than was mitigated on the downside during "Very Negative""
 >
@@ -599,7 +599,7 @@ Theo's HY PM: $N_{\text{eff}} = 40$, $\sigma_{\text{DTS}} = 5\%$, $\text{SR} = 2
 
 Figure 28.5 traces the band as the liquidity cost rises.
 
-![Figure 28.5: Charging the mark-to-bid cost pulls the leverage ceiling down through the floor, so Theo's HY PM has a band with no liquidity charge, none at an average LCS of 0.8%, and a narrow one again at 0.4% with a 4% hurdle. Illustrative: equations (28.2), (28.22) and (28.23) with N_eff = 40, σ_DTS = 5%, SR = 2, κz_p = 4, DD_max = 7.5% and m = 5.8.](assets/figures/ch28_leverage_band.png)
+![Figure 28.5: Charging the mark-to-bid cost pulls the leverage ceiling down through the floor, so Theo's HY PM has a band with no liquidity charge, none at an average LCS of 0.8%, and a narrow one again at 0.4% with a 4% hurdle; the dashed curve is the liquidity speed limit, which stays above the ceiling. Illustrative: equations (28.2), (28.22) and (28.23) with N_eff = 40, σ_DTS = 5%, SR = 2, κz_p = 4, DD_max = 7.5% and m = 5.8.](assets/figures/ch28_leverage_band.png)
 
 > **Desk Myth vs. Desk Reality.** *Myth:* "A higher-Sharpe PM needs less leverage." *Reality:* a higher Sharpe *requires* less (the floor falls) and *permits* more (the ceiling rises, because $\kappa z_p - \text{SR}$ shrinks). Paleologo makes the same point about the idiosyncratic share of variance, $p_{\text{idio}}$ (p.178): "When the percentage idio p_idio increases, it works its magic on both sides of the equation: the lower admissible leverage decreases and the highest admissible leverage increases." IDO or it didn't happen, in leverage form: idiosyncratic risk is the only risk that widens the band from both ends.
 

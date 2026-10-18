@@ -14,9 +14,9 @@
 - [x] 12. [§2.6.1 Basket bid] MATH-GENTLY + FULL-DERIVATION-MOVE. -- Four-term narrative, crowd-and-conductor covariance box, algebra moved after mystery.
 - [x] 13. [§2.6.2 Case Study: PT cycle] EXPAND-SCENE (~1,500 words). -- Rebalance scene: Mags 2021, Kaz on Pi and gamma, decision.
 - [x] 14. [§2.7, §2.7.1 ETFs] MATH-GENTLY + FULL-DERIVATION-MOVE + ANOTHER-SEAT. -- Gift-card band box, AP gag, ETF-maker and Apollo seat box.
-- [ ] 15. [End of §2.7.1 and §2.9.3 "March 2020"] NEW-SCENE, long (2,500–3,500 words): "The Week the ETF Was the Only Price."
-- [ ] 16. [§2.8 Non-bank LPs] LIST-TO-NARRATIVE + ANOTHER-SEAT.
-- [ ] 17. [§2.9.1 LCS] MATH-GENTLY + WHEN-TO-APPLY.
-- [ ] 18. [§2.9.2 Theorem] MATH-GENTLY + FULL-DERIVATION-MOVE.
+- [x] 15. [End of §2.7.1 and §2.9.3 "March 2020"] NEW-SCENE, long (2,500–3,500 words): "The Week the ETF Was the Only Price." -- Three-witness March 2020 scene; decision answered in §2.9.3 with tools.
+- [x] 16. [§2.8 Non-bank LPs] LIST-TO-NARRATIVE + ANOTHER-SEAT. -- Family-tree narrative, FINRA block inference, Jane Street BB, bank seat.
+- [x] 17. [§2.9.1 LCS] MATH-GENTLY + WHEN-TO-APPLY. -- Speedometer duration box; two-witness LCS judgment; floaters, callables, stress.
+- [x] 18. [§2.9.2 Theorem] MATH-GENTLY + FULL-DERIVATION-MOVE. -- Fruit-stall concavity box; result in body; derivative moved to Full Derivation.
 - [ ] 19. [§2.9.3 "April 2025"] NEW-SCENE, long (2,000–3,000 words): "The Same Shock on New Pipes."
 - [ ] 20. [§2.10 Desk Debrief] LIST-TO-NARRATIVE.

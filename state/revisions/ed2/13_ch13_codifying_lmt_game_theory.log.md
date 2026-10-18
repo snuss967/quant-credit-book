@@ -21,5 +21,7 @@
 - [x] 19. Kaz clock scene, hazard/logistic/Beta boxes, MAP algebra moved to derivation.
 - [x] 20. Ines mirror check scene; rank not level; vintage, forum, holders.
 - [x] 21. Incora four-step day, diary redated, Mitel recited, Saks, scoreboard.
-- [ ] 22. §13.10 Desk Debrief Larkspur return scene, bullets kept
-- [ ] 23. Deep-Dive Resource Graph BRIDGE (verified episodes and posts)
+- [x] 22. Larkspur 4:50 scene: EPL, 76 for five, markout; counter now 3.
+- [x] 23. Seven verified episodes, six dated posts with URLs; nothing deleted.
+
+<!-- STATUS: COMPLETE -->

@@ -14,9 +14,9 @@
 - [x] 12. [§7.6 Sample Weights] · MATH-GENTLY + LIST-TO-NARRATIVE. Note: hats/Kish box, decay and attribution argued, bootstrap box.
 - [x] 13. [§7.6] · WHEN-TO-APPLY. Note: overlap factor, overkill case, cross-parent energy 2015, first-slide check.
 - [x] 14. [§7.7 Purged, Embargoed, Issuer-Grouped CV] · MATH-GENTLY + EXPAND-SCENE. Note: Kaz "oh" scene, K-fold photocopy box, grid described, HoldCo tie-back.
-- [ ] 15. [§7.7] · WHEN-TO-APPLY.
-- [ ] 16. [§7.8 Deflated Sharpe] · MATH-GENTLY x2, then FULL-DERIVATION-MOVE.
-- [ ] 17. [§7.8] · ANOTHER-SEAT (box 2 of 3, multi-strategy pod risk desk).
+- [x] 15. [§7.7] · WHEN-TO-APPLY. Note: walk-forward vs CPCV vs purged K-fold; upstream leak; shuffled-purged gap.
+- [x] 16. [§7.8 Deflated Sharpe] · MATH-GENTLY x2, then FULL-DERIVATION-MOVE. Note: strangers box, porch box, logit box; formulas moved intact to end.
+- [x] 17. [§7.8] · ANOTHER-SEAT (box 2 of 3, multi-strategy pod risk desk). Note: Paleologo paraphrased, no quotes; Bloomberg transcript 403, unverified.
 - [ ] 18. [§7.9 The Two Biases] · NEW-SCENE (Scene 2) + MATH-GENTLY.
 - [ ] 19. [§7.9] · WHEN-TO-APPLY.
 - [ ] 20. [§7.10 Trend Watch] · ANOTHER-SEAT (box 3 of 3) + BRIDGE.

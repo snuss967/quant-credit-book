@@ -115,16 +115,16 @@ def fig_capture_plane():
     ax.fill([lo, hi, lo], [lo, hi, hi], color=TINT_BLUE, zorder=0, linewidth=0)
     ax.fill([lo, hi, hi], [lo, lo, hi], color=TINT_GRAY, zorder=0, linewidth=0)
     ax.plot([lo, hi], [lo, hi], color=INK_2, linewidth=1.0, zorder=2)
-    ax.text(86.0, 101.0, "Upside capture above downside:\nalpha, the convexity you pay for", fontsize=8.2,
+    ax.text(86.0, 101.0, "Upside capture above downside:\nalpha, the convexity you pay for", fontsize=8.5,
             color=INK_2, va="top", ha="left")
-    ax.text(100.8, 87.0, "Gives up more upside\nthan it saves", fontsize=8.2, color=INK_2, va="center", ha="right")
-    ax.text(90.6, 88.9, "Pure beta tilt: U = D = \u03b2", fontsize=8.2, color=INK_2, rotation=45, ha="center",
+    ax.text(100.8, 88.2, "Gives up more upside\nthan it saves", fontsize=8.5, color=INK_2, va="center", ha="right")
+    ax.text(90.6, 88.9, "Pure beta tilt: U = D = \u03b2", fontsize=8.5, color=INK_2, rotation=45, ha="center",
             va="center", rotation_mode="anchor")
 
     # the dimmer switch: slide down the diagonal from the benchmark (drawn just below the line so it stays visible)
     ax.add_patch(FancyArrowPatch((99.6, 98.4), (96.6, 95.4), arrowstyle="-|>", mutation_scale=10, linewidth=1.3,
                                  color=INK_2, zorder=4, shrinkA=0, shrinkB=0))
-    ax.text(98.0, 94.7, "Dimmer switch:\nlower \u03b2", fontsize=8.2, color=INK_2, ha="center", va="top")
+    ax.text(98.0, 94.7, "Dimmer switch:\nlower \u03b2", fontsize=8.5, color=INK_2, ha="center", va="top")
 
     for name, D, U in mgrs:
         alpha_m = (U - D) / 100 / k              # per month, decimal
@@ -212,7 +212,7 @@ def fig_dd_pd_map():
     ax.plot([4, 4], [g4, e4], color=INK_2, linewidth=1.0, zorder=4)
     ax.plot([4], [e4], "o", color=C_SURVIVE, markersize=6, zorder=5)
     ax.plot([4], [g4], "o", color=C_JUMP, markersize=6, zorder=5)
-    ax.annotate(f"DD = 4: empirical {e4:.1%}, Gaussian {g4*100:.3f}%\n(about {e4/g4:.0f}\u00d7 apart)", (4, g4),
+    ax.annotate(f"DD = 4: empirical {e4:.1%}, Gaussian {g4*100:.3f}%\n(about {round(e4/g4, -2):.0f}\u00d7 apart)", (4, g4),
                 xytext=(8, 30), textcoords="offset points", fontsize=8.5, color=INK_2, va="center", ha="left",
                 arrowprops=dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8, shrinkA=2, shrinkB=4))
 
@@ -225,7 +225,7 @@ def fig_dd_pd_map():
                 color=INK_2, va="center", ha="right",
                 arrowprops=dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8, shrinkA=2, shrinkB=4))
 
-    label_end(ax, 4.5, float(empirical_pd(4.5)), "Empirical map (Listing 11.2):\nPD = exp(\u22120.718 \u2212 0.9718 DD), cap 35%", C_SURVIVE, dx=6, dy=15)
+    label_end(ax, 4.5, float(empirical_pd(4.5)), "Placeholder empirical map (Listing 11.2):\nPD = exp(\u22120.718 \u2212 0.9718 DD), cap 35%", C_SURVIVE, dx=0, dy=15)
     label_end(ax, 1.5, float(stats.norm.cdf(-1.5)), "Gaussian N(\u2212DD)", C_JUMP, dx=-8, dy=-12, ha="right")
     return finish(fig, "ch11_dd_pd_map")
 
@@ -297,6 +297,7 @@ def fred(series):
 def fig_tier_oas():
     ids = {"HY": "BAMLH0A0HYM2", "BB": "BAMLH0A1HYBB", "B": "BAMLH0A2HYB", "CCC": "BAMLH0A3HYC"}
     df = pd.concat({k: fred(v) for k, v in ids.items()}, axis=1).dropna() * 100.0      # basis points
+    df = df.loc[:"2026-10-15"]                    # the chapter's close; FRED serves a rolling three-year window
     last = df.iloc[-1]
     assert df.index[-1] == pd.Timestamp("2026-10-15")
     assert (round(last.HY), round(last.BB), round(last.B), round(last.CCC)) == (323, 197, 326, 1278)
@@ -318,13 +319,16 @@ def fig_tier_oas():
     a.set_xlim(df.index[0], x_end + pd.Timedelta(days=210))
     a.set_ylim(0, 1450)
     label_end(a, x_end, last.CCC, f"CCC & lower\n{last.CCC:,.0f}bp", ORANGE, dx=6)
-    label_end(a, x_end, last.B, f"B {last.B:,.0f}bp\nindex {last.HY:,.0f}bp", AQUA, dx=6, dy=9)
-    label_end(a, x_end, last.BB, f"BB {last.BB:,.0f}bp", BLUE, dx=6, dy=-4)
-    mark_event(a, pd.Timestamp("2025-04-07"), "Tariff shock\n7 Apr 2025", y_frac=0.43)
+    # B (326) and the index (323) end 3bp apart: a larger grey dot under the aqua dot, one label above, one below
+    a.plot([x_end], [last.HY], "o", color=NEUTRAL, markersize=8, zorder=4, clip_on=False)
+    label_end(a, x_end, last.HY, f"Index {last.HY:,.0f}bp", NEUTRAL, dx=8, dy=-8)
+    label_end(a, x_end, last.B, f"B {last.B:,.0f}bp", AQUA, dx=8, dy=8)
+    label_end(a, x_end, last.BB, f"BB {last.BB:,.0f}bp", BLUE, dx=8, dy=-4)
+    mark_event(a, pd.Timestamp("2025-04-07"), "Tariff-shock peak\n7 Apr 2025", y_frac=0.43)
     a.set_xticks([pd.Timestamp(f"{y}-01-01") for y in (2024, 2025, 2026)])
     a.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
     a.set_ylabel("Option-adjusted spread (bp)")
-    a.set_xlabel("Daily, 17 Oct 2023 to 15 Oct 2026")
+    a.set_xlabel(f"Daily, {df.index[0]:%-d %b %Y} to {df.index[-1]:%-d %b %Y}")
     a.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:,.0f}"))
 
     # right: month-end ratio of the CCC tier to the index

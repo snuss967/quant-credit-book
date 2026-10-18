@@ -28,7 +28,7 @@ Theo is not looking at ROBO's orders. He is looking at the JTD line, because he 
 
 Which raises the question this chapter answers. **What is the number on the risk report supposed to be, and what do you do when it is wrong?**
 
-By the end of the chapter Theo will have built the model that produced that e-mail, piece by piece, and found the bug in it. He will be able to say what a factor is in a credit book and why its loadings are measured in DTS. He will know why a bond that has fallen below 80 needs a different model rather than a bigger volatility, why default lives in its own layer with its own distribution, and how expected shortfall is computed on the mixture of the two. He will be able to write a stress scenario as a set of factor shocks rather than a story, count the model's own failures and tell whether they are bad luck, and read a limit sheet as what it really is: a contract between the model and the people who are allowed to overrule it.
+By the end of the chapter Theo will have rebuilt the model that sent that e-mail and found the bug in it. Along the way he learns why credit loadings are measured in DTS, why a bond below 80 needs a different model rather than a bigger volatility, why default lives in its own layer, how expected shortfall is read off the mixture, how to count the model's own failures, and what a limit sheet really is: a contract between the model and the people allowed to overrule it.
 
 ## 8B.1 What the Model Is For
 
@@ -54,25 +54,23 @@ $$
 n_{\text{eff}} = \frac{n}{1 + (n-1)\bar\rho}.
 $$
 
-With $n = 2{,}000$ and an average correlation of only 0.025, that is $2{,}000/(1 + 1{,}999 \times 0.025) \approx 39$. Two thousand lines, forty hands. Section 28.2 arrives at the same forty from the issuer column, and Ines would say it more simply: you are playing forty hands, and most of what you think of as your other 1,960 are the same hands dealt again. A risk model that cannot see the shared part will report a book that looks as diversified as a phone book and behaves like forty concentrated positions.
+With $n = 2{,}000$ and an average correlation of only 0.025, that is $2{,}000/(1 + 1{,}999 \times 0.025) \approx 39$. Two thousand lines, forty hands, the same forty that §28.2 finds in the issuer column. A risk model that cannot see the shared part reports a book that looks as diversified as a phone book and behaves like forty concentrated positions.
 
-The same arithmetic tells the desk where the risk lives. Portfolio volatility can be split exactly into contributions from each position, because volatility is what mathematicians call homogeneous of degree one: double every position and the volatility doubles.
+The same arithmetic says where the risk lives, because volatility splits exactly into contributions from each position.
 
 > **Math, Gently.** *Who owns the risk? Marginal contribution, by Euler.* Ask how much the book's volatility would rise if one position grew by a dollar. That is the marginal contribution, $\partial\sigma_p/\partial w_i = (\Sigma w)_i/\sigma_p$, where $(\Sigma w)_i$ is position $i$'s covariance with the whole book. Multiply each marginal contribution by the position's size and the pieces add up exactly to $\sigma_p$, a theorem Euler proved two centuries before anyone owned a bond. In the two-bond book at $\rho = 0.6$, A contributes $(3{,}600 + 2{,}880)/125.5 \approx \$52$k and B contributes $(6{,}400 + 2{,}880)/125.5 \approx \$74$k, which sum to the \$126k total. B owns 59% of the risk with 50% of the capital, because it is the more volatile of two positions that move together. The full version, by factor and by issuer, is the first table of the risk pack and the input to §9.8's optimizer.
 
-That first table, contributions by factor and by issuer, is what the risk committee reads first, and it is what made Theo's breach e-mail legible once he knew how to read it. But a contribution table is only as good as the covariance behind it, and a covariance for 2,000 bonds is four million numbers, most of them unknowable from the data a credit desk has. The way out is the same way out the restructuring banker uses when a capital structure has forty instruments: notice that most of them are claims on the same few things.
+But a contribution table is only as good as the covariance behind it, and a covariance for 2,000 bonds is four million numbers, most of them unknowable from a credit desk's data. The way out is the one a restructuring banker takes with a forty-instrument capital structure: notice that most of them are claims on the same few things.
 
 ## 8B.2 The Factor Taxonomy
 
-Kaz draws the tree on the whiteboard on Tuesday afternoon, after the breaches have been explained to everyone's partial satisfaction. It has five branches, and Theo, who has drawn a thousand organization charts of holding companies and their guarantor subsidiaries, recognizes the shape before Kaz labels it.
+Kaz draws the tree on Tuesday afternoon, and Theo, who has drawn a thousand organization charts of holding companies and guarantor subsidiaries, recognizes the shape before it is labelled. "Every bond here is a claim on five things," Kaz says. "Rates, spread, liquidity, whatever the market is doing that our spread factors missed, and the hedges' own idea of the price. Then the part that belongs to the bond alone." They write *IDO?* in the last box, catch a look from Ines, and change it to *residual*.
 
-"Every bond on the desk is a claim on five things," Kaz says. "Rates, spread, liquidity, whatever the market as a whole is doing that our spread factors missed, and the hedges' own idea of the price. Then there's the part that belongs to the bond alone." They write *IDO?* next to the last box and then, after a look from Ines, cross out the question mark and write *residual*. "We find out later whether any of it is IDO."
+The first branch is **key-rate DV01s** (Chapter 4-B): the price change for a one-basis-point move at the 2-, 5-, 10- and 30-year points of the curve. A 2029 note and a 2034 note with the same modified duration hedge each other on a parallel shift and lose together on a steepener, and the key rates are what notice.
 
-The first branch is the one Theo already knows from Chapter 4-B. A bond's price moves when Treasury yields move, and a single duration number hides which part of the curve it is exposed to. The risk model carries **key-rate DV01s**: the price change for a one-basis-point move in the 2-, 5-, 10- and 30-year points of the curve, with the curve interpolated between them. A 2029 note and a 2034 note with the same modified duration can hedge each other on a parallel shift and lose money together on a steepener, and the key rates are what notice.
+The second branch is where credit lives. Bonds are grouped into **rating × sector cells** (B-rated Industrials, BB Energy, CCC Retail), and each cell has a factor return: its common *relative* spread change for the day. A bond's loading on its cell is not estimated bond by bond. It is the bond's DTS (§8.4) times a cell-level sensitivity estimated from the whole panel, because Ben Dor found spread volatility proportional to the spread itself. Twice the DTS means twice the exposure to the same sector shock, whatever the bond's own patchy price history says.
 
-The second branch is where credit lives. The model groups bonds into **rating × sector cells** (B-rated Industrials, BB Energy, CCC Retail, and so on) and gives each cell a factor return: the cell's common *relative* spread change for the day. The loading of a bond on its cell's factor is not estimated bond by bond. It is the bond's DTS, duration times spread (§8.4), multiplied by a cell-level sensitivity estimated from the whole panel. The reason is Ben Dor's regularity that spread volatility is proportional to the spread itself, so a bond's excess-return volatility is proportional to DTS. A bond with twice the DTS of its neighbour has twice the exposure to the same sector shock, whatever its own short and patchy price history says.
-
-The third branch is **liquidity**: a factor built from day-to-day changes in liquidity cost scores, so that a morning when every dealer widens its bid–offer at once shows up as one shock rather than as two thousand small idiosyncratic surprises. The fourth is the factor that §8.8 found hiding in the residuals. Collin-Dufresne, Goldstein and Martin showed in 2001 that most of what structural variables could not explain about spread changes was a single common component, and §8.8 removed it as the first principal component of the residual panel. Here it is promoted from a statistical cleanup step to a **named factor** with its own row in the covariance and its own line in the explain, so that when it moves, the morning meeting can call it something other than "idiosyncratic, all of it, in the same direction." The fifth branch is **basis**: CDX index versus its cash constituents, the high-yield ETFs versus their net asset value, Treasury futures versus the cash curve. These are the factors that only exist because the desk hedges, and they are the ones that bite when the hedge decides to be a separate asset for a week (§8.6, Chapter 20).
+The third branch is **liquidity**, built from daily changes in liquidity cost scores, so that a morning when every dealer widens at once is one shock rather than two thousand small surprises. The fourth is the common component that Collin-Dufresne, Goldstein and Martin (2001) found in what structural variables could not explain, which §8.8 stripped out as the first principal component of the residuals. Here it becomes a **named factor**, so the morning meeting can call it something other than "idiosyncratic, all of it, in the same direction." The fifth is **basis**: CDX against cash, the high-yield ETFs against NAV, Treasury futures against the cash curve. These exist only because the desk hedges, and they bite when a hedge decides to be a separate asset for a week (§8.6, Chapter 20).
 
 ![Figure 8-B.1: The factor tree for a cash-and-derivatives credit book, with Tuesday's exposures marked on each branch: key-rate DV01s, rating × sector spread cells in DTS units, the liquidity factor, the common residual and the basis factors, with issuer residuals and the jump layer drawn as separate leaves. Illustrative book.](assets/figures/ch08b_factor_tree.png)
 
@@ -84,33 +82,33 @@ $$
 
 Here $\text{KRD}_{i,m}$ is bond $i$'s key-rate duration at curve point $m$ and $\Delta y_{m,t}$ the yield change at that point; $g(i)$ is the bond's rating × sector cell; $F_{k,t}$ is spread factor $k$'s relative spread change ($\Delta s/s$, a decimal); $b_{g,k}$ is the sensitivity of cell $g$ to factor $k$, which is 1 for a bond's own cell and something smaller for neighbouring cells when the model allows spillovers; $F^{L}$, $F^{C}$ and $F^{B}_{j}$ are the liquidity factor, the common residual and the basis factors, with their loadings $\beta$; and $\epsilon_{i,t}$ is whatever is left. The minus signs are the bond-math signs: yields up and spreads wider both lose money for a long position.
 
-> **Math, Gently.** *A factor model is a regression that every bond shares.* Imagine forty bonds in the same building, each with its own apartment, all connected to one heating system. On a cold night every apartment cools; some cool more because they have more windows. A factor model says exactly this: each bond's return is a few shared shocks (the heating system, the cold front) multiplied by how exposed that bond is to each (its windows), plus a bit that is the bond's own business (someone left a window open). The shared shocks are the *factor returns* $F_{k,t}$; the exposures are the *loadings* $\beta_{i,k}$; the leftover is the *idiosyncratic return* $\epsilon_{i,t}$. Tiny example: if B-rated Industrials widen 5% in relative terms overnight ($F = 0.05$), a bond with DTS of 0.20 loses about $0.20 \times 0.05 = 1\%$ from the factor alone, and a bond with DTS 0.08 in the same cell loses 0.4%. The payoff for the modeller is that the covariance of 2,000 bonds is now the covariance of perhaps sixty factors, plus 2,000 separate leftover variances, which is a problem that a few years of data can actually answer. The full version is §7-B.5.
+> **Math, Gently.** *A factor model is a regression that every bond shares.* Picture forty apartments on one heating system. On a cold night every apartment cools, and the ones with more windows cool more. A factor model says the same of bonds: each return is a few shared shocks (the cold front) times the bond's exposure to each (its windows), plus a bit that is the bond's own business (someone left a window open). The shocks are *factor returns* $F_{k,t}$, the exposures *loadings* $\beta_{i,k}$, the leftover the *idiosyncratic return* $\epsilon_{i,t}$. Tiny example: if B-rated Industrials widen 5% in relative terms ($F = 0.05$), a bond with DTS 0.20 loses about $0.20 \times 0.05 = 1\%$ from the factor and a cell-mate with DTS 0.08 loses 0.4%. The payoff is that the covariance of 2,000 bonds becomes the covariance of perhaps sixty factors plus 2,000 separate leftover variances, which a few years of data can actually estimate. The full version is §7-B.5.
 
-The covariance matrix follows directly. Stack the loadings into an $n \times K$ matrix $B$, write $\Sigma_F$ for the $K \times K$ covariance of the factor returns and $\Omega$ for the diagonal matrix of idiosyncratic variances. (The letter $D$, which many risk texts use here, is reserved for duration in this book, hence $\Omega$.) Then
+Stack the loadings into an $n \times K$ matrix $B$, write $\Sigma_F$ for the factor covariance and $\Omega$ for the diagonal matrix of idiosyncratic variances. (Many risk texts call it $D$, a letter this book reserves for duration.) Then
 
 $$
 \Sigma = B\,\Sigma_F\,B^{\top} + \Omega, \qquad \sigma_p^2 = w^{\top}\Sigma\,w = \underbrace{(B^{\top}w)^{\top}\,\Sigma_F\,(B^{\top}w)}_{\text{factor}} + \underbrace{w^{\top}\Omega\, w}_{\text{idiosyncratic}} .
 $$
 
-The vector $B^{\top}w$ is the book's exposure to each factor, so the first term is the factor risk and the second the risk that diversifies away as positions multiply. The split is the first table of the risk pack, and it is the same split that the restructuring banker makes without equations when he says that a sector-wide sell-off and a bad quarter at one company are different problems with different fixes.
+The vector $B^{\top}w$ is the book's exposure to each factor; the first term is factor risk and the second is the risk that diversifies away as positions multiply. A restructuring banker makes the same split without equations when he says that a sector sell-off and one company's bad quarter are different problems with different fixes.
 
 > **[SOURCE EXTRACTION]** *Paleologo_Advanced_Portfolio_Management p.111:* "Factor PnL is the sum of all the individual factor PnLs; each factor PnL is the product of factor exposure and factor return; and each factor exposure is the sumproduct of loadings and position NMVs."
 >
-> **Annotation.** Our analysis: Paleologo writes for an equity book, where loadings are estimated characteristics and positions are net market values. The credit translation changes one word and one unit. The word is *DTS*: in a credit book the natural loading on a spread factor is the bond's DTS times a cell sensitivity, so the "sumproduct" is a DTS-weighted sum of market values, and it moves when a bond's spread or rating moves even if no position changes. The unit is relative spread change rather than return. The sentence also explains why the morning explain of Chapter 8-C and this chapter's risk pack have to share their loadings: the same sumproduct that forecasts tomorrow's risk is the one that explains yesterday's P&L.
+> **Annotation.** Our analysis: Paleologo writes for an equity book. The credit translation changes one word and one unit. The word is *DTS*: the loading on a spread factor is DTS times a cell sensitivity, so the "sumproduct" is a DTS-weighted sum of market values that moves when a spread or a rating moves, with no trade. The unit is relative spread change. The sentence also explains why Chapter 8-C's morning explain and this risk pack share their loadings: the sumproduct that forecasts tomorrow's risk is the one that explains yesterday's P&L.
 
-The DTS loading carries a consequence that surprised Theo more than anything else on the tree. Because the loading is $\text{DTS}_i\,b_{g(i),k}$, two things move a bond's risk without any trade. Its spread can widen, which raises DTS, and its rating can change, which moves it to a different cell $g$ with a different sensitivity and a different idiosyncratic bucket. On Tuesday morning both had happened to Halvorsen's neighbours. The whole B-rated Industrials cell had widened on Monday in sympathy, every bond's DTS had risen with its spread, and the cell's DTS exposure, which had been comfortably inside its limit on Friday, was now over the hard line without the desk having bought a bond. That was breach number two. It was not a modelling error. It was the model doing the one thing Theo had not expected a risk model to do, which was to notice that the same bonds had become riskier.
+That DTS loading surprised Theo more than anything else on the tree. Because the loading is $\text{DTS}_i\,b_{g(i),k}$, a bond's risk moves without a trade when its spread widens (DTS rises) or its rating changes (it moves to a different cell and bucket). On Monday the whole B-rated Industrials cell had widened in sympathy with Halvorsen, every bond's DTS had risen with its spread, and the cell's exposure, comfortably inside its limit on Friday, was over the hard line without the desk buying a bond. That was breach number two. It was not a modelling error. It was the model noticing that the same bonds had become riskier.
 
-The factor covariance itself, $\Sigma_F$, is estimated from a few years of daily factor returns, with two adjustments that Chapter 7-B derives and this chapter simply uses.
+The factor covariance $\Sigma_F$ comes from a few years of daily factor returns, with two adjustments derived in Chapter 7-B.
 
-> **Math, Gently.** *EWMA and shrinkage: a memory that fades, and a guess pulled toward common sense.* An exponentially weighted moving average gives yesterday's squared move the most weight, the day before slightly less, and so on, each day's weight shrinking by a constant factor. With a half-life of 60 trading days, a move from three months ago counts half as much as yesterday's; one from a year ago counts about a sixteenth as much. The covariance therefore reacts to a new regime within weeks without forgetting the old one entirely. Shrinkage handles a different problem: with sixty factors and a few hundred days of data, some estimated correlations are noise that happens to look like signal, and the matrix can come out nearly impossible to invert. Ledoit and Wolf's recipe blends the noisy estimate with a simple, stable target (for instance, the same average correlation everywhere) in a proportion chosen from the data itself. Tiny example: if the sample says two factors have correlation 0.9, the target says 0.3, and the estimated shrinkage weight is 0.25, the model uses $0.75 \times 0.9 + 0.25 \times 0.3 = 0.75$. The full version, including how the weight is estimated, is §7-B.5.
+> **Math, Gently.** *EWMA and shrinkage: a memory that fades, and a guess pulled toward common sense.* An exponentially weighted moving average gives yesterday's squared move the most weight and each earlier day a constant fraction less. With a 60-day half-life, a move from three months ago counts half as much as yesterday's and one from a year ago about a sixteenth, so the covariance notices a new regime within weeks without forgetting the old one. Shrinkage solves a different problem: with sixty factors and a few hundred days, some estimated correlations are noise dressed as signal, and the matrix can come out nearly impossible to invert. Ledoit and Wolf blend the noisy estimate with a stable target (say, one average correlation everywhere) in a proportion estimated from the data. Tiny example: a sample correlation of 0.9, a target of 0.3 and a weight of 0.25 give $0.75 \times 0.9 + 0.25 \times 0.3 = 0.75$. The full version is §7-B.5.
 
-That is the Gaussian half of the risk model, and on a quiet Tuesday it is most of the job. But two of the three breaches in Theo's inbox had nothing to do with whether the factors were right. One came from a bond that had stopped behaving like a bond. The other came from a default that had not happened.
+That is the Gaussian half of the model, and on a quiet day it is most of the job. But the other two breaches in Theo's inbox had nothing to do with whether the factors were right. One came from a bond that had stopped behaving like a bond, the other from a default that had not happened.
 
 ## 8B.3 Loadings When Nothing Trades
 
-The factor tree is easy to draw and hard to feed, because on a typical day most of the bonds in a high-yield book do not trade. The DTS loadings survive this well, since DTS needs only a spread and a duration, and an evaluated price supplies both. The trouble is everything the model estimates from history: the liquidity beta, the basis betas, the loading on the common residual, and above all the idiosyncratic variance, which is what is left after the factors and therefore inherits every flaw in them.
+The factor tree is easy to draw and hard to feed, because most bonds in a high-yield book do not trade on a given day. DTS loadings survive this, since an evaluated price supplies a spread and a duration. The trouble is everything estimated from history: the liquidity, basis and common-residual betas, and above all the idiosyncratic variance, which inherits every flaw in the factors.
 
-Chapter 8 met the central difficulty in §8.5. An evaluated price for a bond that did not trade is a weighted average of recent evidence, which makes it a moving average of the truth (App E, Law 9). Regress such a series on same-day factor returns and the beta comes out too small, because part of today's factor move will not show up in the bond's mark until tomorrow or the day after. Dimson's repair is to regress on yesterday's, today's and tomorrow's factor returns and add the coefficients:
+An evaluated price for a bond that did not trade is a weighted average of recent evidence, a moving average of the truth (§8.5; App E, Law 9). Regress it on same-day factor returns and the beta comes out too small, because part of today's move reaches the mark only tomorrow. Dimson's repair is to regress on yesterday's, today's and tomorrow's factor returns and add the coefficients:
 
 $$
 \hat\beta^{\text{Dim}}_{i,k} = \sum_{\ell=-1}^{1} \hat\beta_{i,k,\ell}, \qquad r_{i,t} = \alpha_i + \sum_{\ell=-1}^{1}\beta_{i,k,\ell}\,F_{k,t-\ell} + \epsilon_{i,t}.
@@ -378,3 +376,362 @@ Since $\gamma$ is risk aversion times the variance of the factor being hedged, c
 > **Trend Watch.** *The volume inputs moved in 2026.* A liquidity factor built from trading volumes rests on series that changed definition this year. In its second-quarter 2026 release of 30 July 2026, published as ICE agreed to acquire it for \$167 a share in cash (an equity value of about \$6.0bn), MarketAxess said it was "suspending its practice of issuing monthly volumes press releases" (MarketAxess Q2-2026 release, pp. 4–5, 9; ICE 8-K, Exhibit 99.1). FINRA's affiliate-principal indicator, voluntary from 31 August 2026 and mandatory from 2 August 2027, suppresses the inter-affiliate leg of qualifying trades from dissemination (FINRA Regulatory Notice 26-16, 26 Aug 2026); FINRA's own baseline put such trades at up to about 5.7% of 2025 transactions, counted by trades rather than dollars (SR-FINRA-2026-009, pp. 19–21). Tradeweb's September 2026 report noted that the change lowered reported US high-grade TRACE volumes and that prior periods were not restated. *What it means for the desk:* any volume-based liquidity factor or days-to-liquidate input needs a structural-break dummy at 31 August 2026, and platform series cannot be spliced across it.
 
 *Builds on:* §8.2, §8.6, §8.7, §12.4–§12.5, §27.3, Appendix B §B.16. *Used in:* §9.8 (the optimizer's covariance guard), §12.5.
+
+## 8B.11 The Risk Model Engine
+
+### Specification for AI Implementation
+
+By this point the desk has every piece of the model on paper and has seen each piece fail once: a bucket assigned from a stale field, a basis invented by a clock, a jump folded into a variance, a half-life retuned on its own exceptions. The engine exists to make those failures hard to repeat. It is the one module that Chapter 8-C's explain, the optimizer of §9.8, the MAC covariance of §12.5, the portfolio-trade basket of §19.5 and the dashboard of §28.9 all import, so that the number in the risk pack and the number behind a trade decision are the same number.
+
+What ROBO built from the vague version, "keep risk under the limit," is in the cold open. The precise version reads like a covenant package, because it is one. The inputs are five tables. *Positions*: instrument, issuer, face notional, price, the provenance of that price (trade, quote or evaluation, §27.2), seniority, rating, rating × sector cell, DTS, key-rate durations and the price bucket. *Factor returns*: a dated panel, oldest first, every column snapped at 3:00 p.m. New York. *Cell sensitivities and estimated loadings*: the DTS multipliers by cell and the Dimson loadings on the liquidity, common-residual and basis factors, own or inherited. *Idiosyncratic volatilities* by rating and price bucket, in price points. *The issuer JTD table*: for each instrument, how its default loss depends on recovery, with Beta parameters under $\mathbb{P}$ and a recovery group that says which instruments share an auction.
+
+The outputs are the factor/idiosyncratic split of volatility, the issuer JTD list, VaR and ES at one and ten days on the mixture with their Monte Carlo standard errors, the stress table in two columns, the backtest statistics and the limit sheet with every line marked ok, soft or hard.
+
+Four design choices carry the chapter's argument. The jump layer is simulated and added to Gaussian draws path by path; there is no function anywhere that returns a Gaussian variance with default risk inside it. Recoveries within an issuer are drawn from one uniform number pushed through each group's Beta, so that the notes and the CDS on them recover the same amount and a loan recovers more in the same states of the world; this comonotone shortcut is cruder than running a waterfall over a simulated enterprise value (§12-C), and it is the place to upgrade first. The price bucket has hysteresis. And the engine refuses rather than guesses: a snap that disagrees, a bond below 80 with no equity loading, a bond with no loading and no fallback, or a factor covariance whose condition number passes the alarm all raise an error.
+
+The engine is the right tool for a book of many issuers marked daily. It is the wrong tool, used alone, for a book of five distressed claims, where the jump layer is the whole model and the Gaussian layer is decoration; there, the plan-value engine of Chapter 12-C does the work and this module only aggregates. The edge case that bites is the importance of the tail sample: with a one-day default probability of 0.1%, an issuer defaults on about a hundred paths in a hundred thousand, and an ES that moves by 10% between two runs with different seeds is reporting its own noise. The engine returns the standard error so that the risk pack can print it beside the number.
+
+<!-- EXPLAINED -->
+```python
+"""risk_model.py (Chapter 8-B): the morning risk model for a credit book.
+
+Gaussian layer: EWMA factor covariance with shrinkage, DTS-scaled spread loadings,
+idiosyncratic variance by rating x price bucket, and a sub-80 equity regime with
+hysteresis. Jump layer: issuer-level JTD with Beta recoveries under P, simulated
+separately and never folded into the Gaussian variance. Then VaR/ES on the mixture,
+stress, Kupiec and Christoffersen backtests, and the limit sheet.
+Units: $mm for P&L and notionals, decimals for prices (fraction of par), spreads,
+yields and probabilities; DTS in years x decimal spread; time in years.
+"""
+import numpy as np
+from scipy.special import xlogy
+from scipy.stats import beta as beta_dist, chi2
+
+RNG = np.random.default_rng(20261018)
+SNAP = ("15:00", "America/New_York")
+COND_ALARM = 1e6
+
+
+class RiskModelError(Exception):
+    """Raised instead of guessing."""
+
+
+def check_snaps(snaps):
+    """snaps: dict input name -> (wall clock, time zone). All must equal SNAP."""
+    bad = {k: v for k, v in snaps.items() if tuple(v) != SNAP}
+    if bad:
+        raise RiskModelError(f"snap mismatch: {bad}")
+
+
+def price_bucket(price, in_equity_regime=False, enter=0.80, leave=0.85):
+    """Price bucket with hysteresis: enter the equity regime below 80, leave above 85."""
+    if price < enter or (in_equity_regime and price < leave):
+        return "lt80"
+    if price < 0.90:
+        return "80-90"
+    if price < 0.95:
+        return "90-95"
+    return "ge95"
+
+
+def build_loadings(positions, factor_names, cell_sens, cell_est, equity_beta):
+    """n x K loadings per $ of market value. Spread loadings are -DTS x b_{g,k};
+    rate loadings are -KRD; estimated loadings (liquidity, residual, basis) fall back
+    own -> issuer sibling (rescaled by DTS) -> cell (per unit DTS) -> refuse."""
+    idx = {f: j for j, f in enumerate(factor_names)}
+    B = np.zeros((len(positions), len(factor_names)))
+    siblings = {}
+    for p in positions:
+        if p.get("est"):
+            siblings.setdefault(p["issuer"], p)
+    for i, p in enumerate(positions):
+        if p["bucket"] == "lt80":                      # equity regime (Section 8B.4)
+            if p["id"] not in equity_beta:
+                raise RiskModelError(f"{p['id']}: below 80 with no equity loading")
+            B[i, idx["EQ"]] = equity_beta[p["id"]]     # recovery route: H -> 0 on rates
+            continue
+        for tenor, krd in p["krd"].items():
+            B[i, idx["KR" + tenor]] = -krd
+        if p["cell"] not in cell_sens:
+            raise RiskModelError(f"{p['id']}: no sensitivity for cell {p['cell']}")
+        for f, b in cell_sens[p["cell"]].items():
+            B[i, idx[f]] = -p["dts"] * b
+        est = p.get("est")
+        if not est and p["issuer"] in siblings:
+            ref = siblings[p["issuer"]]
+            est = {f: v * p["dts"] / ref["dts"] for f, v in ref["est"].items()}
+        if not est and p["cell"] in cell_est:
+            est = {f: v * p["dts"] for f, v in cell_est[p["cell"]].items()}
+        if not est:
+            raise RiskModelError(f"{p['id']}: no loading and no fallback")
+        for f, v in est.items():
+            B[i, idx[f]] = v
+    return B
+
+
+def ewma_cov(X, halflife=60):
+    """EWMA covariance (zero mean) of a T x K panel of factor returns, oldest first."""
+    lam = 0.5 ** (1.0 / halflife)
+    w = lam ** np.arange(X.shape[0] - 1, -1, -1)
+    w = w / w.sum()
+    return (X * w[:, None]).T @ X
+
+
+def factor_cov(X, halflife=60, delta=0.25):
+    """Shrink the EWMA covariance toward a constant-correlation target with weight
+    delta (estimated by creditstats.py's Ledoit-Wolf in production), then check it."""
+    S = ewma_cov(X, halflife)
+    sd = np.sqrt(np.diag(S))
+    C = S / np.outer(sd, sd)
+    K = len(sd)
+    rbar = (C.sum() - K) / (K * (K - 1))
+    T = rbar * np.outer(sd, sd)
+    np.fill_diagonal(T, sd ** 2)
+    S = (1.0 - delta) * S + delta * T
+    cond = np.linalg.cond(S)
+    if cond > COND_ALARM:
+        raise RiskModelError(f"factor covariance condition number {cond:.2e}")
+    return S
+
+
+def idio_var(positions, bucket_vol_pts):
+    """Diagonal Omega in return units: (daily idio vol in points / 100 / price)^2."""
+    v = []
+    for p in positions:
+        key = (p["rating"], p["bucket"])
+        if key not in bucket_vol_pts:
+            raise RiskModelError(f"{p['id']}: no idiosyncratic bucket {key}")
+        v.append((bucket_vol_pts[key] / 100.0 / p["price"]) ** 2)
+    return np.diag(v)
+
+
+def gaussian_risk(w, B, SigF, Omega):
+    """Volatility of P&L with its factor and idiosyncratic variances (w in $mm MV)."""
+    x = B.T @ w
+    fac, idi = float(x @ SigF @ x), float(w @ Omega @ w)
+    return np.sqrt(fac + idi), fac, idi
+
+
+def jtd_overlay(instruments):
+    """Issuer -> list of legs (const, slope, (a, b)) with JTD = sum(const + slope * R).
+    Long bond or loan: N(P - R); short bond: -N(P - R); bought CDS: -N(1 - R)."""
+    legs = {}
+    for ins in instruments:
+        N, P = ins["notional"], ins.get("price", 1.0)
+        kind = ins["kind"]
+        if kind in ("bond", "loan"):
+            c, s = N * P, -N
+        elif kind == "bond_short":
+            c, s = -N * P, N
+        elif kind == "cds_bought":
+            c, s = -N, N
+        else:
+            raise RiskModelError(f"unknown instrument kind {kind}")
+        legs.setdefault(ins["issuer"], []).append((c, s, ins["rec"]))
+    return legs
+
+
+def mean_jtd(legs):
+    return {i: sum(c + s * a / (a + b) for c, s, (a, b) in L) for i, L in legs.items()}
+
+
+def simulate_losses(gauss, legs, lam_P, h, n_paths=200_000, rng=RNG):
+    """Losses (positive = loss) over h years. gauss is a Gaussian-layer volatility
+    for the horizon, or an array of historical Gaussian-layer losses to resample.
+    Defaults are independent across issuers under P; recoveries within an issuer
+    are comonotone (one uniform per issuer through each leg's Beta)."""
+    if np.ndim(gauss) == 0:
+        L = rng.standard_normal(n_paths) * float(gauss)
+    else:
+        L = rng.choice(np.asarray(gauss, dtype=float), size=n_paths, replace=True)
+    for issuer, issuer_legs in legs.items():
+        p = 1.0 - np.exp(-lam_P[issuer] * h)
+        hit = rng.random(n_paths) < p
+        k = int(hit.sum())
+        if k == 0:
+            continue
+        U = rng.random(k)
+        jtd = np.zeros(k)
+        for c, s, (a, b) in issuer_legs:
+            jtd += c + s * beta_dist.ppf(U, a, b)
+        L[hit] += jtd
+    return L
+
+
+def historical_gaussian(w, B, X, Omega, h_days, rng=RNG):
+    """Gaussian layer by historical simulation: overlapping h-day sums of past factor
+    returns on today's exposures, plus normal idiosyncratic draws. Losses positive."""
+    x = B.T @ w
+    n = X.shape[0] - h_days + 1
+    blocks = np.array([X[t:t + h_days].sum(axis=0) for t in range(n)])
+    idio_sd = np.sqrt(float(w @ Omega @ w) * h_days)
+    return -(blocks @ x + rng.standard_normal(n) * idio_sd)
+
+
+def var_es(L, alpha=0.99):
+    """VaR, ES and the Monte Carlo standard error of ES (Section 7-B.8)."""
+    q = float(np.quantile(L, alpha))
+    tail = L[L >= q]
+    return q, float(tail.mean()), float(tail.std(ddof=1) / np.sqrt(len(tail)))
+
+
+def stress(w, B, factor_names, scenario, legs):
+    """Two columns, never pre-added: factor loss and jump loss (mean recoveries)."""
+    shock = np.zeros(len(factor_names))
+    for f, v in scenario["shocks"].items():
+        shock[factor_names.index(f)] = v
+    gauss_loss = -float((B.T @ w) @ shock)
+    mj = mean_jtd(legs)
+    jump_loss = sum(mj[i] for i in scenario.get("defaults", []) if i in mj)
+    return {"gaussian": gauss_loss, "jump": jump_loss}
+
+
+def kupiec_pof(x, n, p=0.01):
+    """Kupiec (1995) proportion-of-failures LR and its chi-squared(1) p-value."""
+    lr = -2.0 * (xlogy(n - x, 1 - p) + xlogy(x, p)
+                 - xlogy(n - x, 1 - x / n) - xlogy(x, x / n))
+    return float(lr), float(chi2.sf(lr, 1))
+
+
+def christoffersen_ind(hits):
+    """Christoffersen (1998) independence LR on a 0/1 exception sequence."""
+    h = np.asarray(hits, dtype=int)
+    a, b = h[:-1], h[1:]
+    n00 = int(np.sum((a == 0) & (b == 0)))
+    n01 = int(np.sum((a == 0) & (b == 1)))
+    n10 = int(np.sum((a == 1) & (b == 0)))
+    n11 = int(np.sum((a == 1) & (b == 1)))
+    pi = (n01 + n11) / (n00 + n01 + n10 + n11)
+    p01 = n01 / (n00 + n01) if n00 + n01 else 0.0
+    p11 = n11 / (n10 + n11) if n10 + n11 else 0.0
+    l0 = xlogy(n00 + n10, 1 - pi) + xlogy(n01 + n11, pi)
+    l1 = (xlogy(n00, 1 - p01) + xlogy(n01, p01)
+          + xlogy(n10, 1 - p11) + xlogy(n11, p11))
+    lr = -2.0 * (l0 - l1)
+    return float(lr), float(chi2.sf(lr, 1)), (n00, n01, n10, n11)
+
+
+def limit_sheet(exposures, limits):
+    """limits: line -> (soft, hard) on magnitudes. Hard breaches sort first."""
+    rows = []
+    for line, (soft, hard) in limits.items():
+        if line not in exposures:
+            raise RiskModelError(f"limit line {line} has no exposure")
+        v = exposures[line]
+        status = "HARD" if abs(v) > hard else ("SOFT" if abs(v) > soft else "ok")
+        rows.append((line, v, soft, hard, status))
+    rank = {"HARD": 0, "SOFT": 1, "ok": 2}
+    return sorted(rows, key=lambda r: rank[r[4]])
+
+
+# ---- Self-checks: the chapter's numbers -------------------------------------------
+# 8B.1: two bonds, $60k and $80k daily vol, rho = 0.6 -> about $125.5k.
+cov = np.array([[60.0 ** 2, 0.6 * 60 * 80], [0.6 * 60 * 80, 80.0 ** 2]])
+sig, _, _ = gaussian_risk(np.ones(2), np.eye(2), cov, np.zeros((2, 2)))
+assert abs(sig - 125.54) < 0.01
+
+# 8B.4: hysteresis keeps a bond at 82 in the equity regime once it is there.
+assert price_bucket(0.82, in_equity_regime=True) == "lt80"
+assert price_bucket(0.82, in_equity_regime=False) == "80-90"
+
+# 8B.5: Halvorsen JTD at 78 with mean recovery 15%; Brambleworth net JTD.
+halv = jtd_overlay([{"issuer": "HALV", "kind": "bond", "notional": 12.0,
+                     "price": 0.78, "rec": (0.6, 3.4)}])
+assert abs(mean_jtd(halv)["HALV"] - 7.56) < 1e-9
+bramble = jtd_overlay([
+    {"issuer": "BRAM", "kind": "bond", "notional": 8.0, "price": 0.95, "rec": (0.87, 1.30)},
+    {"issuer": "BRAM", "kind": "loan", "notional": 5.0, "price": 0.98, "rec": (0.93, 0.40)},
+    {"issuer": "BRAM", "kind": "cds_bought", "notional": 6.0, "rec": (0.87, 1.30)},
+])
+assert abs(mean_jtd(bramble)["BRAM"] - 2.20) < 0.01
+
+# 8B.6: one concentrated jump. Ten-day VaR is far above sqrt(10) x one-day VaR.
+jump = {"J": [(20.0, 0.0, (1.0, 1.0))]}          # fixed $20mm JTD (slope zero)
+lam = {"J": -np.log(1 - 0.0015) * 252}           # 0.15% a day under P
+v1, e1, se1 = var_es(simulate_losses(1.0, jump, lam, 1 / 252, 400_000))
+v10, e10, se10 = var_es(simulate_losses(np.sqrt(10), jump, lam, 10 / 252, 400_000))
+assert v10 > 2.0 * np.sqrt(10) * v1 and e10 > np.sqrt(10) * e1 * 1.1
+
+# 8B.8: seven exceptions in 250 days, in clusters of 3, 2, 1, 1.
+lr, pval = kupiec_pof(7, 250, 0.01)
+assert abs(lr - 5.497) < 0.01 and pval < 0.05
+hits = np.zeros(250, dtype=int)
+hits[[50, 51, 52, 57, 58, 120, 200]] = 1
+lri, _, counts = christoffersen_ind(hits)
+assert counts == (238, 4, 4, 3) and abs(lri - 13.49) < 0.01
+
+# 8B.10 and the guards: collinear factors and mismatched snaps both refuse.
+rng = np.random.default_rng(7)
+z = rng.standard_normal((500, 1))
+try:
+    factor_cov(np.hstack([z, z * (1 + 1e-9)]), delta=0.0)
+    raise AssertionError("condition-number alarm did not fire")
+except RiskModelError:
+    pass
+try:
+    check_snaps({"bonds": SNAP, "cdx": ("16:00", "America/New_York")})
+    raise AssertionError("snap guard did not fire")
+except RiskModelError:
+    pass
+
+# 8B.9: the cold open's three breaches.
+sheet = limit_sheet({"JTD_HALV": 7.56, "DTS_B_IND": 1.61, "ES_1D": 2.7},
+                    {"JTD_HALV": (7.0, 9.0), "DTS_B_IND": (1.2, 1.5), "ES_1D": (2.5, 3.0)})
+assert [r[4] for r in sheet] == ["HARD", "SOFT", "SOFT"]
+print("risk_model.py: all chapter checks pass")
+```
+
+## 8B.12 Desk Debrief
+
+A week after Fourteen-Sigma Tuesday the desk held its post-mortem in the small conference room with the broken blind. The breach had been real. The model's sigma had been wrong for a reason that fit on an index card: Halvorsen had crossed 80, the bucket had been read from a monthly field, and the loading had not switched. The JTD line had been right all along, because a person who read the 8-K had moved it. The DTS cell had breached because the cell was riskier, and the model had been the first to notice. ROBO's orders had been cancelled at 7:34 and were now framed above the coffee machine with the caption *flat all day*.
+
+Theo had written the week down the way he used to write up a first-day hearing, and the desk taped the result to the side of his monitor.
+
+- A migration moves risk when nothing trades, because DTS is the unit and the cell is part of the loading. [L3]
+- Default is an event, not a large move: it lives in its own layer, in $\mathbb{P}$, with its own distribution and its own limit, and it is charged once. [L4] [L6]
+- Below 80 the bond is a different claim, so the model changes regime rather than volatility.
+- Risk and P&L share one snap, or the basis they report is a clock. [L9]
+- A model has an exception rate; the desk counts it, and changes the model through a review rather than inside the drawdown that produced the exceptions. [L12]
+- A limit is a conversation with a timestamp, and a breach that lasts seventy-one days has quietly become the limit. [L11]
+
+Mags read the list, initialled it, and added a line in pencil at the bottom: *IDO or it didn't happen, and risk or it didn't count.* Then she went to lunch, which on this desk no longer stops the risk model.
+
+### The Spec You Hand the Robot
+
+"Implement `risk_model.py` per §8B.11. Units: \$mm, decimals, years. One snap, 15:00 America/New_York, checked across every input. Loadings: −KRD on key rates; −DTS × cell sensitivity on spread cells; estimated loadings own, then issuer sibling rescaled by DTS, then cell per unit DTS, else raise. Equity regime below 80 with exit above 85. Factor covariance: EWMA, shrunk, with a condition-number alarm. Idiosyncratic variance by rating × price bucket. Jump layer: issuer JTD legs with Beta recoveries under $\mathbb{P}$, comonotone within issuer, simulated and added path by path, never added to a variance. VaR and ES at 1 and 10 days on the mixture with standard errors. Stress in two columns. Kupiec and Christoffersen. Limit sheet with soft and hard status. Every self-check in the listing passes."
+
+### Exercises
+
+1. *(Quadrature, in DTS.)* Two \$10mm positions have DTS of 0.04 and 0.09 (400 and 900 bp-years), the relative spread volatility is 8.8% a month (§8.4), and the correlation is 0.6. What is the monthly volatility of the pair, and how much diversification did the correlation buy? *Solution:* the stand-alone volatilities are \$35.2k and \$79.2k; the pair's is $\sqrt{35.2^2 + 79.2^2 + 2(0.6)(35.2)(79.2)} \approx \$104.2$k, against \$114.4k if they moved together. Check: the more volatile bond owns about 80% of the risk.
+2. *(The square root of ten.)* A book has a one-day Gaussian volatility of \$1mm and one issuer with a fixed JTD of \$8mm and a one-day default probability of 0.2%. Compute the one-day and ten-day 99% ES on the mixture and compare with $\sqrt{10}$ times the one-day number. *Solution:* about \$3.79mm and \$10.83mm; the shortcut gives \$11.99mm, an overstatement here, while Table 8-B.2's larger jump produced an understatement. Check: the error changes sign with the size of the jump relative to the Gaussian layer.
+3. *(Kupiec.)* Run the proportion-of-failures test on seven exceptions in 250 days at 99%. *Solution:* $\text{LR}_{\text{POF}} = 5.50$, which rejects at 5% (3.84) and not at 1% (6.63). Check: the yellow zone of Basel's traffic light.
+4. *(Christoffersen.)* The same seven exceptions arrive on seven isolated days. Is the model still rejected? *Solution:* $n_{00} = 235$, $n_{01} = n_{10} = 7$, $n_{11} = 0$, and $\text{LR}_{\text{ind}} \approx 0.41$, so independence is not rejected; $\text{LR}_{\text{cc}} \approx 5.90$ sits just below the $\chi^2_2$ 5% value of 5.99. Check: the count alone fails the model at 5% and the timing alone does not, which is why the two tests are read together.
+5. *(The Halvorsen book.)* Using the capital structure of §12B.9, the desk owns \$12mm of the 7.25% notes at 78 (mean recovery 15%) and \$6mm of the 6% notes due 2031 at 31 (mean recovery 5%). The issuer is then downgraded to CCC. Which line of Table 8-B.4 binds, and by how much must the desk cut? *Solution:* JTD is $12(0.78 - 0.15) + 6(0.31 - 0.05) = 7.56 + 1.56 = \$9.12$mm, already above the single-B hard limit of 9.0 and far above the CCC hard limit of 5.5. Reaching 5.5 needs a cut of \$3.62mm of JTD, for example about \$5.75mm face of the 7.25% notes at 0.63 of JTD per dollar of face. Check: no Gaussian line changed with the downgrade except the cell assignment; the binding constraint is the jump.
+6. *(ROBO, again.)* Rewrite "keep risk under the limit" in one sentence so that ROBO's 9:31-and-3:59 plan is no longer a solution. *Solution:* one version is "Hold the 1-day 99% ES on the mixture, computed on end-of-day positions at the 15:00 New York snap and monitored intraday on the same definition, below \$2.5mm soft and \$3.0mm hard, reducing by the trades of least expected cost; round trips within a day count at their cost and leave the end-of-day position unchanged." Check: the sentence names the measure, the horizon, the snap, the threshold and the cost of compliance.
+
+### Deep-Dive Resource Graph
+
+**Podcasts**
+- *Odd Lots*, "How the Hottest Hedge Funds on Wall Street Really Manage Risk" (25 Jul 2024). https://omny.fm/shows/odd-lots/how-the-hottest-hedge-funds-on-wall-street-really. Pod-shop risk management in practice: the risk-limit culture that this chapter's sheet formalizes.
+- *Odd Lots*, "The Math That Explains How Multi-Strategy Hedge Funds Make Money," with Dan Morillo (7 Oct 2024). https://omny.fm/shows/odd-lots/100724-odd-lots-dan-morillo-master. Crowding, factor neutrality and capacity, the economics behind the idiosyncratic line.
+- *Odd Lots*, "Giuseppe Paleologo on Quant Investing at Multi-Strat Hedge Funds" (21 Jun 2025). https://omny.fm/shows/odd-lots/giuseppe-paleologo-on-quant-investing-at-multi-strat-hedge-funds. The audio companion to the Paleologo text quoted in §8B.2.
+- *Flirting with Models*, "Giuseppe Paleologo – Multi-Manager Hedge Funds & Thinking Deeply About Simple Things (S7E11)" (2 Sep 2024). https://www.flirtingwithmodels.com/episodes/l2l3xUqwZbz. Factor models in hedging and portfolio construction, at a technical level.
+- *Flirting with Models*, "Jeff Rosenberg – The Past, Present, and Future of Systematic Fixed Income (S7E19)" (18 Aug 2025). https://www.flirtingwithmodels.com/episodes/8V74zBaN4jN. Why credit factors are characteristic-specific, which is the DTS-loading argument in a practitioner's words.
+
+**Practitioner Writing**
+- US Senate Permanent Subcommittee on Investigations, *JPMorgan Chase Whale Trades: A Case History of Derivatives Risks and Abuses*, staff report (15 Mar 2013). https://www.hsgac.senate.gov/wp-content/uploads/imo/media/doc/REPORT%20-%20JPMorgan%20Chase%20Whale%20Trades%20(3-15-13).pdf. The case study of §8B.9; the limit and model chapters are the best public description of a credit-derivatives risk process under stress.
+- Robeco (van Leeuwen, Penninga and Houweling), "Duration Times Spread: measuring credit risk" (2 Sep 2024). https://www.robeco.com/en-uk/insights/2024/09/duration-times-spread-measuring-credit-risk. The originators on why DTS became the unit of credit risk.
+- Paleologo, *Advanced Portfolio Management* (Wiley, 2021), Chapter 7 on managing factor risk and setting limits.
+
+**Academic Papers**
+- Kupiec, P. (1995), "Techniques for Verifying the Accuracy of Risk Measurement Models," *Journal of Derivatives* 3(2).
+- Christoffersen, P. (1998), "Evaluating Interval Forecasts," *International Economic Review* 39(4).
+- Collin-Dufresne, P., R. Goldstein and J. S. Martin (2001), "The Determinants of Credit Spread Changes," *Journal of Finance* 56(6).
+- Dimson, E. (1979), "Risk Measurement When Shares Are Subject to Infrequent Trading," *Journal of Financial Economics* 7(2).
+- Ledoit, O. and M. Wolf (2004), "Honey, I Shrunk the Sample Covariance Matrix," *Journal of Portfolio Management* 30(4).
+- Whalley, A. E. and P. Wilmott (1997), "An Asymptotic Analysis of an Optimal Hedging Model for Option Pricing with Transaction Costs," *Mathematical Finance* 7(3).
+
+**Data & Code**
+- FRED: ICE BofA US High Yield OAS (https://fred.stlouisfed.org/series/BAMLH0A0HYM2), CCC & Lower OAS (https://fred.stlouisfed.org/series/BAMLH0A3HYC), Moody's Baa minus 10-year (https://fred.stlouisfed.org/series/BAA10Y) and the 10-year Treasury (https://fred.stlouisfed.org/series/DGS10). The ICE series on FRED carry only the most recent three years of history, so pre-2023 scenario levels come from the canonical sections or from BAA10Y.
+- FINRA, SR-FINRA-2026-009 (Apr 2026), the affiliate-principal baseline. https://www.finra.org/sites/default/files/2026-04/SR-FINRA-2026-009.pdf.
+- `risk_model.py` (this chapter, Appendix F and `book_src/lib/`), with `creditstats.py` (§7-B.10) for the Ledoit–Wolf weight and Monte Carlo standard errors.

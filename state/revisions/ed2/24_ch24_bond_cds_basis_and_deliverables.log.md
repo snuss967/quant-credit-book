@@ -1,0 +1,25 @@
+# Progress Log, Edition 2 U2: Ch 24 Bond-to-CDS Basis & Deliverables
+
+- [ ] 1. [Cold open] EXPAND-SCENE (to 800–1,200 words)
+- [ ] 2. [§24.1] MATH-GENTLY #1, risk-neutral replication
+- [ ] 3. [§24.1 A1–A6 list] LIST-TO-NARRATIVE
+- [ ] 4. [§24.2] MATH-GENTLY #2, hazard rate, survival and the risky annuity
+- [ ] 5. [§24.2.1] FULL-DERIVATION-MOVE
+- [ ] 6. [§24.3 opening] LIST-TO-NARRATIVE + SHOP-LIFE
+- [ ] 7. [§24.3.1] MATH-GENTLY #3, RFV vs RMV + FULL-DERIVATION-MOVE
+- [ ] 8. [§24.3 Bohn–Stein and Dynkin airline extractions] BRIDGE
+- [ ] 9. [§24.4] NEW-SCENE, Long Scene A: The Haircut Call, March 2020
+- [ ] 10. [§24.4.1] MATH-GENTLY #4, leverage as divisor + FULL-DERIVATION-MOVE
+- [ ] 11. [§24.4 counterparty] ANOTHER-SEAT #1, dealer desk
+- [ ] 12. [§24.5] MATH-GENTLY #5, minimum over a set is an option + Delphi + FULL-DERIVATION-MOVE
+- [ ] 13. [§24.6] NEW-SCENE, The Sears Afternoon, 17 January 2019
+- [ ] 14. [§24.6.1] FULL-DERIVATION-MOVE
+- [ ] 15. [§24.7] LIST-TO-NARRATIVE + MATH-GENTLY #6, OU and half-life
+- [ ] 16. [§24.7.1] MATH-GENTLY #7, costs vs Sharpe + FULL-DERIVATION-MOVE + WHEN-TO-APPLY
+- [ ] 17. [§24.7] ANOTHER-SEAT #2, insurer / IG real-money mandate
+- [ ] 18. [§24.8.1] LIST-TO-NARRATIVE + MATH-GENTLY #8, thresholds and cliffs
+- [ ] 19. [§24.8.2] EXPAND-SCENE, Long Scene B: The Risk Meeting, 2 January 2018
+- [ ] 20. [§24.8.3 Windstream] EXPAND-SCENE + fact fix
+- [ ] 21. [§24.8.4] ANOTHER-SEAT #3 + BRIDGE to 2026
+- [ ] 22. [§24.9 Desk Debrief] Finder table
+- [ ] 23. [Everywhere] Template ban

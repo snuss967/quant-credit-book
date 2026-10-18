@@ -144,7 +144,7 @@ with $\eta = +1$ for a buy and $-1$ for a sell. It has its own line for two reas
 
 > **[SOURCE EXTRACTION]** *Paleologo_Advanced_Portfolio_Management p.159:* "the attribution is computed based on daily returns, based on market close prices and positions. Orders, however, happen intraday. As an extreme case, take the scenario where you open and close a position intraday. Attribution will attribute zero PnL to this stock. This discrepancy is usually categorized as a 'trading PnL'."
 >
-> **Annotation.** Paleologo is writing about equities, where the close is a single print and the intraday trade is the exception. A credit desk inverts both. The close is several photographs taken at different times by different vendors, and almost every position was traded intraday at a price that differs from any of them. The trading P&L Paleologo describes as a discrepancy is, on a credit desk, the day-one line and the timing line, and the composite at the minute of the trade carries the weight that the closing print carries in equities. Store it, with its own timestamp, on the trade ticket. An explain that keeps only end-of-day marks attributes the edge of every intraday trade to "market".
+> **Annotation.** Paleologo is writing about equities, where the close is a single print and the intraday trade is the exception. A credit desk inverts both. The close is several photographs taken at different times by different vendors, and almost every position was traded intraday at a price that differs from any of them. The trading P&L Paleologo describes as a discrepancy is, on a credit desk, the day-one line and the timing line, and the composite at the minute of the trade carries the weight that the closing print carries in equities. It belongs on the trade ticket, with its own timestamp. An explain that keeps only end-of-day marks attributes the edge of every intraday trade to "market".
 
 The last line in this group is the one Chapter 3-B introduced in a Math, Gently box: **timing**. If a bond is marked at 4:00 p.m. and its futures hedge at the 3:00 settlement, the book reports a P&L of
 
@@ -231,3 +231,152 @@ One more check stands between a signal's P&L and its reputation, and it is the m
 > **View From Another Seat.** *The multi-strategy platform.* On a pod platform the attribution question is a compensation question, and the platform answers it in advance. Portfolio managers are typically paid a share of their own P&L, with factor exposure hedged or charged centrally, so the platform's explain strips factors first and pays on what is left. Cross-terms between pods are mostly invisible to the pods themselves, because each pod sees only its own book. The platform sees the sum, nets the overlaps and keeps the interaction as its own P&L or cost. (Public accounts of this structure include the *Odd Lots* episodes listed in this chapter's Resource Graph; we describe the seat generically.) A single systematic desk running several signals faces the same question with one difference: the person dividing the interaction also runs the signals, which is a reason to fix the convention before the month starts rather than after it ends.
 
 *Builds on:* §8.8 (the IDO ledger), §8.9 (`ido_engine`), §3.3 (markouts), §3.5 (the Edge Ledger), Law 2. *Used in:* §28.3 (allocation across signal horizons), §28.9 (net alpha by signal), Chapter 9 (the factor sleeves).
+
+## 8C.6 Two Worked Mornings
+
+### Morning (a): the stale series
+
+Here is Monday, the cold open's morning, line by line. Chapter 3-B told it in round numbers from the door. This is the version product control signed at 9:55.
+
+| Line | Source | \$ | bp of NAV |
+| :--- | :--- | ---: | ---: |
+| Coupon accrual, bonds (three days) | custodian | +75,800 | +7.6 |
+| Pull-to-par and roll-down | model | +12,400 | +1.2 |
+| Rates, bonds (key rates) | risk model × curve | −52,000 | −5.2 |
+| Rates, Treasury futures | exchange settlement | +40,000 | +4.0 |
+| Spread factors, bonds | risk model × factors | −338,000 | −33.8 |
+| CDX HY protection, price from factor | risk model × index | +110,000 | +11.0 |
+| CDX HY protection, coupon (three days) | clearing statement | −16,700 | −1.7 |
+| Idiosyncratic, bonds | issuer curves | −96,300 | −9.6 |
+| Convexity | model | +300 | 0.0 |
+| Financing | treasury | −15,000 | −1.5 |
+| Fees and commissions | blotter | −4,000 | −0.4 |
+| Day-one | blotter vs composite | +3,500 | +0.4 |
+| **Sum of named lines** | | **−280,000** | **−28.0** |
+| Mark correction pending: CDX HY old series | product control | −110,000 | −11.0 |
+| Unexplained | | −9,000 | −0.9 |
+| **Official P&L as booked** | | **−399,000** | **−39.9** |
+
+At 7:20 Theo sorted the positions by residual, and the hedge had the signature described in §8C.2: an official price change of exactly zero on a day its factor moved 0.275 points, so its residual was exactly minus its factor line. The mark's timestamp was Friday, 4:45 p.m. The protection was on the old series. The roll had moved the market's quoting to the new series on Monday, and the vendor, finding no quotes for the old one, had published Friday's price again with Monday's date on the file.
+
+At 7:28 Theo told Ines that all twelve basis points were the hedge. "Down forty is really down twenty-eight."
+
+"And the other one?"
+
+"The residual was 11.9. Call it twelve. Rounding."
+
+"That," Ines said, "is what *Other* said."
+
+It took Theo a moment, and then it landed. He had found a real cause for eleven basis points and quietly given it credit for the twelfth, which is ROBO's plug done by hand with better manners. At 9:40 product control had quotes on the old series from two dealers. It had fallen 0.275 points, the same as the new series, so the correction was exactly +\$110,000 and the series basis was unchanged on the day. The −\$9,000 stayed where it was: inside the \$10,000 tolerance, logged in the ledger with the cause *bond residuals, unattributed*, and never assigned to the hedge. The official P&L was restated to −\$289,000. Tuesday's explain then showed the +\$110,000 correction as a named line with a source and a date, not as an unexplained gain, which is the only form in which a fixed mistake can be seen as fixed.
+
+Two changes went into production that week. The roll-day job now checks every index position for the stale signature and stops the explain with a named flag if it finds one. And every position that rolls carries a series-basis line, built from the roll quote observed at the time of the roll, so that a generic ticker's jump from the old series to the new appears as what it is.
+
+### Morning (b): the true-up on a bond that did not trade
+
+Friday 30 October is month-end. The desk owns \$8mm of Corriveau Logistics 9.5% notes due 2030 (fictional), carried at a composite of 84.50. The bond last printed on TRACE nine days earlier, at 84.25 for \$2mm, and two dealers' runs on the 30th showed 84–85 and 83¾–85. On Monday morning the administrator's month-end evaluated price arrived at 81.50. The true-up line read
+
+$$
+\Pi^{\text{true-up}} = (81.50 - 84.50) \times \frac{8{,}000{,}000}{100} = -\$240{,}000,
+$$
+
+24 bp of NAV, two and a half times the day's tolerance. Nothing else in the explain moved with it. Corriveau's factor line was +\$4,000, its issuer curve had not moved, and its other bond had not traded either. The explain had a three-point loss and no cause.
+
+Theo found the cause by reading the vendor's methodology note instead of the bond's chart. An evaluated price for a bond that has not traded is built from its neighbors: other bonds in the same rating, sector and maturity cell, adjusted by a model. On 29 October one of those neighbors, a different issuer, had announced a liability-management transaction and dropped nine points. The matrix had moved the whole cell. Corriveau had been repriced on a stranger's news.
+
+"Is that a stale mark or a wrong mark?" Kaz asked.
+
+"It's a mark doing exactly what it's built to do," Mags said. "Which is why you dispute it with evidence and not with feelings." The Ad Hoc Group, represented by counsel, neither confirms nor denies that its mark is stale.
+
+Product control filed the challenge on Monday at 11:00: the 21 October TRACE print, both dealer runs with timestamps, nine days of composite history between 84.2 and 84.6, and the neighbor's press release, with a sentence explaining why its news was specific to that issuer. On Tuesday afternoon the vendor revised to 84.00. The P&L moved back $(84.00 - 81.50) \times 8{,}000{,}000/100 = +\$200{,}000$. The remaining −\$40,000 true-up, half a point, was accepted with a note. The dealer mids averaged about 84.4, a revised price of 84.00 was defensible inside a point-wide market, and a dispute is a request for evidence to be weighed, not a mechanism for getting one's own mark back. The month-end NAV, struck on the fifth business day, used 84.00.
+
+This is Law 9 working in both directions. A mark is a moving average of the truth, and the true-up is usually the day the average catches up. This time the vendor's average had caught up with somebody else's truth. About half the disputes this desk files are rejected, and the rejected ones are often the most informative, because they are the cases where the vendor had seen a print the desk had not.
+
+![Figure 8C.2: The two mornings side by side, before and after. Left: Monday's explain with the residual at −\$119,000 (stale-series signature highlighted), then corrected to −\$9,000 inside the tolerance band. Right: the Corriveau true-up line at −\$240,000, the dispute evidence (the TRACE print, dealer runs and composite history) on a timeline, and the revised line at −\$40,000. Illustrative.](assets/figures/ch08c_two_mornings.png)
+
+*Builds on:* §8C.2 (the series roll), §8C.4 (tolerance and dispute), Appendix B (TRACE and evaluated-price sources), Law 9. *Used in:* §8C.9 (the explain's hand history), Chapter 10-B (rolls), Chapter 17-B (marks as contested prices).
+
+## 8C.7 Case Study: The Whale's Explain (JPMorgan's Chief Investment Office, 2012)
+
+After the Corriveau dispute, Mags drops a printed report on Theo's desk. It runs to about 300 pages and has been annotated in three colors of ink. "The best description anybody has published of a credit desk's morning explain," she says, "is a Senate report about one that didn't work."
+
+The report is the U.S. Senate Permanent Subcommittee on Investigations staff report *JPMorgan Chase Whale Trades: A Case History of Derivatives Risks and Abuses* (15 March 2013). Chapters 3-B and 6 borrowed single facts from it. Read as a whole, it is a case history of an explain that footed every day to marks chosen by the desk being explained. Page numbers below are the report's own. Individuals are not named here, and nothing below is invented.
+
+**The book.** The Synthetic Credit Portfolio sat inside the bank's Chief Investment Office and held credit index and tranche positions. Its net notional grew from "over \$51 billion" at the end of 2011 to "over \$157 billion" at the end of March 2012 (p.185). Its losses eventually reached at least \$6.2 billion.
+
+**The daily ritual.** The book filed "daily profit/loss (P&L) reports ... internally," and its positions were marked each day by "a junior trader charged with marking the SCP's positions" (p.5). Early in January the marks were set "at or near the midpoint price in the daily range of prices (bid-ask spread)." Later the book "began to assign more favorable prices within the daily price range" (p.5). The report quotes a recorded call: "I am not marking at mids as per a previous conversation" (p.5). One day's email estimated a \$43 million loss, "the largest daily loss yet," and referred to a "\$600 million to \$800 million 'lag'" (p.83).
+
+**The shadow explain.** For 12–16 March the marker kept "a spreadsheet tracking the differences" between the reported values and values at the midpoint. By that sheet, the reported year-to-date loss was \$161 million, and at mids it was \$593 million (p.5). Read that spreadsheet as an explain and it is a very good one. It has two columns, one from the desk's marks and one from an independent price, and the difference is the unexplained, \$432 million of it. Its flaw was ownership. The person keeping it was the person whose marks it contradicted, and no tolerance, clock or escalation rule was attached to it.
+
+**The bad days.** On 30 March the book reported a daily loss of \$319 million, and the report records a gap of \$512 million later identified by the bank's Valuation Control Group (p.5). On 10 April an estimated daily loss of about \$6 million was re-issued 90 minutes later, "after a confrontation between two CIO traders" (p.5).
+
+**The price test.** The Valuation Control Group's tolerances let the investment-grade index mark "vary from the midpoint ... by up to 6 basis points" (p.112, n.675). An analyst described the March practice as having "marked the book at the boundary of the bid/offer spread ... then applied a tolerance" (p.141). Internal audit rated the group "Needs Improvement," citing the absence of a "formally applied price sourcing hierarchy" and of "documented/consistently applied price testing thresholds" (p.141). Five risk metrics (VaR, CS01, CSW10%, stress loss and stop-loss advisories) were all breached in the first quarter of 2012 (p.7).
+
+**The outside explain.** The resolution came from counterparties, not from inside the bank. The Chief Investment Office and the bank's own Investment Bank "assigned different values to identical credit derivative holdings," and the counterparties who posted collateral against their own marks objected. The resulting collateral disputes peaked at \$690 million (p.6). In May the CIO was told to mark as the Investment Bank did, which "used an independent pricing service to identify the midpoints," and that "resolved the collateral valuation disputes in favor of the CIO's counterparties" (p.6). On 13 July 2012 the bank restated its first quarter for an additional \$660 million of losses (p.98).
+
+"So they had an explain," Theo says. "They had a shadow explain. They had a price test and five limits. What was missing?"
+
+"Nothing on the list," Ines says. "What was missing is the reason each thing on the list exists."
+
+Four ideas from this chapter would each have shortened the story, and the report supplies the evidence for every one of them. The first is that the foot has to land on a price the desk did not choose. The CIO's daily P&L footed perfectly, to the CIO's marks, and an identity is only as honest as the number on its left-hand side. The shadow spreadsheet was the real explain, and it had no owner outside the desk.
+
+The second is that a tolerance has to be stated in dollars and sized against the book, not in basis points per instrument. Six basis points sounds tight. Take \$100 billion of five-year index notional with a risky duration of about 4.5, an illustrative position and not the SCP's actual mix of longs and shorts. Its CS01 is $100 \times 10^9 \times 4.5 \times 10^{-4} = \$45$mm per basis point, so a 6 bp tolerance leaves about \$270mm of discretion on that one line. A tolerance expressed per instrument grows with the position, which means it grows fastest exactly when the position is becoming impossible to exit. This desk's rule, the smaller of 1 bp of NAV and 5% of ES, is written to shrink in relative terms as the book grows.
+
+The third is that a counterparty's collateral call is an explain with an adversary. A collateral dispute is a residual that the other side has backed with its own money, and it cannot be marked away. Of all the numbers in the report, the \$690 million of disputes was the first that the desk did not control, and it was the one that resolved the marks.
+
+The fourth is the escalation clock. Five limits were breached in a quarter (p.7). On this desk, a breach freezes new risk in the names involved until the residual has a name, which is the opposite of the incentive that lets a position grow while its explain is under discussion.
+
+Mags takes the report back. "In my day we didn't have a Valuation Control Group," she says. "We had a controller named Sal, who came down to the floor on the last day of the month with a folder of broker quotes. Sal didn't have a tolerance." She considers this. "Sal was the tolerance."
+
+### Two more mornings from the public record
+
+*The Revlon wire, from the lenders' side.* On 11 August 2020 Citibank, as agent on Revlon's 2016 term loan, meant to pay interest to the lenders and instead wired about \$894 million of principal. The operational story, including the "six-eye" control that missed it, belongs to §27.7. On the lenders' side, the next morning's explain showed something simpler: a cash receipt at par on a loan that the market priced at 20–30 cents, with no trade, no paydown notice and no maturity. A production explain classifies that as a *cash event with no trade*. It flags it, books nothing to P&L, and someone calls the agent. A system that treated the receipt as a repayment would have extinguished the position and booked a gain of roughly 75 points of face, which is what a plug looks like when it has a wire attached. The defendants' funds held \$558.6 million. Judge Furman ruled for them on 16 February 2021 under the discharge-for-value rule. On 8 September 2022 the Second Circuit (No. 21-487) vacated, holding that a full early repayment, three years before maturity, from a borrower priced at 20–30 cents, put the lenders on inquiry notice, and rehearing was denied on 12 October 2022. The court's reasons for inquiry notice read like the explain's reasons for a flag.
+
+*Hertz, effective date.* On 30 June 2021 Hertz's plan became effective, and in creditors' and shareholders' position files old claims and old stock turned into cash, new common stock and warrants or rights (§16.6). That morning's explain was entirely corporate-action lines. An explain that read the swap as a sale of the old instruments at one mark and a purchase of the new ones at another would have produced a fake loss on one line and a fake gain on another, and neither would have had anything to do with the market.
+
+*Builds on:* §3B.1 (marks after the close), §6.4 (the VaR spreadsheet from the same report), §16.6 (Hertz), §27.7 (the Revlon wire, canonical). *Used in:* §8C.8, §28.6 (marking to bid and the drawdown stop), Chapter 17-B (marks as contested prices).
+
+## 8C.8 When to Apply It, and When It Breaks
+
+The explain works best on a liquid book on an ordinary day, which is to say on the days nobody asks about. Five kinds of day strain it, and a seasoned product controller checks for each one before reading the residual column.
+
+*Illiquid names.* For a bond that has not traded in a month, the explain explains a mark, not a price. Its residual is small because its mark is a model of its neighbors, and the risk model's lines are a model of the same neighbors. A small unexplained on such a bond is agreement between two models. Corriveau showed the failure in the other direction. The useful check is the provenance column (traded, composite, evaluated, model; §27.2), read before the residual column, together with §12.5's reminder that stale marks shrink every beta measured on them.
+
+*The default day.* When Halvorsen's 6s stopped paying (Chapter 12-B), three lines changed character at once. Accrual stopped and the bond began to trade flat, so the accrual line went to zero, and the accrued interest the desk had been carrying (three points on \$10mm, \$300,000, by the missed coupon date) left the accrual column and became part of a claim whose value now sits inside the price (§4B.1, Appendix A §A.5). The price line took the jump, and the protection's gain was booked as a forecast of the auction's final price, not a fact, until the auction weeks later (Appendix D §D.5). For those weeks the jump-to-default line is the largest line on the page and the least certain.
+
+*Corporate actions.* An exchange offer, an A/B exchange or a CUSIP change reaches the position file as an old line out and a new line in. If the two lines are marked from different sources, the explain shows a fake loss on one and a fake gain on the other. Chapter 3-B's 6:45 diff caught one such exchange before it could, and Appendix B §B.16 lists the evidence to keep for each action. The explain books the swap at carrying value with zero P&L, and the market lines start from the new instrument's first mark.
+
+*New issues.* A bond priced yesterday has no return history and so no estimated loadings. Chapter 8-B assigns it its rating-and-sector cell's loadings until it has a history of its own. For its first weeks, part of what the explain calls idiosyncratic is really error in that assignment, and a signal that buys new issues heavily will look more skillful than it is.
+
+*The wire you are not owed.* Revlon's lenders (§8C.7) had a cash event with no trade. The explain flags any receipt or payment that matches no coupon, settlement, margin call or fee, and it sends the flag to a person. The cash stays off the P&L until that person says otherwise.
+
+> **Trend Watch.** *The prices the explain is marked against are changing hands (2026).* On 29–30 July 2026 Intercontinental Exchange agreed to buy MarketAxess for \$167 a share in cash, about \$6.0bn of equity value and \$5.7bn of enterprise value, and described the deal as joining MarketAxess's trading data and analytics with ICE's pricing, reference-data and index businesses (ICE 8-K, Ex. 99.1). The same morning, MarketAxess announced that it was "suspending its practice of issuing monthly volumes press releases" (Q2-2026 release). The shareholder vote and the HSR waiting-period expiry were both set for 29 October 2026, with closing expected in the first half of 2027 (MarketAxess DEFM14A and 8-K). Separately, FINRA's affiliate-principal transaction indicator (Regulatory Notice 26-16, 26 August 2026; voluntary from 31 August 2026, mandatory from 2 August 2027) suppresses the inter-affiliate leg of qualifying trades so that only the trade with the outside counterparty is disseminated. FINRA's own baseline put such trades at up to about 5.7% of 2025 transactions, an upper bound in counts and not dollars (SR-FINRA-2026-009). Tradeweb's September 2026 report notes that it has "not restated prior periods" (Tradeweb, 6 October 2026). *What it means for the explain:* the composite, the evaluated price and the TRACE prints in a dispute file are all changing provenance at once. A composite is becoming one company's product, and print counts have a structural break at 31 August 2026. The explain's own history needs a break marker on that date, or the unexplained series will show a change in the market's plumbing as a change in the desk's skill. Chapter 17-B argues that price itself became contested in 2025–26. This is the public-market version of that argument.
+
+*Builds on:* §4B.1 and Appendix A §A.5 (trading flat), Chapter 8-B (loadings for new issues), §12B.9 (Halvorsen), §27.2 (provenance types), Appendix B §B.16 (corporate actions). *Used in:* §8C.10 (edge cases), Chapter 22 (market structure), Appendix C (trend rows).
+
+## 8C.9 The Explain's Own Hand History
+
+Ines keeps the explain's ledger the way she kept poker hand histories, and for the same reason. One bad hand teaches nothing. A pattern across hundreds of hands says something about the player. At the end of September she asks Theo to read the quarter.
+
+| Cause (third quarter, 63 trading days) | Breaches | Sum of \|U\| at breach (\$k) | Median hours to a name |
+| :--- | ---: | ---: | ---: |
+| Month-end evaluated-price true-ups | 4 | 410 | 26 |
+| Stale or mismapped index marks, roll week | 3 | 260 | 2 |
+| Booking errors (wrong account, late ticket) | 2 | 120 | 3 |
+| Corporate actions and identifiers | 2 | 95 | 5 |
+| Timing and snap mismatches | 1 | 18 | 1 |
+| **Total breaches** | **12** | **903** | |
+| Days inside tolerance (bond residuals, unattributed) | 51 days | 290 | |
+
+*(Illustrative.)* Seven of the twelve breaches fell on six days: the three month-ends and the three days of roll week. Theo's first reaction is that this is obvious, and his second is to ask whether it is real or just a pattern that he went looking for.
+
+> **Math, Gently.** *Is a cluster real? The binomial test.* If breaches landed on random days, each of the 12 would fall on one of the 6 special days with probability $6/63 \approx 0.095$, and the count on special days would follow a binomial distribution with $n = 12$ and $p = 0.095$. Its mean is about 1.1. The binomial gives the probability of a count at least as large as the one observed: $\Pr(X \ge 7) = \sum_{k=7}^{12}\binom{12}{k}p^k(1-p)^{12-k} \approx 3.6 \times 10^{-5}$, about one in 27,000. The clustering is not a coincidence. The test does not say *why* (calendars, vendors, a tired evening shift), only that something structural is there to find. The full version, with the multiple-testing caution that applies when many possible clusters were tried, is Chapter 7-B.
+
+What the table says is what Chapter 3-B's calendar predicted. The unexplained clusters around the dates when the book's instruments change identity (rolls, exchanges) or when the person forecasting their price changes (month-end). It does not cluster around big market days. The model's lines handle volatility well. The explain fails on bookkeeping and calendars, which is good news, because those are cheap to fix, and it is also a warning: an explain tuned only on volatile days will miss most of its own failures. The 51 quiet days inside tolerance summed to \$290,000 of unattributed residual, roughly zero on average and never assigned to anything. That is the line ROBO's *Other* would have erased.
+
+Theo's Edge Ledger (§3.5, §3B.11) gets its first row that is not a trade idea: *22 September, found the residual, \$110,000, stale old-series index mark, roll day; fix: stale-signature check on roll-day job.* The desk counts that row as edge, because it was money the desk would otherwise have misreported, and because the fix keeps paying every March and September.
+
+![Figure 8C.3: The unexplained by day over the third quarter: daily bars of $U$ against the shaded ±\$10,000 tolerance band, with month-ends and roll week marked by vertical lines; seven of the twelve breaches sit on those six days. Illustrative.](assets/figures/ch08c_unexplained_by_day.png)
+
+> **Quant-shop life (a fictional composite).** *The break report, at a systematic asset manager.* At 6:10 p.m. on the third business day of October, the fund administrator's break file arrives: 412 rows in which the administrator's numbers and the manager's differ. Dev, the product controller (a composite; no real person), has a train at 7:48. Sorting by cause takes four minutes. Of the rows, 409 are one bond. A 144A note held across 409 separately managed account lots paid its coupon on a Monday, the administrator booked it on the record date and the manager on the payment date, and every lot breaks by the same few dollars. Two rows are the September index coupon. The 20th fell on a Sunday, and the administrator accrued the protection to the unadjusted date while the manager accrued to Monday the 21st. The difference is one day of 500 bp on the notional, which on \$40mm is \$5,556. The last row is the A/B exchange from Chapter 3-B: the administrator is still pricing the old 144A CUSIP, which nobody has quoted for two weeks, at a level that is a full point stale. Dev clears 411 rows by 8:35 and misses the train. The last row needs the pricing vendor's challenge form, deadline 4 p.m. tomorrow, and the form's only required field is "evidence of executable levels." She attaches two dealer runs and a screenshot of the new CUSIP's TRACE prints, and eats noodles that have been cold since 6:30. The vendor accepts the challenge at 2:15 the next afternoon. Nothing in the file involved a model, a factor or a view on credit. Most of what a book does not understand about itself turns out to be about dates and identifiers.
+
+*Builds on:* §3.3 (hand histories), §3.5 and §3B.11 (the Edge Ledger), §3B.3 (the month and the rolls), Chapter 7-B (testing a pattern you went looking for). *Used in:* §28.9 (the dashboard), Chapter 27 (alert hygiene).

@@ -25,4 +25,5 @@
 - [x] 23. §15.7: Mags tells Spirit, staircase-ramp box, who waits for free.
 - [x] 24. §15.8 WBD: June 10 scene, non-boycott, meter box, two seats, close.
 - [x] 25. Shop-life vignette: Priya, secmaster columns, EU clock, risk committee, ticket.
-- [ ] 26. §15.9 Desk Debrief: LIST-TO-NARRATIVE closing scene + dated podcast items
+- [x] 26. §15.9: closing scene, spine answered, Mags respect, boxed bullets, graphs upgraded.
+<!-- STATUS: COMPLETE -->

@@ -9,10 +9,10 @@
 - [x] 7. [§4.4 Value Q vs P] MATH-GENTLY + ANOTHER-SEAT (Apollo) + WHEN-TO-APPLY — actuarial vs premium box; Rowan quotes; distributor story; three checks.
 - [x] 8. [§4.4 cross-sectional neutralization] MATH-GENTLY (residuals/handicap) — golf handicap box, B2 retailers +50/−20, before IDO line.
 - [x] 9. [§4.5 Data stack, ex-post filter bias] MATH-GENTLY x2 + FULL-DERIVATION — sealed envelope, bell-and-scissors boxes; truncated-normal derivation moved; figure hook.
-- [ ] 10. [§4.5 Case Study Factor Zoo] EXPAND-SCENE 2,500-3,500 words + decision point
-- [ ] 11. [§4.6 DTS] MATH-GENTLY (proportional moves) + WHEN-TO-APPLY
-- [ ] 12. [§4.6 Man's three layers] MATH-GENTLY x2 + FULL-DERIVATION + WHEN-TO-APPLY
-- [ ] 13. [§4.6 Nuveen's identity] MATH-GENTLY (random walk vs OU) + FULL-DERIVATION
+- [x] 10. [§4.5 Case Study Factor Zoo] EXPAND-SCENE 2,500-3,500 words + decision point — Monday–Friday clean-panel week, LIB, FDR box, decision, rules.
+- [x] 11. [§4.6 DTS] MATH-GENTLY (proportional moves) + WHEN-TO-APPLY — points-or-percent box; tight-decile check scene; distressed edge.
+- [x] 12. [§4.6 Man's three layers] MATH-GENTLY x2 + FULL-DERIVATION + WHEN-TO-APPLY — suitcase optimizer, bathroom-scale z-score; Φ derivation moved; event-signal near miss.
+- [x] 13. [§4.6 Nuveen's identity] MATH-GENTLY (random walk vs OU) + FULL-DERIVATION — drunk-on-leash box; (4.4) moved with OU ODE; three breaks.
 - [ ] 14. [§4.7 TC decomposition] MATH-GENTLY + ANOTHER-SEAT (dealer/NBLP)
 - [ ] 15. [§4.7 Break-even turnover] MATH-GENTLY + WHEN-TO-APPLY
 - [ ] 16. [§4.7 Case Study Man Numeric execution] EXPAND-SCENE 2,000-3,000 words + decision point

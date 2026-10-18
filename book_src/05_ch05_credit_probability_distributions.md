@@ -539,7 +539,7 @@ Theo has been waiting for a gap, and takes it. "There's a floor, though. One nob
 
 Kaz looks genuinely startled. "Someone publishes the lower bound of the recovery distribution? For nearly every case? And it's free?"
 
-"Mostly. On CourtListener," Theo says, "next to the plan, once anyone has pulled it." It is in this section's Resource Graph.
+"Mostly. On CourtListener," Theo says, "next to the plan, once anyone has pulled it." The CourtListener link is in the Resource Graph at the end of §5.6.
 
 Mags adds the caveat a distressed PM would add. "It's a floor the debtor built, and the debtor wanted it low, because a low liquidation number makes the plan look generous. So it's a lower bound, not an estimate. But it's a lower bound with a signature on it." Which is exactly how a quant should use it: as a hard left edge on the recovery Beta for a class in a case that has reached the disclosure-statement stage, and as an input that a pure quant, who has never opened a disclosure statement, will not know to collect.
 

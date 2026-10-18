@@ -791,7 +791,7 @@ $$
 
 and the quote is approximately $P \approx P_{\text{no-LMT}} - 100\cdot\text{EPL}_i - \text{risk premium}$, in points. The last factor comes from §13.3 (or §13.6 for a drop-down), the third from the knapsack of §13.4, the second from the co-op state of §13.5. **Measure discipline:** PRS is a $\mathbb{P}$-forecast of an event. The price impact is $\mathbb{Q}$-flavoured, because the marginal holder is averse to exactly this jump, and the *Serta* damages award shows a court measuring it with a market price. Calibrating PRS to prices would bake the market's fear into the forecast and then subtract it a second time in the quote, so the desk keeps the two apart: it regresses price residuals on EPL and calls the slope the premium.
 
-**When to trust the PRS, and when not to.** On the Monday after the model goes live, Ines prints the top forty names by score and reads down the list the way she reads a hand history, looking for the one that does not belong. Larkspur has jumped from 0.12 to 0.19 overnight *(illustrative)*. She asks why. Kaz pulls the attribution, and almost all of the move is `loan_px`, which fell three points on Friday afternoon. Nothing in the document changed. Nobody new signed a co-op. The runway did not shorten. "So the price fell," says Ines, "and the score told us the price fell. That's a mirror, not a forecast." It is her first check on any move, and the reason is circular in the plainest way. The score exists to explain the price, so a score that moves only because the price moved has added nothing, and an EPL built on it would take the same three points off the quote twice. A score that moves because the parser found a new incremental-debt basket, or because a sponsor's 13D landed, is telling the desk something the price may not know yet.
+**When to trust the PRS, and when not to.** On the Monday after the model goes live, Ines prints the top forty names by score and reads down the list the way she reads a hand history, looking for the one that does not belong. A packaging company the desk has never traded has jumped from 0.12 to 0.19 overnight *(illustrative)*. She asks why. Kaz pulls the attribution, and almost all of the move is `loan_px`, which fell three points on Friday afternoon. Nothing in the document changed. Nobody new signed a co-op. The runway did not shorten. "So the price fell," says Ines, "and the score told us the price fell. That's a mirror, not a forecast." It is her first check on any move, and the reason is circular in the plainest way. The score exists to explain the price, so a score that moves only because the price moved has added nothing, and an EPL built on it would take the same three points off the quote twice. A score that moves because the parser found a new incremental-debt basket, or because a sponsor's 13D landed, is telling the desk something the price may not know yet.
 
 That check opens onto the larger judgment about what the PRS is for. It is good at ranking. Within one vintage of documents and one forum, a name scored 0.19 is more likely to see an LMT next year than a name scored 0.05, and the ordering survives most of the ways the model can be misspecified. It is much worse at levels, and three things break the level. The first is vintage. Buccola and Nini found that before 2020 only 40% of loans restricted uptiers, and that by mid-2022, 85% of new loans explicitly blocked them (Trend Watch, §13.3). A base rate fitted on the earlier documents describes a population that no longer exists, which is why the prior's mean comes from events in documents of the same vintage. The second is forum. Courts in Texas and New York read buyback exceptions for the borrower, against it, and for it again within about two years (§13.9), and a score with a static forum coefficient averages across a sign flip. The third is the holder block, which the score sees only dimly. `holder_hhi` and `coop_reported` arrive late and dirty (Priya's Tuesday in §13.6), and Robertshaw showed that a Required-Lender position can be bought quietly in a single month (§13.4). A desk that uses the PRS to decide which forty documents to read first is using it well. A desk that multiplies a PRS of 0.19 by three other factors and quotes the product to the second decimal has mistaken a ranking for a measurement, and the EPL inherits the false precision.
 
@@ -920,10 +920,48 @@ The months are our own arithmetic on the deal and petition dates. The six filers
 
 ## 13.10 Desk Debrief
 
+*Tuesday, 4:50 p.m. The same Tuesday.*
+
+At 7:51 that morning Ines made the call Theo could not yet make. "Tell them 75, for five." The client did not hit it. At 7:58 sales reported, in the voice sales reserves for a lost trade, that the client had done all fifteen million away at 78. Loans do not print on TRACE, so the desk learned the level the way it learns most things about loans: from a salesperson who heard it from a client who wanted them to know.
+
+Theo spent the day doing what this chapter just did. At 4:50 he stands at Ines's desk with one sheet of paper, which is a regression from the legal pad, which was a regression from the napkin.
+
+"Four factors," he says. "The PRS first. With this morning's headline coded as a group organizing, the model says 0.35 for an LMT inside a year. I checked what moved it, the way you do. The price falling from 84 to 78 accounts for about four hundredths of that. The headline and the document account for the rest, so it isn't a mirror."
+
+"What's in the document?"
+
+"An agreement signed in early 2022, before the blockers became the norm later that year. No Serta blocker. A J.Crew blocker, no Chewy blocker. And 9.05(g) says 'open market purchase,' not bare 'purchase.' After the Fifth Circuit, that wording makes a straight Serta-style exchange harder to defend, but it does nothing against an amend-extend-and-exchange. So the second factor, the chance the deal is non-pro-rata given that there is a deal, is a half. Before December 2024 I'd have said seven in ten."
+
+"Third."
+
+"The knapsack. The group says it holds 51.3%, and the action it needs is a bare majority, so the bag is already full. Anyone who arrives today with fifteen million is outside it by construction, and fifteen million is too small to be worth a seat even if the bag weren't full: a one-percent holder adds almost nothing toward $\theta$ and costs a chair at the table. The only way in is a sponsor who opens the deal to everyone to keep the litigators quiet, which happens more often since *Serta* than it used to. Pr(excluded) is 0.85."
+
+"Fourth."
+
+"The Serta-shaped put. Twenty-two cents of expected transfer, from the illustrative lognormal in the §13.8 listing, because I don't have Larkspur's terms yet. It's the factor I trust least." He writes the product, $0.35 \times 0.5 \times 0.85 \times 0.22 \approx 0.033$, about 3.3 points.
+
+"That's for a random holder," says Ines. "Who sold at 7:41?"
+
+"That's the part I couldn't do this morning." Theo turns the sheet over. "If the seller was in seat two, they knew they were out and the deal was close. Then the PRS is more like 0.8, the non-pro-rata chance 0.8, and they're excluded for certain: $0.8 \times 0.8 \times 1 \times 0.22$, about 14 points. If it was seat three, the CLO, it's the random-holder number, 3.3. Seat one can't sell. Given that somebody offered at 78 within a minute of the headline, I'd put four in ten on seat two. That's about 7.6 points of expected priming loss. Without any LMT risk, Larkspur would trade around 86 *(illustrative, from comparable names)*, and our residual regression says the market charges about a third on top of EPL for bearing the jump, call it two and a half points. Eighty-six, less seven and a half, less two and a half: 76. And five million, not fifteen. If they hit 76 in four seconds, I've learned which seat they had, and I paid for the lesson on a third of the size."
+
+"In my day," says Mags, "we'd have bid seventy, hung up, and called it judgment."
+
+"It was judgment," says Ines. "It just didn't have units."
+
+Kaz leans over from the next desk. "And my question from this morning? Why 'excluded' means 25 in one case and 99 in another?"
+
+"Because 'excluded' was never the variable," says Theo. "The variable is where $V$ lands against the strike when the story ends, and who gets to say the story has ended: a court, a sale, or the next filing. Serta ended in a courtroom with $V$ below $K_1$. Lumen ended with an asset sale big enough to put $V$ above everybody's strike, and so did Boardriders. Same word, different $V$, different referee."
+
+Ines pulls up the hand history for a trade she did not do. Larkspur is quoted 74–76 at the close *(illustrative)*. The other dealer's 78 marks out at about −3, roughly \$450,000 on fifteen million. Her 75 for five, had it traded, would be flat. Theo's 76 for five would be down about \$50,000, and the desk would know something it does not know now. "The markout says the seller had a reason," she says. "Nobody followed with another offer at 78, and the bid leaked all day. Seat two, or a very nervous seat three. Write it down."
+
+She does not say whether 76 was right, because the hand is not over. Three days later the lenders who had not been called would find each other and organize, the loan would trade at 81 (§13.5), and the same 78 would mark out at +3. Ines keeps markouts at the close, at a day and at a week for exactly this reason, and she keeps all three.
+
+Theo writes the card that goes on his monitor.
+
 - **An LMT is the difference of two waterfalls.** In low states it is zero-sum among creditors; the liquidity story lives in high states. Compute $\Delta_j(V)$ before you read the press release.
 - **Know your payoff shape.** Excluded from an uptier: short a soft digital put struck at $K_1$. Victim of a drop-down: short a forward capped at $C^{\text{unsub}}/F$. Diluted by a double-dip: someone is counted twice in your denominator.
 - **The sponsor solves a knapsack** and leaves out the constrained, the fragmented and the litigious. Model your invitation probability, not your participation decision.
-- **A co-op above $1 - \theta$ turns an auction into a bargain.** Deal-away capacity costs the co-op $\eta$ per dollar; carve-out premiums are Shapley values. (Cooperation agreements signed in this book so far: 2. Antitrust complaints about them: 2, and counting.)
+- **A co-op above $1 - \theta$ turns an auction into a bargain.** Deal-away capacity costs the co-op $\eta$ per dollar; carve-out premiums are Shapley values. (Cooperation agreements signed in this book so far: 3. Antitrust complaints about them: 2, and counting.)
 - **One word can be the whole loss.** The court is a random variable with a clause, a forum, a doctrine and a vintage.
 - **PRS is $\mathbb{P}$; the price is $\mathbb{Q}$.** Never calibrate the score to prices. The prior keeps $\hat\beta$ finite, and Theo's runway is the covariate that separates.
 - **The LMT is not the terminal state.** Only 22% of coercive-LME firms avoided both re-default and bankruptcy within two years. Price the next event.
@@ -943,15 +981,26 @@ Build `lmt_engine.py` (numpy/scipy; `rng = np.random.default_rng(13)`; runs top 
 ### Deep-Dive Resource Graph
 
 **Podcasts**
-- Bloomberg *Odd Lots*, episodes on liability management and creditor-on-creditor violence (search the archive; episode titles not verified here).
-- *Cloud 9fin* and Octus podcasts on LME structures and cooperation agreements (titles not verified).
+- Bloomberg *Odd Lots*, "Inside the Blood Sport of Creditor-on-Creditor Violence," with Sujeet Indap of the *Financial Times* (Nov 25, 2024): https://omny.fm/shows/odd-lots/inside-the-blood-sport-of-creditor-on-creditor-vio. The general-audience way in to §13.1 and §13.4: how the loose documents of the zero-rate years came back as fights between creditors.
+- *Cloud 9fin*, "Not Your Daughter's Liens: Sid Levinson and team recall the original uptier LME" (Mar 10, 2026, feed date): https://share.transistor.fm/s/cf13a6ad. Majority-lender counsel on the 2017 NYDJ deal as the first uptier, set beside Serta, J.Crew, Envision and Boardriders; the family tree behind the §13.1 zoo.
+- *Cloud 9fin*, "Co-op agreements through the eye of American Needle" (Sep 25, 2024, feed date): https://share.transistor.fm/s/44a5c9af. The antitrust risk to the commitment device of §13.5, a year before the Selecta and Optimum complaints.
+- *Cloud 9fin*, "Jane's LME Addiction: Are lender voting and concentration caps the new and improved DQ lists?" (Nov 13, 2025, feed date): https://share.transistor.fm/s/ea154cb9. Voting and concentration caps as candidate features for the §13.2.1 vector and as sponsor tools against co-ops.
+- *Cloud 9fin*, "Eat, sleep, drive: Breaking down the Del Monte, Serta & American Tire trifecta" (Jul 21, 2026, feed date): https://share.transistor.fm/s/1c4df313. Three judges on similar pro rata language inside and outside Chapter 11; the 2026 court regime behind §13.3.1 and §13.9.
+- *Cloud 9fin*, "Securitize for a J.Crew reprise" (Jul 6, 2023, feed date): https://share.transistor.fm/s/5101c481. Loose securitization baskets as a drop-down route that the §13.6 arithmetic has to flag.
+- *Cloud 9fin*, "LME Doomscrolling: Data-driven reality check," with Mark Roe and Vasile Rotaru (Apr 7, 2026, feed date): https://share.transistor.fm/s/1f62123b. The authors of the 89-deal study in the §13.1 Desk Myth box, with the caveats the written version leaves out.
 
 **Practitioner Writing**
 - Wachtell Lipton, *Liability Management 2026: For Better or Worse* (Feb 3, 2026): https://www.wlrk.com/FirmMemos/WLRK/WLRK.29921.26.pdf
 - 9fin, H1 2026 LME update (Aug 28, 2026): https://9fin.com/insights/h1-2026-lme-update
 - Harvard Law School Bankruptcy Roundtable, liability-management archive: https://bankruptcyroundtable.law.harvard.edu/category/liability-management/
 - *Petition* archive: https://www.petition11.com/archive
-- Mayer Brown on the *Serta* remand damages (July 2026); Paul, Weiss on *Serta* and *Mitel* (Jan 10, 2025); Octus on non-pro-rata uptiers (July 16, 2024); Matt Levine's *Money Stuff* columns on uptiers (titles only).
+- Mayer Brown, "Serta Simmons Bedding: The Fifth Circuit's Uptier Decision and The Landmark Damages Ruling on Remand" (Jul 31, 2026): https://www.mayerbrown.com/en/insights/publications/2026/07/serta-simmons-bedding-the-fifth-circuits-uptier-decision-and-the-landmark-damages-ruling-on-remand. The deal arithmetic and the \$261.13mm remand award that calibrate §13.3.1.
+- Paul, Weiss, "Appellate Review of Uptier Transactions: Serta and Mitel Decisions Reversed on Appeal" (Jan 10, 2025): https://www.paulweiss.com/media/pdchc2qo/appellate_review_of_uptier_transactions_serta_and_mitel_decisions_reversed_on_appeal.pdf. Five pages on why two appellate courts, on one day, read two buyback exceptions in opposite directions (§13.2, §13.9).
+- Paul, Weiss, "Mitel Emerges from Chapter 11 with Less Debt" (June 20, 2025): https://www.paulweiss.com/insights/client-news/mitel-emerges-from-chapter-11-with-less-debt. The credit outcome of a legal win (§13.9).
+- Mayer Brown, "The State of Play on Uptiers: District Court Reversal in Wesco Blesses Multistep Transactions" (Jan 21, 2026; title only). The step-by-step reading of §13.9, and the minority's turn to the Fifth Circuit.
+- Mark Roe and Vasile Rotaru, "Liability Management's Limited Runway: Corporate Restructuring Today," Harvard Law School Bankruptcy Roundtable (Feb 24, 2026): https://bankruptcyroundtable.law.harvard.edu/2026/02/24/liability-managements-limited-runway-corporate-restructuring-today. The re-default and refiling numbers behind the §13.1 clock.
+- Robert Miller, "Liability Management Exercises Mature," Harvard Law School Bankruptcy Roundtable (Dec 2, 2025): https://bankruptcyroundtable.law.harvard.edu/2025/12/02/liability-management-exercises-mature. The move from winner-take-all to "inclusive, but unequal" deals that §13.5 models.
+- Octus on non-pro-rata uptiers (July 16, 2024); Matt Levine's *Money Stuff* columns on uptiers (titles only).
 
 **Academic Papers**
 - Buccola and Nini (2024), *Journal of Legal Studies* 53:489, on uptier restrictions in 600+ loan agreements (SSRN abstract 4143928, via HLS).
