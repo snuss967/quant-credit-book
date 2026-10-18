@@ -1,10 +1,11 @@
 export const meta = {
   name: 'ed2-u2-chapter-revision',
-  description: 'Per chapter: Sonnet replaces code stubs (U1), a short Fable revision brief, then a lean Opus novel-like narrative revision (U2), durable via a revision log',
+  description: 'Per chapter: Sonnet replaces code stubs (U1), a short Fable revision brief, a lean Opus novel-like narrative revision (U2, durable via a revision log), then a Sonnet verifier (nothing removed, new facts checked)',
   phases: [
     { title: 'Explain code', detail: 'Sonnet: replace EXPLAIN stubs with prose (U1)', model: 'sonnet' },
     { title: 'Brief', detail: 'Fable: revision brief per chapter', model: 'fable' },
     { title: 'Revise', detail: 'Opus: narrative revision per the brief (U2)' },
+    { title: 'Verify', detail: 'Sonnet: nothing removed, new facts checked, hygiene', model: 'sonnet' },
   ],
 }
 const ROOT = '/home/user/quant-credit-book'
@@ -55,8 +56,20 @@ Work the checklist in order. Each item is one or more Edit calls on the chapter.
 Rules: remove no topic, derivation, case, exercise, source extraction, Trend Watch box, or resource. You may move a derivation into a "#### The Full Derivation" subsection after the intuition, and you may rewrite list-heavy prose as narrative, but every fact and formula survives. Keep section numbering, anchors, cross-references, "Used in" lines, and every existing Appendix F link. Keep the chapter's last line as ${MARK}. Pandoc math: $...$ inline and $$...$$ display on their own lines. Escape currency as \\$. Never put a line of --- directly before text. Add no code blocks (see CODE). Do not run builds or code.
 Expect to add 5,000–9,000 words. When every item is ticked, your FINAL action is appending a line containing exactly ${MARK} to the log. Return a 60-word summary.`
 
+
+const PRE = args.pre_commit
+const verify = stem => `You are a REVISION VERIFIER (Edition 2) for the book in ${ROOT}. Work from ${ROOT}.
+Chapter: book_src/${stem}.md, just revised by a writer following state/revisions/ed2/${stem}.brief.md. The pre-revision text is in git: git show ${PRE}:book_src/${stem}.md > /tmp/pre_${stem}.md. Output: state/revisions/ed2/${stem}.verify.md.
+FIRST: if the revision log state/revisions/ed2/${stem}.log.md lacks ${MARK}, stop and return "revision not finished". If the output exists and ends with ${MARK}, stop.
+Run three checks, fixing problems directly in the chapter with small Edits, and write the report as you go:
+1. Nothing removed. With a short python3 script, compare the pre and post texts: headings (lines starting with #), the number of display-math blocks ($$), [SOURCE EXTRACTION] blocks, Trend Watch boxes, exercises, Appendix F links (#code-), and Resource Graph items. For anything missing, find it in the pre text and restore it in the right place. Moving a derivation into a "The Full Derivation" subsection is fine; deleting it is not.
+2. Facts. Using python3 difflib by section, list every NEW factual claim the revision added about real events, firms, people, dates, amounts, prices, or rulings. Verify each against the dossier the brief names or with web search and fetch (load them via ToolSearch; at most 15 web calls, primary sources first). Fix wrong facts, and hedge or remove what cannot be verified. Make sure no real person has invented dialogue or quotes, and that fictional composites are labeled as such.
+3. Hygiene. No code blocks in the chapter except \`\`\`text diagrams; math delimiters balanced; currency escaped as \\$; no line of --- directly before text; the last line is ${MARK}.
+The report lists what you checked, what you fixed, and what remains doubtful. Your FINAL action is appending a line containing exactly ${MARK} to the report. Return a 60-word summary.`
+
 const runs = await pipeline(args.stems,
   stem => agent(u1(stem), { label: `u1:${stem}`, phase: 'Explain code', model: 'sonnet' }).then(r => ({ stem, u1: r })),
   x => agent(brief(x.stem), { label: `brief:${x.stem}`, phase: 'Brief', model: 'fable', effort: 'high' }).then(r => ({ ...x, brief: r })),
-  x => agent(revise(x.stem), { label: `revise:${x.stem}`, phase: 'Revise' }).then(r => ({ ...x, revise: r })))
+  x => agent(revise(x.stem), { label: `revise:${x.stem}`, phase: 'Revise' }).then(r => ({ ...x, revise: r })),
+  x => agent(verify(x.stem), { label: `verify:${x.stem}`, phase: 'Verify', model: 'sonnet' }).then(r => ({ ...x, verify: r })))
 return runs

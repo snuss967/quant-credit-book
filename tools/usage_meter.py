@@ -78,7 +78,13 @@ def main():
     recs = [r for r in records() if r[0] >= start]
     total = sum(u for t, _, u in recs)
     at_units = sum(u for t, _, u in recs if t <= at)
-    units_per_pct = at_units / cal["pct"] if at_units else float("nan")
+    if at >= start and at_units:
+        units_per_pct = at_units / cal["pct"]
+        if abs(cal.get("units_per_pct", 0) - units_per_pct) > 1e-9:
+            cal["units_per_pct"] = units_per_pct  # carried into the next window until the user gives a new reading
+            json.dump(cal, open(CAL_FILE, "w"), indent=2)
+    else:
+        units_per_pct = cal.get("units_per_pct", float("nan"))  # calibration predates this window: reuse the last scale
 
     def window(mins):
         return sum(u for t, _, u in recs if t >= now - timedelta(minutes=mins))
@@ -92,7 +98,7 @@ def main():
     mins_left = max(1.0, (end - now).total_seconds() / 60)
     rate = window(args.minutes) / args.minutes / units_per_pct  # % per minute
     print(f"window {start:%H:%M}–{end:%H:%M} UTC  now {now:%H:%M}  minutes left {mins_left:.0f}")
-    print(f"estimated used: {used_pct:5.1f}%   (calibration: {cal['pct']}% at {at:%H:%M})")
+    print(f"estimated used: {used_pct:5.1f}%   (calibration: {cal['pct']}% at {at:%Y-%m-%d %H:%M}{'' if at >= start else ', scale carried from the previous window'})")
     print(f"burn over last {args.minutes} min: {rate:.2f}%/min  -> projected at window end: {used_pct + rate * mins_left:5.1f}%")
     print(f"sustainable rate to finish at 90%: {(90 - used_pct) / mins_left:.2f}%/min")
     for m, u in sorted(by_model.items(), key=lambda x: -x[1]):

@@ -100,3 +100,23 @@ All workflows were stopped to protect the user's 97% cap. On disk at the pause:
 - MISSING: the synthesis and 6 dossiers.
 
 The resume checklist is in state/continuation_prompt.md, and a resume is scheduled for 04:17 UTC (user-set: 2h40m after 01:37 UTC).
+
+## Edition 2 restart (2026-10-18 04:32 UTC, new window 04:30–09:30)
+
+Prep (04:19–04:30, local only): code sweep (0 new listings), `<!-- EXPLAINED -->` marker added to the code mover, PDF untracked (rule 9 in PROCESS.md), and the meter now carries its scale across windows until the user gives a new reading. Scripts live in `tools/workflows/`. Pre-revision text for every chapter = commit `9ac1c37` (verifiers diff against it).
+
+| Run | Task ID | Package | Models | Owns | Status |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| reader-lens (resumed wf_aa7ed3ed-60e) | wrt9kw1ej | WP4 | Fable synthesis → Opus ×4 | synthesis.md, TOC growth, briefs and drafts for the top 4 new files (excluding 01_ch01b and 04_ch04c) | running |
+| primers-finish | wz1dbyljo | WP2 | Opus | finish 04_ch04b, 12_ch12b, 07_ch07b (append-only) | running |
+| research-A | wc8sol35m | research | Sonnet, no map | case_lmt_private_and_european, case_courts_as_regime_variables, trend_re_default_and_recovery_dataset, trend_private_credit_marks_and_redemptions, trend_listed_credit_futures | running |
+| research-B | wpjuofa0m | research | Sonnet, no map | trend_part_v_market_structure_2026, case_carvana_svb_wolfspeed, case_manufactured_credit_events, trend_insurance_capital_forced_flow, trend_figure_data_series | running |
+| u3-media | wgydgxc54 | U3 | Sonnet | media_episodes_posts_parts_I_II / III_IV / V_VIII (specific episodes and posts per chapter) | running |
+| u3-perspectives-life | w28pii0xt | U3 + new chapters | Sonnet → Fable brief → Opus | life_quant_shop_daily_life, perspectives_buyside_credit_managers, perspectives_dealers_and_systematic_shops → 04_ch04c, 01_ch01b | running |
+| u2-A | wmllmn46e | U1+U2 | Sonnet → Fable → Opus → Sonnet verify | Ch 1, 3, 2, 4 | running |
+| u2-B | wt3057wkb | U1+U2 | Sonnet → Fable → Opus → Sonnet verify | Ch 5, 6, 7 | running |
+| u1-lane-1 | w3worjqi3 | U1 | Sonnet | Ch 13–17, 8–12, 6-B, App B | running |
+| u1-lane-2 | w14cc841q | U1 | Sonnet | Ch 18–28, App D, App E | running |
+| pace-guard | bi16e9flv | — | — | `--target 97 --cap-only` (alarms at 91%) | running |
+
+Next in line, as slots free: U2 on Part IV (Ch 13–17), U3b (Resource Graph upgrade from the media dossiers, Sonnet), U4 figures (Sonnet + matplotlib), U1 sweep on the three primers once they finish, then U2 on the remaining Parts.
