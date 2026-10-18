@@ -4,7 +4,6 @@ Checked 2026-10-18 against state/digests/trend_watch_boxes.md (boxes from 01_ch0
 Method: none of the boxes in chapters 1-7 cites a URL, so there was no cited URL to fetch first. Local primary PDFs in source_pdfs/ were checked where a box cites them (no web call); everything else via WebSearch/WebFetch (budget about 40 calls).
 Verdicts: CONFIRMED / CORRECTED / STALE / UNVERIFIABLE.
 
-STATUS: PARTIAL (in progress)
 
 Source key (short names used in the tables). All fetched or run on 2026-10-18.
 - GW24 = Coalition Greenwich, "U.S. corporate bond trading in 2024 by the numbers", Jan 2025: https://coalitiongreenwich.crisil.com/content/dam/coalition-greenwich/MarketViews/2025/US-corporate-bond-trading-2024-numbers-25-C4001.pdf
@@ -100,3 +99,215 @@ Method note: a verdict of CONFIRMED on a figure the book attributes to a news ar
 | Box 2.3. Q2 2026: MarketAxess share of US credit PT 20.6% | UNVERIFIABLE | No share in the Q2 release as fetched (FY2025 release: 19% for the year, 21% in 4Q25). Hedge: "about 20%" | MarketAxess Q2 and FY2025 releases |
 | Box 2.3. Nearly half of PT volume prints at or after index time; Bondwave PT execution-quality percentile 57.3 (May 2023) to 50.3 (Feb 2026) | UNVERIFIABLE | Bondwave report not found | search: Bondwave |
 
+## Chapter 3 (3 boxes)
+
+| claim | verdict | evidence / correct figure | source |
+| :-- | :-- | :-- | :-- |
+| Box 3.1. 2016: about 19% of US IG trading electronically facilitated (Greenwich, cited in Bessembinder, Spatt, Venkataraman 2020) | UNVERIFIABLE | Paper not opened. Hedge: "roughly a fifth of US IG trading in 2015-16" | none accessible |
+| Box 3.1. Greenwich IG e-share 34%, 41%, 45%, 48% for 2021-2024 ("approx." for 2021-22) | CONFIRMED | Chart values IG 34/41/45/48. Drop "approx." | GW24 p.3 |
+| Box 3.1. IG 52% in June 2025 | UNVERIFIABLE | See Ch2 row; monthly value not found | none accessible |
+| Box 3.1. "high yield was stuck near 30-33% throughout" | CORRECTED | HY was 25% (2021), 31% (2022), 33% (2023), 33% (2024), 32% (2025). "Throughout" fails for 2021. See pair C3 | GW24 p.3 chart; Fi-Desk 2025 summary |
+| Box 3.1. June 2024: nearly 30% of dealer trading volume executed without human intervention | CONFIRMED | Coalition Greenwich release, 11 Jun 2024 (search summary) | https://coalitiongreenwich.crisil.com/en/homepage/press-release/Free/2024/bond-dealers-increasingly-automate-trading.html |
+| Box 3.1. Top-tier desks field about 30,000 inquiries per day | CONFIRMED | "roughly 30,000 inquiries per day on average" | same Greenwich release |
+| Box 3.1. Top-tier dealers execute 57% with no human; non-bank liquidity providers 70% | CONFIRMED | "top-tier firms ... executing 57% ... without human intervention and non-bank liquidity providers 70%" | same Greenwich release |
+| Box 3.1. MarketAxess automation suite handled over 36% of clients' global RFQ tickets in 2025 YTD (22 Sep 2025) | UNVERIFIABLE | Not found | none accessible |
+| Box 3.1. 261 client firms used automated/algorithmic tools in 2025 (204 in 2023) | UNVERIFIABLE | MarketAxess 10-Ks not opened | MarketAxess 10-K (not opened) |
+| Box 3.1. Dealer algorithmic responses 32.5 million (2023) to 40.9 million (2024) | UNVERIFIABLE | MarketAxess 10-Ks not opened | MarketAxess 10-K (not opened) |
+| Box 3.1. Trumid: 88% of eligible RFQ line items executed fully no-touch in Sept 2025 (The DESK) | UNVERIFIABLE | Not found | none accessible |
+| Box 3.2. 8-K counts for "liability management transaction": 4, 9, 23, 15, 14, 55, 54, 37 (2019-2026 to 16 Oct) | CONFIRMED | Re-run on 2026-10-18 with the exact phrase, form 8-K, same date windows: totals 4, 9, 23, 15, 14, 55, 54, 37 | EDGAR-FTS |
+| Box 3.2. Distinct filers 4, 6, 16, 12, 8, 24, 27, 24 | CONFIRMED | Distinct first-listed filer names per year reproduce exactly (distinct CIK counts across co-registrants run slightly higher: 17 in 2021, 26 in 2024, 29 in 2025, 27 in 2026; state the counting rule) | EDGAR-FTS |
+| Box 3.2. Wachtell: high-water mark of 38 LMEs in 2024, 24 in 2025; memo 3 Feb 2026 | CONFIRMED | "24, compared to a high-water mark of 38 in 2024"; dated February 3, 2026 | https://www.wlrk.com/FirmMemos/WLRK/WLRK.29921.26.pdf |
+| Box 3.3. Moody's: DEs 64% of defaults in H1 2025, "about the same pace" as 2024, "the highest annual share on record" | CONFIRMED | Verbatim in the report | https://www.moodys.com/web/en/us/insights/resources/us-report-july-2025.pdf |
+| Box 3.3. June 2025 default rate 5.8% falls to 2.1% when the 51 distressed restructurings are removed | CONFIRMED | "came in at 5.8% in June. Removing the 51 distressed restructurings ... 2.1%". Population is all high-yield (bond plus loan) issuers; report is by Moody's Analytics Asset Management Research | same Moody's PDF |
+| Box 3.3. Report cited as "US Credit Review & Outlook," July 2025 | CORRECTED | Cover date is 7 August 2025 (the file name says july). See pair C5 | same Moody's PDF |
+| Box 3.3. Moody's later put distressed restructurings at about 65% of 2025 defaults | CONFIRMED | Moody's 18 May 2026: "roughly 65%" | https://www.moodys.com/web/en/us/insights/credit-risk/private-credit/lend-extend-and-then.html |
+| Box 3.3. ... dated "April 28, 2026" | UNVERIFIABLE | No 28 April piece found; the 65% appears in the 18 May 2026 report (cited in Ch1 and Ch5). Safe fix: cite 18 May 2026 (optional pair H1) | none accessible |
+| Box 3.3. Wachtell: LMEs from 38 (2024) to 24 (2025), still about two-thirds of default activity by issuer count | CONFIRMED | "LMEs still accounted for two-thirds of default activity by issuer count in 2025" | Wachtell PDF above |
+| Box 3.3. Moody's sample of 1,173 borrowers, one in four to hard default, more than 70% within two years (18 May 2026) | CONFIRMED | Exact; qualifier "following a distressed restructuring" is in the Ch3 text | Moody's 18 May 2026 URL above |
+
+## Chapter 4 (2 boxes)
+
+| claim | verdict | evidence / correct figure | source |
+| :-- | :-- | :-- | :-- |
+| Box 4.1. Man Numeric formally launches credit business Oct 2018 under two co-heads (Hedgeweek, 10 Oct 2018) | UNVERIFIABLE | Hedgeweek not found. Hedge: "Man Numeric launched its credit business in autumn 2018" | none accessible |
+| Box 4.1. BlackRock IGEB and HYDB launched July 2017 | UNVERIFIABLE | Not re-fetched; the project dossier (state/research/trend_systematic_credit_industry.md) dates it 11 Jul 2017 | dossier only |
+| Box 4.1. 2020: $116.5bn on MarketAxess Open Trading via quant funds in first three quarters, +150% | CONFIRMED | "$116.5 billion traded on MarketAxess's Open Trading platform via quant funds during the first three quarters of 2020, a 150% increase" | Man_Quantitative_Credit_Alpha_2022 p.8 (local PDF) |
+| Box 4.1. Blackstone agrees to buy DCI, "about $7.5bn", 30 Nov 2020 | CORRECTED | The announcement is 30 Nov 2020, but $7.5bn is DCI's assets under management; deal terms were not disclosed. The Ch4 body (line 611) says it correctly. See pair C4 | https://www.blackstone.com/news/press/blackstone-announces-agreement-to-acquire-dci-a-pioneer-in-technology-driven-quantitative-credit-investing/ |
+| Box 4.1. 2021: eVestment about $52bn actively managed quant credit, more than double five years earlier | UNVERIFIABLE | IFR not found. Hedge: "on the order of $50bn" | none accessible |
+| Box 4.1. 2021: BlueCove, quant credit about 0.4% of a $66trn fixed-income universe vs about 15% for quant equity | UNVERIFIABLE | Not found; the box already flags the date CHECK | none accessible |
+| Box 4.1. 2023: "Systematic credit funds doubled in size in 2023" (Bloomberg 20 May 2024, via BBH 2 Mar 2026) | UNVERIFIABLE | Not found. Keep as a quoted attribution | none accessible |
+| Box 4.1. 2024: Barclays QPS sizes quant-screened IG and HY funds at $90-140bn (via Impax, 19 Sep 2025) | UNVERIFIABLE | Not found | none accessible |
+| Box 4.1. Invesco study: 88% of managers use systematic methods in fixed income, up from 73% in 2023 | UNVERIFIABLE | Not found | none accessible |
+| Box 4.1. Man Numeric co-head: "still in a very low single digits of market share" (podcast, Mar 2024) | UNVERIFIABLE | Podcast not checked | none accessible |
+| Box 4.1. 2025: systematic about 20% of global equities, under 2% of investable fixed income (Bloomberg 2 Feb 2026 via BBH) | UNVERIFIABLE | Not found | none accessible |
+| Box 4.1. Man systematic long-only credit $3.1bn and discretionary $37.5bn at Sept 2026 | CONFIRMED | Man trading statement, 16 Oct 2026: long-only credit $40.6bn = discretionary $37.5bn + systematic $3.1bn | https://www.investegate.co.uk/announcement/rns/man-group--emg/trading-statement-for-quarter-ended-30-sept-2026/9825923 |
+| Box 4.1. Same series in March 2025: systematic $2.0bn, discretionary $19.8bn | UNVERIFIABLE | The Q3 2026 statement starts at Sep 2025 (systematic $2.8bn, discretionary $27.7bn); the Mar 2025 column sits in the Q1 2026 statement, not re-fetched. Note the jump in discretionary from $19.8bn to $27.7bn in six months deserves a check against the Q1 2026 table | Man Q1 2026 RNS (not re-fetched) |
+| Box 4.2. 2021: US IG 37%, HY 27% (Greenwich via IFR, date CHECK) | CORRECTED | Greenwich Jan 2025 series: 34% and 25%. See pair C1 | GW24 p.3 |
+| Box 4.2. Man: "2021 was the year of portfolio trading; 2022 was the year of electronic trading" | CONFIRMED | Verbatim | Man_Revolutions_2023 p.5 |
+| Box 4.2. 2021 to 2022: disclosed RFQ 48% to 42%, PT 7% to 10%, streaming 7% to 9% (column order CHECK) | CONFIRMED | Man Fig. 4 values match. First number = 2021 (Greenwich restated: RFQ 48.3% to 42.3%, PT 6.4% to 9.7%, streaming 8.2% to 8.5%). Remove CHECK | Man_Revolutions_2023 p.4; GW24 p.4 |
+| Box 4.2. May 2023: Man routes over 90% of credit order flow electronically | CONFIRMED | "over 90% of our order flow", as of 1 May 2023 | Man_Revolutions_2023 p.3-4 |
+| Box 4.2. 2024: IG 48%, HY 33%, ADNV $46.2bn (+21%) | CONFIRMED | Exact | GW24 |
+| Box 4.2. 2024: non-bank liquidity providers about 10% of US credit market-making revenue | CONFIRMED | "roughly 10% of total credit market-making revenue in 2024" | GW24 p.5 |
+| Box 4.2. 2024: Tradeweb more than two-thirds of electronic PT | CONFIRMED | "over two-thirds of executed volume in 2024" | GW24 p.5 |
+| Box 4.2. 2025: US corporate bond trading over $50bn a day for the first time (Greenwich 27 Jan 2026) | CONFIRMED | See Ch1 row | GW25 |
+| Box 4.2. MarketAxess FY2025: record PT ADV $1.4bn (+48%), 19% share of US credit PT | CONFIRMED | "48% increase in total portfolio trading ADV to record $1.4 billion"; "Record U.S. credit portfolio trading market share of 19%" | https://investor.marketaxess.com/news/news-details/2026/MarketAxess-Reports-Fourth-Quarter-and-Full-Year-2025-Financial-Results/default.aspx |
+| Box 4.2. Sept 2025: MarketAxess, Tradeweb, Trumid each about $8.5-8.8bn e-credit ADV, about 15% of TRACE each (The DESK 8 Oct 2025) | CONFIRMED | MarketAxess $8.82bn (15.3%), Tradeweb $8.57bn (14.8%), Trumid $8.5bn (14.7%) | https://www.fi-desk.com/trumids-us-electronic-credit-volume-in-sight-of-marketaxess-and-tradewebs/ |
+| Box 4.2. Mar 2026: combined IG+HY TRACE ADV $70.2bn (+14.7%) | UNVERIFIABLE | The DESK 9 Apr 2026 not found | none accessible |
+| Box 4.2. Mar 2026: MarketAxess PT ADV record $2.3bn | UNVERIFIABLE | Q2 2026 release gives a record $2.0bn for the quarter; no March figure seen | MarketAxess Q2 2026 release |
+| Box 4.2. Mar 2026: Trumid record $10.3bn ADV | UNVERIFIABLE | Not found | none accessible |
+| Box 4.2. Jul 2026: ICE to acquire MarketAxess at $167 a share cash, about $6.0bn equity, close in H1 2027 | CONFIRMED | "$167 per share in cash ... equity value of approximately $6.0 billion and total enterprise value of approximately $5.7 billion ... expected to close in the first half of 2027"; 33% premium to the 29 Jul 2026 close | https://www.sec.gov/Archives/edgar/data/1278021/000119312526324933/d159148dex991.htm |
+| Box 4.2. Oct 2026: Vanguard automated low/no-touch about 70% of desk volume, up from about 40% (The DESK 14 Oct 2026) | CONFIRMED | Article of 14 Oct 2026: "Historically for us, those last two methods would represent maybe 40% ... Now that number is more like 70%". The two methods are low-touch and no-touch; the 40% has no stated date | https://www.fi-desk.com/fils-europe-vanguard-automates-70-of-trades-others-urge-caution/ |
+
+## Chapter 5 (3 boxes)
+
+| claim | verdict | evidence / correct figure | source |
+| :-- | :-- | :-- | :-- |
+| Box 5.1. 15 Oct 2026 OAS: HY index 323 bp, BB 197, single-B 326, CCC 1,278 | CONFIRMED | FRED rows for 2026-10-15: 3.23, 1.97, 3.26, 12.78. Last observation in the file is 15 Oct | FRED |
+| Box 5.1. CCC/HY ratio low 2.24 on 20 Oct 2023 | CONFIRMED | 9.69/4.25 on 2023-10-17 is higher; minimum over the window is 2.237 on 2023-10-20 | FRED |
+| Box 5.1. CCC/HY ratio high 4.06 on 11 Sep 2026 | CONFIRMED | 10.76/2.65 = 4.060 | FRED |
+| Box 5.1. Quarter-end ratios 2.66 (Dec 2023), 2.55 (Dec 2024), 3.15 (Dec 2025), 3.53 (Jun 2026), 3.78 (Sep 2026) | CONFIRMED | Computed 2.661, 2.555, 3.149, 3.527, 3.779. (2.555 rounds to 2.55 or 2.56; the book's 2.55 is fine) | FRED |
+| Box 5.1. BB OAS touched 150 bp on 28 Aug 2026 | CONFIRMED | 1.50 on 2026-08-28 (also 1.50 on 2026-09-11). Window minimum | FRED |
+| Box 5.1. CCC OAS hit 1,282 bp on 14 Oct 2026 | CONFIRMED | 12.82 on 2026-10-14, the window maximum | FRED |
+| Box 5.1. Index peak 461 bp on 7 Apr 2025 (tariff shock) | CONFIRMED | 4.61 on 2025-04-07, the window maximum | FRED |
+| Box 5.1. FRED serves three years of history, from 17 Oct 2023 | CONFIRMED | First row is 2023-10-17 | FRED |
+| Box 5.1. Credit-triangle arithmetic: CCC 0.1278/0.6 about 21%; BB about 3% | CONFIRMED | 0.1278/0.6 = 21.3%; 0.0197/0.6 = 3.3% | arithmetic from FRED |
+| Box 5.1. Moody's Analytics, US Credit Review & Outlook, "July 2025" | CORRECTED | Cover date is 7 August 2025. See pair C5 | Moody's PDF (see Ch3) |
+| Box 5.2. Moody's via BMA (5 Sep 2024): trading-price recoveries 1983-2023 of 65% (first-lien bank loans), 55% (first-lien bonds), 38% (senior unsecured bonds) | UNVERIFIABLE | BMA document not found. Moody's long-run figures are widely quoted but were not re-checked. Hedge: add "approximately" | none accessible |
+| Box 5.2. Ultimate recoveries 1987-2023: 87% revolvers, 71% term loans, 62% senior secured bonds, 47% senior unsecured | UNVERIFIABLE | Same | none accessible |
+| Box 5.2. S&P: first-lien and priority debt more than 75% of typical structures | UNVERIFIABLE | Not found | none accessible |
+| Box 5.2. Fitch 2023 Annual Manual (30 Mar 2023): first-lien loan 30-day post-default price averaged 59.5% (median 62.8%), 2007-2022 | UNVERIFIABLE | Not found | none accessible |
+| Box 5.2. S&P CreditWeek (20 Feb 2025): first-lien recovery ratings in the mid-to-low 60% range vs long-term 75-80% (via search summary) | UNVERIFIABLE | The box itself says "via search summary". Hedge: keep the qualifier | none accessible |
+| Box 5.2. Moody's via Bloomberg Law (23 Apr 2025): first-lien distressed-exchange recoveries 71% at end-2024, up from 55% in 2023 | UNVERIFIABLE | Bloomberg Law is paywalled; not opened | https://news.bloomberglaw.com/bankruptcy-law/distress-exchange-leads-to-re-default-half-the-time-moodys |
+| Box 5.2. Moody's 22 Sep 2026 (via American Banker 28 Sep 2026): first-lien loan recoveries projected "declining to 55%" | UNVERIFIABLE | Not found in search. A 2023 figure of 55% and a 2026 projection of 55% in the same paragraph deserves a re-read of the source | none accessible |
+| Box 5.3. Fitch: DDEs 45% (volume) and 50% (count) of 2022 defaults | UNVERIFIABLE | Fitch manual not found | none accessible |
+| Box 5.3. S&P (via FTI, 9 Oct 2026): DDEs about half of rated US corporate defaults for three years vs 32% for 2010-2023 | UNVERIFIABLE | FTI article not opened (budget) | https://www.fticonsulting.com/insights/articles/state-of-restructuring-market |
+| Box 5.3. Moody's Analytics: DEs 64% of H1 2025 defaults, quote, 5.8% vs 2.1% after removing 51 | CONFIRMED | Verbatim in the 7 Aug 2025 report | Moody's PDF (see Ch3) |
+| Box 5.3. Moody's 18 May 2026: about 65% of 2025 defaults; 1,173 soft-event borrowers 1979-2026; one in four; more than 70% within two years | CONFIRMED | Exact | Moody's 18 May 2026 URL (see Ch1) |
+| Box 5.3. Moody's 22 Sep 2026 (via American Banker): DEs/LMEs "roughly 70% of defaults since early 2022"; default rate 5.3% in Aug 2026 | UNVERIFIABLE | Not found. If true, the 5.3% conflicts with the Ch6 box glide path (see Ch6) | none accessible |
+
+## Chapter 6 (3 boxes)
+
+| claim | verdict | evidence / correct figure | source |
+| :-- | :-- | :-- | :-- |
+| Box 6.1. Blackstone BCBS: "the largest pure-play quantitative credit operation in the world, with over $40 billion in assets under management" | CONFIRMED | Verbatim; shelf document is undated, as the box says | Blackstone_Systematic_Credit p.1 (local PDF) |
+| Box 6.1. DCI acquired late 2020, co-founded by the creators of the KMV model | CONFIRMED | Same document: "late-2020 acquisition of DCI, a quantitative credit pioneer co-founded by the creators of the KMV model". Announcement date 30 Nov 2020 confirmed by Blackstone's press release | Blackstone doc p.1; Blackstone press release URL (Ch4) |
+| Box 6.1. BlackRock PD signal identified 77% of defaulted ICE BofA HY bonds within 24 months of default since 2010, data as of 31 Mar 2024 | CONFIRMED | Verbatim; footnote "BlackRock, ICE BofA ML as of March 31, 2024, using data since January 2010" | BlackRock_Systematic_High_Yield_Credit p.6 (local PDF) |
+| Box 6.1. Dynkin et al.: Merton hedge ratios about 5% lower than empirical in both IG and HY, Jan 1993 - Dec 2019 | CONFIRMED | "the analytical hedge ratios were lower by about 5% in both IG and HY"; sample Jan 1993-Dec 2019 | Dynkin p.87, p.115 (local) |
+| Box 6.1. "Goyal, Bali, Huang, Jiang, and Wen (2020 working paper), Predicting Corporate Bond Returns: Merton Meets Machine Learning" | UNVERIFIABLE | Not looked up. Working recollection (unchecked): the paper is Bali, Goyal, Huang, Jiang and Wen, SFI Research Paper 20-110, so the author order may be wrong. Check on SSRN before the next edition | none accessible |
+| Box 6.2. S&P (Feb 2025): DEs about two-thirds of US spec-grade defaults in Q4 2024; DE default rate about 3.2% vs about 2% other types | UNVERIFIABLE | The box already says "not independently verified". Search found S&P's Aug 2024 note (DEs two-thirds of July 2024 global defaults) and a Feb 2025 Europe note (DE rate 2.9%), but not these US figures. Keep the hedge | https://www.spglobal.com/ratings/en/research/articles/240815-default-transition-and-recovery-distressed-exchanges-reached-their-highest-level-since-2009-13217386 |
+| Box 6.2. Oaktree Q4 2024 via Quinn Emanuel (Jan 2026): LMEs "over 50%" of corporate defaults | UNVERIFIABLE | Not found | none accessible |
+| Box 6.2. 31 Dec 2024: Fifth Circuit holds Serta's 2020 uptier not an "open market purchase" | CONFIRMED | Fifth Circuit reversed; uptier outside the exception. The opinion was later revised (14 Feb 2025, per the Fifth Circuit file name in the dossier), so cite both dates if citing the revised text | https://www.mayerbrown.com/en/insights/publications/2025/05/serta-and-mitel-the-latest-major-court-decisions-on-uptier-transactions |
+| Box 6.2. Reporter cite 125 F.4th 555 | UNVERIFIABLE | Cite not seen in any source opened. Check on Westlaw or the court's PDF before print | https://www.ca5.uscourts.gov/opinions/pub/23/23-20181-CV0.pdf (not opened) |
+| Box 6.2. Same day, NY App. Div. First Dept upheld the Mitel uptier (Ocean Trails CLO VII v. MLN Topco) | CONFIRMED | "First Department upheld Mitel's 2022 uptier", 31 Dec 2024 | Mayer Brown, above |
+| Box 6.2. Moody's: global spec-grade default rate 4.3% in May 2026 (4.1% Dec 2025, avg 4.2%); US 5.0%; forecasts 3.1% global / 3.5% US by Dec 2026 (First Trust, 22 Jun 2026) | UNVERIFIABLE | Not found. Cross-chapter conflict: Ch5 reports a US default rate of 5.3% in Aug 2026, which would put the forecast glide path (5.0% falling to 3.5%) behind. If the Ch5 number is confirmed, treat this forecast as superseded | none accessible |
+| Box 6.2. UBS AM projected a 4.8% USD HY default rate for 2025, 3.1% excluding two large names (17 Jan 2025) | UNVERIFIABLE | Not found | none accessible |
+| Box 6.3. ISDA May 2023: single-name traded notional $405bn to $1.1tn per quarter over 2018-Q1 2023, trough Q4 2020, five-year peak $1.1tn in Q1 2023 on bank failures | CONFIRMED | "ranged between $405 billion and $1.1 trillion per quarter, hitting a trough in the fourth quarter of 2020 ... peak"; bank failures named as a driver | https://www.isda.org/a/0jLgE/Single-name-CDS-Market-Update.pdf |
+| Box 6.3. Reference entities trading per quarter 854 (Q1 2018) to 719 (Q1 2023) | CONFIRMED | Exact for those dates | same ISDA PDF |
+| Box 6.3. "Breadth shrank" (the trend claim) | STALE | ISDA July 2026: breadth "remained broadly stable ... approximately 710 to 760 names" each quarter 2021-2025, 751 in Q4 2025. See pair S1 | https://www.isda.org/a/Pa0iE/CDS-Market-Dynamics-Five-Years-of-Activity-and-a-Record-2025.pdf |
+| Box 6.3. 1,169 entities traded at least once in five years; about 600 less than once a quarter; 496 traded every quarter, over 80% of activity | CONFIRMED | Exact | ISDA May 2023 PDF |
+| Box 6.3. Q1 2023: 51.2% of single-name and 87.4% of index notional centrally cleared | STALE | Those shares apply to notional "required to be reported under" US SEC (single-name) and CFTC (index) rules. ISDA July 2026 gives 2025: 63.1% single-name, 78.1% index. See pair S2 | ISDA May 2023 PDF; ISDA July 2026 note |
+| Box 6.3. BIS: CDS notional $8.5tn at end-Dec 2023, down from $9.9tn six months earlier; 65% cleared (16 May 2024) | CONFIRMED | "fell 14% in the second half of 2023, from $9.9 trillion to $8.5 trillion"; cleared share 70% to 65%. Newer BIS releases exist (Nov 2024, May 2025, Nov 2025, May 2026); I could not retrieve the later ones (bis.org/publ/otc_hy2605.htm returned 404), so treat the series as due for an update | https://www.bis.org/publ/otc_hy2405.htm |
+| Box 6.3. BIS: credit derivatives $9.2tn at end-June 2024, down 9% y/y (21 Nov 2024) | CONFIRMED | "credit derivatives declined by 9% yoy to $9.2 trillion"; release dated 21 Nov 2024. Same update caveat as above | https://www.bis.org/publ/otc_hy2411.htm |
+| Box 6.3. ISDA CDS Standard Model rate curves moved to a new S&P Global site; old site shut after 15 Aug 2026 (cdsmodel.com) | UNVERIFIABLE | cdsmodel.com not opened. The shutdown date is already past (today is 2026-10-18); put the sentence in the past tense once confirmed | none accessible |
+
+## Chapter 7 (2 boxes)
+
+| claim | verdict | evidence / correct figure | source |
+| :-- | :-- | :-- | :-- |
+| Box 7.1. Bai, Bali, Wen (2019), JFE 131(3): 619-642, four-factor model | UNVERIFIABLE | Paper and its retraction are real (search); volume and pages not re-checked. Check on Crossref | search: JFE retraction coverage |
+| Box 7.1. Dick-Nielsen, Feldhutter, Pedersen, Stolborg: AQR page 5 Oct 2023, Best Paper at 2024 Utah Winter Finance Conference, "only 23% of the factors ... have significant alphas" (Quantpedia 14 May 2024) | UNVERIFIABLE | Not searched (budget) | none accessible |
+| Box 7.1. Dickerson, Mueller, Robotti, "Priced risk in corporate bonds", JFE 150(2), 103707; factors add essentially nothing beyond the market factor | CONFIRMED | Paper and finding confirmed by coverage (WBS, AFR); volume and article number not re-checked | https://wbs.ac.uk/news/flaw-data-corporate-bond-investors |
+| Box 7.1. Data errors in the 2019 factors; 2019 paper retracted (JFE 150(3)) | CONFIRMED | Retraction confirmed; two factors lead error, one lag error, extreme returns truncated (search summary). The issue number was not re-checked | https://wbs.ac.uk/news/flaw-data-corporate-bond-investors |
+| Box 7.1. Warwick Business School account dated 9 Sep 2024; calls it "the only time" the journal has retracted a paper | UNVERIFIABLE | The WBS page exists and describes the lead/lag errors, but the date and the "only time" wording were not seen. Hedge: drop the date and the quote, or re-open the page | https://wbs.ac.uk/news/flaw-data-corporate-bond-investors |
+| Box 7.1. Mueller and Robotti receive the Fama-DFA Prize | CONFIRMED | WBS news item "Research on bond market wins Fama-DFA prize" with Robotti and Mueller (search result title) | https://www.wbs.ac.uk/news/research-bond-market-wins-fama-dfa-prize/ |
+| Box 7.1. Jensen, Kelly, Pedersen, "Is There a Replication Crisis in Finance?", JF 78(5), 2023 | UNVERIFIABLE | Not looked up; recollection agrees but unchecked | none accessible |
+| Box 7.1. arXiv:2604.07880 (9 Apr 2026): 108 signals, nine clusters, Aug 2002 - Dec 2024 (269 months), 52,656 unique bonds | CONFIRMED | "August 2002 to December 2024 (269 months), with 52,656" | https://arxiv.org/pdf/2604.07880 |
+| Box 7.1. 432 specifications (108 x 2 x 2); 26 (6.0%) survive Benjamini-Hochberg | CONFIRMED | "Across 432 factor-specification combinations ... only 26 (6.0%)" | https://arxiv.org/pdf/2604.07880 |
+| Box 7.1. Short-term reversal falls from -0.99% (t=-4.46) to -0.09% (t=-0.51) | CONFIRMED | Exact, plus "bias comprising over 90% of the documented effect" | https://arxiv.org/pdf/2604.07880 |
+| Box 7.1. Abstract quote "the majority of previously documented factors do not produce statistically significant bond CAPM alphas after correction"; data and code released as Open Bond Asset Pricing | CONFIRMED | Verbatim | https://arxiv.org/pdf/2604.07880 |
+| Box 7.2. MarketAxess CP+ launched May 2017 after about 18 months; more than 350,000 bonds; refreshes every 15 seconds | UNVERIFIABLE | Not searched (company claims, per the box) | none accessible |
+| Box 7.2. SMU Cox study (March 2026) on CP+ | UNVERIFIABLE | Not searched | none accessible |
+| Box 7.2. Bianchi, Buchner, Tamoni, RFS 34(2), 2021 | UNVERIFIABLE | Not looked up | none accessible |
+| Box 7.2. Kelly, Palhares, Pruitt, JF 78(4), 2023; Robeco 23 Jun 2023 | UNVERIFIABLE | Not looked up | none accessible |
+| Box 7.2. Feng, He, Wang, Wu, JBF 171: out-of-sample R-squared 4.48% | UNVERIFIABLE | Not looked up | none accessible |
+| Box 7.2. BondBERT arXiv:2511.01869 (Oct 2025), about 30,000 UK bond-news articles | UNVERIFIABLE | Not looked up | https://arxiv.org/abs/2511.01869 (not opened) |
+| Box 7.2. Bell, Kakhbod, Lettau, Nazemi, "Glass Box Machine Learning and Corporate Bond Returns", NBER WP 33320; JFE 181, 2026 | CONFIRMED | NBER page: issued Dec 2024, revised Jul 2025; JFE vol. 181 (2026), DOI 10.1016/j.jfineco.2026.104294 | https://www.nber.org/papers/w33320 |
+| Box 7.2. 81 predictors, 1,207 firms, Jul 2002 - Aug 2020, nine-year test window, 10-1 portfolio 0.67% per month, alpha 0.55% (t=4.22) | UNVERIFIABLE | Not on the NBER abstract page; needs the full paper | https://www.nber.org/papers/w33320 |
+| Box 7.2. SIFMA: US corporate-bond ADV $66.7bn through Sept 2026, up 13.4% y/y | UNVERIFIABLE | SIFMA statistics not opened | none accessible |
+| Box 7.2. Man 2022: less than $150bn of US bonds traded electronically by quant investors in the prior year | CONFIRMED | "last year in the US less than $150 billion bonds were transacted electronically by quantitative investors" (attributed there to one data provider) | Man_Quantitative_Credit_Alpha_2022 p.3 (local PDF) |
+
+## Summary
+
+Claims checked: 186 (every figure or date in the 20 Trend Watch boxes of chapters 1-7, grouped where a sentence carries one source).
+
+| verdict | count |
+| :-- | --: |
+| CONFIRMED | 105 |
+| CORRECTED | 7 |
+| STALE | 2 |
+| UNVERIFIABLE | 72 |
+
+By chapter (CONFIRMED / CORRECTED / STALE / UNVERIFIABLE): Ch1 21/2/0/8; Ch2 28/0/0/15; Ch3 12/2/0/7; Ch4 13/2/0/13; Ch5 11/1/0/10; Ch6 11/0/2/7; Ch7 9/0/0/12.
+
+Effort. 42 WebFetch/WebSearch/curl calls (8 of them were PDFs that returned binary and were read locally with pdftotext) plus 8 EDGAR full-text API requests, which were one check run once per year. That is a little over the "about 40" budget. None of the boxes cites a URL, so no cited-URL pass was possible; local primary PDFs in source_pdfs/ were used wherever a box cites them. UNVERIFIABLE rows are mostly paywalled trade press (The DESK, IFR, Bloomberg Law, American Banker), the Bondwave report, and academic citation details that were not looked up. They are not a finding that the claim is wrong.
+
+What the checks found:
+- The only real errors are small: a 2021 e-share vintage mismatch (37%/27% vs Greenwich's own 34%/25%), "1,173 events" (borrowers), "HY stuck near 30-33% throughout" (25% in 2021), DCI's $7.5bn (assets, not price), and the Moody's report date (7 Aug 2025, not July).
+- Two STALE items in the Ch6 CDS box (ISDA, July 2026 note supersedes the 2023 breadth trend and clearing shares).
+- The numerically heaviest boxes hold up exactly: FRED spreads and ratios (Ch5), EDGAR 8-K counts and filer counts (Ch3), the TRACE timeline and the SEC order statistics (Ch2), the arXiv paper statistics (Ch1, Ch7), Man's trading statement (Ch4), ISDA 2023 counts (Ch6).
+- The CHECK flags in Ch2 and Ch4 are resolved: 2021/2022 e-shares are 34/25 and 41/31 (Greenwich chart), and Man Fig. 4 column order is 2021 first.
+
+Cross-box conflicts for the editor to resolve (not find/replace-able without a source):
+1. Ch2 PT table: "8 Apr 2025, $89.7bn record day" vs Ch1/Ch2 "30 Sep 2025, $84.7bn single-day record" (Greenwich says Sept 30 was the record). One basis or one number is wrong.
+2. Ch5 box 3 (Moody's, 5.3% in Aug 2026) vs Ch6 box 2 (US 5.0% in May 2026, forecast to fall to 3.5% by Dec 2026). If the 5.3% is right, the Ch6 forecast has been overtaken. Neither figure was verified.
+3. Ch1 box 3: 22% (Chicago Fed, private placements as a share of corporate bonds, 2024) beside 48.4% (S&P MI via Insurance Business, NAIC broad definition, YE2025). Different denominators; say so.
+4. Ch4 box 1: Man discretionary long-only credit $19.8bn (Mar 2025) to $27.7bn (Sep 2025) is a $8bn jump in six months. Check the Q1 2026 statement.
+5. Ch6 box 3 BIS series is due for update: BIS has published end-2024, mid-2025 and end-2025 data since the cited release; bis.org/publ/otc_hy2605.htm returned 404, so the newer figures were not retrieved.
+6. "Open Source Bond Asset Pricing" (Ch1, Ch4, Ch10, Ch11, App B) vs "Open Bond Asset Pricing" (the paper, Ch7). Pick one.
+
+### Find/replace pairs for the editor (CORRECTED and STALE). Strings were verified to occur in book_src; `\$` is the book's own dollar escape.
+
+C1a. File 01_ch01_anthology_and_landscape.md (Box 1.1; the line is long, match the string only)
+- find: `Coalition Greenwich put IG e-trading at 37% and HY at 27% in 2021 (via IFR); at 48% and 33% in 2024`
+- replace: `Coalition Greenwich put IG e-trading at 34% and HY at 25% in 2021 (its restated series) and at 48% and 33% in 2024`
+
+C1b. File 04_ch04_inside_the_systematic_credit_industry.md (Box 4.2)
+- find: `US IG e-trading reaches 37% and HY 27% of volume (Coalition Greenwich, via IFR, c. early 2022; date CHECK)`
+- replace: `US IG e-trading reaches 34% and HY 25% of volume (Coalition Greenwich, *U.S. corporate bond trading in 2024 by the numbers*, January 2025)`
+
+C2. File 01_ch01_anthology_and_landscape.md (Box 1.4)
+- find: `in its 1,173-event history of soft credit events since 1979, about one in four ended in a hard default, with more than 70% of eventual hard defaults arriving within two years`
+- replace: `in its sample of 1,173 borrowers with soft credit events since 1979, about one in four ended in a hard default, with more than 70% of eventual hard defaults after a distressed restructuring arriving within two years`
+
+C3. File 03_ch03_pjt_rssg_cognitive_bridge.md (Box 3.1)
+- find: `high yield was stuck near 30–33% throughout`
+- replace: `high yield rose from 25% in 2021 to 31–33% in 2022–2024 and then stalled near a third`
+
+C4. File 04_ch04_inside_the_systematic_credit_industry.md (Box 4.1)
+- find: `Blackstone agrees to buy DCI, about \$7.5bn, on 30 November 2020`
+- replace: `Blackstone agrees to buy DCI, a quant credit manager with about \$7.5bn of assets (terms undisclosed), on 30 November 2020`
+
+C5 (Moody's report date; the cover says 7 August 2025). Five places:
+- 03_ch03_pjt_rssg_cognitive_bridge.md: find `("US Credit Review & Outlook," July 2025)` replace `("US Credit Review & Outlook," 7 August 2025)`
+- 03_ch03_pjt_rssg_cognitive_bridge.md: find `*US Credit Review & Outlook* (July 2025)` replace `*US Credit Review & Outlook* (7 August 2025)`
+- 05_ch05_credit_probability_distributions.md: find `*US Credit Review & Outlook*, July 2025)` (occurs twice; replace all) replace `*US Credit Review & Outlook*, 7 August 2025)`
+- 05_ch05_credit_probability_distributions.md: find `*US Credit Review & Outlook* (July 2025)` replace `*US Credit Review & Outlook* (7 August 2025)`
+- Outside chapters 1-7 (not checked here): grep book_src for other `US Credit Review` citations; the Ch3 and Ch5 counts above were 2 and 3.
+
+S1 (STALE). File 06_ch06_merton_and_intensity_models.md (Box 6.3). Source: ISDA, "CDS Market Dynamics: Five Years of Activity and a Record 2025", July 2026, https://www.isda.org/a/Pa0iE/CDS-Market-Dynamics-Five-Years-of-Activity-and-a-Record-2025.pdf
+- find: `Breadth shrank: the number of reference entities trading in a quarter fell from 854 in Q1 2018 to 719 in Q1 2023`
+- replace: `Breadth shrank: the number of reference entities trading in a quarter fell from 854 in Q1 2018 to 719 in Q1 2023, and has since held in a narrow range of about 710 to 760 names (751 in Q4 2025; ISDA, July 2026)`
+
+S2 (STALE). Same file and source.
+- find: `In Q1 2023, 51.2% of single-name notional and 87.4% of index notional was centrally cleared`
+- replace: `In Q1 2023, 51.2% of single-name notional and 87.4% of index notional reported in the US was centrally cleared; by 2025 the shares were 63.1% and 78.1% (ISDA, July 2026)`
+
+Optional hedge H1 (UNVERIFIABLE date, number confirmed elsewhere). File 03_ch03_pjt_rssg_cognitive_bridge.md
+- find: `Moody's later put distressed restructurings at approximately 65% of all 2025 defaults (April 28, 2026)`
+- replace: `Moody's later put distressed restructurings at roughly 65% of all 2025 defaults ("Lend, extend, and then...," May 18, 2026)`
+
+Hedged wording for the highest-visibility UNVERIFIABLE items is in the table rows (Ch1 disclosed RFQ 38.6%, Barclays six-minute PT, Jan 2026 $61bn; Ch2 Apr 2025 $89.7bn, Bondwave figures, MarketAxess 20.6%; Ch5 recovery series; Ch6 First Trust, UBS, Quinn Emanuel; Ch7 citation details). Apply only if the source cannot be recovered before print.
+
+Relayed instruction noted: the pacing cap is 97% of the window, not 90%. state/PROCESS.md already says so (line 53); nothing in this review depends on it and no book_src or state file other than this one was edited.
+
+<!-- STATUS: COMPLETE -->

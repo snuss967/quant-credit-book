@@ -1132,6 +1132,81 @@ assert dash.dd_budget_used_pct_of_cut > DESK["realized_dd"] / DESK["stop_half"] 
 print(dash.to_string())
 ```
 
-The one non-obvious line is `sigma_book`. Equation (28.22) is written for $N_{\text{eff}}$ equal, independent bets of volatility $\sigma_{\text{DTS}}$, so the engine backs out the per-bet volatility that, with the measured $N_{\text{eff}}$, reproduces the book's actual volatility per dollar of GMV: $\sigma_{\text{DTS}} = \sigma_{\text{GMV}}\sqrt{N_{\text{eff}}}$. Feeding the average bond volatility instead would double-count the diversification that $N_{\text{eff}}$ already removed.
+The one non-obvious line is `sigma_book`. Equation (28.22) is written for $N_{\text{eff}}$ equal, independent bets of volatility $\sigma_{\text{DTS}}$, so the engine backs out the per-bet volatility that, with the measured $N_{\text{eff}}$, reproduces the book's actual volatility per dollar of GMV: $\sigma_{\text{DTS}} = \sigma_{\text{GMV}}\sqrt{N_{\text{eff}}}$. Because of how (28.4) is defined, this per-bet volatility is exactly the GMV-weighted average bond volatility $\sum_i |w_i|\sigma_i$, which makes a useful audit: the band built from $(N_{\text{eff}}, \sigma_{\text{DTS}})$ reproduces the book's measured risk per dollar of GMV by construction. Feeding in a median or unweighted bond volatility breaks that identity, and the band with it.
 
+## 28.10 Desk Debrief
 
+- **Allocate risk, not dollars.** Give each PM three budgets: volatility, drawdown, and liquidity (days-to-liquidate and stressed cost). The dollars fall out of the division.
+- **Breadth is issuers, not CUSIPs.** Use $N_{\text{eff}}$ from (28.4). A residual correlation of 1% caps any credit book at about 100 bets, and a year of P&L on 40 bets measures the hit rate with a standard error the size of the edge.
+- **Every signal pays its rake.** $h^\ast = \ln 2 \cdot c^{\text{RT}}/\alpha_0$: fast signals in the index layer, slow ones in cash, docket alpha in stressed bonds. The overlay manages beta so the cash books keep their IDO.
+- **Kelly in credit is $f^\ast = 1/L - \lambda^{\mathbb{P}}/c$, inside a ruin boundary set by the documents.** The worst recovery sets $1/L_{\max}$, not the average one. Half Kelly is full Kelly with honest standard errors. Clusters obey $\sum f L < 1$. Never use $\mathbb{Q}$, never use a smoothed mark.
+- **The 5× is the base case.** IG round-trip cost went from 0.59% to 3.40% in 2007–2008. Use $\text{COL} = \tfrac12 m\,\overline{\text{LCS}}\,|\text{MV}|$ with a size term, and treat a fund with under 13 weeks of runway as a going-concern question.
+- **The stop you don't know you have is the mark.** $\Delta^{\text{mark}} = \tfrac12(m-1)\,\overline{\text{LCS}}\,G$ belongs inside $x$, and $x = \sigma\ln(1/P)/(2\,\text{SR})$ is how you set $x$.
+- **Tape (28.22) to the monitor, and remember the speed limit** $G < 2\,\text{DD}_{\max}/((m-1)\,\overline{\text{LCS}})$, which no breadth can lift.
+- **An analyst's value is her $\rho$, not her IC.** Optimal coverage is $N^\ast = N_c$. Log every view in the Edge Ledger, or it is a memory, not a signal.
+
+**The Spec You Hand the Robot.**
+
+```text
+ROLE: Build pm_playbook_engine: a pure, seeded Python function (numpy/scipy/pandas only)
+mapping (book DataFrame, desk dict) -> one dashboard Series. No I/O, no clock, no network.
+UNITS: USD float64; spreads, LCS, vols, drawdowns as decimals; hazards per year under P;
+days are trading days; leverage G = gross MV / NAV. Never invent identifiers.
+BREADTH: net to issuer; N_eff = (sum|w|sigma)^2 / (w' S w) on the idiosyncratic covariance;
+refuse near-zero variance. Report 1/H beside it.
+SIZING: f* = smaller root of sigma^2 L f^2 - (cL + sigma^2) f + (c - lam L) = 0 (rationalized);
+0 if c <= lam L; multiply by 1/(1 + se^2); cap at 1/L_max (documents) and the cluster
+bound sum f L < 1. Merton's mu/sigma^2 is for comparison only.
+LIQUIDITY: COL = 0.5 m LCS |MV| (1 + eta sqrt(|MV|/ADV)), longs and shorts; T = |q|/(pi ADV);
+FRTB ES with horizons 10/20/40/60/120; runway = (cash + (1-h) liquid) / weekly burn.
+DRAWDOWN: used = realized + 0.5 (m-1) LCS G; compare with x/2 and x on INITIAL capital.
+BAND: floor sqrt(N)/sigma * r_min/SR; ceiling = fixed point of G = A (DD - COL(G)), A =
+sqrt(N)/(sigma (kz - SR)); raise if kz <= SR; report the speed limit 2 DD/((m-1) LCS).
+TESTS: every assert in Blocks 1-7 and the final block; MC vs closed form for the hitting
+probability (Brownian bridge) and the hit-rate IR; the 50-day and sqrt(6) regression tests.
+FORBIDDEN: Q-measure hazards in Kelly; volatility from marks that have not traded;
+silently filling a missing ADV or L_max (raise instead).
+```
+
+### Exercises
+
+1. **The empty band.** For Theo's HY PM of §28.7, find the largest average LCS at which the band is non-empty with $r_{\min} = 5\%$. Then find the smallest $N_{\text{eff}}$ at which it is non-empty with no liquidity charge at all, and explain why adding names does not help once the speed limit binds. *(Hint: hold the per-bet IR fixed, so that $\text{SR}$ rises with $\sqrt{N_{\text{eff}}}$, and see which side of (28.22) moves.)*
+2. **Kaz's 93%, re-audited.** The same B3 bond's 5-year CDS trades at 450 bp. Bootstrap $\lambda^{\mathbb{Q}}$ with $L = 0.6$ and show that (28.11) returns zero. Then use $\lambda^{\mathbb{P}} = 1.5\%$ and compute $f^\ast$. Finally, Sunita reports that the credit agreement permits a non-pro-rata uptier: set $L_{\max} = 1$ with a Beta recovery of mean 0.6 and recompute. Which of the three numbers would you defend at the risk committee, and to whom does it belong?
+3. **Your fund is the borrower.** A credit fund has \$150mm of cash, a \$400mm tier-1 sleeve that can be sold at a 3% haircut in stress, prime-broker margin calls of \$10mm a week, and redemptions of \$25mm a week. Compute the runway. Then double the margin haircuts (margin calls to \$20mm a week) and apply the 2008 multiple to the sleeve's cost. Is the fund a going concern by Theo's standard?
+4. **Mags's adjusted number.** Mags asks which line of the dashboard is "adjusted." Name the three inputs to (28.22) that are estimates rather than observations, give each a standard error, and propagate them to a confidence interval on the ceiling. Is the band still a band?
+5. **ROBO and the stop-loss.** Told "never hit the 7.5% stop," ROBO cuts gross to zero at a 3.75% loss and never restarts. Show, using the identity that expected P&L equals $\mu$ times expected capital-time, how much expected return this costs a Sharpe-1, 6%-vol PM relative to Paleologo's two-threshold rule. Then write the spec sentence that would have stopped it.
+
+## 28.11 Sources and Links
+
+### Deep-Dive Resource Graph
+
+**Podcasts**
+- AIMA podcast, Goldman Sachs prime insights on multi-strategy growth and hiring (September 2026), as reported by Hedgeweek (episode details not verified; title only).
+- *Odd Lots* (Bloomberg) and *Flirting with Models* (Corey Hoffstein): episodes on multi-manager pod economics, risk budgeting and position sizing (title only).
+
+**Practitioner Writing**
+- Hedgeweek, "Multi-strats may need to accelerate PM hiring as assets surge" (15 September 2026): https://www.hedgeweek.com/multi-strats-may-need-to-accelerate-pm-hiring-as-assets-surge/
+- Hedgeweek, Millennium and Citadel 2025 returns (5 January 2026): https://www.hedgeweek.com/millennium-and-citadel-post-double-digit-2025-gains-but-lag-smaller-hedge-funds/
+- The Daily Upside on Point72's 2025 return and 190 pods (23 February 2026): https://www.thedailyupside.com/finance/hedge-funds/point72-tops-citadel-and-millennium-returns-as-multi-strategy-funds-expect-another-strong-year/
+- eFinancialCareers on the commonly reported drawdown rule (5 December 2025): https://www.efinancialcareers.com/news/pratik-madhvani-glen-scheinberg
+- Bloomberg, "Hedge Funds Walloped by a Month of Turmoil Sparked by War" (2 April 2026): https://news.bgov.com/new-york-brief/hedge-funds-walloped-by-a-month-of-turmoil-sparked-by-iran-war
+- *Title only:* Cambridge Associates, *2024 Hedge Fund Discretionary Expense Summary* (October 2025); Impax on Barclays QPS aligned signals (19 September 2025); The DESK on MarketAxess bid-ask recovery (1 October 2026) and on Cboe iBoxx futures blocks (16 October 2026); ISDA, *CDS Market Dynamics: Five Years of Activity and a Record 2025* (29 July 2026).
+- Shelf: Paleologo, *Advanced Portfolio Management* (chs. 6, 8, 9, 10); Ben Dor et al., *Quantitative Credit Portfolio Management* (DTS, LCS); Dynkin et al., *Systematic Investing in Credit* (horizons, turnover, rating stop-losses); Man Group (2022, 2023); BlackRock and Blackstone systematic credit papers; Bolder; Bohn and Stein.
+
+**Academic Papers**
+- Gârleanu and Pedersen (2013), *Dynamic Trading with Predictable Returns and Transaction Costs*, *Journal of Finance* 68(6): https://www.nber.org/papers/w15205
+- Bangia, Diebold, Schuermann and Stroughair (1999), *Modeling Liquidity Risk, With Implications for Traditional Market Risk Measurement and Management*: https://ideas.repec.org/p/wop/pennin/99-06.html
+- Kargar, Lester, Lindsay, Liu, Weill and Zúñiga (2021), *Corporate Bond Liquidity During the COVID-19 Crisis*: https://www.nber.org/papers/w27355
+- Sharpe and Zhou (2020), *The Corporate Bond Market Crises and the Government Response*, FEDS Notes: https://www.federalreserve.gov/econres/notes/feds-notes/the-corporate-bond-market-crises-and-the-government-response-20201007.html
+- Garivaltis (2019), *Game-Theoretic Optimal Portfolios for Jump Diffusions*, *Games* 10(1): https://arxiv.org/abs/1812.04603
+- *Title only:* Bermin and Holm (2026), *Kelly trading when asset prices have jumps* (CHECK); O'Hara and Zhou (2021), *Anatomy of a Liquidity Crisis*; Grossman and Zhou (1993), *Optimal Investment Strategies for Controlling Drawdowns*; MacLean, Thorp and Ziemba (2010), *Good and Bad Properties of the Kelly Criterion*; Almgren and Chriss (2001), *Optimal Execution of Portfolio Transactions*; Clarke, de Silva and Thorley (2002), *Portfolio Constraints and the Fundamental Law of Active Management*; Buckle (2004), *How to Calculate Breadth*.
+
+**Data & Code (regulatory sources included)**
+- SEC Release IC-31943 (Third Avenue, 16 December 2015): https://www.sec.gov/files/rules/ic/2015/ic-31943.pdf
+- SEC Rule 22e-4 small-entity compliance guide: https://www.sec.gov/files/secg-liquidity.htm
+- Basel Framework MAR33 (FRTB liquidity horizons): https://www.bis.org/basel_framework/chapter/MAR/33.htm?inforce=20230101&published=20200605
+- Federal Reserve, *Financial Stability Report* (May 2026): https://www.federalreserve.gov/publications/files/financial-stability-report-20260508.pdf
+- FRED, ICE BofA OAS series: https://fred.stlouisfed.org/series/BAMLH0A0HYM2 ; https://fred.stlouisfed.org/series/BAMLC0A0CM ; https://fred.stlouisfed.org/series/BAMLH0A3HYC
+- This chapter's reference implementation: Blocks 1–7 and `pm_playbook_engine` above, which run in order in one interpreter.
+
+<!-- STATUS: COMPLETE -->
