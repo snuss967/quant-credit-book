@@ -286,3 +286,8 @@ Ch 26–28 are done (PB-16 "ROBO's forty-seven pairs" in Ch 26; the PB-01 one-le
 - appz-notes-fix (wf_ce9abb98-d99) done: 31 notes in 18 chapters resolved (29 fixed, 2 softened, partial rulings in Ch 10 and 23).
 - Launched new-chapter-finish (wf_0c696e1b-c8b): per chapter, Sonnet fact-check (brief CHECK list, quotes, cross-refs, Pair Book rows, hygiene) → figures/figcheck/resgraph (chapter_pipeline via workflow()) → App Z solve+fix (appz_complete via workflow()).
 - Meter ~91% at 16:30 (alarm at 105%).
+
+## 2026-10-18 16:50 UTC: cleanup queue workflow
+- Launched cleanup-queue (wf_b4c8ff84-ee9): 5 Sonnet fixer groups split by file (App F listings incl. a renumber tool; Ch 24/8/19 basis and pairs; facts in Ch 12/16/17/22/26 incl. the Ares quote, OCC 2011-12, Uyeda; Part I + cast bible + Columbus Day story clock + the three Ch 4 figures; math in 7-B/4-B/2-B/10/15), each followed by a Sonnet reviewer who checks the diff and greps for stragglers.
+- Not sent: data licensing (owner decision); items already marked DONE in the queue.
+- Workflow concurrency here is 2 agents per workflow (CPU-bound cap), so parallelism comes from running several workflows.
