@@ -9,21 +9,19 @@ Three episodes in which a hedge that was right under the model lost because a do
 ## 1. Carvana (2022-2023): exchange terms, the equity squeeze, the cap-arb losses
 
 ### 1.1 Dated timeline
-| Date | Event | Tag |
-|---|---|---|
-| 10 Aug 2021 | CVNA peak close $370.10 | [YF] |
-| 26 Apr / 9 May 2022 | $80 equity offering (15.625mm shares, $1.2bn net); ADESA acquisition closes 9 May | [C-10Q3][C-10K23] |
-| 7-9 Nov 2022 | Morgan Stanley's Adam Jonas pulls rating; stock about -50% in days, $7.36 close | [II-Nov22] |
-| 18 Nov 2022 | Bonds 37-48 cents; Fitch expects default in 2023; S&P sees liquidity through end-2023 | [AB-BBG] |
-| 27 Dec 2022 | Closing low $3.72 (-99.0% from peak, calc) | [YF] |
-| 22 Mar 2023 | Offer for up to $1.0bn second-lien toggle notes; ADESA designated unrestricted first | [C-8K] |
-| 2 Jun 2023 | Offer terminated: $500mm minimum participation unmet after extensions (19 Apr, 3 May, 17 May) | [C-8K] |
-| 17-19 Jul 2023 | Transaction Support Agreement (TSA) with holders of over 90% (about $5.2bn); stock +40.2% to $55.80 | [C-8K][C-10Q3][YF] |
-| 2 Aug / 18 Aug 2023 | Exchange launched; Garcia Parties buy $126mm of equity at $46.31 | [C-10Q3] |
-| 1 Sep 2023 | Settlement: 96.4% tendered; $878mm gain on extinguishment | [C-10Q3] |
-| 2024 | 2028s repurchased at 101.6 to 105 (calc); Section 382 rights plan ended 4 Jun | [C-10K25][C-8K] |
-| 31 Dec 2025 | Stock $422.02 as traded (calc from vendor); 2028s gone; debt $4.98bn | [C-10K25][YF] |
-| 14 Aug 2026 | $1.66bn Term Loan B at SOFR+225 refinances the 2030 secured notes | [C-8K26] |
+- 10 Aug 2021: CVNA peak close $370.10 [YF]
+- 26 Apr / 9 May 2022: $80 equity offering (15.625mm shares, $1.2bn net); ADESA acquisition closes 9 May [C-10Q3][C-10K23]
+- 7-9 Nov 2022: Morgan Stanley's Adam Jonas pulls rating; stock about -50% in days, $7.36 close [II-Nov22]
+- 18 Nov 2022: Bonds 37-48 cents; Fitch expects default in 2023; S&P sees liquidity through end-2023 [AB-BBG]
+- 27 Dec 2022: Closing low $3.72 (-99.0% from peak, calc) [YF]
+- 22 Mar 2023: Offer for up to $1.0bn second-lien toggle notes; ADESA designated unrestricted first [C-8K]
+- 2 Jun 2023: Offer terminated: $500mm minimum participation unmet after extensions (19 Apr, 3 May, 17 May) [C-8K]
+- 17-19 Jul 2023: Transaction Support Agreement (TSA) with holders of over 90% (about $5.2bn); stock +40.2% to $55.80 [C-8K][C-10Q3][YF]
+- 2 Aug / 18 Aug 2023: Exchange launched; Garcia Parties buy $126mm of equity at $46.31 [C-10Q3]
+- 1 Sep 2023: Settlement: 96.4% tendered; $878mm gain on extinguishment [C-10Q3]
+- 2024: 2028s repurchased at 101.6 to 105 (calc); Section 382 rights plan ended 4 Jun [C-10K25][C-8K]
+- 31 Dec 2025: Stock $422.02 as traded (calc from vendor); 2028s gone; debt $4.98bn [C-10K25][YF]
+- 14 Aug 2026: $1.66bn Term Loan B at SOFR+225 refinances the 2030 secured notes [C-8K26]
 
 ### 1.2 Instruments and tranches
 Pre-deal unsecured stack at 31 Dec 2022 ($mm, tranches by coupon and maturity): 5.625% due 1 Oct 2025, 500; 5.500% due 15 Apr 2027, 600; 5.875% due 1 Oct 2028, 600; 4.875% due 1 Sep 2029, 750; 10.250% due 1 May 2030, 3,275; total 5,725. Ally's Floor Plan Facility (resized to $1.5bn, 1 Nov 2023) sat ahead on inventory.
@@ -41,7 +39,7 @@ Stack mark = fair value over carrying value of all senior notes (Level 2 quotes 
 | 29 Sep 2023 | 41.98 | 8.86 | 77.7 | +73% | 9.3% |
 | 29 Dec 2023 | 52.94 | 11.17 | 84.7 | +89% | 8.8% |
 
-A pair hedged at a delta-style 20% to 50% of bond value lost money in every period: the equity leg lost 2 to 5 times the bond gain by December. Other points: unsecured bonds 37 to 48 cents in Nov 2022 [AB-BBG]; the March 2023 second-lien offer paid 63.3 to 80.9 cents per $1,000 of old paper, which the company called a premium to trading prices, and holders declined it [C-8K]; the August cash tender for 2025s paid 85.0 cents; 2028 secured notes were bought back at about 101.6 (open market, 2024) and redeemed at about 102.3 (2025), and the 2030 secured notes were called for redemption from the Aug 2026 Term Loan B (redemption price not stated in the 8-K) (calc from [C-10K25][C-8K26]). Short squeeze scale: S3 Partners counted $646mm of short losses on 19 Jul 2023 alone, $2.18bn year to date, with short interest at 47% of float [S3-Yahoo]; earlier, 2022's best short returned 323.77% and 56% of float was short by June 2023 (Ortex 54% on 18 Jul) CHECK. The stack mark was 84.7% at 31 Dec 2023 against 44.8% a year earlier, and holders who stayed in the 2028s were taken out at 102 to 105. No public source quantified losses of bond-long, stock-short books; the inference above is mine.
+A pair hedged at a delta-style 20% to 50% of bond value lost money in every period; by December the equity leg had lost 2 to 6 times the bond gain (calc). Other marks: unsecured bonds 37 to 48 cents in Nov 2022 [AB-BBG]; the March 2023 second-lien offer paid 63.3 to 80.9 cents per $1,000 of old paper, called a premium to trading, and was declined [C-8K]; the August tender for 2025s paid 85.0; 2028 secured notes were bought back at about 101.6 (2024, open market) and redeemed at about 102.3 (2025) (calc, [C-10K25]). S3 Partners counted $646mm of short losses on 19 Jul 2023 alone and $2.18bn year to date, with 47% of float short [S3-Yahoo]; 2022's best short returned 323.77% [II-Nov22]. No public source quantified bond-long, stock-short losses; that inference is mine.
 
 ### 1.4 Legal and structural mechanics
 Four mechanics mattered more than the stock price. (1) Unrestricted designation: before the March 2023 offer Carvana designated ADESA US Auction, LLC unrestricted under the unsecured indentures, releasing its guarantees, and planned a FinCo for finance-platform IP: a J.Crew-style asset move on the bond stack, done under existing baskets, disclosed with the offer release [C-8K]. (2) Holdout design: the offer carried a $500mm minimum participation condition and acceptance priority by series; holders coordinated (an ad hoc group of more than 90%) and refused, so the minimum failed [C-8K]. (3) Coercion by consent: the August exchange paired a cash tender for 2025s, exit consents stripping covenants and certain defaults from the unsecured indentures (majority per series; supplemental indentures 30 Aug 2023), and a TSA whose termination triggers included less than $350mm gross new equity within 20 business days of launch [C-10Q3]. (4) Equity as the funding source: a $1.0bn / 35mm-share ATM (19 Jul 2023) sold 7.2mm shares at $46.94 in Q3, and the Garcia Parties' $126mm purchase at $46.31 partly funded the cash tender [C-10Q3]; the TSA made the deal contingent on equity the rally supplied. PIK mechanics: 2031s accreted from 1,741 to 2,269 by Dec 2025 (calc). A Section 382 rights plan (18 Jul 2023) protected tax attributes and was ended 4 Jun 2024 [C-8K].
@@ -52,22 +50,20 @@ Company: Carvana Co. and the controlling Garcia Parties. Advisors named in the 1
 ## 2. SVB Financial Group (March 2023): the holdco note path
 
 ### 2.1 Dated timeline
-| Date | Event | Tag |
-|---|---|---|
-| Jan 2021 / 2021 | Portfolio shifted to held-to-maturity (HTM); $8.8bn reclassified from available-for-sale (AFS) with $132mm of pretax losses | [FED-BARR][S-10K] |
-| 15 Nov 2021 | SIVB equity peaks; assets pass $200bn in Dec 2021 | [FED-BARR] |
-| 31 Dec 2022 | HTM $91.3bn at cost vs $76.2bn fair value; deposits $173.1bn (down $16.1bn); FHLB advances $15.0bn | [S-10K] |
-| 24 Feb 2023 | 10-K filed; 1 Mar: analysts 12 Buy, 11 Hold, 1 Sell | [S-10K][FED-BARR] |
-| 8 Mar 2023 | AFS sale ($23.97bn book, $21.45bn proceeds, to Goldman Sachs); $2.25bn raise announced; rating agencies flagged; Silvergate winds down | [S-8K][FED-BARR] |
-| 9 Mar 2023 | Stock -60.4% to $106.04; over $40bn of deposits leave | [FED-BARR][CA-notice] |
-| 10 Mar 2023 | Stock halted; CDFPI closes the bank, FDIC receiver; offerings terminated | [S-8K] |
-| 12-13 Mar 2023 | Treasury/Fed/FDIC statement; a Treasury official says equity and junior holders will be "wiped out" (CHECK); holdco restructuring committee and CRO | [FED-BARR][S-8K] |
-| 17 Mar 2023 | Holdco Chapter 11 (S.D.N.Y. 23-10367) | [S-8K] |
-| 25 Apr 2023 | FDIC has frozen the holdco's $2bn deposit; 2025 notes 69, 2031 notes 57 | [DW-Apr23] |
-| Jan / 2 Aug 2024 | RSA with ad hoc group members (Jan, Davis Polk summary, CHECK); plan confirmed 2 Aug | [S-8K24][DP] |
-| 7 Nov 2024 | Plan effective; liquidating trust formed | [S-8K24] |
-| 25 Jun 2025 | Judge Glenn dismisses First-Citizens' IP suit | [FL] |
-| Late Aug 2026 | N.D. Cal. rejects the trust's $1.71bn claim against the FDIC | [AB-Sep26][PYMNTS] |
+- Jan 2021 / 2021: Portfolio shifted to held-to-maturity (HTM); $8.8bn reclassified from available-for-sale (AFS) with $132mm of pretax losses [FED-BARR][S-10K]
+- 15 Nov 2021: SIVB equity peaks; assets pass $200bn in Dec 2021 [FED-BARR]
+- 31 Dec 2022: HTM $91.3bn at cost vs $76.2bn fair value; deposits $173.1bn (down $16.1bn); FHLB advances $15.0bn [S-10K]
+- 24 Feb 2023: 10-K filed; 1 Mar: analysts 12 Buy, 11 Hold, 1 Sell [S-10K][FED-BARR]
+- 8 Mar 2023: AFS sale ($23.97bn book, $21.45bn proceeds, to Goldman Sachs); $2.25bn raise announced; rating agencies flagged; Silvergate winds down [S-8K][FED-BARR]
+- 9 Mar 2023: Stock -60.4% to $106.04; over $40bn of deposits leave [FED-BARR][CA-notice]
+- 10 Mar 2023: Stock halted; CDFPI closes the bank, FDIC receiver; offerings terminated [S-8K]
+- 12-13 Mar 2023: Treasury/Fed/FDIC statement; a Treasury official says equity and junior holders will be "wiped out" (CHECK); holdco restructuring committee and CRO [FED-BARR][S-8K]
+- 17 Mar 2023: Holdco Chapter 11 (S.D.N.Y. 23-10367) [S-8K]
+- 25 Apr 2023: FDIC has frozen the holdco's $2bn deposit; 2025 notes 69, 2031 notes 57 [DW-Apr23]
+- Jan / 2 Aug 2024: RSA with ad hoc group members (Jan, Davis Polk summary, CHECK); plan confirmed 2 Aug [S-8K24][DP]
+- 7 Nov 2024: Plan effective; liquidating trust formed [S-8K24]
+- 25 Jun 2025: Judge Glenn dismisses First-Citizens' IP suit [FL]
+- Late Aug 2026: N.D. Cal. rejects the trust's $1.71bn claim against the FDIC [AB-Sep26][PYMNTS]
 
 ### 2.2 Instruments and tranches
 Holdco senior unsecured notes, all one class, issuer SVB Financial Group only, indenture of 20 Sep 2010 with U.S. Bank National Association: 3.50% due Jan 2025, $350mm; 1.800% due Oct 2026, $650mm; 2.100% due May 2028, $500mm; fixed/floating due Apr 2028, $350mm (coupon 4.345% in the 10-K tables, 4.435% in the 10-K narrative and the 22 Mar 2023 8-K, CHECK; floats at compounded SOFR + 1.713% from Apr 2027); 3.125% due Jun 2030, $500mm; 1.800% due Feb 2031, $500mm; 4.570% fixed/floating due Apr 2033, $450mm (SOFR + 1.967% from Apr 2032). Total $3,300mm (calc). Junior layers: Boston Private trust-preferred debentures, about $100mm (Trust II, LIBOR + 1.68%, cumulative) guaranteed by the holdco; five series of preferred stock, $3,646mm carrying (Series A listed as SIVBP). Parent-only balance sheet, 31 Dec 2022: cash $2,258mm; investment in the Bank $15,456mm of $19,679mm total assets (78.5%, calc); long-term debt $3,370mm. Bank-level secured and wholesale funding that ranked ahead of everything the holdco could claim: FHLB advances $15.0bn, repo $525mm, deposits $173.1bn of which 94% uninsured. [S-10K][S-8K]
@@ -85,7 +81,7 @@ Holdco senior unsecured notes, all one class, issuer SVB Financial Group only, i
 | 25 Apr | 3.5% 2025 / 1.8% 2031 | 69 / 57 (MarketAxess) | [DW-Apr23] |
 | 1 Jul 2024 | 1.8% 2026 | 63.625 (Trace) | [BBG-Randles] |
 
-Four readings. (1) Pre-event, equity implied volatility was in the 39 to 50 range of its year, market equity covered the $3.3bn of senior notes 4.8 times and a one-year Merton default probability on those inputs is about 1e-7 (calc, asset value $19.3bn, asset vol 33%, rate 4.5%): the diffusion model priced the notes as riskless. (2) The price move came from a jump in the funding side (over $40bn out on one day, 23% of year-end deposits, calc), not from a diffusion in asset value; Barr's report gives deposit outflows of over $40bn on 9 Mar and an expected $100bn on 10 Mar, roughly 85% of the base [FED-BARR]. (3) Dollar prices mislead across tranches: a 1.8% 2031 note is below par before any distress, so compare spreads at a stated recovery; the 12-point gap between the 2025 and 2031 notes in April is a reinstatement and deposit-recovery bet on a single claim class [DW-Apr23]. (4) Bonds bought in the 30s traded in the 50s to 60s within weeks and the 2026 notes at 63.6 in July 2024; the plan's units, not cash, paid creditors (Section 2.4), so a recovery percentage is not yet closed. The general unsecured claim of the holdco against the receivership, $1.71bn, equals 52% of the senior notes (calc) and was lost at trial in Aug 2026 (Section 4).
+Four readings. (1) Pre-event, implied vol sat at 39 to 50, market equity covered the $3.3bn of senior notes 4.8 times, and a one-year Merton default probability on holdco inputs is about 1e-7 (calc: asset value $19.3bn, asset vol 33%, rate 4.5%): the diffusion model priced the notes as riskless. (2) The move came from the funding side: over $40bn left on 9 Mar (23% of year-end deposits, calc) and $100bn more was expected on 10 Mar, roughly 85% of the base [FED-BARR]. (3) Dollar prices mislead across tranches: a 1.8% 2031 note is below par before any distress, so compare spreads at a stated recovery; the 12-point 2025-versus-2031 gap in April is a reinstatement bet on one claim class [DW-Apr23]. (4) Bonds bought in the 30s were in the 50s and 60s within weeks and the 2026s at 63.6 in July 2024; the plan paid in units and stock (2.4), so recovery is not closed. The holdco's $1.71bn deposit claim is 52% of the senior notes (calc) and was lost at trial in Aug 2026 (Section 4).
 
 ### 2.4 Legal and structural mechanics
 (1) Separate legal entities: holdco notes are "recourse only to the Company and ... not guaranteed by the Company's subsidiaries" and rank behind all Bank creditors; the holdco's own claim on the Bank (cash on deposit, $1.71bn) is a general unsecured claim in the FDIC receivership [S-8K][DW-Apr23]. (2) Resolution regime: the 12 Mar systemic-risk statement protected depositors, not holdco creditors or shareholders; the Bank's closure was an automatic holdco event, and the filing on 17 Mar accelerated all seven notes and the trust-preferred debentures, enforcement stayed [S-8K]. (3) Plan mechanics: the confirmed plan (2 Aug 2024; effective 7 Nov 2024) moved assets to a liquidating trust and made the debtor a subsidiary of MNSN Holdings; senior noteholders took new common stock (Qualified Holders) plus Class A-1 trust units and trustee fees; other unsecured creditors took stock plus Class A-2 units or a 45% cash election (claims above $11mm capped); subordinated debentures took Class A-3 units; preferred took Class C units; common and Section 510(b) claimants nothing; the bank stock was abandoned on 6 Nov 2024 for a worthless-stock deduction [S-8K24]. (4) Tax: the IRS reduced a claim from about $649mm to $43mm in Jul 2024, a gating item for the plan [BBG-Randles]. (5) Offsets: the FDIC said the receivership and holdco claims could be netted [DW-Apr23].
@@ -96,23 +92,21 @@ Debtor: CEO Greg Becker signed the 10 and 13 Mar 8-Ks; the restructuring committ
 ## 3. Wolfspeed (2025): one distribution, many strikes
 
 ### 3.1 Dated timeline
-| Date | Event | Tag |
-|---|---|---|
-| 23 Jun / 5 Jul 2023 | $1.25bn Senior Secured Notes due 2030 sold (net $1.149bn); Renesas deposit agreement for up to $2.0bn, drawn $1.0bn, then $0.5bn (27 Feb 2024) and $0.5bn (26 Jun 2024) | [W-10K25] |
-| 11-22 Oct 2024 | Amended indenture permits $750mm more; $250mm issued; Renesas deposit amended to allow 15% PIK | [W-10K25] |
-| 9 Dec 2024 / Jan 2025 | At-the-market programme set up; 27.79mm shares sold for about $200mm (about $7.20, calc) | [W-10K25][W-DS] |
-| Feb 2025 | Company hires J.P. Morgan, Perella Weinberg and Latham; Finance Committee meets over 90 times | [W-DS] |
-| 28 Mar 2025 | Out-of-court exchange fails; stock about -50% to $2.59, market cap about $400mm | [W-DS] |
-| 30 Mar-May 2025 | Secured ad hoc group's "SSN Framework" becomes the template; Renesas and 2026-convert proposals rejected | [W-DS] |
-| 2 Jun 2025 | Interest on 2029 converts not paid; 30-day grace period used | [W-10K25] |
-| 22-23 Jun 2025 | Restructuring Support Agreement (RSA); old stock about -33% to about $0.60 | [W-8K-RSA][PR-Jun23] |
-| 27 / 30 Jun 2025 | Solicitation begins; prepackaged Chapter 11 filed, S.D. Tex. (Houston) | [W-8K-Jul] |
-| 8 Sep 2025 | Confirmation order, day 70 | [W-8K-Sep] |
-| 29 Sep 2025 | Plan effective; new stock opens at $18.00, closes $22.10 | [W-8K-Exit][YF] |
-| 29 Jan 2026 | CFIUS clears Renesas equity; contingent shares released | [W-8K-Jan26] |
-| 26 Mar 2026 | $379mm 1.5-lien convertible and $96.9mm of stock fund a $475.9mm first-lien redemption | [W-8K-Mar26] |
-| 26 May 2026 | New stock closes $73.50 (3.3 times the $22.02 plan value, calc) | [YF] |
-| 7 Oct 2026 | Conditional $1.5bn U.S. government loan commitment, conditional on equitizing converts | [W-8K-Oct26] |
+- 23 Jun / 5 Jul 2023: $1.25bn Senior Secured Notes due 2030 sold (net $1.149bn); Renesas deposit agreement for up to $2.0bn, drawn $1.0bn, then $0.5bn (27 Feb 2024) and $0.5bn (26 Jun 2024) [W-10K25]
+- 11-22 Oct 2024: Amended indenture permits $750mm more; $250mm issued; Renesas deposit amended to allow 15% PIK [W-10K25]
+- 9 Dec 2024 / Jan 2025: At-the-market programme set up; 27.79mm shares sold for about $200mm (about $7.20, calc) [W-10K25][W-DS]
+- Feb 2025: Company hires J.P. Morgan, Perella Weinberg and Latham; Finance Committee meets over 90 times [W-DS]
+- 28 Mar 2025: Out-of-court exchange fails; stock about -50% to $2.59, market cap about $400mm [W-DS]
+- 30 Mar-May 2025: Secured ad hoc group's "SSN Framework" becomes the template; Renesas and 2026-convert proposals rejected [W-DS]
+- 2 Jun 2025: Interest on 2029 converts not paid; 30-day grace period used [W-10K25]
+- 22-23 Jun 2025: Restructuring Support Agreement (RSA); old stock about -33% to about $0.60 [W-8K-RSA][PR-Jun23]
+- 27 / 30 Jun 2025: Solicitation begins; prepackaged Chapter 11 filed, S.D. Tex. (Houston) [W-8K-Jul]
+- 8 Sep 2025: Confirmation order, day 70 [W-8K-Sep]
+- 29 Sep 2025: Plan effective; new stock opens at $18.00, closes $22.10 [W-8K-Exit][YF]
+- 29 Jan 2026: CFIUS clears Renesas equity; contingent shares released [W-8K-Jan26]
+- 26 Mar 2026: $379mm 1.5-lien convertible and $96.9mm of stock fund a $475.9mm first-lien redemption [W-8K-Mar26]
+- 26 May 2026: New stock closes $73.50 (3.3 times the $22.02 plan value, calc) [YF]
+- 7 Oct 2026: Conditional $1.5bn U.S. government loan commitment, conditional on equitizing converts [W-8K-Oct26]
 
 ### 3.2 Instruments and tranches
 Old stack at 29 Jun 2025 ($mm principal): 1.75% convertible notes due 2026, 575 (conversion about $47.32); 0.25% converts due 2028, 750 ($127.22); 1.875% converts due 2029, 1,750 ($118.88); Senior Secured Notes due 2030, 1,521.2 (9.875% plus 2% payable in kind; scheduled to step to 10.875% or 11.875% from 23 Jun 2025 and to 13.875% or 15.875% from 23 Jun 2026; $750mm liquidity covenant from Apr 2025); Renesas deposits, 2,062.0 (unsecured, due 5 Jul 2033, 6% base, 15% when PIK). Total $6,658.2mm; cash $955.4mm, down $1.22bn in the year. [W-10K25]
@@ -136,7 +130,7 @@ New stack at 29 Sep 2025 ($mm): New Senior Secured Notes due 2030, 1,259.2 (plus
 | 30 Sep 2025 | New stock | $28.60 (Reuters: +33%) | [YF][RTR] |
 | 31 Dec 2025 / 31 Mar 2026 / 29 May 2026 | New stock | $17.41 / $16.32 / $59.28 | [YF] |
 
-Old equity economics (calc): 2,178,190 new shares at about $22 is $48mm for 156.48mm old shares, or $0.31 each with the CFIUS shares and $0.18 without; the old stock's market value was about $94mm at $0.60 (2.0 times) and $189mm at $1.21 (3.9 times). The CFIUS-contingent 871,287 shares were worth about $15mm, or $0.10 per old share (calc, at the $17.33 Renesas mark). The converts' equity optionality was worthless as a hedge ratio: at $2.59 the strikes of $47.32, $118.88 and $127.22 were 18, 46 and 49 times spot (calc), so delta was near zero and the notes traded as recovery claims; the fair-value marks at 26 to 29% sat inside the plan's 25 to 30% range eight weeks before the RSA, so convert and Renesas marks held no surprise. The surprise sat in the equity: a short at $1.21 earned about 75% to 85% over the exchange (depending on the contingent shares), a long lost it. No CDS series or listed-option surface for Wolfspeed was found in public sources this session (an evidence gap; OPRA and ICE data would close it).
+Old equity economics (calc): 2,178,190 new shares at about $22 is $48mm for 156.48mm old shares, $0.31 each with the CFIUS shares and $0.18 without; the old stock's market value was about $94mm at $0.60 (2.0 times plan value) and $189mm at $1.21 (3.9 times). The CFIUS-contingent 871,287 shares were worth about $15mm, $0.10 per old share (at the $17.33 Renesas mark). Convert delta was nil: at $2.59 the strikes of $47.32, $118.88 and $127.22 were 18, 46 and 49 times spot, so the notes traded as recovery claims, and their fair-value marks of 26 to 29% sat inside the plan's 25 to 30% eight weeks before the RSA. The surprise was in the equity: a short at $1.21 earned about 75% to 85% over the exchange, a long lost it. No Wolfspeed CDS series or listed-option surface was found (evidence gap; OPRA and ICE data would close it).
 
 ### 3.4 Legal and structural mechanics
 (1) Order of operations: an out-of-court exchange (March 2025) failed because the 2026 maturity, the Renesas deposit and three convertible issues had no common coalition; the secured group's framework (30 Mar) then set the template and the deal moved in-court as a prepackage with the votes cast before filing [W-DS]. (2) Priority was honoured at the top and bent below: the secured notes were reinstated in substance (new 1L plus a $277.5mm paydown at 109.875%, funded by the rights offering and a sale of MACOM shares), while converts and Renesas, unsecured and pari passu, split the fulcrum in different currencies: stock and second-lien paper for converts, a smaller note, a warrant and 16.85mm shares for Renesas [W-8K-Exit]. (3) The "many strikes" were issued by the plan: two second-lien converts struck at about $12.23 and $18.35, a warrant at $23.95, a later 1.5-lien convert at about $20.14, all against 43.56mm plan shares, plus a Black-Scholes protection clause on the warrant for two years [W-8K-Exit][W-8K-Mar26]. (4) Binary hooks: the Regulatory Trigger Deadline made Renesas's contingent consideration (2.0% of stock, $15mm cash, $15mm takeback notes, a warrant extension) and the equity's 5% versus 3% a digital option on CFIUS clearance, paid out on 29 Jan 2026 [W-8K-Jan26]. (5) Old equity was deemed to reject yet kept 3 to 5% as a negotiated settlement of subordination and other rights; the doctrinal question of an equity "gift" over unpaid seniors was not researched here (CHECK). (6) Backstop economics: $301.1mm of 2L converts offered at 91.3242 of face ($275mm cash), a $30.25mm premium in notes, 40% of the offering reserved to the backstop group (20% to the initial backstop parties, 20% holdback allocation) and only 60% open pro rata to all convert holders [W-DS]. (7) Securities-law exits: new securities issued under Bankruptcy Code Section 1145, and resale S-1s filed within 45 days [W-8K-Exit][W-10K26].
@@ -162,19 +156,58 @@ Three generic rules. (1) Parse the scoreboard of each 8-K item: 1.01, 1.03, 2.04
 
 ## 6. Which model assumptions broke
 
-1. Equity is exogenous (Carvana). The issuer sold 7.2mm shares at $46.94 into the rally, the TSA required at least $350mm of new equity, and the controlling holder bought $126mm; the equity price was a closing condition of the credit's recovery. 2. A short stock hedge has a bounded loss (Carvana, SVB). The bond leg was capped by par (84.7 at best, 100 in the limit) while the short stock was a short call with 47% of float already short: payoff convexity ran against the hedge, h* fell from 18.9% to 8.8%. 3. Default is a diffusion crossing a barrier (SVB). A one-year Merton default probability on holdco inputs is about 1e-7 (calc), a bank-level model gives a different answer, and both miss that the event was a $40bn one-day deposit jump (Barr) priced by a 39-vol surface; the holdco note is a call on a call, claim-ranked behind the Bank's depositors, the FHLB and the FDIC. 4. Priority fixes recovery (all three). Carvana's recovery by series ran from 64.9% to 89.3% of face; SVB's tranches shared one claim yet traded 12 points apart; Wolfspeed's secured notes got 100%-plus while unsecured Renesas took 27 to 29% in a different currency. Recovery is a negotiated vector, not a scalar. 5. Delta is a hedge ratio (Wolfspeed). Convert strikes of $47.32 to $127.22 against a $2.59 stock make delta zero; the instrument is a recovery claim, and the plan then re-struck the strikes at $12.23 to $23.95. 6. A ticker is a security (Wolfspeed). The same symbol went from $1.21 to $22.10, a spurious +1,726% (calc) in any naive return series; the vendor's WOLF history starts on 29 Sep 2025, and the old share is a different instrument worth 0.008352 of the new one. 7. The barrier is book debt (Wolfspeed). The effective barrier was a $750mm covenant on first-lien-controlled cash against a $1.22bn annual burn, not $6.66bn of debt against $955mm of cash.
+1. Equity is exogenous (Carvana). The issuer sold 7.2mm shares at $46.94, the TSA required at least $350mm of new equity, and the controlling holder bought $126mm: the equity price was a closing condition of the credit's recovery. 2. A short-stock hedge has bounded loss (Carvana). The bond leg was capped by par while the short was a short call on a stock with 47% of float already short; h* fell from 18.9% to 8.8%. 3. Default is a diffusion crossing a barrier (SVB). A holdco-level Merton PD is about 1e-7 (calc), a bank-level model gives another answer, and both miss a $40bn one-day deposit jump priced by a 39-vol surface; the holdco note is a call on a call, ranked behind depositors, the FHLB and the FDIC. 4. Priority fixes recovery (all three). Carvana's recovery ran from 64.9% to 89.3% of face by series; SVB's tranches shared one claim yet sat 12 points apart; Wolfspeed's secured notes were reinstated in substance (86% plan estimate) while Renesas took 27 to 29% in different paper. Recovery is a negotiated vector, not a scalar. 5. Delta is a hedge ratio (Wolfspeed). Strikes of $47.32 to $127.22 against $2.59 make delta zero; the plan then re-struck at $12.23 to $23.95. 6. A ticker is a security (Wolfspeed). The same symbol went from $1.21 to $22.10, a spurious +1,726% (calc) in a naive return series; the vendor history of the new line starts 29 Sep 2025. 7. The barrier is book debt (Wolfspeed). The effective barrier was a $750mm first-lien-account covenant against $1.22bn of annual burn, not $6.66bn of debt.
 
 ## 7. What the RSSG banker saw that the quant missed
 
-The seat that reads the 8-K item list, the signature page and the advisor paragraph first. Carvana: (a) the unrestricted-subsidiary designation of ADESA before any offer is the tell that a liability-management deal is coming, since the asset left the old guarantee package first; (b) a minimum-participation condition and a priority order give the ad hoc group a veto, and the group of over 90% (PJT Partners and White & Case advised it) controls both price and timing, so the March offer's 63 to 81 cents was a bid in a negotiation, not a market; (c) the 2030s, 3,275 of 5,725, were the swing block, and the 89.3% they received tells you who the deal was written for; (d) the exchange was gated on an equity raise, so the rally was the transaction. SVB: the banker never asks what the bank is worth, only what the holdco owns: $2.26bn of cash, mostly on deposit at the Bank, a stub in SVB Capital and SVB Securities, and $3.3bn of senior notes in one class, with a freeze on the deposit and a set-off argument from the FDIC; the bonds at 30 to 40 were a bet on a single claim of $1.71bn, and the trust that pays those holders lost that claim at trial. Wolfspeed: the swing creditor is a customer, Renesas, with a wafer-supply agreement and a CFIUS dependency, which turned the recovery into a digital on a regulator, and the RSA's milestone calendar (petition by 1 Jul, confirmation in 75 days, effective in four months) fixed the dates; NDAs were released on 28 Mar and re-imposed on added holders in late May, and the cleansing deck came out with the RSA 8-K on 23 Jun; and the 2 Jun grace-period election started a 30-day clock. The quant had the prices; the banker had the calendar, the coalition and the counterparty.
+The seat that reads the 8-K item list, the signature page and the advisor paragraph first. Carvana: (a) designating ADESA unrestricted before any offer is the tell of a coming liability-management deal, since the asset left the old guarantee package first; (b) a minimum-participation condition and a priority order gave the ad hoc group (over 90%; PJT Partners and White & Case advised it) a veto over price and timing, so the March offer's 63 to 81 cents was a negotiating bid, not a market; (c) the 2030s, 3,275 of 5,725, were the swing block, and their 89.3% recovery shows who the deal was written for; (d) the exchange was gated on an equity raise, so the rally was the transaction. SVB: the banker asks what the holdco owns, not what the bank is worth: $2.26bn of cash, mostly deposited at the Bank and frozen, stubs in SVB Capital and SVB Securities, against $3.3bn of senior notes in one class and an FDIC set-off argument; bonds at 30 to 40 were a bet on one $1.71bn claim, which the trust that pays those holders lost at trial. Wolfspeed: the swing creditor was a customer, Renesas, with a wafer-supply agreement and a CFIUS dependency, which made recovery a digital on a regulator; the RSA calendar (petition by 1 Jul, confirmation within 75 days, effectiveness within four months) fixed the dates; NDAs were released on 28 Mar and re-imposed in late May, the cleansing deck came with the RSA 8-K on 23 Jun, and the 2 Jun grace-period election started a 30-day clock. The quant had the prices; the banker had the calendar, the coalition and the counterparty.
 
 ## Sources
 
-(pending)
+All URLs returned HTTP 200 on 2026-10-18 or were read via WebFetch (FindLaw gave curl a 403).
+
+Carvana
+- [C-10Q3] Q3 2023 10-Q: https://www.sec.gov/Archives/edgar/data/1690820/000169082023000323/cvna-20230930.htm
+- [C-10K23] FY2023 10-K: https://www.sec.gov/Archives/edgar/data/1690820/000169082024000093/cvna-20231231.htm
+- [C-10K25] FY2025 10-K: https://www.sec.gov/Archives/edgar/data/1690820/000169082026000009/cvna-20251231.htm
+- [C-8K] 22 Mar 2023 release: https://www.sec.gov/Archives/edgar/data/1690820/000119312523076322/d820769dex992.htm ; ATM supplement: https://www.sec.gov/Archives/edgar/data/1690820/000119312523189218/d723413d424b5.htm ; 6 Jun 2024 8-K: https://www.sec.gov/Archives/edgar/data/1690820/000169082024000232/cvna-20240603.htm
+- [C-8K26] 14 Aug 2026 8-K: https://www.sec.gov/Archives/edgar/data/1690820/000169082026000059/cvna-20260814.htm
+- [S3-Yahoo] S3 Partners via Yahoo Finance, 19 Jul 2023: https://finance.yahoo.com/news/carvana-stock-is-up-1000-this-year-leaving-short-sellers-with-a-2-billion-loss-162312603.html
+- [II-Nov22] Michelle Celarier, Institutional Investor, 9 Nov 2022; [AB-BBG] Eliza Ronalds-Hannon and Carmen Arroyo, Bloomberg, 18 Nov 2022, as carried by American Banker: titles recorded in an earlier pass, not re-fetched (no link given).
+
+SVB Financial Group
+- [FED-BARR] Review of the Federal Reserve's Supervision and Regulation of SVB, 28 Apr 2023: https://www.federalreserve.gov/publications/files/svb-review-20230428.pdf
+- [S-10K] FY2022 10-K: https://www.sec.gov/Archives/edgar/data/719739/000071973923000021/sivb-20221231.htm
+- [S-8K] 8-Ks of 8, 10, 13 (two), 14, 17, 22 Mar 2023: https://www.sec.gov/Archives/edgar/data/719739/000119312523064680/d430920d8k.htm , .../000119312523067777/d450664d8k.htm , .../000119312523068535/d404655d8k.htm , .../000119312523070254/d487554d8k.htm , .../000119312523073665/d485308d8k.htm , .../000119312523076760/d487549d8k.htm
+- [S-8K24] 8 Nov 2024 8-K and 7 Nov release: https://www.sec.gov/Archives/edgar/data/719739/000119312524254186/d904756d8k.htm , https://www.sec.gov/Archives/edgar/data/719739/000119312524254186/d904756dex993.htm
+- [DW-Apr23] Debtwire, 26 Apr 2023: https://ionanalytics.com/insights/debtwire/svb-debt-trading-price-discrepancy/
+- [BBG-Randles] Jonathan Randles, Bloomberg, 2 Jul 2024, via Accounting Today: https://accountingtoday.com/articles/svb-financial-bonds-rise-after-600m-cut-to-tax-bill
+- [MR] Market Rebellion IV report, 10 Mar 2023: https://marketrebellion.com/news/pre-market-iv-report-march-10-2023 ; SpotGamma, 11 Mar 2023: https://spotgamma.com/silicon-valley-bank-collapse-options-market-reaction/ ; Oaktree 1Q2023: https://www.oaktreecapital.com/insights/insight-commentary/market-commentary/performing-credit-quarterly-1q2023
+- [FL] In re SVB Financial Group, Bankr. S.D.N.Y., 25 Jun 2025: https://caselaw.findlaw.com/court/us-ban-crt-s-d-new-yor/117422670.html
+- [AB-Sep26] American Banker, 9 Sep 2026: https://www.americanbanker.com/news/fdic-wont-have-to-return-1-71-billion-to-svb-creditors ; [PYMNTS] 31 Aug 2026 (Reuters): https://www.pymnts.com/legal/2026/fdic-prevails-in-1-71-billion-court-case-involving-svb-collapse/
+- Search-result summaries only (CHECK, no link): Bloomberg and Reuters bond prices of 13 Mar 2023; WSJ via Axios, 17-18 Mar 2023; class-action notices for the $267.83 and $106.04 closes [CA-notice]; Davis Polk's case summary [DP].
+
+Wolfspeed
+- [W-8K-RSA] 23 Jun 2025 8-K and ex 99.1: https://www.sec.gov/Archives/edgar/data/895419/000119312525144083/d937053d8k.htm , https://www.sec.gov/Archives/edgar/data/895419/000119312525144083/d937053dex991.htm
+- [W-8K-Jul] 1 Jul 2025 8-K and [W-DS] Disclosure Statement (ex 99.1): https://www.sec.gov/Archives/edgar/data/895419/000119312525153145/d755867d8k.htm , https://www.sec.gov/Archives/edgar/data/895419/000119312525153145/d755867dex991.htm
+- [W-8K-Sep] 10 Sep 2025: https://www.sec.gov/Archives/edgar/data/895419/000119312525199310/d36059d8k.htm
+- [W-8K-Exit] 29 and 30 Sep 2025: https://www.sec.gov/Archives/edgar/data/895419/000119312525223057/d69265d8k.htm , https://www.sec.gov/Archives/edgar/data/895419/000119312525224251/d22768d8k.htm
+- [W-8K-Jan26] 30 Jan 2026: https://www.sec.gov/Archives/edgar/data/895419/000119312526030582/d39825d8k.htm
+- [W-8K-Mar26] 19 and 26 Mar 2026: https://www.sec.gov/Archives/edgar/data/895419/000119312526116036/d75349d8k.htm , https://www.sec.gov/Archives/edgar/data/895419/000119312526126483/d916941d8k.htm
+- [W-8K-Oct26] 7 Oct 2026: https://www.sec.gov/Archives/edgar/data/895419/000119312526416987/d122407d8k.htm
+- [W-10K25] FY2025 10-K: https://www.sec.gov/Archives/edgar/data/895419/000089541925000110/wolf-20250629.htm ; Q1 FY2026 10-Q: https://www.sec.gov/Archives/edgar/data/895419/000089541925000132/wolf-20250928.htm ; [W-10K26] FY2026 10-K: https://www.sec.gov/Archives/edgar/data/895419/000089541926000054/wolf-20260628.htm
+- [RTR] Reuters, 30 Sep 2025, via Yahoo Finance: https://finance.yahoo.com/news/wolfspeed-shares-rally-chipmaker-exits-113149062.html
+- [PR-Jun23] Finviz (Motley Fool), 23 Jun 2025: https://finviz.com/news/86229/why-wolfspeed-plunged-today ; Asianet Newsable: https://newsable.asianetnews.com/markets/wolfspeed-stock-plunges-premarket-after-confirming-chapter-11-plan-restructuring-retail-stays-pessimistic/articleshow-wfe1z4i
+
+Vendor data and shelf
+- [YF] Yahoo Finance chart API daily bars for CVNA and the new WOLF line (vendor, CHECK; no old-WOLF history). Short-interest quotes from search summaries. Shelf: Moyer, Distressed Debt Analysis, pp. 259-266 (capital structure arbitrage); Dynkin et al., Systematic Investing in Credit, pp. 87-91 (Merton hedge ratios).
+- Evidence gaps: no TRACE print series, SVBFG or Wolfspeed CDS, or Wolfspeed option surface was obtainable; fund-level holder lists were not found.
 
 ## Book placement
 
-(pending)
+Ch 23 is the home (Case Study B SVB, Case Study C Carvana, Wolfspeed exhibit). Add: (a) the Carvana squeeze lens with the 1.3 h* table and a short function returning break-even hedge ratio from two marks; (b) SVB: replace "mid-80s" and flagged marks with the Debtwire pair (69 and 57 on 25 Apr 2023) and the 167 vs 39 implied-vol pair; fix the Docket Diary ($3,279mm is carrying value, principal is $3,300mm [S-8K]; the deposit claim was $1.71bn at trial, earlier "about $2bn"); add the Aug 2026 Freeman ruling; (c) Wolfspeed: replace the "not reconstructed" note with the strike ladder ($12.23, $18.35, $20.14, $23.95) against the $22.02 plan value, and answer Exercise 5 with the parity arithmetic (81.7508 x $22.02 = $1,800 per $1,000 of 2L convert against a 91.3242 purchase price, calc).
+Ch 6: §6.4.4 says 86-89% uninsured; $151.5bn / $173.1bn = 87.5% is US offices only, the Fed's 94% includes all, so say which; add a holdco-as-call-on-a-call box (holdco-only Merton PD about 1e-7). §6.10.1 can cite per-series Carvana recoveries (64.9% to 89.3%). Ch 15: the CFIUS "Distribution Event" as a digital (871,287 shares, about $15mm) and the rights offering at 91.3242 with its backstop split. Ch 13-B: Wolfspeed Docket Diary from 3.1 and 3.4; Carvana as a one-paragraph LME cameo. Ch 16: the 0.008352 and 0.013920 stub ratios. Ch 9-B: ticker reuse (+1,726% splice) as a corporate-action filter case. Ch 25: the 4.345% / 4.435% mismatch inside one 10-K; 8-K Items 1.01, 1.03, 2.04, 3.02 as parse targets. Ch 28: scenario-sized hedges and a squeeze kill-switch (short interest above 40% of float plus issuer ATM capacity). App C rows: 14 Aug, 31 Aug and 7 Oct 2026.
+New sections justified: "23.9 The hedge that is a short call" (Carvana and Wolfspeed old equity), "6.4.5 Holdco as a call on a call", and a Ch 23 exercise on pricing a document-fixed exchange ratio as a digital. A new chapter is not justified: the three cases fit Chapters 6, 15 and 23.
 
 <!-- RAW FACTS LOG (working notes; to be consolidated into the sections above and then deleted before the COMPLETE marker) -->
 ### RAW C1: Carvana exchange, primary (Carvana 10-Q for quarter ended 30 Sep 2023, fetched this session from sec.gov/Archives/edgar/data/1690820/000169082023000323/cvna-20230930.htm)

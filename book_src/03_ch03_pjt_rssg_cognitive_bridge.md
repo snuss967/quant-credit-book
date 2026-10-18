@@ -129,7 +129,23 @@ An RFQ looks like a request for a price. It is better understood as a request fo
 
 ### 3.2.1 The binary model
 
+> **Math, Gently.** *Bayes' rule, and what it means to condition on someone choosing to trade with you.* A doctor at a walk-in clinic knows that about one adult in fifty in her town has the flu this week. Then a patient walks in. Before he says a word her estimate has already moved, because healthy people do not usually spend a Tuesday morning in a clinic waiting room. The fact that he chose to come in is evidence. Bayes' rule is the bookkeeping for that move: start with a *prior* (one in fifty), weight it by how much more likely the evidence is if the hypothesis is true than if it is false (sick people walk in far more often than healthy ones), and rescale so the probabilities add up to one again; what comes out is the *posterior*. A dealer is that doctor. The prior is the screen mid and the bond's ordinary uncertainty. The evidence is that someone chose to send *this* RFQ, and people who know the bond is about to fall are more likely to want to sell it than people who do not. Glosten and Milgrom made the bookkeeping exact for the simplest case, and the answer is startlingly compact: the bid sits below the mid by $\pi\sigma_V$, the probability that the sender is informed times the size of the move the informed sender knows about. If one sell RFQ in five comes from someone who knows ($\pi = 0.2$) and the move they know about is 5 points ($\sigma_V = 5$), the bid sits $0.2 \times 5 = 1$ point below the mid and the ask a point above. The full version, three steps of Bayes, is in "The Full Derivation" below.
+
 Work under the desk's physical measure $\mathbb{P}$ (these are the dealer's beliefs, not risk-neutral prices). A client sends a sell RFQ for bond $i$. The dealer's prior on the bond's value at the end of the holding horizon is two-point: $V \in \{m + \sigma_V,\ m - \sigma_V\}$ with equal probability, so the prior mean is the mid $m$ and the prior standard deviation is $\sigma_V$. With probability $\pi$ the sender is **informed** and knows $V$; with probability $1-\pi$ the sender is **uninformed** and sends a sell RFQ with probability $\tfrac12$ for reasons that have nothing to do with $V$ (redemptions, a rebalance, a CLO manager trimming a CCC bucket). An informed sender sells only when $V = m - \sigma_V$.
+
+Run Bayes' rule on this setup (three short steps, set out in the Full Derivation below) and ask what a competitive dealer bids if it expects to make exactly zero on average, which means bidding the expected value of the bond conditional on having been hit. The answer is the bid and ask
+
+$$
+b^{\text{GM}} = m - \pi\,\sigma_V, \qquad a^{\text{GM}} = m + \pi\,\sigma_V . \tag{3.1}
+$$
+
+The half-spread is the probability that the sender is informed times the uncertainty the informed sender is resolving. This is Glosten and Milgrom (1985), and it is the $\Lambda_{\text{tox}}$ term in the bid equation of Chapter 1, now with a formula attached. Notice what it does *not* contain: inventory, risk aversion, or funding cost. A dealer who is risk-neutral, has infinite balance sheet, and pays nothing to carry a position still quotes a positive spread, purely because some of the people who want to trade with them know more than they do. That spread is not a fee. It is an insurance premium against the informed fraction of the flow, collected from everyone, and paid out to the informed.
+
+The joke, which is also the point: the uninformed seller pays $\pi\sigma_V$ for the privilege of trading in a market that contains informed sellers. The pension fund rebalancing on the first of the month is subsidizing the distressed fund that just left a lender call. Market making is the business of running that cross-subsidy at a profit of exactly zero, which is why desks that do it well care so much about the "exactly."
+
+Distressed bonds are rarely symmetric, and the derivation below also handles the lopsided case. With a prior $q$ on the good outcome and a gap $\Delta$ between the outcomes, the half-spread comes out at roughly $2\pi\,q(1-q)\,\Delta$ when $\pi$ is small: for a given gap it is largest when the bond is a coin flip, which is the bond an ex-RSSG banker already flags by instinct. The full asymmetric formula is the one this chapter uses for Serta in §3.7.
+
+#### The Full Derivation: the Glosten–Milgrom bid
 
 **Step 1: likelihoods.** The probability of seeing a sell RFQ in each state is
 
@@ -150,15 +166,11 @@ $$
 b = \mathbb{E}^{\mathbb{P}}[V \mid \text{sell}] = (m + \sigma_V)\,\frac{1-\pi}{2} + (m - \sigma_V)\,\frac{1+\pi}{2},
 $$
 
-which simplifies to
+which simplifies to the bid and ask of (3.1),
 
 $$
-b^{\text{GM}} = m - \pi\,\sigma_V, \qquad a^{\text{GM}} = m + \pi\,\sigma_V . \tag{3.1}
+b^{\text{GM}} = m - \pi\,\sigma_V, \qquad a^{\text{GM}} = m + \pi\,\sigma_V .
 $$
-
-The half-spread is the probability that the sender is informed times the uncertainty the informed sender is resolving. This is Glosten and Milgrom (1985), and it is the $\Lambda_{\text{tox}}$ term in the bid equation of Chapter 1, now with a formula attached. Notice what it does *not* contain: inventory, risk aversion, or funding cost. A dealer who is risk-neutral, has infinite balance sheet, and pays nothing to carry a position still quotes a positive spread, purely because some of the people who want to trade with them know more than they do. That spread is not a fee. It is an insurance premium against the informed fraction of the flow, collected from everyone, and paid out to the informed.
-
-The joke, which is also the point: the uninformed seller pays $\pi\sigma_V$ for the privilege of trading in a market that contains informed sellers. The pension fund rebalancing on the first of the month is subsidizing the distressed fund that just left a lender call. Market making is the business of running that cross-subsidy at a profit of exactly zero, which is why desks that do it well care so much about the "exactly."
 
 **The asymmetric version.** Distressed bonds are rarely symmetric. Let the prior be $q = \mathbb{P}(V = V^+)$ with gap $\Delta = V^+ - V^-$, so $m = qV^+ + (1-q)V^-$. Repeating Steps 1–3,
 
@@ -168,7 +180,11 @@ $$
 
 With $q = \tfrac12$ and $\Delta = 2\sigma_V$ this collapses to (3.1). The small-$\pi$ form connects directly to §3.1: $q(1-q)\Delta^2$ is the variance of the two-point distribution, so the half-spread is roughly $2\pi \times \text{variance} / \text{gap}$. A bond near a binary event with $q$ near one half has the largest adverse-selection charge for a given gap, which is exactly the bond that ex-RSSG intuition flags as "this one is a coin flip and somebody knows which way it lands."
 
+#### Units: the bug that bites
+
 **Units.** Equation (3.1) is in price points if $\sigma_V$ is in price points. If your risk system gives you spread volatility $\sigma_s$ (in decimal per horizon), convert with spread duration: $\sigma_V \approx D^{\text{spr}}\,\sigma_s\,P$. For a bond at 87 with $D^{\text{spr}} = 3.5$ and a horizon spread volatility of 150bp, $\sigma_V \approx 3.5 \times 0.015 \times 87 \approx 4.6$ points *(illustrative)*. Mixing a spread-unit $\sigma_V$ with a price-unit $m$ is the single most common bug in RFQ engines written by coding agents, and it is silent: the bid is merely wrong by a factor of a few hundred.
+
+> **View From Another Seat.** *The insurer and the pension fund.* The "uninformed seller" of the model is not an abstraction. It has an investment committee, a liability schedule and a regulator. Sit at a life insurer's fixed-income desk on the morning a B3 bond is downgraded and its NAIC designation slips a notch. The downgrade tells the insurer nothing the market does not already know; what changes is how much capital the position consumes, and the bond goes on the sell list for reasons that live entirely on the insurer's own balance sheet. A pension fund rebalancing back to its policy weights after a month of equity gains is in the same position: it sells because of a table of targets, not because of a view. From this seat the dealer's $\pi\sigma_V$ looks like a tax on innocence, and in a sense it is. The insurer cannot prove it is uninformed, so it pays the same adverse-selection premium per bond as the distressed fund that just left a lender call. What it *can* do is choose whom to ask, and the evidence says visible quotes change that choice. Hendershott, Li, Livdan, Schürhoff and Venkataraman (2026, *Journal of Finance* 81(4)), matching dealers' published quote runs to insurers' trades, find that dealers with no established relationship to an insurer win 23% of its trades in a bond when they are quoting that bond and 11% when they are not. A dealer that publishes a credible price can win uninformed business it never had a relationship with; a dealer that stays dark leaves the insurer to its usual counterparties. For the dealer, insurer flow is the low-$\pi$ business that pays for the high-$\pi$ business. For the insurer, the model suggests the cheapest way to lower its own $\pi$: be legible. A seller whose reasons can be read off a calendar (quarter-end, a designation change, a published rebalancing date) gives the dealer grounds to believe the sale is about the seller, not the bond.
 
 ### 3.2.2 Making $\pi$ a function of the RFQ
 

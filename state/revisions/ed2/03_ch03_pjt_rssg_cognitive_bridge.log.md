@@ -6,8 +6,8 @@
 - [x] 4. [§3.1.2] MATH-GENTLY: distribution zoo. — Note: zoo box with weather analogy, lognormal, Beta, Poisson, fat tails.
 - [x] 5. [§3.1.3] MATH-GENTLY + WHEN-TO-APPLY: random walk, sqrt time, SVB puzzle resolved. — Note: drunk-walk box, Itô pointer to §6.1, judgment, SVB puzzle resolved.
 - [x] 6. [§3.1.4] SHOP-LIFE (short): spreadsheet as feature at a market maker. — Note: feature-store meeting: refresh on Item 2.03, point-in-time, naming.
-- [ ] 7. [§3.2.1] FULL-DERIVATION-MOVE + MATH-GENTLY: Bayes, GM bid.
-- [ ] 8. [§3.2.1, after units] ANOTHER-SEAT: the insurer and pension fund.
+- [x] 7. [§3.2.1] FULL-DERIVATION-MOVE + MATH-GENTLY: Bayes, GM bid. — Note: clinic Bayes box; (3.1) up front; steps moved to Full Derivation.
+- [x] 8. [§3.2.1, after units] ANOTHER-SEAT: the insurer and pension fund. — Note: insurer and pension seat; HLLSV 23% versus 11% cited.
 - [ ] 9. [§3.2.2] LIST-TO-NARRATIVE + MATH-GENTLY: features as Ines walk-through; odds.
 - [ ] 10. [§3.2.3] MATH-GENTLY + WHEN-TO-APPLY: winner's curse; GM judgment.
 - [ ] 11. [§3.3.1-3.3.3] MATH-GENTLY x2: bp of price; beta and residual.

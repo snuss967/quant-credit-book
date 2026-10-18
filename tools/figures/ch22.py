@@ -223,6 +223,7 @@ def fig_dealer_inventory():
     ax.set_ylim(-14, 28)
     ax.set_xlim(D("2015-01-01"), D("2028-03-01"))
     ax.set_xticks([D(f"{y}-01-01") for y in range(2016, 2027, 2)])
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
     ax.set_ylabel("Net position, long minus short ($bn)")
 
     mark_event(ax, D("2020-03-23"), "Mar 2020: SMCCF,\nSLR exclusion", y_frac=0.985)
@@ -232,9 +233,9 @@ def fig_dealer_inventory():
     y17 = df.loc["2017", "total_net_mm"].mean()
     y26 = df.loc["2026", "total_net_mm"].mean()
     i26 = df.loc["2026", "ig_net_mm"].mean()
-    ax.annotate(f"2017 average: +${y17:.1f}bn", (D("2017-07-01"), y17), xytext=(0, 44),
-                textcoords="offset points", fontsize=8, color=INK_2, ha="center",
-                arrowprops=dict(arrowstyle="-", color=MUTED, linewidth=0.7, shrinkA=0, shrinkB=2))
+    ax.annotate(f"2017 average: +${y17:.1f}bn", (D("2017-07-01"), y17), xytext=(D("2017-03-01"), 24.6),
+                textcoords="data", fontsize=8, color=INK_2, ha="left", va="bottom",
+                arrowprops=dict(arrowstyle="-", color=MUTED, linewidth=0.7, shrinkA=0, shrinkB=2, relpos=(0.1, 0.0)))
     ax.plot([D("2017-01-01"), D("2017-12-31")], [y17, y17], color=INK_2, linewidth=1.0, zorder=5)
     ax.plot([D("2026-01-01"), df.index[-1]], [y26, y26], color=INK_2, linewidth=1.0, zorder=5)
     ax.annotate(f"2026 to date: {y26:+.1f}bn\n(IG only {i26:+.1f}bn)".replace("+", "+$").replace("-", "-$"),
