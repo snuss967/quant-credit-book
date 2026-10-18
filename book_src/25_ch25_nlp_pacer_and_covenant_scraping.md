@@ -81,11 +81,15 @@ The desk's first attempt to skip the reading altogether failed in a quieter way.
 
 > **Desk Myth vs. Desk Reality.** *Myth:* "We'll point a large language model at the agreement and it will tell us the restricted payments capacity." *Reality:* A language model is very good at *finding the span* that defines a basket and very bad at being the place where arithmetic happens without a test. The desk splits the job. The model proposes spans with citations. A deterministic parser turns spans into typed nodes. A calculator with unit tests turns nodes into dollars. Every dollar carries a pointer back to the clause it came from. Chapter 26 calls this the citation contract. This chapter is what goes on the other side of it.
 
+The documents were always there. What took systematic credit a while was noticing that they were data.
+
 > **[SOURCE EXTRACTION]** *Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.32:* "The relatively few alternative data approaches that we have seen applied to quant credit strategies thus far include: analysing company linkages (suppliers and customers) from the Revere dataset...; bond short interest information; text-mining credit analysts' reports."
 >
 > **Annotation.** In 2022 one of the largest systematic managers listed text as an aside, and the text in question was *analysts' reports*, which are opinions about documents rather than the documents themselves. The gap since then is not mainly a story about better models. The documents were always free on EDGAR and RECAP. What changed is that LLM-assisted span extraction made covenant parsing cheap enough to run across a whole universe, while the 2017–2024 liability-management era made covenant capacity worth parsing at all. Text has moved from a footnote to a pipeline. The pipeline's competitive edge, though, is the boring part: dedupe, versioning, rate limits and units.
 
 ## 25.2 The Definition Graph: Legalese as a Typed Program
+
+Moyer wrote the parser's job description twenty years before anyone tried to automate it, and he wrote it for a tired human.
 
 > **[SOURCE EXTRACTION]** *Moyer_Distressed_Debt_Analysis p.167:* "...take what is far too often, at least in the view of most nonlawyers, an unnecessarily turgid and impenetrable mass of legalese-laced verbiage and explain why it exists and what it is attempting to accomplish."
 >

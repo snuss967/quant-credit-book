@@ -354,18 +354,21 @@ def fig_whipsaw_capture():
     av.set_ylim(-1.55, 0.35)
 
     # Left bottom: positions of a 3-month signal (L = 1.5) and a 12-month signal (L = 6)
-    for ypos, L, col, lab, res in ((1.0, 1.5, C_SPREAD, "3-month", capture(20, 1.5)),
-                                   (0.0, 6.0, C_RETURN, "12-month", capture(20, 6.0))):
-        ap.broken_barh([(-6, L + 6)], (ypos - 0.34, 0.68), facecolors=TINT_BLUE, edgecolor="none")
-        ap.broken_barh([(L, T / 2)], (ypos - 0.34, 0.68), facecolors=TINT_ORANGE, edgecolor="none")
-        ap.broken_barh([(T / 2 + L, 26 - (T / 2 + L))], (ypos - 0.34, 0.68), facecolors=TINT_BLUE, edgecolor="none")
+    # Colour carries the signal (blue 3-month, orange 12-month), as in the right panel: the short stretch is a tint of
+    # the signal's colour and the long stretches are neutral, so blue/orange never mean long/short.
+    LONG_FILL = "#e6e5e1"
+    for ypos, L, col, lab, res, short_fill in ((1.0, 1.5, C_SPREAD, "3-month", capture(20, 1.5), TINT_BLUE),
+                                               (0.0, 6.0, C_RETURN, "12-month", capture(20, 6.0), TINT_ORANGE)):
+        ap.broken_barh([(-6, L + 6)], (ypos - 0.34, 0.68), facecolors=LONG_FILL, edgecolor="none")
+        ap.broken_barh([(L, T / 2)], (ypos - 0.34, 0.68), facecolors=short_fill, edgecolor="none")
+        ap.broken_barh([(T / 2 + L, 26 - (T / 2 + L))], (ypos - 0.34, 0.68), facecolors=LONG_FILL, edgecolor="none")
         ap.plot([L, L], [ypos - 0.34, ypos + 0.34], color=col, linewidth=1.6)
         ap.plot([T / 2 + L, T / 2 + L], [ypos - 0.34, ypos + 0.34], color=col, linewidth=1.6)
         ap.text(L + T / 4, ypos, "short", ha="center", va="center", fontsize=7.8, color=INK_2)
         ap.text(-5.6, ypos, "long", ha="left", va="center", fontsize=7.8, color=INK_2)
         pct = f"{res * 100:+.0f}%".replace("-", "\u2212")
         ap.text(26.4, ypos, f"{lab}\n{pct}", ha="left", va="center", fontsize=8.2, color=INK_2)
-        ap.plot([26.1], [ypos], "o", color=col, markersize=5, clip_on=False, zorder=5)
+        ap.plot([25.4], [ypos], "o", color=col, markersize=5, zorder=5)
     ap.set_ylim(-0.55, 1.55)
     ap.set_yticks([])
     ap.grid(False)
@@ -412,17 +415,18 @@ def fig_episodes():
          "SG Trend 2008: +20.9%"),
         ("B  Feb-Jun 2020", "2019-12-01", ("2020-02-15", "2020-06-30"), "V in about two months",
          "SG Trend 2020: +6.24%"),
-        ("C  2022", "2021-12-01", ("2022-01-01", "2022-10-31"), "a grind, mostly rates",
+        ("C  2022", "2021-12-01", ("2022-01-01", "2022-12-31"), "a grind, mostly rates",
          "SG Trend 2022: +27.4%"),
         ("D  Apr 2025", "2024-05-01", ("2025-02-15", "2025-06-30"), "a gap that retraced",
          "SG Trend Apr 2025: \u22124.9%"),
     ]
     span = 30
+    WINDOW_FILL = "#ecebe7"          # the same tint in the panels and in the legend swatch
     fig, axes = plt.subplots(1, 4, figsize=(7.0, 3.4), layout="constrained", sharey=True)
     for ax, (ttl, start, win, desc, sg) in zip(axes, eps):
         t0 = pd.Timestamp(start)
         t1 = t0 + pd.DateOffset(months=span)
-        ax.axvspan(pd.Timestamp(win[0]), pd.Timestamp(win[1]), color="#f0efec", linewidth=0, zorder=0)
+        ax.axvspan(pd.Timestamp(win[0]), pd.Timestamp(win[1]), color=WINDOW_FILL, linewidth=0, zorder=0)
         g = baa.loc[t0:t1]
         ax.plot(g.index, g.values, color=C_SPREAD, linewidth=1.3, zorder=3)
         pk = g.idxmax()
@@ -430,7 +434,7 @@ def fig_episodes():
         ax.annotate(f"{g.max():.2f}%", (pk, g.max()), xytext=(0, 7), textcoords="offset points", ha="center",
                     va="bottom", fontsize=8, color=INK_2)
         # lookback scale bars on the same time axis (months)
-        for yb, mths, col in ((1.3, 12, C_RETURN), (1.0, 3, C_SPREAD)):
+        for yb, mths, col in ((0.95, 12, C_RETURN), (0.62, 3, C_SPREAD)):   # below the data, which never drops under 1.4
             ax.plot([t0, t0 + pd.DateOffset(months=mths)], [yb, yb], color=col, linewidth=3.0, solid_capstyle="butt",
                     zorder=4)
         ax.set_title(ttl, fontsize=8.8)
@@ -440,12 +444,12 @@ def fig_episodes():
         ax.xaxis.set_major_locator(mdates.YearLocator())
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
         ax.tick_params(axis="x", labelsize=7.8)
-    axes[0].set_ylim(0.8, 8.0)
+    axes[0].set_ylim(0.35, 8.0)
     axes[0].set_yticks([1, 2, 3, 4, 5, 6])
     axes[0].set_ylabel("Baa less 10-year Treasury (%)")
     handles = [Line2D([0], [0], color=C_RETURN, linewidth=3.0, label="12-month lookback"),
                Line2D([0], [0], color=C_SPREAD, linewidth=3.0, label="3-month lookback"),
-               Patch(facecolor="#e6e5e1", label="episode window")]
+               Patch(facecolor=WINDOW_FILL, label="episode window")]
     fig.legend(handles=handles, loc="outside lower center", ncol=3, fontsize=8, handlelength=1.6, frameon=False)
     return finish(fig, "ch10_episodes_baa_spread")
 
