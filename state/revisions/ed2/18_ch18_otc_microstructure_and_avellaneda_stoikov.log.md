@@ -13,9 +13,9 @@
 - [x] 11. §18.4.6: SHOP-LIFE vignette (9:31 page, T=4pm) before AS Spec. — 9:31 page vignette before Spec; ROBO duplicate cut; explanation reworded.
 - [x] 12. §18.5 GLFT: FULL-DERIVATION-MOVE + Box 7 + View From Another Seat (Jefferies, Dimon). — Problem, Box 7 marble, (18.6) first, Full Derivation, Jefferies/Dimon seat.
 - [x] 13. §18.6 JTD: Box 8 (two parts) + FULL-DERIVATION-MOVE. — Box 8 MGF and P/Q; small-gamma line first; §18.6.1 Full Derivation.
-- [ ] 14. §18.6.3 Long Scene: Altice France, 20 March 2024 (replay), PB-14 Pair box.
-- [ ] 15. §18.6.3 Credit Suisse AT1: EXPAND-SCENE 600-900 words.
-- [ ] 16. §18.7 hit rates: Box 9 + Another Seat (Jane Street) + Niang scene beat; AiEX hedge.
+- [x] 14. §18.6.3 Long Scene: Altice France, 20 March 2024 (replay), PB-14 Pair box. — Altice replay scene, two RFQs, cards graded, PB-14 Pair box; open items logged.
+- [x] 15. §18.6.3 Credit Suisse AT1: EXPAND-SCENE 600-900 words. — CS AT1 weekend replay, A=0, viability misread, pointer to §23.8.
+- [x] 16. §18.7 hit rates: Box 9 + Another Seat (Jane Street) + Niang scene beat; AiEX hedge. — Box 9 win curve/MLE/nu; hit-ratio email scene; Jane Street seat; AiEX hedged.
 - [ ] 17. §18.8 TRACE: LIST-TO-NARRATIVE + Quant-Shop Life vignette.
 - [ ] 18. §18.9 BWICs: Box 10 (winner is the most wrong) + FULL-DERIVATION-MOVE.
 - [ ] 19. §18.9.1 Long Scene: LDI BWIC week (replay) + Another Seat (TwentyFour AM).

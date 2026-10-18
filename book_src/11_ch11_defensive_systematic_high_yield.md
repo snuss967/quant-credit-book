@@ -206,7 +206,7 @@ Why does a 0.91 beta cost money over a cycle? Because high yield's excess return
 
 Real defense means the portfolio responds *less* to down months than to up months, and the capture identity has no way to say so: it gives the manager one beta for both kinds of month. Kaz's fix was to stop asking for one slope.
 
-> **Math, Gently. A line with a kink.** Plot each month as a dot: the index's return along the bottom, the portfolio's up the side. A beta tilt puts every dot near one straight line through the origin, slope 0.9 on both sides, so the portfolio keeps 90% of the good months and suffers 90% of the bad. A real defender's dots follow a line that *bends* at zero: slope 1.0 to the right, 0.9 to the left. Run a down-then-up pair through each. With $eta^{+} = 1.0$ and $eta^{-} = 0.9$, a −5% month costs 4.5% and a +5% month pays the full 5%, so the pair compounds to $0.955 \times 1.05 - 1 = +0.28\%$ while the index compounds to $0.95 \times 1.05 - 1 = -0.25\%$. The straight 0.9 line also loses only 4.5% in the bad month, but it earns only 4.5% back, and $0.955 \times 1.045 - 1 = -0.20\%$. Same defense on the way down, different bill on the way up. In symbols, the kinked line is two slopes, one for the positive part of the index return and one for the negative part, and the regression that estimates both is next.
+> **Math, Gently. A line with a kink.** Plot each month as a dot: the index's return along the bottom, the portfolio's up the side. A beta tilt puts every dot near one straight line through the origin, slope 0.9 on both sides, so the portfolio keeps 90% of the good months and suffers 90% of the bad. A real defender's dots follow a line that *bends* at zero: slope 1.0 to the right, 0.9 to the left. Run a down-then-up pair through each. With $\beta^{+} = 1.0$ and $\beta^{-} = 0.9$, a −5% month costs 4.5% and a +5% month pays the full 5%, so the pair compounds to $0.955 \times 1.05 - 1 = +0.28\%$ while the index compounds to $0.95 \times 1.05 - 1 = -0.25\%$. The straight 0.9 line also loses only 4.5% in the bad month, but it earns only 4.5% back, and $0.955 \times 1.045 - 1 = -0.20\%$. Same defense on the way down, different bill on the way up. In symbols, the kinked line is two slopes, one for the positive part of the index return and one for the negative part, and the regression that estimates both is next.
 
 Write the Henriksson–Merton style asymmetric regression
 
@@ -254,7 +254,7 @@ Mags wrote two words. *Which bonds?*
 
 Ines flipped the tape forward. July 2022: the benchmark returned +6.0%, the first leg of the bear-market rally that BlackRock pairs with June as one of its regime pairs.
 
-Theo's book, at 0.8, made 4.80%. Over the two months it compounded to −2.33% against the benchmark's −1.21%, a 112bp *loss* to the index it had been trying to protect itself from. It had taken the whole down month at full size and three-quarters of the up month.
+Theo's book, at 0.8, made 4.80%. Over the two months it compounded to −2.33% against the benchmark's −1.21%, a 112bp *loss* to the index it had been trying to protect itself from. It had taken the whole down month at full size and only four-fifths of the up month.
 
 Kaz's tilt made 5.46%, for a two-month −1.07% and a 14bp win. Kaz looked pleased for about a second, until Ines pointed out where the 14bp came from: compounding on a down-then-up path. Hold 0.91 through an up-then-down pair instead and the same arithmetic hands the 14bp back. The dimmer switch had not defended anything. It had been lucky about the order of the months.
 

@@ -18,9 +18,9 @@
 - [x] 16. [10.6.2] MATH-GENTLY #8: capture ratio of a V. NOTE: hiker-in-valley box, two-month V, three-week lag, -50%.
 - [x] 17. [10.7 Case A] NEW-SCENE: GFC replay July 2007 to June 2009, card graded. NOTE: four cuts, three extractions placed, lead-ins and Lesson retired.
 - [x] 18. [10.7 Case B and C] BRIDGE only: pointers to Ch 20 and Ch 8. NOTE: one pointer each; B's whipsaw sentence kept, fact needed there.
-- [ ] 19. [10.7 Coda] NEW-SCENE: Liberation Day and the Pair Book.
-- [ ] 20. [inside 19] The Pair box: PB-01 with carry-hurdle algebra and ledger line.
-- [ ] 21. [10.8.1] MATH-GENTLY #9: random walk null and arccos; dealer ANOTHER-SEAT in §10.8.2.
-- [ ] 22. [10.9.1] MATH-GENTLY #10: Poisson jumps and variance adding.
-- [ ] 23. [10.10 Lab] Open listing explanations with scene moments (10.1, 10.6).
-- [ ] 24. [10.11 Debrief] Finder table + return to 4:02 p.m. card.
+- [x] 19. [10.7 Coda] NEW-SCENE: Liberation Day and the Pair Book. NOTE: replay cut 3 Apr; Vantress flashback 10 Apr; closing kept.
+- [x] 20. [inside 19] The Pair box: PB-01 with carry-hurdle algebra and ledger line. NOTE: PB-01 opened Apr 2026, so framed as 2025 lesson built in.
+- [x] 21. [10.8.1] MATH-GENTLY #9: random walk null and arccos; dealer ANOTHER-SEAT in §10.8.2. NOTE: shared-window box; markout paragraph became dealer seat box.
+- [x] 22. [10.9.1] MATH-GENTLY #10: Poisson jumps and variance adding. NOTE: hundred coins; beta 0.23 from Fig 10.2 data; logged.
+- [x] 23. [10.10 Lab] Open listing explanations with scene moments (10.1, 10.6). NOTE: all six open on scene moments; templates varied; Spec untouched.
+- [x] 24. [10.11 Debrief] Finder table + return to 4:02 p.m. card. NOTE: ten-row Finder; card read Friday 4:02, ungraded; bullets kept.

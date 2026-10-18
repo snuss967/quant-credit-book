@@ -21,4 +21,6 @@
 - [x] 19. 11.9 Capacity, MATH-GENTLY #10 (short or gloss) + LIST-TO-NARRATIVE trillion-dollar exchange. — Done: §4.8 box exists, so gloss; ranking became cast exchange.
 - [x] 20. 11.10 Desk Debrief, Finder table + promotions + Kaz Saks closing line. — Done: nine-row Finder, two decision-point headings, Kaz January line.
 - [x] 21. Whole chapter, box discipline check. — Done: 9 MG (§4.8 owns #10), 3 seats, adjacency fixed, templates cut.
-- [ ] 22. Whole chapter, BRIDGE lines.
+- [x] 22. Whole chapter, BRIDGE lines. — Done: three bridges added; cast bible, ledger, open items updated.
+
+<!-- STATUS: COMPLETE -->

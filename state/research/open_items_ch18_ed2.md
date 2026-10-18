@@ -1,0 +1,11 @@
+# Open Items, Chapter 18 (Edition 2, U2)
+
+*Numbers and facts the U2 revision could not verify in its web budget; the book text hedges each one. Logged 2026-10-18.*
+
+1. **Altice France, 20 March 2024: which series fell 21 points.** BNN Bloomberg (20 Mar 2024) put the EUR 1.3bn first-lien notes due May 2027 down 21 cents to 48; a follow-up report attributed a 21-cent fall to the unsecured bonds. The chapter reports both and attributes neither exclusively. Needs transaction data (TRACE/MarketAxess/Bloomberg) for the 2027 first-lien and the AFH 8% 2027 notes, 19-21 Mar 2024.
+2. **Altice France call timing.** Verified this session: the Q4/FY2023 release is dated 20 March 2024 and the debt-investor call was held at 14:00 CET that day (Altice France / SFR Q4 2023 press release). The time the release itself was published that morning was not verified; the scene does not attribute the morning drift in the holdco composite to it.
+3. **"At least \$2bn of Altice-linked debt changed hands the following week"** (BNN Bloomberg, 26 Mar 2024) appeared in Edition 1; the article did not load this session. The revised scene no longer uses the figure.
+4. **Leverage "above six times" at end-2023.** Derived from the release's EUR 24.2bn net debt and the dossier's leverage figures; the exact end-2023 leverage ratio management cited on the call was not verified.
+5. **Pre-call prices.** The scene's 69 for the 2027 first-lien is inferred from the reported 21-point fall to 48; the holdco's 50 is illustrative and labeled so. No pre-call AFH price was verified.
+6. **Tradeweb AiEX share.** The §18.7 Trend Watch's "more than 40% of institutional trades in 2025" was not verified against the FY2025 10-K this session; the sentence is hedged as press and filing reports (see `applied_factcheck_ch22_28.md` C1 follow-up).
+7. **Cast continuity (C9 and the story clock).** The cold open now uses the canon terms for the Halvorsen 7.25% 2029s (senior unsecured, B3/B-). The cold open is undated; a composite of 91.25 conflicts with Ch 1's 78 open after Fri 9 Oct 2026 if the scene is placed after that date. The orchestrator should date it (before 9 Oct, or as a different Halvorsen instrument) when the cast bible's clock is next reconciled.

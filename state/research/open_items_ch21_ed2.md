@@ -10,10 +10,12 @@
 | 2 | §21.5 Case Study, 2026 replay: "and, by press reports, more than 30% of many middle-market CLOs *(Octus)*" | "*(Octus; CHECK)*" | The Octus blog "Private credit CLOs bear brunt of software volatility" (2026), seen only as a search snippet. |
 | 3 | §21.5 Scene B: repricing activity "came to a halt in March," attributed to "the quarter's market reviews" | Edition 1 text quoted it without a named source | Name the publisher of the phrase (LSTA 1Q25 summary or Octaura's blotter). |
 | 4 | §21.6.1: "The proposal's fate in the SEC's 2025 withdrawal of pending rulemakings is outside what this chapter verified" | "Whether the proposal was formally withdrawn ... is not confirmed here; check before you rely on either outcome." | SEC withdrawal notice of June 2025 (list of withdrawn proposals); confirm whether File S7-26-22 is on it. |
+| 5 | §21.7 intro: Beyhaghi and Ehsani (2017) "*(hypothetical, backtested)*" | "*(hypothetical, backtested; sample period to CHECK)*" | The paper's sample period (published version). |
+| 6 | §21.7 Schmid p.177 Annotation: "as S&P's April 2025 CLO index put it *(S&P CLO Insights)*" | "*(S&P CLO Insights, via search; CHECK)*" | S&P CLO Insights 2025 US BSL Index (29 Apr 2025), 403 on fetch per `trend_loans_clos` §2. |
 
 ## Left as written (fact-checked Trend Watch wording, protected)
 
 | # | Text | Source of the wording | What would close it |
 | :-- | :-- | :-- | :-- |
-| T1 | §21.2 Trend Watch: "a ten-year average near 20 days to January 2025 (LSTA slides; CHECK)" | Edition 1 Trend Watch | Same as item 1. |
+| T1 | §21.2 Trend Watch: "a ten-year average near 20 days to January 2025 (LSTA slides; approx.)" (the source tag was "(LSTA slides; CHECK)"; changed per u2_lessons §13, wording otherwise untouched) | Edition 1 Trend Watch | Same as item 1. |
 | T2 | §21.2 Trend Watch: "Q2 2026 fell back as volatility subsided (LSTA; size of the decline to be checked)" | `applied_factcheck_ch15_21.md` C13 | LSTA 2Q26 executive summary (23 Jul 2026): the 18% decline in the listing title. |

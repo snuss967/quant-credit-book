@@ -10,11 +10,11 @@
 - [x] 8. [§19.5] MATH-GENTLY (B6 rank/factor count, B7 staleness random walk) + Kaz springing-lien scene + Full Derivation. — Note: Kaz stopping-time callback; photos box; drunk box after derivation.
 - [x] 9. [§19.6 opening] BRIDGE to 2022 tape. — Note: bridge paragraph hands section to Ines 2022 tape.
 - [x] 10. [§19.6.1] MATH-GENTLY (B8 marginal vs exact removal) + FULL-DERIVATION-MOVE. — Note: hill-and-car box; (19.6)-(19.7) stated; derivation moved.
-- [ ] 11. [§19.6.2] NEW-SCENE Long Scene H1 2022 + The Pair box (RV beat).
-- [ ] 12. [§19.6] ANOTHER-SEAT (dealer desk: Jefferies, Trumid, JPMorgan quotes).
-- [ ] 13. [§19.7 opening] MATH-GENTLY (B9 common multiplier, half-life) + Full Derivation; Trend Watch to end of §19.7.
-- [ ] 14. [§19.7.2] NEW-SCENE Long Scene Two Tapes (12 Mar 2020 and 7 Apr 2025).
-- [ ] 15. [§19.8] MATH-GENTLY (B10 log-odds/logistic) + FULL-DERIVATION-MOVE; two cautions to Kaz and Ines.
+- [x] 11. [§19.6.2] NEW-SCENE Long Scene H1 2022 + The Pair box (RV beat). — Note: 2022 replay, Dov short basket Pair box, Halvorsen evicted, graded.
+- [x] 12. [§19.6] ANOTHER-SEAT (dealer desk: Jefferies, Trumid, JPMorgan quotes). — Note: Orlan, Jallot, Pender, Grant quotes; exit sets pi.
+- [x] 13. [§19.7 opening] MATH-GENTLY (B9 common multiplier, half-life) + Full Derivation; Trend Watch to end of §19.7. — Note: Mags line first; multiplier+half-life box; Trend Watch moved.
+- [x] 14. [§19.7.2] NEW-SCENE Long Scene Two Tapes (12 Mar 2020 and 7 Apr 2025). — Note: two tapes replay, cards graded, one score three dials.
+- [x] 15. [§19.8] MATH-GENTLY (B10 log-odds/logistic) + FULL-DERIVATION-MOVE; two cautions to Kaz and Ines. — Note: log-odds dial box; cautions given to Kaz and Ines.
 - [ ] 16. [§19.8.2] EXPAND-SCENE The Hand History: Friday 16 October 2026.
 - [ ] 17. [§19.9] ANOTHER-SEAT (systematic AM) + Wen builds basket narrative + Full Derivation.
 - [ ] 18. [§19.10] SHOP-LIFE vignette (bank systematic trading group, TRACE dedup).

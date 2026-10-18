@@ -18,8 +18,8 @@
 - [x] 16. 17.7.2 Five price sources · LIST-TO-NARRATIVE — Theo wires atlas with Mags; PIMCO and SEC staff as sceptics.
 - [x] 17. 17.8.1 · SHOP-LIFE vignette — Tomasz's earnings week: names, lots, Monroe par, dropped row, ticket.
 - [x] 18. 17.8.2 Features worth computing · LIST-TO-NARRATIVE + dealer seat — Ines's Friday review; default ladder; Handler and Dimon sentences.
-- [ ] 19. 17.8.3 Pending mark · MATH-GENTLY (box I) + FULL-DERIVATION-MOVE
-- [ ] 20. 17.9 and 17.10 · BRIDGE + Finder table
+- [x] 19. 17.8.3 Pending mark · MATH-GENTLY (box I) + FULL-DERIVATION-MOVE — weather-owed box; algebra moved; software-factor judgment exchange.
+- [x] 20. 17.9 and 17.10 · BRIDGE + Finder table — menu rows tied to scenes; Finder table; Kaz/Theo arc closes.
 
 ## Notes for state files (cast bible, CHECK log, pair book)
 - Cast: Ch 17 Kaz misread "tender offer" = an offer made gently (§17.3.1, first appearance).
@@ -43,3 +43,4 @@
 - CHECK: SEC staff PRIV letters (PRIV-SEC1/2, Feb 2025) quoted from dossier; fetch tool caps quotes; re-verify wording.
 - Cast: new minor cast Tomasz (he/him), 11 months out of a master's, systematic credit asset manager (fictional composite), Ch 17 §17.8.1 vignette; shop's coding agent is 'a literal-minded cousin of ROBO'.
 - CHECK: default ladder Fitch 6.3% (secondary) and Moody's 4.0/5.8% (DRAFT header) hedged as 'reported' / 'a Moody's analysis'.
+<!-- STATUS: COMPLETE -->

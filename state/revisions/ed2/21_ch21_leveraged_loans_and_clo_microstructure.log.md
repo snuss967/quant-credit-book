@@ -17,9 +17,9 @@
 - [x] 15. [§21.5.1] Done: box 8 clock with no hands; Full Derivation; Hana fits logit.
 - [x] 16. [§21.5 end] Done: CLO-manager seat box B with Loomis quote; Trend Watch last.
 - [x] 17. [§21.6] Done: box 9 coins vs bad news, Little's law; Full Derivation; one telling.
-- [ ] 18. [§21.6, before the Spec] SHOP-LIFE vignette (systematic asset manager reconciliation, 8 Oct 2026).
-- [ ] 19. [§21.6 after JAAA Case Study] RV BEAT, The Pair box PB-17 BKLN / HYG; update pair book.
-- [ ] 20. [§21.7 Trend and momentum] MATH-GENTLY box 10 (smoothing); Full Derivation; Ines judgment; hedge CHECK.
-- [ ] 21. [§21.8 CLOs inside the LMT] LIST-TO-NARRATIVE (Weil memo to Mags) + ANOTHER-SEAT box C (insurer, NAIC).
-- [ ] 22. [§21.8 Case Study: Two Holder Bases] EXPAND-SCENE into RV beat PB-15 Trinseo; card; update ledger.
+- [x] 18. [§21.6 shop-life] Done: Ilse Varga reconciliation vignette before Spec; Trend Watch last.
+- [x] 19. [§21.6 PB-17] Done: Pair box BKLN vs HYG after JAAA; ledger row closed.
+- [x] 20. [§21.7] Done: box 10 smoothing; Full Derivation; Ines exchange; CHECKs hedged; pronoun fixed.
+- [x] 21. [§21.8] Done: Weil memo read aloud to Mags; insurer NAIC seat box C.
+- [x] 22. [§21.8 Trinseo] Done: PB-15 replay scene, two cuts, card, Pair box; ledger closed.
 - [ ] 23. [§21.9 Desk Debrief] Finder table; promote Long Scenes, vignette, Pair boxes to #### headings.

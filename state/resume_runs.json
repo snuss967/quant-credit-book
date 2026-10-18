@@ -83,15 +83,6 @@
    }
   },
   {
-   "name": "rv-thread",
-   "task": "wnoycfspo",
-   "runId": "wf_45fc31f8-4c2",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/rv_thread.js",
-   "args": {
-    "today": "2026-10-18"
-   }
-  },
-  {
    "name": "lessons-rv-3-2-7",
    "task": "w0qspn5hq",
    "runId": "wf_6ac67a00-da1",

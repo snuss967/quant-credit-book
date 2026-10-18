@@ -17,10 +17,10 @@
 - [x] 15. [§12.7 Rule 22e-4 paragraph] LIST-TO-NARRATIVE. — Theo margin notes on four buckets; basket covenant; dates kept.
 - [x] 16. [§12.7 KKT] MATH-GENTLY box 9 + FULL-DERIVATION-MOVE. — Shadow-price box, 40bp on $10mm; KKT Full Derivation.
 - [x] 17. [§12.7] NEW-SCENE Long Scene B, "The Queue". — Queue replay 2,550 words, card, four beats, two seats; Case B stub.
-- [ ] 18. [§12.8 opening] MATH-GENTLY box 10: turnover.
-- [ ] 19. [§12.8–12.9, Case Study A] NEW-SCENE Long Scene A, "Twenty-Five Days".
-- [ ] 20. [Case Study C] EXPAND-SCENE + ANOTHER-SEAT (CLO manager).
-- [ ] 21. [§12.10] BRIDGE listing explanations to scenes.
-- [ ] 22. [§12.11 Desk Debrief] Finder table.
-- [ ] 23. [whole chapter] Fiction labels and CHECKs.
+- [x] 18. [§12.8 opening] MATH-GENTLY box 10: turnover. — Jars and kitchen-scale box: 6% turnover, 4.5bp cost.
+- [x] 19. [§12.8–12.9, Case Study A] NEW-SCENE Long Scene A, "Twenty-Five Days". — Twenty-Five Days replay, four beats, card, graded; answer paragraph.
+- [x] 20. [Case Study C] EXPAND-SCENE + ANOTHER-SEAT (CLO manager). — Live Thursday: index calm, Hana dispersion run, CLO seat, Theo email.
+- [x] 21. [§12.10] BRIDGE listing explanations to scenes. — Scene openers per listing (12.2/12.3 mapping corrected); templates removed.
+- [x] 22. [§12.11 Desk Debrief] Finder table. — Ten-row Finder; bullets, Spec, exercises kept; no box solves exercises.
+- [x] 23. [whole chapter] Fiction labels and CHECKs. — Scene labels, illustrative tags, no CHECK; open items logged in state.
 - [ ] 24. [whole chapter] Box spacing.

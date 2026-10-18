@@ -21,5 +21,8 @@
 - [x] 19. [§24.8.2] EXPAND-SCENE, Long Scene B: The Risk Meeting, 2 January 2018 — replay meeting; $1.04mm discovered; cards graded; Diary corrected.
 - [x] 20. [§24.8.3 Windstream] EXPAND-SCENE + fact fix — 3 April fixed; DC calendar; Ines tenor-gap spread; PB-11 box.
 - [x] 21. [§24.8.4] ANOTHER-SEAT #3 + BRIDGE to 2026 — index/pod vs GSO seat; PB-12 refusal; Ardagh "with dissents"; TW last.
-- [ ] 22. [§24.9 Desk Debrief] Finder table
-- [ ] 23. [Everywhere] Template ban
+- [x] 22. [§24.9 Desk Debrief] Finder table — eight rows with desk sayings; Exercises heading demoted; box renumbered.
+- [x] 23. [Everywhere] Template ban — "edge bites" openers gone; every spec opens on a scene.
+
+Notes (items 9–23 session): RV beats added beyond the brief per `rv_thread.md`: PB-03 closed (§24.7 Pair box), PB-11 opened/stressed/closed (§24.8.3), PB-12 declined (§24.8.4); ledger updated. App D Table D.8 Windstream date and settlement fixed (logged in `state/open_items_ed2.md`). Scene B moved to Thu 29 Oct 2026 to avoid Ch 25's Fri 30 Oct Windstream replay. Cast facts in `state/cast_bible.md` "Ch 24 additions". Open: Ch 8 vs Ch 8-D disagree on PB-03's clock; Ardagh dissenters unverified. Web calls used: 3. prescriptiveness.py: modal 2.6, imper 0.8 per 1k; 8 Math, Gently; 3 seats; ~30.3k words.
+<!-- STATUS: COMPLETE -->

@@ -1,0 +1,12 @@
+# Open Fact Items: Chapter 27 (Edition 2, U2 narrative revision, 18 Oct 2026)
+
+*Items hedged, cut or left open in `book_src/27_ch27_system_architecture_and_asics.md` during the U2 pass. Fetched this session: the SEC Knight order (Release No. 34-70694, read in full via pdftotext) and the Second Circuit opinion in Citibank, N.A. v. Brigade Capital Mgmt. (No. 21-487, read in full via pdftotext); the 2026 FOMC calendar (third-party calendars agree on 27-28 Oct 2026; federalreserve.gov not fetched).*
+
+| # | Book text now | Was / issue | What would close it |
+| :-- | :-- | :-- | :-- |
+| 1 | §27.7.3 coda: "As reported in coverage of the FCA final notice of 2024-05-22, a trader meant to sell a basket worth \$58mm ..." | "(FCA final notice 2024-05-22, as reported in coverage of the notice; figures to be checked against the notice itself)" | Read the FCA Final Notice to Citigroup Global Markets Limited (22 May 2024) and the PRA notice; confirm \$58mm, \$444bn, \$255bn blocked, \$189bn to the algorithm, ~\$1.4bn executed, £27.77mm and £33.9mm. |
+| 2 | §27.7.3 Revlon scene ends "Rehearing was denied on 12 October 2022, and the money went back." | Dossier line "dismissal with prejudice 19 Jan 2023" is CHECK (search summary of Revlon FY2022 10-K); cut from book text | Revlon FY2022 10-K (SEC rate-limited this session) or the S.D.N.Y. docket 20-cv-06539 for the final disposition and the return of funds. |
+| 3 | §27.7.3 Revlon scene: "Revlon's annual report for 2020 puts the principal not returned at about \$504mm" | From the dossier's [Rev10K] tag, not re-read this session | Revlon 10-K for FY2020, Item 3 or debt note. |
+| 4 | §27.7.3 Knight scene: the position screen frozen at 9:34 "already in the hundreds of millions on her illustration" | The SEC order gives totals (about 45 minutes; ~\$3.5bn long, ~\$3.15bn short), not a minute-by-minute path | None needed; labelled as the cast's illustration. A sourced intraday path would let the figures pass draw `ch27_knight_45_minutes.png` with real points. |
+| 5 | §27.0 cold open: Wednesday 28 October 2026 as the FOMC decision day | Third-party calendars only | federalreserve.gov FOMC calendar page. |
+| 6 | §27.1 View From Another Seat (non-bank market maker): Cila, Marmoiton, Cifu and Virtu 10-K quotations | Taken from `perspectives_dealers_and_systematic_shops.md` §5B.1, §5B.3 and `life_quant_shop_daily_life.md` §4.3, not re-fetched | The DESK (19 Jul 2023; 23 Jan 2023) and Virtu FY2015 10-K. |

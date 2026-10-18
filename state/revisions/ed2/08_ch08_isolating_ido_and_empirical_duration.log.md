@@ -18,6 +18,8 @@
 - [x] 16. [8.8 What's Left Is IDO] MATH-GENTLY (common whisper) + LIST-TO-NARRATIVE + WHEN-TO-APPLY; IDO ledger as month-end meeting. — Done: whisper box, Theo walk-through, pod RV scene, month-end ledger meeting.
 - [x] 17. [8.9 The IDO Engine] SHOP-LIFE vignette (500–700 words) before the Spec. — Done: Elif Arslan composite; FRED truncation; committee; two spec lines.
 - [x] 18. [8.10 Desk Debrief] BRIDGE (Finder table) + protect; add seven resources to Resource Graphs. — Done: eight-row Finder; seven resources already present; three pod episodes added.
-- [ ] 19. [whole chapter] ANOTHER-SEAT: the insurer, at end of §8.2 before the Trend Watch.
-- [ ] 20. [whole chapter] box budget and sign-offs check.
-- [ ] 21. [whole chapter] CHECK and approx. hygiene; log open items in state/open_items_ed2.md.
+- [x] 19. [whole chapter] ANOTHER-SEAT: the insurer, at end of §8.2 before the Trend Watch. — Done: insurer seat with Athene figures, Mags line before Trend Watch.
+- [x] 20. [whole chapter] box budget and sign-offs check. — Done: seven boxes, varied sign-offs; three box runs threaded with narration.
+- [x] 21. [whole chapter] CHECK and approx. hygiene; log open items in state/open_items_ed2.md. — Done: no CHECK in text; twelve open items logged, PB-03 conflict flagged.
+
+<!-- STATUS: COMPLETE -->

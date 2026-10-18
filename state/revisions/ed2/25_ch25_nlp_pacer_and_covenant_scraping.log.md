@@ -23,3 +23,7 @@
 - [x] 21. [25.8 Claims Registers] BRIDGE: Mags on transferee concentration. — Mags reads transferee line; back-in-my-day; HHI and blocking rule.
 - [x] 22. [25.9.1 Classifier error is an IC tax] MATH-GENTLY (base rates, Youden) + ANOTHER-SEAT (dealer). — Youden box, dealer width seat, PB-08 Pair box, derivation moved.
 - [x] 23. [25.10 and 25.11] BRIDGE + Finder table. — Engine opener ties blocks to scenes; ten-row Finder; templates softened.
+
+Notes: Ch 25's "Lucía" renamed Paloma (Ch 10 collision); vignette engineer named Rhea (Ch 2 Femi collision). PB-08 Pair box added in §25.9.1 (RV beat); ledger and cast bible updated. Narration threaded between the §25.6 and §25.9.2 Source Extractions. Final length about 30.0k words.
+
+<!-- STATUS: COMPLETE -->

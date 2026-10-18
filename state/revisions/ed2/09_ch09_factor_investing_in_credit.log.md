@@ -23,3 +23,14 @@
 - [x] 21. [§9.10, after the scene] ANOTHER-SEAT (Ares/BlueCove, Blackstone/DCI). Note: insurer-seat box; Feb 2026 close verified (Business Wire); TW last.
 - [x] 22. [§9.11] BRIDGE: open lab with the CI job sentence. Note: lab framed as the CI placebo universe; listings untouched.
 - [x] 23. [§9.12 Desk Debrief] add the Finder table. Note: ten-row finder above the scene; bullets and Spec kept.
+
+## Notes for the orchestrator
+- Words: 19,091 → about 30,800 (under the brief's 32,000 cap). Math, Gently boxes: 8. View From Another Seat: 4. No run of more than two boxed elements.
+- RV beat (rv_thread Ch 9 row): scene in §9.7.2, Marcus's second x-ray finds the Pair Book's value loading 0.7 ("a value factor with extra steps"); H/I/L and costs explicit; ledger book-level row added in state/rv_pair_book.md.
+- Scene B cut moved from 30 Jun 2022 to Fri 30 Dec 2022: the sourced numbers (Agg −13%, HY −11%, eVestment +0.47%) are full-year, and Ch 11 §11.2.3 already owns a 30 Jun 2022 replay with the same cast. The sleeve is long-only, DTS-matched, residual in bills (a long-short DTS-neutral low-risk book is not net short duration).
+- Web: one call. Ares completion of BlueCove verified (Business Wire, 2 Feb 2026). Fed first hike 16 Mar 2022 and 19 Mar 2020 as a Thursday stated from knowledge.
+- Machine-transcript material (Man Numeric Mar 2024 recording; Ramji's BlackRock Q1 2020 call) is paraphrased without quotation marks.
+- Cross-ref fixed: Merton pointer in §9.3.3 now Chapter 6 §6.2 (was Chapter 5).
+- Figures in brief §3 (march2020_factor_lens, lowrisk_total_vs_excess_2022, measure_trap, fdr_survivors, buffer_hysteresis) not drawn; for U4. Note the 2022 figure should show the sleeve as long-only DTS-matched with a duration gap, year-end cut.
+- Cast bible updated (Theo, Ines, Kaz, Mags, Hana; C8 Ch 9 fixed).
+<!-- STATUS: COMPLETE -->

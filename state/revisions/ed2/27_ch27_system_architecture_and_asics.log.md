@@ -17,9 +17,9 @@
 - [x] 15. [27.7 Kill Switches] ANOTHER-SEAT (the bank dealer desk). — Bank auto-quoter seat box, March 2020, sourced lines only.
 - [x] 16. [27.7.1 The hierarchy] LIST-TO-NARRATIVE. — Checksum refusal scene, Tier 2; Kaz consent line threaded into Authority.
 - [x] 17. [27.7.2 CUSUM] MATH-GENTLY (box 8: evidence that adds up and forgets) + FULL-DERIVATION-MOVE. — Bluff-count box; G_k statement; LLR, optimality, Siegmund in Full Derivation.
-- [ ] 18. [27.7.3 Knight] NEW-SCENE, Long Scene 1 (2,000–2,800 words), promoted to `#### Long Scene: Forty-five minutes, 1 August 2012` with a `#### Decision point` subheading.
-- [ ] 19. [27.7.3 Citigroup → the Citi/Revlon wire] NEW-SCENE, Long Scene 2 (2,000–2,800 words), `#### Long Scene: The default field, 11 August 2020`.
-- [ ] 20. [Spec for AI Implementation (kill switch)] WHEN-TO-APPLY inside the scene.
-- [ ] 21. [27.8 Observability] SHOP-LIFE (main vignette, 700–1,000 words) + LIST-TO-NARRATIVE.
+- [x] 18. [27.7.3 Knight] NEW-SCENE, Long Scene 1 (2,000–2,800 words), promoted to `#### Long Scene: Forty-five minutes, 1 August 2012` with a `#### Decision point` subheading. — Knight replay, four beats, 9:34 card, graded; SEC order verified.
+- [x] 19. [27.7.3 Citigroup → the Citi/Revlon wire] NEW-SCENE, Long Scene 2 (2,000–2,800 words), `#### Long Scene: The default field, 11 August 2020`. — Revlon wire scene from 2d Cir opinion; agent seat; Citi coda; open items filed.
+- [x] 20. [Spec for AI Implementation (kill switch)] WHEN-TO-APPLY inside the scene. — Listing 27.5 opens at 9:34; c judgment pointer to Ines.
+- [x] 21. [27.8 Observability] SHOP-LIFE (main vignette, 700–1,000 words) + LIST-TO-NARRATIVE. — Tomasz eleven-percent rota vignette; ops plane walked as four screens.
 - [ ] 22. [27.9 Desk Debrief] BRIDGE: Finder table.
 - [ ] 23. [27.10 Resource Graph] BRIDGE.

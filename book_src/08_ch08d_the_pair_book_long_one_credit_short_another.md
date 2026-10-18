@@ -10,15 +10,15 @@ At 7:05 on Tuesday, 6 October 2026, the third week of this book's story clock, W
 
 It is a spreadsheet with one row for every borrowed bond in Dov Adler's book, refreshed each morning from the prime broker's lending feed and from a phone call Wen makes anyway, because the feed has been wrong twice. Each row carries the lender, the fee, the share of that lender's inventory of the bond that is already out on loan, and one column no feed provides: every recall notice the pod has received on that bond, dated, with its size and how many hours the prime broker took to find replacement bonds. Two years of that column make a time series. She calls it the weather because, like weather, it is public in principle, forecastable up to a point, and nothing anyone in the pod does will change it.
 
-This morning the weather is on row seven. Row seven is the short leg of PB-03, the pair Chapter 8 used to show why a DTS-neutral pair carries nothing (§8.4): long \$40 million market value of Ford Motor Credit senior unsecured notes, short \$60 million market value of GM Financial senior unsecured notes, about \$61 million face, borrowed from a single lender whose lendable inventory in that issue is \$300 million face *(illustrative throughout)*. Overnight the share on loan went to 85% and the fee was reset from 25 bp to 70 bp. The recall column has two new entries in ten days, \$5 million on 25 September and \$3 million on 1 October, and the second one took the prime broker a day and a half to cover.
+This morning the weather is on row seven. Row seven is the short leg of PB-19, the live descendant of the Ford replay that Chapter 8 used to show why a DTS-neutral pair carries nothing (PB-03, §8.4): long \$40 million market value of Ford Motor Credit senior unsecured notes, short \$60 million market value of GM Financial senior unsecured notes, about \$61 million face, borrowed from a single lender whose lendable inventory in that issue is \$300 million face *(illustrative throughout)*. Overnight the share on loan went to 85% and the fee was reset from 25 bp to 70 bp. The recall column has two new entries in ten days, \$5 million on 25 September and \$3 million on 1 October, and the second one took the prime broker a day and a half to cover.
 
 Wen's rule of thumb comes from the one large study of the corporate-bond loan market. Asquith, Au, Covert and Pathak, with a large custodian lender's records for 2004–2007, found the fee roughly flat near 30 bp until about 70% of a lender's inventory is on loan, then rising by more than 10 bp for each further 10% (Asquith et al. 2013). At 85% that slope predicts something like 45 bp. Seventy is the slope plus somebody. She writes it in the margin in pencil: *70 > 45. Who else is short?*
 
 Row three is Halvorsen's 7.25% notes due 2029, the short leg of PB-01, Dov's Kestrel pair: 50 bp, 61% on loan, no recalls. The following Tuesday it will be the only row anyone on the floor talks about (§1B.2), but this is not that Tuesday.
 
-At 7:12 the x-ray arrives. Marcus Oyelaran runs the overnight factor x-ray for the platform's credit pods; he works for Gordon Pike, whose nine-minute phone call the reader has already heard in Chapter 1-B. Marcus never asks what a pod's view is. His emails are short and always end on the same kind of question.
+At 7:12 the x-ray arrives. Marcus Oyelaran runs the overnight factor x-ray for the platform's credit pods; he works for Gordon Pike, whose nine-minute call ends Dov's Tuesday in Chapter 1-B. Marcus never asks what a pod's view is. His emails are short and always end on the same kind of question.
 
-*Book beta to CDX HY: +0.04 of gross (limit ±0.05). Rating-bucket factor: +0.11 of gross (limit ±0.10). Eight of your eleven live pairs are long the lower-rated name. PB-03 is the largest contributor. What is the book long that it did not mean to be?*
+*Book beta to CDX HY: +0.04 of gross (limit ±0.05). Rating-bucket factor: +0.11 of gross (limit ±0.10). Eight of your twelve live pairs are long the lower-rated name. PB-19 is the largest contributor. What is the book long that it did not mean to be?*
 
 Dov reads both at 7:15, standing up, and does the arithmetic on the back of the card he must fill in by 7:30. The pair's thesis has been on the ledger since he opened it on 24 August, in his own handwriting, one sentence with a date in it: *Ford Credit's discount to GM Financial is a rating-bucket toll, not a credit gap, and half of it is gone by 31 March 2027.* If the gap between the two captives closes by 30 bp over the life of the trade, that is worth $4.5 \times 0.0030 \times \$40\text{mm} = \$540{,}000$ a year at a spread duration of 4.5. Against it, the borrow at 25 bp on \$60 million had cost \$150,000 a year; at 70 bp it costs \$420,000. Add \$160,000 for financing the long and about \$120,000 a year of two legs' half-spreads amortised over the expected hold, and the friction is \$700,000. Overnight the pair has gone from a thin positive expectation to a negative one, and nothing about Ford or GM has changed. The lender changed.
 
@@ -38,9 +38,9 @@ By the end of this chapter you will be able to open a pair the way Dov tries to:
 
 ## 8D.1 Sourcing a Pair: The Thesis Sentence
 
-Seven weeks earlier, on Monday 24 August, PB-03 began as a sentence. Dov was a dealer's high-yield trader before he was a PM, and the habit he kept is that a view without a date is a mood. The date in a thesis sentence is not a forecast. It is the day on which he has agreed, in advance and in writing, to admit he was wrong.
+Seven weeks earlier, on Monday 24 August, PB-19 began as a sentence. Dov was a dealer's high-yield trader before he was a PM, and the habit he kept is that a view without a date is a mood. The date in a thesis sentence is not a forecast. It is the day on which he has agreed, in advance and in writing, to admit he was wrong.
 
-The sentence came from something Bea Castellanos, the pod's documents analyst, had been saying since the spring. Ford Credit and GM Financial are the two large captive lenders of the two Detroit manufacturers, and to a restructuring banker they are almost the same animal: each funds dealer floorplans and retail auto loans, each borrows in the unsecured bond market against a book of receivables, each lives or dies by credit losses, used-car values and its parent's willingness to stand behind it. Yet on the desk's fictional run Ford Credit's notes traded wider of GM Financial's, per unit of DTS, than those differences seemed to explain. Bea's reading was that a slice of the gap was a rating-bucket toll, paid because some holders can own one bucket more easily than the other, and Dov had seen such a toll before. On 25 March 2020 S&P cut Ford to BB+ and Ford's paper became the headline of the fallen-angel wave; Chapter 1 tells that story in four acts (§1.8.2), and the lesson Dov took from the replay was that Ford's bonds can carry a discount that is about who is allowed to hold them rather than about Ford.
+It came from something Bea Castellanos, the pod's documents analyst, had been saying since spring. Ford Credit and GM Financial are the captive lenders of two of Detroit's three manufacturers, and to a restructuring banker they are almost the same animal: each funds dealers and car buyers, borrows unsecured against a book of receivables, and lives by credit losses, used-car values and its parent's support. Yet on the desk's fictional run Ford Credit's notes traded wider of GM Financial's, per unit of DTS, than those differences seemed to explain. Bea's reading was that a slice of the gap was a rating-bucket toll, paid because some holders can own one bucket more easily than the other, and Dov had seen such a toll before. On 25 March 2020 S&P cut Ford to BB+ and Ford's paper became the headline of the fallen-angel wave; Chapter 1 tells that story in four acts (§1.8.2), the pod replayed it as PB-03 (opened in §8.4, closed on the basis in §24.7), and the lesson Dov took from the replay was that Ford's bonds can carry a discount that is about who is allowed to hold them rather than about Ford.
 
 That is the RSSG shape of a good pair, and Theo would recognise it at once: a document, a maturity wall, a question about who is in the room. In the pod the instinct has to become a sentence that names what is long, what is short, and the day the claim expires.
 
@@ -48,7 +48,7 @@ Before he wrote it, Dov ran the intake, which the pod borrows from a long/short 
 
 On 24 August Dov ran it as a conclusion. Steps one to five went well, as they do when the PM already likes the trade. Both issuers are large and liquid; what was changing, in Bea's reading, was nothing at either company and something in the holder base; the bear case was that the toll is a fair price for a real difference between the parents. Step five said the pair was worth about \$540,000 a year if half the gap closed. Step six, the size the downside supports, he answered at the end with the size he had already chosen, \$40 million of long against a DTS-matched \$60 million of short. Run as a gate, step six would have produced on 24 August the number Marcus would produce on 8 October, and would have saved him a Thursday.
 
-Wen's question at the intake was about the other side. "Who lends it?" The answer, that day, was one asset manager's agent lender, with plenty of inventory and a fee of 25 bp. Nobody asked what the fee would be if the trade became popular. That question is the next section.
+Wen's question at the intake was about the other side. "Who lends it?" That day: one asset manager's agent lender, plenty of inventory, a fee of 25 bp. Nobody asked what the fee would be if the trade became popular.
 
 > **View From Another Seat.** *A long/short credit fund, and a systematic fund.* A long/short credit fund off the platforms faces the same pair differently. The Fixed + Floating write-up of Ironshield's episode notes that a short "has to clear three hurdles", that the book "ends up net long", and that hedging high yield with high yield "removes the exposure he is paid to hold." Paid partly for owning credit, such a fund treats shorts as scarce tools and accepts a net long. A pod cannot: the platform will not pay for beta it can buy through an index, so the hedge must live inside the book even when the only short is an index, a CDS or an ETF with a basis. A systematic fund sees the same two captives as two rows in a cross-section. There is no thesis sentence; the pair exists only as the long and short ends of a residual-momentum sort, ranked on the firm-specific part of the parent's stock return (§10.5.4), DTS-matched by construction and resized every month. Its shorts are an optimiser's output constrained by a borrow feed, and its date is the signal's own decay. What it gives up is the document, which is where Bea found the trade.
 
@@ -75,7 +75,7 @@ Dov has known every row for years. What Wen adds is the sentence the pod writes 
 
 That last row is where the banker's intuition and the borrow market collide. Asquith and his co-authors found an average fee of 33 bp (median 18 bp) in 2004–2007, small enough that most people stop listening before the bonds people actually want to short. A full-letter downgrade took the average fee from 38.4 bp to 52.3 bp. Bonds of companies that filed for bankruptcy cost 173 bp to borrow in the thirty days before the filing and 245 bp after it. The best short ideas from an RSSG seat (distress, a downgrade, weak documents, a maturity wall) are exactly the bonds whose fee goes from 30 bp to 200, and whose lenders want them back for the vote. **The fee is a function of the signal.** Its corollary, documented by Nashikkar and Pedersen (2007), is that bonds expensive to short also look rich against their CDS. The borrow fee and the basis are one variable seen from two sides, which is why Chapter 24 treats them together.
 
-"Now PB-03," Wen says. GM Financial is not distressed, so the fee's move from 25 to 70 bp is not the bankruptcy curve; it is the crowding curve, the Asquith slope plus whoever else has decided the same pair is cheap. Shorting the bonds at a Z-spread of 120 bp and a 70 bp fee costs the pod about 190 bp a year to be short the credit, \$1.14 million on \$60 million. The desk's quote for GM protection is 110 bp. On the same notional that is \$660,000 a year, a saving of \$480,000, and the saving is not free. It is bought with an ISDA and a clearing account, with an auction instead of a bond on the day of a default, and with a basis that the pod will now own: 110 against 120 is a basis of −10 bp today, and nothing says it stays there. It is also bought with a question Wen writes before anything else: *which entity does the contract the dealers will quote actually reference, and are GM Financial's notes deliverable into it?* If the answer is the parent rather than the captive, the CDS leg is short a slightly different credit, and the basis is a parent–subsidiary spread that no screen quotes. The answer goes on the ledger as its own line, not in anyone's head.
+"Now PB-19," Wen says. GM Financial is not distressed, so the fee's move from 25 to 70 bp is not the bankruptcy curve; it is the crowding curve, the Asquith slope plus whoever else has decided the same pair is cheap. Shorting the bonds at a Z-spread of 120 bp and a 70 bp fee costs the pod about 190 bp a year to be short the credit, \$1.14 million on \$60 million. Screen levels for five-year GM protection are around 110 bp. On the same notional that is \$660,000 a year, a saving of \$480,000, and the saving is not free. It is bought with an ISDA and a clearing account, with an auction instead of a bond on the day of a default, and with a basis that the pod will now own: 110 against 120 is a basis of −10 bp today, and nothing says it stays there. It is also bought with a question Wen writes before anything else: *which entity does the contract the dealers will quote actually reference, and are GM Financial's notes deliverable into it?* If the answer is the parent rather than the captive, the CDS leg is short a slightly different credit, and the basis is a parent–subsidiary spread that no screen quotes. The answer goes on the ledger as its own line, not in anyone's head.
 
 At 8:40 Dov does not choose. He asks three dealers for indications on five-year GM protection, \$20 million each, a size at which a dealer can see a client doing something but not how much. The menu has told him what each short costs. It has not told him how much short he needs, and that depends on a ruler.
 
@@ -83,7 +83,7 @@ At 8:40 Dov does not choose. He asks three dealers for indications on five-year 
 
 Marcus holds a ruler review with every credit pod once a month, in the small room with the broken blind; October's falls on Wednesday at 8:00. It is the least glamorous meeting on the platform. One page per pair, one question: if the market moved and nothing else did, what would this pair have made?
 
-For PB-03 his page has four rows. A ruler is a rule for turning a dollar of long into dollars of short, and the three that every pod uses come straight out of Chapter 4-B and §8.4. The spread-duration (DV01) ruler matches the change in value for a one basis point move, $h = D^{\text{spr}}_L/D^{\text{spr}}_S$. The DTS ruler matches the change in value for a one percent *relative* move in spreads, $h = D^{\text{spr}}_L s_L/(D^{\text{spr}}_S s_S)$, which is §8.4's DTS-neutral pair. The empirical ruler trusts history: $h = (\hat\beta_L/\hat\beta_S)\,D^{\text{spr}}_L/D^{\text{spr}}_S$, where each $\hat\beta$ is a leg's trailing slope on the market's spread changes. Marcus adds a fourth, the platform's own factor model, which picks $h$ so that the pair's exposures to the model's factors, weighted by their volatilities, are as close to zero as one number can make them; with a single market factor in relative spread changes that is exactly DTS, and with more factors it is a compromise.
+For PB-19 his page has four rows. A ruler is a rule for turning a dollar of long into dollars of short, and the three that every pod uses come straight out of Chapter 4-B and §8.4. The spread-duration (DV01) ruler matches the change in value for a one basis point move, $h = D^{\text{spr}}_L/D^{\text{spr}}_S$. The DTS ruler matches the change in value for a one percent *relative* move in spreads, $h = D^{\text{spr}}_L s_L/(D^{\text{spr}}_S s_S)$, which is §8.4's DTS-neutral pair. The empirical ruler trusts history: $h = (\hat\beta_L/\hat\beta_S)\,D^{\text{spr}}_L/D^{\text{spr}}_S$, where each $\hat\beta$ is a leg's trailing slope on the market's spread changes. Marcus adds a fourth, the platform's factor model, which picks the $h$ that leaves the least factor variance; with one relative-spread factor that is exactly DTS, and with more it is a compromise.
 
 With both legs at a spread duration of 4.5, Ford Credit at 180 bp and GM Financial at 120 bp, and trailing 24-week betas that the noise has made look like 1.5 for Ford Credit and 0.7 for GM Financial when the truth (by construction of the illustration) is 1.8 and 1.2, the page reads like this *(illustrative; the factor-model row is the desk's fictional run)*:
 
@@ -103,9 +103,9 @@ The carry column bothers Dov first, because it pays the bills. The DV01 pair ear
 | Idio: Ford Credit tightens 15 bp on its own | +270 | +270 | +270 |
 | Idio: GM Financial widens 10 bp on its own | +180 | +270 | +385 |
 
-"Read the third row first," Marcus says. Fifteen basis points of Ford-specific good news is worth $4.5 \times 0.0015 \times \$40\text{mm} = \$270{,}000$ under every ruler, because the ruler only sizes the short. That is the alpha, the thing the platform pays for. Now read the first two rows, which are the market doing ordinary market things. Depending on the ruler, an ordinary day moves the pair by anything from −\$108,000 to +\$205,000. The alpha and the ruler error are the same size. Whatever a pod calls idio is, in practice, whatever its ruler leaves behind, which is why Marcus does not ask pods what their view is. He asks which ruler they used.
+"Read the third row first," Marcus says. Fifteen basis points of Ford-specific news is worth $4.5 \times 0.0015 \times \$40\text{mm} = \$270{,}000$ under every ruler, because the ruler only sizes the short. That is the alpha, the thing the platform pays for. Now read the first two rows, which are the market doing ordinary market things. Depending on the ruler, an ordinary day moves the pair by anything from −\$108,000 to +\$205,000. The alpha and the ruler error are the same size. Whatever a pod calls idio is whatever its ruler leaves behind, which is why Marcus asks pods not for their view but for their ruler.
 
-Dov's ruler for PB-03 is DTS, and the best public experiment on the question backs him. Ben Dor, Dynkin and their Barclays Capital colleagues took weekly five-year CDS spreads on the constituents of CDX.NA.IG from November 2003 to December 2006, grouped 63 issuers into five industries, formed every one of the 392 same-industry pairs, gave each pair a random direction, and hedged it three ways: equal risky PV01 (the CDS version of the DV01 ruler), DTS, and a 24-week empirical beta (Ben_Dor pp.229–232). The DTS-hedged pairs had the lowest P&L volatility, 11.2 bp a week against 13.3 for PV01 and 18.0 for beta. Their hedge ratio moved least over time, with a standard deviation of 0.3 against 1.3 for beta. And the smallest share of their variance was systematic, 12.6% against 18.6% and 18.9%. The beta hedge won on exactly one measure: its P&L had the lowest average absolute correlation with the market, 0.11. That number is the trap.
+Dov's ruler for PB-19 is DTS, and the best public experiment on the question backs him. Ben Dor, Dynkin and their Barclays Capital colleagues took weekly five-year CDS spreads on the constituents of CDX.NA.IG from November 2003 to December 2006, grouped 63 issuers into five industries, formed every one of the 392 same-industry pairs, gave each pair a random direction, and hedged it three ways: equal risky PV01 (the CDS version of the DV01 ruler), DTS, and a 24-week empirical beta (Ben_Dor pp.229–232). The DTS-hedged pairs had the lowest P&L volatility, 11.2 bp a week against 13.3 for PV01 and 18.0 for beta. Their hedge ratio moved least over time, with a standard deviation of 0.3 against 1.3 for beta. And the smallest share of their variance was systematic, 12.6% against 18.6% and 18.9%. The beta hedge won on exactly one measure: its P&L had the lowest average absolute correlation with the market, 0.11. That number is the trap.
 
 > **[SOURCE EXTRACTION]** *Ben_Dor p.233:* "For an exaggerated illustration, imagine a simple strategy that randomly goes long or short one unit of the market each week at the flip of a coin. This strategy takes nothing but market risk; yet the correlation of its return with the market return over the long term will be zero."
 >
@@ -125,11 +125,11 @@ Marcus's last row is why the meeting runs long. His factor model has a rating-bu
 
 "Then the toll isn't idio," Marcus says. "It's a factor. If every pair long the lower-rated name earns it, the platform can buy it in one ticket, and it isn't going to pay you twenty percent of it. What I'll pay you for is Ford Credit being wider than *its bucket* says it should be. How much of your gap is that?"
 
-Dov does not know, which is an honest answer and an expensive one. The ledger's hedge-method column for PB-03 already reads *DTS; rating-bucket factor left open*. After Wednesday it carries a number next to it: of the book's 0.11 of rating-bucket exposure, PB-03 contributes 0.05 that its thesis claims and four other pairs contribute 0.06 that their theses never mention. Those four are Chapter 9's problem, where a book of pairs each long the cheaper name turns out to be a value factor with extra steps. PB-03's 0.05 is Dov's, and it will matter on Thursday.
+Dov does not know, an honest answer and an expensive one. PB-19's hedge-method column, *DTS; rating-bucket factor left open*, now carries a number: of the book's 0.11 of rating-bucket exposure, PB-19 contributes 0.05 that its thesis claims and four other pairs contribute 0.06 that their theses never mention. Those four belong to the conversation Chapter 9 records from the week before, when the same x-ray found the book long value with extra steps; the resize that followed fixed the value line and left this one. PB-19's 0.05 is Dov's, and it will matter on Thursday.
 
-![Figure 8-D.1: Three rulers, four market states. Each panel is one market state; the bars are the pair's P&L under the DV01, DTS and 24-week-beta rulers on a \$40mm Ford Credit long. The Ford-specific idio bar (third panel) is the same height under every ruler, \$270,000; the ruler error in the first two panels is as large as the alpha. Illustrative: the chapter's PB-03 numbers, spread duration 4.5 on both legs, spreads 180 and 120 bp.](assets/figures/ch08d_ruler_scenarios.png)
+![Figure 8-D.1: Three rulers, four market states. Each panel is one market state; the bars are the pair's P&L under the DV01, DTS and 24-week-beta rulers on a \$40mm Ford Credit long. The Ford-specific idio bar (third panel) is the same height under every ruler, \$270,000; the ruler error in the first two panels is as large as the alpha. Illustrative: the chapter's PB-19 numbers, spread duration 4.5 on both legs, spreads 180 and 120 bp.](assets/figures/ch08d_ruler_scenarios.png)
 
-<!-- FIGURE: ch08d_ruler_scenarios.png (four panels; bars DV01/DTS/beta in $000: −108/0/+138; 0/+90/+205; +270/+270/+270; +180/+270/+385) -->
+<!-- FIGURE: ch08d_ruler_scenarios.png (four panels; bars DV01/DTS/beta in USD thousands: −108/0/+138; 0/+90/+205; +270/+270/+270; +180/+270/+385) -->
 
 **A replication you can run.** Nobody has published a pairs test on cash corporate bonds; the 392-pair experiment is CDS, 2003–2008, investment grade. The brief Dov gave the pod's intern in September is the experiment this chapter rests on. Rebuild the panel from 2022–2026 CDX IG constituents (or a cleaned TRACE panel, Chapter 9-B), form same-industry pairs with random directions, and hedge each with PV01, DTS, 24- and 52-week betas, the $(1+\hat\beta)/2$ blend and a factor-residual ruler, charging each short a borrow fee from vendor lending data. Report by ruler the P&L volatility, the systematic share of variance and the hedge ratio's standard deviation; then run §8.8's test, regressing each pair's residual P&L on the others' to see whether the mean pairwise correlation sits above the model's noise floor, the sign of a factor nobody named. Exercise 6 builds a synthetic version with a planted common factor.
 
@@ -163,7 +163,7 @@ Kaz then pushed the formula until it broke. Suppose Ford Credit slides to 60 and
 
 > **[SOURCE EXTRACTION]** *Ben_Dor p.250 (printed p.220):* "When an issuer is near default, its bonds tend to trade on price rather than spread. To protect against default, any long-short positions should be matched on a market-value basis rather than DTS-hedged."
 >
-> **Annotation.** The authors learned this from a strategy that was hedged, issuer-matched and still lost 4.73% in one month: their DTS-neutral utility steepener in July 2002, when El Paso, PSEG Energy Holdings and Williams defaulted or gapped. Removing that one month raises the strategy's information ratio from 0.2 to 0.8. For a pod the rule has two halves. Near default, size on market value, because the jump is the risk. And hedge a default only with the same issuer's capital structure, because no other issuer's bonds jump on the same day; that is Owen's secured-against-unsecured pair next door (§4C.3) and the recovery-weighted sizing of Chapter 12-B. In CDS form the same logic holds: a bought contract pays one minus the auction price, 60 points at a 40 recovery, and it pays it on the issuer you bought it on.
+> **Annotation.** The authors learned this from a strategy that was hedged, issuer-matched and still lost 4.73% in one month: their DTS-neutral utility steepener in July 2002, when El Paso, PSEG Energy Holdings and Williams defaulted or gapped. Removing that one month raises the strategy's information ratio from 0.2 to 0.8. For a pod the rule has two halves. Near default, size on market value, because the jump is the risk. And hedge a default only with the same issuer's capital structure, because no other issuer's bonds jump on the same day; that is Owen's pair next door (§4C.3) and Chapter 12-B's recovery-weighted sizing. In CDS form the same logic holds: a bought contract pays one minus the auction price, 60 points at a 40 recovery, and it pays it on the issuer you bought it on.
 
 Mags had come over for the coffee and stayed for the whiteboard. "Back in my day a pair was two bonds and a prayer," she said. She read the board twice, which from Mags is applause. "This is better. It's still two bonds."
 
@@ -173,9 +173,9 @@ Before the desk went home Ines marked her indication two basis points wider than
 
 On Thursday at 7:40 Marcus walked to Dov's desk instead of emailing, which on the platform is a signal in itself, with two sheets.
 
-The first is the training sheet every new credit PM receives in week one *(illustrative composite)*. A \$200 million pod; capital halved after a 5% drawdown, \$10 million; the pod closed after 7.5%, \$15 million. The shape is the one eFinancialCareers, citing the *Wall Street Journal*, reported for one large platform on 5 December 2025; no platform publishes its rule (Chapter 1-B quotes the report; Chapter 8-B owns the regime). The sheet's single idea is that a stop converts a loss budget into a size before conviction gets a vote. A high-yield bond at 98 with a recovery of 40 loses 58 points on default. The largest long that cannot take the pod through the firing line by itself is $\$15\text{mm}/0.58 = \$25.9$ million. If the platform wants one default to cost no more than 2.5% of capital, \$5 million, the answer is \$8.6 million. A capital-structure pair escapes the rule, which is why the sheet includes one: \$20 million of a first lien at 98 with a recovery of 70 loses \$5.6 million on default, a second lien at 70 with a recovery of 20 gains 50 points per dollar shorted, so \$11.2 million of second-lien short leaves the pair flat on the day of default. It is jump-neutral by sizing, not by beta, and it is exactly the arithmetic of Owen's Halvorsen pair, \$10 million of the secured at 79 against \$3.8 million of the 2031s at 55, flat at recoveries of 60 and 5 (§4C.3).
+The first is the training sheet every new credit PM receives in week one *(illustrative composite)*. A \$200 million pod; capital halved after a 5% drawdown, \$10 million; the pod closed after 7.5%, \$15 million. The shape is the one eFinancialCareers, citing the *Wall Street Journal*, reported for one large platform on 5 December 2025; no platform publishes its rule (Chapter 1-B quotes the report; Chapter 8-B owns the regime). The sheet's single idea is that a stop converts a loss budget into a size before conviction gets a vote. A high-yield bond at 98 with a recovery of 40 loses 58 points on default. The largest long that cannot take the pod through the firing line by itself is $\$15\text{mm}/0.58 = \$25.9$ million. If the platform wants one default to cost no more than 2.5% of capital, \$5 million, the answer is \$8.6 million. A capital-structure pair escapes the rule, which is why the sheet includes one: \$20 million of a first lien at 98 with a recovery of 70 loses \$5.6 million on default, a second lien at 70 with a recovery of 20 gains 50 points per dollar shorted, so \$11.2 million of second-lien short leaves the pair flat on the day of default. It is jump-neutral by sizing, not by beta, which is Owen's Halvorsen pair next door (§4C.3).
 
-The same rule turns up outside the platforms, so it is arithmetic, not culture. The Fixed + Floating write-up of the Ironshield episode states it as "Maximum position size (% of NAV) = loss budget / downside in points," so 35 points of downside against a 50 bp budget caps a position at 1.4% of NAV, and then adds the line that matters for the short leg of any pair: for shorts with three or four points of risk, "the loss budget no longer sets the size. How many bonds you can borrow does."
+The same rule turns up outside the platforms, so it is arithmetic, not culture. The Fixed + Floating write-up of the Ironshield episode states it as "Maximum position size (% of NAV) = loss budget / downside in points," (35 points of downside against a 50 bp budget caps a position at 1.4% of NAV), and adds the line that matters for any pair's short leg: for shorts with three or four points of risk, "the loss budget no longer sets the size. How many bonds you can borrow does."
 
 The second sheet was Dov's. His allocation is \$400 million, his first line sits \$24 million below his high-water mark (§1B.2), and on Thursday morning the book is \$11 million below that mark. The budget is not the line. It is the distance to the line, \$13 million. Ford Credit at 95 with a 40 recovery loses 57.9% of its market value on default, so the largest Ford Credit long that a single default cannot push through the first line is $\$13\text{mm}/0.579 = \$22.5$ million. The pair was opened at \$40 million.
 
@@ -197,7 +197,7 @@ Marcus had one more line on his second sheet. Kestrel, PB-01's long, is \$60 mil
 
 ![Figure 8-D.2: The stop as a size. Largest position against assumed recovery for a single long at 95 under Dov's \$13mm distance to his first line and under the training sheet's \$15mm firing budget, with a recovery-weighted capital-structure pair for contrast; at a recovery of 40 the long is capped at \$22.5mm. Illustrative: the chapter's numbers; the threshold shape is press-reported for one firm, not a disclosed rule.](assets/figures/ch08d_stop_size_vs_recovery.png)
 
-<!-- FIGURE: ch08d_stop_size_vs_recovery.png (x: recovery 0–80; y: max MV in $mm = budget×0.95/(0.95−R) for budgets 13 and 15; cap-structure pair as a band for ±10-point recovery error; mark R=40) -->
+<!-- FIGURE: ch08d_stop_size_vs_recovery.png (x: recovery 0–80; y: max MV in USD mm = budget×0.95/(0.95−R) for budgets 13 and 15; cap-structure pair as a band for ±10-point recovery error; mark R=40) -->
 
 ## 8D.6 The Ledger
 
@@ -206,8 +206,8 @@ At 6:15 on Thursday Wen rewrote the wall. The Pair Book is a whiteboard the widt
 | ID | Thesis sentence, with its date | Short leg: lender or contract, cost | Ruler, ratio at open | Idio share, last explain | Capture | What leaked | Exit rule |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
 | PB-01 | Halvorsen needs its lenders before Kestrel does, and the market prices it before the 2027 revolver is due | Halvorsen 7.25% 2029s borrowed from an asset manager's agent; 50 bp; 61% on loan | Market-value DTS; 0.65 by face | 0.71 (Sept.) | 0.41 | DTS drift as the short's view pays; exchange jump; borrow | Scale toward the budget if the view pays faster than the hedge; Kestrel's jump size to the committee |
-| PB-03 | Ford Credit's discount to GM Financial is a rating-bucket toll, not a credit gap, and half of it is gone by 31 March 2027 | GM Financial notes, one lender; 70 bp (from 25); 85% on loan | DTS; 1.50; rating bucket left open (0.05 of gross) | 0.58 (Sept.) | 0.36 | Rating-bucket factor; the fee | Cut if the gap widens on GM- or Ford-specific news; resize to the stop weekly; switch the short on recall |
-| PB-08 | Level 3's secured holders are inside the support agreement and Lumen's unsecured are not, and the gap opens before it closes (replay, Chapter 13) | Lumen unsecured borrowed at a distressed fee | DTS within the family, participation overlay | Chapter 13-B | Chapter 13-B | Which entity the collateral reaches | Cut if the agreement is offered to the unsecured |
+| PB-19 | Ford Credit's discount to GM Financial is a rating-bucket toll, not a credit gap, and half of it is gone by 31 March 2027 | GM Financial notes, one lender; 70 bp (from 25); 85% on loan | DTS; 1.50; rating bucket left open (0.05 of gross) | 0.58 (Sept.) | 0.36 | Rating-bucket factor; the fee | Cut if the gap widens on GM- or Ford-specific news; resize to the stop weekly; switch the short on recall |
+| PB-03 | Ford Motor Credit's notes give back the discount index-forced selling put on them, against an auto lender that stayed investment grade, by 30 September 2020 (replay, closed) | GM Financial notes via the prime broker; 35 bp | Market-value DTS; 1.65 | 0.60 | ≈0.67 | The fallen-angel factor, left open on purpose | Closed on Ford's basis, −120 to −35 bp (§24.7) |
 | PB-12 | Hovnanian, 2017–18: declined | *No short leg exists once the credit event is manufactured* (§24.8.2) | — | — | — | — | — |
 
 The idio-share column is the part of the month's P&L variance the explain attributes to the idio line; Chapter 8-C builds the explain line by line, and this chapter needs only its last number. The **capture ratio** is
@@ -218,13 +218,13 @@ $$
 
 where the leak is everything the hedge failed to remove (the market line, the rates residue, any basis line) and the friction is everything the pair paid to exist (the borrow fee, the financing of the long net of the rebate, and two legs of transaction cost). The market line is computed with betas fixed at the start of each day; an ex post regression would fit the hedge error away and hand it to the idio line, which is how a pod ends up paid on luck and judged on skill.
 
-PB-03's September makes it concrete. Spreads widened 8% in relative terms; Ford Credit's true relative beta was 1.1 and GM Financial's 0.9, so the DTS ratio left a residue. The market line on the long cost $4.5 \times (180 \times 1.1 \times 8\%) \text{ bp} \times \$40\text{mm} = \$285{,}100$ and the short returned \$233,300, a leak of \$51,800, plus \$6,000 of rates residue. Ford Credit tightened 6 bp on its own and GM Financial widened 2 bp, an idio line of \$108,000 plus \$54,000, **\$162,000**. The friction was \$12,500 of borrow at the old 25 bp, \$13,300 of financing and \$20,000 of amortised transaction cost. Net, \$58,400. Capture, 0.36: of every dollar of thesis, the pod kept thirty-six cents. At October's 70 bp fee the same month would have kept twenty-two.
+PB-19's September makes it concrete. Spreads widened 8% in relative terms; Ford Credit's true relative beta was 1.1 and GM Financial's 0.9, so the DTS ratio left a residue. The market line on the long cost $4.5 \times (180 \times 1.1 \times 8\%) \text{ bp} \times \$40\text{mm} = \$285{,}100$ and the short returned \$233,300, a leak of \$51,800, plus \$6,000 of rates residue. Ford Credit tightened 6 bp on its own and GM Financial widened 2 bp, an idio line of \$108,000 plus \$54,000, **\$162,000**. The friction was \$12,500 of borrow at the old 25 bp, \$13,300 of financing and \$20,000 of amortised transaction cost. Net, \$58,400. Capture, 0.36: of every dollar of thesis, the pod kept thirty-six cents. At October's 70 bp fee the same month would have kept twenty-two.
 
 Under the rows sit the book's own lines. The mean pairwise correlation of the pairs' idio P&L, §8.8's test, read 0.28 for September: twelve "independent" views moving together more than independent views should. Beta to CDX HY: +0.04 of gross. Rating bucket: 0.11 on Tuesday, 0.08 by Friday's x-ray. Largest jump-to-default long: Kestrel, about \$34 million at the model's recovery. Largest jump-to-default short: GM Financial. Borrow fee on the book, weighted by short market value: 64 bp. Distance to the first line: \$13 million.
 
-![Figure 8-D.3: The Pair Book as a figure. Twelve rows, one per pair (live, replay and refused), each with three bars for September: idio P&L, leak and friction; the capture ratio is printed at the end of each row, and refused pairs (PB-12) show an empty row with the reason. Book-level lines run along the bottom. Illustrative: Dov Adler's pod and Vantress are fictional composites.](assets/figures/ch08d_pair_book_ledger.png)
+![Figure 8-D.3: The Pair Book as a figure. Twelve rows (live, replay and refused), each with September's idio, leak and friction bars and its capture ratio; PB-12's row is empty, with the reason. Book-level lines run along the bottom. Illustrative: Dov Adler's pod and Vantress are fictional composites.](assets/figures/ch08d_pair_book_ledger.png)
 
-<!-- FIGURE: ch08d_pair_book_ledger.png (12 rows; PB-03 idio 162, leak −57.8, friction −45.8, κ 0.36; PB-01 κ 0.41; PB-12 empty; footer lines as in §8D.6) -->
+<!-- FIGURE: ch08d_pair_book_ledger.png (12 rows; PB-19 idio 162, leak −57.8, friction −45.8, κ 0.36; PB-01 κ 0.41; PB-12 empty; footer lines as in §8D.6) -->
 
 Dov tells every new analyst that the ledger is the product: the platform cannot see his judgment, only the rows. What a platform pays for a ledger like this is Chapter 28's subject, and the short answer is the capture column, net of the factor lines beneath it.
 
@@ -234,9 +234,9 @@ The recall came at 9:40 on Friday, 9 October, as an email from the prime broker 
 
 "I said this week," Wen said. "I didn't say Friday."
 
-Before he touched anything, Dov wrote PB-03's exit rules on the wall, because an exit decided during a recall is decided by the recall. The rules are the Ironshield write-up's, and each is a day someone remembers. When the thesis is wrong, the pair is cut at once, because a pair whose reason has gone is two unrelated positions with a hedge ratio between them; Owen's replay of GM in May 2005 (§23.6) is the pod's example of what waiting costs. When the thesis is intact but the P&L is moving against it, the pair is scaled toward the loss budget rather than defended; the 2:40 trim of the Halvorsen short in §1B.2, which in story time is four days away, is that rule done well. And when the budget is breached and the PM likes the trade more, somebody other than the PM decides, which is where Kestrel had gone. Gordon Pike's committee had met at 8:00 that morning, given PB-01 until the end of the month at its current size, and signed the ledger line itself.
+Before he touched anything, Dov wrote PB-19's exit rules on the wall, because an exit decided during a recall is decided by the recall. The rules are the Ironshield write-up's, and each is a day someone remembers. When the thesis is wrong, the pair is cut at once, because a pair whose reason has gone is two unrelated positions with a hedge ratio between them; Owen's replay of GM in May 2005 (§23.6) is the pod's example of what waiting costs. When the thesis is intact but the P&L is moving against it, the pair is scaled toward the loss budget rather than defended; the 2:40 trim of the Halvorsen short in §1B.2, which in story time is four days away, is that rule done well. And when the budget is breached and the PM likes the trade more, somebody other than the PM decides, which is where Kestrel had gone. Gordon Pike's committee had met at 8:00 that morning, given PB-01 until the end of the month at its current size, and signed the ledger line itself.
 
-PB-03 fitted none of them. The thesis was intact, the P&L was flat, and what had failed was the instrument. So Dov replaced the leg rather than the trade. He asked three dealers for five-year GM protection, about \$12 million each; one was Ines's desk, unsurprised to be asked again. The par spread was 110 bp against the standard 100 bp coupon, so the pod paid a small upfront, about $(110 - 100)\text{ bp} \times 4.5 \approx 0.45$ points, on top of the running coupon; a CDS short's cost is the coupon, the upfront and the basis, never the running spread alone. A contract at 110 bp carries less DTS per dollar than a bond at 120, so keeping the ratio's meaning took $\$22.5\text{mm} \times 4.5 \times 180 / (4.5 \times 110) \approx \$36.8$ million of protection. Then the pod bought back and returned every borrowed GM Financial note.
+PB-19 fitted none of them. The thesis was intact, the P&L was flat, and what had failed was the instrument. So Dov replaced the leg rather than the trade. He asked three dealers for five-year GM protection, about \$12 million each; one was Ines's desk, unsurprised to be asked again. The par spread was 110 bp against the standard 100 bp coupon, so the pod paid a small upfront, about $(110 - 100)\text{ bp} \times 4.5 \approx 0.45$ points, on top of the running coupon; a CDS short's cost is the coupon, the upfront and the basis, never the running spread alone. A contract at 110 bp carries less DTS per dollar than a bond at 120, so keeping the ratio's meaning took $\$22.5\text{mm} \times 4.5 \times 180 / (4.5 \times 110) \approx \$36.8$ million of protection. Then the pod bought back and returned every borrowed GM Financial note.
 
 For forty minutes, between the first CDS fill and the last bond bought back, the pair was short GM twice: legging risk, the cost of two legs executed as two orders. §18.6.3 shows a day it cost a pod far more; here it cost a few thousand dollars.
 
@@ -244,11 +244,11 @@ What the switch bought: long Ford Credit earns 180 bp on \$22.5 million, about \
 
 At 3:00 that afternoon Halvorsen held its lender call. That story belongs to Chapter 1, and its Tuesday to §1B.2.
 
-> **Trend Watch.** *The short leg, 2022–2026.* In 2022 Man Group wrote that prime brokers' lending desks "now provide daily feeds with firm borrow availability and fees across the entire investable cash bond universe," something "largely unheard of even a few years ago when all cash bond security lending was essentially manual and ad hoc" (Man_2022 p.11). The market grew into the feeds: EquiLend reported corporate-bond lending revenue of \$463 million for 2025, up 8%, with balances up 22% and fees down 12% (Mondo Visione, January 2026), more shorting at lower average prices, which says nothing about the names everyone wants. Transparency did not keep pace: after the Fifth Circuit remanded Rule 10c-1a in August 2025, the SEC's order of 3 December 2025 pushed loan reporting to FINRA back to 28 September 2028, with public dissemination later still, and how much corporate-bond lending the rule will capture remains unclear (Proskauer, December 2025). Meanwhile the platforms kept hiring credit relative-value talent. On 2 June 2025 Hedgeweek reported Millennium's hires of a CDS and CMBS index trader, a corporate-credit partner from another fund and a rival's former US head of credit; on 20 August 2026 it reported that Balyasny had hired a BlackRock investment-grade co-head to run a team that will "trade both long and short positions in US high-grade corporate bonds and pursue relative-value opportunities." More pods running more pairs means more borrowed shorts in the same names, with no public tape of who holds them; the fee is the only crowding gauge a pod can see, which is why Wen keeps the weather and Chapter 22 treats the borrow rules as prices.
+> **Trend Watch.** *The short leg, 2022–2026.* In 2022 Man Group wrote that prime brokers' lending desks "now provide daily feeds with firm borrow availability and fees across the entire investable cash bond universe," something "largely unheard of even a few years ago when all cash bond security lending was essentially manual and ad hoc" (Man_2022 p.11). The market grew into the feeds: EquiLend reported corporate-bond lending revenue of \$463 million for 2025, up 8%, with balances up 22% and fees down 12% (Mondo Visione, January 2026), more shorting at lower average prices, which says nothing about the names everyone wants. Transparency did not keep pace: after the Fifth Circuit remanded Rule 10c-1a in August 2025, the SEC's order of 3 December 2025 pushed loan reporting to FINRA back to 28 September 2028, with public dissemination later still, and how much corporate-bond lending the rule will capture remains unclear (Proskauer, December 2025). The platforms kept hiring: on 2 June 2025 Hedgeweek reported Millennium's hires of a CDS and CMBS index trader, a corporate-credit partner from another fund and a rival's former US head of credit; on 20 August 2026 it reported that Balyasny had hired a BlackRock investment-grade co-head to run a team that will "trade both long and short positions in US high-grade corporate bonds and pursue relative-value opportunities." More pods running more pairs means more borrowed shorts in the same names, with no public tape of who holds them; the fee is the only crowding gauge a pod can see, which is why Wen keeps the weather and Chapter 22 treats the borrow rules as prices.
 
 ## 8D.8 When to Apply It, and When It Breaks
 
-At 4:30 the screen produced a candidate for PB-18 and Wen killed it in four minutes: long a sponsor-backed software company's first-lien loan, short its notes, and the notes had no lender on her sheet and no CDS. "No short leg," she said, and wrote it on the refusals list at the foot of the wall, which Dov privately thinks is the ledger's most valuable part.
+At 4:30 the screen produced a new candidate and Wen killed it in four minutes: long a sponsor-backed software company's first-lien loan, short its notes, and the notes had no lender on her sheet and no CDS. "No short leg," she said, and wrote it on the refusals list at the foot of the wall, which Dov privately thinks is the ledger's most valuable part.
 
 The refusals list records the shapes in which a pair is the wrong tool, each with the chapter that taught it. A private loan has no short leg at all, and the public proxy shorts something else (Chapter 17-B). An exchange that pays consenting holders a premium is a categorical event, and the short leg of any pair on that issuer gaps *up* (Chapter 14). The legal layer can invert the legs after the trade is on: an uptier turns the long first lien into the junior claim (Chapter 13), and an AT1 can go to zero while the senior survives (§23.8). Sometimes the hedge is the trade, as in 2022, when a credit book's "negative duration" hedge was its biggest position (§8.7, Case A). And sometimes a book of twelve pairs is one factor in costume, which only the residual-correlation test catches (§8.8). PB-12, Hovnanian, sits at the top of the list because it is the purest case: once a CDS payoff can be negotiated by the people who hold it, there is no short leg, only a counterparty (§24.8.2).
 
@@ -258,9 +258,7 @@ The published record deserves the same honesty, and Wen keeps it taped beside th
 
 ### Specification for AI Implementation
 
-*The moment it was needed.* At 9:40 on Friday Dov needed one number the pod had computed in pieces all week: the size of PB-03 after the ruler (Wednesday), the stop and the borrow (Thursday) had each had their say, recomputed for a short leg that was about to change from a bond to a contract. It took twenty minutes and a spreadsheet. `pair_book.py` is that twenty minutes as one function call per question.
-
-*What ROBO built from the vague version.* Asked to "hedge the pair," ROBO matched the two legs' DV01, returned a ratio of 1.00, and reported, accurately, a book long the market and earning 60 bp of carry for it, as specified.
+*The moment it was needed.* At 9:40 on Friday Dov needed one number the pod had computed in pieces all week: the size of PB-19 after the ruler (Wednesday), the stop and the borrow (Thursday) had each had their say, recomputed for a short leg that was about to change from a bond to a contract. It took twenty minutes and a spreadsheet. `pair_book.py` is that twenty minutes as one function call per question.
 
 *What it computes, and why it is built this way.* Two `Leg` records and one `ShortCost` record (lender or none, fee, inventory, share limit, expected recall, financing, half-spreads, holding period, and for a CDS the coupon and upfront). `ratio` returns dollars of short per dollar of long under each ruler, importing `dts` and `dts_pair_hedge` from `ido_engine` (§8.9) so the DTS arithmetic has one copy in the book. `scenarios` is §8D.3's four-state table. `jump_table` gives each leg's loss at default, the expected jump under $\mathbb{Q}$ and the worst case as a share of capital, the quantities `risk_model.py`'s jump overlay uses (Chapter 8-B). `max_long` sizes the long to the stop and to the borrow and says which binds. `carry_friction` and `capture` give the lines of §8D.6, and `ledger_row` returns the row as a dictionary for the wall.
 
@@ -268,164 +266,13 @@ The published record deserves the same honesty, and Wen keeps it taped beside th
 
 *The edge cases that bite, each a day this chapter showed.* A leg below 70 trades on price, so the ruler switches to market value and logs it (Ford Credit at 60, §8D.4). A short with no lender returns `declined`, never a size (Wen's refusals, §8D.8). A CDS short on a reference entity outside the liquid set is flagged *basis unquoted*. A trailing beta within 0.1 of zero is shrunk to the DTS ratio and logged rather than divided by (§8D.3). Transaction costs charge both legs, in and out, not one half-spread once; a CDS short's cost is its coupon plus its amortised upfront, not the running spread alone. The full listing is in Appendix F.
 
-<!-- EXPLAINED -->
-```python
-"""pair_book.py (Chapter 8-D): rulers, jumps, the stop, the borrow and the ledger row for one pair."""
-from dataclasses import dataclass
-import numpy as np
-
-try:  # the book's one copy of the DTS arithmetic (Chapter 8, section 8.9)
-    from ido_engine import dts, dts_pair_hedge
-except ImportError:
-    def dts(D_spr, oas):
-        if np.any(np.asarray(oas, dtype=float) <= 0.0):
-            raise ValueError("non-positive spread: DTS undefined")
-        return np.asarray(D_spr, dtype=float) * np.asarray(oas, dtype=float)
-
-    def dts_pair_hedge(dts_long, dts_short):
-        return float(dts_long / dts_short)
-
-LIQUID_CDS = {"GM", "F"}  # illustrative stand-in for the ~100 regularly traded US names
-LOG = []
-
-
-@dataclass
-class Leg:
-    name: str
-    instrument: str        # 'bond' or 'cds' (index, etf, future, equity: same fields)
-    mv: float              # $mm market value; for a CDS, notional
-    price: float           # per 100 (a CDS leg uses 100)
-    spread: float          # decimal: Z-spread for a bond, par spread for a CDS
-    spr_dur: float         # years
-    recovery: float        # fraction of par
-    reference: str = ""    # CDS reference entity
-
-
-@dataclass
-class ShortCost:
-    lender: object = None          # None: nobody lends it
-    fee: float = 0.0               # decimal a year on short market value
-    inventory: float = 0.0         # lender's lendable market value, $mm
-    share_limit: float = 0.20      # the pod's cap on its share of that inventory
-    expected_recall: float = 0.0   # $mm the weather says is coming back
-    financing: float = 0.0         # decimal a year on the long, net of rebate
-    half_spread_bp: float = 0.0    # per leg, per trade
-    hold_years: float = 0.25
-    coupon: float = 0.0            # CDS standard coupon, decimal
-    upfront_pts: float = 0.0       # CDS upfront paid by the protection buyer, points
-
-
-def ratio(L, S, ruler, beta_L=None, beta_S=None, load_L=None, load_S=None, f_vol=None):
-    """Dollars of short per dollar of long, and the ruler actually used."""
-    if L.price < 70 or S.price < 70:
-        LOG.append(f"{L.name}/{S.name}: a leg trades on price; ruler set to market value")
-        return 1.0, "market_value"
-    h_dts = dts_pair_hedge(dts(L.spr_dur, L.spread), dts(S.spr_dur, S.spread))
-    if ruler == "dv01":
-        return L.spr_dur / S.spr_dur, ruler
-    if ruler == "dts":
-        return h_dts, ruler
-    if ruler in ("beta", "beta_adj"):
-        if ruler == "beta_adj":  # Ben Dor's adjusted beta, (1 + beta) / 2
-            beta_L, beta_S = (1 + beta_L) / 2, (1 + beta_S) / 2
-        if abs(beta_S) < 0.1:
-            LOG.append(f"{S.name}: trailing beta {beta_S:.2f} near zero; shrunk to DTS")
-            return h_dts, "dts"
-        return (beta_L / beta_S) * L.spr_dur / S.spr_dur, ruler
-    if ruler == "factor":  # least factor variance; equals DTS with one relative-spread factor
-        bL, bS, v = (np.asarray(x, dtype=float) for x in (load_L, load_S, f_vol))
-        return float(np.sum(bL * bS * v**2) / np.sum(bS**2 * v**2)), ruler
-    raise ValueError(f"unknown ruler {ruler}")
-
-
-def pnl(L, S, h, ds_L_bp, ds_S_bp):
-    """$mm P&L of the long L.mv and the short h * L.mv for spread moves in bp."""
-    return -L.spr_dur * ds_L_bp * 1e-4 * L.mv + S.spr_dur * ds_S_bp * 1e-4 * h * L.mv
-
-
-def scenarios(L, S, h, rel=0.10, parallel=10.0, idio_L=-15.0, idio_S=10.0):
-    sL, sS = L.spread * 1e4, S.spread * 1e4
-    return {"market_relative": pnl(L, S, h, rel * sL, rel * sS),
-            "parallel": pnl(L, S, h, parallel, parallel),
-            "idio_long": pnl(L, S, h, idio_L, 0.0),
-            "idio_short": pnl(L, S, h, 0.0, idio_S)}
-
-
-def jump_table(L, S, h, capital):
-    """Loss at default per leg ($mm), expected jump under Q, worst case / capital."""
-    loss_L = L.mv / (L.price / 100) * (L.price / 100 - L.recovery)
-    face_S = h * L.mv / (S.price / 100)
-    gain_S = face_S * (S.price / 100 - S.recovery) if S.instrument == "bond" else face_S * (1 - S.recovery)
-    lam_L, lam_S = L.spread / (1 - L.recovery), S.spread / (1 - S.recovery)  # Q intensities
-    return {"long_defaults": -loss_L, "short_defaults": gain_S,
-            "expected_Q": lam_S * gain_S - lam_L * loss_L, "worst_share": loss_L / capital}
-
-
-def max_long(L, S, h, budget, cost):
-    """Largest long ($mm MV) allowed by the stop and by the borrow; the smaller binds."""
-    if S.instrument == "bond" and cost.lender is None:
-        return {"status": "declined", "reason": "no lender: no short leg"}
-    stop = budget / ((L.price / 100 - L.recovery) / (L.price / 100))
-    borrow = np.inf
-    if S.instrument == "bond":
-        borrow = (cost.share_limit * cost.inventory - cost.expected_recall) / h
-    elif S.reference not in LIQUID_CDS:
-        LOG.append(f"{S.reference}: CDS outside the liquid set; basis unquoted")
-    size = min(stop, borrow)
-    return {"status": "ok", "stop": stop, "borrow": borrow, "size": size,
-            "binds": "stop" if stop <= borrow else "borrow"}
-
-
-def carry_friction(L, S, h, cost):
-    """$mm a year: spread carry, then the friction lines (both legs, in and out)."""
-    short = h * L.mv
-    if S.instrument == "cds":
-        short_cost, fee = (cost.coupon + cost.upfront_pts / 100 / S.spr_dur) * short, 0.0
-    else:
-        short_cost, fee = S.spread * short, cost.fee * short
-    trading = 2 * cost.half_spread_bp * 1e-4 * (L.mv + short) / cost.hold_years
-    return {"carry": L.spread * L.mv - short_cost, "fee": -fee,
-            "financing": -cost.financing * L.mv, "trading": -trading}
-
-
-def capture(idio, leak, friction):
-    return (idio + leak + friction) / idio
-
-
-def ledger_row(pid, thesis, L, S, h, ruler, cost, kappa=None, leaked=""):
-    short_leg = (f"{S.name}, {cost.lender}, fee {cost.fee * 1e4:.0f} bp" if S.instrument == "bond"
-                 else f"{S.reference} CDS, {S.spread * 1e4:.0f} bp par on {cost.coupon * 1e4:.0f} bp coupon")
-    return {"id": pid, "thesis": thesis, "long": L.name, "short": short_leg,
-            "ruler": ruler, "ratio": round(h, 2), "capture": kappa, "leaked": leaked}
-
-
-# ---- Self-checks: the chapter's numbers --------------------------------------------
-F = Leg("Ford Credit", "bond", 40.0, 95.0, 0.0180, 4.5, 0.40)
-G = Leg("GM Financial", "bond", 60.0, 98.0, 0.0120, 4.5, 0.40)
-assert np.isclose(ratio(F, G, "dv01")[0], 1.00) and np.isclose(ratio(F, G, "dts")[0], 1.50)
-assert np.isclose(ratio(F, G, "beta", 1.5, 0.7)[0], 2.142857, atol=1e-6)
-assert ratio(F, G, "beta", 1.5, 0.05)[1] == "dts"                                  # shrunk, logged
-sc = scenarios(F, G, 2.142857)
-assert np.isclose(scenarios(F, G, 1.0)["market_relative"], -0.108) and np.isclose(sc["parallel"], 0.2057, atol=1e-3)
-jt = jump_table(F, G, 1.5, 400.0)
-assert np.isclose(jt["long_defaults"], -23.158, atol=1e-3) and np.isclose(jt["short_defaults"], 35.510, atol=1e-3)
-assert np.isclose(jt["expected_Q"], 0.0155, atol=1e-4)                                # about +$15k a year
-F_now = Leg("Ford Credit", "bond", 40.0, 95.0, 0.0180, 4.5, 0.40)
-sz = max_long(F_now, G, 1.5, 13.0, ShortCost("agent lender", 0.0070, 300.0, 0.20, 20.0))
-assert np.isclose(sz["stop"], 22.45, atol=0.01) and np.isclose(sz["borrow"], 26.67, atol=0.01)
-assert sz["binds"] == "stop"
-assert max_long(F_now, G, 1.5, 13.0, ShortCost(None))["status"] == "declined"
-assert ratio(Leg("Ford Credit", "bond", 25.0, 60.0, 0.20, 3.0, 0.40), G, "dts")[1] == "market_value"
-cds = Leg("GM 5y", "cds", 0.0, 100.0, 0.0110, 4.5, 0.40, reference="GM")
-h_cds = ratio(Leg("Ford Credit", "bond", 22.5, 95.0, 0.0180, 4.5, 0.40), cds, "dts")[0]
-assert np.isclose(22.5 * h_cds, 36.82, atol=0.01)                                      # §8D.7
-assert np.isclose(capture(0.162, -0.0578, -0.0458), 0.3605, atol=1e-3)                 # §8D.6
-print("pair_book.py: all chapter checks pass")
-```
+*The full python listing is [Listing 8-D.1 in Appendix F](#code-8d-1).*
 
 ## 8D.10 Desk Debrief
 
-At 5:40 on Friday Dov read the ledger aloud, row by row, the pod's way of ending a week. PB-03: same thesis, same date, \$22.5 million long, the short now \$36.8 million of GM protection, capture 0.36 for September and a new line in the leak column that says *basis*. Wen gave the weather for Monday: GM Financial no longer on the sheet; Halvorsen unchanged at 50 bp after the afternoon's call, "which won't last." Marcus's question arrived by email at 5:52, as it always does. *What is the book long that it did not mean to be?* Dov typed the answer before he went home: Kestrel's jump, four pairs' worth of rating bucket, and a basis on GM. It was the first Friday in a month that he had found them himself.
+At 5:40 on Friday Dov read the ledger aloud, row by row, the pod's way of ending a week. PB-19: same thesis, same date, \$22.5 million long, the short now \$36.8 million of GM protection, capture 0.36 for September and a new line in the leak column that says *basis*. Wen gave the weather for Monday: GM Financial no longer on the sheet; Halvorsen unchanged at 50 bp after the afternoon's call, "which won't last." Marcus's question arrived by email at 5:52, as it always does. *What is the book long that it did not mean to be?* Dov typed the answer before he went home: Kestrel's jump, four pairs' worth of rating bucket, and a basis on GM. It was the first Friday in a month that he had found them himself.
+
+Grade your own card from Tuesday at 7:30 against the week. The short leg: GM CDS was the answer by Friday, and early on Tuesday, when the borrow still worked and nobody had read the reference entity; *cut* paid two spreads to leave an intact thesis. The ratio: DTS, 1.50 on bonds and about 1.64 on the contract, with the rating bucket written down as open; a beta of 2.14 was a market short in costume. The size: \$22.5 million, \$13 million over 0.579, before anyone asked whether Dov still liked the trade. Full marks need all three, and the order: the size first, then the leg.
 
 | Concept | Equation | Intuition (box) | Judgment (scene) | Code |
 | :-- | :-- | :-- | :-- | :-- |
@@ -435,7 +282,7 @@ At 5:40 on Friday Dov read the ledger aloud, row by row, the pod's way of ending
 | Two jump processes | $\lambda \approx s/(1-R)$; $\mathbb{E}^{\mathbb{Q}}[J] \approx \lambda_S N_S(P_S - R_S) - \lambda_L N_L(P_L - R_L)$ | Math, Gently: from a spread to a default rate (§8D.4) | Kaz's two spikes; 43 years of alpha (§8D.4) | `jump_table` |
 | Near default | match on market value | — | Ford Credit at 60; July 2002 (§8D.4) | `ratio` (price below 70) |
 | Size to the stop and the borrow | $N_{\max} = \min(\text{budget}/\text{downside},\ \text{available borrow}/h)$ | Math, Gently: a random walk and a line (§8D.5) | Marcus's two sheets (§8D.5) | `max_long` |
-| Capture ratio | $\kappa = \text{net}/\text{idio}$ | — | PB-03's September (§8D.6) | `capture`, `ledger_row` |
+| Capture ratio | $\kappa = \text{net}/\text{idio}$ | — | PB-19's September (§8D.6) | `capture`, `ledger_row` |
 | Switching the short leg | CDS notional that keeps the DTS ratio | — | The recall (§8D.7) | `ratio` on a CDS leg |
 | The refusal | — | — | Wen's list (§8D.8) | `max_long` returns `declined` |
 
@@ -449,11 +296,11 @@ At 5:40 on Friday Dov read the ledger aloud, row by row, the pod's way of ending
 
 ### The Spec You Hand the Robot
 
-*Vague version:* "hedge the pair." *What ROBO built:* a DV01 ratio of 1.00 and a book long the market, as specified. *The precise version:* "Implement `pair_book.py` per §8D.9 in \$mm, decimals and years. Rulers `dv01`, `dts` (from `ido_engine`), `beta`, `beta_adj`, `factor`; market value below a price of 70; shrink a near-zero beta to DTS and log it. Jumps under $\mathbb{Q}$ with $\lambda = s/(1-R)$. Size the long at the smaller of stop budget over downside and available borrow over the ratio, say which binds, and return `declined` with no lender. Charge both legs in and out, a CDS at coupon plus amortised upfront, and flag an illiquid reference entity. Capture is net over idio. Assert the chapter's numbers."
+*Vague version:* "hedge the pair." *What ROBO built:* a DV01 ratio of 1.00 and a book long the market, earning 60 bp of carry for it, as specified. *The precise version:* "Implement `pair_book.py` per §8D.9 in \$mm, decimals and years. Rulers `dv01`, `dts` (from `ido_engine`), `beta`, `beta_adj`, `factor`; market value below a price of 70; shrink a near-zero beta to DTS and log it. Jumps under $\mathbb{Q}$ with $\lambda = s/(1-R)$. Size the long at the smaller of stop budget over downside and available borrow over the ratio, say which binds, and return `declined` with no lender. Charge both legs in and out, a CDS at coupon plus amortised upfront, and flag an illiquid reference entity. Capture is net over idio. Assert the chapter's numbers."
 
 ### Exercises
 
-**1. Three rulers on someone else's pair.** *[ruler]* You are long \$40mm of issuer A (380 bp, spread duration 4.2) and hedge with issuer B (520 bp, 4.6); a trailing beta of A on B is 0.60. Size the short under DV01, DTS and beta, and say which ruler leaves the pair long the market when both spreads widen 10% in relative terms. *Check:* \$36.5mm, \$26.7mm, \$21.9mm. *Solution.* $40 \times 4.2/4.6$; $40 \times (4.2 \times 380)/(4.6 \times 520)$; $40 \times 4.2 \times 0.60/4.6$. A widens 38 bp and B 52 bp: the long loses $4.2 \times 0.0038 \times 40 = \$0.64$mm; the shorts make \$0.87mm, \$0.64mm and \$0.52mm, so DV01 is net *short* the market (+\$0.24mm on a widening), DTS is flat and beta is net long (−\$0.11mm). The long is the tighter name here, so the order flips relative to PB-03.
+**1. Three rulers on someone else's pair.** *[ruler]* You are long \$40mm of issuer A (380 bp, spread duration 4.2) and hedge with issuer B (520 bp, 4.6); a trailing beta of A on B is 0.60. Size the short under DV01, DTS and beta, and say which ruler leaves the pair long the market when both spreads widen 10% in relative terms. *Check:* \$36.5mm, \$26.7mm, \$21.9mm. *Solution.* $40 \times 4.2/4.6$; $40 \times (4.2 \times 380)/(4.6 \times 520)$; $40 \times 4.2 \times 0.60/4.6$. On a 10% widening the long loses \$0.64mm and the shorts make \$0.87mm, \$0.64mm and \$0.52mm: DV01 is net *short* the market, DTS flat, beta net long. The long is the tighter name, so the order flips relative to PB-19.
 
 **2. The two spikes.** *[jump]* Long \$10mm market value of L at 95 (180 bp), short \$15mm of S at 98 (120 bp), recovery 40 on both. Compute the loss if L defaults, the gain if S defaults, and the expected jump P&L under $\mathbb{Q}$. *Check:* −\$5.79mm, +\$8.88mm, about +\$3,900 a year. *Solution.* $10 \times 55/95$; $15 \times 58/98$; $0.02 \times 8.88 - 0.03 \times 5.79$. One default on L is 43 years of a 30 bp thesis (\$135,000 a year).
 
@@ -470,7 +317,7 @@ At 5:40 on Friday Dov read the ledger aloud, row by row, the pod's way of ending
 **Podcasts**
 
 - *Fixed + Floating*, E18, "Inside a Long/Short Credit Hedge Fund: Sizing, Shorts and LME Risk" (Ironshield), 4 Aug 2026: <https://podcasters.spotify.com/pod/show/fixedfloating/episodes/Inside-a-LongShort-Credit-Hedge-Fund-Sizing--Shorts-and-LME-Risk--Frits-Lieuw-Kie-Song-Ironshield-Capital-e3mncab>; write-up at <https://www.fixedandfloating.com/p/how-a-longshort-credit-hedge-fund>. The seven-question intake, size as loss budget over downside, and shorts bounded by borrow.
-- *Odd Lots*, "How to Succeed at Multi-Strategy Hedge Funds" (Giuseppe Paleologo), 20 May 2024: <https://omny.fm/shows/odd-lots/how-to-succeed-at-multi-strategy-hedge-funds>. The overnight x-ray and the risk manager's three jobs, from the platform's side.
+- *Odd Lots*, "How to Succeed at Multi-Strategy Hedge Funds" (Giuseppe Paleologo), 20 May 2024: <https://omny.fm/shows/odd-lots/how-to-succeed-at-multi-strategy-hedge-funds>. The x-ray and the risk manager's three jobs.
 - *Odd Lots*, "The Math That Explains How Multi-Strategy Hedge Funds Make Money" (Dan Morillo), 7 Oct 2024: <https://omny.fm/shows/odd-lots/100724-odd-lots-dan-morillo-master>. Why a little correlation among pods' "idio" caps the platform's Sharpe ratio.
 
 **Practitioner Writing**
@@ -494,3 +341,5 @@ At 5:40 on Friday Dov read the ledger aloud, row by row, the pod's way of ending
 - EquiLend FY2025 lending revenue, via Mondo Visione (January 2026): <https://mondovisione.com/media-and-resources/news/equilend-securities-lending-revenue-soars-to-all-time-highs-of-153-billion-202616/>.
 - Proskauer on the SEC's December 2025 extension of Rule 10c-1a: <https://www.proskauer.com/blog/sec-again-extends-short-sale-and-securities-lending-rules-compliance-deadlines-to-2028-while-it-considers-response-to-court-ruling>.
 - This book: `pair_book.py` (Appendix F), which imports `ido_engine` (§8.9) and pairs with `risk_model.py` (Chapter 8-B) and `pnl_explain.py` (Chapter 8-C).
+
+<!-- STATUS: COMPLETE -->

@@ -14,12 +14,12 @@
 - [x] 12. [§22.4.1] MATH-GENTLY (two-part) + FULL-DERIVATION-MOVE — Two-part netting box; folded-normal derivation added below; equations intact.
 - [x] 13. [§22.4.2] MATH-GENTLY (hinge regression) — Motorway hockey-stick box with own toy numbers; caveat clause kept.
 - [x] 14. [§22.4.3] EXPAND-SCENE -> Long Scene A: "The fortnight the invoice was the market" — Mags war story, four beats, Friday card graded with (22.2), (22.13), (22.11).
-- [ ] 15. [§22.5] LIST-TO-NARRATIVE + WHEN-TO-APPLY inside the scene
-- [ ] 16. [§22.5, after the Poker Table] ANOTHER-SEAT (non-bank market maker)
-- [ ] 17. [§22.6 timeline paragraph] LIST-TO-NARRATIVE
-- [ ] 18. [§22.6.1] MATH-GENTLY (risk-neutral)
-- [ ] 19. [§22.6.2] EXPAND-SCENE (to 800-1,000 words)
-- [ ] 20. [§22.6.2, end] RV beat: scene "A rule is a price, on the short leg" with The Pair box
+- [x] 15. [§22.5] LIST-TO-NARRATIVE + WHEN-TO-APPLY inside the scene — Ines prices the ante row; Act III gains hedged numbers, Bowman, Admati.
+- [x] 16. [§22.5, after the Poker Table] ANOTHER-SEAT (non-bank market maker) — Jane Street notes, Citadel self-report; §22.7 sentence now a pointer.
+- [x] 17. [§22.6 timeline paragraph] LIST-TO-NARRATIVE — Timeline split: index became hedge, singles visible, question open.
+- [x] 18. [§22.6.1] MATH-GENTLY (risk-neutral) — Fire-insurer risk-neutral box; 10% versus 15%, \$90k CVA.
+- [x] 19. [§22.6.2] EXPAND-SCENE (to 800-1,000 words) — Two desk mornings; Ines gives multiple rule at Kaz hedge decision.
+- [x] 20. [§22.6.2, end] RV beat: scene "A rule is a price, on the short leg" with The Pair box — Wen recall call, Pair box, card, Dov moves thesis date, BIS coda.
 - [ ] 21. [§22.7] LIST-TO-NARRATIVE + ANOTHER-SEAT (insurer)
 - [ ] 22. [§22.8.1] MATH-GENTLY + FULL-DERIVATION-MOVE
 - [ ] 23. [§22.8] WHEN-TO-APPLY inside a short scene

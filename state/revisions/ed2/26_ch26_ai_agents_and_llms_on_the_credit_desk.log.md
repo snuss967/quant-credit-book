@@ -10,11 +10,11 @@
 - [x] 8. [26.3, "Where does the reader earn money" items 1-5] LIST-TO-NARRATIVE. — Done: five-item list folded into one day-shaped paragraph; extractions kept.
 - [x] 9. [26.4, claim tuple] MATH-GENTLY #2, "Three lights on one claim." — Done: signature-page box with 10-claim counts; card graded after figure.
 - [x] 10. [26.4, calibration and selective prediction] MATH-GENTLY #3 in two parts. — Done: two-part forecaster and AURC box; equations unchanged below.
-- [ ] 11. [26.5, after Kalai's rule] MATH-GENTLY #4, "When to say I don't know."
-- [ ] 12. [26.5, controls 1-5] LIST-TO-NARRATIVE + SHOP-LIFE (Vantress applied-AI group).
-- [ ] 13. [26.6, arithmetic of chains] MATH-GENTLY #5 + FULL-DERIVATION-MOVE of pass^k proof.
-- [ ] 14. [26.6, verifiers] MATH-GENTLY #6 odds form + FULL-DERIVATION-MOVE retries/Lazarus.
-- [ ] 15. [26.6, bill and frontier / where agents belong] WHEN-TO-APPLY inside Scene A answer; delete standalone paragraph.
+- [x] 11. [26.5, after Kalai's rule] MATH-GENTLY #4, "When to say I don't know." — Done: Ines fold-or-call box, $5,000 and $1,000 against $250.
+- [x] 12. [26.5, controls 1-5] LIST-TO-NARRATIVE + SHOP-LIFE (Vantress applied-AI group). — Done: Vantress holdout week vignette; five controls as days; Marcus.
+- [x] 13. [26.6, arithmetic of chains] MATH-GENTLY #5 + FULL-DERIVATION-MOVE of pass^k proof. — Done: closing-conditions box; proof moved to Full Derivation subsection.
+- [x] 14. [26.6, verifiers] MATH-GENTLY #6 odds form + FULL-DERIVATION-MOVE retries/Lazarus. — Done: odds-form checker box (owner Ch 1); retries derivation moved.
+- [x] 15. [26.6, bill and frontier / where agents belong] WHEN-TO-APPLY inside Scene A answer; delete standalone paragraph. — Done: Ines carries judgment in Scene A; standalone paragraph now pointer.
 - [ ] 16. [26.7] NEW-SCENE, Long Scene B: "ROBO's Forty-Seven Pairs"; Case Study B becomes pointer.
 - [ ] 17. [Scene B, beat 4] The Pair box, PB-16; mark stressed (Ch 26) in ledger.
 - [ ] 18. [26.7] MATH-GENTLY #7, "The best of N coin-flippers," before beat 3.

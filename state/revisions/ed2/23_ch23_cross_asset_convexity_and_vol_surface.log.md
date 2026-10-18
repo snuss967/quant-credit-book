@@ -17,13 +17,13 @@
 - [x] 15. [§23.6, after Scene 1] MATH-GENTLY: persistence, half-life and Sharpe decay — rubber-band box, 6.6/69 days, 0.23/0.071; TW moved to end.
 - [x] 16. [§23.6] The Pair box: Carvana pointer (PB-05) — PB-05 Carvana box; H/I/L/costs; Pair Book row updated.
 - [x] 17. [§23.7] EXPAND-SCENE (Mags) + ANOTHER-SEAT (convertible desk and replicator); Wolfspeed spine — Mags 1999 recall story; Two Sigma/AQR seat box; Wolfspeed spine.
-- [ ] 18. [§23.8 opening] LIST-TO-NARRATIVE
-- [ ] 19. [§23.8 Case Study B] EXPAND-SCENE, LONG SCENE 2: SVB, 8–17 March 2023
-- [ ] 20. [§23.8, after Scene 2] ANOTHER-SEAT (opportunistic credit)
-- [ ] 21. [§23.8 Case Study C] EXPAND-SCENE as the declined pair (CS AT1)
-- [ ] 22. [§23.8 Case Study D] ANOTHER-SEAT (plan sponsor, Hertz)
-- [ ] 23. [§23.9] BRIDGE + one-line gloss
-- [ ] 24. [§23.10 Desk Debrief] Finder table; promote Long Scenes and cards to #### headings
+- [x] 18. [§23.8 opening] LIST-TO-NARRATIVE — one sentence kept; cases arrive as replays with transitions.
+- [x] 19. [§23.8 Case Study B] EXPAND-SCENE, LONG SCENE 2: SVB, 8–17 March 2023 — SVB scene, cards graded, Monday card, tools after scene.
+- [x] 20. [§23.8, after Scene 2] ANOTHER-SEAT (opportunistic credit) — Marks quote, reported holders hedged, inter-company claim question.
+- [x] 21. [§23.8 Case Study C] EXPAND-SCENE as the declined pair (CS AT1) — CS AT1 declined pair scene; Desk Myth kept; ledger line.
+- [x] 22. [§23.8 Case Study D] ANOTHER-SEAT (plan sponsor, Hertz) — plan-sponsor box with 8-K quotes; Hertz numbers kept.
+- [x] 23. [§23.9] BRIDGE + one-line gloss — bridge from SVB/Hertz; Ch 10 gloss replaces imperative.
+- [x] 24. [§23.10 Desk Debrief] Finder table; promote Long Scenes and cards to #### headings — ten-row Finder; objectives folded in; scenes already #### headings.
 
 ## Notes carried between items
 - Item 1 retires the "By the end of this chapter" paragraph; its objectives (Merton/CreditGrades translation and CDS inversion; Carr–Wu unit recovery claim vs CDS; low-strike skew as hazard; spread Greeks and a delta-hedged book; Yu's convergence trade, single trades lose, portfolios earn; why the surface broke in May 2005, March 2023 and 2025–26) go into the Finder table at item 24.

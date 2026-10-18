@@ -13957,5 +13957,166 @@ def forced_pressure(states: Iterable[SeatState], outstanding_face: float,
     return min(total, 1.0)
 ```
 
+## F.8-D: Chapter 8-D: The Pair Book: Long One Credit, Short Another {#code-8d}
+
+Listings from `08_ch08d_the_pair_book_long_one_credit_short_another.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
+
+
+### Listing 8-D.1: pair_book.py (Chapter 8-D): rulers, jumps, the stop, the borrow and the ledger row for one pair {#code-8d-1}
+
+```python
+"""pair_book.py (Chapter 8-D): rulers, jumps, the stop, the borrow and the ledger row for one pair."""
+from dataclasses import dataclass
+import numpy as np
+
+try:  # the book's one copy of the DTS arithmetic (Chapter 8, section 8.9)
+    from ido_engine import dts, dts_pair_hedge
+except ImportError:
+    def dts(D_spr, oas):
+        if np.any(np.asarray(oas, dtype=float) <= 0.0):
+            raise ValueError("non-positive spread: DTS undefined")
+        return np.asarray(D_spr, dtype=float) * np.asarray(oas, dtype=float)
+
+    def dts_pair_hedge(dts_long, dts_short):
+        return float(dts_long / dts_short)
+
+LIQUID_CDS = {"GM", "F"}  # illustrative stand-in for the ~100 regularly traded US names
+LOG = []
+
+
+@dataclass
+class Leg:
+    name: str
+    instrument: str        # 'bond' or 'cds' (index, etf, future, equity: same fields)
+    mv: float              # $mm market value; for a CDS, notional
+    price: float           # per 100 (a CDS leg uses 100)
+    spread: float          # decimal: Z-spread for a bond, par spread for a CDS
+    spr_dur: float         # years
+    recovery: float        # fraction of par
+    reference: str = ""    # CDS reference entity
+
+
+@dataclass
+class ShortCost:
+    lender: object = None          # None: nobody lends it
+    fee: float = 0.0               # decimal a year on short market value
+    inventory: float = 0.0         # lender's lendable market value, $mm
+    share_limit: float = 0.20      # the pod's cap on its share of that inventory
+    expected_recall: float = 0.0   # $mm the weather says is coming back
+    financing: float = 0.0         # decimal a year on the long, net of rebate
+    half_spread_bp: float = 0.0    # per leg, per trade
+    hold_years: float = 0.25
+    coupon: float = 0.0            # CDS standard coupon, decimal
+    upfront_pts: float = 0.0       # CDS upfront paid by the protection buyer, points
+
+
+def ratio(L, S, ruler, beta_L=None, beta_S=None, load_L=None, load_S=None, f_vol=None):
+    """Dollars of short per dollar of long, and the ruler actually used."""
+    if L.price < 70 or S.price < 70:
+        LOG.append(f"{L.name}/{S.name}: a leg trades on price; ruler set to market value")
+        return 1.0, "market_value"
+    h_dts = dts_pair_hedge(dts(L.spr_dur, L.spread), dts(S.spr_dur, S.spread))
+    if ruler == "dv01":
+        return L.spr_dur / S.spr_dur, ruler
+    if ruler == "dts":
+        return h_dts, ruler
+    if ruler in ("beta", "beta_adj"):
+        if ruler == "beta_adj":  # Ben Dor's adjusted beta, (1 + beta) / 2
+            beta_L, beta_S = (1 + beta_L) / 2, (1 + beta_S) / 2
+        if abs(beta_S) < 0.1:
+            LOG.append(f"{S.name}: trailing beta {beta_S:.2f} near zero; shrunk to DTS")
+            return h_dts, "dts"
+        return (beta_L / beta_S) * L.spr_dur / S.spr_dur, ruler
+    if ruler == "factor":  # least factor variance; equals DTS with one relative-spread factor
+        bL, bS, v = (np.asarray(x, dtype=float) for x in (load_L, load_S, f_vol))
+        return float(np.sum(bL * bS * v**2) / np.sum(bS**2 * v**2)), ruler
+    raise ValueError(f"unknown ruler {ruler}")
+
+
+def pnl(L, S, h, ds_L_bp, ds_S_bp):
+    """$mm P&L of the long L.mv and the short h * L.mv for spread moves in bp."""
+    return -L.spr_dur * ds_L_bp * 1e-4 * L.mv + S.spr_dur * ds_S_bp * 1e-4 * h * L.mv
+
+
+def scenarios(L, S, h, rel=0.10, parallel=10.0, idio_L=-15.0, idio_S=10.0):
+    sL, sS = L.spread * 1e4, S.spread * 1e4
+    return {"market_relative": pnl(L, S, h, rel * sL, rel * sS),
+            "parallel": pnl(L, S, h, parallel, parallel),
+            "idio_long": pnl(L, S, h, idio_L, 0.0),
+            "idio_short": pnl(L, S, h, 0.0, idio_S)}
+
+
+def jump_table(L, S, h, capital):
+    """Loss at default per leg ($mm), expected jump under Q, worst case / capital."""
+    loss_L = L.mv / (L.price / 100) * (L.price / 100 - L.recovery)
+    face_S = h * L.mv / (S.price / 100)
+    gain_S = face_S * (S.price / 100 - S.recovery) if S.instrument == "bond" else face_S * (1 - S.recovery)
+    lam_L, lam_S = L.spread / (1 - L.recovery), S.spread / (1 - S.recovery)  # Q intensities
+    return {"long_defaults": -loss_L, "short_defaults": gain_S,
+            "expected_Q": lam_S * gain_S - lam_L * loss_L, "worst_share": loss_L / capital}
+
+
+def max_long(L, S, h, budget, cost):
+    """Largest long ($mm MV) allowed by the stop and by the borrow; the smaller binds."""
+    if S.instrument == "bond" and cost.lender is None:
+        return {"status": "declined", "reason": "no lender: no short leg"}
+    stop = budget / ((L.price / 100 - L.recovery) / (L.price / 100))
+    borrow = np.inf
+    if S.instrument == "bond":
+        borrow = (cost.share_limit * cost.inventory - cost.expected_recall) / h
+    elif S.reference not in LIQUID_CDS:
+        LOG.append(f"{S.reference}: CDS outside the liquid set; basis unquoted")
+    size = min(stop, borrow)
+    return {"status": "ok", "stop": stop, "borrow": borrow, "size": size,
+            "binds": "stop" if stop <= borrow else "borrow"}
+
+
+def carry_friction(L, S, h, cost):
+    """$mm a year: spread carry, then the friction lines (both legs, in and out)."""
+    short = h * L.mv
+    if S.instrument == "cds":
+        short_cost, fee = (cost.coupon + cost.upfront_pts / 100 / S.spr_dur) * short, 0.0
+    else:
+        short_cost, fee = S.spread * short, cost.fee * short
+    trading = 2 * cost.half_spread_bp * 1e-4 * (L.mv + short) / cost.hold_years
+    return {"carry": L.spread * L.mv - short_cost, "fee": -fee,
+            "financing": -cost.financing * L.mv, "trading": -trading}
+
+
+def capture(idio, leak, friction):
+    return (idio + leak + friction) / idio
+
+
+def ledger_row(pid, thesis, L, S, h, ruler, cost, kappa=None, leaked=""):
+    short_leg = (f"{S.name}, {cost.lender}, fee {cost.fee * 1e4:.0f} bp" if S.instrument == "bond"
+                 else f"{S.reference} CDS, {S.spread * 1e4:.0f} bp par on {cost.coupon * 1e4:.0f} bp coupon")
+    return {"id": pid, "thesis": thesis, "long": L.name, "short": short_leg,
+            "ruler": ruler, "ratio": round(h, 2), "capture": kappa, "leaked": leaked}
+
+
+# ---- Self-checks: the chapter's numbers --------------------------------------------
+F = Leg("Ford Credit", "bond", 40.0, 95.0, 0.0180, 4.5, 0.40)
+G = Leg("GM Financial", "bond", 60.0, 98.0, 0.0120, 4.5, 0.40)
+assert np.isclose(ratio(F, G, "dv01")[0], 1.00) and np.isclose(ratio(F, G, "dts")[0], 1.50)
+assert np.isclose(ratio(F, G, "beta", 1.5, 0.7)[0], 2.142857, atol=1e-6)
+assert ratio(F, G, "beta", 1.5, 0.05)[1] == "dts"                                  # shrunk, logged
+sc = scenarios(F, G, 2.142857)
+assert np.isclose(scenarios(F, G, 1.0)["market_relative"], -0.108) and np.isclose(sc["parallel"], 0.2057, atol=1e-3)
+jt = jump_table(F, G, 1.5, 400.0)
+assert np.isclose(jt["long_defaults"], -23.158, atol=1e-3) and np.isclose(jt["short_defaults"], 35.510, atol=1e-3)
+assert np.isclose(jt["expected_Q"], 0.0155, atol=1e-4)                                # about +$15k a year
+F_now = Leg("Ford Credit", "bond", 40.0, 95.0, 0.0180, 4.5, 0.40)
+sz = max_long(F_now, G, 1.5, 13.0, ShortCost("agent lender", 0.0070, 300.0, 0.20, 20.0))
+assert np.isclose(sz["stop"], 22.45, atol=0.01) and np.isclose(sz["borrow"], 26.67, atol=0.01)
+assert sz["binds"] == "stop"
+assert max_long(F_now, G, 1.5, 13.0, ShortCost(None))["status"] == "declined"
+assert ratio(Leg("Ford Credit", "bond", 25.0, 60.0, 0.20, 3.0, 0.40), G, "dts")[1] == "market_value"
+cds = Leg("GM 5y", "cds", 0.0, 100.0, 0.0110, 4.5, 0.40, reference="GM")
+h_cds = ratio(Leg("Ford Credit", "bond", 22.5, 95.0, 0.0180, 4.5, 0.40), cds, "dts")[0]
+assert np.isclose(22.5 * h_cds, 36.82, atol=0.01)                                      # §8D.7
+assert np.isclose(capture(0.162, -0.0578, -0.0458), 0.3605, atol=1e-3)                 # §8D.6
+print("pair_book.py: all chapter checks pass")
+```
+
 
 <!-- STATUS: COMPLETE -->

@@ -13,11 +13,11 @@
 - [x] 11. [§20.4.1–20.4.2] LIST-TO-NARRATIVE. — Ines reads basket against holdings; Mags sources client bond; CHECK hedged.
 - [x] 12. [§20.4.3] MATH-GENTLY + FULL-DERIVATION-MOVE. — Pegs-springs-band box; (20.6),(20.7) up front; derivation below; PT pointer.
 - [x] 13. [new #### after §20.4.3] NEW-SCENE, Long Scene 1: Eight April 2025. — Replay: PT, refused basket, card graded, Virtu coda.
-- [ ] 14. [§20.5] NEW-SCENE, Long Scene 2: Nineteen March 2020.
-- [ ] 15. [§20.6] EXPAND-SCENE + MATH-GENTLY + arithmetic fix.
-- [ ] 16. [§20.6.2] BRIDGE + ANOTHER-SEAT line.
-- [ ] 17. [§20.7, before the Spec] SHOP-LIFE vignette.
-- [ ] 18. [§20.7] LIST-TO-NARRATIVE.
-- [ ] 19. [§20.8 Desk Debrief] Finder table.
-- [ ] 20. [whole chapter] WHEN-TO-APPLY inside scenes.
+- [x] 14. [§20.5] NEW-SCENE, Long Scene 2: Nineteen March 2020. — 12 Mar recalled; three readings; cards; tape; Fed; graded; two seats.
+- [x] 15. [§20.6] EXPAND-SCENE + MATH-GENTLY + arithmetic fix. — Assignment clause read aloud; SRLN anchor; drunk box; 4.3% fixed.
+- [x] 16. [§20.6.2] BRIDGE + ANOTHER-SEAT line. — Zito PRIV quote; CLO ETFs $50bn, JAAA $30bn; CHECKs hedged.
+- [x] 17. [§20.7, before the Spec] SHOP-LIFE vignette. — Noor reconciles +14/−22 bp; restated basket; nav_convention fix.
+- [x] 18. [§20.7] LIST-TO-NARRATIVE. — Three warnings now one paragraph; all contents kept.
+- [x] 19. [§20.8 Desk Debrief] Finder table. — Eight-row Finder: equation, box, scene, Listing 20.1 block.
+- [x] 20. [whole chapter] WHEN-TO-APPLY inside scenes. — Band, staleness, psi, QP, runway judged by characters in scenes.
 - [ ] 21. [whole chapter] CHECK hygiene.
