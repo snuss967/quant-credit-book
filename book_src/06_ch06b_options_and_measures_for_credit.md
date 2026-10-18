@@ -864,3 +864,33 @@ print(_self_test())
 > **Ways This Blows Up.** `1 - norm_cdf(9)` is exactly 0.0 in double precision and `norm_cdf(-9)` is not, so every tail is computed on its small side. `bs_greeks` returns vega per 1.00 of vol and the risk report shows it per point: the factor of 100 is the commonest unit bug in vol code.
 
 Used in: §8.3 and §8.8 (bond-to-equity sensitivities), §11.3 (structural PDs, tagged $\mathbb{P}$), §15.2–15.3 (`Q_nominal` digitals), §16.3–16.4 (backstops and warrants), §21.4 (pool Greeks), §23.2–23.5 (the surface engine imports `jtd_price`, `hazard_from_put` and `implied_vol`), §28.4.
+
+## 6-B.10 Desk Debrief
+
+- **Write the payoff before you price it.** Every clause is a call, a put or a digital; the capital structure is a ladder of call spreads, and the fulcrum is the one at the money. (Law 8)
+- **$N(d_2)$ is a price, not a forecast.** Replication deletes the drift, and $\mathbb{Q}$ is the second derivative of the price list. (Law 4)
+- **Theta is the rent you pay for gamma.** A hedged option earns $\tfrac12\Gamma S^2(\sigma_r^2-\sigma_i^2)$; high yield collects the rent and pays the bill in the bad weeks. (Law 6)
+- **A put on a defaultable stock is $K$ unit recovery claims plus a diffusive put at $r+\lambda$.** Carr–Wu is that sentence with the leak set to zero, and the wing's implied vol must clear (6B.3). (Law 6)
+- **Risk-neutral survival is physical survival to the power $\xi$.** Store $\xi$ per issuer as a time series; it moves tenfold over a cycle. (Law 4)
+- **Price in $\mathbb{Q}$, hedge and size in $\mathbb{P}$, and tag both.** An untagged PD is a bug, and `Q_nominal` is a confession. (Law 4)
+- **The put chain prices the hazard without a recovery, so bond plus puts identifies the recovery.** That is where the RSSG edge lives (§6-B.8). (Laws 4, 7)
+
+**The Spec You Hand the Robot.** "Implement `credit_options.py` per §6-B.9: Black–Scholes prices and Greeks with `erfc` tails; a bracketed Newton implied-vol solver returning `(sigma, status)`, NaN with a reason outside no-arbitrage bounds; Merton debt Greeks; the jump-to-default call and put (6B.1), European and American unit recovery claims, corridor leak and bound (6B.2), hazard from a put, wing floor (6B.3); a min-variance jump hedge that takes $\lambda^{\mathbb{P}}$; the spread decomposition (6B.5); and a `MeasuredPD` that refuses $\mathbb{Q}\to\mathbb{Q}$. Annual decimals, years. Tests: parity, the §6.2.4 firm, $\lambda=0$ reduction, Monte Carlo within four standard errors at seed 6."
+
+### Exercises
+
+1. *(Payoffs.)* Write Larkspur Foam's first-lien loan, second-lien notes and equity as call spreads on $V_T$. Insert a super-priority uptier tranche at $a=0$ and show which tranche's delta rises most. Which tranche did the Ad Hoc Group just become?
+2. *(Measures.)* A screen shows a "CDS-implied PD" of 9% at 40% recovery beside a 4% agency default rate for the bucket. Compute the naive $\xi$, give three reasons it is not a premium ratio (recovery convention, $\lambda_D$, liquidity), and explain to ROBO in one sentence why `to_q` raised.
+3. *(Corridors.)* With (6B.2), find the largest strike on a \$6 stock at 80% vol whose corridor leak is under 1% of $U^{\text{Eur}}$ at $\lambda=14.5\%$. Repeat at 40% vol. Why do low-vol names make better corridor instruments, and why is that exactly when nobody wants their puts?
+4. *(Kaz hedges.)* Kaz proposes offsetting the cold open's −\$41k of vega with equity calls on all forty-one issuers, "because calls are long vega." Using §6-B.1.4 and §6-B.5.3, say what this hedges, what it does not, and what happens on the day an uptier crushes the bonds while the stocks rally.
+
+### Deep-Dive Resource Graph
+
+- **Podcasts:** *Flirting with Models* (Corey Hoffstein), Season 2 Episode 2, Benn Eifert on volatility investing (30 May 2019; official page not verified, so no link). Bloomberg *Odd Lots*, Benn Eifert on short-dated options and buffer ETFs (title not verified, no link).
+- **Practitioner Writing:** OptionMetrics research note on Carr and Wu, https://optionmetrics.com/research/p-carr-and-l-wu-a-simple-robust-link-between-american-puts-and-credit-insurance ; Federal Reserve Bank of New York Staff Report 577 (which summarizes the risk-neutral versus physical intensity evidence), https://www.newyorkfed.org/medialibrary/media/research/staff_reports/sr577.html ; Natenberg, *Option Volatility and Pricing* (book).
+- **Academic Papers:** Black and Scholes (1973), *The Pricing of Options and Corporate Liabilities*, JPE; Merton (1976), *Option Pricing When Underlying Stock Returns Are Discontinuous*, JFE; Cox, Ross and Rubinstein (1979), *Option Pricing: A Simplified Approach*, JFE; Breeden and Litzenberger (1978), *Prices of State-Contingent Claims Implicit in Option Prices*, Journal of Business; Brenner and Subrahmanyam (1988), *A Simple Formula to Compute the Implied Standard Deviation*, FAJ; Lee (2004), *The Moment Formula for Implied Volatility at Extreme Strikes*, Mathematical Finance; Jarrow, Lando and Yu (2005), *Default Risk and Diversification: Theory and Empirical Implications*, Mathematical Finance; Driessen (2005), *Is Default Event Risk Priced in Corporate Bonds?*, RFS 18(1), https://ideas.repec.org/a/oup/rfinst/v18y2005i1p165-195.html ; Carr and Wu (2011), *A Simple Robust Link Between American Puts and Credit Protection*, RFS 24(2), https://ideas.repec.org/a/oup/rfinst/v24y2011i2p473-505.html ; Berndt, Douglas, Duffie and Ferguson (2018), *Corporate Credit Risk Premia*, NBER Working Paper 24213, https://www.nber.org/papers/w24213.pdf
+- **Data & Code:** `credit_options.py` (§6-B.9); OPRA, the consolidated feed for listed US options, https://www.opraplan.com ; SEC EDGAR for capital structures, https://www.sec.gov/edgar
+
+Used in: every chapter that prices an option or quotes a hazard; the Desk Debrief bullets feed App E (Laws 4, 6, 7, 8) and the front-matter *Tape to Your Monitor*.
+
+<!-- STATUS: COMPLETE -->
