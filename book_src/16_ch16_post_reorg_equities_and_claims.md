@@ -127,7 +127,9 @@ The total abnormal return available to a buyer at $t_0$ is the initial discount 
 $$\dot Q_s = Q_0\,\alpha\,e^{-\alpha s} - \theta\,Q_s \quad\Longrightarrow\quad Q_s = \frac{Q_0\,\alpha}{\theta - \alpha}\left(e^{-\alpha s} - e^{-\theta s}\right), \qquad \theta \neq \alpha .$$
 (Verify by substitution: $\dot Q_s + \theta Q_s = \frac{Q_0\alpha}{\theta-\alpha}\left[(\theta - \alpha)e^{-\alpha s}\right] = Q_0\alpha e^{-\alpha s}$.) The overhang, and with constant capital the discount, peaks where inflow equals outflow, $\dot Q_s = 0$:
 $$-\alpha e^{-\alpha s^{*}} + \theta e^{-\theta s^{*}} = 0 \quad\Longrightarrow\quad s^{*} = \frac{\ln(\theta/\alpha)}{\theta - \alpha},$$
-with the limit $s^{*} = 1/\theta$ when $\theta = \alpha$. The peak is always *after* the event, which is the second fact in Ben Dor's paragraph, and its timing tells you the ratio of two speeds that you can estimate separately: how fast shares are delivered (from the claims agent's distribution notices) and how fast constrained holders sell (from volume and holdings filings).
+with the limit $s^{*} = 1/\theta$ when $\theta = \alpha$. The peak is always *after* the event, which is the second fact in Ben Dor's paragraph, and its timing tells you the ratio of two speeds that you can estimate separately: how fast shares are delivered (from the claims agent's distribution notices) and how fast constrained holders sell (from volume and holdings filings). Figure 16.1 plots both cases for the cold open's parameters.
+
+![Figure 16.1: When shares reach constrained holders over weeks, the liquidity discount troughs about 2.9 months after the event rather than on day zero, so buying the open means buying before the worst price. Illustrative: the §16.2.2 two-compartment model with θ = 3.4 per year, α = 5 per year and κQ₀/M = 15%.](assets/figures/ch16_overhang_delivery_lag.png)
 
 Kaz, reading over Theo's shoulder, says this is "just a two-compartment pharmacokinetic model, the kind used for a drug dose moving from the gut into the bloodstream." Kaz is right, and we will let Kaz have this one, because the analogy is exact: the plan is the dose, the CLO is the gut, the market is the bloodstream, and the alpha is the side effect.
 
@@ -233,7 +235,9 @@ Now vary the two inputs nobody negotiates in public:
 | 25% ($K = 0.75\,x_0$) | ≈ 3.0% | ≈ 6.3% |
 | 50% ($K = 0.50\,x_0$) | ≈ 0.3% | ≈ 1.6% |
 
-*(Illustrative: $\sigma = 0.70$, dilution factor 0.64, zero rate; the code below reproduces the table.)* The table makes the chapter's central point about backstops. **The fee and the discount are substitutes.** A deep discount makes the put nearly worthless, because the equity would have to fall by half before the backstop lost a dollar. A backstop party that receives a 50% discount *and* a 10% fee is being paid twice for one risk, and the second payment is the larger one.
+*(Illustrative: $\sigma = 0.70$, dilution factor 0.64, zero rate; the code below reproduces the table.)* The table makes the chapter's central point about backstops. **The fee and the discount are substitutes.** A deep discount makes the put nearly worthless, because the equity would have to fall by half before the backstop lost a dollar. A backstop party that receives a 50% discount *and* a 10% fee is being paid twice for one risk, and the second payment is the larger one. Figure 16.2 draws the two payoffs and the fee curve behind the table.
+
+![Figure 16.2: The rights are a call and the backstop is a short put (left), and the fair fee for selling that put falls from 12.5% of the raise at no discount to 1.6% at a 50% discount for a six-month window (right). Illustrative: Black–Scholes put with σ = 70%, zero rate and Hertz's dilution factor 0.64 from §16.3.2 (left panel: K = 0.75 and m/(n₀ + m) = 0.36); the 6% line is the Seth (2025) average hedge-fund fee and the 10% line is the Hertz fee (Hertz 8-K/A, 14 May 2021).](assets/figures/ch16_backstop_put_and_fee.png)
 
 **The all-in transfer.** The backstop party's take has four legs, not one:
 $$\Pi^{\text{BP}} = \underbrace{f\,m\,S^{\text{post}}}_{\text{fee, paid in shares}} \;+\; \underbrace{a\,m\,(S^{\text{post}} - K)}_{\text{reserved allocation at a discount}} \;+\; \underbrace{(1-a)\,\eta\,m\,(S^{\text{post}} - K)^{+}}_{\text{exclusivity option}} \;-\; \underbrace{N_{\text{eff}}\,(K - x)^{+}}_{\text{the put}},$$
@@ -399,7 +403,9 @@ This is Black–Scholes bookkeeping with $\mathcal{V}/\mathcal{C}$ in the role o
 $$\mathbb{E}[R] = \Phi(a) + \frac{\mathcal{V}}{m_{\mathcal{C}}}\,e^{s^2}\,\Phi(-a - s).$$
 At $\mathcal{V} = m_{\mathcal{C}}$ (the class is covered *on average*) and $s = 0.30$: $a = 0.15$ and $\mathbb{E}[R] \approx 0.5596 + 1.0942 \times 0.3264 \approx 0.917$ *(illustrative)*. More than eight points of recovery disappear purely because the denominator is uncertain, even though the expected pool exactly equals the value available. That is the cap at work: when the pool comes in small you cannot recover more than par, and when it comes in large you lose.
 
-**Jensen cuts both ways.** Now take a deeply impaired class, $\mathcal{V}/m_{\mathcal{C}} = 0.30$, with the same $s$. The cap almost never binds, and the reciprocal $1/\mathcal{C}$ is *convex*, so variance helps: the formula gives $\mathbb{E}[R] \approx 0.328 > 0.30$. Near par, pool uncertainty is a cost; deep out of the money, it is a (small) gift. The desk must know which side of the kink a class sits on before it decides whether it wants to own the uncertainty or sell it.
+**Jensen cuts both ways.** Now take a deeply impaired class, $\mathcal{V}/m_{\mathcal{C}} = 0.30$, with the same $s$. The cap almost never binds, and the reciprocal $1/\mathcal{C}$ is *convex*, so variance helps: the formula gives $\mathbb{E}[R] \approx 0.328 > 0.30$. Near par, pool uncertainty is a cost; deep out of the money, it is a (small) gift. The desk must know which side of the kink a class sits on before it decides whether it wants to own the uncertainty or sell it. Figure 16.3 draws the kink.
+
+![Figure 16.3: With a random claims pool, expected recovery sits below the no-uncertainty line when the class is covered on average (0.917 at V/m = 1) and above it when the class is deeply impaired (0.328 at V/m = 0.30), and a wider pool widens both effects. Illustrative: the closed form of §16.5.3 with a lognormal pool, s = 0.30 and s = 0.60.](assets/figures/ch16_claim_recovery_pool_risk.png)
 
 **Pricing the claim.** With allowance probability $p_A$, an effective date $T$ that arrives at hazard rate $h$ per year (so $T$ is exponential with mean $1/h$ and independent of $R$), a discount rate $r$ and an illiquidity premium $\psi$, the expected discount factor is
 $$\mathbb{E}\!\left[e^{-(r+\psi)T}\right] = \int_0^\infty h\,e^{-ht}\,e^{-(r+\psi)t}\,dt = \frac{h}{h + r + \psi},$$
@@ -447,7 +453,9 @@ Use it to bid on claims in classes whose pool you can bound, and to size the 503
 
 ## 16.6 Case Study: Hertz 2020–2026, the Whole Circuit
 
-Hertz is the only case we know of that runs every instrument in this chapter through one company: equity trading during bankruptcy, a competitive plan auction, a rights offering with a backstop, 30-year warrants, a re-IPO, a solvent-debtor fight over post-petition interest, and then, five years later, a return to the liability-management zone. Read the docket as a sequence of option exercises.
+Hertz is the only case we know of that runs every instrument in this chapter through one company: equity trading during bankruptcy, a competitive plan auction, a rights offering with a backstop, 30-year warrants, a re-IPO, a solvent-debtor fight over post-petition interest, and then, five years later, a return to the liability-management zone. Read the docket as a sequence of option exercises. Figure 16.4 puts the dates on one axis.
+
+![Figure 16.4: Hertz's 2020–2026 docket on one axis (top), and the three prices in the chapter's record against the \$13.80 warrant strike (bottom): the warrants were in the money at the \$29 re-IPO and sit far out of the money at about \$3. Source: Hertz 8-K/A (14 May 2021) and 8-K (7 Jul 2021), Hertz press release (8 Nov 2021), Third Circuit opinion No. 23-1169 (10 Sep 2024), and the June and October 2026 press reports cited in §16.6; the June 2026 date and price are approximate.](assets/figures/ch16_hertz_timeline.png)
 
 > **Docket Diary.** *Hertz, 2020–2026 (sourced from the SEC filings, the Third Circuit opinion and press reports noted; approximate figures marked).*
 > - **22 May 2020.** The Hertz Corporation and affiliates file for Chapter 11 in Delaware after the pandemic shut down car rental.
@@ -498,7 +506,9 @@ where $L_t$ is unrestricted liquidity (after holdbacks), $B_t$ is projected week
 
 Combine §16.1's Trend Watch with §16.7's left tail. Over a 200-day horizon a single post-reorg equity's return $R$ is roughly a lognormal with median zero and mean +40% (the Jiang–Wang–Yang shape) with a jump to $-100\%$ mixed in (the Spirit shape). Write $X \sim N(0, s^2)$ and a jump indicator $J$ with $\Pr(J=1) = p_J$:
 $$R = (1 - J)\left(e^{X} - 1\right) - J, \qquad \mathbb{E}[e^X] = e^{s^2/2} = 1.4 \;\Rightarrow\; s = \sqrt{2\ln 1.4} \approx 0.82 .$$
-Then $\mathbb{E}[R] = (1-p_J)(1.4) - 1$, which is +33% for $p_J = 5\%$ *(illustrative)*, while the median is slightly *negative*: solving $p_J + (1-p_J)\Phi(\ln(1+m)/s) = \tfrac12$ gives $m \approx -5\%$. **The typical single name loses money; the average name makes a third.** That is the sentence to tape to the monitor before anyone proposes a concentrated post-reorg book.
+Then $\mathbb{E}[R] = (1-p_J)(1.4) - 1$, which is +33% for $p_J = 5\%$ *(illustrative)*, while the median is slightly *negative*: solving $p_J + (1-p_J)\Phi(\ln(1+m)/s) = \tfrac12$ gives $m \approx -5\%$. **The typical single name loses money; the average name makes a third.** That is the sentence to tape to the monitor before anyone proposes a concentrated post-reorg book. Figure 16.5 shows the single-name distribution beside a 20-name book.
+
+![Figure 16.5: A single post-reorg name has a mean return of +33% but a median of −5%, while an equal-weighted book of 20 names has a median of +29%, close to its mean, so the premium is a portfolio property. Illustrative: 400,000 simulated draws per panel from the §16.8.1 jump-lognormal mixture (s = 0.82, jump probability 5%, seed 16); the right panel groups them into 20,000 books of 20 names.](assets/figures/ch16_post_reorg_return_distribution.png)
 
 Diversification turns the mean into the median. For an equal-weighted book of $N$ independent names, the book return has the same mean, standard deviation reduced by $\sqrt N$, and skewness reduced by $\sqrt N$, so its median moves toward its mean. With $N = 20$ (about the size of Jiang, Wang & Yang's portfolio) the median book return is comfortably positive, as Block 5 confirms by simulation.
 

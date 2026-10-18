@@ -45,7 +45,7 @@ def _box(ax, cx, cy, w, h, text, sub=None, fs=9.5):
     ax.text(cx, cy + (0.12 if sub else 0), text, ha="center", va="center", fontsize=fs, color=INK,
             fontweight="bold", zorder=3)
     if sub:
-        ax.text(cx, cy - 0.27, sub, ha="center", va="center", fontsize=7.5, color=INK_2, zorder=3)
+        ax.text(cx, cy - 0.27, sub, ha="center", va="center", fontsize=8, color=INK_2, zorder=3)
 
 
 def _arrow(ax, p0, p1, color):
@@ -68,10 +68,10 @@ def fig_wrapper_flows():
 
     # market shading
     ax.add_patch(Rectangle((3.7, 2.5), 6.3, 2.6, facecolor="#f9f8f6", edgecolor="none", zorder=0))
-    ax.text(9.92, 5.02, "Primary market: creation units, in kind or cash", ha="right", va="top", fontsize=8,
+    ax.text(9.92, 5.02, "Primary market: creation units, in kind or cash", ha="right", va="top", fontsize=8.2,
             color=MUTED, style="italic")
     ax.add_patch(Rectangle((3.7, 0.05), 6.3, 2.35, facecolor="#f9f8f6", edgecolor="none", zorder=0))
-    ax.text(9.92, 0.12, "Secondary market: shares among investors", ha="right", va="bottom", fontsize=8,
+    ax.text(9.92, 0.12, "Secondary market: shares among investors", ha="right", va="bottom", fontsize=8.2,
             color=MUTED, style="italic")
 
     _box(ax, xb, yc, bw, bh, "Bond market", "dealers, RFQ, TRACE")
@@ -82,9 +82,9 @@ def fig_wrapper_flows():
     # Bond market <-> AP
     x0, x1 = xb + bw / 2 + 0.08, xa - bw / 2 - 0.08
     _arrow(ax, (x0, yc + 0.28), (x1, yc + 0.28), C_CREATE)
-    ax.text((x0 + x1) / 2, yc + 0.40, "buy bonds\nat the offer", ha="center", va="bottom", fontsize=7.8, color=INK_2)
+    ax.text((x0 + x1) / 2, yc + 0.40, "buy bonds\nat the offer", ha="center", va="bottom", fontsize=8.2, color=INK_2)
     _arrow(ax, (x1, yc - 0.28), (x0, yc - 0.28), C_REDEEM)
-    ax.text((x0 + x1) / 2, yc - 0.40, "sell bonds\nat the bid", ha="center", va="top", fontsize=7.8, color=INK_2)
+    ax.text((x0 + x1) / 2, yc - 0.40, "sell bonds\nat the bid", ha="center", va="top", fontsize=8.2, color=INK_2)
 
     # AP <-> Fund: creation (blue) on top, redemption (orange) below; each label sits just above its arrow
     x0, x1 = xa + bw / 2 + 0.08, xf - bw / 2 - 0.08
@@ -95,14 +95,14 @@ def fig_wrapper_flows():
              (yc - 0.80, "redemption basket", False, C_REDEEM)]
     for y, txt, to_fund, col in lanes:
         _arrow(ax, (x0, y) if to_fund else (x1, y), (x1, y) if to_fund else (x0, y), col)
-        ax.text(xm, y + 0.07, txt, ha="center", va="bottom", fontsize=7.6, color=INK_2)
+        ax.text(xm, y + 0.07, txt, ha="center", va="bottom", fontsize=8.2, color=INK_2)
 
     # AP <-> Exchange (vertical)
     y0, y1 = yc - bh / 2 - 0.08, ye + 0.95 / 2 + 0.08
     _arrow(ax, (xa - 0.45, y0), (xa - 0.45, y1), C_CREATE)
-    ax.text(xa - 0.60, (y0 + y1) / 2, "sell the new\nshares", ha="right", va="center", fontsize=7.8, color=INK_2)
+    ax.text(xa - 0.60, (y0 + y1) / 2, "sell the new\nshares", ha="right", va="center", fontsize=8.2, color=INK_2)
     _arrow(ax, (xa + 0.45, y1), (xa + 0.45, y0), C_REDEEM)
-    ax.text(xa + 0.60, (y0 + y1) / 2, "buy shares\nthat are cheap", ha="left", va="center", fontsize=7.8, color=INK_2)
+    ax.text(xa + 0.60, (y0 + y1) / 2, "buy shares\nthat are cheap", ha="left", va="center", fontsize=8.2, color=INK_2)
 
     # legend (patches)
     ax.add_patch(Rectangle((0.2, 1.72), 0.32, 0.14, facecolor=C_CREATE, zorder=3))
@@ -121,8 +121,8 @@ def fig_arbitrage_band():
     xmin, xmax = -118, 92
     rows = [
         # y, label, lo, hi
-        (0.9, "High-yield fund\n(c\u0304 30 bp, c$^R$ 45 bp)", -21, 66),
-        (0.0, "Investment-grade fund\n(c\u0304 8 bp, c$^R$ 10 bp)", -6, 20),
+        (0.9, "High-yield fund\n($\\bar{c}$ = 30 bp, $c^R$ = 45 bp)", -21, 66),
+        (0.0, "Investment-grade fund\n($\\bar{c}$ = 8 bp, $c^R$ = 10 bp)", -6, 20),
     ]
     h = 0.34
     for y, _lab, lo, hi in rows:
@@ -245,7 +245,7 @@ def fig_march2020_tape(refresh=False):
 
     events = [(dt.datetime(2020, 3, 23), "Mar 23\nSMCCF announced", "right"),
               (dt.datetime(2020, 4, 9), "Apr 9\nHY ETFs added", "left"),
-              (dt.datetime(2020, 5, 12), "May 12\nETF buying starts", "left")]
+              (dt.datetime(2020, 5, 12), "May 12\nETF buying starts", "right")]
     for x, txt, ha in events:
         for ax_ in (a, b):
             ax_.axvline(x, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
@@ -287,7 +287,7 @@ def fig_sleeve_runway():
                (10.0, SEQ_BLUE_STEPS[11], "10% sleeve")]
     t = np.linspace(0, 6, 301)
     for ax, R, ttl in ((axes[0], 2.1, "Steady outflow, 2.1% of fund a week\nsleeve must exceed 5.0%"),
-                       (axes[1], 4.2, "Concentrated outflow, 4.2% a week\nsleeve must exceed 10.1%")):
+                       (axes[1], 4.2, "Double the pace, 4.2% of fund a week\nsleeve must exceed 10.1%")):
         ax.axhspan(-9, 0, color="#faf0ed", zorder=0)
         ax.axhline(0, color=INK_2, linewidth=0.9, zorder=2)
         ax.axvline(Lw, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
@@ -303,14 +303,13 @@ def fig_sleeve_runway():
                 ax.plot([tx], [0], "o", markerfacecolor="white", markeredgecolor=STATUS["critical"], markersize=6.5,
                         markeredgewidth=1.6, zorder=6)
         ax.set_title(ttl, fontsize=8.6, loc="left")
-        ax.set_xlim(0, 6)
         ax.set_xlim(0, 7.3)
         ax.set_xticks([0, 1, 2, 3, 4, 5, 6])
         ax.set_ylim(-9, 10.8)
         ax.set_xlabel("Weeks after redemptions start")
         ax.annotate("loan sales\nsettle", (Lw, 10.6), xytext=(3, 0), textcoords="offset points", ha="left", va="top",
-                    fontsize=7.6, color=MUTED)
-        ax.text(0.08, -8.2, "shortfall: credit line draws", fontsize=7.6, color=INK_2, va="center")
+                    fontsize=8, color=MUTED)
+        ax.text(0.08, -8.2, "shortfall: credit line draws", fontsize=8, color=INK_2, va="center")
     axes[0].set_ylabel("Liquidity sleeve left (% of fund)")
     axes[0].set_yticks([-5, 0, 5, 10])
     # legend for the marker, once

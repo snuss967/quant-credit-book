@@ -54,7 +54,8 @@ def fig_overhang_delivery_lag():
     ax.set_xticks(range(0, 13, 2))
     ax.set_xlabel("Months since the effective date or lock-up expiry")
     ax.set_ylabel("Liquidity discount, p − v (log %)")
-    ax.legend(loc="lower right", bbox_to_anchor=(1.0, 0.04))
+    ax.legend(loc="lower right", bbox_to_anchor=(1.0, 0.04), frameon=True, framealpha=1.0,
+              facecolor=SURFACE, edgecolor="none", borderpad=0.3)
     note(ax, "θ = 3.4 per year, α = 5 per year, κ Q₀ / M = 15%", loc="lower left")
     return finish(fig, "ch16_overhang_delivery_lag")
 
@@ -110,23 +111,28 @@ def fig_backstop_put_and_fee():
     d = np.linspace(0, 0.60, 241)
     a2.axhline(6, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
     a2.annotate("6%: Seth average", (59, 6), xytext=(0, 4),
-                textcoords="offset points", ha="right", fontsize=7.5, color=INK_2)
+                textcoords="offset points", ha="right", fontsize=8, color=INK_2)
     a2.axhline(10, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
     a2.annotate("10%: Hertz fee", (59, 10), xytext=(0, 4), textcoords="offset points", ha="right",
-                fontsize=7.5, color=INK_2)
-    a2.plot(d * 100, fair_fee(d, 0.50), color=BLUE, linewidth=LW, label="Commitment window T = 0.50 y")
-    a2.plot(d * 100, fair_fee(d, 0.25), color=ORANGE, linewidth=LW, label="Commitment window T = 0.25 y")
+                fontsize=8, color=INK_2)
+    a2.plot(d * 100, fair_fee(d, 0.50), color=BLUE, linewidth=LW)
+    a2.plot(d * 100, fair_fee(d, 0.25), color=ORANGE, linewidth=LW)
     for dd in (0.0, 0.25, 0.50):
         a2.plot([dd * 100], [fair_fee(dd, 0.50)], "o", color=BLUE, markersize=5, zorder=5)
         a2.plot([dd * 100], [fair_fee(dd, 0.25)], "o", color=ORANGE, markersize=5, zorder=5)
-    a2.legend(loc="lower left", bbox_to_anchor=(0.0, 0.0), fontsize=8)
+    # direct labels with short leaders (no legend: the curves would run through it)
+    lead = dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8, shrinkA=1, shrinkB=4)
+    a2.annotate("Window T = 0.50 y", (19, fair_fee(0.19, 0.50)), xytext=(25, 8.4), textcoords="data",
+                ha="left", va="center", fontsize=8, color=INK_2, arrowprops=lead)
+    a2.annotate("Window T = 0.25 y", (12.5, fair_fee(0.125, 0.25)), xytext=(3, 2.2), textcoords="data",
+                ha="left", va="center", fontsize=8, color=INK_2, arrowprops=lead)
     a2.set_xlim(0, 60)
     a2.set_ylim(0, 14.5)
     a2.set_xlabel("Rights-price discount to fair value (%)")
     a2.set_ylabel("Fair backstop fee (% of raise)")
     a2.set_title("Fee and discount are substitutes", fontsize=9.5)
-    note(a2, "σ = 70%, dilution factor 0.64, zero rate", loc="upper right")
-    a2.texts[-1].set_position((0.99, 0.80))
+    note(a2, "σ = 70%, dilution factor 0.64, zero rate\nT = commitment-to-funding window", loc="upper right")
+    a2.texts[-1].set_position((0.99, 0.985))
     return finish(fig, "ch16_backstop_put_and_fee")
 
 
@@ -192,7 +198,7 @@ def fig_hertz_timeline():
     # (anchor date, y of label, ha, text, unused)
     labels = [
         (D(2020, 5, 22), 3.0, "left", "22 May 2020: Chapter 11 filed.\n12 Jun: $1bn stock program\nauthorized, then suspended\nafter ~$29mm sold", 0),
-        (D(2021, 5, 11), -1.3, "right", "11 May 2021: sponsor auction ends;\nold holders get $1.53 cash,\n3% of the stock, and a choice of\nwarrants or rights at $10", 0),
+        (D(2021, 5, 11), -1.3, "right", "11 May 2021: sponsor auction\nends; old holders get $1.53\ncash, 3% of the stock, and a\nchoice of warrants or rights\nat $10", 0),
         (D(2021, 6, 20), -3.0, "left", "Jun 2021: plan confirmed (10th),\nrights expire (15th), effective\ndate (30th); $1.635bn raised", 0),
         (D(2021, 11, 8), 1.0, "left", "8 Nov 2021: re-IPO at $29.00;\nHTZ and warrants list", 0),
         (D(2024, 9, 10), 1.3, "center", "10 Sep 2024: Third Circuit\nholds solvent debtor owes\nnoteholders contract-rate\ninterest (>$270mm)", 0),
@@ -202,13 +208,13 @@ def fig_hertz_timeline():
     for d, y, ha, text, _ in labels:
         ax.plot([d, d], [0, y * 0.92 if y > 0 else y * 0.92], color=NEUTRAL, linewidth=0.8, zorder=2)
         ax.annotate(text, (d, y), xytext=(0, 0), textcoords="offset points", ha=ha,
-                    va="bottom" if y > 0 else "top", fontsize=7.5, color=INK, linespacing=1.25)
+                    va="bottom" if y > 0 else "top", fontsize=8, color=INK, linespacing=1.25)
     ax.set_xlim(x0, x1)
 
     # --- bottom: sourced price points and the warrant strike
     bx.axhline(13.80, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
     bx.annotate("Warrant strike $13.80 (expire 30 Jun 2051)", (D(2022, 3, 1), 13.80), xytext=(0, 4),
-                textcoords="offset points", fontsize=7.5, color=INK_2, ha="left")
+                textcoords="offset points", fontsize=8, color=INK_2, ha="left")
     pts = [(D(2021, 6, 30), 10.00, "$10.00 rights price", (6, -4), "left", "top"),
            (D(2021, 11, 8), 29.00, "$29.00 re-IPO", (-6, -2), "right", "top"),
            (D(2026, 6, 15), 3.0, "~$3 (approx.)", (-8, 8), "right", "bottom")]
@@ -263,32 +269,33 @@ def fig_post_reorg_return_distribution():
         ax.bar(edges[:-1] + width / 2, h, width=width * 0.88, color=color)
         mean, med = mean_med
         top = h.max()
-        ax.axvline(med, color=INK_2, linewidth=1.0, linestyle=(0, (3, 3)), zorder=3)
-        ax.axvline(mean, color=INK, linewidth=1.0, zorder=3)
+        ax.plot([med, med], [0, top * 1.02], color=INK_2, linewidth=1.0, linestyle=(0, (3, 3)), zorder=3)
+        ax.plot([mean, mean], [0, top * 1.02], color=INK, linewidth=1.0, zorder=3)
         ax.set_title(title, fontsize=9.5)
         ax.set_ylabel("Share of outcomes per bin (%)")
         ax.set_xlim(lo, hi)
         return top, mean, med
 
     top, mean, med = panel(a1, single, -100, 300, 10, BLUE, "One post-reorg name", stats["single"], 0)
-    a1.set_ylim(0, top * 1.45)
-    a1.annotate(f"mean {mean:+.0f}%", (mean, top * 1.36), xytext=(5, 0), textcoords="offset points",
-                fontsize=8.5, color=INK, va="center")
-    a1.annotate(f"median {med:+.0f}%".replace("-", "\u2212"), (med, top * 1.36), xytext=(-5, 0), textcoords="offset points",
-                fontsize=8.5, color=INK_2, va="center", ha="right")
-    a1.text(-98, top * 1.16, "5% of names jump to \u2212100%\n(the Spirit shape)", fontsize=8, color=INK_2, va="center")
-    a1.plot([-95, -95], [top * 0.84, top * 1.06], color=NEUTRAL, linewidth=0.8, zorder=2)
+    a1.set_ylim(0, top * 1.55)
+    # two-line labels sit just above the line tops; one-line labels hung past the left axis and met the leader
+    a1.annotate(f"mean\n{mean:+.0f}%", (mean, top * 1.04), xytext=(5, 0), textcoords="offset points",
+                fontsize=8.5, color=INK, va="bottom", linespacing=1.15)
+    a1.annotate(f"median\n{med:+.0f}%".replace("-", "\u2212"), (med, top * 1.04), xytext=(-5, 0),
+                textcoords="offset points", fontsize=8.5, color=INK_2, va="bottom", ha="right", linespacing=1.15)
+    a1.text(-98, top * 1.38, "5% of names jump to \u2212100%\n(the Spirit shape)", fontsize=8, color=INK_2, va="center")
+    a1.plot([-95, -95], [top * 0.84, top * 1.27], color=NEUTRAL, linewidth=0.8, zorder=2)
     a1.set_xlabel("200-day return (%); axis cut at +300%")
     a1.text(0.99, 0.62, f"{(single > 3).mean()*100:.1f}% of outcomes\nlie beyond +300%", transform=a1.transAxes,
             ha="right", va="top", fontsize=8, color=MUTED)
 
     top2, mean2, med2 = panel(a2, book, -60, 160, 5, ORANGE, "Equal-weighted book of 20 names",
                               stats["book"], 0)
-    a2.set_ylim(0, top2 * 1.45)
-    a2.annotate(f"mean {mean2:+.0f}%", (mean2, top2 * 1.36), xytext=(5, 0), textcoords="offset points",
-                fontsize=8.5, color=INK, va="center")
-    a2.annotate(f"median {med2:+.0f}%", (med2, top2 * 1.36), xytext=(-5, 0), textcoords="offset points",
-                fontsize=8.5, color=INK_2, va="center", ha="right")
+    a2.set_ylim(0, top2 * 1.55)
+    a2.annotate(f"mean\n{mean2:+.0f}%", (mean2, top2 * 1.04), xytext=(5, 0), textcoords="offset points",
+                fontsize=8.5, color=INK, va="bottom", linespacing=1.15)
+    a2.annotate(f"median\n{med2:+.0f}%", (med2, top2 * 1.04), xytext=(-5, 0), textcoords="offset points",
+                fontsize=8.5, color=INK_2, va="bottom", ha="right", linespacing=1.15)
     a2.set_xlabel("200-day book return (%)")
     a2.text(0.99, 0.62, f"{(book < 0).mean()*100:.0f}% of simulated\nbooks lose money", transform=a2.transAxes,
             ha="right", va="top", fontsize=8, color=MUTED)

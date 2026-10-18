@@ -48,7 +48,7 @@ def fig_rule_timeline():
     ax.grid(False)
     ax.spines["left"].set_visible(False)
     ax.set_yticks([])
-    x0, x1 = D("2019-07-01"), D("2029-03-01")
+    x0, x1 = D("2018-03-01"), D("2030-03-01")
     ax.set_xlim(x0, x1)
     ax.set_ylim(-3.55, 9.0)
     ax.xaxis.set_major_locator(mdates.YearLocator())
@@ -60,14 +60,13 @@ def fig_rule_timeline():
         "info": (0.0, C_INFO, "Information"),
     }
     today = D("2026-10-18")
-    ax.axvspan(today, x1, color="#f4f3f0", zorder=0)
-    ax.axvline(today, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
+    ax.axvspan(today, x1, color="#f1f0ec", zorder=0)
     ax.text(today, 8.75, " Oct 2026", fontsize=7.5, color=MUTED, va="top", ha="left")
 
     for key, (y, col, name) in lanes.items():
         ax.plot([x0, x1], [y, y], color=col, linewidth=1.2, alpha=0.55, zorder=2, solid_capstyle="butt")
-        ax.text(D("2019-08-10"), y + 0.12, name, fontsize=8.5, color=INK, va="bottom", ha="left",
-                fontweight="semibold")
+        ax.text(D("2018-04-15"), y + 0.12, name, fontsize=8.5, color=INK, va="bottom", ha="left",
+                fontweight="bold")
 
     # Market stresses that hit every bond at once (the confounders of section 22.8)
     for a, b, lab in [("2020-03-09", "2020-03-31", "Mar 2020\ndash for cash"),
@@ -101,24 +100,26 @@ def fig_rule_timeline():
     ax.annotate("Apr 2020 to Mar 2021:\nSLR excludes Treasuries", (D("2020-04-01"), y0 + 0.55), xytext=(2, 0),
                 textcoords="offset points", ha="left", va="bottom", fontsize=7.4, color=INK_2, linespacing=1.15)
     ev("2023-07-27", "balance", "Jul 2023: Basel III endgame\nproposed (+16% CET1)", 0.55, "pending")
-    ev("2024-09-10", "balance", "Sep 2024: re-proposal\n(+9% for G-SIBs)", -0.55, "pending")
+    ev("2024-09-10", "balance", "Sep 2024: re-proposal\n(+9% for G-SIBs)", -0.55, "pending", ha="right")
     ev("2026-03-19", "balance", "Mar 2026: re-proposal,\ncapital \"modestly\" lower", 1.55, "pending", ha="right")
-    ev("2026-04-01", "balance", "Apr 2026: eSLR in force\n(final 2025-11-25)", 0.55, "live")
-    ev("2026-12-31", "balance", "Dec 2026: Treasury\ncash clearing due", -0.55, "pending", ha="left")
-    ev("2027-06-30", "balance", "Jun 2027: Treasury\nrepo clearing due", 0.55, "pending", ha="left")
+    ev("2026-04-01", "balance", "Apr 2026: eSLR in force\n(final Nov 2025)", -0.55, "live")
+    ev("2026-12-31", "balance", "Treasury clearing due:\ncash Dec 2026, repo Jun 2027", 0.55, "pending")
+    ax.plot([D("2026-12-31"), D("2027-06-30")], [y0, y0], color=col, linewidth=1.2, zorder=3)
+    ax.plot([D("2027-06-30")], [y0], "o", markerfacecolor="white", markeredgecolor=col, markeredgewidth=1.6,
+            markersize=6, zorder=4)
 
     # Time lane
     ev("2020-01-01", "time", "Jan 2020: Volcker 2.0\ntakes effect", 0.55, "live")
     ev("2024-05-28", "time", "May 2024: T+1\nsettlement", 0.55, "live")
-    ev("2027-10-11", "time", "Oct 2027: EU and UK\nT+1 (approx.)", 0.55, "pending", ha="right")
+    ev("2027-10-11", "time", "Oct 2027: EU and UK\nT+1 (approx.)", 0.55, "pending")
 
     # Information lane
-    ev("2022-02-14", "info", "Feb 2022: SBSR makes\nCDS prints public", 0.55, "live")
+    ev("2022-02-14", "info", "Feb 2022: SBSR\npublic CDS prints", 0.55, "live")
     ev("2023-05-15", "info", "May 2023: portfolio-trade\nmodifier mandatory", -0.55, "live")
     ev("2024-03-25", "info", "Mar 2024: Treasury EOD\ndissemination (approx.)", 1.55, "live")
-    ev("2025-12-04", "info", "Dec 2025: 1-minute rule\ndropped (placebo)", -0.55, "never")
+    ev("2025-12-04", "info", "Dec 2025: 1-minute rule\ndropped (placebo)", -1.55, "never", ha="right")
     ev("2026-06-08", "info", "Jun 2026: allocation\nreports (optional)", 0.55, "live", ha="right")
-    ev("2027-08-02", "info", "Aug 2027: affiliate\nindicator mandatory", -0.55, "pending", ha="left")
+    ev("2027-08-02", "info", "Aug 2027: affiliate\nindicator mandatory", 0.55, "pending", ha="left")
 
     handles = [
         Line2D([], [], marker="o", linestyle="", color=INK_2, markersize=6, label="in force"),
@@ -146,17 +147,15 @@ def fig_regulatory_rent():
     for k_lr, col in [(0.05, NEUTRAL), (0.0375, BLUE)]:
         sw = k_lr / k_rwa * 100
         a.plot([sw], [rent_bp(sw / 100, k_lr)], "o", color=col, markeredgecolor="white", markersize=6, zorder=5)
-    a.annotate("Switching point\n47.6% before, 35.7% after", (47.6, 60), xytext=(52, 20), textcoords="data",
+    a.annotate("Switching point:\n47.6% before, 35.7% after", (47.6, 60), xytext=(63, 36), textcoords="data",
                fontsize=8, color=INK_2, va="center",
                arrowprops=dict(arrowstyle="-", color=MUTED, linewidth=0.7, shrinkA=0, shrinkB=3))
-    a.text(150, 66, "Before 2026-04-01: $\\kappa_{LR}$ = 5%", fontsize=8, color=INK_2, ha="right", va="bottom",
-           bbox=dict(boxstyle="square,pad=0.1", fc="white", ec="none"))
-    a.text(1, 36, "After: 3.75%", fontsize=8, color=BLUE, ha="left", va="top")
+    a.text(2, 64, "Before: $\\kappa_{LR}$ = 5%", fontsize=8, color=INK_2, ha="left", va="bottom")
+    a.text(2, 40, "After: $\\kappa_{LR}$ = 3.75%", fontsize=8, color=BLUE, ha="left", va="top")
     a.plot([100], [rent_bp(1.0, 0.0375)], "o", color=BLUE, markeredgecolor="white", markersize=6, zorder=5)
-    a.annotate("10-yr BBB, RW 100%: 126bp", (100, 126), xytext=(-6, 12), textcoords="offset points", fontsize=8,
-               color=INK_2, ha="right")
-    a.annotate("2-yr Treasury,\nRW near 0: 60 to 45bp", (0, 52), xytext=(5, -66), textcoords="offset points",
-               fontsize=8, color=INK_2, va="center")
+    a.annotate("10-yr BBB, RW 100%: 126bp", (100, 126), xytext=(-8, 6), textcoords="offset points", fontsize=8,
+               color=INK_2, ha="right", va="bottom")
+    a.text(2, 12, "2-yr Treasury (RW near 0):\n60bp before, 45bp after", fontsize=8, color=INK_2, va="center")
     a.set_xlabel("Equivalent risk weight (%)")
     a.set_ylabel("Rent $c_{reg}$ (bp per year)")
     a.set_xlim(0, 150)
@@ -169,7 +168,8 @@ def fig_regulatory_rent():
     ypos = [2, 1, 0]
     b.barh(ypos, days, height=0.6, color=[NEUTRAL, BLUE, BLUE], zorder=3)
     for yp, d in zip(ypos, days):
-        b.text(d + 0.8, yp, f"{d:.0f} days" if d > 10 else f"{d:.1f} days", va="center", fontsize=8.5, color=INK_2)
+        b.text(d + 0.8, yp, f"{d:.0f} days" if d > 10 else f"{d:.1f} days", va="center", fontsize=8.5, color=INK_2,
+               zorder=6, bbox=dict(boxstyle="square,pad=0.15", fc="white", ec="none"))
     b.axvline(7, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
     b.text(7.6, 2.62, "1-week hold", fontsize=8, color=INK_2, va="center")
     b.set_yticks(ypos)
@@ -223,7 +223,7 @@ def fig_dealer_inventory():
     ax.set_ylabel("Net position, long minus short ($bn)")
 
     mark_event(ax, D("2020-03-23"), "Mar 2020: SMCCF,\nSLR exclusion", y_frac=0.985)
-    mark_event(ax, D("2023-07-27"), "Basel III endgame\nproposed", y_frac=0.985)
+    mark_event(ax, D("2023-07-27"), "Endgame\nproposed", y_frac=0.985)
     mark_event(ax, D("2025-11-25"), "eSLR\nfinal", y_frac=0.985)
 
     y17 = df.loc["2017", "total_net_mm"].mean()
@@ -241,8 +241,8 @@ def fig_dealer_inventory():
 
     last = ma.index[-1]
     ax.text(D("2015-03-01"), 24.2, "Weekly total", fontsize=8, color=MUTED, va="center")
-    label_end(ax, last, ma.total_net_mm.iloc[-1], "13-week avg,\nall corporate bonds", BLUE, dx=5, dy=8)
-    label_end(ax, last, ma.ig_net_mm.iloc[-1], "13-week avg,\nIG only", ORANGE, dx=5, dy=-10)
+    label_end(ax, last, ma.total_net_mm.iloc[-1], "All corp. bonds\n(13-wk avg)", BLUE, dx=5, dy=9)
+    label_end(ax, last, ma.ig_net_mm.iloc[-1], "IG only\n(13-wk avg)", ORANGE, dx=5, dy=-11)
     return finish(fig, "ch22_dealer_inventory")
 
 
@@ -263,6 +263,7 @@ def fig_block_spread_delay():
     ax.set_xscale("log")
     ax.set_xlim(0.5, 3500)
     ax.set_ylim(0, 21)
+    ax.set_yticks([0, 5, 10, 15, 20])
     ax.set_xticks([1, 15, 60, 600, 2880])
     ax.set_xticklabels(["1 min", "15 min", "1 hour", "10 hours", "48 hours"])
     ax.xaxis.set_minor_locator(matplotlib_ticker_null())
@@ -271,22 +272,23 @@ def fig_block_spread_delay():
 
     mark_event(ax, 1, "1-minute rule\n(never in force)", y_frac=0.985)
     mark_event(ax, 15, "Today: 15 min", y_frac=0.985)
-    mark_event(ax, 2880, "2019 pilot:\n48 hours", y_frac=0.985)
+    ax.axvline(2880, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
+    ax.annotate("2019 pilot:\n48 hours", (2880, 0.985), xycoords=("data", "axes fraction"), xytext=(-3, 0),
+                textcoords="offset points", fontsize=8, color=INK_2, va="top", ha="right")
 
-    ax.text(1.5, 7.9, "$T_u$ = 15 min: matched and gone\nbefore the print", fontsize=8, color=INK_2, va="bottom")
-    ax.text(25, 4.4, "$T_u$ = 2 hours", fontsize=8, color=INK_2, va="bottom", ha="left")
-    ax.text(1.5, 17.7, "$T_u$ = 10 hours", fontsize=8, color=INK_2, va="bottom")
-    for tu, col in shades.items():
-        for dl in (1, 15):
-            pass
+    lab = dict(fontsize=8, color=INK_2, va="bottom", ha="left",
+               bbox=dict(boxstyle="square,pad=0.1", fc="white", ec="none"))
+    ax.text(0.6, 5.7, "$T_u$ = 15 min:\nzero leak once $\\Delta \\geq T_u$", **{**lab, "va": "top"})
+    ax.text(0.6, 9.9, "$T_u$ = 2 hours", **lab)
+    ax.text(0.6, 17.3, "$T_u$ = 10 hours", **lab)
     pts = [(1, block_half_spread(1, 120)), (15, block_half_spread(15, 120))]
     for x, y in pts:
         ax.plot([x], [y], "o", color=shades[120], markeredgecolor="white", markersize=6, zorder=5)
-    ax.annotate("9.31bp at 1 min,\n8.44bp at 15 min", (15, pts[1][1]), xytext=(34, 11.8), fontsize=8,
+    ax.annotate("9.31bp at 1 min,\n8.44bp at 15 min", (15, pts[1][1]), xytext=(34, 12.2), fontsize=8,
                 color=INK_2, ha="left", va="center",
                 arrowprops=dict(arrowstyle="-", color=MUTED, linewidth=0.7, shrinkA=0, shrinkB=4))
-    note(ax, "Inventory floor: $\\gamma\\sigma^2 Q T_u/6$.  $\\lambda$ = 0.5bp per $mm, $Q$ = $15mm,\n"
-             "$\\sigma$ = 2.5bp per $\\sqrt{\\mathrm{min}}$, $\\gamma$ = 0.001", loc="lower right")
+    ax.text(3300, 4.3, "Flat segments: inventory floor\n$\\gamma\\sigma^2 Q T_u/6$, untouched by the delay",
+            fontsize=8, color=MUTED, ha="right", va="bottom")
     return finish(fig, "ch22_block_spread_delay")
 
 
@@ -310,20 +312,19 @@ def netting_factor(n, m_over_s):
 
 
 def fig_netting_factor():
-    n = np.unique(np.round(np.logspace(np.log10(2), np.log10(200), 120)).astype(int))
+    n = np.logspace(np.log10(2), np.log10(200), 160)
     fig, ax = new_figure()
     cases = [(0.0, SEQ_BLUE_STEPS[5], "$m$ = 0: two-way market"),
              (0.5, SEQ_BLUE_STEPS[7], "$m$ = 0.5$\\sigma_x$"),
              (1.0, SEQ_BLUE_STEPS[10], "$m$ = $\\sigma_x$: one-way tilt")]
     for m, col, lab in cases:
-        phi = np.array([netting_factor(int(k), m) for k in n])
+        phi = np.array([netting_factor(k, m) for k in n])
         ax.plot(n, phi, color=col, linewidth=LW, zorder=3)
         if m > 0:
             floor = abs(m) / folded_mean(m, 1.0)
-            ax.axhline(floor, color=col, linewidth=0.9, linestyle=(0, (1, 2)), zorder=2)
-            ax.text(2.1, floor + 0.012, f"floor {floor:.3f}", fontsize=8, color=INK_2, va="bottom")
+            ax.plot([2, 200], [floor, floor], color=col, linewidth=0.9, linestyle=(0, (1, 2)), zorder=2)
     ax.set_xscale("log")
-    ax.set_xlim(2, 800)
+    ax.set_xlim(2, 700)
     ax.set_ylim(0, 1.05)
     ax.set_xticks([2, 5, 10, 25, 50, 100, 200])
     ax.set_xticklabels(["2", "5", "10", "25", "50", "100", "200"])
@@ -336,11 +337,11 @@ def fig_netting_factor():
     ax.annotate("0.204 at $N$ = 25", (25, netting_factor(25, 0.0)), xytext=(8, 0.07), textcoords="data",
                 fontsize=8, color=INK_2, ha="left",
                 arrowprops=dict(arrowstyle="-", color=MUTED, linewidth=0.7, shrinkA=0, shrinkB=4))
-    ax.axhline(0.54, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
-    ax.text(2.1, 0.54 - 0.012, "DTCC Sponsored Service read: about 0.54", fontsize=8, color=INK_2, va="top")
-    label_end(ax, 200, netting_factor(200, 0.0), "$m$ = 0", SEQ_BLUE_STEPS[5], dx=5)
-    label_end(ax, 200, netting_factor(200, 0.5), "0.5$\\sigma_x$", SEQ_BLUE_STEPS[7], dx=5)
-    label_end(ax, 200, netting_factor(200, 1.0), "$\\sigma_x$", SEQ_BLUE_STEPS[10], dx=5)
+    ax.plot([2, 200], [0.54, 0.54], color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
+    ax.text(200, 0.54 - 0.014, "DTCC Sponsored Service read: about 0.54", fontsize=8, color=INK_2, va="top", ha="right")
+    label_end(ax, 200, netting_factor(200, 0.0), "$m$ = 0\n(two-way)", SEQ_BLUE_STEPS[5], dx=5)
+    label_end(ax, 200, netting_factor(200, 0.5), "$m$ = 0.5$\\sigma_x$\nfloor 0.558", SEQ_BLUE_STEPS[7], dx=5, dy=4)
+    label_end(ax, 200, netting_factor(200, 1.0), "$m$ = $\\sigma_x$\nfloor 0.857", SEQ_BLUE_STEPS[10], dx=5)
     return finish(fig, "ch22_netting_factor")
 
 

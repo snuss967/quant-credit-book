@@ -1,0 +1,26 @@
+# Progress Log, Edition 2 U2: Chapter 1
+
+- [x] 0. Restore missing §1.5 from git (ad55d97^), replace inline code with explanation + Appendix F link. — Restored verbatim from ad55d97^; listing re-added with EXPLAINED marker.
+- [x] 1. Cold open: EXPAND-SCENE (lightly) + BRIDGE. — Added 00:06 instinct beat, Monday Ines exchange, narrative promise paragraph.
+- [ ] 2. §1.1 Epistemological Clash: LIST-TO-NARRATIVE + ANOTHER-SEAT + Math, Gently (conditional expectation).
+- [ ] 3. §1.1 "Why the Hybrid... Owns the Future": LIST-TO-NARRATIVE + Poker Table.
+- [ ] 4. §1.2 Market Set: LIST-TO-NARRATIVE + View From Another Seat (CLO manager).
+- [ ] 5. §1.3.1 Setup and units: Math, Gently (distribution, mean-variance).
+- [ ] 6. §1.3.2 Inventory term: Math, Gently + When to apply.
+- [ ] 7. §1.3.3 Bayes on the RFQ: Math, Gently + LIST-TO-NARRATIVE.
+- [ ] 8. "The cold open, in numbers": BRIDGE.
+- [ ] 9. Ways This Blows Up: Math, Gently + Full Derivation move.
+- [ ] 10. Listing 1.1: Quant-Shop Life vignette.
+- [ ] 11. §1.4 DTS: Math, Gently + LIST-TO-NARRATIVE + When to apply.
+- [ ] 12. §1.4 Reading Listing 1.2: Math, Gently (Monte Carlo).
+- [ ] 13. §1.5 Bohn-Stein DD: Math, Gently x3 + When to apply.
+- [ ] 14. §1.5 Schmid credit triangle: Math, Gently x2 + Full Derivation move.
+- [ ] 15. §1.5 Bolder one-factor: Math, Gently + Full Derivation move.
+- [ ] 16. §1.6 Harvestable flows: LIST-TO-NARRATIVE + Another Seat (systematic fund) + Math, Gently + When to apply.
+- [ ] 17. §1.7 Where flows end up: Another Seat (opportunistic credit) + BRIDGE.
+- [ ] 18. §1.8.1 The model: Math, Gently x2.
+- [ ] 19. §1.8.2 Ford: EXPAND-SCENE (Long Scene 1).
+- [ ] 20. §1.8.3 LQD: BRIDGE.
+- [ ] 21. §1.9.1 Serta: EXPAND-SCENE (Long Scene 2).
+- [ ] 22. §1.9 Trend Watch LM: BRIDGE.
+- [ ] 23. §1.10 Desk Debrief: BRIDGE.

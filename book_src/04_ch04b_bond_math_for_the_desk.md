@@ -443,3 +443,457 @@ A make-whole is a call struck at the issuer's own credit spread equal to $m_w$, 
 
 *Used in:* §5.2.2 (the price cap and negative convexity), §5.9 (the convexity tax), §12.2 (YTW as the yield input), §15.1 (make-whole and call economics in mergers), §16.6 (the Hertz make-whole), §19.2 (`oasd`, `oas`), §21.5 (the loan's call as a repricing hazard), App A §A.5.
 
+## 4B.8 Case Study: The Fallen Angel, Repriced in Every Measure
+
+*Wednesday, 7:40 a.m.* Kaz had either not gone home, or gone home and come back in the same sweater, which on this desk amounts to the same thing. Overnight they had rebuilt all six columns from one object: the note's twenty coupons, priced against a Treasury curve held flat at each date's ten-year par yield (FRED, DGS10). The flat curve is a deliberate stylization. It sets the shape term in $Z - G$ of §4B.6 to zero, so any gap left between two columns has to be a convention. (Exercise 2 puts the real curve back.)
+
+The first hour went where first hours on a quant desk go, which is reconciliation. Kaz's Z-spread for 23 March sat three basis points from the vendor's. Forty minutes later the reasons were on the whiteboard: the vendor fits a smoothed Treasury curve and values the bond for settlement two days later, with accrued. Both choices are defensible, both are on page 41 of a methodology PDF nobody had opened since 2017, and neither is visible in a column called `z_spd`. Mags watched the whiteboard fill. "In 1994 I'd have called the salesman and he'd have said 'call it eight hundred.' Same answer, and nobody lost a night's sleep." She paused. "Mind you, he was lying about something else."
+
+Then Kaz put up the table.
+
+*Table 4B.1. The Chapter 1 fallen angel (stylized ten-year 4.50% note, semi-annual, on a coupon date, so dirty equals clean) on three dates, every measure computed from one flat curve. Treasury yields are real; the bond's yields are illustrative; §4B.9 reproduces every entry. Spreads in basis points.*
+
+| | 20 Feb 2020 | 23 Mar 2020 | 30 Jun 2020 |
+| :--- | ---: | ---: | ---: |
+| Ten-year Treasury (DGS10) | 1.52% | 0.76% | 0.66% |
+| Bond yield | 3.50% | 9.00% | 5.50% |
+| Price | 108.38 | 70.73 | 92.39 |
+| G-spread | 198 | 824 | 484 |
+| Z-spread (continuous) | 196 | 804 | 477 |
+| OAS (Ho–Lee, $\sigma$ = 100bp, make-whole at T+50) | 196 | 804 | 477 |
+| Asset swap, par-par | 207 | 679 | 463 |
+| Asset swap, market value | 191 | 959 | 501 |
+| PECS ($R = 40\%$) | 186 | 945 | 482 |
+| $D^{\text{mod}}$ | 8.11 | 7.40 | 7.86 |
+| DV01 per \$10mm | \$8,785 | \$5,236 | \$7,258 |
+| DTS ($D^{\text{mod}} \times G$) | 1,605 | 6,100 | 3,802 |
+
+The I-spread equals G here, because the stylized swap curve is the Treasury curve.
+
+"Now," said Ines, "which rows are the pot?"
+
+### Rows that are only rulers
+
+Start with the gaps that would exist on a day when nothing happened. G and Z differ by 2.5bp in February, 19.5bp in March and 7.3bp in June, and on a flat curve the whole difference is compounding: a yield quoted semi-annually is larger than the same yield quoted continuously, by an amount that grows with the square of the level. The two asset swaps differ by exactly the factor $100/P$, which was 0.92 while the bond sat at a premium and 1.41 at the trough. PECS sits *below* Z in February and *above* it in March, because a CDS spread is a loss rate per unit of par, Z is a loss rate per unit of price, and the bond crossed par on the way down (§4B.6). The OAS row is identical to Z on all three dates, and that is not rounding. The note's make-whole is struck at T+50, the bond never traded tighter than 196bp over, and by the proposition of §4B.7 a make-whole is never exercised while the spread exceeds the make-whole spread. The vendor's `oas` column was a copy of Z with a more expensive name.
+
+Mags, who regards any number with "adjusted" in its name as a number somebody wanted to be different, was briefly delighted. "The one time an adjustment was honest, it was zero."
+
+"Make whole *whom*?" asked Kaz, who was reading an indenture for the first time and had reached the redemption section. "Is it an insurance term?"
+
+"The bondholder," said Theo. "It's the only clause in the indenture that apologizes in advance."
+
+> **Math, Gently.** *Six rulers, one length.* A spread is a length measured with a ruler, and G, Z, the two asset swaps and PECS are rulers with different units and different zero points. On any one day they rank bonds almost identically, which is why ROBO found them "highly correlated." Their *changes* and *ratios* are another matter. Warm a room from 10°C to 20°C and the Celsius thermometer says the temperature doubled; the Fahrenheit thermometer says it went from 50°F to 68°F, up 36%. Nothing got twice as hot. In Table 4B.1 the fallen angel's spread multiplied by 3.3 on the par asset-swap ruler and by 5.1 on the PECS ruler, over the same month, for the same bond. For compounding the conversion is one line of Taylor: $\ln(1+x) \approx x - x^2/2$, so $y^{\text{cc}} = f\ln(1 + y/f) \approx y - y^2/(2f)$, and at $y = 9\%$ with $f = 2$ the gap is $0.09^2/4 \approx 20$bp. The full version is in §4B.2.
+
+### Rows that moved
+
+Every ruler agrees that something enormous happened between 20 February and 23 March: the note's credit spread rose by roughly six percentage points. (Across the market, spreads rose by about 250bp for investment grade and 550bp for high yield in the March 2020 stress, by the count in New York Fed Staff Report 986.) The rulers disagree about *how* enormous. G rose 626bp, Z 609, the par-par asset swap 471, the market-value asset swap 768, PECS 759. That is a 300bp disagreement about the change, and the change is the left-hand side of every regression in Part III and the input to every trend signal in Chapter 10. A DTS model (Law 3) works in relative changes, and there the disagreement is worse: the month's spread multiplier runs from 3.3 to 5.1, so the measured volatility of the same bond in the same month depends, by half, on which column was loaded.
+
+Then the P&L, the one row on which money actually moved. The note lost 37.65 points. Split it the way §4B.4 did, around the February point with $D^{\text{mod}} = 8.11$, $C^{\text{mod}} = 78.0$ and $P = 108.38$: the 76bp Treasury rally contributed $+6.7$ points; 626bp of spread widening contributed $-55.0$; convexity on the 550bp total yield move gave back $+12.8$; and the residual, mostly the third-order term, was $-2.1$. An explain without its residual line claims a precision it does not have.
+
+Then the hedge. In February the analytic ratio of §4B.5 said to short \$9.5mm of the ten-year against \$10mm of the note. The ten-year rallied 7.3 points as its yield fell from 1.52% to 0.76%, so the hedge *lost* about \$0.69mm while the note lost \$3.76mm. The hedge did exactly what it was sized to do, against a rate move that arrived with the opposite sign from the one that mattered.
+
+> **[SOURCE EXTRACTION]** *Ben_Dor_Quantitative_Credit_Portfolio_Management p.191:* "If this correlation is negative, the empirical duration would be lower than the analytical one and may even end up being negative."
+>
+> **Annotation.** March 2020 is that sentence with numbers in it. Treasury yields fell while the note's spread rose eight times as far, so $\rho_{y,s}$ was sharply negative and the analytic hedge pointed the wrong way. Ben Dor's own Table 7.1 (p.192, on 1998–2009 data) puts the Ba bucket's empirical hedge ratio at maximum spreads at −0.26: the right Treasury hedge for a bond at 824bp was a small *long*, or nothing. The modern departure is that the correlation is a regime, not a constant. In 2022 it flipped sign, and the same "no hedge" lost on rates and spreads together (§8.7). The desk carries $D^{\text{mod}}$ for the risk report and the rolling empirical duration of §8.2 for the hedge, and it shows both.
+
+### Rows that became prices again
+
+The rest is the tape, the part of March 2020 a backtest cannot see unless somebody writes it down. The Federal Reserve announced its corporate credit facilities on 23 March, the day of the table's middle column, before buying a single bond. S&P cut Ford to BB+ on 25 March; Moody's had rated it Ba1 since September 2019, so with two high-yield ratings Ford's bonds left the investment-grade index at the month-end rebalance (§1.8.2). On 9 April the Fed extended its facilities to issuers that had been investment grade on 22 March, which covered Ford. And on 17 April Ford came to the high-yield market itself.
+
+> **View From Another Seat.** *The issuer.* On 17 April 2020 Ford priced \$8bn of unsecured notes in three tranches: \$3.5bn of three-year notes at 8.50%, \$3.5bn of five-year at 9% and \$1bn of ten-year at 9.625%, the ten-year after being marketed at around 11% (Bloomberg, via BNN Bloomberg, 17 April 2020). From the treasurer's seat, none of the six columns exists. A bond sold at par has $c = y$ (§4B.2), so the coupon *is* the yield, and the yield is the cost of ten years of capital: more than double the coupon on the old 4.50% paper. For the desk, the deal was the cleanest spread observation of the month. It needed no curve, no compounding convention and no recovery assumption, and \$8bn changed hands at it. The move from talk to print, about 140bp on the ten-year, measured demand in the one unit nobody can argue with.
+
+By 30 June, the table's last column, the stylized note was back at 92.39 and 484bp over, and the six rulers had drawn back together, as they always do when price returns toward par. The compounding gap fell with the level, the asset-swap ratio $100/P$ fell toward one, and PECS and Z converged because price and par converged.
+
+> **View From Another Seat.** *The life insurer and the bank desk.* A life insurer holding the note at amortized cost saw none of 23 March in its statutory income. Its number was the rating: the move from an NAIC 2 to an NAIC 3 designation multiplied the capital held against the position, and its "spread" was book yield over the liability's crediting rate. It sold, if it sold, over quarters, into the June column (§1.8.2). A bank's credit-trading desk writes its limits in CS01, and the CS01 report showed 40% less risk on 23 March than in February, freeing limit on the day bid–offer was widest, though the balance sheet the limit rations had not grown (§22.5). CS01 said "room to add," DTS said "four times the risk," and both were arithmetically correct.
+
+### When to reach for which number
+
+The habit that separates a seasoned desk from a fast one is to start from the question and let the question choose the ruler.
+
+| The question you are actually asking | The number | Where it breaks |
+| :--- | :--- | :--- |
+| Is this bond cheap against its own CDS? | PECS, with $R$ stated | at or below recovery there is no solution; $R$ is random (§5.5) |
+| What does a funded investor earn over SOFR after swapping? | asset swap: par-par if the package is bought at 100, market value if at $P$ | far from par, par-par hides a loan of $100 - P$ to the swap dealer |
+| Which of two callables is cheaper? | OAS at a stated $\sigma$ and tree | issuers call for covenants and M&A, not only for rates (§4B.7) |
+| How many Treasuries do I short? | DV01 from $D^{\text{eff}}$, then the empirical ratio of §8.2 | high yield in a crisis, where the analytic hedge can have the wrong sign |
+| How much credit risk is this? | DTS | near default, where price and recovery dominate (§8.3) |
+| What feeds a factor or trend signal? | one spread, on one curve, for the whole sample | a reference-curve switch (LIBOR to SOFR, 2023); G across the 2022–24 inversion |
+| What is it worth below 70? | price, and a recovery | every spread on this list |
+
+Ines read the table twice and tapped the last row. "That's the pot. Everything above it is how people choose to count their chips."
+
+*Used in:* §1.8.2 (Ford and the fallen-angel wave), §5.2 (price, spread and return as three distributions), §8.2 and §8.7 (the hedge with the wrong sign), §8.4 and §10.3 (DTS and volatility scaling), §12.3 (spread per unit of what), §19.7.2 (March 2020 in portfolio trading), §22.5 (dealer capital), §24.3–§24.4 (PECS and the basis), App A §A.5.
+
+## 4B.9 Specification for AI Implementation: `bondmath.py`
+
+**The Spec You Hand the Robot.** *What ROBO built from the vague version* ("add a spread function to the bond library"): `spread(bid, ask) = ask - bid`, with a docstring, a unit test and full coverage. It was correct.
+
+> **[SOURCE EXTRACTION]** *Bohn_Stein_Active_Credit_Portfolio_Management p.68:* "The word spread is perhaps the most overloaded (and sometimes abused) word in finance."
+>
+> **Annotation.** ROBO picked a correct dictionary entry, and the wrong one. The cure is not a better guess but a signature that cannot be called without the missing facts: which reference curve, which compounding, which price (dirty, per 100), and which unit comes back. Bohn and Stein list about a dozen meanings; this module implements eight of them and computes none of them from a clean price.
+
+*What the module is for, at this point in the story.* The cold open showed what happens when every consumer of a spread computes its own: six columns, 280bp apart. So `bondmath.py` is less a pricing library than a single source of arithmetic. Chapters 5, 8, 9, 10, 12, 15 and 19 import it, so that when two chapters disagree, they disagree about the market and not about compounding.
+
+*Why it is built this way.* The chapter reduces to two objects and one verb. The objects are a list of (time, cash flow) pairs (§4B.1) and a discount function $d(t)$ (§4B.6). The verb is *reprice*: a yield, a Z-spread, an OAS, a hazard rate and a discount margin are each the single constant that, inserted in the right place, makes the list equal the dirty price. So there is one pricing kernel per model (yield, curve, hazard, lattice) and one solver for all of them: bisection, on purpose. Every kernel is strictly monotone in its constant (§4B.2), so a bracketed bisection cannot find the wrong root or diverge, and when the price is impossible it fails loudly, which is the failure you want.
+
+> **Math, Gently.** *An implied number is a question asked backwards.* Pricing runs forward: give me a yield and I will give you a price. Every spread on the desk runs backward: here is the price, so what yield, spread or hazard would have produced it? Bisection answers the way you would play twenty questions. Start with a bracket you know contains the answer, say yields from −5% to 500%, and price the midpoint. If that price is above the market's, the midpoint yield is too low, so keep the upper half; otherwise keep the lower half. Each guess halves the bracket, so after 43 guesses a bracket 5.05 wide is narrower than $10^{-12}$, and the 9.00% yield of 23 March comes back to twelve decimal places. It works because price falls whenever yield rises: a function that only goes one way can cross a given price only once. The existence and uniqueness proof is in §4B.2.
+
+*Inputs and outputs.* Prices per 100 face, dirty unless a name says otherwise; rates, spreads and hazards as annual decimals (basis points only for display); times in years. A curve is any function `disc(t)` returning discount factors, flat (`flat_curve`) or bootstrapped (`curve_from_par`). Results are floats or dicts with named fields. The lattice runs on a grid: `ho_lee` builds the tree, `on_grid` places the flows, `lattice_price` runs §4B.7's backward induction.
+
+*When to use it, and when not.* Use it for research, for the analytics behind the risk report, and to check a vendor; it is the code that found Kaz's three basis points. It is not a production library: no holiday calendars, no odd coupons beyond the fraction $w$, a CDS premium leg paid continuously on ACT/360 (within a basis point or two of the quarterly standard model of §24.2), and a Ho–Lee tree whose normal rates go negative at the bottom nodes. A lognormal desk will disagree with this OAS by a few basis points, and each will be right about its own model (Veronesi p.467, quoted in §4B.7).
+
+*The edge cases that bite.* First, `pecs` on a bond at or below its assumed recovery has no solution, since no hazard can make a bond worth less than its recovery. The function raises, and the right response is to quote price and recovery, not to lower $R$ until the solver is happy. Second, a clean price passed as dirty gives a smooth, plausible yield that is off by the accrued; the solver cannot know, so the argument is named `p_dirty`. Third, the lattice refuses a cash flow off its step dates, because rounding a coupon to the nearest node moves it by up to half a step and the OAS absorbs the error silently.
+
+*Tests.* Every identity in the chapter is an assertion at the bottom of the listing, from the 0.50 of accrued and the 31st rule to the lattice identities of §4B.7 and the make-whole proposition, and so is the 23 March column of Table 4B.1.
+
+<!-- EXPLAINED -->
+```python
+# bondmath.py (Chapter 4-B): one list of cash flows, one curve, one solver.
+# Units: prices per 100 face (dirty unless a name says otherwise); rates, spreads and hazards
+# as annual decimals; times in years. Every number in Chapter 4-B is reproduced at the bottom.
+import math
+from datetime import date
+
+import numpy as np
+
+
+def year_frac(d1, d2, basis="30/360"):
+    """Year fraction from d1 to d2. '30/360' is the US bond basis, 31st rule included."""
+    if basis == "30/360":
+        a1 = min(d1.day, 30)
+        a2 = 30 if (d2.day == 31 and a1 == 30) else d2.day
+        return (360 * (d2.year - d1.year) + 30 * (d2.month - d1.month) + (a2 - a1)) / 360.0
+    days = (d2 - d1).days
+    if basis == "ACT/360":
+        return days / 360.0
+    if basis == "ACT/365F":
+        return days / 365.0
+    raise ValueError(f"unknown day count {basis!r}")
+
+
+def accrued(coupon, last_coupon, settle, basis="30/360"):
+    """Accrued interest per 100 face, counted to the settlement date, not the trade date."""
+    return 100.0 * coupon * year_frac(last_coupon, settle, basis)
+
+
+def cashflows(c, n, f=2, w=1.0):
+    """Times (years) and flows per 100 face: n coupons left, w of the current period to run."""
+    t = (np.arange(n, dtype=float) + w) / f
+    cf = np.full(n, 100.0 * c / f)
+    cf[-1] += 100.0
+    return t, cf
+
+
+def workout_flows(c, k, redemption, f=2):
+    """Flows to a call date or maturity after k coupons, redeemed at `redemption` per 100."""
+    t, cf = cashflows(c, k, f)
+    cf[-1] += redemption - 100.0
+    return t, cf
+
+
+def price(y, c, n, f=2, w=1.0):
+    """Street dirty price at periodic yield y (Sec. 4B.2)."""
+    t, cf = cashflows(c, n, f, w)
+    return float(np.sum(cf * (1.0 + y / f) ** (-f * t)))
+
+
+def solve(fn, target, lo, hi, tol=1e-12):
+    """Bisection for a monotone fn(x) = target on [lo, hi]; refuses an unbracketed target."""
+    f_lo, f_hi = fn(lo) - target, fn(hi) - target
+    if f_lo * f_hi > 0:
+        raise ValueError("target not bracketed: check units, dirty vs clean, or recovery")
+    while hi - lo > tol:
+        mid = 0.5 * (lo + hi)
+        f_mid = fn(mid) - target
+        if (f_mid > 0) == (f_lo > 0):
+            lo, f_lo = mid, f_mid
+        else:
+            hi = mid
+    return 0.5 * (lo + hi)
+
+
+def ytm(p_dirty, c, n, f=2, w=1.0):
+    """Yield to maturity; unique because price is strictly decreasing in yield."""
+    return solve(lambda y: price(y, c, n, f, w), p_dirty, -0.05, 5.0)
+
+
+def ytw(p_dirty, c, n, schedule, f=2):
+    """(yield, coupon number, redemption) to worst over every coupon date of every call window
+    and maturity. schedule: [(first callable coupon number, call price), ...] in date order."""
+    workouts = [(n, 100.0)]
+    for j, (k0, K) in enumerate(schedule):
+        k1 = schedule[j + 1][0] if j + 1 < len(schedule) else n
+        workouts += [(k, K) for k in range(k0, k1)]
+
+    def y_to(k, K):
+        t, cf = workout_flows(c, k, K, f)
+        return solve(lambda y: float(np.sum(cf * (1.0 + y / f) ** (-f * t))), p_dirty, -0.05, 5.0)
+
+    return min((y_to(k, K), k, K) for k, K in workouts)
+
+
+def risk_at_yield(y, c, n, f=2, w=1.0):
+    """Price, Macaulay and modified duration, modified convexity, from analytic derivatives."""
+    t, cf = cashflows(c, n, f, w)
+    v, e = 1.0 + y / f, f * t
+    pv = cf * v ** (-e)
+    p = float(pv.sum())
+    d_mac = float(np.sum(pv * t)) / p
+    c_mod = float(np.sum(pv * e * (e + 1.0))) / (p * f * f * v * v)
+    return {"price": p, "D_mac": d_mac, "D_mod": d_mac / v, "C_mod": c_mod}
+
+
+def dv01(d_mod, p_dirty, face):
+    """Dollars gained per 1bp fall in yield (positive for a long position)."""
+    return d_mod * p_dirty * face * 1e-6
+
+
+def effective(pricer, h=1e-4):
+    """(D_eff, C_eff) of pricer(h), the full price after a parallel shift h; central differences."""
+    p0, p_up, p_dn = pricer(0.0), pricer(h), pricer(-h)
+    return (p_dn - p_up) / (2.0 * h * p0), (p_up + p_dn - 2.0 * p0) / (h * h * p0)
+
+
+def flat_curve(r, f=2):
+    """Discount function of a flat curve quoted at periodic rate r (par = zero = r)."""
+    return lambda t: (1.0 + r / f) ** (-f * np.asarray(t, dtype=float))
+
+
+def curve_from_par(par, f=2):
+    """Bootstrap d(t_n), t_n = n/f, from par yields on that grid; linear in zero rates."""
+    par = np.asarray(par, dtype=float)
+    d = np.empty(len(par))
+    for n, cn in enumerate(par):
+        d[n] = (1.0 - cn / f * d[:n].sum()) / (1.0 + cn / f)
+    nodes = np.arange(1, len(par) + 1) / f
+    z = -np.log(d) / nodes
+    return lambda t: np.exp(-np.interp(t, nodes, z) * np.asarray(t, dtype=float))
+
+
+def z_spread(p_dirty, t, cf, disc):
+    """Constant continuous shift over the zero curve that reprices the flows."""
+    base = cf * disc(t)
+    return solve(lambda z: float(np.sum(base * np.exp(-z * t))), p_dirty, -0.05, 3.0)
+
+
+def key_rate_durations(t, cf, disc, z, keys):
+    """KRDs from tent bumps of the zero curve at `keys`; the tents sum to one everywhere."""
+    pv = cf * disc(t) * np.exp(-z * t)
+    eye = np.eye(len(keys))
+    return np.array([np.sum(t * pv * np.interp(t, keys, eye[j])) for j in range(len(keys))]) / pv.sum()
+
+
+def asw_par(p_dirty, t, cf, disc, f=2):
+    """Par-par asset-swap spread over the swap curve `disc` (full coupon periods)."""
+    d = disc(t)
+    return (float(np.sum(cf * d)) - p_dirty) / (100.0 * float(np.sum(d)) / f)
+
+
+def discount_margin(p_dirty, margin, base, life, f=4):
+    """Margin over a flat-forward base rate that reprices a floater paying base + margin."""
+    k = np.arange(1, int(round(life * f)) + 1, dtype=float)
+
+    def pv(dm):
+        v = (1.0 + (base + dm) / f) ** (-k)
+        return float(100.0 * (base + margin) / f * v.sum() + 100.0 * v[-1])
+
+    return solve(pv, p_dirty, -0.05, 3.0)
+
+
+def hazard_price(lam, t, cf, r, R):
+    """Q-price per 100: survival-weighted flows plus recovery of face R at default (flat, cc)."""
+    k, T = lam + r, float(t[-1])
+    rec = 100.0 * R * lam * T if abs(k) < 1e-12 else 100.0 * R * lam / k * (1.0 - math.exp(-k * T))
+    return float(np.sum(cf * np.exp(-k * t))) + rec
+
+
+def pecs(p_dirty, t, cf, r, R=0.40):
+    """Par-equivalent CDS spread (ACT/360 premium, paid continuously) and the flat hazard."""
+    lo, hi = 1e-10, 10.0
+    if not hazard_price(hi, t, cf, r, R) < p_dirty < hazard_price(lo, t, cf, r, R):
+        raise ValueError("no hazard reprices this price: is the bond at or below recovery?")
+    lam = solve(lambda x: hazard_price(x, t, cf, r, R), p_dirty, lo, hi)
+    k, T = lam + r, float(t[-1])
+    protection = (1.0 - R) * lam / k * (1.0 - math.exp(-k * T))
+    rpv01 = (365.0 / 360.0) * (1.0 - math.exp(-k * T)) / k
+    return protection / rpv01, lam
+
+
+def toy_tree(s, call=101.0):
+    """Sec. 4B.7 hand lattice: 3-year 9% annual bond, simple rates, p = 1/2, call ex-coupon."""
+    tree = [[0.04], [0.05, 0.03], [0.06, 0.04, 0.02]]
+    V = [109.0 / (1.0 + r + s) for r in tree[2]]
+    for i in (1, 0):
+        V = [min(v, call) for v in V] if call else V
+        V = [0.5 * (V[j] + V[j + 1] + 18.0) / (1.0 + tree[i][j] + s) for j in range(i + 1)]
+    return V[0]
+
+
+def ho_lee(disc, T, steps, sigma):
+    """Ho-Lee tree fitted to disc(t) with Arrow-Debreu prices, no root-finding (Sec. 4B.7)."""
+    dt, Q, rates = T / steps, np.array([1.0]), []
+    for i in range(steps):
+        x = sigma * math.sqrt(dt) * (2.0 * np.arange(i + 1) - i)
+        theta = -math.log(float(disc((i + 1) * dt)) / float(np.sum(Q * np.exp(-x * dt)))) / dt
+        rates.append(theta + x)
+        g = Q * np.exp(-rates[-1] * dt)
+        Q = 0.5 * (np.append(g, 0.0) + np.append(0.0, g))
+    return dt, rates
+
+
+def on_grid(t, cf, dt, steps):
+    """Flows by lattice step; refuses any flow that is not on a step date."""
+    a = np.zeros(steps + 1)
+    for ti, ci in zip(t, cf):
+        k = int(round(ti / dt))
+        if abs(k * dt - ti) > 1e-9:
+            raise ValueError("cash flow off the grid: choose steps so every coupon date is a node")
+        a[k] += ci
+    return a
+
+
+def lattice_price(flows, dt, rates, s, calls=None, mw=None):
+    """Backward induction at spread s. calls: {step: strike}; the issuer pays the coupon plus
+    min(continuation, strike). With mw the strike is max(100, W), W = remaining flows at r + mw."""
+    calls = calls or {}
+    V = np.full(len(rates) + 1, flows[-1])
+    W = V.copy()
+    for i in range(len(rates) - 1, -1, -1):
+        V = np.exp(-(rates[i] + s) * dt) * 0.5 * (V[:-1] + V[1:])
+        if mw is not None:
+            W = np.exp(-(rates[i] + mw) * dt) * 0.5 * (W[:-1] + W[1:])
+        if i in calls:
+            V = np.minimum(V, np.maximum(100.0, W) if mw is not None else calls[i])
+        V = V + flows[i]
+        if mw is not None:
+            W = W + flows[i]
+    return float(V[0])
+
+
+def oas(p_dirty, flows, dt, rates, calls=None, mw=None):
+    """The spread at which the lattice, with every option exercised, reprices the dirty price."""
+    return solve(lambda s: lattice_price(flows, dt, rates, s, calls, mw), p_dirty, -0.05, 3.0)
+
+
+def explain(p0, d_mod, c_mod, dy_rates, ds, p1):
+    """P&L explain per 100 face: rates, spread, convexity, and the residual nobody likes."""
+    rates, spread = -d_mod * dy_rates * p0, -d_mod * ds * p0
+    convexity = 0.5 * c_mod * (dy_rates + ds) ** 2 * p0
+    return {"rates": rates, "spread": spread, "convexity": convexity,
+            "residual": p1 - p0 - rates - spread - convexity}
+
+
+def fallen_angel_row(y, y_tsy, c=0.045, n=20, f=2, R=0.40, face=10e6):
+    """Table 4B.1: every measure of the stylized note from one flat Treasury curve."""
+    t, cf = cashflows(c, n, f)
+    disc, rk = flat_curve(y_tsy, f), risk_at_yield(y, c, n, f)
+    p, g = rk["price"], y - y_tsy
+    a = asw_par(p, t, cf, disc, f)
+    s_pe, _ = pecs(p, t, cf, f * math.log(1.0 + y_tsy / f), R)
+    return {"price": p, "G": 1e4 * g, "Z": 1e4 * z_spread(p, t, cf, disc), "ASW_par": 1e4 * a,
+            "ASW_mm": 1e4 * a * 100.0 / p, "PECS": 1e4 * s_pe, "D_mod": rk["D_mod"],
+            "C_mod": rk["C_mod"], "DV01": dv01(rk["D_mod"], p, face), "DTS": rk["D_mod"] * 1e4 * g}
+
+
+# ---- every identity in the chapter, asserted ----
+assert abs(accrued(0.045, date(2020, 2, 15), date(2020, 3, 25)) - 0.50) < 1e-12
+assert abs(year_frac(date(2020, 1, 30), date(2020, 3, 31)) - 60 / 360) < 1e-12      # the 31st rule
+assert abs(price(0.045, 0.045, 20) - 100.0) < 1e-10                                 # par: c = y
+assert abs(ytm(price(0.09, 0.045, 20), 0.045, 20) - 0.09) < 1e-10
+feb = risk_at_yield(0.035, 0.045, 20)
+fd_d, fd_c = effective(lambda h: price(0.035 + h, 0.045, 20))
+assert abs(fd_d - feb["D_mod"]) < 1e-5 and abs(fd_c - feb["C_mod"]) < 1e-3
+assert abs(feb["D_mod"] - 8.106) < 0.005 and abs(feb["C_mod"] - 78.0) < 0.1
+grid = np.arange(1, 21) / 2
+assert np.allclose(curve_from_par([0.03] * 20)(grid), flat_curve(0.03)(grid), rtol=0, atol=1e-12)
+assert abs(discount_margin(100.0, 0.0375, 0.04, 3.0) - 0.0375) < 1e-10              # floater at par
+assert abs(toy_tree(0.05) - 99.67) < 0.01 and abs(toy_tree(0.05, None) - 100.03) < 0.01
+y_w, k_w, K_w = ytw(103.0, 0.0925, 10, [(4, 104.625), (6, 102.3125), (8, 100.0)])
+assert k_w == 8 and K_w == 100.0 and abs(y_w - 0.0835) < 0.0005                    # the par call
+
+# Table 4B.1 and the 23 March column
+dates = {"2020-02-20": (0.035, 0.0152), "2020-03-23": (0.09, 0.0076), "2020-06-30": (0.055, 0.0066)}
+table = {d: fallen_angel_row(*yy) for d, yy in dates.items()}
+for d, row in table.items():
+    print(d, "  ".join(f"{k} {v:,.2f}" for k, v in row.items()))
+mar = table["2020-03-23"]
+assert abs(mar["G"] - 824) < 0.01 and abs(mar["Z"] - 804.5) < 0.5 and abs(mar["ASW_par"] - 678.5) < 1
+assert abs(mar["ASW_mm"] - 959) < 1 and abs(mar["PECS"] - 945) < 2
+assert abs(table["2020-02-20"]["DV01"] - 8785) < 2 and abs(mar["DV01"] - 5236) < 2
+
+# The P&L explain and the hedge with the wrong sign (Sec. 4B.8)
+print({k: round(v, 1) for k, v in explain(feb["price"], feb["D_mod"], feb["C_mod"],
+                                           0.0076 - 0.0152, 0.0824 - 0.0198, mar["price"]).items()})
+ust = risk_at_yield(0.0152, 0.0152, 20)
+print("hedge ratio", round(feb["D_mod"] * feb["price"] / (ust["D_mod"] * 100.0), 3),
+      "hedge P&L", round(-9.5e6 * (price(0.0076, 0.0152, 20) - 100.0) / 100.0))
+
+# Key rates sum to effective duration; the bullet's OAS is its Z; the make-whole never binds
+t_fa, cf_fa = cashflows(0.045, 20)
+disc_mar, z_mar = flat_curve(0.0076), mar["Z"] / 1e4
+krd = key_rate_durations(t_fa, cf_fa, disc_mar, z_mar, [2.0, 5.0, 10.0, 30.0])
+d_eff, _ = effective(lambda h: float(np.sum(cf_fa * disc_mar(t_fa) * np.exp(-(z_mar + h) * t_fa))))
+assert abs(krd.sum() - d_eff) < 1e-4 and abs(d_eff - risk_at_yield(0.09, 0.045, 20)["D_mac"]) < 1e-4
+dt_fa, rates_fa = ho_lee(disc_mar, 10.0, 40, 0.01)
+flows_fa = on_grid(t_fa, cf_fa, dt_fa, 40)
+mw_calls = {k: None for k in range(2, 40, 2)}
+assert abs(oas(mar["price"], flows_fa, dt_fa, rates_fa, mw_calls, mw=0.005) - z_mar) < 1e-9
+assert abs(lattice_price(flows_fa, dt_fa, rates_fa, z_mar, mw_calls, 0.005)
+           - lattice_price(flows_fa, dt_fa, rates_fa, z_mar)) < 1e-12
+try:
+    pecs(39.0, t_fa, cf_fa, 0.0076)
+    raise AssertionError("a bond below its recovery must have no PECS")
+except ValueError:
+    pass
+
+# Brambleworth on a lattice: zero-vol OAS is the spread to worst; curve shift = spread shift; OAS < Z
+disc_b = flat_curve(0.03)
+t_b, cf_b = cashflows(0.0925, 10)
+calls_b = {4: 104.625, 5: 104.625, 6: 102.3125, 7: 102.3125, 8: 100.0, 9: 100.0}
+stw = min(z_spread(103.0, *workout_flows(0.0925, k, K), disc_b) for k, K in [*calls_b.items(), (10, 100.0)])
+dt_b, rates_0 = ho_lee(disc_b, 5.0, 10, 0.0)
+flows_b = on_grid(t_b, cf_b, dt_b, 10)
+assert abs(oas(103.0, flows_b, dt_b, rates_0, calls_b) - stw) < 1e-9
+_, rates_b = ho_lee(disc_b, 5.0, 10, 0.01)
+_, rates_h = ho_lee(lambda t: disc_b(t) * np.exp(-1e-3 * np.asarray(t, dtype=float)), 5.0, 10, 0.01)
+s_b = oas(103.0, flows_b, dt_b, rates_b, calls_b)
+assert abs(lattice_price(flows_b, dt_b, rates_h, s_b, calls_b)
+           - lattice_price(flows_b, dt_b, rates_b, s_b + 1e-3, calls_b)) < 1e-9
+assert s_b < z_spread(103.0, t_b, cf_b, disc_b)
+_, rates_b2 = ho_lee(disc_b, 5.0, 10, 0.02)
+print("Brambleworth OAS (bp) at 100bp and 200bp vol:", round(1e4 * s_b),
+      round(1e4 * oas(103.0, flows_b, dt_b, rates_b2, calls_b)))
+print("Larkspur DM (bp) at 97 and 84:", [round(1e4 * discount_margin(p, 0.0375, 0.04, 3.0)) for p in (97.0, 84.0)])
+```
+
+*Used in:* §5.2 and §5.9 (durations and convexities in the spread-return expansion), §6-B.8 (Halvorsen's Z-spread), §8.1–§8.4 (excess returns, empirical duration, DTS), §9.2 and §10.3 (DTS as beta and as the volatility scaler), §12.2–§12.3 (carry and spread per unit of risk), §15.1 (call and make-whole economics), §19.2 (`oas`, `oasd`), §21.1 (`discount_margin`), §24.2–§24.3 (`hazard_price`, `pecs`), App F.
+
+## 4B.10 Desk Debrief
+
+- **A bond is a list, and a yield is a price in another font.** Every spread is the one constant that makes the list reprice against some curve. Name the curve, the compounding and the dirty price, or the number means nothing. (Law 11)
+- **Duration answers two questions that share a number by coincidence.** For a callable, a floater or a bond at 60, reprice instead of differentiating, and in a crisis ask §8.2 for the empirical hedge, because the analytic one can have the wrong sign. (Law 1)
+- **"Convexity" is three words.** Ask with respect to what, over what horizon, and who is short it. The market charges for it in yield, and the bill is called theta.
+- **Per basis point the fallen angel got safer; per percent it got four times riskier.** Size, limit and scale in DTS; keep CS01 for the hedge. (Law 3)
+- **On a flat curve, every gap between spreads is a convention**: compounding ($\approx y^2/2f$), $100/P$, par versus price. Those conventions moved the measured spread change by 300bp in one month. (Law 11)
+- **OAS is model output.** State $\sigma$ and the tree. For a bond trading wider than its make-whole spread, OAS equals Z and the adjustment is zero. (Law 13)
+- **Below about 70, stop quoting spreads.** Quote price and recovery, and treat the solver's refusal as the signal. (Law 7)
+
+**The Spec You Hand the Robot.** "Implement `bondmath.py` per §4B.9: 30/360 (bond basis, 31st rule), ACT/360 and ACT/365F year fractions and accrued to settlement; cash flows with a fractional first period; street price, YTM and YTW over every coupon date of every call window; analytic and effective duration and convexity, tent key rates that sum to one; DV01 and DTS; flat and bootstrapped curves; G, Z, par and market-value asset swap, flat-forward DM, PECS with recovery of face; a Ho–Lee tree fitted by Arrow–Debreu prices, fixed-strike and make-whole calls, OAS. One bracketed bisection that raises when unbracketed. Prices per 100 dirty, decimals, years. Tests: every identity in §4B.9 and the 23 March column of Table 4B.1."
+
+### Exercises
+
+1. *(Rulers.)* With $y^{\text{cc}} \approx y - y^2/(2f) + y^3/(3f^2)$, reproduce the G − Z gaps of Table 4B.1 on an envelope, Treasury correction included. At what bond yield is half a point of "spread" made of compounding? *Solution.* At 9%: $20.25 - 0.61 = 19.6$bp, less 0.1bp for the Treasury, so 19.5. The gap reaches 50bp at about 14.5%.
+2. *(The real curve.)* Bootstrap the 23 March 2020 Treasury par curve from FRED (DGS1, DGS2, DGS5, DGS7, DGS10, DGS30) with `curve_from_par` and recompute Z. Does the shape term raise or lower it? *Solution.* By the linearization of §4B.6, $Z - G$ is the par Treasury's duration-weighted zero minus the note's. The note's weight sits earlier (Macaulay 7.74 years against about 9.6 for a par ten-year), so where the curve slopes up between seven and ten years, the shape term is positive and offsets part of the 19.5bp compounding gap. Its size is a fact about that day's curve, so it has to come from the data.
+3. *(The hedge.)* Recompute the February-to-March P&L of \$10mm of the note with no hedge, with the analytic hedge, and with Ben Dor's Ba ratio at maximum spreads (−0.26 times the analytic notional). *Solution.* −\$3.76mm; −\$4.46mm; and, long \$2.5mm of Treasuries, about −\$3.58mm. The empirical hedge wins this regime and loses 2022 (§8.7), so the defensible choice is a rolling estimate with a stated window, not a constant from any table.
+4. *(Kaz reads the redemption section.)* Show with `lattice_price` that the T+50 make-whole is worthless on all three dates of Table 4B.1, and find where it starts to bind. Why does an RSSG banker still read the clause? *Solution.* By the proposition of §4B.7 it cannot bind while $s \ge m_w$, and for a 4.50% coupon with Treasuries under 1% (so the bond is worth well above par at $r + m_w$) it binds once the spread falls below about 50bp. That is high-grade territory. The clause still matters in a merger refinancing (§15.1), a defeasance and a bankruptcy claim (Hertz, §16.6), where it is a claim amount, not an option.
+5. *(ROBO's momentum signal.)* Theo asks for "twelve-month spread momentum on high yield, 2019–2025, using the spread column." Name three ways the output can measure conventions instead of markets. *Solution.* I-spread or ASW switching from LIBOR to SOFR in 2023 (rebuild on one curve); G across the 2022–24 inversion (use Z or OAS); YTW jumping when a bond's workout date changes (use OAS at a stated $\sigma$, labeled, Law 11).
+
+### Deep-Dive Resource Graph
+
+- **Podcasts.** *Wolf Street Report*, "Nothing's Fixed: What's Behind the Corporate Debt Bailout" (Wolf Richter, 6 May 2020), with transcript, https://wolfstreet.com/2020/05/06/nothings-fixed-whats-behind-the-corporate-debt-bailout/ : a skeptic's account of the March 2020 seizure and the Fed's facilities, best read next to McCauley below. No other episode was verified this session; the U3 research pass adds more.
+- **Practitioner Writing.** BNN Bloomberg, "Ford taps junk market for cash after virus spurs \$2 billion loss" (17 April 2020), https://www.bnnbloomberg.ca/ford-taps-junk-market-for-cash-after-virus-spurs-2-billion-loss-1.1422986 (the deal in §4B.8). Robert McCauley, "The Fed in the Corporate Bond Market in 2020" (Boston University Global Development Policy Center, 7 August 2020), https://bu.edu/gdp/2020/08/07/the-fed-in-the-corporate-bond-market-in-2020 , which argues the announcement did the work before the purchases. Congressional Research Service, *COVID-19 and Corporate Debt Market Stress* (Insight IN11275), https://www.everycrsreport.com/reports/IN11275.html . Veronesi, *Fixed Income Securities* (Wiley, 2010), Chapters 2–4 and 12 (on the shelf); Tuckman and Serrat, *Fixed Income Securities* (Wiley, 4th ed., 2022; not on the shelf).
+- **Academic Papers.** Macaulay (1938), *Some Theoretical Problems Suggested by the Movements of Interest Rates, Bond Yields and Stock Prices in the United States since 1856*, NBER; Ho and Lee (1986), *Term Structure Movements and Pricing Interest Rate Contingent Claims*, Journal of Finance 41(5); Black, Derman and Toy (1990), *A One-Factor Model of Interest Rates and Its Application to Treasury Bond Options*, Financial Analysts Journal 46(1); Ho (1992), *Key Rate Durations: Measures of Interest Rate Risks*, Journal of Fixed Income 2(2); Ben Dor, Dynkin, Hyman, Houweling, van Leeuwen and Penninga (2007), *DTS (Duration Times Spread)*, Journal of Portfolio Management 33(2); Ambastha, Ben Dor, Dynkin, Hyman and Konstantinovsky (2010), *Empirical Duration of Corporate Bonds and Credit Market Segmentation*, Journal of Fixed Income 20(1); Haddad, Moreira and Muir (2021), *When Selling Becomes Viral: Disruptions in Debt Markets in the COVID-19 Crisis and the Fed's Response*, Review of Financial Studies 34(11); O'Hara and Zhou (2021), *Anatomy of a Liquidity Crisis: Corporate Bonds in the COVID-19 Crisis*, Journal of Financial Economics 142(1); Federal Reserve Bank of New York Staff Report 986, on the corporate credit facilities, https://www.newyorkfed.org/medialibrary/media/research/staff_reports/sr986.pdf
+- **Data & Code.** `bondmath.py` (§4B.9, App F); FRED DGS10, https://fred.stlouisfed.org/series/DGS10 , and T10Y2Y, https://fred.stlouisfed.org/series/T10Y2Y ; New York Fed SOFR, https://www.newyorkfed.org/markets/reference-rates/sofr ; QuantLib, https://www.quantlib.org (the production library to check this module against, and the reverse); ISDA CDS Standard Model, https://www.cdsmodel.com
+
+*Used in:* every chapter that quotes a duration, a DV01 or a spread; the Debrief bullets feed App E (Laws 1, 3, 7, 11, 13) and App A §A.3 (the convexity and duration collisions).
+

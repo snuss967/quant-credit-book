@@ -18,17 +18,25 @@ Ines rolls her chair over. "What's the pot, what are the odds, and who at this t
 
 The timer reads 00:11. Theo's 13-week model has thirteen columns. The RFQ has eleven seconds. Ines taps the screen. "One of those is going to be reborn as something useful. Guess which."
 
+At 00:06 the thought arrives, fully formed and in the wrong language. *If they were on the call, the right bid is a lot lower than 91.40, and I don't know how much lower.* He knows what an ad hoc group does with a 2019-vintage agreement and a four-page EBITDA definition. He knows that "supported by" in a press release usually means "drafted by." He has sat in the room, on the other side of the glass, while people decided which lenders would be invited in and which would read about it afterwards. What he does not have is a number, and the grey box accepts only numbers.
+
 Theo does not answer, and in credit, not answering is also a price. The desk passes, another dealer prints the bonds at 91.25, and at 4:40 p.m. an 8-K announces a "comprehensive liability management transaction supported by an ad hoc group of lenders." The bonds open Monday at 78.
+
+At 7:15 on Monday, with the 78 still glowing on the screen and his coffee going cold, Theo asks Ines what he should have done: bid lower, bid smaller, pick up the phone? Ines does not look away from her monitors. "You should have had a number for 'they were on the call.' This chapter is where you get one."
 
 That is the whole chapter in one RFQ. Someone was selling. They were selling *now*. And the only question that mattered was not "is Halvorsen a good credit?" but **who is selling, why now, and what is that worth?**
 
-By the end of this chapter you will be able to: (1) derive the market maker's bid from first principles and say which part of this book builds each of its three terms; (2) read the shelf (Ben Dor, Bohn–Stein, Schmid, Bolder, Veronesi, Dynkin, Paleologo, Moyer, Houlihan Lokey, and the five industry papers) as one argument about forced flows rather than fourteen unrelated textbooks; (3) draw the credit ecosystem as a **forced-seller flow graph**, with holders, triggers, response windows, and absorption capacity; (4) quote dated, sourced numbers on how that graph changed between 2018 and 2026; and (5) hand ROBO a specification precise enough that it builds the graph instead of a one-node diagram labeled "Everyone, March 2020."
+Here is what the chapter promises in return for Friday's \$2mm. First, you will derive the market maker's bid from first principles, and you will see that it splits into three terms, each built by a different part of this book. Second, the shelf (Ben Dor, Bohn–Stein, Schmid, Bolder, Veronesi, Dynkin, Paleologo, Moyer, Houlihan Lokey, and the five industry papers) will stop looking like fourteen unrelated textbooks and start reading as one long argument about forced flows. Third, you will learn to draw the credit ecosystem as a **forced-seller flow graph**, with holders, triggers, response windows, and absorption capacity, so that a downgrade becomes a map of who must sell to whom. Fourth, you will be able to quote dated, sourced numbers on how that graph changed between 2018 and 2026, which is the difference between an opinion and a view. And fifth, you will be able to hand ROBO a specification precise enough that it builds the graph instead of a one-node diagram labeled "Everyone, March 2020."
 
 ## 1.1 The Epistemological Clash: PJT RSSG vs. The Automated Market Maker
 
-Walk onto the restructuring floor at PJT Partners (RSSG) in Midtown Manhattan, and the unit of account is the **bespoke legal bottleneck**. An analyst spends 90 hours modeling a 13-week cash flow forecast, reading a 350-page Senior Secured Credit Agreement from 2019, calculating exact dollar capacity inside the *Available Amount* builder basket under Section 7.06, and determining whether an ad-hoc group holding $50.1\%$ of the Term Loan B can strip collateral coverage via an amendment and drop intellectual property into an unrestricted subsidiary. Time moves in weeks; alpha is extracted by structuring a private non-pro-rata transaction where your client captures a $20\text{-point}$ priming premium over left-behind minority lenders *(illustrative)*.
+Theo's last Monday at PJT Partners (RSSG) in Midtown Manhattan began, as most of them had, with a credit agreement and a deadline that was not his. The unit of account on that floor is the **bespoke legal bottleneck**, and that week the bottleneck was a 350-page Senior Secured Credit Agreement from 2019. He had already spent 90 hours on the 13-week cash flow forecast. Now he was reading Section 7.06 for the fourth time, calculating the exact dollar capacity inside the *Available Amount* builder basket, because the whole engagement turned on one question: could an ad hoc group holding $50.1\%$ of the Term Loan B strip collateral coverage through an amendment and drop the intellectual property into an unrestricted subsidiary? Time on that floor moves in weeks. The unit of output is the negotiated outcome, and RSSG's role is to advise on it, not to own it. Somebody's client, on one side of the table or the other, ends up with a $20\text{-point}$ priming premium over left-behind minority lenders *(illustrative)*, or ends up as one of the left-behind lenders. Theo's real asset, which nobody had ever put on a balance sheet, was that he knew *which clause made the 20 points possible*, whichever side he had sat on.
 
-Now walk onto the quantitative credit and cross-asset market-making floor at Susquehanna International Group (SIG) in Bala Cynwyd, or a systematic credit pod at Citadel or DE Shaw. The unit of account is **conditional expected value per unit of inventory variance per day**. Nobody is reading a single indenture cover-to-cover during market hours. Instead, an automated pricing engine ingests real-time FINRA TRACE prints, CME Treasury futures ticks, OPRA single-stock option implied volatility surfaces, and HYG/LQD ETF creation-redemption baskets. When a client sends an all-to-all Request for Quote (RFQ) on MarketAxess asking for a bid on $\$15\text{ million}$ notional of a stressed $B3/B-$ high-yield bond, the desk has **a few seconds** to solve an adverse selection problem:
+His first Monday on the desk, a systematic credit market-making business that this book will follow for twenty-eight chapters (fictional, like everything the cast does), began with a login and a feed. The unit of account here is **conditional expected value per unit of inventory variance per day**. Nobody reads an indenture cover-to-cover during market hours. Instead, an automated pricing engine ingests real-time FINRA TRACE prints, CME Treasury futures ticks, OPRA single-stock option implied volatility surfaces, and HYG/LQD ETF creation-redemption baskets, and it produces a price for every bond in the universe before Theo has found the coffee machine. The clock is not the week; it is the RFQ. When a client sends an all-to-all Request for Quote on MarketAxess asking for a bid on $\$15\text{ million}$ notional of a stressed $B3/B-$ high-yield bond, the desk has **a few seconds** to solve an adverse selection problem. Ines showed him the equation on his first afternoon, written on the whiteboard in a hand that had once filled in tournament scorecards. Before we look at it, one piece of notation needs unpacking, because it carries most of the chapter.
+
+> **Math, Gently.** *What does $\mathbb{E}[\,\cdot \mid \mathcal{F}_t, \mathcal{O}_t]$ mean?* The $\mathbb{E}$ is an average: the average of all the things that could happen, each weighted by how likely it is. The vertical bar means "given," and what comes after it is everything you are allowed to know when you take the average. $\mathcal{F}_t$ is the public information at time $t$: prices, filings, the tape. $\mathcal{O}_t$ is the order flow, and here it means one specific, slightly uncomfortable fact: *somebody just asked you for a bid.* That fact changes the average, because people do not ask at random. A tiny example: a coin pays 100 or 78 with equal odds, so on its own it is worth 89. Now suppose that, given that this particular person is offering it to you, there is a 60% chance they have already seen it land on 78. The coin is now worth $0.6 \times 78 + 0.4 \times 89 = 82.4$. Same coin, same public information; the only new fact is that someone chose to sell it to you, and it cost 6.6 points. The bid equation does the same arithmetic with the desk's numbers, and in §1.3 it turns Kaz's 91.40 into 83.60. The full version is §1.3.
+
+Here is what Ines wrote:
 
 $$
 \text{Quote Bid } B^* = \mathbb{E}[V_{t+\Delta t} \mid \mathcal{F}_t, \text{Order Flow } \mathcal{O}_t] - \frac{1}{2}\gamma \sigma^2_{\text{IDO}} (2q + \Delta q) - \Lambda_{\text{tox}}(\mathcal{O}_t)
@@ -224,6 +232,94 @@ Pick the argument up where the myth box left it. A desk does not hold four bonds
 Use it for ranking, for limits, and for the first-pass prior on `sigma_ido`. The edge case that bites is that nothing in the code knows when to stop. `dts` will multiply a 3,000 bp spread by a duration and return a perfectly formatted number that means nothing, and `lcs` will report a negative cost for a swapped bid and ask. The switch from spread quotes to price quotes is the caller's job.
 
 *The full listing is [Listing 1.2 in Appendix F](#code-1-2).*
+
+---
+
+## 1.5 The Anthology, Part B: Pricing the Default You Might Be Catching (Bohn–Stein; Schmid; Bolder; BlackRock)
+
+The second question about the forced seller: *if the seller is not informed, what is the bond actually worth?* That is the fair-value term, and the shelf offers two families of answers that have been arguing since the 1970s.
+
+> **[SOURCE EXTRACTION]** *Bohn_Stein_Active_Credit_Portfolio_Management p.128:* "we need only stipulate that the market is attempting to fairly value a firm, most typically through its equity."
+>
+> **Annotation.** This is the structural model's entire philosophical cost, and it is cheap. If the equity market is trying to value the firm, then equity is a call option on the assets struck at the debt, $E_t = V_t N(d_1) - F e^{-r(T-t)} N(d_2)$, and the bond is the assets minus that call. Replace the risk-free drift with the physical asset drift $\mu_V$ and you get the distance to default, the number of asset-volatility standard deviations between the firm and its default point:
+>
+> $$
+> \text{DD}_t = \frac{\ln(V_t/F) + (\mu_V - \tfrac12\sigma_V^2)(T-t)}{\sigma_V\sqrt{T-t}}, \qquad \text{PD}^{\mathbb{P}}_{\text{Gauss}} = N(-\text{DD}). \tag{1.4}
+> $$
+>
+> $V_t$ and $\sigma_V$ are not observed; they are backed out of equity value and equity volatility using $\sigma_E E_t = \sigma_V V_t N(d_1)$ (Chapter 6 and Chapter 23 do it properly). The default point $F$ is a convention; the KMV choice commonly reported is short-term liabilities plus half of long-term debt. The desk use is immediate: equity trades every millisecond and the bond trades twice a week, so the equity market gives you a fresh fair-value input for the bid between bond prints.
+
+> **[SOURCE EXTRACTION]** *Bohn_Stein_Active_Credit_Portfolio_Management p.138:* "under MKMV's empirical distribution and using the VK model described later in this chapter, a DD of 4 converts into an EDF of almost 1 percent."
+>
+> **Annotation.** Under the Gaussian map, $N(-4) \approx 0.003\%$. Under the empirical map, it is almost $1\%$: a factor of roughly 300. Kaz, on hearing this: "Let's just assume Gaussian... I regret it already." The lesson for a specifier is that the structural model is excellent at *ranking* firms and terrible at *calibrating* them, so production systems keep the DD and replace $N(\cdot)$ with an empirically fitted, monotone map from DD to default frequency. If ROBO is told to "compute PD from Merton," it will use $N(-\text{DD})$, and every IG name in the book will look immortal.
+
+> **[SOURCE EXTRACTION]** *Schmid_Credit_Risk_Pricing_Models p.128:* "the default time is unpredictable and therefore the behavior of credit spreads for short maturities can be captured more realistically." ... "their main draw-back is the missing link between firm value and corporate default."
+>
+> **Annotation.** The other family. Intensity (reduced-form) models skip the balance sheet and let default arrive as the first jump of a Poisson process with intensity $\lambda_t$. Their virtue is that a pure diffusion can never default by surprise tomorrow, so structural models imply near-zero short-dated spreads, which the market flatly contradicts. With a constant $\lambda$ under $\mathbb{Q}$, a flat rate $r$, recovery $R$ of par paid at default, and a continuously paid premium $s$, equate the two legs of a CDS:
+>
+> $$
+> s\int_0^T e^{-(r+\lambda)t}\,dt \;=\; (1-R)\int_0^T \lambda\,e^{-(r+\lambda)t}\,dt \quad\Longrightarrow\quad s = \lambda\,(1-R). \tag{1.5}
+> $$
+>
+> The integrals are identical, so they cancel exactly, at every maturity: this is the credit triangle. With quarterly ACT/360 premium accrual it becomes an approximation. Two errors to forbid in every spec: feeding a physical EDF into (1.5), which is a $\mathbb{Q}$ relation (risk-neutral intensities run well above physical ones for IG, which Chapter 6 derives); and treating "40% recovery" as a fact about the bond rather than a CDS quoting convention (Chapter 5).
+
+> **[SOURCE EXTRACTION]** *Bolder_Credit_Risk_Modelling p.597:* "If one assumes independence of default, then default risk is entirely idiosyncratic." ... "Relaxing this unrealistic choice, however, is the source of most of the complexity in this field."
+>
+> **Annotation.** For a desk catching forced flow, correlation is not a portfolio-risk nicety; it is the reason forced sellers arrive in herds. The one-factor threshold model makes it concrete: firm $i$ defaults when $\sqrt{\rho}\,Y + \sqrt{1-\rho}\,\varepsilon_i < N^{-1}(p)$, with a common factor $Y$ and idiosyncratic $\varepsilon_i$, both standard normal. Conditional on the factor, defaults are independent with probability
+>
+> $$
+> p(Y) = N\!\left(\frac{N^{-1}(p) - \sqrt{\rho}\,Y}{\sqrt{1-\rho}}\right),
+> $$
+>
+> so a bad draw of $Y$ moves *every* PD at once, and with it every downgrade, every CCC bucket, and every redemption. Bolder's chapter opens with Richard Feynman's line, "What I cannot create, I do not understand," which belongs on the wall of anyone who specifies models for a coding agent: if you cannot write the simulation, you do not understand the model, and neither will ROBO.
+
+> **[SOURCE EXTRACTION]** *BlackRock_Systematic_High_Yield_Credit p.6:* "Our proprietary probability of default signal that has underpinned all of our credit strategies for over 20 years has successfully identified 77% of the defaulted bonds in the ICE BofA High Yield Index within 24 months of its default since 2010."
+>
+> **Annotation.** This is the structural lineage in production, reported by the manager about its own signal (treat it as a self-reported hit rate, not an audited one, and note that a hit rate without a false-positive rate is half a confusion matrix). The point for Chapter 1 is what the signal is *for*: in high yield, avoiding the default you might be catching is worth more than any factor tilt, because a 50-point jump to default erases years of carry. Chapter 11 builds the defensive book around it.
+
+**Reading the §1.5 listing.** By this point the section has made three claims that are easy to say and easy to get wrong: that a firm four asset-volatility standard deviations from its default point looks immortal under the bell curve, that a flat hazard rate and a recovery give a spread through the credit triangle, and that a common factor turns independent coin flips into herds. The listing that follows checks all three by brute force, so that nobody on the desk, and certainly not ROBO, has to take the algebra on faith.
+
+*What it computes.* `distance_to_default(V, F, mu_V, sigma_V, T)` evaluates eq. (1.4) under $\mathbb{P}$ and returns a unitless number of standard deviations. `credit_triangle_check(lam, R, r, T, n)` integrates both legs of a CDS numerically on a fine grid (measure $\mathbb{Q}$) and returns the par spread as a decimal, which should equal $\lambda(1-R)$ to ten decimal places. The last block simulates the one-factor threshold model: 20,000 draws of the common factor $Y$, 500 firms per draw, default probability 2% and correlation 0.2, and it records the fraction of firms that default in each world.
+
+*Why it is built that way.* Each claim is an assertion rather than a printout. An illustrative firm with assets of 150 against a default point of 100, 6% drift and 10% asset volatility must have a DD above 4 and a Gaussian PD below one in ten thousand; that is the "immortal IG name" of the annotation, made executable. The credit-triangle check integrates instead of using the closed form, because the point is to show that the two integrals cancel, not to assume it. The one-factor block asserts two things: the average default rate across worlds matches $p$ (the factor does not change the mean), and the 99th-percentile world loses more than five times $p$ (it changes the tail enormously).
+
+*When to use it, and when not.* Use it as a teaching harness and as a regression test whenever someone touches the DD or hazard-rate code in Chapters 5 and 6. Do not use `distance_to_default` to produce a PD for a trading book: it has no estimation of $V_t$ and $\sigma_V$ from equity, and it maps through $N(\cdot)$, which the Bohn–Stein extraction just told you is wrong by a factor of about 300 at DD = 4.
+
+*The edge case that bites.* `credit_triangle_check` will happily accept a physical, $\mathbb{P}$-measure EDF as `lam` and return a "spread." The number will be perfectly formatted and far too tight. The code cannot know which measure you meant; the spec must.
+
+<!-- EXPLAINED -->
+```python
+from scipy.integrate import trapezoid
+from scipy.stats import norm
+
+
+def distance_to_default(V, F, mu_V, sigma_V, T=1.0):
+    """Eq. (1.4): physical distance to default (unitless)."""
+    return (np.log(V / F) + (mu_V - 0.5 * sigma_V**2) * T) / (sigma_V * np.sqrt(T))
+
+
+def credit_triangle_check(lam=0.03, R=0.40, r=0.04, T=5.0, n=200_001):
+    """Numerically integrate both CDS legs (measure Q) and return the par spread."""
+    t = np.linspace(0.0, T, n)
+    disc_surv = np.exp(-(r + lam) * t)
+    prem_annuity = trapezoid(disc_surv, t)
+    protection = (1.0 - R) * trapezoid(lam * disc_surv, t)
+    return protection / prem_annuity
+
+
+dd = distance_to_default(V=150.0, F=100.0, mu_V=0.06, sigma_V=0.10)   # illustrative IG-like firm
+assert dd > 4.0 and norm.cdf(-dd) < 1e-4                               # Gaussian: 'immortal'
+assert abs(credit_triangle_check() - 0.03 * 0.60) < 1e-10              # s = lambda (1 - R)
+
+# One-factor threshold model: Monte Carlo default rate matches p; tails fatten with rho
+rng = np.random.default_rng(RNG_SEED + 1)
+p, rho, n_sims, n_firms = 0.02, 0.20, 20_000, 500
+Y = rng.standard_normal(n_sims)
+p_cond = norm.cdf((norm.ppf(p) - np.sqrt(rho) * Y) / np.sqrt(1.0 - rho))
+loss_frac = rng.binomial(n_firms, p_cond) / n_firms
+assert abs(loss_frac.mean() - p) < 4 * loss_frac.std() / np.sqrt(n_sims)
+assert np.quantile(loss_frac, 0.99) > 5 * p                            # herds, not coin flips
+```
 
 ---
 

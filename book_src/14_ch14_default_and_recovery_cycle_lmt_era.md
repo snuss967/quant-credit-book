@@ -47,7 +47,9 @@ Here is the fork the rest of the chapter is built on.
 | Bankruptcy and restructuring studies | Filing | Not counted until a filing | Legal research, "Chapter 22" counts |
 | Index default trackers (e.g., LCD-style "with and without LMEs") | Default | Shown both ways | Cycle commentary |
 
-Moody's now publishes the gap directly. In June 2025 the trailing twelve-month speculative-grade default rate for bonds and loans combined was 5.8% including distressed exchanges. Removing the 51 distressed restructurings brought it to 2.1%, "almost one-third" of the headline (Moody's Asset Management Research, *Corporate Credit Risk Looking for a Catalyst to Break Out*, 7 August 2025). Same issuers, same twelve months, a factor of almost three, and the difference is a definition.
+Moody's now publishes the gap directly. In June 2025 the trailing twelve-month speculative-grade default rate for bonds and loans combined was 5.8% including distressed exchanges. Removing the 51 distressed restructurings brought it to 2.1%, "almost one-third" of the headline (Moody's Asset Management Research, *Corporate Credit Risk Looking for a Catalyst to Break Out*, 7 August 2025). Same issuers, same twelve months, a factor of almost three, and the difference is a definition. Figure 14.1 sets that gap beside the soft share of defaults behind it.
+
+![Figure 14.1: Counting distressed exchanges multiplies the headline default rate by almost three (left), because soft defaults have grown from about a third to about two-thirds of all defaults (right). Source: Moody's Asset Management Research (6 March 2025, 7 August 2025), Moody's (28 April and 18 May 2026) and S&P (15 August 2024, as cited by FTI Consulting, 9 October 2026), as quoted in §14.1; shares are rounded as published, S&P's are for US defaults, and the agencies' definitions differ.](assets/figures/ch14_two_default_rates.png)
 
 The punchline for a model builder is uncomfortable. A probability-of-default model trained on pre-2020 labels ("filed or missed a payment") and scored against today's agency default rate will look as if it under-predicts by roughly that factor of three. It isn't miscalibrated. It is answering a different question. Mixing Moody's DE-inclusive counts, S&P's SD, Fitch's RD and a vendor's "excluding LMEs" series in one training set produces label noise that no amount of gradient boosting will find, because it isn't noise in $X$. It is noise in the definition of $y$.
 
@@ -139,11 +141,13 @@ $$
 \hat S(t_i) = \hat S(t_i^-)\left(1 - \frac{\sum_k d_{k,i}}{n_i}\right).
 $$
 
-The identity $\sum_k \hat F_k + \hat S = 1$ holds exactly at every jump time, for the same reason as in continuous time: each step moves mass $\hat S(t_i^-)\sum_k d_{k,i}/n_i$ out of survival and into the CIFs. If your implementation fails that assert, it has a bug, not a rounding problem.
+The identity $\sum_k \hat F_k + \hat S = 1$ holds exactly at every jump time, for the same reason as in continuous time: each step moves mass $\hat S(t_i^-)\sum_k d_{k,i}/n_i$ out of survival and into the CIFs. If your implementation fails that assert, it has a bug, not a rounding problem. Figure 14.2 draws the identity at the rates of §14.2.1.
+
+![Figure 14.2: The three outcomes always sum to one (left), and treating hard defaults as censoring overstates the chance of a distressed exchange by a gap that widens with the horizon (right, dashed line). Illustrative: closed-form constant hazards of 2.2% (hard) and 3.8% (soft) per year from §14.2.1, with no cures.](assets/figures/ch14_competing_risks_cif.png)
 
 Four places where intelligent people get this wrong:
 
-1. **The Kaplan–Meier trap.** The tempting shortcut is to estimate the DE probability as $1 - \widehat{\mathrm{KM}}_D(t)$, treating hard defaults as censored. That estimates $1 - \exp(-\int_0^t \lambda_D)$, the probability of a DE *in a world where hard defaults cannot happen*. Since hard defaults do happen and remove issuers before they can exchange, $1-\widehat{\mathrm{KM}}_D(t) > F_D(t)$ for every $t>0$, and the bias grows with horizon. It is the statistical equivalent of a recovery analysis that assumes the uptier never happened. Our code asserts the inequality so that nobody "simplifies" the estimator later.
+1. **The Kaplan–Meier trap.** The tempting shortcut is to estimate the DE probability as $1 - \widehat{\mathrm{KM}}_D(t)$, treating hard defaults as censored. That estimates $1 - \exp(-\int_0^t \lambda_D)$, the probability of a DE *in a world where hard defaults cannot happen*. Since hard defaults do happen and remove issuers before they can exchange, $1-\widehat{\mathrm{KM}}_D(t) > F_D(t)$ for every $t>0$, and the bias grows with horizon, as the right panel of Figure 14.2 shows. It is the statistical equivalent of a recovery analysis that assumes the uptier never happened. Our code asserts the inequality so that nobody "simplifies" the estimator later.
 2. **Regressing on the wrong hazard.** A Cox model fit to $\lambda_D$ tells you how covariates move the *rate* of DEs among survivors. It does not tell you how they move the *probability* of eventually having a DE, because a covariate that raises $\lambda_H$ also lowers $F_D$ by removing issuers early. If the question is "does a sponsor-owned, loan-only capital structure raise the chance that this company's first default is an exchange?", the right tool is the Fine–Gray model on the sub-distribution hazard (Fine & Gray, 1999). Candidate covariates: `sponsor_backed`, `loan_only_structure`, `docs_vintage` (pre- or post-Serta-blocker), `coop_in_place`, and the Priming Risk Score from Chapter 13.
 3. **Rates are not hazards.** Agency default rates are issuer-count fractions over trailing twelve months, with withdrawn ratings handled by agency-specific rules. Convert them with $-\ln(1-\text{rate})$ before you put them next to a CDS-implied intensity, and keep the two causes separate when you do (§14.7.3).
 4. **Count-weighted versus dollar-weighted.** Moody's notes that in June 2025 the default *count* fell while the *dollar volume* more than doubled. A DE share computed by count and one computed by dollars can differ by tens of points in a single month. State which one you are using, in the column name.
@@ -219,7 +223,9 @@ So fact 3 pins $\eta$ once $k$ is chosen. Fact 4 then pins $k$, which is the par
 | 1.0 | 1.66 | constant, 0.60/yr | 0.56 pp | Borderline |
 | 1.2 | 1.71 | increasing | 0.39 pp | Yes |
 
-The intuitive guess is a decreasing hazard ($k<1$): the weakest credits fail first. The Moody's facts reject it. Given that a quarter fail eventually and 70% of those go within two years, a decreasing-hazard Weibull leaves too much mass in the long tail. The data want $k$ at or slightly above one, and that has an economic reading every RSSG banker will recognize. Among the susceptible, the hazard starts *low* and *rises*, because the exchange bought runway. Defaults come when the new money runs out, not the morning after the closing.
+The intuitive guess is a decreasing hazard ($k<1$): the weakest credits fail first. The Moody's facts reject it. Given that a quarter fail eventually and 70% of those go within two years, a decreasing-hazard Weibull leaves too much mass in the long tail. The data want $k$ at or slightly above one, and that has an economic reading every RSSG banker will recognize. Among the susceptible, the hazard starts *low* and *rises*, because the exchange bought runway. Defaults come when the new money runs out, not the morning after the closing. Figure 14.3 plots the three clocks beside ROBO's exponential.
+
+![Figure 14.3: Left: all three Weibull shapes pass through the same two-year anchor and flatten at the 25% cure ceiling, while ROBO's exponential keeps climbing, reaching two-thirds by year ten, because its hazard never decays. Right: the cure model's population hazard falls toward zero as cured issuers come to dominate the survivors, while the exponential's stays at 0.11 a year. Illustrative: the mixture-cure Weibull of §14.3.2 with p = 0.25 and the scale solved from the Moody's 70%-within-two-years fact (Hamilton, 18 May 2026).](assets/figures/ch14_redefault_clock.png)
 
 That is where the 13-week model comes back from the dead. In a hazard regression the covariates enter through the cure fraction and the scale:
 
@@ -302,7 +308,9 @@ $$
 \sqrt{0.0599} \approx 0.245 .
 $$
 
-A standard deviation of about 24.5 points of par, *from membership alone*, before any within-group noise.
+A standard deviation of about 24.5 points of par, *from membership alone*, before any within-group noise. Figure 14.4 draws the two humps behind that number.
+
+![Figure 14.4: The Serta class splits into two recovery humps 49 points apart, and a single Beta with the same mean and standard deviation (24.9 points: the 24.5 from membership alone plus a little within-group noise) peaks at a recovery that almost nobody receives. Illustrative: π = 0.526, Beta(74, 26) for participants and Beta(25, 75) for excluded lenders, with the 52.6%, 74 and 25 taken from the Serta remand facts (Mayer Brown, July 2026) and the Beta concentrations assumed.](assets/figures/ch14_two_humps.png)
 
 > **[SOURCE EXTRACTION]** *Schmid_Credit_Risk_Pricing_Models p.103:* "The table supports our opinion that recovery rates decrease during recessions and increase during expansions."
 >
@@ -407,7 +415,9 @@ Optimum then sued them for being a cartel. The table agreed not to be bluffed, a
 >
 > The Ad Hoc Group notes, through counsel, that it has been on both sides of every one of these.
 
-Two rulings on the same New Year's Eve, with opposite outcomes, both correct on their own words. This is the cleanest natural experiment the LMT era offers. The economics of the two deals were similar. The contracts differed by two words. A model that predicts priming outcomes from deal economics alone would have scored these two cases identically and been wrong about one of them.
+Two rulings on the same New Year's Eve, with opposite outcomes, both correct on their own words. This is the cleanest natural experiment the LMT era offers. The economics of the two deals were similar. The contracts differed by two words. A model that predicts priming outcomes from deal economics alone would have scored these two cases identically and been wrong about one of them. Figure 14.5 puts the rulings on one calendar with the exchanges they judged and the filings that followed.
+
+![Figure 14.5: Two of four exchanged names filed inside Moody's two-year window and two after it, and the rulings that repriced these deals arrived only in 2024 to 2026. Source: filing dates and rulings as given in §14.3 (Trend Watch), §14.6 (Docket Diary) and §14.8, from the S.D. Tex. and D.N.J. dockets and law-firm memos; dates are month-level where the chapter gives only a month, and the Del Monte exchange date (August 2024) is as reported and not verified against the docket.](assets/figures/ch14_lme_timeline.png)
 
 ### 14.6.1 Encoding a ruling as a jump
 

@@ -146,8 +146,15 @@ A fill on a credit desk has four natural timestamps: the venue's `event_time`; `
 
 **Schema (`price_record`).** `instrument_key: str` (surrogate, §27.3) · `price: float` (per 100 face if `price_type="PRICE"`, bp if `"SPREAD"`, decimal if `"YIELD"`) · `price_type: {"PRICE","SPREAD","YIELD"}` · `side: {"B","S","M"}` · `size_mm: float` (par, USD millions; TRACE-capped values flagged) · `kind: PriceKind` · `source: str` · `event_ns: int` · `known_ns: int` (both ns since epoch, PTP-disciplined) · `affiliate_flag: Optional[bool]` (None before the indicator existed). **Edge cases:** negative latency beyond the clock-error bound raises; capped sizes are never treated as exact; `EVALUATED`/`COMPOSITE` records cannot enter a training-label set.
 
-<!-- EXPLAIN: Listing 27.1 -->
-> **Code Companion: Listing 27.1.** known_at - event_time in ms; a negative value beyond the clock-error bound is a clock fault. The full python listing is in [Appendix F, Listing 27.1](#code-27-1).
+Everything in the provenance rule so far is a promise about what a number is allowed to mean, and promises written in a spec get broken by the first engineer who is late for the open. The desk wants three of them to be impossible rather than discouraged: a dealer run cannot become a fill price, a negative latency cannot be quietly averaged into a mean, and a TRACE duplicate cannot be silently deleted along with the legitimate partial fills that resemble it. So the rules go into code at the door of the store, where every price either gets its badge or does not get in.
+
+Listing 27.1 is that door. `PriceKind` is the five-way enum from §27.2.2, and `PriceRecord` is a frozen dataclass carrying the schema above, so a record cannot be edited after it is stamped. `TRAINABLE` holds two kinds, `TRADED` and `FIRM_QUOTE`, and `training_labels` is a filter against it: evaluated prices, composites and dealer runs may be features but never labels, simulated fills or cost targets. `latency_ms` turns `known_ns - event_ns` into milliseconds and raises if the answer is more negative than the clock-error bound the caller supplies. The bound is an argument, not a default, because the desk has to say how good its clocks are. A small negative number inside the bound is returned as it is, not clipped to zero.
+
+`dedupe_trace` takes a table of prints and returns it with three new columns, `dup`, `dup_reason` and `regime`, and with no row removed. It sorts by instrument and event time, marks a print as a duplicate leg when `affiliate_flag` is true, and otherwise looks forward within `window_s` (one second by default) for an unflagged print with the same price, the same size and the opposite side. That later leg is marked `inferred_pair`, and each print is matched at most once. `trace_regime` stamps each print `no_flag`, `flag_voluntary` or `flag_mandatory` around the August 2026 and August 2027 dates, so volume features can be split where the reporting changed. The sanity block feeds in seven prints and expects exactly one pair: a 2mm and a 1mm print at the same price do not match, and neither do two prints five seconds apart.
+
+Run it at ingest, before any liquidity or turnover feature is built, and treat its output as a proposal. The edge that bites is the inferred pair itself. A genuine customer round trip at the same price and size inside a second looks identical to an affiliate's double report, so rule 2 will sometimes mark a real print. Because it only marks, the cost is a decision for the feature builder rather than lost history. Count how many rows rule 2 touches in each regime before trusting a volume series that spans August 2027.
+
+*The full listing is [Listing 27.1 in Appendix F](#code-27-1).*
 
 ## 27.3 The Security Master Is the Credit Agreement of the System
 
@@ -234,8 +241,15 @@ A CUSIP-keyed, overwrite-in-place master gets question 2 wrong. It reports the p
 
 **What ROBO built from the vague version.** Asked for "a security master with history," ROBO added an `updated_at` column and overwrote rows. It had history in the sense that a shredder has history. The spec: two time axes, append-only knowledge, an exclusion check, and three tests that encode the Serta questions above.
 
-<!-- EXPLAIN: Listing 27.2 -->
-> **Code Companion: Listing 27.2.** As of knowledge time known_at, attr of key had value over [valid_from, valid_to). The full python listing is in [Appendix F, Listing 27.2](#code-27-2).
+The three Serta questions are the test a security master has to pass, and they are unforgiving in one particular way: each asks a different pair of dates, and a table with one date column can answer at most one of them. The desk could read the definition of bitemporality, nod, and end up with an `updated_at` column, which is how most desks get there. Or it could make the store physically unable to rewrite what it once believed, and then put Theo's Tuesday question to it. Listing 27.2 does the second.
+
+`BitemporalMaster` keeps a list of rows with seven fields: instrument key, attribute, value, a valid interval and a knowledge interval, where an open interval ends at `OPEN`, the largest timestamp pandas allows. Its one write method, `assert_fact`, refuses an empty valid interval and refuses any `known_at` earlier than the previous write, so the knowledge axis only moves forward. It then finds every currently believed row for the same key and attribute whose valid interval overlaps the new one. Each is closed by setting its `known_to` to the write time, the parts of its valid interval that the new fact does not cover are re-inserted as fresh rows, and the new fact is appended. The only edit ever made to an existing row is closing an open `known_to`. That is invariant (I2) of §27.3.2, and it is why the past is immutable.
+
+`as_of` answers $Q$: given a key, an attribute, a valid date and a knowledge date, it returns the one matching value, `None` if there is none, and raises if there are two. `snapshot` returns the whole table as it stood at one knowledge time. `check_exclusion` scans pairs of rows for the same key and attribute that overlap on both axes, which is invariant (I1). The sanity block loads the Serta rows, with the closing known at 6 p.m. on 2020-06-22 *(illustrative)*, and asserts the answers: the post-exchange ranking for live risk, `first_lien_pari` for a decision at midnight, and a second-out tranche that does not yet exist. It then adds a litigation fact in 2025, checks that the 2020 snapshot is unchanged, and checks that writing into the past of the knowledge axis raises.
+
+Use it for anything a backtest or a live risk run reads that can later be restated: rankings, coupons, guarantor sets, ratings. Do not mistake it for production storage. The scans are linear, and a real master puts the same two invariants into Postgres range-exclusion constraints. The edge that bites is `known_at`, which defaults to `None`. Pandas turns that into `NaT`, every comparison against `NaT` is false, the monotonic guard goes quiet, and the row gets a knowledge time that no query will ever match. Always pass it, and stamp a migrated legacy table with the migration date, not with a date you wish you had recorded.
+
+*The full listing is [Listing 27.2 in Appendix F](#code-27-2).*
 
 ## 27.4 Pricing, Risk, OMS/EMS, and the Order State Machine
 
@@ -345,8 +359,17 @@ On the evening of 2019-02-26, a technical error halted CME Globex for about thre
 
 **What ROBO built from the vague version.** Asked to "report latency," ROBO reported the mean of the service time, measured inside the pricing function. It was 40 ms on the day the desk was picked off. The spec: measure sojourn (arrival to response), report p50/p99/p99.9 per utilisation band, and check the queueing model against simulation before trusting it.
 
-<!-- EXPLAIN: Listing 27.3 -->
-> **Code Companion: Listing 27.3.** Kingman / Pollaczek-Khinchine mean queueing delay (exact for M/G/1, i.e. The full python listing is in [Appendix F, Listing 27.3](#code-27-3).
+Kaz's forty milliseconds measured the wrong thing, and the spec asks for the right one: time from arrival to response, reported as p50, p99 and p99.9 by utilisation band, and checked against a simulation before anyone believes the formula. The desk has a reason to automate that beyond tidiness. The Pollaczek–Khinchine result is a pen-and-paper argument, and every risk meeting that leans on it eventually asks what happens if arrivals are burstier than Poisson. It is cheaper to have the answer in a file than in Kaz's head.
+
+Listing 27.3 has four small functions and a block of checks. `pk_mean_wait` is the closed form of §27.5.1: utilisation over one minus utilisation, times half the sum of arrival and service variability, times the mean service time. With `ca2` left at 1 it is exact for Poisson arrivals, and any other value turns it into Kingman's heavy-traffic approximation. It raises at utilisation of 1 or more, because there is no steady state to report. `wait_quantile_approx` inverts the exponential tail and returns zero when the requested tail probability exceeds the utilisation, since most requests then do not wait at all.
+
+`simulate_mg1` is the cross-check. It draws gamma service times with the requested mean and squared coefficient of variation, draws exponential gaps between arrivals, and runs the Lindley recursion in a vectorised line: the wait before each request is a running sum minus its running minimum. It returns waits and service times, so the caller can add them to get sojourn. `fanout_slow_prob` is the one-line $1-(1-p)^n$.
+
+The checks run Kaz's engine: 40 ms mean service, squared variation of 4, utilisation 0.7. They require a mean wait of 233 ms; a million simulated requests that agree with it within 10 percent after a burn-in; a tail-formula p99 between three-quarters and four-thirds of the simulated one; and a p99 sojourn between one and 2.4 seconds. Moving utilisation to 0.9 must multiply the mean wait by more than three and a half. The fan-out lines reproduce 63 percent slow at 100 calls and 78 percent at 150, by formula and by Monte Carlo.
+
+Use it to set a utilisation ceiling before the busy hour, not to forecast the busy hour. The edge that bites is the utilisation you feed it. Averaged over the day the engine looks comfortable at 0.3. On an FOMC afternoon, when every exposed quote needs repricing at once, it is 0.9, and the mean wait is nearly four times the 0.7 case. Feed the function the stress window's arrival rate, and raise `ca2` for bursts, or it will reassure you in the one hour you do not want reassurance.
+
+*The full listing is [Listing 27.3 in Appendix F](#code-27-3).*
 
 ## 27.6 FPGA Trigger Tables for Quote-Pulling
 
@@ -434,8 +457,15 @@ Replay the cold-open bond's row with $\theta = 0.14$ and the budget split as abo
 
 **What ROBO built from the vague version.** Asked to "pull quotes when the market moves," ROBO pulled every quote whenever any instrument ticked. It was perfectly safe and quoted for a total of eleven seconds on its first day. The spec: sensitivities in bond points per hedge point, a joint rule and a provably safe per-instrument rule, fixed-point arithmetic with a stated error bound, pull-only semantics, and the cold open as a regression test.
 
-<!-- EXPLAIN: Listing 27.4 -->
-> **Code Companion: Listing 27.4.** Bond points per hedge point for a rate hedge: dollar-duration ratio times empirical rate beta. The full python listing is in [Appendix F, Listing 27.4](#code-27-4).
+A trigger table is a small piece of arithmetic that has to be right in three places at once: on paper, in a reference implementation, and in fixed-point hardware that will never see a float. The slow path computes the table and the FPGA only reads it, so nobody gets a second chance to find out that a sign was wrong. The desk therefore wants one reference that states every sensitivity in bond points per hedge point, runs both pull rules against the same moves, and proves the cheap rule safe by brute force before a bitstream is synthesised. Ines would call it checking the odds before sitting down.
+
+Listing 27.4 starts with the sensitivities. `beta_rate` is the dollar-duration ratio times the empirical rate beta, and `beta_credit` is the ETF version: bond price times spread duration times DTS beta, over the ETF's price times its spread duration. `allocate_tau` splits the pull budget $\theta$ across hedges in proportion to $|\beta_j|\sigma_j$ and divides each share by $|\beta_j|$, which gives thresholds in each hedge's own units. `joint_pull` is the exact rule: the dot product of $\boldsymbol\beta$ and the hedge move, compared with minus $\theta$, with `side` flipping the sign for an offer. `box_pull` is the cheap rule: any hedge move beyond its own threshold. `bachelier_pickoff` is the closed form of §27.6.2.
+
+The checks replay the cold open with $\theta = 0.19 - 0.04 - 0.01 = 0.14$ points. TY down six 32nds and HYG down 14 cents move fair value by about three-eighths, and both rules pull the bid. In a flight to quality, fair value barely moves, the joint rule stays quiet and the cheap rule pulls, which is its false alarm on display. Then 200,000 correlated, fat-tailed moves, rounded to tick grids, confirm that the joint rule never fires without the cheap one and measure the false pulls that safety costs. A Q.16 integer version shows that the hardware's decision differs from the exact one only inside the stated error bound, for moves up to two points per refresh; larger ones meet the Tier-0 collars first. The last block checks the diffusion pick-off loss against Monte Carlo at 15 minutes, finds it zero at 1.5 seconds, and prices the jump loss at about \$5,500.
+
+Use the pair of rules for streamed, linear bonds. Do not use them for callables or distressed paper, where convexity swamps the guard band. The edge that bites is a zero beta: `allocate_tau` then divides zero by zero, and that hedge's threshold comes back as NaN with a warning. Comparisons against NaN are false, so the hedge never pulls, which happens to be right, but hardware has no NaN. Give the table an explicit "never" sentinel for any hedge a bond does not use.
+
+*The full listing is [Listing 27.4 in Appendix F](#code-27-4).*
 
 ## 27.7 Kill Switches as Stopping Rules
 
@@ -489,8 +519,15 @@ with $\mu_G = -\delta/2$ when healthy ($\text{ARL}_0$, the mean time between fal
 
 **What ROBO built from the vague version.** Asked to "add a kill switch," ROBO added a button that set `enabled = False` in the pricing loop. Live quotes on the venues stayed live, because nothing cancelled them. The button worked perfectly and changed nothing, which is Knight's 45 minutes in one line. The spec: trip cancels everything in scope; Tier 0 has no override; a dead-man heartbeat trips Tier 2; anyone may trip; only two distinct humans plus a passing slow-path check may re-arm; and CUSUM run lengths are checked against Siegmund.
 
-<!-- EXPLAIN: Listing 27.5 -->
-> **Code Companion: Listing 27.5.** ARL of G_k = max(0, G_{k-1} + X_k), X ~ N(drift, 1), alarm at G >= c. The full python listing is in [Appendix F, Listing 27.5](#code-27-5).
+Knight and Citigroup reduce to a short list of checks that a machine can run without asking anyone's permission: a hard limit on each message, a sequential test on the stream of fills, a heartbeat on the plumbing, and a rule about who may turn things back on. Two of those are statistics and should be tuned like statistics, with the false-alarm interval stated, not with a hunch that five seems about right. The other two are authority, and authority has to be code, because at 10:02 a.m. the engineer who wants to restart the quoter is always well meaning.
+
+Listing 27.5 has two halves. The first checks the CUSUM arithmetic of §27.7.2. `siegmund_arl` is Siegmund's approximation, with the 1.166 shift added to the alarm level, and `simulate_arl` runs thousands of CUSUMs side by side on normal increments with a given drift until each crosses the level, then averages the alarm times. For a one-standard-deviation deterioration and a level of 5, the checks require about 938 fills between false alarms and about 10 fills to detect a real problem, with simulation agreeing within 10 percent. Moving the level to 6 must more than 2.5 times the quiet time while adding under 2.5 fills of delay.
+
+The second half is `KillSwitch`, a state machine with two states, `ARMED` and `TRIPPED`. `pre_trade` is Tier 0. It refuses everything once tripped, throttles message rate over a one-second window (the only check that trips the whole switch), and then tests price sanity, a collar around the reference price, a maximum order size and a maximum live notional. It takes no override argument, so a caller who passes one gets a `TypeError`. `check_deadman` trips Tier 2 when the heartbeat is older than the limit. A trip cancels every live order and clears any re-arm votes. `trip` lets anyone on the allowed list do it, while `rearm` accepts only listed humans, counts distinct voters, and succeeds only with two of them and a passing slow-path check. The checks include a 444,000mm basket stopped by the order-size limit, a 105 bp spread read as 105 points stopped by the collar, a monitor denied the right to re-arm, and one human voting twice still counting once.
+
+Use it as the reference the production gateway is tested against, not as the gateway. The edge that bites is the message-rate trip: `pre_trade` trips the switch and cancels live orders, but returns only `(False, "message_rate")`. The cancelled order IDs are not in that return value, and the log records the tier and reason without them. Whatever sends cancels to the venues must be driven by the state change, not by the answer to the order that happened to cross the line.
+
+*The full listing is [Listing 27.5 in Appendix F](#code-27-5).*
 
 ## 27.8 Observability, Deployment, and Resilience Beyond Your Walls
 

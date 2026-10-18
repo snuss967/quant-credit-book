@@ -56,7 +56,7 @@ def fig_clause_map():
     # left: signing -> clock -> outcomes (bus at x = 35)
     _box(ax, 5.8, 28, 11, 10, ["Deal signed", "(date t\u2080)"], fs=7.6, styles=[I, M])
     _box(ax, 22.5, 28, 17.5, 19, ["Regulatory clock", "HSR wait,", "Second Request,", "EC Phase I/II,", "CFIUS, STB, court"],
-         fs=7.0)
+         fs=7.6)
     _arrow(ax, (11.4, 28), (13.6, 28))
     outs = [("Closes at \u03c4$_c$", "hazard $h_c(t)$", 42.0, CLOSE_C), ("Abandoned", "hazard $h_a(t)$", 18.5, ABANDON_C),
             ("Litigated block", "hazard $h_b(t)$", 6.5, BLOCK_C)]
@@ -84,25 +84,25 @@ def fig_clause_map():
     _arrow(ax, (ox + ow / 2, 42.0), (bus2, 42.0), color=CLOSE_C, head=False, lw=1.0)
     _arrow(ax, (bus2, 22.0), (bus2, 62.0), color=CLOSE_C, head=False, lw=1.0)
     for y, t0, t1, t2 in close_rows:
-        _box(ax, cx, y, cw, ch, [t0, t1, t2], strip=CLOSE_C, fs=6.9, styles=[I, M, F])
+        _box(ax, cx, y, cw, ch, [t0, t1, t2], strip=CLOSE_C, fs=7.6, styles=[I, M, F])
         _arrow(ax, (bus2, y), (cx - cw / 2 - 0.2, y), color=CLOSE_C, lw=1.0)
     # break: abandoned and block feed the SMR
     _arrow(ax, (ox + ow / 2, 18.5), (bus2, 18.5), color=ABANDON_C, head=False)
     _arrow(ax, (ox + ow / 2, 6.5), (bus2, 6.5), color=BLOCK_C, head=False)
     _arrow(ax, (bus2, 6.5), (bus2, 18.5), color=MUTED, head=False)
     _box(ax, cx, 11.0, cw, ch, ["2  Special mandatory redemption", "Holder gets 101 + AI in cash within days",
-                                 "Tranche holders reinvest; issuer funds"], strip=ABANDON_C, fs=6.9, styles=[I, M, F])
+                                 "Tranche holders reinvest; issuer funds"], strip=ABANDON_C, fs=7.6, styles=[I, M, F])
     _arrow(ax, (bus2, 11.0), (cx - cw / 2 - 0.2, 11.0), color=MUTED, lw=1.0)
 
     # issuer counter-options: dashed, can knock out entry 1
     _box(ax, cx, 73.6, cw, 6.4, ["Issuer counter-options", "Consent strip or defeasance, before the trigger"],
-         edge=INK_2, ls=(0, (4, 3)), fs=6.9, styles=[I, M])
+         edge=INK_2, ls=(0, (4, 3)), fs=7.6, styles=[I, M])
     _arrow(ax, (cx, 70.4), (cx, 66.5), color=INK_2, ls=(0, (3, 2)), lw=1.1, zorder=5)
-    ax.text(cx + 1.4, 68.5, "can knock out clause 1", fontsize=6.8, color=INK_2, va="center", ha="left")
+    ax.text(cx + 1.4, 68.5, "can knock out clause 1", fontsize=7.6, color=INK_2, va="center", ha="left")
 
     ax.text(0.5, 79.8, "Deal outcome and clock", fontsize=7.6, color=MUTED, ha="left", va="center")
     ax.text(59.0, 79.8, "Cash flows that fire (italic: forced flow)", fontsize=7.6, color=MUTED, ha="left", va="center")
-    ax.text(0.5, 1.2, "Clause numbers follow the table in Section 15.1.2", fontsize=7, color=MUTED, ha="left", va="center")
+    ax.text(0.5, 1.2, "Numbers follow the table in Section 15.1.2", fontsize=7.6, color=MUTED, ha="left", va="center")
     return finish(fig, "ch15_deal_clause_map")
 
 
@@ -178,7 +178,7 @@ def fig_smr_gauge():
     ax.annotate("$P^{close}$ = $G_f$: no information", (3, g_f), xytext=(0, 4),
                 textcoords="offset points", ha="left", va="bottom", fontsize=8.0, color=INK_2)
     ax.annotate("Rates rose ($P^{close}$ = 99.0):\nfree put on the deal", (97, 0.97 * g_f + 0.03 * 99.0),
-                xytext=(0, -22), textcoords="offset points", ha="right", va="top", fontsize=8.2, color=INK_2)
+                xytext=(0, -27), textcoords="offset points", ha="right", va="top", fontsize=8.2, color=INK_2)
     # worked example: P0 = 99.40 at pi = 0.20
     p_ex = 0.20 * g_f + 0.80 * 99.0
     ax.plot([20], [p_ex], "o", color=BLUE, markersize=7, markeredgecolor="white", zorder=6)
@@ -268,7 +268,8 @@ def fig_competing_risks():
     tn, Fn = _naive_cumulative(times, cause, 1)
 
     fig, ax = new_figure("wide")
-    tmax = 3.5
+    ut, n_risk, _ = _risk_table(times, (cause > 0).astype(int))
+    tmax = float(ut[np.where(n_risk >= 20)[0][-1]])          # stop where fewer than 20 deals remain at risk
     t = np.concatenate(([0.0], aj["t"]))
 
     def step(y):
@@ -279,7 +280,7 @@ def fig_competing_risks():
         ax.step(t, 100 * step(aj[k]), where="post", color=cols[k])
     ax.step(np.concatenate(([0.0], tn)), 100 * np.concatenate(([0.0], Fn)), where="post", color=BLUE,
             linestyle=(0, (4, 2.5)), linewidth=1.3)
-    ax.step(t, 100 * step(1.0 - aj["S"]), where="post", color=NEUTRAL, linestyle="-", linewidth=1.3)
+    ax.step(t, 100 * step(1.0 - aj["S"]), where="post", color=NEUTRAL, linestyle="-", linewidth=1.5)
     ax.set_xlim(0, tmax)
     ax.set_ylim(0, 100)
 
@@ -291,20 +292,17 @@ def fig_competing_risks():
     yc, ya, yb = at(aj["t"], aj[1], xe), at(aj["t"], aj[2], xe), at(aj["t"], aj[3], xe)
     yn = at(tn, Fn, xe)
     ytot = at(aj["t"], 1 - aj["S"], xe)
+    label_end(ax, xe, ytot, "All exits, $1-\\hat S$", NEUTRAL, dx=6, dy=3)
+    label_end(ax, xe, yn, "$1-e^{-\\Lambda_c}$, ignores\nthe other exits", BLUE, dx=6, dy=-6)
     label_end(ax, xe, yc, "Closes, $\\hat F_c$", CLOSE_C, dx=6)
-    label_end(ax, xe, ya + 1.2, "Abandoned, $\\hat F_a$", ABANDON_C, dx=6, dy=3)
-    label_end(ax, xe, yb - 1.2, "Litigated block, $\\hat F_b$", BLOCK_C, dx=6, dy=-3)
-    ax.plot([xe], [yn], "o", color=BLUE, markersize=4, clip_on=False, zorder=5)
-    ax.annotate("1 − exp(−Λ$_c$): ignores the other\nexits, overstates closing", (1.55, at(tn, Fn, 1.55)), xytext=(0.0, 14),
-                textcoords="offset points", fontsize=8.2, color=INK_2, ha="left", va="bottom")
-    ax.annotate("Total exits $1-\\hat S$ = sum of the three", (1.0, at(aj["t"], 1 - aj["S"], 1.0)), xytext=(-2, -16),
-                textcoords="offset points", fontsize=8.2, color=INK_2, ha="right", va="top")
+    label_end(ax, xe, ya, "Abandoned, $\\hat F_a$", ABANDON_C, dx=6, dy=4)
+    label_end(ax, xe, yb, "Litigated block, $\\hat F_b$", BLOCK_C, dx=6, dy=-4)
     ax.set_xlabel("Years since signing")
     ax.set_ylabel("Probability of exit by time t (%)")
-    ax.text(0.01, 0.98, "Seeded 600-deal cohort, Listing 15.4", transform=ax.transAxes, fontsize=8, color=MUTED,
+    ax.text(0.01, 0.98, "Seeded 600-deal cohort of Listing 15.4", transform=ax.transAxes, fontsize=8, color=MUTED,
             ha="left", va="top")
-    print(f"  competing risks: F_c={yc:.1f} F_a={ya:.1f} F_b={yb:.1f} tot={ytot:.1f} naive={yn:.1f} at {xe} yr; "
-          f"pending share={np.mean(cause == 0):.2f}")
+    print(f"  competing risks (t={xe:.2f}): F_c={yc:.1f} F_a={ya:.1f} F_b={yb:.1f} tot={ytot:.1f} naive={yn:.1f}; "
+          f"pending share={np.mean(cause == 0):.2f}; sum check ok")
     return finish(fig, "ch15_competing_risks_incidence")
 
 
@@ -313,60 +311,54 @@ def fig_competing_risks():
 # ---------------------------------------------------------------------------------------------
 def fig_wbd_timeline():
     D = dt.date
-    lanes = ["Legacy bonds", "Deal", "Loans and financing"]
-    lane_col = {"Legacy bonds": BLUE, "Deal": ORANGE, "Loans and financing": AQUA}
-    fig, ax = new_figure((7.0, 4.5))
-    x0, x1 = mdates.date2num(D(2025, 5, 15)), mdates.date2num(D(2026, 11, 20))
+    BOND, DEAL, LOAN = "Legacy bonds", "Deal", "Loans and financing"
+    lane_col = {BOND: BLUE, DEAL: ORANGE, LOAN: AQUA}
+    # (date, lane, label, label side)
+    ev = [
+        (D(2025, 6, 9), BOND, "Jun 9, 2025: tender offers and consent solicitations launched", "right"),
+        (D(2025, 6, 16), BOND, "Jun 16, 2025: requisite consents in, covenants stripped", "right"),
+        (D(2025, 6, 26), LOAN, "Jun 26, 2025: $15bn bridge, titled 'Non-Investment Grade'", "right"),
+        (D(2025, 12, 4), DEAL, "Dec 4, 2025: Netflix signs", "right"),
+        (D(2026, 1, 19), DEAL, "Jan 19, 2026: Netflix bid amended to $27.75 cash", "right"),
+        (D(2026, 2, 27), DEAL, "Feb 27, 2026: Paramount Skydance signs,\n$31.00 cash + ticking fee", "right"),
+        (D(2026, 4, 23), DEAL, "Apr 23, 2026: stockholders approve", "left"),
+        (D(2026, 6, 4), LOAN, "Jun 4, 2026: $13bn + \u20ac1.7bn term loans B refinance the bridge", "left"),
+        (D(2026, 9, 30), DEAL, "Sep 30, 2026: ticking fee accrues from the next day", "left"),
+        (D(2026, 10, 6), DEAL, "Oct 6, 2026: closes at $31.0167 (six days of ticking)", "left"),
+    ]
+    fig, ax = new_figure((7.0, 4.3))
+    x0, x1 = mdates.date2num(D(2025, 5, 1)), mdates.date2num(D(2026, 10, 25))
     ax.set_xlim(x0, x1)
-    ax.set_ylim(0, 3)
+    n = len(ev)
+    ax.set_ylim(n - 0.4, -0.7)           # earliest event on top
     ax.grid(False)
-    for s in ("left", "bottom"):
-        ax.spines[s].set_visible(False)
+    for sp in ("left",):
+        ax.spines[sp].set_visible(False)
     ax.set_yticks([])
     ax.xaxis.set_major_locator(mdates.MonthLocator(bymonth=[1, 4, 7, 10]))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter("%b\n%Y"))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%b %Y"))
     ax.tick_params(axis="x", length=3, color=NEUTRAL)
-    # lane geometry: bonds on top
-    lane_y = {"Legacy bonds": 2.5, "Deal": 1.45, "Loans and financing": 0.45}
-    for ln in lanes:
-        ax.axhline(lane_y[ln], color=GRID, linewidth=1.0, zorder=0)
-        ax.text(x0 - 4, lane_y[ln] + 0.07, ln.upper(), fontsize=7.2, color=MUTED, ha="left", va="bottom")
-    # events: (date, lane, label lines, label offset in y, ha)
-    ev = [
-        (D(2025, 6, 9), "Legacy bonds", "Jun 9: tender offers and\nconsent solicitations launched", +0.42, "left"),
-        (D(2025, 6, 16), "Legacy bonds", None, 0, None),
-        (D(2025, 6, 26), "Loans and financing", "Jun 26: $15bn bridge, titled\n'Non-Investment Grade'", +0.38, "left"),
-        (D(2025, 12, 4), "Deal", "Dec 4: Netflix signs", +0.50, "left"),
-        (D(2026, 1, 19), "Deal", "Jan 19: Netflix bid\nbecomes $27.75 cash", -0.30, "left"),
-        (D(2026, 2, 27), "Deal", "Feb 27: Paramount Skydance\nsigns, $31.00 cash + ticking", +0.28, "left"),
-        (D(2026, 4, 23), "Deal", "Apr 23: stockholders\napprove", -0.48, "left"),
-        (D(2026, 6, 4), "Loans and financing", "Jun 4: $13bn + €1.7bn term\nloans B refinance the bridge", +0.38, "left"),
-        (D(2026, 10, 6), "Deal", "Oct 6: closes at $31.0167\n(6 days of ticking from Sep 30)", -0.50, "right"),
-    ]
-    for d, ln, text, dy, ha in ev:
+    for i, (d, lane, text, side) in enumerate(ev):
+        ax.axhline(i, color=GRID, linewidth=0.7, zorder=0)
+    # strip-to-bidder gap: dashed guide from the Jun 16 row to the Feb 27 row, with a double arrow in the Feb 27 row
+    xs = mdates.date2num(D(2025, 6, 16))
+    xb = mdates.date2num(D(2026, 2, 27))
+    ax.plot([xs, xs], [1, 5], color=INK_2, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
+    ax.annotate("", (xb, 5), (xs, 5), arrowprops=dict(arrowstyle="<->", color=INK_2, lw=1.0, shrinkA=3, shrinkB=6))
+    ax.text((xs + xb) / 2, 5, "8 months", fontsize=8.2, color=INK_2, ha="center", va="center",
+            bbox=dict(facecolor="white", edgecolor="none", pad=1.5), zorder=4)
+    for i, (d, lane, text, side) in enumerate(ev):
         x = mdates.date2num(d)
-        y = lane_y[ln]
-        ax.plot([x], [y], "o", color=lane_col[ln], markersize=7, markeredgecolor="white", zorder=5)
-        if text is None:
+        ax.plot([x], [i], "o", color=lane_col[lane], markersize=7, markeredgecolor="white", zorder=5)
+        if i == 5:      # Feb 27 label sits to the right of the arrow's end
+            ax.text(x + 7, i, text, fontsize=8, color=INK, ha="left", va="center", linespacing=1.15)
             continue
-        ty = y + dy
-        ax.plot([x, x], [y, ty - np.sign(dy) * 0.07], color=NEUTRAL, linewidth=0.8, zorder=2)
-        ax.text(x + (-2 if ha == "right" else 2), ty, text, fontsize=7.8, color=INK, ha=ha,
-                va="bottom" if dy > 0 else "top", linespacing=1.15)
-    # June 16 consent (strip) emphasized with a second label in the bond lane
-    x = mdates.date2num(D(2025, 6, 16))
-    ax.plot([x, x], [lane_y["Legacy bonds"], lane_y["Legacy bonds"] - 0.38], color=NEUTRAL, linewidth=0.8, zorder=2)
-    ax.text(x + 2, lane_y["Legacy bonds"] - 0.40, "Jun 16: requisite consents in; covenants\nstripped from the legacy notes",
-            fontsize=7.8, color=INK, ha="left", va="top", linespacing=1.15)
-    # the gap: strip -> buyer chosen, as a double arrow in the bond lane
-    xa, xb = mdates.date2num(D(2025, 6, 16)), mdates.date2num(D(2026, 2, 27))
-    ya = 2.02
-    ax.annotate("", (xb, ya), (xa, ya), arrowprops=dict(arrowstyle="<->", color=INK_2, lw=1.0, shrinkA=0, shrinkB=0))
-    ax.text((xa + xb) / 2 + 40, ya + 0.07, "8 months from the strip to the winning bidder", fontsize=8, color=INK_2,
-            ha="center", va="bottom")
-    # ticking window sliver
-    ax.axvspan(mdates.date2num(D(2026, 9, 30)), mdates.date2num(D(2026, 10, 6)), color=ORANGE, alpha=0.25, zorder=1, lw=0)
-    fig.autofmt_xdate(rotation=0, ha="center")
+        ax.text(x + (7 if side == "right" else -7), i, text, fontsize=8, color=INK,
+                ha="left" if side == "right" else "right", va="center")
+    # legend by lane (colored dots with labels)
+    hs = [plt.Line2D([], [], marker="o", color="none", markerfacecolor=lane_col[k], markeredgecolor="white",
+                     markersize=7, label=k) for k in (BOND, DEAL, LOAN)]
+    ax.legend(handles=hs, loc="lower left", ncols=3, bbox_to_anchor=(0.0, 1.0), handletextpad=0.2, columnspacing=1.4)
     return finish(fig, "ch15_wbd_timeline")
 
 

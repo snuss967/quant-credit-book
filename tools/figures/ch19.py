@@ -121,7 +121,9 @@ def fig_hedge_bowl():
     a.plot([0.0], [sd_c[0]], "s", color=INK_2, markersize=5, zorder=6, clip_on=False)
     label_end(a, 2.0, sd_c[-1], "calm basis", C_RISK, dx=5)
     label_end(a, 2.0, sd_s[-1], "stress basis", C_STRESS, dx=5)
-    a.text(0.04, 0.97, f"unhedged: \\${sd_c[0]:.2f}mm", transform=a.transAxes, fontsize=8.5, color=INK_2, va="top")
+    a.annotate(f"unhedged: \\${sd_c[0]:.2f}mm", (0.0, sd_c[0]), xytext=(0.08, 1.9), textcoords="data",
+               fontsize=8.5, color=INK_2, ha="left", va="center",
+               arrowprops=dict(arrowstyle="-", color=NEUTRAL, lw=0.8, shrinkA=2, shrinkB=4))
     a.annotate(f"min \\${min_c:.2f}mm\nat 1\u00d7", (lam_c, min_c), xytext=(0, -9), textcoords="offset points",
                fontsize=8.5, color=INK_2, ha="center", va="top")
     a.annotate(f"min \\${min_s:.2f}mm\nat {lam_s:.1f}\u00d7", (lam_s, min_s), xytext=(0, 9),
@@ -136,11 +138,14 @@ def fig_hedge_bowl():
     # (b) one factor, one hedge with basis noise: attenuation and the surviving systematic residual
     rho = np.logspace(-1, 1, 300)          # basis noise / hedge's factor risk
     r2 = 1.0 / (1.0 + rho ** 2)            # = h* / h_DTS-matched = share of systematic variance removed
-    b.fill_between(rho, 0, r2, color=BLUE, alpha=0.30, linewidth=0)
+    b.fill_between(rho, 0, r2, color=C_HEDGE, alpha=0.35, linewidth=0)
     b.fill_between(rho, r2, 1.0, color=C_RISK, alpha=0.30, linewidth=0)
-    b.plot(rho, r2, color=BLUE)
+    b.plot(rho, r2, color=INK_2)
     b.set_xscale("log")
     b.set_xlim(0.1, 10)
+    b.set_xticks([0.1, 1, 10])
+    b.set_xticklabels(["0.1", "1", "10"])
+    b.minorticks_off()
     b.set_ylim(0, 1)
     b.grid(axis="y", visible=True)
     b.text(0.13, 0.20, "hedge ratio kept\n(share of DTS-matched)", fontsize=8.5, color=INK_2,
@@ -280,7 +285,7 @@ def fig_cost_stack():
         ev = [int(i[1:]) - 1 for i in r["evicted"]]
         keep_mv.append(MV[np.setdiff1d(np.arange(b0.n), ev)].sum())
     terms = [("handling", "Handling", C_HANDLING), ("risk", "Residual risk", C_RISK),
-             ("adv", "Adverse selection", C_AS), ("hedge_cost", "_nolegend_", C_HEDGE)]
+             ("adv", "Adverse selection", C_AS), ("hedge_cost", "Hedge half-spread (under 1bp)", C_HEDGE)]
     fig, ax = new_figure("wide")
     xs = np.arange(len(runs))
     bottoms = np.zeros(len(runs))
@@ -288,20 +293,20 @@ def fig_cost_stack():
         vals = np.array([1e4 * r[key] / mv for (_, r), mv in zip(runs, keep_mv)])
         ax.bar(xs, vals, bottom=bottoms, color=col, width=0.62, edgecolor="white", linewidth=0.8, label=lab)
         bottoms += vals
-    for xi, tot in zip(xs, bottoms):
-        ax.text(xi, max(tot + 4, 52) if abs(tot - 45) < 12 else tot + 4, f"{tot:.0f}bp", ha="center",
-                va="bottom", fontsize=9, color=INK)
     ax.axhline(45, color=INK, linewidth=0.9, linestyle=(0, (3, 3)), zorder=4)
-    ax.annotate("45bp\ntarget", (3.97, 45), xytext=(0, 0), textcoords="offset points", fontsize=8,
-                color=INK_2, ha="right", va="center")
-    ax.text(0.01, 0.62, "The hedge half-spread (under 1bp)\nis too thin to see at this scale.",
-            transform=ax.transAxes, fontsize=8, color=MUTED, va="top")
+    for xi, tot in zip(xs, bottoms):   # white backing lets a total sit on the dashed target line
+        ax.text(xi, tot + 3, f"{tot:.0f}bp", ha="center", va="bottom", fontsize=9, color=INK, zorder=6,
+                bbox=dict(facecolor="white", edgecolor="none", pad=1.2))
+    ax.annotate("45bp target", (3.97, 45), xytext=(0, 2), textcoords="offset points", fontsize=8,
+                color=INK_2, ha="right", va="bottom")
     ax.set_xticks(xs)
     ax.set_xticklabels([n for n, _ in runs], fontsize=8.5)
     ax.set_xlim(-0.55, 4.0)
     ax.set_ylim(0, bottoms.max() * 1.12)
     ax.set_ylabel("Cost, bp of kept gross market value")
-    ax.legend(loc="upper right", ncols=1, fontsize=8.5, handlelength=1.0)
+    hh, ll = ax.get_legend_handles_labels()   # legend reads top-down like the stack
+    ax.legend(hh[::-1], ll[::-1], loc="upper right", ncols=1, fontsize=8.5, handlelength=1.0)
+    ax.set_axisbelow(True)
     ax.grid(axis="y", visible=True)
     finish(fig, "ch19_cost_stack_by_scenario")
     return runs, bottoms

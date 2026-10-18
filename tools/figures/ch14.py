@@ -126,7 +126,8 @@ def cure_curves(k, p=0.25, frac2=0.70):
 
 
 def fig_redefault_clock():
-    cols = {0.7: RED, 1.0: GREEN, 1.2: BLUE}
+    # three shapes of the same hard-default clock: one hue, light to dark with k (RED/GREEN stay free for other roles)
+    cols = {0.7: SEQ_BLUE_STEPS[4], 1.0: BLUE, 1.2: SEQ_BLUE_STEPS[12]}
     fig, (a, b) = new_figure(ncols=2)
     u = np.linspace(0.02, 10, 500)
     lam_robo = 0.11
@@ -141,7 +142,7 @@ def fig_redefault_clock():
                fontsize=8, color=INK_2, ha="left", va="center",
                arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.8, shrinkA=2, shrinkB=3))
     a.text(9.9, 0.262, "cure ceiling $p$ = 25%", ha="right", va="bottom", fontsize=8, color=INK_2)
-    a.text(9.9, 0.60, "ROBO's exponential\n(0.11/yr)", ha="right", va="top", fontsize=8, color=INK_2)
+    a.text(9.9, 0.375, "ROBO's exponential\n(0.11/yr)", ha="right", va="center", fontsize=8, color=INK_2)
     a.set_xlim(0, 10)
     a.set_ylim(0, 0.72)
     a.set_xlabel("Years since the exchange")
@@ -150,7 +151,7 @@ def fig_redefault_clock():
     a.legend(handles=[Line2D([], [], color=cols[0.7], linewidth=LW, label="k = 0.7"),
                       Line2D([], [], color=cols[1.0], linewidth=LW, label="k = 1.0"),
                       Line2D([], [], color=cols[1.2], linewidth=LW + 0.4, label="k = 1.2 (preferred)")],
-             loc="lower right", bbox_to_anchor=(1.0, 0.43), fontsize=8, handlelength=1.6)
+             loc="upper left", bbox_to_anchor=(0.02, 1.0), fontsize=8, handlelength=1.6)
 
     ub = np.linspace(0.1, 7, 400)
     b.plot(ub, np.full_like(ub, lam_robo), color=MUTED, linewidth=LW, linestyle=(0, (4, 2.5)))
@@ -202,13 +203,13 @@ def fig_two_humps():
     ax.plot(xp, d_one, color=MUTED, linewidth=LW, linestyle=(0, (4, 2.5)))
     ax.axvline(mean * 100, color=NEUTRAL, linewidth=0.9, linestyle=(0, (1, 2)))
 
-    ax.text(mu_in * 100 + 5.5, 0.036, "Participants, 52.6%\nexchanged at 74", ha="left", va="center", fontsize=8.5, color=INK_2)
-    ax.text(mu_out * 100 - 5.5, 0.036, "Excluded, 47.4%\nvalued at 25", ha="right", va="center", fontsize=8.5, color=INK_2)
-    ax.annotate("one Beta with the same mean (51)\nand s.d. (25 points)", (mean * 100, 0.0128), xytext=(mean * 100, 0.0295),
+    ax.text(mu_in * 100 + 6.5, 0.036, "Participants, 52.6%\nexchanged at 74", ha="left", va="center", fontsize=8.5, color=INK_2)
+    ax.text(mu_out * 100 - 7.0, 0.036, "Excluded, 47.4%\nvalued at 25", ha="right", va="center", fontsize=8.5, color=INK_2)
+    ax.annotate("one Beta with the same mean (51)\nand s.d. (24.9 points)", (mean * 100, 0.0128), xytext=(mean * 100, 0.0295),
                 ha="center", va="center", fontsize=8, color=INK_2,
                 bbox=dict(boxstyle="round,pad=0.2", fc="white", ec="none"),
                 arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.8, shrinkA=2, shrinkB=2))
-    ax.annotate("", xy=(mu_in * 100 - 2, 0.0525), xytext=(mu_out * 100 + 2, 0.0525),
+    ax.annotate("", xy=(mu_in * 100, 0.0525), xytext=(mu_out * 100, 0.0525),
                 arrowprops=dict(arrowstyle="<->", color=INK_2, lw=0.9, shrinkA=0, shrinkB=0))
     ax.text(mean * 100, 0.0535, "49 points apart", ha="center", va="bottom", fontsize=8, color=INK_2)
     ax.set_xlim(0, 100)
@@ -263,7 +264,7 @@ def fig_lme_timeline():
         ax.plot([t], [y], "o", color=INK_2, markersize=10.5, zorder=4)
         ax.text(t, y, str(n), ha="center", va="center", fontsize=7.5, color="white", zorder=5, fontweight="bold")
     for i, (n, _, _, key) in enumerate(rulings):
-        ax.text(2020.0, 1.85 - 0.31 * i, f"{n}  {key}", ha="left", va="center", fontsize=7.6, color=INK_2)
+        ax.text(2020.0, 1.85 - 0.31 * i, f"{n}  {key}", ha="left", va="center", fontsize=8, color=INK_2)
 
     ax.set_xlim(2019.9, 2026.95)
     ax.set_ylim(-0.4, 7.5)

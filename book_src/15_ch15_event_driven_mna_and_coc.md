@@ -51,7 +51,9 @@ Ines puts it in poker terms. "The payoff is the pot. The clock is how many stree
 | 5 | Loan CoC event of default | Consummation of the CoC | Acceleration, so repayment at par or a refinanced loan | Lenders (often waived, priced as a consent) | CLO reinvestment; repricing |
 | 6 | CDS successor determination | Succession event under the ISDA Definitions | Reference entity reassigned, or orphaned | Protection buyer and seller | Basis dislocation; orphaned protection |
 
-Two further entries are not cash flows at all but *counter-options held by the issuer or acquirer*: the consent solicitation that strips covenants before the trigger, and legal or covenant defeasance, which replaces the issuer's promises with a box of Treasuries. Both kill entry 1. Both appear in the case studies (§15.2, §15.8). An RSSG banker has drafted all eight. A systematic desk has to store all eight as fields in its security master, because a CoC put without its defeasance article is a payoff without its knock-out barrier.
+Two further entries are not cash flows at all but *counter-options held by the issuer or acquirer*: the consent solicitation that strips covenants before the trigger, and legal or covenant defeasance, which replaces the issuer's promises with a box of Treasuries. Both kill entry 1. Both appear in the case studies (§15.2, §15.8). An RSSG banker has drafted all eight. A systematic desk has to store all eight as fields in its security master, because a CoC put without its defeasance article is a payoff without its knock-out barrier. Figure 15.1 hangs the six cash flows on the branches of one deal-outcome tree and shows where the issuer's counter-options bite.
+
+![Figure 15.1: Five of the six clauses fire only if the deal closes, the special mandatory redemption fires only if it breaks, and the issuer's consent strip or defeasance can knock out the change-of-control put before it pays. Illustrative: schematic of the clauses in the table of Section 15.1.2, not data.](assets/figures/ch15_deal_clause_map.png)
 
 Kaz reads the table twice. "Entry five. The loan *defaults* when the deal *succeeds*?"
 
@@ -159,7 +161,9 @@ Any bond with $c < c^*$ has an in-the-money put if it triggers. Plug in a remain
 | 2023 vintage | 5.00% | ≈100.3 | ≈88.7 | ≈12.3 |
 | 2009-style high coupon | 6.875% | ≈107.9 | ≈95.6 | ≈5.4 |
 
-Same issuer, same acquirer, same trigger: a four-to-one spread in what the put is worth, driven entirely by the year the bond was printed. The put does not care about the credit story. It cares about $101 - P$. This is aha number one of the chapter: **moneyness is a coupon-vintage accident**, and the 2020–21 vintage of sub-3% IG coupons turned every one of those bonds into a deep-in-the-money LBO put the day rates went to 4%.
+Same issuer, same acquirer, same trigger: a four-to-one spread in what the put is worth, driven entirely by the year the bond was printed. The put does not care about the credit story. It cares about $101 - P$. This is aha number one of the chapter: **moneyness is a coupon-vintage accident**, and the 2020–21 vintage of sub-3% IG coupons turned every one of those bonds into a deep-in-the-money LBO put the day rates went to 4%. Figure 15.2 draws the hockey stick for both acquirers.
+
+![Figure 15.2: Put intrinsic value falls in a straight line with the coupon and reaches zero at the break-even coupon, so the put on the 1.85% bond is worth more than four times the put on the 6.875% bond into the same sponsor LBO. Illustrative: computed from the model of Section 15.2.2 (4.5 years remaining, flat Treasury zero rate 4.4%, post-close spreads of 60bp and 350bp, strike 101).](assets/figures/ch15_coupon_vintage_put.png)
 
 Kaz looks at the table. "So the most valuable covenant in the IG market was written by a bond that nobody wanted to buy in 2021."
 
@@ -335,7 +339,9 @@ $$
 \hat\pi_f \;=\; \frac{99.00 - 99.40}{99.00 - 100.98} \;=\; \frac{-0.40}{-1.98} \;\approx\; 0.20 .
 $$
 
-The bond market thinks there is a one-in-five chance the judge blocks the deal. That number is free of the takeover premium, the target's standalone value and the equity arbitrageurs' borrow costs, which is why it is cleaner than the one backed out of the target's stock.
+The bond market thinks there is a one-in-five chance the judge blocks the deal. That number is free of the takeover premium, the target's standalone value and the equity arbitrageurs' borrow costs, which is why it is cleaner than the one backed out of the target's stock. Figure 15.3 shows the price line, the sign flip and the blind spot.
+
+![Figure 15.3: Left, an SMR tranche's price is a straight line in the break probability whose slope changes sign when rates move; right, the gauge goes blind as the close-leg price approaches the fail-leg price. Illustrative: the three-year 4.60% tranche of Section 15.4.2 (fail-leg value 100.98, resolution in a quarter), with a 0.10-point price error on the right.](assets/figures/ch15_smr_gauge.png)
 
 **Probabilistic duration.** Dollar durations add across the two legs, so with $D_f \approx T_f$ the fail leg's duration and $D^{\text{close}}$ the close leg's,
 
@@ -453,7 +459,9 @@ $$
 \sum_k \hat F_k(t) \;=\; 1 - \hat S(t),
 $$
 
-and the identity on the right is exact, which makes it the best unit test in the chapter.
+and the identity on the right is exact, which makes it the best unit test in the chapter. Figure 15.4 shows the three incidences on the Listing 15.4 cohort, and how far the cause-specific shortcut overstates closing.
+
+![Figure 15.4: By about 1.5 years the cause-specific shortcut (dashed) says 90% of deals have closed, while the competing-risks estimate says 72%, because 14% were abandoned and 9% blocked, and the three incidences sum exactly to total exits. Illustrative: Aalen–Johansen estimates from the seeded 600-deal synthetic cohort of Listing 15.4 (Weibull cause-specific hazards with planted coefficients, independent censoring), stopped where fewer than 20 deals remain at risk.](assets/figures/ch15_competing_risks_incidence.png)
 
 **From clocks to PnL.** For a position whose price jumps by $\Pi_k(t)$ on outcome $k$ at $t$, under $\mathbb{P}$,
 
@@ -527,7 +535,9 @@ Mags reads the prepayment line twice. "The ticking money went to the equity. The
 
 **The loan said what it was.** A \$15bn bridge was documented as the "Non-Investment Grade Leveraged Bridge Loan Agreement" (June 26, 2025). Kaz: "They named the loan after its rating?" Theo: "It's the only honest title in the data room." It was refinanced on June 4, 2026 with a \$13bn term loan B at SOFR+250 and a €1,717mm term loan B at EURIBOR+250 at Discovery Global Holdings, maturing June 4, 2033, whose change of control, "such as the consummation of the previously disclosed proposed acquisition of the Company by Paramount Skydance Corporation," permits acceleration (WBD 8-K, June 2026). Entry 5 of the §15.1 table, with the trigger named in advance.
 
-**Three suitors, one clock.** WBD signed with Netflix in early December 2025, amended on January 19, 2026 to \$27.75 a share in all cash, and then signed with Paramount Skydance on February 27, 2026 at \$31.00 in cash plus "Ticking Consideration" of \$0.00277778 per share per day after September 30, 2026, capped at \$0.25 per 90 days. Stockholders approved on April 23, 2026. The deal closed on October 6, 2026 at \$31.01666668 a share: exactly six days of ticking ($6 \times 0.00277778$), or \$41,886,975.78 in aggregate. At closing WBD repaid the June 2026 term loans and its October 2024 revolver, and WBD subsidiaries guaranteed Skydance's new notes and credit agreement (WBD 8-Ks, EDGAR).
+**Three suitors, one clock.** WBD signed with Netflix in early December 2025, amended on January 19, 2026 to \$27.75 a share in all cash, and then signed with Paramount Skydance on February 27, 2026 at \$31.00 in cash plus "Ticking Consideration" of \$0.00277778 per share per day after September 30, 2026, capped at \$0.25 per 90 days. Stockholders approved on April 23, 2026. The deal closed on October 6, 2026 at \$31.01666668 a share: exactly six days of ticking ($6 \times 0.00277778$), or \$41,886,975.78 in aggregate. At closing WBD repaid the June 2026 term loans and its October 2024 revolver, and WBD subsidiaries guaranteed Skydance's new notes and credit agreement (WBD 8-Ks, EDGAR). Figure 15.5 puts every date on one axis.
+
+![Figure 15.5: The covenant strip on the legacy notes came eight months before the winning bidder signed and sixteen months before the deal closed. Source: WBD 8-Ks (June 2025 to October 2026), EDGAR, as cited in Section 15.8; the December 4, 2025 Netflix signing date is from the EDGAR 8-K filed December 5, 2025 for that agreement.](assets/figures/ch15_wbd_timeline.png)
 
 **Pricing the ticking fee.** Annualized, $0.00277778 \times 365 \approx \$1.014$, about 3.3% a year on \$31. That compensates shareholders for time, not for break risk, which they still carry. A survival model prices the rest: the expected ticking payment is $0.00277778 \times \mathbb{E}\big[(\tau_c - t^{*})^{+}\big]$ in days, with $t^{*}$ = September 30, 2026, and the competing-risks curve of §15.5 supplies the law of $\tau_c$.
 

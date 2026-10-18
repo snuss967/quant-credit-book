@@ -151,4 +151,21 @@ Run `python3 tools/status.py` first. Workflow scripts live in ~/.claude/projects
 4. **Then WP3 onward**, in this file's package order: canonical homes, the WP4 new chapters from the synthesis, WP5 figures, WP6 tightening, and WP7 code last.
 5. **Pacing.** Recalibrate the meter once the user gives a reading (`tools/usage_meter.py --window-start 2026-10-18T04:30:00+00:00 --calibrate PCT AT`). Run `pace_guard.py --target 97 --cap-only`. Fable handles judgment only; bulk research goes to Sonnet; Opus writers stay lean.
 
+## Edition 2 addendum (reader-lens reviews, 2026-10-18)
+
+Source: `state/reviews/ed2/synthesis.md` (the deduplicated, ranked master list in four layers, with actions and costs), built from `review_rssg_partner.md`, `review_desk_head.md` and `review_transition_coach.md`. The user directives still outrank it; nothing is removed. Appendix F is the Code Companion and stays; new appendices take letters G onward and App Z is reserved for solutions; the transition coach's "getting the seat" chapter is **4-D** (`04_ch04d`), since 4-C is the user's "other seats at the table". The eight endorsed files are in `SYSTEM_PROMPT.md` §3 ("Edition 2 additions", end of the subsection) and `book_state.json["expansion_queue"]`.
+
+New work, in priority order:
+
+1. **Write the TOP 4 now (Opus, from the briefs in `state/advisor_briefs/`; each writer follows the Voice Amendments):** `03_ch03b_your_first_year_on_the_desk`, `12_ch12c_plan_valuation_dip_and_exit_as_derivatives`, `08_ch08b_the_risk_model_and_the_limit_sheet`, `08_ch08c_the_morning_explain_pnl_attribution` (8-B before 8-C if not in parallel; 8-C imports `risk_model.py`). None waits on a PARTIAL dossier.
+2. **Plumbing fix before any new module ships (Sonnet, S):** `book_src/lib/` on `sys.path` in `tools/check_book.py`; document in App F and `README.md`; a Model Inventory table at the head of App F.
+3. **Scope additions to in-flight files (Opus, M):** 12-B intercreditor mechanics, Required-Lenders denominator, the fulcrum defined once, the Purdue node; 13-B's RSA/TSA diary, the Passport forum table, the Purdue jump, Incora dates reconciled.
+4. **Section-level additions (Opus, M each; see synthesis §1):** §3.6.3 walls and the cleansing 8-K; §13.5.2 co-op economics and PRS covariates; §8.6 hedging as an operation; §9.8 constraints that bind; Ch 16 §16.9 the claims desk (+ App D rows); Ch 27 §27.9 from notebook to blotter; App A §A.10 dictionary and §A.11 Statute Block; §28.9 panels and the Sharpe input; Part gates; the make-whole circuit-split table (§15.1/§16.6).
+5. **Red-pen fixes (Sonnet, one pass per file; synthesis §5):** App A §A.9 cram-up and APR; §13.3.1, §13.2, §13.9/§14.6 dates; §16.1.1, §16.6 leg 1; §25.8; §5.5.1; §12.5 rho; §26.8, §26.9; §28.8; §3.5 (rows, Ch 25→26 reference); §27.4, §27.8; §1.1 and §4.1 tables; preface and Part I opener; README.
+6. **Learning-path files, after the primers are COMPLETE and U3 lands (Opus):** `00_02_how_to_use_this_book`, `04_ch04d_getting_the_seat` (with the twelve-project Portfolio), then `02_ch02b_transaction_cost_analysis_for_credit` after 18-B.
+7. **App Z solutions (Sonnet drafts, Opus checks; staged):** primers and Part I first; the rest after WP6 stabilizes the exercise sets; retrofit exercise tags and "Check:" parentheticals in the same pass.
+8. **Deferred to Edition 3 (record in `state/exploratory_space.md` §2 at the next mapper pass):** 27-B research-to-production, 16-B the claims desk, the Forum Atlas and Tax Line appendices, the Portfolio appendix, the Statute Block appendix; each has an interim home above.
+
+Scope notes for the user-specified chapters (synthesis §4): 1-B is a five-shop ethnography with a different composite per shop and one View From Another Seat box per week on the Halvorsen bond; it shows the risk pack and the explain from the corridor and does not teach them. 4-C is one bond through seven seats and closes by noting that the seats become 12-B's classes and 12-C's DIP lender, backstop party and claims fund; its dealer seat hands off to 18-B and its systematic seat to 8-B.
+
 <!-- STATUS: COMPLETE -->

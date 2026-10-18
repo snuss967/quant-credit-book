@@ -1,0 +1,26 @@
+# Progress Log, Edition 2 U2: Chapter 5
+
+- [x] 1. [Cold Open: The Fourteen-Sigma Tuesday] EXPAND-SCENE (Carvana, decision point 2 Jun 2023) -- Carvana scene added, failed exchange, 2 June decision point.
+- [x] 2. [5.1.1 Desk framing] MATH-GENTLY (distribution, mixture; P vs Q) -- deck-of-cards distribution box, bookmaker P versus Q box.
+- [x] 3. [5.1.2 The mixture and its moments] MATH-GENTLY + FULL-DERIVATION-MOVE -- total-variance box; higher moments moved to Full Derivation.
+- [x] 4. [5.1.3 Skew is minus one over root PD] MATH-GENTLY + WHEN-TO-APPLY -- seesaw shape box; judgment paragraph on skeleton limits added.
+- [x] 5. [5.1.4 The fourteen-sigma Tuesday, priced] MATH-GENTLY + ANOTHER-SEAT -- VaR versus ES speedometer box; RV pod seat added.
+- [x] 6. [5.1.5 The 13-week model, reborn] MATH-GENTLY + LIST-TO-NARRATIVE -- hazard-rate box; warnings rewritten as Theo-Mags lender-case scene.
+- [x] 7. [5.2.3 Spread: right-skewed] MATH-GENTLY (normal vs lognormal, random walk, Ito) -- drunk random walk, lognormal, Jensen and Ito correction box.
+- [ ] 8. [5.2.4 Return: sign-flipping in distress] BRIDGE to the cold open
+- [ ] 9. [5.2.4 Ways This Blows Up: stale-price smoother] SHOP-LIFE vignette
+- [ ] 10. [5.3.2 Merton (1976)] MATH-GENTLY + FULL-DERIVATION-MOVE
+- [ ] 11. [5.3.3 Kou (2002)] MATH-GENTLY + EXPAND-SCENE (short)
+- [ ] 12. [5.3.4 What the jump model is for] WHEN-TO-APPLY + LIST-TO-NARRATIVE
+- [ ] 13. [5.4 Levy processes] MATH-GENTLY + FULL-DERIVATION-MOVE + WHEN-TO-APPLY
+- [ ] 14. [5.5.1 Desk framing] EXPAND-SCENE (short) + reviewer fix
+- [ ] 15. [5.5.2 Beta and the method of moments] MATH-GENTLY
+- [ ] 16. [5.5.3 Beta regression] MATH-GENTLY + LIST-TO-NARRATIVE + FULL-DERIVATION-MOVE
+- [ ] 17. [5.5.4 Downturn recovery] MATH-GENTLY + ANOTHER-SEAT
+- [ ] 18. [5.5.6 P recovery, Q recovery, and the 40%] ANOTHER-SEAT + WHEN-TO-APPLY
+- [ ] 19. [5.6.1 The Bernoulli becomes a categorical variable] MATH-GENTLY + WHEN-TO-APPLY
+- [ ] 20. [5.6.2 Case Study: Serta Simmons and Hertz] EXPAND-SCENE (2,500-4,000 words)
+- [ ] 21. [5.7.2 Hill and peaks-over-threshold] MATH-GENTLY + FULL-DERIVATION-MOVE + WHEN-TO-APPLY
+- [ ] 22. [5.7.4 Diversification eats skew] MATH-GENTLY
+- [ ] 23. [5.8 Choosing the Shape] WHEN-TO-APPLY
+- [ ] 24. [5.10 Desk Debrief] LIST-TO-NARRATIVE

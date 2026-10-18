@@ -1,0 +1,29 @@
+# Progress Log, Edition 2 U2: Chapter 3
+
+- [x] 1. [Cold open] EXPAND-SCENE: Brambleworth hand to ~1,200 words, Friday-night replay. — Note: screen texture, three failed answers, Friday-night replay, roadmap added.
+- [x] 2. [§3.1, Moyer box] MATH-GENTLY: distribution, mean as price, risk-neutral. — Note: raffle-ticket box placed before Moyer, P versus Q introduced.
+- [x] 3. [§3.1.1] MATH-GENTLY + BRIDGE: variance, SVB 69/57 puzzle. — Note: seesaw variance box; SVB 69/57 puzzle planted for §3.1.3.
+- [x] 4. [§3.1.2] MATH-GENTLY: distribution zoo. — Note: zoo box with weather analogy, lognormal, Beta, Poisson, fat tails.
+- [x] 5. [§3.1.3] MATH-GENTLY + WHEN-TO-APPLY: random walk, sqrt time, SVB puzzle resolved. — Note: drunk-walk box, Itô pointer to §6.1, judgment, SVB puzzle resolved.
+- [x] 6. [§3.1.4] SHOP-LIFE (short): spreadsheet as feature at a market maker. — Note: feature-store meeting: refresh on Item 2.03, point-in-time, naming.
+- [ ] 7. [§3.2.1] FULL-DERIVATION-MOVE + MATH-GENTLY: Bayes, GM bid.
+- [ ] 8. [§3.2.1, after units] ANOTHER-SEAT: the insurer and pension fund.
+- [ ] 9. [§3.2.2] LIST-TO-NARRATIVE + MATH-GENTLY: features as Ines walk-through; odds.
+- [ ] 10. [§3.2.3] MATH-GENTLY + WHEN-TO-APPLY: winner's curse; GM judgment.
+- [ ] 11. [§3.3.1-3.3.3] MATH-GENTLY x2: bp of price; beta and residual.
+- [ ] 12. [§3.3.4] MATH-GENTLY: shrinkage.
+- [ ] 13. [§3.3.5] SHOP-LIFE vignette: Tuesday 7:40 a.m. vendor restatement.
+- [ ] 14. [§3.3, end] WHEN-TO-APPLY: markouts.
+- [ ] 15. [§3.4] NEW-SCENE: SVB Financial, March 10-22, 2023.
+- [ ] 16. [§3.4.1 table] LIST-TO-NARRATIVE: SVB filings through the rows.
+- [ ] 17. [§3.4.2] MATH-GENTLY x2 + FULL-DERIVATION-MOVE: hazard, P vs Q.
+- [ ] 18. [§3.4.3] FULL-DERIVATION-MOVE + MATH-GENTLY + WHEN-TO-APPLY: base rates.
+- [ ] 19. [§3.4, after Trend Watch] ANOTHER-SEAT: distressed fund in the 30s.
+- [ ] 20. [§3.5] LIST-TO-NARRATIVE + MATH-GENTLY + fix: Ledger SVB row, half-life, Ch 26.
+- [ ] 21. [§3.6.1] LIST-TO-NARRATIVE + NEW-SCENE: Saks Global.
+- [ ] 22. [§3.6.2] MATH-GENTLY + FULL-DERIVATION-MOVE + WHEN-TO-APPLY: CUSUM.
+- [ ] 23. [§3.6.3] EXPAND-SCENE: restricted list, wall-crossing, cleansing, Wolfspeed.
+- [ ] 24. [§3.7 Serta] EXPAND-SCENE: blotter in June 2020.
+- [ ] 25. [§3.7, end] ANOTHER-SEAT: the CLO manager.
+- [ ] 26. [§3.8 Engine, §3.9 Debrief] BRIDGE.
+- [ ] 27. [Resource Graph] BRIDGE: 9fin episodes, Signals and Threads Ep 29.

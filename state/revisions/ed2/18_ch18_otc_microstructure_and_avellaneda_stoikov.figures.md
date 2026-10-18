@@ -1,12 +1,19 @@
 # Figures log: Chapter 18 (OTC microstructure and Avellaneda-Stoikov), Edition 2, task U4
 
-Script: tools/figures/ch18.py -> assets/figures/ch18_<slug>.png. No brief file existed, so figures were chosen from the chapter's own headings and worked examples.
+Script: tools/figures/ch18.py (run: python3 tools/figures/ch18.py) -> assets/figures/ch18_<slug>.png. No brief file existed, so the figures were chosen from the chapter's headings and worked examples. The chapter had no figures before. Every PNG was opened and checked (label collisions, clipping) and re-run until clean; all are under 125 KB. tools/check_book.py reports ch18 OK.
 
-Plan (5 figures, in order of appearance):
-1. 18.1 ch18_roll_splitting_momentum (section 18.2)
-2. 18.2 ch18_quote_ladder_glft_horizon (section 18.5)
-3. 18.3 ch18_dealer_net_inventory_nyfed (section 18.5 Trend Watch; REAL data, NY Fed)
-4. 18.4 ch18_jtd_reservation_price (section 18.6.3)
-5. 18.5 ch18_cold_open_bid_waterfall (section 18.7)
+## Embedded figures (all five done)
 
-Embedded so far: (none yet)
+1. **Figure 18.1** `ch18_roll_splitting_momentum.png`. Section 18.2.1, after the "Order splitting makes Roll underestimate ..." paragraph. Two panels: the Roll estimate as a share of the true spread against order-splitting persistence rho (theory S(1-rho) with simulated points), and against informed drift phi (theory sqrt(1 - phi/(1-phi^2)), NaN beyond phi = 0.618 for these inputs). Data: Illustrative, simulated with Listing 18.1's simulator (S = 0.20, sigma_mid = 0.10, 200,000 prints per point, 5 runs).
+2. **Figure 18.2** `ch18_quote_ladder_glft_horizon.png`. Section 18.5, after the tau_eff paragraph. Left: AS one-week ribbon vs stationary GLFT bid/ask relative to mid by inventory (GLFT is about 2.7x steeper per lot). Right: effective horizon vs arrival rate A (log-log), the 5-day AS horizon, A = 2 giving about 13 days. Data: Illustrative, GLFT ground state of the tridiagonal matrix in (18.5); asserts reproduce the chapter's eta = 0.735, omega = 0.017, tau_eff = 13 days. The A at which tau_eff = 5 days (Exercise 6) is deliberately not labelled.
+3. **Figure 18.3** `ch18_dealer_net_inventory_nyfed.png`. Section 18.5 Trend Watch, inserted after the box (before section 18.6). Primary dealers' net corporate-bond position, maturities over 5 years vs 5 years or less, 13-week average, Jan 2015 to 7 Oct 2026. Data: REAL, NY Fed Primary Dealer Statistics API (series PDPOSCSBND-L13, G13, BELL13, BELG13, G5L10, G10, BELG5L10, BELG10), fetched 2026-10-18; cached in tools/figures/data/ch18_nyfed_pd_corp_bonds.csv. Computed: over-5y averages +4.1bn (2017) and -12.1bn (2026, 40 weeks); 5y-or-less +12.0bn and +9.8bn; total corporate bonds +16.1bn (2017) and -2.3bn (2026).
+4. **Figure 18.4** `ch18_jtd_reservation_price.png`. Section 18.6.3, after the Altice "What the formula would have charged" paragraph. Reservation price minus composite vs inventory: Gaussian AS (flat), + jump-risk premium (lambda^P = lambda^Q), + desk credit view; q = +5 marked at -2.93 = -1.47 - 1.46. Data: Illustrative, Equation (18.7) with J = 21, gamma = 0.005, sigma = 8, one day, lambda^P tau = 0.10, lambda^Q tau = 0.03 (asserts reproduce the chapter's 2.93 / 1.47 / 1.46).
+5. **Figure 18.5** `ch18_cold_open_bid_waterfall.png`. Section 18.7, after "Kaz's 90.875 priced 0.355 points ..." Horizontal waterfall of the five terms of (18.9) in points below the 91.25 composite, with Kaz's 90.875, the 90.50 cover and Ines's 90.22 as reference lines. Data: Illustrative, computed from the worked example's parameters (asserts reproduce the table: 0.10, 0.58, 0.15, 0.25, -0.05; bid 90.22; win probability 1.6%).
+
+## Notes for reviewers
+
+- The chapter's Trend Watch says primary dealers averaged "about $4bn" net short in 2026 and "roughly $13.7bn short over five years"; the NY Fed bond buckets give -2.3bn total and -12.1bn over 5 years (2026 to date). Same direction and the 2017 figure (+16.1bn) matches; the Hedgeweek/Greenwich cut differs somewhat in definition. Figure 18.3's caption quotes only the NY Fed numbers, and the chapter text was not changed.
+- Figure 18.3 includes below-investment-grade buckets, which start 2015-01-07 in the API's current series break.
+- Candidate not drawn (cap of 5): BWIC winner's-curse shading e_n against the number of bidders (section 18.9).
+
+<!-- STATUS: COMPLETE -->

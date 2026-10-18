@@ -165,8 +165,17 @@ What ROBO built from the vague version ("compute breadth"): `len(book)`. It retu
 
 The precise version: compute $1/H$ on issuer-netted GMV weights, $N_{\text{eff}}$ from (28.4) on the idiosyncratic covariance, the closed form (28.5) for equal issuer blocks as a regression test, the IR from (28.3) in both exact and approximate form, and the hit-rate standard error (28.6). Check the hit-rate law by Monte Carlo. All blocks in this chapter run in order in one interpreter.
 
-<!-- EXPLAIN: Listing 28.1 -->
-> **Code Companion: Listing 28.1.** 1/H on absolute GMV weights. The full python listing is in [Appendix F, Listing 28.1](#code-28-1).
+Everything above was done on a napkin: 300 bonds, 60 issuers, a residual correlation of 0.01, and a denominator of 7.55 that Ines checked with a pen. A napkin is fine for a chapter and fatal for a Monday morning, when the book has changed since Friday, a PM has bought the sixth bond of an issuer that already had five, and the risk committee asks why breadth moved from 41 to 37. Breadth feeds the information ratio in (28.3) and the noise estimate in (28.6), so a wrong breadth number is a wrong statement about how much skill the desk can prove. The desk therefore computes it by machine every day, and, more important, tests the machine against every closed form in this section, so that a bug cannot arrive disguised as a precise number.
+
+The listing is six small functions and a test harness. `herfindahl_breadth` takes absolute weights, scales them to sum to one, and returns the reciprocal of the sum of squares. It knows nothing about correlation, which is why the section treats it as a floor. `effective_breadth` is equation (28.4): the square of the weighted sum of stand-alone volatilities, which is the variance if everything moved in lockstep, divided by the variance the book really has, $w^\top\Sigma w$. Negative diagonal entries are clipped to zero before the square root. `issuer_block_cov` builds the test covariance, with one correlation among bonds of the same issuer, another across issuers, and ones on the diagonal. `n_eff_equal_blocks` is the closed form (28.5), `ir_from_hit_rate` is (28.3) with a switch for the exact denominator, and `hit_rate_se` is (28.6).
+
+The harness is where the listing earns its place. It builds Theo's book and asserts that the matrix calculation and the closed form agree to eight decimals, that the answer lands between 39 and 40.5, and that `herfindahl_breadth` returns exactly 300 on the same book, which is the argument of the whole section in one assertion. It then checks the limits: ten million bonds push the closed form to the $1/\rho_a = 100$ ceiling, fifty independent names give fifty, and fifty perfectly correlated names give one. It reproduces Paleologo's 0.33% standard error at 91 names and shows 40 bets giving about 0.50%. Last, a Monte Carlo draws 400 years of daily wins from a binomial on 40 bets at $p = 0.52$ and checks the realized IR against the exact form of (28.3).
+
+Run it as a regression suite whenever the covariance estimator, the issuer mapping or the netting rule changes. On the live book only the matrix function applies, because the closed form needs equal weights, equal volatilities and equal blocks; there it is the test, not the tool. The Monte Carlo confirms that the algebra of (28.3) is right. It cannot tell you whether your bets are independent, since it assumes they are.
+
+The edge case that bites is upstream of the code: `effective_breadth` trusts whatever covariance it is handed. Feed it total-return covariance instead of the idiosyncratic residual and the shared spread beta dominates every off-diagonal term, so $N_{\text{eff}}$ collapses toward one or two. The code will not warn you; it will report, correctly, how many bets you have in a world where you have not hedged beta.
+
+*The full listing is [Listing 28.1 in Appendix F](#code-28-1).*
 
 The edge cases ROBO must handle: a long/short pair in two bonds of the same issuer (a basis or curve trade) makes the denominator of (28.4) nearly zero and $N_{\text{eff}}$ explode, which is why the function refuses and the spec says to net to issuer first; a book with no gross exposure raises; and negative variance from a non-positive-definite estimated covariance is clipped on the diagonal but should be repaired upstream (shrinkage, Chapter 8), not here.
 
@@ -232,8 +241,17 @@ What ROBO built from the vague version ("put each signal where it makes the most
 
 The precise version: for each signal and each tier that can express it, compute the net alpha (28.7); assign the signal to the tier with the highest positive net alpha; flag signals with no positive tier as tie-breakers only. Report the break-even half-life (28.8) for each tier at a reference $\alpha_0$.
 
-<!-- EXPLAIN: Listing 28.2 -->
-> **Code Companion: Listing 28.2.** Eq. The full python listing is in [Appendix F, Listing 28.2](#code-28-2).
+Priya, Dov, Rafe and Sunita each believe their signal belongs at the front of the line, and each has a backtest that says so. Adjudicating by hand means six signals, three tiers and eighteen small sums, every one of them trivial. The danger is not the arithmetic. It is that the cash cost in Priya's memo is 0.4%, the cash cost in Dov's is 0.6%, and nobody can say which spreadsheet the allocation committee saw. So the desk keeps the signals and the tier costs in one place, runs every signal through the same formula, and gets the same answer on the day a new PM proposes a seventh.
+
+The listing opens with two tables. `TIERS` holds the three rungs with illustrative round-trip costs of 0.05%, 0.6% and 2.5% of price. `SIGNALS` holds six signals, each with an inception alpha, a half-life, and the tuple of tiers able to express it. `net_alpha` is equation (28.7): the inception alpha minus $\ln 2 / h$ times the round-trip cost, which is annual turnover times what each turn costs. `break_even_half_life` is (28.8), the same equation solved for the half-life that makes net alpha zero, and it returns infinity for a signal with no alpha so that nothing downstream divides by zero. `horizon_ladder` loops over signals, computes net alpha in every tier that can express the signal, and picks the best. If even the best is not positive, `best_tier` is `None` and `tie_breaker_only` is true, but `net_alpha` still reports the least-bad number, which is negative.
+
+The assertions restate the section's story. Index trend lives in tier 0, positive there and negative in cash. Value lives in tier 1 and loses money in stressed paper. The LMT event signal lands in tier 2 with more than 4% net, and cash momentum is flagged as a tie-breaker only. Break-even half-lives come out under a week for the index layer and one to three months for liquid cash.
+
+Use it for the quarterly allocation conversation and whenever a cost estimate is refreshed. Do not use it as an optimizer: it ranks tiers signal by signal and says nothing about capacity, correlation between signals, or the liquidity budget of §28.5.
+
+The edge case that bites is the half-life. The cost drag is proportional to $1/h$, so halving an estimated half-life doubles the drag, and half-lives are among the noisiest numbers on the desk. A momentum signal that looks marginal at three months is dead at six weeks. Note also that tiers a signal cannot reach show as missing values, not negative ones.
+
+*The full listing is [Listing 28.2 in Appendix F](#code-28-2).*
 
 Edge cases: a signal with $\alpha_0 \le 0$ has an infinite break-even half-life and is never traded; a half-life of zero is an error, not a very fast signal; and costs must be *stressed* costs when the ladder is used for the liquidity budget (§28.5), because a tier-1 bond at a 5× bid-ask is a tier-2 bond for as long as the stress lasts.
 
@@ -377,8 +395,17 @@ What ROBO built from the vague version ("size positions by Kelly"): it computed 
 
 The precise version: implement (28.9), (28.10)–(28.12) with the rationalized root, Merton's approximation (for comparison only, never for sizing), the fractional multiplier (28.13), the random-loss growth rate with a Beta recovery and a ruin boundary at $1/L_{\max}$, and the cluster solver (28.14). Inputs are physical-measure intensities. Long-only: return zero when the edge is not positive.
 
-<!-- EXPLAIN: Listing 28.3 -->
-> **Code Companion: Listing 28.3.** Eq. The full python listing is in [Appendix F, Listing 28.3](#code-28-3).
+The CCC story shows why sizing cannot live in a spreadsheet cell. Kaz's 93% came from a correct formula fed a plausible table. ROBO's 4,000% came from a correct formula fed three months of marks. In October the right answer moved by 40% while the spread screen said buy more. Every one of those errors is a property of how the inputs are chosen and where the formula is allowed to run, and a desk sizes hundreds of positions a day, so the discipline has to be written into a function that refuses to misbehave. It also has to survive the afternoon someone "simplifies" it in a refactor and quietly deletes the ruin boundary.
+
+The listing holds nine small functions. `kelly_binary` is (28.9), floored at zero because the desk is long-only. `growth_binary` and `growth_jump` are the expected log growth rates, which return minus infinity when a default is possible and the position times the loss reaches one, the ruin boundary expressed as code. `kelly_jump` returns the root of the first-order condition in the numerically stable (rationalized) form of the quadratic, and it still works when the diffusion term is zero. `kelly_merton_approx` exists only so the harness can show how wrong it is. `kelly_multiplier` is (28.13). `growth_random_loss` and `kelly_random_loss` put a Beta distribution on the loss and find the optimum numerically, with the search capped just inside $1/L_{\max}$. `kelly_cluster` solves (28.14) for $n$ symmetric names that share one common jump.
+
+The harness reproduces the chapter. Kaz's inputs give 0.926, the derivative of growth at that point is zero, and the edge appears exactly at $q < c/(c+L)$. With a diffusion term, the Kelly fraction stays inside the ruin boundary while Merton's overshoots it, which means one default would wipe out the Merton bettor. In the pure-diffusion case half Kelly gets exactly 75% of the growth, a Monte Carlo confirms the multiplier, random recoveries lower the fraction by Jensen, a common jump shrinks every name, and the CCC example shows the edge rising while the fraction falls by more than 40%.
+
+Use it as the upper bound on single-name and cluster size, with the fractional multiplier and the leverage band applied afterwards. Do not use it for shorts, or for books whose dependence is richer than one common jump.
+
+The edge case that bites is the measure. `lam` must be the physical default intensity. Hand the function the spread-implied hazard, $s/L$, and the harness shows what happens: the edge is zero and the answer is zero. The opposite error is quieter: a physical hazard that is too low looks like a bargain, and the function will lever it toward the ruin boundary without complaint.
+
+*The full listing is [Listing 28.3 in Appendix F](#code-28-3).*
 
 Edge cases ROBO must handle: an edge of exactly zero returns zero, not a division by zero; `lam = 0` falls back to the diffusion fraction and is the only case where the ruin boundary does not apply; a Beta recovery with $a < 1$ or $b < 1$ has an unbounded density at an endpoint, which `quad` integrates but slowly, so the spec requires $a, b \ge 1$ for production fits; and every output fraction is a fraction of NAV *before* the cluster cap, the fractional multiplier and the leverage band of §28.7 are applied, in that order.
 
@@ -450,8 +477,17 @@ The 13-week model, it turns out, was never about the borrower. It was about the 
 
 What ROBO built from the vague version ("compute liquidity risk"): the average bid-ask over the last year, times the book. It reported \$4mm. The stressed figure was \$23mm *(illustrative)*, and ROBO's comment field read "liquidity is fine on average."
 
-<!-- EXPLAIN: Listing 28.4 -->
-> **Code Companion: Listing 28.4.** Bangia eq. The full python listing is in [Appendix F, Listing 28.4](#code-28-4).
+By now the reader holds four liquidity numbers that live in four different places. The risk officer owns a VaR, the trader owns a days-to-liquidate, the regulator owns an expected shortfall with its own clocks, and Theo's old USB stick owns a runway. Third Avenue shows what happens when the cash-out clock and the asset-sale clock are never compared: weeks of runway against a portfolio that could not be sold at the mark in seven calendar days. ROBO's \$4mm answer was not a typo. It was a one-year average presented as a risk figure. A desk automates this block so that the liquidity number sits on the morning dashboard next to VaR, computed from the same positions, with the stress multiplier written down as an input instead of left as a mood.
+
+The listing opens with two constants: `STRESS_MULTIPLIERS`, the sourced menu of 1.64, 3, 5.8 and 6, and `FRTB_LH`, the five regulatory horizons. `parametric_var` and `bangia_col` are the two halves of Bangia's LVaR. `credit_col` is the credit version, equation (28.16): half the multiplier times mean LCS times absolute market value, scaled up by a size term that grows with the square root of position over ADV. Longs and shorts both pay, and ADV is floored at \$1 so a bond that has not traded produces a huge size term instead of a division error. `days_to_liquidate` is (28.17). `frtb_liquidity_es` is (28.18): it takes the horizon widths, scales each bucket by the square root of width over base, and adds in quadrature. `runway_weeks` is Theo's 13-week model pointed at the fund: cash plus a haircut liquid sleeve, divided by weekly burn.
+
+The harness checks the facts. Two days of volume at 4% participation gives 50 days. A book that is all HY spread gets exactly $\sqrt{6}$. A \$2bn IG book at 0.6% LCS costs \$6mm to leave calmly and about \$35mm at the 2007-2008 multiple. Cost per dollar rises with ticket size. Third Avenue's runway comes out near 2.7 weeks, far inside 13.
+
+Use it daily, on the whole book, and as a pre-trade check on any ticket that is large relative to ADV. Do not read the FRTB function as a regulatory capital engine: it assumes you have already computed the shocked-factor ESs, and the size parameter $\eta$ must be fitted to your own markouts.
+
+The edge case that bites is the input to `frtb_liquidity_es`. Element $j$ is the 10-day ES from shocking every factor whose horizon is at least `horizons[j]`, so the vector is cumulative and never rises. Pass per-bucket ESs instead and the code runs without complaint and understates the answer.
+
+*The full listing is [Listing 28.4 in Appendix F](#code-28-4).*
 
 Edge cases: zero ADV (a bond that has not traded in the window) is floored at \$1 so the size term is enormous rather than infinite, which is the right sign; a negative weekly burn (net inflows) gives infinite runway; and `credit_col` deliberately takes absolute values, because a short pays the offer just as a long pays the bid.
 
@@ -509,8 +545,17 @@ Theo's desk: $\overline{\text{LCS}} = 0.6\%$, $G = 5$, and the 2007–2008 multi
 
 What ROBO built from the vague version ("minimize drawdown"): it held cash, as it always does, and reported a maximum drawdown of zero and a Sharpe ratio of "undefined, but excellent."
 
-<!-- EXPLAIN: Listing 28.5 -->
-> **Code Companion: Listing 28.5.** Eq. The full python listing is in [Appendix F, Listing 28.5](#code-28-5).
+The two-threshold rule is simple to state and surprisingly hard to price. A desk head wants three numbers before anyone signs a mandate. How often will a Sharpe-1 PM touch the line in a year? How much expected P&L does the rule take away from a mediocre PM compared with a good one? And how much of the buffer have the marks already eaten before any issuer does anything? The first has a closed form for a smooth Brownian path, the second has no closed form once returns are fat-tailed and the rule is path-dependent, and the third is arithmetic that nobody does until March. So the desk codes all three, and, as with every closed form in this chapter, it also codes a simulator that checks the formula against a world that does not obey it.
+
+The listing has three formulas and two simulators. `prob_hit` is the first-passage probability (28.19), and `stop_for_lifetime_prob` inverts the lifetime limit to give the stop for a target probability (28.20). `mark_to_bid_shock` is (28.21), with a flag for whether the book is already marked at the bid in calm markets; if it is, only the widening beyond the calm multiple counts. `mc_prob_hit` simulates discrete steps and applies a Brownian-bridge correction between them, so that an excursion below the line between two steps is counted probabilistically instead of missed. `simulate_two_threshold` runs the platform rule on Student-t shocks with six degrees of freedom, scaled to unit variance and reused across Sharpe ratios so the comparison is not noise. It halves capital at a loss of $x/2$, zeroes it at $x$, always measuring loss on initial capital, and reports the share of expected P&L given up, which is the price of safety.
+
+The assertions reproduce the section. A Sharpe-1, 6%-vol PM at a 7.5% stop has a lifetime probability of $e^{-2.5}$ and a one-year probability between 4% and 5%, and the simulation agrees within a point. The price of safety falls as the Sharpe rises from 0.5 to 1 to 2. The 5× book at 0.6% LCS and the 2007-2008 multiple loses between 5% and 7.5% of NAV on marks alone.
+
+Use the closed forms for setting stops and the simulator for any variation on the rule. Do not read the one-year probability as a forecast of a given PM, since the inputs are the very quantities (Sharpe, volatility) that a year of data cannot measure.
+
+The edge case that bites is discrete monitoring. A simulation that checks the barrier only at daily closes misses every excursion that recovers before the close, and understates the hitting probability. That is the reason for the bridge term.
+
+*The full listing is [Listing 28.5 in Appendix F](#code-28-5).*
 
 Edge cases: `prob_hit` requires $\sigma > 0$ and $T > 0$; a negative $\mu$ is allowed (a losing PM) and the formula still holds; `stop_for_lifetime_prob` is undefined for a non-positive Sharpe ratio, for which every stop is eventually hit; and the two-threshold simulation must measure loss on *initial* allocated capital, as Paleologo specifies, because measuring it on current capital after the cut silently moves the exit.
 
@@ -542,8 +587,13 @@ Theo's HY PM: $N_{\text{eff}} = 40$, $\sigma_{\text{DTS}} = 5\%$, $\text{SR} = 2
 
 What ROBO built from the vague version ("use as much leverage as is safe"): the ceiling without the floor, and without COL. It reported 4.74× and the word "safe."
 
-<!-- EXPLAIN: Listing 28.6 -->
-> **Code Companion: Listing 28.6.** Eq. The full python listing is in [Appendix F, Listing 28.6](#code-28-6).
+The algebra above is short enough to do on a napkin, and the desk still codes it, because the band is the number a desk head is asked to defend every time a PM asks for more gross. The code also does what the napkin cannot: it solves the ceiling when the liquidation cost is not a straight line in leverage.
+
+The listing is three functions and a test that replays Theo's HY PM. `leverage_floor` is (28.2) and `leverage_ceiling` is (28.22). Given a linear cost the answer has the closed form (28.23), but the function accepts any increasing `col_fn`, such as the size-sensitive cost of (28.16), and finds the fixed point by bracketing between zero and the cost-free ceiling and calling `brentq`. `liquidity_speed_limit` is the right-hand bound of (28.23). The test checks that the numerical root matches the closed form to nine decimals, that a book with $10^8$ effective bets still stays under the speed limit, and that halving the LCS while accepting a 4% hurdle reopens the band.
+
+The edge case that bites is that an empty band is an answer, not an error. The functions return a floor and a ceiling separately, and nothing in them compares the two. The caller has to check, and the test does it on the line `hi_wet < lo`.
+
+*The full listing is [Listing 28.6 in Appendix F](#code-28-6).*
 
 Edge cases: $\kappa z_p \le \text{SR}$ means the PM's Sharpe exceeds the stress quantile and the formula has no ceiling, which is a sign the inputs are wrong, so the function raises; `col_fn` must be increasing in $G$ for the fixed point to be unique; and the floor uses the *forecast* Sharpe, so a floor computed from a backtest Sharpe is a floor computed from the wrong number (deflate it, Chapter 26).
 
@@ -575,8 +625,15 @@ Optimal coverage equals the dilution scale. Past it, each new name lowers the IR
 
 Barclays' QPS and credit research teams, as reported by Impax (19 September 2025), measured the effect directly in US investment grade. The issuer-level hit rate was about 58% overall, about 66% when analyst and quant signals agreed, and about 52% when they conflicted. Concentrating on aligned decisions lifted excess return from 2.0% to 3.7% a year and the IR from 1.09 to 1.71, and doubling exposure to aligned signals gave 4.1% with an IR of 1.83. The industry has priced the same conclusion: in late October 2025, Ares agreed to buy BlueCove, a systematic fixed-income manager with about \$5.5bn of AUM and about 60 staff, and to rebrand it Ares Systematic Credit (Alternative Credit Investor, 30 October 2025; see Chapter 4). The design rule that follows is a division of labour. Analysts own $L$, $L_{\max}$ and the document features (PRS, Chapter 13); PhDs own $\lambda^{\mathbb{P}}$, $\sigma_{\text{DTS}}$ and the covariance; and every analyst view is logged in the Edge Ledger (Chapter 3) with timestamp, horizon and confidence, so that its IC, its $\rho$ and its hit rate are measured rather than remembered. The ROBO spec is the contract between the two cultures: if a view cannot be written as a field with units, it is not yet a view.
 
-<!-- EXPLAIN: Listing 28.7 -->
-> **Code Companion: Listing 28.7.** Eq. The full python listing is in [Appendix F, Listing 28.7](#code-28-7).
+The Barclays numbers say that two signals that agree are worth more than either alone, and the BlueCove deal says someone has paid for that. A hiring committee still needs the rate at which the second signal pays and the point at which the fortieth name stops helping, and it needs them as functions it can run on the analyst who is actually in the room, not as a slide.
+
+The listing is two functions and a short test. `combined_ic` is (28.24). It solves the linear system with the correlation matrix instead of inverting it, then takes the square root of the quadratic form, so it works for any number of signals, not just two. `optimal_coverage` finds (28.25) by brute force: it evaluates the diluted edge times the square root of coverage on a grid from one name to twenty times the dilution scale and returns the maximizer. The test sweeps the three correlations of the worked example against the two-signal closed form, and checks that the brute-force search lands on the dilution scale, here 35 names.
+
+Use it to put a number on the next hire or the next signal. Do not use it to hide a bad IC estimate behind a good correlation.
+
+The edge case that bites is near-collinearity. When two signals are almost perfectly correlated and their estimated ICs differ by noise, the numerator tends to the squared difference and the denominator to zero, so the combined IC explodes. An exactly singular matrix raises an error, but a near-singular one just returns a flattering number.
+
+*The full listing is [Listing 28.7 in Appendix F](#code-28-7).*
 
 ## 28.9 The PM Dashboard: The 13-Week Model, Reborn
 
@@ -609,8 +666,17 @@ Theo's USB stick finally earns its keep. The PM dashboard asks the question the 
 
 Desk parameters (NAV, $\text{DD}_{\max}$, $\kappa z_p$, SR, $r_{\min}$, $m$, the two stop levels, realized drawdown, cash, liquid sleeve, weekly burn, participation, $\rho_w$, $\rho_a$, the Kelly edge s.e.) are a dictionary with units in the key names. The engine is pure: no I/O, no clock, seeded.
 
-<!-- EXPLAIN: Listing 28.8 -->
-> **Code Companion: Listing 28.8.** --- Final block: pm_playbook_engine --------------------------------------------. The full python listing is in [Appendix F, Listing 28.8](#code-28-8).
+A set of correct formulas is not yet a dashboard. The 13-week model was never six separate calculations. It was one workbook in which touching the revenue line moved the cash line, and the value was in the wiring. The same is true here: breadth feeds the leverage band, liquidation cost feeds both the band and the drawdown budget, and the Kelly cap needs the same issuer netting that breadth needs. The last listing wires the earlier blocks into one pure function that takes a position file and the desk's parameters and returns a single row of numbers, so that it can run at 7:30 a.m. before the PMs sit down and nobody has to ask which spreadsheet it came from.
+
+The listing has two functions. `make_demo_book` generates a seeded synthetic book of 60 issuers with five bonds each, so the tests run without a vendor feed: 48 issuers in tier 1 and 12 in tier 2, about 80% of them long, spreads and liquidity costs matched to the tier, and a physical hazard set below the market-implied one. These are plausible shapes, not a calibration. `pm_playbook_engine` then works in five steps. It builds the block covariance and computes $N_{\text{eff}}$ and the leverage floor and ceiling. It nets positions to issuer, applies the fractional multiplier to the Kelly fraction for each issuer, caps it just inside $1/L_{\max}$, and counts names above the cap. It computes days-to-liquidate and stressed liquidation cost. It adds the mark-to-bid shock to realized drawdown and expresses the total as a share of the first cut. Finally it computes runway with a haircut on the liquid sleeve and the one-year hit-rate standard error. The output is one labelled `pandas` Series, one line per dashboard alarm.
+
+The assertions are invariants, not answers. Correlation must shrink breadth below the issuer-level Herfindahl count (itself at most 60), the ceiling must sit under the speed limit, the breach flag must match its definition, the runway must clear 13 weeks, and the drawdown budget used must exceed the realized loss, because marks count.
+
+Use it on the real position file after replacing the demo book, and read it as a daily check, not an intraday one.
+
+The edge case that bites is hidden by the demo itself. `make_demo_book` gives every bond in an issuer the same sign. A real book holds capital-structure pairs, long the secured and short the unsecured of the same name, and passing those bond-level weights to `effective_breadth` can bring back the near-zero variance problem of Listing 28.1. The input schema says to net to issuer first. The engine will not do it for you.
+
+*The full listing is [Listing 28.8 in Appendix F](#code-28-8).*
 
 The one non-obvious line is `sigma_book`. Equation (28.22) is written for $N_{\text{eff}}$ equal, independent bets of volatility $\sigma_{\text{DTS}}$, so the engine backs out the per-bet volatility that, with the measured $N_{\text{eff}}$, reproduces the book's actual volatility per dollar of GMV: $\sigma_{\text{DTS}} = \sigma_{\text{GMV}}\sqrt{N_{\text{eff}}}$. Because of how (28.4) is defined, this per-bet volatility is exactly the GMV-weighted average bond volatility $\sum_i |w_i|\sigma_i$, which makes a useful audit: the band built from $(N_{\text{eff}}, \sigma_{\text{DTS}})$ reproduces the book's measured risk per dollar of GMV by construction. Feeding in a median or unweighted bond volatility breaks that identity, and the band with it.
 

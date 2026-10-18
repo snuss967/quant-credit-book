@@ -1,0 +1,27 @@
+# Progress Log, Edition 2 (U2): Chapter 6
+
+- [x] 1. [Cold Open: Column N] EXPAND-SCENE + LIST-TO-NARRATIVE -- SVB 9 Mar anchor, three assumptions planted, Theo's Friday paragraph.
+- [x] 2. [6.1.1 Desk framing] MATH-GENTLY x3 (distributions/lognormal, random walk, Ito tax) -- three boxes added: lognormal 121/99/81, sqrt(100)=10, tax 3.1%.
+- [x] 3. [6.1.2 The derivation] FULL-DERIVATION-MOVE -- retitled Full Derivation; punchline moved above as Kaz's summary.
+- [x] 4. [6.1.3 Annualize or die] SHOP-LIFE (sigma_frequency) + WHEN-TO-APPLY -- vendor vol vignette with SR 11-7; GBM when-to-apply added.
+- [x] 5. [6.1.4 Column N, renamed] MATH-GENTLY (hazard, exponential, Poisson) -- light-bulb hazard box, memoryless, Poisson counts, cites Ch5.
+- [x] 6. [6.2.1 Desk framing] MATH-GENTLY (payoff diagrams) + EXPAND (fulcrum argument) -- hockey-stick box, 90/70 put, Theo-Mags-Kaz call-spread fulcrum argument.
+- [x] 7. [6.2.2 Replication and PDE] MATH-GENTLY (no-arbitrage, risk-neutral) + FULL-DERIVATION-MOVE -- savings-account box, insurer 1%/1.5% analogy, derivation under subheading.
+- [ ] 8. [6.2.3-6.2.4 Closed forms; spread] MATH-GENTLY (N(d), DD) + ANOTHER-SEAT (insurer) + WHEN-TO-APPLY + Trend Watch to prose
+- [ ] 9. [6.3.1-6.3.2 P to Q] MATH-GENTLY (Girsanov) + FULL-DERIVATION-MOVE + 6.3.3 story
+- [ ] 10. [6.4.2 The solver] MATH-GENTLY (Newton, Jacobian) + FULL-DERIVATION-MOVE + SHOP-LIFE (main vignette)
+- [ ] 11. [6.4.3 Default point, mapping] MATH-GENTLY (isotonic) + WHEN-TO-APPLY
+- [ ] 12. [6.4.4 SVB case] EXPAND-SCENE A: "The week the strike came due"
+- [ ] 13. [6.4.4 end] ANOTHER-SEAT (distressed fund vs dealer)
+- [ ] 14. [6.5.1-6.5.2 Black-Cox] MATH-GENTLY (first passage, reflection) + FULL-DERIVATION-MOVE + WHEN-TO-APPLY
+- [ ] 15. [6.5.3 Covenants, cov-lite, uptiers] LIST-TO-NARRATIVE + ANOTHER-SEAT (CLO manager)
+- [ ] 16. [6.5.4 Monte Carlo and bridge] MATH-GENTLY (Monte Carlo; bridge) + Trend Watch to prose
+- [ ] 17. [6.6.1-6.6.3 Reduced form] MATH-GENTLY x2 (Poisson/Cox; recoveries) + FULL-DERIVATION-MOVE + WHEN-TO-APPLY
+- [ ] 18. [6.7 CIR] FULL-DERIVATION-MOVE (whole section) + MATH-GENTLY (mean reversion)
+- [ ] 19. [6.8 Bootstrap, credit triangle] MATH-GENTLY + EXPAND-SCENE (Big Bang) + ISDA July 2026 note in Resource Graph
+- [ ] 20. [6.9.2-6.9.3 Equity leads credit; First Brands] MATH-GENTLY (log-linear) + EXPAND-SCENE + ANOTHER-SEAT (direct lender)
+- [ ] 21. [6.10.1 Carvana] EXPAND-SCENE B: "The put that got restruck"
+- [ ] 22. [6.10.1 end] ANOTHER-SEAT (opportunistic fund vs multi-strat pod)
+- [ ] 23. [6.10.2 Hertz] EXPAND-SCENE (plan sponsors; Theo's ATM rule)
+- [ ] 24. [6.10.3 and 6.12] LIST-TO-NARRATIVE
+- [ ] 25. [Exercises] BRIDGE (Check: numbers + two warm-ups)

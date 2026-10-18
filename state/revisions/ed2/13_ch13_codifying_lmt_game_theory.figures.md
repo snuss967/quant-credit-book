@@ -1,0 +1,15 @@
+# Figures log: Chapter 13 (ed2 U4)
+
+Script: tools/figures/ch13.py (run: python3 tools/figures/ch13.py). All five PNGs viewed and cleaned (label collisions, clipped text, mathtext). All are "Illustrative": they evaluate the chapter's own formulas at parameters the chapter states; no market data series is used. Role colors fixed across the chapter: BLUE = existing/excluded lender who loses, ORANGE = beneficiary, gray = pre-deal or pro rata baseline.
+
+## Embedded
+
+1. Figure 13.1, ch13_serta_uptier_waterfall.png. Section 13.3.1, after the paragraph mapping Serta to the formula. Two panels: (a) stacked dollars recovered by first-out, second-out and excluded lenders vs enterprise value, with the excluded lenders' no-deal dollars dashed; (b) the excluded lender's priming loss in points of par (peak 44.8 at K1 = 1,075, small gain between 2,150 and 2,400). Data: section 13.3 waterfall at Serta terms from the Fifth Circuit opinion (F = 2,400, N = 200, p = 0.5, x = 875/1,200; liens blended). Asserts conservation (stack = min(V, K2)).
+2. Figure 13.2, ch13_sponsor_knapsack.png. Section 13.4, after the cost-vector paragraph. Two panels: concession cost c_i and holding w_i for the nine holders of the Listing 13.2 register, coloured by membership in the exact min-cost coalition (four funds plus the smallest CLO, 54%; litigator left out). Data: Listing 13.2 register, theta = 0.5, eps = 0.01; the script asserts the 5-holder, 54% result stated in section 13.8.
+3. Figure 13.3, ch13_coop_bargaining_shapley.png. Section 13.5, after the Shapley paragraph. Two panels: (a) generalized Nash split, co-op payoff vs sponsor outside option for eta = 0.3, 0.5, 0.7 (slope -eta; no deal beyond d_sp = 80); (b) co-op share of loans vs Shapley value for the four-member co-op A 25%, B 6%, C 3%, D 3% at theta = 2/3. Data: Pi = 100, d_C = 20 (illustrative); Shapley by enumeration, asserted equal to (5/12, 5/12, 1/12, 1/12).
+4. Figure 13.4, ch13_digital_put_vs_forward.png. Section 13.6, after the capacity-bound paragraph. One panel: loss to the existing lender vs V for the Serta-terms uptier (digital-put-like, peaks at K1) and a J.Crew-corner drop-down (phi = 0, D_u = T = 480, flat T/F = 20 points). Data: section 13.3 and 13.6 formulas, F = 2,400. Asserts the T/F cap.
+5. Figure 13.5, ch13_double_dip_structure_recovery.png. Section 13.7, after the closed-form numbers paragraph. Two panels: (a) claim graph of the double-dip (new-money lenders, SPV, OpCo, first-lien lenders; guarantee and interco note both pari with the first lien; dashed foreign sub for pari-plus); (b) recoveries vs V for the first lien, the new money and the no-dip baseline (80 vs 40 vs 53 cents at V = 800; kinks at 1,000 and 1,500). Data: section 13.7 closed form with F1 = 1,000, F2 = 500, cross-checked in the script against the Listing 13.1 waterfall_clearing engine at six values of V.
+
+Numbering: 13.1 to 13.5 in order of appearance; the chapter had no earlier figures. Each insertion is one Edit after a plain paragraph (no list, box or display math), with a one-sentence pointer added to the end of that paragraph.
+
+<!-- STATUS: COMPLETE -->

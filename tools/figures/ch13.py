@@ -4,8 +4,10 @@ Every figure here is Illustrative: it evaluates the chapter's own formulas (Sect
 parameters the chapter states (Serta Simmons deal terms from the Fifth Circuit opinion; the Listing 13.2
 nine-holder register; the Section 13.7 double-dip example). No market data series is used.
 
-Role colors, fixed across the chapter: BLUE = the existing / excluded lender who loses; ORANGE = the
-beneficiary (participant, new money, double-dipper); gray = the pre-deal or pro rata baseline.
+Role colors, fixed across the chapter: BLUE = the existing / excluded lender who loses (also the co-op of
+existing lenders in Fig 13.3); ORANGE = the beneficiary (participant, new money, double-dipper, the coalition
+the sponsor invites in Fig 13.2); gray = the pre-deal or pro rata baseline. Fig 13.4 compares two transactions
+on one axis, so it takes SERIES[0] (uptier) and SERIES[1] (drop-down) in order.
 """
 import itertools
 import os
@@ -40,6 +42,7 @@ def fig_uptier():
     so = np.minimum(np.maximum(V - N, 0), x * p * F)
     ex = np.minimum(np.maximum(V - K1, 0), (1 - p) * F)
     assert np.allclose(fo + so + ex, np.minimum(V, K2))          # conservation
+    assert all(np.all(np.diff(t) >= -1e-9) for t in (fo, so, ex))  # every tranche is nondecreasing in V
     pre_ex = (1 - p) * F * np.minimum(V, F) / F                  # excluded lenders' dollars with no deal
     loss = 100 * (np.minimum(V, F) / F - ex / ((1 - p) * F))     # priming loss, points of par
     assert abs(loss[int(K1)] - 100 * K1 / F) < 0.05              # 44.8 points at V = K1
@@ -58,8 +61,8 @@ def fig_uptier():
     # direct labels, right edge, at band mid-heights
     for y, t, c in [(100, "First-out", AQUA), (640, "Second-out", ORANGE), (1680, "Excluded", BLUE)]:
         dot_label(a, 2800, y, t, c, dx=5)
-    a.annotate("Dashed: what the excluded\nlenders would recover with\nno deal (pro rata)", (700, 350),
-               xytext=(90, 1780), fontsize=7.5, color=INK_2, ha="left", va="center",
+    a.annotate("Dashed: excluded lenders'\nno-deal recovery\n(pro rata)", (700, 350),
+               xytext=(90, 1780), fontsize=8, color=INK_2, ha="left", va="center",
                arrowprops=dict(arrowstyle="-", color=INK_2, lw=0.7), zorder=7)
 
     b.plot(V, loss, color=BLUE, zorder=3)
@@ -75,7 +78,7 @@ def fig_uptier():
     mark_event(b, K1, "K₁ = 1,075", y_frac=0.995)
     mark_event(b, K2, "K₂", y_frac=0.995)
     b.annotate("44.8 points: the whole\npre-deal recovery", (K1, 44.8), xytext=(1330, 37),
-               fontsize=7.5, color=INK_2, ha="left", va="center",
+               fontsize=8, color=INK_2, ha="left", va="center",
                arrowprops=dict(arrowstyle="-", color=INK_2, lw=0.7))
     return finish(fig, "ch13_serta_uptier_waterfall")
 
@@ -98,18 +101,17 @@ def fig_knapsack():
     kind = ["Fund", "CLO", "Fund", "CLO", "Litigator", "Fund", "CLO", "Fund", "CLO"]
     S = min_cost_coalition(w, c, theta=0.5)
     assert 4 not in S and abs(w[S].sum() - 0.54) < 1e-9 and len(S) == 5     # matches the chapter text
-    # names: A.. within type, ordered as in the register
-    counts, names = {}, []
-    for k in kind:
-        counts[k] = counts.get(k, 0) + 1
-        names.append(k if k == "Litigator" else f"{k} {counts[k]}")
+    # display order = cheapest first, larger holding first; names number within type in that order
     order = sorted(range(len(w)), key=lambda i: (c[i], -w[i]))
-    labels = [names[i] for i in order]
+    counts, labels = {}, []
+    for i in order:
+        counts[kind[i]] = counts.get(kind[i], 0) + 1
+        labels.append(kind[i] if kind[i] == "Litigator" else f"{kind[i]} {counts[kind[i]]}")
     ypos = np.arange(len(order))[::-1]
     inv = [i in S for i in order]
 
     fig, (a, b) = new_figure("wide", ncols=2, sharey=True)
-    colors = [BLUE if f else NEUTRAL for f in inv]
+    colors = [ORANGE if f else BLUE for f in inv]       # ORANGE = invited (beneficiary), BLUE = left out (excluded)
     a.barh(ypos, [100 * c[i] for i in order], color=colors, height=0.68)
     b.barh(ypos, [100 * w[i] for i in order], color=colors, height=0.68)
     for ax in (a, b):
@@ -130,9 +132,10 @@ def fig_knapsack():
     for yy, i in zip(ypos, order):
         a.text(100 * c[i] + 0.3, yy, f"{100 * c[i]:.0f}", va="center", fontsize=8, color=INK_2)
         b.text(100 * w[i] + 0.4, yy, f"{100 * w[i]:.0f}", va="center", fontsize=8, color=INK_2)
-    # legend by direct note
-    b.text(25.7, 2.0, "Blue: invited coalition (54% of class)\nGray: left out (bar to clear: > 50%)",
-           ha="right", va="center", fontsize=8, color=INK_2)
+    from matplotlib.patches import Patch
+    b.legend(handles=[Patch(color=ORANGE, label="Invited coalition (54% of class)"),
+                      Patch(color=BLUE, label="Left out (bar to clear: > 50%)")],
+             loc="center right", bbox_to_anchor=(1.0, 0.26), fontsize=8, handlelength=1.0)
     return finish(fig, "ch13_sponsor_knapsack")
 
 
@@ -159,15 +162,16 @@ def fig_coop():
     for eta, col in shades.items():
         PiC = dC + eta * (Pi - dC - dsp)
         a.plot(dsp, PiC, color=col)
-        dot_label(a, 0, PiC[0], f"η = {eta}", col, dx=-5, ha="right")
+        dot_label(a, 0, PiC[0], f"η={eta}", col, dx=-5, dy=0, ha="right", fs=8)
     a.axhline(dC, color=NEUTRAL, linewidth=0.9, linestyle=(0, (4, 3)))
     a.text(1.5, dC - 1.5, "co-op's outside option $d_C$ = 20", ha="left", va="top", fontsize=8, color=INK_2)
-    a.axvspan(80, 100, color=GRID, alpha=0.7, linewidth=0)
-    a.text(90, 78, "no deal:\noutside options\nexceed surplus", ha="center", va="top", fontsize=7.5, color=INK_2)
-    a.set_xlim(0, 100)
+    a.axvspan(80, 112, color=GRID, alpha=0.7, linewidth=0)
+    a.text(96, 80, "no deal:\noutside\noptions\nexceed\nsurplus", ha="center", va="top", fontsize=8, color=INK_2)
+    a.set_xlim(-21, 112)
+    a.set_xticks([0, 20, 40, 60, 80, 100])
     a.set_ylim(0, 85)
-    a.set_xlabel("Sponsor's outside option $d_{sp}$ ($mm)")
-    a.set_ylabel("Co-op's payoff Π_C ($mm)")
+    a.set_xlabel("Sponsor's outside option $d_{sp}$ (\\$mm)")
+    a.set_ylabel("Co-op's payoff $\\Pi_C$ (\\$mm)")
     a.set_title("(a) Each outside dollar costs η")
     a.annotate("slope = −η", (40, dC + 0.5 * 40), xytext=(46, 62), fontsize=8, color=INK_2,
                arrowprops=dict(arrowstyle="-", color=INK_2, lw=0.7))
@@ -180,7 +184,7 @@ def fig_coop():
     xs = np.arange(4)
     bw = 0.38
     b.bar(xs - bw / 2 - 0.02, 100 * share, width=bw, color=NEUTRAL)
-    b.bar(xs + bw / 2 + 0.02, 100 * phi, width=bw, color=ORANGE)
+    b.bar(xs + bw / 2 + 0.02, 100 * phi, width=bw, color=BLUE)          # co-op members = existing lenders
     for xi, s, f in zip(xs, share, phi):
         b.text(xi - bw / 2 - 0.02, 100 * s + 1.5, f"{100 * s:.0f}", ha="center", fontsize=8, color=INK_2)
         b.text(xi + bw / 2 + 0.02, 100 * f + 1.5, f"{100 * f:.0f}", ha="center", fontsize=8, color=INK_2)
@@ -192,7 +196,7 @@ def fig_coop():
     b.set_title("(b) Veto power vs. loans held")
     from matplotlib.patches import Patch
     b.legend(handles=[Patch(color=NEUTRAL, label="Share of the co-op's loans"),
-                      Patch(color=ORANGE, label="Shapley value (blocking power)")],
+                      Patch(color=BLUE, label="Shapley value (blocking power)")],
              loc="upper right", fontsize=8, handlelength=1.0)
     return finish(fig, "ch13_coop_bargaining_shapley")
 
@@ -224,8 +228,9 @@ def fig_payoff_shapes():
     ax.set_ylabel("Existing lender's loss (points of par)")
     ax.xaxis.set_major_formatter(usd)
     mark_event(ax, K1, "K₁", y_frac=0.995)
-    dot_label(ax, 1075, 44.8, "Uptier, excluded lender:\nlost below K₁, little above", BLUE, dx=8, dy=0)
-    dot_label(ax, 2150, 20, "Drop-down:\n20 points in nearly\nevery state", ORANGE, dx=8, dy=12)
+    mark_event(ax, K2, "K₂", y_frac=0.995)
+    dot_label(ax, K1, 44.8, "Uptier (excluded lender):\nloss peaks at K₁, fades by K₂", BLUE, dx=8, dy=6)
+    dot_label(ax, 800, 20, "Drop-down (existing lender):\n20 points in almost every state", ORANGE, dx=-4, dy=-18, ha="left")
     return finish(fig, "ch13_digital_put_vs_forward")
 
 
@@ -300,6 +305,11 @@ def fig_double_dip():
         dd, fl = dd_recoveries(v, F1, F2)
         cd, cf = clearing_check(float(v), F1, F2)
         assert abs(dd - cd) < 1e-6 and abs(fl - cf) < 1e-6, (v, dd, cd, fl, cf)
+    Vg = np.linspace(0, 1800, 1801)
+    ddg, fg = dd_recoveries(Vg, F1, F2)
+    assert np.all(np.diff(ddg) >= -1e-12) and np.all(np.diff(fg) >= -1e-12)   # monotone in V
+    assert np.all(ddg >= fg - 1e-12) and abs(ddg[1000] - 1.0) < 1e-12 and abs(fg[1500] - 1.0) < 1e-12
+    assert np.allclose(F2 * ddg + F1 * fg, np.minimum(Vg, F1 + F2))          # conservation: pays out min(V, F1+F2)
     fig, (a, b) = new_figure((7.2, 3.7), ncols=2, gridspec_kw={"width_ratios": [1.0, 1.1]})
 
     a.set_xlim(0, 10.6)
@@ -352,7 +362,8 @@ def fig_double_dip():
     b.legend(handles=[Line2D([], [], color=ORANGE, lw=LW, label="New money (guarantee + note)"),
                       Line2D([], [], color=BLUE, lw=LW, label="First lien (diluted)"),
                       Line2D([], [], color=NEUTRAL, lw=LW, ls=(0, (4, 3)), label="No dip: same lenders pari passu")],
-             loc="lower right", fontsize=8, handlelength=2.2)
+             loc="lower right", fontsize=8, handlelength=2.2, frameon=True, facecolor="white",
+             edgecolor="none", framealpha=1.0)
     return finish(fig, "ch13_double_dip_structure_recovery")
 
 

@@ -17,6 +17,7 @@ import datetime as dt
 import json
 import os
 import sys
+import warnings
 
 import numpy as np
 from scipy import signal
@@ -67,7 +68,9 @@ def fig_roll():
     m_rho = np.nanmean(est_rho, axis=1) / S
     # Mean over replications that returned an estimate; NaN if the majority returned NaN.
     nan_share = np.isnan(est_phi).mean(axis=1)
-    m_phi = np.where(nan_share > 0.5, np.nan, np.nanmean(np.where(np.isnan(est_phi), np.nan, est_phi), axis=1) / S)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)          # all-NaN rows are expected beyond phi*
+        m_phi = np.where(nan_share > 0.5, np.nan, np.nanmean(est_phi, axis=1) / S)
 
     fig, (a1, a2) = new_figure("wide", ncols=2)
 
@@ -81,7 +84,7 @@ def fig_roll():
     a1.annotate("Theory: S(1 − ρ)", (0.3, 0.7), xytext=(8, 8), textcoords="offset points", fontsize=8.5,
                 color=INK_2)
     a1.annotate("Simulated", (0.6, m_rho[6]), xytext=(8, 6), textcoords="offset points", fontsize=8.5, color=INK_2)
-    a1.set_xlabel("Order-splitting persistence ρ (lag-1 autocorrelation of trade signs)")
+    a1.set_xlabel("Order-splitting persistence ρ")
     a1.set_ylabel("Roll estimate as a share of true S")
     a1.set_ylim(-0.05, 1.12)
     a1.set_xlim(-0.02, 0.92)
@@ -98,10 +101,10 @@ def fig_roll():
             zorder=3)
     bad = np.isnan(m_phi)
     a2.plot(phis[bad], np.zeros(bad.sum()), "x", color=INK_2, markersize=6, markeredgewidth=1.4, zorder=3)
-    a2.annotate("NaN: covariance > 0,\nno spread reported", (0.77, 0.30), ha="center", va="bottom", fontsize=8.5,
+    a2.annotate("NaN:\ncovariance\nturns positive", (0.77, 0.30), ha="center", va="bottom", fontsize=8.5,
                 color=INK_2)
-    a2.annotate("Roll refuses\nto answer", (0.77, 0.02), ha="center", va="bottom", fontsize=8, color=MUTED)
-    a2.set_xlabel("Informed drift φ (AR(1) coefficient of mid increments)")
+    a2.annotate("no spread\nreported", (0.77, 0.07), ha="center", va="bottom", fontsize=8, color=MUTED)
+    a2.set_xlabel("Informed drift φ")
     a2.set_ylim(-0.05, 1.12)
     a2.set_xlim(-0.02, 0.92)
     a2.set_yticklabels([])
@@ -165,37 +168,36 @@ def fig_quote_ladder():
     a1.plot(q[ok], da[ok], color=SERIES[1], lw=LW, zorder=4)
     a1.axhline(0, color=NEUTRAL, lw=0.9, zorder=1)
     a1.annotate("Composite mid", (-20, 0), xytext=(2, 4), textcoords="offset points", fontsize=8, color=MUTED)
-    a1.annotate("AS, one-week horizon", (-13, as_ask[7] - 0.004), xytext=(-2, -14), textcoords="offset points",
-                fontsize=8.5, color=INK_2, ha="center")
-    a1.plot([-13], [as_ask[7] - 0.0], "o", color=SERIES[0], markersize=4, zorder=5)
-    i = 6
-    a1.annotate("GLFT, stationary", (q[ok][i], da[ok][i]), xytext=(2, 18), textcoords="offset points", fontsize=8.5,
-                color=INK_2, ha="center")
-    a1.plot([q[ok][i]], [da[ok][i]], "o", color=SERIES[1], markersize=4, zorder=5)
+    from matplotlib.lines import Line2D
+    from matplotlib.patches import Patch
+    a1.legend(handles=[Patch(facecolor=SERIES[0], alpha=0.35, label="AS, one-week horizon"),
+                       Line2D([0], [0], color=SERIES[1], lw=LW, label="GLFT, stationary")],
+              loc="upper right", fontsize=8.5, handlelength=1.6)
     a1.set_xlabel("Inventory q (lots of $1mm; positive = long)")
     a1.set_ylabel("Quote relative to mid (points)")
     a1.set_xlim(-20, 20)
     a1.set_ylim(-0.75, 0.75)
-    a1.set_title("The quote ribbon slides down as you get long")
+    a1.set_title("Quotes slide down as you get long")
     a1.text(0.99, 0.02, "A = 2 fills/day/side, γ = 0.005, k = 3", transform=a1.transAxes, ha="right", fontsize=8,
             color=MUTED)
 
     A = np.logspace(-1.3, 2.0, 200)
     a2.loglog(A, tau_eff(A), color=SERIES[1], lw=LW, zorder=3)
     a2.axhline(5.0, color=SERIES[0], lw=1.2, zorder=2)
-    a2.annotate("AS horizon in §18.4 (one week)", (0.06, 5.0), xytext=(0, 4), textcoords="offset points",
-                fontsize=8.5, color=INK_2)
+    a2.annotate("AS horizon in §18.4 (one week)", (0.06, 5.0), xytext=(0, -4), textcoords="offset points",
+                fontsize=8.5, color=INK_2, va="top")        # below the line: above it the text hits the GLFT curve
     a2.plot([2.0], [tau_eff(2.0)], "o", color=SERIES[1], markersize=6, zorder=5)
     a2.annotate("A = 2: about 13 days", (2.0, tau_eff(2.0)), xytext=(8, 8), textcoords="offset points", fontsize=8.5,
                 color=INK_2)
-    a2.annotate("Friday night:\nA → 0, horizon → ∞", (0.05, tau_eff(0.05)), xytext=(6, -6),
-                textcoords="offset points", fontsize=8.5, color=INK_2, va="top")
+    a2.annotate("Friday night:\nA → 0, horizon → ∞", (0.07, tau_eff(0.07)), xytext=(0.07, 14),
+                textcoords="data", fontsize=8.5, color=INK_2, va="center",
+                arrowprops=dict(arrowstyle="->", color=INK_2, lw=0.9))
     a2.set_xlim(0.05, 100)
     a2.set_ylim(1, 100)
-    a2.set_xlabel("Arrival rate A (RFQs per day per side)")
-    a2.set_ylabel("Effective horizon τ_eff (trading days)")
+    a2.set_xlabel("Arrival rate A (fills/day/side at zero distance)")
+    a2.set_ylabel(r"Effective horizon $\tau_{\mathrm{eff}}$ (trading days)")
     a2.grid(True, axis="y")
-    a2.set_title("The busier the bond, the shorter the memory")
+    a2.set_title("Busier bonds forget faster")
     return finish(fig, "ch18_quote_ladder_glft_horizon")
 
 
@@ -253,10 +255,9 @@ def fig_dealer_inventory():
     label_end(ax, dm[-1], ma(gt)[-1], "Due in > 5 years", SERIES[0], dx=6)
     mark_event(ax, dt.datetime(2020, 3, 18), "Mar 2020", y_frac=0.97)
     ax.set_ylabel("Net position, long minus short (USD bn)")
-    ax.set_xlim(dm[0], dt.datetime(2026, 10, 7))
     ax.xaxis.set_major_locator(mdates.YearLocator(base=1))
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
-    ax.set_xlim(dm[0], dm[-1] + dt.timedelta(days=380))
+    ax.set_xlim(dm[0], dm[-1] + dt.timedelta(days=45))
     ax.tick_params(axis="x", labelsize=8.5)
     note(ax, "13-week average of weekly data; IG and below-IG bonds, notes and debentures", loc="lower left")
     # print the numbers the caption and log quote
@@ -291,21 +292,25 @@ def fig_jtd():
     ax.plot(q, diff, color=SERIES[0], lw=LW, zorder=3)
     ax.plot(q, r_nocredit, color=SERIES[6], lw=LW, zorder=3)
     ax.plot(q, r_desk, color=SERIES[7], lw=LW, zorder=3)
-    ax.annotate("Gaussian AS (diffusion only)", (q[150], diff[150]), xytext=(0, 7), textcoords="offset points",
-                ha="center", fontsize=8.5, color=INK_2)
-    ax.plot([q[150]], [diff[150]], "o", color=SERIES[0], markersize=4, zorder=5)
-    ax.annotate("+ jump-risk premium\n(λᴾ = λᵠ, no credit view)", (q[168], r_nocredit[168]),
-                xytext=(-4, 10), textcoords="offset points", ha="center", fontsize=8.5, color=INK_2, va="bottom")
-    ax.plot([q[168]], [r_nocredit[168]], "o", color=SERIES[6], markersize=4, zorder=5)
-    ax.annotate("+ desk's credit view\n(λᴾτ = 0.10, λᵠτ = 0.03)", (q[178], r_desk[178]),
-                xytext=(0, -8), textcoords="offset points", ha="center", va="top", fontsize=8.5, color=INK_2)
-    ax.plot([q[178]], [r_desk[178]], "o", color=SERIES[7], markersize=4, zorder=5)
-    # the q = +5 position of the autopsy
+    ax.annotate("Gaussian AS (diffusion only)", (-9.8, 0.0), xytext=(0, 5), textcoords="offset points",
+                ha="left", fontsize=8.5, color=INK_2)
+    ax.plot([q[0]], [diff[0]], "o", color=SERIES[0], markersize=4, zorder=5, clip_on=False)
+    ax.annotate(r"+ jump-risk premium (no credit view, $\lambda^{P}=\lambda^{Q}$)", (-10, r_nocredit[0]),
+                xytext=(0, 9), textcoords="offset points", ha="left", fontsize=8.5, color=INK_2)
+    ax.plot([q[0]], [r_nocredit[0]], "o", color=SERIES[6], markersize=4, zorder=5)
+    ax.annotate(r"+ desk's credit view ($\lambda^{P}\tau=0.10$, $\lambda^{Q}\tau=0.03$)", (q[-1], r_desk[-1]),
+                xytext=(-2, -10), textcoords="offset points", ha="right", va="top", fontsize=8.5, color=INK_2)
+    ax.plot([q[-1]], [r_desk[-1]], "o", color=SERIES[7], markersize=4, zorder=5)
+    # the q = +5 position of the autopsy: three points on one vertical
     ax.plot([5, 5], [r_desk[i5], 0], color=INK_2, lw=0.9, zorder=2)
+    ax.plot([5], [r_nocredit[i5]], "o", color=SERIES[6], markersize=6, markeredgecolor="white", zorder=6)
+    ax.plot([5], [diff[i5]], "o", color=SERIES[0], markersize=6, markeredgecolor="white", zorder=6)
     ax.plot([5], [r_desk[i5]], "o", color=SERIES[7], markersize=7, markeredgecolor="white", zorder=6)
-    ax.annotate("q = +5: 2.93 below the composite\n= 1.47 credit view + 1.46 jump premium", (5, r_desk[i5]),
-                xytext=(-14, -4), textcoords="offset points", ha="right", va="center", fontsize=8.5, color=INK)
-    ax.annotate("Actual one-day move on 20 March 2024: about −21 points (off scale)",
+    ax.annotate("q = +5 (the Altice autopsy): 2.93 points below the composite\n= 1.47 credit view + 1.46 jump-risk premium",
+                (5, r_desk[i5]), xytext=(-9.8, -4.9), textcoords="data", ha="left", va="center", fontsize=8.5, color=INK,
+                arrowprops=dict(arrowstyle="->", color=INK_2, lw=0.9, shrinkA=2, shrinkB=5,
+                                connectionstyle="arc3,rad=0.15"))
+    ax.annotate("Reported one-day move on 20 March 2024: about −21 points (off scale)",
                 (0.01, 0.02), xycoords="axes fraction", fontsize=8, color=MUTED, va="bottom", ha="left")
     ax.set_xlabel("Dealer inventory q (lots of $1mm; positive = long)")
     ax.set_ylabel("Reservation price minus composite (points)")
@@ -358,7 +363,7 @@ def fig_waterfall():
     assert [round(v, 2) for v in t.values()] == [0.10, 0.58, 0.15, 0.25, -0.05], t
     assert abs(s - x - 90.22) < 0.005 and abs(p_win - 0.016) < 0.002, (s - x, p_win)
 
-    labels = ["Credit view", "Fear", "Suspicion", "Greed", "Franchise"]
+    labels = ["Credit view", "Fear (diffusive + jump)", "Suspicion", "Greed", "Franchise (subsidy)"]
     vals = [t["credit"], t["fear"], t["suspicion"], t["greed"], t["franchise"]]
     fig, ax = new_figure("wide")
     left = 0.0
@@ -367,8 +372,7 @@ def fig_waterfall():
         col = SERIES[0] if v > 0 else "#e66767"
         lft = left if v > 0 else left + v
         ax.barh(yi, abs(v), left=lft, height=0.62, color=col, zorder=3)
-        ax.plot([left, left + v], [yi - 0.31, yi - 0.31 - 0.38], color=NEUTRAL, lw=0.8, zorder=2) if False else None
-        txt = f"{v:+.2f}" if v < 0 else f"{v:.2f}"
+        txt = f"\u2212{abs(v):.2f}" if v < 0 else f"{v:.2f}"
         ax.annotate(txt, (lft + abs(v), yi), xytext=(5, 0), textcoords="offset points", va="center", fontsize=8.5,
                     color=INK_2)
         left += v
@@ -384,6 +388,7 @@ def fig_waterfall():
     ax.set_xlim(0, 1.75)
     # reference quotes
     kaz_x, cover_x = s - 90.875, s - 90.50
+    ax.axvline(x, color=NEUTRAL, lw=0.9, ls=(0, (3, 3)), zorder=1)
     for xv, lab in [(kaz_x, "Kaz 90.875"), (cover_x, "Cover 90.50")]:
         ax.axvline(xv, color=NEUTRAL, lw=0.9, ls=(0, (3, 3)), zorder=1)
         ax.annotate(lab, (xv, 1.0), xycoords=("data", "axes fraction"), xytext=(0, 3), textcoords="offset points",
