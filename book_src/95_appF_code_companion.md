@@ -11524,7 +11524,7 @@ print(monthly.head(8).to_string(index=False, float_format=lambda v: f"{v:.4f}"))
 Listings from `93_appD_market_plumbing_and_contract_mechanics.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing D.1: plumbing.py: settlement, financing and margin mechanics, one function per rule {#code-d-1}
+### Listing D.1: plumbing.py: settlement, financing, margin, CDS cash and credit-event mechanics, one function per rule {#code-d-1}
 
 ```python
 # plumbing.py -- Appendix D reference implementation. Illustrative numbers; seeded.

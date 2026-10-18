@@ -31,6 +31,7 @@ one. `--retitle titles.json` sets titles from a {"code-N-k": "Title"} map (keys 
     python3 tools/renumber_listings.py --check              # read-only consistency check, exit 1 on problems
     python3 tools/renumber_listings.py --titles             # weak titles with context
     python3 tools/renumber_listings.py --apply --retitle titles.json
+    python3 tools/renumber_listings.py --root /tmp/copy_of_book   # rehearse on a copy
 
 Idempotent: on a consistent book it changes nothing.
 """
@@ -149,6 +150,15 @@ def serialize(pre, sections, trailer):
             out.append(b.header)
             out.extend(b.body)
     return "\n".join(out + list(trailer))
+
+
+def trailing_blanks(body):
+    n = 0
+    for ln in reversed(body):
+        if ln.strip():
+            break
+        n += 1
+    return n
 
 
 def normalise_tail(body, blanks=2):
@@ -345,8 +355,8 @@ def weak_reason(title):
 
 
 def stub_context(path, anchor):
-    """Heading chain above the first link to `anchor` in a chapter, and the sentence that introduces it."""
-    heads, last_para = [], ""
+    """Heading chain above the first link to `anchor` in a chapter."""
+    heads = []
     text = open(path, encoding="utf-8").read()
     for ln, in_code in split_fenced(text):
         if in_code:
@@ -377,13 +387,18 @@ def apply_retitle(sections, titles):
 
 # ---------------------------------------------------------------------------------------------- main
 def main():
+    global ROOT, SRC, APPF
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--apply", action="store_true", help="write the changes (default: dry run)")
     ap.add_argument("--check", action="store_true", help="read-only consistency check; exit 1 on problems")
     ap.add_argument("--titles", action="store_true", help="list weak listing titles with chapter context")
     ap.add_argument("--retitle", metavar="JSON", help="{anchor: title} map applied after renumbering")
     ap.add_argument("--roots", nargs="*", default=DEFAULT_ROOTS, help="directories scanned for references")
+    ap.add_argument("--root", default=ROOT, help="book root (default: the repository this script lives in); for tests on a copy")
     args = ap.parse_args()
+    ROOT = os.path.abspath(args.root)
+    SRC = os.path.join(ROOT, "book_src")
+    APPF = os.path.join(SRC, "95_appF_code_companion.md")
 
     text = open(APPF, encoding="utf-8").read()
     pre, sections, trailer = parse_appf(text)
@@ -430,7 +445,6 @@ def main():
         new_sections.append(s)
     for lab, main in main_of.items():
         allb = [b for s in sections if s.lab == lab for b in s.blocks]
-        old_pos = [(b.lab, b.k) for s in sections if s.lab == lab for b in s.blocks]
         for b in allb:
             b.new_k = mapping[(lab, b.k)]
         allb.sort(key=lambda b: b.new_k)
@@ -460,8 +474,7 @@ def main():
                 b.header = f"### Listing {b.lab}.{b.k}: {b.title} {{#{b.anchor}}}"
     for s in new_sections:                      # two blank lines close every section, as the mover writes them
         if s.blocks:
-            tail = len(s.blocks[-1].body) - len("\n".join(s.blocks[-1].body).rstrip("\n").split("\n")) if s.blocks[-1].body else 0
-            if tail < 2:
+            if trailing_blanks(s.blocks[-1].body) < 2:
                 s.blocks[-1].body = normalise_tail(s.blocks[-1].body)
     pre_new = rewrite("\n".join(pre), mapping, labels, cnt).split("\n")
     new_appf = serialize(pre_new, new_sections, trailer)
@@ -471,13 +484,15 @@ def main():
     for (lab, old), new in sorted(changed.items()):
         print(f"  renumber Listing {lab}.{old} -> {lab}.{new}   (#{anchor_of(lab, old)} -> #{anchor_of(lab, new)})")
     for b in moved:
-        print(f"  move Listing {b.lab}.{b.k} into the main section F.{b.lab}")
+        print(f"  move Listing {b.lab}.{b.orig[0]} (now {b.lab}.{b.k}) into the main section F.{b.lab}")
     for s in removed_sections:
         print(f"  drop section {s.header.strip()[:80]}")
     for a, old, new in retitled:
         print(f"  retitle #{a}: {old!r} -> {new!r}")
     for n in notes:
         print("  " + n)
+    if args.apply and any(n.startswith("ERROR") for n in notes):
+        raise SystemExit("refusing to --apply while the plan has ERRORs (see above)")
 
     # ---- every other file
     touched = []

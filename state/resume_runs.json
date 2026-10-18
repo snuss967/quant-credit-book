@@ -2,23 +2,6 @@
  "note": "Restarted 14:35 UTC (window 14:30-19:30). Resume with Workflow({scriptPath, resumeFromRunId, args}).",
  "runs": [
   {
-   "name": "appZ-8-14",
-   "task": "w1axsmeuy",
-   "runId": "wf_b3bcb670-77c",
-   "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/ed2-appz-solutions-wf_dd657811-90b.js",
-   "args": {
-    "stems": [
-     "08_ch08_isolating_ido_and_empirical_duration",
-     "09_ch09_factor_investing_in_credit",
-     "10_ch10_trend_and_time_series_momentum",
-     "11_ch11_defensive_systematic_high_yield",
-     "12_ch12_multi_asset_credit_allocation",
-     "13_ch13_codifying_lmt_game_theory",
-     "14_ch14_default_and_recovery_cycle_lmt_era"
-    ]
-   }
-  },
-  {
    "name": "appz-complete",
    "task": "w0x8oul5v",
    "runId": "wf_47f3acab-447",
@@ -66,6 +49,22 @@
    "runId": "wf_b4c8ff84-ee9",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/cleanup_queue.js",
    "args": "5 groups (appF-listings, basis-and-pairs, facts-12-16-17-22-26, part-i-and-cast, math-2b-4b-7b-10-15); exact args are in the 16:50 ledger entry's launch message, not saved. Fixers are durable via state/revisions/ed2/cleanup_<group>.md, so a relaunch with re-typed args costs little."
+  },
+  {
+   "name": "appz-notes-fix-13-14",
+   "task": "wa872pwhb",
+   "runId": "wf_394d08f5-3ff",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/appz_notes_fix.js",
+   "args": {
+    "lanes": [
+     [
+      "13_ch13_codifying_lmt_game_theory"
+     ],
+     [
+      "14_ch14_default_and_recovery_cycle_lmt_era"
+     ]
+    ]
+   }
   }
  ]
 }

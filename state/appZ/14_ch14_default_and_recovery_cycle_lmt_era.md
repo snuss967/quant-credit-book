@@ -1,6 +1,6 @@
 ## Z.14 Chapter 14: The Default & Recovery Cycle in the LMT Era
 
-Six exercises. Every number below was recomputed in Python. Exercise 3 uses `coop_break_prob` from Listing 14.3, and Exercise 6 runs `fit_ms2` from Listing 14.4 (Appendix F) on 200 simulated histories at each sample size. Write your card before you read ours.
+Six exercises. Every number below was recomputed in Python. Exercise 3 uses `coop_break_prob` from Listing 14.3, and Exercise 6 runs `fit_ms2` from Listing 14.4 (Appendix F) on 200 simulated histories at each sample size. There are three notes for the editor, in Z.14.2, Z.14.3 and Z.14.6. Write your card before you read ours.
 
 **Z.14.1: Two rates, two hazards**
 
@@ -104,3 +104,22 @@ The expected payoff is $0.6 \times 2.252 = 1.351$ on 1.0 paid. The IRR solves $(
 
 **If you got this wrong, read:** §14.1 (Hana's forty-one issuers and the "what we knew when" table), §14.2.2 on rates versus hazards and count- versus dollar-weighting, and the Specification for AI Implementation in §14.7 ("What ROBO built from the vague version").
 
+**Z.14.6: Regime detection**
+
+**Answer:** At 90 defaults a year the filter calls the switch **in year 30, the switch year itself**. In 200 simulated histories, each a fixed switch, Poisson default counts and binomial exchange counts, put through `fit_ms2` on the full 40 years, the filtered LME probability first exceeded 0.9 in year 30 in 199 runs and in year 31 in the last one. None crossed before the switch. At 12 defaults a year, the first crossing at or after the switch came in year 30 in 16% of runs, year 31 in 44%, year 32 in 22%, year 33 in 14%, and years 34–37 in the remaining 6%. That is a median of **one year late** (mean 1.5 years), with three years or more in about one history in five. In 6% of the runs the filter also cried wolf, passing 0.9 at least once before year 30. So the small sample buys you **about one to two years** of "it's just noise," and three or more in a bad draw.
+
+**How:** Each year's count is evidence. Its expected log-likelihood ratio in the LME regime is $n$ times a Kullback–Leibler distance:
+
+$$
+n\left[0.63\ln\frac{0.63}{0.30} + 0.37\ln\frac{0.37}{0.70}\right] = 0.2315\,n \text{ nats},
+$$
+
+which is 20.8 nats a year at 90 defaults and 2.8 at 12. The filter enters year 30 at the fitted switching probability, $1 - \hat P_{00} = 0.022$, a log-odds of $-3.8$, and reading 0.9 needs $+2.2$, a gap of 6 nats. One public-market year covers that gap three times over. At private-credit size it takes about two years of average evidence, and longer after an unlucky draw. This is the umbrella box's seven-of-ten against 105-of-150, played out over time. Two caveats about the full-sample fit. First, its parameters have already read the post-switch years, so its "filtered" path is better than anything you could have known at the time. Second, its $\hat P_{11} = 0.964$, an expected LME life of 28 years, is pinned by Listing 14.4's stationary start rather than by any exit it has seen. Start the recursion in the pre-LME state and $\hat P_{11}$ runs to the $1 - 10^{-6}$ clip. That is §14.7.2's warning about $1/(1 - P_{11})$, in numbers.
+
+**The trap:** The tempting answer is "the same lag at both sizes, because the share is 63% either way." The filter weighs counts, not shares, and a 63% month out of 12 defaults is weak evidence. The second slip is building the history with the listing's `simulate_de_share_series`, which draws its own Markov regime path, so a given seed may switch in year 12 or never. Fix the path at year 30. The third is "fixing" the look-ahead by refitting each year on the data to date and stopping at the first crossing. That *looks* faster (at 12 defaults, 55% of runs cross in year 30 itself), but only because the refit is trigger-happy. Fit a two-state model to data that hold one regime and it finds two anyway: on pre-switch data alone the refit passed 0.9 in 64% of 50 runs at 12 defaults and 60% of 25 runs at 90, with a "high-exchange" share near 0.36 rather than 0.63. A real-time filter needs a guard, either a test of one state against two or a prior that anchors $\rho_1$ to the documented LME share, before its 0.9 means anything.
+
+NOTE (for the editor): §14.7.2 says that "on about 45 annual points the switch date is uncertain by years, worse when each year holds fewer defaults." In this exercise's own setup the date is not uncertain at public-market size: 199 of 200 full-sample fits call it in the switch year. The years appear only at private-credit size (median lag one year, 90th percentile three), or once the binomial model is wrong. With the share overdispersed around each regime's mean (beta-binomial, standard deviation about 0.07), the same filter at 90 defaults a year passes 0.9 before the switch in 19 of 40 histories. With the share drifting from 0.30 to 0.63 over years 25–35, the first crossing falls anywhere from year 29 to year 32 (10th to 90th percentile). I suggest: "the switch date is sharp only if the counts are clean binomial draws around a share that jumps; with private-credit-sized counts, extra-binomial noise or a share that drifts, it is uncertain by years."
+
+**If you got this wrong, read:** §14.7.1: the umbrella box (counts, not shares), the filter's update and prediction steps, and Kaz's paragraph on label switching and priors on $P$. Then §14.7.2's last paragraph on the switch date, and the risk-committee scene for why the desk publishes filtered, not smoothed, numbers.
+
+<!-- STATUS: COMPLETE -->
