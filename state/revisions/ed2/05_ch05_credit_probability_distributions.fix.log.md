@@ -4,7 +4,7 @@ Fix list: `state/reviews/ed2/u2_fixes_ch01_05_06.md`, Chapter 5 section.
 
 ## Items
 
-- [ ] P1 · §5.1.4, line 213, "The 95% VaR is blind" · Keep the metaphor in the box; the paragraph keeps the numbers and the JTD/ES recommendation.
+- [x] P1 · §5.1.4, line 213, "The 95% VaR is blind" · Keep the metaphor in the box; the paragraph keeps the numbers and the JTD/ES recommendation. — *Done: speedometer sentence cut; ES/JTD now point to §5.10 report.*
 - [ ] P1 · §5.6.2, Serta, Mags's chair (~695) and "This is where I tell you what I did" (~723) · Add one clause tying to Ch 1 ("the ten million I bought from the CLO, which Chapter 1 told you about, plus a small piece I already had"); record both in a cast bible.
 - [ ] P2 · §5.1.2, line 167, "Two checks you should always run on formulas like these, and should make ROBO run too" · "Kaz runs two checks on any mixture formula before trusting it: ..."
 - [ ] P2 · §5.1.3, "When the skeleton is the right tool" (~185) · Keep the content; recast the last third as Mags handing Theo a skew of −0.3 on a B3 name and asking what it measured.

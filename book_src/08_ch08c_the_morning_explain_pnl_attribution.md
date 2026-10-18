@@ -461,3 +461,5 @@ Theo's USB stick is in his pocket. The 13-week model and the explain turn out to
 
 - FINRA, TRACE monthly volume reports and their definitions. https://www.finra.org/finra-data/browse-catalog/trace-volume-reports/about-trace-monthly-volume-reports
 - `pnl_explain.py` (Appendix F, and `book_src/lib/`), which takes its sensitivities from `risk_model.py` (Chapter 8-B) and its issuer IDO returns from `ido_engine.py` (§8.9).
+
+<!-- STATUS: COMPLETE -->

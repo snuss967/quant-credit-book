@@ -2,13 +2,6 @@
  "note": "Restarted 09:34 UTC (window 09:30-14:30). Stopped at the user's ~88% rule at 06:11 UTC. To resume: Workflow({scriptPath, resumeFromRunId: runId, args}). All agents are durable, so finished items are skipped.",
  "runs": [
   {
-   "name": "reader-lens",
-   "task": "w0vm8d6o1",
-   "runId": "wf_aa7ed3ed-60e",
-   "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/ed2-reader-lens-reviews-wf_aa7ed3ed-60e.js",
-   "args": null
-  },
-  {
    "name": "research-B",
    "task": "wjge66z49",
    "runId": "wf_e08bbe4b-b57",
@@ -269,6 +262,32 @@
     "stages": [
      "lessons",
      "rv"
+    ]
+   }
+  },
+  {
+   "name": "redpen",
+   "task": "wpslncppo",
+   "runId": "wf_c8972122-75f",
+   "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/ed2-redpen-fixes-wf_c8972122-75f.js",
+   "args": null
+  },
+  {
+   "name": "newfiles-figs",
+   "task": "we6vugnpe",
+   "runId": "wf_2396c6f7-2a1",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "12_ch12c_plan_valuation_dip_and_exit_as_derivatives",
+     "08_ch08b_the_risk_model_and_the_limit_sheet",
+     "08_ch08c_the_morning_explain_pnl_attribution"
+    ],
+    "stages": [
+     "figures",
+     "figcheck",
+     "resgraph"
     ]
    }
   }

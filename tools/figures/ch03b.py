@@ -282,7 +282,7 @@ def fig_wall_interval():
                  textcoords="data", ha="right", va="center", fontsize=8.5, color=INK_2,
                  arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.7, shrinkA=2))
     bot.annotate(f"{s_cliff:.0f}% of the time no deal comes:\nthe outside date ends it", (H, s_cliff),
-                 xytext=(H - 0.8, 47), textcoords="data", ha="right", va="center", fontsize=8.5, color=INK_2,
+                 xytext=(33.3, 60), textcoords="data", ha="right", va="center", fontsize=8.5, color=INK_2,
                  arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.7, shrinkA=2))
     bot.set_ylim(0, 108)
     bot.set_yticks([0, 25, 50, 75, 100])
@@ -326,7 +326,7 @@ def fig_event_windows():
     top.set_yticks(range(len(rows)))
     top.set_yticklabels([r[0] for r in rows])
     top.tick_params(axis="y", length=0, labelsize=8.5)
-    top.tick_params(labelbottom=False)
+    top.tick_params(labelbottom=False, bottom=False)
     top.spines["left"].set_visible(False)
     for i, (name, s0, t1, beta, lab) in enumerate(rows):
         top.add_patch(Rectangle((num(s0), i - 0.28), num(t1) - num(s0), 0.56, fc=VIOLET_TINT, ec=VIOLET, linewidth=1.0,
@@ -347,7 +347,7 @@ def fig_event_windows():
     bot.annotate(f"grace + RSA windows open:\n$4\\% \\times e^{{2.0}}$ = {both:.1f}% a year", (num(day28), both),
                  xytext=(-4, 7), textcoords="offset points", ha="right", va="bottom", fontsize=8.5, color=INK_2)
     g = LAM0 * math.exp(1.2)
-    bot.annotate(f"grace alone: {g:.1f}%", (num(D(2026, 11, 22)), g), xytext=(0, -4), textcoords="offset points",
+    bot.annotate(f"grace alone: {g:.1f}%", (num(D(2026, 11, 24)), g), xytext=(0, -4), textcoords="offset points",
                  ha="center", va="top", fontsize=8.5, color=INK_2)
     bot.annotate(f"consent + coupon\nwindows: {LAM0*math.exp(1.0):.1f}%", (num(D(2026, 11, 2)), LAM0 * math.exp(1.0)),
                  xytext=(-4, 6), textcoords="offset points", ha="center", va="bottom", fontsize=8.5, color=INK_2)
