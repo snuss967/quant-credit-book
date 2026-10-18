@@ -4,7 +4,7 @@
 
 ## Cold Open: The Waterfall Has a Clock
 
-*Monday, 8:05 a.m.* Halvorsen Packaging did not pay the \$18mm coupon on its 6% senior notes due 2031 on Friday. (Halvorsen is fictional, and every number in this chapter is illustrative.) The press release said the company had "elected to utilize the 30-day grace period," which is how a company tells you it has stopped paying without telling you it has stopped paying.
+*Monday 23 November 2026, 8:05 a.m. Day 31 on the clock Chapter 4-C started; Theo's tenth week.* Halvorsen Packaging did not pay the \$18mm coupon on its 6% senior notes due 2031 on Friday. (Halvorsen is fictional, and every number in this chapter is illustrative.) The press release said the company had "elected to utilize the 30-day grace period," which is how a company tells you it has stopped paying without telling you it has stopped paying.
 
 Theo Marsh has drawn the capital structure on the whiteboard as a waterfall: the ABL on top, the first-lien term loan and the 7.25% secured notes side by side, the two unsecured bonds, trade, and a small, sad box labeled "sponsor." Next to it Kaz Lind has drawn the same company as circles and arrows.
 

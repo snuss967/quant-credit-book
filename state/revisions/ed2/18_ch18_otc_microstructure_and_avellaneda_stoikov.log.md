@@ -22,3 +22,5 @@
 - [x] 20. §18.10 Desk Debrief: Finder table; promote Exercises with difficulty tags. — Nine-row Finder table; Exercises heading; Warm-up/Core/Stretch tags added.
 - [x] 21. Whole chapter: ban the templates in code explanations. — Roll, JTD, win-curve, TRACE, BWIC explanations open on scene moments.
 - [x] 22. Whole chapter: one telling per fact (Altice 21 points, Trumid 88%, Gaussian epitaph). — Verified single tellings; pointers in §18.1, §18.8; internal-source hedges fixed.
+
+<!-- STATUS: COMPLETE -->

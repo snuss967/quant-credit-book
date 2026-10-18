@@ -5,7 +5,7 @@
 - [x] 3. **[§28.1 "three substitutions"] · LIST-TO-NARRATIVE.** Turn the numbered list into one paragraph in Theo's voice (he tries to hand out \$500 — DONE: Email scene; Ines's three finger-points replace list; bridges added.
 - [x] 4. **[§28.2 head] · MATH-GENTLY (box 2): what a distribution is, via the hit rate.** A distribution is a list of outcomes with weights; the ±1  — DONE: Box 2 forty coins; (28.3) stated once; Full Derivation subsection added.
 - [x] 5. **[§28.2 "Two definitions of effective breadth"] · MATH-GENTLY (box 3): correlation as a ceiling.** Picture: 300 umbrellas from 40 factories — DONE: Box 3 umbrellas: rho 0.03 gives 16/30/33; ceiling 1/rho; Herfindahl kept.
-- [ ] 6. **[§28.2, before Block 1] · SHOP-LIFE vignette (400–600 words, labeled fictional).** *Shop type: a multi-manager platform's central risk tea
+- [x] 6. **[§28.2, before Block 1] · SHOP-LIFE vignette (400–600 words, labeled fictional).** *Shop type: a multi-manager platform's central risk tea — DONE: Marcus vignette 13 Oct: hierarchy re-parent, 41→27→33; spec opens 7:40.
 - [ ] 7. **[§28.3 head] · MATH-GENTLY (box 4): exponential decay and half-life.** Coffee cooling; tiny number: α₀ = 3% and a 0.6% round trip give h* 
 - [ ] 8. **[§28.4 head] · MATH-GENTLY (box 5): Kelly and log growth.** Why log: a 50% loss needs a 100% gain; ruin is minus infinity. Tiny number: a 
 - [ ] 9. **[§28.4 "Continuous time, and the jump"] · MATH-GENTLY (box 6, two parts): Poisson jumps and Itô's ½σ².** *Part one:* normal vs Poisson in 

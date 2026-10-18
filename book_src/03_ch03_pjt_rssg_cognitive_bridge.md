@@ -81,7 +81,9 @@ $$
 
 Plug in illustrative numbers: $p = (0.55, 0.25, 0.20)$, $\mu = (100, 70, 45)$, $\sigma = (0.5, 6, 12)$ points *(illustrative)*. The price is $55 + 17.5 + 9 = 81.5$. The within-scenario variance is $0.1375 + 9 + 28.8 \approx 37.9$. The between-scenario variance is $0.55(18.5)^2 + 0.25(11.5)^2 + 0.20(36.5)^2 \approx 487.8$. Total variance $\approx 525.7$, a standard deviation of about 22.9 points.
 
-Ninety-three percent of the variance is the question "which scenario are we in?" That is the RSSG question. The recovery distribution *inside* Chapter 11, the thing the plan-valuation fight is about, contributes only seven percent. This is the first aha of the chapter, and it explains why the ex-RSSG hire is valuable on a systematic desk: the expensive uncertainty in high-yield credit is overwhelmingly about discrete states, and a banker who reads the documents and the docket can shift probability mass between states faster and more accurately than a model fit to spread time series. Kaz's "assume Gaussian" collapses a three-humped mixture into one bell curve with the right mean and the right variance and the wrong everything else: a Gaussian puts its mass at 81.5, the one price at which this bond will almost certainly *not* settle.
+Ninety-three percent of the variance is the question "which scenario are we in?" That is the RSSG question. The recovery distribution *inside* Chapter 11, the thing the plan-valuation fight is about, contributes only seven percent. This is the first aha of the chapter, and it explains why the ex-RSSG hire is valuable on a systematic desk: the expensive uncertainty in high-yield credit is overwhelmingly about discrete states, and a banker who reads the documents and the docket can shift probability mass between states faster and more accurately than a model fit to spread time series. Kaz's "assume Gaussian" collapses a three-humped mixture into one bell curve with the right mean and the right variance and the wrong everything else: a Gaussian puts its mass at 81.5, the one price at which this bond will almost certainly *not* settle. Figure 3.1 draws the two side by side.
+
+![Figure 3.1: Kaz's bell curve and the three-scenario mixture have the same mean (81.5) and the same standard deviation (22.9), but the normal peaks where the mixture is thin (the mixture's density at 81.5 is 16% of the normal's, and only 3.5% of its outcomes land within five points of the price, against 17% for the normal) and it puts 21% of its mass above par. The spike at 100 is the clean refinancing, 55% of the mass in a width of half a point. Illustrative: the mixture of §3.1.2 ($p = 0.55/0.25/0.20$, $\mu = 100/70/45$, $\sigma = 0.5/6/12$ points).](assets/figures/ch03_mixture_vs_gaussian.png)
 
 ### 3.1.3 Horizon: the desk does not hold to resolution
 
@@ -139,7 +141,9 @@ The half-spread is the probability that the sender is informed times the uncerta
 
 The joke, which is also the point: the uninformed seller pays $\pi\sigma_V$ for the privilege of trading in a market that contains informed sellers. The pension fund rebalancing on the first of the month is subsidizing the distressed fund that just left a lender call. Market making is the business of running that cross-subsidy at a profit of exactly zero, which is why desks that do it well care so much about the "exactly."
 
-The derivation below also handles the lopsided bond a distressed desk usually faces, and its exact form is the one that prices Serta in §3.7.
+The derivation below also handles the lopsided bond a distressed desk usually faces, and its exact form is the one that prices Serta in §3.7. Figure 3.2 plots the charge it produces.
+
+![Figure 3.2: The adverse-selection charge $m - b$ for a sell RFQ grows with the informed fraction $\pi$ (left), and for a given $\pi$ it is largest near a coin flip (right, dots mark each curve's peak). The $q = 0.5$ line is the symmetric rule (3.1), $\pi\sigma_V$ with $\sigma_V = 10$; Serta's lopsided prior ($q = 0.7$, $\pi = 0.3$) costs 2.9 points. Illustrative: the asymmetric Glosten–Milgrom formula of §3.2.1 at a gap $\Delta = 20$ points.](assets/figures/ch03_gm_half_spread.png)
 
 #### The Full Derivation: the Glosten–Milgrom bid
 

@@ -207,7 +207,7 @@ def fig_hand_replayed():
     ax.plot([4 - w / 2 - 0.07, 4 + w / 2 + 0.07], [theo, theo], color=ORANGE, linewidth=2.4, zorder=7, solid_capstyle="butt")
     ax.annotate(f"Theo at 85\u00bd:\n\u2212{abs(theo):.2f} (\u2212{abs(bp(theo, THEO)):.0f}bp)", (4 + w / 2 + 0.07, theo), xytext=(7, 4),
                 textcoords="offset points", ha="left", va="center", fontsize=8.5, color=INK_2, linespacing=1.25)
-    ax.set_xlim(-0.6, 5.35)
+    ax.set_xlim(-0.6, 5.55)
     ax.set_ylim(-7.2, 2.6)
     ax.set_xticks(range(5))
     ax.set_xticklabels(["Captured\nhalf-spread\n(87 − 85¾)", "Market move\n(CDX +20bp,\nTreasuries −10bp)",
@@ -219,7 +219,7 @@ def fig_hand_replayed():
     ax.set_yticklabels(["−6", "−4", "−2", "0", "+2"])
     ax.grid(axis="y")
     ax.set_axisbelow(True)
-    ax.text(5.3, 2.35, "The winner bought $15mm at 85¾ with the mid at 87;\nfive days later the mid is 81. One point = $150,000.",
+    ax.text(5.5, 2.35, "The winner bought $15mm at 85¾ with the mid at 87;\nfive days later the mid is 81. One point = $150,000.",
             ha="right", va="top", fontsize=8, color=MUTED, linespacing=1.3)
     return finish(fig, "ch03_hand_replayed")
 
