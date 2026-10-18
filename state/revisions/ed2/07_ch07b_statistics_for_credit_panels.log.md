@@ -9,9 +9,9 @@
 - [x] 7. [7-B.3 Desk framing] LIST-TO-NARRATIVE + box 3. Note: three screens, kitchen-scale log-odds, IRLS to Full Derivation.
 - [x] 8. [7-B.3 Calibration] box 4 + ANOTHER-SEAT. Note: two weathermen, Brier 0.21 vs 0.12; dealer win-curve seat.
 - [x] 9. [7-B.4 Desk framing] box 5 two parts. Note: ten issuers 0.771, binomial coin; desk framing replaced by bridge.
-- [ ] 10. [new `#### Long Scene: The Chapter 22 Cohort` after Three functions that are one object, before Kaplan–Meier, derived] NEW-SCENE (2,400–3,000 words), the chapter's second long scene.
-- [ ] 11. [7-B.4 Kaplan–Meier, derived + Cox] FULL-DERIVATION-MOVE + MATH-GENTLY (box 6).
-- [ ] 12. [7-B.4 Check the proportionality] WHEN-TO-APPLY inside the scene.
+- [x] 10. [new `#### Long Scene: The Chapter 22 Cohort`] NEW-SCENE. Note: 2,553 words; Saks clock 5 (exchange), KM 0.875/0.625/0.5/0.375/0.19.
+- [x] 11. [7-B.4 KM + Cox] FULL-DERIVATION-MOVE + box 6. Note: race-in-wind box, practice cohort trimmed, Full Derivation added.
+- [x] 12. [7-B.4 Check the proportionality] WHEN-TO-APPLY. Note: regime sentence is Mags's in Beat 4; plot kept one line.
 - [ ] 13. [7-B.5 Desk framing] MATH-GENTLY (box 7, two parts) + ANOTHER-SEAT.
 - [ ] 14. [7-B.5 Shrinkage + Ledoit–Wolf] MATH-GENTLY (box 8) + FULL-DERIVATION-MOVE.
 - [ ] 15. [7-B.6] MATH-GENTLY (box 9) + LIST-TO-NARRATIVE + SHOP-LIFE.

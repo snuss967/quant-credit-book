@@ -135,7 +135,7 @@ Tuesday 20 October 2026, 4:45 p.m. Ines puts a folder on the table the way she p
 
 "One exception tonight," she says. "Two numbers from the future, because tonight is about the shape of a payoff and not its level, and I don't want to watch Kaz value a chip company for an hour." She writes them on the whiteboard and boxes them: *43.56mm new shares. Plan equity value \$959.4mm, so \$22.02 a share* (calc, from the FY2026 10-K). Everything else in the folder is dated on or before the cut.
 
-**The stack.** Theo reads it aloud, from the balance sheet as the next 10-K would print it six days later, which Ines allows because nothing but accrued interest moved in those six days. Senior Secured Notes due 2030, \$1,521.2mm, paying 9.875% plus 2% in kind. Three convertible issues, all unsecured: 1.75% due 2026, \$575mm, convertible at about \$47.32 a share; 0.25% due 2028, \$750mm, at about \$127.22; 1.875% due 2029, \$1,750mm, at about \$118.88. Renesas's customer deposits, \$2,062mm, unsecured and ranking with the converts. Total debt \$6,658.2mm; cash and short-term investments \$955.4mm, down \$1.22bn in a year.
+**The stack.** Theo reads it aloud, from the balance sheet as the next 10-K would print it six days later, which Ines allows because nothing but accrued interest moved in those six days. Senior Secured Notes due 2030, \$1,521.2mm, paying 9.875% plus 2% in kind. Three convertible issues, all unsecured: 1.75% due 2026, \$575mm, convertible at about \$47.32 a share; 0.25% due 2028, \$750mm, at about \$127.22; 1.875% due 2029, \$1,750mm, at about \$118.88. Renesas's deposits, \$2,062mm, unsecured and ranking with the converts. Total debt \$6,658.2mm; cash and short-term investments \$955.4mm, down \$1.22bn in a year.
 
 The path is in the next three pages. On 28 March 2025 an out-of-court exchange failed and the stock fell about half, to \$2.59, a market capitalisation of about \$400mm. On 2 June the company did not pay the interest due on the 2029 converts and entered the 30-day grace period. On 22 June it signed a restructuring support agreement with holders of more than 97% of the secured notes, and the press release the next morning said what everyone got: the converts and Renesas would exchange about \$5.2bn of claims for \$500mm of new notes and 95% of the new common equity, and existing shareholders would receive "their pro rata share of 3% or 5% of new common equity," subject to dilution and "potential reduction from certain events." By Monday afternoon the stock was about a third lower, near 60 cents (press reports that afternoon put it at 59 and 60 cents).
 
@@ -145,7 +145,7 @@ Theo goes to the whiteboard and draws the ladder of §6-B.1.4 with real attachme
 
 "The tranche that does the most leverage," Kaz says, pleased.
 
-"The tranche whose price moves most when the valuation fight moves," Ines says. "Which is a kind of leverage, so you get half a point." The rungs above and below the money barely move: the secured notes are paid almost whatever the company is worth, and the old equity, a call struck at \$6.66bn on a firm worth perhaps a third of that, is too far out of the money to have a delta. (Six days after the cut the 10-K would mark the three convert issues at 26% of principal, and the disclosure statement would estimate their recovery at 25% to 30%. Ines shows neither yet.)
+"The tranche whose price moves most when the valuation fight moves," Ines says. "Which is a kind of leverage, so you get half a point." The rungs above and below the money barely move: the secured notes are paid almost whatever the company is worth, and the old equity, a call struck at \$6.66bn on a firm worth perhaps a third of that, is too far out of the money to have a delta. (The 10-K's fair values as of 29 June would put the three convert issues at 26% of principal, and the disclosure statement filed that week would estimate their recovery at 25% to 30%. Ines shows neither yet.)
 
 **The second thing.** Kaz has been pricing the old stock all afternoon as a Merton call on the firm, struck at total debt, and has a number to four decimal places. Mags takes the RSA out of the folder and puts it on top of Kaz's printout.
 
@@ -183,9 +183,9 @@ Theo writes the longest card, as usual. *(1) A forward on 0.008352 new shares pl
 
 What would you write? The reader's card is graded with the others, against what happened.
 
-**The grade.** Ines opens the next folders one at a time. The company filed a prepackaged Chapter 11 in Houston on 30 June. The court confirmed the plan on 8 September, day 70. On 29 September the plan went effective, the old shares were cancelled, and each became 0.008352 of a new share. The new stock opened at \$18.00, traded as low as \$8.05 and closed at \$22.10, against the plan's \$22.02 (market-data vendor prints; Chapter 16 notes that vendors differ slightly on that day's opening and closing prints). On 29 January 2026 the committee cleared Renesas, and the old equity's 871,287 contingent shares were released, 0.005568 more per old share, at a time when the new stock was trading near \$17.
+**The grade.** Ines opens the next folders one at a time. The company filed a prepackaged Chapter 11 in Houston on 30 June. The court confirmed the plan on 8 September, day 70. On 29 September the plan went effective, the old shares were cancelled, and each became 0.008352 of a new share. The new stock opened at \$18.00, traded as low as \$8.05 and closed at \$22.10, against the plan's \$22.02 (market-data vendor prints; Chapter 16 notes that vendors differ slightly on that day's opening and closing prints). On 29 January 2026 the committee cleared Renesas, and the old equity's 871,287 contingent shares were released, 0.005568 more per old share, with the new stock near \$17 (it had closed 2025 at \$17.41, vendor close).
 
-Theo's payoff function was right to the share. Valued at the first day's close and at the January mark, the old share delivered about $0.008352\times22.10+0.005568\times17.33\approx\$0.28$ (calc), against 60 cents on the day of the card. The short made about half its proceeds before the cost of borrowing, and the FY2025 10-K's price table shows the old stock trading as low as \$0.41 before the fiscal year ended on 29 June, so the market came part of the way to the document within a week. Full marks on line one, most of the marks on line two. Line three is where Ines stops.
+Theo's payoff function was right to the share. Valued at the first day's close and at that year-end price, the old share delivered about $0.008352\times22.10+0.005568\times17.41\approx\$0.28$ (calc), against 60 cents on the day of the card. The short made about half its proceeds before the cost of borrowing, and the FY2025 10-K's price range for the year to 29 June shows a closing low of \$0.41, so the market came part of the way to the document within a week. Full marks on line one, most of the marks on line two. Line three is where Ines stops.
 
 "The plan confirmed," she says. "So your kill didn't happen. What nearly killed you is a line you didn't write."
 
@@ -195,7 +195,7 @@ She turns the last page in the folder. A short in a share the plan cancels does 
 
 Kaz's card gets the same grade for direction and a lower one for reasoning. The Merton call was struck at \$6.66bn and the document had replaced the strike with a share count, so the model was pricing an option the RSA had already exercised; its delta was a number about an instrument that no longer existed, and the short it sized was right by accident. "The model priced an option somebody had already exercised," Ines says. "That's not a model error. That's a reading error." Kaz writes *read the RSA first* on a sticky note and puts it, for reasons nobody asks about, on Mags's monitor.
 
-Mags's card cannot be graded, and Ines says so. The folder has no borrow tape for June 2025, and the desk will not invent a fee for a stock that half the press was calling a meme. "But you're the only card that wrote down a cost," Ines tells her. "Everyone else priced the payoff and forgot the rent." Mags accepts this as her due.
+Mags's card cannot be graded, and Ines says so. The folder has no borrow tape for June 2025, and the desk does not invent fees for stocks in the week of their restructuring. "But you're the only card that wrote down a cost," Ines tells her. "Everyone else priced the payoff and forgot the rent." Mags accepts this as her due.
 
 **The coda.** Ines leaves the last page face up. On 26 March 2026 the reorganized company sold a 1.5-lien convertible, convertible at about \$20.14 a share, and inserted it between the first and second liens, so the post-emergence stack carries four strikes on one new stock: the second-lien converts at about \$12.23, Renesas's second-lien converts at about \$18.35, the new 1.5-lien convert at about \$20.14 and Renesas's warrant at \$23.95, all around a plan value of \$22.02 (exit and March 2026 8-Ks; calc). Two months later the stock was \$73.50, 3.3 times plan value. Four strikes, one distribution: the picture Chapter 23 calls "one distribution, many strikes" (§23.1), drawn by a court and a committee instead of an options exchange.
 
@@ -213,6 +213,8 @@ Ines: "You don't price a hand by guessing the river. You price it by what it cos
 
 ### 6-B.2.2 One period, two states, and the probability that is a ratio of prices
 
+> **Math, Gently.** *The factory, in two parts.* **Part one: a probability that is a ratio of prices.** A stock is at 100. Tomorrow it will be 120 or 90, nothing else, and money earns nothing overnight ($u=1.2$, $d=0.9$, $r=0$). You are asked to sell a call struck at 100, which pays 20 in the up state and 0 in the down state. Instead of guessing, build the call from parts. Buy $\Delta$ shares and borrow $b$, so that $120\Delta-b=20$ and $90\Delta-b=0$. Subtract: $30\Delta=20$, so $\Delta=2/3$ of a share and $b=60$. The kit costs $\tfrac23\times100-60=6.67$, and it pays exactly what the call pays in both states. So the call costs 6.67. Now notice that $6.67=\tfrac13\times20+\tfrac23\times0$: the price is an average of the payoffs with weight $\tilde q=(1-0.9)/(1.2-0.9)=1/3$ on the up state. Tell me the up-move is 90% likely and I still charge 6.67, because I am not betting, I am manufacturing; the 1/3 came out of three prices, not out of anybody's forecast. **Part two: the factory in continuous time.** Rebalance the same recipe every instant instead of once, and the cost of the kit obeys the Black–Scholes equation of §6-B.2.3. The factory still has an operating margin, though. It was built assuming a certain amount of wiggle, the implied volatility $\sigma_i$; if the world wiggles more or less, the hedger who owns the option collects or pays a rent of $\tfrac12\Gamma S^2(\sigma_r^2-\sigma_i^2)$ per year, the equation of §6-B.2.4. A tiny number: dollar gamma $\Gamma S^2=2{,}000$ *(illustrative)*, realized volatility 40% against 30% implied. The rent is $\tfrac12\times2{,}000\times(0.16-0.09)=1{,}000\times0.07=70$ a year, about 28 cents a trading day, collected one rebalance at a time. The general recipe is next.
+
 Let the underlying be worth $S$ today and either $uS$ or $dS$ after one period of length $\Delta t$, with $d<e^{r\Delta t}<u$ (otherwise one of the assets dominates the other and there is an arbitrage). A claim pays $C_u$ or $C_d$. Buy $\Delta$ units of the underlying and invest $b$ in the riskless asset, and choose them so the portfolio pays the claim in both states:
 
 $$
@@ -225,7 +227,7 @@ $$
 C_0=e^{-r\Delta t}\Big[\tilde q\,C_u+(1-\tilde q)\,C_d\Big],\qquad \tilde q=\frac{e^{r\Delta t}-d}{u-d}\in(0,1).
 $$
 
-Look at what is missing: the physical probability $p$ that the up state happens. It never enters. The weight $\tilde q$ looks like a probability (it is between 0 and 1 and the weights sum to 1), and pricing *as if* it were one, then discounting at $r$, gives the right answer. That is all a risk-neutral probability is: a ratio of prices that behaves like a probability. Cox, Ross and Rubinstein (1979) turned this one-period argument into the binomial tree.
+The physical probability $p$ of the up state never enters. The weight $\tilde q$ lies between 0 and 1 and the weights sum to 1, so pricing *as if* it were a probability and discounting at $r$ gives the right answer, which is all a risk-neutral probability is (the box's 1/3; Chapter 6's box says the same thing in plain words). Cox, Ross and Rubinstein (1979) turned this one-period argument into the binomial tree.
 
 **The credit version, and the fix §3.1 needs.** Replace the share with a one-period zero-coupon bond that pays 100 if the issuer survives and $R$ (in points) if it defaults. If it trades at $P_0$,
 
@@ -285,6 +287,20 @@ Now translate. A Merton bondholder is short a put on the firm (§6.2.1), so a he
 
 ### 6-B.2.5 The Black–Scholes formula, and the two probabilities of one event
 
+> **Math, Gently.** *Two probabilities of one event.* Ask two accountants how likely it is that a one-year call struck at 100 finishes in the money, and tell one to keep the books in dollars and the other in shares. The dollar accountant weights every path the same way the risk-neutral measure does. The share accountant has a quirk: a path on which the stock ends at 150 is, to her, a path on which a share is worth half again as much, so she counts high-stock paths more heavily than low-stock ones. Both are doing correct arithmetic about the same event and they disagree, because they are counting in different currencies. *A tiny number:* $S_0=K=100$, $\sigma=30\%$, $r=4\%$, $T=1$. Then $d_2=(0+0.04-0.045)/0.30=-0.017$ and $d_1=d_2+0.30=0.283$, so the dollar accountant says $N(d_2)=0.493$ and the share accountant says $N(d_1)=0.611$. The call is worth $100\times0.611-96.08\times0.493=13.75$, the same 13.75 that sat in the parity lunchbox of §6-B.1.2. Sixty-one per cent and forty-nine per cent are both the probability of finishing in the money, under two numeraires, and neither is a forecast. What a forecast would need is next.
+
+Stated once, with $N(\cdot)$ the standard normal distribution function:
+
+$$
+C=S_0N(d_1)-Ke^{-rT}N(d_2),\qquad \text{Put}=Ke^{-rT}N(-d_2)-S_0N(-d_1),\qquad d_2=\frac{\ln(S_0/K)+(r-\tfrac12\sigma^2)T}{\sigma\sqrt T},\quad d_1=d_2+\sigma\sqrt T .
+$$
+
+In the box's language, $N(d_2)$ counts the event of exercise at expiry in cash and $N(d_1)$ counts it in shares. Neither is the probability that the option will actually finish in the money: that would need $\mu$ in place of $r$, and it is $N(DD)$ in Merton's language (§6.2.3). Two correct probabilities of one event, neither of which anybody believes. Welcome to derivatives.
+
+For Merton, $N(-d_2)=\mathbb{Q}(V_T<F)$ is the risk-neutral default probability that Chapter 6 stated; the physical $N(-DD)$ swaps $r$ back to $\mu$, and the gap is §6-B.6.
+
+#### The Full Derivation: the change of numeraire
+
 Under $\mathbb{Q}$, $\ln S_T=\ln S_0+(r-\tfrac12\sigma^2)T+\sigma\sqrt T\,Z$ with $Z\sim\mathcal N(0,1)$. Split the call payoff:
 
 $$
@@ -309,10 +325,6 @@ $$
 C=S_0N(d_1)-Ke^{-rT}N(d_2),\qquad \text{Put}=Ke^{-rT}N(-d_2)-S_0N(-d_1).
 $$
 
-Both $N(d_1)$ and $N(d_2)$ are probabilities of the *same* event, exercise at expiry, under two different measures. $N(d_2)$ uses cash as the numeraire; $N(d_1)$ uses the share. Neither is the probability that the option will actually finish in the money: that would need $\mu$ in place of $r$, and it is $N(DD)$ in Merton's language (§6.2.3). Two correct probabilities of one event, neither of which anybody believes. Welcome to derivatives.
-
-For Merton, $N(-d_2)=\mathbb{Q}(V_T<F)$ is the risk-neutral default probability that Chapter 6 stated; the physical $N(-DD)$ swaps $r$ back to $\mu$, and the gap is §6-B.6.
-
 Used in: §3.1 (the two-point bond, read correctly), §6.2.2–6.2.3, §6.4 (the KMV inversion), §11.1, §16.3–16.4 (rights, backstops and warrants priced with these formulas), §23.1–23.2.
 
 ## 6-B.3 The Greeks as Lines on a Risk Report
@@ -320,6 +332,8 @@ Used in: §3.1 (the two-point bond, read correctly), §6.2.2–6.2.3, §6.4 (the
 ### 6-B.3.1 Desk framing: a Greek is a question somebody asks at 7 a.m.
 
 A Greek is a partial derivative with a job title. *Delta:* if the underlying moves a dollar, what do I make? *Gamma:* how wrong is my delta after it moves? *Vega:* if everyone decides the world is more volatile, what do I lose, even if nothing moves? *Theta:* what does waiting cost? *Rho:* what if rates move? And one that is not a derivative at all, *JTD:* what if the issuer is not there tomorrow? A credit desk asks all six. It just calls them CS01, convexity, "spread vol," carry, DV01 and "the jump," and then wonders why the options desk upstairs can hedge and it can't.
+
+> **Math, Gently.** *A Greek is a bump.* Forget calculus for a moment. A risk system computes a Greek the way a mechanic finds a rattle: nudge one thing, listen, divide by the size of the nudge. Take the call of §6-B.2.5, worth 13.75 with the stock at 100. Reprice it with the stock at 101 and it is worth 14.37; with the stock at 99, 13.15. The change per dollar is $(14.37-13.15)/2=0.61$, which is the $N(d_1)$ the share accountant gave us. That is delta. Bump only upward and you get 0.62, a little more, because delta itself grew on the way up; that leftover is gamma, the next row of the table. Now leave the stock alone and bump the volatility from 30% to 31%. The call goes from 13.75 to 14.14, so it gains 0.38 *per vol point*. The closed-form vega in the next table is 38.3, because it is the change per 1.00 of volatility, a move from 30% to 130%, which nobody has ever seen happen in one go. Divide it by 100 to get the 0.38 a trader quotes. Remember that 100; it will cost somebody money before this chapter is over. The closed forms are next.
 
 ### 6-B.3.2 The five derivatives, in closed form
 
@@ -386,7 +400,15 @@ Three readings. The CCC bond is a third of the firm by delta, and it moves fifty
 | Rho | $\partial f/\partial r$ | DV01, and the hedge ratio that is not modified duration | Treasury futures | Ch 4-B; §8.2 |
 | JTD | $f(\text{post})-f(\text{pre})$ | $R-P$ per bond; $(1-R)-\text{MTM}$ per unit of bought CDS | Put spreads; CDS | §6-B.5; §23.5; §28.4 |
 
-The last line is the one an equity-options desk forgets and a credit desk lives on. JTD is a finite difference across the default event, and it does not shrink when you look more closely. The cold open's −\$6.3mm is the sum over Theo's bonds of (recovery minus price) times face *(illustrative)*. Law 6 (App E): charge the jump once, on this line, and not again in the spread, the skew and the position size (§28.4).
+At 7:40 that Monday, twenty minutes before his first risk meeting, Theo prints the table and lays it beside his own report, column against row. Market value and carry are theta's family. DV01 is rho. CS01 is delta in spread space, and the index beta is delta to the CDX hedge. DTS is a delta scaled for the fact that wide spreads move more. The ninth column, now that Kaz has shown him the one bond that makes it, is vega. He draws a line from each of his columns to a row of the table, and every line lands on a derivative: a slope, or the slope of a slope.
+
+Except one. The tenth column, JTD, lands on the last row, and the last row is not a derivative of anything. It is a finite difference across the default event: what the book is worth the instant after the issuer is gone minus what it is worth now, $(R-P)\times$ face for each bond, summed. His −\$6.3mm is that sum over forty-one bonds *(illustrative)*. It does not shrink when you look more closely, the way a slope does when you zoom in on a curve. It is the same size at any magnification.
+
+"It's the only line that doesn't care how small the move is," he says.
+
+"It's the line an equity-options desk forgets and a credit desk lives on," Ines says, walking past with her coffee. "Charge the jump once, there, and not again in the spread, the skew and the size." That is Law 6 (App E), and §28.4 is where the size side of it gets its arithmetic. Ines does not say which replay she is saving it for. The scene after §6-B.5.3 is the week it was the only line that mattered.
+
+> **View From Another Seat.** *The systematic fund that reads the report as a regression.* A quantitative multi-asset manager would look at Theo's eleven columns and see a factor model with too many names in it. In May 2019 Bloomberg reported on a paper by AQR's Roni Israelov showing that four exposures, government bonds, equities, equity volatility and bond volatility, explain up to 76% of corporate-debt returns, so that a Merton-style replication built from futures and listed options could stand in for the bonds "for those who desire enhanced liquidity and cash efficiency" (Bloomberg, 15 May 2019, as republished by WealthManagement.com; the same report notes Israelov would not say whether AQR would use the strategy in its funds). From that seat, Theo's vega column is a loading on an equity-volatility factor the fund can buy in the listed market for a few basis points, and his delta and rho columns are futures positions. The JTD line is the residual: the part of the bond no index and no option replicates, and the part a factor replicator chooses not to hold. Theo's desk exists to hold exactly that residual and to be paid for it, which is the whole relative-value thread of this book in one sentence: hedge what can be bought cheaply, and keep what cannot.
 
 Used in: §8.3 (bond-to-equity sensitivity), §11.1, §19 (basket risk lines), §21.4 (pool-level Greeks), §23.5 (the Natenberg map, in spread space), §28.1 and §28.4 (risk budgets and Kelly with a jump).
 
@@ -398,7 +420,7 @@ Options trade in volatility for the same reason bonds trade in spread: the unit 
 
 ### 6-B.4.2 Definition, existence, and a solver that does not embarrass you
 
-The implied volatility $\sigma_{\text{imp}}(K,T)$ is the number that makes Black–Scholes match the market price: $C_{\text{BS}}(S_0,K,T,\sigma_{\text{imp}},r)=C^{\text{mkt}}$. It exists and is unique whenever the price lies strictly inside the no-arbitrage bounds,
+An implied volatility is a question asked backwards, in the phrase of Chapter 4-B's box: not "what is the price at this volatility?" but "what volatility makes the formula print this price?" Formally, $\sigma_{\text{imp}}(K,T)$ is the number that makes Black–Scholes match the market price: $C_{\text{BS}}(S_0,K,T,\sigma_{\text{imp}},r)=C^{\text{mkt}}$. It exists and is unique whenever the price lies strictly inside the no-arbitrage bounds,
 
 $$
 \big(S_0-Ke^{-rT}\big)^+<C^{\text{mkt}}<S_0,\qquad \big(Ke^{-rT}-S_0\big)^+<\text{Put}^{\text{mkt}}<Ke^{-rT},
@@ -409,6 +431,8 @@ because vega is strictly positive, so $C_{\text{BS}}$ is strictly increasing in 
 The solver every desk eventually writes is Newton's method, $\sigma_{n+1}=\sigma_n-\big(C_{\text{BS}}(\sigma_n)-C^{\text{mkt}}\big)/\nu(\sigma_n)$, started near the Brenner and Subrahmanyam (1988) at-the-money approximation $\sigma_0\approx\sqrt{2\pi/T}\,C^{\text{mkt}}/S_0$. Newton diverges in the wings, where vega is tiny, so the §6-B.9 solver keeps a bisection bracket, rejects any step that leaves it, and declares convergence in *price* units, not vol units. A vol that is correct to $10^{-8}$ on a price nobody can trade is not precision. It is decoration.
 
 ### 6-B.4.3 Skew: two credit reasons the left wing is steep
+
+> **Math, Gently.** *Skew is the ground-floor premium.* Flood insurance costs more per dollar of cover on the ground floor than on the tenth, and nobody thinks that is irrational: the ground floor floods in the storms that matter, and the people selling the cover know it. An implied volatility surface charges the same way. Quote every put on one stock in volatility units and the low strikes, the ground floor, carry a higher number than the at-the-money ones. *A number to check:* a \$100 stock, one year, $r=4\%$. At the money the market says 48%. Find the strike whose put has a delta of $-0.20$ at the 74% the market quotes there: it is about \$73.40. Priced at 74%, that put costs about \$12.41. Priced on a flat 48% surface, it would cost about \$5.41. The ground-floor premium is not a few per cent; the market charges about 2.3 times the flat-surface price *(illustrative; Black–Scholes, `bs_price` of Listing 6-B.1)*. The two credit reasons it does so are next.
 
 If Black–Scholes were the truth, $\sigma_{\text{imp}}$ would be flat in $K$. It never is. By §6-B.1.3 a non-flat implied vol curve is the market telling you that its $\mathbb{Q}$-density is not lognormal. For a leveraged firm there are two reasons the low strikes are expensive, and both are credit.
 
@@ -430,13 +454,15 @@ Used in: Ch 10-B (index option skew, payer versus receiver), §16.4 (warrant vol
 
 ### 6-B.5.2 The model
 
+> **Math, Gently.** *Two parts: the survivors pay for the funeral, and the put has a floor.* Chapter 6's box gave default a Poisson clock that rings at rate $\lambda$; here the bell takes the stock straight to zero. **Part one.** Suppose the clock rings at $\lambda=5\%$ a year and money earns $r=4\%$. Any traded asset, priced risk-neutrally, must grow at 4% on average across all its paths, the dead ones included. The dead paths are worth zero. So the live paths have to grow faster to make up for them: at about $r+\lambda=9\%$, because 5% of the value disappears into the funeral each year and the survivors pay for it in their drift. Turn it around and price a dollar that is paid in a year only if the firm is still alive: discount for time, $e^{-0.04}$, and for survival, $e^{-0.05}$, and it costs $0.961\times0.951=0.914$. **Part two.** Now buy a put struck at \$1 on that stock. If the firm dies, the stock is zero and the put pays its full \$1, whatever volatility did on the way. So before any diffusion is counted, the put is worth at least a dollar paid in a year *if* the firm dies: $e^{-0.04}\times(1-e^{-0.05})=0.961\times0.049=0.047$, almost five cents. That is the floor in Figure 6-B.4, and no volatility, however low, can take a put below it. Both parts are one formula, next.
+
 Let $N_t$ be a Poisson process with constant $\mathbb{Q}$-intensity $\lambda$ and let $\tau$ be its first jump: default. The stock is worth zero from $\tau$ on. Before default, under $\mathbb{Q}$,
 
 $$
 \frac{dS_t}{S_{t^-}}=(r+\lambda)\,dt+\sigma\,dW^{\mathbb{Q}}_t-dN_t .
 $$
 
-The $-dN_t$ term takes the stock to zero at the jump. The extra $+\lambda\,dt$ is the compensator: $\mathbb{E}^{\mathbb{Q}}[dN_t]=\lambda\,dt$, so $\mathbb{E}^{\mathbb{Q}}[dS_t/S_{t^-}]=r\,dt$ and the discounted stock is a $\mathbb{Q}$-martingale, as it must be for any traded asset. The survivors pay a hazard tax to the estate of the dead, and that tax is part of their drift. Solving,
+The $-dN_t$ term takes the stock to zero at the jump. The extra $+\lambda\,dt$ is the compensator: $\mathbb{E}^{\mathbb{Q}}[dN_t]=\lambda\,dt$, so $\mathbb{E}^{\mathbb{Q}}[dS_t/S_{t^-}]=r\,dt$ and the discounted stock is a $\mathbb{Q}$-martingale, as it must be for any traded asset (the box's 9% drift for the survivors). Solving,
 
 $$
 S_t=\tilde S_t\,\mathbf 1_{\{\tau>t\}},\qquad \tilde S_t=S_0\exp\!\Big\{\big(r+\lambda-\tfrac12\sigma^2\big)t+\sigma W^{\mathbb{Q}}_t\Big\},\qquad \mathbb{Q}(\tau>t)=S^{\mathbb{Q}}(t)=e^{-\lambda t}.
@@ -458,10 +484,9 @@ $$
 \text{Put}^{\text{JTD}}(K)=\underbrace{K\,e^{-rT}\big(1-e^{-\lambda T}\big)}_{K\,\times\,U^{\text{Eur}}(T)}+\underbrace{\text{Put}_{\text{BS}}\big(S_0,K,T,\sigma,\;r+\lambda\big)}_{\text{diffusive put at the hazard-shifted rate}} . \tag{6B.1}
 $$
 
-**A put on a defaultable stock is $K$ unit recovery claims plus a diffusive put priced at a hazard-shifted rate.** Expand the second term and (6B.1) is the §23.4 formula (23.8) term for term; check parity and it holds, since $C^{\text{JTD}}-\text{Put}^{\text{JTD}}=S_0-Ke^{-rT}$. Two consequences that later chapters use:
+**A put on a defaultable stock is $K$ unit recovery claims plus a diffusive put priced at a hazard-shifted rate.** Expand the second term and (6B.1) is the §23.4 formula (23.8) term for term; check parity and it holds, since $C^{\text{JTD}}-\text{Put}^{\text{JTD}}=S_0-Ke^{-rT}$.
 
-- *Calls get more valuable, holding the share price fixed.* Rho is positive, so raising the rate from $r$ to $r+\lambda$ raises the call. The strike is paid only in survival states, and the surviving stock must outperform to pay for the dead. This is why Kaz's $e^{-\lambda T}$ haircut on the Hertz warrants charged the funeral twice (§16.4).
-- *Puts get a floor.* As $K\to0$ the second term vanishes faster than $K$, so $\text{Put}^{\text{JTD}}(K)/K\to U^{\text{Eur}}(T)$. The floor ratio is the hazard.
+Later chapters lean on two things that fall out of it. Holding the share price fixed, the jump makes a call *more* valuable, not less: rho is positive, so moving the rate from $r$ to $r+\lambda$ raises the call, because the strike is paid only in survival states and the surviving stock must outperform to pay for the dead. That is why Kaz's $e^{-\lambda T}$ haircut on the Hertz warrants charged the funeral twice (§16.4). And the jump gives a put a floor: as $K\to0$ the second term vanishes faster than $K$, so $\text{Put}^{\text{JTD}}(K)/K\to U^{\text{Eur}}(T)$, the box's five cents per dollar of strike. The floor ratio is the hazard.
 
 ### 6-B.5.4 Corollary 1: the Carr–Wu corridor, with an error term
 

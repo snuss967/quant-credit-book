@@ -316,7 +316,7 @@ $$
 
 As $\lambda \to 0$ the ratio goes to one. As $\lambda \to \infty$ it goes to zero, and the price goes to $R$ whatever $r$ is. That is the restructuring desk's "trades on dollar price" written as a limit.
 
-Kaz, reading over Theo's shoulder, frowned at the derivation. "So the fulcrum security is the one where the hedge ratio pivots through zero?"
+Kaz, reading over Theo's shoulder, frowned at the derivation. "The fulcrum is not a duration. I was told." A pause. "But it is the class where this ratio goes through zero, isn't it?"
 
 "The fulcrum," said Mags, "is the class that gets the equity after the lawyers are done. Which is why its hedge ratio is zero." She paused. "You're accidentally right. That's the worst way to be right."
 
@@ -536,6 +536,8 @@ $$
 
 Here the econometrics meets the trading. Dimson assumes the lagged coefficients are pure smoothing, information that was always going to arrive. Some of it is genuine *information diffusion*: the equity market learns first and the bond market follows. Gebhardt, Hvidkjaer and Swaminathan (2005) document momentum spillover from stocks to bonds. Dynkin (p.606) reports that bonds of issuers in the bottom equity-momentum decile delivered −4.7% a year of excess return over 1993–2017, against about +4.0% for the top decile. A Dimson beta of a bond on its issuer's stock is therefore part stale-price correction and part trend signal.
 
+*The printout and the argument over it are fictional.*
+
 The desk found this out the way it finds out most things, by arguing over a printout. By Wednesday Kaz had the Dimson code running against every factor on the desk's list, the issuers' own stocks included. "Two lags on the equity, summed into the beta," they said. "The math doesn't care what the regressor is called."
 
 Ines looked at the output for Theo's bond. The coefficient on the issuer's stock return from the day before was larger than the coefficient on the same day's. "That isn't the pricing service catching up. That's the stock telling the bond something a day early."
@@ -576,6 +578,8 @@ A *computed illustration*, offered as a hypothesis rather than proof. On FRED da
 At 2:58 p.m., Theo cannot short "the market spread factor." He can short what is on the screen, and each instrument there is a different, imperfect, separately priced claim on the factors he wants to remove. Ines's framing: "You don't get to hedge the risk. You get to trade the instruments. The difference is the basis, and the basis is a position."
 
 ### The instruments, in DV01 terms
+
+*The conversation is fictional; the contract terms, the fund figures and Carr and Wu's result are sourced.*
 
 So Theo did what a banker does with a list of financing sources: he opened each one in its own window and asked what was wrong with it. Ines, who had rolled her chair back over, named the basis before he finished reading the ticker.
 
@@ -729,6 +733,8 @@ A few days after the thirty-seven cents, late on a quiet afternoon, Ines turned 
 
 Theo's packet was two pages. The first described a book *(illustrative)*: \$200mm of single-B bonds, duration 4, analytical DV01 of \$80,000 a basis point. At the chapter's illustrative \$70.8 of DV01 per TY contract (§8.6), a full analytical hedge was 1,130 contracts short. The second page was Table 8.1, Ben Dor's 1998–2009 hedge ratios by rating, with the B row circled in Ines's pen. The card asked for three things.
 
+#### Decision point: the close of Friday 31 December 2021
+
 > *Your card, before the tape runs: write your $H$, your TY count, and one sentence on why rates will move in 2022.*
 
 Kaz finished first, which surprised no one. "B bonds at the average spread, $H = -0.04$. Rounded, zero futures. Strictly, a long of about forty-five contracts, which I decline to buy on grounds of dignity." They wrote *0* on the card and, underneath, *rates move for the reasons they have always moved; the table is eleven years of data.*
@@ -809,6 +815,8 @@ The book on Theo's packet was the same \$200mm of single-B bonds, duration 4 *(i
 
 "It's 7 a.m. Thursday," Ines said. "You've read the 8-K. You haven't read anything else, because nothing else exists yet."
 
+#### Decision point: 7 a.m., Thursday 9 March 2023
+
 > *Your card, Thursday 7 a.m.: keep the hedge at 1.1, cut it to Ben Dor's number for single-B (about zero), or keep the futures at one and add CDX HY protection for the spread beta. Write the number and the reason.*
 
 Kaz kept the hedge. "The model says 1.1. A window is a window. Three months ago everyone wanted me to trust the window, and the window was right."
@@ -863,6 +871,8 @@ The third card was not a replay in the usual sense. Everyone on the desk except 
 
 The setup was one week of screen. On Wednesday 2 April 2025, after the close, came the tariff announcement. By the close of Friday 4 April the 10-year yield had fallen from 4.20% to 4.01%, and the ICE BofA high-yield OAS had gapped from 342 bp to 445 (FRED). Yields down, spreads out: the flight table.
 
+#### Decision point: the close, Friday 4 April 2025
+
 > *Your card, Friday 4 April 2025, at the close: the 10-year is 4.01% and the HY OAS is 445 bp. Choose the hedge ratio you will carry into Monday, and write one sentence on why rates will move next week.*
 
 Theo looked at it for a long time. "Two days ago this was the flight table. Rates rallied and spreads blew out, so the right hedge was small, maybe zero. If it's still the flight table on Monday, I want a low $H$. If it isn't..."
@@ -887,7 +897,7 @@ The month's summary statistics hide the week. For April as a whole, CCMG reports
 
 Grading the card makes the point in one line of arithmetic. Take a duration-4 book that moves with the index spread, and ask what hedge ratio would have left it flat over each stretch *(illustrative arithmetic on Table 8.3)*. From Wednesday to Friday, with yields down 19 bp and spreads out 103, the answer is about −4: the flat book needed to be *long* Treasury futures, because the rally was the fear. From Friday to Monday, with yields up 14 bp and spreads out 16, it is about +2: inflation's table, where the futures short has to cover more than the bond's own duration. From Monday to Friday 11 April, with yields up 33 bp and spreads in 35, it is about zero: the spread tightening paid for the rate sell-off by itself. A card that read Friday's flight table and carried a low $H$ into Monday lost on both legs on Monday. A card that carried a high one was right on Monday, and by the next Friday it was holding a profitable short-rates bet it had never meant to make. Theo's card, the same two-instrument hedge as the week before, had nothing to say about which table the market was at and did not need to; it was left holding the book against the index and a basis the exercise does not price.
 
-Ines put the week as a hand history in two lines. "The board changed three times in seven sessions. Your hedge ratio is your read on the table, so you update it when the board changes, not when the month ends."
+Ines put the week as a hand history in two lines. "The board changed twice in seven sessions. Your hedge ratio is your read on the table, so you update it when the board changes, not when the month ends."
 
 Then Ines showed him what the desk's own estimator had done with the week, which was the part she minded most. The rolling 60-day CCC hedge ratio computed on FRED data was close to zero in the window ending April 30 and reached −0.67 by the window ending May 30 (and −0.78 for the window ending May 23). The *estimate* swung hard negative *after* the event, which is exactly when it was least useful. Rudin (2025), using the Bloomberg US Corporate High Yield index, makes the general point: hedging high yield with Treasury futures based on duration "often leads to increased portfolio volatility." Figure 8.4 draws the whole three-year window of the rolling estimate.
 
@@ -984,6 +994,8 @@ Dov wrote a sentence with a date in it, as he does: *By 30 November 2026, mean r
 
 ### The IDO ledger: proving it
 
+*The meeting, Kaz's signal and its statistics are fictional and illustrative.*
+
 A residual is a claim until a signal predicts it. On Theo's desk the proof is a month-end meeting in the small room with the blind that does not close, at which a strategy may describe itself only in three numbers.
 
 October's meeting was Kaz's. They had a relative-value signal that ranked single-B bonds once a month *(illustrative)*, and the first slide said it had an information coefficient of 0.06 with a $t$-statistic of 2.4 over three years. Mags, who attends these meetings because she is suspicious of anything called adjusted and had heard there would be adjustments, asked the only question she ever asks of a slide.
@@ -1018,7 +1030,7 @@ The risk committee met on Tuesday. It asks one question of every number it is sh
 
 "Then the overlay goes back to last month's table until you can."
 
-It took her two weeks, most of them spent rebuilding a 2021–2023 OAS history from an archived file and checking it against the firm's TRACE-based series (Appendix B), and the answer was dull: about two-thirds of the move was the window and one-third was the year. The fix was duller. Two lines went into the job's specification. The first was an assertion that the estimation window holds the number of observations its name promises, so a 60-month window that receives 36 months stops and says so. The second was an alarm on the rolling 60-day correlation between yield changes and relative spread changes that fires when it changes sign, the same guard that ends the GUARDS line of the robot spec in §8.10. Model-risk guidance has a name for this kind of thing, ongoing monitoring, which SR 11-7 lists among the three parts of model validation. The committee had a shorter name for it, which was "finally." The next time the table moved, it moved with a reason attached, and the reason was in the email.
+It took her two weeks, most of them spent rebuilding a 2021–2023 OAS history from an archived file and checking it against the firm's TRACE-based series (Appendix B), and the answer was dull: about two-thirds of the move was the window and one-third was the year. The fix was duller. Two lines went into the job's specification: an assertion that the estimation window holds the number of observations its name promises, so a 60-month window that receives 36 months stops and says so, and an alarm on the rolling 60-day correlation between yield changes and relative spread changes that fires when it changes sign. Both now sit on the GUARDS line of the robot spec in §8.10. Model-risk guidance has a name for this kind of thing, ongoing monitoring, which SR 11-7 lists among the three parts of model validation. The committee had a shorter name for it, which was "finally." The next time the table moved, it moved with a reason attached, and the reason was in the email.
 
 ### Specification for AI Implementation
 
@@ -1111,6 +1123,7 @@ Theo's sticky note now had a question on the front, a number under it, and two r
 | Stale-mark betas | $\hat\beta_{\text{D}} = \sum_k \hat b_k$ (§8.5) | News in three envelopes (§8.5) | Kaz and Ines on the equity lag (§8.5) | [Listing 8.4](#code-8-4) |
 | Hedge matrix | $h_\eta = (\Sigma_{HH} + \eta\,\mathrm{diag}\,\Sigma_{HH})^{-1}\Sigma_{Hp}$ (§8.6) | Two hedges that are almost the same hedge (§8.6) | The four windows; Theo's hedge, four ways (§8.6) | [Listing 8.6](#code-8-6) |
 | Two-instrument hedge | Futures at $H = 1$; CDX at $\text{DTS}_i/\text{DTS}_{\text{CDX}}$ (§8.8) | (none) | The Hedge That Hedged Both Ways (§8.7); Ines on the mandate (§8.8) | Spec field `OBJECTIVE` (§8.10) |
+| Regime alarm | Rolling 60-day $\rho(\Delta y, \Delta s/s)$ crosses zero (§8.7) | (none) | Ines's floor after the 2022 replay (§8.7); The Window That Shrank (§8.9) | Spec field `GUARDS` (§8.10) |
 | IDO and the ledger | $\text{IDO}_{i,t} = \text{DTS}_{i,t-1}\,\tilde\epsilon^{\perp}_{i,t}$; $t = \overline{\text{IC}}\sqrt{T}/\mathrm{sd}(\text{IC}_t)$ (§8.8) | The common whisper (§8.8) | Twelve Residuals; the month-end meeting (§8.8) | [Listing 8.7](#code-8-7) |
 
 - **IDO or it didn't happen, in two subtractions.** First accounting (carry, KRD-matched Treasuries, convexity), then attribution (DTS-scaled factors, then the common residual factor). The P&L-explain residual is a bookkeeping error, not alpha.
@@ -1143,7 +1156,8 @@ COMPUTE, in order:
  7. IDO = DTS_{t-1} * (scaled residual minus first principal component). Ledger: residual vol, monthly Spearman IC
     of the signal at t-1 against IDO at t, and its t-stat.
 GUARDS: |dy| < 0.05/day; oas > 0 before relative changes; refuse lags > 5; raise on a non-invertible smoothing
-        polynomial; alarm if cond(C) > 1e3; check sum(|h|) against a gross budget;
+        polynomial; alarm if cond(C) > 1e3; check sum(|h|) against a gross budget; assert every estimation
+        window holds the observations its name promises (60 months means 60);
         alarm when the 60-day rolling rho(dy, ds/s) changes sign.
 TESTS: every sanity check in Section 8.9 prints PASS. Do not "improve" the objective. Ask if anything is ambiguous.
 ```

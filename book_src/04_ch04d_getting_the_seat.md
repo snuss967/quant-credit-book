@@ -40,7 +40,7 @@ Ines did not trade. She looked at him the way a dealer looks at a client who has
 
 He never learned the page count. She slid the document into a drawer, and that was that. Months later, on the desk, he asked her. "That," Ines said, "was the most realistic part of the interview. Most hands never show you the cards."
 
-This chapter is about what that room was testing. An ex-banker walks into an interview believing it measures what he knows. It measures how he loses. Every game a market-making or systematic credit shop plays has a live counterparty who trades against the candidate's answer, and the passing move, in every room Theo walked into that week, was the same one: update in the open. Narrow the market after being hit. Cut the Kelly fraction because the recovery is a document variable. Ask "which measure?" before saying a number. Deliver the credit pitch as a distribution with a horizon, a hedge and a markout instead of as a memo with a recommendation. None of it is new mathematics; every game is a section this book has already derived, and each section below opens a scene, works one number, and points home.
+This chapter is about what that room was testing. An ex-banker walks into an interview believing it measures what he knows. It measures how he loses. Every game a market-making or systematic credit shop plays has a live counterparty who trades against the candidate's answer, and the passing move, in every room Theo walked into that week, was to update in the open: narrow the market after being hit, cut the Kelly fraction because the recovery is a document variable, ask "which measure?" before saying a number, and deliver the credit pitch as a distribution with a horizon, a hedge and a markout rather than a memo with a recommendation. None of it is new mathematics. Every game is a section this book has already derived, and each section below opens a scene, works one number, and points home.
 
 By the end of the chapter you will have watched Theo sit five interviews in five rooms and lose in each one in an instructive way, and you will be able to do the arithmetic he did on the train home: price a two-point bond in both measures, quote against someone who keeps buying, size a B3 bond with Kelly and then with a stop, defend a pair's hedge ratio by naming the state you are paid in, run a Fermi chain with error bars, join two tables without a time machine, break a Sharpe of 3.1, and turn a 13-week model into a pitch a trading desk can grade. You will also have a plan for the portfolio of projects that proves it.
 
@@ -62,7 +62,7 @@ What the public record says each seat is, as of the dates shown, is below. The t
 | Multi-strategy pod (Tuesday) | PM, analyst, platform risk (Chapter 8-B's three chairs). Credit PMs hired from banks and rival funds: Millennium (Hedgeweek, 2 Jun 2025), Jain Global (7 Aug 2026), Balyasny's IG long/short team (20 Aug 2026). Two-thirds of Citadel's fixed-income and macro PMs home-grown, and under 1% of applicants accepted (eFinancialCareers, 25 Feb 2026) | Isolating the idiosyncratic view, sizing to a stop, living inside scope | Ch 8, 8-B, 8-C, 8-D, Ch 28 |
 | Distressed fund (Friday) | The restricted-list calendar, run by counsel and advisers to keep members trading as long as possible (Moyer, *Distressed Debt Analysis*, pp. 62–64). Man Group's purchase of Bardin Hill, a distressed and special-situations manager of about \$3bn and 48 people (Alternative Credit Investor, 30 Jul 2025) | Reading documents, valuing a plan, knowing your legal state | Part IV (Ch 12-B to 16), Ch 25 |
 
-Theo's own version of this table was thinner (several entries above postdate his Sunday), and his first reading of it was that it listed jobs he was not qualified for. His second reading, near midnight, was better. Some of the rows were advertising for his résumé in other words. A Two Sigma credit analyst on a convertible-arbitrage book reads capital structure, liquidity and covenants so that a hedged, model-driven book is not blindsided, which is a restructuring banker's job description with the word "client" removed. That September, Robeco would put the same thought in print from the systematic side: its analysts exist for the bond that looks cheap while "a major lawsuit, regulatory issue, large acquisition or other event sits outside the model's scope," and a liability-management transaction is the purest example of an event outside a model's scope that the 2020s produced. The market maker and the pod were the rows where his résumé needed translating, and translating was what the week would be for.
+Theo's own version of this table was thinner (several entries above postdate his Sunday), and his first reading of it was that it listed jobs he was not qualified for. His second reading, near midnight, was better. A Two Sigma credit analyst on a convertible-arbitrage book reads capital structure, liquidity and covenants so that a hedged, model-driven book is not blindsided, which is a restructuring banker's job description with the word "client" removed. The market maker and the pod were the rows where his résumé needed translating, and translating was what the week would be for.
 
 > **Trend Watch.** *Who credit desks hired, 2023–2026, from postings and announced hires.* June 2023: Citadel Securities starts making markets in US investment-grade credit, streaming through MarketAxess and Tradeweb; its head of fixed-income distribution calls credit "a natural expansion" at "the nexus of our fixed income and ETF franchises" (The DESK, 19 Jul 2023). October 2023 to January 2024: the same firm moves its rates COO to credit and hires IG traders from three banks (The DESK, 4 Jan 2024). January 2024: a Goldman credit-trading partner describes about 8,000 portfolio trades for more than 300 clients in 2023, averaging about \$60mm across about 100 CUSIPs (Coalition Greenwich webinar; paraphrase). May 2025: JPMorgan puts its co-head of credit *systematic* trading on its podcast, recorded inside the April 2025 stress (*Market Matters*, 9 May 2025). June 2025: Millennium adds three credit hires, one of them a CDS and CMBS index trader (Hedgeweek, 2 Jun 2025). July 2025: Man Group, which wrote in 2023 that the future of credit investing is quantitative, agrees to buy a distressed manager (Alternative Credit Investor, 30 Jul 2025). May 2026: a buy-side credit-trader posting asks for Python and SQL alongside Bloomberg and the two big venues (DWS, 7 May 2026). August 2026: Jain Global hires a bank's London high-yield head (7 Aug), and Balyasny hires a BlackRock IG co-head to run a team that will "trade both long and short positions in US high-grade corporate bonds and pursue relative-value opportunities" (Hedgeweek, 20 Aug 2026). *What it means for the desk:* the titles moved toward electronic risk pricing on one side and toward documents and distress on the other, and the hybrid seat in the middle is the one this book trains. *What it does not show:* what any firm asks in an interview. No public interview guide was sourced for this box, so it tracks hiring, not questions, and the chapter prints no firm's questions.
 
@@ -96,7 +96,7 @@ The interviewer added two follow-ups, and each one moved the number. "Rates are 
 
 > **Math, Gently.** *A distribution, and why one price has two sets of weights.* A distribution is a list of what can happen with a weight on each outcome, the weights adding to one. Picture a seesaw with a 40 at one end and a 100 at the other. Wherever the market puts the fulcrum, at 85, there is exactly one way to load the ends so that the seesaw balances there: three-quarters of the weight at 100 and a quarter at 40. Those balancing weights are the risk-neutral measure $\mathbb{Q}$. They are not a forecast. They are what the price *implies* if nobody needed paying for the risk. Your forecast of what will actually happen, the physical measure $\mathbb{P}$, is a second set of weights on the same two outcomes, and in credit it puts less weight on default than $\mathbb{Q}$ does, because the people who hold the jump want to be paid for it. One price, two loadings of the seesaw; the difference between them is the risk premium. Prices, hedges and relative value against CDS live in $\mathbb{Q}$; sizing, Kelly and your P&L forecast live in $\mathbb{P}$. The full version is in §5.1 and Chapter 6-B.
 
-The judgment that matters on a desk is knowing which set of weights a question wants. When the question is "what does the CDS curve say this bond is worth?", the answer is a $\mathbb{Q}$ number, and mixing in a historical default rate produces a mispricing that is really a confusion. When the question is "how much of this bond should I own?", the answer needs $\mathbb{P}$, and §4D.5 shows what happens when a $\mathbb{Q}$ number sneaks in instead. Theo would make exactly that mistake in his first week on the desk anyway (Chapter 6 has the receipt). Knowing a distinction and having it in your hands are different stages of the same education.
+The judgment that matters on a desk is knowing which set of weights a question wants. "What does the CDS curve say this bond is worth?" wants $\mathbb{Q}$; mixing in a historical default rate produces a mispricing that is really a confusion. "How much of this bond do I own?" wants $\mathbb{P}$, and §4D.5 shows what happens when a $\mathbb{Q}$ number sneaks in. Theo would make exactly that mistake in his first week on the desk anyway (Chapter 6 has the receipt). Knowing a distinction and having it in your hands are different stages of the same education.
 
 ## 4D.3 Monday, Continued: "I'll Sell You the Bond"
 
@@ -134,7 +134,7 @@ Forgetting the first update is the base-rate trap of §3.4.3 run in reverse: ins
 
 Replay the cold open with Monday in hand, and Theo's three markets become a hand history with a diagnosis attached.
 
-His first market, 180–260, was a guess wearing a bid and an offer. A two-sided market on a number is a confidence interval with money on it, and the useful question is how often it should be wrong. The answer is not "never." An interval that never misses is too wide to trade on, and one that misses half the time is a coin toss with a spread. A reasonable target is an interval you expect to miss about one time in ten, and most people asked for one produce something much narrower. Psychologists have measured this for decades (Alpert and Raiffa's report on training probability assessors, published in 1982, is the classic): people's "90% intervals" miss far more often than one time in ten, because the interval feels like a claim of knowledge and narrowness feels like competence. For a document Theo had only seen on a screen, a page count he could defend at 90% would have run from something like 130 to 480 *(illustrative: a median of 250, uncertain by a factor of about 1.5 either way)*. That market is ugly. It is also honest, and an honest wide market loses less to someone who knows than a confident narrow one.
+His first market, 180–260, was a guess wearing a bid and an offer. A two-sided market on a number is a confidence interval with money on it, and the useful question is how often it ought to miss. An interval that never misses is too wide to trade on; a reasonable target misses about one time in ten. People asked for a "90% interval" miss far more often than that (Alpert and Raiffa's 1982 report on training probability assessors is the classic), because narrowness feels like competence. For a document Theo had only seen on a screen, a page count he could defend at 90% would have run from something like 130 to 480 *(illustrative: a median of 250, uncertain by a factor of about 1.5 either way)*. That market is ugly. It is also honest, and an honest wide market loses less to someone who knows than a confident narrow one.
 
 His second market moved up 40 pages after a buy. That was the right direction and the wrong size. Monday's arithmetic says a single trade from someone who might be informed is evidence, and in a two-sided game against a person holding the document, the informed fraction is not one in five. It is closer to one in one. His third market widened instead of moving, which was the instinct Monday had just disproved: being lifted is news about the *level*, and widening protects you against uncertainty you have already lost.
 
@@ -213,7 +213,7 @@ Then the PM drew the table that every pod draws, with four states of the world d
 
 "Which row are you paid in?" the PM asked. Theo pointed at the two idio rows. "And how big are they compared with the rows you're not paid in?" The alpha in the third row is \$0.25mm. The ruler error in the first two rows runs from \$0.11mm to \$0.34mm. The thing Theo wanted to be paid for was the same size as the thing his choice of formula would pay or charge him by accident.
 
-What Theo learned from the next five minutes was that idio is not a property of a trade. It is whatever the hedge model leaves behind, and choosing the model is choosing what you will call alpha afterward. Defending duration "because it is the formula" had no answer to the first row: when spreads widen in proportion, which is what high-yield spreads mostly do (§8.4), a duration hedge leaves the pair net short the market: it makes money in a proportional sell-off and gives it back in a rally, a view he had not meant to hold. DTS is built for that week. It fails in the second row, the parallel shift, which is what a rates-driven or technical move looks like. Beta is the empirical answer and drifts with the window it was fitted on. The PM's version: say which ruler, say which state it is wrong in, and say why that state is the one you can live with.
+What Theo learned in the next five minutes was that idio is not a property of a trade. It is whatever the hedge model leaves behind, and choosing the model is choosing what you will call alpha afterward. "Because it is the formula" had no answer to the first row: when spreads widen in proportion, which is what high-yield spreads mostly do (§8.4), a duration hedge leaves the pair net short the market: it makes money in a proportional sell-off and gives it back in a rally, a view he had not meant to hold. DTS is built for that week. It fails in the second row, the parallel shift, which is what a rates-driven or technical move looks like. Beta is the empirical answer and drifts with the window it was fitted on. The PM's version: say which ruler, say which state it is wrong in, and say why that state is the one you can live with.
 
 The risk manager's question had a concrete answer once the ruler was chosen, and it came in sizes rather than adjectives. On the DTS hedge the book is long nothing on an ordinary day, loses about \$0.23mm in a 50 bp parallel widening, and is long A's default, which is where Tuesday morning's stop came back. A \$40mm long in A loses \$23.2mm if A defaults at 98 with 40 recovery, through the firing line on its own, and B's short does not help on the day A defaults. The single-default line puts the long at \$8.6mm. The borrow puts a second cap on it: if the prime broker can find \$12mm of B to lend *(illustrative)*, a DTS ratio of 0.667 caps the long at \$18mm. Size to the stop and to the borrow at the same time, and the smaller number wins: \$8.6mm long, \$5.7mm short. At that size, fifteen basis points of A outperforming is worth \$54,000, which is the honest size of the alpha in a pitch that started at \$40mm.
 
@@ -237,7 +237,7 @@ The questions were estimates, and each had a true number somewhere in the public
 
 *What does a portfolio trade look like?* A Goldman credit-trading partner described about 8,000 portfolio trades for more than 300 clients in 2023, averaging about \$60mm across about 100 CUSIPs (Coalition Greenwich webinar, January 2024; paraphrase). That is about \$480bn a year, roughly \$1.9bn a trading day, in lines averaging \$0.6mm each: the small tickets of a big trade.
 
-*How much balance sheet does it take to make markets in high yield?* There is no true number here, and the researcher said so, which Theo liked. He built one *(illustrative)*: quote 300 names in \$2mm clips, let inventory run to five clips either way before the quotes lean hard (§18.5's bounds), and the worst case is \$3bn of gross inventory. Hedges and netting bring the typical day to perhaps a quarter of that, and at a 10% capital haircut the desk needs something like \$75mm of capital at risk. For scale, an ETP market maker reported EUR 771m of trading capital for its whole business at 31 March 2020, the quarter of the ETF dislocation (Flow Traders, Q1 2020 trading update). Two derived numbers came the same way: a high-yield index position with a risky duration near 4.2 has a DV01 of about \$420,000 per basis point per \$1bn, and a venue with \$9.6bn of average daily volume (Trumid, June 2026) and lines near \$1mm is handling something like ten thousand lines a day, most of them, on its own account of eligible RFQ lines, without a human touching them (88% no-touch; The DESK, October 2025). Both are illustrative chains, labeled as such.
+*How much balance sheet does it take to make markets in high yield?* There is no true number here, and the researcher said so, which Theo liked. He built one *(illustrative)*: quote 300 names in \$2mm clips, let inventory run to five clips either way before the quotes lean hard (§18.5's bounds), and the worst case is \$3bn of gross inventory. Hedges and netting bring the typical day to perhaps a quarter of that, and at a 10% capital haircut the desk needs something like \$75mm of capital at risk. For scale, an ETP market maker reported EUR 771m of trading capital for its whole business at 31 March 2020 (Flow Traders, Q1 2020 trading update). Two more chains came the same way, both illustrative: a high-yield index position with a risky duration near 4.2 has a DV01 of about \$420,000 per basis point per \$1bn, and a venue with \$9.6bn of average daily volume (Trumid, June 2026) in lines near \$1mm handles something like ten thousand lines a day, most of them untouched by a human (88% no-touch on eligible RFQ lines; The DESK, October 2025).
 
 > **Math, Gently.** *Why a Fermi chain's errors add up in logs.* A Fermi estimate is a product of ratios: names times clip times inventory limit times netting times haircut. Each factor is known only roughly, say "within a factor of two." Take logs and the product becomes a sum, $\ln(\text{answer}) = \sum_i \ln(\text{factor}_i)$, so the errors add in log space too. If four factors are each off by up to a factor of two and their errors are independent, the log errors combine like independent noise, in quadrature: $\sqrt{4} \times \ln 2 \approx 1.39$, a combined factor of about 4. If they all err in the same direction, the errors stack, $4 \ln 2$, a factor of 16. The interviewer wants to see the chain, a range for each link, and a sentence on which link is the widest. The habit transfers directly to sizing a trade, where the widest link is usually the recovery. The full version of error propagation through products is in §28.2's treatment of noisy hit rates.
 
@@ -383,9 +383,212 @@ The slide was a backtest Kaz had built for interviews, on purpose, to be broken.
 
 Theo asked the questions he would have asked of a CIM. How many companies? What does it cost to trade? Kaz answered the second one cheerfully: turnover eight times a year one way, transaction costs "set to zero so they wouldn't bias the results." Eight times one way is sixteen dollars traded per dollar of book a year. To keep an information ratio of 0.5, net alpha has to stay at 1%, so the costs can eat 5.2% a year, 32.5 bp per dollar traded; at 38.75 bp the whole 6.2% is gone (Chapter 4, Exercise 2). Theo had learned on the Monday desk that a high-yield half-spread on an institutional ticket runs to an eighth or a quarter of a point on a liquid bond and more on the bonds a cheap-decile signal tends to pick. A quarter of a point is 25 bp of price, and at 25 bp the IR is 1.1, not 3.1. "Your Sharpe," he said, "is mostly the bid–offer you didn't pay."
 
-Kaz's second question was the issuer count, posed as a puzzle. "The US high-yield index had 784 issuers on 31 May 2018, and 576 of them had public equity. My panel has forty thousand bond-months. How many independent observations do I have in a month?" Theo answered as a banker: at most 784, fewer once bonds are grouped by ultimate parent, fewer again for anything that needs an equity price, and next month's cross-section is mostly this month's companies a month older. Rows are not observations; issuers are, and slowly (§7.6 makes this a number, $N_{\text{eff}}$). Kaz looked pleased. It is worth recording that Kaz asked exactly the right question in June and failed it on their own slide in October (§7.0), which is the most common way quants know things.
+Kaz's second question was the issuer count, posed as a puzzle. "The US high-yield index had 784 issuers on 31 May 2018, 576 with public equity. My panel has forty thousand bond-months. How many independent observations a month?" Theo answered as a banker: at most 784, fewer by ultimate parent, fewer again for anything needing an equity price, and next month's cross-section is mostly this month's companies a month older. Rows are not observations; issuers are, and slowly (§7.6 makes this a number, $N_{\text{eff}}$). Kaz looked pleased. It is worth recording that Kaz asked exactly the right question in June and failed it on their own slide in October (§7.0), which is the most common way quants know things.
 
 Near the end Kaz closed the laptop and asked a question that was not on any rubric. "Is a *fulcrum* the thing you hang the hedge from?"
 
 Theo started to explain that the fulcrum is the class where the value runs out: the class that is impaired but still in the money, the one that ends up owning the reorganized company. Halfway through the sentence he stopped, because Kaz was half right. In the pod's version of an RSSG trade (§3.7), long the fulcrum and short the class junior to it, sized so that a default costs nothing, the hedge does hang from the fulcrum. "In a capital-structure pair," he said, "yes. Everywhere else, no." Kaz wrote it down. Theo did not know until his second week on the desk that Kaz writing something down was the highest compliment the desk offered.
+
+## 4D.10 Friday: The Thirty-Minute Credit Pitch
+
+The distressed fund occupied half a floor of an older building and had the furniture to prove it. On the conference-room wall hung the restricted-list calendar, colored bars one per company, which is how a fund on a creditor committee tracks when it can trade: information goes first to the committee's advisers and counsel so members stay unrestricted as long as possible, and a restricted holder is freed only when the information is public or stale (Moyer, *Distressed Debt Analysis*, pp. 62–64). Theo had spent six years on the other side of those bars, deciding who could be told what and when.
+
+The PM had been buying bonds since before TRACE, and said so in the first minute. "We interviewed by phone and by grudge," she said, and Theo laughed because he thought it was a joke. Months later he heard Mags Dunleavy use the same words about pricing bonds and realized that either the two of them had overlapped somewhere or the phrase was older than both. He never asked which.
+
+"Thirty minutes. Pitch me something."
+
+He pitched the second-lien notes of a sponsor-owned building-products company he called Company A on his single page *(fictional; every number illustrative)*, because PJT had trained him to call everything Company A. The notes were at 62. He gave it as a memo: a recommendation (buy), a thesis (the sponsor would rather exchange than file, and the exchange math worked for second-lien holders at 70), a downside case (a filing with second-lien recovery in the mid-30s), and three comparable situations. It was a good memo. The PM asked to see the liquidity forecast behind it, and Theo took the USB stick out of his jacket for the first time all week and plugged it into her laptop. The 13-week model opened, all forty tabs of it. She scrolled through the cash roll with the expression of someone reading a letter from an old friend.
+
+"This," she said, "is the first thing anyone has shown me this year that I believe." She offered him the seat before the half hour was up, starting whenever PJT would let him go.
+
+Then she did something he did not expect. "Now give it to me the way the people you saw yesterday would want it. I've lost two analysts to market makers this year, and I'd like to know what they were told."
+
+So he pitched it again, and the second version is the one this book has been building toward. The 13-week model became a hazard, crudely: he counted the weeks until the downside case crossed the minimum-liquidity floor and called it a survival curve with one path (§5.1.5 turns one path into thousands and a curve into a hazard rate). The horizon became six months, not "through the restructuring" (§3.1.3: the desk does not hold to resolution). The outcome became three doors with his own physical-measure weights on them, the RSSG downside case promoted from a scenario to a tail:
+
+| Door at six months | Price | His weight ($\mathbb{P}$) |
+| :--- | ---: | ---: |
+| Refinanced or amended | 85 | 0.45 |
+| Exchange into new notes | 70 | 0.35 |
+| Filing | 35 | 0.20 |
+
+The mean is $0.45(85) + 0.35(70) + 0.20(35) = 69.75$, about 7.75 points above the 62 price, and the standard deviation is about 18.6 points. That is the pitch in one line: an expected gain of 12.5% over six months with a typical swing more than twice as large. A desk can grade that. A desk cannot grade "buy."
+
+The hedge made it a pair, which is what the pod had taught him on Tuesday and what the market maker would ask of every position he ever took. A short in a high-yield index sized by the bond's beta removes the part of the 7.75 points that is just the market (§8.6's hedge matrix), so what is left is the question of which door, which is the part he actually knew something about. He named the short (index protection, because no lender would lend him Company A's peers in size), the ruler (DTS while the notes traded above 70, market value below, as Chapter 8-D does it), the stop size (the filing door costs 27 points, so a 2.5%-of-capital single-name line caps the position at 9.3% of capital), and the markout horizon: twenty trading days, the desk's own clock (§3.3). Then he gave the date he agreed in advance to be wrong, which was the rule he would later watch Dov Adler live by: "If the company hasn't launched an exchange by 30 September, I'm wrong about the door, and I'm out."
+
+Last came the markout test. On the train home from the pod he had gone back through nine situations from his PJT years, anonymized and numbered, using only public prices: for each public milestone, what his downside case had said, and where the bonds traded on TRACE twenty days later. His case had the direction right six times. In five of those six, the price had already moved before his case was written. "So my edge," he said, "was in knowing what would happen, not in knowing it first." The PM looked at him for a long moment. "That's the most expensive sentence anyone's said in this room this year."
+
+The memo won the room. The distribution would win the desk. The PM had offered him a seat on the strength of the first pitch and was, he could tell, slightly irritated by the second, the way a craftsman is irritated by a machine that does half her job adequately.
+
+He declined on Monday, and the reason fits in a paragraph. The distressed fund already knew what he knew: it had a calendar on the wall and a PM who had read more credit agreements than he had. He would have been a good analyst there and learned nothing he could not have learned at PJT. The market maker did not know what he knew. Its people could price adverse selection in three seconds and had never been inside a lender call; Kaz had asked about the fulcrum and meant it. A seat where your knowledge is scarce is worth more to you, and to them, than a seat where it is the furniture.
+
+> **View From Another Seat.** *The same pitch, heard in three other rooms of Chapter 4-C.* A **direct lender** would skip the price table and ask about the documents: can it hold the loan to maturity, who controls an amendment, what the sponsor has promised. A hold-to-maturity book marks to a model, so the six-month distribution matters to it mostly as a covenant conversation. A **CLO manager** would ask first whether the notes are, or will soon be, rated CCC, because a CCC bucket over its limit gets haircut in the overcollateralization test (§4C.4), and the pitch's best door, the exchange, can be the worst one for the manager if the new notes are rated lower. An **insurer** would ask about the regulatory designation and the capital charge before the return (§4C.5); a 7.75-point expected gain on a security with a punitive charge can be a loss on capital. Each hears a different pitch in the same thirty minutes, because each is paid in a different unit.
+
+What Theo wrote on the train home, in the notebook he would bring to the desk in September, was a translation table for his own résumé. It belongs in Appendix A's phrasebook (§A.10), where the full dictionary lives, but its first rows are his:
+
+| On the RSSG résumé | On the desk | Where the book trains it |
+| :--- | :--- | :--- |
+| Built 13-week cash flow forecasts | Built a weekly liquidity-runway series and turned it into a hazard rate | §5.1.5 |
+| Ran downside cases | Estimated a left tail at a stated horizon | §3.1, Ch 5 |
+| Covenant cushion analysis | Distance to a barrier | Ch 6 |
+| Mapped the lender group | Built a holder vector from Rule 2019 statements | §13.2, §25.7 |
+| Advised on liability management | Priced seniority as a document variable with a date | Ch 13, §13.8 |
+| Recovery waterfalls | Recovery distributions with a floor set by the documents | §5.5, Ch 12-C |
+| "The lenders will never agree" | A vote as a probability, updated on each signing | §13.4, Ch 14 |
+
+The last thing on the page was a note on how he wanted to be judged, because §3B.7 would later tell him he would be measured whether he asked or not. Year-one P&L is mostly noise: forty calls with a 55% hit rate have a standard error of $\sqrt{0.55 \times 0.45 / 40} \approx 7.9$ points, so a 55% year is statistically indistinguishable from a coin (§28.2). The fairer measures are calibration (do his 70% calls come true about 70% of the time?), the correlation of his calls with the price factors (low is good: it means he is adding information the index does not have), and the hit rate with its standard error printed next to it. Section 28.8 makes the same argument from the desk head's chair.
+
+## 4D.11 The Portfolio: Twelve Projects That Prove It
+
+On Saturday ROBO offered to build all twelve.
+
+ROBO was the coding agent Theo had been paying for himself since the spring. He had given it a list of twelve projects that, together, would show a desk he could do the job, and within a minute it replied that it could have all twelve done by Sunday night, without enthusiasm or doubt, as it said everything.
+
+Theo declined, and his reason was the study protocol the ramp at the front of this book describes. The core of each project, the part a desk head will ask about (Tier 2: derive it, build it, by hand), he would do himself. The plumbing (Tier 3: loaders, plots, file handling) ROBO could build, and then Theo would break it on purpose and see whether its tests caught him. The asserts are the grade: a project whose acceptance tests were written before the code, and fail when the code is wrong, is evidence; a project that runs is not. He had a number to keep him honest. In METR's 2025 randomized trial, experienced open-source developers allowed AI tools were 19% *slower* on real issues and afterward believed they had been about 20% faster (§26.9, item 8). And he had a sentence from the market maker's own recruiting page, which says that at the firm "feedback on successes and failures is quick and tangible" (Jane Street, firm culture pages). A portfolio is the candidate's attempt to make his own feedback tangible before anyone hires him to.
+
+| # | Project and question | Public data · engine | Acceptance test | The one figure, and what a desk head reads in four minutes | By hand first, then ROBO |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| 1 | TRACE panel and the Roll spread by trade size: how wide is the market for whom? | TRACE (App B §B.1, §B.16) · Roll estimator (§18.2) | Cancels and corrections netted; as/of prints kept at trade time; Roll spread non-negative after the fix | Spread by size bucket; whether small tickets pay more | The cleaning rules; ROBO the loader |
+| 2 | Priming Risk Score on fifty EDGAR credit agreements: which documents permit an uptier? | EDGAR exhibits · PRS (§13.8, §25.3) | Hand-labeled ten agree with the score's top flags | Score against later LMT events; the false positives explained | Label ten agreements yourself |
+| 3 | Rule 2019 holder panel: who owns the case? | Court dockets (§25.7) | Holdings sum to the class within stated rounding | Holder concentration over time | Read three statements first |
+| 4 | RFQ quoting game with a hand history: does the desk lose to the informed tier? | Synthetic RFQs · §18.7, Ch 18-B | Markouts by tier recover the planted toxicity | Markout curve by client tier | The win curve's likelihood |
+| 5 | March 2020 ETF premium decomposition | ETF NAV and price · §20.2–20.5 | Components sum to the discount each day | Discount, split into its parts, 9–23 March 2020 | The NAV-staleness term |
+| 6 | DD→PD map with issuer-grouped CV | Equity and filings · §6.4, §7.7, §11.3 | No issuer in both train and test folds | Calibration curve, in-sample against out | The grouping key (ultimate parent) |
+| 7 | Fallen-angel overhang: how long does forced selling last? | Index and TRACE · §16.2 | Event window excludes the downgrade's own day | Price path after downgrade, with the overhang | The event definition |
+| 8 | CDS bootstrap and basis monitor | Public CDS quotes · §6.8, §24.7 | Survival curve monotone; repricing within a basis point | Bond–CDS basis for one issuer over a year | The bootstrap |
+| 9 | Two-state regime filter on FRED OAS, April 2025 out of sample | FRED HY OAS · §12.4 | Filtered, not smoothed, probabilities in the backtest | Regime probability through April 2025 | The filter recursion |
+| 10 | The re-default clock | Public distressed-exchange lists · §14.3 | Each company counted once per exchange | Survival after exchange against after emergence | The censoring |
+| 11 | Definition graph and the add-back fixed point for one agreement | One credit agreement · §25.2–25.3 | Fixed point reached; cycle reported if none | The definition graph with the add-backs that move EBITDA | Read the definitions article |
+| 12 | Your own 13-week model as a hazard, with a markout test | Your anonymized model, public prices · §5.1.5, §3.3 | Hazard from simulated paths, not one downside case | Hazard curve, and markouts after each milestone | All of it |
+
+Each business weighs the twelve differently, and a candidate with limited weekends can choose accordingly *(illustrative weighting, built from §4D.1's table)*:
+
+| Business | Projects it weighs most |
+| :--- | :--- |
+| Market maker | 1, 4, 5 |
+| Multi-strategy pod | 8, 12, and any pair built on 2 or 11 |
+| Systematic asset manager | 1, 6, 9 |
+| Bank credit-trading desk | 1, 5, 8 |
+| Distressed fund | 2, 3, 10, 11 |
+
+Theo built three before September: the first, the fourth and the twelfth. The fourth taught him the most, because the synthetic informed tier he planted kept winning against his own quoting rule for two weekends, until he moved the mid before he widened.
+
+## 4D.12 Sixty Tagged Problems
+
+The week, broken into sixty problems. Tags: [Read] means the answer is in the home section; [Derive] means pencil; [Build] means code, with tests first. Times are minutes for a prepared reader. Solutions are in Appendix Z.
+
+| # | Tag | Min | Problem | Home |
+| --: | :-- | --: | :-- | :-- |
+| 1 | Read | 5 | Bond pays 100 or 40; price 85; zero rates. $\mathbb{Q}$-default probability? | §4D.2 |
+| 2 | Derive | 5 | The same at a 4% continuous rate. | §4D.2 |
+| 3 | Derive | 10 | Add an exchange door at 70; give two weightings that price at 85. | §3.1.2 |
+| 4 | Derive | 10 | Physical PD 10%: expected return at 85, and what it pays for. | §5.1 |
+| 5 | Read | 5 | Which measure for a CDS hedge, a Kelly size, a P&L forecast? | §4D.2 |
+| 6 | Derive | 5 | Spread 300 bp, recovery 40%: hazard rate by the credit triangle. | Ch 6 |
+| 7 | Derive | 15 | Variance of the two-point and three-point bonds at the same price. | §3.1.1–3.1.2 |
+| 8 | Build | 20 | $\mathbb{Q}$-PD across recoveries 20–60 at a price of 85. | §4D.2 |
+| 9 | Derive | 5 | Values 100/40, one seller in five informed: bid and ask. | §3.2.1 |
+| 10 | Derive | 5 | The bid after a second sale from a new seller. | §4D.3 |
+| 11 | Derive | 10 | The bid after a second sale from the same seller. | Exercise 3 |
+| 12 | Derive | 10 | How many sales from new sellers push the value below 50? | §4D.3 |
+| 13 | Read | 5 | Why does the spread narrow as the posterior moves? | §4D.3 |
+| 14 | Derive | 15 | Informed fraction uniform on 0–0.4: the bid. | §3.2.2 |
+| 15 | Derive | 15 | The winner's curse with three dealers. | §3.2.3 |
+| 16 | Build | 30 | Simulate fifty RFQs and plot the hand history of posteriors. | §3.3 |
+| 17 | Read | 5 | A 90% interval for the number of US HY index issuers in May 2018. | §7.6 |
+| 18 | Derive | 10 | Reservation-price shift at $q = -2$, $\gamma = 0.005$, $\sigma^2\tau = 1.27$. | §18.4.2 |
+| 19 | Derive | 10 | The greed term at $k = 3$, $\gamma = 0.005$. | §18.4.2 |
+| 20 | Read | 5 | Name a quote whose number has a document answer. | §4D.4 |
+| 21 | Derive | 15 | A 25% hit-ratio target: what does its shadow price buy? | §18.7 |
+| 22 | Derive | 15 | Four of your ten "90%" intervals missed. How surprised should you be? | §4D.4 |
+| 23 | Build | 30 | The page-count game against an informed buyer, scored by markouts. | §4D.4 |
+| 24 | Derive | 10 | Jump-to-default in the reservation price of a B3 bond. | §18.6 |
+| 25 | Derive | 5 | Kelly at carry 4.5%, PD 3.1%, recovery 40%. | §28.4 |
+| 26 | Derive | 10 | Its sensitivities to $L$ and to PD. | §28.4 |
+| 27 | Derive | 5 | The ruin boundary at $L = 0.75$ and at $L = 1$. | §28.4 |
+| 28 | Derive | 10 | Largest long on \$200mm at a 7.5% line, bond at 98, recovery 40. | §8D.5 |
+| 29 | Derive | 10 | Fractional Kelly with a 50% relative error in the edge. | §28.4 |
+| 30 | Read | 5 | Why a $\mathbb{Q}$ default intensity makes Kelly zero. | §28.4 |
+| 31 | Derive | 5 | Loss budget 50 bp, downside 35 points: maximum size. | §4D.5 |
+| 32 | Build | 30 | Plot $f^\ast$ over (PD, $L$) with the ruin line and a dollar stop. | Fig 4-D.3 |
+| 33 | Derive | 10 | Three rulers: long \$40mm A (380, 4.2), B (520, 4.6), beta 0.6. | §8D.3 |
+| 34 | Derive | 10 | The four-state P&L for each ruler. | §4D.6 |
+| 35 | Derive | 10 | Spread carry net of a 75 bp borrow at the DTS ratio. | §4D.6 |
+| 36 | Derive | 10 | Size to the stop and to \$12mm of available borrow. | §4D.6 |
+| 37 | Read | 5 | What is the §4D.6 book long that it did not mean to be? | §4D.6 |
+| 38 | Derive | 15 | Jump-neutral short for \$20mm first lien at 98 (recovery 70) against a second lien at 70 (recovery 20). | §3.7, Ch 12-B |
+| 39 | Derive | 15 | Capture ratio from idio, leak and friction lines. | Ch 8-C |
+| 40 | Build | 30 | The three-ruler comparison on two real spread series. | Ch 8-D |
+| 41 | Derive | 5 | DV01 per \$10mm at modified duration 8.11, dirty price 108.38. | §4B.5 |
+| 42 | Read | 5 | Which products does a TRACE daily-volume figure count? | App B §B.1 |
+| 43 | Derive | 10 | Portfolio-trade dollars a year from 8,000 trades at \$60mm. | §4D.7 |
+| 44 | Derive | 10 | High-yield index DV01 per \$1bn at a risky duration of 4.2. | §4D.7 |
+| 45 | Derive | 15 | Capital to quote 300 HY names in \$2mm clips. | §18.5 |
+| 46 | Derive | 10 | Error bar of a four-link chain, each link within a factor of two. | §4D.7 |
+| 47 | Derive | 10 | \$900bn a year with clients: per day, and why it is not comparable to \$2bn. | §4D.7 |
+| 48 | Derive | 10 | Lines a day on a venue with \$9.6bn of daily volume. | §4D.7 |
+| 49 | Build | 20 | Net cancels and corrections in a TRACE-like file. | App B §B.16 |
+| 50 | Build | 15 | As-of join of ratings to prints. | §7.9 |
+| 51 | Build | 20 | Purged, embargoed, issuer-grouped CV in ten lines. | §7.7 |
+| 52 | Read | 5 | Name the two clocks on a 10-Q. | §4D.8 |
+| 53 | Build | 20 | Flag prints reported more than fifteen minutes after execution. | App B §B.1 |
+| 54 | Build | 30 | Group CUSIPs by ultimate parent and compute $N_{\text{eff}}$. | §7.6 |
+| 55 | Derive | 10 | IR at 8× turnover and 25 bp cost, from 6.2% alpha at 2% tracking error. | Ch 4, Ex 2 |
+| 56 | Read | 10 | Rows against issuers: 40,000 bond-months, 784 issuers. | §7.6 |
+| 57 | Derive | 15 | Deflate a Sharpe ratio chosen as the best of 100 backtests. | §7.8 |
+| 58 | Derive | 15 | Mean and standard deviation of the three-door pitch. | §4D.10 |
+| 59 | Derive | 10 | Standard error of a 55% hit rate on 40 calls. | §28.2 |
+| 60 | Build | 45 | Your own pitch: a distribution, a hedge, a stop, a markout horizon and a date. | §4D.10 |
+
+## 4D.13 Desk Debrief
+
+On Sunday 28 June, back at the kitchen table, Theo filled in the column he had labeled a week earlier, *What they will actually test*. Monday: which world a number lives in, and whether he could update on a second trade without forgetting the first; a quote's width is what is left to learn, so being hit moves the mid. Tuesday: whether he sized from the downside or from conviction (Kelly said 93%, the stop said \$8.6mm, and the recovery was a document variable), and whether he could say what a hedge leaves behind and which state he was paid in. Wednesday: error bars on estimates and timestamps on joins. Thursday: losing money out loud while naming the fact that moved his number, and breaking a Sharpe of 3.1 by counting trades and issuers. Friday: turning his best skill into a distribution, a hedge and a date, and telling a room where his knowledge was furniture from one where it was scarce.
+
+He looked at the column and saw it was one test in six costumes: how do you lose, and how fast do you change your mind when you do? Then he wrote to Ines to accept, and to PJT to resign, in that order, because the order was the only part of the week that had a document answer.
+
+### The Spec You Hand the Robot
+
+*Vague version:* "Help me practice for quant credit interviews." *What ROBO built:* sixty questions with the answers printed directly beneath each one, as asked. *The precise version:* "Implement `interview_drills.py` per §4D.8. Six drill families (measure, Glosten–Milgrom posterior, Kelly, stop size, hedge rulers, DV01), each returning (question, answer, checker). Inputs drawn from fixed menus by `random.Random(seed)`; the same seed reproduces a session. Answers computed from the home-section formula, never stored. Tolerances: 0.005 in probability, 0.25 points in price, \$0.1mm in size, 5% in DV01. Kelly returns `None` when $(1-q_D)c \le q_D L$. On import, assert the chapter's anchors (25%, 19.2%, 64, 0.926, \$25.9mm, \$26.7mm, 8,790)."
+
+### Exercises
+
+1. **Two measures before breakfast.** A bond pays 100 or 30 in a year; the price is 80 and the continuous rate is 3%. Find the $\mathbb{Q}$-default probability. If the physical default probability is 8%, what one-year return does a buyer at 80 expect, and what is it paying for? *Check:* $q = (100 - 80e^{0.03})/70 = 17.56/70 \approx 25.1\%$. Expected payoff under $\mathbb{P}$ is $0.92(100) + 0.08(30) = 94.4$, about 18% over 80: the premium for holding a 70-point jump, not a forecast error.
+2. **The trapdoor opens.** Take Theo's B3 bond (carry 4.5%, PD 3.1%) but suppose the agreement allows a non-pro-rata uptier, so a holder left outside recovers nothing. Recompute full Kelly and the largest long under a 2.5% single-default line on \$200mm with the bond at 98. *Check:* $f^\ast = 0.969/1 - 0.031/0.045 = 0.28$, with the ruin boundary at 100% of the fund; the stop gives $\$5\text{mm}/0.98 = \$5.1$mm, against \$8.6mm when recovery was 40.
+3. **The same seller twice.** In §4D.3, a single counterparty sells twice; each time an uninformed seller sells with probability one-half, independently. Find the posterior on the bad state and the value, and compare with two sales from new sellers. *Check:* $P(\text{two sells} \mid 40) = 0.2 + 0.8 \times 0.25 = 0.4$ and $P(\text{two sells} \mid 100) = 0.2$, so the posterior is $2/3$ and the value 60, against 69% and 58.5 for two strangers. An informed seller would have sold twice anyway, so the repeat carries less fresh news.
+4. **When the downside case is the bull case.** Hold the ratio of the refinance and exchange weights in §4D.10 at 45 : 35. What weight on the filing door makes the expected gain at 62 exactly zero? *Check:* the two good doors average $(45 \times 85 + 35 \times 70)/80 = 78.44$, so $78.44 - 43.44\,w = 62$ gives $w \approx 0.38$. A 38% filing probability is where the trade stops paying, which is the number the pitch has to defend.
+
+### Deep-Dive Resource Graph
+
+**Podcasts**
+
+- *Odd Lots*, "How You Get and Actually Keep a Job at a Multi-Strat Hedge Fund" (Brian Yelvington), 7 Jul 2025: <https://omny.fm/shows/odd-lots/how-you-get-and-actually-keep-a-job-at-a-multi-strat-hedge-fund>. Scope, stops and how a credit PM is judged; paraphrased here from a machine transcript, so listen before quoting.
+- *Odd Lots*, "How Hedge Funds Discover the Next Superstar Trader" (Joe Peta), 5 Sep 2024: <https://omny.fm/shows/odd-lots/how-hedge-funds-discover-the-next-superstar-trader>. Talent selection from the allocator's side of the table.
+- *Odd Lots*, "How to Succeed at Multi-Strategy Hedge Funds" (Giuseppe Paleologo), 20 May 2024: <https://omny.fm/shows/odd-lots/how-to-succeed-at-multi-strategy-hedge-funds>. The factor x-ray and the risk manager's three jobs.
+- *Signals and Threads*, Ep 20, "Solving Puzzles in Production" (Liora Friedberg), 7 Oct 2024: <https://signalsandthreads.com/solving-puzzles-in-production/>. What a production rotation is, from inside a market maker.
+- *Signals and Threads*, Ep 29, "Wrestling the World into Rows" (Eric Mannes), 2 Sep 2026: <https://signalsandthreads.com/wrestling-the-world-into-rows/>. The time machine, the vendor's "whoops," and saving data with the time it arrived (§4D.8).
+- J.P. Morgan *Making Sense*, Market Matters, "A new era of credit portfolio trading?", 9 May 2025: <https://www.jpmorgan.com/insights/podcast-hub/market-matters/new-era-credit-portfolio-trading>. A co-head of credit systematic trading inside the April 2025 stress.
+- *Fixed + Floating*, E18, "Inside a Long/Short Credit Hedge Fund: Sizing, Shorts and LME Risk" (Ironshield), 4 Aug 2026: <https://podcasters.spotify.com/pod/show/fixedfloating/episodes/Inside-a-LongShort-Credit-Hedge-Fund-Sizing--Shorts-and-LME-Risk--Frits-Lieuw-Kie-Song-Ironshield-Capital-e3mncab>. The loss-budget sizing rule of §4D.5.
+
+**Practitioner Writing**
+
+- Optiver, "A day in the life of a quant trader intern": <https://www.optiver.com/join-us/stories/day-in-the-life-quant-trader-intern/>. Recruiting copy from equity options, useful by analogy for the market maker's rhythm, including the end-of-day review of trades not done.
+- The DESK, "Citadel Securities new hires are reinforcing US credit market expansion," 4 Jan 2024: <https://www.fi-desk.com/citadel-securities-new-hires-are-reinforcing-us-credit-market-expansion/>. The market maker's build-out, row by row.
+- Hedgeweek, Balyasny's investment-grade long/short team, 20 Aug 2026: <https://www.hedgeweek.com/balyasny-taps-former-blackrock-credit-chief/>; eFinancialCareers on home-grown PMs, 25 Feb 2026: <https://www.efinancialcareers.com/news/hedge-fund-junior-jobs>.
+- Coalition Greenwich, "The Present and Future State of Corporate Bond Portfolio Trading": <https://www.greenwich.com/market-structure-technology/present-and-future-state-corporate-bond-portfolio-trading>. The 8,000 portfolio trades of §4D.7.
+- METR, "Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity," 10 Jul 2025: <https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/>. Why the portfolio's core is built by hand.
+
+**Academic Papers and Books**
+
+- Glosten and Milgrom (1985), *Bid, Ask and Transaction Prices in a Specialist Market with Heterogeneously Informed Traders*, Journal of Financial Economics. The model behind §4D.3.
+- Avellaneda and Stoikov (2008), *High-Frequency Trading in a Limit Order Book*, Quantitative Finance. The reservation price of §4D.4.
+- Kelly (1956), *A New Interpretation of Information Rate*, Bell System Technical Journal. The log-growth criterion of §4D.5.
+- Alpert and Raiffa (1982), *A Progress Report on the Training of Probability Assessors*, in Kahneman, Slovic and Tversky (eds.), *Judgment Under Uncertainty*. Why "90% intervals" miss so often.
+- Derman, *My Life as a Quant* (Wiley, 2004): on candidates who "tried to use the Quantitative Strategies Group I ran as a conduit into trading" (text verified from a scanned copy; printed page to be confirmed). The quant seat as a route to the desk, a generation earlier.
+- Moyer, *Distressed Debt Analysis* (shelf), pp. 62–64: the restricted-list calendar on Friday's wall.
+- Zhou, *A Practical Guide to Quantitative Finance Interviews* (2008), and Mosteller, *Fifty Challenging Problems in Probability with Solutions* (1965). The puzzle canon, for practice; neither is about credit, which is what §4D.2–4D.7 add.
+
+**Data & Code**
+
+- FINRA, TRACE monthly volume files: <https://www.finra.org/finra-data/trace-monthly-volume-files>. The product split behind "which TRACE?"
+- FINRA Rule 6730, TRACE reporting: <https://www.finra.org/rules-guidance/rulebooks/finra-rules/6730>. The fifteen-minute clock and as/of prints.
+- `interview_drills.py`: [Listing 4-D.1 in Appendix F](#code-4D-1).
 

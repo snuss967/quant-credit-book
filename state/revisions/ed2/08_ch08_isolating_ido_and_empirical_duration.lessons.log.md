@@ -47,23 +47,23 @@ Count at start: 7 Math, Gently (L78 tangent and bend, L159 regression slope, L29
 
 ## (e) Research-note leaks and fiction labels
 
-- [ ] E1. Leak strings in non-protected text: L602 "*(approx.; check each venue's methodology)*"; L774 "*(approx.; secondary data summaries)*"; L782 "*(approx.; illustrative sizing on the secondary spread path)*"; L1190 "(paraphrased in the text; the transcript is machine-made)"; L1193 "Show and topic only, no episode verified: *ReSolve Riffs* ...; *Odd Lots* on the 2022 bond sell-off" (channel-level, no URL). Hedge the first four in reader voice; cut L1193 and log it for U3 in `state/open_items_ed2.md`. No "CHECK" fact flags (the four `CHECK` hits are the `CHECKS` dict). L257's "secondary summaries" is the fact-checked Trend Watch wording (applied_factcheck C1) and stays. L701's "should be checked against CME's own documentation" sits inside the protected Trend Watch; recast to reader voice without changing any fact.
-- [ ] E2. Fiction labels missing at the top of three desk beats that mix invented dialogue with sourced numbers: §8.5 the equity-lag printout (L543), §8.6 the four windows (L584; ETF and contract facts sourced), §8.8 the month-end meeting (L995). Add one italic label each.
+- [x] E1. Leak strings in non-protected text: L602 "*(approx.; check each venue's methodology)*"; L774 "*(approx.; secondary data summaries)*"; L782 "*(approx.; illustrative sizing on the secondary spread path)*"; L1190 "(paraphrased in the text; the transcript is machine-made)"; L1193 "Show and topic only, no episode verified: *ReSolve Riffs* ...; *Odd Lots* on the 2022 bond sell-off" (channel-level, no URL). Hedge the first four in reader voice; cut L1193 and log it for U3 in `state/open_items_ed2.md`. No "CHECK" fact flags (the four `CHECK` hits are the `CHECKS` dict). L257's "secondary summaries" is the fact-checked Trend Watch wording (applied_factcheck C1) and stays. L701's "should be checked against CME's own documentation" sits inside the protected Trend Watch; recast to reader voice without changing any fact. **Done:** Five leaks hedged or cut; Spec gains Elif's window guard; logged.
+- [x] E2. Fiction labels missing at the top of three desk beats that mix invented dialogue with sourced numbers: §8.5 the equity-lag printout (L543), §8.6 the four windows (L584; ETF and contract facts sourced), §8.8 the month-end meeting (L995). Add one italic label each. **Done:** Italic fiction labels added to three desk beats, naming the invention.
 
 ## (f) Reference layer
 
-- [ ] F1. The Finder table already heads the Debrief (eight rows, the five columns). Add one row for the regime alarm (rolling 60-day ρ sign change), the rule retired from L798 by B6, and the D3 pointer updates.
-- [ ] F2. Long scenes are already `####` headings (L726, L802, L953). Decision points are italic cards with no heading: add `#### Decision point:` headings before the cards at L736 (the close of Friday 31 December 2021), L814 (7 a.m., Thursday 9 March 2023) and L868 (the close, Friday 4 April 2025), matching Ch 1–3 and 7.
+- [x] F1. The Finder table already heads the Debrief (eight rows, the five columns). Add one row for the regime alarm (rolling 60-day ρ sign change), the rule retired from L798 by B6, and the D3 pointer updates. **Done:** Finder now nine rows; regime-alarm row carries the retired rule.
+- [x] F2. Long scenes are already `####` headings (L726, L802, L953). Decision points are italic cards with no heading: add `#### Decision point:` headings before the cards at L736 (the close of Friday 31 December 2021), L814 (7 a.m., Thursday 9 March 2023) and L868 (the close, Friday 4 April 2025), matching Ch 1–3 and 7. **Done:** Three decision-point headings added before the 2022, SVB, April cards.
 
 ## (g) Cast-bible contradictions
 
-- [ ] G1. §8.3 L323: Kaz repeats the Ch 1 fulcrum misread ("the fulcrum security is the one where the hedge ratio pivots through zero?" = Ch 1's "the tranche with zero duration"). C7 canon: one misread per term at first appearance; later uses are callbacks Kaz pre-empts. Recast as a pre-empted callback ("Not a duration. I was told.") that still asks the zero-hedge-ratio question, so Mags's "accidentally right" and Exercise 2 ("Kaz now claims ...") still land.
-- [ ] G2. Checked, no edit: Mags in 1994 ("the desk I joined two years later", C5), at a winding-down fund in 2022 (C5), her SVBFG holdco memories referenced not retold (Ch 6); Theo watched April 2025 from a PJT conference room, no mandate; Kaz on the desk in April 2025 (Ch 14: by Jan 2025) and they/them throughout; Dov, Wen, Marcus as in the Ch 8 and 8-D additions; PB-03 a 2020 replay closed in Ch 24. Noted for the bible: the month-end "small room with the blind that does not close" (L993) is Theo's desk's room, as in Ch 8-B's post-mortem; Ch 8-D also puts a broken-blind room at Vantress (open item, not this chapter's). Ch 10's 16 Oct 7:20 a.m. April 2025 replay (trend sleeve) and this chapter's April 2025 hedge card (late October) are two different cards; compatible.
-- [ ] G3. Record the pass in `state/cast_bible.md` (Ch 8 additions): the fulcrum callback (C7 applied) and the room note.
+- [x] G1. §8.3 L323: Kaz repeats the Ch 1 fulcrum misread ("the fulcrum security is the one where the hedge ratio pivots through zero?" = Ch 1's "the tranche with zero duration"). C7 canon: one misread per term at first appearance; later uses are callbacks Kaz pre-empts. Recast as a pre-empted callback ("Not a duration. I was told.") that still asks the zero-hedge-ratio question, so Mags's "accidentally right" and Exercise 2 ("Kaz now claims ...") still land. **Done:** Kaz pre-empts the fulcrum callback; Mags and Exercise 2 still land.
+- [x] G2. Checked, no edit: Mags in 1994 ("the desk I joined two years later", C5), at a winding-down fund in 2022 (C5), her SVBFG holdco memories referenced not retold (Ch 6); Theo watched April 2025 from a PJT conference room, no mandate; Kaz on the desk in April 2025 (Ch 14: by Jan 2025) and they/them throughout; Dov, Wen, Marcus as in the Ch 8 and 8-D additions; PB-03 a 2020 replay closed in Ch 24. Noted for the bible: the month-end "small room with the blind that does not close" (L993) is Theo's desk's room, as in Ch 8-B's post-mortem; Ch 8-D also puts a broken-blind room at Vantress (open item, not this chapter's). Ch 10's 16 Oct 7:20 a.m. April 2025 replay (trend sleeve) and this chapter's April 2025 hedge card (late October) are two different cards; compatible. **Done:** Checked against canon; no contradictions beyond G1; room note recorded.
+- [x] G3. Record the pass in `state/cast_bible.md` (Ch 8 additions): the fulcrum callback (C7 applied) and the room note. **Done:** Cast bible Ch 8 block gains lessons-pass line and room note.
 
 ## (h) Relative-value beat
 
-- [ ] H1. `state/rv_thread.md` assigns Ch 8 "Long Scene (new §8.8 subsection) + PB-03 opened in §8.4". Both are present (`> **The Pair.**` PB-03 box at L447; "Twelve Residuals" at L953) and `state/rv_pair_book.md` already carries PB-03 and the book-level ρ_resid line (0.28, 29 Sep 2026). No beat to write; confirm after edits that no PB-03 number or the 0.28 changed.
+- [x] H1. `state/rv_thread.md` assigns Ch 8 "Long Scene (new §8.8 subsection) + PB-03 opened in §8.4". Both are present (`> **The Pair.**` PB-03 box at L447; "Twelve Residuals" at L953) and `state/rv_pair_book.md` already carries PB-03 and the book-level ρ_resid line (0.28, 29 Sep 2026). No beat to write; confirm after edits that no PB-03 number or the 0.28 changed. **Done:** Beat present; PB-03 legs, 1.65, 35 bp and 0.28 unchanged.
 
 ## Out of scope, noted
 
@@ -72,3 +72,18 @@ Count at start: 7 Math, Gently (L78 tangent and bend, L159 regression slope, L29
 ## Fix log
 
 (Items are ticked above as they are fixed, each with a ten-word note.)
+
+C2 addendum: the §8.9 vignette's "The first was ... The second was ..." (Elif's two guards) recast as one sentence; both guards now on the Spec's GUARDS line. Case C: Ines's hand history says the board changed "twice", matching "flipped twice in seven sessions".
+
+## (a) Metric, after
+
+`python3 tools/prescriptiveness.py --pre 9ac1c379053d9d0254e9d524d9a40efdec4a2c71 book_src/08_ch08_isolating_ido_and_empirical_duration.md`
+
+| ver | words | bullets% | modal | imper | rule | dialog | mathgently | seat |
+| :-- | --: | --: | --: | --: | --: | --: | --: | --: |
+| pre (Ed 1) | 14,882 | 11.7 | 2.9 | 1.7 | 0.7 | 8.9 | 0 | 0 |
+| before this pass | 31,765 | 9.0 | 2.7 | 1.7 | 0.5 | 9.9 | 7 | 3 |
+| after this pass | 30,315 | 8.8 | 2.4 | 1.2 | 0.4 | 10.3 | 4 | 3 |
+
+Growth 30,315 / 14,882 = **2.04×** (from 2.13×); `wc -w` 31,952. The pass retired fourteen duplicate tellings (among them the §8.9 body Spec, six listing openings that retold their sections, the Twelve Residuals summary paragraph and the per-step cents in the four subtractions), one detached rule paragraph (now Ines's line in the 2022 replay), seven "edge case that bites" templates and four enumerator runs, and demoted three boxes whose concepts Ch 1, 1-B, 4-B, 5 and 6 already box. It added a ninth Finder row, three decision-point headings, three fiction labels and Kaz's pre-empted fulcrum callback. What keeps the chapter above 1.9× is single-telling material the orchestrator ruling protects: the three replays of §8.7 (5,000 words, each with a dated spine and a graded card), the Alltel and Twelve Residuals scenes, seven listing explanations, the Spec, six exercises and four Resource Graphs. Protected items checked against `a89aa0e`: 34 display equations, 20 Source Extractions (quotes unchanged), 3 Trend Watches (only the CME parenthetical recast to reader voice), 5 figures, 13 Appendix F links, 43 unique URLs and the exercises (hash unchanged). Math, Gently: four, none adjacent; no run of more than two boxed elements; no "CHECK", "search summary" or out-of-Trend-Watch "secondary" strings. Open items logged in `state/open_items_ed2.md`: the cut channel-level Resource Graph entry (U3) and the Paleologo paraphrase note; the Spec's window-length guard closes the earlier §8.9 open item.
+<!-- STATUS: COMPLETE -->

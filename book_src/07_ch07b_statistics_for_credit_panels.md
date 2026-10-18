@@ -441,25 +441,96 @@ $$
 
 Integrate the last identity and you get $S(t) = \exp(-H(t))$ with cumulative hazard $H(t) = \int_0^t \lambda(s)\,ds$. This is the formula of §6.6, now as a $\mathbb{P}$ object estimated from realized defaults rather than a $\mathbb{Q}$ object implied by prices. The two hazards differ by the credit risk premium, and comparing them across that line without saying so is how Law 4 gets broken. On a monthly grid the hazard is a conditional probability, $h_m = \mathbb{P}(\tau \in (m-1, m] \mid \tau > m-1)$, and survival is a product: $S(m) = \prod_{j \le m}(1 - h_j)$.
 
+#### Long Scene: The Chapter 22 Cohort
+
+*Story-now: Monday 12 October 2026, 5:40 p.m., Mags's whiteboard. The eight deals, their dates and their outcomes are real and come from company filings, court records and press reports; the months are computed from the dates shown. The desk's codings, fitted hazards and every number it produces are illustrative, and the three post-LMT bonds on the decision card are fictional.*
+
+The desk had spent the day on Halvorsen, which had opened at 78 (Chapter 1), and by twenty to six the only person still standing was Mags, in front of the whiteboard by the window with a marker in each hand. At the top she had written CHAPTER 22, and underneath, smaller, *(the bankruptcy kind)*.
+
+"Back in my day," she said, when Theo and Kaz drifted over, "a Chapter 22 was a company that filed for Chapter 11 twice. Now it's a company that did a liability-management deal and then filed once, which is the same thing with better lawyers. The agencies count the exchange as a default. The filing is the second one."
+
+Theo had asked for this. On Friday, after the replay, he had asked the question every restructuring banker hears from a client about to sign an uptier and never gets to answer with data: *how often does the deal actually work?* Mags had said she would show him on Monday, and she had brought eight deals, every one of them public, and every one of them a company Theo knew from the other side of the table as a case study, a pitch book page or a war story told at a closing dinner.
+
+| Company | Clock starts (first liability-management step) | How the story stood at 12 Oct 2026 | Months | On the curve |
+| :--- | :--- | :--- | :---: | :--- |
+| Revlon | BrandCo drop-down and roll-up, 7 May 2020 | Chapter 11, 15 Jun 2022 | 25 | filed |
+| Boardriders | Uptier through an "open market purchase", Aug 2020 | Sold to Authentic; excluded lenders repaid at par, Sep 2023 | 37 | censored |
+| Envision | Drop-down Apr 2022; uptier closed Aug 2022 | Chapter 11, 15 May 2023 | 9 (13 from April) | filed |
+| Incora | One-day notes transaction, 28 Mar 2022 | Chapter 11, 1 Jun 2023 | 14 | filed |
+| Robertshaw | Super-priority exchange, 9 May 2023 | Chapter 11, 15 Feb 2024 | 9 | filed |
+| Lumen | Transaction support agreement signed 31 Oct 2023, closed 22 Mar 2024 | No filing | 31 | censored |
+| Trinseo | Double dip, 8 Sep 2023 (exchange 17 Jan 2025) | Chapter 11, 26 May 2026 | 33 (16 from 2025) | filed |
+| Saks Global | Non-pro-rata exchange, 8 Aug 2025 (notes issued 23 Dec 2024) | Chapter 11, 13 Jan 2026 | 5 (13 from issue) | filed |
+
+Theo did what anyone does with a table like that. He counted. "Six of eight filed. Seventy-five percent."
+
+"Six of eight *have filed*," Mags said. "Boardriders and Lumen aren't survivors. They're unfinished." She tapped the Boardriders row. "That one stopped being watchable when Authentic bought it and the people the uptier left behind were paid at par. That's an ending, but it's not the ending you're timing. And Lumen is still here. Thirty-one months since the deal closed, no filing, and you don't know it won't. If you call it a survivor you've told me how its story ends. If you drop it you've thrown away thirty-one months in which it didn't file, which is information you paid for."
+
+Before anyone touched a number, she made them argue about the clocks, because, she said, that was where she had seen most of these studies go wrong. Envision's liability management came in two steps: a drop-down in April 2022 and an uptier that closed in August. Start the clock in April and Envision lasted thirteen months; start it when the excluded lenders were actually excluded and it lasted nine. Mags took August. Trinseo's first step was the September 2023 double dip and its second the January 2025 exchange; the first step started the clock, so thirty-three. Then she circled Theo's Saks row, which he had copied as thirteen from a deal list. "December 2024 is when the notes were born, not when they were restructured. The exchange was August 2025." Theo crossed out the thirteen and wrote five. Nobody said anything about it, which on this desk is how a correction is accepted.
+
+Kaz took the marker. Kaplan–Meier, they said, does only one thing: at each month in which somebody filed, it asks what fraction of the companies still being watched filed that month, and it multiplies the survivals together. They wrote the filing months in order, five, nine, nine, fourteen, twenty-five, thirty-three, with Lumen leaving the watch at thirty-one and Boardriders at thirty-seven, and walked down the list. At month 5 eight companies were at risk and Saks filed: $7/8 = 0.875$. At month 9 seven were at risk and two filed, Envision and Robertshaw: $0.875 \times 5/7 = 0.625$. At month 14, five at risk, Incora: $0.625 \times 4/5 = 0.50$. At month 25, four at risk, Revlon: $0.50 \times 3/4 = 0.375$. At month 31 Lumen walked out of the risk set without filing, which changed nothing on the curve and everything afterwards. At month 33 only two were left, Trinseo and Boardriders, and Trinseo filed: $0.375 \times 1/2 \approx 0.19$.
+
+"So the chance of filing within three years is eighty-one percent," Kaz said, "not seventy-five."
+
+Theo frowned. "Doing it properly made the number worse?"
+
+"Doing it properly made the number honest," Mags said. "Lumen got thirty-one months of credit for not filing and then left. When Trinseo went at thirty-three, there were only two companies in the room, so one filing was half the room. Your seventy-five percent counted Lumen as if it would never file. Kaplan–Meier counts it as exactly what it is: a company that hadn't filed yet when you stopped looking."
+
+Kaz added Greenwood's band, because Ines would ask. At twelve months the curve says 37.5% filed, with a standard error of about seventeen points; at thirty-six months, 81% with about sixteen. "Eight companies," Kaz said. "The error bar is the size of the estimate's personality."
+
+Then Kaz asked the question that, in the cast's long tradition, was wrong in a useful way. "Lumen signed a cooperation agreement. Is that a form of censoring? The lenders agreeing to be quiet?"
+
+"It's the lenders agreeing to be loud together, in one room, so nobody else can get in," Mags said. "At Lumen the support agreement *was* the deal: it's the first step on the clock, not an exit from it. Censoring is when you stop being able to watch. Lumen you can watch every day; it just hasn't filed." She pointed back at Boardriders. "That one is the dangerous kind. It left because somebody bought it, and somebody bought it because it was worth buying. Companies that leave a risk set by being sold or refinanced are the healthy ones, so the companies left behind are sicker than the ones that started. That's informative censoring, and Kaplan–Meier assumes it away." Here it happened not to bite, because Boardriders left at month 37, after every filing on the board; the practice cohort below shows a case where it does.
+
+"So censoring isn't noise," Kaz said.
+
+"Censoring is the signal," Mags said, and wrote it at the bottom of the board, where Law 14 already was in Ines's handwriting from some earlier week.
+
+Ines had come over during the Greenwood band, carrying the re-default ledger Chapter 14 keeps (§14.3), and she put the desk's eight against it. Moody's found that about 46% of 2023's distressed exchanges had already re-defaulted by April 2025, most of them in under a year (Bloomberg Law, 23 April 2025). Roe and Rotaru hand-collected 89 coercive non-pro-rata liability-management deals and found that only 22% had avoided bankruptcy or re-default two years later (Harvard Law School Bankruptcy Roundtable, 24 February 2026). And Moody's study of 1,173 borrowers with a soft credit event between 1979 and 2026 found that more than 70% of the eventual hard defaults came within 24 months (18 May 2026). The three numbers look as if they disagree and do not; they count different events in different cohorts, and §14.3 reconciles them. "Your eight are one draw from that," Ines said. "And not eight independent draws. They share a vintage, a rate cycle and a short list of law firms. It's the same disease as Theo's runway panel: count the hands, not the pictures of the hands." The 38 liability-management deals of 2024 were inside Moody's two-year window as they spoke, which is why the desk cared on a Monday evening at all.
+
+Kaz wanted a covariate. Mags let them have one, under protest about the coding. Five of the eight deals had been non-pro-rata in the plain sense that some holders were left behind and stayed behind: Envision, Incora, Robertshaw, Trinseo and Saks. Revlon's excluded lenders had litigated and settled inside the plan, Boardriders' had been paid at par, and Lumen's term-loan deals had been open to all its term lenders; Kaz coded those three as zero. "Revlon is a judgment call," Mags said. "Write down that it's a judgment call."
+
+The fit was a Cox model, which Kaz explained the way they explain everything, by what cancels. At each filing month, look only at the companies still standing and ask which of them filed. Whatever the year was doing to all of them, the rate shock of 2022 and 2023, the closed high-yield market, the baseline hazard, multiplies every company's chance equally and divides out of the comparison, so the model never has to say what the baseline was. What is left is whether the company that filed tended to be the flagged one. On the desk's eight the coefficient came out at about 1.8, a hazard ratio of about six, with a standard error of 1.1: an interval running from about two-thirds to about fifty-four, and a t-statistic of 1.6 *(illustrative; the desk's coding of real dates)*.
+
+"Six," Theo said, with the particular tone the desk now used for that number.
+
+"Six with an interval from two-thirds to fifty-four," Ines said. "On eight companies that's not an estimate. It's a direction."
+
+Mags had one more thing, and it was the one Theo wrote down. "And the six is this decade's six. Before 2020 the thing that predicted bankruptcy was leverage and a maturity wall. After 2020 the same covariates predict exchanges, and at a different ratio, because the company has a door it didn't used to have. Don't average two worlds into one hazard ratio. Split the baseline by era, or give the covariate an era interaction, and see if the six survives." Kaz drew the check she was asking for, the log of minus the log of each group's survival curve against the log of time, which should run in parallel if one ratio fits all months and visibly does not if it does not.
+
+Three clock questions were left, and Mags answered them in the order the desk would get them wrong. If you insist on starting Saks's clock when its notes were issued in December 2024, then Saks did not join a cohort of post-deal companies until the exchange in August 2025; it enters the risk sets at month 8, not month 0, or you have credited it with eight months it could not have failed as a member of this cohort. On this board the delayed entry changes nothing, because the first filing after it comes at month 9, and that is luck, not design. A distressed exchange is never censoring: Trinseo's January 2025 exchange was itself a default event, and if the event you are timing is "any default" rather than "Chapter 11", Trinseo's clock stops at 16, not 33 (Law 14). And Lumen's later tenders near par, like Boardriders' par takeout, are exits of a different kind. Run Kaplan–Meier on one kind of ending with the others treated as censored and $1 - \hat S$ overstates that ending, because it pretends a company already taken out could still have filed later. Chapter 14 builds the cause-specific hazards and the Aalen–Johansen cumulative incidence that fix it (§14.2, Law 13), adds a cured fraction for re-default after an exchange (§14.3), and §15.5 puts the same machinery on regulatory clocks.
+
+#### Decision point: three bonds after the deal
+
+It is Monday 12 October 2026. The desk holds small positions in three post-LMT bonds. Corvane Health Partners did a non-pro-rata uptier that closed in March 2026, seven months ago. Ostrander Specialty Chemicals did a drop-down with a double dip in January 2026, nine months ago, and its excluded lenders have sued. Tallis Marine Holdings did a pro-rata exchange open to every holder in November 2025, eleven months ago, with a sponsor equity check alongside. Mags capped the marker. *Write three things: which one you would short, the twelve-month re-default hazard you assign it, and the one fact that would change your mind.* Before you read on, write yours.
+
+Kaz wrote: *Corvane and Ostrander both. Cox hazard ratio 6 on a baseline of about 15% a year: 12-month hazard about 60%. Fact: a refinancing.*
+
+Theo wrote: *Corvane. About 45%. Fact: its credit agreement.* Then he went and read it, because that is what Theo does, and came back twenty minutes later with a page flagged. Corvane's uptier had been done through the open-market-purchase exception, and the exception was still in the document, unamended, the same three words the Boardriders lenders had spent three years litigating. "They can do it again," he said. "Another uptier is another distressed exchange, and that's a default. The model has no column for it."
+
+Mags wrote: *Corvane, small. A coin flip. Fact: who owns the new money.*
+
+Ines graded the cards against the two numbers on the board, because she did not have the future and would not pretend to. The cohort's Kaplan–Meier step at twelve months is 37.5%, plus or minus seventeen points, and the public one-year rate for coercive non-pro-rata deals, from Moody's 2023 vintage and from Roe and Rotaru, sits at or a little above a coin flip. Kaz's 60% had multiplied a point estimate whose interval ran to fifty-four by a baseline Kaz had invented, and had shorted two names on the strength of a t of 1.6; Ines marked it down for confidence, not direction. Mags's coin flip sat on the public rate and asked the right next question, since whoever funded the new money decides whether there is a second step. Theo's 45% sat between the cohort and the public numbers, and his fact was the best on the board, because it was the one covariate no model on the desk had: a document that still allowed the deal to be done twice. "Cox can see what you coded," Ines said. "It can't see what you didn't read." She pinned Theo's card next to the open-market-purchase clause and wrote the desk's oldest joke under it: *the most expensive three words in finance*.
+
 ### Kaplan–Meier, derived
 
-Order the distinct event times $t_{(1)} < t_{(2)} < \cdots$. At each, let $n_j$ be the number at risk (observed and event-free just before $t_{(j)}$) and $d_j$ the number of events. Among those at risk, the events are binomial, and the maximum-likelihood estimate of the discrete hazard is $\hat h_j = d_j / n_j$. A censored issuer contributes to every risk set up to its censoring time and then leaves; it is never counted as a survivor beyond what was seen, and never as a default. Chaining the conditional survival probabilities gives the **Kaplan–Meier** (product-limit) estimator:
+Order the distinct event times $t_{(1)} < t_{(2)} < \cdots$. At each, let $n_j$ be the number at risk (observed and event-free just before $t_{(j)}$) and $d_j$ the number of events. Among those at risk, the events are binomial, the coin flipped $n_j$ times of the box above, and the maximum-likelihood estimate of the discrete hazard is $\hat h_j = d_j / n_j$. A censored issuer contributes to every risk set up to its censoring time and then leaves; it is never counted as a survivor beyond what was seen, and never as a default. Chaining the conditional survival probabilities gives the **Kaplan–Meier** (product-limit) estimator, the arithmetic Kaz did on Mags's whiteboard:
 
 $$
 \hat S(t) = \prod_{j:\, t_{(j)} \le t}\Big(1 - \frac{d_j}{n_j}\Big) .
 \tag{7B.5}
 $$
 
-Its variance comes from the delta method. Each $\ln(1 - \hat h_j)$ has variance approximately $\hat h_j / \big(n_j(1 - \hat h_j)\big) = d_j / \big(n_j(n_j - d_j)\big)$, and the terms are asymptotically uncorrelated across event times, so
+Its variance is **Greenwood's formula** (the delta-method argument is in the Full Derivation at the end of this section):
 
 $$
-\widehat{\operatorname{Var}}\big(\hat S(t)\big) \approx \hat S(t)^2 \sum_{j:\, t_{(j)} \le t} \frac{d_j}{n_j(n_j - d_j)} ,
+\widehat{\operatorname{Var}}\big(\hat S(t)\big) \approx \hat S(t)^2 \sum_{j:\, t_{(j)} \le t} \frac{d_j}{n_j(n_j - d_j)} .
 \tag{7B.6}
 $$
 
-**Greenwood's formula**. Build the confidence band on $\ln(-\ln \hat S)$ and transform back, so that it stays inside $[0, 1]$. The **Nelson–Aalen** estimator sums the hazards instead of multiplying the survivals, $\hat H(t) = \sum_{t_{(j)} \le t} d_j / n_j$, and $\exp(-\hat H)$ sits slightly above $\hat S$, with the two nearly equal when $d_j/n_j$ is small.
+Build the confidence band on $\ln(-\ln \hat S)$ and transform back, so that it stays inside $[0, 1]$. The **Nelson–Aalen** estimator sums the hazards instead of multiplying the survivals, $\hat H(t) = \sum_{t_{(j)} \le t} d_j / n_j$, and $\exp(-\hat H)$ sits slightly above $\hat S$, with the two nearly equal when $d_j/n_j$ is small.
 
-**Worked example: the practice cohort.** Run the desk's six fictional issuers through a hypothetical 36-month window *(illustrative; these are not their canonical histories, except that Quillfeather's exchange matches Chapter 14)*. Calloway Industrial's notes are taken out by a make-whole call at month 9 (censored). Quillfeather Packaging completes a distressed exchange at month 14 (event). Larkspur Foam exchanges at month 22 (event). Halvorsen defaults at month 27 (event). Halyard Holdings is acquired at month 30 (censored). Brambleworth is still alive when the window closes at month 36 (censored).
+**The practice cohort, in the margin.** The desk's six fictional issuers, run through a hypothetical 36-month window *(illustrative; these are not their canonical histories, except that Quillfeather's exchange matches Chapter 14)*: a make-whole call takes out Calloway Industrial at month 9, Quillfeather Packaging and Larkspur Foam complete distressed exchanges at months 14 and 22, Halvorsen defaults at 27, Halyard Holdings is acquired at 30, and Brambleworth is alive when the window closes.
 
 | Month | Issuer | Event? | At risk $n_j$ | $d_j$ | $\hat S$ after |
 | :--- | :--- | :---: | :---: | :---: | :---: |
@@ -470,7 +541,7 @@ $$
 | 30 | Halyard | censored (acquired) | 2 | 0 | 0.400 |
 | 36 | Brambleworth | censored (end) | 1 | 0 | 0.400 |
 
-So $\widehat{\text{PD}}(36) = 60\%$. Greenwood gives $\widehat{\operatorname{Var}} = 0.16 \times \big(\tfrac{1}{20} + \tfrac{1}{12} + \tfrac{1}{6}\big) = 0.16 \times 0.30 = 0.048$, a standard error of 22 points. Nelson–Aalen gives $\hat H = 0.2 + 0.25 + 0.333 = 0.783$ and $\exp(-0.783) = 0.457$. The two naive answers bracket the truth and are both wrong: counting censored issuers as survivors gives three defaults in six, 50%; dropping the two that left early gives three in four, 75%. Kaplan–Meier gives each censored issuer exactly the credit it earned. Figure 7-B.3 draws the cohort and the curve.
+So $\widehat{\text{PD}}(36) = 60\%$. Greenwood gives $\widehat{\operatorname{Var}} = 0.16 \times \big(\tfrac{1}{20} + \tfrac{1}{12} + \tfrac{1}{6}\big) = 0.16 \times 0.30 = 0.048$, a standard error of 22 points. Nelson–Aalen gives $\hat H = 0.2 + 0.25 + 0.333 = 0.783$ and $\exp(-0.783) = 0.457$. Counting the censored issuers as survivors would have said 50%, dropping the two that left early 75%; Kaplan–Meier gives each censored issuer exactly the credit it earned. Figure 7-B.3 draws the cohort and the curve.
 
 ![Figure 7-B.3: The six-issuer practice cohort (left) and its Kaplan–Meier survival curve (right). S falls to 0.40 at 36 months, between the naive 0.50 (censored issuers counted as survivors) and 0.25 (the two issuers that left early dropped), and the 95% Greenwood log-log band runs from 0.05 to 0.75. Illustrative: the hypothetical cohort of this section, computed from equations 7B.5 and 7B.6.](assets/figures/ch07b_km_practice_cohort.png)
 
@@ -480,7 +551,7 @@ So $\widehat{\text{PD}}(36) = 60\%$. Greenwood gives $\widehat{\operatorname{Var
 
 Kaz's question was better than it sounded, because the make-whole is the informative-censoring problem in miniature: Calloway left because its credit was good enough to refinance, so the five issuers left behind are worse than the six who started.
 
-**Where this goes next.** If the event has types (hard default versus distressed exchange), Kaplan–Meier on one type with the others censored estimates the wrong thing: $1 - \hat S_{\text{DE}}$ overstates the probability of a DE, because it treats issuers who hard-defaulted as if they could still have exchanged later. Competing risks extend this section, and §14.2 builds the cause-specific hazards and the Aalen–Johansen cumulative incidence that fix it (Law 13). §15.5 applies the same machinery to regulatory clocks, and §14.3 adds a cured fraction for re-default after an exchange.
+> **Math, Gently.** *Why the baseline cancels: a race in the wind.* Two runners on one track, in one wind. The wind slows them both by the same proportion, whatever it is doing that day, so if all you ask is *who crosses the line first*, the wind drops out and only their relative speed matters. Cox's model treats default the same way. Every issuer still standing faces the year's baseline hazard, the wind, and a flag such as "inside a quarter of its liquidity floor" multiplies its own hazard by $e^{b}$. Tiny number: two issuers at risk, one flagged, with $b = 0.7$, so the flagged one's hazard is $e^{0.7} \approx 2.0$ times the other's. If this month's baseline is 1%, the hazards are 2% and 1%; if it is 10%, they are 20% and 10%. Either way, given that one of the two is the next to fall, the chance it is the flagged one is $2/(2+1) = 2/3$. The baseline, whatever the year is doing, has divided out, and stringing those "who fell next" probabilities together over every default is the partial likelihood, next.
 
 ### Cox proportional hazards: covariates without a baseline
 
@@ -490,13 +561,7 @@ $$
 \lambda_i(t) = \lambda_0(t)\, \exp\!\big(b^\top z_i(t)\big),
 $$
 
-with $\lambda_0$ an arbitrary baseline and $z_i(t)$ covariates, possibly time-varying. Covariates scale the hazard proportionally, so $e^{b_k}$ is a hazard ratio. The magic is in how $b$ is estimated without ever specifying $\lambda_0$. At event time $t_{(j)}$, condition on the fact that exactly one issuer in the risk set $R_j$ failed. The probability that it was issuer $i$ is
-
-$$
-\frac{\lambda_0(t_{(j)})\, e^{b^\top z_i}}{\sum_{k \in R_j} \lambda_0(t_{(j)})\, e^{b^\top z_k}} = \frac{e^{b^\top z_i}}{\sum_{k \in R_j} e^{b^\top z_k}} ,
-$$
-
-and the baseline cancels. Cox's trick is a relative-value trade: the baseline is the market beta of time, common to everyone at risk, and it drops out of the ratio. Multiplying over event times gives the **partial likelihood**, with log
+with $\lambda_0$ an arbitrary baseline and $z_i(t)$ covariates, possibly time-varying. Covariates scale the hazard proportionally, so $e^{b_k}$ is a hazard ratio. At each event time, conditioning on the fact that one issuer in the risk set $R_j$ failed and asking which one, the baseline cancels, exactly as the wind did in the box. Cox's trick is a relative-value trade: the baseline is the market beta of time, common to everyone at risk, and it drops out of the ratio. Multiplying the "which one" probabilities over event times gives the **partial likelihood**, with log and score
 
 $$
 \ell_p(b) = \sum_{j} \Big[\, b^\top z_{(j)} - \ln \sum_{k \in R_j} e^{b^\top z_k} \,\Big],
@@ -505,19 +570,33 @@ $$
 \tag{7B.7}
 $$
 
-where $\bar z_j(b)$ is the risk-weighted average covariate of the risk set. The score has a desk reading: the fit is right when, on average, the issuer that defaulted looked no worse than the risk-weighted issuer standing next to it. $\ell_p$ is concave, Newton's method converges quickly, and tied event times are handled by Breslow's approximation (all $d_j$ events share the same denominator). Once $\hat b$ is in hand, Breslow's estimator recovers the baseline, $\hat H_0(t) = \sum_{t_{(j)} \le t} d_j / \sum_{k \in R_j} e^{\hat b^\top z_k}$, and $\hat S(t \mid z) = \exp\big(-\hat H_0(t)\, e^{\hat b^\top z}\big)$.
+where $\bar z_j(b)$ is the risk-weighted average covariate of the risk set. The score has a desk reading: the fit is right when, on average, the issuer that defaulted looked no worse than the risk-weighted issuer standing next to it. That is the fit Kaz ran on the eight LMTs, and its interval from two-thirds to fifty-four is what a partial likelihood says when it has six events to work with.
 
-**Cox and the logit are the same model on a grid.** Put the panel in counting-process form: one row per issuer-month, with covariates fixed within the month. If the continuous-time Cox model holds, the monthly hazard is
+**Cox and the logit are the same model on a grid.** Put the panel in counting-process form, one row per issuer-month, and the Cox model's monthly hazard has a complementary log-log link, which for small hazards coincides with the logit (derived below). Shumway's firm-month logit (§11.4.2) is a discrete-time Cox model with a smooth baseline, and the same $b$ appears in both. One object, two chapters.
+
+**The USB stick, again.** Theo's runway becomes a Cox covariate: $z_i(t) = \mathbf{1}\{\text{runway}_i(t) < 13 \text{ weeks}\}$. A fitted $b = 1.1$ *(illustrative)* means a hazard ratio of $e^{1.1} \approx 3.0$: an issuer inside a quarter of its liquidity floor defaults three times as fast as one outside it, whatever the baseline year looks like. Thirteen weeks of cash flows, reborn as a hazard ratio.
+
+The check Mags asked for on the whiteboard is a picture: plot $\ln(-\ln \hat S)$ by covariate group against $\ln t$, and proportional hazards means parallel curves; where they are not parallel, stratify the baseline by regime or interact the covariate with an era dummy (§14.1).
+
+#### The Full Derivation: Greenwood, the partial likelihood and the cloglog link
+
+*Greenwood (7B.6).* Write $\ln \hat S(t) = \sum_{j} \ln(1 - \hat h_j)$. By the delta method each $\ln(1 - \hat h_j)$ has variance approximately $\hat h_j / \big(n_j(1 - \hat h_j)\big) = d_j / \big(n_j(n_j - d_j)\big)$, the binomial variance $\hat h_j(1-\hat h_j)/n_j$ divided by $(1 - \hat h_j)^2$. The terms are asymptotically uncorrelated across event times, so the variance of $\ln \hat S$ is their sum, and one more application of the delta method, $\operatorname{Var}(\hat S) \approx \hat S^2 \operatorname{Var}(\ln \hat S)$, gives (7B.6).
+
+*The partial likelihood (7B.7).* At event time $t_{(j)}$, condition on the fact that exactly one issuer in the risk set $R_j$ failed. The probability that it was issuer $i$ is
+
+$$
+\frac{\lambda_0(t_{(j)})\, e^{b^\top z_i}}{\sum_{k \in R_j} \lambda_0(t_{(j)})\, e^{b^\top z_k}} = \frac{e^{b^\top z_i}}{\sum_{k \in R_j} e^{b^\top z_k}} ,
+$$
+
+and the baseline cancels. Taking logs and summing over event times gives $\ell_p$ in (7B.7); differentiating gives the score, with $\bar z_j(b) = \sum_{k \in R_j} z_k e^{b^\top z_k} / \sum_{k \in R_j} e^{b^\top z_k}$. $\ell_p$ is concave, Newton's method converges quickly, and tied event times are handled by Breslow's approximation (all $d_j$ events share the same denominator). Once $\hat b$ is in hand, Breslow's estimator recovers the baseline, $\hat H_0(t) = \sum_{t_{(j)} \le t} d_j / \sum_{k \in R_j} e^{\hat b^\top z_k}$, and $\hat S(t \mid z) = \exp\big(-\hat H_0(t)\, e^{\hat b^\top z}\big)$.
+
+*The cloglog link.* In counting-process form, with covariates fixed within each month, the continuous-time Cox model implies the monthly hazard
 
 $$
 h_{i,m} = 1 - \exp\!\big(-e^{\alpha_m + b^\top z_{i,m}}\big), \qquad \alpha_m = \ln\!\int_{m-1}^{m}\lambda_0(s)\,ds ,
 $$
 
-which is a complementary log-log link: $\ln\!\big(-\ln(1 - h_{i,m})\big) = \alpha_m + b^\top z_{i,m}$. When $h$ is small, $-\ln(1-h) \approx h \approx h/(1-h)$, so the cloglog and the logit coincide. Shumway's firm-month logit (§11.4.2) is a discrete-time Cox model with a smooth baseline, and the same $b$ appears in both. One object, two chapters.
-
-**The USB stick, again.** Theo's runway becomes a Cox covariate: $z_i(t) = \mathbf{1}\{\text{runway}_i(t) < 13 \text{ weeks}\}$. A fitted $b = 1.1$ *(illustrative)* means a hazard ratio of $e^{1.1} \approx 3.0$: an issuer inside a quarter of its liquidity floor defaults three times as fast as one outside it, whatever the baseline year looks like. Thirteen weeks of cash flows, reborn as a hazard ratio.
-
-**Check the proportionality.** Plot $\ln(-\ln \hat S)$ by covariate group against $\ln t$; proportional hazards means parallel curves. In credit, proportionality fails across regimes: a covariate that predicted bankruptcy before 2020 predicts distressed exchanges after it, with a different ratio (§14.1). Stratify the baseline by regime, or interact covariates with an era dummy, rather than averaging two worlds into one hazard ratio.
+which is a complementary log-log link: $\ln\!\big(-\ln(1 - h_{i,m})\big) = \alpha_m + b^\top z_{i,m}$. When $h$ is small, $-\ln(1-h) \approx h \approx h/(1-h)$, so the cloglog and the logit coincide, with the month effects $\alpha_m$ playing the role of the logit's time-varying intercept.
 
 *Used in:* §5.1.5 (the 13-week model as a hazard), §6.6 and §6.8 (the $\mathbb{Q}$ survival curve these estimates are compared against), §11.4.2 (the discrete-time hazard logit), §13.8 ($\lambda^{\text{LMT}}$), §14.2 (competing risks extend this section), §14.3 (re-default and the cured fraction), §15.5 (regulatory clocks), §17.1 (private-credit default clocks).
 

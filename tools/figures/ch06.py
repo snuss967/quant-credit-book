@@ -161,7 +161,7 @@ def fig_merton_payoff_fulcrum():
     a.plot(V, eq, color=ORANGE, linewidth=LW + 0.4, zorder=3)
     a.text(96, 118, "firm value V", rotation=40, fontsize=8, color=MUTED, ha="center", va="center")
     a.text(158, 84.5, "Debt = min(V, F)", fontsize=8.5, color=INK_2, ha="right", va="bottom")
-    a.text(124, 19, "Equity =\nmax(V \u2212 F, 0)", fontsize=8.5, color=INK_2, ha="left", va="center")
+    a.text(158, 12, "Equity =\nmax(V \u2212 F, 0)", fontsize=8.5, color=INK_2, ha="right", va="center")
     a.axhline(F, color=NEUTRAL, linewidth=0.8, zorder=1)
     a.annotate("", (70, 80), (70, 70), arrowprops=dict(arrowstyle="<->", color=INK_2, lw=1.0, shrinkA=0, shrinkB=0))
     a.plot([70], [70], "o", color=BLUE, markersize=5, zorder=4)
@@ -198,6 +198,7 @@ def fig_merton_payoff_fulcrum():
     equity = np.maximum(V - K3, 0)
     assert np.allclose(first + second + unsec + equity, V)
     cols = [SEQ_BLUE_STEPS[11], SEQ_BLUE_STEPS[7], SEQ_BLUE_STEPS[2], ORANGE]
+    b.set_axisbelow(True)
     b.stackplot(V, first, second, unsec, equity, colors=cols, edgecolor=SURFACE, linewidth=0.7)
     for k in (K1, K2, K3):
         b.axvline(k, color=SURFACE, linewidth=0.0)
@@ -248,7 +249,7 @@ def fig_merton_spread_short_end():
     ax.axhspan(CCC_LOW_BP, CCC_HIGH_BP, color=ORANGE, alpha=0.16, linewidth=0, zorder=1)
     ax.axhline(CCC_LOW_BP, color=ORANGE, linewidth=0.8, zorder=2)
     ax.axhline(CCC_HIGH_BP, color=ORANGE, linewidth=0.8, zorder=2)
-    ax.text(0.0145, 990, "CCC & Lower index OAS, any tenor:\nbetween 690 and 1,282 bp over the last three years",
+    ax.text(0.0145, 990, "CCC & Lower index OAS:\nbetween 690 and 1,282 bp over the last three years",
             fontsize=8.5, color=INK_2, ha="left", va="center")
     shades = {0.15: SEQ_BLUE_STEPS[4], 0.25: SEQ_BLUE_STEPS[8], 0.35: SEQ_BLUE_STEPS[11]}
     for sig, col in shades.items():
@@ -257,8 +258,8 @@ def fig_merton_spread_short_end():
         label_end(ax, T[-1], float(s[-1]), f"$\\sigma_V$ = {sig:.0%}", col, dx=5)
     # the three numbers printed in 6.2.4 for the 25% firm, each with a leader line into the empty space above the curves
     pts = [(1.0, "216 bp at one year", dict(xytext=(1.0, 330), ha="center")),
-           (0.25, "about 70 bp\nat three months", dict(xytext=(0.27, 215), ha="left")),
-           (2.5 / 52, "under 1 bp at two\nand a half weeks", dict(xytext=(0.0145, 215), ha="left"))]
+           (0.25, "about 70 bp\nat three months", dict(xytext=(0.27, 255), ha="left")),
+           (2.5 / 52, "under 1 bp at two\nand a half weeks", dict(xytext=(0.0145, 255), ha="left"))]
     for t, text, kw in pts:
         sv = float(merton(100, 80, 0.04, 0.25, t)["s_bp"])
         ax.plot([t], [sv], "o", color=shades[0.25], markersize=5.5, zorder=5, markeredgecolor="white", markeredgewidth=0.8)
@@ -295,7 +296,7 @@ def fig_svb_holdco_waterfall():
     fig, (a, b) = new_figure("panel2", ncols=2, gridspec_kw={"width_ratios": [1, 1.25]})
 
     # left: the loss nobody had to mark against the equity that was supposed to absorb it
-    labels = ["Unrealized\nloss on HTM\nbonds", "Total\nstockholders'\nequity", "Loss booked\non the 8 March\nsale, after tax"]
+    labels = ["Unrealized\nHTM loss", "Total\nequity", "8 March sale\nloss, after tax"]
     vals = [HTM_LOSS, EQUITY, AFS_LOSS]
     cols = [LOSS, ORANGE, LOSS]
     xs = np.arange(3)
@@ -307,7 +308,7 @@ def fig_svb_holdco_waterfall():
     for x, v in zip(xs, vals):
         a.text(x, v + 0.4, f"{v:.1f}", ha="center", va="bottom", fontsize=9, color=INK_2)
     a.set_xticks(xs)
-    a.set_xticklabels(labels, fontsize=8)
+    a.set_xticklabels(labels, fontsize=7.8)
     a.set_ylim(0, 19.5)
     a.set_ylabel("$ billions, 31 Dec 2022")
 
@@ -331,8 +332,8 @@ def fig_svb_holdco_waterfall():
     # connectors between the steps
     for x0, y0 in [(0, P_ASSETS), (1, ex_bank), (2, ex_bank), (3, left_after_cash)]:
         b.plot([x0 + 0.31, x0 + 1 - 0.31], [y0, y0], color=MUTED, linewidth=0.7, zorder=2)
-    b.plot([-0.45, 5.35], [liab, liab], color=INK, linewidth=1.1, linestyle=(0, (4, 3)), zorder=5)
-    b.text(5.4, liab, "parent\nliabilities\n3.7", ha="left", va="center", fontsize=8, color=INK_2, clip_on=False)
+    b.plot([-0.55, 4.55], [liab, liab], color=INK, linewidth=1.1, linestyle=(0, (4, 3)), zorder=5)
+    b.text(4.62, liab, "parent\nliabilities\n3.7", ha="left", va="center", fontsize=8, color=INK_2, clip_on=False)
     b.text(0, P_ASSETS + 0.4, f"{P_ASSETS:.1f}", ha="center", va="bottom", fontsize=9, color=INK_2)
     b.text(1, P_ASSETS + 0.4, f"{MINUS}{P_BANK:.1f}", ha="center", va="bottom", fontsize=9, color=INK_2)
     b.text(2, ex_bank + 0.4, f"{ex_bank:.1f}", ha="center", va="bottom", fontsize=9, color=INK_2)
@@ -341,11 +342,11 @@ def fig_svb_holdco_waterfall():
     b.text(2.0, 17.8, f"Ex-bank assets cover {cov_book:.0%} of\nthe parent's liabilities at book,\nbut only {cov_ex_cash:.0%} if the cash is\n"
            "a claim on the receivership", fontsize=8, color=INK_2, ha="left", va="top", linespacing=1.3)
     b.set_xticks(xs)
-    b.set_xticklabels(["Parent\nassets", "Stake in\nthe bank", "Assets\nex-bank", "Cash held\nat the bank", "Left\nover"], fontsize=7.8)
+    b.set_xticklabels(["Parent\nassets", "Bank\nstake", "Ex-bank\nassets", "Cash\nat bank", "Left\nover"], fontsize=7.8)
     b.set_xlim(-0.55, 4.55)
     b.set_ylim(0, 21.5)
     b.set_ylabel("$ billions, parent only")
-    fig.get_layout_engine().set(rect=(0, 0, 0.93, 1))
+    fig.get_layout_engine().set(rect=(0, 0, 0.95, 1))
     return finish(fig, "ch06_svb_holdco_waterfall"), (cov_book, cov_ex_cash)
 
 
@@ -413,13 +414,13 @@ def fig_carvana_pair():
     a.set_ylabel("CVNA close, as traded (log scale)")
     # peak, low and the last close
     a.plot([date2num(dt.date(2021, 8, 10))], [PEAK], "o", color=ORANGE, markersize=4.5, zorder=5)
-    a.annotate("$370.10 peak, 10 Aug 2021", (date2num(dt.date(2021, 8, 10)), PEAK), xytext=(-2, 11), textcoords="offset points",
+    a.annotate("$370.10\n10 Aug 2021", (date2num(dt.date(2021, 8, 10)), PEAK), xytext=(-2, 9), textcoords="offset points",
                fontsize=8, color=INK_2, ha="left", va="bottom")
     a.plot([date2num(dt.date(2022, 12, 27))], [LOW], "o", color=ORANGE, markersize=4.5, zorder=5)
     a.annotate("$3.72, 27 Dec 2022\n(down 99.0%)", (date2num(dt.date(2022, 12, 27)), LOW), xytext=(-8, -3), textcoords="offset points",
                fontsize=8, color=INK_2, ha="right", va="center")
     a.plot([date2num(dt.date(2024, 12, 31))], [203.36], "o", color=ORANGE, markersize=4.5, zorder=5, clip_on=False)
-    a.annotate("$203.36, 31 Dec 2024", (date2num(dt.date(2024, 12, 31)), 203.36), xytext=(-6, 9), textcoords="offset points",
+    a.annotate("$203.36\n31 Dec 2024", (date2num(dt.date(2024, 12, 31)), 203.36), xytext=(-6, 9), textcoords="offset points",
                fontsize=8, color=INK_2, ha="right", va="bottom")
     # the four 2023 exchange dates, numbered; alternate heights so the digits do not touch
     events = [("2023-03-22", "1", 560), ("2023-06-02", "2", 330), ("2023-07-19", "3", 560), ("2023-09-01", "4", 330)]
@@ -427,7 +428,7 @@ def fig_carvana_pair():
         xd = date2num(dt.date.fromisoformat(d))
         a.vlines(xd, 2.5, top, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
         a.text(xd, top * 1.12, n, ha="center", va="bottom", fontsize=8.5, color=INK, fontweight="bold")
-    a.text(date2num(dt.date(2023, 9, 20)), 3.0, "1  22 Mar 2023: offer launched\n2  2 Jun: offer terminated\n"
+    a.text(date2num(dt.date(2023, 9, 20)), 3.0, "1  22 Mar: offer launched\n2  2 Jun: offer terminated\n"
            "3  19 Jul: support agreement\n4  1 Sep: exchange settles", fontsize=7.8, color=INK_2,
            ha="left", va="bottom", linespacing=1.4)
 
@@ -439,23 +440,24 @@ def fig_carvana_pair():
     net = bond + shortpl
     assert abs(bond[-1] - 3.99) < 0.02 and abs(shortpl[-1] + 10.17) < 0.02          # the chapter's "$4 million" and "$10.2 million"
     xs = np.arange(4)
-    w = 0.36
+    w = 0.27
     b.set_axisbelow(True)
-    b.bar(xs - w / 2, bond, width=w, color=BLUE)
-    b.bar(xs + w / 2, shortpl, width=w, color=ORANGE)
-    b.plot(xs, net, "D", color=INK, markersize=5.5, zorder=5)
+    b.bar(xs - w, bond, width=w, color=BLUE)
+    b.bar(xs, shortpl, width=w, color=ORANGE)
+    b.bar(xs + w, net, width=w, color=MUTED)
     b.axhline(0, color=NEUTRAL, linewidth=0.8)
-    b.text(xs[-1] - w / 2, bond[-1] + 0.25, f"+{bond[-1]:.1f}", ha="center", va="bottom", fontsize=8.5, color=INK_2)
-    b.text(xs[-1] + w / 2, shortpl[-1] - 0.3, f"{MINUS}{abs(shortpl[-1]):.1f}", ha="center", va="top", fontsize=8.5, color=INK_2)
-    b.text(xs[-1] - w / 2 - 0.12, net[-1], f"net {MINUS}{abs(net[-1]):.1f}", ha="right", va="center", fontsize=8.5, color=INK_2)
+    b.text(xs[-1] - w, bond[-1] + 0.25, f"+{bond[-1]:.1f}", ha="center", va="bottom", fontsize=8, color=INK_2)
+    b.text(xs[-1], shortpl[-1] - 0.3, f"{MINUS}{abs(shortpl[-1]):.1f}", ha="center", va="top", fontsize=8, color=INK_2)
+    b.text(xs[-1] + w * 1.5 + 0.05, net[-1], f"{MINUS}{abs(net[-1]):.1f}", ha="left", va="center", fontsize=8, color=INK_2)
     b.set_xticks(xs)
     b.set_xticklabels(["Mar", "Jun", "Sep", "Dec"])
-    b.set_xlabel("2023 quarter-ends, since 30 Dec 2022")
-    b.set_ylabel("Pair P&L ($mm, before coupons)")
-    b.set_ylim(-12.5, 6.8)
-    b.legend(handles=[plt.Line2D([], [], marker="s", linestyle="", color=BLUE, markersize=6, label="long $10mm notes"),
-                      plt.Line2D([], [], marker="s", linestyle="", color=ORANGE, markersize=6, label="short $1mm stock"),
-                      plt.Line2D([], [], marker="D", linestyle="", color=INK, markersize=5, label="net")],
+    b.set_xlabel("2023 quarter-ends")
+    b.set_ylabel("Pair P&L since 30 Dec 2022 ($mm)")
+    b.set_ylim(-12.5, 6.0)
+    b.set_xlim(-0.6, 4.1)
+    b.legend(handles=[plt.Line2D([], [], marker="s", linestyle="", color=BLUE, markersize=6, label="long notes"),
+                      plt.Line2D([], [], marker="s", linestyle="", color=ORANGE, markersize=6, label="short stock"),
+                      plt.Line2D([], [], marker="s", linestyle="", color=MUTED, markersize=6, label="net")],
              loc="upper left", fontsize=7.8, handletextpad=0.2, borderaxespad=0.1, labelspacing=0.3)
     return finish(fig, "ch06_carvana_pair"), (bond, shortpl, net)
 

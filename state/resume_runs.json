@@ -102,23 +102,6 @@
    "args": "items [] + chapters 04_ch04d, 02_ch02b, 00_02 (see the 14:35 launch in the ledger)"
   },
   {
-   "name": "figs-ch1",
-   "task": "wham75u2l",
-   "runId": "wf_1738ff80-3b8",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "01_ch01_anthology_and_landscape"
-    ],
-    "stages": [
-     "figures",
-     "figcheck",
-     "resgraph"
-    ]
-   }
-  },
-  {
    "name": "lessons-rv-8-9",
    "task": "wnxwwzef6",
    "runId": "wf_261e7e3b-cd9",

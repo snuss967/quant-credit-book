@@ -27,6 +27,7 @@
 - [x] B15. Bell box Part one and Part two (L271) re-teach the normal distribution (Ch 5, Ch 6 §6.1) and risk-neutral pricing (Ch 3-B's two-measures box, Ch 6 §6.3); the two-ways box Part two (L719) re-tells Ch 4's "432 lottery tickets" box (§4.5: 432 specifications, 26 survivors). **Survivor:** the owning chapters; Ch 9 keeps glosses with its own tiny numbers (with D1, D2). *Done: done as D1 and D2; owners named, Ch 9 numbers kept.*
 - [x] B16. Kaz's whiteboard (L771–777) is a numbered list of five rules after the scene that dramatized rule 1, and Mechanism 3 (L751) already states rules 2–3. The Debrief bullet (L985) and the Finder row keep the summary. **Survivor:** the topic stays, as Kaz's five lines read in prose with where each came from; the numbered list goes (lesson 3). *Done: numbered list now prose; each line tied to its week.*
 - [x] B17. Checked and kept: the §9.11 lab spec (L872–892) and the §9.12 Spec share acceptance tests, but they specify two objects (the synthetic lab with its DGP and schemas; the real-data engine), and the §9.12 Spec points to §9.11's asserts; cutting either breaks the pointer. The ROBO "vague version" box (L213) is the book's standing ROBO joke on one constraint, not a duplicate Spec. Robeco's attribution in the 2022 coda (L515) and the tight-spread Trend Watch (L864) use different numbers and point to each other. *Done: checked; two specs, ROBO joke and Robeco numbers kept as they are.*
+- [x] B18. (Found while fixing.) "Cheapness or information" told in the residual box (L227: gift or warning, with forced seller, downgrade flow, new issue), the p.524 annotation (L247: the same three examples, then "a desk that adds a document-risk regressor... buys only the first kind") and the p.25 annotation (L334: "Whatever value survives *that* regression is cheapness. Whatever it removes was information"). **Survivor:** the box for the gift list, §9.3.4 (scene and p.25 annotation) for the resolution; L247 keeps only the document examples. *Done: annotation points to the box and §9.3.4; examples kept once.*
 
 ### (c) Templates (lesson 4) and detached judgment paragraphs (lesson 5)
 
@@ -37,6 +38,7 @@ Grep for "It breaks in", "seasoned", "the first question", "Use it for", "do not
 - [x] C3. L409, the p.610 annotation: "One number fixes three design choices. It fixes... It fixes... And it fixes...": a list in costume. Recast (with B8). *Done: done with B8; three-fixes list replaced by one quieter point.*
 - [x] C4. L687, the dealer seat box: "knows three things the manager would rather the dealer did not": recast as the dealer's view without the count. *Done: count dropped; dealer's knowledge told as one reading of the RFQ.*
 - [x] C5. L693, the LCS annotation: "Two features of the 2026 desk go beyond the definition. First, ... Second, ...": recast without enumerators; the unfilled-RFQ point points to the 8:10 vignette (L683), which already shows it. *Done: enumerators gone; unfilled pieces now point to the 8:10 vignette.*
+- [x] C6. (Found while fixing.) L265, the p.553 annotation: four bare imperatives in a row ("Shrink... Pool... Winsorize... And run..."), a list in costume. *Done: one sentence of practices; no imperatives; content unchanged.*
 
 ### (d) Boxes (lessons 6–8, 10)
 
@@ -73,3 +75,14 @@ The Finder exists at the top of the Debrief (L954–967, ten rows).
 - [x] H1. `state/rv_thread.md` assigns Ch 9 a scene (callback to Sharpe 1.9; book-level value loading; Man Numeric telecom case; home Ch 8 §8.8). Present at §9.7.2 (L610–624): fiction label, H / I / L in order, costs (financing and borrow on the remaining gross), Marcus's "a value factor with extra steps". `state/rv_pair_book.md` already ledgers it (book loading 0.7 → 0.2). No new beat; add G2's continuity note to the ledger. *Done: beat present at §9.7.2; ledger row gains the G2 continuity note.*
 
 ## Fixes
+
+## After
+
+- [x] Z1. **After** (`python3 tools/prescriptiveness.py --pre 9ac1c379053d9d0254e9d524d9a40efdec4a2c71`): pre 13,958 words, bullets 12.4%, modal 2.4, imper 1.0, rule 1.1, dialog 8.5, Math Gently 0, Seat 0. Now **28,393 words** (from 29,156; `wc` 30,082 from 30,798; 1,086 lines), bullets 6.0% (from 6.4), modal 2.0 (from 2.5), imper 0.9 (from 1.4), rule 0.8 (from 0.9), dialog 8.0, Math Gently 6 (from 8), Seat 4. **Growth 2.03×** (from 2.09×), above the 1.6–1.9× band; per the orchestrator ruling the rest is single-telling scenes (the two Long Scenes, the CI week, the Pair Book x-ray, the paper rebalance) and protected text, so nothing further was cut for length. *Done: metric rerun; every fact now told once.*
+
+## Notes for the orchestrator
+
+- Protected items checked after the pass: equations (9.1)–(9.6) unchanged; 15 Source Extractions with page numbers; 3 Trend Watches untouched; 5 figures; 6 exercises; 7 Appendix F links; Resource Graph URLs identical to the pre-pass file. No code block added (the one pre-existing ```text Spec remains). `$$` lines even; currency escaped.
+- Shared state touched: `state/cast_bible.md` (C7 gains "Ch 9 applied"; the Ch 10 Coda line gains "Ch 9 aligned" for the April 2025 precedent) and `state/rv_pair_book.md` (the book-level value-loading row gains the same continuity note). No new RV beat: Ch 9's assigned scene already stands in §9.7.2.
+- Open, not fixed here: the §9.11 lab spec and the §9.12 Spec still list overlapping acceptance tests (two objects, mutual pointer; see B17). Ch 11 (L743) and the Preface still say Kaz "has never read a credit agreement" (C7), outside this chapter.
+<!-- STATUS: COMPLETE -->

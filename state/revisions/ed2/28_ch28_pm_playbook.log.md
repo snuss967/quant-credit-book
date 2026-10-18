@@ -9,16 +9,16 @@
 - [x] 7. **[§28.3 head] · MATH-GENTLY (box 4): exponential decay and half-life.** Coffee cooling; tiny number: α₀ = 3% and a 0.6% round trip give h*  — DONE: Box 4 coffee, 0.4%→5 weeks; Priya ladder walk; roles swapped; templates cut.
 - [x] 8. **[§28.4 head] · MATH-GENTLY (box 5): Kelly and log growth.** Why log: a 50% loss needs a 100% gain; ruin is minus infinity. Tiny number: a  — DONE: Box 5 Kelly 60/40 coin; (28.9) stated; discrete Full Derivation with sensitivities.
 - [x] 9. **[§28.4 "Continuous time, and the jump"] · MATH-GENTLY (box 6, two parts): Poisson jumps and Itô's ½σ².** *Part one:* normal vs Poisson in  — DONE: Box 6 Poisson/Itô two parts; (28.10)-(28.11) stated; jump Full Derivation; Kaz pronoun.
-- [x] 10. **[§28.4 "Which measure, and which loss"] · MATH-GENTLY (box 7): P vs Q.** Risk-neutral is the bookkeeping that makes today's price fair, no — DONE: Box 7 P vs Q: 450bp CDS, 7.5% vs 3.1%, f*=0.
+- [x] 10. **[§28.4 "Which measure, and which loss"] · MATH-GENTLY (box 7): P vs Q.** Risk-neutral is the bookkeeping that makes today's price fair, no — DONE: Box 7 P vs Q: 300bp CDS, 5% vs 2%, f*=0 (Ex 2 owns 450bp).
 - [x] 11. **[§28.4 Case Study: CCC decompression] · EXPAND-SCENE (to 1,200–1,600 words, live, Sept–Oct 2026).** Rafe's HY book has leaned into CCC car — DONE: Rafe CCC scene; Sunita docs L_max=1; card; TW moved to end.
 - [x] 12. **[§28.4 case, after the decision] · ANOTHER-SEAT (box): the CLO manager.** Same decompression from the seat that must keep a 7.5% CCC bucke — DONE: CLO seat box: Kundu 7.5% bucket, sells higher-priced CCCs first.
 - [x] 13. **[§28.5 head] · MATH-GENTLY (box 8): VaR, the lognormal, and √T.** A 1% daily σ gives a 99% one-day VaR of 1 − e^{−2.33×0.01} ≈ 2.3%; ten d — DONE: Box 8 VaR 2.3%, √10; FRTB Full Derivation subsection; 22e-4 kept.
 - [x] 14. **[§28.5 Case Study: Third Avenue] · NEW-SCENE, Long Scene (2,000–2,800 words), promoted to `####`.** *Ines's replay ritual (before 22 Sep 2 — DONE: Third Avenue four-folder replay; card 10 Dec; NY Fed grading; SE annotation endline adjusted.
 - [x] 15. **[§28.5 after the scene] · WHEN-TO-APPLY inside the scene.** Give (28.16)–(28.17) to Ines at the card's answer: COL is a pre-trade number f — DONE: Ines's four clocks at card answer; Block 4 opens from beat (i).
 - [x] 16. **[§28.6 head] · MATH-GENTLY (box 9, two parts): a random walk with drift, and the PM's call.** *Part one:* the reflection trick in one pict — DONE: Box 9 mirror 19% and zero-skill call 0.8%; stop Full Derivation; footnotes as dialogue.
-- [ ] 17. **[§28.6 Case Study: March 2020 and March 2026] · NEW-SCENE, Long Scene (2,000–3,000 words), promoted to `####`.** *Replay for March 2020, l
-- [ ] 18. **[§28.6 scene, beat (ii)] · ANOTHER-SEAT (box): the dealer desk.** JPMorgan Q1 2020 call, 14 Apr 2020: "our bridge book commitments were ma
-- [ ] 19. **[§28.7] · MATH-GENTLY (box 10): a ceiling that moves when you lean on it.** The fixed point in two iterations the reader can redo: with A 
+- [x] 17. **[§28.6 Case Study: March 2020 and March 2026] · NEW-SCENE, Long Scene (2,000–3,000 words), promoted to `####`.** *Replay for March 2020, l — DONE: Bram March 2020 replay, four folders, card 20 Mar; 2026 coda; Block 5 retuned.
+- [x] 18. **[§28.6 scene, beat (ii)] · ANOTHER-SEAT (box): the dealer desk.** JPMorgan Q1 2020 call, 14 Apr 2020: "our bridge book commitments were ma — DONE: Dealer seat: JPM $820mm bridge, Dimon, BofA $450mm; two opposite-sign businesses.
+- [x] 19. **[§28.7] · MATH-GENTLY (box 10): a ceiling that moves when you lean on it.** The fixed point in two iterations the reader can redo: with A  — DONE: Box 10 fixed point 4.74→1.86→3.61→2.95; band Full Derivation; levers crossed out.
 - [ ] 20. **[§28.8 after the hybrid-shop case] · NEW-SCENE, Long Scene (2,500–3,000 words), promoted to `####`: "Dov Adler's Year-End Review: the Pair
 - [ ] 21. **[§28.8] · LIST-TO-NARRATIVE and keep the reviewer fixes.** D7 (calibration, ρ, hit rate with SE) and the covariates-vs-estimator softening
 - [ ] 22. **[§28.9–28.10] · BRIDGE and the Finder table.** The dashboard table is the payoff and stays; the desk-head reviewer's C9 asks (P&L panel, m

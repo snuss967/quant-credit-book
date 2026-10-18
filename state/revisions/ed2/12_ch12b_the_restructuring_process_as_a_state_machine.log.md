@@ -9,10 +9,10 @@
 - [x] 7. [§12B.5 DIP/roll-up] MATH-GENTLY #5 + FULL-DERIVATION-MOVE — pie box; one-line statement; Saks two cases; milestones tied to 20 Feb.
 - [x] 8. [§12B.5 confirmation] NEW-SCENE, the Purdue jump — 660 words; guard changed on one date; Container Store split.
 - [x] 9. [§12B.5 clock table] WHEN-TO-APPLY in dialogue — Ines: lender's name rows; circles DIP-order rows.
-- [ ] 10. [§12B.6 call spreads] MATH-GENTLY #6
-- [ ] 11. [§12B.6 fulcrum] MATH-GENTLY #7, two parts
-- [ ] 12. [§12B.6 plan value] MATH-GENTLY #8 + FULL-DERIVATION-MOVE + ANOTHER-SEAT (Oaktree)
-- [ ] 13. [§12B.6 absolute priority] BRIDGE to Saks
+- [x] 10. [§12B.6 call spreads] MATH-GENTLY #6 — bathtubs as prose gloss (Ch 6-B owns concept; ten-box cap).
+- [x] 11. [§12B.6 fulcrum] MATH-GENTLY #7, two parts — bag box, pi_j example; Kaz callback, pronoun fixed.
+- [x] 12. [§12B.6 plan value] MATH-GENTLY #8 + FULL-DERIVATION-MOVE + ANOTHER-SEAT (Oaktree) — \$10/\$9 box; strike statement; Oaktree seat; derivation moved.
+- [x] 13. [§12B.6 absolute priority] BRIDGE to Saks — two sentences: cancelled equity, rejecting class, trust as 'something'.
 - [ ] 14. [§12B.6 cramdown] NEW-SCENE Long Scene B: Momentive + MATH-GENTLY #9
 - [ ] 15. [§12B.7] MATH-GENTLY #10 two parts + FULL-DERIVATION-MOVE + WHEN-TO-APPLY
 - [ ] 16. [§12B.8] SHOP-LIFE vignette: the transfer notice + LIST-TO-NARRATIVE

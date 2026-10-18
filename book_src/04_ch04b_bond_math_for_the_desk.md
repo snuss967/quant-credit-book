@@ -627,9 +627,21 @@ A make-whole is a call struck at the issuer's own credit spread equal to $m_w$, 
 
 ## 4B.8 Case Study: The Fallen Angel, Repriced in Every Measure
 
-*Wednesday, 7:40 a.m.* Kaz had either not gone home, or gone home and come back in the same sweater, which on this desk amounts to the same thing. Overnight they had rebuilt all six columns from one object: the note's twenty coupons, priced against a Treasury curve held flat at each date's ten-year par yield (FRED, DGS10). The flat curve is a deliberate stylization. It sets the shape term in $Z - G$ of §4B.6 to zero, so any gap left between two columns has to be a convention. (Exercise 2 puts the real curve back.)
+#### Long Scene: One Month, Six Rulers, One Pot
 
-The first hour went where first hours on a quant desk go, which is reconciliation. Kaz's Z-spread for 23 March sat three basis points from the vendor's. Forty minutes later the reasons were on the whiteboard: the vendor fits a smoothed Treasury curve and values the bond for settlement two days later, with accrued. Both choices are defensible, both are on page 41 of a methodology PDF nobody had opened since 2017, and neither is visible in a column called `z_spd`. Mags watched the whiteboard fill. "In 1994 I'd have called the salesman and he'd have said 'call it eight hundred.' Same answer, and nobody lost a night's sleep." She paused. "Mind you, he was lying about something else."
+*The cold open's replay, continued on Wednesday 7 October 2026 from 7:40 a.m. The tape is real, cut at 23 March 2020 and released one date at a time as Ines chose; the Treasury yields, the ratings, the Federal Reserve's announcements, the Ford deal and the market-wide figures are sourced in the text. The bond is the cold open's stylized composite, and the desk's position, its P&L and every line of dialogue are invented (illustrative).*
+
+#### Beat 1: The First Hour Is Reconciliation
+
+*Quant-Shop Life, a fictional composite: the first hour of a systematic credit desk.* Kaz had either not gone home, or gone home and come back in the same sweater, which on this desk amounts to the same thing. Since the whiteboard session of §4B.6 the two of them had rebuilt all six columns from one object: the note's twenty coupons, priced against a Treasury curve held flat at each date's ten-year par yield (FRED, DGS10). The flat curve is a deliberate stylization. It sets the shape term in $Z - G$ of §4B.6 to zero, so any gap left between two columns has to be a convention. (Exercise 2 puts the real curve back.)
+
+The first hour went where first hours on a quant desk go, which is reconciliation. Kaz's Z-spread for 23 March sat three basis points from the vendor's. Three basis points is nothing on a bond at 804 and everything to a test suite, because a model that cannot reproduce the vendor's number cannot tell you which of the two numbers is wrong. Theo opened the methodology PDF he had bookmarked on Tuesday night, sixty-two pages with a cover in a font nobody uses any more. Forty minutes later the reasons were on the whiteboard: the vendor fits a smoothed Treasury curve and values the bond for settlement two days later, with accrued. Both choices are defensible, both are on page 41 of a methodology PDF nobody on the desk had opened since 2017, and neither is visible in a column called `z_spd`. Theo wrote them on a sticky note, *curve: smoothed; settle: T+2; accrued: yes*, and stuck it to the bezel under Ines's Post-it. It was, he pointed out, the definitions tab.
+
+Then Kaz checked the thing a replay has to check before anything else: that the vendor's number for 23 March 2020 was the number the vendor had actually published on 23 March 2020, and not a later restatement wearing an old date. Vendors do restate, and a backtest run on restated history has a time machine in it. Market makers describe the cure in public; on Jane Street's *Signals and Threads* (episode 29, 2 September 2026) an engineer explains the firm saving its market data together with the time it was received, so that a vendor's later correction cannot quietly rewrite what the desk knew. Ines's desk has done the same with every vendor file since before Kaz arrived. The archived file from the morning of 24 March 2020 said 804. Nobody cheered, because this is not a cheering kind of task. Kaz ticked a box and moved on.
+
+Mags had watched the whiteboard fill. "My first year, I'd have called the salesman and he'd have said 'call it eight hundred.' Same answer, and nobody lost a night's sleep." She paused. "Mind you, he was lying about something else."
+
+#### Beat 2: The Table, and the Rows That Are Only Rulers
 
 Then Kaz put up the table.
 
@@ -654,8 +666,6 @@ The I-spread equals G here, because the stylized swap curve is the Treasury curv
 
 "Now," said Ines, "which rows are the pot?"
 
-### Rows that are only rulers
-
 Start with the gaps that would exist on a day when nothing happened. G and Z differ by 2.5bp in February, 19.5bp in March and 7.3bp in June, and on a flat curve all of it is compounding, which grows with the square of the level. The two asset swaps differ by exactly $100/P$: 0.92 at the premium, 1.41 at the trough. PECS sits *below* Z in February and *above* it in March, because a CDS spread is a loss rate per unit of par, Z one per unit of price, and the bond crossed par on the way down (§4B.6). The OAS row equals Z on all three dates, and not by rounding: the make-whole is struck at T+50, the bond never traded tighter than 196bp, and by the proposition of §4B.7 a make-whole is never exercised while the spread exceeds the make-whole spread. The vendor's `oas` column was Z with a more expensive name.
 
 Mags, who regards any number with "adjusted" in its name as a number somebody wanted to be different, was briefly delighted. "The one time an adjustment was honest, it was zero."
@@ -666,25 +676,55 @@ Mags, who regards any number with "adjusted" in its name as a number somebody wa
 
 > **Math, Gently.** *Six rulers, one length.* G, Z, the two asset swaps and PECS are rulers with different units and zero points. On any one day they rank bonds almost identically, which is why ROBO found them "highly correlated." Their *changes* and *ratios* are another matter. Warm a room from 10°C to 20°C and Celsius says the temperature doubled; Fahrenheit says 50°F to 68°F, up 36%. Nothing got twice as hot. In Table 4B.1 the same bond's spread multiplied by 3.3 on the par asset-swap ruler and by 5.1 on the PECS ruler, in the same month. For compounding the conversion is one line of Taylor: $\ln(1+x) \approx x - x^2/2$, so $y^{\text{cc}} = f\ln(1 + y/f) \approx y - y^2/(2f)$, and at $y = 9\%$ with $f = 2$ the gap is $0.09^2/4 \approx 20$bp. The full version is in §4B.2.
 
-### Rows that moved
-
 Every ruler agrees that something enormous happened between 20 February and 23 March: the note's spread rose by roughly six percentage points (market-wide, about 250bp for investment grade and 550bp for high yield, by the count in New York Fed Staff Report 986). They disagree about *how* enormous. G rose 626bp, Z 609, the par-par asset swap 471, the market-value asset swap 768, PECS 759: a 300bp disagreement about the change, which is the left-hand side of every regression in Part III and the input to every trend signal in Chapter 10. In relative terms, which is how DTS (Law 3) measures, the multiplier runs from 3.3 to 5.1, so the same bond's measured volatility depends, by half, on which column was loaded. Figure 4-B.4 shows the five rulers on all three dates.
 
 ![Figure 4-B.4: On 23 March the rulers for one bond sit about 280bp apart (left), and from 20 February the spread widened by 3.3 times on the par-par asset swap but 5.1 times on PECS (right). Illustrative: the stylized 4.50% ten-year note of Table 4B.1 on a flat Treasury curve (FRED DGS10); the OAS equals Z on all three dates.](assets/figures/ch04b_five_rulers.png)
 
-Then the P&L, the one row on which money moved. The note lost 37.65 points. Split it as §4B.4 did, around February's $D^{\text{mod}} = 8.11$, $C^{\text{mod}} = 78.0$ and $P = 108.38$: the 76bp Treasury rally contributed $+6.7$ points; 626bp of spread widening contributed $-55.0$; convexity on the 550bp total yield move gave back $+12.8$; and the residual, mostly the third-order term, was $-2.1$. An explain without its residual line claims a precision it does not have. Figure 4-B.5 lays the four lines out as a waterfall.
+#### Beat 3: 23 March, the Card, and the Rows That Moved
+
+Ines released nothing new. "It's 23 March," she said. "The Fed has said it will buy investment-grade bonds and hasn't bought one. S&P still has Ford at investment grade. Theo's card is under my coffee. Kaz, Mags, here's yours, in the replay's terms." She dealt two cards.
+
+> *You hold \$10mm of the note and \$9.5mm of ten-years short. Write three things: what you do with the hedge, what you do with the position, and which number you report to the PM.*
+
+Kaz wrote: *Hedge: re-size to the analytic ratio, 0.545; buy back \$4.05mm. Position: hold. Report: CS01, \$5,236 a basis point.* "It's what the durations say," Kaz said. "Both of them."
+
+Mags wrote three words and then said the rest aloud. *Off. More. Price.* "At 824 a ten-year Treasury isn't a hedge for this bond. It's a second opinion about a different bond. The only question at 824 is fallen angel or falling knife, and that depends on who's selling."
+
+"Then ask it," said Ines, who never writes a card in her own replays. "Who's on the other side of the index exit at the end of the month?" She did not answer it. Chapter 1 had (§1.8.2): a rulebook seller, an index fund that must sell a bond the day it stops being investment grade and knows nothing about Ford, which is the best kind of seller to buy from if you can carry the bond until the rule-followers are done.
+
+Theo turned his own card over. He had written it at 6:25, before the whiteboard and before page 41: *1. Z, with its definition attached. 2. Not CS01: it says the bond got safer. Something that counts in percent. 3. Keep the hedge, but find out why it lost money.* Underneath, in different ink, he had answered the line his card had not asked: *Position: hold. Article III.* Kaz, who had read Article III for the first time an hour earlier, nodded. "The make-whole. Struck at T+50, so at 824 it's worthless, by the proposition. Nobody can call the upside away."
+
+"That's why I hold," said Theo.
+
+Ines graded the cards against the P&L, the one row on which money moved. The note lost 37.65 points. Split it as §4B.4 did, around February's $D^{\text{mod}} = 8.11$, $C^{\text{mod}} = 78.0$ and $P = 108.38$: the 76bp Treasury rally contributed $+6.7$ points; 626bp of spread widening contributed $-55.0$; convexity on the 550bp total yield move gave back $+12.8$; and the residual, mostly the third-order term, was $-2.1$. An explain without its residual line claims a precision it does not have. Figure 4-B.5 lays the four lines out as a waterfall.
 
 ![Figure 4-B.5: The note's 37.65-point loss from 20 February to 23 March, explained from February's duration and convexity: a 6.7-point gain from the Treasury rally is swamped by a 55.0-point loss from spread widening, convexity gives back 12.8, and 2.1 points are left as residual. Illustrative: the stylized 4.50% ten-year note, with the explain function of Listing 4-B.1 and the real DGS10 moves of Table 4B.1.](assets/figures/ch04b_pnl_explain_waterfall.png)
 
 Then the hedge. In February the analytic ratio of §4B.5 said to short \$9.5mm of the ten-year against \$10mm of the note. The ten-year rallied 7.3 points, so the hedge *lost* about \$0.69mm while the note lost \$3.76mm. It did exactly what it was sized to do, against a rate move with the opposite sign from the one that mattered.
 
+ROBO had been right on Tuesday: the six spreads were highly correlated with each other. Nobody had asked it about the correlation that cost money, the one between the Treasury yield and the spread, and in March 2020 that one was sharply negative.
+
 > **[SOURCE EXTRACTION]** *Ben_Dor_Quantitative_Credit_Portfolio_Management p.191:* "If this correlation is negative, the empirical duration would be lower than the analytical one and may even end up being negative."
 >
 > **Annotation.** March 2020 is that sentence with numbers in it. Treasury yields fell while the note's spread rose eight times as far, so $\rho_{y,s}$ was sharply negative and the analytic hedge pointed the wrong way. Ben Dor's Table 7.1 (p.192, 1998–2009 data) puts the Ba bucket's empirical hedge ratio at maximum spreads at −0.26: the right hedge at 824bp was a small *long*, or nothing. The modern departure: the correlation is a regime, not a constant. In 2022 it flipped, and "no hedge" lost on rates and spreads together (§8.7). The desk reports $D^{\text{mod}}$ and hedges with the rolling empirical duration of §8.2, and shows both.
 
-### Rows that became prices again
+So the hedge line of every card could be graded. Kaz's re-size to 0.545 was right by the analytic measure of §4B.5, under which the February hedge was 74% too large, and wrong by Ben Dor's, under which the right hedge at 824 was a small long or nothing. Mags's *off* was right. Theo's *keep the hedge* was wrong, and his *find out why it lost money* was the right question, the one §8.2 spends a chapter on.
+
+"Before anybody tapes *no hedge* to a monitor," Mags said, "in March rates fell because everyone was frightened, and spreads rose for the same reason. In 2022 rates rose because of inflation, and spreads rose anyway. Same hedge, opposite answer. Chapter 8 has the bill" (§8.7).
+
+The number for the PM was graded against the two risk reports for the same position. Per \$10mm, DV01 (equal to CS01 for a bullet) had fallen from \$8,785 on 20 February to \$5,236 on 23 March, down 40%; DTS, using $D^{\text{mod}}$ and the 198bp and 824bp G-spreads, had gone from 1,605 to 6,100, up 3.8 times. The CS01 report said the position had become safer. The DTS report said it had become almost four times riskier. Both were arithmetically right, and only one described a market in which spreads were moving in percent, which is what the cold open's "per basis point it got less risky" was missing (Figure 4-B.3). Kaz's card reported the first. Theo's line 2 described the second without knowing its name. Mags's *price* was right for a different reason: at 70.73 the note sat on the boundary below which every spread stops being worth quoting, and the table at the end of this section says so in its last row.
+
+The position line was graded by the tape, which the next beat runs to June: *hold* and *more* both made money, and *more* made more. Theo's line 1 got the one grade nobody argued with: the definition attached to Z had been worth forty minutes of the morning, and the column without it would have carried an unexplained gap into every backtest the desk ran on it.
+
+The reader's card, from the cold open, is graded the same way. A card that kept the hedge because the duration column said so made the February trade twice. A card that took the hedge off because Treasuries always rally in a panic won in 2020 and lost in 2022, for the same reason. A card that said *price* for the column, *DTS* for the risk line and *it depends on why rates are moving* for the hedge would have come back from Ines with nothing written on it, which on this desk is full marks.
+
+#### Beat 4: Rows That Became Prices Again
+
+Ford was an extreme of a pattern, not an exception to it. Downgrades out of investment grade in the first months of 2020 exceeded the total for the whole of the 2008–09 crisis, by the count in a New York Fed post (Liberty Street Economics, 16 February 2022), and across 1,188 fallen-angel bonds the median OAS over BBB went from 56bp a year before the downgrade to 278bp in the downgrade month (QML Solutions, "Fallen Angels Part 2: Forced Selling and Recovery," 17 December 2025). The stylized note's 824 was the far tail of that distribution, on the worst day of the worst month.
 
 The rest is the tape, which a backtest cannot see unless somebody writes it down. The Federal Reserve announced its corporate credit facilities on 23 March, the table's middle column, before buying a single bond. S&P cut Ford to BB+ on 25 March; Moody's had rated it Ba1 since September 2019, so with two high-yield ratings Ford's bonds left the investment-grade index at the month-end rebalance (§1.8.2). On 9 April the Fed extended its facilities to issuers that had been investment grade on 22 March, which covered Ford. And on 17 April Ford came to the high-yield market itself.
+
+Ines released April one date at a time. At 9 April Kaz redrew the absorber line on Chapter 1's graph and moved it across the boundary into high yield. At 17 April she put a single headline on the screen and said nothing, and Theo read it twice. "That's the first number this month that came with its definition attached," he said. "Par, a coupon, a size. No curve."
 
 > **View From Another Seat.** *The issuer.* On 17 April 2020 Ford priced \$8bn of unsecured notes in three tranches: \$3.5bn of three-year notes at 8.50%, \$3.5bn of five-year at 9% and \$1bn of ten-year at 9.625%, the ten-year after being marketed at around 11% (Bloomberg, via BNN Bloomberg, 17 April 2020). From the treasurer's seat, none of the six columns exists. A bond sold at par has $c = y$ (§4B.2), so the coupon *is* the yield, and the yield is ten years' cost of capital, more than double the old 4.50% coupon. For the desk it was the cleanest spread observation of the month: no curve, no compounding convention, no recovery assumption, and \$8bn changed hands at it. The move from talk to print, about 140bp on the ten-year, measured demand in the one unit nobody argues with.
 
@@ -694,7 +734,7 @@ By 30 June the stylized note was back at 92.39 and 484bp over, and the rulers ha
 
 ### When to reach for which number
 
-A seasoned desk starts from the question and lets it choose the ruler.
+Before the desk broke for lunch, Kaz turned the morning into one more table, a row per question, because the question chooses the ruler and not the other way round.
 
 | The question you are actually asking | The number | Where it breaks |
 | :--- | :--- | :--- |
@@ -712,6 +752,8 @@ Ines read the table twice and tapped the last row. "That's the pot. Everything a
 
 ## 4B.9 Specification for AI Implementation: `bondmath.py`
 
+At 7:40 on Wednesday the function Kaz needed first was the one that would not reconcile: `z_spread` with a settlement date. The vendor valued the note for settlement two days after the trade, with accrued (§4B.8); Kaz's overnight version valued it on the trade date and had no argument through which a settlement date could even be passed. The three basis points were not an arithmetic bug. They were a question the function's signature had no way to ask, and the rest of this section follows from taking that seriously.
+
 **The Spec You Hand the Robot.** *What ROBO built from the vague version* ("add a spread function to the bond library"): `spread(bid, ask) = ask - bid`, with a docstring, a unit test and full coverage. It was correct.
 
 > **[SOURCE EXTRACTION]** *Bohn_Stein_Active_Credit_Portfolio_Management p.68:* "The word spread is perhaps the most overloaded (and sometimes abused) word in finance."
@@ -726,9 +768,9 @@ Ines read the table twice and tapped the last row. "That's the pot. Everything a
 
 *Inputs and outputs.* Prices per 100 face, dirty unless a name says otherwise; rates, spreads and hazards as annual decimals (basis points only for display); times in years. A curve is any function `disc(t)` returning discount factors, flat (`flat_curve`) or bootstrapped (`curve_from_par`). Results are floats or dicts with named fields. The lattice runs on a grid: `ho_lee` builds the tree, `on_grid` places the flows, `lattice_price` runs §4B.7's backward induction.
 
-*When to use it, and when not.* Use it for research, for the risk report's analytics, and to check a vendor; it found Kaz's three basis points. It is not a production library: no holiday calendars, no odd coupons beyond $w$, a CDS premium leg paid continuously on ACT/360 (within a basis point or two of §24.2's quarterly model), and a Ho–Lee tree whose normal rates go negative at the bottom nodes. A lognormal desk will disagree with this OAS by a few basis points, and each will be right about its own model (Veronesi p.467, §4B.7).
+*Where it belongs.* It is built for research, for the risk report's analytics, and for checking a vendor; it found Kaz's three basis points. It is not a production library: no holiday calendars, no odd coupons beyond $w$, a CDS premium leg paid continuously on ACT/360 (within a basis point or two of §24.2's quarterly model), and a Ho–Lee tree whose normal rates go negative at the bottom nodes. A lognormal desk will disagree with this OAS by a few basis points, and each will be right about its own model (Veronesi p.467, §4B.7).
 
-*The edge cases that bite.* First, `pecs` on a bond at or below its assumed recovery has no solution, since no hazard can make a bond worth less than its recovery. The function raises, and the right response is to quote price and recovery, not to lower $R$ until the solver is happy. Second, a clean price passed as dirty gives a smooth, plausible yield that is off by the accrued; the solver cannot know, so the argument is named `p_dirty`. Third, the lattice refuses a cash flow off its step dates, because rounding a coupon to the nearest node moves it by up to half a step and the OAS absorbs the error silently.
+*Where it refuses, and why.* The function `pecs` on a bond at or below its assumed recovery has no solution, since no hazard can make a bond worth less than its recovery; it raises, as it did on the SVB holdco note at 40 in §4B.3's replay, and the right response is to quote price and recovery, not to lower $R$ until the solver is happy. A clean price passed as dirty gives a smooth, plausible yield that is off by the accrued; the solver cannot know, so the argument is named `p_dirty`. And the lattice refuses a cash flow off its step dates, because rounding a coupon to the nearest node moves it by up to half a step and the OAS absorbs the error silently.
 
 *Tests.* Every identity in the chapter is an assertion at the bottom of the listing, from the 0.50 of accrued and the 31st rule to the lattice identities of §4B.7 and the make-whole proposition, and so is the 23 March column of Table 4B.1.
 
@@ -737,6 +779,19 @@ Ines read the table twice and tapped the last row. "That's the pot. Everything a
 *Used in:* §5.2 and §5.9 (durations and convexities in the spread-return expansion), §6-B.8 (Halvorsen's Z-spread), §8.1–§8.4 (excess returns, empirical duration, DTS), §9.2 and §10.3 (DTS as beta and as the volatility scaler), §12.2–§12.3 (carry and spread per unit of risk), §15.1 (call and make-whole economics), §19.2 (`oas`, `oasd`), §21.1 (`discount_margin`), §24.2–§24.3 (`hazard_price`, `pecs`), App F.
 
 ## 4B.10 Desk Debrief
+
+**Finder.** One row per tool: where its equation lives, the picture that explains it, the scene that shows when it works or breaks, and the function in `bondmath.py` (Listing 4-B.1) that computes it.
+
+| Concept | Equation | Intuition (box) | Judgment (scene) | Code |
+| :-- | :-- | :-- | :-- | :-- |
+| Price, accrued, yield | Street formula and premium identity, §4B.1–§4B.2 | Post-dated cheques (§4B.1); the one dial (§4B.2) | Agnieszka's thirty-first (§4B.1): accrued to settlement, thirty-first to thirtieth | `accrued`, `cashflows`, `price`, `ytm` |
+| Duration: Macaulay, modified, effective, spread, key-rate | $D^{\text{mod}} = D^{\text{Mac}}/(1+y/f)$ and $D^{\text{eff}}$, §4B.3 | The beam and the hill's slope (§4B.3) | Kaz's three bonds and the SVB replay (§4B.3): near recovery the rate duration is $1/(\lambda + r)$, whatever the yield formula says | `risk_at_yield`, `effective`, `key_rate_durations` |
+| Convexity, in three meanings | $C = D^2 + $ dispersion; $dD/dy = D^2 - C$, §4B.4 | Two trucks; Jensen's coin (§4B.4) | The point and a half on 9 March 2023 (§4B.3) and the 12.8 points of 2020 (§4B.4, §4B.8); Theo's question about the trend sense (§4B.4) | `risk_at_yield`, `explain` |
+| DV01, CS01, DTS | DV01 and the DTS expansion, §4B.5 | Percent, not basis points (§4B.5) | The number for the PM on 23 March (§4B.8, Beat 3): CS01 said safer, DTS said four times riskier | `dv01`, `fallen_angel_row` |
+| Hedge ratio, Treasury and pair | $-\text{DV01}_{\text{bond}}/\text{DV01}_H$, §4B.5 | The Pair, PB-03 before it opens (§4B.5) | The hedge line of the 23 March cards (§4B.8, Beat 3): analytic 0.545 against Ben Dor's −0.26; Ines's "the alpha is the size of the hedge-ratio error" | `dv01`, `effective` (empirical ratio: §8.2) |
+| The curve and the eight spreads | Bootstrap; Z, ASW, DM and PECS, §4B.6 | Bootstrapping is peeling (§4B.6); six rulers, one length (§4B.8) | Kaz's whiteboard (§4B.6) and the reconciliation (§4B.8, Beat 1): attach the definition; the CLO seat reads DM differently (§4B.6) | `curve_from_par`, `z_spread`, `asw_par`, `discount_margin`, `pecs` |
+| YTW, OAS, the lattice and the make-whole | Ho–Lee fit, backward induction, the four identities and the proposition, §4B.7 | What "risk-neutral" means (§4B.7) | Theo's objection (§4B.7): issuers call for covenants and M&A; the 1:10 a.m. assert; *Article III* on the card (§4B.8, Beat 3) | `ytw`, `ho_lee`, `on_grid`, `lattice_price`, `oas` |
+| Implied numbers and the solver | Bracketed bisection, §4B.9 | An implied number is a question asked backwards (§4B.9) | PECS at 40 in the SVB replay (§4B.3): the solver's refusal is the signal | `solve`, `pecs` |
 
 - **A bond is a list, and a yield is a price in another font.** Every spread is the one constant that makes the list reprice against some curve. Name the curve, the compounding and the dirty price, or the number means nothing. (Law 11)
 - **Duration answers two questions that share a number by coincidence.** For a callable, a floater or a bond at 60, reprice; in a crisis, hedge with §8.2's empirical duration, because the analytic one can have the wrong sign. (Law 1)

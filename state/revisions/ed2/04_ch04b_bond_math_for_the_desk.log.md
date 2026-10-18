@@ -18,6 +18,6 @@
 - [x] 16. [4B.7 Yield-to-worst and the Poker Table] WHEN-TO-APPLY inside the scene — Theo objects (covenants, M&A); Ines and Kaz answer; annotation confirms.
 - [x] 17. [4B.7 The production lattice] MATH-GENTLY (what "risk-neutral" means) + FULL-DERIVATION-MOVE + LIST-TO-NARRATIVE — one-step Q box; theta fitting moved; four asserts; compounding bug.
 - [x] 18. [4B.7 Negative convexity] BRIDGE — sketch kept untouched; one bridging sentence into the make-whole.
-- [ ] 19. [4B.8 Case Study, promote to `#### Long Scene: One Month, Six Rulers, One Pot` with `####` beat headings] EXPAND-SCENE (2,500–3,000 words) + SHOP-LIFE
-- [ ] 20. [4B.9 Specification] BRIDGE
-- [ ] 21. [4B.10 Desk Debrief] Finder table at the top
+- [x] 19. [4B.8 Case Study, promote to `#### Long Scene: One Month, Six Rulers, One Pot` with `####` beat headings] EXPAND-SCENE (2,500–3,000 words) + SHOP-LIFE — four beats: reconciliation, rulers, 23 March card graded, April tape.
+- [x] 20. [4B.9 Specification] BRIDGE — opens on z_spread settlement moment; edge-case labels de-templated.
+- [x] 21. [4B.10 Desk Debrief] Finder table at the top — eight-row Finder table with sections, boxes, scenes, functions.

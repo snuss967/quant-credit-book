@@ -461,6 +461,8 @@ Every Part IV chapter needs four definitions, and this section gives each of the
 
 ### The waterfall as call spreads
 
+Chapter 6-B built the capital structure as a ladder of call spreads (§6-B.1.4). Here is the same ladder with plumbing, because a restructuring is easier to see as water than as options. Stack the classes as bathtubs, one under another, each with an overflow pipe that feeds the next, and pour the company's value in at the top. A class is whole when its tub overflows. With claims of 100 and 300 and a value of 350, the first tub fills and spills 250 into the second, which holds 300, so the second class recovers $250/300 = 83\%$ and nothing reaches the third. Each tub's water is the value above its floor less the value above its rim: $(350-100)^+ - (350-400)^+ = 250$. In symbols:
+
 Order the classes by priority $j = 1, \dots, J$ with allowed claims $C_j$ and cumulative claims $K_j = \sum_{i \le j} C_i$, $K_0 = 0$. Let $V$ be the value distributed. Throughout Part IV, $V$ is the *distributable* value the waterfall acts on: the restructuring $\text{EV}$ plus excess cash, less whatever the estate has burned, as in §13.3. Under strict absolute priority, class $j$ recovers
 
 $$
@@ -480,13 +482,17 @@ $$
 
 It recovers $R_{j^\star} = (V - K_{j^\star - 1})/C_{j^\star} \in [0, 1)$, every class above it is paid in full, and every class below it gets nothing. On the boundary $V = K_j$, class $j$ is exactly whole and the fulcrum is $j + 1$, with recovery zero. That edge case matters in code because it decides who receives the new equity. In a reorganization the fulcrum class usually receives most of the reorganized equity, which is why its holders are the ones who end up on the board.
 
-"A fulcrum is where the lever pivots," Kaz says, "so it should have the most leverage." He is, for once, exactly right. Differentiate the call spread:
+"I know it isn't a duration," Kaz says, before anyone can start. "A fulcrum is where the lever pivots, so it should have the most leverage." This time the physics and the finance agree. Differentiate the call spread:
 
 $$
 \frac{\partial R_j}{\partial V} = \frac{1}{C_j}\,\mathbf{1}\{K_{j-1} < V < K_j\}.
 $$
 
-Only the fulcrum class has any delta to enterprise value. Every other class has none: those above are paid in full and those below are out of the money. With $V$ uncertain under the desk's forecast measure $\mathbb{P}$, write $\pi_j = \mathbb{P}(K_{j-1} \le V < K_j)$ for the probability that class $j$ is the fulcrum. Shifting $V$ by $h$ then gives
+Only the fulcrum class has any delta to enterprise value. Every other class has none: those above are paid in full and those below are out of the money. That is true for a company whose value you know. Nobody knows it, and the desk has to say what it believes instead.
+
+> **Math, Gently.** *Value is a bag of numbers, and the fulcrum is a weight in the bag.* **Part one.** A future enterprise value is not one number. Think of it as a bag of numbers, each with a weight saying how likely it is: that bag is a distribution. For a company's value the bag leans right. Value grows and shrinks by percentages, so it multiplies rather than adds, and it cannot fall below zero; that combination gives the lognormal shape, a floor at zero and a long tail of happy outcomes (Chapter 5 owns the full picture, §5.2.3). **Part two.** Now lay the class strikes along the bag. The chance that class $j$ is the fulcrum, call it $\pi_j$, is simply the weight in the bag between its floor $K_{j-1}$ and its rim $K_j$. Take a tiny bag: value is 300, 450 or 700, each with probability ⅓, against claims of 100, 300, 400 and 200, so the rims are 100, 400, 800 and 1,000. At 300 class 2 is the fulcrum; at 450 and at 700 it is class 3. So $\pi_2 = ⅓$ and $\pi_3 = ⅔$, and classes 1 and 4 never are. Divide each by the class's face and you have its expected delta: $⅓/300$ for class 2 and $⅔/400$ for class 3, or about 11 and 17 points of recovery per 100 of value. The larger class has the larger hedge ratio because it is the fulcrum more often. The general rule is next.
+
+With $V$ uncertain under the desk's forecast measure $\mathbb{P}$, write $\pi_j = \mathbb{P}(K_{j-1} \le V < K_j)$ for the probability that class $j$ is the fulcrum. Shifting $V$ by $h$ then gives
 
 $$
 \left.\frac{\partial}{\partial h}\,\mathbb{E}^{\mathbb{P}}\!\big[R_j(V + h)\big]\right|_{h=0} = \frac{\pi_j}{C_j}
@@ -498,13 +504,21 @@ for continuously distributed $V$. A class's expected sensitivity to value is its
 
 ### Plan value is a price
 
-Three different numbers are all called "value" in a restructuring, and Law 11 says label them:
+Three different numbers are all called "value" in a restructuring, and Law 11 says label them. $V$ is the economic value, unknown, which the reorganized company's securities will eventually reflect. $V^{\text{plan}}$ is the value in the disclosure statement, usually the midpoint of the debtor's financial advisor's range; it is a negotiated number, not an estimate (§16.1). $V^{\text{mkt}}$ is the value implied by post-emergence trading, which Chapter 16 trades against. The plan uses $V^{\text{plan}}$ to decide how many new shares each class receives. The market then values those shares at $V$, and the gap between the two is where the money moves.
 
-- $V$: the economic value, unknown, which the reorganized company's securities will eventually reflect.
-- $V^{\text{plan}}$: the value in the disclosure statement, usually the midpoint of the debtor's financial advisor's range. It is a negotiated number, not an estimate (§16.1).
-- $V^{\text{mkt}}$: the value implied by post-emergence trading, which Chapter 16 trades against.
+> **Math, Gently.** *"Paid in full" in shares priced at \$10 and worth \$9.* A plan says the company is worth 1,000 and issues 100 new shares, so each share is priced at \$10. The senior class is owed 800 and is "paid in full at plan value" with 80 shares, 80% of the company. Now suppose the company is really worth 900. Each share is worth \$9, the senior's 80 shares are worth 720, and its recovery is $720/800 = 90\%$, not 100%. The junior class's 20 shares are worth 180. Had the plan used 900, the senior would have taken $800/900 = 88.9\%$ of the shares, worth exactly 800, and the junior 11.1%, worth 100. Raising the plan value by 100 moved 80 from the senior to the junior without a dollar changing hands. The plan value is the price at which the plan sells equity from one class to another, and the derivation follows.
 
-The plan uses $V^{\text{plan}}$ to decide how many new shares each class receives. The market then values those shares at $V$. Take two classes, all-equity consideration, and $C_1 < V^{\text{plan}} < C_1 + C_2$. Class 1 is paid "in full at plan value" with a share fraction $\omega_1 = C_1/V^{\text{plan}}$ of the new equity, and class 2 receives $\omega_2 = 1 - C_1/V^{\text{plan}}$. Their realized recoveries are
+**The plan value is a strike.** A high plan value is the senior class selling equity to the junior class at $V^{\text{plan}}$ when the shares are worth $V$. So seniors argue for low valuations, juniors for high ones, and the valuation fight is a fight over the strike of an option that the plan writes from one class to another. That is why the plan value moves \$300mm in an afternoon (§16.1). Figure 12-B.4 plots both classes' recoveries against the plan value for a two-class example.
+
+![Figure 12-B.4: A higher plan value moves recovery from the senior class to the junior class: the senior receives exactly its claim only when the plan value equals the true value, every dollar above it pays the senior in shares worth less than its claim, and below it the senior would be overpaid, which a plan may not provide on purpose. Illustrative: the §12B.6 two-class all-equity model with claims of 800 and 600 (in millions) and shares truly worth V = 1,000.](assets/figures/ch12b_plan_value_transfer.png)
+
+Which side of that fight a holder is on depends on which class it bought, and one kind of investor makes that choice deliberately.
+
+> **View From Another Seat.** *An opportunistic credit fund (Oaktree's publicly stated frame).* Oaktree describes its approach as "opportunistic, value-oriented and risk-controlled" (oaktreecapital.com/about), and Howard Marks's memos keep returning to two questions, in paraphrase: what is the price relative to value, and what is the cycle doing to prices (memo index at oaktreecapital.com/insights/memos). Carried into this section, that frame describes a seat that buys a claim below a conservative estimate of what it will recover, expects to hold it through the case, and is willing to be paid in equity. For that seat the plan value is not an abstraction but the exchange rate at which its claim becomes shares. If it owns the senior class, a high plan value is a cost: it is paid in shares priced above their worth. If it owns the class just below, the same high plan value is a gift. So the seat picks the class before it argues the price, and judges the price it pays against the recovery at the plan value it expects to win. A systematic desk long the senior class on spread and momentum has taken a side in that fight without knowing it. (This is our application of a public frame, not a description of any Oaktree position.)
+
+#### The Full Derivation: the plan-value transfer
+
+Take two classes, all-equity consideration, and $C_1 < V^{\text{plan}} < C_1 + C_2$. Class 1 is paid "in full at plan value" with a share fraction $\omega_1 = C_1/V^{\text{plan}}$ of the new equity, and class 2 receives $\omega_2 = 1 - C_1/V^{\text{plan}}$. Their realized recoveries are
 
 $$
 R_1 = \frac{\omega_1 V}{C_1} = \frac{V}{V^{\text{plan}}}, \qquad
@@ -518,9 +532,7 @@ $$
 \frac{\partial R_2}{\partial V^{\text{plan}}} = +\frac{C_1\,V}{C_2\,(V^{\text{plan}})^2} > 0 .
 $$
 
-**A high plan value is the senior class selling equity to the junior class at $V^{\text{plan}}$ when the shares are worth $V$.** If $V^{\text{plan}} > V$, the senior is "paid in full" in shares worth $V/V^{\text{plan}} < 1$ of its claim. If $V^{\text{plan}} \le C_1$, the senior takes all the equity, and if $V$ then turns out above $C_1$, it has recovered more than its claim, which a plan may not provide on purpose. So seniors argue for low valuations, juniors for high ones, and the valuation fight is a fight over the strike of an option that the plan writes from one class to another. That is why the plan value moves \$300mm in an afternoon (§16.1). Figure 12-B.4 plots both classes' recoveries against the plan value for a two-class example.
-
-![Figure 12-B.4: A higher plan value moves recovery from the senior class to the junior class: the senior receives exactly its claim only when the plan value equals the true value, every dollar above it pays the senior in shares worth less than its claim, and below it the senior would be overpaid, which a plan may not provide on purpose. Illustrative: the §12B.6 two-class all-equity model with claims of 800 and 600 (in millions) and shares truly worth V = 1,000.](assets/figures/ch12b_plan_value_transfer.png)
+If $V^{\text{plan}} > V$, the senior is "paid in full" in shares worth $V/V^{\text{plan}} < 1$ of its claim. If $V^{\text{plan}} \le C_1$, the senior takes all the equity, and if $V$ then turns out above $C_1$, it has recovered more than its claim, which a plan may not provide on purpose.
 
 ### Absolute priority and its exceptions
 
@@ -529,6 +541,8 @@ When an impaired unsecured class rejects the plan, §1129(b)(2)(B) allows confir
 > **[SOURCE EXTRACTION]** *Moyer_Distressed_Debt_Analysis p.108:* "Cram-down is the process by which a plan or reorganization is imposed on an impaired class that has voted to reject the plan." And on the same page: "a key practical effect of the cram-down provision is to force the debtor to garner the support of all impaired classes if it attempts to provide any type of recovery to an out-of-the-money junior class without paying all more senior classes in full."
 >
 > **Annotation.** ("Plan or reorganization" is the original's wording.) The second sentence is the whole economics of plan negotiation in one line. The absolute priority rule is a veto that a dissenting class holds over any value flowing *past* it, and the veto is worth something only if value is flowing past it. Three 2026 refinements: the "gifting" route around the veto (a senior class handing part of its recovery to a junior over an intermediate class's objection) was closed in the Second Circuit by *DBSD* (2011); old equity cannot keep its stake for "new value" without a market test (*203 North LaSalle*, 1999); and "deathtrap" provisions, under which a junior class receives warrants only if it votes yes, are legal precisely because an accepting class waives the rule for itself. The warrants of §16.4 are often deathtrap consideration.
+
+Saks's plan shows the rule doing its plainest work. The old equity was cancelled, so nothing flowed past the rejecting old-notes class to anyone below it, and the court could cram that class down; the juniors' \$20mm litigation trust is the kind of "something" the rule polices, which is why value like that is negotiated with the classes above it, who can waive the rule for themselves by accepting, rather than imposed on them.
 
 ### Cramdown of a secured class: the rate is a strike
 
