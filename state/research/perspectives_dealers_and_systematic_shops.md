@@ -282,11 +282,75 @@ Paraphrase: Man Numeric reported that over 90% of its order flow went through el
 
 ### 3.4 BlackRock systematic fixed income
 
+**Seat.** BlackRock Systematic Fixed Income (CIO Tom Parker; Jesse Kang, Global Head of Systematic Credit) runs rules-based high-yield and investment-grade credit, benchmark-aware and long-only, with holding periods of months, funded by client mandates and by the iShares ETF complex. Scale context (BlackRock 2025 Annual Report, carried from trend_systematic_credit_industry.md): fixed-income AUM of $3.3 trillion and $175 billion of fixed-income ETF net inflows in 2025. The shelf paper is undated; its document code is BSYSH1225U, which suggests December 2025 (inference), and it uses eVestment data as of 30 Jun 2025.
+
+**Stated views (verbatim, shelf PDF *A systematic approach to high yield credit*).**
+
+| Date | Speaker | Quote | Source |
+| --- | --- | --- | --- |
+| undated (code 1225) | Parker, Radell, Kang, Aguiar | "We view this as the Achilles' heel of both average, and even most top quartile high yield managers." (their defensive positioning) | p. 2 |
+| undated | same | "In 2022, the average manager outperformed their benchmark by 0.47%." | p. 4 (eVestment) |
+| undated | same | "In 2023, the average U.S. high yield manager underperformed their benchmark by -0.68%." | p. 4 |
+
+Paraphrase: the authors argue that high-yield markets mean-revert after outsized drawdowns, that average managers sit in the defensive position at the wrong time (89.56% downside capture and 92.24% upside capture over 20 years, carried), and that a quality screen plus security selection can keep the downside protection while participating in rebounds. Carried: the platform's probability-of-default signal flagged 77% of high-yield defaults within 24 months since 2010 (shelf, pp. 3-6).
+
+**Roles in named events (the firm, not necessarily the systematic arm; all carried from the LMT dossiers).**
+- *Incora/Wesco (Mar 2022):* part of the minority group, with JPMorgan, that held more than a third of the 2026 notes and was out-voted by a majority group led by PIMCO and Silver Point (per the court; case_lmt_autopsies_us_2020_2026.md).
+- *Pluralsight (Aug 2024):* a lender in the Vista-sponsored LME (case_lmt_private_and_european_2024_2026.md).
+- *Saks Global (May 2025):* named among a 51% holder group weighing new financing (Debtwire, via the same dossier).
+- *Optimum (2024-26):* named defendant in the co-op antitrust complaint; *Thames Water:* member of the Class A group per LBC (case_courts_as_regime_variables.md).
+- *March 2020:* iShares credit ETFs traded at discounts to NAV, which the FSB (below) says "became one of the key mechanisms for price discovery." BlackRock's role as the Fed's SMCCF manager is UNVERIFIED (from memory; not fetched).
+
+**How BlackRock's systematic desk looks at our bond.** It sees a B-rated 2029 as a candidate for a quality-adjusted overweight or, more often, an underweight: the default-probability signal, the equity-volatility feature and the CCC-bucket constraint decide, not the covenant analysis. The same firm's fundamental analysts may be in the creditor group on the same issuer, so its systematic arm is exposed to LMT risk it cannot see in its model. The overlap is the book's Ch 11 and Ch 13 bridge.
+
 ### 3.5 Two Sigma
+
+**Seat.** Systematic multi-strategy manager (about 1,700 employees, 250+ PhDs; twosigma.com, fetched 18 Oct 2026). Public credit content is thin. The firm has three relevant arms: Investment Management (diversified quant funds, no credit-specific page), Securities (market making "in equity, futures, and ETF markets across the globe," plus wholesale and algorithmic client trading; no bond market making is claimed) and Sightway Capital, whose portfolio includes Great Rock Capital, formed in 2015 as "an asset-based secured lender to middle market borrowers seeking liquidity for recapitalizations, restructurings, acquisitions, and growth capital." Its insights library (markets and economy section) has no credit or bond piece in the current listing.
+
+**Stated views.** No credit-specific quote was found. Two verified statements bear on how the firm operates:
+
+| Date | Speaker | Quote | Source |
+| --- | --- | --- | --- |
+| 16 Jan 2025 | Sanjay Wadhwa, SEC Acting Director of Enforcement | "Doing nothing for years is not the answer" | SEC press release 2025-15 |
+| 16 Jan 2025 | SEC order (paraphrase) | Two Sigma employees identified model vulnerabilities in or before March 2019 but the firm "waited until August 2023 to address the issues"; the firm repaid $165 million and paid a $90 million penalty | same |
+
+The order is the cautionary tale for a bank-to-quant reader: a model-governance backlog (four years) is a risk event for a systematic shop in the same way a missed covenant is for an issuer. Ben Wellington (Two Sigma) discussed "feature collinearity," "life cycle of features" and p-hacking on a Flirting with Models episode of 6 Jul 2026 (show notes only, carried from life_quant_shop_daily_life.md).
+
+**Roles in named events.** None verified for March 2020, 2022 or 2025. Great Rock is the one lending arm that sits where an RSSG banker's counterparties sit (rescue and restructuring finance), but no named deal was sourced.
+
+**How Two Sigma looks at our bond.** As a feature vector among thousands: an issuer-level panel of price, equity and alternative data, tested for decay. It would only trade the bond if the transaction-cost model and the feature half-life say so. The LMT-flagged name is a regime break in its training sample. The firm's public stance is silence on credit, so everything here is inference from its structure.
 
 ### 3.6 Robeco quant credit
 
+**Seat.** Rotterdam-based asset manager with both a fundamental credit house ("corporate bond investors since the 1970s") and a quantitative credit group ("Robeco's work in quantitative fixed income dates back to 1995"). The systematic book is long-only, benchmark-aware and enhanced-index-like, with holding periods of months; funding is client mandates. The head of Quant Fixed Income and lead portfolio manager is Patrick Houweling, co-author of the 2014 factor-in-credit study. Strategies named on the page: QI Global Multi-Factor Credits and QI Global Multi-Factor High Yield. Risk is DTS: "We developed an innovative method to do so in 2003, based on the observation that the product of a bond's credit spread and its duration ... accurately predicts its future volatility" (robeco.com credit page).
+
+**Stated views (verbatim, 7 Sep 2026 insight by Lodewijk van der Linden and Patrick Houweling).**
+
+| Date | Speaker | Quote | Source |
+| --- | --- | --- | --- |
+| 7 Sep 2026 | van der Linden and Houweling | "Systematic credit is still a small part of fixed income, but its portfolio role is growing." | Robeco insight (summary line) |
+| 7 Sep 2026 | same | "eVestment data show that quant strategies accounted for 6.5% of fixed income AuM in 2026" | same |
+| 7 Sep 2026 | same | "the aim is to keep first-order risks, such as rates and credit beta, close to the benchmark, so that relative returns are driven primarily by credit returns from bottom-up issuer and bond selection." | same |
+| 7 Sep 2026 | same | "portfolio managers and fundamental credit analysts can challenge the model where downside risk is not adequately reflected." | same (more than 20 analysts screen buy candidates for risks the model may miss) |
+
+Paraphrase: the selection model spans about 1,600 issuers and 5,000 bonds in global high yield and 2,600 issuers and more than 26,000 bonds in global investment grade; the process has a "ranking engine" and a "portfolio construction engine" which converts rankings into a diversified portfolio under benchmark, liquidity and risk limits. The authors give the example of a bond that looks cheap because spreads widened while "a major lawsuit, regulatory issue, large acquisition or other event sits outside the model's scope," which is the LMT blind spot in one sentence.
+
+**Roles in named events.** None verified. Robeco's public role is a research source (DTS, factor-in-credit) rather than a trading participant.
+
+**How Robeco looks at our bond.** Through the ranking engine first (valuation, balance-sheet quality, momentum, issuer risk) and then through a human gate: the 20-analyst overlay. The overlay is where an LMT flag would be raised, and where an ex-RSSG analyst is most useful, a role the 2026 article describes without naming.
+
 ### 3.7 Invesco
+
+**Seat.** Large diversified manager. For this dossier it matters in two ways: as a surveyor of systematic fixed-income adoption and, more concretely, as a senior secured loan manager (Invesco Senior Secured Management) that has been a documented participant in liability-management transactions. Invesco's own Global Systematic Investing Study (published October 2024; asiaasset.com, 11 Aug 2026) covers 131 investors managing $22.3 trillion at 31 Mar 2024; the article reports "88% of respondents already used systematic techniques in fixed income" (the 73% prior-year comparator in the earlier dossier is from BBH, UNVERIFIED here). The Invesco site returned 406 to the fetch tool; a quant-credit product page was not read this session.
+
+**Stated views.** No usable verbatim Invesco quote on credit was obtained; the study page is general ("based on interviews with systematic investors"). The record that exists is conduct, not speech.
+
+**Roles in named events (carried from the LMT dossiers; all primary court or filing sources are listed there).**
+- *Serta Simmons (2020 uptier):* one of the prevailing lenders (Invesco Senior Secured Management with Barings, Boston Management and Research, Credit Suisse Asset Management and Eaton Vance) that exchanged "$1.2 billion of their first-lien and second-lien loans for approximately $875 million in second-out, super-priority debt" after providing "$200 million in new financing" (Fifth Circuit, 31 Dec 2024, quoted in perspectives_buyside_credit_managers.md; the court held the uptier was "not a permissible open market purchase").
+- *Robertshaw (2023-24):* Invesco quietly bought over 50% of the first-out plus second-out loans in Jul 2023, became Required Lender, directed the agent not to post amendments, was displaced when the borrower prepaid first-out loans on 11 Dec 2023, sued, and lost: the 20 Jun 2024 ruling gave a money remedy only (about $40mm claimed; debtors said about 3% recovery); plan confirmed 16 Aug 2024 over Invesco's objection (case_lmt_autopsies_us_2020_2026.md).
+- *Selecta (2025):* named as a "favoured holder" in the excluded holders' complaint (allegation; case_courts_as_regime_variables.md).
+
+**How Invesco looks at our bond.** The loan desk and the systematic desk see the same issuer through different documents: the loan manager reads the credit agreement and votes; the systematic manager reads spreads. Robertshaw shows what happens when a loan manager acts like a quant on the register: it accumulated a Required Lender majority tranche by tranche and lost it to a prepayment. The lesson for our desk is that register-share is a state variable (Ch 13).
 
 ## 4. Venues
 

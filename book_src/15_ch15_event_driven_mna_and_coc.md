@@ -373,12 +373,7 @@ $$
 \mathcal{A} \;=\; \left\{ E^{\text{rep}} < \frac{F_{\min}}{\bar\ell\,(1+a)} \right\}.
 $$
 
-With $\ln E^{\text{rep}}\sim\mathcal{N}(-\tfrac12\sigma_E^2,\ \sigma_E^2)$ normalized so that $\mathbb{E}[E^{\text{rep}}]=1$ at signing,
-
-$$
-\mathbb{P}(\mathcal{A}) \;=\; \Phi\!\left(\frac{\ln\!\big(F_{\min}/(\bar\ell(1+a))\big) + \tfrac12\sigma_E^2}{\sigma_E}\right),
-\qquad \frac{\partial\,\mathbb{P}(\mathcal{A})}{\partial a} \;=\; -\frac{\varphi(\cdot)}{\sigma_E\,(1+a)} \;<\; 0 .
-$$
+Put a lognormal on reported EBITDA, normalized so that its mean is one at signing, and the probability that the holder keeps the put is the share of that distribution lying below the barrier $F_{\min}/(\bar\ell(1+a))$. Add-backs move the barrier to the left. With $F_{\min} = 6.05$ turns of signing EBITDA and a 5.0x test, the put survives only if EBITDA comes in below $6.05/5.0 = 1.21$ times its signing level when no add-backs are allowed, and below $6.05/(5.0 \times 1.2) \approx 1.01$ when 20% add-backs are: twenty points of "adjusted" move the barrier from comfortably above the expected outcome to almost exactly on it. The closed form, a normal probability, and its derivative in $a$ are in "The Full Derivation" at the end of §15.3.
 
 Two conclusions. First, every point of permitted add-back lowers the probability that the holder keeps the put, and the derivative is largest exactly where the test is close to binding. Mags has been "deeply suspicious of anything called adjusted" for thirty years; here is the derivative that justifies her. Second, the put that survives lives on $\mathcal{A}$, the states in which EBITDA came in low. Those are the states where the holder most wants the put, so the residual is not worthless. What the holder sold is the put's value in the *good* states, where the bond would have traded a few points below 101 and the sponsor would otherwise have had to pay up. This is a contract-design argument under $\mathbb{P}$; pricing the residual put is under $\mathbb{Q}$ and uses the §15.2 engine restricted to $\mathcal{A}$.
 
@@ -395,6 +390,17 @@ Use it to screen a corpus of portability clauses and to turn "generous add-back 
 *The full listing is [Listing 15.2 in Appendix F](#code-15-2).*
 
 With these illustrative inputs a sponsor needing 6.05 turns of signing EBITDA, against a 5.0x test, ports the deal whenever adjusted EBITDA clears about 1.2 times its signing level with no add-backs, and whenever reported EBITDA clears about 1.0 with 20% add-backs. The survival probability falls from the mid-80s percent to below 40% across the grid. Same bond, same sponsor, same test; the only thing that moved was the word "adjusted."
+
+#### The Full Derivation: the put's survival probability under portability
+
+With $\ln E^{\text{rep}}\sim\mathcal{N}(-\tfrac12\sigma_E^2,\ \sigma_E^2)$ normalized so that $\mathbb{E}[E^{\text{rep}}]=1$ at signing,
+
+$$
+\mathbb{P}(\mathcal{A}) \;=\; \Phi\!\left(\frac{\ln\!\big(F_{\min}/(\bar\ell(1+a))\big) + \tfrac12\sigma_E^2}{\sigma_E}\right),
+\qquad \frac{\partial\,\mathbb{P}(\mathcal{A})}{\partial a} \;=\; -\frac{\varphi(\cdot)}{\sigma_E\,(1+a)} \;<\; 0 .
+$$
+
+The probability is a standard normal CDF evaluated at the log-distance between the barrier and the median of $E^{\text{rep}}$, measured in units of $\sigma_E$; the $+\tfrac12\sigma_E^2$ is the mean-preserving shift of §15.2's lognormal box. The derivative follows from the chain rule through $-\ln(1+a)$ in the argument, and its magnitude is largest where $\varphi$ peaks, at an argument of zero, which is the case in which the test is close to binding.
 
 > **Trend Watch.** *Portability's migration into US public filings, 2018–2026.* A full-text search of EDGAR for the portability term "Specified Change of Control Event" finds 1 filing in 2018, 4 in 2019, 8 in 2020, 11 in 2021, 2 in 2022, 3 in 2023, 5 in 2024, 5 in 2025 and 10 in 2026 through mid-October (EDGAR full-text search, run 2026-10-17; approximate). Over the same years, registered 424B2/424B5 prospectuses using the IG double-trigger terms ran at roughly 230–400 a year for "Change of Control Triggering Event" and 90–230 a year for "Change of Control Repurchase Event." Read the portability series for its *existence*, not its level: it counts filings rather than deals, double-counts preliminary and final prospectuses, and misses almost all high-yield bonds, which are sold under Rule 144A and never filed. The covenant-research providers (Covenant Review, Xtract Research, 9fin) publish the share of HY deals with portability; we have not verified their figures for this edition, and the practitioner consensus that European HY has long carried portability more often than US HY should be checked against their data before it is quoted. What it means for the desk: portability is a document feature with a price, it is spreading into the documents a systematic desk can parse, and Chapter 25's extraction pipeline should pull the leverage test, the window, the one-time-use flag and the add-back definition as four separate fields, because each one moves $\mathbb{P}(\mathcal{A})$.
 

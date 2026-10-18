@@ -24,4 +24,4 @@
 - [x] 22. [6.10.1 end] ANOTHER-SEAT (opportunistic fund vs multi-strat pod) -- Apollo quoted support vs Paleologo stop-loss view; outcome versus path.
 - [x] 23. [6.10.2 Hertz] EXPAND-SCENE (plan sponsors; Theo's ATM rule) -- whiteboard ATM 12% vs 13.8%, wrong on fleet, sponsors' \$5.9bn.
 - [x] 24. [6.10.3 and 6.12] LIST-TO-NARRATIVE -- 19 July screen walk; Kaz reads twelve items, each gets a scene.
-- [ ] 25. [Exercises] BRIDGE (Check: numbers + two warm-ups)
+- [x] 25. [Exercises] BRIDGE (Check: numbers + two warm-ups) -- Check numbers on all six; SVB holdco and Carvana warm-ups.
