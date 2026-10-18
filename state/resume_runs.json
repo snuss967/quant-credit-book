@@ -212,23 +212,6 @@
      "resgraph"
     ]
    }
-  },
-  {
-   "name": "figs-22-23",
-   "task": "wdhqxuiua",
-   "runId": "wf_fba8d467-d9c",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "22_ch22_market_structure_regulation_trends",
-     "23_ch23_cross_asset_convexity_and_vol_surface"
-    ],
-    "stages": [
-     "figures",
-     "figcheck"
-    ]
-   }
   }
  ]
 }
