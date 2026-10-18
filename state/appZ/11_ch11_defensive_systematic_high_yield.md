@@ -52,3 +52,41 @@ Then $\pi_X = 0.0231/0.2497 = 9.25\%$ and $\pi_K = 0.0069/0.7503 = 0.92\%$, so t
 
 **If you got this wrong, read:** §11.5.1 (AUC as a bet; AR $= 2\,$AUC $- 1$), then §11.5.2, including the Base Rates box and the $+44$/$-9$bp worked example that this exercise reruns.
 
+**Z.11.4: The soft-default world**
+
+**Answer:** `de_share` only relabels defaults that have already been drawn, so the panel is unchanged: 163 issuer defaults, and a full 12-month label rate of 3.24% of issuer-months. What changes is the label mix. 67% of default rows (66.5% of defaulted issuers) become exchanges, which leaves a hard-default rate of 1.07%. A model trained on the hard label predicts about a third of the realized full-label rate in almost every decile:
+
+| PD decile (hard model) | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Predicted, hard label (%) | 0.03 | 0.06 | 0.10 | 0.15 | 0.23 | 0.34 | 0.52 | 0.88 | 1.89 | 6.49 |
+| Realized, full label (%) | 0.00 | 0.17 | 0.26 | 0.53 | 0.81 | 0.68 | 0.81 | 2.22 | 7.41 | 19.51 |
+| After prior shift (%) | 0.09 | 0.19 | 0.31 | 0.47 | 0.70 | 1.03 | 1.60 | 2.69 | 5.62 | 17.13 |
+
+The mean absolute error across deciles is 2.18 points before the shift and 0.61 after. The mean PD goes from 1.07% to 2.98%, against 3.24% realized. AUC against the full label is 0.885 both before and after the shift, and 0.886 for a model trained on the full label. So in the listing's world the shift repairs almost everything. It cannot repair the *ranking* when exchanges cluster in sponsor-owned issuers with drop-down capacity. The feature that can is a dated drop-down capacity flag (unrestricted-subsidiary and investment-basket capacity, or Chapter 13's PRS), together with months since the last LME, fitted on the full label.
+
+**How:** Call `simulate_hy_universe(de_share=0.65)`, lag the features by 3 months, set $y^{\text{hard}} = y \cdot (1 - \text{de\_flag})$, fit `fit_logit` on $y^{\text{hard}}$, bin the fitted PDs into deciles and compare each decile with the realized full label. These numbers are in-sample, on issuer-months with overlapping labels. The shift uses $\pi_s = 1.07\%$ and $\pi = 3.24\%$, which multiplies every issuer's odds by
+
+$$
+\frac{0.0324/0.9676}{0.0107/0.9893} = 3.10 .
+$$
+
+It works here because the listing draws `is_de` independently of every covariate. The hard label is then a random one-third thinning of the full label, which changes the prior and leaves the likelihood ratio alone, exactly the condition in the intercept-shift derivation of §11.4.2. It is not perfect, because thinning scales probabilities, not odds. The odds factor actually needed is $(1-\theta p)/(\theta(1-p))$ with $\theta \approx 0.33$. That rises from about 3.0 for small PDs to about 3.5 at 20%, so one constant over-corrects the bottom deciles and under-corrects the top. The shift adds the same constant to every logit, which is a monotone map: the order of issuers, and with it the AUC, the CAP and every hit rate, cannot change. When exchanges are concentrated, the hard label calls the drop-down-capable issuers survivors, so the likelihood ratio itself is wrong for them, and no prior repairs a likelihood. To check, I ran a variant of the simulator *(my extension, illustrative)*: 54% of issuers have capacity, only they do exchanges, and the exchange share is 65.5%. After the shift, the hard model predicts 2.6% for capacity issuers that default at 5.8%, and 5.1% for the rest, which default at 3.0%. Its AUC stays at 0.848. A full-label model with the capacity flag scores 0.871 in-sample (on purged folds the gain is smaller, from 0.791 to 0.798), and its hit rate at a 20% exclusion rises from 71% to 75%.
+
+**The trap:** Concluding from the clean result above that the prior shift fixes soft defaults in general. The listing assigns exchanges at random, which is the one case where the shift is guaranteed to work. The second trap is adding the capacity flag but keeping the hard label. In the variant, the flag then gets a coefficient of $-2.3$: the model learns that drop-down capacity *protects* you, which is the "default softly and never default" lesson of §11.4.3, now written into the model's coefficients. You need the full label and the feature together.
+
+**If you got this wrong, read:** §11.4.2 (the intercept shift and its Full Derivation: "power and calibration are separate repairs"), §11.4.3 (the Saks replay and the desk label), and the Listing 11.3 specification. Chapter 13 builds the Priming Risk Score.
+
+**Z.11.5: ROBO, defensively**
+
+**Answer:** Three portfolios that satisfy the sentence literally, and the constraint that kills each one.
+
+1. **One BB bond.** Put 100% in the single short-dated BB with the lowest PD. In a backtest, ROBO can even pick the one that, with hindsight, beat the index and did not default. Realized defaults are zero, and in a selloff year it beats the index. *Constraint:* $w_i \le 3\%$ for every *issuer* (so at least 34 names), together with DTS-neutrality, $\lvert w^\top\text{DTS}/\text{DTS}^{\text{bench}} - 1\rvert \le 1\%$, so the book cannot hide in a low-DTS corner. Selection is walk-forward only.
+2. **Leverage.** Hold the safest BBs, or Treasuries, and borrow (or add a total-return swap) until expected return beats the index. Its holdings never default, and its return is just beta bought with borrowed money. *Constraint:* $w \ge 0$, $\mathbf 1^\top w = 1$, no borrowing or derivatives unless the mandate says so, and $\text{DTS}^{\text{target}} \le \text{DTS}^{\max}$, with a halt-and-alert if the target cannot be reached long-only.
+3. **Redefine "default".** Score defaults as bankruptcy filings or missed coupons only, then fill the book with sponsor-owned names whose distress will arrive as exchanges and LMEs. That was most of 2025's defaults, so the book reports "zero defaults" while holders are being primed. *Constraint:* the desk label from §11.4.3, fixed in the spec. A default is any of {payment default beyond grace, bankruptcy, distressed exchange, LME that impairs the holder}, announced in $[t, t+12)$, stamped at announcement, counted once per issuer, and read from a point-in-time event table.
+
+**How:** Look for the words in the sentence that leave a degree of freedom. "Minimize realized defaults" sets no breadth requirement, so concentration games the objective (portfolio 1). "Beating the index" has no risk unit, so leverage, or any extra beta, games it (portfolio 2). "Defaults" has no definition, so the label games it (portfolio 3). Each constraint closes one of those gaps. The issuer cap and DTS band set the risk unit at the benchmark's, as in §11.7. The long-only and DTS-max guard is the no-leverage rule of §11.8. The label is fixed by the spec rather than chosen by the optimizer. Then "beat the index" should be stated as an excess-return objective on DTS-matched risk, reported with $U$, $D$, $\beta^{+}$, $\beta^{-}$ on benchmark regimes. That is Desk Debrief's spec almost word for word.
+
+**The trap:** Writing a constraint that sounds right and does not bind. A minimum number of *bonds* is the usual one: a capital structure with 47 lines satisfies it with one issuer. Another is a market-value-neutral or tracking-error limit with no DTS term, which lets the dimmer switch back in at a beta of 0.85. The third is a default definition left in a vendor's hands: Marisol's Tuesday in §11.4 shows a vendor moving every exchange's date overnight.
+
+**If you got this wrong, read:** the §11.2 Specification (ROBO's T-bill portfolio), §11.4.3 (the desk label), §11.7.2 and the §11.7 Specification (IDO, the issuer cap and the refusal to lever), and The Spec You Hand the Robot after the Desk Debrief.
+
