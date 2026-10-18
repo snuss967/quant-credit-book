@@ -15,3 +15,4 @@ Code and consistency fixes found along the way. Lowest priority: run only when n
 - Listing 28.8 (App F) still sets `"sharpe": 2.0`, while revised §28.9 uses 0.7 with a standard error. Set it to 0.7, re-run, and reconcile every §28.9 number quoted from the listing's output. (Red pen, 2026-10-18.)
 - The Part I opener now points to §A.10 (the RSSG-to-quant dictionary), which does not exist yet. Write App A §A.10, synthesis item "App A §A.10 dictionary". (Red pen, 2026-10-18.)
 - §26.8 cites "OCC Bulletin 2011-12" from the synthesis; occ.gov pages returned 404. Verify before print. (Red pen, 2026-10-18.)
+- App F Listing 1.2 contains stray §1.5 prose (verify, Ch 1). Move the prose back to the chapter or delete it from the listing block. (2026-10-18)

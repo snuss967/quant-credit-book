@@ -64,14 +64,14 @@ Count: 14 Math, Gently (L101, 113, 254, 270, 400, 414, 436, 452, 516, 534, 671, 
 
 ## (e) Research-note leaks and fiction labels
 
-- [ ] E1. L133 Desk Myth "(...; secondhand)" → "as quoted by".
-- [ ] E2. L187 "a 2022 drop-down whose details we treat as illustrative" → name Envision's 2022 drop-down (on the §13.9 scoreboard).
-- [ ] E3. L454 "(a secondary account; we have not seen the prints)" → "by press accounts".
-- [ ] E4. L623 "*(approx.; Wikipedia, citing Reuters, the FT and the WSJ)*" → "by contemporaneous press accounts".
-- [ ] E5. L888 "(by a secondary account)", "(also a secondary figure)" → "press accounts put".
-- [ ] E6. L1000, L1003 "title only", "titles only" process notes removed.
-- [ ] E7. Log E1–E5 in `state/research/open_items_ch13_ed2.md`.
-- [ ] E8. Fiction labels at the top of each scene, in italics: cold open (Larkspur and the desk; the parenthesis moves into the italic line); replay labels for Serta (L303), Lumen (L468), Incora (L866) and Trinseo (L701; see G5).
+- [x] E1. L133 Desk Myth "(...; secondhand)" → "as quoted by". **Done:** Now 'as quoted by Antill, Jiang and Wang'; 'secondhand' removed.
+- [x] E2. L187 "a 2022 drop-down whose details we treat as illustrative" → name Envision's 2022 drop-down (on the §13.9 scoreboard). **Done:** Named for Envision's 2022 drop-down, pointing to the §13.9 scoreboard.
+- [x] E3. L454 "(a secondary account; we have not seen the prints)" → "by press accounts". **Done:** Hedged to 'one market commentator's account', matching the dossier's Substack source.
+- [x] E4. L623 "*(approx.; Wikipedia, citing Reuters, the FT and the WSJ)*" → "by contemporaneous press accounts". **Done:** Wikipedia note replaced by 'by contemporaneous press accounts'; S-1 quotes untouched.
+- [x] E5. L888 "(by a secondary account)", "(also a secondary figure)" → "press accounts put". **Done:** Both secondary flags replaced by 'press accounts put' and 'same accounts'.
+- [x] E6. L1000, L1003 "title only", "titles only" process notes removed. **Done:** Resource Graph process notes removed; no URL added or lost.
+- [x] E7. Log E1–E5 in `state/research/open_items_ch13_ed2.md`. **Done:** Six items logged in state/research/open_items_ch13_ed2.md with closing sources.
+- [x] E8. Fiction labels at the top of each scene, in italics: cold open (Larkspur and the desk; the parenthesis moves into the italic line); replay labels for Serta (L303), Lumen (L468), Incora (L866) and Trinseo (L701; see G5). **Done:** Cold open label italicized at top; four replay labels added.
 
 ## (f) Finder and headings
 

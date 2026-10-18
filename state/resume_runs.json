@@ -100,7 +100,7 @@
   },
   {
    "name": "fixes-and-cast",
-   "task": "wjaxjrny2",
+   "task": "wd1haa4tn",
    "runId": "wf_c8095cb4-bb7",
    "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/ed2-u2-fixes-and-cast-bible-wf_c8095cb4-bb7.js",
    "args": {
@@ -109,7 +109,7 @@
     ]
    },
    "todo": "Relaunch the same script with stems [01_ch01_anthology_and_landscape, 05_ch05_credit_probability_distributions] once their .verify.md files are COMPLETE. Then run a lessons pass on Ch 3, 7, 13-16 (revised before the lessons existed).",
-   "status": "Ch 6, Ch 5 fixed; relaunch for Ch 1 once its verify is COMPLETE"
+   "status": "running for Ch 1"
   },
   {
    "name": "part-VII-u2",
@@ -137,24 +137,6 @@
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/rv_thread.js",
    "args": {
     "today": "2026-10-18"
-   }
-  },
-  {
-   "name": "verify-1-3-2-7",
-   "task": "w3oiwl78i",
-   "runId": "wf_55f7ff56-759",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "01_ch01_anthology_and_landscape",
-     "03_ch03_pjt_rssg_cognitive_bridge",
-     "02_ch02_revolutions_in_credit_trading",
-     "07_ch07_ml_on_small_sample_credit_data"
-    ],
-    "stages": [
-     "verify"
-    ]
    }
   },
   {
@@ -233,6 +215,24 @@
      "figures",
      "figcheck",
      "resgraph"
+    ]
+   }
+  },
+  {
+   "name": "lessons-rv-3-2-7",
+   "task": "w0qspn5hq",
+   "runId": "wf_6ac67a00-da1",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "03_ch03_pjt_rssg_cognitive_bridge",
+     "02_ch02_revolutions_in_credit_trading",
+     "07_ch07_ml_on_small_sample_credit_data"
+    ],
+    "stages": [
+     "lessons",
+     "rv"
     ]
    }
   }

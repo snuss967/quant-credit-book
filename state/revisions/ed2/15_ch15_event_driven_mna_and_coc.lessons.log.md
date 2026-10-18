@@ -102,9 +102,9 @@ Adjacent pairs: l.669/671, l.685/687. Runs over two: l.281-291 (Math, Gently, Wa
 - [x] 17. §15.5.2: merge survival into the censoring box; demote distributions, Cox and Bayes boxes; delete l.713 (D12-D15). Done: survival folded into censoring box; Cox, Weibull, Bayes now prose; template gone.
 - [x] 18. §15.5 listing: trim ROBO repeat; rewrite template; D15 pointer. Done: ROBO repeat cut; Hana's singular-column event; 2.1 points back.
 - [x] 19. §15.7: demote jump box into the text; Spirit fiction label; D17 cuts; cut the appended judgment (l.821). Done: jump box into prose; label added; three Spirit repeats cut.
-- [ ] 20. §15.8 WBD: replay label (C1); D18, D19; leak at l.845; promote decision point; trim.
-- [ ] 21. Quant-Shop Life: rename Priya (C11); remove the USB-stick VP (C1); trim.
-- [ ] 22. Desk Debrief: Finder table; replay sticky note (C1).
+- [x] 20. §15.8 WBD: replay label (C1); D18, D19; leak at l.845; promote decision point; trim. Done: replay in three cuts; strip list once; hedge merged into Theo.
+- [x] 21. Quant-Shop Life: rename Priya (C11); remove the USB-stick VP (C1); trim. Done: Priya renamed Noor; USB-stick VP cut; shop marked separate.
+- [x] 22. Desk Debrief: Finder table; replay sticky note (C1). Done: ten-row Finder with rules stated once; sticky note from replay.
 - [ ] 23. Resource Graphs: remove placeholder notes; log open items in `state/research/ch15_open_items.md`.
 - [ ] 24. Cast bible: add the Ch 15 facts and mark C1, C5, C7, C8, C11 resolved for Ch 15.
 - [ ] 25. Hygiene: math delimiters, \$ escapes, no code fences, last line; metric "after".
