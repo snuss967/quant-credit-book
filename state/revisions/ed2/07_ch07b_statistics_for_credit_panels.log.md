@@ -12,8 +12,8 @@
 - [x] 10. [new `#### Long Scene: The Chapter 22 Cohort`] NEW-SCENE. Note: 2,553 words; Saks clock 5 (exchange), KM 0.875/0.625/0.5/0.375/0.19.
 - [x] 11. [7-B.4 KM + Cox] FULL-DERIVATION-MOVE + box 6. Note: race-in-wind box, practice cohort trimmed, Full Derivation added.
 - [x] 12. [7-B.4 Check the proportionality] WHEN-TO-APPLY. Note: regime sentence is Mags's in Beat 4; plot kept one line.
-- [ ] 13. [7-B.5 Desk framing] MATH-GENTLY (box 7, two parts) + ANOTHER-SEAT.
-- [ ] 14. [7-B.5 Shrinkage + Ledoit–Wolf] MATH-GENTLY (box 8) + FULL-DERIVATION-MOVE.
+- [x] 13. [7-B.5] box 7 two parts + Venn seat. Note: box moved to PCA (first load-bearing use, spacing).
+- [x] 14. [7-B.5 Shrinkage + LW] box 8 + Full Derivation. Note: batting average w=0.5; LW and PCA Lagrangian moved.
 - [ ] 15. [7-B.6] MATH-GENTLY (box 9) + LIST-TO-NARRATIVE + SHOP-LIFE.
 - [ ] 16. [7-B.7] LIST-TO-NARRATIVE + WHEN-TO-APPLY.
 - [ ] 17. [7-B.8] MATH-GENTLY (box 10, two parts) + LIST-TO-NARRATIVE + SHOP-LIFE vignette.

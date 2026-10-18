@@ -21,3 +21,6 @@
 - [x] 19. [4B.8 Case Study, promote to `#### Long Scene: One Month, Six Rulers, One Pot` with `####` beat headings] EXPAND-SCENE (2,500–3,000 words) + SHOP-LIFE — four beats: reconciliation, rulers, 23 March card graded, April tape.
 - [x] 20. [4B.9 Specification] BRIDGE — opens on z_spread settlement moment; edge-case labels de-templated.
 - [x] 21. [4B.10 Desk Debrief] Finder table at the top — eight-row Finder table with sections, boxes, scenes, functions.
+
+Notes: 18.6k words → 19.0k by tool count (12.7k → ~20.6k wc). Mags "In 1994" fixed to C5 canon twice. CLO box points to §21.1/§21.4 (brief's "Ch 22" is market structure). SVB HTM duration and the CHECK-tagged bond prints left out (hedged as "press reports"). Mags's 2022 line kept consistent with Ch 8 §8.7 (her 2022 card was a full hedge). Cast bible gained a Ch 4-B section. No web calls.
+<!-- STATUS: COMPLETE -->

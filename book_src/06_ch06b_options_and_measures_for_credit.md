@@ -450,7 +450,7 @@ Used in: Ch 10-B (index option skew, payer versus receiver), §16.4 (warrant vol
 
 ### 6-B.5.1 Desk framing: the Tuesday that is not in the diffusion
 
-"In textbooks companies die by diffusion," Mags says. "They drift down, they touch a barrier, they stop. In my experience they die on a Tuesday at 7 a.m. in a press release with the word 'regrettably' in it." §6.2.4 showed what the diffusion costs: zero short-dated spreads and recoveries near 90 cents. The repair is to let the underlying jump, and the simplest jump that matters to credit is the one to zero.
+§6.2.4 showed what a pure diffusion costs a credit model: zero short-dated spreads and recoveries near 90 cents, because a firm that can only drift toward its default point is never surprised by it. The repair is to let the underlying jump, and the simplest jump that matters to credit is the one to zero. The model comes first; the week it mattered, replayed, follows §6-B.5.3.
 
 ### 6-B.5.2 The model
 
@@ -488,6 +488,66 @@ $$
 
 Later chapters lean on two things that fall out of it. Holding the share price fixed, the jump makes a call *more* valuable, not less: rho is positive, so moving the rate from $r$ to $r+\lambda$ raises the call, because the strike is paid only in survival states and the surviving stock must outperform to pay for the dead. That is why Kaz's $e^{-\lambda T}$ haircut on the Hertz warrants charged the funeral twice (§16.4). And the jump gives a put a floor: as $K\to0$ the second term vanishes faster than $K$, so $\text{Put}^{\text{JTD}}(K)/K\to U^{\text{Eur}}(T)$, the box's five cents per dollar of strike. The floor ratio is the hazard.
 
+#### Long Scene: SVB Financial, 8–17 Mar 2023, the line that is not a derivative
+
+*A replay. The desk's position, its hedge, its marks, the model runs and all dialogue are fictional; nobody on the desk sat in any SVB creditor group, and Mags's own small purchase of the holdco paper that month is Chapter 6's story, not retold here. SVB facts are from the company's 10-K and 8-Ks, the Federal Reserve's review of 28 April 2023, the FDIC's release, a vendor's pre-market options report and the press reports named where they appear. Theo was at his old firm in March 2023 and was not staffed on SVB Financial (Chapter 3).*
+
+"In textbooks companies die by diffusion," Mags says. "They drift down, they touch a barrier, they stop. In my experience they die on a Tuesday at 7 a.m. in a press release with the word 'regrettably' in it."
+
+"This one died on a Friday," Ines says, "and it didn't send a press release. The regulator did."
+
+Wednesday 21 October 2026, 4:15 p.m. Ines has dealt the SVB folder before, the way every desk does. Chapter 3's new-hire drill read the holding company's balance sheet, Chapter 6 watched the structural model fail to see the run, and Chapter 8's replay hedged a generic book's rates through the week. Tonight she deals it to the hedger. The tab says *Cut: close, Wed 8 Mar 2023*, and the position card clipped to the front is new.
+
+**The position (illustrative).** Long \$25mm face of SVB Financial Group's 1.800% senior notes due 2031, the holding company's paper, marked at 76: a low coupon with eight years to run, trading below par because of rates, not credit. Against it, short SIVB common stock. The desk had wanted to size the short by the Merton bond-per-equity ratio of §6-B.3.4, $N(-d_1)/N(d_1)$, and the model had returned about $10^{-8}$: on the holdco's inputs, market equity of \$15.9bn at Wednesday's \$267.83 covered the \$3.3bn of senior notes 4.8 times, and the model's one-year default probability was of the order of one in ten million (calc, from the 10-K and that close). A hedge of zero shares is not a hedge a risk committee signs, so the desk used its house floor, five cents of stock per dollar of bond market value: about \$950,000 short, some 3,550 shares.
+
+"Why five cents?" Theo asks.
+
+"Because the committee needed a number with a digit in it," Ines says. "Somebody in 2019 picked five. Nobody has asked since. Every desk has a number like that, and the day you find out where it came from is usually a bad day." Kaz, who has spent part of the afternoon trying to find out where the desk's 40% recovery default came from, says nothing, which on Kaz is a confession.
+
+Theo reads the Thursday 7 a.m. risk report off the card, line by line, the way §6-B.3.5 taught him. Delta: near zero. Gamma: near zero. Vega: near zero, on an implied volatility that had lived between 39 and 50 for a year. Theta: the carry, small and positive. Rho: the one real number on the page apart from the last, because a 1.8% coupon with eight years to run is a rates trade. And the last line, the one that is not a derivative: $(R-P)\times$ face at the desk's 40 recovery is $(0.40-0.76)\times\$25\text{mm}=-\$9.0\text{mm}$, less about \$0.95mm the stock short would make if the shares went to zero: about −\$8mm.
+
+"Nobody read that line," Ines says. "In the real world, on desks like this one, nobody read that line, because every other line said the bond was a Treasury with a funny name."
+
+After the close on Wednesday the company had filed an 8-K announcing a securities sale and a capital raise (Chapter 3's drill reads it line by line). Ines turns the page.
+
+**Thursday, 9 March.** The stock closes at \$106.04, down 60.4% on the day, and more than \$40bn of deposits leave the bank (the run is Chapter 6's scene; this one watches the hedge). The short-stock leg has made about \$570,000. The bond has barely printed: the folder holds no trade in the 2031s that day that the desk could find, and Ines refuses to invent one. On the report, the delta line has woken up, and the JTD line has not moved, because it never did depend on the stock.
+
+Theo stares at that for a while. Six lines, and five of them are slopes that change when the world tilts. The sixth is a cliff, and it has been the same height since Wednesday morning: about eight million dollars, sitting at the bottom of the page in the same font as the carry. "It was the biggest number on the report on Wednesday," he says, "and the only one that didn't change on Thursday."
+
+"That's what makes it easy to stop reading," Ines says.
+
+#### The card: Thursday, 9 March, at the close
+
+*Write three things: which of the six lines on the report is your risk now, what you buy to cover it, and what it costs.*
+
+Kaz writes first. *Delta. Rerun Merton at \$106 with Thursday's equity vol; the bond-per-equity ratio rises about a hundredfold (fictional run). Short the extra shares at the open.*
+
+Mags writes in capitals. *JTD. BUY PUTS. ANY STRIKE UNDER 50. ANY VOL.*
+
+Theo holds his pen for a long time. He has been reading the indenture summary on the back of the position card, and one phrase has stopped him: the notes are "recourse only to the Company and ... not guaranteed by the Company's subsidiaries." The Company is the holding company. The bank is a subsidiary. *JTD,* he writes, *but whose default? The bank can fail without the holdco filing, and the holdco can be a creditor of its own dead bank. Buy a put spread whose width covers the JTD line, not outright puts. Cost: whatever tomorrow charges. I don't know what that is.*
+
+What would you write? The house rule is the same as on Tuesday: a card executes at the first print after it was written.
+
+**Friday, 10 March, before the open.** A vendor's pre-market options report puts SIVB's 30-day implied volatility at 167, against a 52-week range of 39 to 280, with calls to puts at 1.1 to 1 (Market Rebellion, 10 Mar 2023). Then the stock is halted. That morning the California Department of Financial Protection and Innovation closes the bank and appoints the FDIC as receiver. The holding company's offerings are terminated. SIVB never reopens on Nasdaq, so there is no first print after Thursday's close, and no card executes: not Kaz's shares, not Mags's puts, not Theo's spread. TRACE data cited by Bloomberg put the senior holdco notes at roughly 37 to 42 cents at Friday's close. At 40, the desk's bond leg is down 36 points on \$25mm: −\$9.0mm, the JTD line to the dollar.
+
+Ines makes Kaz run one more number, as the desk's fictional run. If the stock's ordinary diffusive volatility was still about 45%, the middle of the band it had lived in, what jump intensity makes a one-month at-the-money put trade at 167? Kaz bisects on $\lambda$ with (6B.1) and an implied-vol solver. The answer is about 2.5 a year: a 19% chance of a wipe-out within the month. At that intensity the one-month at-the-money put is worth about \$19.96, and \$19.69 of it, 99%, is the unit recovery claim of (6B.1); without the jump the same put at 45% would have been worth \$5.29. A put struck at half the forward must, by (6B.3), carry an implied volatility of at least 203%, and in the model it carries 343%. "Thursday's surface wasn't a volatility surface," Kaz says slowly. "It was a default claim in volatility's clothing. The 167 was a hazard rate quoted in the wrong units."
+
+**The grade.** Ines grades the cards against the tape and against §6-B.5.6, which none of them had read yet.
+
+Kaz's card hedged nothing, because a halted stock cannot be sold, and because even an open one would have been the wrong instrument: the stock is one instrument against two risks, the diffusion and the jump, and the delta that minimizes the first leaves almost all of the second on the table. Mags's card named the right line and the right kind of instrument, and could not be filled: by the time the volatility had moved to where (6B.3) said it had to be, there was no market to pay it in, and the house rule does not let anyone buy Thursday's close on Friday.
+
+"The stock hedge works when the stock trades through the bad news," Ines says. "It breaks the moment the bad news arrives as a halt, and that's the moment it was for." She taps the JTD line. "The only thing on this table that would have paid is an instrument that jumps by its width at default and barely diffuses, which is a put spread, bought on Wednesday, when the line said minus eight million and the surface said nobody cared."
+
+The desk's fictional run prices it. On Wednesday's close, at the 45% volatility and a small intensity the desk might have pencilled in, 1%, a one-month put spread struck at \$100 and \$50 cost about four cents a share and paid \$50 at a wipe-out. Covering \$9mm of JTD takes 180,000 shares of spread, 1,800 contracts; in a listed market where a deep out-of-the-money option is offered at the exchange's minimum, call it ten to twenty thousand dollars *(illustrative)*. How a put on a halted, later-delisted stock is exercised is an afternoon with the options clearing house that Ines does not deal tonight. The point is the price. On Wednesday the jump was on the report and off the surface, and that gap is the only time the hedge is cheap.
+
+**Which default?** Theo's card gets the evening's best grade, and not for anything he bought. Ines opens the last folder. The stock's wipe-out came on 10 March, by receivership: the holding company's main asset passed to the FDIC, and the equity's value went with it. The notes' default came a week later, on 17 March, when SVB Financial Group filed for Chapter 11 in the Southern District of New York (case 23-10367), which accelerated all seven series of senior notes. The equity event and the credit event were a week apart and in different forums, a receivership and a bankruptcy court. A put-implied hazard measures the first; a bond spread prices the second; and a desk that compares them without saying which event each one is about is comparing a funeral with a will reading. Six weeks later the 3.5% notes due 2025 traded at 69 and the 1.8% notes due 2031 at 57 (MarketAxess data reported by Debtwire, 26 Apr 2023): one class of claims, twelve points apart, which §3.1.3 reads as a reinstatement bet on one class rather than two recoveries.
+
+Theo writes the evening's sentence on a sticky note and puts it under the one from Monday, *vega = one bond + one accident*: *JTD is the only line priced before the event. Buy it while it's off the surface.* Then he adds, smaller, *and ask which default.*
+
+Mags has the last word, as she usually does with funerals. "Your put chain saw the funeral," she says. "Your bond went to a different one."
+
+<!-- FIGURE: ch06b_svb_week.png (timeline 8–17 Mar 2023: SIVB close 267.83, 106.04, halt; 30-day implied vol 39–50 to 167, range top 280; holdco notes at the illustrative desk mark, 37–42 TRACE via Bloomberg on 10 Mar, 69/57 on 25 Apr; receivership 10 Mar and Chapter 11 17 Mar as vertical lines labelled "equity event" and "credit event"; source SVB §2.1, §2.3) -->
+
 ### 6-B.5.4 Corollary 1: the Carr–Wu corridor, with an error term
 
 Take two strikes $A<B$ and divide the put spread by its width. From (6B.1),
@@ -496,7 +556,7 @@ $$
 \frac{\text{Put}^{\text{JTD}}(B)-\text{Put}^{\text{JTD}}(A)}{B-A}=U^{\text{Eur}}(T)+\varepsilon(A,B),\qquad 0\le\varepsilon(A,B)\le e^{-(r+\lambda)T}\,N\!\big(-\tilde d_2(B)\big), \tag{6B.2}
 $$
 
-with $\tilde d_2(B)=\big[\ln(S_0/B)+(r+\lambda-\tfrac12\sigma^2)T\big]/(\sigma\sqrt T)$. *Proof.* The error is $\varepsilon=e^{-(r+\lambda)T}\,\mathbb{E}\big[(B-\tilde S_T)^+-(A-\tilde S_T)^+\big]/(B-A)$. The bracket divided by $B-A$ lies in $[0,1]$ and is zero whenever $\tilde S_T\ge B$, so $\varepsilon$ is non-negative and at most the discounted probability that the surviving path ends below $B$. $\square$
+with $\tilde d_2(B)=\big[\ln(S_0/B)+(r+\lambda-\tfrac12\sigma^2)T\big]/(\sigma\sqrt T)$; the proof is in the Full Derivation at the end of §6-B.5.5.
 
 That is the European Carr–Wu result as a corollary: the put spread is a pure default claim plus a *corridor leak*, the chance that a live stock diffuses down into the strikes, which vanishes when the strikes sit far below spot relative to $\sigma\sqrt T$. Carr and Wu's exact American statement (§23.3) replaces the leak with an assumption: if the pre-default stock never trades below $B$, then $\varepsilon=0$ identically, early exercise happens at $\tau$, and the claim being priced becomes the American one, $U^{\text{Am}}(T)=\frac{\lambda}{r+\lambda}\big(1-e^{-(r+\lambda)T}\big)$. The model sizes the leak when the assumption is only approximately true, which is the number a desk needs.
 
@@ -504,17 +564,23 @@ That is the European Carr–Wu result as a corollary: the put spread is a pure d
 
 ### 6-B.5.5 Corollary 2: the wing must blow up, and how fast
 
+> **Math, Gently.** *The ridge.* Plot implied *variance*, $\sigma_{\text{imp}}^2T$, against log-moneyness, $\ln(F_0/K)$, which measures how far below the forward a strike sits in proportional terms. For low strikes the curve climbs. How steeply can it climb? Lee's moment formula says no faster than a straight hill of slope 2: any steeper and some option would be priced above what it could possibly pay. Think of the slope-2 line as a ridge. Ordinary stochastic-volatility models live on the hillside below it. A stock that can die in one print walks exactly on the ridge, because its low-strike puts never stop being worth something: they keep the floor of the box in §6-B.5.2. *A number for the margin:* with a 5% intensity over one year, survival is $e^{-0.05}=0.951$, and $c=N^{-1}(0.951)=1.657$. Take a put struck at a fifth of the forward, so $L=\ln5=1.609$. The bound below says $x=\sigma_{\text{imp}}\sqrt T\ge-1.657+\sqrt{1.657^2+2\times1.609}=-1.657+\sqrt{2.746+3.219}=0.785$: no implied volatility below 78.5% can price that put, whatever the stock's ordinary volatility is. The proposition is next, and both proofs follow it.
+
 **Proposition.** In the jump-to-default model, the Black–Scholes implied volatility of a put struck at $K$ below the forward $F_0=S_0e^{rT}$ satisfies
 
 $$
 \sigma_{\text{imp}}(K)\sqrt T\;\ge\;-c+\sqrt{c^2+2\ln(F_0/K)},\qquad c=N^{-1}\big(S^{\mathbb{Q}}(T)\big)=N^{-1}\big(e^{-\lambda T}\big). \tag{6B.3}
 $$
 
-*Proof.* For any Black–Scholes put, $\text{Put}_{\text{BS}}(K;\sigma)/K\le e^{-rT}N(-d_2(\sigma))$, since the subtracted term $S_0N(-d_1)$ is positive. By (6B.1) the jump put is at least $KU^{\text{Eur}}=Ke^{-rT}(1-e^{-\lambda T})$. At the implied vol the two prices are equal, so $N(-d_2)\ge1-e^{-\lambda T}$, that is, $d_2\le c$. Write $x=\sigma_{\text{imp}}\sqrt T$ and $L=\ln(F_0/K)>0$, so $d_2=(L-\tfrac12x^2)/x$. Then $d_2\le c$ is $x^2+2cx-2L\ge0$, whose positive root gives (6B.3). $\square$
-
-The default probability alone puts a floor under the wing. With $\lambda=5\%$ and $T=1$, $c=N^{-1}(0.951)=1.657$, and at $K/F_0=0.2$ the bound is 78.5%, which the §23.4 table (about 100% at that moneyness) respects. As $K\to0$ the bound grows like $\sqrt{2\ln(F_0/K)/T}$: implied variance rises linearly in log-moneyness with slope 2. That is the steepest left wing Lee's (2004) moment formula allows. A stock that can reach zero sits exactly on the boundary. A stochastic-volatility model can make the wing steep, and an exotic one can even match the slope, but no model without mass at zero produces a positive floor in $\text{Put}(K)/K$. The floor ratio, not the slope, is how you tell the two apart in data. Figure 6-B.4 draws both, the floor ratio on the left and the wing with its bound on the right.
+The default probability alone puts a floor under the wing. With $\lambda=5\%$ and $T=1$ the box's arithmetic gives $c=N^{-1}(0.951)=1.657$ and, at $K/F_0=0.2$, a bound of 78.5%, which the §23.4 table (about 100% at that moneyness) respects. As $K\to0$ the bound grows like $\sqrt{2\ln(F_0/K)/T}$: implied variance rises linearly in log-moneyness with slope 2. That is the steepest left wing Lee's (2004) moment formula allows. A stock that can reach zero sits exactly on the boundary. A stochastic-volatility model can make the wing steep, and an exotic one can even match the slope, but no model without mass at zero produces a positive floor in $\text{Put}(K)/K$. The floor ratio, not the slope, is how you tell the two apart in data. Figure 6-B.4 draws both, the floor ratio on the left and the wing with its bound on the right.
 
 ![Figure 6-B.4: With a jump to default the put price per dollar of strike flattens at the unit recovery claim (4.7 cents here) instead of falling toward zero (left), and the implied volatility of low-strike puts must stay above the bound (6B.3), which is 78.5% at a strike one-fifth of the forward (right). Illustrative: Merton (1976) jump to zero with spot 100, diffusive volatility 40%, r = 4%, λ = 5% and T = 1, priced with (6B.1) and inverted with implied_vol() of Listing 6-B.1.](assets/figures/ch06b_jtd_put_floor_and_wing.png)
+
+#### The Full Derivation: the corridor leak and the wing bound
+
+*The corridor leak, (6B.2).* *Proof.* The error is $\varepsilon=e^{-(r+\lambda)T}\,\mathbb{E}\big[(B-\tilde S_T)^+-(A-\tilde S_T)^+\big]/(B-A)$. The bracket divided by $B-A$ lies in $[0,1]$ and is zero whenever $\tilde S_T\ge B$, so $\varepsilon$ is non-negative and at most the discounted probability that the surviving path ends below $B$. $\square$
+
+*The wing bound, (6B.3).* *Proof.* For any Black–Scholes put, $\text{Put}_{\text{BS}}(K;\sigma)/K\le e^{-rT}N(-d_2(\sigma))$, since the subtracted term $S_0N(-d_1)$ is positive. By (6B.1) the jump put is at least $KU^{\text{Eur}}=Ke^{-rT}(1-e^{-\lambda T})$. At the implied vol the two prices are equal, so $N(-d_2)\ge1-e^{-\lambda T}$, that is, $d_2\le c$. Write $x=\sigma_{\text{imp}}\sqrt T$ and $L=\ln(F_0/K)>0$, so $d_2=(L-\tfrac12x^2)/x$. Then $d_2\le c$ is $x^2+2cx-2L\ge0$, whose positive root gives (6B.3). $\square$
 
 ### 6-B.5.6 Hedging a jump with an instrument that diffuses
 

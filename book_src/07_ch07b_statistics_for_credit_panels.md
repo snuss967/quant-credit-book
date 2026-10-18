@@ -619,17 +619,13 @@ placing weight $(1-\varphi)\varphi^j$ on the observation $j$ periods back. The h
 
 ### Shrinkage, the general idea
 
+> **Math, Gently.** *Shrinkage, or the early-season batting average.* Three weeks into a baseball season some hitter is batting .450. Nobody believes it, and nobody should: twenty at-bats are mostly luck, and the honest forecast for the rest of his season sits much closer to the league average than to .450. **Shrinkage** is that instinct with a dial on it. Blend the player's own number with the average, and set the weight on his own number by how far it can be trusted: $w = \tau^2/(\tau^2 + \sigma^2/n)$, where $\tau^2$ is how much true talent varies across players, $\sigma^2$ how noisy a single at-bat is, and $n$ the number of at-bats. Tiny number: with $\tau^2 = 1$, $\sigma^2 = 4$ and $n = 4$, $w = 1/(1 + 4/4) = 0.5$, half his own record and half the league's. Quadruple the at-bats and $w$ rises to 0.8. Two lessons come out of the formula and survive every generalization of it: shrink hard when your own estimate is noisy, and shrink little when the thing you are shrinking toward is wrong for this player. A covariance matrix is eighty thousand batting averages at once, and the general idea is next.
+
 Shrinkage trades a little bias for a lot of variance. For means it is old: estimate a counterparty's markout with $n_i$ fills as a weighted average of its own mean and the population's, with weight $w_i = \tau^2/(\tau^2 + \sigma^2/n_i)$ on its own data (the normal–normal posterior; §3.3.4 uses exactly this). James and Stein (1961) proved the uncomfortable general version: for three or more means, shrinking all of them toward a common point beats estimating each separately, in total squared error, *whatever the true means are*. Factor weights "shrunk toward equal" (§9.7) are the same move applied to a portfolio.
 
-### Ledoit–Wolf, derived in five lines
+### Ledoit–Wolf: noise over noise plus misspecification
 
-Shrink the sample matrix toward a structured target $\Sigma^{\text{tgt}}$: $\Sigma(\delta) = \delta\,\Sigma^{\text{tgt}} + (1-\delta)\,\hat\Sigma$. Choose $\delta$ to minimize the expected squared Frobenius error $\mathbb{E}\lVert \Sigma(\delta) - \Sigma \rVert_F^2$. Write $\Sigma(\delta) - \Sigma = (\hat\Sigma - \Sigma) - \delta(\hat\Sigma - \Sigma^{\text{tgt}})$; the loss is quadratic in $\delta$ and its minimizer is
-
-$$
-\delta^{*} = \frac{\mathbb{E}\big\langle \hat\Sigma - \Sigma,\; \hat\Sigma - \Sigma^{\text{tgt}} \big\rangle}{\mathbb{E}\lVert \hat\Sigma - \Sigma^{\text{tgt}} \rVert_F^2} .
-$$
-
-If the target is fixed and $\hat\Sigma$ is unbiased, the cross terms vanish and
+Shrink the sample matrix toward a structured target $\Sigma^{\text{tgt}}$, $\Sigma(\delta) = \delta\,\Sigma^{\text{tgt}} + (1-\delta)\,\hat\Sigma$, and choose $\delta$ to minimize the expected squared (Frobenius) distance between the blend and the truth. The answer, derived at the end of this section, is the batting-average weight for a whole matrix:
 
 $$
 \delta^{\text{LW}} = \frac{\sum_{i,j}\operatorname{Var}(\hat\Sigma_{ij})}{\sum_{i,j}\operatorname{Var}(\hat\Sigma_{ij}) + \lVert \Sigma - \Sigma^{\text{tgt}} \rVert_F^2} = \frac{\text{noise}}{\text{noise} + \text{misspecification}} ,
@@ -656,15 +652,11 @@ Credit has a gift here: the loading on the market spread factor is known before 
 
 ### PCA on a residual panel, and which components are real
 
-After stripping the known factors you are left with a $T \times N$ panel $\tilde\epsilon$ of DTS-scaled residuals (§8.8). Its first principal component is the unit vector that captures the most variance:
+After stripping the known factors you are left with a $T \times N$ panel $\tilde\epsilon$ of DTS-scaled residuals (§8.8). The question is whether anything common is still in it, which is the question the RV thread keeps asking: a pair's "idio" is idio only relative to the factors you removed, and a residual panel with a common component in it is a book of pairs that are secretly one trade (Chapter 8 §8.8 runs that test on the Pair Book).
 
-$$
-\max_{v}\; v^\top \hat\Sigma_{\tilde\epsilon}\, v \quad \text{s.t.} \quad v^\top v = 1
-\quad\Longrightarrow\quad
-\hat\Sigma_{\tilde\epsilon}\, v = \omega\, v ,
-$$
+> **Math, Gently.** *What an eigenvalue is, and why noise has an edge.* **Part 1: a stretched ball.** Plot two bonds' daily returns against each other and the cloud is not round. It is an ellipse, stretched along the direction in which the two tend to move together. A covariance or correlation matrix is the recipe for that stretch: its **eigenvectors** are the ellipse's axes and its **eigenvalues** are how long each axis is, which is the variance of a portfolio pointing along it. Tiny number: two bonds with unit variance and correlation 0.6. One axis points along "both together", $(1, 1)/\sqrt2$, with eigenvalue $1 + 0.6 = 1.6$; the other points along "one against the other", $(1, -1)/\sqrt2$, with eigenvalue $1 - 0.6 = 0.4$. The long axis is the market. The short one is the pair, long one bond and short the other, which is why a pair's variance is so much smaller than either leg's, and why an axis whose length is estimated at zero is a portfolio an optimizer believes is riskless: the 400-bond matrix of the desk framing is a ball squashed flat along 281 such axes. **Part 2: noise has an edge.** Pure noise also makes a stretched ball, because a finite sample always finds some direction that happened to move more than the others. Marchenko and Pastur worked out how far noise alone can stretch it: for $N$ unrelated series observed $T$ times, with $q = N/T$, the longest noise axis is about $(1 + \sqrt q)^2$ times the average. Tiny number: 100 bonds and 400 days give $q = 0.25$ and an edge of $(1 + 0.5)^2 = 2.25$, so a top eigenvalue of 2.0 on that panel is nothing at all. The full version is next.
 
-from the Lagrangian $v^\top\hat\Sigma v - \omega(v^\top v - 1)$. The variance captured is the eigenvalue $\omega_1$; the $k$-th component is the $k$-th eigenvector, orthogonal to the rest. The component's time series is $g_t = \tilde\epsilon_t v_1$, and removing it leaves $\tilde\epsilon - g\,v_1^\top$.
+The first principal component of the residual panel is the unit vector $v_1$ along the longest axis of its covariance, $\hat\Sigma_{\tilde\epsilon}\, v_1 = \omega_1 v_1$; the variance it captures is the eigenvalue $\omega_1$, and the $k$-th component is the $k$-th eigenvector, orthogonal to the rest (the Lagrangian is in the Full Derivation below). The component's time series is $g_t = \tilde\epsilon_t v_1$, and removing it leaves $\tilde\epsilon - g\,v_1^\top$.
 
 The question PCA does not answer by itself is whether $\omega_1$ is signal. Random matrix theory supplies the null. If the panel were pure noise with unit variance and aspect ratio $q = N/T$, the nonzero eigenvalues of its sample correlation matrix would fill, as $N, T \to \infty$, the Marchenko–Pastur interval
 
@@ -677,6 +669,30 @@ For 400 bonds and 120 months, $q = 3.33$ and the upper edge is $(1 + 1.826)^2 \a
 ![Figure 7-B.4: Eigenvalues of a 400-bond correlation matrix built from noise plus a market factor and a weak sector factor. With five years of daily data (q = 0.32) noise stays below 2.4 and both factors stand out. With ten years of monthly data (q = 3.33) noise reaches 8.0, only the market factor clears it, and the sector factor is lost in the bulk. Illustrative: simulated with a fixed seed; the line is the Marchenko–Pastur density, and each dot is a single eigenvalue above the edge.](assets/figures/ch07b_mp_edge.png)
 
 "So we just assume Gaussian," Kaz said, and then, a beat later, regretted it. The Marchenko–Pastur edge assumes thin-tailed, serially independent noise; fat tails and stale marks widen the noise band. Treat the edge as a floor for skepticism, not a theorem about your data. Two more traps: the sign of an eigenvector is arbitrary, so align each window's loadings with the previous window's before you chart them; and when two eigenvalues are close, their eigenvectors rotate freely between windows, so the "second factor" may be a different factor every month.
+
+A systematic manager that sells factor analytics to other investors draws the same line in a different place, and Ines, who had listened to the episode on a flight, thought the contrast was the point.
+
+> **View From Another Seat.** *The systematic manager's factor lens (Venn by Two Sigma, from a public podcast).* On *Flirting with Models* (S7E20, 2 September 2025), Chris Carrano of Venn by Two Sigma described the thinking behind Venn's factor lens: eighteen factors, orthogonalized so that each one's exposure means something on its own; a fit that blends Lasso with ordinary least squares to keep the regression from chasing noise; and a stated preference for factors a client can interpret over a more complex set that explains a little more (paraphrased from the episode). From that seat the lens has to describe any portfolio a client uploads, across asset classes, so breadth of factors is the product and Lasso, itself a shrinkage estimator, is what keeps eighteen from overfitting. The desk's credit model makes the opposite trade: five factors, one asset class, and a market loading it never estimates because DTS supplies it (Law 3). Both seats are obeying the same edge. A residual panel at daily frequency, where $q$ is near 0.3 and the noise edge sits near 2.4, can afford to look for more structure than a monthly panel, where the edge is 8.0 and only the market clears it, provided the daily marks are prices and not stale copies of yesterday's, which in credit is a large proviso.
+
+#### The Full Derivation: Ledoit–Wolf and the first principal component
+
+*Ledoit–Wolf (7B.8).* Write $\Sigma(\delta) - \Sigma = (\hat\Sigma - \Sigma) - \delta(\hat\Sigma - \Sigma^{\text{tgt}})$. The expected squared Frobenius error $\mathbb{E}\lVert \Sigma(\delta) - \Sigma \rVert_F^2$ is quadratic in $\delta$, and its minimizer is
+
+$$
+\delta^{*} = \frac{\mathbb{E}\big\langle \hat\Sigma - \Sigma,\; \hat\Sigma - \Sigma^{\text{tgt}} \big\rangle}{\mathbb{E}\lVert \hat\Sigma - \Sigma^{\text{tgt}} \rVert_F^2} .
+$$
+
+If the target is fixed and $\hat\Sigma$ is unbiased, the cross terms vanish: the numerator becomes $\mathbb{E}\lVert \hat\Sigma - \Sigma \rVert_F^2 = \sum_{i,j}\operatorname{Var}(\hat\Sigma_{ij})$ and the denominator that plus $\lVert \Sigma - \Sigma^{\text{tgt}} \rVert_F^2$, which is (7B.8).
+
+*The first principal component.* Maximize the captured variance $v^\top \hat\Sigma_{\tilde\epsilon}\, v$ subject to $v^\top v = 1$. The Lagrangian $v^\top\hat\Sigma v - \omega(v^\top v - 1)$ has first-order condition
+
+$$
+\max_{v}\; v^\top \hat\Sigma_{\tilde\epsilon}\, v \quad \text{s.t.} \quad v^\top v = 1
+\quad\Longrightarrow\quad
+\hat\Sigma_{\tilde\epsilon}\, v = \omega\, v ,
+$$
+
+so the optimum is an eigenvector and the variance captured, $v^\top \hat\Sigma v = \omega$, is its eigenvalue; the largest eigenvalue wins. Repeating the problem orthogonal to $v_1$ gives the second component, and so on.
 
 *Used in:* §3.3.4 (shrunk counterparty scores), §8.4 (DTS scaling), §8.6 (ridge hedges), §8.8 (removing the common residual factor), §9.7 (weights shrunk toward equal), §10.3 (EWMA volatility), §12.5 (EWMA, shrinkage and desmoothing), §19.5 (residual covariance for 150 stale bonds), §28.2 (breadth from the residual correlation).
 

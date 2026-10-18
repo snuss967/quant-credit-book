@@ -136,24 +136,6 @@
    }
   },
   {
-   "name": "resgraph-IV",
-   "task": "wkl81i70m",
-   "runId": "wf_63aaf042-cd1",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "13_ch13_codifying_lmt_game_theory",
-     "14_ch14_default_and_recovery_cycle_lmt_era",
-     "15_ch15_event_driven_mna_and_coc",
-     "16_ch16_post_reorg_equities_and_claims"
-    ],
-    "stages": [
-     "resgraph"
-    ]
-   }
-  },
-  {
    "name": "figs-2-7",
    "task": "wyipb7mze",
    "runId": "wf_dd436fe2-01d",

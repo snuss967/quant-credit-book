@@ -13,7 +13,7 @@
 - [x] 11. [§12B.6 fulcrum] MATH-GENTLY #7, two parts — bag box, pi_j example; Kaz callback, pronoun fixed.
 - [x] 12. [§12B.6 plan value] MATH-GENTLY #8 + FULL-DERIVATION-MOVE + ANOTHER-SEAT (Oaktree) — \$10/\$9 box; strike statement; Oaktree seat; derivation moved.
 - [x] 13. [§12B.6 absolute priority] BRIDGE to Saks — two sentences: cancelled equity, rejecting class, trust as 'something'.
-- [ ] 14. [§12B.6 cramdown] NEW-SCENE Long Scene B: Momentive + MATH-GENTLY #9
+- [x] 14. [§12B.6 cramdown] NEW-SCENE Long Scene B: Momentive + MATH-GENTLY #9 — four beats, web-checked remand facts; annuity box; law paragraphs retired.
 - [ ] 15. [§12B.7] MATH-GENTLY #10 two parts + FULL-DERIVATION-MOVE + WHEN-TO-APPLY
 - [ ] 16. [§12B.8] SHOP-LIFE vignette: the transfer notice + LIST-TO-NARRATIVE
 - [ ] 17. [§12B.9] EXPAND-SCENE Halvorsen, grade the Friday cards

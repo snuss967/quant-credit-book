@@ -548,13 +548,71 @@ Saks's plan shows the rule doing its plainest work. The old equity was cancelled
 
 A dissenting *secured* class can be crammed down in one of three ways (§1129(b)(2)(A)): (i) it keeps its liens and receives deferred cash payments totaling at least its allowed claim, with a present value at the effective date at least equal to the value of its collateral; (ii) the collateral is sold free and clear, subject to the credit bid, with the liens attaching to the proceeds; or (iii) it receives the "indubitable equivalent" of its claim. Route (i) is the one with a number in it: the **cramdown interest rate**.
 
-Price a takeback note of face $S$ (the allowed secured claim), annual coupon $c$ set by the court, maturity $n$ years, when the market yield on comparable paper is $y$. With the annuity factor $a_n(y) = \big(1 - (1+y)^{-n}\big)/y$, the price is $P = S\,[\,c\,a_n(y) + (1+y)^{-n}\,]$. Par pricing gives the identity $1 = y\,a_n(y) + (1+y)^{-n}$, and subtracting it yields
+#### Long Scene: Momentive, the Rate the Court Sets
+
+*A replay. The desk, its cards, every line of dialogue and the inputs to the cards (a 5.5% comparable yield, a 10-point make-whole, a 40% chance of winning it) are invented. The case facts come from practitioner accounts of the Momentive Performance Materials case (Skadden, January 2019; Jones Day, November 2017; Weil, 24 April 2019) and from the Second Circuit's opinion, cited where they appear; nobody outside the desk speaks.*
+
+*Monday 30 November 2026, 7:30 a.m.* Ines lets Mags run this replay, because Mags remembers where she was. In 2014 she was running a distressed book that owned none of the paper, which she describes as owning a view, "cheaper than owning the bonds and more painful, because you can't sell it."
+
+**Beat 1: the offer (spring and summer 2014).** Momentive Performance Materials, a maker of silicones, filed for Chapter 11 in April 2014. Above its unsecured notes sat two classes of secured noteholders: a first lien and a 1.5 lien.
+
+"A lien and a half," Kaz says. "Is that a lien with a deductible?"
+
+"It's a lien junior to the first and senior to the second," Theo says. "The lawyers ran out of integers."
+
+The plan made the senior-lien noteholders an offer with two doors, as practitioners summarized it afterward. If they accepted the plan, they would be paid in full in cash, with no make-whole premium. If they rejected it, they would keep the right to litigate the make-whole and receive replacement notes "with a present value equal to the Allowed amount" of their claims (Skadden's summary of the plan). The make-whole was the premium the indentures charged for paying the notes off early, and the noteholders believed a bankruptcy payoff was early.
+
+Kaz wants to know what a make-whole is worth, and Theo gives the PJT answer: roughly the present value of the coupons the lender loses when the borrower repays early, discounted at a small spread over Treasuries, which on a long, high-coupon note can be many points. "Then it's a digital," Kaz says. "It pays those points if a judge agrees that a bankruptcy payoff is an early repayment, and zero if not."
+
+"Every claim in a bankruptcy is a digital on a judge," Mags says. "This one just has a name."
+
+"Par in cash today," Mags says, "or paper and a lawsuit. That's a deathtrap with a litigation option bolted on." An accepting class waives the cramdown protections for itself, which is what makes the offer legal; a rejecting class forces the court to decide what "present value equal to the allowed amount" means, which is what made this case famous.
+
+Ines deals the cards. "You hold the first-lien notes. It's the week before the vote. Accept par and waive the make-whole, or reject and take a note at a rate the court will set. Write your indifference rate, the court rate at which you don't care, and why." She slides one across to the empty chair. "Reader, yours too. Before Kaz does the arithmetic."
+
+Kaz does the arithmetic anyway, because the card cannot be written without it. "I need the price of a note whose coupon is wrong."
+
+> **Math, Gently.** *The annuity, and the coupon gap.* An annuity is a row of equal payments, one a year, and its factor $a_n(y)$ is what that row of \$1 payments is worth today when money earns $y$. Now take a note that pays 8% when the market wants 10% for the same risk. Think of it as a fair 10% note with a row of 2% IOUs subtracted, IOUs you will never receive. The note's shortfall from par is exactly what that row of missing 2% payments is worth today. For one year, $a_1(10\%) = 1/1.10 = 0.909$, so the note is worth $1 - 0.02 \times 0.909 = 0.982$ of its face. Make the gap last longer and the missing row gets longer, so the discount grows with maturity. That is the whole formula; it comes next with its symbols.
+
+Kaz writes the general case on the whiteboard. Price a takeback note of face $S$ (the allowed secured claim), annual coupon $c$ set by the court, maturity $n$ years, when the market yield on comparable paper is $y$. With the annuity factor $a_n(y) = \big(1 - (1+y)^{-n}\big)/y$, the price is $P = S\,[\,c\,a_n(y) + (1+y)^{-n}\,]$. Par pricing gives the identity $1 = y\,a_n(y) + (1+y)^{-n}$, and subtracting it yields
 
 $$
 \frac{P}{S} = 1 - (y - c)\,a_n(y).
 $$
 
-The shortfall from par is the coupon gap times the annuity. Take a 7-year note at a court rate of 8.5% when comparable exit paper yields 11%. Then $a_7(11\%) = 4.712$, and $P/S = 1 - 0.025 \times 4.712 = 0.882$. The secured class receives paper worth 88.2 per 100 of allowed claim, and the 11.8 points do not disappear: they go to whoever owns the residual, usually the fulcrum class just below or the plan sponsor. The cramdown rate is a strike the court sets on an option the debtor holds, the option to pay a secured creditor in paper rather than cash. The Supreme Court's *Till* plurality (2004, a Chapter 13 case) endorsed a formula rate of prime plus a risk adjustment, typically 1–3%. In *Momentive* (*In re MPM Silicones*, 874 F.3d 787, 2d Cir. 2017) the Second Circuit held that in Chapter 11 the market rate applies where an efficient market exists, falling back to the formula only where none does. On remand the bankruptcy court found that no efficient market in the textbook sense had been shown, and set the rate from the debtors' arm's-length backup exit financing, a "process-efficient" market rate (Jones Day, Nov 2017, on the appeal; practitioner summaries of the remand). That two-step test is what a lender's lawyer is arguing about when the desk sees "cramdown risk" on a secured class: whether $c$ will be set near $y$ or near prime plus two.
+The shortfall from par is the coupon gap times the annuity. Take a 7-year note at a court rate of 8.5% when comparable exit paper yields 11%. Then $a_7(11\%) = 4.712$, and $P/S = 1 - 0.025 \times 4.712 = 0.882$. The secured class receives paper worth 88.2 per 100 of allowed claim, and the 11.8 points do not disappear: they go to whoever owns the residual, usually the fulcrum class just below or the plan sponsor. The cramdown rate is a strike the court sets on an option the debtor holds, the option to pay a secured creditor in paper rather than cash.
+
+Then the three of them write. Ines gives them the same inputs, all invented: comparable seven-year exit paper at 5.5%, so $a_7(5.5\%) = 5.683$, and a make-whole worth 10 points of face if it is ever won.
+
+Kaz's card says *reject; indifference rate 5.5%*. "In an efficient market the court has to give me the market rate. Anything below it is a gift to the debtor, and I'm not giving gifts." Kaz has left the make-whole off the card entirely, as a nuisance parameter.
+
+Mags writes *accept; indifference rate: whatever the judge is least likely to give me*. "A secured lender who rejects a cash payoff is suing for the right to be paid in paper. The court sets the strike, and the court is not on your side of the option."
+
+Theo writes the indifference condition out properly. Rejecting gets the note, $1 - (y - c)\,a_7(y)$, plus the make-whole option, which he values at a 40% chance of winning 10 points, so 4 points. Accepting gets 100. Indifference means $(y - c) \times 5.683 = 0.04$, a coupon gap of 0.70 points, so $c^\star = 4.8\%$. "If the court sets the rate above 4.8%, reject. Below it, accept. And the court will start from something like prime plus a little, so: accept, narrowly."
+
+**Beat 2: the vote and the formula (August 2014).** The senior-lien classes rejected the plan, and the court confirmed it over their objections in August 2014. For the rate, the bankruptcy court reached for the formula approach of the Supreme Court's *Till* plurality (2004, a Chapter 13 case), which endorsed a formula rate of prime plus a risk adjustment, typically 1–3%. Judge Drain built his version on a Treasury base with a small risk premium, and the replacement notes came out, by Weil's later account, at a fixed 3.88% for the first lien and 4.69% for the 1.5 lien. The make-whole claims were denied. The district court affirmed.
+
+Kaz reads the 3.88% twice. Theo's card had a threshold at 4.8%, and the court came in well below it; by his own rule the holders should have taken the cash. Run 3.88% through Kaz's whiteboard against the invented 5.5% and the note is worth about $1 - 0.0162 \times 5.683 = 90.8$ per 100 on the day it is issued. The noteholders had rejected par cash to receive about 91 cents of paper and a lawsuit.
+
+**Beat 3: the Second Circuit (20 October 2017).** Three years later, in *In re MPM Silicones*, 874 F.3d 787 (2d Cir. 2017), the Court of Appeals held that in Chapter 11 the cramdown rate should be the market rate where an efficient market for comparable loans exists, falling back to the formula only where none does: a two-step test (Jones Day, November 2017, on the appeal). It sent the rate back to the bankruptcy court to ask the first question. On the make-whole it agreed with the courts below. The petition had accelerated the notes, so paying them afterwards was not an early redemption, and practitioners noted that this put the Second Circuit at odds with the Third Circuit's 2016 *Energy Future Holdings* ruling on the same kind of clause.
+
+"So I was right," Kaz says.
+
+"About the law," Mags says. "Three years late, and about half of your card."
+
+**Beat 4: the remand (2018 to April 2019).** The bankruptcy court held a trial in August and September 2018 on whether an efficient market had existed in 2014. By early 2019 the first-lien holders were arguing for a market rate of roughly 5% to 6% or more, which they estimated was worth about \$150mm more in aggregate interest than the formula rate (Skadden, January 2019). In April 2019 Judge Drain ruled that he could not find an efficient market for exit financing comparable to the replacement notes, but that a "process-efficient" one had existed: the backup exit financing negotiated at arm's length during the case, under court review. He set the first-lien rate at LIBOR plus 4.50% with a 1% LIBOR floor, which included 0.50% of original issue discount and 0.375% of market flex, and the 1.5-lien rate at 7.9%, against the plan's 3.88% and 4.69%; the holders were entitled to the difference between the rate they had been issued and the process-efficient one (Weil, 24 April 2019).
+
+Ines turns the cards over.
+
+Kaz's card was right in law and wrong on the calendar. The indifference rate of 5.5% was roughly where the remand landed, five years after the vote, and the make-whole Kaz had ignored was lost at every level, so ignoring it cost nothing. "My indifference rate was correct," Kaz says, "and my holding period was five years longer than my card."
+
+Theo's card was right on its own logic and wrong on its inputs. He had given the make-whole a 40% chance, and it was worth zero; with $p = 0$ his indifference rate collapses to Kaz's 5.5%, and the court's 3.88% was far below it, so on the facts of 2014 the card said accept, and accept was right. What he had not priced was the second leg of the two-step: a remand that, on paper, paid the rejecters the difference five years later. A rejection was a long-dated option on the appellate courts, financed by holding sub-market paper in the meantime.
+
+Mags's card was the one the classes did not play. Par in cash in 2014, no make-whole, no five years of litigation. "Whatever the judge is least likely to give you," she says, "turned out to be the market rate. Eventually."
+
+And the reader's card? If your indifference rate was above about 4%, you said accept and were right in 2014. If you said reject, you were betting on the Second Circuit and the remand, and you won that bet in April 2019, holding paper the formula had marked well below par for most of the wait.
+
+"That two-step test," Ines says, "is what a lender's lawyer is arguing about when the screen shows 'cramdown risk' on a secured class: whether $c$ is set near $y$ or near prime plus two. The rest is how long you can wait to find out."
 
 Used in: §5.5 (seniority in the Beta recovery model), §6.2 and Ch 6-B (equity as a call; the fulcrum as the equity option), §13.3 and §13.7 (uptier and double-dip waterfalls, which are this waterfall applied twice), §14.4 (recovery as a mixture), §16.1 (plan value as a negotiated number), §16.3 and §16.4 (backstops, rights and deathtrap warrants), §16.6 (Hertz: the solvent-debtor end of the waterfall), Chapter 3 (the fulcrum in the RFQ), Chapter 28 (sizing a fulcrum position).
 
