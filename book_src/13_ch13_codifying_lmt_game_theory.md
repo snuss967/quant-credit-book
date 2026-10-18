@@ -326,10 +326,10 @@ So after June 2020, the excluded lenders recovered nothing unless enterprise val
 | Version | Face ahead of the excluded first lien, $K_1$ (\$mm) | Pre-deal face sharing the slice (\$mm) | Pre-deal slice at $V = K_1$ (cents) |
 | :--- | :--- | :--- | :--- |
 | Blended (Figure 13.1) | 1,075 | 2,400 (both liens) | 44.8 |
-| Unblended, first-lien second-out only | 934 | 1,950 (2016 first-lien face) | 47.9 |
+| Unblended, first-lien second-out only | 934 | 1,887 (June 2020 first-lien face) | 49.5 |
 | Unblended, all super-priority debt ahead | 1,075 | 1,887 (June 2020 first-lien face) | 57.0 |
 
-The blended picture understates the first-lien minority's peak loss by between three and twelve points, depending on which strike you believe and which face you divide by (our arithmetic). The shape does not change: it is still a short digital put. The notional does. The published figures do not tie exactly (the participants' \$992mm of first lien at 74 and the rest of the \$1.2bn at 39 give somewhat less than \$875mm of second-out), which is one more reason Exercise 1 asks for the sensitivity to the lien split rather than a single answer.
+The blended picture understates the first-lien minority's peak loss by between five and twelve points, depending on which strike you believe and which face you divide by (our arithmetic). The shape does not change: it is still a short digital put. The notional does. The published figures do not tie exactly (the participants' \$992mm of first lien at 74 and the rest of the \$1.2bn at 39 give somewhat less than \$875mm of second-out), which is one more reason Exercise 1 asks for the sensitivity to the lien split rather than a single answer.
 
 #### Decision point: Friday, 19 June 2020
 

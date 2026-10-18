@@ -995,7 +995,7 @@ Kaz looks at the dashboard for a while. Then Kaz does the thing that makes Kaz w
 
 "So the people who won the case," says Ines, "own a company that's ten weeks from running out of money."
 
-Ten weeks, it turned out, was about right. The ruling preceded the filing by about 2.3 months. Mitel filed its prepack on 10 March 2025, and on Paul Weiss's account the plan cut about \$1.15bn of debt, lowered annual interest by about \$135mm, and brought in about \$125mm of new money, converting secured debt into equity along the way. The lenders who had won the right to prime their colleagues in Manhattan spent the spring in a Texas bankruptcy court anyway. In the mixture-cure model Mitel was one of the susceptible 25%, failing inside the high-hazard window that the $k > 1$ calibration predicts, and the desk's model now keeps legality and survival in different columns on purpose.
+Ten weeks, it turned out, was about right. The ruling preceded the filing by about 2.3 months. Mitel filed its prepack on 10 March 2025, and on Paul Weiss's account the plan cut about \$1.15bn of debt, lowered annual interest by about \$135mm, and brought in about \$125mm of new money, converting secured debt into equity along the way. The lenders who had won the right to prime their colleagues in Manhattan spent the spring in a Texas bankruptcy court anyway. In the mixture-cure model Mitel was one of the susceptible 25%, failing inside the window its own runway set, though late on the pooled clock, and the desk's model now keeps legality and survival in different columns on purpose.
 
 ### 14.8.3 Case Study: Del Monte Foods, 2024–2026 (the fast clock)
 
