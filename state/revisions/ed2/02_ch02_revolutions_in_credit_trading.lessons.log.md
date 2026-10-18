@@ -40,8 +40,8 @@ Growth 31,789 / 14,619 = **2.17×** against the 1.6–1.9× target (23,390–27,
 - [x] B23. LCS trust told twice: annotation L734 ("should check that the two agree before trusting either"; floaters/callables) and L746. Survives: annotation; L746 becomes a scene (C5). **Done:** LCS trust paragraph replaced by scene; annotation points to it.
 - [x] B24. Duration tiny number (D=5, 10 bp → 0.50%, 25 bp) in box L736 and L744. Survives: L744; box gets its own number. **Done:** Duration box uses a 25 bp move; L744 keeps cost example.
 - [x] B25. Fundamental-law tiny number (12 → 7.5, 2.56, 1.6, 48 → 77) in box L752 and L754. Survives: L754; box gets its own number. **Done:** Box halves the fare; Man's 12-to-7.5 numbers told once.
-- [ ] B26. Duplicate Specs: body "Specification for AI Implementation" Module/Schemas/Edge cases (L856–860) and the Debrief's "The Spec You Hand the Robot" (L930). Survives: the Debrief Spec, with L858's schemas merged in; L856 and L860 deleted (L866 already holds the clip/centering detail).
-- [ ] B27. Listing 2.2 paragraph L880 relists the §2.3.2 caveats (winner's curse, non-response, cover gap consistent with competition and herding), also in the Debrief. Survives: §2.3.2 and the Debrief; L880 points.
+- [x] B26. Duplicate Specs: body "Specification for AI Implementation" Module/Schemas/Edge cases (L856–860) and the Debrief's "The Spec You Hand the Robot" (L930). Survives: the Debrief Spec, with L858's schemas merged in; L856 and L860 deleted (L866 already holds the clip/centering detail). **Done:** Body Module/Schemas/Edge cases deleted; schemas and guards merged into Debrief Spec.
+- [x] B27. Listing 2.2 paragraph L880 relists the §2.3.2 caveats (winner's curse, non-response, cover gap consistent with competition and herding), also in the Debrief. Survives: §2.3.2 and the Debrief; L880 points. **Done:** Listing 2.2 paragraph points to caveats, Poker Table, 9 April.
 
 ## (c) Templates and detached judgment paragraphs
 
@@ -54,7 +54,7 @@ Growth 31,789 / 14,619 = **2.17×** against the 1.6–1.9× target (23,390–27,
 - [x] C7. L406 "Third, there is direct evidence" after "two places" — fix the stray enumerator. **Done:** Stray 'Third' replaced with 'And'; two places now read cleanly.
 - [x] C8. L390 Poker Table "For Theo, the practical rule:" — give the line to Ines. **Done:** Practical rule now Ines's spoken line to Theo.
 - [x] C9. L838 Ines "First you look ... Second, the no-touch fill rate" — drop the enumerators; keep the order in her voice. **Done:** Ines's order kept without enumerators; 'Only then' closes it.
-- [ ] C10. Listing prose L870, L880, L892, L902: "Use it ... Do not use ... The edge case that bites" ×4. Each keeps its edge case once, opened on the chapter moment (Kaz's K = 0.48; 9 April; Exercise 4's junior; the BBB line's two routers).
+- [x] C10. Listing prose L870, L880, L892, L902: "Use it ... Do not use ... The edge case that bites" ×4. Each keeps its edge case once, opened on the chapter moment (Kaz's K = 0.48; 9 April; Exercise 4's junior; the BBB line's two routers). **Done:** Four 'Use it/edge case' paragraphs open on chapter moments instead.
 
 ## (d) Boxes
 

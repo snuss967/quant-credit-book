@@ -10,25 +10,25 @@
 
 ### (b) Duplication (new telling vs old telling, and which survives)
 
-- [ ] B1. Moyer's 85 = 100p + 60(1−p) → 0.625 and the ℚ-not-ℙ point: L45 box and L51 annotation (and the extraction itself). **Survivor:** extraction + annotation; L45 becomes a gloss (D1).
-- [ ] B2. "93% of the variance is which hump": L75 box and L86. **Survivor:** L86; box becomes a gloss (D1).
-- [ ] B3. Markout +146bp (85.75 → 87): L254 box and L264. **Survivor:** L264.
-- [ ] B4. The Brambleworth hand (6 points, CDX 20bp, Treasuries 10bp, β 1.3, 0.48 and 5.5): L288 box and L320 "The hand, replayed". **Survivor:** L320; box becomes a gloss with no hand numbers.
-- [ ] B5. Shrinkage numbers (150bp, 20bp, 56.25, +300 → +5bp, 56 fills): L300 box solves Exercise 6(b) (lesson 7). **Survivor:** Exercise 6; the box gets its own numbers.
-- [ ] B6. Half-life crossover (0.10/3 days vs 0.04/120 days → 4.1 days): L551 box solves Exercise 4(b). **Survivor:** Exercise 4; box becomes a gloss pointing to it.
-- [ ] B7. Small-π asymmetric GM and "coin flip the ex-RSSG banker flags": L146 and L175–181. **Survivor:** the Full Derivation; L146 becomes a one-line pointer.
-- [ ] B8. "Translating the hazard move into a spread move requires leaving ℙ" (L477 and L491) and the lazy κ = 1 sentence (L481 and L497, plus "Say this explicitly in every spec"). **Survivor:** one statement with the two-line derivation inline right after (3.3); the "Full Derivation: from a filing to a spread move" heading retires (lesson 10).
-- [ ] B9. Elkan is the (3.3) update applied to a whole model, shortcut is first-order: L509 and L523. **Survivor:** the Full Derivation; L509 deleted.
-- [ ] B10. CUSUM's "two properties" (L615) restates L639 and the box's eight days. **Survivor:** the Full Derivation, moved directly under (3.5); L615 deleted.
-- [ ] B11. SVB buyers "in the 30s", PIMCO/Centerbridge/Davidson Kempner and PJT: coda L418, Ines L426, Seat box L531. **Survivor:** the coda; the Seat box points back to it.
-- [ ] B12. SVB 8-K items, \$23.97bn → \$21.45bn, 22 March Item 2.04: coda L418 and §3.4.1 L446. **Survivor:** coda for the numbers; L446 keeps only the item-sequence reading.
-- [ ] B13. WaMu par-plus-interest 2012 and the 7 Nov 2024 stock-and-units plan: L102 and Mags L386 / coda L422. **Survivor:** Mags and the coda; L102 points forward.
-- [ ] B14. Serta: the flow signature (Theo L681, then "*The flow.*" L703); the 45/25/70% prior (card L689, then "*The quote.*" L705); the \$403mm (L695 and L725). **Survivor:** Theo's line, the decision card and the L695 arithmetic; L703, L705 and L725 point back.
-- [ ] B15. σ_V units told five times: L185 (Units), L236 ("State loudly, in every spec"), schema L751, Listing 3.1 edge case L768, Spec item 2. **Survivor:** L185 and the Spec; L236 and L768 become pointers.
-- [ ] B16. Two "Spec You Hand the Robot" (§3.8 L739 and Debrief L867), and "What the coding agent must not do" (L832) restating the Debrief Spec's "Do not" item for item. **Survivor:** Debrief Spec; L739 retitled "What ROBO built from the vague version"; L832 deleted (lesson 11).
-- [ ] B17. Block openers L762, L774, L786, L810, L822 restate the motivations §3.8's intro (L735) already ties to each scene. **Survivor:** L735; each opener cut to the moment in one or two sentences (lesson 12).
-- [ ] B18. Syllabus L37 ("By the end of this chapter you will be able to: ...") repeats L35's roadmap and the Debrief bullets. **Survivor:** L35 and the Debrief; L37 deleted.
-- [ ] B19. Runway column name: the vignette ships `liq_runway_wks_pit_v1` (L114) but the Debrief (L856) says `liquidity_runway_weeks`. Debrief takes the shipped name.
+- [x] B1. Moyer's 85 = 100p + 60(1−p) → 0.625 and the ℚ-not-ℙ point: L45 box and L51 annotation (and the extraction itself). **Survivor:** extraction + annotation; L45 becomes a gloss (D1). *Done: box now two-sentence gloss; annotation keeps 0.625 and Q-point.*
+- [x] B2. "93% of the variance is which hump": L75 box and L86. **Survivor:** L86; box becomes a gloss (D1). *Done: zoo box now one-sentence weather gloss; L86 keeps 93%.*
+- [x] B3. Markout +146bp (85.75 → 87): L254 box and L264. **Survivor:** L264. *Done: bp box now one-line gloss; definition keeps +146bp example.*
+- [x] B4. The Brambleworth hand (6 points, CDX 20bp, Treasuries 10bp, β 1.3, 0.48 and 5.5): L288 box and L320 "The hand, replayed". **Survivor:** L320; box becomes a gloss with no hand numbers. *Done: beta box now harbour gloss; hand numbers live in replay.*
+- [x] B5. Shrinkage numbers (150bp, 20bp, 56.25, +300 → +5bp, 56 fills): L300 box solves Exercise 6(b) (lesson 7). **Survivor:** Exercise 6; the box gets its own numbers. *Done: box uses 120bp, 30bp, four fills; Exercise 6 untouched.*
+- [x] B6. Half-life crossover (0.10/3 days vs 0.04/120 days → 4.1 days): L551 box solves Exercise 4(b). **Survivor:** Exercise 4; box becomes a gloss pointing to it. *Done: half-life box now coffee gloss pointing to Exercise 4.*
+- [x] B7. Small-π asymmetric GM and "coin flip the ex-RSSG banker flags": L146 and L175–181. **Survivor:** the Full Derivation; L146 becomes a one-line pointer. *Done: L146 cut to one-line pointer to the asymmetric derivation.*
+- [x] B8. "Translating the hazard move into a spread move requires leaving ℙ" (L477 and L491) and the lazy κ = 1 sentence (L481 and L497, plus "Say this explicitly in every spec"). **Survivor:** one statement with the two-line derivation inline right after (3.3); the "Full Derivation: from a filing to a spread move" heading retires (lesson 10). *Done: one statement, two-line derivation inline; heading and duplicates retired.*
+- [x] B9. Elkan is the (3.3) update applied to a whole model, shortcut is first-order: L509 and L523. **Survivor:** the Full Derivation; L509 deleted. *Done: L509 duplicate deleted; Full Derivation keeps the Elkan argument.*
+- [x] B10. CUSUM's "two properties" (L615) restates L639 and the box's eight days. **Survivor:** the Full Derivation, moved directly under (3.5); L615 deleted. *Done: properties paragraph deleted; Full Derivation now directly under (3.5).*
+- [x] B11. SVB buyers "in the 30s", PIMCO/Centerbridge/Davidson Kempner and PJT: coda L418, Ines L426, Seat box L531. **Survivor:** the coda; the Seat box points back to it. *Done: Seat box points to the coda; quotes and fund names once.*
+- [x] B12. SVB 8-K items, \$23.97bn → \$21.45bn, 22 March Item 2.04: coda L418 and §3.4.1 L446. **Survivor:** coda for the numbers; L446 keeps only the item-sequence reading. *Done: rows paragraph keeps item sequence; dollar figures left to coda.*
+- [x] B13. WaMu par-plus-interest 2012 and the 7 Nov 2024 stock-and-units plan: L102 and Mags L386 / coda L422. **Survivor:** Mags and the coda; L102 points forward. *Done: L102 points forward to Mags and the coda for WaMu.*
+- [x] B14. Serta: the flow signature (Theo L681, then "*The flow.*" L703); the 45/25/70% prior (card L689, then "*The quote.*" L705); the \$403mm (L695 and L725). **Survivor:** Theo's line, the decision card and the L695 arithmetic; L703, L705 and L725 point back. *Done: card states prior; flow, quote, award paragraphs now point back.*
+- [x] B15. σ_V units told five times: L185 (Units), L236 ("State loudly, in every spec"), schema L751, Listing 3.1 edge case L768, Spec item 2. **Survivor:** L185 and the Spec; L236 and L768 become pointers. *Done: L236 rewritten as plain statement pointing to Units and Spec.*
+- [x] B16. Two "Spec You Hand the Robot" (§3.8 L739 and Debrief L867), and "What the coding agent must not do" (L832) restating the Debrief Spec's "Do not" item for item. **Survivor:** Debrief Spec; L739 retitled "What ROBO built from the vague version"; L832 deleted (lesson 11). *Done: body paragraph retitled ROBO vague version; must-not paragraph deleted.*
+- [x] B17. Block openers L762, L774, L786, L810, L822 restate the motivations §3.8's intro (L735) already ties to each scene. **Survivor:** L735; each opener cut to the moment in one or two sentences (lesson 12). *Done: five block openers cut to the scene moment, one sentence each.*
+- [x] B18. Syllabus L37 ("By the end of this chapter you will be able to: ...") repeats L35's roadmap and the Debrief bullets. **Survivor:** L35 and the Debrief; L37 deleted. *Done: syllabus paragraph deleted; roadmap and Debrief bullets carry outcomes.*
+- [x] B19. Runway column name: the vignette ships `liq_runway_wks_pit_v1` (L114) but the Debrief (L856) says `liquidity_runway_weeks`. Debrief takes the shipped name. *Done: Debrief now names the shipped liq_runway_wks_pit_v1 column.*
 
 ### (c) Templates (lesson 4) and detached judgment paragraphs (lesson 5)
 
