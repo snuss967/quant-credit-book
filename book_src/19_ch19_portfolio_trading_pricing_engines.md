@@ -259,10 +259,13 @@ Use it when the hedge menu is a handful of linear instruments and the factors ar
 **Podcasts**
 
 - Bloomberg Professional, *Market Dialogues*, "How is portfolio trading changing the fixed income landscape?" (2025-07-07; recorded at the Pricing & Valuations Summit): https://professional.content.cirrus.bloomberg.com/professional2023/insights/markets/how-is-portfolio-trading-changing-the-fixed-income-landscape/
+- **Giuseppe Paleologo - Multi-Manager Hedge Funds & Thinking Deeply About Simple Things (S7E11)** (*Flirting with Models*, 2024-09-02). The most technical audio on factor models in hedging, crowding risk and portfolio construction, from the author of the Paleologo text cited in §19.3 and §19.5, and the audio companion to this section's factor hedge. https://www.flirtingwithmodels.com/episodes/l2l3xUqwZbz
+- **The Present and Future State of Corporate Bond Portfolio Trading** (Coalition Greenwich webinar, host Kevin McPartland with Paris Pender of Trumid, 2024-01-17; summarized on Trumid's site). Pender calls dealers "very efficient in providing quotes" on baskets, which is the efficiency this section's hedge-to-one-lump step explains; the 8%-of-TRACE share for Q4 2023 is vendor-sourced. https://www.trumid.com/news/2024/coalition-greenwich-webinar-the-present-and-future-state-of-corporate-bond-portfolio-trading/
 
 **Practitioner Writing**
 
 - Man Group (2023), *Revolutions in Credit Trading* (on the shelf as `Man_Revolutions_in_Credit_Trading_2023`).
+- **Changes in the Returns to Market Making** (Adrian, Fleming, Shachar, Stackman and Vogt, NY Fed *Liberty Street Economics*, 2015-10-07). Estimates market-making returns in equities and corporate bonds; a sourced prior for how thin a dealer's edge per trade is, which is the scale the residual risk left after the hedge has to be priced against. https://libertystreeteconomics.newyorkfed.org/2015/10/changes-in-the-returns-to-market-making/
 - The DESK (2019-10-06), Lynn Strongin Dodds, "The burgeoning portfolio trading business": https://www.fi-desk.com/trading-protocols-portfolio-trading-lynn-strongin-dodds/
 - The DESK (2022-06-01), Dan Barnes, "Barclays: Portfolio trading 8% of US credit market volume": https://www.fi-desk.com/barclays-portfolio-trading-8-of-us-credit-market-volume/
 - Todorov (2021), "The anatomy of bond ETF arbitrage," *BIS Quarterly Review*, March 2021.
@@ -494,9 +497,16 @@ Replayed through the markouts, Ines's hand history reads the way she expected: 1
 
 ### Deep-Dive Resource Graph
 
+**Podcasts**
+
+- **Jeremy Maletz** (*Money Stuff: The Podcast*, 2026-10-09). A Susquehanna market maker on flow versus bespoke trading and adverse selection; a quote is a posterior about who is on the other side, which is the mystery-box logic of this section. https://omny.fm/shows/money-stuff-the-podcast/jeremy-maletz
+- **How Investors Fall Into Bias Traps with Economists Richard Thaler & Alex Imas** (*Masters in Business*, 2026-01-16). The plain-language route to the winner's curse: winning an all-or-none bid is itself information about what is in the box. https://omny.fm/shows/masters-in-business/how-investors-fall-into-bias-traps-with-economists-richard-thaler-alex-imas
+- **What We Can Learn About Market Liquidity By Looking At Everyday Life** (*Odd Lots*, guest Karthik Shashidhar, 2017-10-09). A non-credit opener on why liquidity "sometimes just evaporates with little notice", and on the spread as the price of being picked off. https://omny.fm/shows/odd-lots/what-we-can-learn-about-market-liquidity-by-lookin
+
 **Practitioner Writing**
 
 - IFR (2021), Christopher Whittall, "US banks reap boom in bond portfolio and algo trading": https://www.ifre.com/bonds/1968608/us-banks-reap-boom-in-bond-portfolio-and-algo-trading
+- **How Does Information Affect Liquidity in Over-the-Counter Markets?** (Michael Lee and Antoine Martin, NY Fed *Liberty Street Economics*, 2020-01-13). A short read on a model where dealers face informed traders and inventory cost; the Glosten-Milgrom half is the single-bond version of the basket charge in this section. https://libertystreeteconomics.newyorkfed.org/2020/01/how-does-information-affect-liquidity-in-over-the-counter-markets/
 
 **Academic Papers**
 
@@ -576,10 +586,14 @@ Use it as the core of the live path and as the replay engine for lost quotes. Th
 
 - Coalition Greenwich (2024-06-11), Kevin McPartland, "Corporate Bond Dealers Focus on Trade Automation": https://www.greenwich.com/node/150811
 - Coalition Greenwich (2026-02-17), Kevin McPartland, "Dealer net short in corporate bonds sets record": https://www.greenwich.com/node/158326
+- **Hitting Its Stride: Portfolio Trading's Next Phase** (Paris Pender, Trumid, 2026-02-10). A venue's own view: PT above 21% of US electronic corporate-bond trading in early 2025 versus 6% in 2021, plus three 2026 predictions; read it as a dated vendor claim to check against TRACE, which sets the flow the 90-second engine has to quote. https://www.trumid.com/news/2026/trumid-pt-viewpoint-february-2026/
+- **Electronic trading in fixed income markets** (BIS Markets Committee Papers No. 7, Study Group chaired by Joachim Nagel, 2016-01-21). The central-bank baseline for the electronic RFQ protocols the engine answers inside: better market quality "with exceptions", and liquidity that may have become less robust; read the executive summary. https://www.bis.org/publications/electronic-trading-fixed-income-markets
 
 **Data & Code**
 
 - MarketAxess monthly volume release, May 2026, with the estimated share of US credit portfolio trading: https://s201.q4cdn.com/767283836/files/doc_news/2026/06/05_2026_Volume_Release-Final.pdf
+- **Trading Volume Statistics for March and First Quarter 2026** (MarketAxess volume release, 2026-04-07). Record total PT ADV of $2.3 billion and an estimated 21.9% share of US credit PT; Table 1C gives TRACE PT ADV of $8,478 million in March 2026 against $6,608 million a year earlier, a free denominator for sizing the flow (vendor-reported, so cite the table, not the headline). https://s201.q4cdn.com/767283836/files/doc_news/2026/MKTX-Volume-Release-March-2026-Final.pdf
+- **Monthly Activity Report, May 2026** (Tradeweb, PDF dated 2026-06-04; the page prints only the month). Global cash credit PT ADV up 41.5% YoY, and a footnote defining "non-comp PT" as a portfolio trade sent to a single dealer at a lower fee, a reminder that the same word covers protocols in which the engine faces different competition. https://www.tradeweb.com/49c163/globalassets/newsroom/monthly-activity-reports/2026/may/may-2026-tradeweb-monthly-data-report.pdf
 
 ## 19.11 Desk Debrief
 
@@ -610,6 +624,8 @@ Use it as the core of the live path and as the replay engine for lost quotes. Th
 **Podcasts**
 
 - Bloomberg Professional, *Market Dialogues* (2025-07-07), "How is portfolio trading changing the fixed income landscape?" with David Krein, Anna Han and Shahaan Kazi: https://professional.content.cirrus.bloomberg.com/professional2023/insights/markets/how-is-portfolio-trading-changing-the-fixed-income-landscape/
+- **BlackRock Sees Credit Pain as Tariff Confusion Reigns** (*The Credit Edge*, Bloomberg Intelligence, 2025-04-24). Mitch Garfin of BlackRock with James Crombie and Robert Schiffman on credit spreads widening under trade-war uncertainty, with portfolio trading among the topics; the audio companion to the April 2025 tariff week of §19.7.2. https://omny.fm/shows/the-credit-edge-by-bloomberg-intelligence/blackrock-sees-credit-pain-as-tariff-confusion-reigns
+- **The Present and Future State of Corporate Bond Portfolio Trading** (Coalition Greenwich webinar, host Kevin McPartland with Paris Pender of Trumid, 2024-01-17; summarized on Trumid's site). A dated share datapoint for the Trend Watch in §19.1 (PT at 8% of TRACE volume in Q4 2023, vendor-sourced) and a dealer-side view that quoting baskets had become routine. https://www.trumid.com/news/2024/coalition-greenwich-webinar-the-present-and-future-state-of-corporate-bond-portfolio-trading/
 
 **Practitioner Writing**
 
@@ -618,6 +634,8 @@ Use it as the core of the live path and as the replay engine for lost quotes. Th
 - The DESK (2022-06-01), "Barclays: Portfolio trading 8% of US credit market volume": https://www.fi-desk.com/barclays-portfolio-trading-8-of-us-credit-market-volume/
 - IFR (2021), "US banks reap boom in bond portfolio and algo trading": https://www.ifre.com/bonds/1968608/us-banks-reap-boom-in-bond-portfolio-and-algo-trading
 - Meli & Todorova (2022), "Portfolio Trading: Part III — In Crisis and Calm," Barclays Research (title only).
+- **Hitting Its Stride: Portfolio Trading's Next Phase** (Paris Pender, Trumid, 2026-02-10). A venue's own view of PT's share (above 21% of US electronic corporate-bond trading in early 2025 versus 6% in 2021) and three 2026 predictions; a dated vendor claim to check against TRACE, useful for §19.1 and §19.9. https://www.trumid.com/news/2026/trumid-pt-viewpoint-february-2026/
+- **Overnight Corporate Bond Trading** (Farshid Abdi with Marco Rossi and Botao Wu, Microstructure Exchange webinar, 2026-09-15). Trades between 6:30 p.m. and 8:00 a.m. are not disseminated on TRACE until the next morning, are larger and move prices more persistently, and predict returns on the issuer's other bonds; a fresh fact for the staleness and age inputs of §19.5. The season page links the recording and the paper. https://microstructure.exchange/season
 
 **Academic Papers**
 
@@ -636,5 +654,7 @@ Use it as the core of the live path and as the replay engine for lost quotes. Th
 - FINRA TRACE: Regulatory Notice 22-12 (portfolio-trade modifier, effective 2023-05-15) and Regulatory Notice 26-16 (affiliate indicator), via https://www.finra.org/
 - scikit-learn `LedoitWolf`: https://scikit-learn.org/stable/modules/generated/sklearn.covariance.LedoitWolf.html
 - MarketAxess monthly volume releases (estimated share of US credit portfolio trading): https://s201.q4cdn.com/767283836/files/doc_news/2026/06/05_2026_Volume_Release-Final.pdf
+- **Trading Volume Statistics for March and First Quarter 2026** (MarketAxess volume release, 2026-04-07). Record total PT ADV of $2.3 billion and an estimated 21.9% share of US credit PT; Table 1C gives TRACE PT ADV of $8,478 million in March 2026 against $6,608 million a year earlier, the best dated free denominator for the Trumid figures (vendor-reported, so cite the table, not the headline). https://s201.q4cdn.com/767283836/files/doc_news/2026/MKTX-Volume-Release-March-2026-Final.pdf
+- **Monthly Activity Report, May 2026** (Tradeweb, PDF dated 2026-06-04; the page prints only the month). Global cash credit PT ADV up 41.5% YoY, and a footnote defining "non-comp PT" as a portfolio trade sent to a single dealer at a lower fee; read it beside the MarketAxess release, since the same word covers protocols with different competition (§19.1, §19.9). https://www.tradeweb.com/49c163/globalassets/newsroom/monthly-activity-reports/2026/may/may-2026-tradeweb-monthly-data-report.pdf
 
 <!-- STATUS: COMPLETE -->

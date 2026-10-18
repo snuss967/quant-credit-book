@@ -21,7 +21,7 @@
 - [x] 19. §15.5.1: ICE-MarketAxess scene, verified ICE SMR on 2033s, 2036s.
 - [x] 20. §15.5.2: six boxes: fingers, stadium, four distributions, Cox, doors, Bayes.
 - [x] 21. §15.5: survival-tool judgment passage: sample, censoring, regime, scarcity, why-pending.
-- [ ] 22. §15.6: ANOTHER-SEAT (RV pod, dealer desk) + EXPAND Acharya-Johnson
+- [x] 22. §15.6: narrative base rates, Ines Acharya-Johnson hand, pod and dealer seats.
 - [ ] 23. §15.7: EXPAND-SCENE Spirit + MATH-GENTLY (jump vs diffusion)
 - [ ] 24. §15.8 WBD: EXPAND-SCENE + MATH-GENTLY (expected positive part) + Another Seat
 - [ ] 25. Before §15.9: SHOP-LIFE vignette "The security master has forty new columns"

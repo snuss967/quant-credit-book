@@ -639,8 +639,15 @@ DO NOT: count phrases without dedupe; trust a zero from an untested search opera
 ### Deep-Dive Resource Graph
 
 **Podcasts**
-- Bloomberg *Odd Lots* (Joe Weisenthal and Tracy Alloway). Search the archive for episodes on liability management, J.Crew, Serta and private credit. No specific episode is cited here.
-- Bloomberg *Credit Edge*. Interviews on leveraged finance and restructuring. No specific episode is cited here.
+- **AI Can Tell Us Something About Credit Market Weakness** (*Odd Lots*, Bloomberg, December 4, 2025). Guest Dan Wertman of Noetica, whose product scans deal documents and measures linguistic and term trends over time: the commercial twin of the Section 25.10 engine, and the best audio on language drift as a credit-cycle feature. https://omny.fm/shows/odd-lots/ai-can-tell-us-something-about-credit-market-weakness
+- **Divisive Debt Maneuvers; Bank Stress Returns** (*The Credit Edge*, Bloomberg Intelligence, April 27, 2023). Drop-down transactions that move assets out of lenders' reach, and the creditor lawsuits they provoke: the behaviour the entity-graph nodes of Section 25.4 are built to detect. https://omny.fm/shows/the-credit-edge-by-bloomberg-intelligence/divisive-debt-maneuvers-bank-stress-returns
+- **Covenants: A Primer on J Crew Blockers and How Issuers Can Circumvent Them (Oct. 6, 2020)** (*Octus Radio*, October 6, 2020). The inception and mechanics of J.Crew blockers, the assets they most commonly catch and the "creative ways to circumvent" them; read it as a spec for the blocker-detection nodes of Section 25.4.1 and the J.Crew case in Section 25.4.2. https://share.transistor.fm/s/007e753e
+- **The best and worst of high yield bond covenants** (*Cloud 9fin*, host Jennifer Munnings with Chris Osborne of 9fin, March 14, 2024). European restricted-payment builder baskets "are under threat", yet investors are better protected against "being J.Screwed" than before: named clause families to build parsers for in Section 25.3.5 and Section 25.4.2. https://share.transistor.fm/s/ca974c89
+
+**Blog Posts**
+- **RECAP Search Alerts for PACER Are Now Live!** (Free Law Project, June 18, 2025) and **How I Use RECAP Search Alerts for PACER Data** (Michael Lissner, June 23, 2025). Saved-search alerts that fire whenever new matching content reaches the RECAP Archive, plus the director's own usage notes: the turnkey version of the docket event stream in Section 25.6, and cheaper than building a poller to start. https://free.law/2025/06/18/recap-search-alerts-for-pacer/ ; https://free.law/2025/06/24/how-i-use-recap-alerts/
+- **Full CourtListener Data Access via API Now Included with Membership** (Free Law Project, Jenifer Whiston, May 7, 2026). From May 7, 2026 any CourtListener member can use the full REST API v4, including the PACER/RECAP APIs that previously needed special permission; it changes the access assumptions of Section 25.6.1, so check the rate limits before coding the token bucket of Section 25.6.2. https://free.law/2026/05/07/api-included-in-memberships/
+- **AI Tools and Assistants such as Claude Can Now Connect to CourtListener's Full Functionality** (Free Law Project, May 12, 2026). CourtListener as an MCP connector for Claude and other assistants (case law, PACER data, citation analysis, alerts), pitched as grounding against hallucinated case law: the agent-facing interface to the docket engine, and a cross-reference to Chapter 26. https://free.law/2026/05/12/courtlistener-is-now-available-inside-claude/
 
 **Practitioner Writing**
 - Torys LLP (May 2019), "The J.Crew 'trap door' and its implications for the future of leveraged finance": https://www.torys.com/our-latest-thinking/publications/2019/05/the-j-crew-trap-door-and-its-implications-for-the-future-of-leveraged-finance
@@ -650,7 +657,7 @@ DO NOT: count phrases without dedupe; trust a zero from an untested search opera
 - Paul Weiss / Practical Law (2025), *Covenant-Lite Loans: Overview* (PitchBook|LCD figures).
 - Griffin, Nini & Smith, Harvard Law School Forum on Corporate Governance post (November 4, 2022).
 - Huang, Lewellen & Wang, Harvard Law School Bankruptcy Roundtable post (February 11, 2025).
-- Matt Levine, *Money Stuff* (Bloomberg Opinion), on J.Crew, Serta and "open market purchase."
+- Matt Levine, *Money Stuff* (Bloomberg Opinion), on J.Crew, Serta and "open market purchase." No specific column is cited here.
 
 **Academic Papers**
 - Smith & Warner (1979), *On Financial Contracting: An Analysis of Bond Covenants*, Journal of Financial Economics.

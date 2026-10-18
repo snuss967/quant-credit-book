@@ -18,8 +18,8 @@
 - [x] 16. Kaz halving column, fixed-point box, clearing map moved to derivation.
 - [x] 17. Whiteboard rebuild, 2025 steps, gift, litigation counts, June decision.
 - [x] 18. Two judgment paragraphs: multi-obligor use, allowed claim is litigated.
-- [ ] 19. §13.8 opening Math, Gently #12, #13, #14 + Full Derivation move (MAP)
-- [ ] 20. §13.8 "What the desk prices" WHEN-TO-APPLY (trust PRS to rank)
+- [x] 19. Kaz clock scene, hazard/logistic/Beta boxes, MAP algebra moved to derivation.
+- [x] 20. Ines mirror check scene; rank not level; vintage, forum, holders.
 - [ ] 21. §13.9 Incora day scene + diary date fixes + Mitel cite + Saks clock
 - [ ] 22. §13.10 Desk Debrief Larkspur return scene, bullets kept
 - [ ] 23. Deep-Dive Resource Graph BRIDGE (verified episodes and posts)
