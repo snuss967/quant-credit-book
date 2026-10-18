@@ -112,7 +112,7 @@ def fig_volatility_tax():
     a.axvline(mean, color=ORANGE, linewidth=1.2, ymax=0.84)
     a.text(median - 0.9, 56.5, "median 99", ha="right", va="bottom", fontsize=8.5, color=INK_2)
     a.text(mean + 0.9, 56.5, "mean 100", ha="left", va="bottom", fontsize=8.5, color=INK_2)
-    a.annotate("the 121 branch\npulls the mean up", (121, 25.8), xytext=(113.5, 41), fontsize=8, color=MUTED,
+    a.annotate("the 121 branch\npulls the mean up", (121, 25.8), xytext=(113.5, 41), fontsize=8, color=INK_2,
                ha="center", arrowprops=dict(arrowstyle="-", color=NEUTRAL, lw=0.8))
     a.set_xticks(ends)
     a.set_xlim(72, 130)
@@ -159,7 +159,7 @@ def fig_merton_payoff_fulcrum():
     a.plot(V, V, color=NEUTRAL, linewidth=1.0, linestyle=(0, (3, 3)), zorder=1)
     a.plot(V, debt, color=BLUE, linewidth=LW + 0.4, zorder=3)
     a.plot(V, eq, color=ORANGE, linewidth=LW + 0.4, zorder=3)
-    a.text(96, 118, "firm value V", rotation=40, fontsize=8, color=MUTED, ha="center", va="center")
+    a.text(96, 118, "firm value V", rotation=40, fontsize=8, color=INK_2, ha="center", va="center")
     a.text(158, 84.5, "Debt = min(V, F)", fontsize=8.5, color=INK_2, ha="right", va="bottom")
     a.text(158, 12, "Equity =\nmax(V \u2212 F, 0)", fontsize=8.5, color=INK_2, ha="right", va="center")
     a.axhline(F, color=NEUTRAL, linewidth=0.8, zorder=1)
@@ -167,7 +167,7 @@ def fig_merton_payoff_fulcrum():
     a.plot([70], [70], "o", color=BLUE, markersize=5, zorder=4)
     a.annotate("at V = 70 the debt is\n10 short of par: the put", (68, 76), xytext=(6, 112), fontsize=8, color=INK_2,
                ha="left", arrowprops=dict(arrowstyle="-", color=NEUTRAL, lw=0.8))
-    a.text(2, F + 2, "F = 80", fontsize=8, color=MUTED, ha="left", va="bottom")
+    a.text(2, F + 2, "F = 80", fontsize=8, color=INK_2, ha="left", va="bottom")
     a.set_ylim(0, 170)
     a.set_ylabel("Payoff at maturity")
 
@@ -276,7 +276,7 @@ def fig_merton_spread_short_end():
     ax.set_xlabel("Time to maturity (log scale)")
     ax.set_ylabel("Credit spread (bp)")
     ax.text(0.01, 0.985, "Merton firm: V$_0$ = 100, F = 80, r = 4%", transform=ax.transAxes, ha="left", va="top", fontsize=8,
-            color=MUTED)
+            color=INK_2)
     fig.get_layout_engine().set(rect=(0, 0, 0.93, 1))
     return finish(fig, "ch06_merton_spread_short_end")
 
@@ -310,7 +310,7 @@ def fig_svb_holdco_waterfall():
     a.set_xticks(xs)
     a.set_xticklabels(labels, fontsize=7.8)
     a.set_ylim(0, 19.5)
-    a.set_ylabel("$ billions, 31 Dec 2022")
+    a.set_ylabel("$ billions")
 
     # right: the holdco's parent-only waterfall, assets down to what is left once the bank is worth nothing
     ex_bank = P_ASSETS - P_BANK

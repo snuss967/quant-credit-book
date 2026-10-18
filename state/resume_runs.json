@@ -21,24 +21,6 @@
    }
   },
   {
-   "name": "rv-newfiles",
-   "task": "wvsjasszl",
-   "runId": "wf_c551929c-6b5",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "03_ch03b_your_first_year_on_the_desk",
-     "08_ch08b_the_risk_model_and_the_limit_sheet",
-     "08_ch08c_the_morning_explain_pnl_attribution",
-     "12_ch12c_plan_valuation_dip_and_exit_as_derivatives"
-    ],
-    "stages": [
-     "rv"
-    ]
-   }
-  },
-  {
    "name": "figs-8d-3-5-6",
    "task": "wwq74cnva",
    "runId": "wf_badbe5ce-057",
