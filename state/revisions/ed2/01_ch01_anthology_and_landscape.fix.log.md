@@ -22,7 +22,7 @@
 - [x] P2 · §1.5, lines 402, 406, 442 · P/Q told thrice: add 80-word beat (Kaz feeds vendor EDF, gets 12 bp at 100; Mags: "Which number is lying?"); annotation and listing point to "Kaz's 12 bp". — *Beat added; Schmid annotation, risk-neutral box, Listing 1.4 cite Kaz's 12 bp.*
 - [x] P2 · §1.6, lines 468–470 · Man Numeric 30/60→90 and Blackstone quote only in seat box; annotation keeps aphorism; §1.8 intro says "the Blackstone sentence from §1.6". — *Man 30/60→90 and Blackstone quote only in seat box; pointers elsewhere.*
 - [x] P2 · §1.6, lines 470–476 · Move both Trend Watches to the end of §1.6; add one line of narration before Paleologo extraction ("Kaz's reply arrived at 11:40."). — *Trend Watches moved to section end; 11:40 line and two narration threads added.*
-- [ ] P2 · §1.3.3, line 179, Bayes box · Change to prior 5%, LRs 6 and 2 (odds 0.0526 × 12 = 0.63, π ≈ 0.39). Leave Exercise 2 and Serta arithmetic.
+- [x] P2 · §1.3.3, line 179, Bayes box · Change to prior 5%, LRs 6 and 2 (odds 0.0526 × 12 = 0.63, π ≈ 0.39). Leave Exercise 2 and Serta arithmetic. — *Box now 5% prior, LRs 6 and 2, π≈0.39; exercise intact.*
 - [ ] P2 · §1.3 Specification, lines 257–287 · Move vignette to open the Specification section; delete Listing 1.1 "edge case that bites" sentence.
 - [ ] P2 · Reading Listing 1.2, 1.3, 1.4 · Open each with the chapter moment; drop template phrases.
 - [ ] P2 · §1.8.1, line 533, "Where this blows up" · Cut to Moyer quote + state-dependent-capacity sentence + "Act 3 shows the first two happening on a Saturday."
