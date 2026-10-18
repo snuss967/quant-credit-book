@@ -292,7 +292,7 @@ After confirmation comes the **effective date**, the state that requires exit fi
 | Challenge period | Committee appointment (typical) | Often 60–75 days | DIP order | Lien-challenge option expires |
 | Exclusivity to file | Order for relief | 120 days, at most 18 months | §1121(b), (d)(2) | Who may propose the plan |
 | Exclusivity to solicit | Order for relief | 180 days, at most 20 months | §1121(c)(3), (d)(2) | Who may propose the plan |
-| Real-property leases | Order for relief | 120 + 90 days | §365(d)(4) | Rejection damages (capped by §502(b)(6)) enter the pool |
+| Nonresidential real-property leases | Order for relief | 120 + 90 days | §365(d)(4) | Rejection damages (capped by §502(b)(6)) enter the pool |
 | Governmental bar date | Order for relief | 180 days | §502(b)(9) | Tax claims in the denominator |
 | General bar date | Court order | Case-specific | Rule 3003(c)(3) | Claims denominator |
 | Hearing notice | Notice | 28 days | Rule 2002(b) | Disclosure statement and confirmation |

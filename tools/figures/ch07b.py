@@ -92,7 +92,7 @@ def fig_newey_west():
     for L, col in [(11, C_NAIVE), (23, C_FIX)]:
         w = np.where(k <= L, 1 - k / (L + 1), 0.0)
         a.plot(k, w * tri, color=col, linewidth=2.0, zorder=4)
-    a.annotate("true overlap correlation 1 − k/12", (1.0, 11 / 12), xytext=(5, 12), textcoords="offset points",
+    a.annotate("true overlap correlation 1 − k/12", (1.0, 1.0), xytext=(6, 4), textcoords="offset points",
                ha="left", va="bottom", fontsize=8.5, color=INK_2)
     kk = {23: 4.0, 11: 5.0}
     y23 = (1 - 4 / 24) * (1 - 4 / 12)
@@ -105,10 +105,11 @@ def fig_newey_west():
     a.annotate("L = 11 (textbook)", (5.0, y11), xytext=(8.5, 0.62), textcoords="data", ha="left", va="center",
                fontsize=8.5, color=INK_2, arrowprops=arrow)
     a.set_xlim(0, 25)
-    a.set_ylim(0, 1.1)
+    a.set_ylim(0, 1.16)
+    a.set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1.0])
     a.set_xlabel("Lag k (months)")
-    a.set_ylabel("Weight on the lag-k autocovariance")
-    a.set_title("What Newey–West counts of the overlap", fontsize=9.5)
+    a.set_ylabel("Lag-k contribution to the multiplier")
+    a.set_title("How much overlap Newey–West counts", fontsize=9.5)
     a.grid(axis="x", visible=False)
 
     Ls = np.arange(0, 48)
@@ -189,7 +190,7 @@ def fig_km_cohort():
     a.spines["left"].set_visible(False)
     a.plot([], [], "o", color=RED, markersize=7, label="event (default or exchange)")
     a.plot([], [], "o", markerfacecolor="white", markeredgecolor=BLUE, markeredgewidth=1.8, markersize=7,
-           label="censored (left for another reason)")
+           label="censored (left early, or window closed)")
     a.legend(loc="upper center", bbox_to_anchor=(0.45, -0.17), fontsize=8, ncol=1, handletextpad=0.3)
 
     # right: the Kaplan-Meier curve with a Greenwood log-log band
@@ -219,17 +220,17 @@ def fig_km_cohort():
     na_end = float(np.exp(-km[-1][3]))
     b.axhline(0.5, color=C_NAIVE, linewidth=1.2, linestyle=(0, (4, 3)), zorder=2)
     b.axhline(0.25, color=C_NAIVE, linewidth=1.2, linestyle=(0, (4, 3)), zorder=2)
-    b.text(0.8, 0.5 + 0.015, "censored as survivors: 0.50", fontsize=8, color=INK_2, ha="left", va="bottom")
-    b.text(0.8, 0.25 - 0.015, "censored dropped: 0.25", fontsize=8, color=INK_2, ha="left", va="top")
+    b.text(0.8, 0.5 + 0.015, "counted as survivors: 0.50", fontsize=8, color=INK_2, ha="left", va="bottom")
+    b.text(0.8, 0.25 - 0.015, "early leavers dropped: 0.25", fontsize=8, color=INK_2, ha="left", va="top")
     b.plot([T], [s_end], "o", color=C_FIX, markersize=6, zorder=7, clip_on=False)
-    b.plot([T], [na_end], "D", color=VIOLET, markersize=5.5, zorder=7, clip_on=False)
+    b.plot([T], [na_end], "D", color=INK_2, markersize=5.5, zorder=7, clip_on=False)
     from matplotlib.lines import Line2D
     from matplotlib.patches import Patch
     handles = [
         Line2D([], [], color=C_FIX, linewidth=2.2, marker="|", markersize=10, markeredgewidth=1.8,
                label=f"Kaplan–Meier, S(36) = {s_end:.2f} (ticks: censoring)"),
         Patch(facecolor=BLUE, alpha=0.16, label=f"95% Greenwood band at 36: {lo[-1]:.2f}–{hi[-1]:.2f}"),
-        Line2D([], [], color=VIOLET, marker="D", linestyle="", markersize=5.5, label=f"Nelson–Aalen: {na_end:.2f}"),
+        Line2D([], [], color=INK_2, marker="D", linestyle="", markersize=5.5, label=f"Nelson–Aalen: {na_end:.2f}"),
     ]
     b.legend(handles=handles, loc="upper center", bbox_to_anchor=(0.5, -0.17), fontsize=8, ncol=1, handletextpad=0.5)
     b.set_xlim(0, T)
@@ -263,12 +264,11 @@ def simulate_panel(rng, N, T, a=0.04, c=0.017, sector=100):
 
 
 def eigvals_corr(X):
+    """Nonzero eigenvalues of the sample correlation matrix (columns demeaned and scaled to unit variance)."""
     T, N = X.shape
-    if T < N:
-        ev = np.linalg.eigvalsh(X @ X.T / T)
-    else:
-        ev = np.linalg.eigvalsh(X.T @ X / T)
-    return np.sort(ev)[::-1]
+    Z = (X - X.mean(axis=0)) / X.std(axis=0)
+    ev = np.linalg.eigvalsh(Z @ Z.T / T if T < N else Z.T @ Z / T)   # T < N: the N - T + 1 zeros are dropped below
+    return np.sort(ev[ev > 1e-9])[::-1]
 
 
 def fig_mp_edge():
@@ -294,13 +294,13 @@ def fig_mp_edge():
         ymax = ax.get_ylim()[1]
         ax.annotate(f"edge {edge:.1f}", (edge, ymax * 0.97), xytext=(5, 0), textcoords="offset points",
                     ha="left", va="top", fontsize=8.5, color=INK_2)
-        # eigenvalues above the edge: stems with dots, so a single eigenvalue is visible
+        # eigenvalues above the edge: one dot each, at count 1 like a histogram bar of height one
         for j, v in enumerate(out):
-            ax.vlines(v, 0, ymax * 0.20, color=C_FIX, linewidth=1.6, zorder=5)
-            ax.plot([v], [ymax * 0.20], "o", color=C_FIX, markersize=6, zorder=6)
+            ax.vlines(v, 0, 1, color=C_FIX, linewidth=1.6, zorder=5)
+            ax.plot([v], [1], "o", color=C_FIX, markersize=6, zorder=6)
             name = "market factor" if v > 10 else "sector factor"
             left = v < 10
-            ax.annotate(f"{v:.1f}\n{name}", (v, ymax * 0.20), xytext=(4 if left else 0, 6),
+            ax.annotate(f"{v:.1f}\n{name}", (v, 1), xytext=(4 if left else 0, 6),
                         textcoords="offset points", ha="left" if left else "center", va="bottom",
                         fontsize=8.5, color=INK_2)
         ax.set_xlim(0, 24)
@@ -311,7 +311,7 @@ def fig_mp_edge():
         print(f"  T={T}: edge {edge:.2f}, eigenvalues above edge: {np.round(out, 2)}, "
               f"largest in bulk {bulk.max():.2f}")
     axes[0].set_ylabel("Number of eigenvalues")
-    axes[0].text(0.985, 0.80, "line: Marchenko–Pastur\nbars: simulated eigenvalues", transform=axes[0].transAxes,
+    axes[0].text(0.985, 0.80, "line: Marchenko–Pastur\nbars: simulated eigenvalues\ndots: one eigenvalue above the edge", transform=axes[0].transAxes,
                  ha="right", va="top", fontsize=8, color=MUTED)
     axes[1].text(0.985, 0.50, "the planted sector factor\nis lost somewhere in the bulk", transform=axes[1].transAxes,
                  ha="right", va="top", fontsize=8, color=MUTED)

@@ -16,8 +16,8 @@
 - [x] 14. EA case: three meetings, decision point, interlude, three-seat box.
 - [x] 15. §15.3.1: three-condition portability judgment; Focus Financial and 9fin anchors.
 - [x] 16. §15.3.2: bell-curve tally, digital coin, 0.81 to 0.56 box.
-- [ ] 17. §15.4.1 bullets: LIST-TO-NARRATIVE (three prospectuses side by side)
-- [ ] 18. §15.4.2: MATH-GENTLY (mixture inversion, dollar duration) + WHEN-TO-APPLY
+- [x] 17. §15.4.1: Theo with three prospectuses, highlighters, two obituaries, carve-out pattern.
+- [x] 18. §15.4.2: ruler and seesaw boxes, gauge judgment, four-deal narrative, bridge.
 - [ ] 19. §15.5.1: NEW-SCENE ICE-MarketAxess "regulator counts in working days"
 - [ ] 20. §15.5.2: MATH-GENTLY six boxes (survival, censoring, distributions, competing risks, Cox, Bayes)
 - [ ] 21. §15.5 after Trend Watch: WHEN-TO-APPLY (survival tools)

@@ -17,7 +17,7 @@
 - [x] 15. [14.5 Trend Watch] EXPAND-SCENE (Optimum) + ANOTHER-SEAT (CLO; opportunistic) -- done: courts-calendar Optimum scene; CLO and special-sits seats; 10-Q verified.
 - [x] 16. [14.6 Docket Diary] EXPAND-SCENE (Robertshaw) + WHEN-TO-APPLY -- done: Robertshaw register story; remedy-first judgment; Incora diary dates aligned.
 - [x] 17. [14.6.1] BRIDGE + FULL-DERIVATION-MOVE (Lions Gate caution) -- done: betting-line intuition, logit pointer, Full Derivation, Lions Gate window.
-- [ ] 18. [14.7.1] MATH-GENTLY (HMM, Bayes) + SHOP-LIFE beat
+- [x] 18. [14.7.1] MATH-GENTLY (HMM, Bayes) + SHOP-LIFE beat -- done: umbrella box, Kaz dictates details, regime-explain risk committee vignette.
 - [ ] 19. [14.7.2] MATH-GENTLY (P vs Q) + WHEN-TO-APPLY
 - [ ] 20. [14.8.1 Serta] NEW-SCENE (3,000-4,000 words, three acts)
 - [ ] 21. [14.8.2 Mitel, 14.8.3 Del Monte] EXPAND-SCENE (~800 words each)

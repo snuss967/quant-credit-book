@@ -802,19 +802,94 @@ Nobody answers right away, which Ines takes as a sign that the post-mortem worke
 
 ### 16.8.1 The distribution you are actually trading
 
-Combine §16.1's Trend Watch with §16.7's left tail. Over a 200-day horizon a single post-reorg equity's return $R$ is roughly a lognormal with median zero and mean +40% (the Jiang–Wang–Yang shape) with a jump to $-100\%$ mixed in (the Spirit shape). Write $X \sim N(0, s^2)$ and a jump indicator $J$ with $\Pr(J=1) = p_J$:
+Monday, 8:10 a.m. Ines's Friday question is still on the whiteboard in her handwriting, under the word *airlines*: cut both, hedge the pair with the sector, or keep the second carrier and buy the next one smaller. Somebody has added, in Kaz's handwriting, "define 'smaller'," which Ines has decided to treat as a contribution.
+
+Theo spent part of the weekend on the question and has come in with an answer he likes, which in his experience is the first sign that something is wrong with it. "Cut both," he says. "We just watched a post-reorg equity go to zero in five months. The second carrier is the same instrument, in the same sector, born out of the same kind of plan. If I were still the banker on the second one, I'd be worried."
+
+"You'd be worried about the company," Mags says. "Is the company the trade?"
+
+Theo opens his mouth and closes it again, because that is the question. On Friday the desk spent four pages on one position. A strategy is not one position. It is a bet that a population of positions, each of which looks a little like Spirit on the morning it is bought, will on average pay for the few that turn into Spirit. Whether to cut the second carrier depends less on the second carrier than on what that population looks like, and the population is something the desk can write down.
+
+Kaz writes it down, on the half of the whiteboard nobody has claimed. He combines §16.1's Trend Watch with §16.7's left tail. Over a 200-day horizon a single post-reorg equity's return $R$ is roughly a lognormal with median zero and mean +40% (the Jiang–Wang–Yang shape) with a jump to $-100\%$ mixed in (the Spirit shape). Write $X \sim N(0, s^2)$ and a jump indicator $J$ with $\Pr(J=1) = p_J$:
 $$R = (1 - J)\left(e^{X} - 1\right) - J, \qquad \mathbb{E}[e^X] = e^{s^2/2} = 1.4 \;\Rightarrow\; s = \sqrt{2\ln 1.4} \approx 0.82 .$$
-Then $\mathbb{E}[R] = (1-p_J)(1.4) - 1$, which is +33% for $p_J = 5\%$ *(illustrative)*, while the median is slightly *negative*: solving $p_J + (1-p_J)\Phi(\ln(1+m)/s) = \tfrac12$ gives $m \approx -5\%$. **The typical single name loses money; the average name makes a third.** That is the sentence to tape to the monitor before anyone proposes a concentrated post-reorg book. Figure 16.5 shows the single-name distribution beside a 20-name book.
+
+"Why is a median of zero the same as a mean of forty?" Theo asks. "That's the line I'd have circled in a fairness opinion."
+
+"Because the exponential bends," Kaz says, and for once the explanation is short.
+
+> **Math, Gently.** *Why the half-variance appears (a callback).* Chapter 1 (§1.5) and Chapter 6 (§6.1.1) built Itô's $\tfrac12\sigma^2$ from first principles; this is the same idea wearing this section's numbers, which is the promise §16.2.2 made. Suppose a post-reorg stock's 200-day log return is a coin flip, $+0.82$ or $-0.82$, so the *log* return averages exactly zero and the median outcome is "flat." The price multiples are $e^{0.82} \approx 2.27$ and $e^{-0.82} \approx 0.44$, and their average is about 1.36, not 1. The exponential curves upward, so the good flip gains more than the bad flip loses. Replace the coin with a full bell curve of the same spread, which has tails beyond $\pm 0.82$, and the lift is exactly $e^{s^2/2} = e^{0.336} \approx 1.40$: the "+40% mean, zero median" of §16.1.2 in one line. In continuous time the curvature shows up as $\tfrac12\sigma^2$ per year, the term Itô's lemma adds. Run it backwards and you get the fact this chapter's lottery tickets live on: a stock whose *price* is a fair game must have a log return that drifts *down* by $\tfrac12\sigma^2$, so the more volatile the ticket, the more of its average sits in a few draws and the worse its typical draw looks.
+
+Then $\mathbb{E}[R] = (1-p_J)(1.4) - 1$, which is +33% for $p_J = 5\%$ *(illustrative)*, while the median is slightly *negative*: solving $p_J + (1-p_J)\Phi(\ln(1+m)/s) = \tfrac12$ gives $m \approx -5\%$.
+
+> **Math, Gently.** *A mixture: a coin that picks the deck.* Chapter 5 (§5.1.1) introduced mixtures with a deck of cards; here is the post-reorg version. Before each draw, flip a weighted coin. Five times in a hundred it says "Spirit," and you draw from a deck with a single card in it, $-100\%$. Ninety-five times it says "survivor," and you draw from the lognormal deck above, whose average multiple is 1.40. The mixture's mean is just the coin-weighted mean of the two decks, $0.05 \times 0 + 0.95 \times 1.40 = 1.33$, which is the +33%. The median is less polite. The five cards at $-100\%$ all sit at the far left of the line, so to find the middle draw you have to walk past them first, and the halfway mark lands a little *inside* the survivor deck's lower half: the survivor deck needs $(0.50 - 0.05)/0.95 \approx 47.4\%$ of its draws below the median, which is about $0.066$ standard deviations below its own middle, or a log return of about $-0.054$, roughly $-5\%$. A small lump at zero barely dents the mean and quietly drags the median below water. Chapter 12-C uses the same construction for plan values; Chapter 5 has the general version.
+
+"So the typical name loses money," Theo says, "and the average name makes a third."
+
+Mags writes that sentence on a sticky note: **the typical single name loses money; the average name makes a third.** She puts it on the bottom edge of Theo's second monitor, under the Wolfspeed chart, where anyone proposing a concentrated post-reorg book will have to read it on the way to proposing it. Figure 16.5 shows the single-name distribution beside a 20-name book.
 
 ![Figure 16.5: A single post-reorg name has a mean return of +33% but a median of −5%, while an equal-weighted book of 20 names has a median of +29%, close to its mean, so the premium is a portfolio property. Illustrative: 400,000 simulated draws per panel from the §16.8.1 jump-lognormal mixture (s = 0.82, jump probability 5%, seed 16); the right panel groups them into 20,000 books of 20 names.](assets/figures/ch16_post_reorg_return_distribution.png)
 
 Diversification turns the mean into the median. For an equal-weighted book of $N$ independent names, the book return has the same mean, standard deviation reduced by $\sqrt N$, and skewness reduced by $\sqrt N$, so its median moves toward its mean. With $N = 20$ (about the size of Jiang, Wang & Yang's portfolio) the median book return is comfortably positive, as Block 5 confirms by simulation.
 
+Theo looks at the right-hand panel for a long time. "So Spirit wasn't a mistake in the strategy. It was one of the five cards."
+
+"It was one of the five cards," Ines says. "Now read the word you skipped."
+
+He reads the paragraph again. *Independent.* The $\sqrt N$ only works if the twenty names fail for twenty different reasons. Two airline equities that emerged within months of each other share fuel prices, leisure demand, aircraft lessors and, as of this summer, a card-processing industry that has learned to hold back receipts from carriers in trouble. If their returns move together with a correlation of 0.5, two names diversify like about one and a third ($N_{\text{eff}} = N/(1 + (N-1)\rho) = 2/1.5$) *(illustrative correlation)*, and the book's median does not get the help the figure promises. That is the honest answer to the whiteboard, or most of it. Spirit going to zero says little about the second carrier's own coin. It says a great deal about whether the desk's "twenty names" are really twenty. The sector hedge is the tool for the part the two carriers share, and the "buy the next one smaller" option is the tool for the part they do not, which leaves Kaz's question, *define smaller*, as the only thing left on the board.
+
 ### 16.8.2 Sizing: Kelly with a trapdoor, then a liquidity ceiling
+
+Kaz answers his own whiteboard question before lunch, which is how Kaz answers most questions: by computing something. "Smaller," he announces, "is the growth-optimal fraction. I ran Kelly on our post-reorg history. For a single name it says about half the book."
+
+Nobody says anything for a moment. Mags puts her coffee down.
+
+"Half," Ines says. "Of the book. In one OTC stock."
+
+"That's what the sample says." Kaz turns his screen around. "It's the vendor's post-reorg universe, 2005 to 2024, two hundred-odd names, 200-day returns from the effective date."
+
+"How did the vendor build the universe?"
+
+Kaz scrolls to the methodology note, which he has not read, and reads it now, aloud, at a speed that slows as he goes. The universe was assembled from tickers with a price history in the vendor's equity database. A company that emerged, filed again and was cancelled had its new ticker retired, and a retired ticker with no successor fell out of the history file the following year. "So the names that went to zero," he says, "are not in the names."
+
+"So your sample has no Spirits in it."
+
+"My sample has no Spirits in it." Kaz looks at the number again. "And with no Spirits in it, half the book is exactly what the formula should say. I can show you why."
+
+> **Math, Gently.** *Kelly in one coin flip.* Somebody offers you a coin that lands heads 60% of the time and pays even money: bet a dollar, win a dollar or lose it. You will play hundreds of times, and each bet is a fraction $f$ of whatever you have at that moment. What fraction makes your wealth grow fastest? Not 100%. Bet everything and you are wiped out the first time the coin lands tails, which it will, usually within the first few flips; one zero multiplies everything after it by zero. Not 0% either, since you have an edge. The answer, from maximizing the average *log* of each flip's wealth multiple, is $f = 0.6 - 0.4 = 20\%$, and it grows your wealth by about 2.0% per flip ($0.6\ln 1.2 + 0.4\ln 0.8 \approx 0.020$). Two neighbors of that number are worth knowing by heart. Half-Kelly, 10%, earns about 1.5% a flip, three-quarters of the growth for half the swings, which is why desks that are unsure of their odds use it. Double-Kelly, 40%, earns about $-0.2\%$ a flip: twice the optimal bet on a *winning* coin loses money over time. Kelly's formula is just "maximize the expected log of wealth," and the log is what makes the trapdoor visible, because $\ln 0 = -\infty$: any bet that can lose everything at a size where everything is the bet scores minus infinity, however good the odds. In this chapter the coin is §16.8.1's mixture, and the trapdoor is the five-in-a-hundred card at $-100\%$. Chapter 28 (§28.4) carries the full treatment, with jump-to-default for bonds.
 
 For a single name held as a fraction $f$ of capital, growth-optimal sizing maximizes $g(f) = \mathbb{E}[\ln(1 + fR)]$. The jump to $-100\%$ makes $g(f) \to -\infty$ as $f \to 1$, so the Kelly fraction is always strictly less than one, and the first-order condition
 $$g'(f) = \mathbb{E}\!\left[\frac{R}{1 + fR}\right] = 0$$
-has a neat check point. At $f = \tfrac12$, the non-jump term is $\mathbb{E}[2\tanh(X/2)] = 0$ by symmetry of $X$, and the jump term is $p_J \cdot (-1)/(1 - \tfrac12) = -2p_J$, so $g'(\tfrac12) = -2p_J < 0$: with any jump risk at all, full-name Kelly is below one half. In practice we use half-Kelly (Chapter 28) and then hit the constraint that actually binds, which is liquidity. If a position must be exitable at participation rate $\pi$ of average daily dollar volume $\text{ADV}$ within $d$ days, its size is capped at $\pi \cdot \text{ADV} \cdot d$. For an OTC post-reorg stock trading \$200k a day, a 10% participation and a 20-day exit give a \$400k position. This is why the surviving post-reorg alpha, which lives in the OTC segment, does not scale: it is real, and a \$500mm book can own about four hundred thousand dollars of it per name.
+has a neat check point at $f = \tfrac12$, where the survivor half of $R$ contributes exactly nothing and the jump half contributes $-2p_J$ (the short calculation is in the Full Derivation below). So $g'(\tfrac12) = -2p_J$, and two things follow at once. With any jump risk at all, full-name Kelly is below one half. And with $p_J = 0$, which is what a sample with no Spirits in it estimates, Kelly is *exactly* one half, which is Kaz's number, reproduced to the decimal by a formula that believed everything it was told.
+
+"So the formula is fine," Theo says, "and the data is lying."
+
+"The data is telling the truth about a different population," Ines says. "The population of companies that survived long enough to be in a database. That's not the population you buy on effective date."
+
+The afternoon brings the second half of the lesson, and it arrives as a ticket. Theo, who has been convinced by the morning that the strategy is a portfolio and that the next post-reorg name is worth owning, puts in a request to buy \$5mm of a small-cap packaging company that emerged last week and trades over the counter. It is the kind of name §16.2 is built for: a CLO-heavy fulcrum, an overhang the model can schedule, a discount to the rights price. Ines declines the ticket from her phone and walks over.
+
+"What does it trade?"
+
+"About two hundred thousand dollars a day."
+
+"If the trucking company calls us tomorrow and says it needs the risk budget, or if the packaging company's first 10-Q has a going-concern paragraph in it, how fast can you get out?"
+
+Theo does it on the back of the ticket. If a position must be exitable at participation rate $\pi$ of average daily dollar volume $\text{ADV}$ within $d$ days, its size is capped at $\pi \cdot \text{ADV} \cdot d$. At a 10% participation, which is about as much of an OTC stock's volume as a desk can be before it *is* the volume, and a 20-day exit, the cap is $0.10 \times \$200\text{k} \times 20 = \$400\text{k}$.
+
+"Four hundred thousand," he says.
+
+"That's your size. Kelly's a ceiling on a ceiling. We use half-Kelly (Chapter 28), and in this corner of the market we never get anywhere near it, because the constraint that actually binds is the door." She hands the ticket back. "This is why the surviving post-reorg alpha, the part Jiang, Wang and Yang found still lives in the OTC names, doesn't scale. It's real. And a \$500mm book can own about four hundred thousand dollars of it per name."
+
+Theo does the second piece of arithmetic in his head and does not enjoy it: \$400k is 0.08% of a \$500mm book. Twenty such names are 1.6% of the book. Mags, passing behind him, reads the number over his shoulder. "Back in my day," she says, "we did this trade with the whole fund and three phone numbers. We also didn't have a risk committee. One of those was a mistake."
+
+#### The Full Derivation
+
+The check point at $f = \tfrac12$ takes two lines. On the survivor branch, $R = e^X - 1$, so
+$$\frac{R}{1 + \tfrac12 R} = \frac{2(e^X - 1)}{e^X + 1} = 2\tanh(X/2),$$
+and since $X \sim N(0, s^2)$ is symmetric about zero and $\tanh$ is an odd function, $\mathbb{E}[2\tanh(X/2)] = 0$. On the jump branch, $R = -1$ and the integrand is $(-1)/(1 - \tfrac12) = -2$. Weighting the branches by $1 - p_J$ and $p_J$, the non-jump term is $\mathbb{E}[2\tanh(X/2)] = 0$ by symmetry of $X$, and the jump term is $p_J \cdot (-1)/(1 - \tfrac12) = -2p_J$, so $g'(\tfrac12) = -2p_J < 0$: with any jump risk at all, full-name Kelly is below one half. Because $g''(f) = -\mathbb{E}[R^2/(1+fR)^2] < 0$, $g$ is concave, so $g'(\tfrac12) < 0$ puts the maximum to the left of one half, and $g'(\tfrac12) = 0$ when $p_J = 0$ puts it exactly there.
+
+#### When Kelly applies, and when it breaks
+
+Kelly is at its most useful as an upper bound that you hope never binds. It is the answer to "how much could this bet possibly deserve if I knew the odds," and its value on a post-reorg desk is mostly the confirmation that the true constraint lies somewhere below it. It breaks in three ways that this chapter has already shown, each of which makes the formula's answer too large. It breaks when $p_J$ comes from a sample that dropped the Spirits, because a jump probability estimated at zero lets Kelly climb all the way to one half, as Kaz's vendor file did. It breaks when the names are not independent, because the $\sqrt N$ of §16.8.1 assumed twenty separate coins and the two airlines were closer to one coin flipped twice. And it breaks whenever the mean is uncertain, because Kelly's growth curve is flat near the top and steep beyond it: overestimating the edge by a factor of two takes you from the optimum to double-Kelly, which, as the coin flip showed, grows nothing. The seasoned practitioner's order of operations is therefore the reverse of the textbook's. Size to the liquidity ceiling first, with $\pi \cdot \text{ADV} \cdot d$ and an honest $d$. Then compute half-Kelly with a jump probability taken from a universe that includes the names that died, and check that the ceiling binds first. In OTC post-reorg names it almost always does. On the rare day it does not, the formula is saying the edge is too thin for the door to matter, which is worth hearing before anyone argues about participation rates.
 
 ### 16.8.3 The pair trades
 

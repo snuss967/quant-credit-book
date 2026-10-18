@@ -26,4 +26,5 @@
 - [x] 24. [§3.7 Serta] EXPAND-SCENE: blotter in June 2020. — Note: archived-blotter scene, §9.05(g) reading, 19 June decision, six-year coda.
 - [x] 25. [§3.7, end] ANOTHER-SEAT: the CLO manager. — Note: CLO seat: no new money, CCC bucket, OC tests; Sound Point.
 - [x] 26. [§3.8 Engine, §3.9 Debrief] BRIDGE. — Note: one sentence per function; two Debrief lines applying SVB, Serta.
-- [ ] 27. [Resource Graph] BRIDGE: 9fin episodes, Signals and Threads Ep 29.
+- [x] 27. [Resource Graph] BRIDGE: 9fin episodes, Signals and Threads Ep 29. — Note: two 9fin Serta episodes, Signals and Threads Ep 29, 20 added.
+<!-- STATUS: COMPLETE -->

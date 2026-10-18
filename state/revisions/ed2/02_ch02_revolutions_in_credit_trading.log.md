@@ -1,9 +1,9 @@
 # Ed2 U2 progress log: Chapter 2
 
-- [ ] 1. [Chapter 2 opening] EXPAND-SCENE (~1,200 words).
-- [ ] 2. [Opening, the $\mathbb{P}$ note] MATH-GENTLY: what "under $\mathbb{P}$" means, and what risk-neutral would mean.
-- [ ] 3. [§2.1 The Desk View] WHEN-TO-APPLY + BRIDGE.
-- [ ] 4. [§2.2.1 Dissemination timeline] MATH-GENTLY: what a distribution is, and a mixture.
+- [x] 1. [Chapter 2 opening] EXPAND-SCENE (~1,200 words). -- Ghost print scene, Rule 6730 timing, skills folded into Ines.
+- [x] 2. [Opening, the $\mathbb{P}$ note] MATH-GENTLY: what "under $\mathbb{P}$" means, and what risk-neutral would mean. -- Weather forecast vs rain insurance box, 2% vs 4% added.
+- [x] 3. [§2.1 The Desk View] WHEN-TO-APPLY + BRIDGE. -- Theo "we just paid" bridge; feasible-set judgment vs distressed book.
+- [x] 4. [§2.2.1 Dissemination timeline] MATH-GENTLY: what a distribution is, and a mixture. -- Passport-queue mixture box; overnight third regime added, table intact.
 - [ ] 5. [§2.2.2 The caps] MATH-GENTLY (two boxes) + FULL-DERIVATION-MOVE.
 - [ ] 6. [§2.2.2, after Ways This Blows Up] SHOP-LIFE: "Shop Life: the TRACE loader" (~800 words, labeled fictional composite).
 - [ ] 7. [§2.3 Revolution 1] ANOTHER-SEAT + LIST-TO-NARRATIVE.

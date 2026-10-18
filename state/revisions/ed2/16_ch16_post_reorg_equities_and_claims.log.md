@@ -18,8 +18,8 @@
 - [x] 16. [§16.5.3 pair] Note: when-to-apply, three breaks, bar date first check.
 - [x] 17. [§16.6] Note: six-streets replay, admin-burn theta, make-whole table, October decision.
 - [x] 18. [§16.7] Note: post-mortem scene, runway dial box, Wolfspeed counterweight, when-to-apply, decision.
-- [ ] 19. [§16.8.1 The distribution you are trading] MATH-GENTLY (half-variance; mixtures).
-- [ ] 20. [§16.8.2 Sizing] MATH-GENTLY (Kelly) + FULL-DERIVATION-MOVE + WHEN-TO-APPLY.
+- [x] 19. [§16.8.1] Note: Monday whiteboard scene, half-variance callback, mixture box, independence caveat.
+- [x] 20. [§16.8.2] Note: survivor-sample Kelly scene, coin box, tanh moved, Ines ticket, judgment.
 - [ ] 21. [§16.8.3 The pair trades] LIST-TO-NARRATIVE (+ optional dealer seat).
 - [ ] 22. [§16.9 Desk Debrief] LIST-TO-NARRATIVE (+ claims desk section or pointer).
 - [ ] 23. [All Deep-Dive Resource Graphs] BRIDGE (specific episodes/posts).

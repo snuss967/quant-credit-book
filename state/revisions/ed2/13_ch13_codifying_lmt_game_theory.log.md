@@ -15,7 +15,7 @@
 - [x] 13. Nash and Shapley boxes; FOC and summation moved to section end.
 - [x] 14. Selecta and Optimum suits dated, cast reaction, opportunistic-fund seat box.
 - [x] 15. Already present: capped-forward judgment passage and Priya holder_hhi vignette verified.
-- [ ] 16. §13.7 Math, Gently #11 fixed points + Full Derivation move (clearing map)
+- [x] 16. Kaz halving column, fixed-point box, clearing map moved to derivation.
 - [ ] 17. §13.7.1 Trinseo EXPAND-SCENE + decision point
 - [ ] 18. §13.7 Ways This Blows Up WHEN-TO-APPLY (two paragraphs before box)
 - [ ] 19. §13.8 opening Math, Gently #12, #13, #14 + Full Derivation move (MAP)

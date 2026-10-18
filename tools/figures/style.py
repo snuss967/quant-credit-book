@@ -64,7 +64,7 @@ plt.rcParams.update({
     "figure.facecolor": SURFACE, "axes.facecolor": SURFACE, "savefig.facecolor": SURFACE,
     "font.family": "DejaVu Sans", "font.size": 9.5,
     "axes.labelsize": 9.5, "axes.labelcolor": INK_2, "axes.titlesize": 10, "axes.titlecolor": INK,
-    "axes.titleweight": "semibold", "axes.titlelocation": "left",
+    "axes.titleweight": "bold", "axes.titlelocation": "left",
     "axes.edgecolor": NEUTRAL, "axes.linewidth": 0.8,
     "axes.spines.top": False, "axes.spines.right": False,
     "axes.grid": True, "axes.grid.axis": "y", "grid.color": GRID, "grid.linewidth": 0.7,

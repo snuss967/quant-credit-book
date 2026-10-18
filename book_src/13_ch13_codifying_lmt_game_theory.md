@@ -646,21 +646,47 @@ $$
 R^{\text{DD}} = \frac{2V}{F_1 + 2F_2}, \qquad R^{\text{1L}} = \frac{V}{F_1 + 2F_2}.
 $$
 
-The double-dipper recovers exactly twice what the first lien recovers, from a claim of the same rank. With illustrative numbers $F_1 = 1{,}000$, $F_2 = 500$ (\$mm) and $V = 800$: without the dip both would get $800/1{,}500 = 53.3$ cents; with it, the first lien gets 40 and the new money 80. The \$133mm the first lien lost is exactly the \$133mm the new money gained. Check that before you check anything else. Figure 13.5 draws the structure and the recoveries.
+The double-dipper recovers exactly twice what the first lien recovers, from a claim of the same rank. With illustrative numbers $F_1 = 1{,}000$, $F_2 = 500$ (\$mm) and $V = 800$: without the dip both would get $800/1{,}500 = 53.3$ cents; with it, the first lien gets 40 and the new money 80. The \$133mm the first lien lost is exactly the \$133mm the new money gained, and on this desk that equality is the first thing anyone confirms, before the deal terms and long before the lawyers. Figure 13.5 draws the structure and the recoveries.
 
 ![Figure 13.5: Because the new lenders hold both a guarantee from OpCo and, through the SPV, an intercompany note against it, they recover twice what the first lien does below V = \$1,000mm (80 versus 40 cents at V = \$800mm, against 53 for each with no dip) and are paid in full from there. Illustrative: the §13.7 closed form with F₁ = \$1,000mm and F₂ = \$500mm, checked against the Listing 13.1 clearing engine.](assets/figures/ch13_double_dip_structure_recovery.png)
 
-Above $V = F_2 + F_1/2$ the new lenders are paid in full, and the excess the SPV collects on the note is SPV equity. If OpCo owns the SPV, that equity flows back into OpCo, raises every pro rata payment including the note's, and the solution is a fixed point. Let $A$ be OpCo's distributable value including the returned equity $(2\rho - 1)F_2$, with $\rho = A/(F_1 + 2F_2)$. Then
+Above the kink the arithmetic turns circular, and for once Kaz is the most comfortable person at the whiteboard. Once $V$ passes $F_2 + F_1/2$, the new lenders' two claims would collect more than they are owed, so the SPV ends up holding cash it does not need, and that excess is SPV equity. If OpCo owns the SPV, the equity flows back up into OpCo. A bigger OpCo pays more on every pro rata claim, the note included, so the SPV's excess grows, so OpCo grows again. Theo draws an arrow from OpCo to the SPV, another arrow back, and stares at the loop.
+
+"It's a dog chasing its tail," he says.
+
+"It's a dog that runs half as far each lap," says Kaz, and starts a column of numbers. Take $V = 1{,}200$ with the same $F_1 = 1{,}000$ and $F_2 = 500$, so OpCo's three pro rata claims add up to 2,000. Guess that OpCo pays 50 cents. Then the SPV collects 250 on its note, owes its lenders the 250 the guarantee did not cover, and has nothing left over, so OpCo has just its own 1,200, which pays 60 cents, not 50. Guess 60: the SPV collects 300, needs 200, returns 100; OpCo has 1,300 and pays 65. Guess 65: the SPV returns 150, and OpCo pays 67.5. The column reads 50, 60, 65, 67.5, 68.75, and the distance to 70 is cut in half on every line: 20, 10, 5, 2.5, 1.25.
+
+"Seventy," says Kaz. "At seventy the SPV collects 350, needs 150, hands back 200. OpCo has 1,400, and 1,400 over 2,000 is seventy. Nothing moves."
+
+"Back in my day," says Mags, "the circularity was resolved by whoever hung up the phone last." She studies the column. "This is better. It stays in this room that I said so."
+
+Seventy cents is the fixed point, and it has a clean meaning. The first lien collects $0.70 \times 1{,}000 = 700$; the new lenders collect 350 on the guarantee and 150 through the SPV, which is exactly the 500 they lent. In general, above the kink,
+
+$$
+\rho = \frac{V - F_2}{F_1},
+$$
+
+so the new lenders take $F_2$ and the first lien takes everything else, as conservation demands. The regimes meet at $\rho = \tfrac12$, so recoveries are continuous and monotone in $V$. Kaz's halving is not luck. Each lap moves the payment rate by $2F_2/(F_1 + 2F_2)$ times the previous lap's move, and with these numbers that ratio is exactly one half. The fixed-point map has slope $2F_2/(F_1 + 2F_2) < 1$, so simple iteration converges geometrically. (The algebra is in "The Full Derivation: the clearing map" at the end of this section.)
+
+> **Math, Gently.** *Fixed points, and why iteration converges.* A fixed point of a rule is an input the rule hands back unchanged: feed in 70 cents, get 70 cents out. A surprising number of problems in this book have the shape "the answer depends on itself" (a recovery that depends on equity that depends on the recovery; later, a quote that depends on an inventory that depends on the quote), and the honest way to solve them is to guess, apply the rule, and feed the output back in. Whether that settles down depends on one number, the rule's slope: how far the output moves when the input moves by one. Think of a thermostat set to 70. A good one closes part of the gap each cycle and creeps up on the target. A twitchy one overshoots, but by less each time, and still settles. A broken one overshoots by more each time, and the room swings between sauna and meat locker. A slope between $-1$ and $1$ is the good or the twitchy thermostat; a slope bigger than 1 in size is the broken one. Here the slope is $2F_2/(F_1 + 2F_2)$, which is below 1 whenever there is any first lien at all, and with $F_1 = 1{,}000$ and $F_2 = 500$ it is exactly $0.5$, so every step halves the error. An error of a whole dollar per dollar of face falls below $10^{-10}$ in about 33 steps, because $2^{33}$ is about 8.6 billion. A slope of 0.99 would need about 2,300 steps for the same accuracy, which is why the engine of §13.8 allows 10,000 passes and raises an error, rather than quietly returning a number, when it runs out. The full version, for any number of entities, is the Eisenberg–Noe clearing map in "The Full Derivation" below.
+
+Real structures have more entities than one OpCo and one SPV, and the general tool is the clearing framework of Eisenberg and Noe (*Systemic Risk in Financial Systems*, Management Science, 2001), extended to priority classes. It is Kaz's whiteboard column, done for every entity at once. Each debtor has a pot: its external value, plus whatever its own intercompany claims were paid, plus whatever is left over at the subsidiaries it owns. Each debtor pays its claims rank by rank, senior first, and pays every claim within a rank the same fraction of what is still owed on it. The pots depend on the payments and the payments depend on the pots, so the engine guesses, pays, recomputes the pots, and pays again, until no payment moves by more than $10^{-10}$. The invariant is conservation: payments to outside creditors plus residual outside equity equal total external value, because every intercompany payment is one entity's outflow and another's inflow. The precise map is in "The Full Derivation: the clearing map."
+
+**Pari-plus.** Add a non-guarantor foreign subsidiary worth $V_f$ that guarantees the new money directly. Before the deal, $V_f$ reached the first lien only as equity flowing up to OpCo. After it, the new lenders take $\min(F_2, V_f)$ first and double-dip OpCo for the deficiency, so the first lien loses the foreign value and is diluted on the rest. With $V_f = 0$ the structure collapses to the double-dip, which the code asserts. Sabre's May 2023 financing is the template: a "\$665 million new senior secured credit facility" from "lenders led by affiliates of Centerbridge Partners, L.P." to Sabre Financial Borrower, LLC, "a newly created wholly-owned subsidiary of Sabre GLBL," "secured by an intercompany loan by the Borrower to Sabre GLBL" and by "direct guarantees from, and security interest in assets of, certain foreign subsidiaries of Sabre," with proceeds funding capped tenders for three series of notes (8-K Ex. 99.1, May 25, 2023).
+
+#### The Full Derivation: the clearing map
+
+**The double-dip fixed point.** Above the kink, let $A$ be OpCo's distributable value including the returned SPV equity $(2\rho - 1)F_2$, with $\rho = A/(F_1 + 2F_2)$. Then
 
 $$
 A = V + \Big(\frac{2A}{F_1 + 2F_2} - 1\Big)F_2
 \quad\Longrightarrow\quad
-\rho = \frac{V - F_2}{F_1},
+\rho = \frac{V - F_2}{F_1}.
 $$
 
-so the new lenders take $F_2$ and the first lien takes everything else, as conservation demands. The regimes meet at $\rho = \tfrac12$, so recoveries are continuous and monotone in $V$. The fixed-point map has slope $2F_2/(F_1 + 2F_2) < 1$, so simple iteration converges geometrically.
+Written as a map on the payment rate, one pass sends $\rho$ to $\big(V - F_2 + 2\rho F_2\big)/(F_1 + 2F_2)$. Its slope in $\rho$ is $2F_2/(F_1 + 2F_2) < 1$, so the map is a contraction on the regime $\rho \ge \tfrac12$ and the iteration converges geometrically to the unique fixed point there. Kaz's column is this map at $V = 1{,}200$: $\rho \mapsto 0.35 + 0.5\rho$.
 
-Real structures have more entities, and the general tool is the clearing framework of Eisenberg and Noe (*Systemic Risk in Financial Systems*, Management Science, 2001), extended to priority classes. For a debtor $d$ with external value $e_d$, define its distributable value as external value plus intercompany receipts plus the residual equity $E_c$ of the subsidiaries $c$ it owns. A claim $j$ of rank $r$ owed by $d$ is then paid
+**The general map.** For a debtor $d$ with external value $e_d$, define its distributable value as external value plus intercompany receipts plus the residual equity $E_c$ of the subsidiaries $c$ it owns. A claim $j$ of rank $r$ owed by $d$ is then paid
 
 $$
 A_d(p) = e_d + \sum_{\ell:\ \text{cred}(\ell) = d} p_\ell + \sum_{c:\ \text{parent}(c) = d} E_c(p),
@@ -668,9 +694,7 @@ A_d(p) = e_d + \sum_{\ell:\ \text{cred}(\ell) = d} p_\ell + \sum_{c:\ \text{pare
 p_j = \bar p_j \cdot \min\!\left(1,\ \frac{\big(A_d - \sum_{\text{rank}(m) < r} p_m\big)^+}{\sum_{\text{rank}(m) = r} \bar p_m}\right),
 $$
 
-where the sums in the fraction run over $d$'s own claims and $\bar p_j$ is the amount still owed on claim $j$ (face, less anything already collected from a co-obligor on the same debt). Iterate $p \mapsto \Phi(p)$ until $\|p^{(k+1)} - p^{(k)}\|_\infty < 10^{-10}$. The invariant is conservation: payments to outside creditors plus residual outside equity equal total external value, because every intercompany payment is one entity's outflow and another's inflow.
-
-**Pari-plus.** Add a non-guarantor foreign subsidiary worth $V_f$ that guarantees the new money directly. Before the deal, $V_f$ reached the first lien only as equity flowing up to OpCo. After it, the new lenders take $\min(F_2, V_f)$ first and double-dip OpCo for the deficiency, so the first lien loses the foreign value and is diluted on the rest. With $V_f = 0$ the structure collapses to the double-dip, which the code asserts. Sabre's May 2023 financing is the template: a "\$665 million new senior secured credit facility" from "lenders led by affiliates of Centerbridge Partners, L.P." to Sabre Financial Borrower, LLC, "a newly created wholly-owned subsidiary of Sabre GLBL," "secured by an intercompany loan by the Borrower to Sabre GLBL" and by "direct guarantees from, and security interest in assets of, certain foreign subsidiaries of Sabre," with proceeds funding capped tenders for three series of notes (8-K Ex. 99.1, May 25, 2023).
+where the sums in the fraction run over $d$'s own claims and $\bar p_j$ is the amount still owed on claim $j$ (face, less anything already collected from a co-obligor on the same debt). Iterate $p \mapsto \Phi(p)$ until $\|p^{(k+1)} - p^{(k)}\|_\infty < 10^{-10}$. Every payment is non-decreasing in every other payment, so $\Phi$ is monotone: iterating up from $p = 0$ climbs to the least clearing vector, and iterating down from face descends to the greatest. When every loop of ownership and claims has some outside value behind it, as in the structures of this chapter, the two meet; when they do not, the first item of "Ways This Blows Up" in §13.7.1 applies.
 
 ### 13.7.1 Case Study: Trinseo (2023–2026), the Double-Dip Meets Chapter 11
 
