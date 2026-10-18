@@ -192,13 +192,6 @@
    }
   },
   {
-   "name": "redpen",
-   "task": "wpslncppo",
-   "runId": "wf_c8972122-75f",
-   "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/ed2-redpen-fixes-wf_c8972122-75f.js",
-   "args": null
-  },
-  {
    "name": "newfiles-figs",
    "task": "we6vugnpe",
    "runId": "wf_2396c6f7-2a1",

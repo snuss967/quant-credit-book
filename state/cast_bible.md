@@ -9,7 +9,7 @@ Theo's Day One is **Tuesday 22 Sep 2026** (Ch 3-B "late September"; Ch 10 starts
 ## Theo Marsh (he/him)
 
 - **Role.** Ex-PJT RSSG VP, reader's stand-in, new hire; desk head by Ch 28 (!C2). Right about documents, often wrong about priors (Ch 5, 6).
-- **Backstory.** Canonical: six years at PJT RSSG, 2020 to Sept 2026 (!C3). Last PJT week: a 350-page 2019 senior secured agreement, 90 hours on the 13-week forecast, the Available Amount basket (Ch 1 §1.1). Generic work only: dual-track processes (Ch 17), "uptier math for a majority group" (Ch 21), first-day declarations (Ch 14). Not staffed on Carvana (Ch 5), SVBFG (Ch 3) or Hertz (Ch 16).
+- **Backstory.** Canonical: six years at PJT RSSG, 2020 to Sept 2026 (!C3). Last PJT week: a 350-page 2019 senior secured agreement, 90 hours on the 13-week forecast, the Available Amount basket (Ch 1 §1.1). Generic work only: dual-track processes (Ch 17), "uptier math for a majority group" (Ch 21), first-day declarations (Ch 14). Not staffed on Carvana (Ch 5), SVBFG (Ch 3) or Hertz (Ch 16). How he got the seat (Preface, "The cast"): no quant résumé; in the final round Ines had him make a market on something he had never priced, he did it badly, out loud, and named the fact that would move his number and which way; what the desk hired was his knowledge of which paragraph of a credit agreement moves the price. Kaz is not in that scene; no firm, date or number attached.
 - **Props and gags.** USB stick "for emotional support"; notebook; "But what does the credit agreement say?" (10 uses). 13-week model counter: stick (Ch 1, 3) to job (Ch 3 §3.1.4), hazard curve (Ch 5-6), PRS runway (Ch 13), 20-day cash queue (Ch 21), state feature (Ch 25), PM dashboard (Ch 28).
 
 | Ch | Event | His move | Outcome |
