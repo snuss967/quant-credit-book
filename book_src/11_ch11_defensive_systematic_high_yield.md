@@ -157,11 +157,25 @@ BlackRock's 2025 white paper on systematic high yield opens with a diagnosis tha
 
 ### 11.2.1 The capture-ratio identity
 
+Theo's first question about Ines's slide was the one every allocator asks and almost nobody answers: is 89.56% against 92.24% good, and if it is, good at what?
+
+> **Math, Gently. The gap is alpha, the level is beta.** Draw a square: downside capture along the bottom, upside capture up the side, and a diagonal from corner to corner. A manager who simply holds less of the index, say 91% of it with the rest in cash, lands *on* the diagonal at (91%, 91%). It catches 91% of every rally and 91% of every fall, because holding less scales both by the same number. Now give that manager some real skill: a small fixed amount of extra return every month, rain or shine. In an up month the extra adds to the gain, so upside capture rises; in a down month it shrinks the loss, so downside capture falls. The same monthly amount moves the two ratios by different distances, because each ratio divides by a different average month. Take up months averaging +1.6% and down months averaging −2.0%. An extra $\alpha$ a month moves upside capture by $\alpha/0.016$ and downside capture by $\alpha/0.020$, so the gap opens by $\alpha \times (62.5 + 50) = 112.5\,\alpha$. A manager whose ratios sit 2.68 points apart (92.24% against 89.56%) therefore has $\alpha = 0.0268/112.5 = 0.000238$: about 2.4bp a month, or 29bp a year. The gap measured the skill; the midpoint, about 91%, measured how much index the manager held. The exact statement is next.
+
 Split benchmark months into up months $\mathcal{U} = \{t : r_{b,t} > 0\}$ and down months $\mathcal{D} = \{t : r_{b,t} < 0\}$. Using arithmetic means (eVestment uses annualized geometric means; the algebra is the same to first order), upside and downside capture are
 
 $$
 U = \frac{\bar r_p^{\,\mathcal{U}}}{\bar r_b^{\,\mathcal{U}}}, \qquad D = \frac{\bar r_p^{\,\mathcal{D}}}{\bar r_b^{\,\mathcal{D}}}.
 $$
+
+If the portfolio follows a single-index model with alpha $\alpha$ and beta $\beta$, the gap between the two ratios is alpha scaled by the two regime means,
+
+$$
+U - D = \alpha\left(\frac{1}{\bar r_b^{\,\mathcal{U}}} + \frac{1}{\lvert \bar r_b^{\,\mathcal{D}} \rvert}\right),
+$$
+
+which is positive if and only if $\alpha > 0$. That one line does most of the work on a due-diligence call. A pure beta tilt ($\alpha = 0$) gives $U = D = \beta$, so every point of downside "protection" is paid for with a point of upside; and the *level* $(U + D)/2$ is roughly beta.
+
+#### The Full Derivation: the capture identity
 
 Suppose the portfolio follows a single-index model $r_{p,t} = \alpha + \beta r_{b,t} + \epsilon_t$ with residuals averaging to zero within each regime. Averaging over up months gives $\bar r_p^{\,\mathcal{U}} = \alpha + \beta\,\bar r_b^{\,\mathcal{U}}$, so
 
@@ -169,15 +183,9 @@ $$
 U = \beta + \frac{\alpha}{\bar r_b^{\,\mathcal{U}}}, \qquad D = \beta + \frac{\alpha}{\bar r_b^{\,\mathcal{D}}}.
 $$
 
-Because $\bar r_b^{\,\mathcal{D}} < 0$, a positive alpha raises $U$ above $\beta$ and pushes $D$ below it. Subtracting,
+Because $\bar r_b^{\,\mathcal{D}} < 0$, a positive alpha raises $U$ above $\beta$ and pushes $D$ below it. Subtracting the second expression from the first gives the identity above.
 
-$$
-U - D = \alpha\left(\frac{1}{\bar r_b^{\,\mathcal{U}}} + \frac{1}{\lvert \bar r_b^{\,\mathcal{D}} \rvert}\right),
-$$
-
-which is positive if and only if $\alpha > 0$. Two corollaries do most of the work on a due-diligence call. First, a pure beta tilt ($\alpha = 0$) gives $U = D = \beta$: every point of downside "protection" is paid for with a point of upside. Second, the *gap* $U - D$ measures alpha, and the *level* $(U + D)/2$ is roughly beta.
-
-Put illustrative regime means into the identity: up months average $+1.6\%$ and down months $-2.0\%$ *(illustrative; the paper reports only the capture ratios)*. Then $1/0.016 + 1/0.020 = 112.5$, and
+With the box's regime means *(illustrative; the paper reports only the capture ratios)*, the two managers BlackRock reports decompose as follows.
 
 | Manager (BlackRock p.3) | $U$ | $D$ | Implied $\alpha$ (per year) | Implied $\beta$ |
 | :--- | ---: | ---: | ---: | ---: |
@@ -210,8 +218,6 @@ Three traps for the person computing these numbers. Compute capture on *excess* 
 >
 > **Annotation.** This is the round-trip cost measured, not argued. BlackRock pairs adjacent regimes (June/July 2013, December 2018/January 2019, March/April 2020, June/July 2022, September/October 2022) and shows the average manager giving back on the rebound what it saved on the drop. In poker terms the hand history shows a player who folds the river every time the flop looks scary, including on the hands where the scary flop was followed by a winning card. The point for a systematic builder is that the defense must be evaluated on *pairs* of regimes, not on down months alone, because a model that looks heroic in March 2020 and is underinvested in April 2020 is a model that has learned fear. Build the evaluation set as regime pairs and you will reject that model before a client does.
 
-> **Trend Watch: The Whipsaw Years, 2022–2026.** *What changed:* high yield stopped trending and started reversing, which is the regime where a beta tilt does worst. *When and how big:* 2022, US HY "down over 11%"; 2023, "up over 13%" (BlackRock p.3, Bloomberg data as of 31 March 2024). The average manager beat the benchmark by 0.47% in 2022 and lagged by 0.68% in 2023 (BlackRock p.4), giving back more than it saved. In 2024 the pattern repeated at a smaller scale: +0.35% versus benchmark in Q1, −0.37% over the rest of the year (BlackRock p.5). The ICE BofA US High Yield total return index returned +8.20% in calendar 2024 and +8.50% in 2025, then fell 3.83% from 28 February to 7 April 2025 on the tariff shock and regained its prior peak on 12 May 2025, a ten-week V; in 2026 it fell 2.87% from 27 August to 1 October and stood +0.15% year-to-date on 15 October *(our computations from FRED series BAMLHYH0A0HYM2TRIV)*. *What it means for the desk:* shallow, fast V-shaped drawdowns are the worst environment for a strategy that de-risks on price, and the best environment for one that de-risks on default probability, because PDs barely move in a ten-week V while prices move a lot. The whipsaw years are the empirical case for issuer-level defense.
-
 ### 11.2.3 Case Study 1: The 2022–2023 Round Trip
 
 The benchmark facts are BlackRock's: high yield down more than 11% in 2022 and up more than 13% in 2023, with two regime pairs inside 2022 of −6.8%/+6.0% (June/July) and −4.0%/+2.8% (September/October) (BlackRock p.5, Figure 3). The average manager finished 2022 ahead and 2023 behind, and the cumulative result over the two years was a net giveback (p.4).
@@ -219,6 +225,8 @@ The benchmark facts are BlackRock's: high yield down more than 11% in 2022 and u
 Now run three stylized portfolios through the June/July 2022 pair *(illustrative; only the benchmark returns are sourced)*. The beta tilt at $\beta = 0.91$ returns $-6.19\%$ then $+5.46\%$, a cumulative $-1.07\%$ against the benchmark's $-1.21\%$: a 14bp win, almost entirely from compounding on a down-then-up path. The issuer-level defender holds $\beta^{+} = 1.0$ and, by avoiding the bonds that gap in a down month, achieves $\beta^{-} = 0.90$: $-6.12\%$ then $+6.00\%$, a cumulative $-0.49\%$, a 72bp win. The third portfolio is the one a nervous committee builds in real time: it cuts to $\beta = 0.8$ at the end of June after the loss and rides July at that beta, $-6.80\%$ then $+4.80\%$, cumulative $-2.33\%$, a 112bp *loss* to the benchmark it was trying to protect against.
 
 The desk read is that the second portfolio's advantage is not a forecast of the market. It is a forecast of *which bonds* fall more than their spread duration predicts, which is a default and distress forecast. That is what §11.3 through §11.5 build.
+
+> **Trend Watch: The Whipsaw Years, 2022–2026.** *What changed:* high yield stopped trending and started reversing, which is the regime where a beta tilt does worst. *When and how big:* 2022, US HY "down over 11%"; 2023, "up over 13%" (BlackRock p.3, Bloomberg data as of 31 March 2024). The average manager beat the benchmark by 0.47% in 2022 and lagged by 0.68% in 2023 (BlackRock p.4), giving back more than it saved. In 2024 the pattern repeated at a smaller scale: +0.35% versus benchmark in Q1, −0.37% over the rest of the year (BlackRock p.5). The ICE BofA US High Yield total return index returned +8.20% in calendar 2024 and +8.50% in 2025, then fell 3.83% from 28 February to 7 April 2025 on the tariff shock and regained its prior peak on 12 May 2025, a ten-week V; in 2026 it fell 2.87% from 27 August to 1 October and stood +0.15% year-to-date on 15 October *(our computations from FRED series BAMLHYH0A0HYM2TRIV)*. *What it means for the desk:* shallow, fast V-shaped drawdowns are the worst environment for a strategy that de-risks on price, and the best environment for one that de-risks on default probability, because PDs barely move in a ten-week V while prices move a lot. The whipsaw years are the empirical case for issuer-level defense.
 
 ### Specification for AI Implementation
 

@@ -2,7 +2,7 @@
 
 - [x] 1. [§9.0 Cold Open] EXPAND-SCENE: three-tenant round, retire learning-objective bullets. Note: Kaz defends, dealer, Mags marks, rent roll; bullets now one paragraph.
 - [x] 2. [§9.1] LIST-TO-NARRATIVE: Fact one/two/three as desk moments; move Trend Watch to end of §9.1. Note: facts told via 0.6, tip line moved, marks; TW already last.
-- [ ] 3. [§9.1, after the table] ANOTHER-SEAT: AQR Palhares and Richardson (FAJ 2020).
+- [x] 3. [§9.1, after the table] ANOTHER-SEAT: AQR Palhares and Richardson (FAJ 2020). Note: box added, sample counts omitted, narration threads between boxes.
 - [ ] 4. [§9.2.1] MATH-GENTLY (two parts: relative change; beta as ratio) + FULL-DERIVATION-MOVE.
 - [ ] 5. [§9.2.2–9.2.3] WHEN-TO-APPLY inside the scene: Mags at the 1,000bp line; ROBO timing.
 - [ ] 6. [§9.3.1–9.3.2] MATH-GENTLY (regression residual in a peer cell).
