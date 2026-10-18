@@ -602,7 +602,7 @@ def fig_year_clocks():
     for doy in (90, 181, 273, 365):                                                          # quarter-ends
         dot("year", doy / 365 * 360, 0.68, SURFACE, "o", 6.5, markeredgecolor=ORANGE, markeredgewidth=1.6)
     p_q = pol(mid("year", 0.68), 90 / 365 * 360)
-    fomc = [27.5, 76.5, 118.5, 167.5, 209.5, 255.5, 298.5, 342.5]                           # 2026 meetings' mid-dates, day of year
+    fomc = [27.5, 76.5, 118.5, 167.5, 209.5, 258.5, 300.5, 342.5]                           # 2026 meetings' mid-dates, day of year (27-28 Jan, 17-18 Mar, 28-29 Apr, 16-17 Jun, 28-29 Jul, 15-16 Sep, 27-28 Oct, 8-9 Dec)
     for dy in fomc:
         radial("year", dy / 365 * 360, 0.32, 0.48, color=INK_2, linewidth=1.8, zorder=5, solid_capstyle="butt")
     p_fomc = pol(mid("year", 0.40), 118.5 / 365 * 360)
