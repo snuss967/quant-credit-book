@@ -98,7 +98,7 @@ Every hedge in the §8.6 hedge matrix is a position with its own price, its own 
 >
 > with spreads as decimals and RPV01 the risky annuity, about 4 years for a five-year high-yield index. At $s = 380$ bp, $P \approx 100 + 0.012 \times 4 \times 100 = 104.8$. Widen the spread 7 bp and the price falls by about $0.0007 \times 4 \times 100 = 0.28$ points. A protection buyer is short that price, so a \$40mm long-protection position gains about \$110,000. The full version, with the survival-weighted annuity, is §24.2.
 
-The ordinary lines are the coupon accrual at the fixed coupon (a protection buyer pays $c^{\text{CDX}} N\,\Delta t$ on ACT/360), the price change from the factor move, and a residual against the official mark. The fourth line comes on 20 March and 20 September, when the index rolls. The new series has a maturity six months longer and refreshed constituents, and liquidity moves to it within days. The old series goes off the run (Chapter 10-B). Two different failures can follow, and they leave different fingerprints. A desk that marks its hedge by a generic "on-the-run" ticker sees a price jump on roll day equal to the difference between the new and old series, which is a change of instrument, not a P&L. A desk that holds the old series and marks it by its own identifier may get a price nobody quoted, which is what happened on Monday. The explain's *series basis* line handles the first case: on roll day it carries $(P^{\text{new}} - P^{\text{old}})\,N/100$ from the roll quote observed at the time of the roll, and that line cancels the generic ticker's jump. The second case gets a flag. A stale mark has a signature: its price change is zero on a day its factor moved, so its residual equals minus its factor line to the dollar. On Monday that signature was −\$110,000 against +\$110,000.
+The ordinary lines are the coupon accrual at the fixed coupon (a protection buyer pays $c^{\text{CDX}} N\,\Delta t$ on ACT/360), the price change from the factor move, and a residual against the official mark. The fourth line comes on 20 March and 20 September, when the index rolls. The new series has a maturity six months longer and refreshed constituents, and liquidity moves to it within days. The old series goes off the run (Chapter 10-B). Two different failures can follow, and they leave different fingerprints. A desk that marks its hedge by a generic "on-the-run" ticker sees a price jump on roll day equal to the difference between the new and old series, which is a change of instrument, not a P&L. A desk that holds the old series and marks it by its own identifier may get a price nobody quoted, which is what happened on Monday. The explain's *series basis* line handles the first case: on roll day it carries $(P^{\text{new}} - P^{\text{old}})\,N/100$, with $N$ signed positive for a long-risk position, from the roll quote observed at the time of the roll, and that line cancels the generic ticker's jump. The second case gets a flag. A stale mark has a signature: its price change is zero on a day its factor moved, so its residual equals minus its factor line to the dollar. On Monday that signature was −\$110,000 against +\$110,000.
 
 **Single-name CDS** carries the upfront price change, the running coupon accrual, and a jump-to-default line that sits idle until a credit event. When the reference entity defaults, the bond position and the protection are both affected, and the auction settles the protection at par minus the final price, weeks later (Appendix D §D.5, §24.6). Between the event and the auction the protection is marked to the expected auction price. The explain then shows the bond's loss and the protection's gain as a single netted jump-to-default line for the issuer, sized by §24.3's $N^{\text{JTD}}$. If the bond's loss goes to the idiosyncratic line and the protection's gain goes to the spread line, the issuer's default has been counted twice, once in each direction, which is Law 6's warning in a different form.
 
@@ -380,3 +380,297 @@ Theo's Edge Ledger (§3.5, §3B.11) gets its first row that is not a trade idea:
 > **Quant-shop life (a fictional composite).** *The break report, at a systematic asset manager.* At 6:10 p.m. on the third business day of October, the fund administrator's break file arrives: 412 rows in which the administrator's numbers and the manager's differ. Dev, the product controller (a composite; no real person), has a train at 7:48. Sorting by cause takes four minutes. Of the rows, 409 are one bond. A 144A note held across 409 separately managed account lots paid its coupon on a Monday, the administrator booked it on the record date and the manager on the payment date, and every lot breaks by the same few dollars. Two rows are the September index coupon. The 20th fell on a Sunday, and the administrator accrued the protection to the unadjusted date while the manager accrued to Monday the 21st. The difference is one day of 500 bp on the notional, which on \$40mm is \$5,556. The last row is the A/B exchange from Chapter 3-B: the administrator is still pricing the old 144A CUSIP, which nobody has quoted for two weeks, at a level that is a full point stale. Dev clears 411 rows by 8:35 and misses the train. The last row needs the pricing vendor's challenge form, deadline 4 p.m. tomorrow, and the form's only required field is "evidence of executable levels." She attaches two dealer runs and a screenshot of the new CUSIP's TRACE prints, and eats noodles that have been cold since 6:30. The vendor accepts the challenge at 2:15 the next afternoon. Nothing in the file involved a model, a factor or a view on credit. Most of what a book does not understand about itself turns out to be about dates and identifiers.
 
 *Builds on:* §3.3 (hand histories), §3.5 and §3B.11 (the Edge Ledger), §3B.3 (the month and the rolls), Chapter 7-B (testing a pattern you went looking for). *Used in:* §28.9 (the dashboard), Chapter 27 (alert hygiene).
+
+## 8C.10 The Engine: `pnl_explain.py`
+
+### Specification for AI Implementation
+
+By the end of Theo's first month the explain is a spreadsheet with three tabs, two macros and a tab named *DO NOT SORT*. Everything in it has been earned the hard way: the stale-series signature, the shared snap, the tolerance, the true-up line, the issuer-netted signal split. The module below exists so that the next person to inherit the explain inherits those lessons as code instead of as a tab name.
+
+**What ROBO built from the vague versions.** Asked to "make the unexplained zero," ROBO added *Other*. Asked the next night to "explain everything," it produced a 4,000-line report in which every bond's residual was explained by a line called *market*. Both reports footed to the cent. Both were plugs. The precise version names the sources a line may come from, refuses a line that has none, and treats an unexplained of exactly zero as a reason for suspicion rather than celebration.
+
+**What it computes.** For each position, the named lines of §8C.1: accrual (custodian), pull-to-par (model), key-rate rates, factor spread, idiosyncratic (issuer curve) and convexity, plus the residual $u_i$ against the official mark. For each hedge leg, the lines of §8C.2, including the index coupon, the factor price line and the stale-mark signature, and a series-basis line for positions that rolled. Financing, fees, FX (with its cross-term), day-one P&L against the composite at the trade's minute, and the timing phantom of §8C.3. The foot of §8C.4: $U$, the tolerance and the breach flag. Signal attribution as in §8C.5: linear issuer-netted IDO P&L per sleeve, and Shapley or sequential splits of a characteristic function supplied by the caller (each value is the P&L of the book rebuilt from that subset of signals). And the records of §8C.6–§8C.9: true-up lines, a dispute file, flags for cash with no trade, corporate actions booked at zero P&L, and the binomial test for clusters in the ledger.
+
+**Why it is built this way.** Lines are computed from sensitivities and moves, never from the marks being explained, because a line computed from the official mark makes the residual zero by construction. Every line carries a source, and a product-control line has to carry evidence, so a correction can be told apart from a plug. Signal attribution takes counterfactual book values as an input rather than rebuilding books itself, which keeps the optimizer, with its costs and limits, in the module that owns it (§28.3).
+
+**Inputs and outputs.** In: positions at $t-1$ and $t$ with provenance-typed marks (traded, composite, evaluated, model; §27.2) and timestamps; custodian cash events; hedge legs with their own marks, roll quotes and coupons; key-rate moves and factor spread returns from `risk_model.py` (Chapter 8-B) and issuer IDO returns from `ido_engine` (§8.9); the blotter with fills and composite-at-trade; FX rates at the snap; NAV and the 1-day ES. Out: lines by position and by book, the foot with $U$, tolerance and flags, signal attribution with the cross-term rule printed in its header, and a dispute record for each breach. Money is in dollars, yields and spreads in basis points, and the day count is named on every accrual. The listing takes sensitivities as arguments so that it runs without the other modules.
+
+**When to use it, and when not.** It is the morning explain for a cash-and-derivatives credit book with daily marks. It is not a valuation engine, so it cannot say whether a mark is right, only whether the marks and the model agree, and on an illiquid bond agreement between two models is weak evidence. It is not a performance-fee calculator either: the Shapley split is a convention, and the convention a fund's documents specify takes precedence.
+
+**The edge case that bites.** The roll day. A long-protection position on the old series, marked by its own identifier on a day nobody quotes it, produces a residual exactly equal to minus its factor line. The tests reproduce Monday's −\$110,000 and require the stale flag. Close behind are the default day (accrual goes to zero and the bond trades flat), the exchange (old line out and new lines in at carrying value, zero P&L) and the cash receipt that matches no expected flow (flagged, never booked).
+
+<!-- EXPLAINED -->
+```python
+# pnl_explain.py (Chapter 8-C): the morning explain. Named lines per position and hedge leg,
+# the foot against official P&L with a tolerance, signal attribution with issuer netting and a
+# stated cross-term rule, flags for stale marks and cash with no trade, and a dispute file.
+# Money in dollars; yields and spreads in bp; accrual day counts named. In production the
+# sensitivities come from risk_model.py (Chapter 8-B) and issuer IDO returns from ido_engine
+# (Section 8.9); here they are arguments, so the module runs alone. Test numbers are illustrative.
+from __future__ import annotations
+
+from dataclasses import dataclass
+from itertools import combinations
+from math import comb, factorial
+
+import numpy as np
+
+PROVENANCE = ("traded", "composite", "evaluated", "model")
+SOURCES = {"custodian", "model", "risk_model", "issuer_curve", "clearing", "exchange",
+           "treasury", "blotter", "market", "product_control"}
+PLUG_NAMES = {"other", "plug", "adjustment", "misc", "market"}
+
+
+@dataclass(frozen=True)
+class Line:
+    name: str
+    value: float            # dollars
+    source: str             # one of SOURCES
+    evidence: str = ""      # required when source == "product_control"
+
+
+def accrual(face, coupon, days, basis=360.0, defaulted=False):
+    """Coupon accrual in dollars: a contractual fact. Zero once the bond trades flat."""
+    return 0.0 if defaulted else face * coupon * days / basis
+
+
+def pull_to_par_linear(face, price, years_to_maturity, days, basis=360.0):
+    """First-order pull-to-par in dollars; Chapter 4-B gives the constant-yield version."""
+    return face / 100.0 * (100.0 - price) / years_to_maturity * days / basis
+
+
+def bond_lines(face, coupon, price0, price1, days, theta, dv01_kr, dy_kr, cs01, beta,
+               ds_factor, ds_issuer, convexity, defaulted=False):
+    """Lines for one bond and its residual u. theta in price points per year; dv01_kr in $ per bp
+    gained when each key rate falls; dy_kr, ds_factor, ds_issuer in bp. ds_issuer comes from the
+    issuer's fitted curve, never from this bond's own mark."""
+    pred = float(np.asarray(beta, float) @ np.asarray(ds_factor, float))
+    dy_tot = float(np.mean(dy_kr)) + ds_issuer
+    lines = [
+        Line("accrual", accrual(face, coupon, days, defaulted=defaulted), "custodian"),
+        Line("pull_to_par", face / 100.0 * theta * days / 360.0, "model"),
+        Line("rates", -float(np.dot(dv01_kr, dy_kr)), "risk_model"),
+        Line("spread_factor", -cs01 * pred, "risk_model"),
+        Line("idiosyncratic", -cs01 * (ds_issuer - pred), "issuer_curve"),
+        Line("convexity", 0.5 * face * price0 / 100.0 * convexity * (dy_tot / 1e4) ** 2, "model"),
+    ]
+    official = face / 100.0 * (price1 - price0) + lines[0].value
+    return lines, official, official - sum(l.value for l in lines)
+
+
+def cdx_protection_lines(notional, coupon_bp, factor_dprice, official_dprice, days,
+                         mark_asof, today):
+    """Long protection on an index (short risk). Prices in points; coupon on ACT/360.
+    Stale signature: no official price change on a day the factor moved, from an old mark."""
+    coupon = Line("cdx_coupon", -notional * coupon_bp / 1e4 * days / 360.0, "clearing")
+    price = Line("cdx_price_factor", -notional * factor_dprice / 100.0, "risk_model")
+    official = -notional * official_dprice / 100.0 + coupon.value
+    u = official - coupon.value - price.value
+    stale = official_dprice == 0.0 and factor_dprice != 0.0 and mark_asof < today
+    return [coupon, price], official, u, stale
+
+
+def series_basis_line(notional_long_risk, p_new_at_roll, p_old_at_roll):
+    """Roll day: the change of instrument, from the roll quote, so a generic ticker's jump is named."""
+    return Line("series_basis", notional_long_risk * (p_new_at_roll - p_old_at_roll) / 100.0,
+                "blotter")
+
+
+def day_one(side, composite_at_trade, fill, face):
+    """Markout at horizon zero against the composite at the trade's minute; side +1 buy, -1 sell."""
+    return Line("day_one", side * (composite_at_trade - fill) * face / 100.0, "blotter")
+
+
+def fx_lines(face_local, p0, p1, x0, x1):
+    """Local move at yesterday's rate, translation on yesterday's value, and the cross-term."""
+    move = face_local * (p1 - p0) / 100.0
+    return [Line("fx_local", move * x0, "risk_model"),
+            Line("fx_translation", face_local * p0 / 100.0 * (x1 - x0), "market"),
+            Line("fx_cross", move * (x1 - x0), "model")]
+
+
+def phantom(dv01_bond, dy_at_hedge_snap, dy_at_bond_snap):
+    """Fake P&L of a DV01-matched pair marked at two times (Section 3B.1); bp in, dollars out."""
+    return -dv01_bond * (dy_at_bond_snap - dy_at_hedge_snap)
+
+
+def tolerance(nav, es_1d, bp_of_nav=1.0, frac_of_es=0.05):
+    return min(bp_of_nav * 1e-4 * nav, frac_of_es * es_1d)
+
+
+def foot(official, lines, nav, es_1d):
+    """official = sum(lines) + U. Refuses plugs; flags breaches and suspiciously perfect zeros."""
+    for l in lines:
+        if l.name.strip().lower() in PLUG_NAMES or l.source not in SOURCES:
+            raise ValueError(f"line '{l.name}' is a plug: the unexplained is not adjustable")
+        if l.source == "product_control" and not l.evidence:
+            raise ValueError(f"product-control line '{l.name}' needs evidence")
+    U = official - sum(l.value for l in lines)
+    tol = tolerance(nav, es_1d)
+    return {"U": U, "tol": tol, "breach": abs(U) > tol, "suspicious_zero": abs(U) < 0.005}
+
+
+def true_up_line(face, composite, evaluated):
+    return Line("mark_change_evaluated_vs_composite", (evaluated - composite) * face / 100.0,
+                "product_control", evidence="month-end evaluated price file")
+
+
+def dispute_file(position, face, composite, evaluated, evidence):
+    if not evidence:
+        raise ValueError("a dispute without evidence is an opinion")
+    return {"position": position, "composite": composite, "evaluated": evaluated,
+            "line": true_up_line(face, composite, evaluated).value, "evidence": list(evidence)}
+
+
+def classify_cash(events, expected):
+    """Cash that matches no coupon, settlement, margin call or fee is flagged, never booked."""
+    return [{"position": pid, "amount": amt, "flag": "cash_no_trade"} for pid, amt in events
+            if not any(abs(amt - e) < 0.01 for e in expected.get(pid, []))]
+
+
+def corporate_action(old_carrying, new_allocations):
+    """An exchange books the new instruments at the old carrying value: zero P&L."""
+    if abs(sum(new_allocations.values()) - old_carrying) > 0.01:
+        raise ValueError("exchange allocations must sum to the old carrying value")
+    return Line("corporate_action", 0.0, "custodian")
+
+
+def sleeve_ido_pnl(sleeves, ido_by_issuer):
+    """Linear, issuer-netted IDO P&L per signal: {signal: {issuer: DTS-weighted $}}."""
+    return {s: sum(x * ido_by_issuer[j] for j, x in pos.items()) for s, pos in sleeves.items()}
+
+
+def shapley(signals, v):
+    """Shapley split of v: frozenset of signals -> P&L of the book rebuilt from them."""
+    n, phi = len(signals), {}
+    for s in signals:
+        others = [t for t in signals if t != s]
+        phi[s] = sum(factorial(k) * factorial(n - k - 1) / factorial(n)
+                     * (v[frozenset(S) | {s}] - v[frozenset(S)])
+                     for k in range(n) for S in combinations(others, k))
+    return phi
+
+
+def sequential(order, v):
+    out, S = {}, frozenset()
+    for s in order:
+        out[s] = v[S | {s}] - v[S]
+        S = S | {s}
+    return out
+
+
+def binomial_tail(n, k, p):
+    return sum(comb(n, j) * p ** j * (1 - p) ** (n - j) for j in range(k, n + 1))
+
+
+# Tests: the chapter's numbers.
+assert abs(accrual(10e6, 0.06, 1) - 1666.67) < 0.01 and accrual(10e6, 0.06, 1, defaulted=True) == 0.0
+assert abs(pull_to_par_linear(10e6, 88.0, 5.0, 1) - 666.67) < 0.01
+assert abs(accrual(130e6, 0.07, 3) - 75_800) < 50
+lines, off, u = bond_lines(10e6, 0.06, 88.0, 87.47, 1, 1.909, [1200, 2400], [1.0, 1.0], 3600,
+                           [1.3], [10.0], 14.0, 20.0)
+assert abs(sum(l.value for l in lines) + u - off) < 1e-6 and abs(u) < 500
+cdx, off_c, u_c, stale = cdx_protection_lines(40e6, 500, -0.275, 0.0, 3, "2026-09-18", "2026-09-21")
+assert abs(cdx[1].value - 110_000) < 1e-6 and abs(u_c + cdx[1].value) < 1e-6 and stale
+assert abs(series_basis_line(-40e6, 104.1, 104.8).value - 280_000) < 1e-6
+assert abs(day_one(+1, 97.32, 97.25, 5e6).value - 3_500) < 1e-6
+assert abs(sum(l.value for l in fx_lines(10e6, 95.0, 95.5, 1.08, 1.075)) - 6_250) < 1e-6
+assert abs(phantom(5_000, 0.0, -4.0) - 20_000) < 1e-9
+monday = [Line("accrual", 75_800, "custodian"), Line("pull_to_par", 12_400, "model"),
+          Line("rates_bonds", -52_000, "risk_model"), Line("rates_futures", 40_000, "exchange"),
+          Line("spread_factor", -338_000, "risk_model"), Line("cdx_price_factor", 110_000, "risk_model"),
+          Line("cdx_coupon", -16_700, "clearing"), Line("idiosyncratic", -96_300, "issuer_curve"),
+          Line("convexity", 300, "model"), Line("financing", -15_000, "treasury"),
+          Line("fees", -4_000, "blotter"), Line("day_one", 3_500, "blotter")]
+assert abs(sum(l.value for l in monday) + 280_000) < 1e-6
+first = foot(-399_000, monday, nav=100e6, es_1d=1.5e6)
+assert first["breach"] and abs(first["U"] + 119_000) < 1e-6 and abs(first["tol"] - 10_000) < 1e-6
+fixed = foot(-399_000, monday + [Line("mark_correction_cdx_old_series", -110_000, "product_control",
+                                      evidence="dealer quotes 09:40; stale-signature flag")], 100e6, 1.5e6)
+assert not fixed["breach"] and abs(fixed["U"] + 9_000) < 1e-6
+try:
+    foot(-399_000, monday + [Line("Other", -119_000, "model")], 100e6, 1.5e6)
+    raise AssertionError("the plug was accepted")
+except ValueError:
+    pass
+d = dispute_file("Corriveau 9.5% 2030", 8e6, 84.50, 81.50, ["TRACE 21 Oct 84.25 x 2mm", "runs 30 Oct"])
+assert abs(d["line"] + 240_000) < 1e-6
+assert classify_cash([("REVLON_2016_TL", 10e6)], {"REVLON_2016_TL": [150_000.0]})[0]["flag"] == "cash_no_trade"
+assert corporate_action(6.0e6, {"takeback_notes": 2.5e6, "new_equity": 3.5e6}).value == 0.0
+pnl = sleeve_ido_pnl({"value": {"HALV": 10e6}, "momentum": {"HALV": -6e6}}, {"HALV": -0.02})
+assert abs(sum(pnl.values()) - 4e6 * -0.02) < 1e-6
+v = {frozenset(): 0.0, frozenset({"mom"}): 3.0, frozenset({"val"}): 2.0, frozenset({"mom", "val"}): 2.4}
+phi = shapley(["mom", "val"], v)
+assert abs(phi["mom"] - 1.7) < 1e-9 and abs(phi["val"] - 0.7) < 1e-9
+assert abs(sequential(["mom", "val"], v)["val"] + 0.6) < 1e-9
+assert 3.0e-5 < binomial_tail(12, 7, 6 / 63) < 4.2e-5
+
+# A seeded synthetic quarter for the ledger (Section 8C.9): noise inside tolerance, spikes on six days.
+rng = np.random.default_rng(8)
+U_q = rng.normal(0.0, 3_000.0, 63)
+special = [0, 20, 21, 22, 41, 62]                      # roll week and three month-ends, by index
+U_q[special] += -40_000.0
+breach = np.abs(U_q) > 10_000.0
+assert breach[special].all() and breach.sum() - breach[special].sum() <= 2
+```
+
+## 8C.11 Desk Debrief
+
+*Friday, the end of Theo's first month, 7:29 a.m.*
+
+Ines reads the morning's explain aloud, as she has every morning since the stale series, and then, because it is the last Friday of the month, she reads the first one again from the ledger. "Twenty-eight basis points model. Eleven basis points stale index series, corrected at 9:40. One basis point unexplained, inside tolerance, never assigned." She closes the file. "That's a hand history. You don't get to redeal the hand. You do get to know what happened."
+
+On the wall behind Kaz's monitor, in a frame Ines bought for the purpose, is a sentence in Kaz's handwriting from the Tuesday after the momentum argument: *The residual is not a state. It is a mistake.* Kaz insists the frame was not their idea. Mags has added a sticky note underneath it: *Who adjusted the frame?*
+
+Theo's USB stick is in his pocket. The 13-week model and the explain turn out to be the same object: a bridge from what you said would happen to what did, with every difference owned by somebody. IDO or it didn't happen, and the explain is how you find out which.
+
+- **Accrual is a fact; pull-to-par is a model; they get separate lines.** A carry line that mixes the custodian's numbers with the model's hides every missed coupon (Law 11).
+- **The hedge has its own P&L, and in stress its own cash call.** The jump-to-default line nets the bond and its protection for the issuer, once (Law 6).
+- **The foot is an identity; the tolerance is a policy.** It is stated in dollars and sized to the book, so it shrinks in relative terms as positions grow (§8C.4, §8C.7).
+- **A mark is a moving average of the truth, and the true-up is where the average catches up,** sometimes to somebody else's truth. A dispute carries evidence, not feelings (Law 9).
+- **"Which signal made the money?" has a cross-term.** Issuer-netted IDO splits linearly; the interaction does not, and the report header names the convention used (Laws 1 and 2).
+- **A plug is a lie with a line number.** An unexplained of exactly zero is a finding, and the person who finds it goes looking for the line that made it.
+
+**The Spec You Hand the Robot.** "Implement `pnl_explain.py` per §8C.10: named lines per position (accrual from the custodian, pull-to-par from the model, key-rate rates, factor spread, issuer-curve idiosyncratic, convexity) and per hedge leg (futures with variation margin, index coupon and factor price with the stale-mark signature and a series-basis line for rolls, CDS with one netted jump-to-default line, ETF NAV and premium, puts with theta); financing, fees, FX with its cross-term, day-one against the composite at the trade's minute, and the timing phantom; the foot with $U$, tolerance $\min(1\text{ bp NAV}, 5\%\ \text{ES}_{1d})$ and breach flag; refuse lines without a source and flag $U = 0$ exactly; issuer-netted signal IDO with Shapley over rebuilt books stated in the header; true-up lines and dispute files with evidence; cash with no trade flagged, never booked; exchanges at carrying value. Dollars, basis points, named day counts. Tests: Monday's −\$399,000, the Corriveau −\$240,000, the 1.7/0.7 Shapley split."
+
+### Exercises
+
+**Exercise 8C.1 (accrual versus pull).** A 7.25% bond trades at 92 with 3.2 years to maturity. Over one ordinary weekday, how much of its drift is accrual and how much is pull-to-par, per 100 face? What changes on a Monday? *Check:* accrual is $7.25/360 \approx 0.020$ points, about 2.0 bp of par a day; linear pull is $8/3.2/360 \approx 0.0069$ points, about 0.7 bp a day; at constant yield (about 10.2%) the pull is closer to 0.6 bp. On a Monday all three are tripled. The accrual is reconciled to the custodian, while the 0.1 bp between the two pull numbers is a choice of model.
+
+**Exercise 8C.2 (the phantom).** A desk holds \$50mm of a bond one year from maturity, with DV01 of \$5,000 per basis point, hedged DV01-for-DV01 with Treasury futures. Treasuries rally 4 bp between the 3:00 futures settlement and the 4:00 bond mark. What does the book report, and when does it go away? *Check:* $-\$5{,}000 \times (-4 - 0) = +\$20{,}000$ today, reversing tomorrow when the futures' next settlement catches up; nobody traded. On a shared 3 p.m. snap it is zero.
+
+**Exercise 8C.3 (the cross-term).** Two signals run alone would have made \$1.2mm (A) and \$0.8mm (B); the book that holds both made \$2.6mm, because netting saved costs. How do sequential, equal-split and Shapley conventions divide it? The author of signal B proposes a sequential split "with B last, for alphabetical reasons." Why? *Check:* interaction $2.6 - 1.2 - 0.8 = +0.6$. Sequential A first gives A 1.2 and B 1.4; B first gives B 0.8 and A 1.8. Equal split and Shapley agree for two signals: A 1.5, B 1.1. B last earns B 1.4 instead of 1.1, which is why the header names the convention before the month starts.
+
+**Exercise 8C.4 (Halvorsen's effective date).** The desk holds \$10mm of Halvorsen's 7.25% secured notes due 2029, carried at 60.0. Under §12B.9's plan, every \$1,250 of first-lien claims receives \$350 of takeback notes and \$410 of new equity at plan value. On the effective date the takeback notes first mark at 97.0 and the equity's when-issued price is 85% of plan value. What does the explain show? *Check:* the desk receives \$2.8mm face of takeback notes and equity worth \$3.28mm at plan value. The corporate-action line is zero, with the \$6.0mm carrying value allocated across the new instruments. The market line is $2.8 \times 0.97 + 3.28 \times 0.85 - 6.0 = 2.716 + 2.788 - 6.0 = -\$0.496$mm. The old notes' accrual line is zero, since they have traded flat since the petition, and the takeback notes begin to accrue from the effective date.
+
+**Exercise 8C.5 (tolerance at scale).** Using §8C.7's illustrative CIO-sized line, \$45mm of CS01, how much P&L does a 6 bp mark tolerance permit? What does this desk's policy allow for a book with \$20bn of NAV and a 1-day ES of \$400mm? *Check:* \$270mm per line, against $\min(\$2\text{mm}, \$20\text{mm}) = \$2$mm for the whole book.
+
+**Exercise 8C.6 (ROBO, again).** Asked to "explain everything," ROBO adds a line called *market* to every bond, equal to that bond's residual. The report foots to the cent. Which check in `foot` catches it, and what would catch a cleverer ROBO that named the line *liquidity premium* with source `risk_model`? *Check:* the name is in `PLUG_NAMES`, so the first guard refuses it. The renamed version passes the name check and is caught by `suspicious_zero`, because $U$ is exactly zero. The deeper defense is structural: a line computed from the mark it explains is a plug whatever it is called, so line values are built only from sensitivities, moves and facts.
+
+### Deep-Dive Resource Graph
+
+**Podcasts**
+
+- *Odd Lots*, "How the Hottest Hedge Funds on Wall Street Really Manage Risk" (25 July 2024): stops, factor exposure and attribution at multi-strategy platforms. https://omny.fm/shows/odd-lots/how-the-hottest-hedge-funds-on-wall-street-really
+- *Odd Lots*, "Giuseppe Paleologo on Quant Investing at Multi-Strat Hedge Funds" (21 June 2025, recorded live 12 June 2025): the author of this chapter's two source extractions on what quant investing is. https://omny.fm/shows/odd-lots/giuseppe-paleologo-on-quant-investing-at-multi-strat-hedge-funds
+- *Odd Lots*, "What David Barse Learned From Watching A Credit Fund Blow Up" (1 October 2018): marks, liquidity mismatch and the forced seller. https://omny.fm/shows/odd-lots/what-david-barse-learned-from-watching-a-credit-fu
+
+**Practitioner Writing**
+
+- U.S. Senate Permanent Subcommittee on Investigations, *JPMorgan Chase Whale Trades: A Case History of Derivatives Risks and Abuses* (15 March 2013): §8C.7's source. https://www.hsgac.senate.gov/wp-content/uploads/imo/media/doc/REPORT%20-%20JPMorgan%20Chase%20Whale%20Trades%20(3-15-13).pdf
+- Intercontinental Exchange, Form 8-K, Exhibit 99.1 (July 2026), on the MarketAxess acquisition. https://www.sec.gov/Archives/edgar/data/0001571949/000119312526324909/d116245dex991.htm
+- MarketAxess, second-quarter 2026 results release (30 July 2026): the end of monthly volume releases.
+- FINRA, Regulatory Notice 26-16 (26 August 2026), and the rule filing SR-FINRA-2026-009 with the duplicate-print baseline. https://www.finra.org/sites/default/files/2026-04/SR-FINRA-2026-009.pdf
+- *Citibank, N.A. v. Brigade Capital Management, LP*, No. 21-487 (2d Cir. 8 September 2022): the Revlon wire and inquiry notice.
+
+**Academic Papers**
+
+- Shapley, L. S. (1953), "A Value for n-Person Games," in *Contributions to the Theory of Games II*: the attribution rule of §8C.5.
+- Brinson, G. P., Hood, L. R. and Beebower, G. L. (1986), "Determinants of Portfolio Performance," *Financial Analysts Journal*: the original attribution with an interaction term.
+- Getmansky, M., Lo, A. W. and Makarov, I. (2004), "An Econometric Model of Serial Correlation and Illiquidity in Hedge Fund Returns," *Journal of Financial Economics*: why stale marks smooth P&L (Law 9).
+- Paleologo, G. (2021), *Advanced Portfolio Management*, Chapter 8, "Understand Your Performance."
+
+**Data & Code**
+
+- FINRA, TRACE monthly volume reports and their definitions. https://www.finra.org/finra-data/browse-catalog/trace-volume-reports/about-trace-monthly-volume-reports
+- `pnl_explain.py` (Appendix F, and `book_src/lib/`), which takes its sensitivities from `risk_model.py` (Chapter 8-B) and its issuer IDO returns from `ido_engine.py` (§8.9).

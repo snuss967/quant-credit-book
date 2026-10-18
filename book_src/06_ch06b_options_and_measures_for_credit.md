@@ -262,7 +262,7 @@ The bondholder is long a little of the firm, short gamma on its assets, and shor
 | Put on firm (= $Fe^{-rT}-B_0$) | 1.64 | 11.19 |
 | Spread $s$ | 216 bp | 1,307 bp |
 | $\mathbb{Q}(\tau\le T)=N(-d_2)$ | 17.7% | 48.9% |
-| Bond delta $\partial B/\partial V$ | 0.120 | 0.334 |
+| Bond delta $\partial B/\partial V$ | 0.119 | 0.334 |
 | Bond gamma $\partial^2B/\partial V^2$ | −0.0080 | −0.0091 |
 | Bond vega, per asset-vol point | −0.199 | −0.364 |
 | Spread vega, per asset-vol point | +26.5 bp | +45.4 bp |

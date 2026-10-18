@@ -1,6 +1,8 @@
 # Chapter 24: Bond-to-CDS Basis & Deliverable Obligation Mechanics
 
-*7:41 a.m.* Theo had written the trade on a sticky note. On this desk that counted as either retro or a compliance event. *Buy \$10mm Halvorsen Packaging 6% Senior Notes due 2031 at 88. Buy \$10mm five-year Halvorsen CDS at 370 bp. Bond Z-spread: 480. Basis: −110.* (Halvorsen is fictional; all numbers illustrative.)
+*Fiction label: the desk, Halvorsen Packaging, its bonds, its swap and every number in this scene are invented (illustrative).*
+
+*Tuesday 20 October 2026, 7:41 a.m., Theo's fifth week.* Theo had written the trade on a sticky note. On this desk that counted as either retro or a compliance event. *Buy \$10mm Halvorsen Packaging 6% Senior Notes due 2031 at 88. Buy \$10mm five-year Halvorsen CDS at 370 bp. Bond Z-spread: 480. Basis: −110.*
 
 "A hundred and ten basis points of riskless carry," Kaz said. "If they default, the swap pays par minus recovery, the bond pays recovery, and we're flat. It's a tautology with a coupon."
 
@@ -12,7 +14,15 @@
 
 Kaz blinked. "Is a 'deliverable obligation' the one with free shipping?"
 
-From the end of the row, without looking up, Mags said, "Back in my day the basis was free money too. In the autumn of 2008 it was free money at minus several hundred, and the people who owned it learned that a repo haircut is just a margin call that's been patient."
+Theo did not answer, because he had already opened the trade confirmation in one window and Halvorsen's debt schedule in the other, the way he used to open a credit agreement beside its third amendment and wait for the two to disagree. The confirmation ran to eleven pages, most of them incorporating other documents by reference, which made it feel like home. Reference Entity: Halvorsen Packaging Holdings, Inc. Credit Events: Bankruptcy, Failure to Pay. Deliverable Obligation Characteristics: Not Subordinated, Specified Currency, Transferable, Maximum Maturity 30 years, and a few more that he read twice. Nothing in it mentioned his 6% 2031s. The swap did not care which Halvorsen bond he owned. It cared which ones existed.
+
+So he went down the other window line by line, the way you read a debt schedule when you suspect management put the interesting item on the last page. The 7.25% notes due 2029. His 6% 2031s. A secured term loan, which the swap's "senior unsecured" reference would not let him lean on. And at the bottom, issued in the spring of 2021, when anyone with a ticker could borrow for twenty-four years at three percent, a 3% senior unsecured note due 2045: same issuer, same guarantors, ranked equally with his bond. Nineteen years left, inside thirty. Not subordinated. Dollars. Transferable. He pulled the last print and wrote it at the bottom of the sticky note, under the basis: *3% 2045 — 52?* Then he drew a box around it.
+
+"You drew a box," Kaz said.
+
+"At PJT a box meant the number was going on page one of the board deck."
+
+From the end of the row, without looking up from her run sheets, Mags said, "Bottom of the schedule. It's always the bottom of the schedule."
 
 Ines put down her coffee. "What's the pot, what are the odds, and who at this table knows more than you? Start with the pot. Halvorsen files tomorrow. What do you make?"
 
@@ -20,15 +30,19 @@ Theo did it on the sticky note. "The bond drops from 88 to recovery, call it 40,
 
 "Good. Now suppose they don't file. Suppose they skip one coupon on one bond, on purpose, and the swap triggers anyway."
 
-"Then the bonds don't accelerate and trade on their cash flows. Halvorsen has a 3% 2045 from the 2021 bubble. It's deliverable, it's at 52, and it would be the cheapest thing in the auction." Theo stopped. "So the swap pays 48 whether or not anybody actually loses anything."
+Theo looked at the box. "Then the bonds don't accelerate and trade on their cash flows. Halvorsen has a 3% 2045 from the 2021 bubble. It's deliverable, it's at 52, and it would be the cheapest thing in the auction." Theo stopped. "So the swap pays 48 whether or not anybody actually loses anything."
 
 "Somebody paid for that 48," Ines said. "Find out who before you buy their side of it."
+
+Theo turned the sticky note over, because the front was full. On the back he wrote the three numbers the trade now seemed to depend on, none of which had been on the front: the price of a bond he did not own, the date of a coupon he had not read, and the name of whoever decided what counted as a default. The 110 basis points had not moved. What they were a price *for* had.
+
+Kaz pulled the bond's screen and the swap's screen side by side, as if they might be persuaded to agree by proximity. The bond said 480. The swap said 370. Both had traded that morning, both were quoted by the same three dealers, and both claimed to be the market's best estimate of how likely Halvorsen was to fail and how much it would hurt.
 
 Kaz was rereading the confirmation. "So the question isn't whether the bond and the swap disagree. It's which one of them is lying."
 
 That is the question this chapter answers. *When the bond and the CDS of the same company disagree, which one is wrong, by how much, and what exactly does the swap pay when the company dies, or when someone arranges for it to look dead?*
 
-By the end of this chapter you will be able to: price both legs of a CDS, compute the risky annuity, and convert between running spread and points upfront; compute four different "bases" for the same bond and say which one is honest; turn funding, haircuts and repo specialness into an arbitrage band and a return on equity; value the cheapest-to-deliver option and simulate the two-stage credit event auction; build a mean-reversion basis signal that survives transaction costs; run the successor arithmetic; and flag orphaning and manufactured-credit-event risk before the Determinations Committee rules on it.
+By the end of this chapter you will be able to price both legs of a CDS, translate a running spread into points upfront, compute four different "bases" for the same bond and say which one is honest, and turn funding, haircuts and repo specialness into an arbitrage band with a return on equity attached. You will also be able to value the cheapest-to-deliver option, simulate the two-stage credit event auction, build a mean-reversion basis signal that survives its costs, run the successor arithmetic, and flag orphaning and manufactured-credit-event risk before the Determinations Committee rules on it.
 
 ## 24.1 Two Doctors, One Patient, and the Frictionless Lie
 
@@ -38,7 +52,11 @@ The Part VI opener described four doctors looking at one patient. This chapter i
 >
 > **Annotation.** Our analysis: this is the founding argument of the basis, and the rest of the chapter is a list of the ways it fails. The portfolio pays a fixed spread every period and receives $1-R$ if the issuer defaults, which is exactly the protection buyer's side of a CDS. So the CDS spread must equal the floater's spread, and the basis must be zero. On a 2026 desk almost nothing in the argument survives intact. Few issuers have par floaters outstanding, so you compare a swap with fixed-coupon bonds at 88 or 104. Shorting a corporate bond means borrowing it in a repo market that may charge you for the privilege. "Invest the money" assumes you can fund at the risk-free rate with no haircut. And "a credit event occurs" assumes the bond and the swap agree on what a credit event is. Each assumption breaks in its own section of this chapter, and each break has a sign and a size you can model.
 
-Write the argument out. Let $r_{t}$ be the floating rate (SOFR after the 2021–2023 Libor cessation), and let coupon dates be $t_1 < \dots < t_n = T$ with accrual fractions $\alpha_i$. A par defaultable floater pays $(r_{t_{i-1}} + s^{\text{FRN}})\alpha_i$ at $t_i$ while the issuer survives. A par default-free floater pays $r_{t_{i-1}}\alpha_i$. Short the first and buy the second. Both cost par, so the package costs nothing. While the issuer survives, the package pays $s^{\text{FRN}}\alpha_i$ each period, because the floating legs cancel. If default happens on a coupon date $t_i$, unwind: the default-free floater has just reset, so it is worth exactly 1, and the defaulted floater is worth its recovery $R$. You receive $1-R$.
+The sticky-note version of Schmid's argument leans on one idea a restructuring banker does not use every day, and it is worth slowing down for.
+
+> **Math, Gently.** *Replication, and the "probability" that is really a price.* Picture two vending machines side by side that dispense the same can. If one charges a dollar and the other a dollar twenty, somebody buys from the first and sells beside the second until the prices meet, and nobody has to agree on whether the can is any good. Replication is that argument with cash flows: two packages that pay the same amount in every state of the world must cost the same today. Now a tiny bond. It matures in one year and pays 100 if the issuer survives and 40 if it defaults; cash earns 4%. Suppose the market prices it as if default had a 5% chance. The "average" payoff is $0.95 \times 100 + 0.05 \times 40 = 97$, worth $97/1.04 \approx 93.3$ today, a yield of about 7.2% and a spread of about 3% over cash. That 3 is the 5% chance times the 60 points lost, give or take compounding. Here is the twist. The 5% is nobody's forecast. It is the number that makes the replication price come out equal to the price on the screen, which is why it lives under its own letter, $\mathbb{Q}$, and why a swap insuring the same 60 points has to charge the same 3 points a year: feed both machines the same 5% and they must agree. The forecast, the physical $\mathbb{P}$ probability, might be 2%, with the other point being what investors charge for carrying the risk. Chapter 6-B (§6-B.2 and §6-B.6) owns the full story; here we only need the vending machines.
+
+Here is the argument in symbols. Let $r_{t}$ be the floating rate (SOFR after the 2021–2023 Libor cessation), and let coupon dates be $t_1 < \dots < t_n = T$ with accrual fractions $\alpha_i$. A par defaultable floater pays $(r_{t_{i-1}} + s^{\text{FRN}})\alpha_i$ at $t_i$ while the issuer survives. A par default-free floater pays $r_{t_{i-1}}\alpha_i$. Short the first and buy the second. Both cost par, so the package costs nothing. While the issuer survives, the package pays $s^{\text{FRN}}\alpha_i$ each period, because the floating legs cancel. If default happens on a coupon date $t_i$, unwind: the default-free floater has just reset, so it is worth exactly 1, and the defaulted floater is worth its recovery $R$. You receive $1-R$.
 
 A protection buyer in a CDS with spread $s^{\text{CDS}}$ pays $s^{\text{CDS}}\alpha_i$ per period while the issuer survives and receives $1-R$ at default. The two cash-flow streams are the same up to the spread, and both packages cost zero. No-arbitrage under $\mathbb{Q}$ then forces
 
@@ -52,16 +70,20 @@ That is the whole frictionless theory of the basis. The basis $b$ is defined as 
 >
 > **Annotation.** Our analysis: this is the smallest crack, and it is worth seeing why it is small. Between coupon dates the default-free floater is worth $B(u, t_i)(1 + r_{t_{i-1}}\alpha_i)$ rather than 1, which differs from par by roughly the interest accrued since the last reset, $r\,(u - t_{i-1})$, a few bp of price on a quarterly reset. The CDS, meanwhile, settles on its own timetable (credit event, auction, settlement about a month later), with the accrued premium paid up to the event. The mismatch is real but second order, worth a basis point or so. It matters because it shows the method: write down the replicating package, then find each place where the real cash flows leave the textbook's. The big leaks, funding, deliverables, and the definition of default, are each worth tens to hundreds of bp.
 
-So list the assumptions, and number them, because each one has been someone's entire P&L at some point:
+Each assumption hiding inside the frictionless argument has been somebody's entire P&L at some point, and the rest of the chapter cites them by label.
 
-1. **(A1) The bond is a par floater.** Real bonds are fixed-coupon and trade away from par, and a CDS is a par instrument. Comparing the two needs a convention, and the choice of convention moves the "basis" by 10–20 bp before any economics (§24.3).
-2. **(A2) You can fund the long bond at the risk-free rate, with no haircut** (§24.4).
-3. **(A3) You can short the bond for free,** at general collateral repo with no specialness or borrow fee (§24.4).
-4. **(A4) Your counterparty survives your issuer** (§24.4).
-5. **(A5) The swap pays $1-R$ on *this* bond.** It actually pays par minus the auction price of the cheapest deliverable obligation (§24.5–24.6).
-6. **(A6) "Default" means the same thing to the bond and the swap.** Hovnanian, Windstream and every orphaning fight since have shown that it need not (§24.8).
+| Label | The assumption | Who broke it | Where |
+| :--- | :--- | :--- | :--- |
+| **A1** | The bond is a par floater. | Every fixed-coupon bond at 88 or 104 compared with a par instrument; the choice of convention moves the "basis" by 10–20 bp before any economics. | §24.3 |
+| **A2** | You can fund the long bond at the risk-free rate, with no haircut. | The prime brokers of autumn 2008 and March 2020. | §24.4 |
+| **A3** | You can short the bond for free, at general collateral repo with no specialness or borrow fee. | Any bond that goes special when everyone wants to be short it. | §24.4 |
+| **A4** | Your counterparty survives your issuer. | The 2008 dealers whose own CDS widened alongside their clients' bonds. | §24.4 |
+| **A5** | The swap pays $1-R$ on *this* bond. It actually pays par minus the auction price of the cheapest deliverable obligation. | Halvorsen's 3% 2045s in the cold open; Hovnanian's 5% 2040s for real. | §24.5–24.6 |
+| **A6** | "Default" means the same thing to the bond and the swap. | Hovnanian, Windstream and every orphaning fight since. | §24.8 |
 
-The trading consequence is that the basis is never "free money." It is a price for bearing whichever of A1–A6 is currently broken, and the job is to know which one, and to know whether you are being paid enough for it. That leads to the desk motto. The negative basis on Halvorsen is not alpha until you strip out the funding term, the convention term and the deliverable term. IDO or it didn't happen.
+A5 is the one Theo found before he had a name for it. His package rested on a picture in which, if Halvorsen failed, his 6% 2031s and the swap would both be marked off the same recovery, so the two legs would cancel up to the over-hedge he had already spotted. In a bankruptcy that picture is nearly right, because a filing turns every senior unsecured bond into the same claim. In Ines's other world, one skipped coupon and no filing, his 2031s keep paying and keep trading near where they were, while the auction looks for the cheapest bond anyone can deliver and finds the 2045s at 52. The swap then pays 48 points on a company whose bonds, including his, have barely moved. His "hedge" would have turned into a bet on a bond he did not own, and the bet would have paid. Somebody, as Ines said, would have paid for it. He wrote "A5" next to the box on the sticky note, which was by now more box than note. §24.5 turns his discovery into an option with a price.
+
+So the basis is not "free money," whatever the sticky note says. It is a price for bearing whichever of A1–A6 is currently broken, and the interesting work is finding out which one, and whether the price is high enough. That is the desk motto in another costume. The negative basis on Halvorsen is not alpha until you strip out the funding term, the convention term and the deliverable term. IDO or it didn't happen.
 
 There is also a reason the quant desk cares less about single-name CDS than its 2007 predecessor did, and it is a market-structure reason.
 
@@ -73,11 +95,17 @@ There is also a reason the quant desk cares less about single-name CDS than its 
 
 ## 24.2 Pricing the Swap: Two Legs and One Risky Annuity
 
-Desk framing first. A single-name CDS on a North American corporate trades on standardized terms that date from the April 2009 "Big Bang" protocol. There is a fixed running coupon $c$ of 100 or 500 bp, quarterly payment dates on the 20th of March, June, September and December, a full first coupon with an accrual rebate, auction settlement hardwired into the contract, and, for the Standard North American Corporate (SNAC) contract, no Restructuring credit event. Because the coupon is fixed, the price discovered on the screen is *points upfront*. The par spread quoted next to it is a translation, made with an agreed model and a conventional 40% recovery for senior unsecured names. Theo's 370 bp Halvorsen swap actually trades as a 500 bp coupon plus a payment *to* the protection buyer at inception. Every basis calculation starts by inverting that translation correctly.
+A single-name CDS on a North American corporate trades on standardized terms that date from the April 2009 "Big Bang" protocol. There is a fixed running coupon $c$ of 100 or 500 bp, quarterly payment dates on the 20th of March, June, September and December, a full first coupon with an accrual rebate, auction settlement hardwired into the contract, and, for the Standard North American Corporate (SNAC) contract, no Restructuring credit event. Because the coupon is fixed, the price discovered on the screen is *points upfront*. The par spread quoted next to it is a translation, made with an agreed model and a conventional 40% recovery for senior unsecured names. Theo's 370 bp Halvorsen swap actually trades as a 500 bp coupon plus a payment *to* the protection buyer at inception. Every basis calculation starts by inverting that translation correctly.
 
 Kaz's version is shorter. "A CDS is a bond whose coupons stop when the issuer dies, plus a put on the issuer's death. The first leg is an annuity, the second is a lottery ticket, and the spread is the exchange rate between them."
 
-### 24.2.1 Derivation
+Theo asked for the exchange rate in numbers, and Kaz drew two pictures on the whiteboard instead.
+
+> **Math, Gently.** *Part one: survival is a candle.* Picture a thousand candles, each with the same small chance of guttering out in any instant, no matter how long it has already burned. If that chance runs at a rate $\lambda = 5\%$ a year, then after one year $e^{-0.05} = 95.1\%$ of them are still lit, and after five years $e^{-0.25} = 77.9\%$. That curve, $S(t) = e^{-\lambda t}$, is the survival curve, and the waiting time until a given candle goes out has the exponential distribution that Chapter 5 (§5.3.3) and Chapter 6 (§6.1.4) introduce properly. *Part two: the risky annuity is a coupon that stops when the candle goes out.* Promise 1 bp a year, paid at each year-end for five years, but only if the candle is still lit, and discount at 4%. Each payment is worth survival times discount, $e^{-(0.05+0.04)t}$, so the five are worth $0.914 + 0.835 + 0.763 + 0.698 + 0.638 \approx 3.85$ bp today. Paid quarterly, with the premium accrued up to a default included, the same promise is worth about 4.06, the risky annuity of the next subsection. Kaz's lottery ticket is the other leg: it pays the 60 points lost at default, if default comes within five years, and at these numbers it is worth about 12.1 points. The exchange rate is $12.1/4.06 \approx 2.97\%$, the 297 bp par spread computed at the end of this section. And Theo's swap: the hazard that produces a 370 bp spread is about 6.2%, the annuity shrinks a little to about 3.95, and the 130 bp a year the buyer overpays by handing over the standard 500 bp coupon instead of 370 comes back to him at inception: $1.30 \times 3.95 \approx 5.1$ points upfront. The full version is next.
+
+The two pictures are all the derivation needs. In symbols, the par spread is whatever running coupon makes the annuity leg worth exactly the lottery ticket, $s_{\text{par}} = \text{DL}/\text{RPV01}$, and the points upfront are what is left over when the coupon is fixed at 100 or 500 bp instead.
+
+### 24.2.1 The Full Derivation: two legs, par spread and upfront
 
 Work under the risk-neutral measure $\mathbb{Q}$ throughout this section. Let $\tau$ be the default time with deterministic intensity $\lambda_t$, so that survival is
 

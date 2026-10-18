@@ -1,0 +1,25 @@
+# U2 Progress Log: Chapter 9, Factor Investing in Corporate Credit
+
+- [ ] 1. [§9.0 Cold Open] EXPAND-SCENE: three-tenant round, retire learning-objective bullets.
+- [ ] 2. [§9.1] LIST-TO-NARRATIVE: Fact one/two/three as desk moments; move Trend Watch to end of §9.1.
+- [ ] 3. [§9.1, after the table] ANOTHER-SEAT: AQR Palhares and Richardson (FAJ 2020).
+- [ ] 4. [§9.2.1] MATH-GENTLY (two parts: relative change; beta as ratio) + FULL-DERIVATION-MOVE.
+- [ ] 5. [§9.2.2–9.2.3] WHEN-TO-APPLY inside the scene: Mags at the 1,000bp line; ROBO timing.
+- [ ] 6. [§9.3.1–9.3.2] MATH-GENTLY (regression residual in a peer cell).
+- [ ] 7. [§9.3.3] MATH-GENTLY (two parts: normal; risk-neutral) + FULL-DERIVATION-MOVE.
+- [ ] 8. [§9.3.4] ANOTHER-SEAT (Robeco, 7 Sep 2026) + EXPAND-SCENE (Theo's runway column).
+- [ ] 9. [§9.4.1] MATH-GENTLY (half-life and exponential decay).
+- [ ] 10. [§9.4.2] MATH-GENTLY (turnover and break-even cost) + BRIDGE; move "elaborate way to tip".
+- [ ] 11. [§9.5.3] NEW-SCENE Long Scene B: 2022, the Year Low-Risk Looked Like Genius.
+- [ ] 12. [§9.6.3] EXPAND-SCENE (Sal, 1998) to 150 words.
+- [ ] 13. [§9.7.1] MATH-GENTLY (correlation, rowers) + FULL-DERIVATION-MOVE; breadth gloss.
+- [ ] 14. [Case Study: One Telecom] keep intact; BRIDGE into §9.8.
+- [ ] 15. [§9.8.1] LIST-TO-NARRATIVE + desk-head constraints; hinge Math, Gently.
+- [ ] 16. [§9.8.2] SHOP-LIFE opener + ANOTHER-SEAT (dealer desk via Man).
+- [ ] 17. [§9.8.3] keep; move cost-curve Trend Watch to end of §9.8.
+- [ ] 18. [§9.9] MATH-GENTLY (Jensen; false discovery) + FULL-DERIVATION-MOVE + LIST-TO-NARRATIVE.
+- [ ] 19. [§9.9, before the whiteboard] SHOP-LIFE vignette: Kaz's CI job, Two Sigma order.
+- [ ] 20. [§9.10] NEW-SCENE Long Scene A: March 2020, the Factor Book in a Fire Drill.
+- [ ] 21. [§9.10, after the scene] ANOTHER-SEAT (Ares/BlueCove, Blackstone/DCI).
+- [ ] 22. [§9.11] BRIDGE: open lab with the CI job sentence.
+- [ ] 23. [§9.12 Desk Debrief] add the Finder table.

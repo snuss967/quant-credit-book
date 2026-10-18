@@ -11,3 +11,4 @@ Code and consistency fixes found along the way. Lowest priority: run only when n
 - Ch 7-B §7-B.6: the Bohn–Stein claim "about half of the time ... 20 bps vs 200 bps" does not follow from the stated one-factor parameters. Re-derive or re-parameterize. (Figure check, 2026-10-18.)
 - Ch 4-B Table 4B.1 shows 679 where the listing gives 678.5 (rounding; optional). (Figure check, 2026-10-18.)
 - Ch 22 Resource Graph: the Uyeda speech figures must be checked against the SEC page before print (sec.gov returned 403 to scripted fetch). (resgraph, 2026-10-18)
+- Ch 13 §13.6: the ΔR cases omit the V/F branch for V<T (figure check). Fix in the lessons pass. (2026-10-18)

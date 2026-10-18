@@ -18,5 +18,9 @@
 - [x] 16. [§2.8 Non-bank LPs] LIST-TO-NARRATIVE + ANOTHER-SEAT. -- Family-tree narrative, FINRA block inference, Jane Street BB, bank seat.
 - [x] 17. [§2.9.1 LCS] MATH-GENTLY + WHEN-TO-APPLY. -- Speedometer duration box; two-witness LCS judgment; floaters, callables, stress.
 - [x] 18. [§2.9.2 Theorem] MATH-GENTLY + FULL-DERIVATION-MOVE. -- Fruit-stall concavity box; result in body; derivative moved to Full Derivation.
-- [ ] 19. [§2.9.3 "April 2025"] NEW-SCENE, long (2,000–3,000 words): "The Same Shock on New Pipes."
-- [ ] 20. [§2.10 Desk Debrief] LIST-TO-NARRATIVE.
+- [x] 19. [§2.9.3 "April 2025"] NEW-SCENE, long (2,000–3,000 words): "The Same Shock on New Pipes." -- Log replay April 2025; theta vs phi; Theo finds n; markouts settle.
+- [x] 20. [§2.10 Desk Debrief] LIST-TO-NARRATIVE. -- Markout-day debrief; eight bold lines handed by cast; ghost resolved.
+
+Metrics (tools/prescriptiveness.py): bullets% 5.8->1.0, modal 2.0->1.8, imper 1.6->0.9, rule 1.8->1.1, dialog 5.4->8.2; 12 Math, Gently; 4 View From Another Seat. Words 16,979 -> ~32,100.
+
+<!-- STATUS: COMPLETE -->

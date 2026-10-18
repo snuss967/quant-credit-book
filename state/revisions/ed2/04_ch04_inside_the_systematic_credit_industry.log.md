@@ -13,12 +13,12 @@
 - [x] 11. [§4.6 DTS] MATH-GENTLY (proportional moves) + WHEN-TO-APPLY — points-or-percent box; tight-decile check scene; distressed edge.
 - [x] 12. [§4.6 Man's three layers] MATH-GENTLY x2 + FULL-DERIVATION + WHEN-TO-APPLY — suitcase optimizer, bathroom-scale z-score; Φ derivation moved; event-signal near miss.
 - [x] 13. [§4.6 Nuveen's identity] MATH-GENTLY (random walk vs OU) + FULL-DERIVATION — drunk-on-leash box; (4.4) moved with OU ODE; three breaks.
-- [ ] 14. [§4.7 TC decomposition] MATH-GENTLY + ANOTHER-SEAT (dealer/NBLP)
-- [ ] 15. [§4.7 Break-even turnover] MATH-GENTLY + WHEN-TO-APPLY
-- [ ] 16. [§4.7 Case Study Man Numeric execution] EXPAND-SCENE 2,000-3,000 words + decision point
-- [ ] 17. [§4.8 Capacity] MATH-GENTLY x2 + FULL-DERIVATION + LIST-TO-NARRATIVE + WHEN-TO-APPLY
-- [ ] 18. [§4.8 Dynkin cap weights] MATH-GENTLY (one line)
-- [ ] 19. [§4.9 Risk] MATH-GENTLY x2 + FULL-DERIVATION + WHEN-TO-APPLY
+- [x] 14. [§4.7 TC decomposition] MATH-GENTLY + ANOTHER-SEAT (dealer/NBLP) — restaurant cost box 50bp; dealer/NBLP seat; Ines's client card.
+- [x] 15. [§4.7 Break-even turnover] MATH-GENTLY + WHEN-TO-APPLY — two-haircuts box; state-dependent cost and forced turnover judgment.
+- [x] 16. [§4.7 Case Study Man Numeric execution] EXPAND-SCENE 2,000-3,000 words + decision point — June 2022 400-line rebalance; pay/slice/wait; PT modifier; stress coda.
+- [x] 17. [§4.8 Capacity] MATH-GENTLY x2 + FULL-DERIVATION + LIST-TO-NARRATIVE + WHEN-TO-APPLY — sqrt and hill boxes; Ines vs pitch book; own-fills measurement.
+- [x] 18. [§4.8 Dynkin cap weights] MATH-GENTLY (one line) — three ceilings; n=100 used so the cap binds (brief's n=200 did not).
+- [x] 19. [§4.9 Risk] MATH-GENTLY x2 + FULL-DERIVATION + WHEN-TO-APPLY — ruler and smoke-alarm boxes; capture algebra moved; judgment on windows.
 - [ ] 20. [§4.10 KMV to Blackstone] EXPAND-SCENE + MATH-GENTLY (Merton) + ANOTHER-SEAT (insurer)
 - [ ] 21. [§4.11 Genealogy and Empty Cells] LIST-TO-NARRATIVE + BRIDGE + figure hook
 - [ ] 22. [§4.12 Desk Debrief] BRIDGE end-of-day scene

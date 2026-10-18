@@ -359,7 +359,9 @@ $$
 \mathbb{E}\big[r^{\text{TF}}_{t+1}\,\big|\, r_{t+1}\big] \approx \sqrt{\frac{2}{\pi}}\;\frac{\rho}{\sigma_r\sqrt{1-\rho^2}}\; r_{t+1}^2 ,
 $$
 
-a parabola. For large moves, $2\Phi(\cdot)-1 \to \operatorname{sign}(r_{t+1})$ and the payoff tends to $|r_{t+1}|$, which is a straddle. The quadratic coefficient is positive *if and only if* $\rho > 0$. Convexity is not a separate property of trend; it is the receipt for momentum. If the market does not trend, the smile is flat. This is the formal version of Fung and Hsieh's reading of trend followers as holders of lookback straddles (Fung and Hsieh 2001, *The Risk in Hedge Fund Strategies: Theory and Evidence from Trend Followers*), and of Hamill, Rattray, and van Hemert's finding that trend returns are positively skewed and straddle-like.
+a parabola. For large moves, $2\Phi(\cdot)-1 \to \operatorname{sign}(r_{t+1})$ and the payoff tends to $|r_{t+1}|$, which is a straddle. The quadratic coefficient is positive *if and only if* $\rho > 0$. Convexity is not a separate property of trend; it is the receipt for momentum. If the market does not trend, the smile is flat. This is the formal version of Fung and Hsieh's reading of trend followers as holders of lookback straddles (Fung and Hsieh 2001, *The Risk in Hedge Fund Strategies: Theory and Evidence from Trend Followers*), and of Hamill, Rattray, and van Hemert's finding that trend returns are positively skewed and straddle-like. Figure 10.3 draws the payoff for several values of $\rho$ and for one simulated sample.
+
+![Figure 10.3: Every round of a sign strategy pays +|r| or −|r|, and momentum only tilts the odds toward the right call when the move is large, so the expected payoff is a smile whose depth grows with ρ and which vanishes at ρ = 0. Illustrative: the bivariate-normal model of §10.6.1, with the right panel showing 400 simulated rounds at ρ = 0.25 (fixed seed) against the closed form.](assets/figures/ch10_trend_smile.png)
 
 The empirical test is the regression
 
@@ -380,7 +382,9 @@ $$
 = \frac{2d\,(T - 4L)}{T}.
 $$
 
-The total available move is $2d$ (down $d$, up $d$), so the capture ratio is $(T-4L)/T$. It is negative whenever $L > T/4$. For a trailing-sum signal of length $h$ after a prior trend of similar slope, $L \approx h/2$, so a 12-month signal ($L \approx 6$ months) needs a V lasting more than about two years to break even, and a 3-month signal ($L\approx 1.5$) needs one longer than six months. March 2020 and April 2025 had $T \approx 2$ months, which no reasonable lookback beats. The 2007–2009 widening and recovery took closer to two years. Plug in $T = 20$: a 3-month signal captures $(20-6)/20 = 70\%$ of the round trip, and a 12-month signal loses $(20 - 24)/20 = -20\%$ of it *(stylized; real Vs are asymmetric and the lag depends on the preceding slope)*. Speed is a parameter, not a personality. Section 10.10 verifies the formula on a grid.
+The total available move is $2d$ (down $d$, up $d$), so the capture ratio is $(T-4L)/T$. It is negative whenever $L > T/4$. For a trailing-sum signal of length $h$ after a prior trend of similar slope, $L \approx h/2$, so a 12-month signal ($L \approx 6$ months) needs a V lasting more than about two years to break even, and a 3-month signal ($L\approx 1.5$) needs one longer than six months. March 2020 and April 2025 had $T \approx 2$ months, which no reasonable lookback beats. The 2007–2009 widening and recovery took closer to two years. Plug in $T = 20$: a 3-month signal captures $(20-6)/20 = 70\%$ of the round trip, and a 12-month signal loses $(20 - 24)/20 = -20\%$ of it *(stylized; real Vs are asymmetric and the lag depends on the preceding slope)*. Speed is a parameter, not a personality. Section 10.10 verifies the formula on a grid. Figure 10.4 draws the V, the two signals' positions, and the capture ratio as the V gets shorter or longer.
+
+![Figure 10.4: A signal that lags a V by more than a quarter of its duration loses on the round trip: against a 20-month V the 3-month signal captures 70% and the 12-month signal loses 20%, and against a two-month V (March 2020, April 2025) only a two-week lag breaks even while the 3-month signal loses half. Illustrative: the stylized V of §10.6.2 with lags L = 0.5, 1.5 and 6 months; dots mark break-even at T = 4L, and below T = 2L, where the signal flips after the trough, the same legs give 2L/T − 2.](assets/figures/ch10_whipsaw_capture.png)
 
 ### 10.6.3 Is credit trend just beta?
 
@@ -394,7 +398,9 @@ Hurst, Ooi, and Pedersen (2017), *A Century of Evidence on Trend-Following Inves
 
 ## 10.7 Case Studies: 2008, 2020, 2022, and the April 2025 Coda
 
-All four episodes are told the same way: what trend did, what it should have been measured against, and what a 2026 systematic desk would have flagged. Spread levels before October 2023 come from secondary sources or Dynkin's tables, are marked approximate, and should be checked against the full ICE BofA history, which the §10.10 code reads from a local CSV.
+All four episodes are told the same way: what trend did, what it should have been measured against, and what a 2026 systematic desk would have flagged. Spread levels before October 2023 come from secondary sources or Dynkin's tables, are marked approximate, and should be checked against the full ICE BofA history, which the §10.10 code reads from a local CSV. Figure 10.5 puts the four episodes on one axis and one time scale, using a public daily series that does reach back that far.
+
+![Figure 10.5: Four episodes, four shapes: a two-year ramp that a 12-month signal could follow (A), a two-month needle in 2020 (B), a grind to a July peak in 2022 (C) and a six-week gap in 2025 (D) that is shorter than even the 3-month lookback bar. Source: FRED BAA10Y (Moody's seasoned Baa yield less the 10-year Treasury), daily, used as a long-history proxy because ICE BofA history before October 2023 is no longer on FRED; SG Trend returns as cited in §10.7 (Cambridge Associates for 2008 and 2022, Hedgeweek for 2020, SG Prime Services for April 2025).](assets/figures/ch10_episodes_baa_spread.png)
 
 ### Case Study A: 2007–2009, the trend that paid and the rebound that charged
 

@@ -19,7 +19,6 @@ Data policy (see style.py):
   10.1 left, 10.3, 10.4  models stated in the chapter (carry hurdle, bivariate-normal payoff, V-shaped round trip);
                       captions say "Illustrative".
 """
-import datetime as dt
 import math
 import os
 import sys
@@ -117,11 +116,6 @@ def ensure_caches(refresh=False):
         build_ice_caches()
 
 
-def months_fmt(ax):
-    ax.xaxis.set_major_locator(mdates.MonthLocator(bymonth=[1, 4, 7, 10]))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter("%b\n%Y"))
-
-
 # --------------------------------------------------------------------------------------------------------------
 # Figure 10.1: the carry hurdle
 # --------------------------------------------------------------------------------------------------------------
@@ -148,10 +142,12 @@ def fig_carry_hurdle():
     # Right: real HY OAS, the last two years FRED serves
     h = load(P_HURDLE, parse_dates=["date"])
     x, d12, hur = h["date"].values, h["d12_bp"].values, h["hurdle_bp"].values
-    top = np.maximum(d12, 0)
     b.axhline(0, color=NEUTRAL, linewidth=0.9, zorder=1)
-    b.fill_between(x, 0, np.minimum(top, hur), where=d12 > 0, color=TINT_ORANGE, linewidth=0, zorder=1)
-    b.fill_between(x, hur, d12, where=d12 > hur, color=C_RETURN, alpha=0.55, linewidth=0, zorder=1)
+    # shade the days by regime, from zero up to the curve: a light tint where only the spread rule is short, a
+    # darker one where both rules are short (a few days, so a thin sliver above the hurdle line would be invisible)
+    b.fill_between(x, 0, d12, where=(d12 > 0) & (d12 <= hur), color=TINT_ORANGE, linewidth=0, zorder=1,
+                   interpolate=True)
+    b.fill_between(x, 0, d12, where=d12 > hur, color=C_RETURN, alpha=0.55, linewidth=0, zorder=1, interpolate=True)
     b.plot(x, hur, color=C_RETURN, linewidth=1.3, linestyle=(0, (4, 2)), zorder=3)
     b.plot(x, d12, color=C_SPREAD, linewidth=LW, zorder=4)
     n = len(h)
@@ -204,13 +200,12 @@ def fig_dts_vol_scaling():
     a.minorticks_off()
     a.set_xlabel("Average OAS in the quarter (bp, log)")
     a.set_ylabel("Volatility of daily OAS changes (bp a year, log)")
-    a.grid(axis="x", color=GRID, linewidth=0.5)
     dot = lambda col: Line2D([0], [0], marker="o", color="none", markerfacecolor=col, markeredgewidth=0, markersize=6)  # noqa: E731
     handles = [dot(C_IG), dot(C_HY), dot(C_CCC),
                Line2D([0], [0], marker="o", color="none", markerfacecolor="none", markeredgecolor=INK, markersize=8),
                Line2D([0], [0], color=INK_2, linewidth=1.1, linestyle=(0, (4, 2)))]
     labels = ["IG: AAA, AA, A, BBB", "HY: BB, B", "CCC", "Q2 2025 (April gap)",
-              f"vol = {beta:.2f} x OAS"]
+              f"vol = {beta:.2f} × OAS"]
     a.legend(handles, labels, loc="lower right", fontsize=7.8, handlelength=1.3, labelspacing=0.35,
              borderaxespad=0.2)
 
@@ -363,7 +358,6 @@ def fig_whipsaw_capture():
     # Left bottom: positions of a 3-month signal (L = 1.5) and a 12-month signal (L = 6)
     for ypos, L, col, lab, res in ((1.0, 1.5, C_SPREAD, "3-month", capture(20, 1.5)),
                                    (0.0, 6.0, C_RETURN, "12-month", capture(20, 6.0))):
-        segs = [(-6, L + 6), (L, T / 2), (T / 2 + L, 26 - (T / 2 + L))]
         ap.broken_barh([(-6, L + 6)], (ypos - 0.34, 0.68), facecolors=TINT_BLUE, edgecolor="none")
         ap.broken_barh([(L, T / 2)], (ypos - 0.34, 0.68), facecolors=TINT_ORANGE, edgecolor="none")
         ap.broken_barh([(T / 2 + L, 26 - (T / 2 + L))], (ypos - 0.34, 0.68), facecolors=TINT_BLUE, edgecolor="none")

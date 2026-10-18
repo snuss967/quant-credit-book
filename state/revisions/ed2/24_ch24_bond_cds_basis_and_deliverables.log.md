@@ -1,10 +1,10 @@
 # Progress Log, Edition 2 U2: Ch 24 Bond-to-CDS Basis & Deliverables
 
-- [ ] 1. [Cold open] EXPAND-SCENE (to 800–1,200 words)
-- [ ] 2. [§24.1] MATH-GENTLY #1, risk-neutral replication
-- [ ] 3. [§24.1 A1–A6 list] LIST-TO-NARRATIVE
-- [ ] 4. [§24.2] MATH-GENTLY #2, hazard rate, survival and the risky annuity
-- [ ] 5. [§24.2.1] FULL-DERIVATION-MOVE
+- [x] 1. [Cold open] EXPAND-SCENE (to 800–1,200 words) — dated story-week frame, Theo finds 2045s, Mags 2008 cut.
+- [x] 2. [§24.1] MATH-GENTLY #1, risk-neutral replication — vending-machine box, 93.3 price, 3-point spread, Ch 6-B pointer.
+- [x] 3. [§24.1 A1–A6 list] LIST-TO-NARRATIVE — six-row table; A5 dramatized via 2045s; list sentence deleted.
+- [x] 4. [§24.2] MATH-GENTLY #2, hazard rate, survival and the risky annuity — candle and stopping-coupon box; 5.1 points upfront hand-checked.
+- [x] 5. [§24.2.1] FULL-DERIVATION-MOVE — heading renamed; one-line par-spread statement added before derivation.
 - [ ] 6. [§24.3 opening] LIST-TO-NARRATIVE + SHOP-LIFE
 - [ ] 7. [§24.3.1] MATH-GENTLY #3, RFV vs RMV + FULL-DERIVATION-MOVE
 - [ ] 8. [§24.3 Bohn–Stein and Dynkin airline extractions] BRIDGE

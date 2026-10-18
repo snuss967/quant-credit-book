@@ -97,9 +97,10 @@ def fig_gamma_rent():
     ax = axes[0]
     S = np.linspace(65.0, 135.0, 500)
     gap = sig_r ** 2 - sig_i ** 2
-    cases = [(1.0, "1 year", SEQ_BLUE_STEPS[4], 122.0),
+    cases = [(1.0, "1 year", SEQ_BLUE_STEPS[4], 67.5),
              (0.25, "3 months", SEQ_BLUE_STEPS[8], 114.0),
              (1.0 / 52.0, "1 week", SEQ_BLUE_STEPS[12], 105.5)]
+    # (1 year at spot 67.5, not 122: the 1-year and 3-month curves cross near 122, which made that label ambiguous)
     for T, label, col, xl in cases:
         d1 = (np.log(S / K) + (R_FREE + 0.5 * sig_i ** 2) * T) / (sig_i * math.sqrt(T))
         rent = S * np.exp(-0.5 * d1 ** 2) / math.sqrt(2.0 * math.pi) / (2.0 * sig_i * math.sqrt(T)) * gap / 365.0
@@ -127,6 +128,8 @@ def fig_gamma_rent():
         lo.append(np.percentile(pnl, 5))
         hi.append(np.percentile(pnl, 95))
     x = vols * 100.0
+    assert all(b_ > a_ for a_, b_ in zip(mean, mean[1:]))                 # vega > 0: mean P&L rises with realized vol
+    assert abs(mean[int(round((sig_i - 0.10) / 0.05))]) < 0.15            # and is ~0 where realized = implied (30%)
     ax.fill_between(x, lo, hi, color=SEQ_BLUE_STEPS[1], zorder=1)
     ax.axhline(0, color=NEUTRAL, linewidth=0.9, zorder=2)
     ax.plot(x, mean, color=BLUE, linewidth=LW + 0.4, zorder=3)
@@ -154,6 +157,10 @@ def fig_merton_bond_greeks():
                                             ["Bond delta  ∂B/∂V", "Bond gamma  ∂²B/∂V²"])):
         for F, sv, col, label in firms:
             y = [E["merton"](v, F, 1.0, sv, R_FREE)[key] for v in V]
+            if key == "bond_delta":
+                assert all(b_ <= a_ + 1e-12 for a_, b_ in zip(y, y[1:])) and 0.0 <= min(y) and max(y) <= 1.0
+            else:
+                assert max(y) < 0.0                                    # short gamma on assets at every V
             ax.plot(V, y, color=col, linewidth=LW + 0.2, label=label if k == 0 else None)
             m0 = E["merton"](100.0, F, 1.0, sv, R_FREE)
             ax.plot([100.0], [m0[key]], "o", color=col, markersize=6, zorder=5, markeredgecolor="white")
@@ -200,7 +207,8 @@ def fig_jtd_put_floor_and_wing():
     ax.plot(m, diff, color=C_P, linewidth=LW + 0.2, label="diffusion only")
     ax.plot(m, jump, color=C_Q, linewidth=LW + 0.2, label="with jump to default")
     ax.axhline(floor, color=INK_2, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
-    ax.text(0.03, floor * 0.80, "floor: the unit recovery claim", color=INK_2, fontsize=8, ha="left", va="top")
+    assert float(jump.min()) >= floor - 1e-12 and all(b_ >= a_ for a_, b_ in zip(jump, jump[1:]))
+    ax.text(0.03, floor * 0.80, "floor: the unit\nrecovery claim", color=INK_2, fontsize=8, ha="left", va="top")
     ax.legend(loc="lower right", handlelength=1.4, borderaxespad=0.2)
     ax.set_ylim(1e-4, 0.5)
     ax.set_xlim(0, 1.2)
@@ -253,18 +261,15 @@ def fig_halvorsen_two_measures():
     t = np.linspace(0, 5, 200)
     sp, sq = np.exp(-lam_p * t), np.exp(-HALV["lam_q"] * t)
     ax.fill_between(t, sq, sp, color=SEQ_BLUE_STEPS[0], zorder=1)
-    ax.plot(t, sp, color=C_P, linewidth=LW + 0.2, zorder=3)
-    ax.plot(t, sq, color=C_Q, linewidth=LW + 0.2, zorder=3)
+    ax.plot(t, sp, color=C_P, linewidth=LW + 0.2, zorder=3, label=f"physical (P), hazard {lam_p * 100:.2f}%")
+    ax.plot(t, sq, color=C_Q, linewidth=LW + 0.2, zorder=3, label=f"risk-neutral (Q), hazard {HALV['lam_q'] * 100:.1f}%")
     ax.plot([1.0], [math.exp(-lam_p)], "o", color=C_P, markersize=6, zorder=5, markeredgecolor="white")
     ax.annotate(f"{math.exp(-lam_p) * 100:.1f}%", (1.0, math.exp(-lam_p)), xytext=(6, 4),
                 textcoords="offset points", fontsize=8.5, color=INK_2, ha="left", va="bottom")
     ax.plot([1.0], [math.exp(-HALV["lam_q"])], "o", color=C_Q, markersize=6, zorder=5, markeredgecolor="white")
     ax.annotate(f"{math.exp(-HALV['lam_q']) * 100:.1f}%", (1.0, math.exp(-HALV["lam_q"])), xytext=(-7, -3),
                 textcoords="offset points", fontsize=8.5, color=INK_2, ha="right", va="top")
-    ax.text(4.9, 0.935, f"physical (P), hazard {lam_p * 100:.2f}%", color=INK_2, fontsize=8.5,
-            ha="right", va="bottom")
-    ax.text(4.9, sq[-1] - 0.025, f"risk-neutral (Q), hazard {HALV['lam_q'] * 100:.1f}%", color=INK_2,
-            fontsize=8.5, ha="right", va="top")
+    ax.legend(loc="lower left", handlelength=1.6, borderaxespad=0.2)
     ax.text(3.25, 0.68, r"$\xi$ = %.2f" "\n" r"$S^Q = (S^P)^{\xi}$" % dec["xi"], color=INK_2, fontsize=9,
             ha="left", va="center")
     ax.set_xlim(0, 5)
@@ -285,6 +290,7 @@ def fig_halvorsen_two_measures():
         ax.text(i, base + val + 22, f"{val:,.0f}", ha="center", va="bottom", fontsize=8.5, color=INK_2)
         ax.plot([i + 0.31, i + 0.69], [base + val, base + val], color=NEUTRAL, linewidth=0.8, zorder=2)
         base += val
+    assert abs(base - HALV["spread"] * 1e4) < 1e-6                     # the three steps sum to the spread
     ax.bar(3, base, width=0.62, color=NEUTRAL, zorder=3)
     ax.text(3, base + 22, f"{base:,.0f}", ha="center", va="bottom", fontsize=8.5, color=INK_2)
     ax.set_xticks(xs, [p[0] for p in parts] + ["Spread"])
@@ -340,7 +346,7 @@ def fig_halvorsen_recovery_bet():
         ax.text(i, top + 0.15, f"{sign}{abs(val):.1f}", ha="center", va="bottom", fontsize=8.5, color=INK_2)
     ax.plot([0.31, 0.69], [notes, notes], color=NEUTRAL, linewidth=0.8, zorder=2)
     ax.plot([1.31, 1.69], [net, net], color=NEUTRAL, linewidth=0.8, zorder=2)
-    ax.set_xticks(range(3), [b[0] for b in bars])
+    ax.set_xticks(range(3), [b[0] for b in bars], fontsize=8)
     ax.tick_params(axis="x", length=0)
     ax.set_xlim(-0.55, 2.55)
     ax.set_ylim(-0.6, 7.0)

@@ -93,26 +93,6 @@
    }
   },
   {
-   "name": "part-IV-a",
-   "task": "w2qsjhh1h",
-   "runId": "wf_83785e8e-e25",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "13_ch13_codifying_lmt_game_theory",
-     "14_ch14_default_and_recovery_cycle_lmt_era"
-    ],
-    "stages": [
-     "figures",
-     "figcheck",
-     "brief",
-     "revise",
-     "verify"
-    ]
-   }
-  },
-  {
    "name": "part-IV-b",
    "task": "wholtbqen",
    "runId": "wf_cc2956d9-745",

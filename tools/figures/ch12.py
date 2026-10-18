@@ -173,7 +173,7 @@ def fig_identity_waterfall():
     for i, (t, v) in enumerate(zip(tops, labels)):
         ax.text(i, t + 0.14, v, ha="center", va="bottom", fontsize=9, color=INK_2)
     ax.text(4, ret - 0.2, "3.56", ha="center", va="top", fontsize=9.5, color="white", fontweight="bold")
-    ax.text(4.5, cash, "Implied cash rate\n(Nuveen Fig. 6)\nabout 3.68%", ha="left", va="center",
+    ax.text(4.5, cash, "Cash rate implied\nby Nuveen Fig. 6:\nabout 3.68%", ha="left", va="center",
             fontsize=8, color=INK_2, linespacing=1.15)
     ax.set_xlim(-0.55, 5.6)
     ax.set_ylim(0, 7.8)
@@ -328,9 +328,10 @@ def fig_april_2025(dates, d):
 
     fig, axs = new_figure("wide", ncols=2, gridspec_kw={"width_ratios": [1.55, 1]})
     ax = axs[0]
-    ax.plot(xs, hy, color=BLUE, linewidth=LW, zorder=3)
-    ax.plot(mx, my, color=ORANGE, linewidth=1.1, linestyle=(0, (3, 2)), zorder=2)
-    ax.plot(mx, my, "o", color=ORANGE, markersize=6.5, markeredgecolor="white", markeredgewidth=0.8, zorder=4)
+    # the HY index keeps its grey role and the month-end sample is ink: blue and orange are BB and B in the right panel
+    ax.plot(xs, hy, color=C_HY, linewidth=LW, zorder=3)
+    ax.plot(mx, my, color=INK, linewidth=1.1, linestyle=(0, (3, 2)), zorder=2)
+    ax.plot(mx, my, "o", color=INK, markersize=6.5, markeredgecolor="white", markeredgewidth=0.8, zorder=4)
     i7 = int(np.argmax(hy))
     assert xs[i7] == dt.datetime(2025, 4, 7) and round(hy[i7]) == 461
     ax.annotate("461 bp, April 7", (xs[i7], hy[i7]), xytext=(-24, -2), textcoords="offset points", ha="right",
@@ -353,8 +354,8 @@ def fig_april_2025(dates, d):
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%b"))
     ax.set_ylabel("HY OAS (bp)")
     ax.set_xlabel("2025")
-    ax.legend(handles=[Line2D([0], [0], color=BLUE, lw=LW, label="Daily"),
-                       Line2D([0], [0], color=ORANGE, lw=1.1, ls=(0, (3, 2)), marker="o", markersize=6,
+    ax.legend(handles=[Line2D([0], [0], color=C_HY, lw=LW, label="Daily"),
+                       Line2D([0], [0], color=INK, lw=1.1, ls=(0, (3, 2)), marker="o", markersize=6,
                               markeredgecolor="white", label="Month-end print")],
               loc="upper right", fontsize=8, handlelength=2.2)
 
@@ -399,6 +400,8 @@ def fig_ccc_bb_split(dates, d):
     for k, lab, col, dy in (("CCC", "CCC 1,278", C_CCC, 0), ("B", "B 326", C_B, 6), ("HY", "HY 323", C_HY, -6),
                             ("BB", "BB 197", C_BB, -8)):
         label_end(ax, xe, last[k], lab, col, dx=5, dy=dy)
+    # B (326) and HY (323) end 3 bp apart: a larger orange dot under the grey one keeps both colours visible
+    ax.plot([xe], [last["B"]], "o", color=C_B, markersize=6.5, zorder=4.9, clip_on=False)
     mark_event(ax, dt.datetime(2025, 4, 7), "April 7, 2025", y_frac=0.95)
     ax.set_xlim(dates[0], xe)
     ax.set_ylim(0, 1400)

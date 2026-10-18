@@ -130,6 +130,8 @@ def fig_hit_rate_se():
     n = np.logspace(np.log10(10), np.log10(2000), 300)
     se = np.sqrt(P * (1 - P) / n)
     fig, (a, b) = new_figure(ncols=2)
+    ticks = [10, 40, 100, 400, 1000]
+    tick_labels = ["10", "40", "100", "400", "1,000"]
 
     lo, hi = 100 * (P - 2 * se), 100 * (P + 2 * se)
     a.fill_between(n, lo, hi, color=BLUE_TINT, linewidth=0)
@@ -140,8 +142,8 @@ def fig_hit_rate_se():
     a.set_xscale("log")
     a.set_xlim(10, 2000)
     a.set_ylim(25, 85)
-    a.text(11, 50.8, "coin flip, 50%", fontsize=8.5, color=INK_2, va="bottom")
-    a.text(1900, 55.8, "true hit rate 55%", fontsize=8.5, color=INK_2, ha="right", va="bottom")
+    a.text(10.8, 49.2, "coin flip", fontsize=8.5, color=INK_2, ha="left", va="top")
+    a.text(55, 55.8, "true hit rate 55%", fontsize=8.5, color=INK_2, ha="left", va="bottom")
     n40 = 40
     se40 = math.sqrt(P * (1 - P) / n40)
     a.plot([n40, n40], [100 * (P - 2 * se40), 100 * (P + 2 * se40)], color=INK_2, linewidth=1.6, solid_capstyle="butt")
@@ -150,12 +152,12 @@ def fig_hit_rate_se():
                xytext=(6, 2), textcoords="offset points", fontsize=8.5, color=INK_2, va="bottom")
     n_x = 4 * P * (1 - P) / 0.05 ** 2                       # 2 SE = 5 points -> about 396 views
     a.plot([n_x], [50], "o", color=INK, markersize=5, zorder=5)
-    a.annotate(f"band clears 50%\nat about {n_x:.0f} views", (n_x, 50), xytext=(8, -28), textcoords="offset points",
-               fontsize=8.5, color=INK_2, arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.7))
+    a.annotate(f"band clears 50%\nat about {n_x:.0f} views", (n_x, 50), xytext=(-6, -34), textcoords="offset points",
+               ha="center", fontsize=8.5, color=INK_2, arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.7))
     a.set_xlabel("Logged views (log scale)")
     a.set_ylabel("Measured hit rate (%), band = $\\pm$2 SE")
-    a.set_xticks([10, 40, 100, 400, 1000, 2000])
-    a.set_xticklabels(["10", "40", "100", "400", "1,000", "2,000"])
+    a.set_xticks(ticks)
+    a.set_xticklabels(tick_labels)
     a.minorticks_off()
 
     b.plot(n, 100 * se, color=BLUE, linewidth=LW)
@@ -164,23 +166,26 @@ def fig_hit_rate_se():
     b.set_xscale("log")
     b.set_xlim(10, 2000)
     b.set_ylim(0, 18)
-    b.text(1950, 5.5, "the edge: 5 points", ha="right", va="bottom", fontsize=8.5, color=INK_2)
-    b.annotate("2 SE", (14, 200 * math.sqrt(P * (1 - P) / 14)), xytext=(6, 4), textcoords="offset points",
-               fontsize=8.5, color=INK_2)
-    b.annotate("1 SE", (14, 100 * math.sqrt(P * (1 - P) / 14)), xytext=(6, 4), textcoords="offset points",
+    b.text(10.5, 4.6, "the edge: 5 points", ha="left", va="top", fontsize=8.5, color=INK_2)
+    b.annotate("2 SE", (40, 200 * se40), xytext=(7, 0), textcoords="offset points", fontsize=8.5, color=INK_2,
+               va="center")
+    b.plot([40], [200 * se40], "o", color=BLUE, markersize=4, zorder=5)
+    b.annotate("1 SE", (13, 100 * math.sqrt(P * (1 - P) / 13)), xytext=(7, 4), textcoords="offset points",
                fontsize=8.5, color=INK_2)
     b.plot([n_x], [5], "o", color=INK, markersize=5, zorder=5)
+    b.annotate(f"2 SE meets the edge\nat about {n_x:.0f} views", (n_x, 5), xytext=(10, 14), textcoords="offset points",
+               fontsize=8.5, color=INK_2, arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.7))
     b.plot([40], [100 * se40], "o", color=BLUE, markersize=5, zorder=5)
-    b.annotate(f"40 views: {100*se40:.1f} points", (40, 100 * se40), xytext=(8, -14), textcoords="offset points",
-               fontsize=8.5, color=INK_2)
+    b.annotate(f"40 views:\n{100*se40:.1f} points", (40, 100 * se40), xytext=(-8, -16), textcoords="offset points",
+               ha="right", va="center", fontsize=8.5, color=INK_2)
     se400 = 100 * math.sqrt(P * (1 - P) / 400)
     b.plot([400], [se400], "o", color=BLUE, markersize=5, zorder=5)
-    b.annotate(f"400 views: {se400:.1f} points", (400, se400), xytext=(-6, -16), textcoords="offset points",
-               fontsize=8.5, color=INK_2, ha="center")
+    b.annotate(f"400 views: {se400:.1f} points", (400, se400), xytext=(-8, -12), textcoords="offset points",
+               ha="right", fontsize=8.5, color=INK_2)
     b.set_xlabel("Logged views (log scale)")
     b.set_ylabel("Standard error of the hit rate (points)")
-    b.set_xticks([10, 40, 100, 400, 1000, 2000])
-    b.set_xticklabels(["10", "40", "100", "400", "1,000", "2,000"])
+    b.set_xticks(ticks)
+    b.set_xticklabels(tick_labels)
     b.minorticks_off()
     return finish(fig, "ch03b_hit_rate_se")
 
@@ -192,31 +197,27 @@ def fig_jtd_hedge():
     FACE = 10.0
     fig, (a, b) = new_figure(ncols=2)
     P = np.linspace(30, 100, 281)
-    shades = {30: SEQ_BLUE(0.30), 40: BLUE, 50: SEQ_BLUE(0.90)}
-    for R in (30, 40, 50):
+    for R in (30, 50):                                           # the family: thin lines, unlabelled, named in the note
         x = P[P >= R]
-        y = FACE * (x - R) / (100 - R)
-        a.plot(x, y, color=shades[R], linewidth=LW if R == 40 else 1.2)
+        a.plot(x, FACE * (x - R) / (100 - R), color=SEQ_BLUE(0.35), linewidth=1.0)
+    x = P[P >= 40]
+    a.plot(x, FACE * (x - 40) / 60.0, color=BLUE, linewidth=LW)
     a.axhline(FACE, color=ORANGE, linewidth=1.4)
     a.text(31, FACE + 0.25, "face hedge: ten matches ten", fontsize=8.5, color=INK_2, va="bottom")
     # the extra bet Theo holds at 88 and at 70 (recovery 40)
-    for price, tag in ((88, "88"), (70, "70")):
+    for price in (88, 70):
         j = FACE * (price - 40) / 60.0
         a.plot([price, price], [j, FACE], color=ORANGE, linewidth=3.0, solid_capstyle="butt", alpha=0.55)
         a.plot([price], [j], "o", color=BLUE, markersize=6, zorder=5)
-    a.annotate("at 88: $8.0mm\n(extra bet $2.0mm)", (88, 8.0), xytext=(-10, -34), textcoords="offset points",
-               ha="right", fontsize=8.5, color=INK_2, arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.7))
-    a.annotate("at 70: $5.0mm\n(extra bet $5.0mm)", (70, 5.0), xytext=(-8, 26), textcoords="offset points",
-               ha="right", fontsize=8.5, color=INK_2, arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.7))
-    for R, yy, dx in ((30, 7.3, 0), (40, 6.0, 0), (50, 4.5, 0)):
-        pass
-    a.text(99, 8.25, "R = 30", fontsize=8, color=INK_2, ha="right", va="center")
-    a.text(99, 5.7, "R = 50", fontsize=8, color=INK_2, ha="right", va="center")
-    a.text(99, 6.95, "R = 40", fontsize=8, color=INK_2, ha="right", va="center", fontweight="bold")
+    a.annotate("at 88: $8.0mm\nleaves $2.0mm\nof extra bet", (88, 8.0), xytext=(99, 3.3), ha="right", va="center",
+               fontsize=8.5, color=INK_2, arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.7))
+    a.annotate("at 70: $5.0mm\nleaves $5.0mm\nof extra bet", (70, 5.0), xytext=(62, 7.9), ha="right", va="center",
+               fontsize=8.5, color=INK_2, arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.7))
     a.set_xlim(30, 100)
     a.set_ylim(0, 11.5)
     a.set_xlabel("Bond price (% of par)")
-    a.set_ylabel("Protection to be flat on default ($mm)")
+    a.set_ylabel("Protection that leaves the book\nflat on default ($mm)")
+    note(a, "thick: recovery R = 40\nthin: R = 30 and 50", loc="lower right")
 
     pnl = FACE * (1 - P / 100.0)
     b.plot(P, pnl, color=ORANGE, linewidth=LW)
@@ -225,14 +226,308 @@ def fig_jtd_hedge():
     for price in (88, 70):
         v = FACE * (1 - price / 100.0)
         b.plot([price], [v], "o", color=ORANGE, markersize=6, zorder=5)
-        b.annotate(f"at {price}: ${v:.1f}mm", (price, v), xytext=(8, 6), textcoords="offset points", fontsize=8.5,
-                   color=INK_2)
+        b.annotate(f"at {price}: ${v:.1f}mm", (price, v), xytext=(8, 8), textcoords="offset points", fontsize=8.5,
+                   color=INK_2, ha="left" if price == 70 else "right")
     b.set_xlabel("Bond price (% of par)")
-    b.set_ylabel("Face-hedged book's P&L if the issuer\ndefaults tomorrow ($mm)")
+    b.set_ylabel("Face-hedged book's P&L if the\nissuer defaults tomorrow ($mm)")
+    note(b, "any recovery: the discount to par is the bet", loc="upper right")
     return finish(fig, "ch03b_jtd_hedge")
 
 
-FIGURES = [fig_snap_phantom, fig_hit_rate_se, fig_jtd_hedge]
+# --------------------------------------------------------------------------------------------------
+# Figure 3-B.6 (3B.5): the wall is a dated interval
+# --------------------------------------------------------------------------------------------------
+def fig_wall_interval():
+    MU, H, DEAL_DAY, LIFT_DAY = 1 / 20.0, 30.0, 19, 20
+    fig = plt.figure(figsize=(7.0, 4.9), layout="constrained")
+    gs = fig.add_gridspec(2, 1, height_ratios=[1.0, 2.3])
+    top = fig.add_subplot(gs[0])
+    bot = fig.add_subplot(gs[1], sharex=top)
+
+    # top: Brambleworth's wall as the chapter tells it
+    top.set_ylim(0, 1.3)
+    top.set_yticks([])
+    top.grid(False)
+    top.spines["left"].set_visible(False)
+    top.spines["bottom"].set_visible(False)
+    top.tick_params(labelbottom=False, bottom=False)
+    top.add_patch(Rectangle((0, 0.28), LIFT_DAY, 0.30, fc=BLUE_TINT, ec=BLUE, linewidth=1.2, zorder=3))
+    top.text(LIFT_DAY / 2, 0.43, "restricted: every Brambleworth RFQ auto-declined", ha="center", va="center", fontsize=8.2,
+             color=INK, zorder=4)
+    top.plot([0, 0], [0.18, 0.98], color=INK_2, linewidth=0.9, zorder=2)
+    top.text(0.4, 1.0, "Day 0, Thursday 10:14: on the restricted list", ha="left", va="bottom", fontsize=8.2, color=INK_2)
+    top.plot([LIFT_DAY, LIFT_DAY], [0.18, 0.68], color=INK_2, linewidth=0.9, zorder=4)
+    top.text(LIFT_DAY + 0.7, 0.43, "Day 19: deal\nDay 20, 7:05: 8-K filed\n7:40: restriction lifted", ha="left",
+             va="center", fontsize=8.2, color=INK_2, linespacing=1.25)
+    top.plot([H, H], [0.18, 0.98], color=VIOLET, linewidth=1.3, linestyle=(0, (3, 2)), zorder=2)
+    top.text(H + 0.0, 1.0, "NDA outside date,\nday 30", ha="center", va="bottom", fontsize=8.2, color=INK_2)
+    top.set_xlim(-1.0, 33.5)
+    top.set_ylim(0, 1.55)
+
+    # bottom: the chance the name is still restricted, and why its area is the expected length
+    t = np.linspace(0, H, 301)
+    S = np.exp(-MU * t)
+    bot.fill_between(t, 0, S * 100, color=BLUE_TINT, linewidth=0)
+    bot.plot(t, S * 100, color=BLUE, linewidth=LW)
+    s_cliff = math.exp(-MU * H) * 100
+    bot.plot([H, H], [s_cliff, 0], color=VIOLET, linewidth=1.6)
+    bot.plot([H], [s_cliff], "o", color=BLUE, markersize=5, zorder=5)
+    expected = (1 - math.exp(-MU * H)) / MU
+    bot.text(2.0, 12, f"shaded area = expected restriction = {expected:.1f} days", fontsize=8.5, color=INK_2, ha="left",
+             va="center")
+    s20 = math.exp(-MU * LIFT_DAY) * 100
+    bot.plot([LIFT_DAY], [s20], "o", color=INK, markersize=5, zorder=5)
+    bot.annotate("Brambleworth: restriction\nlifted on day 20", (LIFT_DAY, s20), xytext=(LIFT_DAY - 0.4, 78),
+                 textcoords="data", ha="right", va="center", fontsize=8.5, color=INK_2,
+                 arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.7, shrinkA=2))
+    bot.annotate(f"{s_cliff:.0f}% of the time no deal comes:\nthe outside date ends it", (H, s_cliff),
+                 xytext=(H - 0.8, 47), textcoords="data", ha="right", va="center", fontsize=8.5, color=INK_2,
+                 arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.7, shrinkA=2))
+    bot.set_ylim(0, 108)
+    bot.set_yticks([0, 25, 50, 75, 100])
+    bot.set_xlabel("Days since the wall-cross")
+    bot.set_ylabel("Chance the name is still\nrestricted (%)")
+    note(bot, "model: deal after an exponential wait, mean 20 days; outside date at day 30", loc="upper right")
+    return finish(fig, "ch03b_wall_interval")
+
+
+# --------------------------------------------------------------------------------------------------
+# Figure 3-B.4 (3B.4): contract clocks as event windows x_k(t), and the intensity they imply
+# --------------------------------------------------------------------------------------------------
+def fig_event_windows():
+    import matplotlib.dates as mdates
+    L = load_listing()
+    add_bd, grace_end = L["add_business_days"], L["grace_end"]
+    D = dt.date
+    missed = D(2026, 11, 13)                                  # the chapter's Halvorsen date (Friday)
+    grace_raw, _ = grace_end(missed)                          # Sunday 13 Dec 2026 (the listing also returns the rolled date)
+    day28 = missed + dt.timedelta(days=28)                    # Friday 11 Dec 2026: RSA and petition (12B.9)
+    consent = D(2026, 11, 5)                                  # the last version of the consent deadline
+    assert grace_raw == D(2026, 12, 13) and day28 == D(2026, 12, 11)
+    W = 10                                                    # business days before the event for the pre-event windows
+    rows = [("Consent deadline", add_bd(consent, -W, "SIFMA"), consent, 0.4, "5 Nov"),
+            ("Coupon due", add_bd(missed, -W, "SIFMA"), missed, 0.6, "13 Nov"),
+            ("Grace period", missed, grace_raw, 1.2, "13 Dec"),
+            ("RSA milestone", add_bd(day28, -W, "SIFMA"), day28, 0.8, "11 Dec")]
+    LAM0 = 4.0                                                # percent a year, the chapter's 4% example
+    days = [D(2026, 10, 1) + dt.timedelta(days=i) for i in range((day28 - D(2026, 10, 1)).days + 1)]
+    lam = np.array([LAM0 * math.exp(sum(beta for _, s0, t1, beta, _ in rows if s0 <= d0 <= t1)) for d0 in days])
+
+    fig = plt.figure(figsize=(7.0, 4.6), layout="constrained")
+    gs = fig.add_gridspec(2, 1, height_ratios=[1.0, 1.25])
+    top = fig.add_subplot(gs[0])
+    bot = fig.add_subplot(gs[1], sharex=top)
+
+    num = mdates.date2num
+    top.set_ylim(-0.7, len(rows) - 0.3)
+    top.invert_yaxis()
+    top.grid(False)
+    top.set_yticks(range(len(rows)))
+    top.set_yticklabels([r[0] for r in rows])
+    top.tick_params(axis="y", length=0, labelsize=8.5)
+    top.tick_params(labelbottom=False)
+    top.spines["left"].set_visible(False)
+    for i, (name, s0, t1, beta, lab) in enumerate(rows):
+        top.add_patch(Rectangle((num(s0), i - 0.28), num(t1) - num(s0), 0.56, fc=VIOLET_TINT, ec=VIOLET, linewidth=1.0,
+                                zorder=3))
+        top.plot([num(t1)], [i], "D", color=VIOLET, markersize=5.5, zorder=5)
+        top.annotate(f"$\\times${math.exp(beta):.1f}  (due {lab})", (num(t1), i), xytext=(8, 0), textcoords="offset points",
+                     va="center", fontsize=8.2, color=INK_2)
+    top.set_xlim(num(D(2026, 10, 1)), num(D(2026, 12, 30)))
+
+    bot.step([num(x) for x in days], lam, where="post", color=BLUE, linewidth=LW)
+    bot.axhline(LAM0, color=MUTED, linewidth=0.9, linestyle=(0, (4, 3)), zorder=1)
+    bot.set_ylim(0, 38)
+    bot.text(num(D(2026, 10, 2)), LAM0 - 0.7, "baseline $\\lambda_0$ = 4% a year", fontsize=8.5, color=INK_2, va="top")
+    bot.axvline(num(day28), color=RED, linewidth=1.1, linestyle=(0, (3, 2)))
+    bot.annotate("day 28: RSA signed,\npetition filed", (num(day28), 36), xytext=(6, 0), textcoords="offset points", va="top",
+                 fontsize=8.2, color=INK_2)
+    both = LAM0 * math.exp(1.2 + 0.8)
+    bot.annotate(f"grace + RSA windows open:\n$4\\% \\times e^{{2.0}}$ = {both:.1f}% a year", (num(day28), both),
+                 xytext=(-4, 7), textcoords="offset points", ha="right", va="bottom", fontsize=8.5, color=INK_2)
+    g = LAM0 * math.exp(1.2)
+    bot.annotate(f"grace alone: {g:.1f}%", (num(D(2026, 11, 22)), g), xytext=(0, -4), textcoords="offset points",
+                 ha="center", va="top", fontsize=8.5, color=INK_2)
+    bot.annotate(f"consent + coupon\nwindows: {LAM0*math.exp(1.0):.1f}%", (num(D(2026, 11, 2)), LAM0 * math.exp(1.0)),
+                 xytext=(-4, 6), textcoords="offset points", ha="center", va="bottom", fontsize=8.5, color=INK_2)
+    spike = LAM0 * math.exp(0.6 + 1.2)
+    bot.annotate("13 Nov: coupon missed", (num(D(2026, 11, 13)), spike), xytext=(-5, 0), textcoords="offset points",
+                 ha="right", va="center", fontsize=8.5, color=INK_2)
+    bot.xaxis.set_major_locator(mdates.WeekdayLocator(byweekday=0, interval=2))
+    bot.xaxis.set_major_formatter(mdates.DateFormatter("%-d %b"))
+    bot.set_xlabel("2026")
+    bot.set_ylabel("Default intensity $\\lambda^P$\n(% a year)")
+    return finish(fig, "ch03b_event_windows")
+
+
+# --------------------------------------------------------------------------------------------------
+# Figure 3-B.5 (3B.4 case study): Saks Global seen from the calendar
+# --------------------------------------------------------------------------------------------------
+def fig_saks_calendar():
+    import matplotlib.dates as mdates
+    D = dt.date
+    num = mdates.date2num
+    fig = plt.figure(figsize=(7.0, 5.1), layout="constrained")
+    gs = fig.add_gridspec(2, 1, height_ratios=[1.45, 1.0])
+    top = fig.add_subplot(gs[0])
+    bot = fig.add_subplot(gs[1])
+
+    def stem(ax, d, y, color, marker, text, dy, ha="center", dx=0, size=6.5, y0=None, fs=8.0):
+        ax.plot([num(d), num(d)], [y if y0 is None else y0, y + dy * 0.0], color=color, linewidth=0.0)
+        ax.plot([num(d)], [y], marker, color=color, markersize=size, zorder=5, markeredgewidth=0)
+        ax.annotate(text, (num(d), y), xytext=(dx, dy), textcoords="offset points", ha=ha, va="bottom" if dy > 0 else "top",
+                    fontsize=fs, color=INK_2, linespacing=1.2,
+                    arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.6, shrinkA=0, shrinkB=3))
+
+    # ---- top: the whole life of the 11% 2029 notes
+    lanes = {"Contract clocks": 2, "Events and prices": 1, "Processes": 0}
+    top.set_ylim(-0.75, 2.9)
+    top.grid(False)
+    top.set_yticks(list(lanes.values()))
+    top.set_yticklabels(list(lanes.keys()))
+    top.tick_params(axis="y", length=0, labelsize=8.5)
+    top.spines["left"].set_visible(False)
+    top.set_xlim(num(D(2024, 11, 20)), num(D(2026, 7, 25)))
+    for y in lanes.values():
+        top.axhline(y, color=GRID, linewidth=0.8, zorder=0)
+
+    # processes
+    top.add_patch(Rectangle((num(D(2025, 7, 21)), -0.17), num(D(2025, 8, 8)) - num(D(2025, 7, 21)), 0.34, fc=BLUE_TINT, ec=BLUE,
+                            linewidth=1.0, zorder=3))
+    top.annotate("exchange offer\n21 Jul to 8 Aug 2025", (num(D(2025, 7, 30)), -0.17), xytext=(0, -5), textcoords="offset points",
+                 ha="center", va="top", fontsize=8.0, color=INK_2, linespacing=1.2)
+    top.add_patch(Rectangle((num(D(2026, 1, 13)), -0.17), num(D(2026, 6, 26)) - num(D(2026, 1, 13)), 0.34, fc=BLUE_TINT, ec=BLUE,
+                            linewidth=1.0, zorder=3))
+    top.annotate("Chapter 11, 13 Jan to 26 Jun 2026:\nRSA 2 Apr, plan 5 Jun, exit 26 Jun",
+                 (num(D(2026, 4, 1)), -0.17), xytext=(0, -5), textcoords="offset points", ha="center", va="top", fontsize=8.0,
+                 color=INK_2, linespacing=1.2)
+    for d0 in (D(2026, 4, 2), D(2026, 6, 5)):
+        top.plot([num(d0)], [0], "|", color=BLUE, markersize=9, markeredgewidth=1.4, zorder=5)
+    # events and prices
+    stem(top, D(2024, 12, 23), 1, BLUE, "o", "23 Dec 2024: Neiman Marcus closes;\n$2.2bn 11% 2029 notes issued", 15, ha="left", dx=-6)
+    stem(top, D(2025, 5, 16), 1, BLUE, "o", "16 May 2025: notes quoted at 47.5\n(144 days after issue)", -14, ha="center", dx=-8)
+    top.plot([num(D(2026, 1, 13))], [1], "o", color=RED, markersize=6.5, zorder=5, markeredgewidth=0)
+    top.annotate("13 Jan 2026:\npetition", (num(D(2026, 1, 25)), 1), xytext=(0, 0), textcoords="offset points", ha="left",
+                 va="center", fontsize=8.0, color=INK_2, linespacing=1.2)
+    # contract clocks
+    stem(top, D(2025, 6, 30), 2, VIOLET, "D", "end-June 2025: first coupon,\nabout $121mm", 12, ha="center", dx=-24)
+    top.plot([num(D(2025, 12, 1)), num(D(2025, 12, 16))], [2, 2], "D", color=VIOLET, markersize=6.0, zorder=5, markeredgewidth=0)
+    top.annotate("ABL minimum-availability\nsteps, 1 and 16 Dec 2025", (num(D(2026, 1, 25)), 2), xytext=(0, 0),
+                 textcoords="offset points", ha="left", va="center", fontsize=8.0, color=INK_2, linespacing=1.2)
+    # zoom window outline
+    z0, z1 = D(2025, 11, 24), D(2026, 1, 20)
+    top.add_patch(Rectangle((num(z0), 0.62), num(z1) - num(z0), 1.62, fc="none", ec=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 2)),
+                            zorder=2))
+    top.xaxis.set_major_locator(mdates.MonthLocator(bymonth=[1, 4, 7, 10]))
+    top.xaxis.set_major_formatter(mdates.DateFormatter("%b %Y"))
+    top.tick_params(axis="x", labelsize=8)
+
+    # ---- bottom: the collapse, December 2025 to January 2026
+    bot.set_xlim(num(z0), num(z1))
+    bot.set_ylim(0.05, 2.9)
+    bot.grid(False)
+    bot.set_yticks([2, 1])
+    bot.set_yticklabels(["Contract clocks", "Events"])
+    bot.tick_params(axis="y", length=0, labelsize=8.5)
+    bot.spines["left"].set_visible(False)
+    for y in (2, 1):
+        bot.axhline(y, color=GRID, linewidth=0.8, zorder=0)
+    bot.plot([num(D(2025, 12, 1))], [2], "D", color=VIOLET, markersize=6.5, zorder=5, markeredgewidth=0)
+    bot.annotate("1 Dec: availability minimum\n\\$200mm to \\$375mm", (num(D(2025, 12, 1)), 2), xytext=(-4, 12), textcoords="offset points",
+                 ha="center", va="bottom", fontsize=8.0, color=INK_2, linespacing=1.2,
+                 arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.6, shrinkA=0, shrinkB=3))
+    bot.plot([num(D(2025, 12, 16))], [2], "D", color=VIOLET, markersize=6.5, zorder=5, markeredgewidth=0)
+    bot.annotate("16 Dec: to $500mm", (num(D(2025, 12, 16)), 2), xytext=(20, 12), textcoords="offset points",
+                 ha="center", va="bottom", fontsize=8.0, color=INK_2, linespacing=1.2,
+                 arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.6, shrinkA=0, shrinkB=3))
+    bot.add_patch(Rectangle((num(D(2025, 12, 1)), 0.82), 31, 0.36, fc=ORANGE_TINT, ec=RED, linewidth=1.0, zorder=3))
+    bot.annotate("December: about $126mm of\ninterest unpaid (date: see indenture)", (num(D(2025, 12, 16)), 0.82), xytext=(0, -5),
+                 textcoords="offset points", ha="center", va="top", fontsize=8.0, color=INK_2, linespacing=1.2)
+    bot.plot([num(D(2026, 1, 7))], [1], "o", color=RED, markersize=6.5, zorder=5, markeredgewidth=0)
+    bot.annotate("7 Jan: S&P\nmoves to SD", (num(D(2026, 1, 7)), 1), xytext=(-8, 12), textcoords="offset points",
+                 ha="center", va="bottom", fontsize=8.0, color=INK_2, linespacing=1.2,
+                 arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.6, shrinkA=0, shrinkB=3))
+    bot.plot([num(D(2026, 1, 13))], [1], "o", color=RED, markersize=6.5, zorder=5, markeredgewidth=0)
+    bot.annotate("13 Jan:\nChapter 11", (num(D(2026, 1, 13)), 1), xytext=(12, -8), textcoords="offset points",
+                 ha="center", va="top", fontsize=8.0, color=INK_2, linespacing=1.2)
+    bot.xaxis.set_major_locator(mdates.WeekdayLocator(byweekday=0, interval=2))
+    bot.xaxis.set_major_formatter(mdates.DateFormatter("%-d %b"))
+    bot.tick_params(axis="x", labelsize=8)
+    note(bot, "zoom on the dashed box above", loc="lower right")
+    return finish(fig, "ch03b_saks_calendar")
+
+
+# --------------------------------------------------------------------------------------------------
+# Figure 3-B.2 (3B.1): the desk's day as a timeline
+# --------------------------------------------------------------------------------------------------
+def fig_day_timeline():
+    fig, ax = new_figure(size=(7.0, 4.9))
+    ax.grid(False)
+    ax.spines["left"].set_visible(False)
+    X0, X1 = 6.0, 18.6
+    ax.set_xlim(X0, X1)
+    ax.set_ylim(-0.4, 10.9)
+    ax.set_yticks([])
+    ax.set_xticks([6, 8, 10, 12, 14, 16, 18])
+    ax.set_xticklabels(["6 a.m.", "8", "10", "12 p.m.", "2", "4", "6"])
+    ax.set_xlabel("Time of day (New York)")
+    for h in range(7, 19):                                           # faint hour grid
+        ax.axvline(h, color=GRID, linewidth=0.6, zorder=0)
+    white = dict(boxstyle="square,pad=0.15", fc="white", ec="none")
+
+    def band_label(y, text):
+        ax.text(X0 - 0.12, y, text, ha="right", va="center", fontsize=8.5, color=INK_2, clip_on=False)
+
+    # lane 1: scheduled jobs (cron-like), BLUE; labels climb a staircase so none collides
+    yj = 7.6
+    band_label(yj, "Scheduled jobs")
+    jobs = [(6.75, "6:45 feed diff", 64), (7.25, "7:15 explain", 48), (7.5, "7:30 risk pack", 32),
+            (8.5, "8:30 pre-open calendar", 16)]
+    for h, txt, off in jobs:
+        ax.plot([h], [yj], "o", color=BLUE, markersize=6.5, zorder=5, markeredgewidth=0)
+        ax.annotate(txt, (h, yj), xytext=(3, off), textcoords="offset points", ha="left", va="center", fontsize=8.3,
+                    color=INK_2, arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.6, shrinkA=0, shrinkB=3,
+                                                 relpos=(0, 0.5)))
+
+    # lane 2: intraday loops, BLUE tint bars
+    loops = [(5.9, "fills loop: order, booking, risk, P&L"),
+             (5.1, "hedge loop: DV01 and DTS drift against this morning's hedges"),
+             (4.3, "RFQ loop: hit ratio, cover gaps, who we win too often")]
+    band_label(5.1, "Intraday loops")
+    for y, txt in loops:
+        ax.add_patch(Rectangle((9.5, y - 0.32), 6.5, 0.64, fc=BLUE_TINT, ec=BLUE, linewidth=1.0, zorder=3))
+        ax.text(9.62, y, txt, ha="left", va="center", fontsize=8.0, color=INK, zorder=4)
+
+    # lane 3: after the close
+    yc = 3.1
+    band_label(yc, "After the close")
+    ax.add_patch(Rectangle((16.0, yc - 0.36), 2.2, 0.72, fc=BLUE_TINT, ec=BLUE, linewidth=1.0, zorder=3))
+    ax.text(16.1, yc, "marks, disputes,\nEOD risk", ha="left", va="center", fontsize=7.6, color=INK, zorder=4, linespacing=1.15)
+
+    # lane 4: venue and vendor clocks (approximate), ORANGE
+    band_label(1.25, "Venue and\nvendor clocks")
+    ax.text(X0 - 0.12, 0.35, "(approximate)", ha="right", va="center", fontsize=7.2, color=MUTED, clip_on=False)
+    ax.plot([15.0], [2.0], "s", color=ORANGE, markersize=6.5, zorder=5, markeredgewidth=0)
+    ax.annotate("Treasury futures settle,\nabout 3:00", (15.0, 2.0), xytext=(-8, 0), textcoords="offset points", ha="right",
+                va="center", fontsize=8.0, color=INK_2, linespacing=1.15, bbox=white)
+    ax.plot([16.0], [2.0], "s", color=ORANGE, markersize=6.5, zorder=5, markeredgewidth=0)
+    ax.annotate("equities close, 4:00", (16.0, 2.0), xytext=(8, 0), textcoords="offset points", ha="left",
+                va="center", fontsize=8.0, color=INK_2, bbox=white)
+    ax.add_patch(Rectangle((15.0, 1.0), 2.0, 0.5, fc=ORANGE_TINT, ec=ORANGE, linewidth=1.0, linestyle=(0, (3, 2)), zorder=3))
+    ax.text(14.9, 1.25, "evaluated bond prices,\nmid-to-late afternoon", ha="right", va="center", fontsize=8.0, color=INK_2,
+            linespacing=1.15, bbox=white)
+    ax.add_patch(Rectangle((17.0, 0.1), 1.6, 0.5, fc=ORANGE_TINT, ec=ORANGE, linewidth=1.0, linestyle=(0, (3, 2)), zorder=3))
+    ax.text(16.9, 0.35, "CDX end-of-day marks, later still", ha="right", va="center", fontsize=8.0, color=INK_2, bbox=white)
+
+    # the snap: one timestamp
+    ax.plot([15.0, 15.0], [-0.1, 6.5], color=INK_2, linewidth=1.1, linestyle=(0, (4, 3)), zorder=2)
+    ax.annotate("3:00 p.m. snap:\none timestamp for\nrisk and P&L", (15.0, 6.5), xytext=(5, 20), textcoords="offset points",
+                ha="left", va="center", fontsize=8.3, color=INK, fontweight="bold", linespacing=1.15)
+    return finish(fig, "ch03b_day_timeline")
+
+
+FIGURES = [fig_snap_phantom, fig_day_timeline, fig_event_windows, fig_saks_calendar, fig_wall_interval, fig_jtd_hedge,
+           fig_hit_rate_se]
 
 if __name__ == "__main__":
     only = set(sys.argv[1:])

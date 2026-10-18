@@ -1,0 +1,25 @@
+# Progress Log, Edition 2 U2: Chapter 25
+
+- [x] 1. [25.0 Cold Open: Thirty Percent of What?] NEW-SCENE: Windstream 2019-02-15 cold open; fold Halyard to pivot; retire §25.5.2 Facts. — Windstream replay, card at 2017-10-12, Halyard pivot, bridge, Facts retired.
+- [ ] 2. [25.1 and 25.1.1] LIST-TO-NARRATIVE: Reg S-K censoring as PJT memory; Desk Myth lead-in.
+- [ ] 3. [25.2 The Definition Graph] MATH-GENTLY: graphs, adjacency, topological order, nilpotence; Full Derivation for Lemma 25.1.
+- [ ] 4. [25.2.3 Cycles are real] BRIDGE: one-sentence gloss of SCC and contraction.
+- [ ] 5. [25.2.4 Finding the vertices and edges] rule-to-scene: substring bug night; fix list to Finder.
+- [ ] 6. [25.3.1 Node types] LIST-TO-NARRATIVE: Mags reads general debt basket; Kaz on "greater of".
+- [ ] 7. [25.3.2 The ratio basket] MATH-GENTLY + ANOTHER-SEAT (direct lender, Ares).
+- [ ] 8. [25.3.3 The add-back fixed point] MATH-GENTLY (fixed point, contraction); Full Derivation.
+- [ ] 9. [25.3.4 Capacity is levered to add-backs] MATH-GENTLY (convex PL, indicator derivative); Badawi via Kaz.
+- [ ] 10. [25.3.5 The builder basket] WHEN-TO-APPLY inside the gag: LTM window overstated capacity.
+- [ ] 11. [25.4.1 Max-flow min-cut] MATH-GENTLY (flows, cuts); Full Derivation weak duality.
+- [ ] 12. [25.4.2 Case Study: J.Crew] EXPAND-SCENE -> Long Scene 1.
+- [ ] 13. [end of 25.4.2] ANOTHER-SEAT (CLO manager, opportunistic credit generic).
+- [ ] 14. [25.5.1 Text diffs are blind] MATH-GENTLY (count vectors, cosine); Full Derivation.
+- [ ] 15. [25.5.2 Windstream] BRIDGE + EXPAND-SCENE: parser binding vs economic binding; docket clock bridge.
+- [ ] 16. [25.6 and 25.6.1 The plumbing] LIST-TO-NARRATIVE + new Trend Watch (public vs private side).
+- [ ] 17. [25.6.2 Rate limits as a token bucket] MATH-GENTLY + SHOP-LIFE vignette.
+- [ ] 18. [25.7.1 From statements to a panel] MATH-GENTLY (shares, intervals, HHI, blocking); Ines opener.
+- [ ] 19. [25.7.2 The docket as a state machine] MATH-GENTLY (Poisson, exponential, MLE); Full Derivation.
+- [ ] 20. [25.7.3 Serta] EXPAND-SCENE -> Long Scene 2.
+- [ ] 21. [25.8 Claims Registers] BRIDGE: Mags on transferee concentration.
+- [ ] 22. [25.9.1 Classifier error is an IC tax] MATH-GENTLY (base rates, Youden) + ANOTHER-SEAT (dealer).
+- [ ] 23. [25.10 and 25.11] BRIDGE + Finder table.

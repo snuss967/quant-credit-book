@@ -17,10 +17,12 @@
 - [x] 15. [§7.7] · WHEN-TO-APPLY. Note: walk-forward vs CPCV vs purged K-fold; upstream leak; shuffled-purged gap.
 - [x] 16. [§7.8 Deflated Sharpe] · MATH-GENTLY x2, then FULL-DERIVATION-MOVE. Note: strangers box, porch box, logit box; formulas moved intact to end.
 - [x] 17. [§7.8] · ANOTHER-SEAT (box 2 of 3, multi-strategy pod risk desk). Note: Paleologo paraphrased, no quotes; Bloomberg transcript 403, unverified.
-- [ ] 18. [§7.9 The Two Biases] · NEW-SCENE (Scene 2) + MATH-GENTLY.
-- [ ] 19. [§7.9] · WHEN-TO-APPLY.
-- [ ] 20. [§7.10 Trend Watch] · ANOTHER-SEAT (box 3 of 3) + BRIDGE.
-- [ ] 21. [§7.11 Case Studies A–C] · EXPAND-SCENE (light).
-- [ ] 22. [§7.12 The Credit ML Lab] · BRIDGE.
-- [ ] 23. [§7.13 Desk Debrief] · EXPAND-SCENE.
-- [ ] 24. [Exercises, Resource Graph] · BRIDGE only.
+- [x] 18. [§7.9 The Two Biases] · NEW-SCENE (Scene 2) + MATH-GENTLY. Note: set Oct 2026 for timeline; three rounds, coda, scale box.
+- [x] 19. [§7.9] · WHEN-TO-APPLY. Note: price vs non-price signals, composite anchoring, within-firm check.
+- [x] 20. [§7.10 Trend Watch] · ANOTHER-SEAT (box 3 of 3) + BRIDGE. Note: 2017-to-2026 lead-in; Robeco, Ralph Smith paraphrase, Blackstone seat.
+- [x] 21. [§7.11 Case Studies A–C] · EXPAND-SCENE (light). Note: Monday paragraphs for A, C; Case B ALFRED vintage scene.
+- [x] 22. [§7.12 The Credit ML Lab] · BRIDGE. Note: why-lab paragraph, Kaz "oh" bridge after block 5; pronouns fixed.
+- [x] 23. [§7.13 Desk Debrief] · EXPAND-SCENE. Note: forty flags typed, wrong drop-down call, Four defined, Mags gift line.
+- [x] 24. [Exercises, Resource Graph] · BRIDGE only. Note: exercise lead-in; Paleologo and Ralph Smith episodes with why tags.
+
+<!-- STATUS: COMPLETE -->
