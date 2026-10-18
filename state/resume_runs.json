@@ -2,25 +2,6 @@
  "note": "Restarted 14:35 UTC (window 14:30-19:30). Resume with Workflow({scriptPath, resumeFromRunId, args}).",
  "runs": [
   {
-   "name": "u2-VII-VIII",
-   "task": "wrwwe5p20",
-   "runId": "wf_555f9532-3bf",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "26_ch26_ai_agents_and_llms_on_the_credit_desk",
-     "27_ch27_system_architecture_and_asics",
-     "28_ch28_pm_playbook"
-    ],
-    "stages": [
-     "brief",
-     "revise",
-     "verify"
-    ]
-   }
-  },
-  {
    "name": "figs-8d-3-5-6",
    "task": "wwq74cnva",
    "runId": "wf_badbe5ce-057",
@@ -89,6 +70,74 @@
    "runId": "wf_88dd2b76-e50",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/u3_research_and_new_chapters.js",
    "args": "items [] + chapters 18_ch18b, 09_ch09b, 13_ch13b, 17_ch17b, 10_ch10b (see the 15:10 ledger entry)"
+  },
+  {
+   "name": "appZ-1-7",
+   "task": "wtbnk5xyq",
+   "runId": "wf_dd657811-90b",
+   "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/ed2-appz-solutions-wf_dd657811-90b.js",
+   "args": {
+    "stems": [
+     "01_ch01_anthology_and_landscape",
+     "02_ch02_revolutions_in_credit_trading",
+     "03_ch03_pjt_rssg_cognitive_bridge",
+     "04_ch04_inside_the_systematic_credit_industry",
+     "05_ch05_credit_probability_distributions",
+     "06_ch06_merton_and_intensity_models",
+     "07_ch07_ml_on_small_sample_credit_data"
+    ]
+   }
+  },
+  {
+   "name": "appZ-8-14",
+   "task": "w1axsmeuy",
+   "runId": "wf_b3bcb670-77c",
+   "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/ed2-appz-solutions-wf_dd657811-90b.js",
+   "args": {
+    "stems": [
+     "08_ch08_isolating_ido_and_empirical_duration",
+     "09_ch09_factor_investing_in_credit",
+     "10_ch10_trend_and_time_series_momentum",
+     "11_ch11_defensive_systematic_high_yield",
+     "12_ch12_multi_asset_credit_allocation",
+     "13_ch13_codifying_lmt_game_theory",
+     "14_ch14_default_and_recovery_cycle_lmt_era"
+    ]
+   }
+  },
+  {
+   "name": "appZ-15-21",
+   "task": "w7mtisb8w",
+   "runId": "wf_2c53fa83-160",
+   "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/ed2-appz-solutions-wf_dd657811-90b.js",
+   "args": {
+    "stems": [
+     "15_ch15_event_driven_mna_and_coc",
+     "16_ch16_post_reorg_equities_and_claims",
+     "17_ch17_private_credit_public_private_convergence",
+     "18_ch18_otc_microstructure_and_avellaneda_stoikov",
+     "19_ch19_portfolio_trading_pricing_engines",
+     "20_ch20_credit_etf_creation_redemption_arb",
+     "21_ch21_leveraged_loans_and_clo_microstructure"
+    ]
+   }
+  },
+  {
+   "name": "appZ-22-28",
+   "task": "wj2bo3zel",
+   "runId": "wf_203f44f2-023",
+   "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/ed2-appz-solutions-wf_dd657811-90b.js",
+   "args": {
+    "stems": [
+     "22_ch22_market_structure_regulation_trends",
+     "23_ch23_cross_asset_convexity_and_vol_surface",
+     "24_ch24_bond_cds_basis_and_deliverables",
+     "25_ch25_nlp_pacer_and_covenant_scraping",
+     "26_ch26_ai_agents_and_llms_on_the_credit_desk",
+     "27_ch27_system_architecture_and_asics",
+     "28_ch28_pm_playbook"
+    ]
+   }
   }
  ]
 }

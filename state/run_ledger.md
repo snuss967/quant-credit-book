@@ -264,3 +264,6 @@ Ch 1 finished its lessons pass (16 → 9 Math, Gently boxes, modal 3.9 → 3.7) 
 ### 15:10 UTC
 - Ch 18 and 19 revised + verified (PB-14 legging in Ch 18; the pod sending pure residual into a PT in Ch 19). Ch 2, 3, 7 have lessons + rv complete. Cleanup batch 1 is done: Listing 25.1 regex fixed and running clean, Ch 4-C weekday, Ch 13 V/F branch, arXiv citation. App A §A.10 "The Phrasebook: RSSG to Quant" written (71 entries, including RV vocabulary).
 - **Planned-but-never-written TOC files found:** 18_ch18b (RFQ response engine), 09_ch09b (bond data problem), 13_ch13b (Autopsy Room), 17_ch17b (marking the unmarked), 10_ch10b (credit index futures). Other chapters already point to them. Launched as wr9ksz5pq: Fable brief → Opus writer, each with its dossiers and its RV beat.
+
+### 15:20 UTC: all 28 main chapters revised and verified
+Ch 26–28 are done (PB-16 "ROBO's forty-seven pairs" in Ch 26; the PB-01 one-leg-never-trades exercise in Ch 27; Dov's year-end review in Ch 28). **App Z launched:** worked solutions, numerically checked, written per chapter into `state/appZ/<stem>.md` by 4 workflows (Ch 1–7, 8–14, 15–21, 22–28). After it lands, assemble them into `book_src/99_appZ_solutions_hints_and_self_assessment.md`, adding the part gates and "if you got this wrong, read §x.y" index. Primers and new chapters get solutions after their own passes.

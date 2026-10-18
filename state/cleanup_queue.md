@@ -34,3 +34,4 @@ Code and consistency fixes found along the way. Lowest priority: run only when n
 - Ch 4 has three figure placeholders not yet drawn: pod_fee_waterfall (RV thread: the Mercer fee waterfall), etrading_timeline, genealogy. Draw them in a follow-up figures pass (delete the figures log or add a 'figures-extra' stage). (2026-10-18)
 - Columbus Day (12 Oct 2026) conflicts with the story-clock canon in Ch 8-C and Ch 21 (the business-day counts). Reconcile with state/cast_bible.md's story clock. (rv 8-C, verify 21, 2026-10-18)
 - Ch 24 §24.7: PB-03's $0.75mm total leaves out financing; with financing the capture ratio is about 0.6, not two-thirds (rv Ch 8). Reconcile Ch 24 with Ch 8 §8.4. (2026-10-18)
+- Ch 12 states 99.8% for the whole $1.4bn Blue Owl sale; the press-release average was 99.7% (verify Ch 26). Reconcile Ch 12 with Ch 26. (2026-10-18)
