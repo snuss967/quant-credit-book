@@ -225,22 +225,6 @@
    }
   },
   {
-   "name": "resgraph-6b-3b",
-   "task": "wc8knrqe2",
-   "runId": "wf_bc16652d-ce3",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "06_ch06b_options_and_measures_for_credit",
-     "03_ch03b_your_first_year_on_the_desk"
-    ],
-    "stages": [
-     "resgraph"
-    ]
-   }
-  },
-  {
    "name": "research-tsmom",
    "task": "wbvxf1354",
    "runId": "wf_845cc0c4-eec",

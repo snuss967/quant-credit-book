@@ -239,3 +239,157 @@ The 8-K that would cleanse everyone is expected after the close. At 4:30 there i
 > **View From Another Seat.** *The opportunistic buyer, in its own published words.* To the distressed seat Halvorsen is a document first, a price second and a possible restricted interval third, and the interval is part of the price: a fund that joins the group trades liquidity for information, and the trade is priced in weeks of being unable to sell. The other side of that trade is the buyer with patient capital and no obligation to be anywhere in particular. The cleanest public account of the seat comes from structured credit rather than corporate distress. D. E. Shaw's research note *Assessing U.S. Mortgage-Backed Credit Stress in 2020* reports that over March and April 2020 "we purchased in excess of \$400 million in CAS and STACR bonds at a significant discount to par," from sellers who "were put under stress by redemption requests and margin calls." Wednesday's systematic seat sees a liquidity score falling; this seat sees a forced seller's discount and the possibility that somebody else's constraint is about to become its week. Chapter 4-C walks the full set of seats; Chapter 12-B gives the restructuring itself its state machine.
 
 *Builds on:* §1B.3 (the liquidity score that fell without a public reason), Chapter 3-B §3B.5 (the wall, from Theo's side). *Used in:* §3.4 (the Bayesian 8-K), §3.5 (the Edge Ledger), §3.6 (who at this table knows about the LMT), Chapter 12-B (the restructuring as a state machine), Chapter 13 (the restricted interval as a dated feature in the Priming Risk Score), Chapter 25 (reading the 8-K when it finally arrives), Chapter 4-C (the opportunistic seat).
+
+## 1B.6 Which Room Is Yours?
+
+At 5:30 on Friday Priya closes the week's last page. The vendor has answered Monday's ticket with an apology and a second restatement, and the second restatement has gone into quarantine beside the first, each with the minute it arrived. Dov's x-ray is grey, his distance to the line is a little longer than it was on Tuesday, and the lender of his Halvorsen bonds has not yet asked for them back. Ngozi's pull request passed Thursday's review; the April ticket is closed, after 187 days. Hal's Friday email went out at 4:41 and tied, and his shadow column has no rows in it, which is the only state in which a shadow column is good news. Sol is restricted until an 8-K that did not come, reading a forecast he cannot act on.
+
+The only number that rose steadily all week was the age of the tickets. Fourteen months for Dov's roll sync. Three years for Hal's risk load. Sol's fund has no ticket. It has a binder.
+
+On Sunday, Theo Marsh, three weeks into his own first year on a systematic desk, writes up his week for Ines, who asks every new hire for the same thing: a log of who touched which number, when, and on whose authority. Halfway down the page he notices that the log has the shape of every week he spent at his old firm. A market maker who saved what it knew when it knew it, a pod whose hedge was right for the bonds it used to have, a manager whose rank moved because the past was edited, a bank with two prices for one bond, and a fund that could not trade because it knew too much. Five businesses. One question underneath all of them, and it was never *what is this worth?* It was *who is responsible for this number, and can they prove where it came from?* His USB stick is in his pocket. Sol, he will learn at the next poker game, keeps a 13-week model too, a week-by-week runway of cash against the next coupon. It is a survival curve that Sol has never called a survival curve, and Chapters 5 and 6 will call it one for him.
+
+Which room is yours is a real question, and the first year in each looks different. In the market maker it is a rota and a toolchain. In the pod it is a mandate and a line. In the systematic manager it is a tape and a ticket. On the bank desk it is a mark and an email. In the distressed fund it is a confi and a log. Chapter 3-B follows Theo through his first year in one of these rooms, and Chapter 4-D is about getting a seat in any of them. (The Priya and Dov of this chapter are not the Priya and Dov of Chapter 28. Credit has more CUSIPs than first names.)
+
+The week looked like five different jobs. It was one: the custody of a number. Who marked it, which feed it came from, whether yesterday's version of it still exists, and who is allowed to know it today. A restructuring banker has been doing that job since the first 13-week cash flow they ever tied out.
+
+*Builds on:* Chapter 1 (the Halvorsen RFQ). *Used in:* Chapter 3-B (the first year), Chapter 4-C (the seats in full), Chapter 4-D (getting the seat), Chapters 5 and 6 (the survival curve the 13-week model becomes).
+
+## 1B.7 The Week Log
+
+### Specification for AI Implementation
+
+*The problem it solves, at this point in the story.* Every room this week ran on clocks, and the clocks came in three kinds. Some were set by regulation: the fifteen-minute TRACE report, the quarterly best-execution review, the annual market-access certification. Some were sourced practice, routines that real firms have described in public: the support rota, the morning x-ray, the end-of-day reflection. And some were composite, invented for the story. Each event also had two times, the moment it happened and the moment the shop learned the version it acted on, which is what Monday's vendor file and Wednesday's cancelled print were both about. A desk that wants to learn from its own weeks needs those events in one table, with the clock type and the source attached, so that a later reader can tell a regulation from a habit from a story.
+
+*What it computes, and why it is built this way.* The listing defines one immutable row type, `WeekEvent`, and two functions. Each row carries a logical `event_id` (a correction is a new row with the same id, never an edit), the shop type, a task class, the clock type, `occurred_at`, `known_at`, an optional interval end, an optional ticket-opened date and a `source`. The constructor refuses a regulation or sourced-practice row without a source, which is the chapter's labelling discipline enforced in code. `as_known` returns the latest version of an event that the shop knew at a given time, the bitemporal read of §27.2. `to_calendar_row` emits the row shape that Chapter 3-B's `desk_calendar.py` already ingests (event id, date, known-at date, source), so no new library is needed.
+
+*Inputs and outputs.* In: events typed or parsed from tickets, load logs, compliance calendars and the restricted list. Out: validated rows, a point-in-time view of any event, ticket ages in days, and calendar rows for 3-B's module.
+
+*When to use it, and when not.* It is a record of what happened and when it was known, useful for post-mortems, for the week-in-review, and for back-tests that need to know what the desk knew. It is not a compliance system and it does not decide whether anyone may trade; the restricted list stays the authority for that.
+
+*The edge case that bites.* Two versions stamped with the same `known_at`, as when a cancel and its re-report arrive in the same minute. The listing breaks the tie by order of arrival in the list, which is arbitrary; a production version carries a sequence number from the feed. A second, gentler trap: a restricted interval whose end is unknown. The listing stores it as an open interval, with no end, because "next 8-K" is not a date.
+
+<!-- EXPLAINED -->
+```python
+from dataclasses import dataclass
+from datetime import date, datetime
+from enum import Enum
+from typing import Iterable, Optional
+
+
+class Shop(Enum):
+    MARKET_MAKER = "market_maker"
+    POD = "pod"
+    SYSTEMATIC_AM = "systematic_am"
+    BANK_DESK = "bank_desk"
+    DISTRESSED = "distressed"
+
+
+class ClockType(Enum):
+    REGULATION = "regulation"      # a rule sets the clock (e.g. FINRA 6730, 5310; SEC 15c3-5)
+    SOURCED_PRACTICE = "sourced"   # a cited public account describes the routine
+    COMPOSITE = "composite"        # invented for the story, labelled as such
+
+
+@dataclass(frozen=True)
+class WeekEvent:
+    event_id: str                        # logical id; a correction is a new row, same id
+    shop: Shop
+    task_class: str                      # "reconciliation", "model_review", "restricted_list", ...
+    clock_type: ClockType
+    occurred_at: datetime                # when it happened (or is scheduled to happen)
+    known_at: datetime                   # when the shop learned this version
+    source: Optional[str] = None         # citation; required unless COMPOSITE
+    instrument_id: Optional[str] = None  # surrogate key, never a CUSIP (see Chapter 3-B)
+    ends_at: Optional[datetime] = None   # interval end; None means open ("next 8-K")
+    ticket_opened: Optional[date] = None
+
+    def __post_init__(self) -> None:
+        if self.clock_type is not ClockType.COMPOSITE and not self.source:
+            raise ValueError(f"{self.event_id}: a non-composite event needs a source")
+        if self.ends_at is not None and self.ends_at < self.occurred_at:
+            raise ValueError(f"{self.event_id}: interval ends before it starts")
+
+    def ticket_age_days(self, on: date) -> Optional[int]:
+        return None if self.ticket_opened is None else (on - self.ticket_opened).days
+
+
+def as_known(events: Iterable[WeekEvent], event_id: str, at: datetime) -> Optional[WeekEvent]:
+    """Latest version of event_id that the shop knew at time `at` (bitemporal read).
+    Ties on known_at are broken by list order; production feeds carry a sequence number."""
+    best = None
+    for e in events:
+        if e.event_id == event_id and e.known_at <= at:
+            if best is None or e.known_at >= best.known_at:
+                best = e
+    return best
+
+
+def to_calendar_row(e: WeekEvent) -> dict:
+    """Row shape for Chapter 3-B's desk_calendar.py (event id, date, known-at date, source)."""
+    return {
+        "event_id": e.event_id,
+        "instrument_id": e.instrument_id,
+        "event_date": e.occurred_at.date(),
+        "known_at": e.known_at.date(),
+        "source": e.source or "composite",
+    }
+```
+
+## 1B.8 Desk Debrief
+
+The week's ideas, in the order the rooms taught them. A point-in-time archive is a back-test's alibi: Priya could open on Friday's original file only because her firm had saved it with the minute it arrived. A trade not done still has a markout, and a desk that logs only its fills is grading itself on the hands it chose to play. A hedge ratio built on DTS is right for the bonds a pair used to hold; when the idiosyncratic view pays, the ratio drifts, and a pair left alone turns quietly into a market position, while the jump it was never designed to hedge becomes the risk that matters. A return is a ratio of two prices, either of which the tape can retract, and one bad print makes two fake returns of opposite sign. A mark is a choice inside the bid-ask, and a tolerance is a budget for honest disagreement that can be spent one basis point at a time. Information has a legal state with timestamps, and even a silence carries a likelihood ratio unless someone has made it carry none. Underneath all of it sits one job, the custody of a number, and the one figure that rises reliably every week is the age of the ticket to automate the thing everyone does by hand.
+
+### The Spec You Hand the Robot
+
+*Vague version:* "log what happens each week." *What ROBO built from it:* a table with one column, `what_happened`, populated from every Bloomberg chat on the floor, including Thursday's discussion of where to get lunch, each row timestamped with the moment ROBO read it rather than the moment it happened. ROBO did exactly what was asked. *The precise version:* one immutable row per event version with `event_id`, `shop`, `task_class`, `clock_type` in {regulation, sourced practice, composite}, `occurred_at`, `known_at`, optional `ends_at` (open intervals allowed), optional `ticket_opened`, optional `instrument_id` (a surrogate key, not a CUSIP), and a `source` that is mandatory unless the row is composite; corrections as new rows, never edits; a point-in-time read by `known_at` with a feed sequence number to break ties; export rows in the shape Chapter 3-B's `desk_calendar.py` ingests.
+
+### Exercises
+
+**1. The river on a passed trade.** Priya's engine passes on an RFQ to buy \$3mm of a bond that trades at 80 with someone else; an hour later the composite is 81.50. What is the markout of the trade the engine did not do, and what would you want to see before calling the pass a mistake? *Solution.* Had it bought at 80, the markout would be $(81.50 - 80) \times 3{,}000{,}000/100 = +\$45{,}000$, so the pass cost \$45,000 of opportunity. One pass proves little: the market may have rallied, so the beta-adjusted (IDO) markout of §3.3.3 is the fairer number, and a month of passes set against a month of fills is the real test (§3.3.5).
+
+**2. A pair that keeps working.** Suppose Kestrel's leg stays at a market-value DTS of about 70,200 and Halvorsen falls to 70, with a spread of 1,800 bp and a spread duration of 2.0. What face amount of Halvorsen short keeps the pair DTS-matched? *Solution.* Solve $N \times 0.70 \times 2.0 \times 1{,}800 = 70{,}200$, so $N \approx \$27.9$mm, down from \$39mm. As the short leg's view pays, its DTS rises and the matched size shrinks; an unrebalanced pair becomes a market short. The rematch does nothing about the jump risk of an exchange offer.
+
+**3. The PM's option.** A platform pays 20% of positive P&L. Strategy A makes or loses \$5mm with equal odds; strategy B makes or loses \$20mm. What is the PM's expected pay under each, and the platform's expected P&L under B with and without a stop at a \$12mm loss? *Solution.* PM: $0.5 \times 0.2 \times 5 = \$0.5$mm and $0.5 \times 0.2 \times 20 = \$2.0$mm. Platform under B without a stop: $0.5 \times 16 - 0.5 \times 20 = -\$2.0$mm; with the stop: $0.5 \times 16 - 0.5 \times 12 = +\$2.0$mm, provided the loss arrives gradually enough for the stop to bind.
+
+**4. One bad print.** A bond closes Friday at 95. Monday's last print is reported at 88, Tuesday's at 94.50; Tuesday evening the Monday print is corrected to 94.80. What are Monday's and Tuesday's returns before and after the correction, and which pair belongs in a back-test? *Solution.* Before: $88/95 - 1 = -7.4\%$ and $94.50/88 - 1 = +7.4\%$, a fake reversal. After: $94.80/95 - 1 = -0.2\%$ and $94.50/94.80 - 1 = -0.3\%$. A back-test that reproduces decisions uses the as-known version; a performance measurement uses the corrected one; the archive keeps both (§27.2).
+
+**5. Leaning inside the tolerance.** A desk holds twelve high-yield bonds, \$40mm of face in total, and the valuation group's tolerance is 0.75 points. How much P&L can be moved without breaching a single tolerance, and why does the valuation group look at the signs of the deviations as well as their sizes? *Solution.* Up to $0.75 \times 40{,}000{,}000/100 = \$300{,}000$ if every mark leans the same way. Honest marking errors fall on either side of mid; all twelve on the favourable side has probability $0.5^{12} \approx 0.02\%$ if the errors are honest coin flips, which is a much louder alarm than any single breach.
+
+**6. Kaz's small-boy letter.** Suppose the fund's general counsel used the standard "no comment" reply 90% of the time for restricted names and 60% of the time otherwise. With a 5% prior that a name is in private talks, what does receiving the reply do to the probability? *Solution.* The likelihood ratio is $0.9/0.6 = 1.5$. Prior odds $0.05/0.95 \approx 0.053$ become $0.079$, a posterior of about 7.3%. A reply used for every name, in every state, has a ratio of one and moves nothing; there is, alas, no small-boy letter.
+
+### Deep-Dive Resource Graph
+
+**Podcasts**
+
+- *Signals and Threads*, Ep 20, "Solving Puzzles in Production" (7 Oct 2024): the intraday support rota and the alert-history question. https://signalsandthreads.com/solving-puzzles-in-production/
+- *Signals and Threads*, Ep 29, "Swapping the Engine Out of a Moving Race Car" (2 Sep 2026): vendor restatements, saving data with its arrival time, and negative crude. https://signalsandthreads.com/swapping-the-engine-out-of-a-moving-race-car/
+- *Odd Lots*, "How to Succeed at Multi-Strategy Hedge Funds" (20 May 2024), with Giuseppe Paleologo: the x-ray, the PM's call option, "in scope." Transcript: https://podscripts.co/podcasts/odd-lots/how-to-succeed-at-multi-strategy-hedge-funds
+- *Odd Lots*, "How the Hottest Hedge Funds on Wall Street Really Manage Risk" (25 Jul 2024), with Rich Falk-Wallace: leverage on the residual. Transcript: https://podscripts.co/podcasts/odd-lots/how-the-hottest-hedge-funds-on-wall-street-really-manage-risk
+- *Odd Lots*, "How Oaktree's Head of Sourcing Finds the Next Great Deal" (28 Nov 2024), with Milwood Hobbs: passing eighteen times. Transcript: https://podscripts.co/podcasts/odd-lots/how-oaktrees-head-of-sourcing-finds-the-next-great-deal
+- Man Institute, "Extra Credit: Algorithmic Advantage" (recorded Mar 2024), with Robert Lam and Paul Kamenski: earnings season, venue selection, slicing a block. https://www.man.com/maninstitute/extra-credit-algorithmic-advantage
+
+**Practitioner Writing**
+
+- Optiver, "Day in the life: quant trader intern": the news round, the standup and the reflection on trades not done. https://www.optiver.com/join-us/stories/day-in-the-life-quant-trader-intern/
+- The DESK, "Technology upends traditional credit trading liquidity patterns, Barclays says" (17 Sep 2025). https://www.fi-desk.com/insights-analysis-technology-upends-traditional-credit-trading-liquidity-patterns-barclays-says/
+- The DESK, "EMCA 2023 winner: Best sell-side fixed income trading desk, Jefferies" (26 Oct 2023): a mid-size dealer's economics. https://www.fi-desk.com/emca-2023-winner-best-sell-side-fixed-income-trading-desk-jefferies/
+- Flow Traders, *Annual Report 2025*, pp.18 and 31: fixed-income capital as a committee decision. https://flowtraders.com/media/itid3d0e/flow-traders-annual-report-2025.pdf
+- D. E. Shaw, *Assessing U.S. Mortgage-Backed Credit Stress in 2020*: the patient buyer's account. https://www.deshaw.com/library/assessing-us-mortgage-2020
+- Man Institute, *The Revolutions in Credit Trading* (Jun 2023), Lam and Kamenski: electronic share and RFQs at a systematic manager.
+- Stephen G. Moyer, *Distressed Debt Analysis: Strategies for Speculative Investors* (J. Ross Publishing), pp.62–64: confi, restriction, big-boy letters and the third race.
+
+**Academic Papers and Official Records**
+
+- U.S. Senate Permanent Subcommittee on Investigations, *JPMorgan Chase Whale Trades: A Case History of Derivatives Risks and Abuses* (15 Mar 2013), pp.5, 6, 98, 112, 141, 185–186. https://www.hsgac.senate.gov/wp-content/uploads/imo/media/doc/REPORT%20-%20JPMorgan%20Chase%20Whale%20Trades%20(3-15-13).pdf
+- Board of Governors of the Federal Reserve and OCC, *Supervisory Guidance on Model Risk Management*, SR 11-7 (4 Apr 2011). https://www.federalreserve.gov/boarddocs/srletters/2011/sr1107a1.pdf
+- SEC Press Release 2025-15 (16 Jan 2025), Two Sigma. https://www.sec.gov/newsroom/press-releases/2025-15
+- SEC Press Release 2025-6 (13 Jan 2025), off-channel communications. https://www.sec.gov/newsroom/press-releases/2025-6
+- FINRA Rule 6730 (TRACE reporting) and Rule 5310 (best execution). https://www.finra.org/rules-guidance/rulebooks/finra-rules/6730 and https://www.finra.org/rules-guidance/rulebooks/finra-rules/5310
+- 17 CFR 240.15c3-5 (market access). https://www.law.cornell.edu/cfr/text/17/240.15c3-5
+
+**Data & Code**
+
+- The week-log listing for this chapter (Appendix F) and Chapter 3-B's `desk_calendar.py`, which ingests its rows.
+- FINRA's TRACE data, the exhaust Wednesday was spent cleaning; Chapter 9-B builds the point-in-time panel and its filters.
+
+<!-- STATUS: COMPLETE -->

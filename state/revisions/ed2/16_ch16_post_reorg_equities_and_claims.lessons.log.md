@@ -93,7 +93,7 @@ Growth 34641 / 15148 = **2.29×**, against the 1.6–1.9× target (24,237–28,7
 - [x] 6. §16.2.3: demote the logs box to one clause (b7, d). Note: A cancels, two photographs of tub, in one clause.
 - [x] 7. §16.2.4: "First... Second" in 242; reorder Ways → narration → vignette → Spec; Trend Watch to the end of §16.2; rewrite the Listing 16.1 explanation (c, d). Note: reordered; Listing 16.1 opens on Dana's Thursday; no template.
 - [x] 8. §16.3.1: retire "When the put view applies"; move Hanen and the mootness ruling into the Harlan scene (b10, c). Note: subsection gone; Hanen, mootness, forum-priced reversal risk follow Theo.
-- [ ] 9. §16.3.2: demote the put box into 333 and the worked number; fix the Full Derivation's reference to the box (b12, d).
+- [x] 9. §16.3.2: demote the put box into 333 and the worked number; fix the Full Derivation's reference to the box (b12, d). Note: 37% × 0.20 in worked number; risk-neutral honesty kept.
 - [ ] 10. §16.3.4: cut the prose copy of the three observations; rewrite the Listing 16.2 explanation (b11, c).
 - [ ] 11. §16.4.2: demote fixed-point and Poisson boxes; cut the duplicate sentence in the Full Derivation (b13, b14, d).
 - [ ] 12. §16.4.3: cut 491's lesson sentences; coda becomes a pointer; rewrite the Listing 16.3 explanation; drop "check against filings" (b15, b16, c, e).

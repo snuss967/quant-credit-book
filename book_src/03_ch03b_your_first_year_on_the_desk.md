@@ -370,7 +370,6 @@ Mags, passing again: "Back in my day we'd have found it at bonus time." A pause.
 
 - **Seven Habits of Highly Ineffective Quants** (CXO Advisory Group, summarizing Marcos López de Prado's September 2017 talk, 21 September 2017). Path-aware testing, purged splits and a deflated Sharpe ratio: the case against mistake 8's retune in a drawdown. https://www.cxoadvisory.com/big-ideas/seven-habits-of-highly-ineffective-quants/
 - **Risk Revisited Again** (Howard Marks, Oaktree client memo, 8 June 2015). Risk as the possibility of permanent loss, with a probability "no more measurable than the probability of rain": the practitioner's footing for mistake 7 and the calibration of §3B.7. https://www.oaktreecapital.com/docs/default-source/memos/2015-06-08-risk-revisited-again.pdf
-
 - U.S. Senate Permanent Subcommittee on Investigations, *JPMorgan Chase Whale Trades: A Case History of Derivatives Risks and Abuses* (15 March 2013): marks and price testing. https://www.hsgac.senate.gov/wp-content/uploads/imo/media/doc/REPORT%20-%20JPMorgan%20Chase%20Whale%20Trades%20(3-15-13).pdf
 - Board of Governors of the Federal Reserve System and OCC, *Supervisory Guidance on Model Risk Management* (SR 11-7, 4 April 2011): the rules behind §3B.9's model review. https://www.federalreserve.gov/boarddocs/srletters/2011/sr1107a1.pdf
 - Man Institute, "Extra Credit: Algorithmic Advantage" (recorded March 2024): a systematic credit manager's day as execution choices. https://www.man.com/maninstitute/extra-credit-algorithmic-advantage
