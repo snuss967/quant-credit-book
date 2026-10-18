@@ -296,7 +296,7 @@ def fig_mixture_traps():
         b.annotate(f"{arr[iA]:.2f}\u00d7", (10, arr[iA]), xytext=(-5, dy), textcoords="offset points",
                    ha="right", va="center", fontsize=8.3, color=INK_2)
     print("mixture figure:", f"Halvorsen VaR {var_h:.3f}, ES {es_h:.3f}, folded sd {sd_blend:.3f}, folded VaR {var_b:.3f};",
-          f"ES ratio at 10d: A {res['A'][0][iA]:.2f}, B {res['B'][0][iB]:.2f}; VaR ratio A {res['A'][1][iA]:.2f}")
+          f"ES ratio at 10d: A {res['A'][0][iA]:.2f}, B {res['B'][0][iA]:.2f}; VaR ratio A {res['A'][1][iA]:.2f}")
     return finish(fig, "ch08b_mixture_traps")
 
 

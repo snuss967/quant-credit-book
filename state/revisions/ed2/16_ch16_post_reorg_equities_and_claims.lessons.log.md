@@ -97,7 +97,7 @@ Growth 34641 / 15148 = **2.29×**, against the 1.6–1.9× target (24,237–28,7
 - [x] 10. §16.3.4: cut the prose copy of the three observations; rewrite the Listing 16.2 explanation (b11, c). Note: list kept alone; listing opens on Harlan's Thursday committee.
 - [x] 11. §16.4.2: demote fixed-point and Poisson boxes; cut the duplicate sentence in the Full Derivation (b13, b14, d). Note: 8.66/8.58/8.56 kept in gloss; pointers to §13.7, §6.1.4.
 - [x] 12. §16.4.3: cut 491's lesson sentences; coda becomes a pointer; rewrite the Listing 16.3 explanation; drop "check against filings" (b15, b16, c, e). Note: scene carries spot lesson; listing opens on Kaz's rebuild.
-- [ ] 13. §16.5.2–16.5.3: trim statute framing; demote lognormal and hazard boxes (hazard with numbers that do not solve Exercise 5); move the Jensen box ahead of the result; retire the pair When-to for a bar-date beat (b18–b21, c, d).
+- [x] 13. §16.5.2–16.5.3: trim statute framing; demote lognormal and hazard boxes (hazard with numbers that do not solve Exercise 5); move the Jensen box ahead of the result; retire the pair When-to for a bar-date beat (b18–b21, c, d). Note: hazard gloss uses h=2/1; Mags asks "Has the bar date passed?"
 - [ ] 14. §16.5 Spec: moment-of-need paragraph moved ahead of the Spec to break the box run; trim the claims-buyer seat; rewrite the Listing 16.4 explanation (c, d).
 - [ ] 15. §16.6: `####` long scene with fiction label; fix the doubled "finished in the money"; trim 722 and 726; `####` decision point; Docket Diary hedge (b16, b17, b23, e, f).
 - [ ] 16. §16.7: hedge 738; `####` scene heading; trim 762; runway When-to becomes a Mags beat; `####` decision point; Ines's cash-games line (b22, c, e, f, g).

@@ -43,7 +43,7 @@ The banker enters through Chapter 3, which is written for you; its RSSG Edge Led
 
 **Seat 4: risk and strat.** 4-B, 6-B and 7-B are yours to live in. Then 8-B and 8-C, Chapter 22 (regulation and the forces reshaping liquidity), Part VI (Chapters 23–24: cross-asset convexity, the volatility surface, the bond–CDS basis) and Chapter 27 (systems). Appendix D is the plumbing reference.
 
-Whatever the seat, come back for the Parts you skipped, including Parts III, V, VI, VII, and VIII where they were not on your route, and keep Appendix A open the whole time.
+Whatever the seat, come back for the Parts you skipped, and keep Appendix A open the whole time.
 
 **The AI-agent specifier reads with a lens rather than a seat.** Read this preface, then Appendix A, then go through every `### Specification for AI Implementation` block in the book in order, starting with Chapters 5–8 (distributions, structural models, labeling, decomposition), then Chapter 13 (the Priming Risk Score), Chapters 18–19 (quoting and basket pricing), and Chapters 25–27 (document parsing, agent workflows, and system architecture). Chapter 26 is the operating manual for directing coding agents and should be read before you direct one. Then go back and read the prose: a spec you do not understand is a spec you cannot debug.
 
@@ -54,6 +54,8 @@ There is also an unofficial path for the reader who is here for the trends: Chap
 Twenty-eight chapters written by a committee tend to read like twenty-eight chapters written by a committee. So we use a small recurring cast. They are fictional. Every line of dialogue in the book belongs to them. Real firms and real people appear only with verifiable facts attached.
 
 **Theo Marsh** (he/him) is you, or the version of you who is three weeks into a systematic credit desk after years at PJT RSSG. He carries his old 13-week cash flow model on a USB stick "for emotional support." He asks, "But what does the credit agreement say?" He is usually right, which is annoying for everyone else and the reason he was hired.
+
+How he got the seat happens off the page, and a reader who has not been hired yet should know it. There was no quant résumé to speak of. There was a final-round conversation in which Ines asked him to make a market on something he had never priced, and he did it badly, out loud, and then said which fact would move his number and in which direction. The desk can teach the arithmetic. It cannot teach which paragraph of a credit agreement moves the price, and that was the one line on his résumé nobody else in the room could claim.
 
 **Ines Okafor** (she/her) runs credit market making and used to play poker professionally, which she regards as the same job with worse coffee. She frames every problem as a hand: what's the pot, what are the odds, and who at this table knows more than you? She calls markouts "the hand history" and reviews them the way other people review their text messages at 1 a.m.
 
@@ -83,6 +85,15 @@ Between those elements you will find a small set of boxes, each with a fixed lab
 Trend Watch boxes deserve a paragraph of their own, because "trend" means two things in this book and we care about both. The first meaning is the structural trends reshaping credit markets: electronification, portfolio trading, ETF-led liquidity, the LMT era, private credit, the regulatory agenda. Every chapter includes at least one Trend Watch box with dated, sourced figures showing how its topic changed over 2018–2026, and Appendix C stitches them into a single timeline. The second meaning is trend as a strategy: time-series momentum in credit indices and excess returns, cross-asset lead–lag, trend combined with carry, and how it behaved in 2008, 2020, and 2022. That gets Chapter 10 to itself and recurs through Parts III and VIII. If a chapter does not tell you what changed and when, we consider it unfinished.
 
 Each chapter opens with a cold-open desk scene and closes with a Desk Debrief (takeaways sharp enough to tape to a monitor), a compact Spec You Hand the Robot, and a few exercises, some of them funny, all of them real.
+
+Two marks need a legend. The first is the tag at the end of a Desk Debrief bullet, such as `[L6]`, or `[L4, L7]` when one bullet carries two laws. It points to one of the sixteen **Laws of the Desk** in Appendix E: sentences that recurred in at least three Debriefs, each compressing an equation the book derives. They come in four families, one question each, and the numbering is permanent, so a tag means the same thing in every edition.
+
+- **The Ruler** asks what a number is measured against. (1) IDO or it didn't happen. (2) Bonds are not bets; issuers are. (3) DTS is the unit of credit beta. (4) Say which measure you are in.
+- **The Table** asks what a price must survive before it is a price. (5) A bid is a posterior, not a markup, and winning is information. (6) Charge the jump once. (7) Default is a menu, and recovery is a U. (8) Every clause is a payoff function, and one word can be the whole loss.
+- **The Tape** asks what the data and the backtest are hiding. (9) A mark is a moving average of the truth. (10) Costs decide, and capacity is a square. (11) Label every number. (12) Count your trials.
+- **The Clock** asks when the outcome arrives and who decides it. (13) The label is the model. (14) Censoring is the signal. (15) Forced selling is a supply schedule, not a mood. (16) The court is a random variable with timestamps.
+
+The second mark is the **Prerequisites** box at the head of a chapter that leans on earlier ones. It names, by section number, what the chapter assumes and where that is built, and when the answer is "nothing else" it says so. Many of the pointers land on the lettered primers (4-B, 6-B, 7-B, 12-B), and where a box says to read one first, it means it. If the box names a tool you already own, skip the section it cites; if a piece of mathematics is new, the plain-language box labeled Math, Gently introduces it at its first use.
 
 ## A note on how this book is made, and why you should check the build stamp
 
