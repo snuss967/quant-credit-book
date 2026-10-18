@@ -377,3 +377,101 @@ For CourtListener's default tier the binding limit is the daily one. Polling $M$
 
 > **Ways This Blows Up.** (1) *Phrase counts are polluted.* "Open market purchase" in EDGAR full-text search is dominated by fund prospectuses and Form 4s in 2018, and by SPAC sponsor agreements in 2025's 8-Ks. The most expensive three words in finance are also some of the most boring. (2) *Exhibits are refiled*, so one agreement is counted many times. Dedupe by accession number plus a hash of the exhibit text. (3) *The 10,000 cap* truncates silently (`relation: "gte"`). (4) *Untested operators.* `NEAR()` queries with quoted phrases returned zero hits for 2018, 2021 and 2025 alike, which cannot be true. Validate every search operator against a known-positive filing before you trust a zero. (5) *Keyword precision.* In the live Rule 2019 search, one of the top five hits was an appellate motion to dismiss, so put a classifier on the entry text and the PDF's first page. (6) *Sealed placeholders and expired PACER passwords* look like silence. Alert on silence.
 
+## 25.7 The Rule 2019 Time Series and the Holder Graph
+
+Federal Rule of Bankruptcy Procedure 2019, as amended in 2011, requires any group or committee of multiple creditors "acting in concert" to file a verified statement. Indenture trustees and agents are excused "solely for that reason." The statement must disclose, for each member, name, address and "the nature and amount of each disclosable economic interest," which is defined broadly enough to cover derivatives. Members who claim to represent others must also give the quarter and year each interest was acquired, unless it was acquired more than a year before the petition. A verified *supplemental* statement is due when a disclosed fact materially changes and the group takes a position. The sanctions have teeth: the court can refuse to hear the group or invalidate its votes.
+
+The rule got this shape through a fight. In *In re Northwest Airlines* (Bankr. S.D.N.Y. 2007), Judge Gropper held on February 26, 2007 that the plain terms of the old rule required an ad hoc equity committee to disclose holdings. On March 9 he refused to seal the trading details, because "Rule 2019 was a disclosure rule that would be thwarted" if the other holders could not see them (Cleary Gottlieb alert memo, Mar 13, 2007). The old rule demanded "the amounts paid therefore." The 2011 amendment dropped price disclosure in exchange for broader coverage (CDS, total return swaps, shorts) and the acquisition quarter. So the Rule 2019 series carries **quantities and dates, never prices**. Prices have to be imputed.
+
+> **[SOURCE EXTRACTION]** *Moyer_Distressed_Debt_Analysis p.329:* "Usually the largest creditor schedule will list as the creditors only the indenture trustee for any bond issues, even though the indenture trustee probably will not actually own any bonds."
+>
+> **Annotation.** This is the entity-resolution warning in one sentence: the name on the claim is not the holder. A naive holder graph built from schedules has one giant node, the indenture trustee, which owns nothing and, as Moyer notes elsewhere, will "only do what they are clearly obliged to do" (p.76). Ad hoc groups exist because trustees are passive. Rule 2019 is how the desk sees through the trustee to the beneficial holders who will actually vote. The modern desk fuses three sources: Rule 2019 for the active holders, CLO trustee reports for the loan side, and 13F and N-PORT filings for the fund side. Each source has a different lag.
+
+### 25.7.1 From statements to a panel
+
+For group $g$, statement $k$ filed at $t_k$, and class $c$ with face $F_c$, let $h_{i,c,k}$ be member $i$'s disclosed face. Then the group's class share, net flow and holder concentration are
+
+$$
+\theta_{g,c}(t_k) = \frac{1}{F_c}\sum_{i \in g} h_{i,c,k}, \qquad \Delta h_{i,c,k} = h_{i,c,k} - h_{i,c,k-1}, \qquad H_c(t_k) = \sum_i \Big(\frac{h_{i,c,k}}{F_c}\Big)^2.
+$$
+
+$H_c$ is the `holder_hhi` input in §13.2.1. Statements say "approximately," so assume each of $n$ members rounds to the nearest $\delta$; then $|\hat\theta - \theta| \le n\delta/(2F_c)$. Carry that as an interval, not a point.
+
+**Blocking arithmetic.** Under 11 U.S.C. §1126(c), a class accepts a plan if holders of at least two-thirds in amount and more than half in number *of the claims that vote* accept. If a fraction $\varphi$ of the class's face votes and the group, holding $\theta \le \varphi$, votes as a block, its share of the voted amount is $\theta/\varphi$. It can defeat acceptance on amount alone when
+
+$$
+\frac{\theta}{\varphi} > \frac13 \quad\Longleftrightarrow\quad \theta > \frac{\varphi}{3}.
+$$
+
+So low turnout lowers the blocking bar. With 60% turnout *(illustrative)*, 20% of the class blocks. Out of court, the analogous threshold is the agreement's "Required Lenders" (typically more than 50%), which is the $\theta_{\text{required}}$ of Chapter 13.
+
+**Imputed cost basis.** With disclosed acquisition quarters $q$ and a quarterly average price $\bar P_q$ from TRACE or loan marks, the imputed basis is $\hat c_i = \sum_q h_{i,q}\bar P_q / \sum_q h_{i,q}$. A group with a basis of 40 will take a plan at 55 that a basis-90 group will fight to the end. "Their cost basis is their hand," said Ines. "Rule 2019 makes them show you half of it."
+
+**Endogenous sampling.** Supplements are filed when holdings change *and* the group takes a position. So the timing of a filing is informative in its own right: a statement appears because something is about to happen.
+
+### 25.7.2 The docket as a state machine
+
+Classify entries into marks and map them to states: Quiet → Organized (first 2019 statement) → Contested (exclusivity, standing or lien-challenge motions) → Standstill (stipulated stays, mediation) → Plan → Confirmed. Treat the path as a continuous-time Markov chain with transition intensities $q_{ab}$. (These are $q_{ab}$ with two subscripts, distinct from inventory $q$.) With $N_{ab}$ observed $a \to b$ transitions and total time $T_a$ spent in state $a$ across a panel of cases, the log-likelihood is
+
+$$
+\log \mathcal{L} = \sum_{a}\sum_{b \ne a}\big(N_{ab}\log q_{ab} - q_{ab}\,T_a\big),
+$$
+
+and setting $\partial \log \mathcal{L}/\partial q_{ab} = N_{ab}/q_{ab} - T_a = 0$ gives $\hat q_{ab} = N_{ab}/T_a$. This is the right estimator for "how long after a group organizes does it attack exclusivity," and it stays honest about cases still in progress, because their time in state counts in $T_a$ even if no transition has happened yet.
+
+> **Docket Diary. Hughes Satellite Systems Corporation, Bankr. S.D. Tex. No. 26-90739 (2026).** Doc. 154 (2026-08-10): "Verified Statement of Noteholders Pursuant to Bankruptcy Rule 2019... Exhibit A." Doc. 320 (2026-09-10, 40 pp.): "The Noteholder Group's Emergency Motion to Terminate the Debtors' Exclusive Periods Pursuant to 11 U.S.C. § 1121(d)(1)," hearing set for 9/28/2026, exhibits filed under seal. Doc. 369 (2026-09-20, 36 pp.): "Stipulated Order Staying Litigation and Investigations in the Chapter 11 Cases." That is Organized → Contested in 31 days and Contested → Standstill in 10. *The Ad Hoc Group, through counsel, in unison:* "We reserve all rights. Including the right to have reserved them earlier." Ines read the sequence aloud: "A bet, a raise, and both players agreeing to check it down." (Facts beyond the docket entry text are not stated here.)
+
+### 25.7.3 Case Study: Serta Simmons, Read From the Docket (2023)
+
+Chapter 13 (§13.3.1) priced the 2020 uptier. Here is what the bankruptcy docket shows. Serta Simmons Bedding filed in the Southern District of Texas on 2023-01-23 (No. 23-90020). A CourtListener `type=rd` query for Rule 2019 filings returns this sequence:
+
+| Entry date | Doc. | Filer | What |
+| :--- | :--- | :--- | :--- |
+| 2023-01-24 | 69 | Ad Hoc Priority Lender Group | Original verified statement |
+| 2023-01-24 | 75 | Ad Hoc Group of First Lien Lenders | Original verified statement (the excluded-lender side) |
+| 2023-02-09 | 273 | Five utility creditors, one counsel | Rule 2019 statement |
+| 2023-02-10 | 289 | Ad Hoc Equity Group | Original verified statement |
+| 2023-02-13 | 311 | Utilities plus one more | Statement adding a member |
+| 2023-03-01 | 389 | Ad Hoc Priority Lender Group | Amended verified statement |
+| 2023-06-21 | 1116 | Ad Hoc Priority Lender Group | Second amended verified statement |
+
+Four things a desk takes from this. First, *both sides of the uptier organized on day one*: Docs 69 and 75 were filed together, a day after the petition, so litigation was certain before the first-day hearing ended. Second, the priority-lender group's statements at {Jan 24, Mar 1, Jun 21} *are* its holdings time series, and the diff between them is the flow. Third, the classifier has to rank by class: the utilities' statements are valid Rule 2019 filings with no bearing on term-loan recovery. Fourth, the PDFs showed as "not available" in RECAP because nobody had bought them, and at \$3 or less each through RECAP Fetch, the whole series costs less than lunch. The adversary proceeding (No. 4:23-ap-09001, filed 2023-01-24) carries a 2023-05-22 stipulated order on "North Star's status as a disqualified institution," a disqualified-lender-list fact that a holder graph needs and no press release gave. The Fifth Circuit's December 31, 2024 holding that the 2020 transaction was not an "open market purchase" came twenty-three months after Doc. 75 told you there would be a fight.
+
+Huang, Lewellen & Wang, *Creditor Coalitions in Bankruptcy* (SSRN 4854111; HLS Bankruptcy Roundtable, Feb 11, 2025) is what turns this feed from a who's-who into a return predictor. Working from Chapter 11 filings, "especially Rule 2019 disclosures," they find coalitions are more likely in large classes with dispersed ownership and illiquid debt, and that "coalition announcements are associated with increased bond prices," with significant positive returns across creditor classes. (Sample sizes and magnitudes are not reproduced here pending the paper's own tables.)
+
+## 25.8 Claims Registers and the Transfer Feed
+
+Rule 3001(e) creates the third layer. When a claim is transferred after a proof of claim is filed, "the transferee must file evidence of the transfer," *except* for claims based on publicly traded notes, bonds or debentures. The clerk mails notice, and the transferor has 21 days to object. So every trade claim, vendor claim, lease-rejection claim and bank-loan claim that changes hands after the bar date leaves a docket entry naming the transferor, the transferee and the face amount, but never the price. The bond side is dark. The resulting features are the share of class face transferred, the concentration of transferees (the same few funds buying everything), and the time from bar date to transfer. Each of these says something about who will be at the plan negotiation.
+
+Moyer's starting point still holds: the petition's list of the 20 largest unsecured creditors "can often give insight on the possible composition of the unsecured creditor committee" (Moyer_Distressed_Debt_Analysis p.286). The plumbing is the hard part. On 2026-10-17, Kroll's restructuring portal returned HTTP 403 to an automated fetch, Epiq served a JavaScript-only shell, Stretto's case site was live, and Verita returned 503. Claims registers are the least API-friendly layer in the stack. Budget a headless browser and per-agent adapters, and read each portal's terms before automating.
+
+## 25.9 From Text to Signal: Error, Decay and Discipline
+
+### 25.9.1 Classifier error is an IC tax
+
+Let $x \in \{0,1\}$ be a true document feature (for example, "has a trapdoor-type route") with base rate $\pi$, and let $\hat x$ be the classifier's output, with sensitivity $a = \mathbb{P}(\hat x = 1 \mid x = 1)$ and specificity $b = \mathbb{P}(\hat x = 0 \mid x = 0)$. Assume errors are independent of the forward return $r$ given $x$. Then $\mathbb{E}[\hat x \mid x, r] = (1-b) + (a + b - 1)\,x$, so
+
+$$
+\text{Cov}(\hat x, r) = \text{Cov}\big(\mathbb{E}[\hat x \mid x, r],\, r\big) = J\,\text{Cov}(x, r), \qquad J = a + b - 1,
+$$
+
+and therefore
+
+$$
+\text{IC}(\hat x) = J\,\frac{\sqrt{\pi(1-\pi)}}{\sqrt{\hat\pi(1-\hat\pi)}}\;\text{IC}(x), \qquad \hat\pi = (1-b) + J\pi. \tag{25.3}
+$$
+
+$J$ is Youden's index, and it is the exchange rate between classifier quality and alpha. Take $\pi = 5\%$, $a = 0.90$, $b = 0.95$. Then $J = 0.85$, $\hat\pi = 9.25\%$, and the IC falls to $0.639$ of its true value. By the fundamental law ($\text{IR} \approx \text{IC}\sqrt{\text{BR}}$) you need $1/0.639^2 \approx 2.45$ times the breadth to break even. Note also that with a 5% base rate, a "95% specific" classifier is wrong on about half of its flags: $\mathbb{P}(x = 1 \mid \hat x = 1) = a\pi/\hat\pi \approx 0.49$.
+
+This is the quantitative argument for the citation contract. Dahl et al. (2024), *Large Legal Fictions*, found hallucination rates of "roughly 58% to 88%" on verifiable questions about federal cases. Magesh et al. (2024) found that leading retrieval-augmented legal research tools still hallucinated "between 17% and 33% of the time." Either rate, plugged into (25.3), takes most of the signal away. So ROBO never emits a covenant value without a span, and the test harness scores span correctness, not fluency. For pre-training and evaluation there are public corpora: CUAD (510 contracts, 41 clause types, 13,000+ expert labels), LEDGAR ("over 60'000 contracts," "almost 100'000 provisions," from SEC filings) and LegalBench (162 tasks). None of them labels basket arithmetic, so the desk's gold set is hand-built from its own universe.
+
+### 25.9.2 Discipline and decay
+
+> **[SOURCE EXTRACTION]** *Paleologo_Advanced_Portfolio_Management p.156:* "There are so many choices that generating all possible features from alternative data would be a recipe for confusion and data mining."
+>
+> **Annotation.** A 300-page agreement has millions of n-grams, and some of them will backtest beautifully by accident. The defense is to pre-register: the document features are the typed nodes in the Chapter 13 table ($\Phi$, ratio headroom, builder availability, blocker flags) plus the docket states of §25.7.2, fixed *before* looking at returns. New features go through a written hypothesis first. This is the one place on the desk where bureaucracy is alpha.
+
+> **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.621:* "Indeed, bonds may react more slowly than stocks to news affecting a corporation... In this case, the relationship between equity momentum and subsequent returns of corporate bonds can be an illusion: Investors, trying to implement the strategy, would in reality be offered 'updated' prices of corporate bonds."
+>
+> **Annotation.** Docket and amendment signals share the same trap. If a backtest goes long the loans whose priority-lender group just filed a 2019 statement and marks the entry at the last TRACE print or the prior day's loan mark, it is buying at a price no dealer would show after the docket entry posted. Measure signal decay as $\text{IC}(h)$ across horizons $h$, and enter at a quote that is executable *after* the event timestamp, with the delay set by the feed's actual latency (seconds for EDGAR, minutes to days for RECAP). Then apply the desk motto: IDO or it didn't happen. Strip the carry, rates and factor beta before you call anything alpha (Chapter 8).
+

@@ -219,3 +219,418 @@ except ValueError:
 ```
 
 *Further reading for this section:* Duffie (2012), *Market Making Under the Proposed Volcker Rule*; Konstantinovsky and Phelps (2012) as summarized in Dynkin et al.; the NY Fed's primary dealer statistics (links in the Deep-Dive Resource Graph at the end of the chapter).
+
+## 22.2 TRACE, 2002–2027: The Transparency Ledger
+
+Information is the third thing a dealer sells, and TRACE is the rule that decides how much of it the dealer gets to keep. Mags remembers the pre-TRACE world with the fondness people reserve for wars they survived. "Back in my day the tape was the guy at the next desk who'd heard something. You priced a bond by phone and by grudge." She will also tell you, grudgingly, that the distressed desk barely noticed TRACE for its first few years, and the shelf agrees with her.
+
+> **[SOURCE EXTRACTION]** *Moyer_Distressed_Debt_Analysis p.416 (n.62):* "The National Association of Securities Dealers requires that trades in specified bonds, usually larger issue sizes or of large capitalization firms, be electronically recorded by broker-dealers into the Trade Reporting and Comparison Entry Source (TRACE). However, most of the securities required to be posted do not constitute distressed securities."
+>
+> **Annotation.** Our analysis: two things are dated in this footnote, and both are useful. The acronym is wrong (TRACE is the Trade Reporting and Compliance Engine), which tells you how much attention a distressed investor of the mid-2000s paid to it. More importantly, the coverage claim was true when Moyer wrote it: dissemination was phased in by issue size and rating, and immediate dissemination of *all* public TRACE-eligible corporate bonds began only on 2006-01-09 (FINRA TRACE FactBook 2025). For a systematic desk, this means any distressed-bond liquidity series that starts before 2006 has a selection problem baked in: the bonds you can see are the large, liquid ones, which is exactly the sample that does not default. Start the panel in 2006, or carry a dissemination-phase flag.
+
+The ledger since then, as a quant needs it, is a list of dates on which the information set changed. Table 22.1 below is that list. The academic verdict on the original 2002–2006 rollout is unusually unanimous on costs and unusually split on volume. Bessembinder, Maxwell and Venkataraman (2006), Edwards, Harris and Piwowar (2007), and Goldstein, Hotchkiss and Sirri (2007) all found that trading costs fell for bonds that became transparent; the last of these was a literal controlled experiment on a set of BBB bonds, the regulatory event study in its purest form (§22.8). Asquith, Covert and Pathak (NBER w19417, 2013, revised 2019) found that costs fell across all bond types, with high-yield costs down 22.9%, and estimated total savings of about \$600mm a year. They also found that "trading activity does not increase and, by one measure, decreases," and that by that measure high-yield activity fell 71.1%. Transparency lowered the average price of liquidity and reduced the quantity dealers were willing to supply at the margin. That is not a paradox. It is what happens when you tax the dealer's information, and the derivation below shows where the tax lands.
+
+> **[SOURCE EXTRACTION]** *Ben_Dor_Quantitative_Credit_Portfolio_Management p.162 (n.3):* "Trade Reporting and Compliance Engine (TRACE) ... disseminates trade-by-trade corporate bond execution information within 15 minutes to all market participants. At this time, TRACE data are censored at \$5 million for investment grade and \$1 million for high-yield securities."
+>
+> **Annotation.** Our analysis: "at this time" was 2010, and the striking fact for a 2026 desk is that both numbers in the sentence are still the rule. FINRA Regulatory Notice 25-17 (2025-12-04) retained the 15-minute outer limit and restated the caps: investment-grade trades above \$5mm print as "5MM+" and non-investment-grade trades above \$1mm as "1MM+," with uncapped sizes released in the Historic Corporate Bond Data Set six months after quarter-end. Fifteen years of electronification, two serious attempts to change the parameters (one from each direction, both in the case study below), and the market is still running on Ben Dor's footnote. When a parameter survives that much pressure from both sides, it is an equilibrium, and an equilibrium can be priced.
+
+### 22.2.1 Derivation: the reporting delay is an option the block dealer holds
+
+Work under $\mathbb{P}$ with Kyle-style linear impact (§18.3): once the market learns of a signed block of size $Q$, the mid moves against the dealer by $\lambda Q$, where $\lambda$ is impact per unit of size the market *infers*. A dealer buys a block of $Q$ (\$mm) at $t = 0$, earning a concession of $\tfrac{s_B}{2}$ (bp of price) per unit, and works it out linearly over an unwind time $T_u$, so its remaining inventory at $t$ is $Q(1 - t/T_u)$. The print becomes public after a delay $\Delta$: fifteen minutes today, one minute under the rule that died, end of day for on-the-run Treasuries.
+
+The leak cost is the impact times the inventory still held at publication:
+
+$$
+\text{Leak}(\Delta) = \lambda Q \cdot Q\Big(1 - \frac{\Delta}{T_u}\Big)^+ .
+$$
+
+The inventory-risk cost is the mean-variance penalty on the unwind. With mid volatility $\sigma$ (bp per $\sqrt{\text{minute}}$), the P&L variance of a linear unwind is $\int_0^{T_u}\sigma^2 Q^2 (1 - t/T_u)^2\,dt = \sigma^2 Q^2 T_u/3$, so the penalty is $\tfrac12\gamma\sigma^2Q^2T_u/3$. Expected utility-adjusted P&L is
+
+$$
+\Pi(\Delta) = \frac{s_B}{2}\,Q - \lambda Q^2\Big(1-\frac{\Delta}{T_u}\Big)^+ - \frac{\gamma\sigma^2 Q^2 T_u}{6}.
+\tag{22.5}
+$$
+
+Setting $\Pi = 0$ gives the competitive block half-spread and its sensitivity to the delay:
+
+$$
+\frac{s_B^\ast}{2}(\Delta) = \lambda Q\Big(1-\frac{\Delta}{T_u}\Big)^+ + \frac{\gamma\sigma^2 Q\,T_u}{6},
+\qquad
+\frac{\partial s_B^\ast}{\partial \Delta} = -\frac{2\lambda Q}{T_u} \quad (\Delta < T_u).
+\tag{22.6}
+$$
+
+Three readings fall out. **Shorter delay, wider block spread**, with the effect proportional to block size $Q$. **The effect is concentrated where $\Delta$ and $T_u$ are comparable.** A riskless-principal trade, matched before it prints ($T_u \le \Delta$), pays no leak at fifteen minutes or at one; a block worked over three days barely notices the difference between one minute and fifteen. The trades that care are the risk-transfer blocks worked out in an hour or two through ETFs, CDS, and portfolio trades. **To protect a multi-day unwind, the delay must be measured in days**, which is why the 2019 block proposal paired higher caps with a 48-hour delay.
+
+*Worked example (illustrative):* $\lambda = 0.5$bp per \$mm, $Q = 15$, $T_u = 120$ minutes, $\sigma = 2.5$bp$/\sqrt{\text{min}}$ (about 50bp of price a day, a 10-year BBB), $\gamma = 0.001$ per bp·\$mm. The inventory term is $0.001 \times 6.25 \times 15 \times 120/6 = 1.875$bp. At $\Delta = 15$ the leak term is $7.5 \times 0.875 = 6.56$bp, for a half-spread of 8.44bp; at $\Delta = 1$ it is $7.5 \times 0.992 = 7.44$bp, for 9.31bp. The one-minute rule would have widened this block by about 0.9bp, roughly 10%, which on a desk printing a few thousand such blocks a year is a line item someone would write a comment letter about.
+
+### 22.2.2 Derivation: what hides behind "5MM+"
+
+Printed size is $\tilde Q = \min(Q, C)$ plus a flag, with $C = 5$ (\$mm, IG) or $C = 1$ (HY). The market cannot see $Q$ above the cap, so it updates on $\mathbb{E}[Q \mid Q > C]$. Suppose sizes above the cap are Pareto with tail index $\alpha > 1$: $\mathbb{P}(Q > x \mid Q > C) = (C/x)^{\alpha}$ for $x \ge C$. Then
+
+$$
+\mathbb{E}[Q \mid Q > C] = \int_C^\infty x\,\frac{\alpha C^\alpha}{x^{\alpha+1}}\,dx = \frac{\alpha}{\alpha - 1}\,C \equiv m\,C,
+\qquad
+\alpha = \frac{m}{m-1}.
+\tag{22.7}
+$$
+
+Every capped print therefore moves the market by the same $\lambda m C$, whatever its true size. Two consequences follow. The cap **pools** blocks: a \$25mm block is subsidized (the market infers less than the truth), and a \$6mm block just over the cap is taxed (the market infers more). And the dealer that did the trade knows $Q$, so it holds an information edge of $\lambda(Q - mC)$ until the uncapped historic file appears six months after quarter-end.
+
+The shelf gives us $m$ directly, which is a pleasing accident.
+
+> **[SOURCE EXTRACTION]** *Ben_Dor_Quantitative_Credit_Portfolio_Management p.364 (n.8):* "TRACE truncates the sizes of large transactions at \$1 million and \$5 million for high-yield and investment-grade bonds, respectively ... Alternative transaction caps can be imputed based on equating the sum of individual trades with the aggregate volume figures reported by TRACE. This procedure yields higher transaction limits of \$4 million and \$12.5 million"
+>
+> **Annotation.** Our analysis: Ben Dor and coauthors used the imputed caps to fix a volume series. We can use them to back out a tail index. Matching the sum of trades to aggregate volume is exactly estimating $\mathbb{E}[Q \mid Q > C]$, so $m_{\text{IG}} = 12.5/5 = 2.5$ and $m_{\text{HY}} = 4/1 = 4$. By (22.7) that gives $\alpha_{\text{IG}} = 5/3 \approx 1.67$ and $\alpha_{\text{HY}} = 4/3 \approx 1.33$. Both are below 2, so the variance of block size above the cap does not exist. That is why averaging capped sizes produces garbage, and why the median capped IG block ($C \cdot 2^{1/\alpha} \approx$ \$7.6mm) sits so far below the mean (\$12.5mm). The modern desk departs from the footnote in one respect: estimate $\alpha$ from the uncapped historic file, by rating bucket and year, rather than from a single 2010-era aggregate match. Portfolio trading has fattened the tail since then.
+
+### 22.2.3 Case Study: The One-Minute Rule That Died (2022–2025), and the Block Pilot That Never Lived (2019)
+
+*The approach from transparency.* FINRA proposed cutting the TRACE reporting outer limit from fifteen minutes to one in 2022 (Regulatory Notice 22-17). The formal filing, SR-FINRA-2024-004, followed in January 2024 and would "reduce the 15-minute TRACE reporting timeframe to one minute," with "exceptions for member firms with de minimis reporting activity and for manual trades." After an amendment, the SEC approved it in 2024 *(the approval order is dated in the autumn; check the exact date on the filing page)*. Then, on 2025-12-04, Regulatory Notice 25-17: "FINRA is not moving forward with its proposal to reduce the 15-minute TRACE reporting outer limit to one minute." The stated reason was that "firms raised additional concerns and questions in connection with aspects of the approved reduced reporting time regime," and the notice added the line every quant should frame: "While the Securities and Exchange Commission approved these amendments, they have not taken effect."
+
+*The approach from size.* In 2019, FINRA Regulatory Notice 19-12 sought comment on a pilot, recommended by the SEC's Fixed Income Market Structure Advisory Committee, that would have raised the caps to \$10mm (IG) and \$5mm (HY) while delaying dissemination of trades above the caps by 48 hours. Some commenters warned that more size transparency would make dealers "even more reluctant to position bonds." The pilot was not adopted; the caps in Notice 25-17 are still \$5mm and \$1mm.
+
+*What the model says happened.* Equation (22.6) says the one-minute rule taxed exactly one population: blocks unwound in an hour or two. The auto-ex RFQ engines that answer most tickets are riskless or near-riskless ($T_u \le \Delta$) and were indifferent. The block desks were not, and the manual-trade exception showed that FINRA knew it. The 2019 pilot attacked from the other side: more size information (a tax on the dealer) bought with a 48-hour delay (a subsidy sized to multi-day unwinds). Each proposal moved one parameter in the transparency advocates' favor and needed a compensating move in the block dealers' favor. Neither got one, and fifteen minutes and \$5mm/\$1mm survived.
+
+*How a systematic desk would have handled it.* Carry a regime flag for every rule from the day it is *proposed*, not just the day it takes effect, because quoting behavior can move on the approval. Price blocks with (22.6) under both regimes and keep the switch ready. And when the rule died, record the non-event: 2025-12-04 is the best placebo date in this book, a rule that was approved and never took effect. If your event study (§22.8) finds a liquidity effect on that date, your event study is broken.
+
+> **Poker Table.** Ines replays the cold open as a hand history. "We buy fifteen million. The print shows at minute fifteen as '5MM+ sell,' and the table assumes twelve and a half, not fifteen, so the cap just hid two and a half million of our size, worth about a basis point and a quarter of impact *(illustrative, at $\lambda = 0.5$bp per \$mm)*. By minute fifteen we've worked out an eighth of it. Markouts: flat at five minutes, down 4bp at thirty, down 6 at the close *(illustrative)*. Under a one-minute rule the thirty-minute markout comes at minute one, before we've sold anything. Same hand, worse position at the table. That's why the block desks folded the one-minute rule, and why nobody at this table will ever vote to lower the cap."
+
+> **Trend Watch: TRACE and adjacent reporting regimes as a table of structural breaks (Table 22.1).** *What changed:* the information set, about once a year. *Sources:* FINRA TRACE FactBook 2025; FINRA Regulatory Notices 22-12, 25-17, 26-16; SEC releases as noted; dates marked *approx.* rest on secondary sources.
+>
+> | Effective | Change | What breaks in your data |
+> | :--- | :--- | :--- |
+> | 2002-07 | TRACE dissemination begins, phased by size and rating | Pre-2006 samples overweight large, liquid bonds |
+> | 2006-01-09 | Immediate dissemination of all public TRACE-eligible corporates | Coverage break in any distressed liquidity series |
+> | 2017-07-10 | Treasuries reportable (regulatory use only) | Treasury data exist from here, but not publicly |
+> | 2022-02-14 | SBSR public dissemination of security-based swaps, including single-name CDS *(approx.; trade press)* | Single-name CDS prints become observable (§22.6) |
+> | 2022-09-01 | Covered depository institutions report Treasury trades | Treasury coverage jumps |
+> | 2023-05-15 | Portfolio-trade modifier mandatory (≥10 issues, single basket price) | PT prints separable; "price" of a PT line is not a bond-level price |
+> | 2024-03-25 | End-of-day dissemination of individual on-the-run nominal Treasury trades *(approx.; FINRA Rule 6750 materials)* | Public Treasury trade data begin |
+> | 2024-05-28 | T+1 settlement for corporates (§22.3) | Settlement-date fields shift by a day |
+> | 2025-12-04 | One-minute reporting abandoned (approved, never effective) | Nothing. Use it as a placebo |
+> | 2026-06-08 | Optional aggregate allocation reports (Rule 6730.08) for dual BD/IA firms | Print counts fall for the same economic volume |
+> | 2026-08-31 | Affiliate indicator extended to member affiliates, voluntary | Duplicate affiliate prints begin to be flagged |
+> | 2027-08-02 | Affiliate indicator mandatory | Volume series de-inflates; one June 2026 industry estimate put duplicate affiliate prints at up to 8% of HG TRACE volume *(approx.)* |
+>
+> *What it means for the desk:* a liquidity feature built on raw TRACE volume from 2020 to 2027 crosses at least four definitional breaks. Volume did not change on those dates; the meaning of a print did.
+
+> **Ways This Blows Up.** (1) *A liquidity model fit on 2020–2026 volume* straddles the PT modifier and the allocation-report change, so the fitted "trend in liquidity" is partly a trend in reporting conventions. (2) *Averaging capped sizes at the cap* understates IG block volume by a factor of $m = 2.5$ on the capped share; averaging them at \$12.5mm is right on average and wrong for every individual trade. (3) *Fitting $\alpha$ on the live feed* is impossible, since the live feed is censored by construction; use the historic file. (4) *PT prints as bond prices.* A portfolio-trade line carries a basket-level price allocated across bonds. Feed those prints to a bond-level fair-value model and it learns the dealer's allocation scheme. (5) *Setting `one_minute_rule = True` from the approval date* because the approval was in the news: the rule was approved and never took effect.
+
+### Specification for AI Implementation (TRACE regime layer)
+
+**The Spec You Hand the Robot.** *Vague version:* "clean TRACE and flag the regime changes." *What ROBO built:* a flag for every FINRA notice ever published, all of them set from the publication date, including a one-minute flag that switched on in 2024 and never switched off. *Precise version:* implement the block half-spread (22.6) with the positive-part guard, the censored-size impact and tail index (22.7), and a regime-flag layer driven by one dated table (`REGIME_DATES`) that every other chapter imports. Inputs: `trade_dt` timezone-aware (reject naive timestamps), `bond_id` (str, never a made-up CUSIP), `size_mm` as disseminated (\$mm), `side`, `price`, `rating_bucket` in {"IG", "HY"}. Flags compare the New York *calendar date* of the trade with the effective date. `one_minute_rule` is always False. Units are bp of price, \$mm, and minutes.
+
+```python
+def block_half_spread(lam, Q, delay, unwind_time, gamma, sigma, inferred_size=None):
+    """Zero-profit block half-spread, bp of price (eq. 22.6). lam: bp per $mm the market infers;
+    Q: true block size, $mm; delay, unwind_time: minutes; sigma: bp per sqrt(minute); gamma: per bp*$mm.
+    inferred_size: what the market believes Q is (defaults to Q; use the censored mean above the cap)."""
+    if Q <= 0 or unwind_time <= 0 or min(delay, lam, gamma, sigma) < 0:
+        raise ValueError("need Q > 0, unwind_time > 0, and non-negative delay, lam, gamma, sigma")
+    q_hat = Q if inferred_size is None else inferred_size
+    leak = max(0.0, 1.0 - delay / unwind_time)                 # positive-part guard
+    return lam * q_hat * leak + gamma * sigma**2 * Q * unwind_time / 6.0
+
+
+def pareto_alpha_from_imputed_mean(cap, imputed_mean):
+    """Tail index from the mean size above the cap (eq. 22.7): alpha = m / (m - 1), m = mean / cap."""
+    m = imputed_mean / cap
+    if m <= 1.0:
+        raise ValueError("imputed mean must exceed the cap")
+    return m / (m - 1.0)
+
+
+def censored_impact(lam, cap, alpha):
+    """Impact of any capped print: lam * alpha / (alpha - 1) * cap."""
+    if alpha <= 1.0:
+        raise ValueError("alpha must exceed 1 for a finite conditional mean")
+    return lam * alpha / (alpha - 1.0) * cap
+
+
+REGIME_DATES = {                      # New York calendar dates; imported by every later chapter
+    "sbsr_public": "2022-02-14",
+    "pt_modifier_live": "2023-05-15",
+    "t_plus_1": "2024-05-28",
+    "alloc_reports_live": "2026-06-08",
+    "affiliate_ind_voluntary": "2026-08-31",
+    "affiliate_ind_mandatory": "2027-08-02",
+}
+DISSEMINATION_CAP_MM = {"IG": 5.0, "HY": 1.0}
+
+
+def trace_regime_flags(trades):
+    """Add one boolean column per regime, plus size_capped and dup_risk. Rejects naive timestamps."""
+    need = {"trade_dt", "bond_id", "size_mm", "side", "price", "rating_bucket"}
+    missing = need - set(trades.columns)
+    if missing:
+        raise ValueError(f"missing columns: {sorted(missing)}")
+    if not isinstance(trades["trade_dt"].dtype, pd.DatetimeTZDtype):
+        raise ValueError("trade_dt must be timezone-aware (America/New_York)")
+    if not trades["rating_bucket"].isin(list(DISSEMINATION_CAP_MM)).all():
+        raise ValueError("rating_bucket must be 'IG' or 'HY'")
+    out = trades.copy()
+    ny_date = out["trade_dt"].dt.tz_convert("America/New_York").dt.tz_localize(None).dt.normalize()
+    for flag, d in REGIME_DATES.items():
+        out[flag] = ny_date >= pd.Timestamp(d)
+    out["one_minute_rule"] = False    # approved by the SEC in 2024, never effective: FINRA Notice 25-17
+    out["size_capped"] = out["size_mm"] >= out["rating_bucket"].map(DISSEMINATION_CAP_MM)
+    out["dup_risk"] = ~out["affiliate_ind_mandatory"]    # affiliate duplicates not reliably flagged yet
+    return out
+
+
+# Sanity checks
+lam, gam, sig = 0.5, 0.001, 2.5
+s15 = block_half_spread(lam, 15.0, 15.0, 120.0, gam, sig)
+s1 = block_half_spread(lam, 15.0, 1.0, 120.0, gam, sig)
+s48h = block_half_spread(lam, 15.0, 48 * 60.0, 120.0, gam, sig)
+assert abs(s15 - 8.4375) < 1e-9 and abs(s1 - 9.3125) < 1e-9          # worked example, 22.2.1
+assert abs(s48h - gam * sig**2 * 15.0 * 120.0 / 6.0) < 1e-12          # delay >= unwind: inventory only
+path = [block_half_spread(lam, 15.0, d, 120.0, gam, sig) for d in np.linspace(0.0, 240.0, 49)]
+assert np.all(np.diff(path) <= 1e-12)                                  # non-increasing in the delay
+
+alpha_ig = pareto_alpha_from_imputed_mean(5.0, 12.5)                   # Ben Dor p.364 imputed caps
+alpha_hy = pareto_alpha_from_imputed_mean(1.0, 4.0)
+assert abs(alpha_ig - 5.0 / 3.0) < 1e-12 and abs(alpha_hy - 4.0 / 3.0) < 1e-12
+assert abs(censored_impact(lam, 5.0, alpha_ig) - lam * 12.5) < 1e-12
+rng = np.random.default_rng(22)
+capped_ig = 5.0 * (1.0 + rng.pareto(alpha_ig, 200_000))               # classical Pareto above $5mm
+assert abs(np.median(capped_ig) - 5.0 * 2.0 ** (1.0 / alpha_ig)) < 0.05   # median ~ $7.6mm, mean $12.5mm
+
+trades = pd.DataFrame({
+    "trade_dt": pd.to_datetime(["2023-05-12 15:41", "2023-05-15 09:30", "2023-05-16 10:05"])
+                  .tz_localize("America/New_York"),
+    "bond_id": ["BBB_IND_2033", "B2_PKG_2029", "BBB_IND_2033"],
+    "size_mm": [2.0, 1.0, 5.0], "side": ["S", "B", "S"], "price": [97.25, 91.10, 96.90],
+    "rating_bucket": ["IG", "HY", "IG"],
+})
+flags = trace_regime_flags(trades)
+flag_cols = list(REGIME_DATES) + ["one_minute_rule"]
+assert [c for c in flag_cols if flags[c].iloc[0] != flags[c].iloc[-1]] == ["pt_modifier_live"]
+assert flags["size_capped"].tolist() == [False, True, True] and flags["dup_risk"].all()
+try:
+    trace_regime_flags(trades.assign(trade_dt=trades["trade_dt"].dt.tz_localize(None)))
+    raise AssertionError("naive timestamps must be rejected")
+except ValueError:
+    pass
+```
+
+*Further reading for this section:* Asquith, Covert and Pathak (2013/2019); Goldstein, Hotchkiss and Sirri (2007); FINRA Regulatory Notices 19-12, 22-12, 22-17, 25-17 and 26-16; FINRA Rule 6730 (links at the end of the chapter).
+
+## 22.3 T+1 and the Settlement Clock
+
+Time is the second thing a dealer sells, and the settlement cycle is the most literal clock in the business: the number of days between the handshake and the money. The SEC adopted T+1 on 2023-02-15, moving most broker-dealer securities transactions from two business days to one, and the industry switched on 2024-05-28, the Tuesday after Memorial Day. The rule also required same-day affirmation "as soon as technologically practicable and no later than the end of trade date," made investment advisers keep records of allocations, confirmations and affirmations, and required central matching service providers to adopt straight-through-processing policies. The SEC chair at the time said it "will reduce latency, lower risk, and promote efficiency." Treasuries were never part of this: as exempt securities they already settled T+1 by market convention.
+
+To a restructuring banker, a settlement cycle looks like plumbing. To a risk manager it is a horizon, and horizons are where square roots live.
+
+### 22.3.1 Derivation: why T+1 cut margin by about a quarter
+
+A clearing agency's margin covers the loss on a member's open positions between trade and close-out. If the member defaults, the clearing agency is exposed from the trade until settlement, and then for however long it takes to liquidate, so the horizon is $H = T_{\text{settle}} + T_{\text{co}}$ days. Under $\mathbb{P}$, with daily price changes independent and of volatility $\sigma$, the loss over $H$ days has standard deviation $\sigma\sqrt{H}$. A value-at-risk-style margin at a fixed confidence level scales the same way, $\text{IM} = z_{\alpha}\,\sigma\sqrt{H}\cdot|\text{position}|$. The confidence multiplier, the volatility, and the position all cancel in the ratio:
+
+$$
+\frac{\text{IM}_{T+1}}{\text{IM}_{T+2}} = \sqrt{\frac{1 + T_{\text{co}}}{2 + T_{\text{co}}}} =
+\begin{cases} 0.707 & (T_{\text{co}} = 0):\ -29\% \\ 0.816 & (T_{\text{co}} = 1):\ -18\% \end{cases}
+\tag{22.8}
+$$
+
+The two brackets correspond to whether liquidation is instantaneous or takes a day. Now the published numbers. According to the DTCC/SIFMA/ICI after-action reporting, NSCC's clearing fund fell from \$12.8bn under T+2 to \$9.1bn in an early snapshot (−29%) and to \$9.8bn on a three-month average basis (−23%) *(approx.; DTCC, 2024)*. Both land inside the bracket, with the more durable average close to the middle. A one-line derivation, a published number, and an honest fit rather than a cherry-pick: the empirical ratio is in the range the theory allows, and it would have been embarrassing if it weren't.
+
+*Error-prone spots.* NSCC margin has a volatility component plus add-ons (mark-to-market, liquidity, concentration, backtesting) that do not scale with $\sqrt{H}$, so apply (22.8) to the volatility component only. The square root also assumes independent daily changes. In a trending, autocorrelated market the horizon effect is closer to linear, so a T+1 saving computed in calm data overstates the saving in a crisis. The clock helps least when you need it most, a theme that will recur.
+
+### 22.3.2 Fails, and the identity hiding in the fails charge
+
+A shorter cycle shrinks the *window* of counterparty exposure and raises the *probability* of a fail, because there is less time to locate the bond. The cost of failing has a clean identity. A seller who fails to deliver does not receive the cash until it does, so it forgoes interest at roughly the short rate $r^{\text{ref}}$. The Treasury Market Practices Group (TMPG) fails charge adds $\max(0,\ 3\% - r^{\text{ref}})$ per year, accrued as $\text{Par}\times\text{rate}\times\text{days}/360$. Adding the two, and taking the reference rate as the seller's reinvestment rate:
+
+$$
+\text{cost of failing (per year)} = r^{\text{ref}} + \max\!\big(0,\ 3\% - r^{\text{ref}}\big) = \max\!\big(r^{\text{ref}},\ 3\%\big).
+\tag{22.9}
+$$
+
+The charge is a floor on the cost of failing. Above 3% it is zero and the market's own interest rate disciplines fails. Below 3%, without it, failing at zero rates is free, which is exactly what happened in 2008–2009. Check the TMPG's current definition of the reference rate before using (22.9) in production; the structure is what matters here.
+
+> **[SOURCE EXTRACTION]** *Veronesi_Fixed_Income_Securities p.57:* "Starting May 1, 2009, the Federal Reserve imposed a penalty charge of 3% over its Fed funds rate for failing to deliver the bonds in the repo transactions the Federal Reserve conducts daily in its open market operations." And: "on May 1, 2009, the repo rate for some Treasury securities that were on special became negative."
+>
+> **Annotation.** Our analysis: Veronesi's textbook records the moment a fails penalty changed the sign of an interest rate. With the policy rate near zero, a bond on special could not trade below a 0% repo rate as long as failing was free; once failing cost 3%, lenders of cash would accept a negative repo rate to get the bond rather than fail. (The Fed's own penalty in the quotation was set relative to the fed funds rate; the industry fails charge in (22.9) is stated as 3% *minus* a reference rate. Both put a floor under the cost of failing.) The 2026 desk departs from 2009 in the regime: with reference rates above 3% for most of 2023–2025 *(approx.)*, the charge has been near zero and fails have been disciplined by carry, not by penalty. The day rates fall back toward zero, the charge wakes up, specials can again go negative, and any short-financing model calibrated on 2023–2025 will be wrong in exactly that direction.
+
+The 2024 fail data matched the identity's prediction of "not much changes": the continuous net settlement (CNS) fail rate was 1.90% on the first T+1 day against a May 2024 T+2 average of 2.01%, and averaged 2.12% in July 2024 *(approx.; DTCC after-action reporting)*. The cost moved to the operations desk, which now affirms on trade date, and to the people whose other legs did not move: a non-US buyer funding in FX that settles on a T+2 spot convention must pre-fund or trade FX for same-day settlement; an ETF authorized participant matching creation baskets against bonds settling T+1 runs a funding gap whenever the fund's own cycle differs (Chapter 20); and a loan trade still settles in days to weeks, so a CLO that sells bonds to buy loans is short cash for the gap (Chapter 21). The EU and UK plan their move to T+1 for 2027-10-11 *(ESMA and FCA announcements; approx.)*, which will move the FX-mismatch problem from New York to London.
+
+### 22.3.3 Case Study: May 28–29, 2024, the Weekend the Clock Moved
+
+*Setup.* Monday 2024-05-27 was Memorial Day, so T+2 trades from Friday 2024-05-24 settled on Wednesday 2024-05-29 under the old cycle, and so did the first T+1 trades from Tuesday the 28th. Wednesday was therefore a "double settlement" day, with two days of trades settling together. Affirmation had been the industry's worry: only about 73% of transactions were affirmed by the DTC cutoff at end-January 2024.
+
+*What happened.* On 2024-05-29, 94.55% of transactions were affirmed by the 9:00 p.m. ET DTC cutoff. The CNS fail rate was 1.90% on the first T+1 day, against a May 2024 T+2 average of 2.01%. NSCC's clearing fund fell by \$3.0bn (23%) on a three-month average basis *(all approx.; DTCC/SIFMA/ICI after-action reporting, 2024)*. Nothing broke, and the most interesting number on the day was a rise of more than 20 points in affirmation rates in four months, achieved because there was a date. Theo recognized the mechanism at once: nothing gets a borrower's reporting package delivered on time like a covenant with a hard test date.
+
+*How a systematic desk would have handled it.* Flag `t_plus_1` from 2024-05-28 (Table 22.1) and shift every settlement-date field in the training data; a carry or accrual calculation that uses a settlement offset of two days after that date is off by one day of accrual on every trade. Expect lower clearing-fund calls for broker-dealer affiliates and slightly higher fail *probabilities* for hard-to-borrow shorts. And, most usefully, treat the double-settlement day as a known liquidity-supply shock in the event-study calendar (§22.8), not as noise.
+
+### Specification for AI Implementation (settlement clock)
+
+**The Spec You Hand the Robot.** *Vague version:* "estimate the margin saving from T+1." *What ROBO built:* the ratio $1/2$, because one day is half of two days, and a report claiming margin had halved. *Precise version:* implement (22.8) as `margin_ratio(t_old, t_new, closeout_days)` with the square root applied to the horizon *including* close-out, reject negative day counts, and check that DTCC's published ratios fall inside the $T_{\text{co}} \in \{0, 1\}$ bracket. Implement (22.9) returning both the total cost of failing and the charge, as annual decimals.
+
+```python
+from math import erf, exp, pi, sqrt
+
+
+def margin_ratio(t_old, t_new, closeout_days):
+    """IM_new / IM_old = sqrt((t_new + closeout) / (t_old + closeout)) for the volatility component (eq. 22.8)."""
+    if min(t_old, t_new, closeout_days) < 0 or t_old + closeout_days <= 0:
+        raise ValueError("day counts must be non-negative and the old horizon positive")
+    return sqrt((t_new + closeout_days) / (t_old + closeout_days))
+
+
+def fail_cost_annual(r_ref, floor=0.03):
+    """(total annual cost of failing, fails charge) per $1 of proceeds (eq. 22.9); decimals."""
+    charge = max(0.0, floor - r_ref)
+    return r_ref + charge, charge
+
+
+assert abs(margin_ratio(2, 1, 0) - 0.70711) < 1e-5 and abs(margin_ratio(2, 1, 1) - 0.81650) < 1e-5
+dtcc = {"snapshot": 9.1 / 12.8, "three_month_avg": 9.8 / 12.8}        # NSCC clearing fund, $bn (approx.)
+assert all(margin_ratio(2, 1, 0) <= v <= margin_ratio(2, 1, 1) for v in dtcc.values())
+assert fail_cost_annual(0.0) == (0.03, 0.03) and fail_cost_annual(0.045) == (0.045, 0.0)
+assert margin_ratio(2, 1, 0) != 0.5                                      # ROBO's linear answer
+```
+
+*Further reading for this section:* SEC press release 2023-29 (T+1 adoption); the DTCC/SIFMA/ICI T+1 after-action report (2024); TMPG best-practice materials on fails charges (title only).
+
+## 22.4 The Treasury Clearing Mandate: Netting, Margin, and the Price of a Very Large Market
+
+Why does a credit desk care about Treasury clearing? Three reasons, in increasing order of how much they cost when ignored. Every IG bond the desk owns is hedged with Treasuries or Treasury futures. Every bond the desk owns is financed in repo. And the same dealer balance sheet intermediates both, so when Treasury intermediation consumes the balance sheet, the corporate desk's rent goes up. March 2020 (the case study below) was a Treasury event that became a corporate bond event in about four days.
+
+**The rule.** The SEC adopted amendments to Rule 17ad-22 on 2023-12-13. Covered clearing agencies must require their members to clear (i) all Treasury repo and reverse repo the member enters into, with exceptions for state and local governments, other clearing organizations, and inter-affiliate trades; and (ii) cash Treasury purchases and sales where the member is an interdealer broker, or between a clearing member and a registered broker-dealer or government securities dealer. Central banks, sovereigns, international financial institutions, and natural persons are exempt. At adoption the SEC chair described the Treasury market as "\$26 trillion" and said that "70 to 80 percent of the Treasury funding market is uncleared, and at least 80 percent of the cash market is uncleared." On 2025-02-25 the SEC extended the compliance dates by a year, to 2026-12-31 for cash and 2027-06-30 for repo. Trade press and an FIA paper report SEC approval of CME Securities Clearing as a second Treasury clearing house in December 2025 and of ICE in early 2026 *(approx.; check the SEC orders)*; FICC remains the incumbent.
+
+"And done-away trades?" Theo asked, reading the Treasury Borrowing Advisory Committee's list of open issues.
+
+"If they've been done away with," said Kaz, "why are we still clearing them?"
+
+"Done-away means you execute with one dealer and clear through another," Theo said. "Like buying a car at one dealership and getting it serviced at a different one. Except the second one is allowed to say it's too busy."
+
+That is the access problem in one line. A mandate is only as good as the customer's ability to reach a clearing member who will take the trade on terms that do not depend on who executed it.
+
+### 22.4.1 Derivation: what multilateral netting buys, and when it stops
+
+Dealer $i$ faces $N - 1$ counterparties, with signed exposure $x_{ij}$ to counterparty $j$. Assume, under $\mathbb{P}$, $x_{ij} = m + \sigma_x z_{ij}$ with $z_{ij}$ i.i.d. standard normal: $m$ is a common directional component (everyone on the same side), and $\sigma_x$ the idiosyncratic scale. Bilaterally, the dealer's gross exposure is $G_i = \sum_{j \ne i}|x_{ij}|$. Novated to a central counterparty, the exposures net to a single position $|\sum_{j \ne i} x_{ij}|$. The **netting factor** is
+
+$$
+\phi(N) = \frac{\mathbb{E}\,\big|\sum_{j\ne i} x_{ij}\big|}{\mathbb{E}\,\sum_{j\ne i} |x_{ij}|}.
+$$
+
+*No direction ($m = 0$).* The sum of $N-1$ independent $N(0, \sigma_x^2)$ is $N(0, (N-1)\sigma_x^2)$, and $\mathbb{E}|Z| = \sqrt{2/\pi}$ for a standard normal, so
+
+$$
+\phi(N) = \frac{\sqrt{N-1}\,\sigma_x\sqrt{2/\pi}}{(N-1)\,\sigma_x\sqrt{2/\pi}} = \frac{1}{\sqrt{N-1}}, \qquad \phi(25) = 0.204 .
+\tag{22.10}
+$$
+
+With 25 symmetric counterparties, clearing shrinks the exposure to a fifth of its gross.
+
+*With direction ($m \ne 0$).* The numerator is now $\mathbb{E}|(N-1)m + \sqrt{N-1}\,\sigma_x Z| \approx (N-1)|m|$ for large $N$, while the denominator is $(N-1)\,\mathbb{E}|m + \sigma_x Z|$. The netting factor converges to a floor:
+
+$$
+\phi(N) \xrightarrow[N\to\infty]{} \phi_\infty = \frac{|m|}{\mathbb{E}|m + \sigma_x Z|},
+\qquad
+\mathbb{E}|m + \sigma_x Z| = \sigma_x\sqrt{\tfrac{2}{\pi}}\,e^{-m^2/2\sigma_x^2} + m\,\operatorname{erf}\!\Big(\frac{m}{\sigma_x\sqrt 2}\Big).
+\tag{22.11}
+$$
+
+For $m = \sigma_x$, $\phi_\infty = 0.857$: netting saves only 14%. **Netting stops helping exactly when the market is one-way**, which is the basis-trade case (every leveraged fund long cash Treasuries and short futures against the same dealers) and the March 2020 case (everyone selling). The balance sheet that clearing "creates" in calm markets disappears in the state of the world where it was supposed to help.
+
+A back-of-envelope calibration *(illustrative)*: DTCC reported that its Sponsored Service peaked at \$2.48trn on 2025-06-30 and provided "\$1.14 trillion in balance sheet capacity" *(approx.; DTCC press release)*. Read as a netting factor, that is $\phi \approx 1 - 1.14/2.48 = 0.54$, which in (22.11) corresponds to a directional component about half the idiosyncratic scale, plausible for a market where money funds lend and hedge funds borrow.
+
+**The mandate as a trade.** Balance sheet saved per dealer per year is $(1 - \phi)\,G\,\kappa_{\text{LR}}\,h$, using the rent of (22.1). The price is initial margin, funded at a spread $f$, plus the annual cost of the default-fund contribution, $\text{DF}$. The mandate pays when
+
+$$
+(1 - \phi)\,G\,\kappa_{\text{LR}}\,h \;>\; \text{IM}\cdot f + \text{DF}.
+\tag{22.12}
+$$
+
+The left side shrinks as the market turns directional; the right side grows, because IM is procyclical. Clearing converts counterparty risk into liquidity risk, and buys back balance sheet with netting, at a price that is lowest in calm markets and highest in stress. *Error-prone spots:* done-with and done-away trades may land in different netting sets; cross-margining between FICC and CME changes IM, not $\phi$; and sponsored repo already nets at the sponsor, which is why DTCC says it clears "nearly half" of the repo the mandate covers, and why the marginal gain from the mandate is smaller than the gross numbers suggest.
+
+### 22.4.2 Derivation: dealer capacity as a convex state variable
+
+Duffie, Fleming, Keane, Nelson, Shachar and Van Tassel (2023), *Dealer Capacity and U.S. Treasury Market Functionality* (NY Fed Staff Report 1070), measure dealer balance-sheet utilization $U_t \in [0,1]$ from weekly FR 2004 dealer-level positions (risk-adjusted gross fixed-income positions relative to a sample-record scale). They find that yield volatility explains most of the time variation in Treasury illiquidity, but that when utilization is high, "liquidity is much worse than predicted by yield volatility alone." A stylized hinge captures the shape *(our representation, not the paper's specification)*:
+
+$$
+\text{Illiq}_t = a + b\,\sigma^{y}_t + c\,\big(U_t - U^\ast\big)^+ + \epsilon_t .
+\tag{22.13}
+$$
+
+Two of their sentences pin down $c$ and $U^\ast$. "When dealer capacity utilization rises from 40% to 80%, Treasury illiquidity is estimated to increase by roughly three standard deviations beyond the level of illiquidity predicted by volatility," so if the kink lies below 40%, $c \times 0.4 = 3$ and $c = 7.5$ standard deviations per unit of utilization. "When dealer capacity utilization is 60%, Treasury illiquidity is predicted to be about two standard deviations above the level predicted by contemporaneous volatility," so $7.5\,(0.6 - U^\ast) = 2$ and $U^\ast = 1/3$, consistent with the assumption. On 2020-03-12 utilization hit its sample record of 96%, where the hinge predicts about 4.7 standard deviations of excess illiquidity. The paper reports the first principal component of Treasury illiquidity at 5.4 standard deviations above its mean that day, volatility included.
+
+For the desk, $U_t$ is a slow state variable, not a trade trigger: it is weekly and published with a lag. Proxy it with FR 2004 positions, FICC volumes, and your own RFQ hit-rate decay, and make the liquidity-cost model of Chapter 19 convex in it. Rent (22.1) is the price of balance sheet when the balance sheet has room. The hinge is the price when it doesn't.
+
+### 22.4.3 Case Study: The March 2020 Dash for Cash
+
+*The setup.* Foreign official holders, leveraged basis traders, and mutual funds meeting redemptions all sold Treasuries in the same two weeks. In the language of (22.11), $m$ went from small to enormous: every counterparty was on the same side.
+
+*The price path.* On 2020-03-12, dealer utilization reached its sample record of 96% and Treasury illiquidity hit 5.4 standard deviations above its mean (Duffie et al., 2023). The safest asset in the world became expensive to sell, and because IG bonds are hedged and financed through the same dealer balance sheets, corporate bond markets dislocated in the days that followed; corporate bond ETFs traded at deep discounts to NAV (Chapter 20).
+
+*The policy response, as a sequence of price changes.* On 2020-03-23 the Federal Reserve established the Secondary Market Corporate Credit Facility (SMCCF), which bought US-listed corporate bond ETFs and individual bonds and "ceased purchasing eligible assets on December 31, 2020." On 2020-04-01 the Fed issued an interim final rule excluding "U.S. Treasury securities and deposits at Federal Reserve Banks" from the holding-company SLR "until March 31, 2021," which it said would "temporarily decrease tier 1 capital requirements of holding companies by approximately 2 percent in aggregate," because "liquidity conditions in Treasury markets have deteriorated rapidly." The exclusion expired on schedule. In the notation of §22.1, the Fed set $\kappa_{\text{LR}}$ to zero for Treasuries and reserves, collapsing the rent term for exactly the asset where (22.4) said rent was the whole business. It was the first time the leverage ratio was used as a market-structure tool, and the November 2025 eSLR rule (§22.5) made a milder version permanent.
+
+*How a systematic desk would have flagged it.* Three slow signals were visible before 2020-03-12: rising Treasury volatility, rising dealer positions in the FR 2004 data, and collapsing RFQ hit rates on the desk's own Treasury and IG bids. Fed into (22.13), they put the desk on the steep side of the hinge. The trade was not a directional bet but a sizing decision: halve block sizes, widen block quotes by the convex term, and stop treating the ETF discount as an arbitrage until the balance sheet that would arbitrage it reappeared. The facilities then re-opened the warehouse. The desk that had the regime table flagged 2020-03-23 and 2020-04-01 as structural breaks, and did not train its post-crisis liquidity model on a period when the central bank was the marginal buyer.
+
+> **Trend Watch: Treasury clearing volumes and the compliance path, 2023–2026.** *What changed:* central clearing of Treasuries went from a dealer convenience to a legal requirement with a moving date. *Path:* adopted 2023-12-13 (cash 2025-12-31, repo 2026-06-30) → extended 2025-02-25 (cash 2026-12-31, repo 2027-06-30; margin separation enforced from 2025-09-30) → second and third clearing houses approved, CME in December 2025 and ICE in early 2026 *(approx.)* → no further delay found as of October 2026 *(check before relying on it)*. *How big:* FICC's Government Securities Division cleared a peak of \$11.8trn on 2025-06-30 (prior peak \$11.4trn on 2025-04-09), and Sponsored Service activity hit a record \$2.48trn the same day *(approx.; DTCC press releases)*. Money-market-fund FICC-cleared reverse repo rose by \$132bn (11%) to \$1.3trn in June 2026 *(approx.; OFR data via trade press)*. *What it means for the desk:* repo financing of the bond book is migrating to cleared, margined, netted structures, so your financing cost becomes a function of IM and the netting set, not just a repo rate. Model the compliance dates as structural breaks, and give each one a placebo twin in case it slips again.
+
+### Specification for AI Implementation (netting and capacity)
+
+**The Spec You Hand the Robot.** *Vague version:* "simulate how much clearing saves." *What ROBO built:* a simulation with $N = 2$, where netting saves nothing and ROBO recommended against clearing. *Precise version:* Monte Carlo the netting factor for $N$ counterparties with a common directional component $m$ and idiosyncratic scale $\sigma_x$; return the simulated factor, the no-direction theory $1/\sqrt{N-1}$, and the large-$N$ floor (22.11). Provide a bisection that maps an observed netting factor to the implied $m$; implement (22.12); and calibrate the hinge (22.13) from two published sentences. Seeded; at least 1,000 simulations; reject $N < 2$.
+
+```python
+def folded_normal_mean(m, s=1.0):
+    """E|m + s Z| for standard normal Z (eq. 22.11)."""
+    return s * sqrt(2.0 / pi) * exp(-m * m / (2.0 * s * s)) + m * erf(m / (s * sqrt(2.0)))
+
+
+def netting_factor_mc(n_dealers, n_sims, seed, common_component=0.0, scale=1.0):
+    if n_dealers < 2 or n_sims < 1000 or scale <= 0:
+        raise ValueError("need n_dealers >= 2, n_sims >= 1000, scale > 0")
+    rng = np.random.default_rng(seed)
+    x = common_component + scale * rng.standard_normal((n_sims, n_dealers - 1))
+    mc = np.abs(x.sum(axis=1)).mean() / np.abs(x).sum(axis=1).mean()
+    m = abs(common_component)
+    return {"mc": float(mc), "theory": 1.0 / sqrt(n_dealers - 1),
+            "directional_floor": m / folded_normal_mean(m, scale)}
+
+
+def implied_common_component(phi_target, scale=1.0, lo=1e-9, hi=50.0, tol=1e-12):
+    """Directional component m at which the large-N floor equals phi_target (bisection; floor rises in m)."""
+    if not 0.0 < phi_target < 1.0:
+        raise ValueError("phi_target must lie in (0, 1)")
+    f = lambda m: m / folded_normal_mean(m, scale) - phi_target
+    for _ in range(200):
+        mid = 0.5 * (lo + hi)
+        lo, hi = (lo, mid) if f(lo) * f(mid) <= 0 else (mid, hi)
+        if hi - lo < tol:
+            break
+    return 0.5 * (lo + hi)
+
+
+def mandate_net_benefit(gross, phi, kappa_lr, hurdle, im, funding_spread, default_fund_cost=0.0):
+    """Left minus right side of eq. 22.12, per year, in the units of gross (e.g. $bn)."""
+    if not 0.0 <= phi <= 1.0:
+        raise ValueError("phi must lie in [0, 1]")
+    return (1.0 - phi) * gross * kappa_lr * hurdle - (im * funding_spread + default_fund_cost)
+
+
+def capacity_hinge(u_lo=0.4, u_hi=0.8, delta_sd=3.0, u_mid=0.6, level_sd=2.0):
+    """Calibrate c and U* in eq. 22.13 from two statements in Duffie et al. (2023)."""
+    c = delta_sd / (u_hi - u_lo)            # valid only if the kink lies below u_lo
+    u_star = u_mid - level_sd / c
+    if u_star > u_lo:
+        raise ValueError("kink above u_lo: the two-point calibration is invalid")
+    return c, u_star
+
+
+nf = netting_factor_mc(25, 20_000, seed=7)
+assert abs(nf["theory"] - 0.2041) < 1e-4 and abs(nf["mc"] / nf["theory"] - 1.0) < 0.02
+nd = netting_factor_mc(25, 20_000, seed=7, common_component=1.0)
+assert abs(nd["directional_floor"] - 0.857) < 1e-3 and abs(nd["mc"] - nd["directional_floor"]) < 0.01
+m_implied = implied_common_component(1.0 - 1.14 / 2.48)                 # DTCC sponsored figures (approx.)
+assert 0.4 < m_implied < 0.6
+calm = mandate_net_benefit(100.0, 0.54, 0.05, 0.12, im=2.0, funding_spread=0.005, default_fund_cost=0.02)
+one_way = mandate_net_benefit(100.0, 0.857, 0.05, 0.12, im=4.0, funding_spread=0.01, default_fund_cost=0.02)
+assert calm > one_way                                                     # netting fades, IM rises
+c_h, u_star = capacity_hinge()
+assert abs(c_h - 7.5) < 1e-12 and abs(u_star - 1.0 / 3.0) < 1e-12
+assert abs(c_h * max(0.96 - u_star, 0.0) - 4.70) < 0.01                  # 2020-03-12, excess over volatility
+```
+
+*Further reading for this section:* SEC press release 2023-247 (clearing mandate); Duffie et al. (2023), NY Fed Staff Report 1070; Duffie (2020), *Still the World's Safe Haven?* (Hutchins Center); Federal Reserve releases of 2020-03-23 (SMCCF) and 2020-04-01 (SLR exclusion).

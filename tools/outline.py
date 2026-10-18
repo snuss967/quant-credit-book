@@ -18,9 +18,10 @@ import re
 HEADING = re.compile(r"^(#{1,4})\s+(.*)")
 
 
-def digest(path, full_rx, max_words):
+def digest(path, full_rx, max_words, intro=0):
     lines = open(path, encoding="utf-8").read().splitlines()
     out, in_code, keep, kept_words = [f"\n==== {os.path.basename(path)} ({sum(len(l.split()) for l in lines):,} words)"], False, False, 0
+    keep, kept_words = (True, max_words - intro) if intro else (False, 0)  # keep the opening (cold open) up to `intro` words
     for line in lines:
         if line.lstrip().startswith("```"):
             in_code = not in_code
@@ -49,10 +50,11 @@ def main():
     ap.add_argument("--full", help="regex of ##-level headings to include in full")
     ap.add_argument("--max-words", type=int, default=600)
     ap.add_argument("--out")
+    ap.add_argument("--intro", type=int, default=0, help="also keep the first N words before the first ## heading")
     args = ap.parse_args()
     full_rx = re.compile(args.full, re.I) if args.full else None
     files = sorted({p for pat in args.paths for p in glob.glob(pat)})
-    text = "\n".join(digest(p, full_rx, args.max_words) for p in files)
+    text = "\n".join(digest(p, full_rx, args.max_words, args.intro) for p in files)
     if args.out:
         os.makedirs(os.path.dirname(args.out), exist_ok=True)
         open(args.out, "w", encoding="utf-8").write(text + "\n")

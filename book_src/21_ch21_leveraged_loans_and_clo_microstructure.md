@@ -303,11 +303,11 @@ FSPI is the expected fraction of loan $i$ that constrained CLOs will sell. It is
 
 **March 2020.** The S&P/LSTA index's weighted-average bid fell from 95.18 on 29 February to 76.23 on 23 March. March's return was −12.4%, second only to October 2008's −13.2%. The distress ratio peaked at 57%. On 19 March the LSTA reported record volumes and bid-ask spreads that had "widened beyond 300 basis points" *(S&P Global LCD 1Q20 review; LSTA)*. The index rebounded to 82.9 by 31 March. Then the downgrades arrived, and the cliff did the rest. BSL CLO exposure to CCC-range companies peaked at 12.31% and the average junior OC cushion fell to 1.13% *(S&P Global Ratings, 28 Apr 2023)*. Elkamhi and Nozawa's 2020 downgrade-week price impact was 4.41%, more than three times the 2010–19 average. A systematic desk running FSPI in April 2020 would have seen pressure concentrated in recently downgraded, CLO-heavy names. By (21.6), those were exactly the highest-priced CCCs. The trade was to buy them from the forced sellers and hold through the reversal, sized against the risk that the downgrades kept coming.
 
-**2022–2023: one deal, autopsied.** An April 2023 Academy Securities note counted 42 CLO deals failing their junior OC test, based on trustee reports. Cushions ranged from −3 bp (SRANC 2014-2A, just failing class E) to −104.7 bp (HLA 2012-1A, failing class C since August 2022) *(Academy Securities, "OC Triggers," 4 Apr 2023)*. Take ZAIS6 2017-1A. Its required OC ratios ran from 122.6% (class A/B) to 103.7% (class E). The class E ratio was 103.56%, a failure by 14 bp. The haircuts were: defaulted −\$13.5mm, deferring −\$0.12mm, discount zero, and excess CCC −\$5.0mm, for a total of 5.72% of aggregate principal. The notes were A-1-R \$146.6mm, A-2 \$25mm, B-R \$45mm, C-R \$30mm, D \$25mm and E \$25mm, so \$296.6mm in total. Now do the arithmetic the note invites (ours). A class E ratio of 103.56% implies an ACPA of about \$307.2mm. Total haircuts of about \$18.6mm at 5.72% imply aggregate principal of about \$325.5mm. Without haircuts the class E ratio would be about 109.7%, a six-point cushion. **The par was there. The option book failed the test.** The CCC excess alone was worth about 1.7 points of class E OC, and without it the deal would have passed at about 105.2%. ZCCP 2019-1A, another deal in the note, breached class E in February 2023 and cured the following month through cash diversion, the waterfall working as Schmid described in 2003.
+**2022–2023: one deal, autopsied.** An April 2023 Academy Securities note counted 42 CLO deals failing their junior OC test, based on trustee reports. Cushions ranged from −3 bp (SRANC 2014-2A, just failing class E) to −104.7 bp (HLA 2012-1A, failing class C since August 2022) *(Academy Securities, "OC Triggers," 4 Apr 2023)*. Take ZAIS6 2017-1A. Its required OC ratios ran from 122.6% (class A/B) to 103.7% (class E). The class E ratio was 103.56%, a failure by 14 bp. The haircuts were: defaulted −\$13.5mm, deferring −\$0.12mm, discount zero, and excess CCC −\$5.0mm, for a total of 5.72% of aggregate principal. The notes were A-1-R \$146.6mm, A-2 \$25mm, B-R \$45mm, C-R \$30mm, D \$25mm and E \$25mm, so \$296.6mm in total. Now do the arithmetic the note invites (ours). A class E ratio of 103.56% implies an ACPA of about \$307.2mm. Total haircuts of about \$18.6mm at 5.72% imply aggregate principal of about \$325.5mm. Without haircuts the class E ratio would be about 109.7%, a six-point cushion. **The par was there. The option book failed the test.** The CCC excess alone was worth about 1.7 points of class E OC, and without it the deal would have passed at about 105.2%. ZCCP 2019-1A, another deal in the note, breached class E in February 2023 and cured the following month through cash diversion: the waterfall working exactly as Schmid's p.175 describes it.
 
 ### Specification for AI Implementation
 
-**The Spec You Hand the Robot (OC engine).** *What ROBO built from the vague version ("cure the OC test"):* it sold the entire CCC bucket, cheapest first, because "cheapest" sounded like "least valuable." It realized every haircut as a loss, burned \$4mm of par, and left the junior test exactly where it was. By (21.6) that is the correct result for that instruction. The precise spec:
+**The Spec You Hand the Robot (OC engine).** *What ROBO built from the vague version ("cure the OC test"):* it sold the entire CCC bucket, cheapest first, because "cheapest" sounded like "least valuable." By (21.6) the first sales were OC-neutral: they turned haircuts into realized losses. Every sale after the bucket dropped below its limit simply burned par. On the synthetic deal below, ROBO took about \$10mm off the numerator and about two points off the junior OC ratio it had been asked to improve. It did exactly what it was told. The precise spec:
 
 - **Inputs.** `pool`: one row per loan, with `par` (\$mm, ≥0), `price` (fraction of par, in (0, 1.2]), `is_ccc`, `is_default`, `agency_rec` (fraction), `is_discount`, `purchase_px` (fraction). `balances`: (K,) note balances, senior to junior, \$mm. `triggers`: (K,) required OC ratios as decimals. `cash`: principal cash, \$mm. `ccc_limit`: decimal (default 0.075).
 - **Outputs.** ACPA and its three haircuts; CCC share, excess and marginal price $p^{\ast}$; OC ratios and cushions per class; for each candidate sale, $\Delta$ACPA from an exact recompute, never from the linearization.
@@ -427,7 +427,7 @@ assert abs(res["p_marg"] - pool.loc[pool.is_ccc, "price"].nsmallest(3).max()) < 
 under = pool.copy()
 under.loc[under.index[:5], "is_ccc"] = False             # CCC share about 6.5%
 assert acpa(under)["h_ccc"] == 0.0
-j = under.index[(~under.is_ccc) & (~under.is_default) & (~under.is_discount)][-1]
+j = under.index[((~under.is_ccc) & (~under.is_default) & (~under.is_discount)).to_numpy()][-1]
 under_dg = under.copy()
 under_dg.loc[j, "is_ccc"] = True
 assert acpa(under_dg)["h_ccc"] == 0.0                    # flat side of the cliff
@@ -502,3 +502,257 @@ print(f"FSPI median {np.median(f_now):.3f} -> stressed {np.median(f_stress):.3f}
 - **Academic Papers.** Elkamhi, R. and Nozawa, Y. (2022), "Fire-Sale Risk in the Leveraged Loan Market," *Journal of Financial Economics* 146(3), 1120–1147: https://ideas.repec.org/a/eee/jfinec/v146y2022i3p1120-1147.html · Kundu, S. (2023), "The Externalities of Fire Sales: Evidence from Collateralized Loan Obligations," ESRB Working Paper No. 141: https://www.esrb.europa.eu/pub/pdf/wp/esrb.wp.141.en.pdf · Loumioti, M. and Vasvari, F. (2019), "Portfolio Performance Manipulation in Collateralized Loan Obligations," *Journal of Accounting and Economics* 67(2–3), 438–462 (accepted manuscript: https://lbsresearch.london.edu/id/eprint/1014) · Cordell, Roberts and Schwert, "CLO Performance" (*Journal of Finance*, 2023; check volume and pages).
 - **Practitioner Writing.** Creditflux CLO Guide, ch. 6, "Understanding the Tests": https://cloguide.creditflux.com/6-understanding-the-tests · Academy Securities, "OC Triggers: Subtle Thresholds Come to the Fore as Collateral Distress Builds Up" (Apr 2023) · S&P Global Ratings, "Scenario Analysis: How Rising U.S. BSL CLO 'CCC' Baskets Could Affect Junior Overcollateralization Test Cushions" (28 Apr 2023).
 - **Data & Code.** CLO trustee reports via commercial vendors (CLO-i/Creditflux, Intex, Octus); TRACE for CLO tranches; Elkamhi–Nozawa replication package (Mendeley Data).
+
+## 21.5 Repricing Waves: The Borrower Exercises
+
+"Upside in a loan," Ines said, "is a chip the borrower can take back whenever it likes, as long as it waits six months." A repricing is an amendment, not new money. The arranger proposes a lower margin, and often the removal of the legacy CSA. Lenders who consent keep the loan at the new coupon. Lenders who object are taken out at par, or at 101 inside the soft call. For a CLO the loan simply starts paying less, and by (21.3) the equity pays for it at 11×. In January 2025 banks were pitching repricings timed to soft-call expiries and offering to run them for free *(Bloomberg, 30 Jan 2025)*. The fee was not in the arranger fee. It was in the next deal.
+
+### 21.5.1 Derivation: the price of a loan under a repricing hazard
+
+Keep (21.2), but let the borrower reprice at a random time with intensity $h_t$ (per year) whenever the call is in the money ($m > s$). We use $h$ rather than $\lambda$ because $\lambda$ is reserved for default intensity in this book. At repricing the lender either receives par or keeps a loan paying the market margin $s$. Both are worth par, so after repricing nothing is left above par. Before repricing the lender earns the excess margin $m - s$. At time $u$ that excess is received with probability $e^{-hu}$ (no repricing yet) and is discounted by $e^{-yu}$. So, with constant $h$:
+
+$$
+P \;=\; 100\left[\,1 + (m - s)\int_0^T e^{-(y + h)u}\,du\right] \;=\; 100\left[\,1 + (m-s)\,a(T;\,y + h)\right], \qquad m > s. \tag{21.7}
+$$
+
+For $m \le s$ the call is out of the money and (21.2) applies with $a(T; y)$. Three consequences follow.
+
+**The ceiling.** When $(y+h)T$ is large, $a(T;y+h) \approx 1/(y+h)$ and the premium over par is about $100(m - s)/(y + h)$. Take $m - s = 50$ bp, $y = 6.65\%$ and $T = 3$. With $h = 0$ (soft call in force, or no one bothers) the loan is worth 101.36. With $h = 1$ (a repricing expected within about a year) it is worth 100.45. With $h = 4$ (the window is open and arrangers are calling) it is worth 100.12. *That* is where the 100.5 ceiling comes from: it is the price at which the market expects a repricing within roughly a year. And 101 is the cap during the soft call, because the borrower would have to pay that point to exercise.
+
+**Negative convexity, measured.** At par, the one-sided spread durations are
+
+$$
+D^{\text{spr}}_{\uparrow s} = a(T; y) \approx 2.72, \qquad D^{\text{spr}}_{\downarrow s} = a(T; y + h) \approx 0.25 \quad (h = 4).
+$$
+
+The loan loses 2.7 points per 100 bp of widening and gains about a quarter of a point per 100 bp of tightening. It is the bond you would design if you wanted to sell someone convexity and keep the premium.
+
+**Expected carry loss.** Over a horizon $H$, the margin lost at time $u$ is $(m-s)$ if repricing has happened by $u$, which has probability $1 - e^{-hu}$. Averaging over $[0, H]$ gives the annualized expected give-up:
+
+$$
+\mathbb{E}[\text{carry lost}] \;=\; (m - s)\left[1 - \frac{1 - e^{-hH}}{hH}\right]. \tag{21.8}
+$$
+
+With $h = 4$ and $H = 1$, about 75% of the 50 bp excess margin, roughly 38 bp, is expected to disappear within the year. Quoted carry on an above-par loan in an open window is mostly fiction.
+
+**The hazard itself.** Model repricing as a discrete-time hazard on loan-months. Fit a logit on PitchBook LCD repricing records with these features: price minus par (points); a soft-call-expired indicator and months since expiry; the market's share of loans bid above par, which is the window state; rating (BBs reprice first: 11 of 15 deals in May 2026 month to date were BB, per PitchBook LCD); sponsor ownership; and arranger activity. Treat margin $m$ and CSA as *separate* state variables, because a repricing can cut both: $\Delta c = \Delta m + \text{CSA}$. The CLO equity's exposure follows from (21.3). If a fraction $\varphi$ of the pool reprices by $\delta$, then $\Delta y_E = -\varphi\,\delta / w_E$. In 2025 roughly half the market repriced, but the average nominal coupon fell only about 20 bp *(Loomis Sayles, Q4 2025)*, so the equity lost about $0.20\%/0.09 \approx 2.2$ points of yield a year. Guggenheim estimated that the 2024 repricings cut contractual spreads by 53 bp each, and CreditSights put the typical cut at 40–50 bp.
+
+> **Trend Watch: the repricing machine, 2024–2026.**
+> *2024.* Repricing volume **\$756.8bn**. US institutional loan volume including repricings and extensions was "almost \$1.4 trillion," a record by far (William Blair, *Leveraged Finance Newsletter*, citing PitchBook LCD). About 62% of loans traded above par at year-end (Guggenheim, citing LCD/BofA).
+> *Jan 2025.* A record \$215bn month, with repricings 52% of year-to-date volume (Matrix CMG, citing LCD). At its peak the cycle averaged \$52.5bn a month and touched 632 borrowers, 57% of index borrowers (PitchBook LCD, May 2026).
+> *Q2 2025.* Repricing fell to a multiyear low of \$28.5bn after the tariff shock. The share of trading activity priced above par was 8% in April and 37% in June (LSTA).
+> *FY2025.* Repricing **\$503.6bn**, second only to 2024, and refinancing \$191.8bn. B− new-issue spreads fell to 354 bp in Q4, "the lowest level since the Global Financial Crisis" (William Blair Q4-2025). 58% of loans were bid above par at year-end (Loomis Sayles).
+> *2026.* \$108bn of repricings in January. Then February–April produced only \$11.8bn as a software sell-off froze the window. The share of BB− loans at or above par went 13% (end-March) → 59% (end-April) → 76% (11 May) (PitchBook LCD via Yahoo Finance, 15 May 2026).
+> *What it means.* Repricing is a regime with two states, window open and window shut, and the share of the index above par is a good proxy for which state you are in. A carry model that ignores the state is wrong by up to 75% of the excess margin, per (21.8).
+
+### Case Study: The January–April 2025 Round Trip, and the 2026 Replay
+
+**The open window.** In December 2024 about 62% of loans were above par. January 2025 set a monthly volume record of \$215bn, about half of it repricings, and Octaura's secondary volume rose 83% month on month. In the model's terms, the window share was high, $h$ was large for every loan past its soft call, and (21.7) pinned above-par loans to roughly 100.1–100.5. Quoted carry overstated realized carry by most of the excess margin.
+
+**The window shuts.** Activity "came to a halt in March." Octaura's March inquiry was 70% customer selling. April's tariff shock produced \$109.2bn of secondary volume, the second-busiest month on record after March 2020's \$119.3bn. Octaura saw loan prices fall 1.85 points in the first week with the VIX in the mid-40s, and the index's daily average bid "fluctuated 3.5% from crest to trough" *(LSTA; Octaura)*. The above-par share of trading fell to 8%. Now look at (21.7) from the other side. Once prices fall below par the call goes out of the money, the loan gets its full 2.7 years of spread duration back, and the excess-carry give-up (21.8) drops to zero. A buyer in mid-April bought a floater that was temporarily *long* convexity relative to its January self. It earned the recovery at full duration and kept its coupon until the window reopened.
+
+**The window reopens.** By June the above-par share was back to 37%, refinancing and repricing activity was a four-month high of \$45bn, and the index average bid recovered to 97.6 by 24 July, a "V-shaped recovery" *(LSTA 2Q25 summary)*. A desk running the hazard model would have cut its expected carry loss sharply in April, added duration to performing B2/B loans that forced sellers were dumping (FSPI was also elevated), and handed the convexity back in June as the window state turned.
+
+**The 2026 replay.** January 2026 repriced \$108bn. Then the "SaaS-pocalypse" arrived: AI-disruption fears hit the software sector, which is more than 5% of the loan index *(Loomis Sayles)* and more than 30% of many middle-market CLOs *(Octus; CHECK)*. February–April repricing was only \$11.8bn, the index average bid hit a low of 94.17 in early March, and new-issue spreads were about 50 bp wider than in January. By 11 May, 76% of BB− loans were back at or above par and \$47.2bn of repricings were lined up *(PitchBook LCD via Yahoo Finance)*. The Fed's May 2026 *Financial Stability Report* noted secondary spreads that "increased moderately, reflecting a high concentration of leveraged loan borrowers in the software industry." It was the same machine with a sector-shaped shock, and the same two signals mattered: the window state for repricing, and FSPI for forced sales of downgraded software names.
+
+### Specification for AI Implementation (repricing engine)
+
+*What ROBO built from "price the loan with its call":* a Black-style option on the loan with a strike of 100 and a volatility taken from the bond market. The result priced every loan at 99.7, including ones whose soft call had three months left to run. The precise spec: price = (21.7) when $m > s$ and (21.2) otherwise. The hazard is annualized from a monthly logit with documented features. Margin and CSA are separate. Spread durations are reported one-sided. Asserts check par at $m = s$, the ceiling ordering, and the duration asymmetry.
+
+```python
+# Block 3: the loan as a capped floater with a repricing hazard; CLO equity gearing.
+def annuity(T, rate):
+    """a(T; rate) = integral_0^T exp(-rate u) du, stable as rate -> 0."""
+    rate = np.asarray(rate, dtype=float)
+    small = np.abs(rate * T) < 1e-8
+    safe = np.where(small, 1.0, rate)
+    return np.where(small, T - 0.5 * rate * T**2, (1.0 - np.exp(-safe * T)) / safe)
+
+
+def loan_price(m, s, base, T=3.0, h=0.0):
+    """Price per 100 of a floater paying base + m when the market requires s; eqs (21.2)/(21.7).
+    h is the repricing hazard per year, active only while the call is in the money (m > s)."""
+    m, s = np.asarray(m, dtype=float), np.asarray(s, dtype=float)
+    h_eff = np.where(m > s, h, 0.0)
+    return 100.0 * (1.0 + (m - s) * annuity(T, base + s + h_eff))
+
+
+def spread_duration(m, s, base, h, side, ds=1e-6):
+    """One-sided spread duration in years: side=+1 widening, side=-1 tightening."""
+    p0 = loan_price(m, s, base, h=h)
+    p1 = loan_price(m, s + side * ds, base, h=h)
+    return float(-(p1 - p0) / (side * ds) / p0)
+
+
+THETA = {"const": -3.0, "px_minus_par": 1.2, "softcall_expired": 1.5,
+         "above_par_share": 4.0, "is_bb": 0.5}            # illustrative; fit on loan-months
+
+
+def monthly_reprice_prob(px, softcall_expired, above_par_share, is_bb, theta=THETA):
+    """Discrete-time hazard: P(reprice this month | features). px in points."""
+    z = (theta["const"] + theta["px_minus_par"] * (np.asarray(px, float) - 100.0)
+         + theta["softcall_expired"] * np.asarray(softcall_expired, float)
+         + theta["above_par_share"] * (np.asarray(above_par_share, float) - 0.5)
+         + theta["is_bb"] * np.asarray(is_bb, float))
+    return 1.0 / (1.0 + np.exp(-z))
+
+
+def annual_hazard(q_month):
+    """Monthly event probability -> continuous annual hazard h."""
+    q = np.clip(np.asarray(q_month, float), 0.0, 1.0 - 1e-12)
+    return -12.0 * np.log1p(-q)
+
+
+def expected_carry_loss(m, s, h, H=1.0):
+    """Equation (21.8): annualized expected margin given up over horizon H (decimals)."""
+    gap = np.maximum(np.asarray(m, float) - np.asarray(s, float), 0.0)
+    hH = np.asarray(h, float) * H
+    small = hH < 1e-8
+    frac = np.where(small, 0.5 * hH, 1.0 - (1.0 - np.exp(-hH)) / np.where(small, 1.0, hH))
+    return gap * frac
+
+
+def clo_equity_yield(was, base, w, s, fees, el):
+    """Equation (21.3): equity cash yield per year; w, s are liability weights and spreads."""
+    w, s = np.asarray(w, float), np.asarray(s, float)
+    w_e = 1.0 - w.sum()
+    if w_e <= 0.0:
+        raise ValueError("liabilities exceed collateral par")
+    return base + (was - w @ s - fees - el) / w_e
+
+
+B0 = 0.0365                                               # base rate (illustrative)
+assert abs(float(loan_price(0.0325, 0.0325, B0)) - 100.0) < 1e-12
+p_open, p_year, p_shut = (float(loan_price(0.035, 0.030, B0, h=hh)) for hh in (4.0, 1.0, 0.0))
+assert 100.0 < p_open < p_year < 100.5 < p_shut           # the ceiling, eq. (21.7)
+d_wide = spread_duration(0.03, 0.03, B0, h=4.0, side=+1)
+d_tight = spread_duration(0.03, 0.03, B0, h=4.0, side=-1)
+assert d_wide > 2.5 and d_tight < 0.3 and d_wide / d_tight > 8.0   # negative convexity
+
+q_hot = monthly_reprice_prob(100.5, 1, 0.6, 0)
+q_cold = monthly_reprice_prob(98.0, 0, 0.1, 0)
+assert q_hot > 0.3 and q_cold < 0.01
+loss = float(expected_carry_loss(0.035, 0.030, 4.0))
+assert abs(loss - 0.005 * (1.0 - (1.0 - np.exp(-4.0)) / 4.0)) < 1e-12 and loss < 0.005
+assert float(expected_carry_loss(0.030, 0.035, 4.0)) == 0.0
+
+W_LIAB = np.array([0.62, 0.11, 0.08, 0.05, 0.05])         # AAA..BB, fraction of collateral
+S_LIAB = np.array([0.0130, 0.0175, 0.0210, 0.0310, 0.0575])  # illustrative 2025 spreads
+y_before = clo_equity_yield(0.0319, B0, W_LIAB, S_LIAB, 0.0045, 0.0075)
+y_after = clo_equity_yield(0.0319 - 0.5 * 0.0045, B0, W_LIAB, S_LIAB, 0.0045, 0.0075)
+assert abs((y_before - y_after) - 0.5 * 0.0045 / 0.09) < 1e-12   # 11x gearing
+print(f"prices open/year/shut {p_open:.2f}/{p_year:.2f}/{p_shut:.2f}; "
+      f"D_spr wide {d_wide:.2f} vs tight {d_tight:.2f}; equity yield {y_before:.2%}")
+```
+
+## 21.6 Loan ETFs vs CLO ETFs: Where Liquidity Transformation Lives
+
+Chapter 20 owns the authorized-participant (AP) mechanics and March 2020. This section owns the loan-side *cause*. Theo's 13-week cash flow model makes its comeback here, reborn as a 20-business-day cash queue. A loan fund is a company whose receivables (sale proceeds) arrive in about twenty days and whose payables (redemptions) are due tomorrow. Theo has seen that company before. It hired PJT.
+
+The wrappers, as of 2026: SRLN (State Street Blackstone Senior Loan ETF) had \$5.38bn of net assets on 15 October 2026, 731 holdings and a 0.70% gross expense ratio. Its holdings are reported on a trade-date basis *including unsettled positions*, which is an ETF wrapper's way of admitting what is inside it *(SSGA fund page)*. BKLN was about \$6.7–6.8bn in mid-2026 *(aggregators; approx.)*. Bank-loan mutual funds held \$71bn at end-2025. Meanwhile US CLO ETFs passed **\$50bn** around the start of July 2026 *(BofA via Octus)*, and JAAA alone passed **\$30bn** on 13 August 2026 *(Janus Henderson)*. Retail money did not leave loans. It left the *loan* and bought the *tranche*, and the reason is settlement.
+
+### 21.6.1 Derivation: the buffer is a queue
+
+Normalize NAV to 1. Let $f_t$ be day $t$'s net redemption as a fraction of NAV (positive means outflow). Redemptions are paid in about a day. To raise cash, the fund sells loans on day $t$, and the proceeds arrive $\ell$ business days later. Starting from a cash buffer $b_0$, cash on day $t$ is the buffer, minus everything paid out, plus the proceeds that have arrived:
+
+$$
+\text{cash}_t \;=\; b_0 - \sum_{u \le t} f_u + \sum_{u \le t - \ell} f_u \;=\; b_0 - S^{(\ell)}_t, \qquad S^{(\ell)}_t = \sum_{u = t-\ell+1}^{t} f_u .
+$$
+
+The fund stays liquid without borrowing if and only if $b_0 \ge \max_t S^{(\ell)}_t$. That is Little's law with the settlement cycle as service time: cash in transit equals the redemption rate times $\ell$. Now let flows follow a Gaussian AR(1), $f_t - \mu = \phi(f_{t-1} - \mu) + \sigma\varepsilon_t$, with stationary variance $\sigma_f^2 = \sigma^2/(1-\phi^2)$ and autocovariances $\sigma_f^2\phi^k$. The variance of the $\ell$-day window is
+
+$$
+\operatorname{Var}\big(S^{(\ell)}\big) \;=\; \sigma_f^2\left[\ell + 2\sum_{k=1}^{\ell-1}(\ell - k)\,\phi^k\right], \tag{21.9}
+$$
+
+and the buffer that covers a single window at one-sided confidence $z_\alpha$ is
+
+$$
+b^{\ast}_\alpha(\ell) \;=\; \ell\mu + z_\alpha\sqrt{\operatorname{Var}\big(S^{(\ell)}\big)} .
+$$
+
+(The running maximum over many windows is larger; simulate it.) The scaling is the point. With i.i.d. flows ($\phi = 0$) the buffer grows like $\sqrt{\ell}$. With persistent flows ($\phi \to 1$), which is what you get in a sell-off, it grows like $\ell$. A T+20 loan fund therefore needs between $\sqrt{20} \approx 4.5$ and 20 times the buffer of a T+1 bond fund facing the same flows. The Fed's August 2026 note puts the median bank-loan fund liquidity ratio at about 4.5% since 2024, down from about 10% in 2021. In 2–9 April 2025, bank-loan funds with above-median liquidity lost 4.2% of assets and those below median lost 2.7%. That difference is not significant, and it contrasts with March 2020's −6.7% vs −14.2%, which was significant at 1% *(Fed FEDS Note, 19 Aug 2026)*. A week of April 2025 outflows was roughly the size of the median buffer. The rest was covered by credit lines, by dealers willing to settle quickly, and by a quiet trick: unsettled *purchases* leave cash in the fund until they settle, so a loan fund's real cash is larger than its trade-date books show.
+
+This is the queue behind the SEC's November 2022 proposal (File S7-26-22). The proposal would have removed the "less liquid" category, where most loans sit, so that loans would likely become "illiquid investments" capped at 15% of an open-end fund. The LSTA said this "effectively shuts down open-end loan funds" and proposed a standardized expedited settlement arrangement (ESA) that would give dealer-to-fund trades settlement certainty by T+3. The ICI noted that in roughly 25 years no bank-loan fund had suspended redemptions. Whether the proposal was formally withdrawn in the SEC's 2025 clean-out of pending rules is not confirmed here; check before you rely on either outcome.
+
+**The ETF arbitrage band.** An AP that buys ETF shares at a discount $d$ to NAV and redeems them in kind receives loans. It can sell them at once, paying half the bid-ask spread $c/2$ and funding the position until settlement. Or it can warehouse them and bear price risk with annualized volatility $\sigma_L$. The discount it needs before it will act is roughly
+
+$$
+d^{\ast} \;\approx\; f_{\text{AP}}\,\frac{\ell}{360} \;+\; \min\!\left(\frac{c}{2},\; z\,\sigma_L\sqrt{\ell/252}\right).
+$$
+
+For loans in a March-2020-style stress ($c$ above 300 bp, $\ell = 20$, $\sigma_L = 15\%$), $d^{\ast}$ is at least 1.8% before the bid for size disappears entirely. For an AAA CLO note settling like a bond ($\ell = 1$), it is mostly the half-spread. If loans could move in kind as easily as bonds, the first term would shrink. They cannot, because every in-kind loan transfer is an assignment with consents, so loan ETFs redeem largely in cash and inherit the fund queue (21.9). AAA CLO notes are DTC-eligible securities, so a CLO ETF can redeem in kind and hand the bonds to the AP.
+
+> **Ways This Blows Up.** Take a loan ETF with 4.5% cash that faces outflows of 25% of NAV in one week *(illustrative)*. With $\ell = 20$, it must sell about 20% of NAV in loans whose cash arrives a month later, so it draws its credit line on day 2 and spends the next three weeks as a leveraged loan fund. Its sales are public: the ETF basket and the dealers' axes show them, so every other holder of the same 100 index names front-runs the flow. The fire-sale discount from §21.4 then appears in the *index* names, not the CCCs. This is one reason the March 2020 loan-ETF discounts in Chapter 20 read as a settlement event as much as a credit event.
+
+### Case Study: JAAA, April–May 2025
+
+On 4 April 2025, two days after the tariff announcement, US-listed CLO ETFs swung to discounts averaging more than 1%. JAAA, then about \$20bn and the largest CLO ETF, traded more than 1% below NAV. It recorded its largest one-day outflow, about \$600mm (etf.com's daily flows put 8 April at \$585mm). Janus Henderson said the redemptions were absorbed with "very little impact," which is the manager's framing. In May JAAA took in about \$850mm, the "vast majority" as in-kind creations, and Barclays counted \$663mm into AAA CLO ETFs in a single May week. Total CLO-ETF assets stayed below their Q1 peak for a while *(etf.com, Octus, ETF Trends)*. Then the stack kept growing: more than \$50bn by July 2026, with JAAA about 88% of an eight-fund cohort and holding 62.1% *reset* paper *(Octus, 7 Jul 2026)*.
+
+Read it through the band. A greater-than-1% discount on a T+1 AAA wrapper is not a settlement problem. It is a dealer balance-sheet problem: the AP's half-spread on AAA CLO paper widened for a few days. In-kind redemption let APs take the bonds instead of forcing the fund to sell, so the queue (21.9) never formed. In the same week bank-loan *funds* lost about 3–4% of assets with a 20-day queue and a 4.5% median buffer. Same asset class, same week, different settlement cycle, different plumbing outcome. There is a second-order loop too. JAAA's reset-heavy book means ETF inflows are effectively a bid for CLO resets. Resets lower the equity's cost of liabilities and keep the CLO bid for loans alive, so the ETF stack feeds back, through the AAA spread, into the loan repricing machine of §21.5. Test the cascade (CLO ETF flows → AAA spread → reset count → loan secondary bid) at 2–8 week lags before you trade it. It is a hypothesis, not a result.
+
+> **Trend Watch: the retail wrapper moved up the stack, 2019–2026.** Bank-loan mutual funds fell 21% to \$71bn, with \$23bn of net outflows over 2019–2025 (Fed FEDS Note, Aug 2026). SRLN was \$5.38bn (Oct 2026) and BKLN about \$6.8bn (mid-2026, approx.). US CLO ETFs grew from about \$38bn (Sep 2025, Deutsche Bank Flow) to above \$50bn (Jul 2026, BofA via Octus), and JAAA passed \$30bn (13 Aug 2026). The first European CLO ETF listed in September 2024. *What it means:* daily liquidity is now being offered on the asset that settles like a bond, and the loan itself is funded by CLOs. The liquidity transformation moved to where the plumbing can carry it.
+
+### Specification for AI Implementation (liquidity queue)
+
+*What ROBO built from "make sure the fund can meet redemptions":* a buffer equal to the largest one-day outflow in the history file. That is correct for a T+1 fund and wrong by a factor of up to $\ell$ for this one. The precise spec: compute (21.9) analytically, check it against a seeded simulation of AR(1) flows, report the buffer for $\ell \in \{1, 7, 20\}$, and report the arbitrage band for loan and CLO wrappers.
+
+```python
+# Block 4: the loan-fund liquidity queue (21.9) and the ETF arbitrage band.
+def window_var(sigma_eps, phi, ell):
+    """Variance of the ell-day sum of stationary AR(1) flows with innovation sd sigma_eps."""
+    if not -1.0 < phi < 1.0:
+        raise ValueError("phi must lie in (-1, 1)")
+    var_f = sigma_eps**2 / (1.0 - phi**2)
+    k = np.arange(1, ell)
+    return var_f * (ell + 2.0 * np.sum((ell - k) * phi**k))
+
+
+def buffer_needed(mu, sigma_eps, phi, ell, z=2.326):
+    """Cash buffer (fraction of NAV) covering one ell-day outflow window at one-sided z."""
+    return ell * mu + z * np.sqrt(window_var(sigma_eps, phi, ell))
+
+
+def simulate_flows(mu, sigma_eps, phi, n_days, n_paths, rng=RNG):
+    """Seeded stationary AR(1) net-redemption paths, shape (n_paths, n_days)."""
+    f = np.empty((n_paths, n_days))
+    f[:, 0] = mu + rng.normal(0.0, sigma_eps / np.sqrt(1.0 - phi**2), n_paths)
+    for t in range(1, n_days):
+        f[:, t] = mu + phi * (f[:, t - 1] - mu) + rng.normal(0.0, sigma_eps, n_paths)
+    return f
+
+
+def rolling_window_sums(f, ell):
+    """All ell-day window sums along axis 1."""
+    c = np.concatenate([np.zeros((f.shape[0], 1)), np.cumsum(f, axis=1)], axis=1)
+    return c[:, ell:] - c[:, :-ell]
+
+
+def etf_discount_bound(ell, half_spread, sigma_ann, fund_rate=0.05, z=1.645):
+    """Approximate discount (decimal) an AP needs before redeeming in kind."""
+    return fund_rate * ell / 360.0 + min(half_spread, z * sigma_ann * np.sqrt(ell / 252.0))
+
+
+MU, SIG, PHI = 0.0005, 0.004, 0.4        # illustrative daily net outflow, sd, persistence
+b1, b7, b20 = (buffer_needed(MU, SIG, PHI, ell) for ell in (1, 7, 20))
+assert b1 < b7 < b20
+sd1, sd20 = np.sqrt(window_var(SIG, PHI, 1)), np.sqrt(window_var(SIG, PHI, 20))
+assert np.sqrt(20.0) - 1e-9 <= sd20 / sd1 <= 20.0 + 1e-9     # between sqrt(l) and l scaling
+
+flows = simulate_flows(MU, SIG, PHI, n_days=260, n_paths=2000)
+w20 = rolling_window_sums(flows, 20)
+assert w20.shape == (2000, 241)
+q99 = float(np.quantile(w20, 0.99))
+assert abs(q99 / b20 - 1.0) < 0.08                          # simulation agrees with (21.9)
+
+band_loan = etf_discount_bound(20, 0.015, 0.15)
+band_clo = etf_discount_bound(1, 0.005, 0.03)
+assert band_loan > band_clo > 0.0
+print(f"buffers l=1/7/20: {b1:.2%}/{b7:.2%}/{b20:.2%} (MC 99%: {q99:.2%}); "
+      f"band loan {band_loan:.2%} vs AAA CLO {band_clo:.2%}")
+```
+
+### Deep-Dive Resource Graph (21.6)
+
+- **Practitioner Writing.** Fed FEDS Note, "Liquidity Transformation Risks in U.S. Bank Loan and High-Yield Mutual Funds: A 2026 Update" (19 Aug 2026): https://www.federalreserve.gov/econres/notes/feds-notes/liquidity-transformation-risks-in-u-s-bank-loan-and-high-yield-mutual-funds-a-2026-update-20260819.html · Janus Henderson, JAAA passes \$30bn (13 Aug 2026): https://www.janushenderson.com/en-us/advisor/press-releases/janus-hendersons-aaa-clo-etf-jaaa-the-worlds-largest-clo-etf-surpasses-30-billion-in-assets-under-management/ · Octus, "Portfolio Analytics Wrap: CLO ETF Manager Strategies Diverge as Total Assets Surpass \$50B" (7 Jul 2026): https://octus.com/resources/articles/portfolio-analytics-wrap-clo-etf-manager-strategies-diverge-as-total-assets-surpass-50b/
+- **Data & Code.** SSGA SRLN fund page (daily holdings, trade-date basis): https://www.ssga.com/us/en/intermediary/etfs/spdr-blackstone-senior-loan-etf-srln · SEC comment file S7-26-22: https://www.sec.gov/comments/s7-26-22/ · SEC EDGAR (N-PORT holdings; quarterly reporting from Nov 2027 for large funds): https://www.sec.gov/edgar

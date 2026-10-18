@@ -66,3 +66,12 @@ Usage reached 30% of the window in about 15 minutes, about 75% of it from Fable 
 | part-reviews | Engagement and foundations review per Part on chapter text (after chapters) |
 | appendix-C | Trend Tracker from all trend research |
 | ed2-planner | Continuation prompt, TOC v2, and the next queue |
+
+## Edition 1: finishing (00:40 UTC, usage 59%)
+
+19 of 28 chapters are COMPLETE. Ch 19–25 are in progress and Ch 27–28 are starting in the wide lanes.
+
+| Run | Owns | Status |
+| :--- | :--- | :--- |
+| ed1-reviews-and-trend-tracker | Fable engagement review, Fable foundations review (effort high, digest-driven), Appendix C | running |
+| Sonnet research (targeted) | Only the case studies and gaps the reviews request | queued until the reviews land |
