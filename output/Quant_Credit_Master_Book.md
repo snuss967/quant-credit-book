@@ -1,6 +1,6 @@
 ---
 title: 'Systematic & Quantitative Credit: From PJT RSSG to the Automated Desk'
-subtitle: 'Mathematical Foundations, Microstructure, LMT Game Theory, and Alpha Isolation (Edition 1, Build: 2026-10-18 00:50 UTC)'
+subtitle: 'Mathematical Foundations, Microstructure, LMT Game Theory, and Alpha Isolation (Edition 1, Build: 2026-10-18 00:58 UTC)'
 toc: true
 toc-depth: 3
 ---
@@ -5410,12 +5410,6 @@ print("All chapter 6 checks passed.")
 
 # Chapter 7: Machine Learning on Small-Sample, Non-Stationary Credit Data
 
-<!-- WRITER PLAN (sections appended in order as drafted; resume after the last complete "## 7.x" section):
-7.0 Cold open; 7.1 Worst ML dataset; 7.2 Trend Watch replication crisis; 7.3 Fractional differentiation;
-7.4 Triple barrier in DTS space; 7.5 Meta-labeling; 7.6 Uniqueness weights; 7.7 Purged/embargoed/grouped CV;
-7.8 Deflated Sharpe & PBO; 7.9 LIB & LAB; 7.10 Trend Watch ML frontier; 7.11 Case studies;
-7.12 Specification for AI Implementation (cumulative python); 7.13 Desk Debrief, Spec You Hand the Robot, Exercises;
-Deep-Dive Resource Graph. -->
 
 ## 7.0 Cold Open: Forty-Seven Hats
 
@@ -6348,12 +6342,6 @@ The trend that defines this part is that systematic credit has grown a track rec
 
 # Chapter 8: Stripping Beta to Isolate Pure IDO
 
-<!-- WRITER PLAN (sections appended in order as drafted; resume after the last complete "## 8.x" section):
-8.0 Cold open; 8.1 Return decomposition; 8.2 Empirical vs analytical duration (Trend Watch 1);
-8.3 The IG/HY discontinuity (Alltel case study); 8.4 DTS; 8.5 Stale-price betas;
-8.6 Hedge matrix (Trend Watch 2); 8.7 Case studies 2022 / SVB 2023 / April 2025; 8.8 What's left is IDO;
-8.9 Specification for AI Implementation (cumulative python); 8.10 Desk Debrief, Spec You Hand the Robot,
-Exercises; Deep-Dive Resource Graph. -->
 
 ## 8.0 Cold Open: Thirty-Seven Cents
 
@@ -7481,13 +7469,6 @@ TESTS: every sanity check in Section 8.9 prints PASS. Do not "improve" the objec
 
 # Chapter 9: Factor Investing in Corporate Credit
 
-<!-- WRITER PLAN (sections appended in order as drafted; resume after the last complete "## 9.x" section):
-9.0 Cold open; 9.1 What a credit factor is (TW: systematic credit's share); 9.2 DTS, the hidden beta;
-9.3 Value; 9.4 Momentum; 9.5 Carry and low-risk; 9.6 Quality, size, informed investor;
-9.7 Combining factors (Case Study: one telecom, four factors); 9.8 Construction under costs (TW: cost curve);
-9.9 The replication debate; 9.10 Crowding, capacity, drawdowns (Case Study: March 2020; TW: the tight-spread regime);
-9.11 Specification for AI Implementation (cumulative python); 9.12 Desk Debrief, Spec You Hand the Robot, Exercises;
-Deep-Dive Resource Graph. -->
 
 ## 9.0 Cold Open: Sharpe 1.9, Beta 0.6
 
@@ -8541,12 +8522,6 @@ ACCEPTANCE TESTS (fail loudly)
 
 # Chapter 10: Trend-Following & Time-Series Momentum in Credit
 
-<!-- WRITER PLAN (sections appended in order as drafted; resume after the last complete "## 10.x" section):
-10.0 Cold open; 10.1 What a trend is in credit (+ Trend Watch: index CDS venue); 10.2 TSMOM engine adapted;
-10.3 Vol scaling is DTS scaling; 10.4 Trend plus carry; 10.5 Equity -> credit lead-lag;
-10.6 Crisis alpha and payoff shape (+ Trend Watch: CTAs 2024-2026); 10.7 Case studies 2008/2020/2022/Apr 2025;
-10.8 Turnover, costs, capacity; 10.9 Trend in the LMT era; 10.10 Specification for AI Implementation;
-10.11 Desk Debrief, The Spec You Hand the Robot, Exercises, Deep-Dive Resource Graph. -->
 
 ## 10.0 Cold Open: The Model Has No Amygdala
 
@@ -9576,12 +9551,6 @@ DO NOT: forward-fill marks across days without a print flag; estimate anything w
 
 # Chapter 11: Defensive Systematic High Yield
 
-<!-- WRITER PLAN (sections appended in order as drafted; resume after the last complete "## 11.x" section):
-11.0 Cold open; 11.1 The asymmetry; 11.2 Capture ratios and the beta-tilt diagnosis (Trend Watch, Case Study 1, code block 1);
-11.3 Structural PD (code block 2); 11.4 Hazard models, labels, ML (code block 3); 11.5 Validation and the 77% (Trend Watch, code block 4);
-11.6 The CCC problem (Case Study 3, Docket Diary); 11.7 Quality and low-risk tilts (code block 5);
-11.8 Regime-aware exposure (Case Study 2); 11.9 Capacity (Trend Watch, code block 6);
-11.10 Desk Debrief; The Spec You Hand the Robot; Exercises; Deep-Dive Resource Graph. -->
 
 ## 11.0 Cold Open: The Bow Tie
 
@@ -10589,13 +10558,6 @@ ROBO acknowledged the spec. It did not ask what "impairs the holder" meant, beca
 
 # Chapter 12: Multi-Asset Credit Allocation
 
-<!-- WRITER PLAN (sections appended in order as drafted; resume after the last complete "## 12.x" section):
-12.0 Cold open; 12.1 MAC universe as a capital-structure map (TW-1); 12.2 The return identity;
-12.3 Spread per unit of what? (+ Resource Graph); 12.4 Regimes: two-state HMM (TW-2);
-12.5 Covariance you can trust: DTS, EWMA, shrinkage, desmoothing; 12.6 Optimization and the flat frontier;
-12.7 Liquidity tiers as the binding constraint (TW-3, + Resource Graph); 12.8 Tactical overlays and the turnover budget (TW-4);
-12.9 Case studies; 12.10 Specification for AI Implementation (cumulative python);
-12.11 Desk Debrief, The Spec You Hand the Robot, Exercises; Deep-Dive Resource Graph. -->
 
 ## 12.0 Cold Open: Seven Piles, One Bet
 
@@ -13450,7 +13412,6 @@ Each edge is a known flow on an unknown date. The rest of the chapter is about e
 - **Academic Papers:** Billett, King & Mauer (2004), *Bondholder Wealth Effects in Mergers and Acquisitions*, Journal of Finance, DOI 10.1111/j.1540-6261.2004.00628.x; Furfine & Rosen (2011), *Mergers Increase Default Risk*, Journal of Corporate Finance, DOI 10.1016/j.jcorpfin.2011.03.003; Renneboog & Szilagyi (2008), *Corporate Restructuring and Bondholder Wealth*, European Financial Management, DOI 10.1111/j.1468-036X.2007.00414.x.
 - **Data & Code:** SEC EDGAR full-text search, https://www.sec.gov/edgar/search/ (API root https://efts.sec.gov/LATEST/search-index); FTC Premerger Notification Program, https://www.ftc.gov/enforcement/premerger-notification-program; FTC/DOJ HSR Annual Report FY2025, https://www.ftc.gov/system/files/ftc_gov/pdf/fy_2025_hsr_annual_report_for_transmittal_to_congress.pdf.
 
-<!-- PASS 1 END -->
 
 ## 15.2 Anatomy and Pricing of the 101 Change-of-Control Put
 
@@ -13759,7 +13720,6 @@ With these illustrative inputs a sponsor needing 6.05 turns of signing EBITDA, a
 
 > **Trend Watch.** *Portability's migration into US public filings, 2018–2026.* A full-text search of EDGAR for the portability term "Specified Change of Control Event" finds 1 filing in 2018, 4 in 2019, 8 in 2020, 11 in 2021, 2 in 2022, 3 in 2023, 5 in 2024, 5 in 2025 and 10 in 2026 through mid-October (EDGAR full-text search, run 2026-10-17; approximate). Over the same years, registered 424B2/424B5 prospectuses using the IG double-trigger terms ran at roughly 230–400 a year for "Change of Control Triggering Event" and 90–230 a year for "Change of Control Repurchase Event." Read the portability series for its *existence*, not its level: it counts filings rather than deals, double-counts preliminary and final prospectuses, and misses almost all high-yield bonds, which are sold under Rule 144A and never filed. The covenant-research providers (Covenant Review, Xtract Research, 9fin) publish the share of HY deals with portability; we have not verified their figures for this edition, and the practitioner consensus that European HY has long carried portability more often than US HY should be checked against their data before it is quoted. What it means for the desk: portability is a document feature with a price, it is spreading into the documents a systematic desk can parse, and Chapter 25's extraction pipeline should pull the leverage test, the window, the one-time-use flag and the add-back definition as four separate fields, because each one moves $\mathbb{P}(\mathcal{A})$.
 
-<!-- PASS 2 END -->
 
 ## 15.4 Special Mandatory Redemptions: The Deal-Break Gauge in the Acquirer's Curve
 
@@ -13950,7 +13910,6 @@ The check that matters most is the round trip, and the check that will save you 
 - **Academic Papers:** Mitchell & Pulvino (2001), *Characteristics of Risk and Return in Risk Arbitrage*, Journal of Finance, DOI 10.1111/0022-1082.00401; Officer (2003), *Termination Fees in Mergers and Acquisitions*, Journal of Financial Economics, DOI 10.1016/S0304-405X(03)00119-3; David (1998), *Pricing the Strategic Value of Poison Put Bonds*, FEDS 1998-06, DOI 10.17016/feds.1998.06.
 - **Data & Code:** Kroger Fiftieth Supplemental Indenture, https://www.sec.gov/Archives/edgar/data/56873/000110465924093481/tm2421523d7_ex4-3d1.htm ; Kroger SMR 8-K, https://www.sec.gov/Archives/edgar/data/56873/000110465924128106/tm2430972d1_8k.htm ; Tapestry termination 8-K, https://www.sec.gov/Archives/edgar/data/1116132/000114036124046713/ef20038690_8k.htm ; CourtListener docket, FTC v. Kroger, https://www.courtlistener.com/docket/68284514/federal-trade-commission-v-kroger-company/ ; EA closing 8-K (defeasance), https://www.sec.gov/Archives/edgar/data/712515/000114036126031157/ef20079099_8k.htm .
 
-<!-- PASS 3 END -->
 
 ## 15.5 Antitrust and Regulatory Timelines as Survival Analysis
 
@@ -14173,7 +14132,6 @@ Read the printed Second Request coefficient as a time multiplier: with a Weibull
 - **Academic Papers:** Giglio & Shue (2014), *No News Is News: Do Markets Underreact to Nothing?*, Review of Financial Studies, DOI 10.1093/rfs/hhu052; Dikova, Sahib & van Witteloostuijn (2010), *Cross-Border Acquisition Abandonment and Completion*, Journal of International Business Studies, DOI 10.1057/jibs.2009.10; Wollmann (2019), *Stealth Consolidation: Evidence from an Amendment to the Hart-Scott-Rodino Act*, AER: Insights, DOI 10.1257/aeri.20180137.
 - **Data & Code:** FTC/DOJ HSR Annual Reports, FY2023 https://www.ftc.gov/system/files/ftc_gov/pdf/fy2023hsrreport.pdf and FY2024 https://www.ftc.gov/system/files/ftc_gov/pdf/FY24-HSR-ANNUAL-REPORT-FOR-TRANSMITTAL-TO-CONGRESS.pdf ; European Commission merger procedures, https://competition-policy.ec.europa.eu/mergers/procedures_en ; CourtListener REST API, https://www.courtlistener.com/help/api/ .
 
-<!-- PASS 4 END -->
 
 ## 15.6 Target vs. Acquirer: Spread Compression, Acquirer Widening, and Event Momentum
 
@@ -22476,12 +22434,6 @@ The trend that defines this part is the arrival of language models on the desk a
 
 # Chapter 25: NLP for Credit Agreements, Indentures & PACER Dockets
 
-<!-- WRITER PLAN (sections appended in order as drafted; resume after the last complete "## 25.x" section):
-25.0 Cold open; 25.1 The document is the constraint set; 25.2 The definition graph (+ Trend Watch: LMT vocabulary on EDGAR);
-25.3 Basket arithmetic (+ Trend Watch: covenants leave the building); 25.4 Leakage as max-flow (Case Study: J.Crew);
-25.5 Versions and diffs (Case Study: Windstream); 25.6 The docket as an event stream (+ Trend Watch: docket access);
-25.7 Rule 2019 time series (Docket Diary + Case Study: Serta on the docket); 25.8 Claims registers; 25.9 Text to signal;
-25.10 Specification for AI Implementation; 25.11 Desk Debrief, Spec You Hand the Robot, Exercises; Deep-Dive Resource Graph. -->
 
 ## 25.0 Cold Open: Thirty Percent of What?
 
@@ -23551,13 +23503,6 @@ DO NOT: count phrases without dedupe; trust a zero from an untested search opera
 
 # Chapter 26: AI Agents & LLMs on the Credit Desk
 
-<!-- WRITER PLAN (sections appended in order as drafted; resume after the last complete "## 26.x" section):
-26.0 Cold open; 26.1 What a language model is, for a specifier; 26.2 Trend Watch: adoption 2022-2026;
-26.3 The tool stack: what is sold vs. what it is; 26.4 Citation contract; 26.5 Hallucination controls + Trend Watch 2;
-26.6 Workflows first, agents last; 26.7 Agentic alpha research & multiple testing; 26.8 Model risk for stochastic readers;
-26.9 The AI-specifier's operating manual; 26.10 Prompt injection in the data room; 26.11 Case studies;
-26.12 Specification for AI Implementation (cumulative python); 26.13 Desk Debrief, Spec You Hand the Robot, Exercises;
-Deep-Dive Resource Graph. -->
 
 ## 26.0 Cold Open: Section 6.08(b)(xiv)
 
@@ -24444,13 +24389,6 @@ found inside documents; reporting stated confidence as accuracy.
 
 # Chapter 27: System Construction, Low-Latency Infrastructure & ASICs/FPGAs
 
-<!-- WRITER PLAN (sections appended in order; resume after the last complete "## 27.x" section):
-27.0 cold open; 27.1 two clocks (Trend Watch 1); 27.2 ingestion and provenance (Trend Watch 2, code block 1);
-27.3 bitemporal security master (Trend Watch 3, Serta case, block 2); 27.4 OMS/EMS and the order state machine;
-27.5 latency budgets as queues (CME halts case, block 3); 27.6 FPGA trigger tables (Trend Watch 4,
-2014 flash rally case, block 4); 27.7 kill switches as stopping rules (Knight and Citi cases, block 5);
-27.8 observability, replay, deployment; 27.9 resilience beyond your walls; 27.10 Desk Debrief, Spec, Exercises;
-27.11 Deep-Dive Resource Graph. -->
 
 ## 27.0 Cold Open: The Fastest Thing on the Desk
 
@@ -25268,7 +25206,7 @@ $$
 \text{ARL}(\mu_G) \approx \frac{e^{-2\mu_G b} + 2\mu_G b - 1}{2\mu_G^2}, \qquad b = c + 1.166,
 $$
 
-with $\mu_G = -\delta/2$ when healthy ($\text{ARL}_0$, the mean time between false alarms) and $\mu_G = +\delta/2$ when picked off ($\text{ARL}_1$, the detection delay). For a one-standard-deviation deterioration ($\delta = 1$) and $c = 5$: $\text{ARL}_0 \approx 938$ fills and $\text{ARL}_1 \approx 10.3$ fills. At 200 auto-quoted fills a day *(illustrative)*, that is a false alarm about every five trading days and detection within about ten bad fills. Raise $c$ to 6 and $\text{ARL}_0 \approx 2{,}570$ fills (about 13 days) while $\text{ARL}_1 \approx 12.3$. **Tripling the quiet time costs two fills of delay**, because to first order the delay grows only with the log of the false-alarm interval, $\text{ARL}_1 \approx \ln(\text{ARL}_0)/\mathcal{K}$ with $\mathcal{K} = \delta^2/2$ the Kullback–Leibler information per fill. The desk head chooses $c$, and in doing so chooses both numbers. Ines calls this reading the hand history in real time: the river card is the 10th bad fill, and you fold on the 9th.
+with $\mu_G = -\delta/2$ when healthy ($\text{ARL}_0$, the mean time between false alarms) and $\mu_G = +\delta/2$ when picked off ($\text{ARL}_1$, the detection delay). For a one-standard-deviation deterioration ($\delta = 1$) and $c = 5$: $\text{ARL}_0 \approx 938$ fills and $\text{ARL}_1 \approx 10.3$ fills. At 200 auto-quoted fills a day *(illustrative)*, that is a false alarm about every five trading days and detection within about ten bad fills. Raise $c$ to 6 and $\text{ARL}_0 \approx 2{,}570$ fills (about 13 days) while $\text{ARL}_1 \approx 12.3$. **Tripling the quiet time costs two fills of delay**, because to first order the delay grows only with the log of the false-alarm interval, $\text{ARL}_1 \approx \ln(\text{ARL}_0)/\mathcal{K}$ with $\mathcal{K} = \delta^2/2$ the Kullback–Leibler information per fill. The desk head chooses $c$, and in doing so chooses both numbers. Ines calls this reading the hand history in real time. The river is the bad fill that would have cost you the session; the CUSUM folds about ten bad fills in, which is long before the river and long after your ego would have liked.
 
 > **[SOURCE EXTRACTION]** *Paleologo_Advanced_Portfolio_Management p.164:* "Stop-loss rules are a partial hedge for the PM call option. ... Since the value of the option increases with the volatility of the underlying asset, it is in the interest of the manager to run with the highest possible volatility, independently of her skill. The stop-loss is a constraint that limits the value of this option."
 >
@@ -25276,7 +25214,7 @@ with $\mu_G = -\delta/2$ when healthy ($\text{ARL}_0$, the mean time between fal
 
 ### 27.7.3 Case Study: Knight Capital (2012) and Citigroup (2022), mapped to tiers
 
-**Knight, 2012-08-01** (SEC Release No. 34-70694, 2013-10-16). While processing 212 small retail orders, Knight's SMARS router "routed millions of orders into the market over a 45-minute period, and obtained over 4 million executions in 154 stocks for more than 397 million shares." Knight ended up net long about \$3.5bn in 80 stocks and net short about \$3.15bn in 74, and "lost over \$460 million." The new code reused a flag that had once activated "Power Peg," functionality Knight "had discontinued using many years earlier." A technician "did not copy the new code to one of the eight SMARS computer servers," there was no second-technician review, and orders that reached the eighth server ran the dormant code. Before the open, the system sent 97 automated e-mails flagging the problem, and Knight "did not design these types of messages to be system alerts." Throughout, "Knight remained connected to the markets and continued to send orders." The civil money penalty was \$12mm. Chapter 26 told this as a story about specifications. Here it is a story about four missing tiers. *Tier 2* (version skew) would have refused to open with one server out of eight on different code. *Tier 1* (a child-to-parent fill-ratio test) would have fired within seconds, because Power Peg kept sending child orders without counting fills. *Tier 0* (cumulative notional caps per strategy) would have stopped the position long before \$3.5bn. And *authority* would have answered the question nobody did for 45 minutes: who is allowed to pull the plug, and does pulling it actually disconnect?
+**Knight, 2012-08-01** (SEC Release No. 34-70694, 2013-10-16). While processing 212 small retail orders, Knight's SMARS router "routed millions of orders into the market over a 45-minute period, and obtained over 4 million executions in 154 stocks for more than 397 million shares." Knight ended up net long about \$3.5bn in 80 stocks and net short about \$3.15bn in 74, and "lost over \$460 million." The new code reused a flag that had once activated "Power Peg," functionality Knight "had discontinued using many years earlier." A technician "did not copy the new code to one of the eight SMARS computer servers," there was no second-technician review, and orders that reached the eighth server ran the dormant code. Before the open, the system sent 97 automated e-mails referencing the error to a group of Knight personnel, and Knight "did not design these types of messages to be system alerts." Throughout, "Knight remained connected to the markets and continued to send orders." The civil money penalty was \$12mm. Chapter 26 told this as a story about specifications. Here it is a story about four missing tiers. *Tier 2* (version skew) would have refused to open with one server out of eight on different code. *Tier 1* (a child-to-parent fill-ratio test) would have fired within seconds, because Power Peg kept sending child orders without counting fills. *Tier 0* (cumulative notional caps per strategy) would have stopped the position long before \$3.5bn. And *authority* would have answered the question nobody did for 45 minutes: who is allowed to pull the plug, and does pulling it actually disconnect?
 
 **Citigroup, 2022-05-02** (FCA final notice 2024-05-22, as reported in coverage of the notice; figures to be checked against the notice itself). A trader meant to sell a basket worth \$58mm, and an input error produced one worth \$444bn. Controls blocked \$255bn; \$189bn reached an algorithm; about \$1.4bn of shares sold on European venues before the trader cancelled, coinciding with a brief, sharp drop in several European indices. The FCA found no hard block that would have rejected the whole basket, a pop-up warning the trader could click through without reading, and real-time monitoring that was too slow to escalate. Fines from the FCA (£27.77mm) and PRA (£33.9mm) totalled about £61.6mm. The lesson fits in one line of the spec below: **a warning that can be clicked past is a suggestion, not a control.** The Tier-0 function takes no override argument.
 
@@ -25427,7 +25365,99 @@ assert ks.rearm("ines", 3.4, slow_path_ok=True) and ks.state == "ARMED"
 
 **Beyond your walls.** On 2023-11-08/09, LockBit ransomware hit ICBC Financial Services, the US broker-dealer arm of ICBC. BNY Mellon, its Treasury settlement agent, disconnected it and settled its trades manually; ICBC FS owed BNY about \$9bn in unsettled trades until the parent injected capital (Reuters and other coverage). On 2015-04-17, Bloomberg terminals went dark for several hours from about 8:30 a.m. London, and the UK Debt Management Office postponed a gilt operation of about £3bn, citing "ongoing issues with the third-party platform supplier." And the composite and venue layer is consolidating: ICE agreed on 2026-07-29 to buy MarketAxess. Each case is the same lesson. Your fastest system is bounded by your slowest counterparty's recovery plan, so every external dependency (settlement agent, chat and pricing terminal, composite vendor, hedge venue) needs a named fallback and a Tier-2 trigger that says what happens to live quotes when it disappears.
 
-Mags listens to all of this with her arms folded. "Back in my day the kill switch was the head trader unplugging the phone bank, and the dead-man switch was the head trader." A pause. "He was dead-man adjacent, frankly, by four o'clock." Another pause. "Fine. Yours doesn't go to lunch."
+Mags listens to all of this with her arms folded. "Back in my day the kill switch was the head trader unplugging the phone bank, and the dead-man switch was the head trader going to lunch. Nothing traded until he came back." A pause. "Fine. Yours doesn't go to lunch."
+
+## 27.9 Desk Debrief
+
+- **Two clocks, one desk.** The quote clock runs in seconds to minutes; the hedge clock runs in microseconds. Speed is worth $\Delta\ell/T$ of your edge, so buy it in proportion to $1/T$ of the information you act on, not in proportion to how much you enjoy hardware.
+- **The fastest thing on the desk is the thing that says no.** The fast path compares precomputed numbers and may only pull. Only the slow path, which can be audited, may say yes again.
+- **Every price says what it is and when you knew it.** `price_kind` plus `known_at`, or it does not get a badge. Labels, fills and cost targets come from prints and firm quotes only.
+- **The security master is the credit agreement of the system.** Use internal surrogate keys, bitemporal rows and append-only knowledge time. Serta's 22 June 2020 is a test case, not an anecdote.
+- **The p99 is the number the sniper trades against, and it is worst when the market moves.** Little, Pollaczek–Khinchine and fan-out turn "40 ms" into "1.5 seconds on FOMC day, and 78% of PTs slow."
+- **The cheap trigger rule is safe by the triangle inequality, and it costs false pulls in a flight to quality.** Store dollar sensitivities, budget the threshold, and set a guard band above fixed-point and convexity error.
+- **A kill switch is a stopping rule with two numbers attached.** The desk head picks the false-alarm interval, and the detection delay comes with it, growing only with its log. Anyone can trip, two humans re-arm, and nothing can be clicked past.
+- **Silence is not safety.** A dead hedge feed, a missing eighth server or a counterparty in manual settlement is a Tier-2 event with a named owner and a five-second deadline.
+
+### The Spec You Hand the Robot
+
+```text
+SYSTEM: two-clock quoting engine for a systematic credit desk. Implement exactly this; ask before guessing.
+
+1. PRICE STORE. Every record: instrument_key (internal surrogate), value, price_type in {PRICE, SPREAD, YIELD},
+   side, size_mm (USD mm par; flag TRACE-capped), price_kind in {TRADED, FIRM_QUOTE, INDICATIVE_RUN, EVALUATED,
+   COMPOSITE}, source, event_ns, known_ns. Only TRADED and FIRM_QUOTE may be labels, fills or cost targets.
+   Late records go to a correction stream; never overwrite. TRACE affiliate duplicates are MARKED, never deleted;
+   tag regime {no_flag, flag_voluntary (from 2026-08-31), flag_mandatory (from 2027-08-02)}.
+2. SECURITY MASTER. Bitemporal facts (key, attr, value, valid [from, to), known [from, to)); knowledge time
+   non-decreasing; exclusion constraint per (key, attr). Backtests query as_of(valid <= t, known = t) only.
+   Test: Serta 2016 first-lien loan as of 2020-06-23 known 2020-06-22 00:00 returns first_lien_pari.
+3. LATENCY. Measure sojourn (arrival to response), not service time. Report p50/p99/p99.9 by utilisation band.
+   Alert when the p99 at current load exceeds the trigger-table refresh budget.
+4. TRIGGER TABLE (fast path). Per exposed quote i: side, hedge reference prices H_ref[j], beta[i,j] in bond points
+   per hedge point, theta_i = h_i - m_i - guard (points), tau[i,j] = theta_ij / |beta[i,j]| with
+   theta_ij proportional to |beta[i,j]| * sigma_j. Pull if any |H_j - H_ref_j| > tau[i,j] (or if the joint rule
+   |beta_i . dH| > theta_i fires). Fixed point Q.16; guard >= rounding bound + convexity bound. Pull only;
+   re-arm only by a new row from the slow path, gated on realised hedge volatility.
+5. KILL SWITCH. Tier 0 (no override argument): price collar, PriceType sanity, max order, max live notional,
+   message rate. Tier 1: CUSUM on 1-minute markouts, delta and c from config; log ARL0 and ARL1. Tier 2: version or
+   config skew, hedge-feed heartbeat gap, clock fault, venue down -> pull all quotes referencing it. Tier 3:
+   drawdown stop-loss. Any authorised human or monitor may trip; trip cancels everything in scope;
+   re-arm requires two distinct humans plus a passing slow-path check. Every alert has an owner and a 5 s deadline.
+6. TESTS. The asserts in blocks 1-5 of this chapter, plus the cold open: TY -6/32, HYG -14c must pull the bid.
+```
+
+### Exercises
+
+1. **Kaz's engine on a CPI morning.** With $\mathbb{E}[S] = 40$ ms and $c_s^2 = 4$, find the utilisation $\rho$ at which the approximate p99 *waiting time* equals 500 ms. If the trigger-table refresh budget is 500 ms, what fraction of quote refreshes must be shed or batched when load rises from $\rho = 0.5$ to $\rho = 0.9$? Then rerun block 3 with $c_s^2 = 1$ and explain, in one sentence for the risk meeting, why "make the slow requests less slow" beats "make the average request faster."
+2. **Add LQD and CDX IG to the table.** Derive $\beta_{i,\text{LQD}}$ by the method of §27.6.1, allocate $\theta_i$ across TY, LQD and CDX IG, and construct a move vector for which the per-instrument rule pulls and the joint rule does not. Using a covariance of your choosing (state it), estimate the false-pull rate by simulation, and show that it never misses a joint-rule pull.
+3. **The J.Crew drop-down as rows.** Write the bitemporal rows for an IP transfer to an unrestricted subsidiary (Chapter 13), including the guarantor-map change and the event row. Which as-of query must a backtest of Chapter 25's covenant-flag signal use? What specifically goes wrong if the vendor's "point-in-time" file is valid-time only?
+4. **Your PM says "never false-alarm."** Compute the CUSUM detection delay as $c \to \infty$, then explain the result to her using only poker terms. Then choose $c$ so that, at 200 fills a day and $\delta = 0.75$, false alarms average no more than one a month (21 trading days), and report $\text{ARL}_1$.
+5. **ROBO and the zero-pick-off mandate.** ROBO receives the spec "make sure we never get picked off." Describe what it builds (hint: §27.6.2 has a closed form for the expected loss of a quote that is never shown). Then rewrite the spec with units, a loss budget per day, and boundary conditions so that the optimal policy is not "quote nothing."
+6. **Kaz wants the callable-bond OAS model on the FPGA.** Write the one-paragraph memo declining the request. It should cite the convexity term, the re-synthesis cycle and the "table is data, logic is fixed" principle, and offer the alternative: stream callables from the slow path at a wider $h$, or not at all.
+
+## 27.10 Sources and Links
+
+### Deep-Dive Resource Graph
+
+**Podcasts**
+
+- Bloomberg *Odd Lots* (series): episodes on bond-market electronification, portfolio trading and high-frequency trading. No specific episode was verified for this chapter; search the archive by topic.
+- *Flirting with Models* (Corey Hoffstein, series): practitioner interviews on systematic implementation and execution. Series-level pointer only.
+
+**Practitioner Writing**
+
+- Kevin McPartland, "What the buy side wants from their bond dealers," Coalition Greenwich blog, 2024-02-13. https://www.greenwich.com/blog/what-buy-side-wants-their-bond-dealers
+- Fleming, Johansson, Keane and Meyer, "From the Vault: A Look Back at the October 15, 2014 Flash Rally," *Liberty Street Economics*, 2019-10-15. https://libertystreeteconomics.newyorkfed.org/2019/10/from-the-vault-a-look-back-at-the-october-15-2014-flash-rally/
+- Man Group papers on systematic credit (2022 and 2023), cited from the shelf as Man_Quantitative_Credit_Alpha_Early_Mover_2022 and Man_Revolutions_in_Credit_Trading_2023.
+- Arista Networks, 7130 Series product documentation (Layer 1+ devices; vendor latency specifications). Title only.
+- AMD and Exegy, STAC-T0 tick-to-trade benchmark announcements (2024). Vendor claims; title only.
+- The DESK coverage of auto-quoting, no-touch rates and credit futures blocks (2025-10-08, 2026-10-08, 2026-10-16), as cited in the Trend Watch boxes. Title only.
+
+**Academic Papers**
+
+- Matteo Aquilina, Eric Budish and Peter O'Neill (2020), "Quantifying the High-Frequency Trading 'Arms Race': A Simple New Methodology and Estimates," FCA Occasional Paper 50; later published in the *Quarterly Journal of Economics*. https://www.fca.org.uk/publication/occasional-papers/occasional-paper-50.pdf
+- Eric Budish, Peter Cramton and John Shim (2015), "The High-Frequency Trading Arms Race: Frequent Batch Auctions as a Market Design Response," *Quarterly Journal of Economics* 130(4).
+- Jeffrey Dean and Luiz André Barroso (2013), "The Tail at Scale," *Communications of the ACM* 56. https://research.google/pubs/the-tail-at-scale/
+- John D. C. Little (1961), "A Proof for the Queuing Formula: L = λW," *Operations Research* 9(3).
+- J. F. C. Kingman (1961), "The Single Server Queue in Heavy Traffic," *Proceedings of the Cambridge Philosophical Society* 57.
+- E. S. Page (1954), "Continuous Inspection Schemes," *Biometrika* 41; Gary Lorden (1971), "Procedures for Reacting to a Change in Distribution," *Annals of Mathematical Statistics* 42; George Moustakides (1986), "Optimal Stopping Times for Detecting Changes in Distributions," *Annals of Statistics* 14.
+- David Siegmund (1985), *Sequential Analysis: Tests and Confidence Intervals*, Springer (the ARL approximation used in §27.7).
+- Lockwood, Gupte, Mehta, Blott, English and Vissers (2012), "A Low-Latency Library in FPGA Hardware for High-Frequency Trading (HFT)," IEEE Symposium on High-Performance Interconnects.
+- Richard T. Snodgrass (1999), *Developing Time-Oriented Database Applications in SQL*, Morgan Kaufmann (the bitemporal model of §27.3).
+
+**Regulation, Data & Code**
+
+- SEC, *In the Matter of Knight Capital Americas LLC*, Release No. 34-70694 (2013-10-16). https://www.sec.gov/litigation/admin/2013/34-70694.pdf
+- SEC, Risk Management Controls for Brokers or Dealers with Market Access (Rule 15c3-5), Release No. 34-63241 (2010-11-03). https://www.sec.gov/rules/final/2010/34-63241.pdf
+- SEC press release 2014-260, adoption of Regulation SCI (2014-11-19). https://www.sec.gov/news/press-release/2014-260
+- Commission Delegated Regulation (EU) 2017/589 (MiFID II RTS 6, algorithmic trading). https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32017R0589
+- FINRA Rule 4590, Synchronization of Member Business Clocks. https://www.finra.org/rules-guidance/rulebooks/finra-rules/4590
+- FINRA TRACE overview and specifications. https://www.finra.org/filing-reporting/trace (Regulatory Notices 25-17 and 26-16: title only.)
+- OpenFIGI symbology and mapping API. https://www.openfigi.com/ and https://www.openfigi.com/api
+- CourtListener REST API, for the docket of *Dinosaur Financial Group LLC v. S&P Global Inc.*, S.D.N.Y. No. 1:22-cv-01860. https://www.courtlistener.com/help/api/
+- This chapter's reference implementation: `ch27_desk_system.py`, blocks 1–5 above (provenance and dedupe, bitemporal master, queueing, trigger tables, kill switch).
+
+<!-- STATUS: COMPLETE -->
 
 
 ---
@@ -25457,14 +25487,6 @@ Ines closes the floor. "You've seen the hand history. You know the pot. Go run t
 
 # Chapter 28: What a Desk Head / Senior PM Must Know to Extract Maximum Alpha
 
-<!-- WRITER PLAN (sections appended in order as drafted; resume after the last complete "## 28.x" section):
-28.0 Cold open; 28.1 Risk, not capital (+ Trend Watch: the platform operating system); 28.2 Effective breadth when issuers cluster (code block 1);
-28.3 Allocation across signal horizons (+ Trend Watch: the liquid overlay layer; code block 2); 28.4 Kelly with jump-to-default
-(+ Case Study / Trend Watch: the 2026 CCC decompression; code block 3); 28.5 LVaR, days-to-liquidate and the 5x problem
-(Case Study: Third Avenue 2015; code block 4); 28.6 Drawdown control and marking to bid (Case Study: March 2020 and March 2026; code block 5);
-28.7 The leverage band and the kappa problem (code block 6); 28.8 Running ex-RSSG analysts alongside PhDs (Case Study: aligned signals; code block 7);
-28.9 The PM dashboard (full Specification for AI Implementation, final block); 28.10 Desk Debrief, Spec You Hand the Robot, Exercises;
-28.11 Deep-Dive Resource Graph. -->
 
 ## 28.0 Cold Open: The Keys to the Table
 
@@ -26366,8 +26388,307 @@ assert 0.05 < shock < 0.075
 assert abs(mark_to_bid_shock(5.0, 0.006, 5.8) - 0.072) < 1e-12
 ```
 
-Edge cases: `prob_hit` requires $\sigma > 0$ and $T > 0$; a negative $\mu$ is allowed (a losing PM) and the formula still holds; `stop_for_lifetime_prob` is undefined for a non-positive Sharpe ratio, for which every stop is eventually hit; and the two-threshold simulation must measure loss on *initial* allocated capital, as Paleologo specifies, because measuring it on current capital after the cut turns a 7.5% exit into a 10% one.
+Edge cases: `prob_hit` requires $\sigma > 0$ and $T > 0$; a negative $\mu$ is allowed (a losing PM) and the formula still holds; `stop_for_lifetime_prob` is undefined for a non-positive Sharpe ratio, for which every stop is eventually hit; and the two-threshold simulation must measure loss on *initial* allocated capital, as Paleologo specifies, because measuring it on current capital after the cut silently moves the exit.
 
+## 28.7 The Leverage Band and the κ Problem
+
+Every term is now on the table, and they assemble into the one equation to tape to the monitor. The floor is (28.2). The ceiling comes from the drawdown limit. Let the book's annual NAV return be $G(\mu_{\text{GMV}} + \kappa\,\sigma_{\text{GMV}} Z)$, with $\sigma_{\text{GMV}} = \sigma_{\text{DTS}}/\sqrt{N_{\text{eff}}}$, $\mu_{\text{GMV}} = \text{SR}\,\sigma_{\text{GMV}}$, $Z$ a standardized shock with distribution $F$, and $\kappa \ge 1$ the factor by which realized volatility exceeds predicted volatility in a drawdown. Require $\Pr(\text{loss} > \text{DD}_{\max}) \le p_{\text{loss}}$ (we write $\text{DD}_{\max}$, not $D_{\max}$, because $D$ is duration). With $z_p = -F^{-1}(p_{\text{loss}})$, the condition is $G\sigma_{\text{GMV}}(\kappa z_p - \text{SR}) \le \text{DD}_{\max}$. In credit the drawdown budget must also absorb the liquidation and mark-to-bid cost $\text{COL}(G)$, as a fraction of NAV, which arrives in the same tail event. So
+
+$$
+\frac{\sqrt{N_{\text{eff}}}}{\sigma_{\text{DTS}}}\cdot\frac{r_{\min}}{\text{SR}} \;\le\; G \;\le\; \frac{\sqrt{N_{\text{eff}}}}{\sigma_{\text{DTS}}}\cdot\frac{\text{DD}_{\max} - \text{COL}(G)}{\kappa z_p - \text{SR}}. \tag{28.22}
+$$
+
+The ceiling is a fixed point, because $\text{COL}$ grows with $G$. With the linear mark-to-bid cost of (28.21), $\text{COL}(G) = c_1 G$ with $c_1 = \tfrac12(m-1)\overline{\text{LCS}}$, and writing $A = \sqrt{N_{\text{eff}}}/(\sigma_{\text{DTS}}(\kappa z_p - \text{SR}))$,
+
+$$
+G_{\max} = \frac{A\,\text{DD}_{\max}}{1 + A\,c_1} \;<\; \frac{\text{DD}_{\max}}{c_1} = \frac{2\,\text{DD}_{\max}}{(m-1)\,\overline{\text{LCS}}}. \tag{28.23}
+$$
+
+The right-hand bound is the **liquidity speed limit**: no amount of breadth, Sharpe or model confidence takes a credit book's leverage above it, because as $A \to \infty$ the ceiling converges to it. At $\text{DD}_{\max} = 7.5\%$, $m = 5.8$ and $\overline{\text{LCS}} = 0.8\%$, the speed limit is $0.15/0.0384 = 3.9\times$.
+
+> **[SOURCE EXTRACTION]** *Paleologo_Advanced_Portfolio_Management p.175–176:* "we … assume that realized portfolio volatility is inflated by a positive factor κ … with values between 1 (if we really believe in models) and 3 (if we are skeptical)." … "In practice, we want to set −κF⁻¹(p_loss) between 4 and 6."
+>
+> **Annotation.** In credit, $\kappa$ has an observable cousin: the ratio of stressed to calm relative-spread volatility, $\sigma_{\text{rel}}$ in a stress window over $\sigma_{\text{rel}}$ in the calibration window. Estimate it by bucket, because the CCC ratio in 2026 is not the IG ratio. And note that credit has two stress multipliers, not one: $\kappa$ inflates the volatility, and $m$ inflates the bid-ask. They hit together, which is why (28.22) charges both in the same tail.
+
+Theo's HY PM: $N_{\text{eff}} = 40$, $\sigma_{\text{DTS}} = 5\%$, $\text{SR} = 2$, $\kappa z_p = 4$, $\text{DD}_{\max} = 7.5\%$ and $r_{\min} = 5\%$ *(all illustrative)*. Without liquidity, the band is $[3.16,\ 4.74]$. Charge the 2008 mark-to-bid with $\overline{\text{LCS}} = 0.8\%$ and the ceiling falls to $4.74/(1 + 63.2 \times 0.0192) = 2.14$, below the floor. **The band is empty.** The liquidity term closed it. The desk head has four levers, and all of them are in this chapter: cut $\overline{\text{LCS}}$ (route beta management to the overlay, use smaller tickets and PT, §28.3), lower the PM's hurdle $r_{\min}$, buy a wider drawdown limit with a lower $p_{\text{loss}}$ elsewhere on the platform, or raise $\text{SR}$ by adding uncorrelated signals (§28.8). Halving the LCS and accepting a 4% hurdle reopens the band at about $[2.5,\ 3.0]$.
+
+> **Desk Myth vs. Desk Reality.** *Myth:* "A higher-Sharpe PM needs less leverage." *Reality:* a higher Sharpe *requires* less (the floor falls) and *permits* more (the ceiling rises, because $\kappa z_p - \text{SR}$ shrinks). Paleologo makes the same point about the idiosyncratic share of variance, $p_{\text{idio}}$ (p.178): "When the percentage idio p_idio increases, it works its magic on both sides of the equation: the lower admissible leverage decreases and the highest admissible leverage increases." IDO or it didn't happen, in leverage form: idiosyncratic risk is the only risk that widens the band from both ends.
+
+### Specification for AI Implementation (Block 6): The Leverage Band
+
+What ROBO built from the vague version ("use as much leverage as is safe"): the ceiling without the floor, and without COL. It reported 4.74× and the word "safe."
+
+```python
+# --- Block 6: the leverage band -------------------------------------------------
+def leverage_floor(n_eff, sigma, r_min, sharpe):
+    """Eq. (28.2)."""
+    return np.sqrt(n_eff) / sigma * r_min / sharpe
+
+
+def leverage_ceiling(n_eff, sigma, dd_max, sharpe, kappa_z, col_fn=None):
+    """Eq. (28.22): fixed point G = A (DD_max - COL(G)); COL(G) is a fraction of NAV, increasing."""
+    if kappa_z <= sharpe:
+        raise ValueError("kappa * z_p must exceed the Sharpe ratio")
+    a = np.sqrt(n_eff) / (sigma * (kappa_z - sharpe))
+    if col_fn is None:
+        return a * dd_max
+    h = lambda g: g - a * (dd_max - col_fn(g))
+    hi = a * dd_max
+    return hi if h(hi) <= 0.0 else optimize.brentq(h, 0.0, hi, xtol=1e-12)
+
+
+def liquidity_speed_limit(dd_max, lcs_mean, mult):
+    """Eq. (28.23), right-hand side: 2 DD / ((m - 1) LCS)."""
+    return 2.0 * dd_max / ((mult - 1.0) * lcs_mean)
+
+
+m08 = 5.8
+c1 = 0.5 * (m08 - 1.0) * 0.008
+lo = leverage_floor(40, 0.05, 0.05, 2.0)
+hi_dry = leverage_ceiling(40, 0.05, 0.075, 2.0, 4.0)
+hi_wet = leverage_ceiling(40, 0.05, 0.075, 2.0, 4.0, col_fn=lambda g: c1 * g)
+a_band = np.sqrt(40) / (0.05 * 2.0)
+assert abs(lo - 3.162) < 1e-3 and abs(hi_dry - 4.743) < 1e-3
+assert abs(hi_wet - a_band * 0.075 / (1 + a_band * c1)) < 1e-9     # closed form (28.23)
+assert hi_wet < lo < hi_dry                                        # liquidity closes the band
+assert leverage_ceiling(10**8, 0.05, 0.075, 2.0, 4.0, lambda g: c1 * g) < liquidity_speed_limit(0.075, 0.008, m08)
+assert abs(liquidity_speed_limit(0.075, 0.008, m08) - 0.075 / c1) < 1e-12
+c1_half = 0.5 * (m08 - 1.0) * 0.004                                # halve LCS, accept a 4% hurdle
+assert leverage_floor(40, 0.05, 0.04, 2.0) < leverage_ceiling(40, 0.05, 0.075, 2.0, 4.0, lambda g: c1_half * g)
+```
+
+Edge cases: $\kappa z_p \le \text{SR}$ means the PM's Sharpe exceeds the stress quantile and the formula has no ceiling, which is a sign the inputs are wrong, so the function raises; `col_fn` must be increasing in $G$ for the fixed point to be unique; and the floor uses the *forecast* Sharpe, so a floor computed from a backtest Sharpe is a floor computed from the wrong number (deflate it, Chapter 26).
+
+## 28.8 Running Ex-RSSG Analysts Alongside PhDs
+
+Sunita is explaining a fulcrum analysis to Kaz. Kaz, delighted, asks whether the fulcrum security is "the one at the pivot of the lever, where a small force moves a large load." Sunita says yes, actually: it is the class where value breaks, so a small change in enterprise value moves its recovery the most. Kaz has, for once, read a legal term correctly by reading it as physics. It is the right picture of the team: two vocabularies for one sensitivity.
+
+The team is a production function. Two signals with information coefficients $\text{IC}_1$, $\text{IC}_2$ and correlation $\rho$, combined optimally (regress the forward return on both standardized signals), have a combined IC equal to the multiple correlation,
+
+$$
+\text{IC}_c^2 = \mathbf{ic}^{\top} C^{-1}\, \mathbf{ic} = \frac{\text{IC}_1^2 + \text{IC}_2^2 - 2\rho\,\text{IC}_1\text{IC}_2}{1 - \rho^2}. \tag{28.24}
+$$
+
+Two signals with IC 0.05 each combine to 0.056 if they correlate at 0.6 (another price factor), 0.071 if they are uncorrelated (a docket or covenant signal), and 0.079 at $\rho = -0.2$. The value of an ex-RSSG analyst to a quant book is mostly the $\rho$, not the IC: documents, dockets and process are information the price factors do not contain.
+
+Breadth has a cost the formula hides. Suppose a PM's edge per bet dilutes as coverage grows, $e(N) = e_0 N_c/(N + N_c)$, with $N_c$ the coverage at which attention halves the edge. Then $\text{IR} \propto e(N)\sqrt{N} \propto \sqrt{N}/(N + N_c)$, whose derivative vanishes where $N + N_c = 2N$:
+
+$$
+N^\ast = N_c. \tag{28.25}
+$$
+
+Optimal coverage equals the dilution scale. Past it, each new name lowers the IR. A team helps only by adding coverage at the *new* member's own $N_c$, not by stretching the PM's.
+
+> **[SOURCE EXTRACTION]** *Paleologo_Advanced_Portfolio_Management p.149:* "The power of diversification is great. It is not a skill: it is a skill multiplier." … "Beyond a certain threshold, coverage and breadth increase at the expense of accuracy."
+>
+> **Annotation.** Equation (28.25) is the second sentence, made precise. Its credit corollary is the hiring rule: an analyst is worth adding when her names are ones the book does not cover and her hit rate on them, measured with the standard error of (28.6), is at least the PM's. Paleologo also warns (p.131) that a platform run "as a fund of funds" pays "the opportunity cost of not adopting more advanced techniques": pods that never share signals cannot combine them through (28.24).
+
+### Case Study: Aligned Signals, and the Hybrid Shop
+
+Barclays' QPS and credit research teams, as reported by Impax (19 September 2025), measured the effect directly in US investment grade. The issuer-level hit rate was about 58% overall, about 66% when analyst and quant signals agreed, and about 52% when they conflicted. Concentrating on aligned decisions lifted excess return from 2.0% to 3.7% a year and the IR from 1.09 to 1.71, and doubling exposure to aligned signals gave 4.1% with an IR of 1.83. The industry has priced the same conclusion: in late October 2025, Ares agreed to buy BlueCove, a systematic fixed-income manager with about \$5.5bn of AUM and about 60 staff, and to rebrand it Ares Systematic Credit (Alternative Credit Investor, 30 October 2025; see Chapter 4). The design rule that follows is a division of labour. Analysts own $L$, $L_{\max}$ and the document features (PRS, Chapter 13); PhDs own $\lambda^{\mathbb{P}}$, $\sigma_{\text{DTS}}$ and the covariance; and every analyst view is logged in the Edge Ledger (Chapter 3) with timestamp, horizon and confidence, so that its IC, its $\rho$ and its hit rate are measured rather than remembered. The ROBO spec is the contract between the two cultures: if a view cannot be written as a field with units, it is not yet a view.
+
+```python
+# --- Block 7: the team production function --------------------------------------
+def combined_ic(ics, corr):
+    """Eq. (28.24): sqrt(ic' C^{-1} ic)."""
+    ics = np.asarray(ics, dtype=float)
+    return float(np.sqrt(ics @ np.linalg.solve(np.asarray(corr, dtype=float), ics)))
+
+
+def optimal_coverage(n_c, e0=0.01, n_grid=None):
+    """Eq. (28.25) by brute force: argmax of e(N) sqrt(N) with e(N) = e0 n_c / (N + n_c)."""
+    n = np.arange(1, 20 * n_c + 1) if n_grid is None else n_grid
+    ir = 2.0 * e0 * n_c / (n + n_c) * np.sqrt(TRADING_DAYS * n)
+    return int(n[np.argmax(ir)])
+
+
+for rho, target in ((0.6, 0.0559), (0.0, 0.0707), (-0.2, 0.0791)):
+    two = np.sqrt((0.05 ** 2 * 2 - 2 * rho * 0.05 ** 2) / (1 - rho ** 2))
+    assert abs(combined_ic([0.05, 0.05], [[1, rho], [rho, 1]]) - two) < 1e-12
+    assert abs(two - target) < 1e-4
+assert optimal_coverage(35) == 35
+```
+
+## 28.9 The PM Dashboard: The 13-Week Model, Reborn
+
+Theo's USB stick finally earns its keep. The PM dashboard asks the question the 13-week model always asked (do we make it to the other side of the quarter?) about the desk instead of the borrower, and answers it with every formula in this chapter on one screen. Mags reads it top to bottom and asks who adjusted it. Theo points to the equation number next to each line.
+
+| Panel | Metric | Formula | Alarm *(illustrative thresholds)* |
+| :--- | :--- | :--- | :--- |
+| Leverage | $G$ against floor, ceiling and speed limit | (28.2), (28.22), (28.23) | $G$ above the ceiling, or band empty |
+| Breadth | $N_{\text{eff}}$, $1/H$ on issuers, ES share of top decile | (28.4), Procedure 8.1 | $N_{\text{eff}} < 25$ |
+| Horizon | Net alpha by signal and tier | (28.7) | Any signal traded with negative net alpha |
+| Sizing | Capped half-Kelly vs actual, by issuer and cluster | (28.11)–(28.14) | Actual above cap; cluster $\sum fL \ge 1$ |
+| Liquidity | Stressed COL, days-to-liquidate, FRTB-style ES | (28.16)–(28.18) | More than 20% of gross beyond 20 days |
+| Drawdown | Realized loss plus $\Delta^{\text{mark}}$ against $x/2$ and $x$ | (28.21) | Budget used above 80% of $x/2$ |
+| Runway | Weeks of cash against margin and redemption burn | Block 4 | Under 13 weeks |
+| Team | Hit rate and SE by signal and analyst | (28.6) | Hit rate within one SE of 50% after a year |
+
+### Specification for AI Implementation: `pm_playbook_engine`
+
+**Input schema (one row per bond; internal identifiers only, never a CUSIP the spec did not supply).**
+
+| Column | Type | Units | Notes |
+| :--- | :--- | :--- | :--- |
+| `bond_id`, `issuer_id`, `sector` | str / int | — | Net to `issuer_id` before breadth and Kelly |
+| `tier` | int | 0, 1, 2 | §28.3 ladder |
+| `mv_usd` | float64 | USD | Signed; marked at bid (long) or offer (short) |
+| `spr_dur`, `spread` | float64 | years, decimal | $D^{\text{spr}}$ and OAS ($s$) |
+| `sigma_rel` | float64 | decimal / yr | Relative spread volatility |
+| `lcs`, `adv_usd` | float64 | decimal, USD/day | Calm round-trip LCS; trailing ADV |
+| `lam_p`, `lgd_mean`, `lgd_max` | float64 | 1/yr, decimal | $\lambda^{\mathbb{P}}$ (never $\mathbb{Q}$); $L$ and its document-implied worst case |
+
+Desk parameters (NAV, $\text{DD}_{\max}$, $\kappa z_p$, SR, $r_{\min}$, $m$, the two stop levels, realized drawdown, cash, liquid sleeve, weekly burn, participation, $\rho_w$, $\rho_a$, the Kelly edge s.e.) are a dictionary with units in the key names. The engine is pure: no I/O, no clock, seeded.
+
+```python
+# --- Final block: pm_playbook_engine --------------------------------------------
+def make_demo_book(rng, n_issuers=60, bonds_per=5, nav=4e8):
+    iss = np.repeat(np.arange(n_issuers), bonds_per)
+    n = iss.size
+    tier = np.where(iss < 48, 1, 2)
+    side = np.where(rng.random(n_issuers) < 0.8, 1.0, -1.0)[iss]        # same sign within issuer
+    spread = np.where(tier == 1, rng.uniform(0.008, 0.045, n), rng.uniform(0.06, 0.14, n))
+    return pd.DataFrame({
+        "bond_id": [f"B{i:04d}" for i in range(n)], "issuer_id": iss, "sector": iss % 11,
+        "tier": tier, "mv_usd": side * rng.uniform(4e6, 10e6, n),
+        "spr_dur": rng.uniform(2.0, 6.0, n), "spread": spread, "sigma_rel": rng.uniform(0.25, 0.45, n),
+        "lcs": np.where(tier == 1, 0.006, 0.025), "adv_usd": rng.uniform(2e6, 2e7, n),
+        "lam_p": np.where(tier == 1, 0.5, 0.8) * spread / 0.6,              # P-hazard below Q (illustrative)
+        "lgd_mean": np.where(tier == 1, 0.6, 0.7), "lgd_max": np.where(tier == 1, 0.8, 1.0),
+    })
+
+
+def pm_playbook_engine(book, desk):
+    gross = float(book.mv_usd.abs().sum())
+    g = gross / desk["nav_usd"]
+    sig = (book.spr_dur * book.spread * book.sigma_rel).to_numpy()
+    cov = issuer_block_cov(book.issuer_id.to_numpy(), sig, desk["rho_within"], desk["rho_across"])
+    w = book.mv_usd.to_numpy() / gross
+    n_eff = effective_breadth(w, cov)
+    by_iss = book.groupby("issuer_id").mv_usd.sum()
+    sigma_book = float(np.sqrt(w @ cov @ w) * np.sqrt(n_eff))           # per-bet vol consistent with N_eff
+    lcs_bar = float(np.average(book.lcs, weights=book.mv_usd.abs()))
+    c1 = 0.5 * (desk["mult"] - 1.0) * lcs_bar
+    floor = leverage_floor(n_eff, sigma_book, desk["r_min"], desk["sharpe"])
+    ceil = leverage_ceiling(n_eff, sigma_book, desk["dd_max"], desk["sharpe"], desk["kappa_z"],
+                            col_fn=lambda x: c1 * x)
+    iss = book.groupby("issuer_id").agg(carry=("spread", "mean"), lam=("lam_p", "mean"),
+                                        lgd=("lgd_mean", "mean"), lgd_max=("lgd_max", "max"))
+    theta = kelly_multiplier(desk["edge_rel_se"])
+    kelly = np.array([theta * kelly_jump(r.carry, r.lam, r.lgd) for r in iss.itertuples()])
+    kelly_cap = np.minimum(kelly, (1.0 - 1e-9) / iss.lgd_max.to_numpy())
+    actual = by_iss.reindex(iss.index).abs().to_numpy() / desk["nav_usd"]
+    dtl = days_to_liquidate(book.mv_usd.to_numpy(), book.adv_usd.to_numpy(), desk["participation"])
+    col = credit_col(book.mv_usd, book.lcs, book.adv_usd, mult=desk["mult"], eta=desk["eta"]).sum()
+    used = desk["realized_dd"] + mark_to_bid_shock(g, lcs_bar, desk["mult"])
+    return pd.Series({
+        "gross_leverage": g, "lev_floor": floor, "lev_ceiling": ceil,
+        "lev_speed_limit": liquidity_speed_limit(desk["dd_max"], lcs_bar, desk["mult"]),
+        "band_empty": floor > ceil, "lev_breach": g > ceil,
+        "n_eff": n_eff, "issuer_herfindahl_n": herfindahl_breadth(by_iss.to_numpy()),
+        "names_over_kelly_cap": int(np.sum(actual > kelly_cap)),
+        "stressed_col_pct_nav": col / desk["nav_usd"],
+        "pct_gross_over_20d": float(book.mv_usd.abs()[dtl > 20].sum() / gross),
+        "dd_budget_used_pct_of_cut": used / desk["stop_half"],
+        "runway_weeks": runway_weeks(desk["cash_usd"], desk["liquid_sleeve_usd"],
+                                     desk["weekly_burn_usd"], haircut=0.1),
+        "hit_rate_se_1y": hit_rate_se(0.51, n_eff),
+    })
+
+
+DESK = {"nav_usd": 4e8, "dd_max": 0.075, "kappa_z": 4.0, "sharpe": 2.0, "r_min": 0.05, "mult": 5.8,
+        "eta": 0.5, "stop_half": 0.05, "realized_dd": 0.01, "cash_usd": 6e7, "liquid_sleeve_usd": 1.5e8,
+        "weekly_burn_usd": 8e6, "participation": 0.10, "rho_within": 0.9, "rho_across": 0.01,
+        "edge_rel_se": 1.0}
+dash = pm_playbook_engine(make_demo_book(np.random.default_rng(28)), DESK)
+
+assert 1.0 < dash.n_eff < dash.issuer_herfindahl_n <= 60.0 + 1e-9    # correlation shrinks breadth
+assert dash.lev_ceiling < dash.lev_speed_limit
+assert dash.lev_breach == (dash.gross_leverage > dash.lev_ceiling)
+assert 0.0 <= dash.pct_gross_over_20d <= 1.0 and dash.stressed_col_pct_nav > 0.0
+assert dash.runway_weeks > 13.0                                      # the desk survives the quarter
+assert dash.dd_budget_used_pct_of_cut > DESK["realized_dd"] / DESK["stop_half"]   # marks count
+print(dash.to_string())
+```
+
+The one non-obvious line is `sigma_book`. Equation (28.22) is written for $N_{\text{eff}}$ equal, independent bets of volatility $\sigma_{\text{DTS}}$, so the engine backs out the per-bet volatility that, with the measured $N_{\text{eff}}$, reproduces the book's actual volatility per dollar of GMV: $\sigma_{\text{DTS}} = \sigma_{\text{GMV}}\sqrt{N_{\text{eff}}}$. Because of how (28.4) is defined, this per-bet volatility is exactly the GMV-weighted average bond volatility $\sum_i |w_i|\sigma_i$, which makes a useful audit: the band built from $(N_{\text{eff}}, \sigma_{\text{DTS}})$ reproduces the book's measured risk per dollar of GMV by construction. Feeding in a median or unweighted bond volatility breaks that identity, and the band with it.
+
+## 28.10 Desk Debrief
+
+- **Allocate risk, not dollars.** Give each PM three budgets: volatility, drawdown, and liquidity (days-to-liquidate and stressed cost). The dollars fall out of the division.
+- **Breadth is issuers, not CUSIPs.** Use $N_{\text{eff}}$ from (28.4). A residual correlation of 1% caps any credit book at about 100 bets, and a year of P&L on 40 bets measures the hit rate with a standard error the size of the edge.
+- **Every signal pays its rake.** $h^\ast = \ln 2 \cdot c^{\text{RT}}/\alpha_0$: fast signals in the index layer, slow ones in cash, docket alpha in stressed bonds. The overlay manages beta so the cash books keep their IDO.
+- **Kelly in credit is $f^\ast = 1/L - \lambda^{\mathbb{P}}/c$, inside a ruin boundary set by the documents.** The worst recovery sets $1/L_{\max}$, not the average one. Half Kelly is full Kelly with honest standard errors. Clusters obey $\sum f L < 1$. Never use $\mathbb{Q}$, never use a smoothed mark.
+- **The 5× is the base case.** IG round-trip cost went from 0.59% to 3.40% in 2007–2008. Use $\text{COL} = \tfrac12 m\,\overline{\text{LCS}}\,|\text{MV}|$ with a size term, and treat a fund with under 13 weeks of runway as a going-concern question.
+- **The stop you don't know you have is the mark.** $\Delta^{\text{mark}} = \tfrac12(m-1)\,\overline{\text{LCS}}\,G$ belongs inside $x$, and $x = \sigma\ln(1/P)/(2\,\text{SR})$ is how you set $x$.
+- **Tape (28.22) to the monitor, and remember the speed limit** $G < 2\,\text{DD}_{\max}/((m-1)\,\overline{\text{LCS}})$, which no breadth can lift.
+- **An analyst's value is her $\rho$, not her IC.** Optimal coverage is $N^\ast = N_c$. Log every view in the Edge Ledger, or it is a memory, not a signal.
+
+**The Spec You Hand the Robot.**
+
+```text
+ROLE: Build pm_playbook_engine: a pure, seeded Python function (numpy/scipy/pandas only)
+mapping (book DataFrame, desk dict) -> one dashboard Series. No I/O, no clock, no network.
+UNITS: USD float64; spreads, LCS, vols, drawdowns as decimals; hazards per year under P;
+days are trading days; leverage G = gross MV / NAV. Never invent identifiers.
+BREADTH: net to issuer; N_eff = (sum|w|sigma)^2 / (w' S w) on the idiosyncratic covariance;
+refuse near-zero variance. Report 1/H beside it.
+SIZING: f* = smaller root of sigma^2 L f^2 - (cL + sigma^2) f + (c - lam L) = 0 (rationalized);
+0 if c <= lam L; multiply by 1/(1 + se^2); cap at 1/L_max (documents) and the cluster
+bound sum f L < 1. Merton's mu/sigma^2 is for comparison only.
+LIQUIDITY: COL = 0.5 m LCS |MV| (1 + eta sqrt(|MV|/ADV)), longs and shorts; T = |q|/(pi ADV);
+FRTB ES with horizons 10/20/40/60/120; runway = (cash + (1-h) liquid) / weekly burn.
+DRAWDOWN: used = realized + 0.5 (m-1) LCS G; compare with x/2 and x on INITIAL capital.
+BAND: floor sqrt(N)/sigma * r_min/SR; ceiling = fixed point of G = A (DD - COL(G)), A =
+sqrt(N)/(sigma (kz - SR)); raise if kz <= SR; report the speed limit 2 DD/((m-1) LCS).
+TESTS: every assert in Blocks 1-7 and the final block; MC vs closed form for the hitting
+probability (Brownian bridge) and the hit-rate IR; the 50-day and sqrt(6) regression tests.
+FORBIDDEN: Q-measure hazards in Kelly; volatility from marks that have not traded;
+silently filling a missing ADV or L_max (raise instead).
+```
+
+### Exercises
+
+1. **The empty band.** For Theo's HY PM of §28.7, find the largest average LCS at which the band is non-empty with $r_{\min} = 5\%$. Then find the smallest $N_{\text{eff}}$ at which it is non-empty with no liquidity charge at all, and explain why adding names does not help once the speed limit binds. *(Hint: hold the per-bet IR fixed, so that $\text{SR}$ rises with $\sqrt{N_{\text{eff}}}$, and see which side of (28.22) moves.)*
+2. **Kaz's 93%, re-audited.** The same B3 bond's 5-year CDS trades at 450 bp. Bootstrap $\lambda^{\mathbb{Q}}$ with $L = 0.6$ and show that (28.11) returns zero. Then use $\lambda^{\mathbb{P}} = 1.5\%$ and compute $f^\ast$. Finally, Sunita reports that the credit agreement permits a non-pro-rata uptier: set $L_{\max} = 1$ with a Beta recovery of mean 0.6 and recompute. Which of the three numbers would you defend at the risk committee, and to whom does it belong?
+3. **Your fund is the borrower.** A credit fund has \$150mm of cash, a \$400mm tier-1 sleeve that can be sold at a 3% haircut in stress, prime-broker margin calls of \$10mm a week, and redemptions of \$25mm a week. Compute the runway. Then double the margin haircuts (margin calls to \$20mm a week) and apply the 2008 multiple to the sleeve's cost. Is the fund a going concern by Theo's standard?
+4. **Mags's adjusted number.** Mags asks which line of the dashboard is "adjusted." Name the three inputs to (28.22) that are estimates rather than observations, give each a standard error, and propagate them to a confidence interval on the ceiling. Is the band still a band?
+5. **ROBO and the stop-loss.** Told "never hit the 7.5% stop," ROBO cuts gross to zero at a 3.75% loss and never restarts. Show, using the identity that expected P&L equals $\mu$ times expected capital-time, how much expected return this costs a Sharpe-1, 6%-vol PM relative to Paleologo's two-threshold rule. Then write the spec sentence that would have stopped it.
+
+## 28.11 Sources and Links
+
+### Deep-Dive Resource Graph
+
+**Podcasts**
+- AIMA podcast, Goldman Sachs prime insights on multi-strategy growth and hiring (September 2026), as reported by Hedgeweek (episode details not verified; title only).
+- *Odd Lots* (Bloomberg) and *Flirting with Models* (Corey Hoffstein): episodes on multi-manager pod economics, risk budgeting and position sizing (title only).
+
+**Practitioner Writing**
+- Hedgeweek, "Multi-strats may need to accelerate PM hiring as assets surge" (15 September 2026): https://www.hedgeweek.com/multi-strats-may-need-to-accelerate-pm-hiring-as-assets-surge/
+- Hedgeweek, Millennium and Citadel 2025 returns (5 January 2026): https://www.hedgeweek.com/millennium-and-citadel-post-double-digit-2025-gains-but-lag-smaller-hedge-funds/
+- The Daily Upside on Point72's 2025 return and 190 pods (23 February 2026): https://www.thedailyupside.com/finance/hedge-funds/point72-tops-citadel-and-millennium-returns-as-multi-strategy-funds-expect-another-strong-year/
+- eFinancialCareers on the commonly reported drawdown rule (5 December 2025): https://www.efinancialcareers.com/news/pratik-madhvani-glen-scheinberg
+- Bloomberg, "Hedge Funds Walloped by a Month of Turmoil Sparked by War" (2 April 2026): https://news.bgov.com/new-york-brief/hedge-funds-walloped-by-a-month-of-turmoil-sparked-by-iran-war
+- *Title only:* Cambridge Associates, *2024 Hedge Fund Discretionary Expense Summary* (October 2025); Impax on Barclays QPS aligned signals (19 September 2025); The DESK on MarketAxess bid-ask recovery (1 October 2026) and on Cboe iBoxx futures blocks (16 October 2026); ISDA, *CDS Market Dynamics: Five Years of Activity and a Record 2025* (29 July 2026).
+- Shelf: Paleologo, *Advanced Portfolio Management* (chs. 6, 8, 9, 10); Ben Dor et al., *Quantitative Credit Portfolio Management* (DTS, LCS); Dynkin et al., *Systematic Investing in Credit* (horizons, turnover, rating stop-losses); Man Group (2022, 2023); BlackRock and Blackstone systematic credit papers; Bolder; Bohn and Stein.
+
+**Academic Papers**
+- Gârleanu and Pedersen (2013), *Dynamic Trading with Predictable Returns and Transaction Costs*, *Journal of Finance* 68(6): https://www.nber.org/papers/w15205
+- Bangia, Diebold, Schuermann and Stroughair (1999), *Modeling Liquidity Risk, With Implications for Traditional Market Risk Measurement and Management*: https://ideas.repec.org/p/wop/pennin/99-06.html
+- Kargar, Lester, Lindsay, Liu, Weill and Zúñiga (2021), *Corporate Bond Liquidity During the COVID-19 Crisis*: https://www.nber.org/papers/w27355
+- Sharpe and Zhou (2020), *The Corporate Bond Market Crises and the Government Response*, FEDS Notes: https://www.federalreserve.gov/econres/notes/feds-notes/the-corporate-bond-market-crises-and-the-government-response-20201007.html
+- Garivaltis (2019), *Game-Theoretic Optimal Portfolios for Jump Diffusions*, *Games* 10(1): https://arxiv.org/abs/1812.04603
+- *Title only:* Bermin and Holm (2026), *Kelly trading when asset prices have jumps* (CHECK); O'Hara and Zhou (2021), *Anatomy of a Liquidity Crisis*; Grossman and Zhou (1993), *Optimal Investment Strategies for Controlling Drawdowns*; MacLean, Thorp and Ziemba (2010), *Good and Bad Properties of the Kelly Criterion*; Almgren and Chriss (2001), *Optimal Execution of Portfolio Transactions*; Clarke, de Silva and Thorley (2002), *Portfolio Constraints and the Fundamental Law of Active Management*; Buckle (2004), *How to Calculate Breadth*.
+
+**Data & Code (regulatory sources included)**
+- SEC Release IC-31943 (Third Avenue, 16 December 2015): https://www.sec.gov/files/rules/ic/2015/ic-31943.pdf
+- SEC Rule 22e-4 small-entity compliance guide: https://www.sec.gov/files/secg-liquidity.htm
+- Basel Framework MAR33 (FRTB liquidity horizons): https://www.bis.org/basel_framework/chapter/MAR/33.htm?inforce=20230101&published=20200605
+- Federal Reserve, *Financial Stability Report* (May 2026): https://www.federalreserve.gov/publications/files/financial-stability-report-20260508.pdf
+- FRED, ICE BofA OAS series: https://fred.stlouisfed.org/series/BAMLH0A0HYM2 ; https://fred.stlouisfed.org/series/BAMLC0A0CM ; https://fred.stlouisfed.org/series/BAMLH0A3HYC
+- This chapter's reference implementation: Blocks 1–7 and `pm_playbook_engine` above, which run in order in one interpreter.
+
+<!-- STATUS: COMPLETE -->
 
 
 ---
@@ -27245,6 +27566,271 @@ print(monthly.head(8).to_string(index=False, float_format=lambda v: f"{v:.4f}"))
 **Academic Papers.** Dick-Nielsen (2009), *Liquidity Biases in TRACE*; Dick-Nielsen (2014), *How to Clean Enhanced TRACE Data*; Dimson (1979), *Risk Measurement When Shares Are Subject to Infrequent Trading*; Getmansky, Lo & Makarov (2004), *An Econometric Model of Serial Correlation and Illiquidity in Hedge Fund Returns*; Edwards, Harris & Piwowar (2007), *Corporate Bond Market Transaction Costs and Transparency*; Bessembinder, Kahle, Maxwell & Xu (2009), *Measuring Abnormal Bond Performance*; Bai, Bali & Wen (2019), *Common Risk Factors in the Cross-Section of Corporate Bond Returns*; Dickerson, Mueller & Robotti (2023), *Priced Risk in Corporate Bonds*; Dickerson, Robotti & Rossetti, *The Corporate Bond Factor Replication Crisis* (working paper).
 
 **Data & Code.** FINRA TRACE historic data (<https://www.finra.org/filing-reporting/trace/historic-academic-data>); SEC EDGAR APIs (<https://www.sec.gov/edgar/sec-api-documentation>); RECAP Fetch (<https://wiki.free.law/c/courtlistener/help/api/rest/v4/recap>); FRED HY OAS (<https://fred.stlouisfed.org/series/BAMLH0A0HYM2>); OBAP pipeline (<https://github.com/Alexander-M-Dickerson/trace-data-pipeline>); edgartools (<https://github.com/dgunning/edgartools>); OpenBB (<https://github.com/OpenBB-finance/OpenBB>). All other verified links appear inline above.
+
+<!-- STATUS: COMPLETE -->
+
+
+---
+
+
+# Appendix C: The Trend Tracker
+
+## C.0 Why Trends Are the Spine
+
+The corridor outside the systematic credit desk has been taken over by paper. Theo Marsh has printed all 74 Trend Watch boxes in this book, cut out every dated line, and taped them to the wall in order. The strip starts with a fax machine and ends, eleven meters later, with an AI agent that still fails about one structured task in three.
+
+"It's one story," Theo says. "Twenty-eight chapters, and every box answers the same three questions: what changed, when, and how big. The book has a spine, and I'm looking at it."
+
+"Two spines," says Kaz Lind. "One is structural trends. E-share goes up, recoveries go down, default turns into a negotiation. Those move over years, and you use them to decide what to build. The other is trend-following, Chapter 10: prices that keep going the way they were going. Those move over months, and you use them to decide what to hold." Kaz squints at the 2026 end of the strip. "I assume a 'drop-down' is the same in both. A menu."
+
+"It is a menu," says Mags Dunleavy. "Of assets, sorted by how fast they leave the collateral package. Back in my day you found out about a trend from the recovery, three years late, in the lawyers' invoice. This one has dates and sources. I'll allow it."
+
+Ines Okafor is reading the 2025 section. "Same game at two speeds. A structural trend is a hand that takes eight years to play out. A price trend takes eight months. Either way the question is whether you're early, late, or the player everyone else is reading. And half of these numbers disagree with each other."
+
+"So there's a section for that," Theo says.
+
+ROBO, asked to "track the trends," has computed a 12-month moving average of the word *trend* across the manuscript. The series is rising. ROBO is not wrong.
+
+This appendix is the wall, cleaned up. §C.1 boils the 74 boxes down to seven megatrends. Each one gets a thesis, its key numbers, the chapters it feeds, and the indicators to watch in 2027. §C.2 is the master timeline: one row per sourced fact, deduplicated across chapters. §C.3 collects the numbers on which good sources disagree, and explains why. §C.4 tells the next edition's editor how to keep the tracker alive. Everything here comes from the Trend Watch boxes and the research notes behind them, compiled on 2026-10-18. The appendix adds no new research, so it inherits every *approx.* and every CHECK flag from its sources.
+
+## C.1 The Seven Megatrends of Credit, 2018–2026
+
+A megatrend is a direction that showed up in at least three chapters and in more than one independent data series. It is not a forecast. The seven overlap on purpose. Megatrends 1, 2 and 3 are the same machine seen from the trader's seat, the product shelf and the regulator's desk. Megatrends 4 and 5 are one capital structure seen before and after the lawyers.
+
+| # | Megatrend | One-line thesis | Main chapters |
+| :-- | :-- | :-- | :-- |
+| 1 | The quote went electronic, then automatic | Machines answer the small tickets; adverse selection concentrates in what is left | 1, 2, 3, 4, 18, 27 |
+| 2 | Risk moves in baskets | PT, ETFs, index CDS and futures carry more risk than single bonds | 2, 8, 10, 19, 20, 24 |
+| 3 | The dealer became a router, and the tape was re-plumbed | Inventory left the banks; the meaning of a TRACE print changes yearly | 2, 18, 22, 27 |
+| 4 | Default became a negotiation | The distressed exchange is the modal default, and re-default is the base case | 3, 5, 6, 13, 14, 16 |
+| 5 | The cushion and the covenants disappeared | Recoveries compress, covenants vanish, and the CCC tier decouples | 5, 8, 11, 12, 25 |
+| 6 | Leverage moved off the public tape | Loans, CLOs and private credit grew; public HY stood still | 1, 12, 17, 21 |
+| 7 | Quant credit grew up | Bought rather than built, audited, automated, and trend-tested | 4, 7, 9, 10, 26 |
+
+### C.1.1 Megatrend 1: The Quote Went Electronic, Then Automatic
+
+*Thesis.* Between 2018 and 2026, US corporate bonds moved from voice to venues, and then from venues to machines. By at least one definition IG crossed the halfway line; HY has stalled near a third. The share is not the deep change. The deep change is who answers. The small, uninformed ticket now gets an algorithm's reply in milliseconds at close to the minimum spread. Adverse selection did not go away. It moved into the large, stressed, event-adjacent tickets that are still left for humans, which is the ex-RSSG reader's home game. Automation is also a fair-weather technology. The robots widen their parameters or switch off when the market gaps, so the stress cost of liquidity has not fallen the way the calm-market cost has.
+
+*Key numbers.* IG e-share was 20% in 2015, 48% in 2024 and 52% in June 2025; HY was 6% in 2015, then 33% in 2024 and 32% in 2025 (Coalition Greenwich). ADNV rose from \$46.2bn (2024) to more than \$50bn (2025) to \$61bn (January 2026), and daily turnover went from 0.33% of outstanding (2021) to 0.44% (2024). About 30% of dealer volume ran with no human touch in June 2024. Tradeweb's AiEX handled more than 40% of its institutional trades in 2025 (30% in 2021), Trumid ran 88% of eligible RFQ line items fully no-touch in September 2025, and Vanguard automated about 70% of its desk volume by October 2026. Non-bank liquidity providers earned about 10% of US credit market-making revenue in 2024. In the March 2026 stress, EUR IG bid–ask hit 64% above its January average, and recovery took between 4 weeks (EUR IG) and 14+ weeks (EM).
+
+*Feeds.* Chapters 1, 2, 3, 4, 11, 18, 19 and 27.
+
+*Watch in 2027.* Whether HY breaks out of the 30–33% band on Greenwich's annual series. No-touch share and auto-execution fill rates on high-VIX days, which is the "auto-ex stops executing" signal. The non-bank share of market-making revenue, which Coalition Greenwich expects to grow over the next two to three years. Bid–ask recovery half-life after the next shock. The ICE–MarketAxess closing, expected in H1 2027, and whether the market leader's monthly volume data come back.
+
+### C.1.2 Megatrend 2: Risk Moves in Baskets
+
+*Thesis.* Credit risk increasingly changes hands as a basket rather than as a bond. Portfolio trading went from a curiosity to standard plumbing. Bond ETFs went from a side door to a main entrance. Index CDS absorbed the derivatives market while single-name CDS thinned out, and listed credit futures arrived in 2024. The resulting triangle (ETF, portfolio trade, cash) is regime-dependent. In calm markets, PT does the risk transfer and the ETF share of volume falls. In stress, the ETF is again the only instrument that trades at size. Basket flow also clusters at the index mark, so time of day is now a cost variable.
+
+*Key numbers.* PT was about 1% of IG volume in 2018, 7% in 2021, and 10% of IG and 8% of HY in 2024. It was 18% of the \$84.7bn record day on 30 September 2025 and 19.8% of customer volume in Q1 2026, when 15.5% of all corporate volume printed at the index mark (5% in 2016). US bond ETFs held \$1.8tn at end-2024, 17% of all ETF assets, while the ETF-to-cash volume ratio fell from 23.2% (2022) to 16.6% (2024). Then \$99bn of fixed-income ETFs traded on 7 April 2025. CDS trading set a record \$41.8tn in 2025, of which index products were 93.3%; single-name activity fell from its 2023 peak of \$3.3tn to \$2.8tn. Only 20 of 751 single-name reference entities averaged ten or more trades a day in Q4 2025. Cboe iBoxx credit-futures blocks topped \$1bn a month in July and August 2026. US CLO ETFs passed \$50bn in July 2026.
+
+*Feeds.* Chapters 2, 8, 10, 19, 20, 21 and 24.
+
+*Watch in 2027.* PT share on each denominator, labeled. Bondwave's index-mark share. The ETF discount and the ETF-to-cash ratio as a stress detector. Credit-futures open interest and block counts, now that IBIG blocks have overtaken IBHY. ISDA's single-name breadth. CLO ETF flows, which are effectively a bid for CLO resets.
+
+### C.1.3 Megatrend 3: The Dealer Became a Router, and the Tape Was Re-plumbed
+
+*Thesis.* Bank dealers stopped warehousing corporate bonds. By 2026 the street was net short on average, which Coalition Greenwich's analysis says had not happened in at least 25 years. The inventory function moved to customers: all-to-all venues, ETF creation and redemption, and portfolio trades. Meanwhile the public tape changed its definitions about once a year. The PT modifier came in 2023 and T+1 in 2024. A one-minute reporting rule was approved and then abandoned. Optional aggregate allocation reports began in 2026, and an affiliate-print flag phases in during 2026–27. Treasury clearing is moving the financing of a bond book onto cleared, margined, netted rails. None of these dates changed the economic volume. All of them changed what a print means.
+
+*Key numbers.* Dealers held about \$235bn of corporates at the 2007 peak (approx.; upper bound), averaged about \$16bn long in 2017, and were about \$4bn net short on average in 2026 (approx.). FINRA's statistics show 82.9% of 2022 trades already reported within one minute. Duplicate affiliate prints inflated high-grade TRACE volume by up to 8% in June 2026. FICC cleared a peak of \$11.8trn on 30 June 2025 (approx.). Open Trading carried 35.2%, 35.0% and 37.0% of eligible MarketAxess volume over 2023–2025, so all-to-all is a structural minority, not a takeover.
+
+*Feeds.* Chapters 2, 18, 22 and 27, and Appendix B.
+
+*Watch in 2027.* The mandatory affiliate indicator on 2 August 2027, after which volume series de-inflate. Treasury cash clearing on 31 December 2026 and repo on 30 June 2027, each with a placebo twin in case it slips. Whether the net short in the NY Fed primary-dealer statistics persists. N-PORT's move to quarterly reporting from November 2027.
+
+### C.1.4 Megatrend 4: Default Became a Negotiation
+
+*Thesis.* The modal default is now a distressed exchange, timed by lender calls and documents rather than by a missed coupon. LMT counts peaked at 38 in 2024 and fell to 24 in 2025, but the soft share of defaults did not fall. The technique migrated from coercive uptiers to amend-extend-and-exchange, drop-downs, deals away and equity handovers. The courts made outcomes depend on contract tokens: "open market purchase" in *Serta*, a bare "purchase" in Mitel. The creditor counter-technology, the cooperation agreement, went from a rarity to a default setting and then to an antitrust defendant. Re-default is the base case, and it is front-loaded.
+
+*Key numbers.* Distressed exchanges were about 32% of S&P-rated defaults in 2010–2023, about half for three years to mid-2024, about 63% of Moody's-rated defaults in 2024, about 65% in 2025, and "roughly 70%" since early 2022 (Moody's, September 2026). In June 2025 the spec-grade default rate was 5.8% including distressed exchanges and 2.1% excluding them. About 45 co-ops were signed in 2024, against about four a year over 2018–2023. (Cooperation agreements signed in this book so far: still fewer than the US signed in 2024.) Of 1,173 soft-event borrowers since 1979, about one in four hard-defaulted, more than 70% of them within two years. About 46% of 2023 distressed exchanges had re-defaulted by April 2025, and only 22% of 89 coercive LMEs were clean after two years. Before 2020, about 40% of loans restricted uptiers; by mid-2022, 85% of new loans blocked them.
+
+*Feeds.* Chapters 1, 3, 5, 6, 11, 13, 14, 16 and 25.
+
+*Watch in 2027.* The gap between headline and ex-DE default rates, a regime variable in its own right (§14.7). The 2024 cohort of 38 LMTs crossing the two-year re-default window. The Optimum co-op antitrust case in the S.D.N.Y. and Optimum's April and July 2027 maturities. Fifth Circuit appeals in Wesco and *ConvergeOne*. The \$580bn loan and \$625bn HY maturity wall over 2027–2029. Company adviser hires, which lead LMTs by months.
+
+### C.1.5 Megatrend 5: The Cushion and the Covenants Disappeared
+
+*Thesis.* Leveraged capital structures lost their junior debt cushion and their maintenance covenants at the same time. First-lien recoveries migrated down as structures became first-lien-heavy, and the early-warning device that used to give lenders a seat at the table, the covenant trip, was replaced by incurrence baskets that only tell you what the borrower is allowed to do next. Recovery became bimodal, conditional on whether you were inside the deal. The bottom of the high-yield stack then came apart from the top: by October 2026 the CCC tier priced its widest levels of the window while BBs sat near their tights, and the index spread looked calm.
+
+*Key numbers.* Long-run first-lien term-loan ultimate recovery was 71% over 1987–2023, but S&P's first-lien recovery ratings had fallen to the mid-to-low 60s by February 2025, against realized averages of 75–80%, and Moody's projected first-lien loan recoveries "declining to 55%" (September 2026). First-lien and priority debt now exceed 75% of typical structures. Cov-lite loans were 88.91% of outstanding US leveraged loans at year-end 2022 and 91.09% at year-end 2024. The share of public firms reporting a covenant violation fell from over 12% (1997) to under 5% (2016). The CCC-and-lower OAS went from 746bp (end-2024) to 885bp (end-2025) to 1,278bp (15 October 2026), while BB went 186, 169, 197bp; the CCC/BB ratio rose from 4.0× to 5.2× to 6.5×. CCC beta to HY spread changes fell from 0.54 (2024) to 0.45 (2026 YTD). On the Serta remand, the excluded loans were valued at 25 cents.
+
+*Feeds.* Chapters 5, 8, 11, 12, 14, 16 and 25.
+
+*Watch in 2027.* The CCC/HY OAS ratio as a mixture-weight indicator (Chapter 12). Moody's annual default-and-recovery study, and whether first-lien recoveries really print near 55%. The full-year 2025 cov-lite figure, which was not verified for this edition. Software concentration in loan and private-credit books. Refits of the debt-cushion and loan-only coefficients in the recovery model on post-2019 defaults.
+
+### C.1.6 Megatrend 6: Leverage Moved Off the Public Tape
+
+*Thesis.* Public high yield stopped growing and got better rated. The growth in leveraged finance went to institutional loans, mostly owned by rule-bound CLOs, and to private credit, mostly marked by models. More of the market now sits with holders whose sales are triggered by rules (CLO tests, NAIC capital charges, ETF flows, 5% redemption gates) and less with dealers whose balance sheets used to absorb them. Private credit's failure mode shifted from defaults to redemptions, and its first redemption cycle arrived in Q1 2026. At the same time it began building public-market plumbing (daily pricing, identifiers, official statistics), which turns marks into prices and makes the gap between them tradable.
+
+*Key numbers.* The HY index had about \$1.4tn of face value in April 2025, essentially unchanged over ten years, with a BB share of 53.55% against a 1996–2024 average of 44.53%. Institutional leveraged loans reached \$1,549bn at 2025:Q4. CLOs hold about two-thirds of the loan market and buy "nearly three-quarters" of new issue, yet 2025's roughly \$400bn of gross loan issuance produced only about \$106bn of net new loans. Private-credit loans on the Fed's new Z.1 basis were \$1,042.6bn (2023), \$1,253.6bn (2024) and \$1,493.5bn (2025). Semi-liquid fund net assets went from about \$15bn (2018) to \$388bn (2025). In Q1 2026, accepted redemptions exceeded inflows for the first time since those vehicles were created. Bank loans are about 40% of BDC debt, double their share a decade earlier. Life insurers' privately placed bonds reached 48.4% of their bond holdings at YE2025 (see §C.3 on the competing measure).
+
+*Feeds.* Chapters 1, 12, 16, 17 and 21.
+
+*Watch in 2027.* The quarterly Z.1 private-credit series. Semi-liquid redemption requests against the 5% caps, and the dispersion (not the mean) of listed BDC discounts. Private-credit default measures with PIK and extensions included. NAIC's CLO C-1 factors, effective with YE2026 RBC. The share of loans priced above par, which says whether the repricing window is open. Octaura's share of secondary loan volume (7.5–7.7% in H1 2026).
+
+### C.1.7 Megatrend 7: Quant Credit Grew Up
+
+*Thesis.* The plumbing for systematic credit scaled faster than the capital dedicated to it. Pure systematic credit is still under 2% of the investable fixed-income universe, against about 20% of equities. The money went to hybrids (quant screens feeding analysts) and to large platforms that bought an engine rather than built one. The academic foundation was audited, and much of the corporate-bond factor zoo did not survive cleaned data. ML research moved from "can it predict?" to "can we trust the inputs?" to "can the model explain itself?" AI made reading cheap and left checking expensive. Trend-following, the book's second spine, turned out to be an index strategy in credit. It is small and slow, it sits inside crowded CTA books, and since 2024 it has faced a high-yield spread band too narrow to clear the carry hurdle.
+
+*Key numbers.* Actively managed quant credit was about \$52bn in 2021, and quant-screened IG and HY funds were \$90–140bn in 2024. At Man Group, systematic long-only credit went from \$2.0bn (March 2025) to \$3.1bn (September 2026), while discretionary long-only credit went from \$19.8bn to \$37.5bn. Blackstone agreed to buy DCI in 2020, and Ares agreed to buy BlueCove in October 2025. In the 2026 replication audit, 26 of 432 specifications (6.0%) survived a false-discovery correction. Robeco's live multi-factor credit fund returned 0.63% a year since its 2015 inception against 0.87% for its benchmark (to September 2026). The inference cost of GPT-3.5-level performance fell more than 280-fold between November 2022 and October 2024, while 2,199 court decisions involving hallucinated content had been logged by October 2026. The SG Trend Index made +27.3% in 2022, drew down −21.8% from April 2024 to May 2025, and stood +11.07% YTD at end-August 2026. Pairwise correlation among its constituents was 0.78 in 2024. HY OAS spent 2024–2026 between 2.59% and 4.61%.
+
+*Feeds.* Chapters 1, 4, 6, 7, 9, 10, 11, 23 and 26.
+
+*Watch in 2027.* Man Group's quarterly systematic-versus-discretionary split, the cleanest public flow series. Systematic-credit M&A, with Ares–BlueCove as the template. The outcome of the replication paper's revision and the next Open Source Bond Asset Pricing release. IGEB and HYDB assets. CTA crowding (pairwise correlation and same-direction drawdowns). Whether HY OAS breaks out of its 2024–2026 band for long enough to give credit trend something to follow.
+
+## C.2 The Master Timeline
+
+One row per event, deduplicated across chapters; when several chapters cite the same fact, the row lists them all. Dates are ISO. A month-level date (`2025-09`) sorts at the start of its month, and a single event known only by year sorts at the start of that year. A statistic for a full year, half or quarter (`2024 FY`, `2024 YE`, `2026 Q1`) sorts at the end of its period, after the dated events that produced it. *(approx.)* marks a figure its chapter flagged as approximate, secondary or unverified, and CHECK means the source chapter asked for a primary-source check before anyone relies on it. "Authors' computation" means the book's own arithmetic on the public series named. Rows dated after 2026-10-18 are scheduled, not observed.
+
+| Date | Event | Magnitude | Source | Chapter |
+| :-- | :-- | :-- | :-- | :-- |
+| 2002-07-01 | TRACE launches with 75-minute reporting | ~520 securities disseminated by end-2002 | FINRA TRACE Fact Book 2025 | 2, 22 |
+| 2007 | Dealer corporate inventories peak | ~\$235bn, cut ~3/4 by 2012 *(approx.; upper bound)* | Fed FR 2004 | 22 |
+| 2015-06-15 | Robeco QI Global Multi-Factor Credits launches | EUR 1,039mm; costs 0.20%/yr (Sep 2026) | Robeco fund page | 9 |
+| 2016 FY | IG trading electronically facilitated | ~19% | Greenwich via Bessembinder, Spatt & Venkataraman (2020) | 3 |
+| 2017-07-11 | BlackRock launches IGEB and HYDB systematic bond ETFs | HYDB \$1.52bn, IGEB \$1.43bn (Oct 2026) | stockanalysis.com | 4, 11 |
+| 2018 FY | Portfolio trading share of IG volume | ~1% (7% by 2021) | Meli & Todorova (Dec 2023) | 19 |
+| 2018 Q4 | US CLOs outstanding | \$617bn, ~half of US leveraged loans | Fed FEDS Note (2019) | 21 |
+| 2019 | Bai, Bali & Wen publish four-factor bond model | Retracted 2023 | *JFE* 131(3); retraction, *JFE* 150(3) | 1, 7 |
+| 2019-09-26 | SEC adopts ETF Rule 6c-11 (effective 2019-12-23) | ~2,000 ETFs, >\$3.3tn at adoption | SEC press release 2019-190 | 20 |
+| 2020-02-10 | FIMSAC recommends a TRACE portfolio-trade flag | ≥30 issuers, one basket price | The DESK (2020-03-31) | 2, 22 |
+| 2020-03 | COVID stress; largest banks shut auto-quoters | Immediacy premium up ~200bp per dollar at peak | Kargar et al. (2021); Coalition Greenwich (2024-02-13) | 18, 27 |
+| 2020-06-22 | Serta Simmons uptier closes | \$200mm new money; ~\$1.2bn exchanged into ~\$875mm super-priority | Proskauer (2025-01-02) | 13, 14 |
+| 2020-11-30 | Blackstone agrees to buy DCI (KMV-founder heritage) | ~\$7.5bn | Institutional Investor (2020-11-30) | 4, 6 |
+| 2021-10 | Cov-lite share of leveraged-loan issuance | >90%, a record | S&P Global (Oct 2021) | 25 |
+| 2021 FY | US IG / HY e-trading | 37% / 27% *(contested; see §C.3)* | Coalition Greenwich via IFR | 1, 4 |
+| 2021 FY | Actively managed quant credit | ~\$52bn; ~0.4% of ~\$66trn FI *(approx.; date CHECK)* | eVestment and BlueCove via IFR | 4 |
+| 2022-03 | Wesco/Incora notes transaction | \$250mm new money; Chapter 11 on 2023-06-01 | Octus (2024-06-26); S.D. Tex. docket | 13, 14 |
+| 2022 mid | New loans explicitly blocking uptiers | 85% (~40% pre-2020); 70% need unanimity to subordinate | Buccola & Nini, *J. Legal Stud.* 53:489 (2024) | 13 |
+| 2022-09-28 | Bank of England buys long gilts in LDI crisis; CLO BWIC wave | >€1.5bn of CLOs listed in a week; AA "in the 80s" | TwentyFour AM (2022-10-05) | 18 |
+| 2022-10 | Mitel uptier | ~\$156mm new money; ~\$857mm priming debt | Paul Weiss (2025-01-10) | 14 |
+| 2022-11-30 | ChatGPT launches | Reading costs start to fall | Launch announcement (§26.14) | 26 |
+| 2022 FY | Rates shock | 10y 1.52%→3.88%; 2y 0.73%→4.41%; US HY "down over 11%" | FRED DGS10/DGS2; `BlackRock_Systematic_High_Yield_Credit p.3` | 8, 11 |
+| 2022 FY | Trend's record year | SG Trend +27.3%, mostly short bonds | Hedgeweek (2023-01-27) | 10 |
+| 2022 FY | Distressed exchanges' share of defaults | 45% by volume, 50% by count | Fitch, *Annual Manual* (2023-03-30) | 5 |
+| 2023 | Prior bond factors add ~nothing beyond the market factor | 2019 factor paper retracted | Dickerson, Mueller & Robotti, *JFE* 150(2) | 1, 7 |
+| 2023-01 | Hand-cleaned TRACE replication of bond factors | Only 23% of significant factors keep alphas | Dick-Nielsen, Feldhütter, Pedersen & Stolborg (2023) | 7 |
+| 2023 Q1 | Single-name CDS peaks on bank stress | \$1.1tn quarterly; traded names 854 (Q1 2018) → 719 | ISDA (May 2023) | 6, 24 |
+| 2023-05-01 | Man Numeric routes order flow electronically | >90% (from ~30% HY, ~60% IG) | `Man_Revolutions_in_Credit_Trading_2023 p.3` | 2, 4, 11 |
+| 2023-05-15 | TRACE portfolio-trade modifier mandatory | ≥10 issues, single basket price | FINRA RN 22-12 | 2, 20, 22 |
+| 2023-06 | *Mata v. Avianca* sanctions over invented citations | Hallucination becomes a legal term | S.D.N.Y. No. 1:22-cv-01461 | 26 |
+| 2023-08-24 | *Kirschner*: syndicated term loans are not securities | No T+1 path for loans | 2d Cir. No. 21-2726 | 21 |
+| 2023-12-13 | SEC adopts Treasury clearing mandate | Cash 2025-12-31, repo 2026-06-30 (later extended) | SEC release | 22 |
+| 2023 FY | Systematic credit funds | "Doubled in size" | Bloomberg (2024-05-20) via BBH | 4 |
+| 2024-04-23 | CME announces IG, HY and duration-hedged credit futures | Launch 2024-06-17 | Markets Media (2024-04-29) | 8 |
+| 2024-05-28 | T+1 settlement for corporate bonds | Loans stay on T+7 par convention | SEC; §22.3 | 21, 22 |
+| 2024-06 | Dealer automation survey | ~30% no-touch; 57% top-tier dealers; 70% non-bank LPs | Coalition Greenwich (June 2024) | 3, 18 |
+| 2024-06 | Optimum/CSC Holdings co-op | ~99% of ~\$21.8bn of debt | Optimum 8-K (2026-06-01) | 14 |
+| 2024-07-16 | Non-pro-rata uptier tally | 11 since Mar 2022; early deals moved 100% of value, latest six avg 18% | Octus (2024-07-16) | 13 |
+| 2024-08-15 | Distressed exchanges' share of S&P-rated defaults | ~50% for three years (32% in 2010–2023) *(secondary)* | S&P via FTI Consulting (2026-10-09) | 5, 14 |
+| 2024-09-20 | SEC approves one-minute TRACE rule | Up to 16.4% of volume, 6.1mm trades affected | SEC Rel. 34-101121 | 2 |
+| 2024-09-26 | Citi–Apollo private credit program | \$25bn initial | Citi press release | 17 |
+| 2024-11-20 | Dealers net short long-dated IG | −\$3.8bn | The DESK (2024-11-20) | 18, 22 |
+| 2024-11-25 | Model Context Protocol open-sourced | Standard model-to-data port | Anthropic | 26 |
+| 2024-12-31 | Fifth Circuit *Serta*: not an "open market purchase"; NY App. Div. upholds Mitel uptier | 125 F.4th 555 | Quinn Emanuel (Jan 2026) | 6, 13, 16 |
+| 2024 FY | US corporate bond trading | ADNV \$46.2bn (+21%); IG/HY e-share 48%/33%; non-bank LPs ~10% of revenue | Coalition Greenwich (Jan 2025) | 1, 2, 4 |
+| 2024 FY | Electronic PT and ETF volume | E-PT \$3.3bn/day (+76%); ETF/cash ratio 16.6% (23.2% in 2022) | Coalition Greenwich (Jan 2025) | 2, 19, 20 |
+| 2024 FY | Loan repricing record | \$756.8bn | William Blair citing PitchBook LCD | 21 |
+| 2024 FY | LMEs hit high-water mark; co-ops multiply | 38 LMEs; ~45 co-ops (~4/yr in 2018–2023) | Wachtell Lipton (2026-02-03); 9fin | 3, 13, 14 |
+| 2024 FY | Distressed exchanges' share of Moody's-rated defaults | ~63%, highest on record | Moody's (2025-03-06) | 14 |
+| 2024 YE | US bond ETFs | \$1.8tn, 17% of ETF assets | ICI 2025 Fact Book | 20 |
+| 2024 YE | Cov-lite share of outstanding leveraged loans | 91.09% (~\$1,292.74bn) | PitchBook LCD via Paul Weiss (2025) | 25 |
+| 2025-02-25 | Treasury clearing deadlines extended | Cash 2026-12-31; repo 2027-06-30 | SEC | 22 |
+| 2025-03 | PT share of institutional IG risk trades | ~25% | Bloomberg *Market Dialogues* (2025-07-07) | 19 |
+| 2025-04-07 | Tariff-shock peak | HY OAS 461bp (259bp on 01-22); \$99bn FI ETFs traded | FRED; The DESK (2025-06-10) | 5, 12, 20 |
+| 2025-04-08 | Then-record trading day | \$89.7bn, 12% PT | Coalition Greenwich (2025-04-14) | 2, 19 |
+| 2025-04-23 | Re-default and recovery data | 46% of 2023 DEs re-defaulted; 1L DE recovery 71% (55% in 2023) | Moody's via Bloomberg Law | 5, 14 |
+| 2025-05-12 | HY regains prior peak: a ten-week V | −3.83% drawdown (02-28 to 04-07) | FRED, authors' computation | 11, 12 |
+| 2025-05-14 | CTA drawdown trough | −21.8% from 2024-04-15 | AlphaSimplex (June 2025) | 10 |
+| 2025-06 | IG electronic share; spec-grade default rate | 52%; 5.8% incl. DEs vs 2.1% excl. | Coalition Greenwich (2025-07-14); Moody's (July 2025) | 2, 3, 5 |
+| 2025-06-30 | FICC cleared peak | \$11.8trn *(approx.)* | DTCC releases | 22 |
+| 2025-07 | PT share of US corporate volume peaks | 17% (11% in 2024; 15% in 2025) | Morgan Stanley via The DESK (2026-02-19) | 1 |
+| 2025-08-07 | Federal courts' case system under cyberattack | >20 courts restrict sealed filings *(secondary)* | Administrative Office, as reported by CNN | 25 |
+| 2025-09 | IG OAS tightest since 1998 | ~72bp | SSGA (2025-11-25) | 9 |
+| 2025-09 | No-touch and venue tie | Trumid 88% no-touch; three venues at \$8.5–8.8bn ADV each | The DESK (2025-10-08) | 3, 4, 18, 27 |
+| 2025-09 | First Brands and Tricolor bankruptcies | Fed: "isolated" so far (Nov 2025) | Fed FSR (Nov 2025) | 12, 17 |
+| 2025-09-25 | *ConvergeOne*: exclusive backstop reversed | \$245mm rights offering, 10% fee | S.D. Tex. district court | 16 |
+| 2025-09-29 | EA take-private agreed | ~\$55bn EV, \$210/share | EA press release | 15 |
+| 2025-09-30 | Record trading day | \$84.7bn, 18% PT | Coalition Greenwich (2026-01-27) | 1, 2, 19 |
+| 2025-10-30 | Ares agrees to buy BlueCove | \$5.5bn AUM | The DESK | 4 |
+| 2025-11-05 | OBDC/OBDC II merger announced; terminated 11-19 | Fourteen days | Blue Owl releases | 17 |
+| 2025-12-04 | FINRA drops one-minute rule; 15 minutes stays | Optional allocation reports from 2026-06-08 | FINRA RN 25-17 | 2, 22, 27 |
+| 2025 FY | US corporate bond trading | ADNV >\$50bn; IG just under 50%, HY 32%; disclosed RFQ 38.6% | Coalition Greenwich via The DESK (2026-01-30) | 1 |
+| 2025 FY | CDS trading record | \$41.8tn; index 93.3%; single names \$2.8tn | ISDA (2026-07-29) | 10, 24 |
+| 2025 FY | Loans | Repricing \$503.6bn; secondary record \$971bn | William Blair; LSTA | 21 |
+| 2025 FY | LMEs fall, soft share holds | 24 LMEs; DRs ~65% of defaults | Wachtell (2026-02-03); Moody's (2026-04-28) | 3, 13, 14 |
+| 2025 FY | Trend lags equities | SG Trend +2.39% vs S&P 500 TR +17.89% | Top Traders Unplugged (2026-01-23) | 10 |
+| 2025 Q4 | Institutional leveraged loans | \$1,549bn (+9.2%) | Fed FSR (2026-05-08) | 12, 21 |
+| 2026-01 | Record trading month | ADNV \$61bn (+22%) | Coalition Greenwich (2026-02-17) | 1 |
+| 2026-02-24 | Coercive LME outcomes | 22% clean after two years (89 deals) | Roe & Rotaru, HLS Bankruptcy Roundtable | 14 |
+| 2026-03 | Middle East energy shock | EUR IG bid–ask +64%; recovery 4 to 14+ weeks; TRACE ADV \$70.2bn | The DESK (2026-10-01; 2026-04-09) | 4, 18 |
+| 2026-03-26 | BDC Q1 redemption requests | ~\$13bn; >\$4.6bn trapped | Bloomberg Law | 17 |
+| 2026-03-30 | HY OAS peaks in energy shock | 3.46% | FRED | 10 |
+| 2026 Q1 | Semi-liquid private credit redemptions exceed inflows | First time; \$425bn gross / \$241bn net | Fed FSR (2026-05-08) | 12, 17 |
+| 2026 Q1 | PT and index-mark clustering | 19.8% of customer volume; 15.5% at the mark | Bondwave (2026-05-20) | 2 |
+| 2026-04 | FRED ICE BofA series cut to three years | Free history starts Oct 2023 | FRED series pages | 5, 8 |
+| 2026-04 | Fitch US private credit default rate | Record 6% | The DESK (2026-05-27) | 11 |
+| 2026-04-09 | *The Corporate Bond Factor Replication Crisis* | 26 of 432 specs (6.0%) survive | Dickerson, Robotti & Rossetti, arXiv:2604.07880 | 1, 7 |
+| 2026-05-11 | Repricing window reopens after the software freeze | Feb–Apr repricings \$11.8bn; BB− loans at/above par 13% (end-Mar) → 76% | PitchBook LCD via Yahoo Finance | 21 |
+| 2026-05-18 | Soft-event study, 1979–2026 | 1,173 borrowers; ~1 in 4 hard default | Moody's | 1, 3, 5, 14 |
+| 2026-06 | Duplicate affiliate prints | Up to 8% of HG TRACE volume | MarketAxess volume release | 22, 27 |
+| 2026-06-01 | Optimum drop-down to "Unsub Topco" | \$300mm preferred | Optimum 8-K | 14 |
+| 2026-07 | US CLO ETFs; trend crowding | >\$50bn; SG Trend −1.12%, "positioned the same way" | BofA via Octus; Top Traders Unplugged | 10, 21 |
+| 2026-07-07 | Serta remand damages against participating lenders | \$261.13mm + 9% interest | Mayer Brown (Jul 2026) | 13, 14 |
+| 2026-07-13 | Dealers net short corporates on average | ~\$4bn, first in ≥25 years *(approx.)* | Hedgeweek, citing Coalition Greenwich | 18, 22 |
+| 2026-07-24 | SEC approves affiliate-indicator expansion | Voluntary 2026-08-31 | FINRA RN 26-16 | 2, 22, 27 |
+| 2026-07-29 | ICE agrees to buy MarketAxess | \$167/share; ~\$6.0bn equity | MarketAxess 8-K Ex. 99.1 | 4 |
+| 2026-08 | Cboe credit futures blocks | >\$1bn/month; IBIG blocks overtake IBHY | The DESK (2026-10-16) | 10 |
+| 2026-08 | Default rate and recoveries | 5.3%; DEs+LMEs ~70% since 2022; 1L recovery seen at 55% | Moody's (2026-09-22) via American Banker | 5 |
+| 2026-08-28 | LMT mix shifts | 25 in H1 2026 (24 in H1 2025); coercive uptiers "all but vanished" | 9fin | 13, 14 |
+| 2026-09 | Systematic vs discretionary long-only credit at Man | \$3.1bn vs \$37.5bn | Man Group Q3 2026 trading statement | 4 |
+| 2026-09-11 | CCC/HY OAS ratio high | 4.06 (low 2.24, 2023-10-20) | FRED, authors' computation | 5 |
+| 2026-10-01 | Apollo daily pricing reaches all credit vehicles | Asset-level from 10-30 | Apollo | 17 |
+| 2026-10-14 | Vanguard automation | ~70% of FI desk volume (from ~40%) | The DESK (2026-10-14) | 4, 18, 27 |
+| 2026-10-15 | The HY split | HY 323bp; BB 197bp; CCC 1,278bp; CCC/BB 6.5×; CCC YTD −5.21% | FRED, authors' computation | 5, 8, 12 |
+| 2026-10-16 | Private credit enters the Fed's Z.1 | \$1,493.5bn (2025), ~20%/yr growth | Brinkman et al., FEDS Note | 17 |
+| 2026-10-16 | AI Hallucination Cases database | 2,199 decisions; 871 involve lawyers | Charlotin database | 26 |
+| 2026-12-31 | Treasury cash clearing; NAIC CLO C-1 factors | 11.77% surcharge on thin below-IG BSL tranches | SEC; NAIC Proposal 2026-12-IRE | 21, 22 |
+| 2027-04 | Optimum maturities begin | \$4.12bn (April), \$2.225bn (July) | Optimum 10-Q | 14 |
+| 2027-06-30 | Treasury repo clearing deadline | — | SEC | 22 |
+| 2027 H1 | ICE–MarketAxess expected close | Outside date 2027-07-29 | ICE 8-K | 4 |
+| 2027-08-02 | TRACE affiliate indicator mandatory | Volume series de-inflate | FINRA RN 26-16 | 22, 27 |
+| 2027–2029 | Maturity wall | \$580bn loans, \$625bn HY | Wachtell (2026-02-03) | 13 |
+
+## C.3 Contested Numbers
+
+Some of the book's most-quoted figures come in two or three versions, each from a careful source. The table keeps both sides and says why they differ. Where the chapters did not reconcile a pair, we say so rather than guess.
+
+| Quantity | Figure A | Figure B (and C) | Why they differ |
+| :-- | :-- | :-- | :-- |
+| US IG electronic share, 2024–2025 | 48% (2024), 52% (June 2025): Coalition Greenwich, notional | ~50% (2024) and ~60% (2025): MarketAxess 10-K; "more than 50%": Barclays (Sept 2025) | "Electronic" means fully electronic, electronically processed voice, or auto-executed, depending on the source. MarketAxess's company definition runs above Greenwich's |
+| US IG / HY e-share, 2021 | 37% / 27%: Greenwich via IFR (early 2022) | ≈34% / ≈25%: Greenwich's January 2025 review | Series vintage plus chart reading. Both sides carry CHECK flags (citation date; chart mapping) |
+| Portfolio-trading share | 11.4% of TRACE (Dec 2024); 15% of volume (2025, Morgan Stanley) | 19.8% of customer volume (Q1 2026, Bondwave); ~25% of institutional IG risk trades (Mar 2025) | Denominator: TRACE includes interdealer prints, customer volume does not, and institutional-size trades exclude odd lots |
+| Record trading day of 2025 | \$89.7bn on 2025-04-08 (Greenwich, citing Trumid) | \$84.7bn on 2025-09-30 (Greenwich's 2025 review); \$92bn on 2025-04-30 (one report, CHECK) | Different volume definitions; Chapter 22 untangles them |
+| LMT counts | 38 (2024) and 24 (2025): Wachtell Lipton | 24 in H1 2025 and 25 in H1 2026: 9fin; Octus ~40 US LMTs a year; Debtwire 213 since 2020 | 9fin's half-year count equals Wachtell's full-year count, so the talliers use different inclusion rules (completed vs announced, size, geography). None of the boxes reconciles them |
+| Default rate | 5.8% spec-grade incl. DEs (Moody's, June 2025); private credit 6.1% (Fitch, July 2026) | 2.1% excl. DEs, same report; private credit 0.85% (S&P credit estimates, 2Q26), 2.51% (Proskauer), 5.8% incl. PIK and extensions (Moody's), ~19% shadow (PIMCO BDC) | Event definition (hard, selective, shadow) and sample (rated, CLO-held, BDC-held). A model's default label is now a modeling choice |
+| Re-default after a soft event | ~25% hard default, 1,173 borrowers since 1979 (Moody's) | 46% of the 2023 DE cohort; only 22% of coercive LMEs clean at two years; ~80% within three years (FT via Wachtell, CHECK); 63% avoid Chapter 11 (S&P via proponents, CHECK) | Cohort (all soft events, a stressed vintage, coercive deals only) and event (hard only, or hard plus repeat exchange). Each is a valid estimate of a different $p$ |
+| First-lien recovery | 71% ultimate, term loans 1987–2023; 71% for 1L distressed exchanges (end-2024) | 59.5% average 30-day post-default price, 2007–2022 (Fitch); mid-to-low 60s (S&P recovery ratings); 55% projected (Moody's, Sept 2026); 55% for 1L DEs (2023) | Ultimate vs trading-price recovery, DE vs all defaults, and the vintage of the capital structure |
+| Size of systematic credit | Under 2% of FI (2025); ~\$52bn active quant credit (2021) | \$90–140bn in quant-screened funds (2024); one platform alone at "over \$40 billion" (undated) | Pure systematic vs funds that use a screen, plus a self-description with no as-of date |
+| Size of the HY and private-credit markets | HY index ~\$1.4tn face (Apr 2025); private-credit loans \$1,493.5bn (Z.1, 2025) | \$1,772bn of HY and unrated bonds (Fed FSR, May 2026); private-credit vehicle AUM >\$2.6tn, global AUM >\$2.2tn (Mar 2025) | Index eligibility vs every bond; loans outstanding vs AUM (including uncalled capital); US vs global |
+| Life insurers' private placements | 22% of corporate bond holdings (2024; Chicago Fed) | 48.4% of life-industry bonds (YE2025; S&P via Insurance Business) | Different numerators and denominators. The chapters do not reconcile them, so quote each with its definition |
+| ICE–MarketAxess price | ~\$6.0bn equity value | ~\$5.7bn enterprise value | Not a disagreement: equity vs enterprise value. It is the easiest row in this table, and it still gets misquoted |
+
+Three causes explain nearly every row: *definition* (what counts as electronic, a default, or an LMT), *denominator* (TRACE, customer volume, or institutional trades), and *vintage* (which year's capital structure, which revision of the chart). The desk rule from Chapter 2 applies to the whole table. Never average two contested figures. Carry both, label each with its definition, and let the model choose the one that matches its own target variable. Ines's version: "When two honest sources disagree, you've learned something about the deck, not about the dealer."
+
+## C.4 How to Update This Appendix
+
+The tracker is a dated object, and its value decays at the speed of the trends it tracks. For the next edition:
+
+1. **Start from the watch lists.** Each megatrend's "Watch in 2027" list is the first update target. Score every indicator as *moved as expected*, *flat*, or *reversed*, and keep that scorecard in the appendix. A tracker that never admits it was wrong is just a brochure.
+2. **One fact, one row.** Search the timeline before adding a row. If the event is already there, add your chapter number to it. The earliest dated primary source wins the Source column; later citations go in the chapters.
+3. **Date the event, not the article.** Put the publication date in the Source column, and follow the sorting rules at the top of §C.2.
+4. **Source or delete.** Name the document. Write "via" for secondary reporting. Add a URL only if it was verified in that session or is a canonical root.
+5. **Expire the flags.** An *approx.* or CHECK that survives two editions is resolved against the primary source or deleted. It is not inherited a third time.
+6. **Log the breaks.** When a reporting rule changes (the 2027-08-02 affiliate indicator, the N-PORT move to quarterly reporting), add a timeline row *and* a regime tag in Appendix B, so that no series silently changes meaning.
+7. **Contested means unreconciled.** A pair joins §C.3 only after the definitions have been checked, and it leaves once someone has reconciled it.
+8. **Re-cut the seven.** Retire a megatrend once it stops producing new rows. Promote a candidate once it appears in three chapters and two independent series.
+
+> **The Spec You Hand the Robot.** *What ROBO built from the vague version ("keep the tracker up to date"):* a nightly job that sets every date to today. *The spec:* maintain `trend_tracker.csv` with columns `date` (ISO; plus `date_precision` ∈ {day, month, quarter, year}), `event`, `magnitude`, `unit`, `source`, `source_type` ∈ {primary, secondary}, `approx` (bool), `check` (bool), `chapters` (list of ints), `megatrend` ∈ {1, …, 7}, and `last_verified` (ISO). The sort key follows §C.2. Reject any row with an empty `source`. Raise a warning when `check` is true and `last_verified` is more than 365 days old. Flag two rows as duplicates when they share `event`, `date` and `magnitude`. Never edit `date` on an existing row: corrections go in a new row that names the one it supersedes.
 
 <!-- STATUS: COMPLETE -->
 

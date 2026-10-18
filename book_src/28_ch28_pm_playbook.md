@@ -1,13 +1,5 @@
 # Chapter 28: What a Desk Head / Senior PM Must Know to Extract Maximum Alpha
 
-<!-- WRITER PLAN (sections appended in order as drafted; resume after the last complete "## 28.x" section):
-28.0 Cold open; 28.1 Risk, not capital (+ Trend Watch: the platform operating system); 28.2 Effective breadth when issuers cluster (code block 1);
-28.3 Allocation across signal horizons (+ Trend Watch: the liquid overlay layer; code block 2); 28.4 Kelly with jump-to-default
-(+ Case Study / Trend Watch: the 2026 CCC decompression; code block 3); 28.5 LVaR, days-to-liquidate and the 5x problem
-(Case Study: Third Avenue 2015; code block 4); 28.6 Drawdown control and marking to bid (Case Study: March 2020 and March 2026; code block 5);
-28.7 The leverage band and the kappa problem (code block 6); 28.8 Running ex-RSSG analysts alongside PhDs (Case Study: aligned signals; code block 7);
-28.9 The PM dashboard (full Specification for AI Implementation, final block); 28.10 Desk Debrief, Spec You Hand the Robot, Exercises;
-28.11 Deep-Dive Resource Graph. -->
 
 ## 28.0 Cold Open: The Keys to the Table
 

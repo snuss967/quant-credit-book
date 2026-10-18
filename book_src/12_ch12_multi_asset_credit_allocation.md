@@ -1,12 +1,5 @@
 # Chapter 12: Multi-Asset Credit Allocation
 
-<!-- WRITER PLAN (sections appended in order as drafted; resume after the last complete "## 12.x" section):
-12.0 Cold open; 12.1 MAC universe as a capital-structure map (TW-1); 12.2 The return identity;
-12.3 Spread per unit of what? (+ Resource Graph); 12.4 Regimes: two-state HMM (TW-2);
-12.5 Covariance you can trust: DTS, EWMA, shrinkage, desmoothing; 12.6 Optimization and the flat frontier;
-12.7 Liquidity tiers as the binding constraint (TW-3, + Resource Graph); 12.8 Tactical overlays and the turnover budget (TW-4);
-12.9 Case studies; 12.10 Specification for AI Implementation (cumulative python);
-12.11 Desk Debrief, The Spec You Hand the Robot, Exercises; Deep-Dive Resource Graph. -->
 
 ## 12.0 Cold Open: Seven Piles, One Bet
 

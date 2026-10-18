@@ -1,12 +1,5 @@
 # Chapter 9: Factor Investing in Corporate Credit
 
-<!-- WRITER PLAN (sections appended in order as drafted; resume after the last complete "## 9.x" section):
-9.0 Cold open; 9.1 What a credit factor is (TW: systematic credit's share); 9.2 DTS, the hidden beta;
-9.3 Value; 9.4 Momentum; 9.5 Carry and low-risk; 9.6 Quality, size, informed investor;
-9.7 Combining factors (Case Study: one telecom, four factors); 9.8 Construction under costs (TW: cost curve);
-9.9 The replication debate; 9.10 Crowding, capacity, drawdowns (Case Study: March 2020; TW: the tight-spread regime);
-9.11 Specification for AI Implementation (cumulative python); 9.12 Desk Debrief, Spec You Hand the Robot, Exercises;
-Deep-Dive Resource Graph. -->
 
 ## 9.0 Cold Open: Sharpe 1.9, Beta 0.6
 

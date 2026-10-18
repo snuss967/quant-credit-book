@@ -1,11 +1,5 @@
 # Chapter 10: Trend-Following & Time-Series Momentum in Credit
 
-<!-- WRITER PLAN (sections appended in order as drafted; resume after the last complete "## 10.x" section):
-10.0 Cold open; 10.1 What a trend is in credit (+ Trend Watch: index CDS venue); 10.2 TSMOM engine adapted;
-10.3 Vol scaling is DTS scaling; 10.4 Trend plus carry; 10.5 Equity -> credit lead-lag;
-10.6 Crisis alpha and payoff shape (+ Trend Watch: CTAs 2024-2026); 10.7 Case studies 2008/2020/2022/Apr 2025;
-10.8 Turnover, costs, capacity; 10.9 Trend in the LMT era; 10.10 Specification for AI Implementation;
-10.11 Desk Debrief, The Spec You Hand the Robot, Exercises, Deep-Dive Resource Graph. -->
 
 ## 10.0 Cold Open: The Model Has No Amygdala
 

@@ -1,11 +1,5 @@
 # Chapter 25: NLP for Credit Agreements, Indentures & PACER Dockets
 
-<!-- WRITER PLAN (sections appended in order as drafted; resume after the last complete "## 25.x" section):
-25.0 Cold open; 25.1 The document is the constraint set; 25.2 The definition graph (+ Trend Watch: LMT vocabulary on EDGAR);
-25.3 Basket arithmetic (+ Trend Watch: covenants leave the building); 25.4 Leakage as max-flow (Case Study: J.Crew);
-25.5 Versions and diffs (Case Study: Windstream); 25.6 The docket as an event stream (+ Trend Watch: docket access);
-25.7 Rule 2019 time series (Docket Diary + Case Study: Serta on the docket); 25.8 Claims registers; 25.9 Text to signal;
-25.10 Specification for AI Implementation; 25.11 Desk Debrief, Spec You Hand the Robot, Exercises; Deep-Dive Resource Graph. -->
 
 ## 25.0 Cold Open: Thirty Percent of What?
 

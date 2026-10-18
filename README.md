@@ -2,6 +2,8 @@
 
 A book that writes itself: an autonomous agent loop grows a rigorous, and deliberately entertaining, treatise on quantitative credit, market microstructure, and special situations. Fable advisors dissect each topic before a writer agent expands it, and the whole thing recompiles every six hours.
 
+**Edition 1 shipped (2026-10-18):** 28 chapters, preface, 8 part openers, and 3 appendices. About 474k words, a 1,212-page PDF. Facts in the Trend Watch boxes were fact-checked (≈95% of verifiable claims confirmed; corrections queued for Edition 2). Code examples have not been executed yet. See `CHANGELOG.md` and `state/continuation_prompt.md` for Edition 2.
+
 **Read the book:** [`output/Quant_Credit_Master_Book.html`](output/Quant_Credit_Master_Book.html) (MathJax, clickable TOC), [`output/Quant_Credit_Master_Book.pdf`](output/Quant_Credit_Master_Book.pdf), or the Markdown monolith [`output/Quant_Credit_Master_Book.md`](output/Quant_Credit_Master_Book.md). Each chapter also stands alone in [`book_src/`](book_src/).
 
 ## Layout
@@ -14,11 +16,19 @@ quant-credit-book/
 ├── index_pdfs.py              # splits source_pdfs/ into per-page text for citation
 ├── tools/
 │   ├── pdf_search.py          # find pages by keyword, print a TOC or a page
-│   └── check_book.py          # lint chapter anatomy and execute every chapter's Python
+│   ├── check_book.py          # lint chapter anatomy and execute every chapter's Python
+│   ├── status.py              # COMPLETE / PARTIAL / MISSING for every brief, chapter, and dossier (drives restarts)
+│   ├── outline.py             # compact digests so reviewers read outlines, not 400k words
+│   ├── usage_meter.py         # estimate usage-window burn from transcripts (calibrate to real readings)
+│   └── pace_guard.py          # background guard: wakes the orchestrator when burn is too fast or near the cap
 ├── source_pdfs/               # the shelf (PDF + EPUB)
 ├── state/
 │   ├── book_state.json        # queue, completed modules, case studies, word counts
 │   ├── style_bible.md         # voice, cast, running gags, notation table (by the Fable Showrunner)
+│   ├── PROCESS.md             # the production line, durability rules, usage economics
+│   ├── run_ledger.md          # every workflow run, what it owns, incidents
+│   ├── reviews/ed1/           # Fable engagement and foundations reviews, Sonnet fact-checks, writer returns
+│   ├── research/              # trend dossiers (dated, sourced)
 │   ├── advisor_briefs/        # Fable dissection briefs, one per chapter plus one per loop iteration
 │   ├── pdf_index.json         # per-book TOC and page counts
 │   ├── iteration_log.jsonl    # one line per loop iteration

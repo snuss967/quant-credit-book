@@ -1,11 +1,5 @@
 # Chapter 8: Stripping Beta to Isolate Pure IDO
 
-<!-- WRITER PLAN (sections appended in order as drafted; resume after the last complete "## 8.x" section):
-8.0 Cold open; 8.1 Return decomposition; 8.2 Empirical vs analytical duration (Trend Watch 1);
-8.3 The IG/HY discontinuity (Alltel case study); 8.4 DTS; 8.5 Stale-price betas;
-8.6 Hedge matrix (Trend Watch 2); 8.7 Case studies 2022 / SVB 2023 / April 2025; 8.8 What's left is IDO;
-8.9 Specification for AI Implementation (cumulative python); 8.10 Desk Debrief, Spec You Hand the Robot,
-Exercises; Deep-Dive Resource Graph. -->
 
 ## 8.0 Cold Open: Thirty-Seven Cents
 

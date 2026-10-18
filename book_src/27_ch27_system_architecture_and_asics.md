@@ -1,12 +1,5 @@
 # Chapter 27: System Construction, Low-Latency Infrastructure & ASICs/FPGAs
 
-<!-- WRITER PLAN (sections appended in order; resume after the last complete "## 27.x" section):
-27.0 cold open; 27.1 two clocks (Trend Watch 1); 27.2 ingestion and provenance (Trend Watch 2, code block 1);
-27.3 bitemporal security master (Trend Watch 3, Serta case, block 2); 27.4 OMS/EMS and the order state machine;
-27.5 latency budgets as queues (CME halts case, block 3); 27.6 FPGA trigger tables (Trend Watch 4,
-2014 flash rally case, block 4); 27.7 kill switches as stopping rules (Knight and Citi cases, block 5);
-27.8 observability, deployment, resilience beyond your walls; 27.9 Desk Debrief, Spec, Exercises;
-27.10 Sources and Links (Deep-Dive Resource Graph). -->
 
 ## 27.0 Cold Open: The Fastest Thing on the Desk
 

@@ -1,11 +1,5 @@
 # Chapter 11: Defensive Systematic High Yield
 
-<!-- WRITER PLAN (sections appended in order as drafted; resume after the last complete "## 11.x" section):
-11.0 Cold open; 11.1 The asymmetry; 11.2 Capture ratios and the beta-tilt diagnosis (Trend Watch, Case Study 1, code block 1);
-11.3 Structural PD (code block 2); 11.4 Hazard models, labels, ML (code block 3); 11.5 Validation and the 77% (Trend Watch, code block 4);
-11.6 The CCC problem (Case Study 3, Docket Diary); 11.7 Quality and low-risk tilts (code block 5);
-11.8 Regime-aware exposure (Case Study 2); 11.9 Capacity (Trend Watch, code block 6);
-11.10 Desk Debrief; The Spec You Hand the Robot; Exercises; Deep-Dive Resource Graph. -->
 
 ## 11.0 Cold Open: The Bow Tie
 

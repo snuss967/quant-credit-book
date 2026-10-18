@@ -81,7 +81,6 @@ Each edge is a known flow on an unknown date. The rest of the chapter is about e
 - **Academic Papers:** Billett, King & Mauer (2004), *Bondholder Wealth Effects in Mergers and Acquisitions*, Journal of Finance, DOI 10.1111/j.1540-6261.2004.00628.x; Furfine & Rosen (2011), *Mergers Increase Default Risk*, Journal of Corporate Finance, DOI 10.1016/j.jcorpfin.2011.03.003; Renneboog & Szilagyi (2008), *Corporate Restructuring and Bondholder Wealth*, European Financial Management, DOI 10.1111/j.1468-036X.2007.00414.x.
 - **Data & Code:** SEC EDGAR full-text search, https://www.sec.gov/edgar/search/ (API root https://efts.sec.gov/LATEST/search-index); FTC Premerger Notification Program, https://www.ftc.gov/enforcement/premerger-notification-program; FTC/DOJ HSR Annual Report FY2025, https://www.ftc.gov/system/files/ftc_gov/pdf/fy_2025_hsr_annual_report_for_transmittal_to_congress.pdf.
 
-<!-- PASS 1 END -->
 
 ## 15.2 Anatomy and Pricing of the 101 Change-of-Control Put
 
@@ -390,7 +389,6 @@ With these illustrative inputs a sponsor needing 6.05 turns of signing EBITDA, a
 
 > **Trend Watch.** *Portability's migration into US public filings, 2018–2026.* A full-text search of EDGAR for the portability term "Specified Change of Control Event" finds 1 filing in 2018, 4 in 2019, 8 in 2020, 11 in 2021, 2 in 2022, 3 in 2023, 5 in 2024, 5 in 2025 and 10 in 2026 through mid-October (EDGAR full-text search, run 2026-10-17; approximate). Over the same years, registered 424B2/424B5 prospectuses using the IG double-trigger terms ran at roughly 230–400 a year for "Change of Control Triggering Event" and 90–230 a year for "Change of Control Repurchase Event." Read the portability series for its *existence*, not its level: it counts filings rather than deals, double-counts preliminary and final prospectuses, and misses almost all high-yield bonds, which are sold under Rule 144A and never filed. The covenant-research providers (Covenant Review, Xtract Research, 9fin) publish the share of HY deals with portability; we have not verified their figures for this edition, and the practitioner consensus that European HY has long carried portability more often than US HY should be checked against their data before it is quoted. What it means for the desk: portability is a document feature with a price, it is spreading into the documents a systematic desk can parse, and Chapter 25's extraction pipeline should pull the leverage test, the window, the one-time-use flag and the add-back definition as four separate fields, because each one moves $\mathbb{P}(\mathcal{A})$.
 
-<!-- PASS 2 END -->
 
 ## 15.4 Special Mandatory Redemptions: The Deal-Break Gauge in the Acquirer's Curve
 
@@ -581,7 +579,6 @@ The check that matters most is the round trip, and the check that will save you 
 - **Academic Papers:** Mitchell & Pulvino (2001), *Characteristics of Risk and Return in Risk Arbitrage*, Journal of Finance, DOI 10.1111/0022-1082.00401; Officer (2003), *Termination Fees in Mergers and Acquisitions*, Journal of Financial Economics, DOI 10.1016/S0304-405X(03)00119-3; David (1998), *Pricing the Strategic Value of Poison Put Bonds*, FEDS 1998-06, DOI 10.17016/feds.1998.06.
 - **Data & Code:** Kroger Fiftieth Supplemental Indenture, https://www.sec.gov/Archives/edgar/data/56873/000110465924093481/tm2421523d7_ex4-3d1.htm ; Kroger SMR 8-K, https://www.sec.gov/Archives/edgar/data/56873/000110465924128106/tm2430972d1_8k.htm ; Tapestry termination 8-K, https://www.sec.gov/Archives/edgar/data/1116132/000114036124046713/ef20038690_8k.htm ; CourtListener docket, FTC v. Kroger, https://www.courtlistener.com/docket/68284514/federal-trade-commission-v-kroger-company/ ; EA closing 8-K (defeasance), https://www.sec.gov/Archives/edgar/data/712515/000114036126031157/ef20079099_8k.htm .
 
-<!-- PASS 3 END -->
 
 ## 15.5 Antitrust and Regulatory Timelines as Survival Analysis
 
@@ -804,7 +801,6 @@ Read the printed Second Request coefficient as a time multiplier: with a Weibull
 - **Academic Papers:** Giglio & Shue (2014), *No News Is News: Do Markets Underreact to Nothing?*, Review of Financial Studies, DOI 10.1093/rfs/hhu052; Dikova, Sahib & van Witteloostuijn (2010), *Cross-Border Acquisition Abandonment and Completion*, Journal of International Business Studies, DOI 10.1057/jibs.2009.10; Wollmann (2019), *Stealth Consolidation: Evidence from an Amendment to the Hart-Scott-Rodino Act*, AER: Insights, DOI 10.1257/aeri.20180137.
 - **Data & Code:** FTC/DOJ HSR Annual Reports, FY2023 https://www.ftc.gov/system/files/ftc_gov/pdf/fy2023hsrreport.pdf and FY2024 https://www.ftc.gov/system/files/ftc_gov/pdf/FY24-HSR-ANNUAL-REPORT-FOR-TRANSMITTAL-TO-CONGRESS.pdf ; European Commission merger procedures, https://competition-policy.ec.europa.eu/mergers/procedures_en ; CourtListener REST API, https://www.courtlistener.com/help/api/ .
 
-<!-- PASS 4 END -->
 
 ## 15.6 Target vs. Acquirer: Spread Compression, Acquirer Widening, and Event Momentum
 
