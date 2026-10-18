@@ -101,3 +101,16 @@ Collected from the research agents' structured results. Nothing here is in the T
 - Ch 5-6: Math, Gently box on payout as one minus the minimum of deliverable prices and on exogenous versus endogenous default intensity
 - Ch 22: SEC/CFTC/FCA joint statement and the absence of an enforcement case as of Dec 2019
 - Ch 4c: protection seller (Solus), engineer (GSO) and DC-voting dealer as three seats
+
+## From `trend_figure_data_series.md`
+
+- The Free-Data Half-Life Table (App B new section B.7a): per-series window, owner, licence, loss date and gotchas, generated from figure_series.csv
+- Freeze Before It Rolls: The Desk Archive (Ch 27 section): dated snapshots with vintages, licence ledger, row-count assertions, restore test
+- Weights Are a State Variable (Ch 12 section 12.3 box and figure): regression-implied BB/B/CCC weights replace illustrative ones; 323bp actual vs 377bp at Dec-2024 mix
+- The Index-Free Spread (Ch 9-B section): TRACE-based OAS proxy benchmarked against the Fed GZ spread
+- Whose Volume? Four Denominators for Portfolio Trading (Ch 19 exhibit, Ch 22 box)
+- The Premium That Fired on Veterans Day (Ch 20 scene and figure): 448-day HYG/LQD premium series and bond-holiday stale-NAV artifact
+- The Trend Tracker Extractor (App C section C.4): regenerate trend_tracker.csv from 102 Trend Watch boxes instead of 74
+- Series Cards (App A convention): one-line data card under every figure caption
+- A Secondary-Source Check That Caught a Sign (Ch 10 box): SG Trend monthly vs YTD-implied cross-check
+- The 2026-2028 Observable Calendar (App C new section C.5)

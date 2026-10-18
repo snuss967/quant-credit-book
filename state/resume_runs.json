@@ -2,54 +2,6 @@
  "note": "Restarted 09:34 UTC (window 09:30-14:30). Stopped at the user's ~88% rule at 06:11 UTC. To resume: Workflow({scriptPath, resumeFromRunId: runId, args}). All agents are durable, so finished items are skipped.",
  "runs": [
   {
-   "name": "research-B",
-   "task": "wjge66z49",
-   "runId": "wf_e08bbe4b-b57",
-   "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/research-resilient-wf_bd451f4f-5fb.js",
-   "args": {
-    "today": "2026-10-18",
-    "model": "sonnet",
-    "no_map": true,
-    "items": [
-     {
-      "kind": "trend",
-      "slug": "part_v_market_structure_2026",
-      "status": "PARTIAL",
-      "title": "Part V market structure, 2026",
-      "scope": "See state/research_queue_ed2.json entry for trend_part_v_market_structure_2026 (read it first) and any existing PARTIAL dossier; finish it."
-     },
-     {
-      "kind": "case",
-      "slug": "carvana_svb_wolfspeed_capital_structure",
-      "status": "PARTIAL",
-      "title": "Carvana, SVB and Wolfspeed: capital-structure pain trades",
-      "scope": "See state/research_queue_ed2.json entry for case_carvana_svb_wolfspeed_capital_structure (read it first) and any existing PARTIAL dossier; finish it."
-     },
-     {
-      "kind": "case",
-      "slug": "manufactured_credit_events",
-      "status": "PARTIAL",
-      "title": "Manufactured credit events",
-      "scope": "See state/research_queue_ed2.json entry for case_manufactured_credit_events (read it first) and any existing PARTIAL dossier; finish it."
-     },
-     {
-      "kind": "trend",
-      "slug": "insurance_capital_forced_flow",
-      "status": "PARTIAL",
-      "title": "Insurance capital and forced flow",
-      "scope": "See state/research_queue_ed2.json entry for trend_insurance_capital_forced_flow (read it first) and any existing PARTIAL dossier; finish it."
-     },
-     {
-      "kind": "trend",
-      "slug": "figure_data_series",
-      "status": "PARTIAL",
-      "title": "Figure data series",
-      "scope": "See state/research_queue_ed2.json entry for trend_figure_data_series (read it first) and any existing PARTIAL dossier; finish it."
-     }
-    ]
-   }
-  },
-  {
    "name": "u3-perspectives-life",
    "task": "wt0odrxzq",
    "runId": "wf_1508b41d-803",

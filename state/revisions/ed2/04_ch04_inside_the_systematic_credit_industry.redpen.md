@@ -1,0 +1,13 @@
+# Red-pen log (Edition 2): 04_ch04_inside_the_systematic_credit_industry.md
+
+## D11 (transition-coach red-pen 5), §4.1 CHECK markers only: fixed
+
+All changes in `book_src/04_ch04_inside_the_systematic_credit_industry.md`, §4.1 census table and the paragraph below it. The §1.1 parts of D11 (priming-premium sentence, marketing register, firm tables) belong to `01_ch01` and were not touched.
+
+- **Table row (ii), "Examples (sourced)" cell:** "pod names and sizes CHECK" replaced by "multi-strategy credit pods are left unnamed: they disclose almost nothing, and no public source for a pod's credit book was found". Cut, not filled: the U3 dossiers hold no primary or press source for any pod's systematic-credit book (`trend_systematic_credit_industry.md` lists pod build-outs as "no primary or press evidence gathered"; `rv_pod_platforms_and_risk.md` is a skeleton). Man's 4-5x leverage entry and its source are unchanged. No number added.
+- **Table row (iv), ETF cell:** "about \$1.43bn and \$1.52bn in assets in October 2026 *(approx.; aggregator data, CHECK)*" replaced by "about \$1.4bn and \$1.5bn in assets at the 16 October 2026 close *(approx.; aggregator data: stockanalysis.com, checked 17 October 2026)*". Verified by web fetch of the IGEB and HYDB pages (IGEB \$1.44bn, HYDB \$1.52bn, both launched 11 July 2017, price data at 16 Oct 2026 close, page checked 17 Oct 2026). Rounded to one decimal because an aggregator AUM moves daily and IGEB read \$1.44bn today against \$1.43bn in the dossier; the "approx." and "aggregator data" hedges are kept. Appendix C row 2017-07-11 still shows \$1.43bn and \$1.52bn, which is consistent within the rounding.
+- **Paragraph after the table:** "Where this chapter says CHECK it means it: we will not invent a pod's AUM to make the table look full." changed to "Where the table names no pod it means it: ..." (same point, no longer pointing at a marker the table no longer carries).
+- **Not touched (outside the two markers named in D11):** the third `CHECK` in the BlueCove "View From Another Seat" box ("completion is reported for early February 2026 (CHECK)") stays, with its "reported" hedge. The only source is a Business Wire URL dated 20260202; the page returns 403 and a second search fetch returned nothing, so it could not be confirmed. Also unchanged: `CHECK` markers in §4.3 table (rows with "Silent (CHECK)") and §4.10 (Blackstone as-of date, Ares completion).
+
+Verification: 4 web fetches used (stockanalysis IGEB, stockanalysis HYDB, Business Wire, a search). No new unverified numbers. Currency escapes kept as \$. `tools/check_book.py --file` passes (35,914 words). No topic removed; the chapter's closing status line preserved.
+<!-- STATUS: COMPLETE -->

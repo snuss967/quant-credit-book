@@ -86,7 +86,7 @@ Adjacent pairs: l.669/671, l.685/687. Runs over two: l.281-291 (Math, Gently, Wa
 - [x] 1. Cold open: replay label at top (C1); merge D21; cut D2 and D22; promote decision point; trim toward 1,500 words. Done: replay label added; timeline, syllabus cut; card promoted; ~1,800 words.
 - [x] 2. §15.1.1 box: risk-neutral part to one sentence with a Ch 6 pointer (D11); vary sign-off. Done: risk-neutral cut to one pointer sentence; tiny number kept; sign-off varied.
 - [x] 3. §15.1.2: shorten the three-instrument walk; D20 pointer; Kaz make-whole callback (C7). Done: walk cut to one paragraph; WBD quote left to §15.8; callback.
-- [ ] 4. §15.2.1: delete "When the put matters" (D10, template); Mags RJR to "learned it from people who were there" (C5).
+- [x] 4. §15.2.1: delete "When the put matters" (D10, template); Mags RJR to "learned it from people who were there" (C5). Done: template deleted; Mags learned RJR secondhand, started 1996.
 - [ ] 5. §15.2.2: merge raffle and umbrella boxes into one two-part box; trim Step 2 to the statement.
 - [ ] 6. §15.2.2: demote PV/annuity, logistic, P-vs-Q and random-walk boxes to glosses with pointers; Step 6 carries the 25%/15% example (D11).
 - [ ] 7. §15.2.2: break the four-box run: move the Schmid extraction under the vintage table; thread narration between Ways and Veronesi.
