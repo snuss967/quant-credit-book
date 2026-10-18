@@ -1,6 +1,6 @@
 """Figures for Chapter 4 (Inside the Systematic Credit Industry).
 
-Run:  python3 tools/figures/ch04.py      -> assets/figures/ch04_*.png  (five figures, in order of appearance)
+Run:  python3 tools/figures/ch04.py      -> assets/figures/ch04_*.png  (five figures in order of appearance, plus three added in the cleanup pass)
 
 Data policy (see style.py):
   4.1 effective_breadth    Illustrative: equation (4.1) evaluated on a grid (no data).
@@ -10,6 +10,10 @@ Data policy (see style.py):
                            counts as quoted in section 4.5 and in state/research/papers_factor_replication_crisis_and_bond_data.md 3.4.
   4.4 capacity_hot_tub     Illustrative: equation (4.2) at the section 4.8 worked-example parameters.
   4.5 empty_cells_map      Source: the section 4.3 table; the shading is the book's own reading of each cell.
+  Added in the cleanup pass (they sit between the five above in the chapter, so the embeds were renumbered 4.1-4.8):
+  pod_fee_waterfall        Illustrative: Mercer's published fee schedule (May 2023, Figure 1) at five hypothetical gross returns.
+  etrading_timeline        Source: Coalition Greenwich e-share (Trend Watch, Jan 2025; 2022-23 read off a chart) and Man (2023) p.3.
+  genealogy                Source: the timeline of section 4.10 and the family-tree paragraph of section 4.11.
 
 Colour roles held fixed across the chapter's figures:
   BLUE   = the baseline or "within-firm" case (breadth m = 2.25 highlight, normal bell, HY long/short book)
@@ -340,6 +344,167 @@ def fig_empty_cells():
     return finish(fig, "ch04_empty_cells_map")
 
 
+# ---------------------------------------------------------------------------------------------
+# 4.1  Added: the platform's pass-through fee waterfall at Mercer's inputs (RV thread)
+# ---------------------------------------------------------------------------------------------
+def fee_waterfall(gross, mgmt=1.0, passthrough=3.0, pm_rate=0.20, fund_rate=0.20):
+    """Mercer (May 2023) Figure 1, as reconstructed in state/research/rv_pod_platforms_and_risk.md 3.2.
+    PM incentive = 20% x (gross - pass-through); fund incentive = 20% x (gross - fixed - PM incentive)."""
+    gross = np.asarray(gross, float)
+    fixed = mgmt + passthrough
+    pm = pm_rate * (gross - passthrough)
+    fund = fund_rate * (gross - fixed - pm)
+    return fixed, pm, fund, gross - fixed - pm - fund
+
+
+def fig_pod_fee_waterfall():
+    gross = np.array([5.0, 10.0, 15.0, 20.0, 25.0])
+    fixed, pm, fund, net = fee_waterfall(gross)
+    assert np.allclose(net, [0.48, 3.68, 6.88, 10.08, 13.28])          # the dossier's table and the chapter's text
+    assert abs(fee_waterfall(6.0)[3] - 1.12) < 1e-9                    # "at 6%, about 1.1%"
+    assert np.allclose(fixed + pm + fund + net, gross)
+
+    fig, ax = new_figure()
+    x = np.arange(len(gross))
+    w = 0.62
+    parts = [("Net to the investor", net, SERIES[0]), ("Fixed charges", np.full_like(gross, fixed), SERIES[1]),
+             ("PM incentive", pm, SERIES[2]), ("Fund incentive", fund, SERIES[3])]
+    bottom = np.zeros_like(gross)
+    mids = []
+    for name, vals, col in parts:
+        ax.bar(x, vals, w, bottom=bottom, color=col, edgecolor="white", linewidth=1.2, zorder=3)
+        mids.append(bottom[-1] + vals[-1] / 2)
+        bottom = bottom + vals
+    # direct labels beside the last bar (the aqua and yellow slots are below 3:1 contrast on white)
+    labels = ["Net to the investor", "Fixed charges\n(1% fee + 3% pass-through)", "PM incentive\n(20% of gross less 3%)",
+              "Fund incentive\n(20% of the remainder)"]
+    for (name, vals, col), y, text in zip(parts, mids, labels):
+        label_end(ax, x[-1] + w / 2 + 0.06, y, text, col, dx=6, linespacing=1.15)
+    ax.set_xlim(-0.55, 6.15)
+    ax.set_ylim(0, 28)
+    ax.set_xticks(x)
+    ax.set_xticklabels([f"{g:g}%\nkeeps {n:.2f}" for g, n in zip(gross, net)])
+    ax.set_xlabel("Gross return of the fund (bar height); what the investor keeps (blue)")
+    ax.set_ylabel("Percent of invested capital")
+    ax.yaxis.set_major_formatter(lambda v, _: f"{v:g}")
+    ax.grid(axis="x", visible=False)
+    ax.tick_params(axis="x", length=0)
+    ax.annotate("Mercer: a 10% net return\nneeds about 20% gross", (x[3], gross[3] + 0.3), xytext=(0.15, 24.2),
+                ha="left", va="center", fontsize=8.3, color=INK, bbox=BACK,
+                arrowprops=dict(arrowstyle="-", color=INK_2, linewidth=0.9, shrinkA=1, shrinkB=1))
+    return finish(fig, "ch04_pod_fee_waterfall")
+
+
+# ---------------------------------------------------------------------------------------------
+# 4.5  Added: the revolution that made the industry (e-trading share, and one firm's migration)
+# ---------------------------------------------------------------------------------------------
+def fig_etrading_timeline():
+    fig, (a, b) = new_figure("panel2", ncols=2)
+    # (a) Coalition Greenwich e-share of US IG and HY volume. Annual values sit mid-year so that "H1 2022" is a half-year band.
+    yrs = np.array([2021, 2022, 2023, 2024]) + 0.5
+    ig = np.array([34, 41, 45, 48.0])
+    hy = np.array([25, 31, 33, 33.0])
+    a.axvspan(2019, 2021, ymin=0, ymax=1, color="#f0efec", zorder=0)
+    a.fill_between([2019, 2021], 25, 38, color=SERIES[0], alpha=0.22, linewidth=0, zorder=1)
+    a.fill_between([2019, 2021], 15, 30, color=SERIES[1], alpha=0.22, linewidth=0, zorder=1)
+    a.text(2020, 64.5, "2019–20:\nrange only,\nread off a chart", ha="center", va="top", fontsize=7.8, color=INK_2,
+           linespacing=1.15)
+    a.text(2020, 35.2, "IG, 25–38%", ha="center", va="center", fontsize=7.8, color=INK_2)
+    a.text(2020, 18.0, "HY, 15–30%", ha="center", va="center", fontsize=7.8, color=INK_2)
+    a.axvspan(2022.0, 2022.5, color=NEUTRAL, alpha=0.45, linewidth=0, zorder=1)
+    a.annotate("H1 2022: portfolio-\ntrading costs spike\n(Man; no public series)", (2022.5, 64.5), xytext=(3, 0),
+               textcoords="offset points", ha="left", va="top", fontsize=7.8, color=INK_2, linespacing=1.15)
+    for ys, col, nm in ((ig, SERIES[0], "IG"), (hy, SERIES[1], "HY")):
+        a.plot(yrs, ys, color=col, linewidth=LW, zorder=3)
+        a.plot(yrs[[0, 3]], ys[[0, 3]], "o", color=col, markersize=5.5, zorder=4)                   # stated in the Trend Watch
+        a.plot(yrs[1:3], ys[1:3], "o", color="white", markeredgecolor=col, markeredgewidth=1.5,   # read off Greenwich's chart
+               markersize=5.5, zorder=4)
+        label_end(a, yrs[-1], ys[-1], f"{nm} {ys[-1]:g}%", col, dx=6)
+    a.set_xlim(2019, 2025.35)
+    a.set_ylim(0, 66)
+    a.set_xticks(range(2019, 2025))
+    a.set_xlabel("Year (annual values plotted mid-year)")
+    a.set_ylabel("Electronic share of US corporate\nbond volume (%)")
+    note(a, "hollow = read off Greenwich's chart", loc="lower right")
+
+    # (b) Man Numeric's share of order flow going through electronic venues
+    xs = [0, 1]
+    for start, col, nm, dy in ((60, SERIES[0], "IG", 0), (30, SERIES[1], "HY", 0)):
+        b.plot(xs, [start, 90], color=col, linewidth=LW, zorder=3)
+        b.plot([0], [start], "o", color=col, markersize=5.5, zorder=4)
+        b.annotate(f"{nm} {start}%", (0, start), xytext=(-7, 0), textcoords="offset points", ha="right", va="center",
+                   fontsize=8.5, color=INK_2)
+    b.plot([1], [90], "o", color=INK_2, markersize=5.5, zorder=4)
+    b.annotate("", (1, 98), (1, 90.8), arrowprops=dict(arrowstyle="-|>", color=INK_2, linewidth=1.1, mutation_scale=9))
+    b.annotate("over 90%\nof all credit\norder flow", (1, 90), xytext=(8, -2), textcoords="offset points", ha="left",
+               va="center", fontsize=8.5, color=INK_2, linespacing=1.15)
+    b.set_xlim(-0.75, 1.75)
+    b.set_ylim(0, 105)
+    b.set_xticks(xs)
+    b.set_xticklabels(["Earlier\n(no date given)", "May 2023"])
+    b.set_xlabel("Man Numeric")
+    b.set_ylabel("Share of order flow sent\nto electronic venues (%)")
+    b.grid(axis="x", visible=False)
+    return finish(fig, "ch04_etrading_timeline")
+
+
+# ---------------------------------------------------------------------------------------------
+# 4.7  Added: the family tree of quant credit (flow graph)
+# ---------------------------------------------------------------------------------------------
+def fig_genealogy():
+    fig, ax = new_figure((7.0, 4.5))
+    ax.set_xlim(0, 100)
+    ax.set_ylim(-9, 103)
+    ax.axis("off")
+    ax.grid(False)
+    PEOPLE, BOUGHT = SERIES[0], SERIES[1]            # blue: people move or found a firm; orange: a firm is bought
+    X1, X2, X3 = (0, 21), (41, 59), (79, 100)         # box x-extents of the three columns
+    H = 11.0
+
+    def box(xr, y, text, fill="white", edge=NEUTRAL, bold=False):
+        ax.add_patch(Rectangle((xr[0], y - H / 2), xr[1] - xr[0], H, facecolor=fill, edgecolor=edge, linewidth=1.0, zorder=2))
+        ax.text((xr[0] + xr[1]) / 2, y, text, ha="center", va="center", fontsize=8.2, color=INK, linespacing=1.15, zorder=3)
+
+    def arrow(p0, p1, color, text, rad=0.0, tx=None, ty=None, ha="center"):
+        ax.add_patch(FancyArrowPatch(p0, p1, arrowstyle="-|>", mutation_scale=10, color=color, linewidth=1.5,
+                                     connectionstyle=f"arc3,rad={rad}", shrinkA=0, shrinkB=0, zorder=4))
+        tx = (p0[0] + p1[0]) / 2 if tx is None else tx
+        ty = (p0[1] + p1[1]) / 2 + 3.6 if ty is None else ty
+        ax.text(tx, ty, text, ha=ha, va="center", fontsize=7.8, color=INK_2, linespacing=1.12, bbox=BACK, zorder=5)
+
+    TODAY = SEQ_BLUE_STEPS[0]
+    rows = {"kmv": 88, "moodys": 70, "apollo": 53, "aqr": 39, "robeco": 25, "bluecove": 11}
+    # the structural-model line: KMV -> (Moody's, DCI) -> Blackstone
+    box(X1, rows["kmv"], "KMV\n(early 1990s)")
+    box(X2, rows["kmv"], "DCI")
+    box(X3, rows["kmv"], "Blackstone Corporate\nBond Strategies", fill=TODAY)
+    box(X2, rows["moodys"], "Moody's")
+    arrow((X1[1], rows["kmv"]), (X2[0], rows["kmv"]), PEOPLE, "Kealhofer, McQuown\nfound DCI, 2004")
+    arrow((X2[1], rows["kmv"]), (X3[0], rows["kmv"]), BOUGHT, "Blackstone agrees\nto buy, 30 Nov 2020")
+    arrow((X1[1] - 5, rows["kmv"] - H / 2), (X2[0], rows["moodys"]), BOUGHT, "bought, 2002", rad=0.25,
+          tx=30, ty=rows["moodys"] + 4.8)
+    # four more lineages, left to right
+    lines = [("apollo", "Apollo quant\nresearch", PEOPLE, "co-head hired to launch the credit business, 2018", "Man Numeric\ncredit"),
+             ("aqr", "AQR / BGI\nalumnus", PEOPLE, "former AQR co-head hired to build credit; announced Jul 2022", "Acadian\nsystematic credit"),
+             ("robeco", "Robeco factor-\npaper author", PEOPLE, "one of the paper's two authors now listed with Cubist", "Cubist Systematic\nStrategies (Point72)"),
+             ("bluecove", "BlueCove\n(founded 2018)", BOUGHT, "Ares agrees to buy, Oct 2025; closes Feb 2026", "Ares Systematic\nCredit")]
+    for key, src, col, text, dst in lines:
+        box(X1, rows[key], src)
+        box(X3, rows[key], dst, fill=TODAY)
+        arrow((X1[1], rows[key]), (X3[0], rows[key]), col, text, tx=50)
+    # column headers
+    for xr, t in ((X1, "Where it started"), (X2, "Along the way"), (X3, "Where it sits today")):
+        ax.text((xr[0] + xr[1]) / 2, 99, t, ha="center", va="center", fontsize=8.5, color=MUTED)
+    # legend
+    ly = -5.5
+    for x0, col, t in ((2, PEOPLE, "people move, or found a firm"), (36, BOUGHT, "a firm is bought")):
+        ax.add_patch(FancyArrowPatch((x0, ly), (x0 + 7, ly), arrowstyle="-|>", mutation_scale=10, color=col, linewidth=1.5,
+                                     shrinkA=0, shrinkB=0))
+        ax.text(x0 + 9, ly, t, ha="left", va="center", fontsize=8.2, color=INK_2)
+    return finish(fig, "ch04_genealogy")
+
+
 if __name__ == "__main__":
-    for fn in (fig_effective_breadth, fig_truncation_bias, fig_factor_zoo, fig_capacity, fig_empty_cells):
+    for fn in (fig_effective_breadth, fig_truncation_bias, fig_factor_zoo, fig_capacity, fig_empty_cells,
+               fig_pod_fee_waterfall, fig_etrading_timeline, fig_genealogy):
         fn()

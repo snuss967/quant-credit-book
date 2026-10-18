@@ -862,7 +862,7 @@ assert abs(effective_breadth(1800, 800, 0.7) - 960.0) < 1e-9     # the worked ex
 ```
 
 
-### Listing 4.2: Net alpha under square-root impact, and the capacity A* {#code-4-2}
+### Listing 4.2: Net alpha under square-root impact, and the capacity limit {#code-4-2}
 
 ```python
 # block 2 of 4: capacity under square-root impact, eq. (4.2). Units: $mm and annual decimals.
@@ -2473,7 +2473,7 @@ print(f"PBO noise {pbo_noise:.2f}   PBO with one real strategy {pbo_skill:.2f}  
 Listings from `07_ch07b_statistics_for_credit_panels.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 7-B.1: creditstats.py: OLS with clustered and Newey-West covariances, logit, survival, shrinkage, PCA, bootstrap and first-passage tools {#code-7b-1}
+### Listing 7-B.1: creditstats.py: the credit statistics module {#code-7b-1}
 
 ```python
 # creditstats.py: the statistics toolbox imported by Chapters 8-12, 14 and 15 (Chapter 7-B)
@@ -4403,6 +4403,9 @@ def defensive_portfolio(pd_hat, spread, dur, bench_w, L=0.6, exclude_q=0.20,
     return w, keep, w0, dts, dts_bench
 
 
+FULL_GRID = False        # True: every issuer in every cross-section (SLSQP then takes several minutes)
+N_DEMO = 100             # default grid: a systematic sample of this many issuers per cross-section
+
 g5 = np.random.default_rng(RNG_SEED + 5)
 n_iss = int(lagged["issuer_id"].max()) + 1
 dur_by_issuer = g5.uniform(1.5, 6.5, n_iss)
@@ -4410,6 +4413,8 @@ size_by_issuer = g5.lognormal(0.0, 0.5, n_iss)
 held_def, bench_def = 0.0, 0.0
 for t0 in (24, 36, 48, 60, 72):
     cs = lagged[lagged["month"] == t0]
+    if not FULL_GRID:
+        cs = cs.iloc[:: max(1, len(cs) // N_DEMO)].iloc[:N_DEMO]      # every k-th issuer, by id
     iid = cs["issuer_id"].to_numpy()
     pd_t = predict_logit(b_full, cs[XCOLS].to_numpy())
     spr_t = 0.015 + 0.35 * empirical_pd(cs["DD"].to_numpy()) * np.exp(g5.normal(0.0, 0.2, len(cs)))
@@ -4674,7 +4679,7 @@ print("Ledoit-Wolf delta %.3f" % delta)
 ```
 
 
-### Listing 12.4: A two-state regime model: HMM filter, EM fit and the regime-conditional return assumptions {#code-12-4}
+### Listing 12.4: A two-state regime model: HMM filter, EM fit and regime-conditional capital-market assumptions {#code-12-4}
 
 ```python
 def mvn_logpdf(X, mu, S):
