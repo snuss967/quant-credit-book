@@ -16,3 +16,4 @@ Code and consistency fixes found along the way. Lowest priority: run only when n
 - The Part I opener now points to §A.10 (the RSSG-to-quant dictionary), which does not exist yet. Write App A §A.10, synthesis item "App A §A.10 dictionary". (Red pen, 2026-10-18.)
 - §26.8 cites "OCC Bulletin 2011-12" from the synthesis; occ.gov pages returned 404. Verify before print. (Red pen, 2026-10-18.)
 - App F Listing 1.2 contains stray §1.5 prose (verify, Ch 1). Move the prose back to the chapter or delete it from the listing block. (2026-10-18)
+- The citation 'SSRN 6088966' (Dickerson–Robotti–Rossetti 2026) could not be confirmed. The verified id is arXiv:2604.07880. Replace it wherever the book cites SSRN 6088966 (grep book_src). (TSMOM dossier, 2026-10-18)

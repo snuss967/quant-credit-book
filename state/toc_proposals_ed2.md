@@ -114,3 +114,12 @@ Collected from the research agents' structured results. Nothing here is in the T
 - Series Cards (App A convention): one-line data card under every figure caption
 - A Secondary-Source Check That Caught a Sign (Ch 10 box): SG Trend monthly vs YTD-implied cross-check
 - The 2026-2028 Observable Calendar (App C new section C.5)
+
+## From `trend_trend_following_tsmom_credit.md`
+
+- Four Things Called Momentum in Credit (Ch 10 opening): separates index TSMOM, bond-price momentum, residual same-issuer momentum, and equity/CDS spillover, each with its verdict, so no blended Sharpe is reported
+- The Residual Is the Signal: Same-Issuer Momentum and the Hedged Long/Short Overlay (Ch 10 middle; links to Ch 8, 8-B, 28): the pod implementation with buckets, hedges, short-leg risk, costs, and DRR Table IA.XI numbers
+- Momentum Crashes in Credit (Ch 10 before the CTA section; Ch 28 cross-reference): Daniel-Moskowitz, the EMC negative market loading, Mar 2025 and Jul 2026 episodes, the variance-scaled sleeve
+- Trend Watch: Decay and Crowding, 2009-2026 (Ch 10 box and App C): Kurth et al., SG's 0.78 correlation, TTU's 'positioned the same way'
+- Ch 10-C: Running Momentum in a Pod (code chapter, only if Ch 10 passes 15,000 words; after Ch 10-B): signal build on OBAP, bucketed hedges, stops, crash overlay; ships residual_momentum.py
+- Momentum audit box (Ch 9-B): the mom6_1 trimming sensitivity (ex-ante zero, ex-post right-tail about 0.60%/month) as the clearest audit teaching case

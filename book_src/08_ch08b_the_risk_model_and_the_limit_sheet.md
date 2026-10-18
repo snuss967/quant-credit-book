@@ -435,6 +435,14 @@ Mags initialled the list and added a line in pencil: *IDO or it didn't happen, a
 - Robeco (van Leeuwen, Penninga and Houweling), "Duration Times Spread: measuring credit risk" (2 Sep 2024). https://www.robeco.com/en-uk/insights/2024/09/duration-times-spread-measuring-credit-risk. The originators on DTS.
 - Paleologo, *Advanced Portfolio Management* (Wiley, 2021), Chapter 7 on managing factor risk and setting limits.
 
+**Episodes and Posts, by Section**
+- **"Debunking the high credit beta myth"** (SimCorp, Christoph Schon, 2024; page undated). High spread means high volatility but not necessarily high beta to the index, which is why §8B.2 scales a bond's cell loading by its DTS and estimates the cell sensitivity from the panel. https://www.simcorp.com/resources/insights/industry-articles/2024/Debunking-the-high-credit-beta-myth
+- **"Why the True Price of a Bond Can Still Be Hard To Know"** (Odd Lots, with Maciej Kowara and Eric Jacobson of Morningstar, 5 Apr 2021). Evaluated prices on illiquid bonds differ by firm, the stale-mark mechanism behind the Dimson repair in §8B.3. https://omny.fm/shows/odd-lots/why-the-true-price-of-a-bond-can-still-be-hard-to
+- **"Why Treasuries Are 'Risky' Again"** (Odd Lots, with Carolin Pflueger, 5 Oct 2026). Bonds turning "more stock-like" and what makes them "bond-like" again: the stock-bond correlation sign is the regime question behind the rate-spread correlation that §8B.7 carries as a stress input. https://omny.fm/shows/odd-lots/why-treasuries-became-risky-again
+- **"How The Crisis Nearly Blew Up One Of The World's Safest Trades"** (Odd Lots, with Josh Younger of JPMorgan, 26 Mar 2020). Treasury cash-futures arbitrage failing in March 2020, a reminder for the March 2020 row of §8B.7 that the rates hedge has basis risk of its own. https://omny.fm/shows/odd-lots/how-the-crisis-nearly-blew-up-one-of-the-world-s-s
+- **"What We Learned About Treasuries on the Night of April 8"** (Odd Lots, with Ira Jersey of Bloomberg Intelligence, 28 Apr 2025). Who sold, and why the safe-haven hedge failed in an acute way, the live case for the April 2025 row of §8B.7. https://omny.fm/shows/odd-lots/what-we-learned-about-treasuries-on-the-night-of-april-8
+- **"TCW Chops Credit Risk to Lowest in 30 Years as CCCs 'Cry Uncle'"** (The Credit Edge, with Bryan Whalen of TCW, 15 Oct 2026). CCC is "the weakest borrower, and they cry uncle first," then single-B, then double-B: a manager's account of the CCC decompression behind the doubled idiosyncratic variance in §8B.4 and the 2026 row of §8B.7. https://omny.fm/shows/the-credit-edge-by-bloomberg-intelligence/tcw-chops-credit-risk-to-lowest-in-30-years-as-cccs-cry-uncle
+
 **Academic Papers**
 - Kupiec, P. (1995), "Techniques for Verifying the Accuracy of Risk Measurement Models," *Journal of Derivatives* 3(2).
 - Christoffersen, P. (1998), "Evaluating Interval Forecasts," *International Economic Review* 39(4).

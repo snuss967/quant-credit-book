@@ -13,10 +13,10 @@
 - [x] P1 · §1.2, lines 91–115, six-chair walk · Keep chairs 1, 3, 6 as Halvorsen counterfactuals; drop chairs 2, 4, 5 from the walk; keep Ines's "Laws are what you call observations that have cost you money twice." — *Walk now three Halvorsen counterfactuals (chairs 1, 3, 6); table carries rest.*
 - [x] P1 · §1.9.1, line 748, "The market maker's version" · Cut to last two sentences (Ch 3 / Ch 13 pointers, hand-history loop), or give them to Ines as the scene's close. — *Paragraph deleted; Ines's action-item line now closes the scene.*
 - [x] P1 · §1.3, line 261, "The Spec You Hand the Robot" · Delete the §1.3 copy; vignette says "The chapter's spec (§1.10) says". — *§1.3 spec cut to pointer; §1.10 gains sigma_ido units, jump_penalty_ratio.*
-- [ ] P1 · Line 29, promise paragraph · Replace with two sentences (the number is three bets; the chapter builds each); move five outcomes to §1.10 train scene.
-- [ ] P1 · §1.9.1, line 764, co-op counter note · Reword: "no cooperation agreement before the deal; the excluded lenders organized afterwards, as plaintiffs, which is why the counter stays at 0."
-- [ ] P1 · §1.9.1, Serta scene, 11:45 a.m. RFQ (~698) · Second account explicitly "a fund I later learned had been pitched and passed".
-- [ ] P1 · Docket Diary, line 676 · Add the \$734mm / \$875mm reconciliation clause.
+- [x] P1 · Line 29, promise paragraph · Replace with two sentences (the number is three bets; the chapter builds each); move five outcomes to §1.10 train scene. — *Two-sentence promise; five outcomes now Theo's train-scene paragraph in §1.10.*
+- [x] P1 · §1.9.1, line 764, co-op counter note · Reword: "no cooperation agreement before the deal; the excluded lenders organized afterwards, as plaintiffs, which is why the counter stays at 0." — *Verifier already reworded; kept, no unverified pre-deal claim added.*
+- [x] P1 · §1.9.1, Serta scene, 11:45 a.m. RFQ (~698) · Second account explicitly "a fund I later learned had been pitched and passed". — *Verifier already made it pitched-and-passed; wording confirmed, unchanged.*
+- [x] P1 · Docket Diary, line 676 · Add the \$734mm / \$875mm reconciliation clause. — *Reconciliation clause added, pointing to Ch 5 §5.6.2 wording.*
 - [ ] P2 · §1.3.2 l.169; §1.4 l.350; §1.5 l.398; §1.6 l.480 · Four "When to reach for it" paragraphs: inventory → 150-word "Whose five days?" beat; DTS delete; DD → Mags's "lottery ticket on the plan"; fallen angel delete; add four judgments as Finder rows.
 - [ ] P2 · §1.5, lines 376–380 · Keep "Equity is a call option" box; reduce random walk and Itô boxes to one sentence each in Kaz's dialogue with pointers to §6.1.1.
 - [ ] P2 · §1.5, lines 402, 406, 442 · P/Q told thrice: add 80-word beat (Kaz feeds vendor EDF, gets 12 bp at 100; Mags: "Which number is lying?"); annotation and listing point to "Kaz's 12 bp".
