@@ -1,6 +1,6 @@
 ---
 title: 'Systematic & Quantitative Credit: From PJT RSSG to the Automated Desk'
-subtitle: 'Mathematical Foundations, Microstructure, LMT Game Theory, and Alpha Isolation (Edition 2, Build: 2026-10-18 03:21 UTC)'
+subtitle: 'Mathematical Foundations, Microstructure, LMT Game Theory, and Alpha Isolation (Edition 2, Build: 2026-10-18 04:06 UTC)'
 toc: true
 toc-depth: 3
 ---
