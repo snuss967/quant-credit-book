@@ -285,7 +285,8 @@ def fig_recovery_distributions():
                  textcoords="offset points", ha="left", va="center", fontsize=8, color=INK_2)
     axb.annotate("tail: almost all\ncommittee's expert", (22, 0.30), xycoords=("data", "axes fraction"),
                  ha="left", va="center", fontsize=8, color=INK_2)
-    note(axb, "37 bins, equal in log recovery", loc="upper right")
+    axb.text(0.99, 0.55, "37 bins, equal in log recovery", transform=axb.transAxes, ha="right", va="center",
+             fontsize=8, color=MUTED)
     return finish(fig, "ch12c_recovery_distributions")
 
 
