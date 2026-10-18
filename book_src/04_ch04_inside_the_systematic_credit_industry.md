@@ -2,7 +2,17 @@
 
 At 7:40 a.m. Ines Okafor puts six documents on Theo's desk in the order a dealer stacks a deck: Man Group's two papers on quantitative credit, BlackRock's note on systematic high yield, Nuveen's multi-asset credit framework, a long Barclays book, and two thin pages from Blackstone. "Tell me which of these desks we are," she says, "and which one is going to eat us."
 
+She does not wait for an answer. Before eight she rarely does. The pile lands on the corner of the desk next to the USB stick, which still holds a 13-week cash flow model for a company that came out of Chapter 11 two years ago and no longer needs anyone's help.
+
 Theo has read a thousand pitch books. He knows the genre. One slide shows the process as a funnel. One shows risk as a dial. One says "capacity" next to a number with no derivation and an asterisk. He opens the first paper and looks for the funnel.
+
+There is no funnel on the first page, or the fifth. What he finds on page 19 of Man's 2022 paper, under a heading about transaction-cost modelling, is a sentence that stops his coffee halfway to his mouth. Corporate bond bid and ask prices, it says, "are indicated by dealer runs that are not firm and actionable," and so "trades that appear profitable in practice are unprofitable once transaction costs are factored in" (`Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.19`). A line later the paper notes, in the tone of someone who has been burned, that the market has a phrase for this: "if filled" trades.
+
+Theo reads the paragraph twice. In restructuring he used the word "price" several thousand times a year. The firsts were at 88. The seconds were at 40. The ad hoc group bought in at 71. Every one of those numbers came off a screen, a dealer run or a call to a desk, and every one of them was, he now sees, a dealer's opinion about where it might be willing to deal, in some size, with somebody, for a few minutes. In RSSG that was fine. A recovery analysis needs a reference point, not an execution, and nobody at PJT ever had to buy \$5mm of the seconds at 40 before lunch. Here the paper is telling him that the price on the screen is a menu, and that the business is what the kitchen will actually serve you.
+
+He writes on a sticky note, *"price" = as of when, in what size, from whom?*, and presses it to the bottom of his monitor.
+
+The Blackstone document is two pages long, which in his experience means either a very confident firm or a very careful lawyer. It calls its platform "the largest pure-play quantitative credit operation in the world, with over \$40 billion in assets under management" (`Blackstone_Systematic_Credit p.1`). Out of habit Theo looks for the date. There isn't one. In a fairness opinion an undated number is a number you cannot use, and a second-year associate would have sent it back before it reached the partner. He circles it and writes "as of?" in the margin, and the circle stays with it through this chapter: the figure is CHECK until someone finds its as-of date. On the second page Blackstone gives him the number he will hear all day in different words. Systematic strategies manage "roughly 20% of global equities" and "less than 2% of the fixed-income universe" (`Blackstone_Systematic_Credit p.2`). Twenty against two. Either credit is twenty years behind, or there is something about bonds that the equity machine cannot digest. He suspects both, and that the second half is the interesting one.
 
 Kaz rolls over with a laptop. "I already built the framework. Alpha model, risk model, optimizer. Backtested Sharpe of 3.1."
 
@@ -10,26 +20,71 @@ Kaz rolls over with a laptop. "I already built the framework. Alpha model, risk 
 
 "Transaction costs are a parameter," Kaz says. "I set it to zero so it wouldn't bias the results."
 
+Theo turns the laptop toward himself. The equity curve climbs from the lower left to the upper right with the serenity of a line drawn with a ruler: twenty-two years of monthly returns from a value sleeve, a momentum sleeve and a quality sleeve, blended by an optimizer that Kaz wrote over a long weekend and is visibly proud of.
+
+"Zero is a bias," Theo says.
+
+"Zero is a *neutral* bias," Kaz says, and then, because Kaz is honest when cornered, makes the case properly. The signals are slow; the value sleeve holds a bond for most of a year, and costs scale with turnover. The academic papers report factor premia gross, so a net number set against a gross literature would compare apples with oranges. Put in a cost assumption and you smuggle in an opinion; better to show the clean signal and let the execution people argue about the haircut later. "And look at the drawdowns." Kaz scrolls. "2008 is a dip. 2020 is a dip. The thing *recovers*. Equity value spent most of the 2010s underwater. The cross-section of credit is just less picked over. Isn't that the whole thesis of the Man paper? Early movers."
+
+It is a good speech. It also has the shape, Theo notices, of the speeches he used to hear from management teams on the second day of a lender meeting: every sentence defensible on its own, and the conclusion two floors above the evidence.
+
+Ines has come back for her pen. She reads the screen over Kaz's shoulder for about four seconds.
+
+"Show me the hand history," she says.
+
+"It's a backtest. There are no hands."
+
+"Then how many of those fills did you get, and from whom?" She taps the 2008 dip with the pen. "In November 2008 your model bought single-B bonds at these prices. Who sold them to you? Which dealer, what size, how many dealers in competition? Because in November 2008 I was sitting across from people like you, and I can promise you the bid I showed and the price on that screen were not the same number."
+
+Kaz opens a second window, scrolls, and goes quiet in a way Theo will learn to recognize. "The prices are month-end composites," Kaz says at last. "Vendor-evaluated. Bid side, where available."
+
+"Evaluated by whom, from what?"
+
+"A matrix. Comparable bonds, dealer quotes, some TRACE."
+
+"Some," Ines says. "So your backtest bought bonds at the average of what dealers said they might do, in a month when most of them weren't picking up the phone." She is not unkind about it. She has the tone of a poker player explaining to a strong amateur that the hand was lost three streets ago. "It's a fine number. Nobody could have traded it. Your 3.1 is the Sharpe ratio of a market where nobody ever had to ask."
+
 Mags walks past with a coffee and doesn't slow down. "Four white papers, one memo. Buy cheap, don't get defaulted on, and for God's sake measure your costs. Back in my day we called that a desk, not a framework."
+
+Then she does slow down, because she has heard Ines say "evaluated," and on evaluated prices Mags has views.
+
+"Autumn of ninety-eight," she says, to no one in particular. "Everyone's long and wrong after the Russian default. I've got three million of a telecom bond I want out of. I call a dealer. He says ninety-four, ninety-five, very friendly, how's the family. I say let me check with my PM. I call back eleven minutes later and he's ninety-one bid and he doesn't ask about the family. In eleven minutes he's worked out three things. I'm a seller. I called him first, so I don't have a better bid. And if I'm selling, maybe I know something he doesn't." She takes a sip. "The first price was the menu. The second was the meal. Every price in your vendor file is the first call." *(Mags's story is fiction; the dealer is nobody in particular.)*
+
+"That's adverse selection," Kaz says, pleased to have a name for it.
+
+"That's Tuesday," says Mags, and leaves.
 
 She is right about the memo. Every paper on the pile wants cheap bonds, improving bonds, bonds that won't default, and bonds that pay you to wait. Theo can read that in twenty minutes. What takes him the morning is that the papers *disagree* about nearly everything else. They disagree about what data you are allowed to know and when you knew it, how a forecast becomes a position, how the position gets filled, how big the book can grow before the book *is* the market, and which risks you hedge and which you are paid to hold. Kaz's Sharpe of 3.1 lives entirely in the gap between the memo and the plumbing.
 
+By eleven the four people on the desk have each, without quite meaning to, staked out a position that the rest of this chapter will test. Kaz thinks the product is the math: a better alpha model and a cleaner optimizer, with costs as an engineering detail for some Friday afternoon. Ines thinks the product is the fills. A signal you cannot get executed is a rumour, and the edge lives in knowing which dealer will show you a real price, in size, on a bad day. Mags thinks neither matters if you are wrong about who defaults, and that the people who forget it relearn it every seven years or so at their own expense. Theo does not have a position yet. He has a sticky note that says "as of when?", and the feeling, familiar from years of pitch books, that when six firms say the same thing on the front page the money is somewhere around page 19.
+
+So he reads the rest of the pile the way he used to read a data room, looking for where each document stops talking. BlackRock's note is about defence: how a systematic high-yield book loses less than the index in the bad months without simply owning less risk. Nuveen's framework is not choosing bonds at all; it is choosing among whole sectors (high yield, loans, emerging-market debt, private credit) with something that looks suspiciously like a 13-week model scaled up to the size of an asset class. The Barclays book runs to several hundred pages and spends many of them on the things the white papers leave to footnotes: index rules, the cost of buying a new issue the day it enters the index, turnover, capacity. The second Man paper, from 2023, is about almost nothing except how the firm trades. Nobody in the pile disagrees about what a cheap bond is. They disagree about everything that happens after you find one.
+
 By lunch Theo has a sheet of paper with six columns and a lot of blank cells. He looks at the blanks the way he used to look at a capital structure with a hole in the guarantor coverage. The hole is where the money is.
+
+The columns do not have headers yet; writing them is the work of §4.3. The rows are the six documents, plus Kaz's laptop, which he adds at the bottom in pencil. Above the grid, where a deal team would write the client's name, Theo writes the question that has been forming since page 19: *if everyone has the same menu, what is the kitchen?*
 
 The question this chapter answers: **on which axes do systematic credit shops actually differ, and where on that map is there room for a desk that knows what the credit agreement says?**
 
-By the end of this chapter you will be able to:
-
-- name the five businesses that share the label "systematic credit" and say which constraint binds each one;
-- explain, with dated numbers, why credit went systematic about twenty years after equities, and why it is still under 2% of the fixed-income universe;
-- lay any manager's pitch book on a six-axis map (alpha families, data stack, portfolio construction, execution, capacity, risk) and find the cells it hides;
-- show that every "value" signal in the industry is a gap between a risk-neutral and a physical loss rate;
-- compute effective breadth under issuer clustering, break-even turnover, and capacity under square-root impact, and explain why at the manager's preferred size the client keeps one-third of the edge;
-- specify a seeded engine that scores any row of the map, and name the empty cells where an ex-RSSG brain is scarce.
+By the end of the chapter Theo can do six things he could not do at 7:40, and so can you. He can name the five businesses that share the label "systematic credit" and say which constraint binds each one. He can explain, with dated numbers, why credit went systematic about twenty years after equities, and why it is still under 2% of the fixed-income universe. He can lay any manager's pitch book on a six-axis map (alpha families, data stack, portfolio construction, execution, capacity, risk) and find the cells it hides. He can show that every "value" signal in the industry is a gap between a risk-neutral and a physical loss rate. He can compute effective breadth under issuer clustering, break-even turnover, and capacity under square-root impact, and explain why at the manager's preferred size the client keeps one-third of the edge. And he can specify a seeded engine that scores any row of the map, and point to the empty cells where an ex-RSSG brain is scarce.
 
 ## 4.1 The Five Businesses Called "Systematic Credit"
 
 In restructuring you learn early that "the creditors" is not a party. A first-lien term lender, a second-lien noteholder, a trade creditor and a CDS protection buyer all hold a claim on the same company, and they want four different things. "Systematic credit" works the same way. The phrase covers at least five businesses that share a vocabulary (factors, optimizers, transaction-cost models) and almost nothing else that matters: not the benchmark, the leverage, the client, or the constraint that decides whether they make money.
+
+Theo has met all five, though never under these names. On one of his early restructurings, a specialty retailer with \$1.2bn of unsecured notes and a borrowing base that shrank every time the inventory appraiser visited *(a fictional composite; the company and its numbers are invented)*, they turned up roughly in the order a filing calls them.
+
+The first was an investment-grade fund that sold the notes long before anyone at PJT had heard of the company. When the second of the three rating agencies cut the retailer to junk, the bonds left the index at the next month-end, and the fund's index rules sold them for it. Every dealer on the Street could read the same rules, so the bonds were cheap by the time the selling arrived. That is row (iv) of the table below, the rules-based fund: its virtue is that you can predict what it will do, and its cost is that so can everyone else.
+
+The second was a high-yield manager who owned the notes because they were in *her* index. She held them through the missed coupon and into the filing, not out of conviction but because selling a 0.3% index weight at 30 cents would have locked in a loss her benchmark had not yet taken. Her questions on the creditor call were about timing, never value. When would the index drop the name, and would the new paper be index-eligible? She was row (i). The constraint that decided her trades was never the signal. It was the tracking error a sale would have cost her.
+
+The third was a hedge fund that had been short the notes since they were at 80, borrowing them in repo, and was in no hurry to cover. It wanted a quick filing and a low recovery. Its analyst asked the sharpest questions on the call, most of them about whether the notes would be deliverable into the CDS auction. Row (ii): levered, free of any benchmark, and kept awake at night by the borrow rate and by the suspicion that five other funds were short the same bond.
+
+The fourth was the dealer who made the market in all of it. It bought from the index fund, lent the short its bonds, showed the long-only manager a bid she declined, and quoted the new notes after emergence. The dealer was nearly indifferent to whether the company survived. It cared whether its inventory turned over before the people it traded with turned out to know more than it did. Row (v).
+
+The fifth never saw the name. A multi-asset credit allocator had cut high yield from 30% to 20% of its book three months before the filing, in favour of loans, because its sector model said high-yield spreads were too tight for the default rate it expected. The retailer was one bond among two thousand that left the portfolio in a single portfolio trade. Row (iii): it chooses sectors, and an individual credit is noise to it.
+
+Five people, one capital structure, five ideas of what a good month looked like. The industry now calls the machine-run version of each of them "systematic credit."
 
 Acadian, which built a systematic credit business between 2022 and 2024, put it bluntly in June 2026: the term has become an "ambiguous catch-all label." Acadian's own narrow definition is "fundamentally driven, benchmark-relative corporate bond strategies that apply purely quantitative methods" (Acadian, *Credit's Systematic Shift*, June 2026). That is one of the five businesses below. It is a good definition and a bad census.
 
@@ -41,13 +96,15 @@ Acadian, which built a systematic credit business between 2022 and 2024, put it 
 | (iv) | Rules-based and smart-beta credit ETFs | Index; no leverage | A cheap, transparent factor tilt | Rebalance predictability | iShares IGEB and HYDB, launched July 2017; about \$1.43bn and \$1.52bn in assets in October 2026 *(approx.; aggregator data, CHECK)* |
 | (v) | Algorithmic dealers and non-bank liquidity providers | None; inventory P&L | Liquidity | Adverse selection and balance sheet | Non-bank liquidity providers earned about 10% of US credit market-making revenue in 2024 (Coalition Greenwich, January 2025); see Chapters 18–19 |
 
-Two things in this table should change how you read every pitch book that follows.
+Theo reads the table the way he once read the retailer's creditor matrix, and two things in it change how he reads every pitch book that follows.
 
 First, the five businesses face different binding constraints, so they optimize different things and will tell you different stories about the same factor. A long-only manager running against the ICE BofA High Yield Index does not care much about whether value works as a standalone long/short spread. It cares whether value tilts can be carried at a 2% tracking error without paying away the edge in bid–offer. A long/short fund at four times leverage does not care about a benchmark at all. It cares whether it can borrow the bond it wants to short, and whether the six other funds running the same value signal will try to sell at the same moment. Same factor, different businesses, different answers.
 
 Second, the column on the far right is thin for a reason. The industry is young, much of it sits inside larger firms that do not split out systematic assets, and the multi-strategy pods disclose almost nothing. Where this chapter says CHECK it means it: we will not invent a pod's AUM to make the table look full.
 
-A sixth group hangs over all five: the "quant-assisted" discretionary manager. Barclays QPS estimates that funds using quantitative *screening* in IG and HY hold between \$90bn and \$140bn (Mateer et al., Barclays QPS & Credit Research, 2024, cited by Impax, 19 September 2025). That is several times the dedicated systematic pool. Most of the industry's quant money is not running a model. It is running a model *past* an analyst. Keep that number in your pocket next to the USB stick. It is the strongest evidence in this chapter that an RSSG-trained analyst is not obsolete. They are the other half of the most common product.
+A sixth group hangs over all five: the "quant-assisted" discretionary manager. Barclays QPS estimates that funds using quantitative *screening* in IG and HY hold between \$90bn and \$140bn (Mateer et al., Barclays QPS & Credit Research, 2024, cited by Impax, 19 September 2025). That is several times the dedicated systematic pool. Most of the industry's quant money is not running a model. It is running a model *past* an analyst. Theo files that number next to the USB stick. It is the strongest evidence in this chapter that an RSSG-trained analyst is not obsolete. They are the other half of the most common product.
+
+> **View From Another Seat.** *The firm that holds two seats.* On 29–30 October 2025 Ares Management agreed to buy all of BlueCove, a systematic fixed-income manager founded in 2018 in which it had held a minority stake since 2023. BlueCove had grown from \$1.8bn of assets in 2023 to \$5.5bn at 30 September 2025, with about 60 staff. Ares renamed it Ares Systematic Credit and cited insurance distribution and "increased interest in systematic credit" (The DESK, 30 October 2025; Alternative Credit Investor, 30 October 2025); completion is reported for early February 2026 (CHECK). Three months after the agreement, on Ares Capital's fourth-quarter call of 4 February 2026, ARCC's president Jim Miller described the direct-lending business of the same parent. "We will walk away from transactions based on documentation terms," he said, and he spoke of the "merits of not being a benchmark-style investor, as we are able to be selective not only with the companies we are financing but also with the industries we target more generally" (ARCC Q4 2025 earnings call). Set the two beside the table and Theo sees the asymmetry. BlueCove is row (i) almost by definition: benchmark-relative, model-driven, sold on its tracking error. ARCC is on no row at all. It negotiates a covenant package line by line, holds the loan to maturity or refinancing, and treats having no benchmark as the whole point. One parent, two objective functions that are close to opposites: one is paid to stay near the index and be a little better than it, and the other is paid to stay away from any index and to read the documents. A firm that already had the second seat bought the first, which is about as clear a public statement as exists that each seat now wants the other's tools. Theo has spent his career in the second seat. He starts to wonder which way the trade in tools runs for him.
 
 > **Desk Myth vs. Desk Reality.** *Myth:* Systematic credit is equity quant with the tickers swapped for CUSIPs. *Reality:* An equity quant trades a stock that exists once, prints every few milliseconds, and can be shorted by calling the prime broker. A credit quant trades one of the seven bonds a single issuer has outstanding, three of which printed last week. Shorting any of them means borrowing it in repo, and that bond may be cheapest-to-deliver into a CDS auction or held by an ad hoc group that is about to sign a cooperation agreement. The signal library transfers. The plumbing does not.
 
