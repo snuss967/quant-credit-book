@@ -214,9 +214,11 @@ def fig_volatility_tax():
     ax.bar(edges[:-1] + 0.05, share, width=0.085, color=colors, zorder=2)
     ax.plot([exact_med, exact_med], [0, 11.9], color=ORANGE, lw=2.0, zorder=4)
     ax.plot([exact_mean, exact_mean], [0, 11.9], color=BLUE, lw=2.0, zorder=4)
-    ax.text(exact_med - 0.07, 12.7, "median 0.97", fontsize=8.5, color=INK_2, ha="right", va="center")
-    ax.text(exact_mean + 0.07, 12.7, "mean 1.05", fontsize=8.5, color=INK_2, ha="left", va="center")
-    ax.text(3.1, 8.6, f"{below:.0%} of paths end\nbelow 1.00, though\nthe average is +5%", fontsize=8.3,
+    ax.text(exact_med - 0.07, 12.15, "median\n0.97", fontsize=8.5, color=INK_2, ha="right", va="bottom",
+            linespacing=1.15)
+    ax.text(exact_mean + 0.07, 12.15, "mean\n1.05", fontsize=8.5, color=INK_2, ha="left", va="bottom",
+            linespacing=1.15)
+    ax.text(3.1, 8.6, f"{below:.0%} of paths end below\n1.00 (darker bars), though\nthe average is +5%", fontsize=8.3,
             color=INK_2, va="top", ha="right", linespacing=1.2)
     ax.set_xlim(0.0, 3.2)
     ax.set_ylim(0, 14.0)
@@ -238,10 +240,10 @@ def fig_volatility_tax():
     bx.plot(t, np.exp((mu - 0.5 * sig**2) * t), color=ORANGE, lw=2.2, zorder=4)
     bx.axhline(1.0, color=INK_2, lw=0.8, ls=(0, (1.5, 2.5)), zorder=2)
     bx.set_yscale("log")
-    bx.set_ylim(0.1, 25)
+    bx.set_ylim(0.035, 45)                     # wide enough that no simulated path (0.04 to 27) is cut off
     bx.set_xlim(0, 10.0)
-    bx.set_yticks([0.25, 0.5, 1, 2, 4, 8, 16])
-    bx.set_yticklabels(["0.25", "0.5", "1", "2", "4", "8", "16"])
+    bx.set_yticks([0.1, 0.25, 0.5, 1, 2, 4, 8, 16, 32])
+    bx.set_yticklabels(["0.1", "0.25", "0.5", "1", "2", "4", "8", "16", "32"])
     bx.minorticks_off()
     bx.set_xlabel("Years")
     bx.set_ylabel("Price, log scale (start = 1.00)")
@@ -249,6 +251,7 @@ def fig_volatility_tax():
     label_end(bx, 10.0, np.exp((mu - 0.5 * sig**2) * 10), "median\n0.74", ORANGE, dx=5)
     bx.set_xlim(0, 10.0)
     note(bx, "40 simulated paths, same mu and sigma", loc="upper left")
+    assert logs.min() > np.log(0.035) and logs.max() < np.log(45)    # nothing clipped by the axis limits
     finish(fig, "00_02__volatility_tax")
 
 

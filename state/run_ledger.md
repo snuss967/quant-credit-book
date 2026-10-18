@@ -267,3 +267,9 @@ Ch 1 finished its lessons pass (16 → 9 Math, Gently boxes, modal 3.9 → 3.7) 
 
 ### 15:20 UTC: all 28 main chapters revised and verified
 Ch 26–28 are done (PB-16 "ROBO's forty-seven pairs" in Ch 26; the PB-01 one-leg-never-trades exercise in Ch 27; Dov's year-end review in Ch 28). **App Z launched:** worked solutions, numerically checked, written per chapter into `state/appZ/<stem>.md` by 4 workflows (Ch 1–7, 8–14, 15–21, 22–28). After it lands, assemble them into `book_src/99_appZ_solutions_hints_and_self_assessment.md`, adding the part gates and "if you got this wrong, read §x.y" index. Primers and new chapters get solutions after their own passes.
+
+## 2026-10-18 15:55 UTC: App Z assembled; editor-note fix pass launched
+- tools/assemble_appZ.py: builds book_src/99_appZ_solutions_hints_and_self_assessment.md (Parts I-IV, ~41k words) and 99_appZb_solutions_parts_v_to_viii.md (Parts V-VIII, ~23k words) from state/appZ/, in TOC order with Part headings; one heading scheme; editor NOTEs kept out of the book and listed in state/appZ/_editor_notes.md. Optional Part gates at state/appZ/gates/<part stem>.md. Re-run after every App Z change.
+- Still unsolved: Ch 13, 14, 21, 27 (running batches); the primers and new chapters carry brief inline solutions, so App Z for them is deferred (lower value per credit).
+- Launched appz-notes-fix (wf_ce9abb98-d99, Sonnet, two lanes, 18 chapters, 31 notes): recompute, minimal chapter fix, align solution, delete NOTE, log to state/revisions/ed2/<stem>.appz_fix.md.
+- Meter 82.7% at 15:48 (alarm at 105%).

@@ -294,3 +294,167 @@ The first was the sample. Every ruling in the table comes from a case somebody l
 > **Trend Watch.** *The form moved, not the frequency (2024–2026).* After the Fifth Circuit's *Serta* opinion, uptier components still appeared in 12 of 17 LMTs in the first quarter of 2025, and CreditSights found 43.4% of loans (44% of private-equity-backed loans) still carried the majority-subordination "Serta loophole" through Q1 2025 (courts dossier §2 and §11). By 2026 the modal deal had moved to amend-extend-exchange, drop-downs and co-op-negotiated extensions (Chapter 13's Trend Watch, Wachtell Lipton, 3 February 2026; 9fin, 28 August 2026). A token map catches the words; the substitute structures need new tokens.
 
 > **Ways This Blows Up.** Three, all from this room. *The feed without a label:* ROBO's 4,100 entries, faithfully parsed, contain no direction, and a model trained on entry counts learns that cases with more lawyers are worse, which is true and useless. *Settled as won:* a coder who labels Boardriders $+1$ because the excluded lenders were paid par has turned a sale into a ruling, and the jump fitted to it will fire the next time a judge denies a motion to dismiss. *Fitting jumps on nineteen rows:* a regression of price reactions on nineteen ruling dates, with three tokens and two forums as regressors, has more parameters than it has independent events, and its confident output is the separation problem of §13.8 wearing a robe.
+
+Used in / builds on: §14.6 and §14.7 (the jumps and the filter these rows feed), Chapter 16 (excluded claims and releases after *Purdue*), Chapter 24 and Appendix D (the Altice auction and its deliverables), Chapter 25 §25.6–25.7 (dockets and Rule 2019 statements as data), Chapter 27 §27.3.3 (the Serta master-table rows), Chapter 28 (excluded-claim carry sizing), Appendix C (the dated rows), Appendix E (the court is a random variable with timestamps).
+
+## 13B.8 Desk Debrief
+
+- **The door beats the lien.** The same first lien was worth 74, 25 or 95 depending on which side of the deal it sat. Coalition status and a judge explain more of the excluded holder's P&L than seniority, leverage or rating.
+- **A ruling is a dated jump.** Label it by direction for the excluded holder, keep all four timestamps, and add an elicited jump to the log-odds of every document carrying the same words.
+- **Two clocks.** Deal to petition, about 13.5 months; transaction to the ruling that set the regime, 22. Courts reallocate estates; they rarely prevent filings.
+- **The pair is the markout.** Long the likely participant, short the likely excluded: the hedge removes default and sector, and what remains is the seat and the judge. Both PB-06 and PB-08 closed on the excluded leg's markout, and both leaked time.
+- **Exclusion is a bet on a sale or a ruling.** Boardriders and Lumen's orphans were paid near par after a sale; Serta's non-participants waited six years for a court.
+- **Zayo is the false positive with a date on it.** A score that fires on every wall and pact will fire there, too.
+- **Nineteen rulings are a diary, not a dataset.**
+
+### Specification for AI Implementation: `docket_diary.py`
+
+**The Spec You Hand the Robot.** What ROBO built from the vague version, "flag every ruling," was a list of 1,312 orders, of which 1,290 were scheduling orders, because a scheduling order is, literally, a ruling about the schedule. The precise version asks for something smaller. Given docket entries for a set of cases, keep only the entries that decide something for the excluded holders, give each a direction ($+1$, $-1$, $0$) and up to four dates, map each case's history onto the states of §13B.4, count the one-step transitions across cases, and compute, for any wording token and any date, the excluded side's log-odds from an elicited baseline plus the jumps of every ruling on that token that was public by that date.
+
+The problem this solves, at this point in the story, is the one Theo had on Monday: a feed with four thousand rows and no answer in any of them. The listing does not read dockets; Chapter 25 §25.6 builds the scraper. It starts where a human labeler has already done the judgment work and turns those labels into the two objects the chapter uses, a transition-count table for the chain and a dated log-odds series for each token. It is built as plain dataclasses and a few pure functions because the courts table changes by hand, a row at a time, and every number in it has to be traceable to one entry. Its inputs are `Entry` records (case, forum, kind, four optional dates, direction, tokens, the state the entry moves the case into, and an elicited jump); its outputs are a dictionary of case paths, a `Counter` of transitions, empirical row probabilities, and a log-odds for a token as of a date.
+
+Use it to keep the diary honest and to feed priors to the Hamilton filter of §14.7. Do not use it to estimate jumps: with nineteen rows it has nothing to estimate them from, and the function that sums jumps will happily sum numbers you made up last week. The edge case that bites is the date. A ruling has an oral date, a written date, an entry date and a first-public date, and they can differ by months (Incora) or fall on a Saturday (*STG*); the code uses the first public date when it exists and falls back in a fixed order, so the same ruling is never counted twice with two dates. A settled case carries no direction at all, `None`, which is different from a mixed ruling's `0`, and the filter keeps them apart.
+
+<!-- EXPLAINED -->
+```python
+"""docket_diary.py (Chapter 13-B): labelled docket entries -> rulings, case paths,
+transition counts, and token log-odds that jump on ruling dates.
+
+Direction: +1 favours excluded or non-consenting holders, -1 the majority or debtor,
+0 mixed, None for entries that are not rulings (including settlements).
+Jumps are elicited priors on the excluded side's log-odds (illustrative), not estimates.
+"""
+from __future__ import annotations
+
+import math
+from collections import Counter
+from dataclasses import dataclass
+from datetime import date
+
+STATES = ("announced", "challenged", "mtd_denied", "trial", "ruled_pos", "ruled_neg",
+          "reversed", "settled", "in_court", "emerged", "coop_close")
+ABSORBING = {"coop_close", "emerged"}
+
+
+@dataclass(frozen=True)
+class Entry:
+    case: str
+    forum: str
+    kind: str                          # "ruling", "filing", "scheduling", "settlement", ...
+    decided_at: date | None = None
+    entered_at: date | None = None
+    first_public_at: date | None = None
+    direction: int | None = None       # +1, -1, 0, or None
+    tokens: tuple[str, ...] = ()
+    state_after: str | None = None     # map state this entry moves the case into
+    jump: float = 0.0                  # elicited log-odds jump for the excluded side
+
+    def event_date(self) -> date | None:
+        """First date the market could know: public, else decided, else entered."""
+        return self.first_public_at or self.decided_at or self.entered_at
+
+
+def rulings(entries):
+    """Entries that decide something, in event-date order; scheduling orders excluded."""
+    out = [e for e in entries
+           if e.kind == "ruling" and e.direction in (-1, 0, 1) and e.event_date()]
+    for e in out:
+        if e.jump * e.direction < 0:
+            raise ValueError(f"{e.case}: jump {e.jump} has the wrong sign for {e.direction}")
+    return sorted(out, key=lambda e: e.event_date())
+
+
+def case_paths(entries):
+    """Ordered list of map states per case, from entries that carry state_after."""
+    paths: dict[str, list[str]] = {}
+    dated = [e for e in entries if e.state_after and e.event_date()]
+    for e in sorted(dated, key=lambda e: e.event_date()):
+        if e.state_after not in STATES:
+            raise ValueError(f"unknown state {e.state_after!r} in {e.case}")
+        path = paths.setdefault(e.case, ["announced"])
+        if path[-1] != e.state_after:
+            path.append(e.state_after)
+    return paths
+
+
+def transition_counts(paths):
+    """One-step moves i -> j across cases; nothing may leave an absorbing state."""
+    counts = Counter()
+    for case, path in paths.items():
+        for i, j in zip(path, path[1:]):
+            if i in ABSORBING:
+                raise ValueError(f"{case}: move out of absorbing state {i}")
+            counts[(i, j)] += 1
+    return counts
+
+
+def row_probabilities(counts, state):
+    """Empirical one-step probabilities out of one state; None if never left."""
+    row = {j: n for (i, j), n in counts.items() if i == state}
+    total = sum(row.values())
+    return {j: n / total for j, n in row.items()} if total else None
+
+
+def token_logodds(alpha, token, entries, as_of):
+    """Excluded side's log-odds for a wording token on as_of: baseline plus the jumps
+    of rulings that read the token and were public on or before as_of."""
+    return alpha + sum(e.jump for e in rulings(entries)
+                       if token in e.tokens and e.event_date() <= as_of)
+
+
+def prob(logit):
+    return 1.0 / (1.0 + math.exp(-logit))
+
+
+if __name__ == "__main__":
+    serta = [
+        Entry("Serta", "Bankr. S.D. Tex.", "ruling", decided_at=date(2023, 3, 28),
+              direction=-1, tokens=("open_market_purchase",), jump=-0.5),
+        Entry("Serta", "5th Cir.", "ruling", decided_at=date(2024, 12, 31),
+              direction=+1, tokens=("open_market_purchase",), jump=+1.0),
+        Entry("Serta", "Bankr. S.D. Tex.", "scheduling", entered_at=date(2023, 4, 3)),
+    ]
+    for d in (date(2023, 1, 1), date(2023, 6, 1), date(2025, 1, 2)):
+        x = token_logodds(0.0, "open_market_purchase", serta, d)
+        print(d, round(prob(x), 2))    # 0.5, then 0.38, then 0.62
+```
+
+### Exercises
+
+1. **Replace the illustrative marks.** Pull TRACE prints for Level 3's 3.875% first-lien 2029s and one Lumen parent unsecured note for the five days around 10 November 2023 and 22 March 2024, and recompute PB-08's idio, net and capture ratio. *Solution sketch:* idio $= 15 \times \Delta P_{L3}/100 - 10 \times \Delta P_{\text{Lumen}}/100$ in \$mm; carry and spreads stay at about \$0.42mm. If the parent notes rose over the window, the entity thesis lost even though the seat wedge was real, and the capture ratio is undefined for a negative idio; say so rather than printing a number.
+2. **Fill a data gap.** For Envision (April and August 2022, 15 May 2023) and Incora (28 March 2022, 10 July 2024, 8 December 2025), build the excluded tranche's markout at $t-1$, $t+5$ and $t+20$ trading days. *Solution sketch:* Incora's notes are on TRACE; Envision's first lien is a loan and is not, so the markout needs a loan-mark vendor, and the two series are not comparable without saying how each was built. Noticing that is the exercise.
+3. **Manufacture a majority.** A group holds 55% of a \$600mm class; majority consent can add pari passu notes, and releasing collateral needs two-thirds. How many new notes does the group need, and how few would erase a 34% blocking stake? *Solution:* $(330 + x)/(600 + x) = 2/3$ gives $x = \$210$mm; $600 \times (3 \times 0.34 - 1) = \$12$mm erases the block.
+4. **Absorb a folder.** Monthly, an announced deal stays announced with probability 0.90, enters court with 0.06 and closes cooperatively with 0.04; a case in court stays with 0.92 and emerges with 0.08. From *announced*, how many months to absorption, and how often does it end cooperatively? *Solution:* $Q = \begin{pmatrix} 0.90 & 0.06 \\ 0 & 0.92 \end{pmatrix}$ gives $N = (I-Q)^{-1} = \begin{pmatrix} 10 & 7.5 \\ 0 & 12.5 \end{pmatrix}$, so 17.5 months; $B = NR$ gives 0.40 cooperative and 0.60 through court.
+5. **Kaz's Saturday.** Kaz proposes dropping any ruling whose decision date falls on a weekend "as a data error." Using *STG* (3 January 2026 as reported, nine days before the petition), argue what the drop does to the token log-odds for STG-style wording on 12 January 2026. *Solution sketch:* it deletes a $+1$ jump that was public before the filing, so the model enters the bankruptcy with stale odds; the fix is a `first_public_at` column, not a filter.
+
+### Deep-Dive Resource Graph
+
+**Podcasts**
+
+- *Odd Lots*, "Inside the Blood Sport of Creditor-on-Creditor Violence," with Sujeet Indap (25 Nov 2024): https://omny.fm/shows/odd-lots/inside-the-blood-sport-of-creditor-on-creditor-vio. The general-audience on-ramp to why documents turned into fights.
+- *Cloud 9fin*, "Co-op agreements through the eye of American Needle" (25 Sep 2024): https://share.transistor.fm/s/44a5c9af. The antitrust question about co-ops, a year before Optimum filed.
+- *Cloud 9fin*, "Eat, sleep, drive: Breaking down the Del Monte, Serta & American Tire trifecta" (21 Jul 2026): https://share.transistor.fm/s/1c4df313. Three judges on similar pro rata language, including the Serta remand.
+- *Cloud 9fin*, "LME Doomscrolling: Data-driven reality check," with Mark Roe and Vasile Rotaru (7 Apr 2026): https://share.transistor.fm/s/1f62123b. The re-default clock from the people who counted.
+
+**Practitioner Writing**
+
+- Mayer Brown, "Serta Simmons Bedding: The Fifth Circuit's Uptier Decision and the Landmark Damages Ruling on Remand" (31 Jul 2026): https://www.mayerbrown.com/en/insights/publications/2026/07/serta-simmons-bedding-the-fifth-circuits-uptier-decision-and-the-landmark-damages-ruling-on-remand. The arithmetic behind PB-06's close.
+- Paul Weiss, "Appellate Review of Uptier Transactions: Serta and Mitel Decisions Reversed on Appeal" (10 Jan 2025): https://www.paulweiss.com/media/pdchc2qo/appellate_review_of_uptier_transactions_serta_and_mitel_decisions_reversed_on_appeal.pdf. The two-word difference, from counsel to Serta's excluded lenders.
+- Cleary Gottlieb, "Cooperation, Not a Cartel: Why Lender Co-Op Agreements Should Generally Withstand Antitrust Scrutiny": https://www.clearygottlieb.com/news-and-insights/publication-listing/cooperation-not-a-cartel-why-lender-co-op-agreements-should-generally-withstand-antitrust-scrutiny. The defence view of §13B.6.
+- IFR, "CDS market passes Altice debt test": https://www.ifre.com/topic-codes/2304255/cds-market-passes-altice-debt-test. The starved auction and the composite package.
+- Wachtell Lipton, "Liability Management 2026: For Better or Worse," Harvard Law School Bankruptcy Roundtable (7 Apr 2026): https://bankruptcyroundtable.law.harvard.edu/2026/04/07/liability-management-2026-for-better-or-worse/. The deal lawyers' counterpoint.
+
+**Academic Papers and Opinions**
+
+- *In re Serta Simmons Bedding*, 5th Cir. No. 23-20181 (revised 14 Feb 2025): https://www.ca5.uscourts.gov/opinions/pub/23/23-20181-CV0.pdf. "Deafening silence" and the surplusage canon.
+- *Kington S.a.r.l. v Thames Water Utilities Holdings* [2025] EWCA Civ 475: https://caselaw.nationalarchives.gov.uk/ewca/civ/2025/475. The relevant alternative and the fee stack, paragraphs 171–172 and 205.
+- *Harrington v. Purdue Pharma L.P.*, No. 23-124 (27 Jun 2024): https://www.supremecourt.gov/opinions/23pdf/23-124_8nk0.pdf. Releases as a regime date.
+- Mark Roe and Vasile Rotaru, "Liability Management's Limited Runway: Corporate Restructuring Today," HLS Bankruptcy Roundtable (24 Feb 2026): https://bankruptcyroundtable.law.harvard.edu/2026/02/24/liability-managements-limited-runway-corporate-restructuring-today. The 89 events behind §13.8's prior.
+- Harvard Law Review, "Excluded Lenders v. Serta Simmons Bedding, L.L.C.," 139 Harv. L. Rev. 669: https://harvardlawreview.org/print/vol-139/excluded-lenders-v-serta-simmons-beddingl-l-c/.
+
+**Data & Code**
+
+- EMEA Determinations Committee, Altice France decision of 9 June 2025: https://www.cdsdeterminationscommittees.org/documents/2025/06/altice-france-emea-dc-decision-9-june-2025.pdf. A credit event as a dated, voted entry.
+- Lumen Technologies 8-K of 31 October 2023: https://www.sec.gov/Archives/edgar/data/18926/000119312523267280/d578129d8k.htm. The TSA as filed.
+- Ares Capital 10-Q for 30 June 2024: https://www.sec.gov/Archives/edgar/data/1287750/000128775024000039/arcc-20240630.htm. The Pluralsight mark at 48.0.
+- CourtListener RECAP search API: https://www.courtlistener.com/api/rest/v4/search/. Docket metadata for the Optimum and Selecta cases; anonymous use is rationed, entry-level history needs a login, and New York's state-court site blocks automated fetches.

@@ -52,3 +52,66 @@ The count changes by the same one AP in both cases. Only the capacity differs. T
 
 **If you got this wrong, read:** §20.3.2, the Math, Gently box "A hill, and risk tolerances that add like resistors", and the paragraph after Figure 20.3 on going from 28 APs to 24. Block 3 of Listing 20.1 (`clearing_premium` takes a list of `gammas`, so you can test it directly).
 
+**Z.20.4: Cardinality**
+
+**Answer:** Adding $\chi$ per line gives the problem
+
+$$
+\min_{w,\,z}\; k^\top w + \frac{\theta}{2}(w - h)^\top \Sigma (w - h) + \chi\,\mathbf{1}^\top z \quad \text{s.t.} \quad \mathbf{1}^\top w = 1,\quad 0 \le w_i \le z_i,\quad z_i \in \{0, 1\}.
+$$
+
+The objective is a convex quadratic in $w$ plus a linear term in $z$, and the constraints are linear, but $z$ is binary. That makes it a mixed-integer QP. A good heuristic is greedy backward elimination. Solve (20.6) with $w \ge 0$, score every line by the exact rise in $J$ from forcing it out, drop the cheapest line while its score is below $\chi$, re-solve, and repeat. We tested it against exhaustive search on eleven random 12-bond instances at three values of $\chi$ each, and it found the optimum all 33 times. Coverage ends up in the 10–35% range because the value of keeping a line grows with the *square* of its weight, while $\chi$ is charged per line. In a 1,300-bond fund, the long tail of small lines fails the test, and the basket becomes the heavy index lines plus the lines with large tilts.
+
+**How:** The cost $\chi\,\#\{i : w_i > 0\}$ is an $\ell_0$ penalty: it is discontinuous at zero and nonconvex, and the binaries $z_i$ (with $w_i \le z_i$ as the big-M link, since $w_i \le 1$) are the standard way to write it. Adding the constraint $w_i = 0$ to the equality-constrained QP on the current set $S$ raises the optimum by
+
+$$
+\Delta J_i = \frac{\theta\, w_i^{*2}}{2\, q_i}, \qquad q_i = (\Sigma_S^{-1})_{ii} - \frac{\big((\Sigma_S^{-1}\mathbf{1})_i\big)^2}{\mathbf{1}^\top \Sigma_S^{-1} \mathbf{1}},
+$$
+
+which matches a brute-force re-solve to $10^{-17}$. Drop $\arg\min_i \Delta J_i$ while it is below $\chi$, and drop any line the re-solve pushes negative. Two features of the score do the work. It is quadratic in $w_i^*$, so a line at the pro rata weight $\sim 1/N$ is worth $O(1/N^2)$ in tracking, while it costs a full $\chi$. And $1/q_i$ is the line's variance *conditional on the rest*, so a bond with close substitutes is cheap to drop and an idiosyncratic one is expensive. To see the scaling, we extended Listing 20.1's Block 4 to $N$ bonds, with lognormal index weights, 5% of lines axed and $\theta$ scaled with $N$. With $\chi = 0$ the $w \ge 0$ corners keep about 80% of lines at every $N$. At $\chi = 0.05$–$0.5$ bp per line, a 1,300-bond fund keeps 11–26% of its lines, which still carry 35–58% of the index weight and most of the axes. Redemptions add the fund's shadow value $\ell_i$ to the gaps, so they have more lines with big tilts than creations do, which is why redemption coverage runs above creation coverage (about 20% against 10% in Shim–Todorov).
+
+**The trap:** Relaxing $\ell_0$ to $\ell_1$, as in a lasso. On the budget simplex, $\sum_i |w_i| = \mathbf{1}^\top w = 1$ for every feasible basket, so the $\ell_1$ penalty is a constant and selects nothing. The other trap is dropping lines by smallest *weight* rather than by $\Delta J_i$: a small, idiosyncratic line can cost more to drop than a larger one with close substitutes.
+
+NOTE (for the editor): §20.4.3 says "the fractional baskets in the data are the corner solutions of this problem." Listing 20.1's own Block 4 prints `basket coverage 92%` at the $w \ge 0$ corners, and our scaled runs give about 80% at $\chi = 0$. The 10–35% in the data needs the per-line cost of this exercise as well. Suggest "partly the corner solutions of this problem, and partly a fixed cost per line (Exercise 4)."
+
+**If you got this wrong, read:** §20.4.3 (the Math, Gently box "Pegs on springs inside a rubber band", (20.6)–(20.7) and the derivation's remark on $w \ge 0$), §20.4.2 for the coverage ratios, and Block 4 of Listing 20.1 (`basket_qp`), which this exercise extends.
+
+**Z.20.5: The Fed's clause**
+
+**Answer:** Above the upper door, creation is profitable: $\Pi^C = \pi - \pi^{\text{hi}} > 0$ per \$1 of NAV. So APs buy the creation basket, create shares and sell them to the Fed. The transfer to the APs per dollar the Fed spends is
+
+$$
+\frac{\pi - \pi^{\text{hi}}}{1 + \pi} \;\approx\; \pi - \pi^{\text{hi}} .
+$$
+
+On the chapter's illustrative IG band ($\pi^{\text{hi}} = 20$ bp), a purchase at a 1% premium hands the APs 79.2 bp per dollar. On a position the size of the SMCCF's \$2.47bn of LQD, that would be about \$19.6mm, if all of it had been bought that way (a hypothetical; it was not). The Fed's full overpayment against the bonds' mid value is about 91 bp per dollar. Of that, about 12 bp goes to people who did real work: dealers' half-spread $c^C$, the fund's fee $f^C$ and the AP's costs $k^C$. The remaining 79 bp is the APs' rent.
+
+**How:** From the creation leg of §20.3.1, $\Pi^C_t = (1 + \pi) - \frac{1 + c^C}{1 - \bar c} - f^C - k^C \approx \pi - (\bar c + c^C + f^C + k^C) = \pi - \pi^{\text{hi}}$. This is positive whenever $\pi > \pi^{\text{hi}}$, and it carries no risk, because the buyer is standing there. With $\bar c = c^C = 8$ bp, $f^C = 1$ bp and $k^C = 3$ bp, the exact profit at $\pi = 1\%$ is 79.99 bp per \$1 of NAV. Each dollar of purchases buys $1/(1+\pi)$ dollars of NAV, so the rent is 79.2 bp per dollar. Measured against mid, the overpayment splits as
+
+$$
+\pi - \bar c = \underbrace{(\pi - \pi^{\text{hi}})}_{\text{AP rent}} + \underbrace{c^C + f^C + k^C}_{\text{paid for real services}} .
+$$
+
+The paragraph: *A bid-side NAV puts a calm IG ETF at a small premium, and a NAV that lags a rally adds a staleness premium on top, so a facility forbidden to buy "above NAV" could not have bought on most ordinary days (JNK closed at a premium on 206 of 250 days in 2025), even though neither the accounting constant $\bar c$ nor the staleness $s_t$ is a transfer to anyone. "Materially exceed" lets the Fed pay those two harmless terms and promises it will not pay above $\pi^{\text{hi}}$, the line beyond which every basis point is a riskless gift to whoever can create shares. The phrase turns "NAV" into "the band": the Fed could bid the discount closed, up to the creation door, and no further. Its mirror, "materially below" on the exit, kept it from selling into the redemption door that it had been brought in to shut.*
+
+**The trap:** Calling the whole premium, $\pi$, the transfer. Part of it is the bid-side constant $\bar c$: the Fed receives bonds worth mid, not bid, so that part is not an overpayment at all. Another $c^C + f^C + k^C$ pays dealers, the fund and the AP's balance sheet for real services. Only $\pi - \pi^{\text{hi}}$ is rent to the APs.
+
+**If you got this wrong, read:** §20.3.1 (the derivation of the creation edge in (20.4)) and §20.5.2, "The Fed buys a seat at the table".
+
+**Z.20.6: The sleeve and the line**
+
+**Answer:** $B$ must exceed **2% of NAV**, and the infimum is exactly 2%. The outflow is 9%, both weeks fall inside the three-week lag, and the sleeve covers 7%, so the gap is $9\% - 7\% = 2\%$. How the 9% splits between the two weeks does not matter (4.5/4.5, 6/3 and 3/6 all trough at $-2\%$). The undrawn fee is $0.5\% \times 2\% = 1$ bp of NAV a year, or \$100k a year per \$1bn of fund, which is cheap next to a 0.65% expense ratio. For Theo: *"Same company as any 13-week borrower with lumpy payables and slow receivables. Beginning cash 7, disbursements of 4.5 in each of the first two weeks, receipts of 4.5 arriving three weeks after each disbursement. Ending cash runs 2.5, −2.0, −2.0, 2.5, 7.0. It's solvent, because the receivables cover every dollar. It's illiquid for two weeks. Size the revolver to the trough plus your minimum-cash cushion, draw it in week 2 and repay it from the first receipt. Then stress the receipts: a longer lag lengthens the draw, and if the outflows keep coming, the trough deepens."*
+
+**How:** This extends Listing 20.1's Block 5. Treat the line as cash that is in the sleeve from week 0, and run `sleeve_path(0.07 + B, [0.045, 0.045, 0, ...], lag_weeks=3)`. The recursion $\phi_{t+1} = \phi_t - R_t + R_{t-3}$ gives
+
+$$
+\phi = 0.07 + B,\ \ 0.025 + B,\ \ -0.02 + B,\ \ -0.02 + B,\ \ 0.025 + B,\ \ 0.07 + B, \dots
+$$
+
+so survival needs $B > 0.02$. In general, the line has to cover the largest cumulative outflow that falls inside any one lag window, minus the sleeve. When the whole outflow fits inside the lag ($L \ge 2$ weeks here), the depth of the trough is fixed at 2% and the lag sets only its length: one week at $L = 2$, two at $L = 3$, three at $L = 4$. At $L = 1$ the sleeve alone survives. That is Theo's warning from §20.6.1 in numbers. A longer lag lengthens the draw, and a longer lag combined with a longer burn deepens it.
+
+**The trap:** Plugging the burst into (20.8) as if it were a steady rate: $\bar R L_w = 4.5\% \times 3 = 13.5\%$, so $B = 6.5\%$. (20.8) assumes the outflow continues for the whole lag, so for a burst that stops after two weeks it overstates the need by more than three times. A smaller trap is in the code. At $B = 2.00\%$ exactly, `sleeve_path` reports survival only by floating-point luck: its minimum prints as $1.4 \times 10^{-17}$ against a `phi <= 0` test. Mathematically the sleeve touches zero, so quote "just above 2%".
+
+**If you got this wrong, read:** §20.6.1 ("The Full Derivation: the settlement gap" and "The runway in March 2020's weather", including Theo's remark that the lag lengthens in a bad week) and Block 5 of Listing 20.1 (`sleeve_path`).
+
+<!-- STATUS: COMPLETE -->
