@@ -576,14 +576,13 @@ $$
 
 which follows from dividing both sides of the inequality by $\sigma_\Delta$, so that the left side becomes a standard normal variable, whose probability of exceeding a level $a$ is $1 - \Phi(a)$. With $c_j + c_k = 60$bp and $\sigma_\Delta = 50$bp the level is $1.2 + z$: $1 - \Phi(1.2) = 0.115$ at $z = 0$ and $1 - \Phi(2.2) = 0.014$ at $z = 1$.
 
-#### When headroom helps, and when it costs you the trade
+#### The exchange offer the rebalance would have slept through
 
-Headroom is built for slow signals, and for them it is nearly free. A value score that changes a little each month, on a bond the desk expects to hold for most of a year, loses almost nothing by waiting for a clearer reading: if the alpha is real it will still be there next month, a little better measured. That is the world the formula assumes, a gap that persists while the instrument wobbles around it.
+Theo learns what headroom costs from a near miss. The desk's monthly rebalance, headroom and all, would have waited a month to sell a bond whose issuer announced an exchange offer the day after the rebalance. The early-tender deadline would decide who got the better consideration and who was left holding a stub stripped of its covenants, as the packaging company's holdouts learned in §4.1. Ines catches it because the RFQ flow in the name has tripled.
 
-Event signals break the assumption. When a bond falls out of the investment-grade index on a downgrade, the forced selling is concentrated in a few days around the index exit, and most of the opportunity lives in those days. When an issuer launches an exchange offer, the early-tender deadline decides who gets the better consideration and who is left holding a stub stripped of its covenants, as the packaging company's holdouts learned in §4.1. In both cases the cost of *not* trading is the whole move. A headroom of one standard error, calibrated on monthly value scores, would sit politely on its hands through the only week that mattered.
+"Headroom is for signals that keep," she says. "A value score that moves a little each month, on a bond we'll hold for most of a year, loses nothing by waiting for a clearer reading. If it's real, it'll still be there next month. An exchange deadline doesn't keep. Neither does an index exit after a downgrade. The whole move is in a few days, and a rule calibrated on monthly scores sits politely on its hands through the only week that mattered."
 
-Theo learns the distinction from a near miss. The desk's monthly rebalance, headroom and all, would have waited a month to sell a bond whose issuer had announced an exchange the day after the rebalance. Ines catches it because the RFQ flow in the name has tripled. The fix the desk settles on is not a cleverer $z$. It is a label on every signal saying what kind of clock it runs on: slow signals go through the headroom rule, and event signals bypass it and go to a person with a calendar of deadlines. The first question to ask of any turnover control is how quickly the alpha it is protecting decays.
-
+The fix the desk settles on is not a cleverer $z$. It is a label on every signal saying what kind of clock it runs on: slow signals go through the headroom rule, and event signals bypass it and go to a person with a calendar of deadlines.
 
 ### Nuveen's identity, or the 13-week model with a covariance matrix
 

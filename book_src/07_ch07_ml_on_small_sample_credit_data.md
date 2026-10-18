@@ -326,6 +326,20 @@ with a vertical barrier at $u = h$. The label is $y_{i,t} = +1$ if $\bar b$ is t
 
 **Strip the carry, or the label learns the coupon.** Here is a number that surprises people. Take $h = 13$ weeks $= 3$ months, $\text{DTS} = 0.20$, $\sigma_{\text{rel}} = 10\%$ per month, $\bar m = \underline m = 1$. The barrier half-width is $0.20 \times 0.10 \times \sqrt 3 \approx 3.5\%$. A 500bp bond accrues carry of $0.05 \times 0.25 = 1.25\%$ over the same 13 weeks, about 36% of the barrier width *(illustrative)*. Raw excess-return labels in high yield are therefore tilted toward $+1$ by carry alone, and a model trained on them learns to buy the highest-spread bonds, which is the always-long-carry strategy with extra steps. Build the labels on carry-adjusted, market-beta-stripped residual returns (the IDO return of Chapter 8) instead. The desk motto applies to labels too: IDO or it didn't happen.
 
+**The Pair Book panel.** *A scene at Vantress in the first week of September 2026, before Theo's first day. Dov Adler's pod, Vantress and the platform's pair screen are fictional composites; the panel, the labels and every number are illustrative; the Collin-Dufresne, Goldstein and Martin finding is real and cited.*
+
+The platform's research team shipped a pair screen to the credit pods that week, and Dov's ran first: about 400 candidate pairs over six years, triple-barrier labels in DTS space, a top-decile backtest Sharpe of 2.4. Wen read the label's definition before the chart, the way she reads a short leg's contract. The barrier sat on the change in the spread gap between the two legs.
+
+"Then it's paid for carry," she said. "The wider name wins on coupon alone."
+
+Research relabeled on the residual differential: each leg's return after market beta, DTS and carry, the long's residual minus the short's. The Sharpe fell to 1.6, and the top feature became one nobody had asked for: the long leg one rating bucket below the short.
+
+Marcus read the feature list standing up. "That's a factor with a great backtest. It's a line on my sheet, and the platform owns it for a few basis points without you. What is the screen long that it didn't mean to be?"
+
+Wen answered with a number. The top decile's residual differentials moved together, a mean pairwise correlation near 0.35, much as Collin-Dufresne, Goldstein and Martin (2001) found the residuals of their credit-spread-change regressions "highly cross-correlated," driven mostly by "a single common factor."
+
+Dov wrote the rule on the screen's ticket: *the model may predict only what no factor on Marcus's sheet can see; whatever it predicts in every pair at once is a factor we forgot to name.* Chapter 7-B (§7-B.5, PCA on a residual panel) tests that correlation properly, and §8.8 measures it on the live book.
+
 **The trapdoor.** Because the floor of the corridor gives way rather than holding, the realized return at touch can sit many barrier-widths below $\underline b$, and the sign alone throws that depth away. The label keeps it, $X_{i,t}(t_{1,i}-t)$, beside the $-1$: §7.6 uses it for return-attribution weights, and the sizing layer in §7.5 needs to know that $-1$ labels in CCC carry fatter losses than $+1$ labels carry gains (Chapter 5's mixture distributions). The same asymmetry argues for $\underline m < \bar m$ in the lowest ratings, a tighter stop on the side where the distribution has a jump component, which is how a risk manager would actually run the position.
 
 **The 13-week model, reborn.** How long should $h$ be? Theo's answer was immediate, and for once the data agrees with the emotional-support USB stick.

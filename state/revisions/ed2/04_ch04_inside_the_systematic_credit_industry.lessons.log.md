@@ -39,20 +39,20 @@ Growth 35,365 / 12,571 = **2.81×** against the 1.6–1.9× target (20,114–23,
 - [x] B22. "How a systematic desk reads it" L939 tells engine / distribution / data a third time (story; insurer Seat L941). Survives: story and Seat; L939 cut to the A* sentence. **Done:** Three-things paragraph cut to one A-star sentence after coda.
 - [x] B23. Merton told three times: annotation L904, box L906, story L927. Survives: annotation and story; box becomes a gloss inside the story (D1). **Done:** Merton box deleted; picture and DD number glossed inside fax story.
 - [x] B24. Cost-function box L646 retells the menu/kitchen metaphor of L638 and the cold open. Survives: L638; the box's 50bp becomes Ines's line (D1). **Done:** Cost box deleted; Ines prices twenty-five, ten, fifteen aloud.
-- [ ] B25. Man's \$2.0 → 3.1bn / \$19.8 → 37.5bn: Trend Watch L188 and Theo's scene L192, with the Trend Watch's "What it means" making Mags's point first. Survives: both (Trend Watch protected); Trend Watch moves to the end of §4.2 so the scene tells it first (D3).
+- [x] B25. Man's \$2.0 → 3.1bn / \$19.8 → 37.5bn: Trend Watch L188 and Theo's scene L192, with the Trend Watch's "What it means" making Mags's point first. Survives: both (Trend Watch protected); Trend Watch moves to the end of §4.2 so the scene tells it first (D3). **Done:** Trend Watch now ends §4.2; scene finds Man's statements first.
 
 ## (c) Templates (lesson 4) and detached judgment paragraphs (lesson 5)
 
-- [ ] C1. L69, "Theo can do six things... He can... He can..." (a syllabus in costume). Cut to two sentences; the Debrief bullets and the new Finder carry the outcomes.
-- [ ] C2. L99–103, "two things... First,... Second,...". Recast without the ordinals.
-- [ ] C3. L196, five ranked answers ("The best supported... The second... The fifth"): a table in costume. Give a five-row table; dramatize the yield row with Mags.
-- [ ] C4. L281–291: "wrong in three instructive ways", "A seasoned risk manager's first question", detached L291. Ines owns the stressed-ρ question; L291 becomes a Finder row; heading retitled to the scene.
-- [ ] C5. L353–357, "When the value identity works... It breaks in three places... an experienced PM". Replace with a ~150-word beat after the distributor: Kaz prints the top twenty, Ines asks for the worst months, Mags names the volatility-as-PD trap; heading deleted.
-- [ ] C6. L553–559, "When DTS is the right ruler": scene kept; "The check an experienced risk manager runs first" cut; heading retitled (with B12).
-- [ ] C7. L591–597, "When headroom helps": near-miss scene leads, slow and event clocks become Ines's line, "The first question to ask" cut; heading retitled.
-- [ ] C8. L630–634, "When the identity works... It breaks in three places... a seasoned allocator checks first": deleted (B13).
-- [ ] C9. L670–674, "When break-even turnover is a ceiling... The check an experienced PM runs": L672 deleted (B4); L674's involuntary turnover becomes Mags's beat; heading deleted.
-- [ ] C10. L724, "Two things... The first... The second...": one line (B4).
+- [x] C1. L69, "Theo can do six things... He can... He can..." (a syllabus in costume). Cut to two sentences; the Debrief bullets and the new Finder carry the outcomes. **Done:** Six-outcome syllabus cut to two sentences about map and tools.
+- [x] C2. L99–103, "two things... First,... Second,...". Recast without the ordinals. **Done:** First/Second ordinals removed; binding-constraint column now leads the paragraph.
+- [x] C3. L196, five ranked answers ("The best supported... The second... The fifth"): a table in costume. Give a five-row table; dramatize the yield row with Mags. **Done:** Five-row table added; Mags dramatizes the yield row's record argument.
+- [x] C4. L281–291: "wrong in three instructive ways", "A seasoned risk manager's first question", detached L291. Ines owns the stressed-ρ question; L291 becomes a Finder row; heading retitled to the scene. **Done:** Versions dated Wednesday-Friday; Ines owns stressed rho; judgment paragraph cut.
+- [x] C5. L353–357, "When the value identity works... It breaks in three places... an experienced PM". Replace with a ~150-word beat after the distributor: Kaz prints the top twenty, Ines asks for the worst months, Mags names the volatility-as-PD trap; heading deleted. **Done under B14:** template gone; top-twenty, worst-months beat verified by grep.
+- [x] C6. L553–559, "When DTS is the right ruler": scene kept; "The check an experienced risk manager runs first" cut; heading retitled (with B12). **Done under B12:** heading retitled; experienced-risk-manager sentence absent on re-grep.
+- [x] C7. L591–597, "When headroom helps": near-miss scene leads, slow and event clocks become Ines's line, "The first question to ask" cut; heading retitled. **Done:** Near miss leads; Ines's line carries slow and event clocks.
+- [x] C8. L630–634, "When the identity works... It breaks in three places... a seasoned allocator checks first": deleted (B13). **Done under B13:** Nuveen three-places paragraph absent on re-grep; nothing further.
+- [x] C9. L670–674, "When break-even turnover is a ceiling... The check an experienced PM runs": L672 deleted (B4); L674's involuntary turnover becomes Mags's beat; heading deleted. **Done under B4:** heading gone; Mags's involuntary-turnover beat verified in place.
+- [x] C10. L724, "Two things... The first... The second...": one line (B4). **Done under B4:** ordinals gone; Theo's line-by-line recognition is one line.
 - [ ] C11. L771–775, Ines's "The first question... The second question... The third question": keep the scene, drop the ordinal frame.
 - [ ] C12. L789–791, "The first is... The second... The third..." and "The question an experienced risk manager asks": a three-row table of Ines's series; the exit-days question becomes hers.
 - [ ] C13. L892, "a good first question to ask... The first is... The second is...": Theo counts BlackRock's down months; heading retitled; L896 deleted (B11).
