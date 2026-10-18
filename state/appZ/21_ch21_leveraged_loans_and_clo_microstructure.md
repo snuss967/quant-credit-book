@@ -96,3 +96,23 @@ To run the strategy at the true risk the backtest *thought* it was taking, scale
 
 **If you got this wrong, read:** §21.7.1 (equation 21.10 and the Math, Gently box), Listing 21.5 (`geltner_desmooth`, `dimson_beta`), and the capacity paragraph and desmoothed-backtest scene in §21.7 for what is left after costs.
 
+**Z.21.6: Read the holder base**
+
+**Answer:** With $\theta = 0.65$, the non-CLO holders' 35% cannot carry a majority. You need at least 15.1 points of the tranche from CLOs, which is 23% of CLO-held par. The uptier that wins those votes is a CLO-friendly roll-up:
+
+- a par-for-par exchange into a super-priority first-lien term loan;
+- floating rate, paying cash;
+- no maturity extension;
+- rated B3/B− or better by both agencies *before* launch;
+- new money funded by the 35% non-CLO holders, who get a backstop fee and any equity kicker (the CLOs would mark that equity at zero anyway);
+- for the CLOs, at most a small allocation through their loss-mitigation (LML) baskets.
+
+**LML binds first.** Rescue financing is capped at about 1–3% of a deal's principal, carries an extra OC haircut, and is often funded from interest proceeds. A deal with a 1.2-point cushion is one downgrade away from having that interest diverted. PIK (up to 5%) and long-dated (2.5–7.5%) bind only if you put PIK or an extension into the paper, so don't. Fixed-rate (10–15%, no haircut) binds last.
+
+**How:** Start with the majority arithmetic: $0.501 - 0.35 = 0.151$ of the tranche must come from CLOs, and $0.151/0.65 = 23\%$ of their par. Then read $\psi$ and $\bar\kappa$, which say that these CLOs vote for a rating, not a recovery. Of the CLO holders, 60% (39% of the tranche) are already over their CCC limit. For them, a CCC outcome hits the cliff at about $1 - p^\ast \approx 42$ cents per dollar, at Kundu's 58-cent $p^\ast$, charged to other loans. Suppose the junior trigger is near 104%. Then a 1.2-point cushion is about $1.2/105.2 = 1.14\%$ of the numerator, which is room for roughly $1.14/0.42 = 2.7\%$ of the pool in fresh CCC before the junior test fails. A typical 0.5% position going CCC uses about a fifth of that room. Hence the design rules. Get the rating first. Don't extend, because an extension pushes the paper into the long-dated bucket and risks a distressed-exchange SD, then a CCC, then the cliff, which is the Loan A warning. Keep the CLOs out of the new money: at 2% on a \$400mm deal, LML is \$8mm for *every* workout in the book, and 60% of these holders already have a full CCC bucket that is drawing on it. One more reading of the numbers: the CLOs under their limit (26 points) plus the non-CLOs (35) make 61%. If you don't win the over-limit CLOs, a majority can be built without them, and they become the excluded minority with the highest Priming Risk Score.
+
+**The trap:** The common mistake is to sweeten the economics for the CLOs instead of fixing the rating, with a better recovery, equity, a PIK toggle or a fat fixed coupon, each of which lands in a bucket or a haircut. The next is to assume the CLOs can fund their pro rata share of the new money: they can sign but not fund. The answer that picks PIK "because 5% is small" misses that LML is smaller, and that new money is the one thing every uptier needs.
+
+**If you got this wrong, read:** §21.8 (the Weil memo, the state variable $(\theta_i, \bar\kappa_i, \psi_i)$, and Loans A and B), §21.4.1 for the cliff, and Chapter 13 for the Priming Risk Score.
+
+<!-- STATUS: COMPLETE -->

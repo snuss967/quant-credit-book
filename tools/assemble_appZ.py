@@ -54,8 +54,14 @@ def main():
     out_b = None
     current_part = None
     for stem in stems:
-        if stem.startswith(("99_", "9")) and not stem.startswith("09"):
+        if stem[:2] in ("95", "96", "97", "98", "99"):
             continue
+        if stem[:2] in ("90", "91", "92", "93", "94") and current_part != "appendices":
+            if not os.path.exists(os.path.join(ZDIR, stem + ".md")):
+                continue
+            out.append(gate(current_part))
+            out.append("## The Appendices\n")
+            current_part = "appendices"
         if "_00_part_" in stem:
             if current_part:
                 out.append(gate(current_part))

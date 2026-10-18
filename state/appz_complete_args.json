@@ -1,0 +1,198 @@
+{
+"chapters": [
+{
+"stem": "01_ch01b_a_week_in_five_quant_shops",
+"tag": "1-B",
+"kind": "Chapter"
+},
+{
+"stem": "02_ch02b_transaction_cost_analysis_for_credit",
+"tag": "2-B",
+"kind": "Chapter"
+},
+{
+"stem": "03_ch03b_your_first_year_on_the_desk",
+"tag": "3-B",
+"kind": "Chapter"
+},
+{
+"stem": "04_ch04b_bond_math_for_the_desk",
+"tag": "4-B",
+"kind": "Chapter"
+},
+{
+"stem": "04_ch04c_other_seats_at_the_table",
+"tag": "4-C",
+"kind": "Chapter"
+},
+{
+"stem": "06_ch06b_options_and_measures_for_credit",
+"tag": "6-B",
+"kind": "Chapter"
+},
+{
+"stem": "07_ch07b_statistics_for_credit_panels",
+"tag": "7-B",
+"kind": "Chapter"
+},
+{
+"stem": "08_ch08b_the_risk_model_and_the_limit_sheet",
+"tag": "8-B",
+"kind": "Chapter"
+},
+{
+"stem": "08_ch08c_the_morning_explain_pnl_attribution",
+"tag": "8-C",
+"kind": "Chapter"
+},
+{
+"stem": "08_ch08d_the_pair_book_long_one_credit_short_another",
+"tag": "8-D",
+"kind": "Chapter"
+},
+{
+"stem": "09_ch09b_the_bond_data_problem_and_the_replication_crisis",
+"tag": "9-B",
+"kind": "Chapter"
+},
+{
+"stem": "12_ch12b_the_restructuring_process_as_a_state_machine",
+"tag": "12-B",
+"kind": "Chapter"
+},
+{
+"stem": "12_ch12c_plan_valuation_dip_and_exit_as_derivatives",
+"tag": "12-C",
+"kind": "Chapter"
+},
+{
+"stem": "18_ch18b_the_rfq_response_engine",
+"tag": "18-B",
+"kind": "Chapter"
+},
+{
+"stem": "93_appD_market_plumbing_and_contract_mechanics",
+"tag": "D",
+"kind": "Appendix"
+},
+{
+"stem": "94_appE_laws_of_the_desk",
+"tag": "E",
+"kind": "Appendix"
+},
+{
+"stem": "27_ch27_system_architecture_and_asics",
+"tag": "27",
+"kind": "Chapter"
+},
+{
+"stem": "21_ch21_leveraged_loans_and_clo_microstructure",
+"tag": "21",
+"kind": "Chapter"
+}
+],
+"gates": [
+{
+"opener": "01_00_part_I",
+"roman": "Part I",
+"short": "I",
+"stems": [
+"01_ch01_anthology_and_landscape",
+"01_ch01b_a_week_in_five_quant_shops",
+"02_ch02_revolutions_in_credit_trading",
+"02_ch02b_transaction_cost_analysis_for_credit",
+"03_ch03_pjt_rssg_cognitive_bridge",
+"03_ch03b_your_first_year_on_the_desk",
+"04_ch04_inside_the_systematic_credit_industry",
+"04_ch04b_bond_math_for_the_desk",
+"04_ch04c_other_seats_at_the_table",
+"04_ch04d_getting_the_seat"
+]
+},
+{
+"opener": "05_00_part_II",
+"roman": "Part II",
+"short": "II",
+"stems": [
+"05_ch05_credit_probability_distributions",
+"06_ch06_merton_and_intensity_models",
+"06_ch06b_options_and_measures_for_credit",
+"07_ch07_ml_on_small_sample_credit_data",
+"07_ch07b_statistics_for_credit_panels"
+]
+},
+{
+"opener": "08_00_part_III",
+"roman": "Part III",
+"short": "III",
+"stems": [
+"08_ch08_isolating_ido_and_empirical_duration",
+"08_ch08b_the_risk_model_and_the_limit_sheet",
+"08_ch08c_the_morning_explain_pnl_attribution",
+"08_ch08d_the_pair_book_long_one_credit_short_another",
+"09_ch09_factor_investing_in_credit",
+"09_ch09b_the_bond_data_problem_and_the_replication_crisis",
+"10_ch10_trend_and_time_series_momentum",
+"11_ch11_defensive_systematic_high_yield",
+"12_ch12_multi_asset_credit_allocation",
+"12_ch12b_the_restructuring_process_as_a_state_machine",
+"12_ch12c_plan_valuation_dip_and_exit_as_derivatives",
+"10_ch10b (being written)"
+]
+},
+{
+"opener": "13_00_part_IV",
+"roman": "Part IV",
+"short": "IV",
+"stems": [
+"13_ch13_codifying_lmt_game_theory",
+"13_ch13b_the_autopsy_room_lmt_docket_diaries",
+"14_ch14_default_and_recovery_cycle_lmt_era",
+"15_ch15_event_driven_mna_and_coc",
+"16_ch16_post_reorg_equities_and_claims",
+"17_ch17_private_credit_public_private_convergence",
+"17_ch17b_marking_the_unmarked_private_credit_lmes"
+]
+},
+{
+"opener": "18_00_part_V",
+"roman": "Part V",
+"short": "V",
+"stems": [
+"18_ch18_otc_microstructure_and_avellaneda_stoikov",
+"18_ch18b_the_rfq_response_engine",
+"19_ch19_portfolio_trading_pricing_engines",
+"20_ch20_credit_etf_creation_redemption_arb",
+"21_ch21_leveraged_loans_and_clo_microstructure",
+"22_ch22_market_structure_regulation_trends"
+]
+},
+{
+"opener": "23_00_part_VI",
+"roman": "Part VI",
+"short": "VI",
+"stems": [
+"23_ch23_cross_asset_convexity_and_vol_surface",
+"24_ch24_bond_cds_basis_and_deliverables"
+]
+},
+{
+"opener": "25_00_part_VII",
+"roman": "Part VII",
+"short": "VII",
+"stems": [
+"25_ch25_nlp_pacer_and_covenant_scraping",
+"26_ch26_ai_agents_and_llms_on_the_credit_desk",
+"27_ch27_system_architecture_and_asics"
+]
+},
+{
+"opener": "28_00_part_VIII",
+"roman": "Part VIII",
+"short": "VIII",
+"stems": [
+"28_ch28_pm_playbook"
+]
+}
+]
+}

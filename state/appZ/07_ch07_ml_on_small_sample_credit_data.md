@@ -4,7 +4,7 @@ This chapter has six exercises, all in the end-of-chapter set, and none carries 
 
 **Z.07.1: Count Kaz's hats**
 
-**Answer:** (a) In the interior, $11 \times 63 = 693$ labels are live on any given day, so $\bar u_i \approx 1/693 \approx 0.0014$. Summed over all $11 \times 1{,}197 = 13{,}167$ labels, that gives $N_{\text{eff}} = 19.98 \approx T/h = 20$, and you get exactly the same 19.98 with one bond or with eleven. (b) Yes, they stay **one group**, keyed on the ultimate parent. What the drop-down creates is a new *within-parent* target: the OpCo–HoldCo basis, meaning the priming loss to the HoldCo notes relative to the OpCo notes. Inside this one family you can validate it only across time blocks (purged and embargoed walk-forward), because there is no other parent to hold out. (c) $(\sum w)^2/\sum w^2 = 10^2/40 = $ **2.5**. Five rows, two and a half opinions.
+**Answer:** (a) In the interior, $11 \times 63 = 693$ labels are live on any given day, so $\bar u_i \approx 1/693 \approx 0.0014$. Summed over all $11 \times 1{,}197 = 13{,}167$ labels, the interior value alone gives $13{,}167/693 = 19.0$. The exact sum, which gives the less crowded labels near the two ends of the sample their higher uniqueness, is $N_{\text{eff}} = 19.98 \approx T/h = 20$, and you get exactly the same 19.98 with one bond or with eleven. (b) Yes, they stay **one group**, keyed on the ultimate parent. What the drop-down creates is a new *within-parent* target: the OpCo–HoldCo basis, meaning the priming loss to the HoldCo notes relative to the OpCo notes. Inside this one family you can validate it only across time blocks (purged and embargoed walk-forward), because there is no other parent to hold out. (c) $(\sum w)^2/\sum w^2 = 10^2/40 = $ **2.5**. Five rows, two and a half opinions.
 
 **How:** For (a), skip the interior approximation and use the identity that makes the hat count exact. Each covered day $t$ appears in $c_t$ label windows, and each of those labels counts it at $1/c_t$, so the day contributes exactly 1 to the double sum. With every window $L = 63$ days long ($t_1 = t_0 + 62$):
 
@@ -17,8 +17,6 @@ The bond count $B$ drops out, because eleven sibling labels cover the same days 
 **The trap:** In (a), the trap is $11 \times 20 = 220$, or the 13,167 rows. More bonds feel like more evidence, but siblings formed on the same day are one issuer's news at eleven durations. In (b), the trap is to treat the drop-down as a new credit and split the family "because the documents now separate them". The documents separate the *claims*. The *information* is still one company's. In (c), the trap is to answer 5 because "there are five rows".
 
 **If you got this wrong, read:** §7.6, "Hats, not rows", "Uniqueness, defined" and "The hat count"; §7.7, "Group by parent, not ticker, especially in the LMT era"; §7.5, Quant-Shop Life.
-
-NOTE (for the editor): The check's "about 19" ($11 \times 1{,}197/693$) gives every label the interior uniqueness. The labels near the two ends of the sample share their windows with fewer neighbours, and the exact sum is 19.98, which is the $\approx 20$ the exercise asks the reader to show. Suggested wording: "about 19 from the interior approximation, and exactly 20 once the less crowded edge labels are counted."
 
 **Z.07.2: Memory after a closing night**
 
@@ -37,8 +35,6 @@ For $d \in (0,1)$ every factor lies strictly between 0 and 1, so the product is 
 **The trap:** In (a), the trap is alternating signs ($+0.12$ for $w_2$), carried over from the binomial theorem. For $0 < d < 1$, every weight after $w_0$ is negative. In (c), the trap is keeping block 5's `embargo=21` because the label horizon is "only" 63 days. The embargo covers the longest *lookback*, not just the label. The other trap is to confuse the two costs. The 280 NaN warm-up rows are paid once per series, at the start. The embargo is paid again after every test fold.
 
 **If you got this wrong, read:** §7.3, "Math, Gently: the dial", "The warm-up cost, computed" and "The Full Derivation: the fractional weights"; §7.7, "The embargo" and Ways This Blows Up item (2); §7.12, the paragraph after block 5 on the `embargo=21` trap.
-
-NOTE (for the editor): The check counts the embargo alone (280 days, "close to 90% of a 315-day block"). Under the chapter's own purge-and-embargo inequality (§7.7; Listing 7.5), the embargo runs from the last test label's end, which falls 63 days after the last test formation date. The training data removed after each test block is therefore about $63 + 280 = 343$ days, 109% of a block, and the following block is lost entirely. One clause in the check, "and with the 63-day purge in front of it, more than a whole block", would make the cost exact.
 
 **Z.07.3: Size Theo's hand**
 
@@ -79,10 +75,6 @@ For (d), the 2.9 is annualized, or 0.84 a month. Fed into the formula, it return
 **The trap:** The commonest error in (c) is to compute the MinTRL against $SR_0 = 0$: $1 + 1.24(1.645/0.30)^2 = 38$ months, "three years and done". The benchmark that matters is the noise bar, not zero. In (a) and (b), the traps are mixing units (an annualized 0.80 bar against a monthly 0.30 Sharpe) and plugging in excess kurtosis (2) where the formula wants raw kurtosis (5). In (b), expect less than you might from clustering. Cutting $N$ by a factor of 7.5 lowers the bar by only 16%, because $SR^\ast$ grows like $\sqrt{2\ln N}$.
 
 **If you got this wrong, read:** §7.8, "The Full Derivation: PSR, DSR, MinTRL and PBO", the Paleologo annotation on clustering trials, and Figure 7.5; §7.12, block 6 (the paragraph on handing `deflated_sharpe` only the survivors).
-
-NOTE (for the editor): In (c), the check rounds the gap $0.30 - SR^\ast$ to 0.11 and gets $T^\ast \approx 280$ months, "roughly 23 years". With the unrounded $SR^\ast = 0.1927$ the gap is 0.107 and $T^\ast = 292$ months, about 24.4 years. The conclusion survives and gets sharper: 292 months is essentially TRACE's whole public life (about 291 months to October 2026), and it is 52 months, more than four years, beyond Kaz's 240.
-
-NOTE (for the editor): Part (d) calls deflating an in-sample Sharpe a category error. Yet §7.8's worked example deflates "Kaz's winner" using $\widehat{SR} = 0.23$ a month. That is neither the cold open's in-sample 2.9 (0.84 a month) nor an out-of-sample figure; it appears to be set equal to $SR^\ast$ to show the coin flip. One clause in §7.8 saying so would stop a careful reader from asking which number was deflated, and from seeing a conflict with (d).
 
 **Z.07.5: The composite is not a clean gap**
 

@@ -4,22 +4,6 @@
 
 NOTE (for the editor): The "right-skewed survival leg" comes from §5.9.1's Gaussian $\Delta s$, not from the bond. §5.2.4 says a lognormal spread (skew $+1.1$ at $\kappa = 0.35$) gives a survival-world return skew of "about $-1.1$," which positive convexity pushes back on only "a little." I simulated the same leg with lognormal relative spread changes, $\Delta s = s\,(e^{-\kappa^2/2 + \kappa Z} - 1)$, and four million draws. The skew is $-0.93$ at $C^{\text{spr}} = +8$, $-1.13$ at 0 and $-1.35$ at $-8$. The exercise's "show that the survival leg of a non-call bond is right-skewed" therefore holds only under the Gaussian-$\Delta s$ assumption. I suggest "under §5.9.1's Gaussian spread change, show that…", perhaps with a closing clause noting that with §5.2.3's lognormal spreads the leg stays left-skewed.
 
-### 07_ch07_ml_on_small_sample_credit_data
-
-NOTE (for the editor): The check's "about 19" ($11 \times 1{,}197/693$) gives every label the interior uniqueness. The labels near the two ends of the sample share their windows with fewer neighbours, and the exact sum is 19.98, which is the $\approx 20$ the exercise asks the reader to show. Suggested wording: "about 19 from the interior approximation, and exactly 20 once the less crowded edge labels are counted."
-
-### 07_ch07_ml_on_small_sample_credit_data
-
-NOTE (for the editor): The check counts the embargo alone (280 days, "close to 90% of a 315-day block"). Under the chapter's own purge-and-embargo inequality (§7.7; Listing 7.5), the embargo runs from the last test label's end, which falls 63 days after the last test formation date. The training data removed after each test block is therefore about $63 + 280 = 343$ days, 109% of a block, and the following block is lost entirely. One clause in the check, "and with the 63-day purge in front of it, more than a whole block", would make the cost exact.
-
-### 07_ch07_ml_on_small_sample_credit_data
-
-NOTE (for the editor): In (c), the check rounds the gap $0.30 - SR^\ast$ to 0.11 and gets $T^\ast \approx 280$ months, "roughly 23 years". With the unrounded $SR^\ast = 0.1927$ the gap is 0.107 and $T^\ast = 292$ months, about 24.4 years. The conclusion survives and gets sharper: 292 months is essentially TRACE's whole public life (about 291 months to October 2026), and it is 52 months, more than four years, beyond Kaz's 240.
-
-### 07_ch07_ml_on_small_sample_credit_data
-
-NOTE (for the editor): Part (d) calls deflating an in-sample Sharpe a category error. Yet §7.8's worked example deflates "Kaz's winner" using $\widehat{SR} = 0.23$ a month. That is neither the cold open's in-sample 2.9 (0.84 a month) nor an out-of-sample figure; it appears to be set equal to $SR^\ast$ to show the coin flip. One clause in §7.8 saying so would stop a careful reader from asking which number was deflated, and from seeing a conflict with (d).
-
 ### 08_ch08_isolating_ido_and_empirical_duration
 
 NOTE (for the editor): §8.2 ("The two-factor derivation") says that with $\ell \approx -19$ "a B bond at 500 bp has $H \approx 0.03$." With the exact $\ell = -19.25$ the figure is $0.0375$ (0.04), and with $\ell = -19$ it is 0.05. Neither rounds to 0.03. The same paragraph says Theo's bond at 620 bp "comes out slightly below zero." The figure is $-0.19$, a 45-contract long, which may be worth stating.
@@ -43,6 +27,14 @@ NOTE (for the editor): The coda's fictional run puts the fast 20/120 sleeve "one
 ### 12_ch12_multi_asset_credit_allocation
 
 NOTE (for the editor): In "The Queue" (§12.7), the grading of Kaz's card says a 90-day $\tau$ "would have been wrong ... by something nearer seven at the technology fund." With requests of about 40% of shares against a 5% gate, $Q/g = 8$. That is both the dollar-weighted mean exit (in quarters) under a stationary line and the number of quarters to drain a line that stops growing, so the text should say "nearer eight" unless the request share was nearer 35%. The HPS figure checks: $9/5 = 1.8$, "a factor of two."
+
+### 13_ch13_codifying_lmt_game_theory
+
+NOTE (for the editor): In §13.3.1's unblending table, the middle row ("first-lien second-out only") builds $K_1 = 934$ from June 2020 holdings ($992 \times 0.74$) but divides by the 2016 face of 1,950, giving 47.9. On the June 2020 face of 1,887, the one the remand court's ratable share uses, the row reads $934/1{,}887 = 49.5$, and the sentence below the table would say "between five and twelve points" rather than "between three and twelve." The other two rows check (44.8 and 57.0).
+
+### 13_ch13_codifying_lmt_game_theory
+
+NOTE (for the editor): The whiteboard's arithmetic puts the guarantee in OpCo's pool at its full \$1,266mm on top of the \$735mm collected upstairs, and "Ways This Blows Up" item (2) says the engine assumes full face against each obligor. Listing 13.1's pari-plus wiring does the opposite: `opco_guar` carries `reduce_by=["fsub_guar"]`, and §13.7 describes it as "double-dip OpCo for the deficiency." A reader who copies `dd_recoveries` gets OpCo 6.35% and Super HoldCo 68.3% at the whiteboard inputs, not 5.0% and 69%. With the note struck the gap is wider (14.0% against 8.8%). Suggest saying in the pari-plus paragraph, or in item (2), that the listing nets and the whiteboard does not.
 
 ### 15_ch15_event_driven_mna_and_coc
 

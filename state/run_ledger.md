@@ -273,3 +273,9 @@ Ch 26–28 are done (PB-16 "ROBO's forty-seven pairs" in Ch 26; the PB-01 one-le
 - Still unsolved: Ch 13, 14, 21, 27 (running batches); the primers and new chapters carry brief inline solutions, so App Z for them is deferred (lower value per credit).
 - Launched appz-notes-fix (wf_ce9abb98-d99, Sonnet, two lanes, 18 chapters, 31 notes): recompute, minimal chapter fix, align solution, delete NOTE, log to state/revisions/ed2/<stem>.appz_fix.md.
 - Meter 82.7% at 15:48 (alarm at 105%).
+
+## 2026-10-18 16:15 UTC: App Z completion launched (ultracode on)
+- appZ-15-21 done (Ch 21: 0 notes). figs-4d-2b-0002 done (16 figures, checked; 00_02 labels now "Figure 0.N"; tagOf fixed for front matter and appendices).
+- Launched appz-complete (wf_47f3acab-447, Sonnet): solve → fix for 14 primers/new chapters + App D, App E (+ fix-only for Ch 21, 27); the 4-D sixty-problem bank (two agents, then fix); the eight Part gates (table appended to each Part opener, worked answers in state/appZ/gates/, §0.5 summary rows kept true). Args in state/appz_complete_args.json.
+- Assembler: appendices with solutions go under "## The Appendices" at the end of App Zb.
+- Still to add when written: 13-B, 17-B, 10-B (App Z + figures); Ch 13, 14 notes once appZ-8-14 lands.
