@@ -194,6 +194,24 @@
      "resgraph"
     ]
    }
+  },
+  {
+   "name": "figs-2-7",
+   "task": "wyipb7mze",
+   "runId": "wf_dd436fe2-01d",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "02_ch02_revolutions_in_credit_trading",
+     "07_ch07_ml_on_small_sample_credit_data"
+    ],
+    "stages": [
+     "figures",
+     "figcheck",
+     "resgraph"
+    ]
+   }
   }
  ]
 }
