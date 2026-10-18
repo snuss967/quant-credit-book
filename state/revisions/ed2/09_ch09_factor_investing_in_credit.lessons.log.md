@@ -63,13 +63,13 @@ The Finder exists at the top of the Debrief (L954–967, ten rows).
 
 ### (g) Cast-bible contradictions
 
-- [ ] G1. L942 "Kaz, who has never read a credit agreement": C7 canon gives Kaz's first indenture to Ch 4-B (§4B, "reading an indenture for the first time"). Reword; add Ch 9 to C7 in the cast bible.
+- [x] G1. L942 "Kaz, who has never read a credit agreement": C7 canon gives Kaz's first indenture to Ch 4-B (§4B, "reading an indenture for the first time"). Reword; add Ch 9 to C7 in the cast bible. *Done: done in C1: 'read exactly one indenture (Chapter 4-B)'; C7 noted.*
 - [x] G2. §9.7.2 (L620) "Nobody had noticed": Ch 10's Coda (Thu 10 Apr 2025) has Wen find the same value tilt in Dov's twelve pairs, and its PB-01 box says the Sept 2026 x-ray would "find again" the drift (Ch 9 §9.7.2). Add one clause: the second time, and why it slipped back in (PB-01 is long the tighter name, but cheaper per turn of leverage). Note in the cast bible and the pair book. *Done: Ch 9 now names April 2025 precedent and the leverage loophole.*
-- [ ] G3. L910 "When Ines asked 'cheap why?' in the cold open": in the cold open the line is Theo's (L10–16). Fix the attribution.
-- [ ] G4. L10 "Theo had built leveraged-buyout returns": cast bible gives Theo generic RSSG work only (13-week models, uptier math, first-day declarations); an RSSG banker reads sponsor models more than he builds LBO returns. Soften to "had sat across from sponsor models".
+- [x] G3. L910 "When Ines asked 'cheap why?' in the cold open": in the cold open the line is Theo's (L10–16). Fix the attribution. *Done: done in C1: 'When Theo asked "cheap why?"' now matches the cold open.*
+- [x] G4. L10 "Theo had built leveraged-buyout returns": cast bible gives Theo generic RSSG work only (13-week models, uptier math, first-day declarations); an RSSG banker reads sponsor models more than he builds LBO returns. Soften to "had sat across from sponsor models". *Done: now 'sat across the table from sponsor models'; generic RSSG work.*
 
 ### (h) Relative-value beat
 
-- [ ] H1. `state/rv_thread.md` assigns Ch 9 a scene (callback to Sharpe 1.9; book-level value loading; Man Numeric telecom case; home Ch 8 §8.8). Present at §9.7.2 (L610–624): fiction label, H / I / L in order, costs (financing and borrow on the remaining gross), Marcus's "a value factor with extra steps". `state/rv_pair_book.md` already ledgers it (book loading 0.7 → 0.2). No new beat; add G2's continuity note to the ledger.
+- [x] H1. `state/rv_thread.md` assigns Ch 9 a scene (callback to Sharpe 1.9; book-level value loading; Man Numeric telecom case; home Ch 8 §8.8). Present at §9.7.2 (L610–624): fiction label, H / I / L in order, costs (financing and borrow on the remaining gross), Marcus's "a value factor with extra steps". `state/rv_pair_book.md` already ledgers it (book loading 0.7 → 0.2). No new beat; add G2's continuity note to the ledger. *Done: beat present at §9.7.2; ledger row gains the G2 continuity note.*
 
 ## Fixes

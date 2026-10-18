@@ -397,39 +397,39 @@ def fig_carvana_pair():
     for k, want in EQUITY_CLOSE.items():
         assert abs(byd[dt.date.fromisoformat(k)] - want) < 0.08, k
 
-    fig, (a, b) = new_figure("panel2", ncols=2, gridspec_kw={"width_ratios": [1.45, 1]})
+    fig, (a, b) = new_figure("panel2", ncols=2, gridspec_kw={"width_ratios": [1.75, 1]})
     x = date2num(dates)
     a.plot(x, close, color=ORANGE, linewidth=1.2)
     a.set_yscale("log")
-    a.set_ylim(2.5, 600)
+    a.set_ylim(2.5, 1000)
     a.set_yticks([3, 10, 30, 100, 300])
     a.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"${v:,.0f}"))
     a.yaxis.set_minor_formatter(NullFormatter())
-    a.set_xlim(date2num(dt.date(2021, 7, 1)), date2num(dt.date(2025, 1, 15)))
+    a.set_xlim(date2num(dt.date(2021, 7, 1)), date2num(dt.date(2025, 3, 1)))
     a.xaxis_date()
     a.set_xticks([date2num(dt.date(y, 1, 1)) for y in (2022, 2023, 2024, 2025)])
     a.set_xticklabels(["2022", "2023", "2024", "2025"])
     a.grid(axis="y")
     a.set_ylabel("CVNA close, as traded (log scale)")
-    # peak and low
+    # peak, low and the last close
     a.plot([date2num(dt.date(2021, 8, 10))], [PEAK], "o", color=ORANGE, markersize=4.5, zorder=5)
-    a.annotate("$370.10, 10 Aug 2021", (date2num(dt.date(2021, 8, 10)), PEAK), xytext=(6, -2), textcoords="offset points",
-               fontsize=8, color=INK_2, va="center")
+    a.annotate("$370.10 peak, 10 Aug 2021", (date2num(dt.date(2021, 8, 10)), PEAK), xytext=(-2, 11), textcoords="offset points",
+               fontsize=8, color=INK_2, ha="left", va="bottom")
     a.plot([date2num(dt.date(2022, 12, 27))], [LOW], "o", color=ORANGE, markersize=4.5, zorder=5)
     a.annotate("$3.72, 27 Dec 2022\n(down 99.0%)", (date2num(dt.date(2022, 12, 27)), LOW), xytext=(-8, -3), textcoords="offset points",
                fontsize=8, color=INK_2, ha="right", va="center")
     a.plot([date2num(dt.date(2024, 12, 31))], [203.36], "o", color=ORANGE, markersize=4.5, zorder=5, clip_on=False)
-    a.annotate("$203.36", (date2num(dt.date(2024, 12, 31)), 203.36), xytext=(-6, 9), textcoords="offset points", fontsize=8,
-               color=INK_2, ha="right", va="center")
-    # the four 2023 exchange dates, numbered
-    events = [("2023-03-22", "1"), ("2023-06-02", "2"), ("2023-07-19", "3"), ("2023-09-01", "4")]
-    for d, n in events:
+    a.annotate("$203.36, 31 Dec 2024", (date2num(dt.date(2024, 12, 31)), 203.36), xytext=(-6, 9), textcoords="offset points",
+               fontsize=8, color=INK_2, ha="right", va="bottom")
+    # the four 2023 exchange dates, numbered; alternate heights so the digits do not touch
+    events = [("2023-03-22", "1", 560), ("2023-06-02", "2", 330), ("2023-07-19", "3", 560), ("2023-09-01", "4", 330)]
+    for d, n, top in events:
         xd = date2num(dt.date.fromisoformat(d))
-        a.vlines(xd, 2.5, 420, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
-        a.text(xd, 470, n, ha="center", va="center", fontsize=8.5, color=INK, fontweight="bold")
-    a.text(date2num(dt.date(2023, 10, 5)), 3.4, "1  22 Mar 2023, second-lien offer launched\n2  2 Jun, offer terminated\n"
-           "3  19 Jul, support agreement, stock +40.2%\n4  1 Sep, exchange settles (96.4%)", fontsize=7.6, color=INK_2,
-           ha="left", va="bottom", linespacing=1.35)
+        a.vlines(xd, 2.5, top, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
+        a.text(xd, top * 1.12, n, ha="center", va="bottom", fontsize=8.5, color=INK, fontweight="bold")
+    a.text(date2num(dt.date(2023, 9, 20)), 3.0, "1  22 Mar 2023: offer launched\n2  2 Jun: offer terminated\n"
+           "3  19 Jul: support agreement\n4  1 Sep: exchange settles", fontsize=7.8, color=INK_2,
+           ha="left", va="bottom", linespacing=1.4)
 
     # right: the illustrative pair, $10mm face of notes bought at 44.8 against a $1mm short of stock at 4.74 (6.10.1 Beat 5)
     face, short_notional = 10.0, 1.0
@@ -439,26 +439,24 @@ def fig_carvana_pair():
     net = bond + shortpl
     assert abs(bond[-1] - 3.99) < 0.02 and abs(shortpl[-1] + 10.17) < 0.02          # the chapter's "$4 million" and "$10.2 million"
     xs = np.arange(4)
-    w = 0.34
+    w = 0.36
+    b.set_axisbelow(True)
     b.bar(xs - w / 2, bond, width=w, color=BLUE)
     b.bar(xs + w / 2, shortpl, width=w, color=ORANGE)
     b.plot(xs, net, "D", color=INK, markersize=5.5, zorder=5)
     b.axhline(0, color=NEUTRAL, linewidth=0.8)
-    b.annotate(f"notes {bond[-1]:+.1f}".replace("-", MINUS), (xs[-1] - w / 2, bond[-1]), xytext=(-2, 5), textcoords="offset points",
-               fontsize=8, color=INK_2, ha="center", va="bottom")
-    b.annotate(f"short stock {shortpl[-1]:+.1f}".replace("-", MINUS), (xs[-1] + w / 2, shortpl[-1]), xytext=(0, -5),
-               textcoords="offset points", fontsize=8, color=INK_2, ha="center", va="top")
-    b.annotate(f"net {net[-1]:+.1f}".replace("-", MINUS), (xs[-1], net[-1]), xytext=(-9, 0), textcoords="offset points", fontsize=8,
-               color=INK_2, ha="right", va="center")
+    b.text(xs[-1] - w / 2, bond[-1] + 0.25, f"+{bond[-1]:.1f}", ha="center", va="bottom", fontsize=8.5, color=INK_2)
+    b.text(xs[-1] + w / 2, shortpl[-1] - 0.3, f"{MINUS}{abs(shortpl[-1]):.1f}", ha="center", va="top", fontsize=8.5, color=INK_2)
+    b.text(xs[-1] - w / 2 - 0.12, net[-1], f"net {MINUS}{abs(net[-1]):.1f}", ha="right", va="center", fontsize=8.5, color=INK_2)
     b.set_xticks(xs)
-    b.set_xticklabels(["31 Mar", "30 Jun", "29 Sep", "29 Dec"])
-    b.set_xlabel("2023, since 30 Dec 2022")
+    b.set_xticklabels(["Mar", "Jun", "Sep", "Dec"])
+    b.set_xlabel("2023 quarter-ends, since 30 Dec 2022")
     b.set_ylabel("Pair P&L ($mm, before coupons)")
-    b.set_ylim(-12.5, 6.5)
+    b.set_ylim(-12.5, 6.8)
     b.legend(handles=[plt.Line2D([], [], marker="s", linestyle="", color=BLUE, markersize=6, label="long $10mm notes"),
                       plt.Line2D([], [], marker="s", linestyle="", color=ORANGE, markersize=6, label="short $1mm stock"),
                       plt.Line2D([], [], marker="D", linestyle="", color=INK, markersize=5, label="net")],
-             loc="lower left", fontsize=7.8, handletextpad=0.2, borderaxespad=0.2)
+             loc="upper left", fontsize=7.8, handletextpad=0.2, borderaxespad=0.1, labelspacing=0.3)
     return finish(fig, "ch06_carvana_pair"), (bond, shortpl, net)
 
 
