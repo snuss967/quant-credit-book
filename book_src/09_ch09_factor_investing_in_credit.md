@@ -466,7 +466,7 @@ A turnover buffer is hysteresis. Buy a bond when its score rises above $\theta_B
 > - **February–March 2020.** Man's 20-day average high-yield bid–ask spread spiked and then normalized within months (Man p.20; levels are shown only in a chart, so we describe the shape, not the numbers).
 > - **2023–2026 (live).** Robeco's Multi-Factor Credits fund reports realized transaction costs of 0.20% a year, as a three-year average to 30 September 2026 (fund page).
 >
-> *What it means for the desk.* The cost of trading credit factors fell by roughly half per decade, but not monotonically: in a stress month it can jump fivefold overnight. Construction must use a *state-dependent* cost (LCS today, not the average), and the turnover budget must be set for the stress state, because that is when the signals fire hardest.
+> *What it means for the desk.* The cost of trading credit factors fell by roughly half per decade, but not monotonically: in a stress episode it can rise several-fold within months (Barclays IG LCS: 0.4% in 2007, 2.8% in 2008). Construction must use a *state-dependent* cost (LCS today, not the average), and the turnover budget must be set for the stress state, because that is when the signals fire hardest.
 
 ## 9.9 The Replication Debate, Read as a Desk
 

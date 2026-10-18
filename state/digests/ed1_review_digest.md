@@ -272,7 +272,7 @@ This is the version that fits in a prompt. Everything in it is defined in §5.9;
   [...truncated]
 ### Deep-Dive Resource Graph
 
-==== 07_ch07_ml_on_small_sample_credit_data.md (17,252 words)
+==== 07_ch07_ml_on_small_sample_credit_data.md (17,169 words)
 # Chapter 7: Machine Learning on Small-Sample, Non-Stationary Credit Data
 ## 7.0 Cold Open: Forty-Seven Hats
 ## 7.1 Why Credit Is the Worst Machine-Learning Dataset in Liquid Finance
@@ -306,7 +306,7 @@ Theo put the USB stick back in his pocket. It had been a 13-week cash flow model
 ### Exercises
 ### Deep-Dive Resource Graph
 
-==== 08_ch08_isolating_ido_and_empirical_duration.md (18,226 words)
+==== 08_ch08_isolating_ido_and_empirical_duration.md (18,159 words)
 # Chapter 8: Stripping Beta to Isolate Pure IDO
 ## 8.0 Cold Open: Thirty-Seven Cents
 ## 8.1 The Subtraction: Return Decomposition With the Right Signs
@@ -375,7 +375,7 @@ COMPUTE, in order:
 ### Exercises
 ### Deep-Dive Resource Graph
 
-==== 09_ch09_factor_investing_in_credit.md (17,453 words)
+==== 09_ch09_factor_investing_in_credit.md (17,363 words)
 # Chapter 9: Factor Investing in Corporate Credit
 ## 9.0 Cold Open: Sharpe 1.9, Beta 0.6
 ## 9.1 What a Factor Is in Credit, and Why It Is Not What It Is in Equities
@@ -431,7 +431,7 @@ Mags read the new tear sheet twice, which for her is applause. "Back in my day, 
 ### Exercises
 ### Deep-Dive Resource Graph
 
-==== 10_ch10_trend_and_time_series_momentum.md (17,637 words)
+==== 10_ch10_trend_and_time_series_momentum.md (17,554 words)
 # Chapter 10: Trend-Following & Time-Series Momentum in Credit
 ## 10.0 Cold Open: The Model Has No Amygdala
 ## 10.1 What a Trend Is, in Credit
@@ -497,7 +497,7 @@ SINGLE NAMES: variance += lambda_J * E[J^2], lambda_J = l0 + l1 * PRS; switch to
 ### Exercises
 ### Deep-Dive Resource Graph
 
-==== 11_ch11_defensive_systematic_high_yield.md (15,680 words)
+==== 11_ch11_defensive_systematic_high_yield.md (15,574 words)
 # Chapter 11: Defensive Systematic High Yield
 ## 11.0 Cold Open: The Bow Tie
 ## 11.1 The Asymmetry: Why High Yield Needs a Defense at All
@@ -549,7 +549,7 @@ Theo unplugged the USB stick at 7:40 p.m. The 13-week model had become a covaria
 ### Exercises
 ### Deep-Dive Resource Graph
 
-==== 12_ch12_multi_asset_credit_allocation.md (15,668 words)
+==== 12_ch12_multi_asset_credit_allocation.md (15,573 words)
 # Chapter 12: Multi-Asset Credit Allocation
 ## 12.0 Cold Open: Seven Piles, One Bet
 ## 12.1 The MAC Universe as a Capital-Structure Map
@@ -624,7 +624,7 @@ Build `lmt_engine.py` (numpy/scipy; `rng = np.random.default_rng(13)`; runs top 
   [...truncated]
 ### Deep-Dive Resource Graph
 
-==== 14_ch14_default_and_recovery_cycle_lmt_era.md (14,551 words)
+==== 14_ch14_default_and_recovery_cycle_lmt_era.md (14,557 words)
 # Chapter 14: The Default & Recovery Cycle in the LMT Era (TREND)
 ## 14.1 Two Default Rates, Two Recovery Rates
 ### Deep-Dive Resource Graph (§14.1)
@@ -665,7 +665,7 @@ Build `lmt_engine.py` (numpy/scipy; `rng = np.random.default_rng(13)`; runs top 
 ## Exercises
 ### Deep-Dive Resource Graph
 
-==== 15_ch15_event_driven_mna_and_coc.md (14,015 words)
+==== 15_ch15_event_driven_mna_and_coc.md (13,995 words)
 # Chapter 15: Event-Driven M&A, Regulatory Spreads & Change-of-Control
 ## Cold Open: Friday the Thirteenth, Aisle Four
 ## 15.1 The Event-Driven Credit Map: Six Cash Flows That Fire on a Deal
@@ -878,14 +878,56 @@ Ines replays the cold-open hand. The desk bid the \$25mm of notes two points bac
   [...truncated]
 ### Deep-Dive Resource Graph
 
-==== 19_ch19_portfolio_trading_pricing_engines.md (3,562 words)
+==== 19_ch19_portfolio_trading_pricing_engines.md (13,958 words)
 # Chapter 19: Portfolio Trading & Basket Pricing Engines
 ## 19.1 What a Portfolio Trade Is (and Isn't)
 ## 19.2 The Master Equation: Four Terms, One Price
 ### 19.2.1 Derivation: the basket bid as a certainty equivalent
 ### Specification for AI Implementation
+## 19.3 Per-Line Liquidation Cost: LCS, Size, and the Fat Tail
+### 19.3.1 Derivation: from a standalone score to a basket cost
+### Specification for AI Implementation (handling cost)
+## 19.4 The Hedge: Collapsing 150 Lines into One Lump
+### 19.4.1 Derivation: the minimum-variance hedge and the residual
+### Specification for AI Implementation (factor model and hedge)
+### Deep-Dive Resource Graph
+## 19.5 Residual Covariance for 150 Stale Bonds
+### 19.5.1 Derivation: factor structure, staleness, shrinkage
+### Specification for AI Implementation (residual covariance)
+## 19.6 Eviction: Which Lines to Kick Out, and the Price of Keeping Them
+### 19.6.1 Derivation: marginal cost, exact removal saving, greedy loop
+### 19.6.2 Case Study: The H1 2022 Reversal
+### Specification for AI Implementation (greedy eviction)
+## 19.7 Stress Liquidity Commonality: When Every $c_i$ Moves Together
+### 19.7.1 Derivation: a common multiplier in costs, a rank-one spike in risk
+### 19.7.2 Case Study: March 2020 and the April 2025 Tariff Week
+### Specification for AI Implementation (regime and stress covariance)
+## 19.8 Adverse Selection in Baskets: The Mystery Box
+### 19.8.1 Derivation: the inclusion model and the AS charge
+### 19.8.2 Case Study: The Mystery Box at Line 117 (illustrative)
+### Specification for AI Implementation (adverse selection and hand history)
+### Deep-Dive Resource Graph
+## 19.9 The Buy Side: When to Use a PT, and How to Build One the Dealer Will Love
+### 19.9.1 Derivation: the all-or-none inequality
+## 19.10 Engineering for 90 Seconds
+### Specification for AI Implementation (the full engine)
+### Deep-Dive Resource Graph
+## 19.11 Desk Debrief
+- **A PT bid is four terms plus a margin:** fair value, minus liquidation cost, minus residual risk *after the hedge*, minus adverse selection, minus $\pi$. Every term is in dollars until the very last line.
+- **You are pricing one lump and a residual.** The hedge turns $\Sigma$ into $\Sigma^{\text{res}}$, and $\Sigma^{\text{res}}$ is the re-hedged covariance for *any* basket, so eviction re-hedges for free.
+- **LCS is a standalone price.** Use only its handling share inside a basket, scale it for size, and never multiply it by duration again.
+- **Staleness is variance, not a haircut.** Line 42 is not a bad bond; nobody knows what it is worth, and that ignorance is what the engine prices.
+- **Evict on exact removal savings, and recompute after every eviction.** Liquidity scores evict line 42. Only the AS term evicts line 117.
+- **The liquidity factor does not diversify.** In stress, one regime score must move $m$, $\gamma$ and the basis together.
+- **The hand history is by line and net of the hedge.** A basket-level markout averages away the two cards that were face down. IDO or it didn't happen.
+- **Ninety seconds is 89 seconds of precomputation and judgment, and one second of linear algebra.**
+### The Spec You Hand the Robot
+> Build `price_pt(inquiry, model_state, market_state) -> Quote`. **Inputs:** a struct-of-arrays inquiry ($N\le500$ lines: id, signed par \$, composite mid as a fraction of par, age in business days, print fraction, LCS at \$4mm, OASD, OAS, sector, daily idiosyncratic vol, PRS, days to lender call, ad hoc flag). Also: overnight loadings $B$ $(N,K)$, factor covariance $\Omega$ $(K,K)$, hedge loadings $A$ $(H,K)$ and basis covariance $U$ $(H,H)$, plus live ETF discount z-score and bid–ask percentile. **Compute (all under $\mathbb{P}$, all in dollars):** handling cost (19.3); idiosyncratic variance with staleness, print-frequency inflation and ridge (19.5); $\Sigma^{\text{res}}$ by Schur complement (19.4), PSD-projected, with $\operatorname{cond}\le10^6$; the stress spike (19.9) from one regime score that also scales $\gamma$ and the basis; the AS charge (19.10) from a logistic inclusion model; greedy eviction on exact removal savings (19.7), stopping at the target cost per dollar, $\alpha$ of MV, or $k_{\max}$ lines; and the minimum-variance hedge of the kept basket. **Return:** cash, cost in \$ and in bp of gross MV, the four-term decomposition, hedge notionals, evicted ids, a `hit_target` flag and latency. **Refuse** if mids look like points, if more than 20% of MV has age $>10$, or if a guard fails. **Escalate to a human** if $s\ge1$, if any $\text{PRS}>0.7$, or if one line carries more than 25% of cost. **Tests:** CE matches Monte Carlo under Gaussian P&L; hedged variance equals the Schur form; costs are side-symmetric; eviction strictly lowers cost per dollar; stress cost is at least 2× calm on the reference basket; the live path runs in under 1 s.
+  [...truncated]
+### Exercises
+### Deep-Dive Resource Graph
 
-==== 20_ch20_credit_etf_creation_redemption_arb.md (8,182 words)
+==== 20_ch20_credit_etf_creation_redemption_arb.md (13,883 words)
 # Chapter 20: Credit ETF Creation/Redemption Arbitrage (HYG, JNK, LQD, BKLN)
 ## 20.1 The Machine: Two Markets, One Wrapper
 ## 20.2 NAV Is an Opinion: Price, Evaluated Prices and the Bid Side
@@ -899,8 +941,30 @@ Ines replays the cold-open hand. The desk bid the \$25mm of notes two points bac
 ### 20.4.1 The rule and the regulator's worry
 ### 20.4.2 What the baskets actually look like
 ### 20.4.3 Derivation: the custom basket as a quadratic program
+## 20.5 Case Study: March 2020, When the ETF Was the Only Price in Town
+### 20.5.1 The tape
+### 20.5.2 The Fed buys a seat at the table
+### 20.5.3 How a systematic desk would have flagged and traded it
+## 20.6 BKLN: The Basket That Cannot Settle
+### 20.6.1 Derivation: the settlement gap and the liquidity runway
+### 20.6.2 What the wrapper is now being asked to hold
+## 20.7 Building the Arbitrage Monitor
+### Specification for AI Implementation
+## 20.8 Desk Debrief
+- **A credit ETF is two markets and a conversion right.** The secondary market nets; only the residual reaches the APs, and the band is the price of converting.
+- **Premium = flow + staleness + bid-side constant** (20.1). Only the flow term is a trade. Staleness is a forecast of tomorrow's marks, and $\bar c$ is a decimal point in the valuation policy.
+- **The band is $[\bar c - c^R - f^R - k^R,\ \bar c + c^C + f^C + k^C]$** (20.4). Bid-side NAVs slide it up by $\bar c$, which is why calm HY ETFs "trade at a premium." Custom baskets move the two edges independently.
+- **In stress, price impact multiplies**: $\psi = \bar\gamma \sigma_b^2 T^{\text{h}}$ (20.5). Two times 36 times 4 turns a 1 bp flow into a 3% discount without anyone leaving the table.
+- **Custom baskets are worth $\mathcal{D}/(2\theta)$** (20.7): the dispersion of net costs over the fund's tracking aversion. They are how PT dealers recycle risk, and losing them in H1 2022 showed up in PT pricing.
+- **March 2020 was not a broken arbitrage.** IG's flow term collapsed because it was the most sellable risky asset. The Fed fixed it by lowering everyone's price of risk, mostly before it bought a share.
+- **Loan ETFs live or die by (20.8):** sleeve over burn rate against the settlement lag. It is Theo's 13-week model in a 40 Act wrapper.
+- **IDO or it didn't happen:** an ETF discount trade earns only the convergence, net of rate and spread beta.
+**The Spec You Hand the Robot.** *Vague:* "Build me an ETF arb monitor." *What ROBO built:* see §20.7, all 206 alerts of it. *Precise:* Build `etf_arb.monitor(date, ticker) -> Signal`. **Inputs:** `etf_daily` and `holdings` per the schema in §20.7, published creation and redemption baskets, TRACE same-day dispersion `u`, and the change in shares outstanding as $F$. **Compute:** $\bar c$, $c^C$ and $c^R$ from half-LCS weights; the static band (20.4) with the fund's fee schedule; $\hat\eta$ from (20.3) on a trailing 250-day calm window, reported with its attenuation bound; $\hat s_t$ from (20.2) using ETF returns as the proxy for true returns; $\hat\psi$ from (20.5) as the regression slope of the premium on $F$ over a rolling window; the regime label from `classify`. **Guards:** fractions of NAV everywhere; refuse to run without `nav_convention`; skip days with no NAV strike; mark any day with a pricing-methodology change as `measurement_noise`; never emit a trade signal from the premium alone. **Outputs:** the regime label, the band edges, the three components of (20.1), $\hat\psi$, and for loan funds the runway from (20.8). **Tests:** the asserts in Blocks 1–6, plus one replay of 2020-03-09 to 2020-03-27 that must label LQD's March 19 discount `flow_dislocation_redeem` and HYG's same-day premium `inside_band` or `measurement_noise`.
+  [...truncated]
+### Exercises
+### Deep-Dive Resource Graph
 
-==== 21_ch21_leveraged_loans_and_clo_microstructure.md (13,169 words)
+==== 21_ch21_leveraged_loans_and_clo_microstructure.md (16,343 words)
 # Chapter 21: Leveraged Loans, CLOs & Loan-Market Microstructure
 ## 21.1 The Leveraged Loan as an Instrument: A Floater That Is Short a Call
 ### 21.1.1 Derivation: carry, price, and the two durations
@@ -928,8 +992,33 @@ Ines replays the cold-open hand. The desk bid the \$25mm of notes two points bac
 ### Case Study: JAAA, April–May 2025
 ### Specification for AI Implementation (liquidity queue)
 ### Deep-Dive Resource Graph (21.6)
+## 21.7 Trend and Momentum in Loans: Smoothing, Ceilings, and Forced Sellers
+### 21.7.1 Derivation: what smoothing does to a mark
+### Specification for AI Implementation (stale marks)
+## 21.8 CLOs Inside the LMT
+### Case Study: Two Holder Bases, One Uptier Proposal
+### Deep-Dive Resource Graph (21.8)
+## 21.9 Desk Debrief
+- **A performing loan is a floater that is short a par call.** Its spread duration is about 2.7 on the way down and about 0.25 on the way up when the repricing window is open (21.7). Quote carry net of the expected repricing loss (21.8), or you are quoting fiction.
+- **The OC test is an option book written by the CLO equity.** It cannot see performing-loan prices and is short the cheapest tail of the CCC book (21.5). Past the 7.5% cliff, each dollar of new CCC costs about $(1 - p^{\ast})$, around 42 cents at Kundu's 58-cent average, through *other* loans.
+- **The cure is deterministic: sell the richest CCC** (21.6). Forced sellers sell the freshly downgraded loan, which is the one fundamental buyers want. FSPI tells you who must sell, and the reversal pays the liquidity provider.
+- **Every repricing costs CLO equity about 11× the spread cut** (21.3). The ETF bid for AAA resets is the equity's counter-move.
+- **Settlement is a risk factor, not a back-office detail.** About 20 days on average; delayed compensation is a forced repo at the base rate; a loan fund's buffer scales between $\sqrt{\ell}$ and $\ell$ (21.9).
+- **Retail liquidity moved to the tranche because the tranche settles like a bond.** JAAA could redeem in kind in April 2025. A loan ETF cannot.
+- **Desmooth the marks before you believe a momentum backtest** (21.10). Then condition winners on headroom and losers on FSPI.
+- **Ask two questions.** What does the credit agreement say? What does the CLO indenture say? The second decides who is a forced seller under the first.
+**The Spec You Hand the Robot.** Build `loan_clo_engine` with five deterministic, seeded modules and the asserts from Blocks 1–5:
+1. `acpa(pool, cash, ccc_limit)` implements (21.5): cheapest-first CCC excess, $\max(0, 1-p)$ haircuts, defaulted loans at $\min(p, R^{\text{ag}})$, discount loans at purchase price, and indenture priority "without duplication."
+2. `cure_candidates(pool)` ranks CCC sales by exact recomputed ΔACPA and checks the bound (21.6).
+3. `fspi(holdings, outstanding, cushion, excess)` returns, for each loan, the expected fraction sold. It uses the logistic calibrated to $\pi = 13.27\%$ at a 4% cushion with $+1.56$ pp per $-3.26\%$ of cushion, and it checks that holdings never exceed outstanding.
+4. `loan_price(m, s, base, T, h)` implements (21.2)/(21.7), with a monthly-logit hazard converted by $h = -12\ln(1-q)$, margin and CSA kept as separate state, one-sided spread durations, and (21.8) carry loss.
+5. `buffer_needed` and `etf_discount_bound` implement (21.9) and the band, cross-checked by simulation within 8%. Desmoothing implements (21.10) with a Dimson beta.
+Units: prices as fractions of par in code and points in reports, spreads as decimals, \$mm for par, business days for $\ell$. Never infer a CCC classification, a market-value source or a test trigger: read it from the parsed indenture, or raise.
+  [...truncated]
+### Exercises
+### Deep-Dive Resource Graph
 
-==== 22_ch22_market_structure_regulation_trends.md (10,970 words)
+==== 22_ch22_market_structure_regulation_trends.md (16,001 words)
 # Chapter 22: Market-Structure Regulation & the Forces Reshaping Liquidity
 ## 22.1 A Rule Is a Price: Taxes on Balance Sheet, Time, and Information
 ### 22.1.1 Derivation: the regulatory cost of carry in the reservation price
@@ -949,8 +1038,32 @@ Ines replays the cold-open hand. The desk bid the \$25mm of notes two points bac
 ### 22.4.2 Derivation: dealer capacity as a convex state variable
 ### 22.4.3 Case Study: The March 2020 Dash for Cash
 ### Specification for AI Implementation (netting and capacity)
+## 22.5 Dealer Capital: Volcker, the Leverage Ratio, and the Endgame
+### 22.5.1 Case Study: The Basel III Endgame Saga, 2023–2026
+## 22.6 CDS: From the Index Clearing Mandate to SBSR, Rule 9j-1, and the Dealer Rule That Wasn't
+### 22.6.1 Derivation: when clearing a CDS is cheaper than not
+### 22.6.2 Case Study: Two Stresses, Two Instruments (Q1 2023 and April 2025)
+## 22.7 The Regulated Venue: Consolidation, Tapes, and the Non-Bank Question
+## 22.8 The Regulatory Event-Study Engine
+### 22.8.1 Derivation: difference-in-differences around an effective date
+### Specification for AI Implementation (event-study engine)
+## 22.9 Desk Debrief
+- **A dealer sells balance sheet, time, and information, and every rule is a tax or a subsidy on one of them.** The desk does not comply with rules; it prices them, and it dates them.
+- **Rent is $h\cdot\max(\kappa_{\text{RWA}}\text{RW}, \kappa_{\text{LR}})\cdot\tau^{\text{hold}}$.** A flat dealer widens both sides; a long dealer skews. For a 2-year Treasury, rent is the whole spread (breakeven hold of three to four days); for a BBB, it is a rounding error (about a month). That inequality explains why Treasuries went agency first.
+- **A reporting delay is an option the block dealer holds**, worth $2\lambda Q/T_u$ of spread per unit of delay. The fifteen-minute, \$5mm/\$1mm equilibrium has survived attacks from both sides since 2019. It is priced into every block you quote.
+- **Behind "5MM+" is a Pareto tail** with $\alpha \approx 1.67$ for IG and $1.33$ for HY, so block-size variance does not exist. Use the historic file, medians, and rating-specific tails; never average at the cap.
+- **Square roots and floors.** T+1 cut the volatility component of margin by between $1-\sqrt{2/3}$ and $1-\sqrt{1/2}$, and DTCC's 23–29% landed inside the bracket. Netting shrinks exposure by $1/\sqrt{N-1}$ in a two-way market and by almost nothing in a one-way market, which is the only market in which you need it.
+- **Dealer capacity is a hinge:** rent in calm markets, convex in stress, with the kink near a third of utilization. Make the liquidity model's dealer term a slow state variable, not a constant.
+- **Capital rules are dated changes in $\kappa$.** For each one, ask which inventories are leverage-bound and which are risk-bound; the 2023–2026 endgame saga moved them in opposite directions.
+- **Every effective date is a structural break, and every abandoned rule is a placebo.** No control group, no effect: IDO or it didn't happen.
+### The Spec You Hand the Robot
+*Vague version:* "make the models regulation-aware." *What ROBO built:* a dummy variable for every page of the Federal Register since 2002, a model with more regulatory features than bonds, and a perfect in-sample fit. *Precise version (prompt-ready):*
+> Build `reg_cost_engine.py` (numpy and pandas only; every random draw seeded). (1) `regulatory_carry_bp(kappa_rwa, risk_weight, kappa_lr, hurdle, holding_days)`: $10^4\,h\,\max(\kappa_{\text{RWA}}\text{RW}, \kappa_{\text{LR}})\,\text{days}/365$, decimals only, reject ratios outside [0, 1] and non-positive days; `breakeven_holding_days` per (22.4); `carry_table` over a positions frame using $|$notional$|$. (2) `block_half_spread` per (22.6) with the positive-part guard and an optional inferred size; `pareto_alpha_from_imputed_mean` and `censored_impact` per (22.7), with $\alpha > 1$ enforced. (3) `margin_ratio` per (22.8) on the horizon including close-out; `fail_cost_annual` per (22.9). (4) `netting_factor_mc` returning simulated, theoretical ($1/\sqrt{N-1}$) and directional-floor (22.11) factors; `mandate_net_benefit` per (22.12); `capacity_hinge` calibrated from two published sentences. (5) `REGIME_DATES` as the single dated table, and `trace_regime_flags`, which rejects naive timestamps, compares New York calendar dates, keeps `one_minute_rule` False forever, and flags capped sizes by rating bucket. (6) `event_study_did` per (22.17) with a cluster bootstrap by bond, and `placebo`. Acceptance tests: the asserts in this chapter, unchanged, including: Treasury rent 1.15bp a week at 5% and 12%; margin ratios 0.7071 and 0.8165 bracketing DTCC's 0.71 and 0.77; netting factor within 2% of 0.204 at $N = 25$; a synthetic +2bp rule effect recovered within four standard errors despite a −3bp concurrent market move; placebo estimates below 0.25bp. Do not invent bond identifiers; use descriptive `bond_id` strings.
+  [...truncated]
+### Exercises
+### Deep-Dive Resource Graph
 
-==== 23_ch23_cross_asset_convexity_and_vol_surface.md (8,787 words)
+==== 23_ch23_cross_asset_convexity_and_vol_surface.md (15,322 words)
 # Chapter 23: Cross-Asset Convexity & the Volatility Surface
 ## 23.1 One Distribution, Many Strikes: The Capital Structure as a Vol Surface
 ### The Merton identity: equity vol is leveraged asset vol
@@ -962,15 +1075,72 @@ Ines replays the cold-open hand. The desk bid the \$25mm of notes two points bac
 ### Specification for AI Implementation (continued): the put-surface engine
 ## 23.5 Greeks in Spread Terms: Natenberg for the Credit Desk
 ### Specification for AI Implementation (continued): spread Greeks
+## 23.6 Capital-Structure Arbitrage: Rules, Returns, and Why Single Trades Lose
+### Case Study A: May 2005, GM and Ford, or How to Lose on Both Legs
+### Specification for AI Implementation (continued): the cap-structure backtester
+## 23.7 Convertible Arbitrage: The Original Cap-Structure Trade
+## 23.8 When the Surface Lies: Banks, Runs, and Contractual Inversions
+### Case Study B: SVB, March 8–10, 2023
+### Case Study C: Credit Suisse AT1, March 19, 2023
+### Case Study D: Hertz, 2020–21, the Happy Inversion
+### Specification for AI Implementation (continued): the bank override
+## 23.9 Cross-Asset Trend: Does the Surface Lead the Spread?
+## 23.10 Desk Debrief
+- **The capital structure is one distribution sliced at different strikes.** Equity is the call, bonds are short puts, CDS is the put without rates, and a low-strike equity put is a CDS that forgot to tell anyone.
+- **Equity vol is leveraged asset vol** ($\sigma_E E = \sigma_V V N(d_1)$). Cheap stocks are mechanically high-vol stocks, the skew is built in, and plugging $\sigma_E$ in for $\sigma_V$ overstates default risk by the leverage.
+- **CreditGrades is the production bridge**, with honest warts: the time-zero ghost, a reported error in the published closed form, two different recoveries, and $\nu$ fitted on non-financials. Integrate the legs yourself and test against Monte Carlo.
+- **A put spread inside the default corridor is a model-free default claim** (Carr–Wu). Match the payment convention (American pays at default, European at expiry) before you trade the basis against CDS.
+- **The low-strike floor $P(K)/K$ is the hazard.** Jumps make it flatten to a constant; stochastic vol sends it to zero. Diagnose with prices, not implied vols.
+- **Hedge ratios are the part of Merton that works.** Cap-structure arbitrage bets the ratio is right and the price is wrong; single trades lose, portfolios earn. Strip carry, simulate defaults, and stress the May 2005 vector (stock up, spread up).
+- **The surface breaks where the process is not a diffusion:** runs (SVB), contractual triggers (Credit Suisse AT1), and estates whose value tail was fatter than anyone modeled (Hertz). The credit agreement, the prospectus, and the deposit base decide those cases, and reading them is the ex-RSSG analyst's edge.
+**The Spec You Hand the Robot.** Build `ch23_cross_asset_surface`, numpy/scipy/pandas only, seeded RNG (`seed=23`), no network. (1) `cg_survival`, `cg_cds_spread`, `cg_implied_vol` per (23.3)–(23.5), with the leg integration monthly, the time-zero mass in the protection leg, `nan` outside the inversion range, and a Monte Carlo check with a Brownian-bridge correction. (2) `urc_from_puts` per (23.6), returning bid and ask bounds and a payment `convention`, and `urc_from_cds` per (23.7) with a matching `payment` argument; raise on convention mismatch. (3) `jtd_put_price` and `jtd_fit` per (23.8), fitting $(\sigma, \lambda)$ jointly on $P(K)/K$, with borrow backed out of at-the-money parity first and the `floor_ratio` diagnostic. (4) `spread_greeks` (CS01, convexity, DTS) and `cg_greeks` (shares per \$10mm, stock-space gamma, equity and asset vega), plus JTD per notional reported as its own line. (5) `capstruct_backtest` with Yu's rules, carry reported separately from convergence, defaults simulated at the CDS-implied hazard in production runs, and an event-sign stress (stock +20%, spread +30%). (6) A router that sends any issuer with deposits above 50% of liabilities to `bank_run_dd`, and flags any instrument with a contractual write-down trigger as `contractual_waterfall_override`. Inputs in decimals and years; outputs in bp, \$, and shares, with units in every column name. Every function raises on non-positive prices, vols, or debt.
+  [...truncated]
+### Exercises
+### Deep-Dive Resource Graph
 
-==== 24_ch24_bond_cds_basis_and_deliverables.md (3,794 words)
+==== 24_ch24_bond_cds_basis_and_deliverables.md (16,114 words)
 # Chapter 24: Bond-to-CDS Basis & Deliverable Obligation Mechanics
 ## 24.1 Two Doctors, One Patient, and the Frictionless Lie
 ## 24.2 Pricing the Swap: Two Legs and One Risky Annuity
 ### 24.2.1 Derivation
 ### Specification for AI Implementation (CDS legs, par spread and upfront)
+## 24.3 Four Things People Mean by "Basis"
+### 24.3.1 Derivation: why a par swap and a discount bond disagree even when nothing is wrong
+### Specification for AI Implementation (bond-level basis: Z, PECS and JTD hedge ratio)
+## 24.4 Funding, Repo, and the Counterparty: Why a Negative Basis Is Not Free
+### 24.4.1 Derivation: the carry of each package and the arbitrage band
+### Specification for AI Implementation (basis package carry and stress)
+## 24.5 The Cheapest-to-Deliver Option
+### 24.5.1 Derivation: when the option is worth nothing and when it is worth half of par
+### Specification for AI Implementation (CTD under the two default regimes)
+## 24.6 The Two-Stage Auction
+### 24.6.1 Derivation: the inside market midpoint and the final price
+### Specification for AI Implementation (two-stage auction simulator)
+## 24.7 Trading the Basis Systematically
+### 24.7.1 Derivation: a mean-reverting basis and the cost threshold
+### Specification for AI Implementation (OU basis signal, net of costs)
+## 24.8 When the Legal Layer Breaks: Successors, Orphans and Manufactured Credit Events
+### 24.8.1 Derivation: the successor arithmetic
+### 24.8.2 Case Study: Hovnanian, Sunrise Trails and the Coupon Nobody Wanted Paid (2017–2018)
+### 24.8.3 Case Study: Windstream (2015–2019): One Sale-Leaseback, Two Successor Answers, One Auction
+### 24.8.4 The patch, and what it does not reach
+### Specification for AI Implementation (successor map and manufactured-event flags)
+## 24.9 Desk Debrief
+- **A CDS is a par instrument; your bond is not.** Compare them with PECS, or expect a Z-spread basis of ±15 bp on bonds priced perfectly, plus a few bp of day-count noise.
+- **Hedge to jump-to-default, not to face.** $N^{\text{JTD}} = (P-R)/(1-R)$. At 88 and 40% recovery, \$10mm of bonds needs \$8mm of protection.
+- **A negative basis is a funding trade with a default option.** Its ROE is divided by the haircut, and the haircut rises when the basis widens. Price the haircut process, not today's haircut.
+- **The swap doesn't pay recovery. It pays par minus the auction price of the cheapest deliverable.** In bankruptcy that is close to recovery. In a failure to pay without acceleration it can be half of par from a solvent company.
+- **The auction is a poker hand with the cards face up.** Read the open interest, respect the cap, and expect bonds to bounce after a large sell imbalance.
+- **Exits make the Sharpe.** On the fallen-angel basis, transaction costs took three-quarters of the gross Sharpe until the exit rule cut the holding period.
+- **Successors are arithmetic with cliffs.** At 25.0% nothing happens and at 25.1% your swap splits. Run the thresholds before the DC does.
+- **The definition of default is a risk factor.** Flag affiliate payees, conditional financing, new long low-coupon deliverables and refinancings that orphan the swap, and use the 13-week model as evidence.
+### The Spec You Hand the Robot
+> Build `basis_engine` for one reference entity and its deliverable bonds. **Inputs:** an OIS curve (named and dated); CDS quotes by tenor with coupon and quoting recovery; a contract-terms table (day count, accrual on default, credit events, deliverable characteristics, Definitions vintage); bonds with coupon, maturity, seniority, price and timestamp; repo spread, haircut and borrow fee per bond. **Steps:** (1) bootstrap a piecewise-flat $\mathbb{Q}$-hazard curve and reproduce the standard upfront to the cent; (2) per bond, compute $Z$, ASW, PECS and the JTD hedge ratio, reporting $b^{Z}$ and $b^{\text{PE}}$ in bp; (3) compute the arbitrage band and ROE at current and doubled haircuts; (4) compute the regime-1 and regime-2 CTD payout over the deliverable set; (5) fit an OU model to the market-adjusted basis and emit entry and exit signals net of per-name costs; (6) run the successor map on any announced transaction and the manufactured-event flags on any missed payment. **Guards:** refuse a basis if the CDS mark is older than the bond print; raise an error on an empty deliverable set ("possible orphan"); round auction prices with halves going up; label every flag a heuristic. **Tests:** every assert in this chapter, in order. **Never:** use the bond's yield as its spread, use $R = 40\%$ for quoting and a different $R$ for valuation, or report an ROE without its haircut.
+  [...truncated]
+## 24.10 Exercises
+### Deep-Dive Resource Graph
 
-==== 25_ch25_nlp_pacer_and_covenant_scraping.md (10,302 words)
+==== 25_ch25_nlp_pacer_and_covenant_scraping.md (14,417 words)
 # Chapter 25: NLP for Credit Agreements, Indentures & PACER Dockets
 ## 25.0 Cold Open: Thirty Percent of What?
 ## 25.1 The Document Is the Constraint Set
@@ -1004,8 +1174,37 @@ Ines replays the cold-open hand. The desk bid the \$25mm of notes two points bac
 ## 25.9 From Text to Signal: Error, Decay and Discipline
 ### 25.9.1 Classifier error is an IC tax
 ### 25.9.2 Discipline and decay
+## 25.10 The Covenant-and-Docket Engine
+### Specification for AI Implementation
+## 25.11 Desk Debrief
+- **A basket is a function, not a sentence.** It maps the state of the company to \$mm and carries a scope, a netting flag and a source span. Without units, it didn't happen.
+- **Parse definitions into a graph.** Evaluate it in Tarjan order and solve cycles as contractions. The EBITDA node has the largest blast radius in the document, so read it first and diff it every time.
+- **"After giving effect to" turns a 25% cap into 33.3%.** Each add-back dollar buys $m + \sum p_j$ dollars of debt capacity, 4.85 at Halyard. Mags is right to distrust "adjusted."
+- **Leakage is max-flow; the binding baskets are the min cut.** J.Crew's trapdoor created no capacity of its own. It moved the cut upstream onto \$250mm of "small" baskets.
+- **Diff the capacity vector, not the tokens.** One ratio edit moves cosine similarity by less than $10^{-6}$ and capacity by \$200mm.
+- **The docket is an append-only event log.** Use one global token bucket with $b + \rho h_0 \le L$. CourtListener's 125 requests a day means search and webhooks, not polling. Alert on silence.
+- **Rule 2019 gives you quantities and dates, never prices.** Impute basis from the acquisition quarter, carry rounding as an interval, and remember that with turnout $\varphi$ a group blocks at $\theta > \varphi/3$.
+- **Classifier error is an IC tax.** The tax rate is Youden's $J$ times a variance ratio, and at a 5% base rate half your flags are wrong. Span-cite everything.
+**The Spec You Hand the Robot.**
+```text
+TASK: Covenant capacity + docket monitor for universe U (loans/bonds with EDGAR exhibits or open bankruptcy cases).
+INPUTS: EDGAR exhibits EX-4.*, EX-10.* (versioned by accession, sha256); CourtListener v4 search/webhooks; RECAP Fetch
+        (our PACER account); Rule 2019 statements; claims-transfer notices. All money in $mm, ratios in x, dates UTC.
+STEP 1  Definitions -> graph. Case-sensitive, word-bounded, longest-match-first, span-consuming matcher; plurals.
+        Tarjan SCCs; evaluate condensation in emission order; solve each cycle by fixed-point iteration; if the
+        estimated Lipschitz constant >= 1, STOP and route to a human. Never guess a missing definition.
+STEP 2  Baskets -> typed nodes {fixed, grower, ratio, builder, maintenance} with scope, netting flag, usage.
+        Ratio with proceeds netting -> return inf and raise a red flag. Builder uses cumulative CNI (50% / -100%).
+STEP 3  Entity graph -> max-flow Phi by commodity (IP, cash, other); report min-cut arcs and Phi/EV.
+STEP 4  On each new version: dollar-weighted blast radius sum_u |K_u(v_k) - K_u(v_k-1)| / EV, signed per node.
+STEP 5  Docket: classify entries (entry text + first page); state machine Quiet->Organized->Contested->Standstill->
+        Plan->Confirmed; MLE q_ab = N_ab / T_a with censored spells. Rule 2019 -> panel of (holder, class, face,
+        acq_quarter) with share intervals, flows, imputed basis, HHI lower bound, blocking flag theta > turnout/3.
+  [...truncated]
+### Exercises
+### Deep-Dive Resource Graph
 
-==== 26_ch26_ai_agents_and_llms_on_the_credit_desk.md (14,840 words)
+==== 26_ch26_ai_agents_and_llms_on_the_credit_desk.md (14,732 words)
 # Chapter 26: AI Agents & LLMs on the Credit Desk
 ## 26.0 Cold Open: Section 6.08(b)(xiv)
 ## 26.1 What a Language Model Is, for a Specifier
@@ -1063,7 +1262,7 @@ for the verifier posterior; pass^k unbiased estimator, NaN when k > n.
 ## 26.14 Sources and Links
 ### Deep-Dive Resource Graph
 
-==== 27_ch27_system_architecture_and_asics.md (4,128 words)
+==== 27_ch27_system_architecture_and_asics.md (16,037 words)
 # Chapter 27: System Construction, Low-Latency Infrastructure & ASICs/FPGAs
 ## 27.0 Cold Open: The Fastest Thing on the Desk
 ## 27.1 Two Clocks: Why Credit Latency Is Not Equity Latency
@@ -1073,3 +1272,121 @@ for the verifier posterior; pass^k unbiased estimator, NaN when k > n.
 ### 27.2.2 The provenance rule
 ### 27.2.3 Clocks, and the four timestamps of a fill
 ### Specification for AI Implementation
+## 27.3 The Security Master Is the Credit Agreement of the System
+### 27.3.1 What the master holds
+### 27.3.2 The bitemporal model, derived
+### 27.3.3 Case Study: Serta Simmons, 22 June 2020, as a sequence of master-table rows
+### Specification for AI Implementation (bitemporal master)
+## 27.4 Pricing, Risk, OMS/EMS, and the Order State Machine
+### 27.4.1 The reference architecture
+### 27.4.2 The order state machine
+## 27.5 Latency Budgets Are Queues, Not Numbers
+### 27.5.1 Little, Pollaczek–Khinchine, and the p99, derived
+### 27.5.2 Two budgets on one desk
+### 27.5.3 Case Study: CME Globex halts, 2019 and 2025, a budget with an infinite term
+### Specification for AI Implementation (latency as a queue)
+## 27.6 FPGA Trigger Tables for Quote-Pulling
+### 27.6.1 The trigger table, derived
+### 27.6.2 What a stale quote costs: diffusion versus tournament
+### 27.6.3 Case Study: The 15 October 2014 Treasury flash rally, replayed against a trigger table
+### Specification for AI Implementation (trigger tables)
+## 27.7 Kill Switches as Stopping Rules
+### 27.7.1 The hierarchy
+### 27.7.2 CUSUM on markouts, derived
+### 27.7.3 Case Study: Knight Capital (2012) and Citigroup (2022), mapped to tiers
+### Specification for AI Implementation (kill switch)
+## 27.8 Observability, Deployment, and Resilience Beyond Your Walls
+## 27.9 Desk Debrief
+- **Two clocks, one desk.** The quote clock runs in seconds to minutes; the hedge clock runs in microseconds. Speed is worth $\Delta\ell/T$ of your edge, so buy it in proportion to $1/T$ of the information you act on, not in proportion to how much you enjoy hardware.
+- **The fastest thing on the desk is the thing that says no.** The fast path compares precomputed numbers and may only pull. Only the slow path, which can be audited, may say yes again.
+- **Every price says what it is and when you knew it.** `price_kind` plus `known_at`, or it does not get a badge. Labels, fills and cost targets come from prints and firm quotes only.
+- **The security master is the credit agreement of the system.** Use internal surrogate keys, bitemporal rows and append-only knowledge time. Serta's 22 June 2020 is a test case, not an anecdote.
+- **The p99 is the number the sniper trades against, and it is worst when the market moves.** Little, Pollaczek–Khinchine and fan-out turn "40 ms" into "1.5 seconds on FOMC day, and 78% of PTs slow."
+- **The cheap trigger rule is safe by the triangle inequality, and it costs false pulls in a flight to quality.** Store dollar sensitivities, budget the threshold, and set a guard band above fixed-point and convexity error.
+- **A kill switch is a stopping rule with two numbers attached.** The desk head picks the false-alarm interval, and the detection delay comes with it, growing only with its log. Anyone can trip, two humans re-arm, and nothing can be clicked past.
+- **Silence is not safety.** A dead hedge feed, a missing eighth server or a counterparty in manual settlement is a Tier-2 event with a named owner and a five-second deadline.
+### The Spec You Hand the Robot
+```text
+SYSTEM: two-clock quoting engine for a systematic credit desk. Implement exactly this; ask before guessing.
+1. PRICE STORE. Every record: instrument_key (internal surrogate), value, price_type in {PRICE, SPREAD, YIELD},
+   side, size_mm (USD mm par; flag TRACE-capped), price_kind in {TRADED, FIRM_QUOTE, INDICATIVE_RUN, EVALUATED,
+   COMPOSITE}, source, event_ns, known_ns. Only TRADED and FIRM_QUOTE may be labels, fills or cost targets.
+   Late records go to a correction stream; never overwrite. TRACE affiliate duplicates are MARKED, never deleted;
+   tag regime {no_flag, flag_voluntary (from 2026-08-31), flag_mandatory (from 2027-08-02)}.
+2. SECURITY MASTER. Bitemporal facts (key, attr, value, valid [from, to), known [from, to)); knowledge time
+   non-decreasing; exclusion constraint per (key, attr). Backtests query as_of(valid <= t, known = t) only.
+   Test: Serta 2016 first-lien loan as of 2020-06-23 known 2020-06-22 00:00 returns first_lien_pari.
+3. LATENCY. Measure sojourn (arrival to response), not service time. Report p50/p99/p99.9 by utilisation band.
+   Alert when the p99 at current load exceeds the trigger-table refresh budget.
+4. TRIGGER TABLE (fast path). Per exposed quote i: side, hedge reference prices H_ref[j], beta[i,j] in bond points
+  [...truncated]
+### Exercises
+## 27.10 Sources and Links
+### Deep-Dive Resource Graph
+
+==== 28_ch28_pm_playbook.md (17,621 words)
+# Chapter 28: What a Desk Head / Senior PM Must Know to Extract Maximum Alpha
+## 28.0 Cold Open: The Keys to the Table
+## 28.1 Risk, Not Capital: The Desk Head's Accounting Identity
+### The identity, and why credit needs three substitutions
+## 28.2 Effective Breadth When Issuers Cluster
+### The Fundamental Law in hit-rate form
+### Two definitions of effective breadth
+### How noisy is your hit rate?
+### Concentration is not rewarded in debt
+### Specification for AI Implementation (Block 1): Effective Breadth and the Hit-Rate Law
+## 28.3 Allocation Across Signal Horizons
+### The break-even half-life
+### The horizon ladder
+### Specification for AI Implementation (Block 2): The Horizon Ladder
+## 28.4 Kelly With Jump-to-Default
+### Discrete Kelly for a bond
+### Continuous time, and the jump
+### Fractional Kelly is full Kelly for people with standard errors
+### Which measure, and which loss
+### Many names, one recession
+### Case Study: The 2026 CCC Decompression
+### Specification for AI Implementation (Block 3): Kelly With Jumps
+## 28.5 LVaR, Days-to-Liquidate and the 5× Problem
+### From Bangia's LVaR to a credit LVaR
+### Days-to-liquidate, and the regulatory clocks
+### Case Study: Third Avenue Focused Credit Fund, December 2015
+### Specification for AI Implementation (Block 4): LVaR, Days-to-Liquidate and Runway
+## 28.6 Drawdown Control: The Two-Threshold Rule, the PM Option and Marking to Bid
+### Setting the stop with drift
+### The stop-loss you don't know you have
+### Case Study: March 2020 and March 2026
+### Specification for AI Implementation (Block 5): Stops, Hitting Probabilities and the Mark-to-Bid Shock
+## 28.7 The Leverage Band and the κ Problem
+### Specification for AI Implementation (Block 6): The Leverage Band
+## 28.8 Running Ex-RSSG Analysts Alongside PhDs
+### Case Study: Aligned Signals, and the Hybrid Shop
+## 28.9 The PM Dashboard: The 13-Week Model, Reborn
+### Specification for AI Implementation: `pm_playbook_engine`
+## 28.10 Desk Debrief
+- **Allocate risk, not dollars.** Give each PM three budgets: volatility, drawdown, and liquidity (days-to-liquidate and stressed cost). The dollars fall out of the division.
+- **Breadth is issuers, not CUSIPs.** Use $N_{\text{eff}}$ from (28.4). A residual correlation of 1% caps any credit book at about 100 bets, and a year of P&L on 40 bets measures the hit rate with a standard error the size of the edge.
+- **Every signal pays its rake.** $h^\ast = \ln 2 \cdot c^{\text{RT}}/\alpha_0$: fast signals in the index layer, slow ones in cash, docket alpha in stressed bonds. The overlay manages beta so the cash books keep their IDO.
+- **Kelly in credit is $f^\ast = 1/L - \lambda^{\mathbb{P}}/c$, inside a ruin boundary set by the documents.** The worst recovery sets $1/L_{\max}$, not the average one. Half Kelly is full Kelly with honest standard errors. Clusters obey $\sum f L < 1$. Never use $\mathbb{Q}$, never use a smoothed mark.
+- **The 5× is the base case.** IG round-trip cost went from 0.59% to 3.40% in 2007–2008. Use $\text{COL} = \tfrac12 m\,\overline{\text{LCS}}\,|\text{MV}|$ with a size term, and treat a fund with under 13 weeks of runway as a going-concern question.
+- **The stop you don't know you have is the mark.** $\Delta^{\text{mark}} = \tfrac12(m-1)\,\overline{\text{LCS}}\,G$ belongs inside $x$, and $x = \sigma\ln(1/P)/(2\,\text{SR})$ is how you set $x$.
+- **Tape (28.22) to the monitor, and remember the speed limit** $G < 2\,\text{DD}_{\max}/((m-1)\,\overline{\text{LCS}})$, which no breadth can lift.
+- **An analyst's value is her $\rho$, not her IC.** Optimal coverage is $N^\ast = N_c$. Log every view in the Edge Ledger, or it is a memory, not a signal.
+**The Spec You Hand the Robot.**
+```text
+ROLE: Build pm_playbook_engine: a pure, seeded Python function (numpy/scipy/pandas only)
+mapping (book DataFrame, desk dict) -> one dashboard Series. No I/O, no clock, no network.
+UNITS: USD float64; spreads, LCS, vols, drawdowns as decimals; hazards per year under P;
+days are trading days; leverage G = gross MV / NAV. Never invent identifiers.
+BREADTH: net to issuer; N_eff = (sum|w|sigma)^2 / (w' S w) on the idiosyncratic covariance;
+refuse near-zero variance. Report 1/H beside it.
+SIZING: f* = smaller root of sigma^2 L f^2 - (cL + sigma^2) f + (c - lam L) = 0 (rationalized);
+0 if c <= lam L; multiply by 1/(1 + se^2); cap at 1/L_max (documents) and the cluster
+bound sum f L < 1. Merton's mu/sigma^2 is for comparison only.
+LIQUIDITY: COL = 0.5 m LCS |MV| (1 + eta sqrt(|MV|/ADV)), longs and shorts; T = |q|/(pi ADV);
+FRTB ES with horizons 10/20/40/60/120; runway = (cash + (1-h) liquid) / weekly burn.
+DRAWDOWN: used = realized + 0.5 (m-1) LCS G; compare with x/2 and x on INITIAL capital.
+  [...truncated]
+### Exercises
+## 28.11 Sources and Links
+### Deep-Dive Resource Graph

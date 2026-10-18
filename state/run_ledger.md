@@ -90,3 +90,4 @@ Edition 1 shipped at commit 8dffb93 (474k words, 1,212 pages). The Edition 2 pla
 | ed2-wp2-primers-1 | WP2 | Opus | 04_ch04b bond math; 12_ch12b restructuring state machine | running |
 | ed2-wp2-primers-2 | WP2 | Opus | 06_ch06b options and measures; 07_ch07b statistics | running |
 | ed2-wp2-appendices | WP2 | Opus | 94_appE Laws of the Desk; 93_appD plumbing | running |
+| ed2-reader-lens-reviews | review + WP4 | Fable ×3 → Fable synthesis → Opus ×2 lanes | Reviews as an RSSG partner, a desk head, and a transition coach → master gap list, TOC growth, briefs for the top 4 new files → write them | running |
