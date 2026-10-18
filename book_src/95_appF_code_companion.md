@@ -12976,5 +12976,937 @@ if __name__ == "__main__":
     print(_self_test())
 ```
 
+## F.3-B: Chapter 3-B: Your First Year on the Desk: The Day, the Week, the Quarter, and the Twelve Mistakes Ex-Bankers Make {#code-3b}
+
+Listings from `03_ch03b_your_first_year_on_the_desk.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
+
+
+### Listing 3-B.1: Following convention: the first business day on or after d {#code-3b-1}
+
+```python
+# desk_calendar.py (Chapter 3-B): venue calendars, versioned contract clocks, event features, Edge Ledger.
+# Dates are datetime.date. Windows and countdowns are business days on the named venue calendar.
+# Holiday sets are illustrative 2026 subsets; load the published SIFMA and NYSE tables in production.
+import math
+import random
+from dataclasses import dataclass, field
+from datetime import date, timedelta
+from typing import Optional
+
+random.seed(2026)  # only the synthetic ledger in the tests uses randomness
+
+HOLIDAYS = {
+    # SIFMA recommends full closes on Columbus Day and Veterans Day while the NYSE is open (App D).
+    "SIFMA": {date(2026, 9, 7), date(2026, 10, 12), date(2026, 11, 11),
+              date(2026, 11, 26), date(2026, 12, 25)},
+    "NYSE": {date(2026, 4, 3), date(2026, 9, 7), date(2026, 11, 26), date(2026, 12, 25)},
+}
+SETTLEMENT = {  # class -> (calendar, business-day offset); loan offsets are targets, not cash dates (App D)
+    "corp_bond": ("SIFMA", 1), "etf": ("NYSE", 1), "par_loan": ("SIFMA", 7), "distressed_loan": ("SIFMA", 20),
+}
+CONTRACT_KINDS = {"coupon", "record", "grace_end", "notice_cure_end", "consent_deadline", "early_tender",
+                  "call", "maturity", "rsa_milestone", "nda_outside", "claim_transfer_objection"}
+
+
+def is_business_day(d, cal):
+    return d.weekday() < 5 and d not in HOLIDAYS[cal]
+
+
+def roll_forward(d, cal):
+    """Following convention: the first business day on or after d."""
+    while not is_business_day(d, cal):
+        d += timedelta(days=1)
+    return d
+
+
+def add_business_days(d, n, cal):
+    step, k = (1 if n >= 0 else -1), 0
+    while k < abs(n):
+        d += timedelta(days=step)
+        if is_business_day(d, cal):
+            k += 1
+    return d
+
+
+def business_days_between(a, b, cal):
+    """Business days in (a, b]; negative when b is before a."""
+    if b < a:
+        return -business_days_between(b, a, cal)
+    n, d = 0, a
+    while d < b:
+        d += timedelta(days=1)
+        n += int(is_business_day(d, cal))
+    return n
+
+
+def settle_date(trade_date, instrument_class):
+    cal, k = SETTLEMENT[instrument_class]
+    return add_business_days(trade_date, k, cal)
+
+
+def grace_end(missed_payment_date, days=30, basis="calendar", cal="SIFMA"):
+    """Last day of a grace period, raw and rolled forward. Which one applies is in the indenture."""
+    if basis == "business":
+        end = add_business_days(missed_payment_date, days, cal)
+        return end, end
+    end = missed_payment_date + timedelta(days=days)
+    return end, roll_forward(end, cal)
+
+
+def index_roll_dates(year, cal="SIFMA"):
+    """CDX/iTraxx roll on 20 March and 20 September, moved to the next business day (proxy calendar)."""
+    return [roll_forward(date(year, 3, 20), cal), roll_forward(date(year, 9, 20), cal)]
+
+
+@dataclass(frozen=True)
+class ContractEvent:
+    event_id: str      # one logical event across all its versions, e.g. 'HALV-consent'
+    instrument: str    # surrogate key, never a CUSIP: an exchange changes CUSIPs, not instruments
+    kind: str
+    event_date: date
+    known_at: date     # when the desk learned this version of the date
+    source: str        # 'indenture', '8-K', 'docket', 'vendor', 'desk'
+
+
+def as_of(events, t):
+    """Bitemporal read: the latest version of each logical event known on or before t."""
+    best = {}
+    for e in events:
+        if e.known_at <= t and (e.event_id not in best or e.known_at > best[e.event_id].known_at):
+            best[e.event_id] = e
+    return list(best.values())
+
+
+CROSSWALK = {}  # cusip -> instrument surrogate key
+
+
+def instrument_of(cusip):
+    return CROSSWALK[cusip]
+
+
+def features(events, instrument, t, cal="SIFMA", window=10):
+    live = [e for e in as_of(events, t) if e.instrument == instrument and e.event_date >= t]
+    contract = [business_days_between(t, e.event_date, cal) for e in live if e.kind in CONTRACT_KINDS]
+    nda = [business_days_between(t, e.event_date, cal) for e in live if e.kind == "nda_outside"]
+    since_roll = [business_days_between(r, t, cal) for r in index_roll_dates(t.year, cal)]
+    return {
+        "days_to_next_contract_event": min(contract) if contract else None,
+        "in_contract_window": int(bool(contract) and min(contract) <= window),
+        "in_cleansing_window": int(bool(nda) and min(nda) <= window),  # scheduling input only (3B.5)
+        "in_roll_week": int(any(0 <= g < 5 for g in since_roll)),
+    }
+
+
+@dataclass
+class LedgerEntry:
+    view_id: str
+    logged_at: date
+    instrument: str
+    direction: int          # +1 long credit risk, -1 short credit risk ("bought protection" is -1)
+    prob: float             # stated probability that the view is right at the horizon
+    horizon_bd: int
+    size_and_hedge: str
+    kill_condition: str
+    decay_class: str        # 'days', 'weeks', 'months', 'never'
+    ido_markout_bp: dict = field(default_factory=dict)  # {1: x, 5: y, 20: z}, beta stripped, filled later
+    outcome: Optional[int] = None                        # 1 right, 0 wrong, None while open
+
+
+def hit_rate_se(outcomes):
+    n = len(outcomes)
+    p = sum(outcomes) / n
+    return p, math.sqrt(p * (1 - p) / n)
+
+
+def brier(probs, outcomes):
+    return sum((q - y) ** 2 for q, y in zip(probs, outcomes)) / len(probs)
+
+
+if __name__ == "__main__":
+    # 1. Columbus Day: a T+1 bond trade on Friday 9 Oct 2026 settles Tuesday; a T+1 ETF trade settles Monday.
+    assert settle_date(date(2026, 10, 9), "corp_bond") == date(2026, 10, 13)
+    assert settle_date(date(2026, 10, 9), "etf") == date(2026, 10, 12)
+
+    # 2. Halvorsen 6s: an $18mm coupon (600 x 6% / 2) missed on Friday 13 Nov 2026 (illustrative date).
+    assert abs(600 * 0.06 / 2 - 18.0) < 1e-12
+    end, rolled = grace_end(date(2026, 11, 13))
+    assert end == date(2026, 12, 13) and end.weekday() == 6 and rolled == date(2026, 12, 14)
+    assert date(2026, 11, 13) + timedelta(days=28) == date(2026, 12, 11)  # day 28: RSA and petition (12B.9)
+
+    # 3. The A/B exchange: two CUSIPs, one instrument. A consent deadline extended three times.
+    CROSSWALK.update({"HALV144A0": "HALV-7.25-2029", "HALVREG00": "HALV-7.25-2029"})
+    assert instrument_of("HALV144A0") == instrument_of("HALVREG00")
+    versions = [(date(2026, 10, 15), date(2026, 10, 1)), (date(2026, 10, 22), date(2026, 10, 14)),
+                (date(2026, 10, 29), date(2026, 10, 21)), (date(2026, 11, 5), date(2026, 10, 28))]
+    ev = [ContractEvent("HALV-consent", "HALV-7.25-2029", "consent_deadline", d, k, "8-K") for d, k in versions]
+    f13 = features(ev, instrument_of("HALV144A0"), date(2026, 10, 13))
+    f20 = features(ev, instrument_of("HALVREG00"), date(2026, 10, 20))
+    assert f13["days_to_next_contract_event"] == 2  # sees 15 Oct, not the 5 Nov it could not yet know
+    assert f20["days_to_next_contract_event"] == 2 and f20["in_contract_window"] == 1
+
+    # 4. The roll: 20 September 2026 is a Sunday, so the roll week starts Monday 21 September.
+    assert index_roll_dates(2026)[1] == date(2026, 9, 21)
+    assert features([], "ANY", date(2026, 9, 25))["in_roll_week"] == 1
+    assert features([], "ANY", date(2026, 9, 28))["in_roll_week"] == 0
+
+    # 5. Measurement (3B.7): 22 of 40 is 55% with SE near 7.9 points; ten 70% calls, six right, score 0.25.
+    p40, se40 = hit_rate_se([1] * 22 + [0] * 18)
+    assert abs(p40 - 0.55) < 1e-12 and abs(se40 - 0.0787) < 1e-3
+    outcomes = [1] * 6 + [0] * 4
+    random.shuffle(outcomes)  # order does not matter to the score
+    assert abs(brier([0.7] * 10, outcomes) - 0.25) < 1e-12
+    assert abs(brier([0.6] * 10, outcomes) - 0.24) < 1e-12
+
+    # 6. A seeded synthetic year of 400 views at a true 55%: the standard error is about 2.5 points.
+    year = [int(random.random() < 0.55) for _ in range(400)]
+    p400, se400 = hit_rate_se(year)
+    assert abs(se400 - 0.0249) < 0.003
+    entry = LedgerEntry("TM-0001", date(2026, 10, 20), "BRAM-9.25-SSN", -1, 0.6, 20,
+                        "$5mm, DTS-hedged in CDX HY", "refinancing launched at or above par", "days")
+    assert entry.outcome is None and entry.ido_markout_bp == {}
+    print(f"40 views: {p40:.3f} +/- {se40:.3f}; 400 views: {p400:.3f} +/- {se400:.3f}")
+```
+
+
+## F.8-B: Chapter 8-B: The Risk Model You Run Every Morning: Factors, Idiosyncratic Variance, Jump-to-Default, Stress and the Limit Sheet {#code-8b}
+
+Listings from `08_ch08b_the_risk_model_and_the_limit_sheet.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
+
+
+### Listing 8-B.1: risk_model.py (Chapter 8-B): the morning risk model for a credit book {#code-8b-1}
+
+```python
+"""risk_model.py (Chapter 8-B): the morning risk model for a credit book.
+
+Gaussian layer: EWMA factor covariance with shrinkage, DTS-scaled spread loadings,
+idiosyncratic variance by rating x price bucket, and a sub-80 equity regime with
+hysteresis. Jump layer: issuer-level JTD with Beta recoveries under P, simulated
+separately and never folded into the Gaussian variance. Then VaR/ES on the mixture,
+stress, Kupiec and Christoffersen backtests, and the limit sheet.
+Units: $mm for P&L and notionals, decimals for prices (fraction of par), spreads,
+yields and probabilities; DTS in years x decimal spread; time in years.
+"""
+import numpy as np
+from scipy.special import xlogy
+from scipy.stats import beta as beta_dist, chi2
+
+RNG = np.random.default_rng(20261018)
+SNAP = ("15:00", "America/New_York")
+COND_ALARM = 1e6
+
+
+class RiskModelError(Exception):
+    """Raised instead of guessing."""
+
+
+def check_snaps(snaps):
+    """snaps: dict input name -> (wall clock, time zone). All must equal SNAP."""
+    bad = {k: v for k, v in snaps.items() if tuple(v) != SNAP}
+    if bad:
+        raise RiskModelError(f"snap mismatch: {bad}")
+
+
+def price_bucket(price, in_equity_regime=False, enter=0.80, leave=0.85):
+    """Price bucket with hysteresis: enter the equity regime below 80, leave above 85."""
+    if price < enter or (in_equity_regime and price < leave):
+        return "lt80"
+    if price < 0.90:
+        return "80-90"
+    if price < 0.95:
+        return "90-95"
+    return "ge95"
+
+
+def build_loadings(positions, factor_names, cell_sens, cell_est, equity_beta):
+    """n x K loadings per $ of market value. Spread loadings are -DTS x b_{g,k};
+    rate loadings are -KRD; estimated loadings (liquidity, residual, basis) fall back
+    own -> issuer sibling (rescaled by DTS) -> cell (per unit DTS) -> refuse."""
+    idx = {f: j for j, f in enumerate(factor_names)}
+    B = np.zeros((len(positions), len(factor_names)))
+    siblings = {}
+    for p in positions:
+        if p.get("est"):
+            siblings.setdefault(p["issuer"], p)
+    for i, p in enumerate(positions):
+        if p["bucket"] == "lt80":                      # equity regime (Section 8B.4)
+            if p["id"] not in equity_beta:
+                raise RiskModelError(f"{p['id']}: below 80 with no equity loading")
+            B[i, idx["EQ"]] = equity_beta[p["id"]]     # recovery route: H -> 0 on rates
+            continue
+        for tenor, krd in p["krd"].items():
+            B[i, idx["KR" + tenor]] = -krd
+        if p["cell"] not in cell_sens:
+            raise RiskModelError(f"{p['id']}: no sensitivity for cell {p['cell']}")
+        for f, b in cell_sens[p["cell"]].items():
+            B[i, idx[f]] = -p["dts"] * b
+        est = p.get("est")
+        if not est and p["issuer"] in siblings:
+            ref = siblings[p["issuer"]]
+            est = {f: v * p["dts"] / ref["dts"] for f, v in ref["est"].items()}
+        if not est and p["cell"] in cell_est:
+            est = {f: v * p["dts"] for f, v in cell_est[p["cell"]].items()}
+        if not est:
+            raise RiskModelError(f"{p['id']}: no loading and no fallback")
+        for f, v in est.items():
+            B[i, idx[f]] = v
+    return B
+
+
+def ewma_cov(X, halflife=60):
+    """EWMA covariance (zero mean) of a T x K panel of factor returns, oldest first."""
+    lam = 0.5 ** (1.0 / halflife)
+    w = lam ** np.arange(X.shape[0] - 1, -1, -1)
+    w = w / w.sum()
+    return (X * w[:, None]).T @ X
+
+
+def factor_cov(X, halflife=60, delta=0.25):
+    """Shrink the EWMA covariance toward a constant-correlation target with weight
+    delta (estimated by creditstats.py's Ledoit-Wolf in production), then check it."""
+    S = ewma_cov(X, halflife)
+    sd = np.sqrt(np.diag(S))
+    C = S / np.outer(sd, sd)
+    K = len(sd)
+    rbar = (C.sum() - K) / (K * (K - 1))
+    T = rbar * np.outer(sd, sd)
+    np.fill_diagonal(T, sd ** 2)
+    S = (1.0 - delta) * S + delta * T
+    cond = np.linalg.cond(S)
+    if cond > COND_ALARM:
+        raise RiskModelError(f"factor covariance condition number {cond:.2e}")
+    return S
+
+
+def idio_var(positions, bucket_vol_pts):
+    """Diagonal Omega in return units: (daily idio vol in points / 100 / price)^2."""
+    v = []
+    for p in positions:
+        key = (p["rating"], p["bucket"])
+        if key not in bucket_vol_pts:
+            raise RiskModelError(f"{p['id']}: no idiosyncratic bucket {key}")
+        v.append((bucket_vol_pts[key] / 100.0 / p["price"]) ** 2)
+    return np.diag(v)
+
+
+def gaussian_risk(w, B, SigF, Omega):
+    """Volatility of P&L with its factor and idiosyncratic variances (w in $mm MV)."""
+    x = B.T @ w
+    fac, idi = float(x @ SigF @ x), float(w @ Omega @ w)
+    return np.sqrt(fac + idi), fac, idi
+
+
+def jtd_overlay(instruments):
+    """Issuer -> list of legs (const, slope, (a, b)) with JTD = sum(const + slope * R).
+    Long bond or loan: N(P - R); short bond: -N(P - R); bought CDS: -N(1 - R)."""
+    legs = {}
+    for ins in instruments:
+        N, P = ins["notional"], ins.get("price", 1.0)
+        kind = ins["kind"]
+        if kind in ("bond", "loan"):
+            c, s = N * P, -N
+        elif kind == "bond_short":
+            c, s = -N * P, N
+        elif kind == "cds_bought":
+            c, s = -N, N
+        else:
+            raise RiskModelError(f"unknown instrument kind {kind}")
+        legs.setdefault(ins["issuer"], []).append((c, s, ins["rec"]))
+    return legs
+
+
+def mean_jtd(legs):
+    return {i: sum(c + s * a / (a + b) for c, s, (a, b) in L) for i, L in legs.items()}
+
+
+def simulate_losses(gauss, legs, lam_P, h, n_paths=200_000, rng=RNG):
+    """Losses (positive = loss) over h years. gauss is a Gaussian-layer volatility
+    for the horizon, or an array of historical Gaussian-layer losses to resample.
+    Defaults are independent across issuers under P; recoveries within an issuer
+    are comonotone (one uniform per issuer through each leg's Beta)."""
+    if np.ndim(gauss) == 0:
+        L = rng.standard_normal(n_paths) * float(gauss)
+    else:
+        L = rng.choice(np.asarray(gauss, dtype=float), size=n_paths, replace=True)
+    for issuer, issuer_legs in legs.items():
+        p = 1.0 - np.exp(-lam_P[issuer] * h)
+        hit = rng.random(n_paths) < p
+        k = int(hit.sum())
+        if k == 0:
+            continue
+        U = rng.random(k)
+        jtd = np.zeros(k)
+        for c, s, (a, b) in issuer_legs:
+            jtd += c + s * beta_dist.ppf(U, a, b)
+        L[hit] += jtd
+    return L
+
+
+def historical_gaussian(w, B, X, Omega, h_days, rng=RNG):
+    """Gaussian layer by historical simulation: overlapping h-day sums of past factor
+    returns on today's exposures, plus normal idiosyncratic draws. Losses positive."""
+    x = B.T @ w
+    n = X.shape[0] - h_days + 1
+    blocks = np.array([X[t:t + h_days].sum(axis=0) for t in range(n)])
+    idio_sd = np.sqrt(float(w @ Omega @ w) * h_days)
+    return -(blocks @ x + rng.standard_normal(n) * idio_sd)
+
+
+def var_es(L, alpha=0.99):
+    """VaR, ES and the Monte Carlo standard error of ES (Section 7-B.8)."""
+    q = float(np.quantile(L, alpha))
+    tail = L[L >= q]
+    return q, float(tail.mean()), float(tail.std(ddof=1) / np.sqrt(len(tail)))
+
+
+def stress(w, B, factor_names, scenario, legs):
+    """Two columns, never pre-added: factor loss and jump loss (mean recoveries)."""
+    shock = np.zeros(len(factor_names))
+    for f, v in scenario["shocks"].items():
+        shock[factor_names.index(f)] = v
+    gauss_loss = -float((B.T @ w) @ shock)
+    mj = mean_jtd(legs)
+    jump_loss = sum(mj[i] for i in scenario.get("defaults", []) if i in mj)
+    return {"gaussian": gauss_loss, "jump": jump_loss}
+
+
+def kupiec_pof(x, n, p=0.01):
+    """Kupiec (1995) proportion-of-failures LR and its chi-squared(1) p-value."""
+    lr = -2.0 * (xlogy(n - x, 1 - p) + xlogy(x, p)
+                 - xlogy(n - x, 1 - x / n) - xlogy(x, x / n))
+    return float(lr), float(chi2.sf(lr, 1))
+
+
+def christoffersen_ind(hits):
+    """Christoffersen (1998) independence LR on a 0/1 exception sequence."""
+    h = np.asarray(hits, dtype=int)
+    a, b = h[:-1], h[1:]
+    n00 = int(np.sum((a == 0) & (b == 0)))
+    n01 = int(np.sum((a == 0) & (b == 1)))
+    n10 = int(np.sum((a == 1) & (b == 0)))
+    n11 = int(np.sum((a == 1) & (b == 1)))
+    pi = (n01 + n11) / (n00 + n01 + n10 + n11)
+    p01 = n01 / (n00 + n01) if n00 + n01 else 0.0
+    p11 = n11 / (n10 + n11) if n10 + n11 else 0.0
+    l0 = xlogy(n00 + n10, 1 - pi) + xlogy(n01 + n11, pi)
+    l1 = (xlogy(n00, 1 - p01) + xlogy(n01, p01)
+          + xlogy(n10, 1 - p11) + xlogy(n11, p11))
+    lr = -2.0 * (l0 - l1)
+    return float(lr), float(chi2.sf(lr, 1)), (n00, n01, n10, n11)
+
+
+def limit_sheet(exposures, limits):
+    """limits: line -> (soft, hard) on magnitudes. Hard breaches sort first."""
+    rows = []
+    for line, (soft, hard) in limits.items():
+        if line not in exposures:
+            raise RiskModelError(f"limit line {line} has no exposure")
+        v = exposures[line]
+        status = "HARD" if abs(v) > hard else ("SOFT" if abs(v) > soft else "ok")
+        rows.append((line, v, soft, hard, status))
+    rank = {"HARD": 0, "SOFT": 1, "ok": 2}
+    return sorted(rows, key=lambda r: rank[r[4]])
+
+
+# ---- Self-checks: the chapter's numbers -------------------------------------------
+# 8B.1: two bonds, $60k and $80k daily vol, rho = 0.6 -> about $125.5k.
+cov = np.array([[60.0 ** 2, 0.6 * 60 * 80], [0.6 * 60 * 80, 80.0 ** 2]])
+sig, _, _ = gaussian_risk(np.ones(2), np.eye(2), cov, np.zeros((2, 2)))
+assert abs(sig - 125.54) < 0.01
+
+# 8B.4: hysteresis keeps a bond at 82 in the equity regime once it is there.
+assert price_bucket(0.82, in_equity_regime=True) == "lt80"
+assert price_bucket(0.82, in_equity_regime=False) == "80-90"
+
+# 8B.5: Halvorsen JTD at 78 with mean recovery 15%; Brambleworth net JTD.
+halv = jtd_overlay([{"issuer": "HALV", "kind": "bond", "notional": 12.0,
+                     "price": 0.78, "rec": (0.6, 3.4)}])
+assert abs(mean_jtd(halv)["HALV"] - 7.56) < 1e-9
+bramble = jtd_overlay([
+    {"issuer": "BRAM", "kind": "bond", "notional": 8.0, "price": 0.95, "rec": (0.87, 1.30)},
+    {"issuer": "BRAM", "kind": "loan", "notional": 5.0, "price": 0.98, "rec": (0.93, 0.40)},
+    {"issuer": "BRAM", "kind": "cds_bought", "notional": 6.0, "rec": (0.87, 1.30)},
+])
+assert abs(mean_jtd(bramble)["BRAM"] - 2.20) < 0.01
+
+# 8B.6: one concentrated jump. Ten-day VaR is far above sqrt(10) x one-day VaR.
+jump = {"J": [(20.0, 0.0, (1.0, 1.0))]}          # fixed $20mm JTD (slope zero)
+lam = {"J": -np.log(1 - 0.0015) * 252}           # 0.15% a day under P
+v1, e1, se1 = var_es(simulate_losses(1.0, jump, lam, 1 / 252, 400_000))
+v10, e10, se10 = var_es(simulate_losses(np.sqrt(10), jump, lam, 10 / 252, 400_000))
+assert v10 > 2.0 * np.sqrt(10) * v1 and e10 > np.sqrt(10) * e1 * 1.1
+
+# 8B.8: seven exceptions in 250 days, in clusters of 3, 2, 1, 1.
+lr, pval = kupiec_pof(7, 250, 0.01)
+assert abs(lr - 5.497) < 0.01 and pval < 0.05
+hits = np.zeros(250, dtype=int)
+hits[[50, 51, 52, 57, 58, 120, 200]] = 1
+lri, _, counts = christoffersen_ind(hits)
+assert counts == (238, 4, 4, 3) and abs(lri - 13.49) < 0.01
+
+# 8B.10 and the guards: collinear factors and mismatched snaps both refuse.
+rng = np.random.default_rng(7)
+z = rng.standard_normal((500, 1))
+try:
+    factor_cov(np.hstack([z, z * (1 + 1e-9)]), delta=0.0)
+    raise AssertionError("condition-number alarm did not fire")
+except RiskModelError:
+    pass
+try:
+    check_snaps({"bonds": SNAP, "cdx": ("16:00", "America/New_York")})
+    raise AssertionError("snap guard did not fire")
+except RiskModelError:
+    pass
+
+# 8B.9: the cold open's three breaches.
+sheet = limit_sheet({"JTD_HALV": 7.56, "DTS_B_IND": 1.61, "ES_1D": 2.7},
+                    {"JTD_HALV": (7.0, 9.0), "DTS_B_IND": (1.2, 1.5), "ES_1D": (2.5, 3.0)})
+assert [r[4] for r in sheet] == ["HARD", "SOFT", "SOFT"]
+print("risk_model.py: all chapter checks pass")
+```
+
+
+## F.8-C: Chapter 8-C: The Morning Explain: P&L Attribution That Foots, From One Bond to the Book to the Signal {#code-8c}
+
+Listings from `08_ch08c_the_morning_explain_pnl_attribution.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
+
+
+### Listing 8-C.1: Coupon accrual in dollars: a contractual fact {#code-8c-1}
+
+```python
+# pnl_explain.py (Chapter 8-C): the morning explain. Named lines per position and hedge leg,
+# the foot against official P&L with a tolerance, signal attribution with issuer netting and a
+# stated cross-term rule, flags for stale marks and cash with no trade, and a dispute file.
+# Money in dollars; yields and spreads in bp; accrual day counts named. In production the
+# sensitivities come from risk_model.py (Chapter 8-B) and issuer IDO returns from ido_engine
+# (Section 8.9); here they are arguments, so the module runs alone. Test numbers are illustrative.
+from __future__ import annotations
+
+from dataclasses import dataclass
+from itertools import combinations
+from math import comb, factorial
+
+import numpy as np
+
+PROVENANCE = ("traded", "composite", "evaluated", "model")
+SOURCES = {"custodian", "model", "risk_model", "issuer_curve", "clearing", "exchange",
+           "treasury", "blotter", "market", "product_control"}
+PLUG_NAMES = {"other", "plug", "adjustment", "misc", "market"}
+
+
+@dataclass(frozen=True)
+class Line:
+    name: str
+    value: float            # dollars
+    source: str             # one of SOURCES
+    evidence: str = ""      # required when source == "product_control"
+
+
+def accrual(face, coupon, days, basis=360.0, defaulted=False):
+    """Coupon accrual in dollars: a contractual fact. Zero once the bond trades flat."""
+    return 0.0 if defaulted else face * coupon * days / basis
+
+
+def pull_to_par_linear(face, price, years_to_maturity, days, basis=360.0):
+    """First-order pull-to-par in dollars; Chapter 4-B gives the constant-yield version."""
+    return face / 100.0 * (100.0 - price) / years_to_maturity * days / basis
+
+
+def bond_lines(face, coupon, price0, price1, days, theta, dv01_kr, dy_kr, cs01, beta,
+               ds_factor, ds_issuer, convexity, defaulted=False):
+    """Lines for one bond and its residual u. theta in price points per year; dv01_kr in $ per bp
+    gained when each key rate falls; dy_kr, ds_factor, ds_issuer in bp. ds_issuer comes from the
+    issuer's fitted curve, never from this bond's own mark."""
+    pred = float(np.asarray(beta, float) @ np.asarray(ds_factor, float))
+    dy_tot = float(np.mean(dy_kr)) + ds_issuer
+    lines = [
+        Line("accrual", accrual(face, coupon, days, defaulted=defaulted), "custodian"),
+        Line("pull_to_par", face / 100.0 * theta * days / 360.0, "model"),
+        Line("rates", -float(np.dot(dv01_kr, dy_kr)), "risk_model"),
+        Line("spread_factor", -cs01 * pred, "risk_model"),
+        Line("idiosyncratic", -cs01 * (ds_issuer - pred), "issuer_curve"),
+        Line("convexity", 0.5 * face * price0 / 100.0 * convexity * (dy_tot / 1e4) ** 2, "model"),
+    ]
+    official = face / 100.0 * (price1 - price0) + lines[0].value
+    return lines, official, official - sum(l.value for l in lines)
+
+
+def cdx_protection_lines(notional, coupon_bp, factor_dprice, official_dprice, days,
+                         mark_asof, today):
+    """Long protection on an index (short risk). Prices in points; coupon on ACT/360.
+    Stale signature: no official price change on a day the factor moved, from an old mark."""
+    coupon = Line("cdx_coupon", -notional * coupon_bp / 1e4 * days / 360.0, "clearing")
+    price = Line("cdx_price_factor", -notional * factor_dprice / 100.0, "risk_model")
+    official = -notional * official_dprice / 100.0 + coupon.value
+    u = official - coupon.value - price.value
+    stale = official_dprice == 0.0 and factor_dprice != 0.0 and mark_asof < today
+    return [coupon, price], official, u, stale
+
+
+def series_basis_line(notional_long_risk, p_new_at_roll, p_old_at_roll):
+    """Roll day: the change of instrument, from the roll quote, so a generic ticker's jump is named."""
+    return Line("series_basis", notional_long_risk * (p_new_at_roll - p_old_at_roll) / 100.0,
+                "blotter")
+
+
+def day_one(side, composite_at_trade, fill, face):
+    """Markout at horizon zero against the composite at the trade's minute; side +1 buy, -1 sell."""
+    return Line("day_one", side * (composite_at_trade - fill) * face / 100.0, "blotter")
+
+
+def fx_lines(face_local, p0, p1, x0, x1):
+    """Local move at yesterday's rate, translation on yesterday's value, and the cross-term."""
+    move = face_local * (p1 - p0) / 100.0
+    return [Line("fx_local", move * x0, "risk_model"),
+            Line("fx_translation", face_local * p0 / 100.0 * (x1 - x0), "market"),
+            Line("fx_cross", move * (x1 - x0), "model")]
+
+
+def phantom(dv01_bond, dy_at_hedge_snap, dy_at_bond_snap):
+    """Fake P&L of a DV01-matched pair marked at two times (Section 3B.1); bp in, dollars out."""
+    return -dv01_bond * (dy_at_bond_snap - dy_at_hedge_snap)
+
+
+def tolerance(nav, es_1d, bp_of_nav=1.0, frac_of_es=0.05):
+    return min(bp_of_nav * 1e-4 * nav, frac_of_es * es_1d)
+
+
+def foot(official, lines, nav, es_1d):
+    """official = sum(lines) + U. Refuses plugs; flags breaches and suspiciously perfect zeros."""
+    for l in lines:
+        if l.name.strip().lower() in PLUG_NAMES or l.source not in SOURCES:
+            raise ValueError(f"line '{l.name}' is a plug: the unexplained is not adjustable")
+        if l.source == "product_control" and not l.evidence:
+            raise ValueError(f"product-control line '{l.name}' needs evidence")
+    U = official - sum(l.value for l in lines)
+    tol = tolerance(nav, es_1d)
+    return {"U": U, "tol": tol, "breach": abs(U) > tol, "suspicious_zero": abs(U) < 0.005}
+
+
+def true_up_line(face, composite, evaluated):
+    return Line("mark_change_evaluated_vs_composite", (evaluated - composite) * face / 100.0,
+                "product_control", evidence="month-end evaluated price file")
+
+
+def dispute_file(position, face, composite, evaluated, evidence):
+    if not evidence:
+        raise ValueError("a dispute without evidence is an opinion")
+    return {"position": position, "composite": composite, "evaluated": evaluated,
+            "line": true_up_line(face, composite, evaluated).value, "evidence": list(evidence)}
+
+
+def classify_cash(events, expected):
+    """Cash that matches no coupon, settlement, margin call or fee is flagged, never booked."""
+    return [{"position": pid, "amount": amt, "flag": "cash_no_trade"} for pid, amt in events
+            if not any(abs(amt - e) < 0.01 for e in expected.get(pid, []))]
+
+
+def corporate_action(old_carrying, new_allocations):
+    """An exchange books the new instruments at the old carrying value: zero P&L."""
+    if abs(sum(new_allocations.values()) - old_carrying) > 0.01:
+        raise ValueError("exchange allocations must sum to the old carrying value")
+    return Line("corporate_action", 0.0, "custodian")
+
+
+def sleeve_ido_pnl(sleeves, ido_by_issuer):
+    """Linear, issuer-netted IDO P&L per signal: {signal: {issuer: DTS-weighted $}}."""
+    return {s: sum(x * ido_by_issuer[j] for j, x in pos.items()) for s, pos in sleeves.items()}
+
+
+def shapley(signals, v):
+    """Shapley split of v: frozenset of signals -> P&L of the book rebuilt from them."""
+    n, phi = len(signals), {}
+    for s in signals:
+        others = [t for t in signals if t != s]
+        phi[s] = sum(factorial(k) * factorial(n - k - 1) / factorial(n)
+                     * (v[frozenset(S) | {s}] - v[frozenset(S)])
+                     for k in range(n) for S in combinations(others, k))
+    return phi
+
+
+def sequential(order, v):
+    out, S = {}, frozenset()
+    for s in order:
+        out[s] = v[S | {s}] - v[S]
+        S = S | {s}
+    return out
+
+
+def binomial_tail(n, k, p):
+    return sum(comb(n, j) * p ** j * (1 - p) ** (n - j) for j in range(k, n + 1))
+
+
+# Tests: the chapter's numbers.
+assert abs(accrual(10e6, 0.06, 1) - 1666.67) < 0.01 and accrual(10e6, 0.06, 1, defaulted=True) == 0.0
+assert abs(pull_to_par_linear(10e6, 88.0, 5.0, 1) - 666.67) < 0.01
+assert abs(accrual(130e6, 0.07, 3) - 75_800) < 50
+lines, off, u = bond_lines(10e6, 0.06, 88.0, 87.47, 1, 1.909, [1200, 2400], [1.0, 1.0], 3600,
+                           [1.3], [10.0], 14.0, 20.0)
+assert abs(sum(l.value for l in lines) + u - off) < 1e-6 and abs(u) < 500
+cdx, off_c, u_c, stale = cdx_protection_lines(40e6, 500, -0.275, 0.0, 3, "2026-09-18", "2026-09-21")
+assert abs(cdx[1].value - 110_000) < 1e-6 and abs(u_c + cdx[1].value) < 1e-6 and stale
+assert abs(series_basis_line(-40e6, 104.1, 104.8).value - 280_000) < 1e-6
+assert abs(day_one(+1, 97.32, 97.25, 5e6).value - 3_500) < 1e-6
+assert abs(sum(l.value for l in fx_lines(10e6, 95.0, 95.5, 1.08, 1.075)) - 6_250) < 1e-6
+assert abs(phantom(5_000, 0.0, -4.0) - 20_000) < 1e-9
+monday = [Line("accrual", 75_800, "custodian"), Line("pull_to_par", 12_400, "model"),
+          Line("rates_bonds", -52_000, "risk_model"), Line("rates_futures", 40_000, "exchange"),
+          Line("spread_factor", -338_000, "risk_model"), Line("cdx_price_factor", 110_000, "risk_model"),
+          Line("cdx_coupon", -16_700, "clearing"), Line("idiosyncratic", -96_300, "issuer_curve"),
+          Line("convexity", 300, "model"), Line("financing", -15_000, "treasury"),
+          Line("fees", -4_000, "blotter"), Line("day_one", 3_500, "blotter")]
+assert abs(sum(l.value for l in monday) + 280_000) < 1e-6
+first = foot(-399_000, monday, nav=100e6, es_1d=1.5e6)
+assert first["breach"] and abs(first["U"] + 119_000) < 1e-6 and abs(first["tol"] - 10_000) < 1e-6
+fixed = foot(-399_000, monday + [Line("mark_correction_cdx_old_series", -110_000, "product_control",
+                                      evidence="dealer quotes 09:40; stale-signature flag")], 100e6, 1.5e6)
+assert not fixed["breach"] and abs(fixed["U"] + 9_000) < 1e-6
+try:
+    foot(-399_000, monday + [Line("Other", -119_000, "model")], 100e6, 1.5e6)
+    raise AssertionError("the plug was accepted")
+except ValueError:
+    pass
+d = dispute_file("Corriveau 9.5% 2030", 8e6, 84.50, 81.50, ["TRACE 21 Oct 84.25 x 2mm", "runs 30 Oct"])
+assert abs(d["line"] + 240_000) < 1e-6
+assert classify_cash([("REVLON_2016_TL", 10e6)], {"REVLON_2016_TL": [150_000.0]})[0]["flag"] == "cash_no_trade"
+assert corporate_action(6.0e6, {"takeback_notes": 2.5e6, "new_equity": 3.5e6}).value == 0.0
+pnl = sleeve_ido_pnl({"value": {"HALV": 10e6}, "momentum": {"HALV": -6e6}}, {"HALV": -0.02})
+assert abs(sum(pnl.values()) - 4e6 * -0.02) < 1e-6
+v = {frozenset(): 0.0, frozenset({"mom"}): 3.0, frozenset({"val"}): 2.0, frozenset({"mom", "val"}): 2.4}
+phi = shapley(["mom", "val"], v)
+assert abs(phi["mom"] - 1.7) < 1e-9 and abs(phi["val"] - 0.7) < 1e-9
+assert abs(sequential(["mom", "val"], v)["val"] + 0.6) < 1e-9
+assert 3.0e-5 < binomial_tail(12, 7, 6 / 63) < 4.2e-5
+
+# A seeded synthetic quarter for the ledger (Section 8C.9): noise inside tolerance, spikes on six days.
+rng = np.random.default_rng(8)
+U_q = rng.normal(0.0, 3_000.0, 63)
+special = [0, 20, 21, 22, 41, 62]                      # roll week and three month-ends, by index
+U_q[special] += -40_000.0
+breach = np.abs(U_q) > 10_000.0
+assert breach[special].all() and breach.sum() - breach[special].sum() <= 2
+```
+
+
+## F.12-C: Chapter 12-C: Plan Value Is a Negotiated Random Variable: Valuation Fights, the DIP, Roll-Ups, Exit Financing and the Fulcrum Under Uncertainty {#code-12c}
+
+Listings from `12_ch12c_plan_valuation_dip_and_exit_as_derivatives.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
+
+
+### Listing 12-C.1: plan_value_engine.py (Chapter 12-C) {#code-12c-1}
+
+```python
+"""plan_value_engine.py (Chapter 12-C).
+
+Plan value as a random variable: a lognormal mixture over confirmed value, a silo
+waterfall per draw, fulcrum probabilities and recovery distributions by class, the
+section 1129 flags, the DIP package, the take-back transfer and the NOL line.
+Money in $mm, rates as annual decimals, recoveries as fractions of allowed claim.
+Every distribution here is a P object: a forecast of a judge, not a price (Law 4).
+"""
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+
+import numpy as np
+
+from lmt_engine import waterfall_clearing                 # Chapter 13, Listing 13.1
+from restructuring_state_machine import (                 # Chapter 12-B
+    Silo, silo_waterfall, rollup_transfer, cramdown_price)
+
+rng = np.random.default_rng(1229)
+
+
+@dataclass
+class PlanCase:
+    classes: dict[str, float]                  # allowed claim by class, after any roll-up
+    silos: list[tuple[float, float, list[list[str]]]]  # (fixed value, share of remainder, lien tiers)
+    fixed_carve: float                         # value carved out before shares (e.g. ABL collateral)
+    pool_classes: list[str]                    # classes sharing the unsecured pool
+    admin: float                               # administrative and priority claims, paid first in cash
+    gift: tuple[str, str, float] | None = None # (from class, to pool, amount): a top-up the senior
+                                               # funds, net of collateral surplus it already lets through
+    floors: dict[str, float | None] = field(default_factory=dict)  # best-interests floors
+
+
+def _class_recoveries(V: float, case: PlanCase) -> dict[str, float]:
+    """One waterfall at plan value V: silos, cash wall, pool, settlement gift."""
+    rem = max(V - case.fixed_carve, 0.0)
+    got = dict.fromkeys(case.classes, 0.0)
+    unencumbered, surplus = 0.0, 0.0
+    src = case.gift[0] if case.gift is not None else None
+    for fixed, share, tiers in case.silos:
+        left = fixed + share * rem
+        if not tiers:                          # an unencumbered silo
+            unencumbered += left
+            continue
+        for tier in tiers:
+            owed = {k: case.classes[k] - got[k] for k in tier}
+            tot = sum(owed.values())
+            paid = min(left, tot)
+            for k, o in owed.items():
+                got[k] += paid * o / tot if tot > 0 else 0.0
+            left -= paid
+        unencumbered += max(left, 0.0)         # equity in collateral returns to the estate
+        if src is not None and any(src in t for t in tiers):
+            surplus += max(left, 0.0)          # value the gift's source is already releasing
+    if case.gift is not None:                  # settlement: senior tops up the pool
+        amt = case.gift[2]
+        moved = min(max(amt - surplus, 0.0), got[src])   # no gift once the senior is whole
+        got[src] -= moved
+        unencumbered += moved
+    pool = max(unencumbered - case.admin, 0.0) # section 1129(a)(9): admin is paid first
+    owed = {k: case.classes[k] - got[k] for k in case.pool_classes}
+    tot = sum(owed.values())
+    for k, o in owed.items():
+        got[k] += min(pool, tot) * o / tot if tot > 0 else 0.0
+    return {k: got[k] / case.classes[k] for k in case.classes}
+
+
+def draw_plan_values(medians, sigmas, weights, n=200_000, rng=rng) -> np.ndarray:
+    """Lognormal mixture: the judge picks expert i with probability weights[i]."""
+    w = np.asarray(weights, float)
+    if np.any(w < 0) or abs(w.sum() - 1.0) > 1e-9:
+        raise ValueError("expert weights must be non-negative and sum to one")
+    pick = rng.choice(len(w), size=n, p=w)
+    mu = np.log(np.asarray(medians, float))[pick]
+    sd = np.asarray(sigmas, float)[pick]
+    return np.maximum(np.exp(mu + sd * rng.standard_normal(n)), 0.0)  # guard for swapped-in normals
+
+
+def recovery_paths(V: np.ndarray, case: PlanCase) -> dict[str, np.ndarray]:
+    out = {k: np.empty(len(V)) for k in case.classes}
+    for i, v in enumerate(V):
+        for k, r in _class_recoveries(float(v), case).items():
+            out[k][i] = r
+    return out
+
+
+def fulcrum_probabilities(paths: dict[str, np.ndarray], order: list[str]) -> dict[str, float]:
+    """Fulcrum = most senior class in `order` not paid in full (strict: whole means R >= 1)."""
+    n = len(next(iter(paths.values())))
+    first_short = np.full(n, len(order))       # len(order) means old equity is the fulcrum
+    for j in reversed(range(len(order))):
+        first_short = np.where(paths[order[j]] < 1.0 - 1e-12, j, first_short)
+    probs = {c: float(np.mean(first_short == j)) for j, c in enumerate(order)}
+    probs["old_equity"] = float(np.mean(first_short == len(order)))
+    return probs
+
+
+def recovery_distribution(paths, floors) -> dict[str, dict]:
+    rep = {}
+    for k, r in paths.items():
+        f = floors.get(k)
+        rep[k] = dict(mean=float(r.mean()), median=float(np.median(r)),
+                      p5=float(np.percentile(r, 5)), p95=float(np.percentile(r, 95)),
+                      below_floor=None if f is None else float(np.mean(r < f - 1e-12)))
+    return rep
+
+
+def best_interests_flags(rep) -> dict[str, bool | None]:
+    """True = no path breaches; None = floor not supplied. Never pass on a missing floor."""
+    return {k: (None if d["below_floor"] is None else d["below_floor"] == 0.0) for k, d in rep.items()}
+
+
+def cash_wall_flag(V: np.ndarray, case: PlanCase, exit_cash: float | None) -> float | None:
+    """Fraction of paths where unencumbered value plus exit cash misses the admin claims."""
+    if exit_cash is None:
+        return None
+    rem = np.maximum(V - case.fixed_carve, 0.0)
+    unenc = sum(fixed + share * rem for fixed, share, tiers in case.silos if not tiers)
+    return float(np.mean(unenc + exit_cash < case.admin))
+
+
+def feasibility_proxy(fcf_downside: list[float] | None, exit_debt_service: float) -> bool | None:
+    if not fcf_downside:
+        return None
+    return min(fcf_downside) >= exit_debt_service
+
+
+def dip_package_value(M, kappa, W, F, base, margin, upfront, exit_fee, tenor, group_share_after):
+    """Coupon, fees and the roll-up for the lender group (section 12C.4). Raises if W < kappa*M."""
+    if kappa * M > W:
+        raise ValueError("roll-up exceeds value the class receives: transfer comes from outside")
+    coupon = (base + margin) * M * tenor
+    fees = (upfront + exit_fee) * M
+    gross = kappa * M * (1.0 - min(W / F, 1.0))            # rolled claims promoted to par
+    loss_pts = rollup_transfer(W, F, M, kappa)              # 12-B closed form, per remaining claim
+    remaining = F - kappa * M
+    assert abs(gross - loss_pts * remaining) < 1e-6, "roll-up must conserve value"
+    net = gross - loss_pts * group_share_after               # the group pays part of its own bill
+    return dict(coupon=coupon, fees=fees, rollup_gross=gross, rollup_net=net,
+                all_in_annual=(coupon + fees) / (M * tenor))
+
+
+def takeback_note_transfer(face, coupon, market_yield, years):
+    exact = face * (1.0 - cramdown_price(coupon, market_yield, years))
+    a = (1 - (1 + market_yield) ** -years) / market_yield
+    dur_mod = sum(t * (coupon if t < years else 1 + coupon) / (1 + market_yield) ** t
+                  for t in range(1, years + 1)) / ((1 + market_yield) * (1 - (market_yield - coupon) * a))
+    first_order = face * dur_mod * (market_yield - coupon)
+    return dict(exact=exact, first_order=first_order)
+
+
+def nol_value(nol, cod, rate_lt, equity, chi, income, r, branch="l6", years=40, cap=0.8):
+    """Attribute reduction first (section 108(b)), then the section 382 branch."""
+    left = max(nol - cod, 0.0)
+    limit = {"none": np.inf, "l6": rate_lt * equity, "l5": np.inf}[branch]
+    pv = 0.0
+    for t in range(1, years + 1):
+        use = min(limit, left, cap * income)
+        pv += chi * use / (1 + r) ** t
+        left -= use
+        if left <= 0:
+            break
+    return pv
+
+
+def halvorsen_case() -> PlanCase:
+    """Section 12B.9 after the roll-up and the day-71 settlement."""
+    cls = {"ABL": 150.0, "DIP": 300.0, "1L": 1250.0, "UNS": 1020.0}
+    silos = [(250.0, 0.0, [["ABL"], ["1L"]]),             # ABL collateral, fixed at 250
+             (0.0, 32 / 35, [["DIP"], ["1L"]]),           # term collateral, primed by the DIP
+             (0.0, 3 / 35, [])]                           # unencumbered
+    return PlanCase(classes=cls, silos=silos, fixed_carve=250.0, pool_classes=["UNS"],
+                    admin=75.0, gift=("1L", "pool", 20.0),
+                    floors={"ABL": 1.0, "DIP": 1.0, "1L": 0.216, "UNS": 0.0})
+
+
+def _self_test() -> str:
+    case = halvorsen_case()
+    r = _class_recoveries(1300.0, case)
+    assert abs(r["1L"] - 0.592) < 1e-3 and abs(r["UNS"] - 35 / 1020) < 1e-3, r
+    no_gift = PlanCase(**{**case.__dict__, "gift": None})
+    assert abs(_class_recoveries(1300.0, no_gift)["1L"] - 0.608) < 1e-3     # 12-B before settlement
+    # agreement with 12-B's silo_waterfall when nothing is waived or gifted
+    simple = PlanCase(classes={"A": 100.0, "B": 200.0}, silos=[(0.0, 1.0, [["A"]]), (0.0, 0.0, [])],
+                      fixed_carve=0.0, pool_classes=["A", "B"], admin=0.0)
+    ref = silo_waterfall({"A": 100.0, "B": 200.0}, [Silo(value=150.0, tiers=[["A"]])], 0.0)
+    mine = _class_recoveries(150.0, simple)
+    assert all(abs(mine[k] - ref[k]) < 1e-9 for k in ref), (mine, ref)
+    # agreement with Chapter 13's waterfall_clearing on a one-entity, two-rank stack
+    pay, _ = waterfall_clearing({"co": {"value": 150.0, "parent": None}},
+                                [dict(id="A", creditor="ext", debtor="co", face=100.0, rank=1),
+                                 dict(id="B", creditor="ext", debtor="co", face=200.0, rank=2)])
+    assert abs(pay["A"] / 100 - mine["A"]) < 1e-9 and abs(pay["B"] / 200 - 0.25) < 1e-9
+    # roll-up conservation and the 4.2-point transfer
+    pkg = dip_package_value(150, 1.0, 910, 1400, 0.035, 0.08, 0.03, 0.02, 0.5, 662)
+    assert abs(pkg["rollup_gross"] - 52.5) < 1e-6 and abs(pkg["rollup_net"] - 24.696) < 0.01
+    tb = takeback_note_transfer(350.0, 0.08, 0.10, 5)
+    assert abs(tb["exact"] - 26.54) < 0.05
+    # the mixture: fulcrum probabilities near 0.83 / 0.17 by Monte Carlo
+    V = draw_plan_values([1300, 1900], [0.10, 0.12], [0.7, 0.3], n=100_000)
+    paths = recovery_paths(V, case)
+    pf = fulcrum_probabilities(paths, ["ABL", "DIP", "1L", "UNS"])
+    assert abs(pf["1L"] - 0.828) < 0.01 and abs(pf["UNS"] - 0.172) < 0.01, pf
+    flags = best_interests_flags(recovery_distribution(paths, {**case.floors, "UNS": None}))
+    assert flags["UNS"] is None, "a missing floor must not pass"
+    assert nol_value(600, 1495, 0.035, 390, 0.21, 87, 0.10) == 0.0      # attribute reduction first
+    return "plan_value_engine: all checks passed"
+
+
+if __name__ == "__main__":
+    print(_self_test())
+```
+
 
 <!-- STATUS: COMPLETE -->
