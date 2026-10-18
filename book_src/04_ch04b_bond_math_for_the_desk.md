@@ -223,11 +223,23 @@ where $z \pm h$ is the zero curve shifted in parallel by $\pm h$ and every optio
 
 ### Spread duration, and the two routes to zero
 
-$D^{\text{spr}} = -\frac{1}{P}\,\partial P/\partial s$ for whichever spread $s$ the desk uses (Z, OAS, or a hazard-based spread). For a fixed-rate bullet priced at $\sum_k \text{CF}_k e^{-(z(t_k)+Z)t_k}$, the curve and the spread enter only through $z + Z$, so a parallel curve bump and a Z bump are the same bump and $D^{\text{spr}} = D^{\text{eff}}$. Three instruments break the equality:
+$D^{\text{spr}} = -\frac{1}{P}\,\partial P/\partial s$ for whichever spread $s$ the desk uses (Z, OAS, or a hazard-based spread). For a fixed-rate bullet priced at $\sum_k \text{CF}_k e^{-(z(t_k)+Z)t_k}$, the curve and the spread enter only through $z + Z$, so a parallel curve bump and a Z bump are the same bump and $D^{\text{spr}} = D^{\text{eff}}$. Three instruments break the equality, and the desk met all three on the same whiteboard.
 
-- **Floaters and loans.** The coupon resets with the curve, so rate duration is the time to the next reset and spread duration is roughly the remaining life (built in §21.1).
-- **Callables.** OAS duration, the `oasd` field of §19.2, is $-\frac1P\,\partial P/\partial\,\text{OAS}$ on the lattice; whether it equals $D^{\text{eff}}$ depends on the rate model (§4B.7).
-- **Distressed bonds.** Under recovery of face, as $\lambda \to \infty$ the survival leg vanishes and the price tends to $100R\,\lambda/(\lambda + r)$, whose derivative in $r$ is $-100R\,\lambda/(\lambda + r)^2 \to 0$. The bond's rate duration goes to zero because the recovery is paid at default whatever the maturity. A modified duration computed from the 31% yield of §4B.2's bond at 40 still says about 3.3. This is the first of the two routes to zero duration in §8.3; the second, the negative rate–spread correlation, is the empirical duration of §8.2, which this chapter does not rebuild.
+Later that Tuesday, with the replay's two red lines still on the screen, Kaz went to the whiteboard to show Theo where spread duration and rate duration part company, and drew three bonds. Theo, without being asked, wrote a clause beside each one.
+
+The first was a floater. "The coupon is the curve plus a fixed margin," Kaz said, "so when the curve moves, the next coupon moves with it. The rate risk lives only until the next reset. The margin is locked for the whole life." Rate duration is the time to the next reset; spread duration is roughly the remaining life (built in §21.1). Theo wrote *Interest Period; Applicable Margin* beside it: the reset clause, which in a leveraged loan is three definitions and a benchmark-replacement section that nobody read until LIBOR died.
+
+The second was a callable. Kaz drew a small tree and stopped. "Here the spread duration is OAS duration, $-\frac1P\,\partial P/\partial\,\text{OAS}$ on the lattice, the `oasd` field of §19.2. Whether it equals the effective duration depends on the rate model, which is a problem for later." Theo wrote *Article III, Redemption*: the section that hands the issuer the option, with its schedule of call prices and, at the bottom, the make-whole (§4B.7).
+
+The third was a bond at 40. Kaz wrote the recovery-of-face price from §4B.2 and let the default intensity run off to infinity. "Under recovery of face, as $\lambda \to \infty$ the survival leg vanishes and the price tends to $100R\,\lambda/(\lambda + r)$. Differentiate in $r$ and you get $-100R\,\lambda/(\lambda + r)^2$, which goes to zero. The rate duration dies, because the recovery is paid at default whatever the maturity says."
+
+"Acceleration," said Theo, and wrote it: *Section 6.02, Acceleration*, the number it carried in most of the indentures he had marked up. "On an Event of Default the whole principal is due now. The maturity date stops being a date and becomes a suggestion."
+
+Kaz looked back at the screen. "A modified duration computed from the 31% yield of §4B.2's bond at 40 still says about 3.3."
+
+"Because the yield formula believes the coupon schedule," said Theo. "The indenture has a section that says it might not happen."
+
+That is the first of the two routes to zero duration in §8.3. The second, the negative correlation between rates and spreads, is the empirical duration of §8.2, which this chapter does not rebuild; the replay's hedge was already demonstrating it on the second red line, and §4B.8 grades it. The first route has a date on it, too, and the desk's next replay was built around that date.
 
 ### Key-rate durations
 

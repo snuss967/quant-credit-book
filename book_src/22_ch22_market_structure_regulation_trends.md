@@ -8,7 +8,7 @@ Theo did what six years of restructuring work had trained him to do with a numbe
 
 "Nothing moved in the features," said Kaz, scrolling. "Spread vol, inventory, the win curve. All flat. I assumed regulation was a constant." They pulled up the quoter's config history, looking for the usual suspects: a stale parameter file, a percent typed where a decimal belongs, a deploy someone pushed on Friday afternoon and forgot to mention. "If it's a bug, it's a tidy one. The last config change was nine days ago."
 
-At 3:43 the RFQ closed. The desk lost. The client sold to someone else at 98.75, a quarter of a cent above the desk's bid, and the venue showed the cover, the second-best price, at 98.70 *(illustrative)*. Theo went back to the previous Monday's ticket. The winner then had paid 99.125. Every dealer in the competition had moved by roughly the same three-eighths, at the same hour, on the same bond, for no reason anybody's features could see.
+At 3:43 the RFQ closed. The desk lost. The client sold to someone else at 98.75, two and a half cents above the desk's bid, and the venue showed the desk's 98.725 as the cover, the second-best price *(illustrative)*. Theo went back to the previous Monday's ticket. The winner then had paid 99.125. Every dealer in the competition had moved by roughly the same three-eighths, at the same hour, on the same bond, for no reason anybody's features could see.
 
 "Four quoters with the same bug," Theo said. "On the same afternoon."
 

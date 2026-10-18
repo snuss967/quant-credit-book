@@ -15,7 +15,7 @@
 - [x] 13. [26.6, arithmetic of chains] MATH-GENTLY #5 + FULL-DERIVATION-MOVE of pass^k proof. — Done: closing-conditions box; proof moved to Full Derivation subsection.
 - [x] 14. [26.6, verifiers] MATH-GENTLY #6 odds form + FULL-DERIVATION-MOVE retries/Lazarus. — Done: odds-form checker box (owner Ch 1); retries derivation moved.
 - [x] 15. [26.6, bill and frontier / where agents belong] WHEN-TO-APPLY inside Scene A answer; delete standalone paragraph. — Done: Ines carries judgment in Scene A; standalone paragraph now pointer.
-- [ ] 16. [26.7] NEW-SCENE, Long Scene B: "ROBO's Forty-Seven Pairs"; Case Study B becomes pointer.
+- [x] 16. [26.7] NEW-SCENE, Long Scene B: "ROBO's Forty-Seven Pairs"; Case Study B becomes pointer. — Done: scene in four beats, card graded; Case B pointer.
 - [ ] 17. [Scene B, beat 4] The Pair box, PB-16; mark stressed (Ch 26) in ledger.
 - [ ] 18. [26.7] MATH-GENTLY #7, "The best of N coin-flippers," before beat 3.
 - [ ] 19. [26.8] ANOTHER-SEAT #2, dealer's CIO and market maker's budget.

@@ -200,7 +200,7 @@ def fig_hand_replayed():
     ax.text(1, capture + 0.18, f"−{abs(sysmove):.2f}", ha="center", va="bottom", fontsize=9, color=INK, fontweight="bold")
     ax.text(2, raw - 0.18, f"−{abs(issuer):.2f}", ha="center", va="top", fontsize=9, color=INK, fontweight="bold")
     ax.text(3, raw - 0.18, f"−{abs(raw):.2f}", ha="center", va="top", fontsize=9, color=INK, fontweight="bold")
-    ax.text(4, ido - 0.18, f"−{abs(ido):.2f}\n({bp(ido, FILL):.0f}bp)".replace("-", "−"), ha="center", va="top",
+    ax.text(4, ido - 0.18, f"\u2212{abs(ido):.2f}\n(\u2212{abs(bp(ido, FILL)):.0f}bp)", ha="center", va="top",
             fontsize=9, color=INK, fontweight="bold", linespacing=1.2)
     # Theo's counterfactual
     ax.plot([4 - w / 2 - 0.07, 4 + w / 2 + 0.07], [theo, theo], color="white", linewidth=4.2, zorder=6, solid_capstyle="butt")
@@ -239,88 +239,60 @@ def load_svb_filings():
 def fig_svb_filings_timeline():
     filings = load_svb_filings()
     assert len(filings) == 7
-    fday = lambda t: t.day + (t.hour * 60 + t.minute) / 1440.0
+    fday = lambda t: t.day + (t.hour * 60 + t.minute) / 1440.0              # day d spans [d, d+1)
     by = {f[0].strftime("%d %H:%M"): f for f in filings}
     for k in by:
         print("  8-K", k, by[k][1])
+    when = lambda k: by[k][0].strftime("%-d Mar, %-I:%M %p").replace("AM", "am").replace("PM", "pm")
+    item_label = lambda k: ("Items " if "," in by[k][1] else "Item ") + by[k][1]
 
-    fig, (ax, zx) = new_figure((7.0, 5.0), nrows=2, ncols=1, gridspec_kw={"height_ratios": [3.3, 1.0]})
-    # ---------- top: the calendar
+    # rows, top to bottom in time order: (x, colour, first line, second line, label side)
+    rows = [
+        (fday(by["08 17:16"][0]), BLUE, f"{when('08 17:16')}  \u00b7  {item_label('08 17:16')}", "capital raise announced (\\$2.25bn)", "R"),
+        (9.5, MUTED, "9 Mar  \u00b7  not on EDGAR", "shares fall 60%; \\$40bn+ of deposits leave", "R"),
+        (fday(by["10 17:23"][0]), BLUE, f"{when('10 17:23')}  \u00b7  {item_label('10 17:23')}", "bank closed: \u201cno longer the parent\u201d", "R"),
+        (11.5, VIOLET, "11 Mar (Sat)  \u00b7  the drill", "Theo: parent-only cash \u00f7 debt = 67\u00a2, then \u201cclaim?\u201d", "R"),
+        (12.5, MUTED, "12 Mar (Sun)  \u00b7  not on EDGAR", "Treasury, Fed and FDIC protect the bank's depositors", "R"),
+        (fday(by["13 08:27"][0]), BLUE, f"{when('13 08:27')}  \u00b7  {item_label('13 08:27')}", "restructuring committee and its three advisers", "R"),
+        (13 + (9 * 60 + 2) / 1440.0, VIOLET, "13 Mar, 9:02 am  \u00b7  the drill", "the sell RFQ, 35 minutes after the committee 8-K", "R"),
+        (fday(by["13 16:59"][0]), BLUE, f"{when('13 16:59')}  \u00b7  {item_label('13 16:59')}", "CRO appointed; the drill pulls this into the morning", "R"),
+        (fday(by["14 17:18"][0]), BLUE, f"{when('14 17:18')}  \u00b7  {item_label('14 17:18')}", "AFS sale: \\$23.97bn book sold for \\$21.45bn", "R"),
+        (fday(by["17 13:46"][0]), RED, f"{when('17 13:46')}  \u00b7  {item_label('17 13:46')}", "Chapter 11 petition, No. 23-10367", "L"),
+        (fday(by["22 16:36"][0]), BLUE, f"{when('22 16:36')}  \u00b7  {item_label('22 16:36')}", "all seven note tranches accelerated", "L"),
+    ]
+    n = len(rows)
+    fig, ax = new_figure((7.0, 4.9))
     ax.set_xlim(7.0, 24.0)
-    ax.set_ylim(-3.6, 5.3)
-    wk = ["Tue", "Wed", "Thu", "Fri", "Sat", "Sun", "Mon"]          # 7 March 2023 was a Tuesday
+    ax.set_ylim(n - 0.35, -0.9)
+    wk = ["Tue", "Wed", "Thu", "Fri", "Sat", "Sun", "Mon"]                  # 7 March 2023 was a Tuesday
     days = list(range(7, 24))
-    for d in (11, 12, 18, 19):
-        ax.add_patch(Rectangle((d, -3.6), 1, 8.9, facecolor=TINT, edgecolor="none", zorder=0))
-    ax.axhline(0, color=INK_2, linewidth=1.0, zorder=2)
-    ax.set_yticks([])
-    ax.grid(False)
-    ax.spines["left"].set_visible(False)
-    ax.spines["bottom"].set_visible(False)
+    for d0 in (11, 18):
+        ax.add_patch(Rectangle((d0, -0.9), 2, n + 0.55, facecolor=TINT, edgecolor="none", zorder=0))
     ax.set_xticks([d + 0.5 for d in days])
     ax.set_xticklabels([f"{wk[(d - 7) % 7]}\n{d}" for d in days], fontsize=8)
     ax.xaxis.set_ticks_position("top")
     ax.tick_params(axis="x", length=0, pad=2, labelcolor=INK_2)
-    ax.text(7.05, -3.45, "March 2023 (shaded: weekends)", fontsize=8, color=MUTED, va="bottom")
-
-    def stem(x, h, col, text, ha="left", dx=4, size=8, bold=None, va="center"):
-        ax.plot([x, x], [0, h], color=col, linewidth=1.1, zorder=3)
-        ax.plot([x], [0], "o", color=col, markersize=6.5, zorder=5, markeredgecolor="white", markeredgewidth=0.8)
-        ax.annotate(text, (x, h), xytext=(dx if ha == "left" else -dx, 0), textcoords="offset points", ha=ha, va=va,
-                    fontsize=size, color=INK_2, linespacing=1.25)
-
-    t = lambda k: fday(by[k][0])
-    # EDGAR lane (above the line): blue, the petition in red
-    stem(t("08 17:16"), 4.4, BLUE, "8 Mar, 5:16 pm  Item 7.01\n$2.25bn capital raise announced")
-    stem(t("10 17:23"), 3.2, BLUE, "10 Mar, 5:23 pm  Items 1.03, 8.01\nbank closed: “no longer the parent”")
-    stem(t("13 08:27"), 1.1, BLUE, "", dx=0)
-    stem(t("13 16:59"), 2.0, BLUE, "", dx=0)
-    ax.annotate("13 Mar, 8:27 am  Item 8.01\nrestructuring committee,\nthree advisers", (t("13 08:27"), 1.1),
-                xytext=(-5, 2), textcoords="offset points", ha="right", va="bottom", fontsize=8, color=INK_2, linespacing=1.25)
-    ax.annotate("13 Mar, 4:59 pm  Item 5.02\nCRO appointed", (t("13 16:59"), 2.0), xytext=(4, 0),
-                textcoords="offset points", ha="left", va="center", fontsize=8, color=INK_2, linespacing=1.25)
-    stem(t("14 17:18"), 3.7, BLUE, "14 Mar, 5:18 pm  Item 2.01\nAFS sale: $23.97bn book\nfor $21.45bn")
-    stem(t("17 13:46"), 1.6, RED, "17 Mar, 1:46 pm  Items 1.03, 3.01, 5.02\nChapter 11 petition, No. 23-10367", va="center")
-    stem(t("22 16:36"), 3.4, BLUE, "22 Mar, 4:36 pm\nItem 2.04: all seven\nnote tranches accelerated", ha="right")
-
-    # not-on-EDGAR lane (below the line): grey context, violet for the drill
-    stem(9.55, -1.2, MUTED, "9 Mar: shares −60%,\n$40bn+ of deposits leave", ha="right")
-    stem(12.5, -1.1, MUTED, "12 Mar: Treasury, Fed, FDIC protect\nthe bank's depositors, not the holding company", ha="left", dx=5)
-    stem(11.5, -2.55, VIOLET, "11 Mar, Theo: parent-only cash ÷ debt = 67¢,\nthen “claim?”", ha="right")
-    stem(13 + (9 * 60 + 2) / 1440.0, -2.55, VIOLET,
-         "13 Mar, 9:02 am: the drill's sell RFQ", ha="left", dx=5)
-    # key
-    ax.plot([], [], "o", color=BLUE, label="8-K on EDGAR")
-    ax.plot([], [], "o", color=RED, label="Chapter 11 petition (8-K)")
+    ax.set_yticks([])
+    ax.grid(False)
+    for sp in ("left", "bottom"):
+        ax.spines[sp].set_visible(False)
+    ax.spines["top"].set_visible(False)
+    day_only = {1, 3, 4}                                                      # rows whose time of day is not meaningful
+    for i, (x, col, l1, l2, side) in enumerate(rows):
+        ax.plot([7.0, 24.0], [i, i], color=GRID, linewidth=0.6, zorder=1)
+        if i in day_only:
+            ax.plot([x], [i], "o", markerfacecolor="white", markeredgecolor=col, markeredgewidth=1.8, markersize=8, zorder=5)
+        else:
+            ax.plot([x], [i], "o", color=col, markersize=8, zorder=5, markeredgecolor="white", markeredgewidth=1.0)
+        dx, ha = (0.32, "left") if side == "R" else (-0.32, "right")
+        ax.text(x + dx, i - 0.16, l1, ha=ha, va="center", fontsize=8.2, color=INK, fontweight="bold", zorder=6)
+        ax.text(x + dx, i + 0.2, l2, ha=ha, va="center", fontsize=8.2, color=INK_2, zorder=6)
+    ax.plot([], [], "o", color=BLUE, label="8-K on EDGAR (acceptance time)")
+    ax.plot([], [], "o", color=RED, label="Chapter 11 petition")
     ax.plot([], [], "o", color=MUTED, label="event not on EDGAR")
     ax.plot([], [], "o", color=VIOLET, label="the drill")
-    ax.legend(loc="lower right", bbox_to_anchor=(1.0, 0.0), ncols=2, fontsize=8, handletextpad=0.2, columnspacing=1.0)
-
-    # ---------- bottom: Monday 13 March, zoomed (hours, New York)
-    zx.set_xlim(7.5, 17.5)
-    zx.set_ylim(-1, 1.45)
-    zx.set_yticks([])
-    zx.grid(False)
-    zx.spines["left"].set_visible(False)
-    zx.axhline(0, color=INK_2, linewidth=1.0, zorder=2)
-    hrs = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
-    zx.set_xticks(hrs)
-    zx.set_xticklabels(["8 am", "9", "10", "11", "noon", "1 pm", "2", "3", "4", "5"], fontsize=8)
-    zx.set_xlabel("Monday 13 March 2023, New York time")
-
-    def hh(k):
-        d = by[k][0]
-        return d.hour + d.minute / 60.0
-
-    def zstem(x, h, col, text, ha="left", dx=4, marker="o", ms=6.5):
-        zx.plot([x, x], [0, h], color=col, linewidth=1.1, zorder=3)
-        zx.plot([x], [0], marker, color=col, markersize=ms, zorder=5, markeredgecolor="white", markeredgewidth=0.8)
-        zx.annotate(text, (x, h), xytext=(dx if ha == "left" else -dx, 0), textcoords="offset points", ha=ha, va="center",
-                    fontsize=8, color=INK_2, linespacing=1.25)
-
-    zstem(hh("13 08:27"), 0.75, BLUE, "8:27 am  Item 8.01 accepted:\ncommittee and its advisers", ha="right")
-    zstem(9 + 2 / 60.0, 0.75, VIOLET, "9:02 am  the RFQ,\n35 minutes later", ha="left", marker="D", ms=6)
-    zstem(hh("13 16:59"), 0.75, BLUE, "4:59 pm  Item 5.02 accepted:\nthe CRO, Kosturos of A&M", ha="right")
+    ax.plot([], [], "o", markerfacecolor="white", markeredgecolor=MUTED, markeredgewidth=1.6, label="ring: day only, no time of day")
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.005), ncols=3, fontsize=8, handletextpad=0.2, columnspacing=1.2)
     return finish(fig, "ch03_svb_filings_timeline")
 
 

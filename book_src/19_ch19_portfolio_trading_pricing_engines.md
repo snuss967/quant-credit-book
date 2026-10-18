@@ -873,6 +873,21 @@ Use it as the core of the live path and as the replay engine for lost quotes. Th
 
 ## 19.11 Desk Debrief
 
+**Finder.** One row per tool: where its equation lives, the picture that explains it, the scene where it worked or broke, and its listing.
+
+| Concept | Equation | Intuition (box) | Judgment (scene) | Code |
+| :--- | :--- | :--- | :--- | :--- |
+| The master equation: four terms and a margin | (19.1)–(19.2), §19.2.1 | The price of not flipping (§19.2); a week as a histogram, and the trapdoor in it (§19.2.1) | Theo's card in the cold open, graded in the hand history (§19.8.2); Ines at the equation's edges (§19.2.1) | [Listing 19.1](#code-19-1), [Listing 19.8](#code-19-8) |
+| Handling cost at size | (19.3), §19.3.1 | The door that narrows (§19.3.1) | Hana's duration-twice bug, 13 January 2026 (§19.3) | [Listing 19.2](#code-19-2) |
+| The hedge and the residual | (19.4), §19.4.1 | A hedge ratio is a slope, and the residual is what the slope leaves (§19.4.1) | The hedge with the ETF at a 5% discount, in Two Tapes (§19.7.2) | [Listing 19.3](#code-19-3) |
+| Staleness as variance | (19.5), §19.5.1 | Fourteen photographs of 150 people (§19.5); the drunk and the lamppost (§19.5.1) | Line 42's 22× (§19.5.1); Kaz's springing lien (§19.5) | [Listing 19.4](#code-19-4) |
+| Eviction on exact removal savings | (19.6)–(19.7), §19.6.1 | The slope of the hill and the walk back to the car (§19.6.1) | The Year the Second Tier Went Home, H1 2022 (§19.6.2) | [Listing 19.5](#code-19-5) |
+| The stress spike | (19.8)–(19.9), §19.7.1 | Why the common multiplier does not diversify, and how long it lasts (§19.7) | Two Tapes, 12 March 2020 and 7 April 2025 (§19.7.2) | [Listing 19.6](#code-19-6) |
+| The adverse-selection charge and the hand history | (19.10) and the by-line markout, §19.8.1 | A dial from "never" to "always" (§19.8.1) | The Hand History, Friday 30 October 2026 (§19.8.2); where the charge goes (§19.8.1) | [Listing 19.7](#code-19-7) |
+| The all-or-none inequality | (19.11), §19.9.1 | Ten lonely lines, in prose (§19.9.1) | Wen's Month-End List (§19.9.1); Man's seat (§19.9) | Exercise 5 |
+
+The bullets below are the same chapter with the scenes taken out, short enough to tape to a monitor.
+
 - **A PT bid is four terms plus a margin:** fair value, minus liquidation cost, minus residual risk *after the hedge*, minus adverse selection, minus $\pi$. Every term is in dollars until the very last line.
 - **You are pricing one lump and a residual.** The hedge turns $\Sigma$ into $\Sigma^{\text{res}}$, and $\Sigma^{\text{res}}$ is the re-hedged covariance for *any* basket, so eviction re-hedges for free.
 - **LCS is a standalone price.** Use only its handling share inside a basket, scale it for size, and never multiply it by duration again.
