@@ -516,10 +516,10 @@ The Windstream Services auction is a good worked set of parameters, all from the
 
 ### 24.6.1 Derivation: the inside market midpoint and the final price
 
-**Stage 1.** Each of $K$ dealers submits a two-way market $(b_k, o_k)$ with $o_k - b_k \le M$ (3 points for Windstream) in the quotation amount, together with any physical settlement request. A request must be in the same direction as the submitter's net CDS position and no larger than it. Sort bids in descending order, $b_{(1)} \ge b_{(2)} \ge \dots$, and offers in ascending order, $o_{(1)} \le o_{(2)} \le \dots$. The first $\kappa^{\text{tr}}$ pairs with $b_{(i)} \ge o_{(i)}$ are *tradeable* (touching or crossing) and are discarded. From the remaining $K - \kappa^{\text{tr}}$ pairs keep the best half, $h = \lceil (K-\kappa^{\text{tr}})/2 \rceil$, and average:
+**Stage 1.** Each of $K$ dealers submits a two-way market $(b_k, o_k)$ with $o_k - b_k \le M$ (3 points for Windstream) in the quotation amount, together with any physical settlement request. A request must be in the same direction as the submitter's net CDS position and no larger than it. Sort bids in descending order, $b_{(1)} \ge b_{(2)} \ge \dots$, and offers in ascending order, $o_{(1)} \le o_{(2)} \le \dots$. The first $n^{\text{tr}}$ pairs with $b_{(i)} \ge o_{(i)}$ are *tradeable* (touching or crossing) and are discarded. From the remaining $K - n^{\text{tr}}$ pairs keep the best half, $h = \lceil (K-n^{\text{tr}})/2 \rceil$, and average:
 
 $$
-\text{IMM} = \operatorname{round}_{1/8}\!\left(\frac{1}{2h}\sum_{i=\kappa^{\text{tr}}+1}^{\kappa^{\text{tr}}+h}\big(b_{(i)} + o_{(i)}\big)\right).
+\text{IMM} = \operatorname{round}_{1/8}\!\left(\frac{1}{2h}\sum_{i=n^{\text{tr}}+1}^{n^{\text{tr}}+h}\big(b_{(i)} + o_{(i)}\big)\right).
 $$
 
 A dealer whose tradeable quote sits on the wrong side of the IMM pays an Adjustment Amount, $(b - \text{IMM})^{+}$ or $(\text{IMM} - o)^{+}$ times the quotation amount. That is the price of a quote that crosses the market. The open interest is the net of all physical settlement requests, $\text{OI} = \sum_k \text{PSR}_k$, positive for a net demand to buy bonds.
@@ -648,7 +648,7 @@ $$
 b_{t+\Delta} = \theta + (b_t-\theta)\,e^{-\kappa\Delta} + \sigma\sqrt{\frac{1-e^{-2\kappa\Delta}}{2\kappa}}\;\varepsilon_{t+\Delta}, \qquad \varepsilon \sim N(0,1),
 $$
 
-so the basis is an AR(1) with coefficient $\phi^{\text{AR}} = e^{-\kappa\Delta}$, half-life $\ln 2/\kappa$, and stationary standard deviation $\sigma/\sqrt{2\kappa}$. Estimation is a regression of $b_{t+\Delta}$ on $b_t$, with $\hat\kappa = -\ln\hat\phi^{\text{AR}}/\Delta$. If $\hat\phi^{\text{AR}} \ge 1$ there is no reversion to trade, and the code must say so rather than return a negative half-life. "Market-adjusted" means $\tilde{b}_{i,t} = b_{i,t} - \beta_i\,\bar{b}_t$, with $\bar{b}_t$ the index-level basis. The common component is funding (§24.4), and IDO or it didn't happen.
+so the basis is an AR(1) with coefficient $\phi^{\text{AR}} = e^{-\kappa\Delta}$ (the superscript keeps it apart from the funding spread $\phi$ of §24.4), half-life $\ln 2/\kappa$, and stationary standard deviation $\sigma/\sqrt{2\kappa}$. Estimation is a regression of $b_{t+\Delta}$ on $b_t$, with $\hat\kappa = -\ln\hat\phi^{\text{AR}}/\Delta$. If $\hat\phi^{\text{AR}} \ge 1$ there is no reversion to trade, and the code must say so rather than return a negative half-life. "Market-adjusted" means $\tilde{b}_{i,t} = b_{i,t} - \beta_i\,\bar{b}_t$, with $\bar{b}_t$ the index-level basis. The common component is funding (§24.4), and IDO or it didn't happen.
 
 Enter the negative-basis package at $b_0 < \theta$ and hold for $H$. The expected mark-to-market gain is $D^{\text{spr}}(\theta - b_0)(1-e^{-\kappa H})$, carry adds about $\int_0^H(-\mathbb{E}^{\mathbb{P}}[b_t] - \phi)\,dt$, and the round-trip cost $c^{\text{rt}}$ comes off the top. Ignoring carry, the trade is worth entering only if
 
