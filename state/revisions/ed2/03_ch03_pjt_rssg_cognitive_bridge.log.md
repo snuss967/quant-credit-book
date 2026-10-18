@@ -8,7 +8,7 @@
 - [x] 6. [§3.1.4] SHOP-LIFE (short): spreadsheet as feature at a market maker. — Note: feature-store meeting: refresh on Item 2.03, point-in-time, naming.
 - [x] 7. [§3.2.1] FULL-DERIVATION-MOVE + MATH-GENTLY: Bayes, GM bid. — Note: clinic Bayes box; (3.1) up front; steps moved to Full Derivation.
 - [x] 8. [§3.2.1, after units] ANOTHER-SEAT: the insurer and pension fund. — Note: insurer and pension seat; HLLSV 23% versus 11% cited.
-- [ ] 9. [§3.2.2] LIST-TO-NARRATIVE + MATH-GENTLY: features as Ines walk-through; odds.
+- [x] 9. [§3.2.2] LIST-TO-NARRATIVE + MATH-GENTLY: features as Ines walk-through; odds. — Note: detective odds box; Ines replays seven features; citations kept.
 - [ ] 10. [§3.2.3] MATH-GENTLY + WHEN-TO-APPLY: winner's curse; GM judgment.
 - [ ] 11. [§3.3.1-3.3.3] MATH-GENTLY x2: bp of price; beta and residual.
 - [ ] 12. [§3.3.4] MATH-GENTLY: shrinkage.
