@@ -5,7 +5,7 @@
 
 ## Method and verification notes
 
-(to be filled after verification pass)
+**What "verified" means here.** Every row's URL was fetched on 2026-10-18 and returned HTTP 200 with the title, date or description shown (re-checked by a status sweep of all 114 distinct URLs at the end of the session: 112 returned 200; sec.gov returns 403 to scripted requests and was read through the WebFetch tool, and one YouTube short link returned 429 for rate limiting, not absence). Podcast titles, guests and dates are copied from the publisher's page or RSS item; where a page prints no date the row says so and uses the feed `pubDate`. Vendor figures (Trumid, Octaura, Dataiku) are labelled as the vendor's own. Where no good audio exists for a chapter the section says so rather than padding: that gap is itself a finding.
 
 ---
 

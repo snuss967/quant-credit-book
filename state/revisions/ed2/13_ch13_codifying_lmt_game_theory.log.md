@@ -2,7 +2,7 @@
 
 - [x] 1. Cold open expanded: three seats priced, Serta, Lumen napkin, decision point.
 - [x] 2. Boardriders story, waterfall-queue and distribution Math Gently boxes added.
-- [ ] 3. §13.1 Desk Myth BRIDGE (Mags: jump to a state with a clock)
+- [x] 3. Already present: Mags clock line after Desk Myth, verified intact.
 - [x] 4. Families read aloud, Kaz misreads, RL denominator, Pluralsight seat box.
 - [x] 5. Three feature blocks rewritten as narrative ordered by speed of movement.
 - [x] 6. Payoff-shape and partial-expectation boxes; derivation moved after intuition.
@@ -14,7 +14,7 @@
 - [x] 12. Lumen scene: wall, prices, argument, joinder decision, take-out twist, counter 3.
 - [x] 13. Nash and Shapley boxes; FOC and summation moved to section end.
 - [x] 14. Selecta and Optimum suits dated, cast reaction, opportunistic-fund seat box.
-- [ ] 15. §13.6 WHEN-TO-APPLY capped forward + quant-shop-life vignette (holder_hhi)
+- [x] 15. Already present: capped-forward judgment passage and Priya holder_hhi vignette verified.
 - [ ] 16. §13.7 Math, Gently #11 fixed points + Full Derivation move (clearing map)
 - [ ] 17. §13.7.1 Trinseo EXPAND-SCENE + decision point
 - [ ] 18. §13.7 Ways This Blows Up WHEN-TO-APPLY (two paragraphs before box)

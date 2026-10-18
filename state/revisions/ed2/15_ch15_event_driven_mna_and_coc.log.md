@@ -15,7 +15,7 @@
 - [x] 13. Specs moved to Engine subsection; four Full Derivation subsections created.
 - [x] 14. EA case: three meetings, decision point, interlude, three-seat box.
 - [x] 15. §15.3.1: three-condition portability judgment; Focus Financial and 9fin anchors.
-- [ ] 16. §15.3.2: MATH-GENTLY (bell curve, Phi, digital options)
+- [x] 16. §15.3.2: bell-curve tally, digital coin, 0.81 to 0.56 box.
 - [ ] 17. §15.4.1 bullets: LIST-TO-NARRATIVE (three prospectuses side by side)
 - [ ] 18. §15.4.2: MATH-GENTLY (mixture inversion, dollar duration) + WHEN-TO-APPLY
 - [ ] 19. §15.5.1: NEW-SCENE ICE-MarketAxess "regulator counts in working days"

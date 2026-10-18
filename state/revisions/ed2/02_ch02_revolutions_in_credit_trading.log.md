@@ -1,0 +1,22 @@
+# Ed2 U2 progress log: Chapter 2
+
+- [ ] 1. [Chapter 2 opening] EXPAND-SCENE (~1,200 words).
+- [ ] 2. [Opening, the $\mathbb{P}$ note] MATH-GENTLY: what "under $\mathbb{P}$" means, and what risk-neutral would mean.
+- [ ] 3. [§2.1 The Desk View] WHEN-TO-APPLY + BRIDGE.
+- [ ] 4. [§2.2.1 Dissemination timeline] MATH-GENTLY: what a distribution is, and a mixture.
+- [ ] 5. [§2.2.2 The caps] MATH-GENTLY (two boxes) + FULL-DERIVATION-MOVE.
+- [ ] 6. [§2.2.2, after Ways This Blows Up] SHOP-LIFE: "Shop Life: the TRACE loader" (~800 words, labeled fictional composite).
+- [ ] 7. [§2.3 Revolution 1] ANOTHER-SEAT + LIST-TO-NARRATIVE.
+- [ ] 8. [§2.3.1 S-curve] MATH-GENTLY + FULL-DERIVATION-MOVE + WHEN-TO-APPLY.
+- [ ] 9. [§2.3.2 RFQ as auction] MATH-GENTLY + FULL-DERIVATION-MOVE.
+- [ ] 10. [§2.4 All-to-All] MATH-GENTLY + ANOTHER-SEAT.
+- [ ] 11. [§2.5 Automation, §2.5.1] LIST-TO-NARRATIVE + MATH-GENTLY + WHEN-TO-APPLY.
+- [ ] 12. [§2.6.1 Basket bid] MATH-GENTLY + FULL-DERIVATION-MOVE.
+- [ ] 13. [§2.6.2 Case Study: PT cycle] EXPAND-SCENE (~1,500 words).
+- [ ] 14. [§2.7, §2.7.1 ETFs] MATH-GENTLY + FULL-DERIVATION-MOVE + ANOTHER-SEAT.
+- [ ] 15. [End of §2.7.1 and §2.9.3 "March 2020"] NEW-SCENE, long (2,500–3,500 words): "The Week the ETF Was the Only Price."
+- [ ] 16. [§2.8 Non-bank LPs] LIST-TO-NARRATIVE + ANOTHER-SEAT.
+- [ ] 17. [§2.9.1 LCS] MATH-GENTLY + WHEN-TO-APPLY.
+- [ ] 18. [§2.9.2 Theorem] MATH-GENTLY + FULL-DERIVATION-MOVE.
+- [ ] 19. [§2.9.3 "April 2025"] NEW-SCENE, long (2,000–3,000 words): "The Same Shock on New Pipes."
+- [ ] 20. [§2.10 Desk Debrief] LIST-TO-NARRATIVE.

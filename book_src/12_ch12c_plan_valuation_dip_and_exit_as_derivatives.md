@@ -662,3 +662,5 @@ Kaz is staring at Figure 12C.1. "So the judge is the measure change," they say. 
 - **Data & Code:** `plan_value_engine.py` (§12C.12, Appendix F); Title 11, https://www.law.cornell.edu/uscode/text/11 ; Hertz's 8-K/A on the plan sponsor auction (14 May 2021) and 8-K on the effective date (7 Jul 2021), linked in §16.6.
 
 Used in: §13.3 and §13.5 (the in-court sequel to the uptier and the RSA), §14.4 and §14.6 (recovery as a mixture; rulings as regime switches), §16.1–16.4 and §16.8 (the plan's securities and the post-reorg book), §25.6–25.8 (the docket events this chapter reads: disclosure statements, KEIP motions, NOL orders, bid procedures, claims registers), §28.9 (the dashboard), App E Laws 4, 7, 8, 11, 16.
+
+<!-- STATUS: COMPLETE -->
