@@ -16,11 +16,13 @@ table's cause totals (410, 260, 120, 95, 18 = 903 $k) and the quiet days are dra
 Beta distribution scaled to the table's 290 $k. Figure 4 uses the numbers the chapter quotes from the
 U.S. Senate PSI staff report on JPMorgan's CIO (15 March 2013), with the report's page numbers.
 
-Colour roles, fixed across the chapter:
-  BLUE   = the desk's own numbers: facts from custodian, clearing, blotter; the composite mark
+Colour roles, fixed across the explain figures (1, 3, 4); Figures 2 and 5 use BLUE and ORANGE only as the
+first two categorical slots (momentum and value; calendar-day and other-day breaches), each named in its legend
+or direct labels:
+  BLUE   = the desk's own numbers: facts from custodian, clearing, blotter; the composite mark; the desk's marks
   ORANGE = a model's forecast: risk-model lines, the vendor's evaluated price
   AQUA   = an outside or corrected number: product control's correction, TRACE and dealer evidence,
-           an independent price (slot 3, so every use is direct-labelled)
+           a price the desk did not choose (mids, an independent service) (slot 3, so every use is direct-labelled)
   INK_2  = the unexplained (no source), always
   pale blue band = the tolerance (+-$10k)
 """
@@ -114,7 +116,7 @@ def fig_waterfall():
     explained = -390.0
     ax.add_patch(Rectangle((explained - TOL, n - 3 - 0.45), 2 * TOL, 3 * 1.0 - 0.1, color=C_TOL, zorder=1, lw=0))
     ax.text(explained + TOL + 8, n - 2, "tolerance band " + "\u00b1" + "$10k around the explained total", va="center",
-            ha="left", fontsize=7.5, color=MUTED)
+            ha="left", fontsize=8, color=MUTED)
 
     ax.set_yticks(range(n))
     ax.set_yticklabels([r[0] for r in rows], fontsize=8.5)
@@ -139,11 +141,11 @@ def fig_waterfall():
     ins.set_ylim(-0.5, 0.5)
     ins.set_yticks([])
     ins.set_xticks([-20, -10, 0, 10, 20])
-    ins.tick_params(labelsize=7.5, length=2)
+    ins.tick_params(labelsize=8, length=2)
     ins.grid(False)
     ins.spines["left"].set_visible(False)
     ins.text(-9.0, 0.36, "U = " + MINUS + "9.0", fontsize=8, color=INK, ha="center", va="center")
-    ins.text(TOL - 0.8, -0.36, "inside \u00b110", fontsize=7.5, color=MUTED, ha="right", va="center")
+    ins.text(TOL - 0.8, -0.36, "inside \u00b110", fontsize=8, color=MUTED, ha="right", va="center")
     ttl = ins.set_title("Zoom: unexplained\nvs tolerance ($k)", fontsize=8, loc="left", fontweight="normal", color=INK_2, linespacing=1.15)
     ttl.set_bbox(dict(facecolor="white", edgecolor="none", pad=1.5))
 
@@ -192,14 +194,16 @@ def fig_signal_split():
                    edgecolor="white", linewidth=1.2)
             ymid = bottom + abs(v) / 2
             ax.plot([gi + w / 2], [ymid], "o", color=col[key], markersize=4, zorder=5)
-            ax.annotate(f"{name[key]}\n{sgn(v, plus=False)}", (gi + w / 2, ymid), xytext=(5, 0), textcoords="offset points",
+            sep = " " if abs(v) < 1.0 else "\n"   # a short segment gets a one-line label so it stays inside its own height
+            ax.annotate(f"{name[key]}{sep}{sgn(v, plus=False)}", (gi + w / 2, ymid), xytext=(5, 0), textcoords="offset points",
                         va="center", fontsize=8.2, color=INK_2, path_effects=halo, zorder=6, linespacing=1.15)
         if gi == 0:
             # the interaction: the gap between the sum of the standalone books and the book that was held
             ax.add_patch(Rectangle((gi - w / 2, book), w, M_alone + V_alone - book, fill=False,
                                    edgecolor=INK_2, linestyle=(0, (3, 2)), linewidth=1.1, zorder=4))
-            ax.annotate("interaction\n" + MINUS + "2.6", (gi, 3.7), ha="center", va="center",
-                        fontsize=7.6, color=INK, zorder=5, linespacing=1.15)
+            ax.annotate("interaction\n" + MINUS + "2.6\n(dashed box)", (gi - w / 2, 3.7), xytext=(-5, 0),
+                        textcoords="offset points", ha="right", va="center", fontsize=8, color=INK, zorder=5,
+                        linespacing=1.15)
             ax.text(gi, M_alone + V_alone + 0.12, "sum 5.0", ha="center", va="bottom", fontsize=8.5, color=INK_2)
         else:
             ax.text(gi, max(pos, 0) + 0.12, "= 2.4", ha="center", va="bottom", fontsize=8.5, color=INK_2)
@@ -211,7 +215,7 @@ def fig_signal_split():
     ax.set_xticklabels([g[0] for g in groups], fontsize=8.5)
     ax.tick_params(axis="x", length=0)
     ax.set_ylim(-1.1, 5.9)
-    ax.set_xlim(-0.55, 4.15)
+    ax.set_xlim(-0.95, 4.15)
     ax.set_ylabel("Attributed P&L, September ($mm)")
     return finish(fig, "ch08c_signal_split")
 
@@ -238,10 +242,10 @@ def fig_two_mornings():
     # direct labels (right of the bars)
     label_end(axL, 0 + w / 2, -9.0 - 55, "stale-series\nsignature\n" + MINUS + "110", C_PC, dx=5)
     label_end(axL, 1 + w / 2, -4.5, "bond\nresiduals", C_U, dx=5)
-    axL.text(-0.45, 12, "tolerance \u00b110", fontsize=7.5, color=MUTED, ha="left", va="bottom")
+    axL.text(-0.45, 12, "tolerance \u00b110", fontsize=8, color=MUTED, ha="left", va="bottom")
     axL.axhline(0, color=INK_2, lw=0.8, zorder=2)
     axL.set_xticks([0, 1])
-    axL.set_xticklabels(["As found\n7:28", "Corrected\n9:40"], fontsize=8.5)
+    axL.set_xticklabels(["As found\n7:15", "Corrected\n9:40"], fontsize=8.5)
     axL.tick_params(axis="x", length=0)
     axL.set_xlim(-0.55, 2.3)
     axL.set_ylim(-146, 24)
@@ -277,11 +281,11 @@ def fig_two_mornings():
     ax.plot([D(2, 11), D(3, 11)], [81.5, 84.0], "o", color=C_MODEL, markersize=6, zorder=5, markeredgecolor="white")
     ax.annotate("evaluated 81.50\ntrue-up " + MINUS + "$240k", (D(2, 11), 81.5), xytext=(-8, -2), textcoords="offset points",
                 ha="right", va="center", fontsize=8.5, color=INK, fontweight="bold")
-    ax.annotate("revised 84.00 (3 Nov)\ntrue-up " + MINUS + "$40k", (D(3, 11), 84.0), xytext=(8, -6),
+    ax.annotate("revised 84.00\n(3 Nov)\ntrue-up " + MINUS + "$40k", (D(3, 11), 84.0), xytext=(8, -14),
                 textcoords="offset points", ha="left", va="center", fontsize=8.5, color=INK, fontweight="bold")
     ax.annotate("", xy=(D(2, 11), 81.62), xytext=(D(2, 11), 84.5),
                 arrowprops=dict(arrowstyle="-|>", color=INK_2, lw=0.9, linestyle=(0, (2, 2)), shrinkA=0, shrinkB=0))
-    ax.annotate("challenge filed\n2 Nov, 11:00", (D(2, 11), 83.2), xytext=(-6, 0), textcoords="offset points",
+    ax.annotate("challenge\nfiled 2 Nov,\n11:00", (D(2, 11), 83.2), xytext=(-6, 0), textcoords="offset points",
                 ha="right", va="center", fontsize=8, color=INK_2, linespacing=1.15)
     ax.set_xlim(D(19.6), D(9, 11))
     ax.set_ylim(80.9, 86.2)
@@ -327,13 +331,13 @@ def fig_whale():
     events = [
         ("End 2011", "Net notional “over $51 billion” (p.185).", "own"),
         ("Early Jan", "Marks set “at or near the midpoint” of the daily range (p.5).", "own"),
-        ("Later in Q1", "Marker begins to assign “more favorable prices within the daily range” (p.5).", "own"),
+        ("Later", "The book began to assign “more favorable prices within the daily price range” (p.5).", "own"),
         ("12–16 Mar", "Marker keeps a spreadsheet of the differences: $161mm reported, $593mm at mids (p.5).", "own"),
         ("30 Mar", "Reported daily loss $319mm; a $512mm gap later recorded by the Valuation Control Group (p.5). "
                    "Net notional now “over $157 billion” (p.185).", "own"),
         ("10 Apr", "Estimated daily loss of about $6mm re-issued 90 minutes later (p.5).", "own"),
         ("May", "CIO told to mark as the Investment Bank does, from an independent pricing service; "
-                "collateral disputes (peak $690mm) resolve for the counterparties (pp.5–6).", "out"),
+                "collateral disputes (peak $690mm) resolve for the counterparties (p.6).", "out"),
         ("13 Jul", "Q1 restated for an additional $660mm of losses (p.98).", "out"),
     ]
     n = len(events)
@@ -355,11 +359,11 @@ def fig_whale():
             lines += textwrap.wrap(para, 54) or [""]
         ax.text(spine_x + 0.04, y, "\n".join(lines).replace("$", "\\$"), ha="left", va="center", fontsize=8, color=INK_2,
                 linespacing=1.2)
-    ax.text(0.0, -0.005, "Dates and page numbers as quoted in section 8C.7; spacing is not to scale.", fontsize=7.5,
+    ax.text(0.0, -0.005, "Dates and page numbers as quoted in section 8C.7; spacing is not to scale.", fontsize=8,
             color=MUTED, ha="left", va="top")
     from matplotlib.lines import Line2D
-    handles = [Line2D([0], [0], color=C_FACT, lw=3.2, label="P&L foots to the desk's own marks"),
-               Line2D([0], [0], color=C_PC, lw=3.2, label="Price set by an independent service")]
+    handles = [Line2D([0], [0], color=C_FACT, lw=3.2, label="The desk's own marks"),
+               Line2D([0], [0], color=C_PC, lw=3.2, label="A price the desk did not choose (mids; from May, an independent service)")]
     fig.legend(handles=handles, loc="outside lower center", ncol=2, fontsize=8, handlelength=1.8,
                columnspacing=1.6)
     return finish(fig, "ch08c_whale_shadow")
@@ -402,7 +406,7 @@ def fig_unexplained_by_day():
     fig, ax = new_figure("wide")
     ax.set_axisbelow(True)
     ax.axhspan(-TOL, TOL, color=C_TOL, zorder=1, lw=0)
-    ax.axvspan(55.5, 58.5, color=SEQ_BLUE_STEPS[0], alpha=0.55, zorder=0, lw=0)
+    ax.axvspan(55.5, 58.5, color=GRID, zorder=0, lw=0)   # grey, so pale blue stays the tolerance only
     for xe in (55.5, 58.5):
         ax.axvline(xe, color=NEUTRAL, lw=0.9, linestyle=(0, (3, 3)), zorder=1)
     for d, v in quiet.items():
@@ -422,14 +426,14 @@ def fig_unexplained_by_day():
     for d, nm in zip([21, 42], ["Jul month-end", "Aug month-end"]):
         mark_event(ax, d, nm, y_frac=0.99)
     ax.axvline(63, color=NEUTRAL, lw=0.9, linestyle=(0, (3, 3)), zorder=1)
-    ax.annotate("Sep month-end", (63, 0.99), xycoords=("data", "axes fraction"), xytext=(-3, 0),
-                textcoords="offset points", fontsize=8, color=INK_2, va="top", ha="right")
+    ax.annotate("Sep\nmonth-end", (63, 0.99), xycoords=("data", "axes fraction"), xytext=(-8, 0),
+                textcoords="offset points", fontsize=8, color=INK_2, va="top", ha="right", linespacing=1.15)
     ax.text(55.0, 112, "roll week", ha="right", va="center", fontsize=8, color=INK_2)
     ax.annotate("Mon 21 Sep:\nstale CDX series,\n" + MINUS + "$119k as found", (55.6, -119), xytext=(-4, -2),
                 textcoords="offset points", fontsize=8, color=INK_2, va="center", ha="right", linespacing=1.15)
     ax.annotate("two true-ups\non one day", (41.6, -105), xytext=(-2, 0), textcoords="offset points",
                 fontsize=8, color=INK_2, va="center", ha="right", linespacing=1.15)
-    ax.text(0.5, TOL + 3, "tolerance " + "±" + "$10k", fontsize=7.5, color=MUTED, ha="left", va="bottom")
+    ax.text(0.5, TOL + 3, "tolerance " + "±" + "$10k", fontsize=8, color=MUTED, ha="left", va="bottom")
     ax.set_xlim(0, 64)
     ax.set_ylim(-190, 175)
     ax.set_xticks([1, 11, 21, 31, 42, 52, 63])
@@ -439,8 +443,8 @@ def fig_unexplained_by_day():
     handles = [Patch(color=NEUTRAL, label="inside tolerance"),
                Patch(color=C_FACT, label="breach on a month-end or roll-week day (7)"),
                Patch(color=C_MODEL, label="breach on any other day (5)")]
-    ax.legend(handles=handles, loc="lower left", bbox_to_anchor=(0.0, 0.0), fontsize=8, handlelength=1.2,
-              ncol=1, borderaxespad=0.4)
+    fig.legend(handles=handles, loc="outside lower center", ncol=3, fontsize=8, handlelength=1.2,
+               columnspacing=1.5)
     return finish(fig, "ch08c_unexplained_by_day")
 
 

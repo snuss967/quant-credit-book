@@ -155,7 +155,7 @@ def fig_cheapest_cure():
     p = np.linspace(50, 100, 100)
     a1.plot(p, excess * (1 - p / 100), color=INK_2, linewidth=LW)
     a1.axhline(excess * (1 - 0.58), color=NEUTRAL, linewidth=1.0, linestyle=(0, (4, 3)), zorder=1)
-    a1.text(99.5, excess * 0.42 - 0.03, "do nothing: the excess is counted\nat the lowest price, 58, and costs 0.84", ha="right", va="top",
+    a1.text(99.5, excess * 0.42 - 0.03, "do nothing: excess counted\nat the lowest price, 58: 0.84", ha="right", va="top",
             fontsize=7.8, color=INK_2)
     pts = [(58, "Sell the dentist loan", (7, 7), "left", "bottom"), (77, "Sell Halvorsen", (7, 7), "left", "bottom"),
            (86, "Sell the software loan", (-7, -7), "right", "top")]
@@ -325,10 +325,9 @@ def fig_coalition_map():
     fill = {"abl": MUTED, "fl": INK_2, "un": NEUTRAL}
 
     # background bands for the two classes
-    ax.add_patch(Rectangle((0, ry[2] - 2.8), W, 11.2, fc=TINT, ec="none", zorder=0))
+    ax.add_patch(Rectangle((0, ry[2] - 2.8), W, 11.2, fc="#ecebe7", ec="none", zorder=0))
     ax.add_patch(Rectangle((0, ry[6] - 2.8), W, 22.4, fc=TINT, ec="none", zorder=0))
-    ax.plot([0, W], [ry[2] - 2.8, ry[2] - 2.8], color=NEUTRAL, linewidth=0.8, zorder=1)   # first lien / unsecured
-    ax.text(1.0, (ry[1] + ry[2]) / 2, "FIRST-LIEN CLASS", rotation=90, ha="center", va="center", fontsize=6.6, color=MUTED)
+    ax.text(1.0, (ry[1] + ry[2]) / 2, "FIRST LIEN", rotation=90, ha="center", va="center", fontsize=6.6, color=MUTED)
     ax.text(1.0, (ry[3] + ry[6]) / 2, "UNSECURED", rotation=90, ha="center", va="center", fontsize=6.6, color=MUTED)
 
     # headers in two tiers so the names do not collide; the colour dot under each name is the seat's key
