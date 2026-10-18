@@ -1,0 +1,23 @@
+# U2 Progress Log: Chapter 19 (Portfolio Trading & Basket Pricing Engines)
+
+- [ ] 1. [Title / cold open] EXPAND-SCENE (to 1,200-1,400 words), card ending, objectives list becomes narration.
+- [ ] 2. [§19.1] LIST-TO-NARRATIVE; Ines walks the ticket; View From Another Seat (insurer/pension); Trend Watch to end of §19.1.
+- [ ] 3. [§19.2 opening] BRIDGE + MATH-GENTLY (B1 certainty equivalent).
+- [ ] 4. [§19.2.1] FULL-DERIVATION-MOVE + MATH-GENTLY (B2 distributions/third moment, B3 physical vs risk-neutral).
+- [ ] 5. [§19.3] MATH-GENTLY (B4 size exponent) + junior-quant duration-twice story + Full Derivation move.
+- [ ] 6. [§19.4] LIST-TO-NARRATIVE + MATH-GENTLY (B5 hedge ratio/residual) + ANOTHER-SEAT (ETF/non-bank MM).
+- [ ] 7. [§19.4.1] FULL-DERIVATION-MOVE.
+- [ ] 8. [§19.5] MATH-GENTLY (B6 rank/factor count, B7 staleness random walk) + Kaz springing-lien scene + Full Derivation.
+- [ ] 9. [§19.6 opening] BRIDGE to 2022 tape.
+- [ ] 10. [§19.6.1] MATH-GENTLY (B8 marginal vs exact removal) + FULL-DERIVATION-MOVE.
+- [ ] 11. [§19.6.2] NEW-SCENE Long Scene H1 2022 + The Pair box (RV beat).
+- [ ] 12. [§19.6] ANOTHER-SEAT (dealer desk: Jefferies, Trumid, JPMorgan quotes).
+- [ ] 13. [§19.7 opening] MATH-GENTLY (B9 common multiplier, half-life) + Full Derivation; Trend Watch to end of §19.7.
+- [ ] 14. [§19.7.2] NEW-SCENE Long Scene Two Tapes (12 Mar 2020 and 7 Apr 2025).
+- [ ] 15. [§19.8] MATH-GENTLY (B10 log-odds/logistic) + FULL-DERIVATION-MOVE; two cautions to Kaz and Ines.
+- [ ] 16. [§19.8.2] EXPAND-SCENE The Hand History: Friday 16 October 2026.
+- [ ] 17. [§19.9] ANOTHER-SEAT (systematic AM) + Wen builds basket narrative + Full Derivation.
+- [ ] 18. [§19.10] SHOP-LIFE vignette (bank systematic trading group, TRACE dedup).
+- [ ] 19. [§19.10 table and Trend Watch] BRIDGE sentence between table and Trend Watch.
+- [ ] 20. [§19.11 Desk Debrief] Finder table; promote scenes to #### headings.
+- [ ] 21. [Whole file] one telling per fact; no CHECK; templates removed; open items logged.

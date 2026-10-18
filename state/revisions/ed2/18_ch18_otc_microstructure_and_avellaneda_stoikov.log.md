@@ -1,0 +1,24 @@
+# Progress Log, Edition 2 (U2): Chapter 18
+
+- [x] 1. Cold open: EXPAND-SCENE to 1,100-1,400 words; three beats; decision card; "You priced one." — Cold open expanded: PRS beat, card, 12:00-12:12 clock, canon unsecured terms.
+- [x] 2. §18.1 Harris's Zoo: LIST-TO-NARRATIVE; Ines walks the table with real sellers; move Man p.19 SE to end. — Ines walks the table: LDI, CLO CCC sellers, Altice evening; dimensions mapped.
+- [ ] 3. §18.2 Roll: MATH-GENTLY Box 1 (covariance and the bounce); Trend Watch to end of §18.2.
+- [ ] 4. §18.2.1: WHEN-TO-APPLY scene, Roll NaN on Altice secured (replay).
+- [ ] 5. §18.3.1 Glosten-Milgrom: BRIDGE gloss and pointer to Ch 3.
+- [ ] 6. §18.3.2 Kyle: MATH-GENTLY Box 2 (best guess is a straight line).
+- [ ] 7. §18.3.3 Kyle to RFQ: LIST-TO-NARRATIVE in Ines's napkin scene.
+- [ ] 8. §18.4 opening: FULL-DERIVATION-MOVE + MATH-GENTLY Boxes 3 and 4.
+- [ ] 9. §18.4.3 Step 1: MATH-GENTLY Box 5 (exponential of a wobble, Jensen); skew line.
+- [ ] 10. §18.4.5 Step 3: MATH-GENTLY Box 6 (ln(1+x) ~ x; monopoly markup).
+- [ ] 11. §18.4.6: SHOP-LIFE vignette (9:31 page, T=4pm) before AS Spec.
+- [ ] 12. §18.5 GLFT: FULL-DERIVATION-MOVE + Box 7 + View From Another Seat (Jefferies, Dimon).
+- [ ] 13. §18.6 JTD: Box 8 (two parts) + FULL-DERIVATION-MOVE.
+- [ ] 14. §18.6.3 Long Scene: Altice France, 20 March 2024 (replay), PB-14 Pair box.
+- [ ] 15. §18.6.3 Credit Suisse AT1: EXPAND-SCENE 600-900 words.
+- [ ] 16. §18.7 hit rates: Box 9 + Another Seat (Jane Street) + Niang scene beat; AiEX hedge.
+- [ ] 17. §18.8 TRACE: LIST-TO-NARRATIVE + Quant-Shop Life vignette.
+- [ ] 18. §18.9 BWICs: Box 10 (winner is the most wrong) + FULL-DERIVATION-MOVE.
+- [ ] 19. §18.9.1 Long Scene: LDI BWIC week (replay) + Another Seat (TwentyFour AM).
+- [ ] 20. §18.10 Desk Debrief: Finder table; promote Exercises with difficulty tags.
+- [ ] 21. Whole chapter: ban the templates in code explanations.
+- [ ] 22. Whole chapter: one telling per fact (Altice 21 points, Trumid 88%, Gaussian epitaph).

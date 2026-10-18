@@ -1,0 +1,27 @@
+# Progress Log, Edition 2 U2: Ch 26, AI Agents & LLMs on the Credit Desk
+
+- [ ] 1. [26.0 Cold Open] EXPAND-SCENE to 1,100-1,400 words; second movement, three failures, Mata/Park, decision card.
+- [ ] 2. [26.0, "By the end of this chapter"] LIST-TO-NARRATIVE.
+- [ ] 3. [26.1, after the temperature equation] MATH-GENTLY #1, "A distribution over the next word."
+- [ ] 4. [26.1, P/Q convention] BRIDGE: one-sentence risk-neutral gloss, pointer to Ch 6.
+- [ ] 5. [26.2 Trend Watch] BRIDGE + move to end of 26.2; correlated-error paragraph dies (reborn in Scene A beat 3).
+- [ ] 6. [26.3] NEW-SCENE, Long Scene A: "Thirty-One Days in February".
+- [ ] 7. [Scene A, between beats 2 and 3] ANOTHER-SEAT #1, direct lender and buyer of its loans.
+- [ ] 8. [26.3, "Where does the reader earn money" items 1-5] LIST-TO-NARRATIVE.
+- [ ] 9. [26.4, claim tuple] MATH-GENTLY #2, "Three lights on one claim."
+- [ ] 10. [26.4, calibration and selective prediction] MATH-GENTLY #3 in two parts.
+- [ ] 11. [26.5, after Kalai's rule] MATH-GENTLY #4, "When to say I don't know."
+- [ ] 12. [26.5, controls 1-5] LIST-TO-NARRATIVE + SHOP-LIFE (Vantress applied-AI group).
+- [ ] 13. [26.6, arithmetic of chains] MATH-GENTLY #5 + FULL-DERIVATION-MOVE of pass^k proof.
+- [ ] 14. [26.6, verifiers] MATH-GENTLY #6 odds form + FULL-DERIVATION-MOVE retries/Lazarus.
+- [ ] 15. [26.6, bill and frontier / where agents belong] WHEN-TO-APPLY inside Scene A answer; delete standalone paragraph.
+- [ ] 16. [26.7] NEW-SCENE, Long Scene B: "ROBO's Forty-Seven Pairs"; Case Study B becomes pointer.
+- [ ] 17. [Scene B, beat 4] The Pair box, PB-16; mark stressed (Ch 26) in ledger.
+- [ ] 18. [26.7] MATH-GENTLY #7, "The best of N coin-flippers," before beat 3.
+- [ ] 19. [26.8] ANOTHER-SEAT #2, dealer's CIO and market maker's budget.
+- [ ] 20. [26.9, items 1-8] LIST-TO-NARRATIVE, one Thursday afternoon; keep pairs, METR, extractions.
+- [ ] 21. [26.9, determinism formally] MATH-GENTLY #8 in two parts.
+- [ ] 22. [26.10, controls (i)-(v)] LIST-TO-NARRATIVE; white-text amendment as the day.
+- [ ] 23. [26.11, Case Study A, Knight] EXPAND-SCENE to 900-1,200 words, #### heading.
+- [ ] 24. [26.11, Case Study C, AI-washing] WHEN-TO-APPLY inside a beat.
+- [ ] 25. [26.13 Desk Debrief] BRIDGE: Finder table; promote scenes and case studies to ####.

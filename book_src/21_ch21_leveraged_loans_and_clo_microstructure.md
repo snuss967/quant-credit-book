@@ -1,8 +1,12 @@
 # Chapter 21: Leveraged Loans, CLOs & Loan-Market Microstructure
 
+*Wednesday 14 October 2026, live. The desk, the loan, its borrower, the selling dealer and the two CLOs are fictional; the market figures on the screens are real and cited where they appear.*
+
 Mags Dunleavy dropped a trade ticket on Theo's desk the way other people drop subpoenas. "Twenty-three business days," she said. "We bought seven million of a B2 term loan B on the eleventh of last month. It has not settled. The agent wants a \$3,500 transfer fee and our KYC packet. Again. Back in my day we settled these by fax, and the fax machine at least had the decency to jam where you could see it."
 
 Theo read the ticket. Trade price 99.75. Settlement date: blank. "Delayed comp should have been running since T+7," he said. "Unless we didn't sign the assignment by T+5. Then it's our fault and nobody owes us anything."
+
+He turned the ticket over, as if the back might be more forthcoming. It was his fourth Wednesday on the desk, and he had learned that the quickest way to find the edge of what he knew was to ask the question that sounded stupid. "Fine. What's it worth?"
 
 Ines rolled her chair over. "Hand history, please. What is the position worth right now?"
 
@@ -14,43 +18,87 @@ Ines rolled her chair over. "Hand history, please. What is the position worth ri
 
 "Whatever the CLOs are doing," said Mags.
 
-A headline crossed all four screens: well over half the loan index bid above par, January repricing launches at a record pace, three more launched before lunch.
+Theo looked from one to the other. "That's three answers."
 
-Kaz frowned. "If everything is above par, why does everyone look unhappy?"
+"It's one hand nobody has shown," said Ines. "Kaz is telling you what the cards would be worth face up. Mags is telling you who else is sitting at the table. You're telling me the dealer has been dealing with the lights off. All three are true at once. The risk system has us at 99.40 this morning *(illustrative)*, and I would not bet lunch on the second decimal. Or the first."
 
-"Because above par," said Ines, "is where the borrower takes chips off the table. A loan at 100.5 is about to be handed back to you at 100 with fifty basis points less coupon. You are long a bond and short its upside. And two-thirds of the players at this table use house rules that tell them exactly when they must fold."
+A headline crossed all four screens, and three more stacked up behind it. September's CLO tally was out: \$41.1bn of activity across 92 deals, of which only \$13.8bn was new issue, and refinancings had beaten resets for the first time since April *(Trepp, via CRE Daily, 14 Oct 2026)*. Voya's Monday note called the previous week a ratings decompression, BBs firm and CCCs weaker *(Voya IM, 12 Oct 2026)*. And the share of loans bid above par, 58% at New Year, had fallen to about a fifth by midyear *(21.7% at end-June; Eagle Point Credit Co, N-CSRS, 2026)*.
 
-Theo took the USB stick with his 13-week cash flow model out of his pocket, looked at it, and put it back. This one was going to need a different model.
+Kaz frowned at the numbers. "Only a fifth of the market above par, and the CLOs would rather refinance themselves than buy anything new. Is that good news or bad?"
+
+"Depends which side of par you're sitting on," said Ines. "Above par is where the borrower takes chips off the table. Fifty-eight percent at year-end, and look what January did to them: a hundred and eight billion of repricings in one month. A loan at 100.5 is about to be handed back to you at 100 with fifty basis points less coupon. You are long a bond and short its upside. And two-thirds of the players at this table use house rules that tell them exactly when they must fold."
+
+Hana had been listening from the next desk, which as the owner of the risk-data pipeline she did most of the day, since every problem on the floor eventually arrived there as a missing field. "The dealer said where it came from," she said. "On the September call. 'Out of two CLO accounts.' I wrote down the shelf names." She pulled both deals' August trustee reports from the desk's CLO data vendor and put them side by side on her second screen.
+
+The first deal was dull in the way a healthy CLO is dull: CCC bucket 3.9%, junior overcollateralization cushion 4.2% *(both illustrative)*. The second was not. Its CCC bucket sat at 8.4% against a 7.5% limit, and its junior OC cushion was 1.1% *(illustrative)*, one bad downgrade from shutting off the cash to its equity.
+
+Kaz leaned over to read the indenture summary Hana had opened beside the reports. "Interest diversion test. OC test." They frowned. "Is the OC test optical character recognition? Do they scan the loans?"
+
+"Overcollateralization," Theo said. "Loans, valued the way the indenture says, divided by the notes. If the ratio drops below its trigger, cash stops flowing to the bottom of the structure and goes to pay down the top."
+
+"So it's a covenant on the lender."
+
+"It's a covenant the lender wrote on itself."
+
+"That's why the dealer had it to sell," said Mags.
+
+Theo shook his head. "It's a B2 at par. Selling it does nothing for their test. It isn't one of their CCCs."
+
+"Nobody said it was the problem. It was the cash." Mags tapped the 1.1% on Hana's screen. "A deal with a one-point cushion sells whatever it can sell near par and buys whatever its indenture counts at par for less. Seven million at 99.75 buys a bit over eight million of something in the mid-eighties that still counts at full par *(illustrative)*. The numerator goes up a million. That isn't a view on your borrower. It's arithmetic on theirs."
+
+Theo sat with that for a moment. At PJT a seller had always been someone with a view: wrong, scared, or knowing something. This seller had none of the three. It had a ratio.
+
+"So we paid a price set by someone else's rulebook," he said.
+
+"Everyone in this market does," said Ines. "The question is whether it was a good price." She tore a sheet off her pad and slid it across, the same way she had for the Kroger replay three weeks earlier. "Card. Write three things: what the loan is worth to us today, what it was worth to the seller yesterday, and why those are different numbers."
+
+Theo took the USB stick with his 13-week cash flow model out of his pocket, looked at it, and put it back. This one was going to need a different model. He wrote the first line of the card, crossed it out, and said, mostly to himself, "At RSSG I read the credit agreement. Here I read the indenture of the lender."
 
 The question this chapter answers: **who sets the price of a leveraged loan when two-thirds of its holders cannot freely choose what they buy, the borrower can call it at par, and the trade settles in three weeks?**
 
-By the end of this chapter you will be able to:
-
-- price a loan as a credit-risky floater that is short a par call;
-- compute a CLO's overcollateralization (OC) test with its CCC, defaulted and discount haircuts, and derive the cure trade a manager is pushed into;
-- size a loan fund's liquidity buffer as a queue whose service time is the settlement cycle;
-- build a CLO Forced-Sale Pressure Index and a repricing-hazard carry signal;
-- correct stale loan marks before you mistake smoothing for momentum;
-- read a CLO indenture the way you used to read a credit agreement, because the indenture now decides who is a forced seller under the credit agreement.
-
-The PJT bridge in one line: at RSSG you asked, "What does the credit agreement say?" Here you also ask, "What does the *CLO indenture* say?"
+The rest of the chapter is the answer key to Theo's card, assembled in the order the desk learned it. The loan is a credit-risky floater that is short a par call, and §21.1 prices it that way. Its price is a composite of opinions, delivered through a settlement pipe about three weeks long (§21.2). Two-thirds of its holders are CLOs, whose overcollateralization tests, with their CCC, defaulted and discount haircuts, turn one borrower's downgrade into a sale whose direction can be derived and whose size can be read in a trustee report; the desk compresses that into a Forced-Sale Pressure Index (§21.3–21.4). The borrower owns the call and exercises it in waves, which a repricing hazard prices and a carry signal can trade (§21.5). A loan fund that promises daily cash on a T+20 asset is running a queue, and the buffer the queue needs can be sized (§21.6). Marks are smoothed before they reach a backtest, so loan momentum has to survive desmoothing before anyone believes it (§21.7). And the last page, the one a restructuring banker already knows, is that the CLO indenture decides who is a forced seller under the credit agreement, and therefore who can sign and fund an uptier (§21.8). At RSSG the question was "What does the credit agreement say?" Here it is also "What does the *CLO indenture* say?"
 
 ## 21.1 The Leveraged Loan as an Instrument: A Floater That Is Short a Call
 
 At RSSG the term loan B was the top of the capital structure: first lien, secured, the tranche whose recovery you fought over and whose lenders you organized. That view is right in distress. For the large majority of loans on the large majority of days, when nobody is distressed, it misses where the price comes from. A performing leveraged loan's price is set by three things that are not financial covenants. (There usually aren't any: more than 90% of the index is covenant-lite.) The three things are a floating coupon, a borrower call at par, and a holder base dominated by vehicles that follow rules.
 
-The instrument, as a desk sees it:
+*Same Wednesday, later that morning. The loan's terms below are the fictional ticket's; the market conventions and the court case are real.*
 
-- **Coupon.** Term SOFR plus a margin $m$, reset monthly or quarterly. Legacy loans converted from LIBOR may carry a credit spread adjustment (CSA). Many loans have a base-rate floor. Interest accrues ACT/360.
-- **Security and covenants.** First-lien senior secured. Covenant-lite: no maintenance tests for the term loan. The revolver may keep a springing leverage test.
-- **Amortization.** Roughly 1% per year, with a bullet at maturity *(typical; check the agreement)*.
-- **Call.** Prepayable at par at any time, except that a "101 soft call" usually applies for six months after closing or after a repricing. During that window, a *repricing* transaction (not every prepayment) costs the borrower one point.
-- **Transfer.** Assignment, not a book-entry transfer. It needs the agent's consent, often the borrower's consent (frequently deemed given after a set number of days), a check against the disqualified-lender list, and an entry in the agent's register. This is the root cause of §21.2.
-- **Legal status.** Not a security. In *Kirschner v. J.P. Morgan Chase Bank, N.A.* (2d Cir., 24 August 2023), the court held that syndicated term loans are not securities under the *Reves* test. So no T+1 mandate, no DTC settlement, and no securities-law disclosure regime are coming to rescue the plumbing.
+Kaz wanted the term sheet before the curve, which Theo took as progress. He printed the loan's two-page summary from the agent's portal and walked Kaz through it the way he would once have walked a client through a first-day declaration, one clause at a time, saying out loud why each one mattered.
 
-Kaz read the list twice and asked whether "soft call" meant the borrower phones the lenders and asks nicely. It means something close to that. The borrower's arranger phones the lenders, tells them the new margin, and lets anyone who objects be taken out at par.
+"Coupon," he said. "Term SOFR plus a margin, 325 basis points on this one *(illustrative)*, reset monthly. ACT/360. There's a floor on the base rate at fifty basis points, which nobody has cared about since 2022 and everybody will care about the day SOFR goes back near zero. Some older loans still carry a credit spread adjustment from the LIBOR conversion. Ours was repriced in January, and the arranger stripped it."
+
+"So the coupon follows the base rate. Fine. That's a floater."
+
+"Security: first-lien, senior secured. Covenants: none, for the term loan. It's covenant-lite, like more than ninety percent of the index. The revolver keeps a springing leverage test, which only wakes up if the revolver is drawn past a threshold, and the term lenders can't enforce it anyway." Theo turned the page. "Amortization one percent a year, bullet at maturity. That's typical, but you check the agreement every time, because 'typical' is how people get surprised."
+
+"And the call?"
+
+"Prepayable at par at any time. Except for the soft call: for six months after closing, or after a repricing, a *repricing* costs the borrower one point. Not every prepayment, only one done to cut the margin. So it's 101 inside the window and 100 outside it. Ours was repriced on 23 January *(illustrative)*, so the window shut in July."
+
+Kaz read the definition twice. "Soft call. Does that mean the borrower phones the lenders and asks nicely?"
+
+"Close," said Theo. "The borrower's arranger phones the lenders, tells them the new margin, and anyone who objects gets taken out at par. Asking nicely, with a door."
+
+"Transfer," Kaz said, reading ahead. "Assignment and Assumption. That's not a security transfer."
+
+"It isn't a security at all. That's the last line." Theo pointed. "Every trade is an assignment. The agent bank has to consent. The borrower usually has to consent too, and that consent is deemed given if the borrower says nothing for a set number of business days. Someone checks the buyer against the disqualified-lender list. Then the agent writes the new name in its register, and only then do we own it. There's no book entry and no DTC. That's why our ticket has a blank where the settlement date goes."
+
+"Why not just make it a security?"
+
+"Somebody tried, in court." In *Kirschner v. J.P. Morgan Chase Bank, N.A.* (2d Cir., 24 August 2023), the Second Circuit held that syndicated term loans are not securities under the *Reves* test. So no T+1 mandate, no DTC settlement and no securities-law disclosure regime are coming to rescue the plumbing. "The plumbing is the plumbing," Theo said, and §21.2 follows it pipe by pipe.
+
+Kaz put the page down. "So: a floater I understand, a call I understand, and a transfer I don't. Price the first two."
 
 ### 21.1.1 Derivation: carry, price, and the two durations
+
+> **Math, Gently.** *Why a floater sits at par, what an extra 50 bp is worth, and why the loan has two durations.* Part one is a picture. Imagine a flat let on a lease whose rent resets every month to whatever the flat would fetch on the open market that month. What is the lease itself worth, over and above the flat? Nothing. Whatever rents do, next month's rent will be the market rent, so nobody would pay a premium to take over the lease and nobody would demand a discount to hand it back. A loan whose coupon resets to "SOFR plus exactly the spread the market now demands" is that lease, and on every reset date it is worth par for the same reason. Now suppose the lease pays 50 bp a year *more* than the market, locked in for the three years the tenant is expected to stay. That extra is a small annuity: half a point a year per 100 of par. Undiscounted it is 1.5 points; discounted at 7.5%, three years of payments are worth about 2.69 years' worth, so the extra is worth $0.50 \times 2.69 \approx 1.35$ points, and the loan "should" trade near 101.35. Hold that thought, because the borrower has an opinion about it.
+>
+> Part two asks the same loan two different questions. If SOFR jumps 100 bp tomorrow, the price barely moves: the coupon catches up at the next reset, a month away, so the rate duration is about a twelfth of a year. If instead the spread the market demands for *this borrower* jumps 100 bp, the coupon never catches up, because the margin is fixed for life. The annuity now runs the other way, about one point a year for 2.69 discounted years, and the price falls about 2.7 points. Rate duration 0.1, spread duration 2.7: a money-market fund for rates and a three-year bond for credit, in one instrument. The full version is next.
+
+In symbols, a loan's return is carry plus price change, equation (21.1), and a loan without its call is worth par plus an annuity of the margin difference, equation (21.2). The derivation builds both, then takes the call away.
+
+#### The Full Derivation
 
 Let $b_t$ be the base rate (term SOFR) and $m$ the contractual margin, both decimals per year. Quote the price $P_t$ in points per 100 of par. Over an accrual period of length $\Delta$ (ACT/360, so $\Delta = \text{days}/360$), the holding-period return splits into two parts:
 
@@ -82,6 +130,10 @@ $$
 
 where $\epsilon_t$ is the small premium that survives because exercise is not instantaneous (§21.5 derives it). On the way down the loan has the full 2.7 years of spread duration. On the way up it has almost none. **A par loan is a short call struck at 100.** Its return distribution is left-skewed by construction, and §21.7 shows what that does to momentum.
 
+> **Math, Gently.** *A bond with a lid.* Draw the loan's price on the vertical axis and the spread the market demands for this borrower on the horizontal, wide on the left and tight on the right. A plain bond's line keeps climbing to the right: every 100 bp of tightening adds about 2.7 points, forever. Now hand the borrower a call struck at 100. To the left of the strike nothing changes, because no borrower prepays a loan that is cheap to keep. To the right, the line rises to about par and then bends flat, like a ceiling it cannot get through. That bend is the whole instrument: long a bond, short a call on it. Here is the tiny number. The first box priced our loan, with 50 bp of excess margin, at 101.35 without a call. With the call, the borrower's arranger phones, the loan is handed back at 100, and whoever stays in holds a new loan at par with 50 bp less coupon. The 1.35 points moved from the lender's pocket to the borrower's. A buyer who paid 100.5 the week before loses the half-point on the day the call is exercised. Why would anyone pay 100.5 at all? Because the borrower does not exercise instantly, and §21.5 turns that delay into a hazard rate and the half-point into a forecast.
+
+Kaz drew the bent line on the whiteboard and wrote "negative convexity, but with lawyers" underneath it. Theo did not correct it. An allocator, reading the same loan off a monthly index, sees neither the lid nor the lawyers:
+
 > **[SOURCE EXTRACTION]** *Nuveen_Multi_Asset_Credit_Quant_Framework p.9:* Leveraged loans are benchmarked to the "S&P UBS Leveraged Loan Index (Formerly Credit Suisse Leveraged Loan Index)," and private credit is proxied by the "S&P UBS Leveraged Loan B Index."
 >
 > **Annotation.** This is how an allocator sees the sleeve: an index return series with an allocation band. On p.6 the same framework constrains leveraged loans to 5–25% of a multi-asset credit portfolio and CLO BBB–B to 0–10%. Using single-B loans as a proxy for private credit is a joke that teaches. Both markets now refinance each other (more than \$30bn moved each way in 2025, per William Blair's Q4-2025 newsletter), so the proxy is better than it looks. But a monthly index return hides the three things this chapter is about: a capped price, a holder base that sells by rule, and a settlement lag. Chapter 12's optimizer consumes these sleeves. This chapter supplies the inputs it should be fed: carry net of expected repricing loss, a forced-flow drawdown term, and a liquidity horizon set by settlement, not by the trading screen.
@@ -99,6 +151,12 @@ where $\epsilon_t$ is the small premium that survives because exercise is not in
 
 **Marks, not prints.** No public trade tape exists for loans. Prices come from dealer-quote composites (LSTA/LSEG mark-to-market, IHS Markit, now S&P Global). A composite is an average of indications that may be stale, may cluster, and may include the dealer who is your counterparty. In June 2025 the average LSTA/LSEG bid-ask was **72 bp**, the median **50 bp**, and both were flat year on year. The average trade level was 97.2 and the median 99.6. Turnover, annual volume divided by average outstandings, reached **65%** over the trailing twelve months, a five-year best equal to 2020 *(LSTA, "2Q25 Secondary Trading Monthly Executive Summary," 24 Jul 2025)*. Compare that to a TRACE-eligible bond: a print within fifteen minutes, a public tape, and a T+1 settlement.
 
+The dealer who sold Mags the loan was, that Wednesday, probably one of the quotes inside the composite that marked it, and it was certainly still carrying the loan. When Theo called its loan desk about the KYC packet, he got the other half of the ticket.
+
+> **View From Another Seat.** *The selling dealer's loan desk (a generic seat; the ticket is the cold open's illustrative one).* From the dealer's chair, Mags's twenty-three-day ticket is a position it has already sold and still owns. Price risk passed to the buyer on 11 September, but the loan sits on the dealer's balance sheet until the agent records the assignment, funded at the dealer's own rate. Since T+7, delayed compensation has paid the dealer only the base rate flat on the purchase price while it passes the coupon through, and its treasury charges more than that, so each extra day costs the funding spread plus a capital charge that appears on no ticket. The KYC packet is the buyer's to deliver, and the dealer's closer has asked for it three times. The \$3,500 assignment fee is split by convention, and the dealer will dispute its half on the grounds that the delay is the buyer's fault. None of this shows on a screen. What shows is the dealer's next quote, and the quote carries all of it. Its head of loan trading would explain the asymmetry with a venue's own numbers. During May 2025, as the tariff-week sellers thinned out, Octaura estimated that the cost to sell a loan fell from 23 cents to 9, while the cost to buy was 13 *(Octaura, "On the Blotter: 2025 in review")*. A dealer charges the side the crowd is on, because the crowd's paper is the paper it will warehouse, fund and chase signatures on for three weeks. A buyer in a selling month gets the cheaper half of the spread, and a counterparty who would very much like the trade to settle.
+
+Theo hung up with a new respect for the dealer and no KYC answer. The marks the desk had to work with were no better than the people quoting them, which is the problem the first quant credit managers ran into when they looked at loans at all:
+
 > **[SOURCE EXTRACTION]** *Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.41:* "funds targeting opportunities in leveraged loans and, particularly, convertible bonds, where we see the potential for significant alpha. While loans and other private credit instruments are obviously problematic from a data availability perspective at present... Already both Refinitiv and IHS Markit are providing daily pricing on 6,500 loan facilities."
 >
 > **Annotation.** "Daily pricing" means daily *marks*. That distinction is the whole data problem. A daily mark built from quotes is a smoothed, partly stale estimate of an unobserved price, and its errors are autocorrelated. §21.7 shows that naive momentum on such marks partly rediscovers the smoother. The 2026 desk has two things Man did not have in 2022. The first is electronic venue data (Octaura's inquiry and trade flow, below), which adds real executable prints for a growing share of volume. The second is CLO trustee data (holdings, prices and test results by deal), which tells you who *must* trade before they do. The modern desk combines the three sources: composite marks for coverage, venue prints for truth where they exist, and trustee holdings for flow. It does not trust any one of them alone.
@@ -109,11 +167,39 @@ where $\epsilon_t$ is the small premium that survives because exercise is not in
 >
 > **Annotation.** Moyer wrote this in 2004, when bonds settled T+3. Since then bonds went to T+2 (2017) and T+1 (28 May 2024). Loans moved their *convention* to T+7 for par and T+20 for distressed, but barely moved their *reality*. Moyer's page also notes an agent transfer fee of "\$2500–\$5000" and that loan holders can be identified from amendment signature pages. Both are still true, and the second is why holder-base modeling (§21.8) is possible. The modern departure is legal: after *Kirschner*, nothing forces loans onto securities rails. The ledger stays with the agent bank, and every trade is an assignment with consents.
 
-Why is it slow? A par trade needs a confirmation, an assignment agreement, agent consent, borrower consent (or the passage of a deemed-consent period), KYC on the buyer, a disqualified-lender check, a funding memo, and an update to the agent's register. Each step involves a different party, and none of them is paid for speed. Over the decade to January 2025 the LSTA's own chart puts the average par settlement time at about **20 days** against the T+7 convention *(LSTA, April 2025 conference slides, via search; CHECK before print)*. Vendors describe averages "upwards of 20 days" for many firms. The LSTA's quarterly settlement studies with exact medians are members-only.
+*Same Wednesday, 2:30 p.m. The ticket's stops and the desk's paperwork are fictional; the LSTA protocol and its numbers are real.*
 
-The one well-documented policy experiment is instructive. Before September 2016, delayed compensation (defined below) was paid to the buyer whether or not the buyer had done its paperwork. That meant a buyer could sit on an unsigned assignment and collect the loan's coupon, financed at the base rate, with no capital tied up. In effect the LSTA had written every buyer a free repo option. The delayed-compensation protocol (Phase I for trades from 1 September 2016, Phase II from 1 November 2016) made compensation "requirements-based." Under it, the buyer must execute the documents by T+5 and pick a settlement date of T+7 or earlier, or it loses compensation for the delay. Median par settlement fell from T+12 (January–August 2016) to T+9 (September 2016), and the share settling within T+7 rose from 23% to 37% *(Markets Media, 2 Nov 2016)*. When you take away a free option, people stop exercising it. This is the most reliable law in finance.
+By the afternoon Theo had given up on the phone and taken the problem to the whiteboard, which on this desk meant erasing half of one of Kaz's stochastic integrals and promising to put it back. He drew the life of a single par loan trade as a line of nine stops and wrote under each one who owned it.
+
+Stop one was the trade itself, agreed on the phone on 11 September. Stop two, the confirmation, went out that afternoon. Stop three was the assignment agreement that buyer and seller both sign; the desk's closer had signed it on T+3, the first good news of the day, because it meant delayed compensation had been running since T+7 and the dealer owed the desk the loan's economics for every day since. Stop four was the agent's consent. Stop five was the borrower's, which this credit agreement deems given after five business days of silence *(illustrative)*; the borrower had been silent, which in this market counts as enthusiasm. Stop six was KYC on the buyer at the agent bank. Stop seven was the check against the disqualified-lender list. Stop eight was the funding memo that tells each side how much cash moves, net of accrued interest and delayed compensation. At stop nine the agent writes the buyer's name in its register, and the trade has settled.
+
+He put a red magnet on stop six. "Here. The agent wants our beneficial-ownership certification refreshed. Ours expired in August. Nobody told anybody, because the form lives in compliance and the trade lives here."
+
+Kaz studied the line. "Nine parties, nine queues, and nobody is paid for speed. It's a tandem queue. The whole thing runs at the pace of its slowest server."
+
+"The slowest server," said Mags, "is always the one that isn't paid."
+
+How slow the whole line runs is surprisingly hard to see from outside. The LSTA's own chart puts the decade average to January 2025 at roughly 20 days against the T+7 convention. Vendors describe averages "upwards of 20 days" for many firms. The LSTA's quarterly settlement studies, the ones with exact medians, are members-only.
+
+"There was one autumn," Ines said, "when somebody made it faster on purpose." She told it as a hand, which is how she told everything. Before September 2016, delayed compensation (§21.2.2 defines it) was paid to the buyer whether or not the buyer had done its paperwork. A buyer could leave an assignment unsigned in a drawer and collect the loan's coupon, financed at the base rate, with no capital tied up. "The LSTA had dealt every buyer a free repo option. The buyers did what anyone does with a free option. They held it." The delayed-compensation protocol (Phase I for trades from 1 September 2016, Phase II from 1 November 2016) made compensation "requirements-based." Under it, the buyer must execute the documents by T+5 and pick a settlement date of T+7 or earlier, or it loses compensation for the delay. Median par settlement fell from T+12 (January–August 2016) to T+9 (September 2016), and the share settling within T+7 rose from 23% to 37% *(Markets Media, 2 Nov 2016)*. "When you take away a free option, people stop exercising it," Ines said. "This is the most reliable law in finance. Three days off the median, and all anyone changed was who gets paid when."
+
+Theo was already sketching a column header. "So we model the lag for every loan. A distribution by agent bank, by regime, by whether the borrower has to consent..."
+
+"For whom?" Ines asked. It was the question she asked when she wanted him to find the answer himself, so he tried. A CLO buying to hold barely notices the twenty days: it did not need the cash, and the coupon accrues to it either way. The dealer he had just spoken to notices them as funding cost. A loan fund that sold to meet a redemption notices nothing else, because the cash it needs is the thing that has not arrived, which is §21.6. And the desk itself notices the tail. On a forty-line portfolio trade, the one line that settles on day sixty is the one that sets the counterparty exposure and the balance-sheet charge for the whole package.
+
+"So the lag is worth modeling exactly in proportion to how badly the holder needed the cash," Theo said.
+
+Ines picked up her coffee. "Or the balance sheet. Write that down."
+
+He wrote it under the nine stops, took the red magnet off stop six and went to find compliance.
 
 ### 21.2.2 Derivation: delayed compensation is a forced repo
+
+> **Math, Gently.** *Delayed compensation is a repo you did not agree to.* Picture two ledgers side by side, the buyer's and the seller's, starting on T+7 for the cold open's ticket: \$7mm of par bought at 99.75, so \$6.98mm of purchase price, on a loan paying the base rate plus 325 bp *(illustrative)*. On the buyer's ledger, every day the seller hands over the coupon the loan earned, and the buyer hands back the base rate on \$6.98mm. Meanwhile the buyer's own \$6.98mm, which has not been delivered, sits in a money fund earning about the base rate. Net, the buyer has the loan's coupon and the loan's price risk and has paid the base rate flat to finance it: it owns the loan on borrowed money. On the seller's ledger, the loan is still on its balance sheet, its treasury charges it, say, the base rate plus 50 bp to fund \$6.98mm, and the buyer pays it only the base rate. The seller is lending the buyer the purchase price, secured by the loan, at a rate it did not choose and for a term nobody can tell it. That is a repo. Now the tiny number: 50 bp a year on \$6.98mm is about \$97 a day on a 360-day year, and the twenty-two calendar days from T+7 to this Wednesday come to about \$2,100 *(illustrative)*. Small, and nobody budgeted for it. The full version, with the general formula, is next.
+
+In symbols, the daily transfer $\text{DC}_u$ below hands the buyer the loan's economics from T+7, and the seller's cost is the gap between its funding rate $f_S$ and the base rate.
+
+#### The Full Derivation
 
 Let a buyer purchase par $n$ at price $P$ (points) on trade date $T$. The settlement date is the random variable $T + \ell$, measured in business days. In stylized form (the LSTA Standard Terms and Conditions govern the details), delayed compensation starts on day $T+7$ if the buyer has met its obligations. From then until settlement, the seller pays the buyer the interest accruing on the loan, and the buyer pays the seller a cost of carry on the purchase price at a benchmark rate, which we write as the base rate $b$. The net daily transfer to the buyer, for $u \in (T+7, T+\ell]$, is
 
@@ -135,9 +221,11 @@ For a pricing engine, $\ell$ is a distribution, not a constant. Model it by regi
 
 ### 21.2.3 E-trading arrives, two decades late
 
-Octaura, a dealer-backed platform that began life as "Project Octopus," launched loan trading in April 2023 with three dealers and 34 buy-side firms. By April 2026 it had about 30 dealers and more than 170 buy-side firms. Its share of LSTA-reported secondary volume went from 1% (April 2024) to 6.4% (July 2025) to 7.7% (January 2026). It reports a record \$19.6bn traded in Q1 2026 and its CFO says it exited June 2026 at 7.51% *(Octaura blog posts, 2025–2026; Pulse 2.0 interview, 29 Jul 2026; vendor-reported)*. It added a CLO platform in September 2025 and a "Live Feedback" auction protocol for CLO BWICs in February 2026. Separately, Versana, a consortium of agent banks, put amendment and consent voting on a live digital platform in October 2026. For Part IV readers that is the real headline: liability management transactions are consent games, and the consent machinery is now an API.
+Octaura, a dealer-backed platform that began life as "Project Octopus," launched loan trading in April 2023 with three dealers and 34 buy-side firms. By April 2026 it had about 30 dealers and more than 170 buy-side firms. Its share of LSTA-reported secondary volume went from 1% (April 2024) to 6.4% (July 2025) to 7.7% (January 2026). It reports a record \$19.6bn traded in Q1 2026 and its CFO says it exited June 2026 at 7.51% *(Octaura blog posts, 2025–2026; Pulse 2.0 interview, 29 Jul 2026; vendor-reported)*. It added a CLO platform in September 2025 and a "Live Feedback" auction protocol for CLO BWICs in February 2026. Separately, Versana, a consortium of agent banks, put amendment and consent voting on a live digital platform in October 2026.
 
-The inquiry tape is already a signal. In March 2025, 70% of Octaura inquiry was customer selling. In April it was balanced (55% sellers). By June, 72% was buying. In May 2025 the platform's estimated cost to sell fell from 23 cents to 9 cents, against 13 cents to buy *(Octaura, "On the Blotter: 2025 in review")*. A buy/sell imbalance that a venue publishes monthly is a crude flow factor, but it is a real, timestamped one, which is more than loans have ever had.
+The inquiry tape is already a signal. In March 2025, 70% of Octaura inquiry was customer selling. In April it was balanced (55% sellers). By June, 72% was buying, and in May the cost to sell had collapsed from 23 cents to 9, the asymmetry the dealer seat above reads off the same tape *(Octaura, "On the Blotter: 2025 in review")*. A buy/sell imbalance that a venue publishes monthly is a crude flow factor, but it is a real, timestamped one.
+
+Ines put it in her own terms when Theo showed her the monthly series. "That's the first hand history this market has ever kept with a clock on it. Crude, monthly, one venue's worth of hands, and still more than anyone had in 2022." Then she pointed at the Versana announcement on his other screen. "And that one is the part you used to bill for. Every uptier you ever worked on was a consent game. The consent machinery just became an API, which means somebody, soon, will know who voted before the press release does." (Part IV's liability-management chapters are where that matters.)
 
 > **Trend Watch: settlement and e-trading, 2004–2026.**
 > *Settlement.* T+10 par / T+30 distressed conventions with delays to 120 days (`Moyer_Distressed_Debt_Analysis p.322`, 2004) → median T+12 falling to T+9 after the September 2016 delayed-comp protocol (Markets Media, Nov 2016) → a ten-year average near 20 days to January 2025 (LSTA slides; CHECK). Over the same period bonds went T+3 → T+2 (2017) → T+1 (May 2024).

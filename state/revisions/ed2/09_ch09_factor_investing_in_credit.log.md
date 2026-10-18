@@ -3,15 +3,15 @@
 - [x] 1. [§9.0 Cold Open] EXPAND-SCENE: three-tenant round, retire learning-objective bullets. Note: Kaz defends, dealer, Mags marks, rent roll; bullets now one paragraph.
 - [x] 2. [§9.1] LIST-TO-NARRATIVE: Fact one/two/three as desk moments; move Trend Watch to end of §9.1. Note: facts told via 0.6, tip line moved, marks; TW already last.
 - [x] 3. [§9.1, after the table] ANOTHER-SEAT: AQR Palhares and Richardson (FAJ 2020). Note: box added, sample counts omitted, narration threads between boxes.
-- [ ] 4. [§9.2.1] MATH-GENTLY (two parts: relative change; beta as ratio) + FULL-DERIVATION-MOVE.
-- [ ] 5. [§9.2.2–9.2.3] WHEN-TO-APPLY inside the scene: Mags at the 1,000bp line; ROBO timing.
-- [ ] 6. [§9.3.1–9.3.2] MATH-GENTLY (regression residual in a peer cell).
-- [ ] 7. [§9.3.3] MATH-GENTLY (two parts: normal; risk-neutral) + FULL-DERIVATION-MOVE.
-- [ ] 8. [§9.3.4] ANOTHER-SEAT (Robeco, 7 Sep 2026) + EXPAND-SCENE (Theo's runway column).
-- [ ] 9. [§9.4.1] MATH-GENTLY (half-life and exponential decay).
-- [ ] 10. [§9.4.2] MATH-GENTLY (turnover and break-even cost) + BRIDGE; move "elaborate way to tip".
-- [ ] 11. [§9.5.3] NEW-SCENE Long Scene B: 2022, the Year Low-Risk Looked Like Genius.
-- [ ] 12. [§9.6.3] EXPAND-SCENE (Sal, 1998) to 150 words.
+- [x] 4. [§9.2.1] MATH-GENTLY (two parts: relative change; beta as ratio) + FULL-DERIVATION-MOVE. Note: boats box, (9.1) one line, chain under Full Derivation.
+- [x] 5. [§9.2.2–9.2.3] WHEN-TO-APPLY inside the scene: Mags at the 1,000bp line; ROBO timing. Note: beach exchange, annotation now pointer, threads between four boxes.
+- [x] 6. [§9.3.1–9.3.2] MATH-GENTLY (regression residual in a peer cell). Note: 180/210/300 box, log reason, First/Second paragraph de-templated.
+- [x] 7. [§9.3.3] MATH-GENTLY (two parts: normal; risk-neutral) + FULL-DERIVATION-MOVE. Note: sand bell, bookmaker, 2.7%; trap kept main; Ch 6 pointer.
+- [x] 8. [§9.3.4] ANOTHER-SEAT (Robeco, 7 Sep 2026) + EXPAND-SCENE (Theo's runway column). Note: Monday scene, public-filings pitch book, Robeco gate box, threads.
+- [x] 9. [§9.4.1] MATH-GENTLY (half-life and exponential decay). Note: coffee box with 0.8 survival; text keeps 0.55, cold coffee.
+- [x] 10. [§9.4.2] MATH-GENTLY (turnover and break-even cost) + BRIDGE; move "elaborate way to tip". Note: taxi-meter box, bridge from coffee, threads between three boxes.
+- [x] 11. [§9.5.3] NEW-SCENE Long Scene B: 2022, the Year Low-Risk Looked Like Genius. Note: cut moved to 30 Dec 2022 (full-year sourced numbers; Ch 11 owns 30 Jun 2022 cut); sleeve long-only DTS-matched, bills residual; old paragraph retired.
+- [x] 12. [§9.6.3] EXPAND-SCENE (Sal, 1998) to 150 words. Note: favour, week, recall; spreadsheet limits; Kaz pronoun fixed at 9.6.1.
 - [ ] 13. [§9.7.1] MATH-GENTLY (correlation, rowers) + FULL-DERIVATION-MOVE; breadth gloss.
 - [ ] 14. [Case Study: One Telecom] keep intact; BRIDGE into §9.8.
 - [ ] 15. [§9.8.1] LIST-TO-NARRATIVE + desk-head constraints; hinge Math, Gently.

@@ -1,10 +1,16 @@
 # Chapter 18: OTC Credit Microstructure & the Market Maker's Equations
 
-*11:52 a.m.* The RFQ arrived the way bad news always arrives on a credit desk: politely, in a grey box, with a countdown timer. *Client sells \$8mm Halvorsen Packaging 7.25% Senior Secured Notes due 2029 (a fictional issuer; B2/B), disclosed, five dealers in competition, three minutes to respond.* The composite said 91.25.
+*What is invented in this scene: Halvorsen Packaging, its notes, its lender call, the 12:07 headline, the client and every quote are fictional, and so is the desk. The grey box, the timer and the tick size are real.*
 
-Kaz's auto-quoter had already filled in a bid of 90.875. "Avellaneda–Stoikov," Kaz said, with the calm of someone whose model has never been subpoenaed. "We're long three million already. Twenty-day realized vol, half-spread from the fitted win curve, rounded to the nearest eighth, because this market is a medieval guild."
+*11:52 a.m.* The RFQ arrived the way bad news always arrives on a credit desk: politely, in a grey box, with a countdown timer. *Client sells \$8mm Halvorsen Packaging 7.25% Senior Notes due 2029 (senior unsecured, B3/B−), disclosed, five dealers in competition, three minutes to respond.* The composite said 91.25.
 
-Theo had the indenture open on his second monitor, because he always had a credit document open on his second monitor. "Their lender call is at noon," he said. "And the indenture lets them buy back notes below par through open market purchases, with no cap. If they announce a discounted repurchase at noon, today's sellers are the people who were told first."
+For fifty seconds nobody spoke, which on a market-making desk is a long silence. Theo spent it the way he had spent every spare minute of six years at PJT, on the document. He had the indenture open on his second monitor, because he always had a credit document open on his second monitor, and he scrolled to the clause he had flagged on Monday, the one a restructuring banker reads first and a market maker reads last. *Nothing in this Indenture shall restrict the Issuer or any of its Affiliates from purchasing Notes in open market purchases, privately negotiated transactions or otherwise, at any price.* No cap. No pro rata sharing. No promise to offer every holder the same price. A company with that sentence and a reason to shrink its debt can buy its own bonds at 85 from whoever is nervous enough to sell them at 85.
+
+On his third monitor sat a window the desk had stopped teasing him about: the Priming Risk Score he had been building in the evenings, the 13-week cash flow model in its newest body (Chapter 13). On Monday it had read 0.31 for Halvorsen *(illustrative)*. Overnight the text pipeline had finished last Thursday's earnings-call transcript and tripped on one sentence from the CFO, who was "committed to a leverage target of four times, using all tools available to us." The score now read 0.44. Theo had posted the number in the desk chat at 7:40 a.m. Nobody had replied, because at 7:40 a.m. nobody on a market-making desk replies to anything that is not a price.
+
+At the fifty-second mark Kaz's auto-quoter filled in a bid of 90.875. "Avellaneda–Stoikov," Kaz said, with the calm of someone whose model has never been subpoenaed. "We're long three million already. Twenty-day realized vol, half-spread from the fitted win curve, rounded to the nearest eighth, because this market is a medieval guild."
+
+"Their lender call is at noon," Theo said. "And the indenture lets them buy back notes below par through open market purchases, with no cap. Last week the CFO put 'leverage target' and 'all tools' in the same sentence. If they announce a discounted repurchase at noon, today's sellers are the people who were told first."
 
 "Is an open market purchase like open outcry?" Kaz asked. "Do they have to shout?"
 
@@ -16,7 +22,17 @@ Theo had the indenture open on his second monitor, because he always had a credi
 
 From across the row, Mags did not look up either. "Back in my day we'd just not pick up the phone."
 
-Ines dragged the bid to 90.25 and sent it. It did not trade; someone covered at 90.50. Twenty minutes later the bond was 86 bid, and the chat windows filled with the noise a market makes when it finds out who the patsy was. On \$8mm, the winner had just bought a \$360,000 lesson *(illustrative)*.
+The timer said 1:58. Ines did what she did with every new hire at least once, whenever the clock allowed it and sometimes when it did not. She took an index card from the stack beside her keyboard, wrote on it, and slid it across. *You are the fifth dealer. Write your bid, your size, and the one fact that would change it.* Theo wrote *90, all eight, the noon call*, and slid it back. She tucked it under her keyboard without reading it. If you are reading this with a pen, write your own card now, before the cover comes back.
+
+Ines dragged the bid to 90.25 and sent it with eleven seconds on the clock. It did not trade; someone covered at 90.50. Kaz's face did the small thing faces do when a model has just been overruled by a human and the human has just lost.
+
+*12:00.* Theo had the public dial-in on speaker. The CFO's voice had the even cadence of a script that had been through two rounds of legal review. The company was "evaluating a range of balance-sheet initiatives," had "engaged advisers to assist," and would "consider all options consistent with the leverage target." Nobody said the word *discount*. Nobody needed to.
+
+*12:07.* A headline crossed the news terminal in capitals: HALVORSEN EXPLORING DISCOUNTED DEBT REPURCHASES; ENGAGES ADVISERS. Two dealer runs flipped from offers to "no offer." The composite stopped updating, which is what a composite does when nobody it averages is willing to be averaged.
+
+*12:12.* A print crossed the tape at 86, size shown only as `1MM+`, because the tape caps high-yield size at a million (§18.8). The chat windows filled with the noise a market makes when it finds out who the patsy was. On \$8mm, the winner had just bought a \$360,000 lesson *(illustrative)*.
+
+Ines slid Theo's card out from under her keyboard and read it for the first time. "Right fact," she said. "The number was a quarter too scared. Today that cost nothing. On a quiet Tuesday it costs you the client." If your own card was above 90.50, you won the bonds, and the chat is about you.
 
 Kaz stared at the screen. "The model was right about the inventory."
 
@@ -24,6 +40,7 @@ Kaz stared at the screen. "The model was right about the inventory."
 
 That is the question this chapter answers: *what is the right bid, and how much of it is fear, how much greed, how much suspicion, and how much the price of being asked again tomorrow?*
 
+By the end of this chapter you will be able to look at any bid and name the numbers inside it. Harris's taxonomy and Roll's trick tell you who is selling and what the spread is when nobody will show you one; Kyle and Glosten–Milgrom price the suspicion; Avellaneda–Stoikov (AS), derived from the Hamilton–Jacobi–Bellman (HJB) equation, the Guéant–Lehalle–Fernandez-Tapia (GLFT) inventory-bounded model solved as a linear ODE system, and their jump-to-default extension price the fear and the greed; a fitted RFQ win curve and a hit-ratio multiplier price the franchise. TRACE and BWICs are where the data comes from and where the auction turns inside out, a first-price auction with a leaky list. The Finder table at the top of the Desk Debrief (§18.10) maps each tool to its equation, its box, its scene and its listing, and every engine ends in a spec that leaves ROBO nothing to guess.
 By the end of this chapter you will be able to: map Harris's trader taxonomy onto the credit ecosystem and say who is a forced seller to whom; estimate an effective spread from TRACE prints with Roll's trick, and know when the estimator is lying; derive Kyle's $\lambda$ and estimate it from markouts; derive the Avellaneda–Stoikov (AS) quotes from the Hamilton–Jacobi–Bellman (HJB) equation without skipping steps; solve the Guéant–Lehalle–Fernandez-Tapia (GLFT) inventory-bounded problem as a linear ODE system; extend both to jump-to-default; fit an RFQ win curve and price a hit-ratio target; decode a TRACE file into features; and model a BWIC as a first-price auction with a leaky list. You will also be able to hand all of it to ROBO in a spec that leaves it nothing to guess.
 
 ## 18.1 Harris's Zoo, Relabeled for Credit
@@ -41,13 +58,29 @@ Relabeled for the credit ecosystem of Chapter 1, the zoo looks like this.
 | Order anticipators | Anyone who has seen a BWIC list, a leaked run, or a large RFQ shopped to too many dealers (§18.9) | To trade ahead of known flow | Pre-auction drift, paid by the seller |
 | Dealers | Bank dealers; non-bank liquidity providers, about 10% of credit market-making revenue in 2024 *(approx.; industry dossier)* | Spread, and future flow | Competition. Non-banks bring a different $\gamma$ and a different $k$ (§18.4). |
 
-Harris's four liquidity dimensions turn into the four things an RFQ engine must estimate before it answers anything. Immediacy is the *win probability* within the timer. Width is the *reservation spread* plus the markup. Depth is how the reservation price changes with *block size*, not just with one more lot. Resiliency is the *impact decay* after a print, which is the spring Paleologo describes for equities (Paleologo p.152–153). In bonds the spring is the dealer's own inventory, and it relaxes only when the dealer finds the other side. The rest of the chapter derives a model for each.
+Theo spent part of the afternoon after the 86 print rereading that table with a question he had never needed at PJT: of everyone who could have sent the Halvorsen RFQ, whom should the desk have been glad to see? Ines found him at it, took a pencil, and walked him down the printout one row and one real seller at a time.
+
+"Start at the top," she said, tapping *utilitarian, uninformed*. "The sellers we're paid to love. In the first week of October 2022, British pension funds running liability-driven strategies sold CLO tranches in size, because their gilt hedges were calling for cash. Not one of them had a view on a single loan inside those CLOs. That week gets its own scene in §18.9. What did they want from a dealer?"
+
+"Speed," Theo said.
+
+"Harris calls it immediacy. In our engine it's the *win probability* inside the timer: the chance we answer, at a price they'll take, before the clock runs out. And they wanted it in size, which is Harris's *depth*. Depth is why the reservation price has to move with the block, not with one more lot. A dealer who prices the fortieth million like the first is about to own forty million at the first million's price."
+
+She moved the pencil to the CLOs in the same row. "Same row, different calendar. A CLO whose loan has just been cut to CCC, with a thin overcollateralization cushion, sells. Elkamhi and Nozawa (2022, *Journal of Financial Economics*) found that CLOs with little OC slack are significantly more likely to sell a loan downgraded to CCC within about three months, that the price falls and then comes back, and that because CLOs own overlapping portfolios the constraint binds for many of them in the same weeks. Chapter 21 owns the mechanics. The coming back is Harris's *resiliency*, how fast the price recovers after someone trades. On an exchange the spring is the order book refilling, which is the spring Paleologo describes for equities (Paleologo p.152–153)." She tapped her own monitor, where the desk's positions lived. "Here the spring is our inventory. The price relaxes when we find the other side, and not one minute before."
+
+"And the bottom row?" Theo asked. "The informed."
+
+"The row nobody admits to sitting in." She thought about it. "The cleanest public example I know isn't a seller at all. In March 2024 Altice France held an investor call that knocked its debt down hard, and by that evening a group of creditors had formed a cooperation agreement (IFR; §18.6.3 tells the day). Nobody in that group needed a secret. They had read the capital structure before the call and they read the call faster than the market did. That is what *informed* means on this table most days: someone who did the reading you didn't. Today it was a client with an indenture and a calendar."
+
+"So width is where they hurt us."
+
+"Width is what a round trip costs, and in our engine it's the *reservation spread* plus the markup. The bottom row is the reason a third charge sits on top of both." She put the pencil down. "Four dimensions, four things the engine has to estimate before it answers anything. The rest of the chapter builds a model for each."
 
 > **Desk Myth vs. Desk Reality.** *Myth:* "The bid–ask spread is the dealer's profit." *Reality:* The quoted spread is four charges, and only one of them is profit. **Fear** is the inventory risk premium, $\gamma\sigma^2(T-t)$ in §18.4. **Greed** is the markup a dealer with some pricing power can charge, $\tfrac{2}{\gamma}\ln(1+\gamma/k)$. **Suspicion** is the expected adverse markout, $2\pi\sigma_V$ in Glosten–Milgrom (§18.3). **Franchise** is a *negative* charge: the subsidy a dealer pays to keep winning enough RFQs to stay on the client's list (§18.7). Realized profit is the spread minus the markout. On a toxic RFQ it is negative, which is why "the dealer made the spread" is something only people who have never been a dealer say.
 
 > **[SOURCE EXTRACTION]** *Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.19:* "the bond market is structured around a Request for Quotation (RFQ) process that has hardly changed for decades. Corporate bond bid/ask prices are indicated by dealer runs that are not firm and actionable"
 >
-> **Annotation.** Our analysis: the Man authors are right about the *protocol* and, by 2026, wrong about the *responder*. The disclosed RFQ is still a sealed-bid auction among a handful of dealers. What changed between 2022 and 2026 is who answers it. Trumid reported 88% of eligible RFQ line items executed with no human touch in September 2025, and Tradeweb says AiEX now handles a large and rising share of its institutional trades (sources in Trend Watch, §18.7). The runs are still "not firm and actionable", which is why §18.2 has to recover spreads from prints rather than quotes. The same page also complains about "if filled" trades. That complaint is the reason the modern engine treats fill probability as a modeled variable rather than as noise: in §18.7 the win curve $P(x)$ is a first-class input to the quote, not an afterthought in the backtest.
+> **Annotation.** Our analysis: the Man authors are right about the *protocol* and, by 2026, wrong about the *responder*. The disclosed RFQ is still a sealed-bid auction among a handful of dealers. What changed between 2022 and 2026 is who answers it. Trumid reports that most eligible RFQ line items now execute with no human touch, and Tradeweb says AiEX handles a large and rising share of its institutional trades (figures and sources in the Trend Watch, §18.7). The runs are still "not firm and actionable", which is why §18.2 has to recover spreads from prints rather than quotes. The same page also complains about "if filled" trades. That complaint is the reason the modern engine treats fill probability as a modeled variable rather than as noise: in §18.7 the win curve $P(x)$ is a first-class input to the quote, not an afterthought in the backtest.
 
 ## 18.2 Roll's Trick: Seeing the Spread When No One Will Show You One
 

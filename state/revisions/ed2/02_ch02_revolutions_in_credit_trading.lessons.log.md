@@ -65,6 +65,26 @@ Third sweep (tool count 28,302 = 1.94×):
 - [x] B42. March 2020 scene intro recaps §1.8's whiteboard; the BIS paragraph's "basket at NAV ... never for sale" restates Ines's and Mags's lines. Survives: the dialogue. **Done:** Scene intro and BIS paragraph trimmed; dialogue carries the basket.
 - [x] B43. ETF/lender Seat box tells the "edge of the map / ceiling" idea twice in its last four sentences. Survives: one telling. **Done:** Seat box tells the edge-of-map ceiling once.
 
+Fourth sweep (tool count 28,075 = 1.92×):
+
+- [x] B44. Listing 2.1 prose (`fit_adoption` does the work) restates the Debrief Spec's guards (None, clip with warning, 2015 centering, OLS fallback). Survives: the Spec; the prose keeps the sequence of the fit. **Done:** Listing 2.1 prose defers guards to the Spec; fit sequence kept.
+- [x] B45. Listing 2.2 prose restates the Spec's input checks, draw count and seed. Survives: the Spec; the prose keeps the broadcast-anchor and `np.partition` mechanics. **Done:** Listing 2.2 prose drops input checks and draw count; mechanics kept.
+- [x] B46. §2.9.1 Man TC paragraph's Exercise 4 sentence repeats the Listing 2.3 paragraph. Survives: the listing paragraph. **Done:** Exercise 4 sentence cut; listing paragraph names the bug.
+- [x] B47. Lesson 9: the March 2020 BIS beat reveals the next day's 0.19% and the NAV-falling outcome before the 3:30 p.m. card is posed; the §2.9.3 whiteboard answer tells it again. Survives: the answer; the beat ends on "nothing on the screen said how much of each", and "the ETF had been there a day early" moves into the answer. **Done:** 0.19% reveal moved after the card into the whiteboard answer.
+- [x] B48. §2.3 Man p.19 annotation lists the RFQ's labeled record (invited, answered, quotes, winner, cover, timestamps, traded), which the §2.3 closer and the §2.5 p.4 annotation tell. Survives: the closer and §2.5. **Done:** RFQ labeled-record list cut; closer and §2.5 carry it.
+- [x] B49. "Theo's edge is where the exhaust is thinnest" told four times (§2.1 Man p.2 annotation, §2.2.2, §2.8, Debrief). Survives: §2.2.2's "aha" line, §2.8 and the Debrief; the §2.1 annotation points ahead. **Done:** §2.1 annotation points to §2.8 instead of retelling Theo's edge.
+- [x] B50. Dealer Seat box (§2.3) re-tells Mags's run ("binds nobody", stale by the first coffee) a paragraph after she says it. Survives: Mags. **Done:** Seat box drops the run's staleness; Mags's line carries it.
+- [x] B51. "No March-2020-style discount spiral" told in the April scene (Mags) and again in the April recap. Survives: the scene. **Done:** Recap drops the discount-spiral clause; Mags's scene keeps it.
+- [x] B52. Lesson 9: the April 16 hand-history verdict sits before the 10:40 a.m. card. Move it after Ines's answer (the desk's action), so the card comes before any answer. **Done:** Hand-history verdict moved after Ines's answer; card now precedes answers.
+- [x] B53. The stress paradox ("hardest tickets went back to the phone while the marginal provider moved onto the wire") told in the March 2020 scene and in the §2.9.3 Man p.5 annotation. Survives: the annotation (with its extraction); the scene points to it. **Done:** Scene points to Man's p.5 annotation instead of stating paradox.
+- [x] B54. §2.2.2 opening restates the caps Kaz explained at 3:56 in the cold open. Survives: Kaz; §2.2.2 points to "the two strings Theo met at 3:56". **Done:** §2.2.2 opens on Theo's 3:56 strings; caps told once by Kaz.
+- [x] B55. Censoring box's parenthetical on Ben Dor's "censored"/"truncates" and the p.162 annotation's "the right word" make the same point. Survives: the annotation. **Done:** Box parenthetical cut; annotation names the right word.
+- [x] B56. Ben Dor p.364 annotation announces the Pareto extraction ("below we use it to extract a structural fact") that the next paragraph announces again. Survives: Kaz's paragraph. **Done:** Annotation's forward announcement cut; Kaz's paragraph carries it.
+- [x] B57. Cold-open roadmap's last sentence ("Each section closes by saying what its revolution did to the two numbers") and the §2.1 Man p.4 annotation say the same. Survives: the annotation, where the two numbers are defined. **Done:** Roadmap's closing sentence cut; §2.1 annotation names the two numbers.
+- [x] B58. §2.4 Open Trading launch date: "If your model's first feature is the launch date of its own data source, check the 10-K" is a manual-voice aside after the 10-K is already cited. Cut. **Done:** Manual-voice launch-date aside cut; 10-K citation stays.
+- [x] B59. §2.8 opening meta-sentence ("so every number below carries its source and a self-reported flag") describes the hedges the paragraph then applies. Cut to the claim. **Done:** Meta-sentence cut; the hedges themselves stay in the paragraph.
+- [x] B60. After the 12 March card, Ines says the band is one of three tools and the other two are ahead; the narration then lists the three again with section numbers. Survives: Ines; narration keeps one pointer. **Done:** Narration cut to one pointer; Ines names the missing tools.
+
 ## (c) Templates and detached judgment paragraphs
 
 - [x] C1. L51 Ines's syllabus ("First you date ... Then you read ... You fit ... You price ... You compute ... You treat ... And at the end") — a syllabus in costume. Cut to the one-line answer; the Debrief already gives each outcome to a cast member. **Done:** Syllabus cut; Ines stops counting at one; Debrief carries outcomes.
@@ -99,18 +119,37 @@ Count: 12 Math, Gently (L63 P/Q, L138 mixture, L154 censoring, L168 distribution
 
 ## (f) Reference layer
 
-- [ ] F1. Add a Finder table at the top of §2.10 (ten rows: concept · equation · intuition box · judgment scene · listing), carrying the one-line rules retired by C3–C5 and D1–D3.
-- [ ] F2. Promote the three decision points (Feb 2022; 3:30 p.m. 12 Mar 2020; 10:40 a.m. 9 Apr 2025) to `####` headings; the two long scenes already have `####` headings; the §2.6.2 case study is `###`.
+- [x] F1. Add a Finder table at the top of §2.10 (ten rows: concept · equation · intuition box · judgment scene · listing), carrying the one-line rules retired by C3–C5 and D1–D3. **Done:** Ten-row Finder table added at top of §2.10 with retired rules.
+- [x] F2. Promote the three decision points (Feb 2022; 3:30 p.m. 12 Mar 2020; 10:40 a.m. 9 Apr 2025) to `####` headings; the two long scenes already have `####` headings; the §2.6.2 case study is `###`. **Done:** Three decision points now #### headings; long scenes already headed.
 
 ## (g) Cast-bible contradictions
 
-- [x] G1. C9: "Halvorsen Freight 7.125% senior notes due 2030, B2" (L5), "Halvorsen is B2" (L37), "a B2 bond" (L366) → Halvorsen Packaging 7.25% senior notes due 2029, B3. Name the story day (cast rule 3): Tue 13 Oct 2026, week four, after Ch 1's Fri 9 Oct lender call. **Done:** Packaging 7.25% 2029 B3 throughout; story day 13 Oct 2026 named.
+- [x] G1. C9: "Halvorsen Freight 7.125% senior notes due 2030, B2" (L5), "Halvorsen is B2" (L37), "a B2 bond" (L366) → Halvorsen Packaging 7.25% senior notes due 2029, B3. Name the story day (cast rule 3). The old "three weeks" put the cold open on Tue 13 Oct, the day Ch 1 §1.3.2 has Halvorsen not trading at all ("The Tuesday after the 8-K"); set it on Tue 20 Oct 2026, week five, "a month on a systematic desk". **Done:** Packaging 7.25% 2029 B3 throughout; dated Tue 20 Oct, clearing Ch 1's halt.
 - [x] G2. C3: Theo's March 2020 PJT memory (L660) needs a pre-March-2020 start: "ten weeks into the job" (joined Jan 2020). **Done:** Theo ten weeks into PJT in March 2020; CHECK removed.
 - [x] G3. L926 "a decade learning to read" contradicts six years at PJT → "six years". **Done:** Debrief's 'a decade' now 'six years', matching the PJT canon.
-- [ ] G4. Record new facts in `state/cast_bible.md`: Theo's Ch 2 Halvorsen ticket and PJT start (Jan 2020); Ines's March 2020 seat (IG market making at a dealer); Kaz in a university library in March 2020 and a first quant job in 2022; Mags's 2021 view from the distressed seat and spring-2020 purchases; Kaz misreads "riskless principal" (tenured professor) and "authorized participant"; Femi (Shop Life, fictional systematic asset manager).
+- [x] G5. Kaz "spent 2022 at a first quant job" (§2.6.2 spine, moved from the old L568) contradicts the cast bible's Ch 14 canon (postdoc on rough paths until Nov 2023; on the desk by Jan 2025). Drop the 2022 job; Kaz reads the reversal in the four terms without a backstory. **Done:** Kaz's 2022 quant job removed; Ch 14 postdoc canon stands.
+- [x] G4. Record new facts in `state/cast_bible.md`: Theo's Ch 2 Halvorsen ticket and PJT start (Jan 2020); Ines's March 2020 seat (IG market making at a dealer); Kaz in a university library in March 2020; Mags's 2021 view from the distressed seat and spring-2020 purchases; Kaz misreads "riskless principal" (tenured professor) and "authorized participant"; Femi (Shop Life, fictional systematic asset manager). **Done:** Cast bible gains Ch 2 rows, PJT start, misreads, Femi.
 
 ## (h) Relative-value beat
 
-- [ ] H1. `state/rv_thread.md` does not exist (only `state/rv_thread_plan.md`), so no RV beat is assigned this pass; no item to write.
+- [x] H1. `state/rv_thread.md` does not exist (only `state/rv_thread_plan.md`), so no RV beat is assigned this pass; no item to write. **Done:** No rv_thread.md exists; no RV beat assigned; nothing written.
 
-<!-- items above are ticked below as they are fixed -->
+## Metric, after
+
+`python3 tools/prescriptiveness.py --pre 9ac1c379053d9d0254e9d524d9a40efdec4a2c71 book_src/02_ch02_revolutions_in_credit_trading.md`
+
+| ver | words | bullets% | modal | imper | rule | dialog | mathgently | seat |
+| :-- | --: | --: | --: | --: | --: | --: | --: | --: |
+| pre (Ed 1) | 14,619 | 6.6 | 1.6 | 1.1 | 1.6 | 5.9 | 0 | 0 |
+| before this pass | 31,789 | 1.0 | 1.8 | 0.9 | 1.1 | 8.1 | 12 | 4 |
+| after this pass | 27,746 | 1.2 | 1.7 | 0.6 | 1.2 | 9.0 | 9 | 4 |
+
+Growth 27,746 / 14,619 = **1.90×** (1.898), inside the 1.6–1.9× band, down from 2.17×. File 951 → 926 lines; `wc -w` 32,229 → 28,524. Imperatives per 1,000 words fell from 0.9 to 0.6, dialogue rose from 8.1 to 9.0. Nothing protected removed: 26 display-math blocks, 17 Source Extractions (text and page numbers byte-identical), three Trend Watches (only "CHECK" dropped from three CONFIRMED chart-reading cells), six exercises (identical), four Appendix F links and every URL kept. No code blocks; `$$` alone on lines; currency escaped; last line `<!-- STATUS: COMPLETE -->`; `tools/check_book.py` reports OK for the chapter.
+
+## Open items (not fixed here)
+
+- The §2.3.1 fit uses 48% for US IG in 2025 while the Trend Watch lists 48% for full-year 2024 and 52% for June 2025 (carried from the verify report); a one-line reconciliation belongs to the next fact pass.
+- The chapter has no figures yet (U4 owns the three-figure minimum).
+- Cast: Ch 2's cold open now sits on Tue 20 Oct 2026, after Ch 3's Fri 16 Oct in story time; book order and story order differ, as elsewhere in the book.
+
+<!-- STATUS: COMPLETE -->

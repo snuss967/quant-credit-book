@@ -8,13 +8,13 @@
 - [x] 6. [§24.3 opening] LIST-TO-NARRATIVE + SHOP-LIFE — four-seat scene; Ruth vendor vignette; ROBO gag one sentence.
 - [x] 7. [§24.3.1] MATH-GENTLY #3, RFV vs RMV + FULL-DERIVATION-MOVE — jacket box; Full Derivation subheading; lunch beat "hedge the loss".
 - [x] 8. [§24.3 Bohn–Stein and Dynkin airline extractions] BRIDGE — Mags equipment-trust line threads Bohn–Stein and Dynkin boxes.
-- [ ] 9. [§24.4] NEW-SCENE, Long Scene A: The Haircut Call, March 2020
-- [ ] 10. [§24.4.1] MATH-GENTLY #4, leverage as divisor + FULL-DERIVATION-MOVE
-- [ ] 11. [§24.4 counterparty] ANOTHER-SEAT #1, dealer desk
-- [ ] 12. [§24.5] MATH-GENTLY #5, minimum over a set is an option + Delphi + FULL-DERIVATION-MOVE
-- [ ] 13. [§24.6] NEW-SCENE, The Sears Afternoon, 17 January 2019
-- [ ] 14. [§24.6.1] FULL-DERIVATION-MOVE
-- [ ] 15. [§24.7] LIST-TO-NARRATIVE + MATH-GENTLY #6, OU and half-life
+- [x] 9. [§24.4] NEW-SCENE, Long Scene A: The Haircut Call, March 2020 — Friday replay; term-repo reveal; cards graded; CSS closes scene.
+- [x] 10. [§24.4.1] MATH-GENTLY #4, leverage as divisor + FULL-DERIVATION-MOVE — house box, two calls; one-line statement; heading renamed.
+- [x] 11. [§24.4 counterparty] ANOTHER-SEAT #1, dealer desk — generic bank seat after Bohn–Stein; Trend Watch moved to section end.
+- [x] 12. [§24.5] MATH-GENTLY #5, minimum over a set is an option + Delphi + FULL-DERIVATION-MOVE — shelf box with shortfall-times-annuity; Delphi hedged; heading renamed.
+- [x] 13. [§24.6] NEW-SCENE, The Sears Afternoon, 17 January 2019 — replay on clock; one-sided cap found; §24.8.3 pointer; App D fixed.
+- [x] 14. [§24.6.1] FULL-DERIVATION-MOVE — heading renamed; one-line IMM gloss; ROBO rounding pointer; spec opener.
+- [x] 15. [§24.7] LIST-TO-NARRATIVE + MATH-GENTLY #6, OU and half-life — Kaz spring scene; KLZ, LNS folded in; Itô pointer §6.1.
 - [ ] 16. [§24.7.1] MATH-GENTLY #7, costs vs Sharpe + FULL-DERIVATION-MOVE + WHEN-TO-APPLY
 - [ ] 17. [§24.7] ANOTHER-SEAT #2, insurer / IG real-money mandate
 - [ ] 18. [§24.8.1] LIST-TO-NARRATIVE + MATH-GENTLY #8, thresholds and cliffs

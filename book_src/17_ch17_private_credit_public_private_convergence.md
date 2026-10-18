@@ -6,21 +6,47 @@
 
 ## Cold Open: Volatility N/A
 
-Tuesday, June 23, 2026, 4:40 p.m. The RFQ is for \$25mm of a listed business development company's senior unsecured notes due 2029. It lands two hours after a headline that a \$26 billion non-traded private credit fund has received redemption requests for 16.8% of its shares this quarter, against a 5% cap. *(The fund and its numbers are real: InvestmentNews, June 23, 2026. The RFQ and the listed BDC are ours.)*
+*(A replay. The desk, its dialogue, the listed BDC, its notes and the \$25mm RFQ are fictional, and every price the desk sees on its own screens is illustrative. The fund in the headline and its numbers are real: InvestmentNews, June 23, 2026.)*
 
-Kaz has already pulled the BDC's NAV history. "I don't see the problem. NAV per share has moved less than one percent all quarter. I tried to pull the volatility of the loan book and the vendor field says N/A."
+The desk keeps a folder called "Replays": real credit events cut off at a minute, with nothing inside that was not public by then. Ines runs one on a Friday afternoon every few weeks, and the rule never changes: nobody mentions anything that happened after the cut-off. This Friday in October, the week the Fed finally put private credit into its Financial Accounts, the folder on the big screen is labeled *Tuesday 23 June 2026, 2:40 p.m.* Mags and Kaz were on the desk that day. Theo was at RSSG, where the same headline arrived as somebody else's problem and stayed that way until dinner.
+
+Ines starts the clock.
+
+**2:40 p.m.** The headline crosses the news screen in the clipped grammar of a wire: Apollo Debt Solutions, a \$26 billion non-traded private credit fund, has received repurchase requests for 16.8% of its shares this quarter, about \$2.4 billion, and will pay 5%, which the story calls "the standard limit for such vehicles." Two other sponsors' funds appear further down the piece; the desk will get to them in §17.6.
+
+Kaz reads it twice, the way Kaz reads anything with a percentage in it, and shrugs. "That's their fund. It isn't our bond. Their investors want out of a vehicle that only lets five in a hundred leave each quarter. Our bonds don't have investors who want out. They have a price."
+
+It is a reasonable sentence, and Mags lets it sit on the desk for a while, the way you let a junior's bid sit on a screen to see who hits it.
+
+**3:05 p.m.** The desk makes markets in the unsecured notes of a listed BDC that lends to the same kind of borrower as the fund in the headline: sponsor-backed, middle-market, heavy in software. The run sheet shows the 2029 notes quoted where they were at lunch, because nothing has printed since. The BDC's shares are down a little more than 2% since the headline, which is the only price anywhere on the screen that has moved.
+
+Theo opens the BDC's last 10-Q, skips everything a normal person would read, and goes looking for the credit agreement behind the revolver, which the 10-Q mentions in two sentences and files as an exhibit to a different document. It takes him twenty minutes to find the definition of the borrowing base, and another ten to find the paragraph that matters, which is about what the bank will lend against and what it will not. Loans on non-accrual drop out. Loans that have been amended to pay in kind, interest that accrues as more debt instead of arriving as cash, are "Eligible Investments" only at a haircut, and the haircut gets worse the longer the PIK runs.
+
+He reads it out loud, which is what he does when people start talking about poker. "What does the revolver say about borrowing-base eligibility for PIK loans? If the bank haircuts anything that's been amended into PIK, and a fifth of the book is software that's been amended into PIK, then the borrowing base shrinks exactly when the fund needs it. And these notes sit behind that line."
+
+Nobody answers, because the question is a good one and the 10-Q does not say how much of the book is PIK by amendment rather than by design. Theo writes a sticky note and puts it under the one from Chapter 4 (*"price" = as of when, in what size, from whom?*): *whose number is it?*
+
+**4:10 p.m.** Kaz has pulled the BDC's NAV history and the history of a loan index beside it, and is quietly pleased with the first chart and quietly annoyed with the second, because the second one moves.
+
+**4:40 p.m.** The RFQ arrives: a client wants to sell \$25mm of the BDC's senior unsecured notes due 2029, two hours after the headline, twenty minutes before the close, from an account the desk sees about once a quarter.
+
+Kaz has the NAV chart up. "I don't see the problem. NAV per share has moved less than one percent all quarter. I tried to pull the volatility of the loan book and the vendor field says N/A."
 
 "N/A isn't zero," Ines says. "N/A means nobody looked. What's the pot, what are the odds, and who at this table knows more than we do? Somebody wants out of the bond of a vehicle that owns the same kind of loans as the fund that just got a run. They want out at 4:40 today, not at 9:30 tomorrow. That's the hand."
 
 "In my day," Mags says without looking up, "we called a bond with no price a bond. You found out what it was worth when you tried to sell it. Then you found out who else was trying."
-
-Theo is reading the BDC's last 10-Q, which is what he does when people start talking about poker. "What does the revolver say about borrowing-base eligibility for PIK loans? If the bank haircuts anything that's been amended into PIK, and a fifth of the book is software that's been amended into PIK, then the borrowing base shrinks exactly when the fund needs it. And these notes sit behind that line."
 
 "Are you saying the NAV is wrong?" Kaz asks.
 
 "I'm saying the NAV is a mark," Theo says. "It's marked quarterly, by the manager, who earns fees on it. The bond price is a price. Underneath, it's the same loans."
 
 Ines nods at the screen. "Then the question isn't what the bond is worth. It's what the loans are worth, and which of the things we *can* trade already knows."
+
+She stops the clock there, at 4:41, with the RFQ still blinking, and hands out index cards, because a replay is worthless if people get to answer after they have heard each other. "Write three things: what you bid, how much of the \$25mm, and which public thing you'd hedge it with. Then put the card face down. We turn them over at the end of the chapter."
+
+Kaz writes quickly. Mags writes one line and folds the card. Theo looks at his sticky note for longer than he looks at his card, which is, Ines notes without saying so, the right order.
+
+Four prices will be attached to the same loans before this chapter is done: the manager's NAV, the listed sibling's share price, a pension fund's bid at par, and a secondary buyer's bid for a fund's units at two-thirds of NAV. Each is honest about a different question, which is why Theo's sticky note is the right one.
 
 The question this chapter answers: **what are the true value and risk of a portfolio whose only published price is set by its owner, and which public instruments let us trade our answer?**
 
@@ -50,9 +76,17 @@ Now the fact that organizes the chapter. Private credit and public leveraged fin
 
 The private borrower is smaller, more levered and more software-heavy. It pays about 100bp more for the privilege. None of that makes it a different kind of credit; it is the bottom-left of the same scatter plot. The same sponsor, the same software company and the same five turns of leverage can sit in a CLO as a daily-priced syndicated loan or in a BDC as a quarterly-marked unitranche. **What differs is not the credit. It is the measurement.**
 
-A public loan is *priced*: daily, noisily, by people who lose money when they are wrong, with an error that is roughly mean zero. A private loan is *marked*: quarterly, from a model, smoothed, by the party that owns it and earns a fee on the number. Everything in this chapter is the mathematics of that difference. If you want one sentence for your monitor, it is this: *private credit is public credit with the price removed, and our job is to put the price back and get paid by whoever still believes it was never there.*
+Mags has heard this argument before, in a different decade. "When I started, loans were priced by phone and by grudge. The bid you got depended on whether the man on the other end had been stuck with your last one. Terrible system. But every one of those numbers came from somebody who'd lose money if it was wrong."
 
-Theo will find the structure familiar, because he has seen it on the other side of the table. A BDC is, in the Boston Fed's phrase, "a CLO in which banks hold the top tranche" (Fillat, Landoni, Levin and Wang, Boston Fed Current Policy Perspectives 25-8, May 21, 2025): a bank revolver on top, unsecured notes in the middle, listed or non-listed equity at the bottom, and a manager who both picks the collateral and marks it. A perpetual BDC facing 16.8% redemption requests against a 5% cap is a liquidity-constrained borrower. The right tool for it is the one on Theo's USB stick: a thirteen-week cash flow model in which the "maturity wall" is the redemption queue and the "revolver availability" is the undrawn bank line plus whatever syndicated loans the fund holds for liquidity. And "selective default" (PIK amendments, amend-and-extends, covenant holidays) is the bilateral market's liability management transaction: the same redefinition of default Theo watched in Serta and Incora, done quietly, with one lender and no docket.
+"Who loses money if a private mark is wrong?" Theo asks. He means it as a real question: in a restructuring, the first thing anyone asks about a valuation is who paid for it.
+
+Kaz starts to answer and then stops, because the honest answer is *nobody, this quarter*. If the manager carries a loan at 97 and it is worth 85, no trade happens at 97, no one is filled at the wrong price, and the fee is still charged on 97. The error does not show up as a loss to anyone; it shows up as a mark that is twelve points too high and a volatility series that is too smooth, and it gets corrected later, by a committee, in an amount and at a speed the committee chooses.
+
+"Oh," Kaz says. "That's the whole problem. A public loan is *priced*: daily, noisily, by people who lose money when they're wrong, so the error is roughly mean zero. A private loan is *marked*: quarterly, from a model, smoothed, by the party that owns it and earns a fee on the number. Nobody is paid to make the error go away, so it doesn't go away. It just arrives late."
+
+Everything in this chapter is the mathematics of that difference. Ines gives Theo the one sentence for his monitor, and he tapes it under the sticky note: *private credit is public credit with the price removed, and our job is to put the price back and get paid by whoever still believes it was never there.*
+
+Theo will find the structure familiar, because he has seen it on the other side of the table. A BDC is, in the Boston Fed's phrase, "a CLO in which banks hold the top tranche" (Fillat, Landoni, Levin and Wang, Boston Fed Current Policy Perspectives 25-8, May 21, 2025): a bank revolver on top, unsecured notes in the middle, listed or non-listed equity at the bottom, and a manager who both picks the collateral and marks it. The redemption queue that made the cold open's seller nervous turns that structure into a borrower with a maturity wall, and §17.6.1 is where Theo's USB stick gets its next job. And "selective default" (PIK amendments, amend-and-extends, covenant holidays) is the bilateral market's liability management transaction: the same redefinition of default Theo watched in Serta and Incora, done quietly, with one lender and no docket.
 
 ### 17.1.2 What "private" actually buys: access and patience
 
@@ -61,6 +95,10 @@ There is an honest case for private credit, and it is worth stating before we sp
 > **[SOURCE EXTRACTION]** *Ben_Dor_Quantitative_Credit_Portfolio_Management p.166:* "Long-term investors, with reduced mark-to-market constraints, can choose to provide liquidity to the market and buy the bond, comfortable with the low default risk."
 >
 > **Annotation.** This is the respectable theory of the illiquidity premium: patient capital that does not have to mark to market earns a premium for absorbing assets that forced sellers must dump. Ben Dor and coauthors are writing about public bonds after downgrades, but the logic is the original pitch for private credit, and it has two conditions. The investor must have *reduced mark-to-market constraints*, and the default risk must be *low*. The 2020s growth of semi-liquid retail vehicles quietly removed the first condition: a fund that promises quarterly liquidity at NAV has re-imported the mark-to-market constraint while keeping the mark smoothed. The 2025–26 cycle tested the second, through software borrowers exposed to AI disruption. The modern desk departs from the shelf here. It treats the illiquidity premium as real but *conditional* on the holder's liability structure, and it prices the premium separately for a drawdown fund (patient), an insurer (patient but rating-constrained) and a perpetual BDC (patient until the redemption queue says otherwise).
+
+Ben Dor's patient investor has a modern name, and it holds earnings calls. Theo reads one of them the way he used to read a lender presentation: for what the lender says it will refuse to do.
+
+> **View From Another Seat.** *The direct lender.* From the chair of the largest listed BDC, the edge is documents and patience, and the managers say so in public. On Ares Capital's fourth-quarter 2025 call (4 February 2026), its president Jim Miller said, "We will walk away from transactions based on documentation terms," put the portfolio's first-lien loan-to-values "in the high 30% to low 40% range," and reported non-accruals of 1.8% at cost against a 3.8% average for BDCs. A loan with sixty cents of equity value under it and a covenant package negotiated line by line does not need a daily price to be a good loan, and a lender that can hold it to refinancing does not need to sell it to anyone. The same seat is candid about where the weakness lives, and it is not in the loans. On the Ares Management call of 31 July 2026, chief executive Michael Arougheti said "there is a risk that some of the wealth flows could be more pro-cyclical than people thought they were." That sentence is the hinge of this chapter. The direct lender's assets are patient; a growing share of its liabilities, the retail money in perpetual vehicles, is not, and the place where a public desk meets the private lender is the funding side, where §17.6's queue lives. (Quoted words are the speakers' own, from the calls cited; the reading of them is ours.)
 
 The dishonest version of the case is the one the Nuveen table hints at. If the volatility cell says "N/A," an optimizer that needs a number will use whatever is smoothest, and the smoothest series in the world is one nobody updates. Cliffwater's direct lending index (CDLI), which aggregates BDC portfolio marks, returned 9.3% in 2025, 10.4% of it from interest income, with a 20-year average of 9.5% and one negative year (Cliffwater release, March 31, 2026). Those are real returns to real loans. The question §17.2 answers is how much real *risk* sits behind them, and why the reported series cannot tell you.
 
@@ -98,7 +136,9 @@ Kaz looks at the overlay and says the natural thing. "So the NAV is just a lagge
 
 ### 17.2.2 Derivation: the Getmansky–Lo–Makarov smoothing model
 
-**Notation.** In this chapter $t$ counts **quarters**, not years; we convert explicitly when comparing with monthly public data. We write returns as $x$ rather than $r$, because this book reserves $r$ for the short rate and $R$ for recovery. All expectations are under the physical measure $\mathbb{P}$: there is no liquid hedge for a single private loan, so nothing here is priced under $\mathbb{Q}$.
+> **Math, Gently.** *A thermometer with a lag, and why risk adds up in squares.* **Part 1, the filter.** Picture an old thermometer on a porch that never quite keeps up. When the temperature drops, the dial shows half of today's change today, three-tenths of it tomorrow and the last fifth the day after. Nothing is lost: the dial ends up in the right place. It just gets there late. Now let the temperature be the true value of a loan book and the dial be the manager's mark. A true loss of 4 points shows up as 2.0 points in this quarter's mark, 1.2 in the next and 0.8 in the one after. The first mark carries half the loss, and the rest is still in the pipe. A list of weights like (0.5, 0.3, 0.2) is called a *kernel*, and a mark built this way is a *moving average* of the true returns. **Part 2, the squares.** Flip one fair coin for a dollar and the result swings a full dollar either way. Flip three independent coins for a third of a dollar each and the total still averages zero, but it rarely reaches the extremes, because the coins partly cancel. Behind that calm is a rule: the variance of a weighted sum of uncorrelated pieces is the sum of the *squared* weights times the variance of one piece. Squares, because variance measures squared distance, so a third of a coin contributes a ninth of a coin's variance. Three equal thirds give $3\times\tfrac19=\tfrac13$ of the variance, and the volatility, its square root, is $1/\sqrt3\approx0.58$ of one coin's. Now do the porch thermometer in the margin: $0.5^2+0.3^2+0.2^2=0.25+0.09+0.04=0.38$, and $\sqrt{0.38}\approx0.62$. A lagged mark reports about 62% of the true volatility of the thing it marks, and nobody has to lie for that to happen. The full version is next.
+
+**Notation.** In this chapter $t$ counts **quarters**, not years; we convert explicitly when comparing with monthly public data. We write returns as $x$ rather than $r$, because this book reserves $r$ for the short rate and $R$ for recovery. All expectations are under the physical measure $\mathbb{P}$: there is no liquid hedge for a single private loan, so nothing here is priced under $\mathbb{Q}$. (Physical measure here simply means the odds you actually face; the risk-neutral odds a hedge would imply belong to Chapters 6 and 23.)
 
 **Assumptions.** Let $x_t$ be the true, unobservable quarterly excess return on the loan portfolio, covariance-stationary with mean $\mu$ and variance $\sigma^2$, and serially uncorrelated. Let $F_t$ be the excess return on a public factor (the leveraged loan index, say), also serially uncorrelated, with $x_t=\beta F_t+\epsilon_t$, where $\epsilon_t$ is idiosyncratic and independent of $F$ at all leads and lags. The reported (marked) return is a finite moving average of true returns:
 
@@ -108,7 +148,23 @@ $$
 
 Here $\theta_0$ is the share of today's true return that shows up in today's mark, $\theta_1$ the share that shows up next quarter, and so on. The unit-sum constraint says the marks *eventually* catch up: nothing is hidden forever, only delayed. (When the constraint fails, with $\sum_k\theta_k<1$, the marks never catch up, because the collateral was never there. That is the fraud case, and §17.8 returns to it.)
 
-**Mean.** By linearity, $\mathbb{E}[x^o_t]=\sum_k\theta_k\,\mathbb{E}[x_{t-k}]=\mu\sum_k\theta_k=\mu$. Smoothing does not change the average return. This is why the CDLI's 9.3% can be a perfectly good estimate of the mean while being useless for risk.
+Kaz copies the kernel onto the whiteboard and asks the obvious question: what does it do to each number on a risk report? The answers fit on a line each, and the algebra behind them is in the Full Derivation at the end of this subsection. The **mean** is untouched, $\mathbb{E}[x^o_t]=\mu$, which is why the CDLI's 9.3% can be a perfectly good estimate of the average return while being useless for risk. The **variance** is deflated by the sum of squared weights, $\operatorname{Var}(x^o_t)=\sigma^2\sum_k\theta_k^2$, so reported volatility is the truth times $\sqrt{\sum_k\theta_k^2}\le1$, which is Part 2 of the box. The **Sharpe ratio** is inflated by the reciprocal, $\text{SR}^o=\text{SR}/\sqrt{\sum_k\theta_k^2}$, because the mean survived and the volatility did not.
+
+> **Math, Gently.** *Autocorrelation: does last quarter's number predict this one?* The lag-one autocorrelation of a series is its correlation with itself one step earlier: close to +1 if up quarters follow up quarters, zero if last quarter tells you nothing, negative if the series zigzags. Think of footprints in fresh snow. A walker who stamps each print in new snow leaves prints that tell you nothing about each other. A walker whose stride is shorter than her foot leaves prints that overlap, so neighbours share some of the same snow. A smoothed mark is the second walker: this quarter's mark and last quarter's both contain a slice of last quarter's true return, so they move together even when the true returns are pure noise. Take a two-quarter kernel, (0.6, 0.4), a different porch from the one above. Two neighbouring marks share exactly one true return, weighted 0.6 in one and 0.4 in the other, so their covariance is $0.6\times0.4=0.24$ units of true variance, while each mark's own variance is $0.6^2+0.4^2=0.52$ units. Their ratio, $0.24/0.52\approx0.46$, is the lag-one autocorrelation of a series whose truth has none. The full version is next.
+
+That is the general result: every reported **autocorrelation** is non-negative and vanishes beyond lag $K$, with $\rho^o_j=\sum_l\theta_l\theta_{l+j}\big/\sum_k\theta_k^2$. Call it what it is. NAV "momentum" in a smoothed series is a property of the measurement, not of information, and a strategy that trades it inside the private wrapper is trading the valuation calendar. Finally, the **beta** to public credit measured in the same quarter is attenuated by exactly the first weight, $\beta^o_0=\theta_0\beta$. The rest of the beta has not vanished; it is parked at lags $1,\dots,K$, and the same-quarter correlation shrinks by $\theta_0/\sqrt{\sum_k\theta_k^2}$. Those two facts are what Kaz's regression in §17.2.3 is built to undo.
+
+**Worked check.** Take $\theta=(0.5,0.3,0.2)$, the porch thermometer. The thermometer box already did the variance, $\sum_k\theta_k^2=0.38$, so reported volatility is $\sqrt{0.38}=0.616$ of true volatility and the reported Sharpe ratio is inflated by $1/0.616=1.62$. The autocorrelations are $\rho^o_1=(0.5\cdot0.3+0.3\cdot0.2)/0.38=0.21/0.38=0.553$ and $\rho^o_2=(0.5\cdot0.2)/0.38=0.263$. The contemporaneous beta is half the true beta, and the contemporaneous correlation is $0.5/0.616=0.81$ of the true one.
+
+Those are not exotic numbers. A two-quarter lag in the marks, which any valuation committee can produce without anyone doing anything wrong, turns an asset with the risk of a single-B loan portfolio into one that reports 62% of the volatility, half the beta and 1.6 times the Sharpe ratio. That is how a vendor field ends up saying "N/A": the honest answer would have been "about 1.6 times what you see, and correlated with things you already own, a quarter later." Figure 17.2 shows both effects: the lagged, shallower path (left) and the pending mark after a single shock (right).
+
+![Figure 17.2: A mark that recognizes each true return over three quarters falls later and less than the true value (left), and after a 4% shock the first mark carries only 2.0 points of the loss, leaving 2.0 still to come (right). Illustrative: the §17.2.2 model with θ = (0.5, 0.3, 0.2); true quarterly returns drawn as N(1.8%, 1.2%) (seed 17) with two stress quarters of −6% and −4%; the right panel is the cumulative kernel weight times a 4% loss.](assets/figures/ch17_smoothing_staircase.png)
+
+#### The Full Derivation
+
+Each line above, worked from the assumptions.
+
+**Mean.** By linearity, $\mathbb{E}[x^o_t]=\sum_k\theta_k\,\mathbb{E}[x_{t-k}]=\mu\sum_k\theta_k=\mu$. Smoothing does not change the average return.
 
 **Variance.** Because the $x_{t-k}$ are uncorrelated,
 
@@ -132,7 +188,7 @@ $$
 \rho^{o}_j=\frac{\sum_{l=0}^{K-j}\theta_l\,\theta_{l+j}}{\sum_{k=0}^{K}\theta_k^2}\;\ge 0 .
 $$
 
-Every autocorrelation of the reported series is non-negative, and it is zero beyond lag $K$. Positive autocorrelation in a NAV series is therefore *mechanical*: it would appear even if the true returns were pure noise. Call it what it is. NAV "momentum" in a smoothed series is a property of the measurement, not of information, and a strategy that trades it inside the private wrapper is trading the valuation calendar.
+Every autocorrelation of the reported series is non-negative, and it is zero beyond lag $K$. Positive autocorrelation in a NAV series is therefore *mechanical*: it would appear even if the true returns were pure noise.
 
 **Sharpe ratio.** With $\text{SR}=\mu/\sigma$ the true Sharpe ratio,
 
@@ -150,15 +206,11 @@ $$
 
 The contemporaneous beta to public credit is attenuated by exactly $\theta_0$. The rest of the beta has not disappeared; it is parked at lags $1,\dots,K$, where $\operatorname{Cov}(x^o_t,F_{t-k})=\theta_k\beta\operatorname{Var}(F)$. Correlation is attenuated by the smaller factor $\theta_0/\sqrt{\sum_k\theta_k^2}$, because the denominator's volatility was deflated too.
 
-**Worked check.** Take $\theta=(0.5,0.3,0.2)$. Then $\sum_k\theta_k^2=0.25+0.09+0.04=0.38$, so reported volatility is $\sqrt{0.38}=0.616$ of true volatility and the reported Sharpe ratio is inflated by $1/0.616=1.62$. The autocorrelations are $\rho^o_1=(0.5\cdot0.3+0.3\cdot0.2)/0.38=0.21/0.38=0.553$ and $\rho^o_2=(0.5\cdot0.2)/0.38=0.263$. The contemporaneous beta is half the true beta, and the contemporaneous correlation is $0.5/0.616=0.81$ of the true one.
-
-Those are not exotic numbers. A two-quarter lag in the marks, which any valuation committee can produce without anyone doing anything wrong, turns an asset with the risk of a single-B loan portfolio into one that reports 62% of the volatility, half the beta and 1.6 times the Sharpe ratio. That is how a vendor field ends up saying "N/A": the honest answer would have been "about 1.6 times what you see, and correlated with things you already own, a quarter later." Figure 17.2 shows both effects: the lagged, shallower path (left) and the pending mark after a single shock (right).
-
-![Figure 17.2: A mark that recognizes each true return over three quarters falls later and less than the true value (left), and after a 4% shock the first mark carries only 2.0 points of the loss, leaving 2.0 still to come (right). Illustrative: the §17.2.2 model with θ = (0.5, 0.3, 0.2); true quarterly returns drawn as N(1.8%, 1.2%) (seed 17) with two stress quarters of −6% and −4%; the right panel is the cumulative kernel weight times a 4% loss.](assets/figures/ch17_smoothing_staircase.png)
-
 > **Desk Myth vs. Desk Reality.** *Myth:* Private credit has low volatility and low correlation with public credit, so it diversifies a high-yield book. *Reality:* It has low *measured* volatility because $\sum_k\theta_k^2<1$, and low *contemporaneous* correlation because $\theta_0<1$. Sum the lagged betas and the correlation comes back. Cliff Asness has made the uncomfortable version of the point: "What if investors will actually pay a higher price and accept a lower expected return for very illiquid assets?" and "Attractive smoothness of returns may not come for free" (Asness, "The Illiquidity Discount?", AQR, December 19, 2019). If investors value not seeing the volatility, the smoothing is a product feature, and somebody is paying for it. The desk's job is to find out who, and to be on the other side when the feature is withdrawn.
 
 ### 17.2.3 Recovering the beta: Dimson sums and the public-leads-private test
+
+> **Math, Gently.** *A regression slope, and summing the echoes.* A regression slope answers one question: when $X$ moves by one unit, how far does $Y$ move, on average? Numerically it is the covariance of the two divided by the variance of $X$, which is the same thing said with less charm. Now picture shouting into a canyon. Your voice comes back not once but three times, each echo fainter and later than the last. If you measure only the first echo, you conclude that the canyon returns 30% of your voice; add up all three and it returns 60%. The marks of a private fund behave like the canyon. Suppose the loan index moves by 1 point and the fund's marks answer with 0.30 points this quarter, 0.18 next quarter and 0.12 the quarter after. A regression of the mark on the same-quarter index finds a slope of 0.30 and calls it the beta. Give the regression last quarter's index and the quarter before as two more inputs, and it finds three slopes, 0.30, 0.18 and 0.12, one per echo. Their sum, $0.60$, is the true beta, and each slope divided by the sum, $0.30/0.60=0.5$, then $0.3$ and $0.2$, is the kernel the porch thermometer used. One regression, two answers. The full version is next.
 
 Kaz's instinct is the Dimson (1979) and Scholes–Williams (1977) correction for nonsynchronous trading, invented for thinly traded stocks and exactly right here. Regress reported returns on the current and $K$ lagged factor returns:
 
@@ -178,13 +230,41 @@ $$
 \mathbb{E}_t\big[x^o_{t+1}\big]=\alpha+\sum_{k=1}^{K}b_k\,F_{t+1-k},
 $$
 
-which is known at $t$ because it uses only $F_t,F_{t-1},\dots$. The next NAV print is partly *already in the public data*. A desk that knows the index fell 3% this quarter and that $b_1\approx0.3$ knows the next mark will carry about $0.9\%$ of that fall, before the valuation committee meets. The residual $u_t$ is serially correlated (it is an MA($K$) in $\epsilon$), so use HAC standard errors with at least $K$ lags, or the $t$-statistics will flatter you too.
+which is known at $t$ because it uses only $F_t,F_{t-1},\dots$. The next NAV print is partly *already in the public data*. A desk that knows the index fell 3% this quarter and that $b_1\approx0.3$ knows the next mark will carry about $0.9\%$ of that fall, before the valuation committee meets. The residual $u_t$ is serially correlated (it is an MA($K$) in $\epsilon$), so ordinary least-squares standard errors understate the uncertainty, and HAC (heteroskedasticity- and autocorrelation-consistent) errors with at least $K$ lags are the honest ones. The desk found out what the difference is worth on a Thursday.
+
+#### Kaz's first Dimson run
+
+*(The desk's fictional run: the vehicle, its 36 quarters and every statistic in this scene are illustrative.)*
+
+Kaz's first real run is on a listed BDC with 36 quarters of NAV history, regressed on the leveraged loan index with two lags. The output fits on one screen, and Kaz turns the screen so the desk can see it. The same-quarter slope is 0.31. The lag-one slope is 0.19 with a $t$-statistic of 1.9; the lag-two slope is 0.08 and insignificant. The sum is 0.58.
+
+"So the lag is real," Kaz says. "Point one nine of last quarter's index shows up in this quarter's mark. That's a forecast."
+
+"What's the second $t$-stat?" Theo asks, because there is a second column, and in his experience the second column is where the bad news lives.
+
+"HAC. Newey–West, two lags. It's 1.3." Kaz pauses. "The residual is a moving average of the idiosyncratic returns, so neighbouring residuals share pieces. The plain errors pretend they don't."
+
+Ines leans back. "Which one do you bet on?"
+
+"The one that was still true after the lawyers," Mags says, which is her answer to most questions and, this time, a precise one. She means the number that survives the honest standard error. The lag-one coefficient does not; the sum does, at 0.58 with a HAC standard error of 0.14 *(illustrative)*, because the individual lags are nearly collinear in calm quarters while their total is pinned down by every big move in the sample.
+
+Ines's view of when the tool earns its keep comes out as a question for each of them. Twenty quarters or more? Thirty-six, yes. A public factor that plausibly drives the book? A first-lien sponsor lender against the loan index, yes. Then Mags asks the one nobody has: did anything change inside those 36 quarters? Theo pulls the 10-Ks. In the twenty-second quarter the vehicle replaced its third-party valuation firm, and over the following two years its software share doubled. A new valuer means a new kernel, a strategy drift means a new beta, and either one splits the sample into pieces of 21 and 15 quarters, both short of the thirty observations the Spec below requires for $K=2$. And the vehicle co-holds most of its large loans with three other BDCs, so its marks share a common smoothing with theirs, the problem §17.2.4 returns to.
+
+Kaz keeps the sum, files the lag-one forecast under "not yet," and rewrites the output so that the individual lag coefficients are printed in grey.
 
 Note what the forecast does *not* say. It does not say you can buy the NAV low and sell it high, because inside a non-traded fund you transact at the smoothed NAV in both directions, subject to a cap. It says that any *public* instrument whose price is tied to that NAV (a listed BDC's equity, its bonds, a fund-of-BDCs ETF) will be repriced by a number you can forecast. §17.9 builds the book on that.
 
 ### 17.2.4 Unsmoothing, and why you should do less of it than you want to
 
-The other direction is to invert the filter and recover $x_t$ from $x^o_t$. The workhorse is Geltner's (1991, 1993) appraisal-smoothing model from real estate, which is the GLM model with geometric weights, $\theta_k=(1-\theta)\theta^k$ for $k=0,1,2,\dots$ and $0\le\theta<1$. Those weights sum to one, and the model collapses to a recursion:
+The other direction is to invert the filter and recover $x_t$ from $x^o_t$. The workhorse is Geltner's (1991, 1993) appraisal-smoothing model from real estate, which is the GLM model with geometric weights, $\theta_k=(1-\theta)\theta^k$ for $k=0,1,2,\dots$ and $0\le\theta<1$. Those weights sum to one, and the model collapses to a recursion with a plain-English reading: this quarter's mark is a blend of this quarter's truth, with weight $1-\theta$, and last quarter's mark, with weight $\theta$. Run the blend backwards, subtracting $\theta$ times last quarter's mark and scaling what is left by $1/(1-\theta)$, and out comes an estimate of the true return. For this kernel $\theta$ is simply the first-order autocorrelation of the reported returns, so a single number, measurable from the marks alone, both describes the smoothing and undoes it. That is the attraction. Here is the catch.
+
+> **Math, Gently.** *Why unsmoothing turns up the hiss.* Anyone who has played a quiet cassette at full volume knows the sound: the music comes back, and so does the tape hiss, louder than anyone ever heard it. Unsmoothing is a volume knob. It takes this quarter's mark, subtracts $\theta$ times last quarter's, and divides by $1-\theta$, which is small when $\theta$ is large. Every rounding error, one-off valuation call or change of valuer that sits in the marks goes through the same arithmetic, and it brings last quarter's error along with this quarter's. In the margin, at $\theta=0.6$: the divisor is $0.4$, so the signal is scaled up by $1/0.4=2.5$, while a speck of noise this quarter and an independent speck last quarter combine into noise whose variance is $(1+0.6^2)/0.4^2=1.36/0.16=8.5$ times the original, about 2.9 times in volatility. The noise is turned up more than the music, because it arrives from two quarters at once. The full version is next.
+
+Now the regret. Real marks contain measurement noise $\eta_t$ (rounding, one-off valuation calls, the quarter a third-party valuer was replaced), so we observe $x^o_t+\eta_t$. The inversion is linear, so the noise passes straight through it, and its variance is multiplied by $(1+\theta^2)/(1-\theta)^2$. At $\theta=0.6$ that is the box's $8.5\times$; at $\theta=0.7$, $16.6\times$; at $\theta=0.9$, $181\times$. Unsmoothing a heavily smoothed series does not reveal the truth. It reveals the noise, enlarged. This is the place Kaz's Gaussian assumption bites: valuation noise is not Gaussian, it is lumpy (a single large write-down on a concentrated position), and the inversion turns a lump into a spike followed by an echo of the opposite sign.
+
+#### The Full Derivation
+
+The geometric kernel turns the moving average into a first-order recursion, which inverts directly:
 
 $$
 x^o_t=(1-\theta)\,x_t+\theta\,x^o_{t-1}
@@ -198,20 +278,20 @@ $$
 \operatorname{Var}(\hat x_t)=\frac{(1+\theta^2)\operatorname{Var}(x^o_t)-2\theta\operatorname{Cov}(x^o_t,x^o_{t-1})}{(1-\theta)^2}.
 $$
 
-Now the regret. Real marks contain measurement noise $\eta_t$ (rounding, one-off valuation calls, the quarter a third-party valuer was replaced), so we observe $x^o_t+\eta_t$. The inversion is linear, so the noise passes through as
+With measurement noise in the observed marks, the same linear inversion gives the error of the unsmoothed series and its variance:
 
 $$
 \hat x_t-x_t=\frac{\eta_t-\theta\,\eta_{t-1}}{1-\theta},\qquad
 \operatorname{Var}(\hat x_t-x_t)=\frac{1+\theta^2}{(1-\theta)^2}\,\sigma_\eta^2 .
 $$
 
-At $\theta=0.6$ the noise variance is amplified $8.5\times$; at $\theta=0.7$, $16.6\times$; at $\theta=0.9$, $181\times$. Unsmoothing a heavily smoothed series does not reveal the truth. It reveals the noise, enlarged. This is the place Kaz's Gaussian assumption bites: valuation noise is not Gaussian, it is lumpy (a single large write-down on a concentrated position), and the inversion turns a lump into a spike followed by an echo of the opposite sign.
+#### The quarter Kaz unsmoothed one fund
 
-Three more error-prone spots, each of which has embarrassed someone.
+*(Illustrative: the vehicle, its marks and the committee are a fictional composite.)*
 
-1. **Small samples.** Twenty to forty quarterly observations are all most vehicles have. With $n=30$ and $\rho_1=0.5$, the standard error of $\hat\rho_1$ is about $\sqrt{(1-\rho_1^2)/n}=0.16$, so a 90% interval for $\theta$ runs from roughly 0.24 to 0.76. Report intervals, not points.
-2. **Common smoothing.** Couts, Gonçalves and Rossi ("Unsmoothing Returns of Illiquid Funds," *Review of Financial Studies* 37(7), 2024) show that funds holding similar assets share a *common* source of spurious autocorrelation, so unsmoothing fund by fund leaves correlated lag in the residuals and understates systematic risk. Estimate $\theta$ on a cross-holder panel, which for BDCs is natural: many hold the same facilities.
-3. **Frequency.** A quarterly $\rho_1$ is not comparable with a monthly one. If you are benchmarking against the shelf's monthly autocorrelation buckets for public bonds, aggregate first.
+The first time Kaz unsmoothed a single vehicle there were 28 quarters of marks, and the estimate came back at $\hat\theta=0.71$. Kaz liked it. Under the geometric kernel the true volatility is the reported one times $\sqrt{(1+\theta)/(1-\theta)}$, here about 2.4, a number with a story attached. Theo asked the question he used to ask about a sponsor's EBITDA add-backs: what's the range? He did the arithmetic at a round thirty quarters, which flatters Kaz's 28. With $n=30$ and $\rho_1=0.5$, the standard error of $\hat\rho_1$ is about $\sqrt{(1-\rho_1^2)/n}=0.16$, so a 90% interval for $\theta$ runs from roughly 0.24 to 0.76. Across that interval the true volatility runs from about 1.3 times the reported figure to about 2.7 times, and the noise amplification from under $2\times$ to about $27\times$. The risk committee looked at the interval, declined to put any single unsmoothed volatility in the report, and asked for the interval instead. Kaz took it personally for about a day.
+
+Ines added the two things the committee had not thought to ask. "Funds that hold the same loans share their smoothing, so unsmoothing them one at a time leaves the same lag in all of them. Fit it on the panel of co-holders." She was paraphrasing Couts, Gonçalves and Rossi ("Unsmoothing Returns of Illiquid Funds," *Review of Financial Studies* 37(7), 2024), who show that fund-by-fund unsmoothing leaves correlated lag in the residuals and understates systematic risk; for BDCs, which co-hold many of the same facilities, the cross-holder panel is the natural fix. "And a quarterly autocorrelation isn't a monthly one. If you're comparing it with the shelf's monthly buckets for public bonds, aggregate first."
 
 > **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.623:* "if corporate bond prices are only updated infrequently and are subject to 'stale' pricing, their returns are likely to be positively correlated as new information slowly gets priced in."
 >
@@ -274,6 +354,8 @@ Kaz, reading the latest 10-Q, wants to know whether a "tender offer" is an offer
 
 ### 17.3.2 Derivation: from a listed price to an implied asset markdown
 
+> **Math, Gently.** *The thin slice.* Theo has known this one since his first leveraged buyout model, though nobody called it math. A house worth \$210 with a \$110 mortgage is \$100 of equity. If a buyer offers \$80 for the equity, and the mortgage still has to be paid in full, the buyer is saying the house is worth \$80 + \$110 = \$190. That is a haircut of \$20 on a \$210 house, about 9.5%, not 20%. The equity is a thin slice on top of a big asset, so a large percentage move in the slice is a small percentage move in the asset underneath. A BDC is the same house: loans on the bottom of the balance sheet, a bank line and notes as the mortgage, NAV as the equity. Its leverage $\ell$ is debt over equity, $110/100 = 1.1$ here, and the translation from an equity discount to an asset markdown divides by $1+\ell=2.1$. One more wrinkle makes it a BDC rather than a house: the manager takes fees before the shareholder sees anything, which is worth, say, 5% of NAV to a buyer. So of the 20-point equity discount, 5 points are the fee and only 15 are about the loans, and $15/2.1\approx7.1\%$ is what the market is taking off the manager's marks. The full version is next.
+
 **Notation.** In this section $P$ is the BDC's share price (not a bond price), NAV is book equity per share at reported marks, $A$ is total assets at reported fair value and $E$ is total NAV. We write leverage as $\ell=(A-E)/E$, net debt over NAV as the companies report it, rather than $L$, which this book reserves for loss given default. Then $A=E(1+\ell)$.
 
 **Assumptions.** (i) The market values the loan book at $A(1-m)$, where $m\ge0$ is the implied markdown as a fraction of reported asset value. (ii) The equity also bears a structural fee drag with present value $\phi E$ (base and incentive fees capitalized at the equity's required return, net of any value the manager adds). (iii) The debt is money-good. Then market equity is assets at market, minus debt, minus fees:
@@ -292,13 +374,15 @@ $$
 
 The factor $1/(1+\ell)$ is the leverage translation: at $\ell=1.1$, each point of equity discount maps to only $0.48$ points of asset markdown. A 20% equity discount is not a claim that the loans are worth 80. It is a claim that they are worth about 90.
 
-**Numbers.** Blue Owl Capital Corporation (OBDC) bought back about \$148mm of its own stock in the fourth quarter of 2025 at "86% of price-to-book value," with net debt to equity of 1.19x (company release, February 18, 2026). With an illustrative fee drag $\phi=0.05$, $m=(0.95-0.86)/2.19=4.1\%$ of assets. Octus reported on April 16, 2026 that BDCs traded "at nearly a 20% discount to net asset value, with certain large names approaching a 50% discount." At $P/\text{NAV}=0.80$ and an illustrative $\ell=1.1$, $m=(0.95-0.80)/2.1=7.1\%$; at $0.50$, $m=(0.95-0.50)/2.1=21.4\%$. The second number is the market saying that a book the manager carries at 98–100 is worth about 78. A widely reported tally put the median listed BDC at about 0.74 times *forward* NAV at the end of March 2026 (Reuters/LSEG; not independently verified for this edition), which maps to $m\approx10\%$. Figure 17.3 draws the formula at three leverage levels with these price points on it.
+**Numbers.** Blue Owl Capital Corporation (OBDC) bought back about \$148mm of its own stock in the fourth quarter of 2025 at "86% of price-to-book value," with net debt to equity of 1.19x (company release, February 18, 2026). With an illustrative fee drag $\phi=0.05$, $m=(0.95-0.86)/2.19=4.1\%$ of assets. Octus reported on April 16, 2026 that BDCs traded "at nearly a 20% discount to net asset value, with certain large names approaching a 50% discount." At $P/\text{NAV}=0.80$ and an illustrative $\ell=1.1$, the thin-slice box's arithmetic gives $m=7.1\%$; at $0.50$, $m=(0.95-0.50)/2.1=21.4\%$. The second number is the market saying that a book the manager carries at 98–100 is worth about 78. A widely reported tally put the median listed BDC at about 0.74 times *forward* NAV at the end of March 2026 (Reuters/LSEG; not independently verified for this edition), which maps to $m\approx10\%$. Figure 17.3 draws the formula at three leverage levels with these price points on it.
 
 ![Figure 17.3: Because the equity is levered, a point of discount to NAV is worth less than a point off the loans: at 1.1x leverage a 20% discount implies about 7% and a 50% discount about 21%, and the slope flattens as leverage rises. Source: the §17.3.2 formula m = ((1 − φ) − P/NAV)/(1 + ℓ) with an illustrative fee drag φ = 5% (leverage of 0.6x and 1.6x shown for contrast); OBDC's 86% of book and 1.19x net leverage are from Blue Owl's release of 18 February 2026, and the 20% and 50% discounts are from Octus (16 April 2026), plotted at an assumed 1.1x.](assets/figures/ch17_implied_markdown.png)
 
 **Boundary conditions.** If $P/\text{NAV}>1-\phi$, the formula returns $m<0$. Floor it at zero and attribute the premium to franchise value: net investment income in excess of the dividend, a lower-cost internal management structure, or a growing fee base. Main Street Capital, an internally managed BDC, has historically traded well above NAV, and nobody believes its loans are worth more than par. If the debt is *not* money-good, relax assumption (iii): equity becomes a call option on $A(1-m)$ struck at the debt, worth more than its intrinsic value, so a given price is consistent with a *larger* $m$. The money-good formula is then a lower bound on the markdown. That Merton-on-a-CLO extension, and the $\mathbb{Q}$-measure link to BDC CDS spreads, belongs to Chapter 23. Do not mix a $\mathbb{Q}$ spread with this $\mathbb{P}$ markdown without saying so.
 
 ### 17.3.3 Derivation: the non-accrual gap and the implied carrying value of bad loans
+
+> **Math, Gently.** *A ratio of two shares.* Picture a bowl of loans that cost \$100, of which \$2 are bruised: loans that have stopped paying, "on non-accrual." That is 2.0% *at cost*. Now the manager marks the whole bowl, and it is carried at \$98, so fair value over cost for the portfolio is 0.98. The report also says the bruised loans are 1.0% of the bowl *at fair value*, which is \$0.98 of the \$98. So two dollars of bad loans are carried at ninety-eight cents: 49 cents on the dollar. That is all the formula below does: the fair-value share over the cost share, times the bowl's overall ratio, $1.0/2.0\times0.98=0.49$. The interesting case is the one where the two shares move in opposite directions. OBDC's June 2026 release, in the table below, has non-accruals at 0.8% of fair value, the lowest in its series, and 2.8% of cost, the highest: $0.8/2.8\times0.98=0.28$. The headline number fell, and the hole got deeper, because the new bad loans arrived already marked down hard. The full version is next.
 
 BDCs report non-accrual loans as a share of the portfolio at **cost** and at **fair value**. That pair of numbers hides a mark. Let $w^{C}_{\text{NA}}$ and $w^{FV}_{\text{NA}}$ be the two shares, and $C$ and $FV$ the whole portfolio's cost and fair value. The non-accrual bucket's cost is $w^C_{\text{NA}}C$ and its fair value is $w^{FV}_{\text{NA}}FV$, so its carrying value as a fraction of cost is
 
@@ -317,9 +401,29 @@ OBDC's own releases give a clean four-quarter series *(company releases; FV/C of
 | Mar 31, 2026 | \$14.41 | 2.0% | 1.0% | 1.0pp | 0.49 | 1.13x |
 | Jun 30, 2026 | \$14.26 | 2.8% | 0.8% | 2.0pp | 0.28 | 1.11x |
 
-In the second quarter of 2026 the fair-value non-accrual rate fell to its lowest level in the series while the cost rate jumped, and the implied carrying value of the bad bucket fell from about 49 cents to about 28. On the same day the industry was quoting 70-cent recoveries, Octus estimated private-credit restructuring recoveries at "approximately 50 cents on the dollar," "well below the 70% previously cited by many managers" (Octus, April 16, 2026). The mark was moving toward the evidence; it just moved at the speed of the kernel.
+The June row is the box's quarter: the headline fell, and the implied carrying value of the bad bucket fell with it, from about 49 cents to about 28. While much of the industry was still quoting 70-cent recoveries, Octus estimated private-credit restructuring recoveries at "approximately 50 cents on the dollar," "well below the 70% previously cited by many managers" (Octus, April 16, 2026). The mark was moving toward the evidence; it just moved at the speed of the kernel.
 
 Octus also put a number on the cross-holder problem. Adjusting for loans held by several BDCs raised sector non-accruals from 1.45% to 2.18% of cost, and it found "pricing gaps of nearly 40 points as measured by fair value divided by par" in widely held stressed loans. Two managers, one loan, forty points apart. One of them is wrong, and the listed price of each BDC is a vote on which. Figure 17.4 shows a real case: one loan, seven managers, seven marks.
+
+#### The Medallia ledger
+
+*(Theo's reading, the dialogue and the desk's spreadsheet are fictional. Every mark is fair value over par from the seven vehicles' 10-Q and 10-K schedules of investments on EDGAR, multi-lot positions summed, as in Figure 17.4.)*
+
+It is a Wednesday in Theo's fourth week, and the job sounds like punishment: find every public vehicle that holds Medallia, a software company taken private in 2021, and copy its first-lien term loan out of each schedule of investments, every quarter, from the end of 2024 to June 2026. EDGAR's full-text search finds seven: Blackstone's BCRED and BXSL, HPS's HLEND, FS KKR, Apollo Debt Solutions, Onex Direct Lending and Monroe Capital Income Plus. Together they show about \$1.97 billion of par. Theo builds the table the way he used to build a claims register, one row per holder, and then reads it across, which is the part nobody does.
+
+At the end of 2024 the seven marks run from 86.8 to 98.8. By September 2025 they run from 77.3 to 91.2. By December, by which time the schedules show the 4% PIK component gone and a cash coupon of SOFR plus 6.00% in its place, they run from 73.0 to 79.2. Then the first quarter of 2026: the two Blackstone vehicles take the loan from about 77.8 to 60.2 and 60.3, and both flag it as on non-accrual. In the second quarter they are at 49.5, HPS and FS KKR at 49 to 50, and Apollo's ADS, Onex and Monroe at 39 to 41. The par-weighted mark across all seven goes from 77.8 in December to 49.2 in June.
+
+"Why do the two Blackstone funds agree to a tenth of a point?" Kaz asks. "Every quarter."
+
+"Because it's one valuation," Theo says. "Same adviser, same committee, same third-party review. That's two rows in the spreadsheet and one opinion. If you count it as two independent marks, your dispersion statistic is lying to you." Kaz writes *cluster by adviser* on the whiteboard, under the Couts–Gonçalves–Rossi note from §17.2.4.
+
+Then Theo finds the row that matters for the next page of this chapter. ADS carried the loan at 86.8 at the end of 2024 and at 86.8 again in June 2025, while the other six moved by between four and ten points. One unchanged mark is not evidence of anything. A run of them, while every co-holder moves, is a mark nobody looked at that quarter.
+
+Mags reads the table over his shoulder, twice, which is applause. "The move from 94 to 77 took a year. 77 to 49 took six months. That's not a loan getting worse. That's a committee catching up."
+
+She is describing the kernel of §17.2 in a sentence: the true loss arrived over 2025, and the marks recognized it on a lag, then all at once when a non-accrual flag forced the issue. The dispersion is the other half. At every date the highest and lowest marks sit 5 to 14 points apart, which is wide for a single first-lien loan with one coupon and one maturity, and which is not unusual. PIMCO's Lotfi Karoui, in "Daily Pricing Is Not Daily Liquidity" (11 May 2026), put marks for the same instrument across BDC portfolios at the end of 2025 "about five points apart" on average, and estimated that "83% of loans held by at least two BDCs are priced within a two-point range," with the rest skewed upward. That is the base rate: most co-held loans are marked alike, and the ones that are not are where the information is. Medallia was one of the 17%.
+
+Theo saves the spreadsheet with a name that has the date in it, the habit of a man who has been asked for a "final final v3" at 2 a.m., and adds two columns he did not have that morning: one counting consecutive unchanged marks, one counting distinct valuation processes.
 
 ![Figure 17.4: Seven BDCs held the same Medallia first-lien term loan and all marked it down, from between 87 and 99 in December 2024 to between 39 and 50 in June 2026, yet at every date shown the highest and lowest marks sat 5 to 14 points apart, and by June 2026 they had split into two groups about nine points apart (blue: 49 to 50; orange: 39 to 41). Source: fair value over par from each BDC's 10-Q schedule of investments on EDGAR (BCRED, BXSL, HLEND, FS KKR, Apollo Debt Solutions, Onex Direct Lending, Monroe Capital Income Plus), with multi-lot positions summed; Monroe's par rose from \$12.7M to \$15.0M in June 2026, so that point needs care.](assets/figures/ch17_medallia_marks.png)
 

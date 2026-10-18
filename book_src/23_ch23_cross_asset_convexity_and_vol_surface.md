@@ -1,22 +1,36 @@
 # Chapter 23: Cross-Asset Convexity & the Volatility Surface
 
-6:40 a.m., Thursday, March 9, 2023. Theo Marsh has been on the systematic credit desk for three weeks and still reads bank filings for fun, which is how he knows things nobody has asked him yet. Last night SVB Financial Group announced that it had sold \$21 billion of available-for-sale securities, was booking a \$1.8 billion after-tax loss, and wanted to raise \$2.25 billion of capital (Federal Reserve, *Review of the Federal Reserve's Supervision and Regulation of Silicon Valley Bank*, April 28, 2023). The stock is indicated sharply lower.
+*A replay, and Ines's ritual: on Friday afternoons she takes a real episode, cuts the tape at a stated minute, and has the cast trade it blind, with what actually happened held face down until she turns it over. Today's tape stops at 6:40 a.m. on Thursday, March 9, 2023, and Ines plays the rest of the market from her own screen; whatever the desk shows, she decides whether to lift it. SVB Financial Group's filings, the Federal Reserve's post-mortem and the market marks are real and cited. The desk's quotes, Ines's bids, ROBO's column, every number marked (illustrative) and all dialogue are invented.*
 
-Kaz has the SIVB listed put surface on the big screen. "The one-month low-strike puts are bid at an implied vol that makes no sense," they say, "unless the stock is going to zero."
+6:40 a.m., Thursday, March 9, 2023. Theo Marsh, in his third week of replays, still reads bank filings for fun, which is how he knows things nobody has asked him yet. Last night SVB Financial Group announced that it had sold \$21 billion of available-for-sale securities, was booking a \$1.8 billion after-tax loss, and wanted to raise \$2.25 billion of capital (Federal Reserve, *Review of the Federal Reserve's Supervision and Regulation of Silicon Valley Bank*, April 28, 2023). The stock is indicated sharply lower.
+
+The replay corner is the part of the floor with the good whiteboard and the bad chairs. Kaz has the SIVB listed put surface on the big screen, frozen at Wednesday's close, the last prices anyone paid before the announcement. It is a portrait of a dull bank. The stock closed at \$267.83, and its 30-day implied volatility has spent the past year near the bottom of its range; a vendor's pre-market report would later put the floor of that 52-week range at 39 (Market Rebellion, pre-market IV report, March 10, 2023). Kaz shows a ladder of one-month puts priced around that level, with an ordinary skew, and Ines starts lifting the low strikes one after another without haggling. Kaz moves the offers up. She lifts those too. Kaz backs the volatility out of the last fill, something north of 150 *(illustrative)*, and frowns at it.
+
+"The one-month low-strike puts are bid at an implied vol that makes no sense," they say, "unless the stock is going to zero."
 
 "It can go to zero by lunch," Theo says. "At year-end about 94 percent of the deposits were uninsured, and the held-to-maturity book had a weighted-average duration of 6.2 years. The equity is a call option on whether the depositors read the same footnote I did."
 
+He has the 10-K open at the fair-value tables, and he reads it the way he used to read a borrower's liquidity schedule at two in the morning, hunting for the line the company hopes you will skip. "Unrealized losses on the securities, both books, about seventeen point seven billion. Common equity, twelve point four. Mark the bonds and the common is gone one and a half times over." The ratio is 143 percent, computed from the FY2022 10-K. Chapter 6 tells the same balance sheet with the held-to-maturity hole alone, \$15.2 billion, set against total equity including the preferred, \$16.0 billion. Both are right: one asks whether the common survives a mark, the other whether the whole equity layer does.
+
 Ines does not look up from her markouts. "So what's the pot, what are the odds, and who at this table knows more than you? Somebody is lifting every put we show, and it isn't a pension fund rebalancing."
+
+Nobody points out that the somebody is Ines. That is the ritual working: she lifts what the informed side of the 2023 tape lifted, and the desk has to read from the hand history who it is playing against.
 
 "Merton says the distance to default is fine," Kaz offers. "Bank asset volatility is tiny."
 
-"Bank asset volatility is tiny right up until the assets are on the other side of the street," says Mags, from the distressed corner, where the screens are older and the opinions are firmer. "The holdco notes were mid-80s on Monday. Price is what you pay. Recovery is what you get, eventually, after the FDIC."
+"Bank asset volatility is tiny right up until the assets are on the other side of the street," says Mags, from the distressed corner, where the screens are older and the opinions are firmer. "Press reports had the holdco notes near ninety earlier this week. Price is what you pay. Recovery is what you get, eventually, after the FDIC."
 
 ROBO's overnight batch, asked to "compute the equity-implied CDS spread for every bank in the book," has helpfully populated a column. SVB Financial Group: 12bp. Nobody has the heart to tell it.
 
+Kaz, who does have the heart, opens the inputs, expecting a bug. There isn't one. The stock is Wednesday's close, the volatility is Wednesday's at-the-money level, the recovery is the house default, and the debt per share is the holding company's senior notes, about \$3.3 billion over 59 million shares, call it \$56 a share against a \$268 stock (computed from the 10-K; the run is illustrative). Feed those to the model Section 23.2 builds and 12bp is what comes out. ROBO did exactly what it was asked, about exactly the entity it was given. Kaz writes *which F?* on a sticky note and presses it onto the monitor bezel, where it will stay until Section 23.8.
+
+Mags watches the fills stack up on the board and says what she thinks the trouble is, which is not a model. "When it's assets wobbling, the stock and the bonds are arguing about the same thing, and one of them is just slow. When it's a run, or a contract, or a regulator with a pen, they aren't arguing about the same thing at all. Then your arbitrage is a bet on who wrote the document."
+
+Ines deals a blank index card to each of them, and one to the reader. The cards are the only fixed rule of the ritual. *Write three things: which instrument is lying, what you would trade against it in what size, and what would have to be true for you to be wrong.* Theo writes for a long time. Kaz writes a number, crosses it out, and writes a smaller one. Mags writes a single word, folds the card, and parks it under her coffee. The cards go face down in the middle of the desk. The tape runs forward in Section 23.8, and the cards are graded there against what happened on Thursday, on Friday, and in the week after.
+
 The question this chapter answers is the one Ines is really asking: *when the equity-volatility surface and the credit curve disagree, which one is lying, and how do you size the bet that it's the other one?*
 
-By the end of this chapter you will be able to: translate an equity price and volatility into a model credit spread with Merton and CreditGrades, and invert a CDS quote into an implied asset volatility; extract a model-free unit recovery claim from a listed put spread (Carr–Wu) and trade it against CDS; read the low-strike skew as a hazard rate; express credit Greeks in spread units and build a delta-hedged capital-structure book; run Yu's convergence trade and explain why single trades lose while portfolios earn; and say precisely why the surface broke in May 2005, March 2023, and the 2025–26 cycle.
+The answer comes in three movements. Sections 23.1 to 23.5 build the translation layer between the two markets (Merton, CreditGrades, the Carr–Wu put spread, the jump floor in the skew, and Greeks in spread units) and let you believe in it, because most days it deserves belief. Section 23.6 breaks it on General Motors in May 2005, when two shocks on consecutive days hit two different claims and a hedged pair lost on both legs. Section 23.8 breaks it three more ways, with Mags's distinction doing the work: a run is not a diffusion, a trigger can reorder a waterfall, and the right tail can belong to the creditors.
 
 ## 23.1 One Distribution, Many Strikes: The Capital Structure as a Vol Surface
 
@@ -32,6 +46,8 @@ a call spread on firm value $V_T$ struck at its attachment and detachment points
 
 What RSSG never priced is the *distribution* of $V_T$. Theo ran three EV cases, called them low, mid, and high, and wrote a recovery under each. The systematic desk prices the whole distribution, and the market reveals that distribution one strike at a time: the stock is the high strike, the bonds are the middle strikes, CDS is the middle strike stripped of rates, and a deep out-of-the-money equity put is a bet on the low tail that happens to trade on an exchange. A CCC bond is an equity option that wears a tie to work; a 20-delta put is a CDS that forgot to wear one. Every slice is priced off the same risk-neutral law of $V_T$, so the volatility surface of one slice is a forecast of the spread of another. This chapter builds that translation layer.
 
+> **Math, Gently.** *The bookmaker's odds, and why firm value is lognormal.* Picture a bookmaker who must quote odds on every horse in a race and cannot afford to be picked off. He does not need to know which horse will win. He needs odds at which no combination of bets lets a customer make money for certain, once the house has been paid the interest it could have earned sitting in cash. Those are *risk-neutral* odds, and they are a pricing device rather than a forecast: the odds on a long shot carry whatever extra people pay to be insured against it, which is why a market's $\mathbb{Q}$ default probabilities sit above the physical frequencies of Chapter 6. A tiny number: a claim pays 100 if the firm's assets end the year above 70 and nothing otherwise, the pricing odds put that outcome at 0.6, and the risk-free rate is 3%. The price is $0.6 \times 100 / 1.03 = 58.25$. Every price in this chapter has that shape, $P_0 = e^{-rT}\,\mathbb{E}^{\mathbb{Q}}[\text{payoff}]$: average the payoff under the pricing odds, then discount. The second fact is the shape of the odds. Firm value cannot go below zero, and percentage moves compound rather than add: a year at −30% followed by a year at +30% leaves you at $0.7 \times 1.3 = 0.91$, down 9%, not flat. So the model makes the *logarithm* of assets bell-shaped, which makes the assets themselves lognormal: floored at zero, with a long right tail and a median below the mean. Chapter 5 owns the distributions and Chapter 6 the two measures; here you need only these two facts.
+
 ### The Merton identity: equity vol is leveraged asset vol
 
 Recall the setup from Chapter 6. Under $\mathbb{P}$ firm assets follow $dV_t = \mu V_t\,dt + \sigma_V V_t\,dW_t$; under $\mathbb{Q}$ the drift is $r$. Debt is a single zero-coupon claim of face $F$ due at $T$, so $E_T = (V_T - F)^+$ and
@@ -40,13 +56,11 @@ $$
 E_0 = V_0 N(d_1) - F e^{-rT} N(d_2), \qquad d_{1,2} = \frac{\ln(V_0/F) + (r \pm \tfrac12\sigma_V^2)T}{\sigma_V\sqrt{T}} .
 $$
 
-Here $N(\cdot)$ is the standard normal CDF. Equity is a smooth function $E(V,t)$, so Itô's lemma gives
+Here $N(\cdot)$ is the standard normal CDF. The desk's question is narrower than the formula: when the assets shake by a given amount, how much does the stock shake? Answering it takes the one piece of stochastic calculus this chapter cannot do without.
 
-$$
-dE_t = \frac{\partial E}{\partial V}\,dV_t + \Big(\frac{\partial E}{\partial t} + \tfrac12 \sigma_V^2 V_t^2 \frac{\partial^2 E}{\partial V^2}\Big)dt .
-$$
+> **Math, Gently.** *Why a wobble pays a curved claim: Itô's ½σ².* Equity is a curved function of assets, flat when the firm is deep under water (the call is worthless and stays worthless for small moves) and steep when it is comfortably solvent. Whenever a payoff curves upward, wobbling the input raises the average output, because the gain on the up-wobble beats the loss on the down-wobble. A tiny number: let $f(V) = V^2$, and let $V$, now 100, move to 90 or 110 with equal odds. The average of $f$ is $(8{,}100 + 12{,}100)/2 = 10{,}100$, not $f(100) = 10{,}000$. The extra 100 is one half times the squared wobble ($10^2 = 100$) times the curvature ($f'' = 2$): $\tfrac12 \times 100 \times 2 = 100$. Ordinary calculus throws that term away because, for a smooth path, a squared step is negligible next to the step. A random path's squared step is not negligible: over a short interval $dt$ it averages $\sigma_V^2 V^2\,dt$, so the bonus becomes $\tfrac12\sigma_V^2V^2\,\partial^2E/\partial V^2\,dt$ and lands in the drift of equity. For the identity below the bonus is a side character. It lives in the $dt$ term, while the identity lives in the shaking term, where only the slope $\partial E/\partial V$ appears. Kaz's version: curvature changes what you earn on average, slope changes how much you shake. The step-by-step derivation comes next.
 
-Only the first term carries a $dW_t$, and its coefficient is $\frac{\partial E}{\partial V}\sigma_V V_t$. Writing the equity dynamics as $dE_t = (\cdot)\,dt + \sigma_E E_t\,dW_t$ and matching diffusion coefficients, with the call delta $\partial E/\partial V = N(d_1)$:
+Matching how much equity shakes to how much the assets shake gives the identity every cross-asset screen rests on:
 
 $$
 \sigma_E E = \sigma_V V N(d_1) \quad\Longleftrightarrow\quad \sigma_E = \sigma_V \cdot \underbrace{\frac{V\,N(d_1)}{E}}_{\Omega\ \ge\ 1} . \tag{23.1}
@@ -60,9 +74,19 @@ $$
 s^{\text{M}}(T) = -\frac{1}{T}\ln\!\Big[N(d_2) + \frac{V_0}{F e^{-rT}}N(-d_1)\Big]. \tag{23.2}
 $$
 
-Three consequences matter on the desk.
+#### The Full Derivation of (23.1)
 
-**Consequence 1: cheap stocks are mechanically high-vol stocks.** Hold asset vol fixed at 25%, set $F = 70$, $T = 1$, $r = 3\%$, and slide assets down *(illustrative)*:
+Equity is a smooth function $E(V,t)$, so Itô's lemma gives
+
+$$
+dE_t = \frac{\partial E}{\partial V}\,dV_t + \Big(\frac{\partial E}{\partial t} + \tfrac12 \sigma_V^2 V_t^2 \frac{\partial^2 E}{\partial V^2}\Big)dt .
+$$
+
+Only the first term carries a $dW_t$, and its coefficient is $\frac{\partial E}{\partial V}\sigma_V V_t$. Writing the equity dynamics as $dE_t = (\cdot)\,dt + \sigma_E E_t\,dW_t$ and matching diffusion coefficients, with the call delta $\partial E/\partial V = N(d_1)$, gives $\sigma_E E_t = \sigma_V V_t N(d_1)$, which is (23.1). The convexity bonus from the box, $\tfrac12 \sigma_V^2 V_t^2\,\partial^2 E/\partial V^2$, sits wholly inside the $dt$ coefficient and never enters the match.
+
+#### Sliding the assets down the table
+
+With the replay cards face down, Kaz takes the marker. "Forget banks for a minute. A boring firm. Asset vol twenty-five percent, and it stays twenty-five percent, I promise. Debt face seventy, one year, rates at three." They write three rows and fill them in out loud, the way a croupier calls the numbers *(illustrative)*:
 
 | Assets $V$ | Equity $E$ | $N(d_1)$ | Equity vol $\sigma_E$ |
 | :-- | :-- | :-- | :-- |
@@ -70,13 +94,19 @@ Three consequences matter on the desk.
 | 100 | 32.6 | 0.953 | 73% |
 | 75 | 11.2 | 0.699 | 117% |
 
-Nothing about the business got riskier. Asset vol never moved. Equity vol went from 46% to 117% because the equity cushion got thinner. This is why a vol-targeting overlay shorts distressed equity at exactly the wrong time: it reads leverage as risk appetite.
+"Assets at 150. Equity is worth 82, the call is nearly all delta, so the stock is the assets with a lever of about 1.8 on it. Equity vol 46." The marker drops a row. "Assets at 100. Equity 32.6. Same business, same twenty-five percent, but the cushion is a third of the firm now. Equity vol 73." Another row. "Assets at 75, five above the debt. Equity 11.2, delta 0.7. Equity vol 117."
 
-**Consequence 2: the skew is built in.** The elasticity of a call falls as the call moves into the money, so $\partial \sigma_E/\partial E < 0$ with $\sigma_V$ constant. Equity vol rises as the stock falls, which is a negative skew in the option surface before anyone has said "crash risk" or "jumps." Section 23.4 adds a jump to default, which steepens the low-strike wing far beyond what leverage alone produces. Figure 23.2 plots both consequences.
+"What changed about the business?" Ines asks.
+
+"Nothing. Asset vol never moved. Equity vol went from 46% to 117% because the equity cushion got thinner. Cheap stocks are mechanically high-vol stocks."
+
+"Then walk a vol-targeting overlay down your rows." Ines does not wait for the answer; she has sat across from that overlay. At 150 it holds a full position, because 46 looks like an ordinary stock. At 100 it trims, because 73 looks like a risky one. At 75 it is selling hard into a stock whose only news is arithmetic, at the moment the stock is starting to behave like the credit. "It reads leverage as risk appetite," she says. How much it sells on the way down is Exercise 1's problem, and the risk committee will want the answer in one sentence.
+
+Theo has been sketching the rows as a curve. "So if I plot equity vol against the stock price, it slopes down. The skew is in there already." Kaz nods: the elasticity of a call falls as the call moves into the money, so $\partial \sigma_E/\partial E < 0$ with $\sigma_V$ constant, and equity vol rises as the stock falls. That is a negative skew in the option surface before anyone has said "crash risk" or "jumps." Section 23.4 adds a jump to default, which steepens the low-strike wing far beyond what leverage alone produces. Figure 23.2 plots both effects.
 
 ![Figure 23.2: With asset volatility pinned at 25%, equity volatility climbs from 46% to 117% and the model one-year spread from under 1bp to 626bp as assets fall from 150 toward the debt face of 70, so the skew and the spread are both built into leverage alone. Illustrative: Merton model (23.1) and (23.2), debt face 70, r = 3%, one year.](assets/figures/ch23_leverage_skew.png)
 
-**Consequence 3: the inverse problem.** Observe $(E_0, \sigma_E)$ from the market, solve (23.1) and the call-price equation jointly for $(V_0, \sigma_V)$, and read off (23.2). That is the equity-implied spread. The classic error is to skip the inversion and plug $\sigma_E$ in as $\sigma_V$, which overstates default probability by roughly a factor of leverage. The second classic error is ROBO's from the cold open, which we will autopsy in the spec.
+"And backwards?" Theo asks. "The market hands me the stock and its vol, not the assets." That is the inverse problem, and it is the version the desk actually runs: observe $(E_0, \sigma_E)$, solve (23.1) and the call-price equation jointly for $(V_0, \sigma_V)$, and read the equity-implied spread off (23.2). Kaz lists the two classic ways to get it wrong and owns the first. Skip the inversion and plug $\sigma_E$ in as $\sigma_V$, and you overstate default probability by roughly a factor of leverage; Kaz did that once in graduate school, in a paper nobody read. The second classic error is ROBO's from the cold open, and the marker taps the sticky note that says *which F?* The spec in Section 23.2 holds the autopsy.
 
 > **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.93:* "In the Merton model (1974), a corporate bond is a short put on the underlying asset plus a risk‐free asset, while the company's stock is a call option on the underlying asset. The short put on the underlying asset also can be decomposed into a stock (call) plus a short straddle (a call and put at‐the‐money (ATM)) position on the underlying asset."
 >

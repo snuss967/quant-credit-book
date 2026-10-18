@@ -1,15 +1,15 @@
 # Progress Log, Edition 2 (U2): Chapter 8
 
 - [x] 1. [8.0 Cold Open: Thirty-Seven Cents] EXPAND-SCENE (to 1,200–1,400 words): P&L explain email with "unexplained: −4 cents"; Ines's "why did rates sell off since lunch?"; cut closing paragraph to three clauses. — Done: explain email, −4¢ plug, Ines why-rates question, three-clause close.
-- [ ] 2. [8.1 The Subtraction] MATH-GENTLY (tangent and bend) + FULL-DERIVATION-MOVE; P/Q one-sentence gloss.
-- [ ] 3. [8.1 The thirty-seven cents, itemized] BRIDGE + SHOP-LIFE SEED: carry split note.
-- [ ] 4. [8.2 Empirical vs. Analytical Duration] MATH-GENTLY (regression slope, two parts) + FULL-DERIVATION-MOVE.
-- [ ] 5. [8.2 The canonical numbers, rebuilt] LIST-TO-NARRATIVE: three regimes as paragraphs; move Trend Watch to end of §8.2.
-- [ ] 6. [8.3 The Discontinuity] MATH-GENTLY (memoryless clock) + FULL-DERIVATION-MOVE.
-- [ ] 7. [8.3 Case Study: Alltel] EXPAND-SCENE (~900 words) + WHEN-TO-APPLY inside it; promote heading.
-- [ ] 8. [8.3 Trend Watch: CCC Decompression] BRIDGE: one Kaz line before it.
-- [ ] 9. [8.4 DTS] MATH-GENTLY (percent/lognormal) + FULL-DERIVATION-MOVE + ANOTHER-SEAT (pod risk x-ray).
-- [ ] 10. [8.5 Betas When Nothing Trades] MATH-GENTLY (envelopes) + FULL-DERIVATION-MOVE + WHEN-TO-APPLY (Kaz vs Ines on equity lags).
+- [x] 2. [8.1 The Subtraction] MATH-GENTLY (tangent and bend) + FULL-DERIVATION-MOVE; P/Q one-sentence gloss. — Done: hillside box, words-first statement, Full Derivation heading, P/Q gloss.
+- [x] 3. [8.1 The thirty-seven cents, itemized] BRIDGE + SHOP-LIFE SEED: carry split note. — Done: carry split existed; bridged to 8-C morning explain owner.
+- [x] 4. [8.2 Empirical vs. Analytical Duration] MATH-GENTLY (regression slope, two parts) + FULL-DERIVATION-MOVE. — Done: two-part slope box, H stated once, derivation moved under heading.
+- [x] 5. [8.2 The canonical numbers, rebuilt] LIST-TO-NARRATIVE: three regimes as paragraphs; move Trend Watch to end of §8.2. — Done: flight/nobody/inflation paragraphs; Trend Watch kept last before Graph.
+- [x] 6. [8.3 The Discontinuity] MATH-GENTLY (memoryless clock) + FULL-DERIVATION-MOVE. — Done: smoke-detector clock box; formulas stated; derivation under heading.
+- [x] 7. [8.3 Case Study: Alltel] EXPAND-SCENE (~900 words) + WHEN-TO-APPLY inside it; promote heading. — Done: ~800-word scene; bucket rule given to Ines; sponsors removed; kept ### level.
+- [x] 8. [8.3 Trend Watch: CCC Decompression] BRIDGE: one Kaz line before it. — Done: Kaz line bridges Alltel extraction to CCC Trend Watch.
+- [x] 9. [8.4 DTS] MATH-GENTLY (percent/lognormal) + FULL-DERIVATION-MOVE + ANOTHER-SEAT (pod risk x-ray). — Done: percent box, derivation moved, pod x-ray seat, PB-03 Pair opened.
+- [x] 10. [8.5 Betas When Nothing Trades] MATH-GENTLY (envelopes) + FULL-DERIVATION-MOVE + WHEN-TO-APPLY (Kaz vs Ines on equity lags). — Done: envelopes box, derivation moved, Kaz vs Ines equity-lag scene.
 - [ ] 11. [8.6 The Hedge Matrix] ANOTHER-SEAT (market maker's basket) + MATH-GENTLY (rulers) + FULL-DERIVATION-MOVE; instruments as continuous passage; snap fix.
 - [ ] 12. [8.7 Case Studies] LIST-TO-NARRATIVE (frame): delete template sentence and italic sub-labels.
 - [ ] 13. [8.7 Case Study A: 2022] NEW-SCENE, long: "The Year a PDF Said Zero (2022, replayed)".

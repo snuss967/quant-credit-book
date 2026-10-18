@@ -1,14 +1,14 @@
 # U2 Progress Log, Chapter 17
 
-- [ ] 1. Cold Open: Volatility N/A · EXPAND-SCENE (to ~1,200 words)
-- [ ] 2. 17.1.1 Desk framing · LIST-TO-NARRATIVE + BRIDGE
-- [ ] 3. 17.1.2 What "private" actually buys · ANOTHER-SEAT (box 1: direct lender)
-- [ ] 4. 17.2.1 → 17.2.2 · MATH-GENTLY (box A, two parts)
-- [ ] 5. 17.2.2 Derivation: GLM · FULL-DERIVATION-MOVE + box B (autocorrelation)
-- [ ] 6. 17.2.3 Dimson sums · MATH-GENTLY (box C) + WHEN-TO-APPLY scene
-- [ ] 7. 17.2.4 Unsmoothing · MATH-GENTLY (box D) + LIST-TO-NARRATIVE
-- [ ] 8. 17.3.1–17.3.2 BDC P/NAV · MATH-GENTLY (box E)
-- [ ] 9. 17.3.3 Non-accrual gap · MATH-GENTLY (box F) + NEW-SCENE (Medallia)
+- [x] 1. Cold Open: Volatility N/A · EXPAND-SCENE (to ~1,200 words) — replay frame, hour before RFQ, card posed, 17.1.1 paragraph trimmed.
+- [x] 2. 17.1.1 Desk framing · LIST-TO-NARRATIVE + BRIDGE — priced-vs-marked thesis now Mags/Theo/Kaz dialogue; monitor sentence verbatim.
+- [x] 3. 17.1.2 What "private" actually buys · ANOTHER-SEAT (box 1: direct lender) — Ares Miller/Arougheti sourced quotes; narration line separates boxes.
+- [x] 4. 17.2.1 → 17.2.2 · MATH-GENTLY (box A, two parts) — thermometer filter plus squares box; P-measure gloss added to Notation.
+- [x] 5. 17.2.2 Derivation: GLM · FULL-DERIVATION-MOVE + box B (autocorrelation) — statements first, footprints box, algebra under Full Derivation. (Order: statements precede worked check so it uses stated results.)
+- [x] 6. 17.2.3 Dimson sums · MATH-GENTLY (box C) + WHEN-TO-APPLY scene — canyon echoes box; Kaz's OLS-vs-HAC run, valuer change, sample split.
+- [x] 7. 17.2.4 Unsmoothing · MATH-GENTLY (box D) + LIST-TO-NARRATIVE — cassette-hiss box; Geltner algebra moved; n=28 interval scene; Ines's two sentences.
+- [x] 8. 17.3.1–17.3.2 BDC P/NAV · MATH-GENTLY (box E) — house-and-mortgage thin slice; Numbers paragraph points to box; tender misread kept.
+- [x] 9. 17.3.3 Non-accrual gap · MATH-GENTLY (box F) + NEW-SCENE (Medallia) — bruised-apples ratio box; Medallia ledger scene; PIMCO base rate, title written around.
 - [ ] 10. Case Study OBDC and OBDC II · EXPAND-SCENE → Long Scene 1 + Another Seat box 2
 - [ ] 11. 17.4.1–17.4.2 Two-way takeouts · MATH-GENTLY (box G) + Full Derivation
 - [ ] 12. Case Study Finastra 2023 · NEW-SCENE (Pluralsight)

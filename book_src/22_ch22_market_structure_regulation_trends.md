@@ -1,12 +1,22 @@
 # Chapter 22: Market-Structure Regulation & the Forces Reshaping Liquidity
 
-*Tuesday, 3:41 p.m., two business days before quarter-end.* The RFQ was ordinary in every way a model can see. *Client sells \$15mm Calloway Industrial 5.10% Senior Notes due 2033 (a fictional issuer; Baa2/BBB), four dealers in competition, two minutes to respond.* Same CDS level as last Tuesday. Same equity. Same news, which was none. And yet the auto-quoter bid three-eighths of a point lower than it had a week earlier, for the same bond in the same size.
+*Monday 28 September 2026, 3:41 p.m., two business days before quarter-end. Theo's fifth day on the desk. Calloway Industrial is a fictional issuer; the desk, its quoter and its numbers are illustrative.* The RFQ was ordinary in every way a model can see. *Client sells \$15mm Calloway Industrial 5.10% Senior Notes due 2033 (a fictional issuer; Baa2/BBB), four dealers in competition, two minutes to respond.* Same CDS level as last Monday. Same equity. Same news, which was none. And yet the auto-quoter bid three-eighths of a point lower than it had a week earlier, for the same bond in the same size.
+
+Theo did what six years of restructuring work had trained him to do with a number he did not believe: he went and got the other number. The RFQ log for the previous Monday had the same client, the same bond, the same \$15mm, at almost the same minute. He put the two rows side by side. Five-year CDS on Calloway: 112 both days *(illustrative)*. The stock: down eleven cents over the week. Thirty-day spread volatility, desk inventory in the name, the fitted probability of winning at each price: every column the quoter reads was flat to the second decimal. The only column that had moved was the one at the end, the bid. Last Monday it had been 99.10. Today it was 98.725.
 
 "Something's broken," Theo said. "Nothing moved."
 
-"Nothing moved in the features," said Kaz, scrolling. "Spread vol, inventory, the win curve. All flat. I assumed regulation was a constant."
+"Nothing moved in the features," said Kaz, scrolling. "Spread vol, inventory, the win curve. All flat. I assumed regulation was a constant." They pulled up the quoter's config history, looking for the usual suspects: a stale parameter file, a percent typed where a decimal belongs, a deploy someone pushed on Friday afternoon and forgot to mention. "If it's a bug, it's a tidy one. The last config change was nine days ago."
 
-"The pot didn't change," said Ines, without looking up. "The table did. Thursday is quarter-end, and every balance sheet on the Street is getting dressed for a photograph, ours included. Treasury sent the hurdle rate for the snapshot this morning. If we buy this, we're paying rent on it through the photo. And whoever we sell it to has to see our print inside fifteen minutes. Which, you'll be relieved to hear, is still fifteen."
+At 3:43 the RFQ closed. The desk lost. The client sold to someone else at 98.75, a quarter of a cent above the desk's bid, and the venue showed the cover, the second-best price, at 98.70 *(illustrative)*. Theo went back to the previous Monday's ticket. The winner then had paid 99.125. Every dealer in the competition had moved by roughly the same three-eighths, at the same hour, on the same bond, for no reason anybody's features could see.
+
+"Four quoters with the same bug," Theo said. "On the same afternoon."
+
+"What's Wednesday?" Ines asked.
+
+"The thirtieth." He heard it as he said it. "Quarter-end. Half my old clients drew their revolvers the week before it, so the 10-Q would show cash."
+
+"The pot didn't change," said Ines, without looking up. "The table did. Wednesday is quarter-end, and every balance sheet on the Street is getting dressed for a photograph, ours included. Treasury sent the hurdle rate for the snapshot this morning. If we buy this, we're paying rent on it through the photo. And whoever we sell it to has to see our print inside fifteen minutes. Which, you'll be relieved to hear, is still fifteen."
 
 Theo opened a new window out of habit. "But what does the credit agreement say?"
 
@@ -14,25 +24,43 @@ Theo opened a new window out of habit. "But what does the credit agreement say?"
 
 "So it's a credit agreement with worse fonts and better enforcement."
 
-"Back in my day," said Mags, from behind a stack of 10-Qs, "the regulator was a phone call from the Fed and a fax nobody read." She considered this. "The new way is better, honestly. The fax never told you the effective date."
+"Then read the term sheet," Ines said. "It's in your inbox. Subject line in capitals, from Treasury, sent at 7:02."
+
+It was. The memo ran to a page and a half and read like every internal memo that has ever cost anyone money: polite, numbered, no adjectives. Paragraph 3 said that for positions held over the quarter-end reporting date, the hurdle rate on consumed Tier 1 capital would be 24% annualized instead of the usual 12% *(illustrative)*. Paragraph 4 said desks were "encouraged to manage balance sheet accordingly." Theo had seen the same sentence, in a different font, in a sponsor's letter to a lender group. It had meant the same thing.
+
+"Do the rent," Ines said. "On the margin of the memo. In your handwriting."
+
+Theo wrote it out the way he would have written a fee calculation at PJT. A BBB industrial is bound by risk-based capital, not by the leverage ratio, so the capital it eats is the 10.5% requirement on a 100% risk weight. The desk wants 12% a year on that capital: $0.12 \times 0.105 = 0.0126$, or 126bp a year per dollar of bond. A week of it is seven days out of 365: $126 \times 7/365 \approx 2.4$bp. "And Treasury doubled the hurdle for the photo," he said, "so 4.8. Call it a nickel a hundred." He looked at the two bids again. "The quote moved thirty-seven and a half cents. The rent is a nickel."
+
+"So it's a bug," Kaz said, hopefully.
+
+"It's an invoice," Ines said. "Four dealers got charged this afternoon, and each of them got the same memo from its own Treasury. The rent is the line that came with a memo. The rest of the invoice came without one, and that's the part you'll spend this chapter learning to read."
+
+"Back in my day," said Mags, from behind a stack of 10-Qs, "the regulator was a phone call from the Fed and a fax nobody read." She considered this. "The new way is better, honestly. The fax never told you the effective date." She turned a page. "In March 2020 I sat on a bank desk and watched the invoice become the whole market, and the Fed paid it."
 
 Kaz had stopped scrolling. "So the rule is a feature."
 
 "The rule is a price," Ines said. "And the day it changed is a date in every series you've ever trained on."
 
-That is the question this chapter answers: *how do you put a price on a rule, and how do you know when a rule changed the data?*
+Theo looked at his margin note, at the nickel and the thirty-seven and a half cents, and understood that the gap between them was the lesson. Nothing in the bond had moved, and his price had moved. Someone had charged him, and most of the invoice was not on the page in front of him.
 
-By the end of this chapter you will be able to: decompose a dealer's quote into the three things regulation taxes (balance sheet, time, and information); add a regulatory cost-of-carry term to the Avellaneda–Stoikov quotes of Chapter 18 and compute the breakeven holding period below which principal market making beats agency; price a reporting delay as an option held by the block dealer, and back out the size distribution hidden behind TRACE's \$5mm and \$1mm caps; derive why T+1 cut clearing margin by roughly a quarter; compute how much balance sheet multilateral netting buys under the Treasury clearing mandate and why it stops helping when the market is one-way; read the capital-rule saga from Volcker to the 2026 Basel III re-proposal as a sequence of price changes; and build a dated regime table plus a difference-in-differences engine that tells you whether a rule moved your data or whether something else did.
+*Before reading on, write down the three things a dealer sells, and which one this quote just charged you for. §22.1 grades the card.*
+
+That is the question this chapter answers: *how do you put a price on a rule, and how do you know when a rule changed the data?* The answer comes as two machines, one that reads the invoice (rent, delay, settlement, netting, capacity and clearing, §22.1–§22.6) and one that dates it (the regime table and the event study, §22.2 and §22.8); the Finder table at the top of the Desk Debrief (§22.9) lists every tool with the scene that teaches it.
 
 ## 22.1 A Rule Is a Price: Taxes on Balance Sheet, Time, and Information
 
-A restructuring banker learns to read a credit agreement for the trapdoors: the basket that permits the drop-down, the definition that lets the sponsor add back synergies nobody will ever see. The skill transfers intact. An SEC adopting release has effective dates, phase-ins, carve-outs ("natural persons," "sovereign entities," "inter-affiliate"), and a compliance date that slips. Read it the way you read a covenant package and you find where the liquidity will and will not be.
+A restructuring banker learns to read a credit agreement for the trapdoors: the basket that permits the drop-down, the definition that lets the sponsor add back synergies nobody will ever see. The skill transfers intact. An SEC adopting release has effective dates, phase-ins, carve-outs ("natural persons," "sovereign entities," "inter-affiliate"), and a compliance date that slips. Theo read his first one, that week, the way he used to read a covenant package, and found what he would have found there: the places where the liquidity would and would not be.
 
-The organizing idea of this chapter is that a dealer sells exactly three things, and every market-structure rule is a tax or a subsidy on one of them:
+Ines graded the card the next morning, with Monday's two Calloway tickets still on Theo's screen. "Three things," she said. "A dealer sells exactly three things, and every rule you'll ever read is a tax or a subsidy on one of them."
 
-1. **Balance sheet.** The dealer lends its capital to the customer for as long as the inventory sits on its books. Leverage ratios, risk-based capital, and clearing and netting rules set the rent.
-2. **Time.** The settlement cycle sets how long counterparty exposure lasts; Volcker's inventory limits set how long the dealer may wait for the other side; reporting delays set how long the dealer's private information stays private.
-3. **Information.** TRACE and the security-based swap reporting regime (SBSR) decide who learns what, and when.
+The first is balance sheet. When the desk buys a client's \$15mm, it is lending the client its capital for as long as the bonds sit on its books, and the leverage ratio, risk-based capital, and the clearing and netting rules set the rent on that loan. That was the nickel in Theo's margin note, and Treasury's memo was the receipt for it.
+
+The second is time, and time was most of the invoice. The settlement cycle sets how long counterparty exposure lasts; Volcker's inventory limits set how long the dealer may wait for the other side; reporting delays set how long the dealer's private information stays private. On Monday the time that mattered was the plainest kind: whoever takes the bond from the client has to hold it until somebody else wants it. The quoter does not read that as a feature. It reads it from a calendar table, expected days to the next buyer by rating and by week of the quarter, and the quarter-end row says three weeks instead of one, because the dealers and clients who would normally take a BBB block off the desk are dressing for the same photograph *(illustrative)*. "You wrote that table in June," Ines told Kaz. "Then you stopped thinking of it as regulation." Triple the hold and the inventory-risk charge on the bid, about an eighth of a point for a week, triples with it, to about three-eighths; the rent on three weeks at the photo's doubled hurdle is $0.24 \times 0.105 \times 21/365 \approx 14.5$bp against last week's 2.4 *(all illustrative)*. A quarter of a point of time and an eighth of balance sheet: that was the three-eighths.
+
+The third is information. TRACE and the security-based swap reporting regime (SBSR) decide who learns what, and when. On Monday the information charge did not change, which is why nobody saw it: the desk's print would show at minute fifteen as "5MM+ sell," exactly as it would have the week before. It is in both bids, and §22.2 prices it.
+
+Most people who do the card write "balance sheet," because the memo was about balance sheet. The memo was the part of the invoice that came in writing. Two-thirds of the three-eighths was time. The table below lists the rules a credit desk lives with, by which of the three things each one taxes.
 
 | Rule (key date) | Input taxed (−) or subsidized (+) | Where it enters the quote | See |
 | :--- | :--- | :--- | :--- |
@@ -44,7 +72,7 @@ The organizing idea of this chapter is that a dealer sells exactly three things,
 | TRACE: 15-minute reporting; \$5mm IG and \$1mm HY dissemination caps | Information (+ for blocks) | Block spread falls with the delay and the cap | §22.2 |
 | CDS index clearing (2013), SBSR public dissemination (2022-02-14) | Information and balance sheet | Cost of the CDS hedge | §22.6 |
 
-A systematic desk does not "comply with" this table; compliance is the legal department's job. The desk *prices* it. Two consequences follow. First, every rule shows up as a term in the quote, so the market maker of Chapter 18 acquires a fifth component next to fear, greed, suspicion, and the value of tomorrow's flow: **rent**. Second, every rule has an effective date, and every effective date is a candidate structural break in every series the desk trains on. The chapter is therefore two machines: a pricing machine (§22.1–§22.6) and a dating machine (§22.2 and §22.8). Figure 22.1 puts the dating machine's raw material on one axis.
+Compliance with this table is the legal department's job. What the desk does with it is price it, and pricing it has two halves. Every rule shows up as a term in the quote, so the market maker of Chapter 18 acquires a fifth component next to fear, greed, suspicion, and the value of tomorrow's flow: **rent**. And every rule has an effective date, which makes every effective date a candidate structural break in every series the desk trains on. Kaz's calendar table had carried a regulatory date for three months without anyone calling it one. The chapter is therefore two machines: a pricing machine (§22.1–§22.6) and a dating machine (§22.2 and §22.8). Figure 22.1 puts the dating machine's raw material on one axis.
 
 ![Figure 22.1: Rule changes on balance sheet, time, and information bunch up in 2022–2027, so a series that spans those years crosses several breaks that have nothing to do with credit, and the shaded bars mark the market-wide stresses that hit every bond at once (filled markers are in force, hollow markers are proposed or scheduled, the cross is a rule approved and never in force, and the grey panel is the future as of October 2026). Source: dates as stated in §22.2–§22.6 (FINRA Regulatory Notices 25-17 and 26-16; SEC, CFTC and Federal Reserve releases); dates marked approx. in the text are approximate here.](assets/figures/ch22_rule_timeline.png)
 
@@ -55,6 +83,8 @@ A systematic desk does not "comply with" this table; compliance is the legal dep
 ### 22.1.1 Derivation: the regulatory cost of carry in the reservation price
 
 Everything in this subsection is under the physical measure $\mathbb{P}$: inventory risk is a real-world variance, and capital ratios are accounting identities, not probabilities.
+
+> **Math, Gently.** *The rent.* Picture a parking garage with a peculiar rate card. It charges by the hour, and the hourly rate is the larger of two numbers: a footprint rate, the same for a hatchback and a limousine, and a value rate that depends on what the car is worth. A cheap car pays the footprint rate, because its value rate is tiny; an expensive car pays the value rate. A bank's balance sheet is that garage, and its Tier 1 capital is the floor space. The footprint rate is the leverage ratio: every dollar of assets, Treasury or junk bond, needs the same slice of capital. The value rate is risk-based capital: a requirement times a risk weight that is close to zero for a Treasury and about 100% for a BBB industrial. The bank pays whichever slice is larger, and it wants a return, the hurdle, on the capital it ties up. Tiny number: a 2-year Treasury with a 5% leverage requirement and a 12% hurdle costs $0.12 \times 0.05 = 0.006$ a year, or 60bp, and a week of that is $60 \times 7/365 \approx 1.15$bp. The dealer earns about half a basis point for crossing the Treasury's bid-ask. A week of parking costs more than twice the fare. In symbols, the rent per year is the hurdle times the larger slice, and the next two paragraphs write it down properly as (22.1).
 
 **Capital per unit of inventory.** A dealer holds signed inventory $q$ (lots) of a bond with mid $S_t$ (points per lot). The Tier 1 capital the position consumes is
 
@@ -70,6 +100,50 @@ $$
 c_{\text{reg}} = h\,\kappa = h\cdot\max\!\big(\kappa_{\text{RWA}}\,\text{RW},\ \kappa_{\text{LR}}\big).
 \tag{22.1}
 $$
+
+That is the number Theo wrote in the margin of the memo, done properly. The harder question is what the rent does to a quote, and for that the dealer needs a way to say what one more bond is worth to it, which is where the utility of Chapter 18 comes back in.
+
+> **Math, Gently.** *The indifference price, in two parts.* **Part 1: what you would pay not to flip a coin.** A friend offers a bet: heads you win \$50, tails you lose \$50. On average it is worth nothing, and most people would still pay a little to be excused. How much depends on how much the swing bothers you, and the dealer of Chapter 18 has a precise answer: with exponential utility and a small risk aversion $\gamma$, the cost of carrying a gamble is about $\tfrac12\gamma$ times its variance. Here the variance is $50^2 = 2{,}500$, so with $\gamma = 0.01$ per dollar the coin costs $\tfrac12 \times 0.01 \times 2{,}500 = \$12.50$. A dealer's *indifference price* is the same idea applied to one more bond: the bid at which buying it leaves the dealer exactly as content as not buying it. It sits below the mid by the variance charge the extra bond brings and, now, by the extra rent. **Part 2: the kink.** Rent is charged on the size of the position, $|q|$, whichever way it faces, because a short consumes balance sheet through the borrow. Say a week's rent on one lot is 2.4bp. A flat dealer that buys opens a position and pays 2.4bp; one that sells opens a short and pays 2.4bp too. Both quotes move away from the mid by the rent, and the spread widens. A dealer already long ten lots is in a different spot: buying an eleventh adds 2.4bp of rent, but selling one *saves* 2.4bp. Both quotes move down by the rent, the spread stays where it was, and the whole market skews. That is a dealer subletting a room it already rents: it will happily take less for the sublet. The two cases are the two sides of one absolute value; the statement is next, and the algebra closes the subsection.
+
+**What the rent does to the quote.** Put both parts into the Avellaneda–Stoikov dealer of §18.4 and the rent turns up in three places. A dealer already holding inventory moves its reservation price by the rent, in the direction that shrinks the position:
+
+$$
+r^{\text{res}}(q) = \tfrac12\big(r^a + r^b\big) = s - q\,\gamma\sigma^2(T-t) - \operatorname{sgn}(q)\,c_{\text{reg}}\bar S\,(T-t),
+\tag{22.2}
+$$
+
+with $\operatorname{sgn}(0) = 0$. A flat dealer instead widens both quotes by the rent, so its quoted spread acquires a third term next to fear and greed. Write $\tau^{\text{hold}}$ for the expected holding period, which replaces the horizon $T - t$ as in the worked example of §18.4 (the superscript keeps it apart from the default time $\tau$). A flat dealer's quoted spread is then
+
+$$
+\delta^a + \delta^b = \underbrace{\gamma\sigma^2\tau^{\text{hold}}}_{\text{fear}} + \underbrace{\tfrac{2}{\gamma}\ln\!\big(1+\tfrac{\gamma}{k}\big)}_{\text{greed}} + \underbrace{2\,c_{\text{reg}}\bar S\,\tau^{\text{hold}}}_{\text{rent}}.
+\tag{22.3}
+$$
+
+The kink is why a desk running near its balance-sheet limit quotes a sharp offer and a sullen bid. And principal market making pays only if the half bid-ask covers the rent over the hold. In bp of notional, with $c_{\text{reg}}$ in bp per year and $\tau^{\text{hold}}$ in years, the breakeven is
+
+
+$$
+\tau^\ast = \frac{s_{\text{ba}}/2}{c_{\text{reg}}},
+\tag{22.4}
+$$
+
+where $s_{\text{ba}}$ is the bid-ask in bp of price. Hold the bond for less than $\tau^\ast$ and principal market making beats agency; hold it longer and you are an unpaid warehouse. The algebra behind (22.2) and (22.3) is the Full Derivation at the end of this subsection.
+
+**Numerics** *(illustrative; hurdle $h = 12\%$, 7-calendar-day hold, ACT/365)*:
+
+| Position | Binding constraint | $\kappa$ | $c_{\text{reg}}$ (bp/yr) | 1-week rent (bp) | Half bid-ask (bp of price) | $\tau^\ast$ |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2y on-the-run Treasury, eSLR before 2026 | Leverage, $\kappa_{\text{LR}} = 5\%$ | 5.0% | 60 | 1.15 | ~0.5 | ~3 days |
+| Same, after 2026-04-01 (3% + ½ × 1.5% surcharge) | Leverage | 3.75% | 45 | 0.86 | ~0.5 | ~4 days |
+| 10y BBB industrial, equivalent RW 100% | Risk-based, $10.5\% \times 1.0$ | 10.5% | 126 | 2.42 | ~12.5 | ~36 days |
+
+The table explains a decade of market structure. For the corporate bond, rent is a rounding error against a quarter-point market: the dealer can sit on it for a month. For the Treasury, rent *is* the market: three days of inventory eats the half-spread. That single inequality explains why dealers went agency in Treasuries first, why the Federal Reserve's first market-structure tool in March 2020 was a leverage-ratio exclusion (§22.4), and why the November 2025 eSLR rule was sold as relief for "Treasury market intermediation" (§22.5). The risk weight does not tell you what a Treasury costs to hold. The leverage ratio does. Figure 22.2 draws the kink in (22.1) and the breakeven in (22.4).
+
+![Figure 22.2: Rent (left) sits at the leverage floor for every asset below the switching point (47.6% risk weight before 2026-04-01, 35.7% after) and rises with risk weight only above it, so a week of Treasury rent already exceeds the half bid-ask while a BBB bond can sit for about a month (right). Illustrative: hurdle 12%, risk-based requirement 10.5%, leverage requirement 5% then 3.75%, half bid-ask 0.5bp for the Treasury and 12.5bp for the BBB, from (22.1) and (22.4).](assets/figures/ch22_regulatory_rent.png)
+
+> **Ways This Blows Up.** (1) *Units.* $c_{\text{reg}}$ is annual and $\tau^{\text{hold}}$ is in years; ROBO once fed a holding period of seven days into the year slot and concluded that a week in Treasuries costs 4.2% of notional, which would make every repo desk on the Street a charity. (2) *Using $q$ instead of $|q|$.* A short pays rent too, through the borrow. A signed formula says shorting a bond *releases* capital, and the optimizer gets very excited about shorts. (3) *Double counting funding.* $h$ is the excess return over funding. (4) *Gross versus net.* Leverage charges apply to gross positions and risk charges to net-of-hedge positions, so a hedged book is cheap under risk-based capital and expensive under the leverage ratio. Run both and take the max *per legal entity*, not per trade. (5) *Calendar.* $\kappa$ and $h$ are effectively higher around reporting snapshots for some dealers. Model them as calendar features, not constants, or the quarter-end in the cold open becomes an unexplained residual.
+
+#### The Full Derivation: rent in the reservation price
 
 **Frozen-inventory value with rent.** Take the Avellaneda–Stoikov setup of §18.4: the mid follows $dS_t = \sigma\,dW_t$, the dealer has cash $x$ and exponential utility with risk aversion $\gamma$, and the horizon is $T$. If the dealer holds $q$ to $T$ without trading, its terminal wealth is $x + qS_T$ minus the rent paid along the way, $c_{\text{reg}}\bar S|q|(T-t)$. Taking the expectation of $-\exp(-\gamma\,\cdot)$ over the Gaussian $S_T$ gives
 
@@ -95,60 +169,33 @@ $$
 r^a(0) - r^b(0) = \gamma\sigma^2(T-t) + 2\,c_{\text{reg}}\bar S\,(T-t).
 $$
 
-*Long dealer ($q \ge 1$).* Then $|q+1| - |q| = 1$ but $|q-1| - |q| = -1$: buying adds rent and selling saves it. Both indifference prices shift down by the same amount, so the spread is unchanged and the midpoint moves:
+*Long dealer ($q \ge 1$).* Then $|q+1| - |q| = 1$ but $|q-1| - |q| = -1$: buying adds rent and selling saves it. Both indifference prices shift down by the same amount, so the spread is unchanged and the midpoint $\tfrac12(r^a + r^b)$ moves by $-c_{\text{reg}}\bar S\,(T-t)$ on top of the usual inventory skew $-q\gamma\sigma^2(T-t)$. That is (22.2); the short case is the mirror image, which is where $\operatorname{sgn}(q)$ comes from.
 
-$$
-r^{\text{res}}(q) = \tfrac12\big(r^a + r^b\big) = s - q\,\gamma\sigma^2(T-t) - \operatorname{sgn}(q)\,c_{\text{reg}}\bar S\,(T-t),
-\tag{22.2}
-$$
+The Avellaneda–Stoikov first-order condition from §18.4 still places each quote at the indifference price plus the markup $\tfrac{1}{\gamma}\ln(1 + \tfrac{\gamma}{k})$, because the rent enters only through $r^a$ and $r^b$. Add the markup to both of the flat dealer's indifference prices and replace $T - t$ with $\tau^{\text{hold}}$, and the quoted spread is (22.3).
 
-with $\operatorname{sgn}(0) = 0$. The short case is the mirror image. The Avellaneda–Stoikov first-order condition from §18.4 still places each quote at the indifference price plus the markup $\tfrac{1}{\gamma}\ln(1 + \tfrac{\gamma}{k})$, because the rent enters only through $r^a$ and $r^b$. Replace $T - t$ with the expected holding period, as in the worked example of §18.4; we write it $\tau^{\text{hold}}$, with the superscript keeping it apart from the default time $\tau$. A flat dealer's quoted spread is then
+#### Where the warehouse went
 
-$$
-\delta^a + \delta^b = \underbrace{\gamma\sigma^2\tau^{\text{hold}}}_{\text{fear}} + \underbrace{\tfrac{2}{\gamma}\ln\!\big(1+\tfrac{\gamma}{k}\big)}_{\text{greed}} + \underbrace{2\,c_{\text{reg}}\bar S\,\tau^{\text{hold}}}_{\text{rent}}.
-\tag{22.3}
-$$
+The rent explains why a dealer's quote moves on a calendar. It also explains, over fifteen years, where the warehouse went, which is the part a buy-side reader feels as "liquidity."
 
-The kink is the useful part. A flat dealer widens both sides by the rent, because either fill opens a new position. A long dealer does not widen at all; it *skews*, because a sale shrinks a position it is already paying rent on. That is a dealer subletting a room it already rents: it will happily take less for the sublet. It is also why a desk running near its balance-sheet limit quotes a sharp offer and a sullen bid.
+> **Desk Myth vs. Desk Reality.** *Myth:* "Post-crisis regulation killed bond-market liquidity." *Reality:* It re-priced balance sheet and moved the warehouse. By most published measures, average costs for small and mid-sized IG tickets fell over the decade as electronic venues and dealer competition (§22.2) did their work, while the cost of moving a large block in a stressed week rose *(qualitative; see the dealer-capacity evidence in §22.4)*. "Liquidity" was never one number. Regulation raised the price of the dealer's balance sheet and left the price of matching buyers to sellers alone, so every protocol that matches without warehousing grew. A desk that measures liquidity by the median ticket thinks regulation helped. A desk that measures it by the 99th-percentile block in March 2020 thinks regulation broke the market. Both are right about their own sample.
 
-**Breakeven holding period.** Principal market making pays only if the half bid-ask covers the rent over the hold. In bp of notional, with $c_{\text{reg}}$ in bp per year and $\tau^{\text{hold}}$ in years, the breakeven is
+Figure 22.3 plots the NY Fed series week by week; the Trend Watch below it gives the longer history and the trade-press reading of 2026.
 
-$$
-\tau^\ast = \frac{s_{\text{ba}}/2}{c_{\text{reg}}},
-\tag{22.4}
-$$
+![Figure 22.3: US primary dealers' net corporate-bond inventory averaged \$16bn long in 2017 and has since drifted down through zero: the 2026 average to date is -\$2.3bn for all corporate bonds and -\$4.9bn for investment-grade bonds alone, and the investment-grade book turned short first (annual average of -\$0.9bn in 2025). Averages are of the weekly observations. Source: NY Fed Primary Dealer Statistics (FR 2004), series PDPOSCSBND-* (long minus short, investment-grade and below-investment-grade bonds, notes and debentures, all maturities; weekly, 2015-01-07 to 2026-10-07).](assets/figures/ch22_dealer_inventory.png)
 
-where $s_{\text{ba}}$ is the bid-ask in bp of price. Hold the bond for less than $\tau^\ast$ and principal market making beats agency; hold it longer and you are an unpaid warehouse.
+> **Trend Watch: dealer corporate-bond inventories, 2007–2026.** *What changed:* US primary dealers stopped warehousing corporate bonds. *How big:* Federal Reserve FR 2004 data put dealer corporate holdings at a peak of roughly \$235bn in 2007, cut by about three-quarters by 2012 *(approx.; the pre-2013 series lumps corporates with other credit, so treat the peak as an upper bound)*. Average long inventories were about \$16bn in 2017. Trade press citing Crisil Coalition Greenwich analysis of FR 2004 data reports that primary dealers have averaged a **net short** position of about \$4bn in US corporate bonds so far in 2026, "the first time in at least 25 years" *(approx.; check against the NY Fed primary dealer statistics before relying on it)*. In late 2024 Coalition Greenwich was already describing dealers as net short in longer-dated IG corporates *(late-2024 figure not independently verified)*. *What it means for the desk:* the inventory function has moved to the customer: all-to-all venues, ETF creation and redemption (Chapter 20), and portfolio trades (Chapter 19). The bank dealer is now a router with a risk budget, and its $\tau^{\text{hold}}$ is measured in hours. Your liquidity model's "dealer capacity" variable should say which kind of dealer it means.
 
-**Numerics** *(illustrative; hurdle $h = 12\%$, 7-calendar-day hold, ACT/365)*:
-
-| Position | Binding constraint | $\kappa$ | $c_{\text{reg}}$ (bp/yr) | 1-week rent (bp) | Half bid-ask (bp of price) | $\tau^\ast$ |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 2y on-the-run Treasury, eSLR before 2026 | Leverage, $\kappa_{\text{LR}} = 5\%$ | 5.0% | 60 | 1.15 | ~0.5 | ~3 days |
-| Same, after 2026-04-01 (3% + ½ × 1.5% surcharge) | Leverage | 3.75% | 45 | 0.86 | ~0.5 | ~4 days |
-| 10y BBB industrial, equivalent RW 100% | Risk-based, $10.5\% \times 1.0$ | 10.5% | 126 | 2.42 | ~12.5 | ~36 days |
-
-The table explains a decade of market structure. For the corporate bond, rent is a rounding error against a quarter-point market: the dealer can sit on it for a month. For the Treasury, rent *is* the market: three days of inventory eats the half-spread. That single inequality explains why dealers went agency in Treasuries first, why the Federal Reserve's first market-structure tool in March 2020 was a leverage-ratio exclusion (§22.4), and why the November 2025 eSLR rule was sold as relief for "Treasury market intermediation" (§22.5). The risk weight does not tell you what a Treasury costs to hold. The leverage ratio does. Figure 22.2 draws the kink in (22.1) and the breakeven in (22.4).
-
-![Figure 22.2: Rent (left) sits at the leverage floor for every asset below the switching point (47.6% risk weight before 2026-04-01, 35.7% after) and rises with risk weight only above it, so a week of Treasury rent already exceeds the half bid-ask while a BBB bond can sit for about a month (right). Illustrative: hurdle 12%, risk-based requirement 10.5%, leverage requirement 5% then 3.75%, half bid-ask 0.5bp for the Treasury and 12.5bp for the BBB, from (22.1) and (22.4).](assets/figures/ch22_regulatory_rent.png)
-
-> **Ways This Blows Up.** (1) *Units.* $c_{\text{reg}}$ is annual and $\tau^{\text{hold}}$ is in years; ROBO once fed a holding period of seven days into the year slot and concluded that a week in Treasuries costs 4.2% of notional, which would make every repo desk on the Street a charity. (2) *Using $q$ instead of $|q|$.* A short pays rent too, through the borrow. A signed formula says shorting a bond *releases* capital, and the optimizer gets very excited about shorts. (3) *Double counting funding.* $h$ is the excess return over funding. (4) *Gross versus net.* Leverage charges apply to gross positions and risk charges to net-of-hedge positions, so a hedged book is cheap under risk-based capital and expensive under the leverage ratio. Run both and take the max *per legal entity*, not per trade. (5) *Calendar.* $\kappa$ and $h$ are effectively higher around reporting snapshots for some dealers. Model them as calendar features, not constants, or the quarter-end in the cold open becomes an unexplained residual.
+The idea that a dealer's holding cost is funding plus capital times a hurdle is older than the leverage ratio. Here it is in a 2004 textbook, priced on a total return swap.
 
 > **[SOURCE EXTRACTION]** *Schmid_Credit_Risk_Pricing_Models p.163:* "the cost of the trade will depend mainly on the funding cost of the total return payer and any regulatory capital charge incurred ... If the total return payer is a bank, it also depends on the BIS risk weight of the asset, with 20% for OECD bank debt and 100% for corporate debt."
 >
 > **Annotation.** Our analysis: this is (22.1) in its 2004 form. Schmid prices a total return swap as funding plus a capital charge driven by the Basel I risk weight, and the logic carries over to a dealer's inventory one for one. What changed is the *max*. In Schmid's world the risk weight was the only constraint, so a Treasury, with a zero weight, was free to hold, and corporate debt at 100% was the expensive asset. Since the leverage ratio arrived, every asset carries the floor $\kappa_{\text{LR}}$, and for low-risk assets the floor binds. The modern desk keeps Schmid's decomposition, funding plus capital times hurdle, and replaces the risk weight with $\max(\kappa_{\text{RWA}}\text{RW}, \kappa_{\text{LR}})$. One more departure: a TRS desk in 2026 also asks whether the trade is cleared, because clearing changes the counterparty term and the margin term (§22.4, §22.6).
 
-> **Trend Watch: dealer corporate-bond inventories, 2007–2026.** *What changed:* US primary dealers stopped warehousing corporate bonds. *How big:* Federal Reserve FR 2004 data put dealer corporate holdings at a peak of roughly \$235bn in 2007, cut by about three-quarters by 2012 *(approx.; the pre-2013 series lumps corporates with other credit, so treat the peak as an upper bound)*. Average long inventories were about \$16bn in 2017. Trade press citing Crisil Coalition Greenwich analysis of FR 2004 data reports that primary dealers have averaged a **net short** position of about \$4bn in US corporate bonds so far in 2026, "the first time in at least 25 years" *(approx.; check against the NY Fed primary dealer statistics before relying on it)*. In late 2024 Coalition Greenwich was already describing dealers as net short in longer-dated IG corporates *(late-2024 figure not independently verified)*. *What it means for the desk:* the inventory function has moved to the customer: all-to-all venues, ETF creation and redemption (Chapter 20), and portfolio trades (Chapter 19). The bank dealer is now a router with a risk budget, and its $\tau^{\text{hold}}$ is measured in hours. Your liquidity model's "dealer capacity" variable should say which kind of dealer it means.
-
-Figure 22.3 plots the NY Fed series behind the box.
-
-![Figure 22.3: US primary dealers' net corporate-bond inventory averaged \$16bn long in 2017 and has since drifted down through zero: the 2026 average to date is -\$2.3bn for all corporate bonds and -\$4.9bn for investment-grade bonds alone, and the investment-grade book turned short first (annual average of -\$0.9bn in 2025). Averages are of the weekly observations. Source: NY Fed Primary Dealer Statistics (FR 2004), series PDPOSCSBND-* (long minus short, investment-grade and below-investment-grade bonds, notes and debentures, all maturities; weekly, 2015-01-07 to 2026-10-07).](assets/figures/ch22_dealer_inventory.png)
+The first buy-side price tag on all of this came eight years later.
 
 > **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.348 (n.1):* "Konstantinovsky and Phelps (2012) document the decline in US corporate bond market liquidity as dealer inventories have fallen since 2008 in response to various regulatory changes. They estimate that the inventory decline led to an 18% drop in illiquidity, which translates to approximately 13bp/year in additional transaction cost for a portfolio with 100% yearly turnover."
 >
 > **Annotation.** Our analysis: thirteen basis points a year is the first serious price tag anyone put on post-crisis regulation from the buy side, and it is a useful prior even now. Read the units carefully: 13bp a year *at 100% turnover*. A systematic credit strategy with 200% turnover pays twice that, and a quarterly-rebalanced factor portfolio of the kind in Chapter 9 pays perhaps half. The modern desk departs from the 2012 estimate in two ways. First, the cost did not stay with the dealer; it moved into new protocols (portfolio trades, all-to-all) whose costs are lower on average and lumpier in stress. Second, the "18% drop in illiquidity" averages over calm and stressed regimes, and §22.4 shows that the regulatory cost is convex in dealer utilization: small in calm markets, very large when balance sheets fill.
-
-> **Desk Myth vs. Desk Reality.** *Myth:* "Post-crisis regulation killed bond-market liquidity." *Reality:* It re-priced balance sheet and moved the warehouse. By most published measures, average costs for small and mid-sized IG tickets fell over the decade as electronic venues and dealer competition (§22.2) did their work, while the cost of moving a large block in a stressed week rose *(qualitative; see the dealer-capacity evidence in §22.4)*. "Liquidity" was never one number. Regulation raised the price of the dealer's balance sheet and left the price of matching buyers to sellers alone, so every protocol that matches without warehousing grew. A desk that measures liquidity by the median ticket thinks regulation helped. A desk that measures it by the 99th-percentile block in March 2020 thinks regulation broke the market. Both are right about their own sample.
 
 ### Specification for AI Implementation
 

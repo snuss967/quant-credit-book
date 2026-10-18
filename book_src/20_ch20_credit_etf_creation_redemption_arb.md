@@ -1,6 +1,6 @@
 # Chapter 20: Credit ETF Creation/Redemption Arbitrage (HYG, JNK, LQD, BKLN)
 
-*3:41 p.m., the Thursday of a bad week. Every number in this scene is illustrative.*
+*3:41 p.m. on a Thursday, by the clock of one of Ines's drills. The screens show a composite bad week rather than a real one; the cast is fictional and every number in this scene is illustrative.*
 
 HYG was 77.10 bid. The intraday NAV estimate beside it said 77.82. "Ninety-three basis points," Theo said. "Buy the ETF, hand the shares back to the fund, take the bonds, sell the bonds. That's an arbitrage. That's the thing the textbook says can't exist."
 
@@ -20,20 +20,31 @@ Kaz leaned over. "It says 'custom basket.' Is it artisanal? Does it come with a 
 
 "It comes with the bonds nobody else wants," Mags said. "Back in my day the redemption basket was a fund manager calling you at 4:15 to ask what you'd pay for his whole high yield book. The answer was 'less.' This is better. It's still less."
 
-Theo looked at the chemicals name again, then at the 93 bp. It was a consent fee, he realized. Somebody always pays to turn a promise into cash, and the fee goes to whoever holds the scarce thing. Here the scarce thing was a balance sheet willing to own 212 bonds overnight.
+Theo had spent six years at PJT reading instruments that turn into other instruments, and this one had a familiar shape. "It's a convertible," he said. "The share converts into a slice of the bonds, and the bonds convert back into shares. So it's the three questions you'd ask about any conversion right. Who holds it? What does it cost to exercise? And what do they do with the thing they receive?"
 
-"So," Ines said. "Is the ETF cheap, or is the NAV late?"
+"Go on," said Ines.
 
-That is the question this chapter answers. *When a credit ETF trades away from its net asset value, how much of the gap is mispricing, how much is accounting, and how much is a fee for somebody else's liquidity? And what does it cost to make the gap close?*
+"We don't hold it. The right sits with a club of dealers that have signed an agreement with the fund. We can buy the shares, but to hand them back we'd have to pay a member of the club to do it for us." He scrolled the basket. "Exercising it costs two hundred and twelve bonds sold at the bid, plus whatever it costs to own them until they're sold. And what they do with what they receive is sell it." He stopped. "To whom?"
 
-By the end of this chapter you will be able to:
+Nobody answered, which was the answer. Theo looked at the chemicals name again, then at the 93 bp. It was a consent fee, he realized. Somebody always pays to turn a promise into cash, and the fee goes to whoever holds the scarce thing. Here the scarce thing was a balance sheet willing to own 212 bonds overnight.
 
-- explain the primary and secondary markets of a credit ETF in the language of Rule 6c-11;
-- decompose an observed premium into a flow component, a staleness component and a bid-side accounting constant, and estimate how stale the NAV is from public data;
-- derive the creation/redemption no-arbitrage band from bond-level liquidity costs, and extend it to a risk-averse AP whose balance sheet is the binding constraint;
-- solve the custom-basket problem as a constrained quadratic program and say who gains and who pays;
-- replay March 2020, the SMCCF and the loan-ETF settlement problem through those equations;
-- hand ROBO a spec for an arbitrage-band monitor that does not mistake a late NAV for free money.
+Ines took three index cards from her jacket and dealt them across the desk like a river card she already knew. "Before anyone says *arbitrage* again. Write what you'd bid for the redemption basket, in what size, and who you'd sell it to."
+
+Kaz wrote for four seconds. "Redeem all of it. Whatever the AP will take. Ninety-three bips is ninety-three bips, and the law of one price doesn't care what day of the week it is."
+
+Mags did not pick up her pen. "I was the person you'd sell it to," she said. "In 2020 I sat on a dealer's distressed desk, and when a fund's basket came out the other side of a redemption, the bonds nobody else wanted came to people like me. I bid a third of what you're hoping."
+
+"A third of the size?" Kaz asked.
+
+"A third of the size, at a price you would not enjoy. The other two-thirds you keep, and you find out what they're worth on Monday."
+
+Theo's hand had gone to his pocket, where the USB stick with his old 13-week cash flow model lived. He did not take it out. He did not have to; the stick had only ever asked one question. "How long does the AP have to hold the bonds?" he said. "Receipts lag, disbursements don't. If the AP pays for the shares today and the last bond in that basket sells in two weeks, the ninety-three bips is a fee for two weeks of somebody's balance sheet. I want to know how many weeks, and whose."
+
+Ines looked at the screen for a while. "Is ninety-three outside anywhere a calm high-yield fund ever trades? By a mile. Is that a trade?" She tapped Kaz's card with one finger. "Not yet." Then she turned to the room. "So. Is the ETF cheap, or is the NAV late?"
+
+That is the question this chapter answers. *When a credit ETF trades away from its net asset value, how much of the gap is mispricing, how much is accounting, and how much is a fee for somebody else's liquidity? And what does it cost to make the gap close?* The chapter takes the ninety-three apart. Some of it turns out to be a valuation convention, some of it a pricing service running late, and what is left is a fee for a balance sheet willing to hold 212 bonds overnight, which has a price that can be written down.
+
+By Friday Theo could do what Kaz's card could not. He could tell the two markets of a credit ETF apart in the vocabulary of Rule 6c-11, and split an observed premium into a flow term, a staleness term and a bid-side accounting constant, with an estimate from public data of how late the NAV runs. He could derive the band inside which no AP bothers to create or redeem, first from bond-level trading costs and then for an AP whose balance sheet is the binding constraint, and he could read the fund's custom basket as a quadratic program that says who gains and who pays. He had replayed March 2020, the Fed's corporate facility and the loan ETF's settlement problem through those equations. And he had handed ROBO a spec for a monitor that does not mistake a late NAV for free money.
 
 ## 20.1 The Machine: Two Markets, One Wrapper
 
@@ -45,18 +56,17 @@ In the **primary market**, a small club of **authorized participants** (APs) tra
 
 Since 2019 the vocabulary has been statutory. Rule 6c-11 under the Investment Company Act (17 CFR 270.6c-11(a)(1)) defines an authorized participant as "a member or participant of a clearing agency registered with the Commission" that has a written agreement with the fund to place creation and redemption orders. It defines a basket as "the securities, assets or other positions in exchange for which an exchange-traded fund issues" (or redeems) creation units. A creation unit is "a specified number of exchange-traded fund shares that the exchange-traded fund will issue to (or redeem from)" an AP. The cash balancing amount is "an amount of cash to account for any difference between the value of the basket" and the NAV of the creation unit. Hold on to one more definition, because §20.4 is built on it. A **custom basket** is either "a basket that is composed of a non-representative selection of the exchange-traded fund's portfolio holdings," or a representative basket that differs from the initial basket used earlier that business day.
 
-The two trades are mirror images.
+Kaz, who distrusts any definition that has not been drawn, drew the two trades on the whiteboard on Thursday evening as four boxes: the bond market on the left, the fund at the top, the exchange on the right and the AP in the middle with arrows to all three. "Creation first, because it's the cheerful one. The ETF is rich. The AP buys the bonds in the creation basket in the bond market, walks them up to the fund with the cash balancing amount, gets a creation unit of brand-new shares, and sells those shares on the exchange at the rich price." They added a tally beside the fund: shares outstanding, up. "Redemption is the same picture with the arrows reversed. The ETF is cheap. The AP buys shares on the exchange, hands a creation unit back to the fund, receives the redemption basket, and sells the bonds." The tally went down. "That last verb is where your ninety-three went," Ines said from the door.
 
-- **Creation (the ETF is rich).** The AP buys the bonds in the creation basket, delivers them to the fund with the cash balancing amount, receives a creation unit of new shares, and sells those shares on the exchange. Shares outstanding go up.
-- **Redemption (the ETF is cheap).** The AP buys shares on the exchange, delivers a creation unit to the fund, receives the redemption basket, and sells the bonds. Shares outstanding go down.
-
-Some funds transact **in cash** rather than in kind, for some or all orders. The fund then buys or sells the bonds itself and charges the AP a transaction fee to cover the cost, which matters enormously for loans (§20.6). Figure 20.1 draws both trades as flows around the AP.
+Theo asked what happened if the fund did not want bonds at all. Some funds, Kaz said, transact **in cash** rather than in kind, for some or all orders: the fund buys or sells the bonds itself and charges the AP a transaction fee to cover the cost. For a corporate bond fund that is a detail. For a loan fund it is the whole problem (§20.6). Figure 20.1 is Kaz's whiteboard, tidied up.
 
 ![Figure 20.1: The AP is the only link between the bond market, the fund and the exchange: when the ETF is rich it buys bonds and sells new shares (blue), and when the ETF is cheap it buys shares and sells the redemption basket (orange). Illustrative: schematic of the Rule 6c-11 flows described in §20.1.](assets/figures/ch20_wrapper_flows.png)
 
-For a restructuring banker, the cleanest analogy is a convertible. An ETF share is convertible into a slice of the bond portfolio, and the bonds are convertible back into shares. The conversion right sits with a small club, and exercising it costs money. Everything in this chapter follows from asking the questions you would ask about any conversion right: *who holds it, what does it cost to exercise, and what do they do with the thing they receive?*
+Theo's three convertible questions from the cold open (*who holds the conversion right, what does it cost to exercise, and what do they do with the thing they receive?*) organize the rest of the chapter, and the first has a countable answer.
 
 The club is not large, but it is not tiny either. Using Form N-CEN data, BlackRock counted 37 different APs active in US-listed ETFs in 2019, with about 5 active APs per ETF on average. In March 2020, 24 APs created or redeemed iShares US ETFs, against 28 active in 2019. The AP with the largest share of creations and redemptions accounted for less than a quarter of activity by dollar value (BlackRock, *Lessons from COVID-19: ETFs as a Source of Stability*, ViewPoint, July 2020, pp. 3–4). Most of the activity, however, never reaches the club at all. ICI's 2025 Fact Book puts about 83% of domestic high-yield bond ETF activity in the secondary market, so only about 17% involves creation or redemption. Most ETF trades are just investors swapping risk with each other, which is the whole point.
+
+> **View From Another Seat.** *The ETP market maker.* Flow Traders, the Amsterdam-listed market maker in exchange-traded products, reported net trading income of EUR 495.0m for the first quarter of 2020, against EUR 63.1m a year earlier, and added that "No loss days were recorded in the quarter." Its Chief Trading Officer, Folkert Joling, said "the ETF mechanism performed as intended" (Flow Traders, Q1 2020 trading update, 21 Apr 2020). Set that beside the Bank of England's finding, as reported by Investment Executive (21 Sep 2020, citing the Bank's May 2020 report), that some of the largest investment-grade and high-yield corporate bond ETFs traded more than 5% below NAV in mid-March, against no more than 0.1% in January. Both statements are true, because they measure different things. The market maker measures the mechanism by the volume it handled and the spread it captured on that volume; the seller measures it by the price received. The same fortnight that cost a seller five points paid an intermediary who was hedged, quoted wide on record volume and never had to sit with the basket. The release does not split the quarter by asset class, so how much of it came from credit products is not public. The seat's own later judgment is the coda: in its 2025 annual report (12 Mar 2026) the firm says it "strategically reduced the capital deployed to fixed income in 2025," moving trading capital "to other asset classes which saw greater dislocations." A market maker goes where the dislocations are, and in 2025 it decided they were mostly somewhere other than bonds.
 
 Here are the four funds in the chapter title, as their issuers reported them in mid-October 2026.
 
@@ -69,7 +79,7 @@ Here are the four funds in the chapter title, as their issuers reported them in 
 
 *Sources: iShares HYG and LQD product pages (as of 2026-10-16); SSGA JNK page (as of 2026-10-15); Invesco BKLN case study; BKLN AUM from stockanalysis.com (2026-10-16), not yet confirmed against Invesco.*
 
-Two things in that table deserve a second look. First, HYG's 30-day median bid/ask is 0.01%, which is tighter than any bond it holds. That is not an error, and §20.2 explains why a regulator requires the fund to publish it. Second, BKLN holds 185 loans that settle on a timetable measured in days or weeks, while its shares settle T+1. That mismatch is the subject of §20.6.
+Theo's eye went to two cells. HYG's 30-day median bid/ask is 0.01%, which is tighter than any bond it holds. That is not an error, and §20.2 explains why a regulator requires the fund to publish it. And BKLN holds 185 loans that settle on a timetable measured in days or weeks, while its shares settle T+1. That mismatch is the subject of §20.6.
 
 Why is the primary market so small relative to the secondary market? Because the secondary market nets. On a heavy selling day the ETF changes hands thousands of times, and buyers and sellers mostly meet each other. Only the *net imbalance*, after market makers have warehoused what they will, reaches an AP. BlackRock's July 2020 ViewPoint (p. 5) put the gap starkly: "the largest high yield bond ETF traded over 168,000 times per day during the week of March 23 to March 27, while the fund's largest five bond holdings traded an average of 25 times per day." The ETF is a netting machine sitting on top of an RFQ market, and it nets a great deal.
 
@@ -85,15 +95,19 @@ Why is the primary market so small relative to the secondary market? Because the
 
 An equity ETF's NAV is a sum of closing prices from a continuous auction. A bond ETF's NAV is a sum of *evaluated prices*: model-based marks from third-party pricing services, built from whatever trades, dealer quotes and comparable bonds were available. Most of the 1,334 bonds in HYG did not trade at size today. Their marks are an informed opinion about where they would trade.
 
-Three features of that opinion matter for the arbitrage.
+"There were two phone calls at 4:15 in my day," Mags said, when Theo asked how anyone decides what a bond that has not traded is worth. "One was the fund manager asking what you'd pay for his book, which you've heard about. The other was the pricing service asking where you'd mark it. You gave them a number, they wrote it down, on a good day they rang three other people and took the middle, and the next morning it was in somebody's NAV as if it had come down from the mountain." The calls are feeds now, and the feeds are far better, but the product is still an opinion, and three things about that opinion decide whether a discount is money.
 
-1. **It is struck on the bid side.** For most US bond ETFs the NAV uses bid-side evaluated prices, while the ETF itself is quoted, and closes, near the midpoint of its own tight market. Vanguard's adviser education material and Morningstar both describe the convention, and both conclude that bond ETFs therefore *tend* to trade at a small premium to NAV in normal markets (Vanguard, "4 things to know about bond ETFs"; Morningstar, "NAV premiums and discounts"). A few funds use mid prices, so check the prospectus fund by fund before you hard-code it. JNK's own page shows the footprint: in 2025 it closed at a premium on 206 days and at a discount on 44 (SSGA, accessed 2026-10-15).
-2. **It is struck at a time.** ICE has noted that a bond NAV may be struck at 3 p.m. while the exchange closes at 4 p.m. (ICE Data Services via FOW, 2020-06-22). A rally between 3 and 4 shows up as a "premium" that is really just the clock.
-3. **It is slow.** An evaluated price moves when the evaluator sees evidence. In a fast market evidence arrives late, so the mark lags the true clearing level.
+The first is which side of the market it is struck on. "The auditor's thumb on the scale," Mags called it. For most US bond ETFs the NAV uses bid-side evaluated prices, the level at which a holder could sell, while the ETF itself is quoted, and closes, near the midpoint of its own tight market. A share priced at mid against a portfolio priced at bid looks rich on a day when nothing is happening. Vanguard's adviser education material and Morningstar both describe the convention, and both conclude that bond ETFs therefore *tend* to trade at a small premium to NAV in normal markets (Vanguard, "4 things to know about bond ETFs"; Morningstar, "NAV premiums and discounts"). A few funds use mid prices, which is why the desk reads the convention from each prospectus rather than hard-coding it. JNK's own page shows the footprint: in 2025 it closed at a premium on 206 days and at a discount on 44 (SSGA, accessed 2026-10-15).
+
+The second is the clock. ICE has noted that a bond NAV may be struck at 3 p.m. while the exchange closes at 4 p.m. (ICE Data Services via FOW, 2020-06-22). "So a rally between three and four," Theo said, "prints as a premium." "As a premium that is really the clock," said Mags. "We called it the hour nobody owned."
+
+The third is speed. An evaluated price moves when the evaluator sees evidence, and in a fast market evidence arrives late, so the mark trails the level at which the bond would actually clear. On the days nobody picked up Mags's phone, her marks trailed too.
 
 Regulators know all of this, and Rule 6c-11 responds with disclosure. Every ETF must publish, daily, its NAV, market price and premium or discount as of the prior close, plus a "median bid-ask spread, expressed as a percentage rounded to the nearest hundredth," computed over the last 30 calendar days. And "if the exchange-traded fund's premium or discount is greater than 2% for more than seven consecutive trading days," the fund must say so on its website and discuss the contributing factors, for at least a year (17 CFR 270.6c-11(c)(1)). That is why every issuer page shows a median bid/ask of 0.01%. The rule mandated a statistic that makes the fund look more liquid than anything it owns, and the statistic is correct, which is the joke.
 
 ### 20.2.1 Derivation: three reasons a price differs from a NAV
+
+> **Math, Gently.** *A ratio is a chain, and a logarithm turns the chain into a sum.* **(a) The log premium.** A premium is a ratio, price over NAV, minus one. Take the cold open's screen: $77.10 / 77.82 = 0.99075$, a simple premium of $-0.925\%$, or $-92.5$ bp. The natural log of the same ratio is $\ln 0.99075 = -0.930\%$, or $-93.0$ bp. For gaps this small the two readings agree to within half a basis point, which is why the desk says "ninety-three" for both; they drift apart only for big gaps (at a 5% discount the log reading is about 13 bp deeper). So why bother with logs? Because of part (b). **(b) The telescoping identity.** Picture a relay with three handoffs. The exchange price hands the baton to the true value of the bonds, the true value hands it to the pricing service's opinion of that value, and the opinion hands it to the bid-side NAV. Each handoff is a ratio, and the whole race, price over NAV, is the product of the three ratios, because every runner in the middle appears once on top and once underneath and cancels. A log turns that product into a sum, so the total drift of the baton is the sum of the three legs' drifts. Tiny number: the ETF is 0.5% below the true value of its bonds (price over truth $= 0.995$), the evaluator's opinion sits 2.5% above the truth (truth over opinion $= 0.975$), and marking at the bid shaves 30 bp off the opinion (opinion over NAV $= 1/(1 - 0.003) = 1.003$). The legs are about $-0.5\%$, $-2.5\%$ and $+0.3\%$, so the printed discount is about $-2.7\%$ (exactly $-2.73\%$ in logs), and only half a point of it is the ETF being cheap. The same relay, with symbols, is next.
 
 Let the fund hold $n_i$ units of bond $i = 1, \dots, N$ per ETF share (ignore cash, accrued interest and fees for now; they add a known constant). Let $m_{i,t}$ be the true executable mid price of bond $i$ at the NAV strike time on day $t$. It exists in principle and is never observed directly. The pricing service publishes an evaluated mid $\tilde m_{i,t}$ and an evaluated bid $\tilde m_{i,t}(1 - c_i)$, where $c_i$ is bond $i$'s half bid–offer as a fraction of price. Define the per-share aggregates
 
@@ -109,11 +123,7 @@ $$
 p_t \;=\; \underbrace{\ln \frac{P_t}{M_t}}_{\ell_t \;(\text{flow})} \;+\; \underbrace{\ln \frac{M_t}{\tilde M_t}}_{s_t \;(\text{staleness})} \;+\; \underbrace{-\ln\left(1 - \bar c_t\right)}_{\approx\, \bar c_t \;(\text{bid-side convention})}. \tag{20.1}
 $$
 
-Equation (20.1) is an identity. It needs no assumptions, which is why it is useful: every argument about bond ETF premiums is an argument about which of the three terms is large.
-
-- $\ell_t$ is the **flow term**: the ETF price differs from the true value of what it holds. This is the only term an AP can arbitrage, and only within the band of §20.3.
-- $s_t$ is the **staleness term**: the true value differs from the pricing service's opinion. Nobody can arbitrage it, because nobody can trade at the evaluated price. It is a *forecast*: the NAV will move toward the ETF.
-- $\bar c_t$ is the **accounting term**: a near-constant positive premium created by marking at the bid. For an IG fund with a value-weighted half-spread of 10 bp it is about 10 bp; for an HY fund at 30 bp it is about 30 bp *(illustrative magnitudes)*.
+Equation (20.1) is an identity. It needs no assumptions, which is why it is useful: every argument about bond ETF premiums is an argument about which of the three terms is large, and each term has its own villain. In the **flow term** $\ell_t$, the ETF price differs from the true value of what it holds; this is the only term an AP can arbitrage, and only outside the band of §20.3. In the **staleness term** $s_t$, the true value differs from the pricing service's opinion. Nobody can arbitrage that, because nobody can trade at the evaluated price, but it is a *forecast*: the NAV will move toward the ETF. And the **accounting term** $\bar c_t$ is a near-constant positive premium created by marking at the bid, about 10 bp for an IG fund with a value-weighted half-spread of 10 bp and about 30 bp for an HY fund at 30 bp *(illustrative magnitudes)*. Mags's thumb on the scale, in other words, has a size.
 
 Now give staleness a model. The simplest one that matches how evaluators behave is **partial adjustment**: each day the evaluated level closes a fraction $\eta \in (0, 1]$ of the gap to the truth,
 

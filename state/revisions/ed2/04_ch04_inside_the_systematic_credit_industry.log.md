@@ -22,3 +22,7 @@
 - [x] 20. [§4.10 KMV to Blackstone] EXPAND-SCENE + MATH-GENTLY (Merton) + ANOTHER-SEAT (insurer) — Mags's airline EDF fax; told timeline; insurer box with Fed note.
 - [x] 21. [§4.11 Genealogy and Empty Cells] LIST-TO-NARRATIVE + BRIDGE + figure hook — Theo labels blanks; two figure hooks; kitchen answered: bond-choice room.
 - [x] 22. [§4.12 Desk Debrief] BRIDGE end-of-day scene — Ines counts blanks; measurable-by-Friday triage; bullets kept verbatim.
+- [x] 23. [§4.1, after the table] RV BEAT (scene, per state/rv_thread.md row 04_ch04): pod credit RV on the map; fee waterfall 20% gross for 10% net; what the platform buys (T12); Millennium 2 Jun 2025, Balyasny 20 Aug 2026; figure hook. — Ines reads hires, runs Mercer waterfall; Dov's pair; netting; corner.
+- [x] 24. [whole chapter] CHECK HYGIENE (u2_lessons 13, outranks brief §4): hedge in-text CHECK markers; log open items in state/open_items_ed2.md. — 12 markers hedged; Ares completion verified; four open items logged.
+
+<!-- STATUS: COMPLETE -->

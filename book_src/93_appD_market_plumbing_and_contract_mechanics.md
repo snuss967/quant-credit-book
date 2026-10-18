@@ -244,7 +244,7 @@ On a credit event the protection buyer receives $N(1 - \text{FP}/100)$ and pays 
 
 **Table D.8. Auction parameters, with one real set for scale.**
 
-| Parameter | What it does | Windstream Services, 18 Mar 2019 (DC decision of 6 Mar 2019) |
+| Parameter | What it does | Windstream Services, held 3 Apr 2019 (DC decision of 6 Mar 2019 set 18 Mar; a dealer vote on 11 Mar moved it, 9 to 1) |
 | :--- | :--- | :--- |
 | Initial Market Quotation Amount | Size of each dealer's stage-1 two-way market | \$2mm |
 | Maximum bid–offer spread | Width of each two-way | 3 points |
@@ -252,7 +252,7 @@ On a credit event the protection buyer receives $N(1 - \text{FP}/100)$ and pays 
 | Cap Amount | How far FP may sit beyond the IMM against the open interest | 1 point |
 | Pricing increment | Tick | 1/8 point |
 | Timetable | Stage 1, 9:45–10:00 a.m., IMM 10:30; stage 2, 12:45–1:00 p.m., FP 2:00 | |
-| Settlement | | The later of T+3 and 21 Mar 2019 |
+| Settlement | | The later of T+3 and 8 Apr 2019 (21 Mar under the original date) |
 
 (Windstream's story has its canonical home in §25.5.2, with the CDS side in §24.8.3; only the parameters are borrowed here.)
 

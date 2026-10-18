@@ -1,16 +1,16 @@
 # Progress Log, Edition 2 (U2): Chapter 12, Multi-Asset Credit Allocation
 
 - [x] 1. [§12.0 Cold Open] EXPAND-SCENE (to 1,100–1,400 words). — Seats read aloud, Mags recoveries, queue beat, promise, card; 1,252 words.
-- [ ] 2. [§12.1] LIST-TO-NARRATIVE + ANOTHER-SEAT (insurer).
-- [ ] 3. [§12.2, before "Derivation."] MATH-GENTLY box 1: price as a hill.
-- [ ] 4. [§12.2, at "The yield is a market price"] MATH-GENTLY box 2: two measures.
-- [ ] 5. [§12.2] FULL-DERIVATION-MOVE; Nuveen as Theo's Tuesday rebuild.
-- [ ] 6. [§12.3 "three ratios"] LIST-TO-NARRATIVE.
-- [ ] 7. [§12.3 "Mean reversion and the z-score"] MATH-GENTLY box 3 + FULL-DERIVATION-MOVE.
-- [ ] 8. [§12.3 composition adjustment] WHEN-TO-APPLY inside the scene.
-- [ ] 9. [§12.4 opening] MATH-GENTLY box 4 (two parts): regimes and mixtures.
-- [ ] 10. [§12.4 "The model."] MATH-GENTLY box 5 + FULL-DERIVATION-MOVE.
-- [ ] 11. [§12.4 "What goes wrong"] LIST-TO-NARRATIVE + SHOP-LIFE vignette.
+- [x] 2. [§12.1] LIST-TO-NARRATIVE + ANOTHER-SEAT (insurer). — Ines walks table, five-lawyers line, insurer NAIC box, Trend Watch moved.
+- [x] 3. [§12.2, before "Derivation."] MATH-GENTLY box 1: price as a hill. — Hill box: D=4, C=20, loan sixteen-to-one; signs off next.
+- [x] 4. [§12.2, at "The yield is a market price"] MATH-GENTLY box 2: two measures. — Bookmaker box: 300bp, L=0.6, λQ 5%, premium 1.8%.
+- [x] 5. [§12.2] FULL-DERIVATION-MOVE; Nuveen as Theo's Tuesday rebuild. — Statement, Full Derivation, Theo Tuesday rebuild, Kaz sticky-note judgment.
+- [x] 6. [§12.3 "three ratios"] LIST-TO-NARRATIVE. — Mags break-even, Ines DTS, Theo CMBS round trip; PB-13 Pair box.
+- [x] 7. [§12.3 "Mean reversion and the z-score"] MATH-GENTLY box 3 + FULL-DERIVATION-MOVE. — Drunk-on-leash box, κ=0.35, z=+2 gives 89bp; Full Derivation.
+- [x] 8. [§12.3 composition adjustment] WHEN-TO-APPLY inside the scene. — Mags: ruler whose zero moved; fixed-mix, sovereign index judgment.
+- [x] 9. [§12.4 opening] MATH-GENTLY box 4 (two parts): regimes and mixtures. — Weather coin plus mixture box; 13x tail, 0.96 of 4.35.
+- [x] 10. [§12.4 "The model."] MATH-GENTLY box 5 + FULL-DERIVATION-MOVE. — Odds-form filter box, 47% then 25%; Full Derivation subsection.
+- [x] 11. [§12.4 "What goes wrong"] LIST-TO-NARRATIVE + SHOP-LIFE vignette. — Hana month-end refresh vignette: NAV, eigenvalue, relabel, smoothed backtest.
 - [ ] 12. [§12.5 Steps 1–3] MATH-GENTLY box 6 + FULL-DERIVATION-MOVE.
 - [ ] 13. [§12.5 Step 4] MATH-GENTLY box 7 + FULL-DERIVATION-MOVE + WHEN-TO-APPLY.
 - [ ] 14. [§12.6] MATH-GENTLY box 8 + FULL-DERIVATION-MOVE.

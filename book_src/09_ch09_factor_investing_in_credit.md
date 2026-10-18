@@ -110,6 +110,20 @@ Every factor in this chapter is built on one identity. Get it wrong and every la
 
 ### 9.2.1 From proportional spread changes to beta
 
+The morning after the backtest, Theo asked Kaz the question he would have asked of any number in a restructuring model: where does it come from? Why should a wide bond move more than a tight one, and why should "more" be something you can compute before the month starts? Kaz drew two boats on the whiteboard, which is not how Kaz usually answers anything.
+
+> **Math, Gently.** *Relative change, and beta as a ratio.* **Part one: two boats on one tide.** Picture two bonds on the same bad morning. One sits at 100bp, the other at 300bp. The news is "credit is 10% wider," and both obey it: the first widens 10bp, the second 30bp. An absolute ruler ("spreads moved 5bp") would treat the two bonds as identical and be wrong by a factor of three. A relative ruler says each moved 10%, and then asks what that 10% costs you. The cost is spread duration times the absolute move: at five years of spread duration, 10bp is 0.5% of price and 30bp is 1.5%. Duration times spread, $5 \times 1\% = 5$ against $5 \times 3\% = 15$, carries the same factor of three. DTS is how much of your boat is in the water: the tide is the same for everyone, and DTS decides how far it lifts or sinks you. **Part two: beta is a ratio.** A beta answers "when the market moves one unit, how many units do I move?" The textbook formula, covariance over variance, reads in English as *how much of your move is the market's move, per unit of the market's move.* If every bond rides the same tide, a bond moves by its DTS times the tide and the market moves by the market's DTS times the same tide, so the tide cancels and the beta is the ratio of the two DTS numbers. A bond with DTS 12 in a market with DTS 8 has a beta of $12/8 = 1.5$; a bond with DTS 4 has $4/8 = 0.5$. No regression and no five years of history, just two numbers off the screen. The covariance algebra is next; Chapter 1's box on regression slopes has the general idea of a beta.
+
+Put the two parts together and the whole result fits on one line:
+
+$$
+\beta_i \;\approx\; \frac{\text{DTS}_i}{\text{DTS}_m}. \tag{9.1}
+$$
+
+Equation (9.1) is the most useful line in this chapter. Beta in credit is not something you estimate with a five-year regression and a prayer. To first order it is a ratio you can read off the screen at the start of the month. Where the tide stops being one tide, the ratio stops being beta, and Mags is about to find that edge in §9.2.2.
+
+#### The Full Derivation
+
 Let $r^{xs}_{i,t+1}$ be the one-period excess return of bond $i$ over duration-matched Treasuries, $s_{i,t}$ its spread (decimal), $D^{\text{spr}}_{i,t}$ its spread duration (years), and $\Delta t$ the period length in years. To first order,
 
 $$
@@ -141,10 +155,10 @@ Now decompose the relative move into a common part and an idiosyncratic part, $\
 $$
 \beta_i \;=\; \frac{\operatorname{Cov}^{\mathbb{P}}\!\left(r^{xs}_i,\, r^{xs}_m\right)}{\operatorname{Var}^{\mathbb{P}}\!\left(r^{xs}_m\right)}
 \;=\; \frac{\text{DTS}_i\,\text{DTS}_m\,\sigma^2_{\eta_m}}{\text{DTS}_m^2\,\sigma^2_{\eta_m}}
-\;=\; \frac{\text{DTS}_i}{\text{DTS}_m}. \tag{9.1}
+\;=\; \frac{\text{DTS}_i}{\text{DTS}_m}.
 $$
 
-Equation (9.1) is the most useful line in this chapter. Beta in credit is not something you estimate with a five-year regression and a prayer. To first order it is a ratio you can read off the screen at the start of the month.
+The tide cancels, and what remains is (9.1).
 
 ### 9.2.2 Why a dollar-neutral spread sort is long beta
 
@@ -176,15 +190,29 @@ Look at what happens to the carry: $2.0\% \times 1 - 1.2\% \times 1.667 = 0.0\%$
 
 ![Figure 9.1: Matching the short leg's DTS to the long leg's closes the 4.8 gap (left) that gave the dollar-neutral book a beta of 0.6 and 0.8% a year of carry, leaving a book that neither moves with the index nor earns anything before a signal (right). Illustrative: the §9.2.2 worked example (leg DTS 12.0 and 7.2, market DTS 8.0, spreads 2.0% and 1.2%) with 84 simulated months of index returns and no signal.](assets/figures/ch09_kaz_book_dts_neutral.png)
 
+Mags did not stay at her terminal long. When Kaz rebuilt the book cell by cell, she leaned over and put a pen on one line of the single-B energy cell: a bond at 2,500bp, sitting in the long leg with a DTS that made it the largest risk position in the cell, so that the short leg had been scaled up to match it. "If the market widens ten percent tomorrow, does this one widen ten percent?"
+
+Kaz pulled its history. In the market's last bad week the index had widened 9% and this bond had dropped half a point *(illustrative)*.
+
+"Because it isn't trading on spread," Mags said. "It's trading on what you get back. Forty cents, give or take, after the lawyers. Your ruler measures the tide, and this one is already on the beach."
+
+Kaz conceded that it was priced to recovery, moved it out of the DTS scaling into a bucket of its own, and watched the cell's short leg give back the notional it had been carrying to hedge a tide the bond no longer rode.
+
 > **[SOURCE EXTRACTION]** *Ben_Dor_Quantitative_Credit_Portfolio_Management p.34:* "just as spread duration is the sensitivity to an absolute change in spread (e.g., spreads widen by 5 bps), DTS (D · s) is the sensitivity to a relative change in spread."
 >
-> **Annotation.** This is the sentence that turned a portfolio-management heuristic into a risk model. Spread duration answers "what if spreads widen 5bp?", a question nobody should ask in high yield, where a 5bp move is a rounding error on Monday and a fantasy on the Friday before a lender call. DTS answers "what if spreads widen 10%?", which is the question the market actually poses, because spreads move in proportion to themselves. Barclays QPS introduced the measure with Robeco in 2005 (Dynkin p.729, note 11). It is now standard in index analytics. For factor investing the consequence is structural: the natural unit of exposure is DTS, so the natural neutrality condition is DTS-neutrality, and the natural cells for comparing bonds are cells of similar DTS. Two caveats separate the 2026 desk from the 2005 paper. First, proportionality weakens near distress: a 2,500bp bond does not widen 10% when the market does, because its price is anchored to recovery rather than to spread. Above roughly 1,000bp the desk switches from DTS to price-based or recovery-based risk (Chapters 5 and 14). Second, DTS is a bond-level number, and an issuer's bonds can diverge wildly when a liability-management transaction splits the capital structure into winners and losers, so issuer-level DTS-neutrality is not bond-level DTS-neutrality.
+> **Annotation.** This is the sentence that turned a portfolio-management heuristic into a risk model. Spread duration answers "what if spreads widen 5bp?", a question nobody should ask in high yield, where a 5bp move is a rounding error on Monday and a fantasy on the Friday before a lender call. DTS answers "what if spreads widen 10%?", which is the question the market actually poses, because spreads move in proportion to themselves. Barclays QPS introduced the measure with Robeco in 2005 (Dynkin p.729, note 11). It is now standard in index analytics. For factor investing the consequence is structural: the natural unit of exposure is DTS, so the natural neutrality condition is DTS-neutrality, and the natural cells for comparing bonds are cells of similar DTS. Two caveats separate the 2026 desk from the 2005 paper. First, proportionality weakens near distress, which is what Mags found in the single-B energy cell: a bond anchored to recovery does not ride the tide. Above roughly 1,000bp the desk switches from DTS to price-based or recovery-based risk (Chapters 5 and 14). Second, DTS is a bond-level number, and an issuer's bonds can diverge wildly when a liability-management transaction splits the capital structure into winners and losers, so issuer-level DTS-neutrality is not bond-level DTS-neutrality.
+
+Ben Dor's sentence is the theory. Barclays later measured what ignoring it does to a value signal, in good markets and bad.
 
 > **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.741:* "In the case of ESP, adjusting for DTS reduces correlations with US Corporate Index excess returns from 34% to –6% in drawdown episodes and from 44% to –22% in other (benign) periods."
 >
 > **Annotation.** This is the cold open measured on real data. ESP is Barclays' value signal (§9.3). Built naively, with long and short legs that differ in DTS, its correlation with the credit index is +44% in benign markets, so nearly half its variance is beta. DTS-match the legs and the sign *flips* to −22%: the genuine value signal is mildly *defensive*, because cheap-to-fundamentals bonds that are not simply wider are, on average, being mispriced by forced or panicked sellers. The practical lesson is in the drawdown numbers, 34% falling to −6%: a naive value book loses money exactly when the desk can least afford it, and a DTS-matched one does not. The 2026 desk reports every factor in both forms, because the gap between them is a direct measure of how much of the factor was beta. When a vendor shows you a credit-value backtest without saying how it handled DTS, assume the worse version.
 
+Theo's first attempt to write any of this down for ROBO went the way first specifications usually go.
+
 > **The Spec You Hand the Robot (what ROBO built from the vague version).** Theo's first specification said: "Neutralize spread exposure in both legs." ROBO, which never guesses, reduced each leg's DTS to zero by selling every corporate bond and buying two-year Treasuries. The book's spread exposure was perfectly neutral. So was its alpha. The precise version: "At the start of each month, using beginning-of-month OAS and OAS duration, scale each leg so that $\sum_{i \in \text{leg}} |w_i|\, D^{\text{spr}}_i s_i = 12$ (years × percent) within each rating × sector cell; if a cell has fewer than five bonds in a leg, pool it with the adjacent rating; never rescale with end-of-month DTS."
+
+That last clause exists because of ROBO's second run, which used the month-end file because nobody had said which DTS to use. In the backtest's worst month the short leg grew after the fact to match spreads that had already widened, and the hedge looked flawless in exactly the month a real one would have failed.
 
 > **Ways This Blows Up.** (1) *Units.* DTS in years × percent and years × basis points differ by a factor of 100. A DTS cap of 5 in one convention is a cap of 500 in the other, and a junior analyst will eventually enter the wrong one into the optimizer. Name the units in the variable name. (2) *Timing.* Scaling legs with end-of-month DTS is look-ahead: in a selloff, spreads widen, DTS rises, and the "neutral" short leg grows retroactively. Use beginning-of-month DTS only. (3) *Callables.* Use option-adjusted duration on callable high yield; modified duration on a bond trading to a 2027 call overstates its DTS and under-hedges it. (4) *Distress.* Cap DTS-based scaling for spreads above about 1,000bp or treat those names separately; a DTS-neutral short leg of three CCC bonds is not neutral to anything except the bankruptcy court's calendar. (5) *Leverage.* DTS-neutral legs need not be dollar-equal. A DTS-neutral book that is long short-dated A-rated paper and short long-dated BBBs can be levered several times on the long leg, and leverage has its own cost and its own drawdown (§9.5).
 
@@ -194,7 +222,11 @@ Value is the factor an RSSG reader understands best and gets wrong most expensiv
 
 ### 9.3.1 Excess spread to peers (ESP)
 
-Barclays' value measure is a monthly cross-sectional regression within peer groups. For a peer group $g$ (rating × sector × maturity bucket), estimate
+Barclays' value measure is a monthly cross-sectional regression within peer groups. It is the chapter's first load-bearing residual, so it is worth slowing down for.
+
+> **Math, Gently.** *A residual is the part the peers cannot explain.* Picture three BB chemicals bonds, all with about seven years to maturity, quoted at 180, 210 and 300bp. A regression inside that cell draws one fair line through it: spread as a function of leverage, coverage and the rest. Plug in the third bond's leverage and the line says it "should" trade at 220bp. It trades at 300. The residual is the difference, $300 - 220 = +80$bp: what the market is paying you that the bond's peers and its ratios do not account for. Everything in this section is a way of computing that 80, and most of the chapter after it is an argument about whether the 80 is a gift (a forced seller, a downgrade flow, a new issue priced to clear) or a warning (something the ratios cannot see). One refinement. The desk runs the regression on the logarithm of the spread rather than the spread itself, because on a log scale a residual of $\ln(300/220) \approx 0.31$ means "about 36% wider than fair" whether the fair line sits at 100bp or at 1,000bp. That is the relative ruler of the two boats in §9.2; measured in basis points instead, an 80bp residual is a shout at 220 and a whisper at 1,000. Chapter 1's box on regression slopes covers how the line itself gets drawn.
+
+For a peer group $g$ (rating × sector × maturity bucket), estimate
 
 $$
 s_{i,t} \;=\; a_{g(i),t} \;+\; b_{1,t}\,\text{Lev}_{i,t} \;+\; b_{2,t}\,\Big(\frac{\text{ND}}{\text{EBITDA}}\Big)_{i,t} \;+\; b_{3,t}\,\text{ICov}_{i,t} \;+\; \epsilon_{i,t},
@@ -208,7 +240,7 @@ $$
 
 In Barclays' results, measured against the index, the richest decile returned −1.10% a year (information ratio −0.27) and the cheapest +3.29% a year (IR 0.53) (Dynkin p.528), and the long–short spread has an IR above 1.5 (Dynkin p.545). The same page adds the condition that matters for 2026: the outperformance is larger when the cross-sectional dispersion of ESP is high. Value needs something to be cheap *relative to*; §9.10 returns to what happens when the whole market is tight.
 
-Two implementation choices deserve a sentence each. First, the regression in §9.11 uses the *logarithm* of OAS rather than its level. That is our choice, not Barclays'. It follows from §9.2: if spreads move proportionally, log spread is the scale on which a residual of 0.2 means "20% cheap" for both a 90bp bond and a 400bp bond. Second, the regression's slopes $b_{k,t}$ are common across cells while the intercepts vary by cell. Letting every cell have its own slopes sounds more flexible and is, in practice, a way to fit noise in cells with eleven bonds.
+The regression in §9.11 uses the *logarithm* of OAS rather than its level, for the reason in the box, and that is our choice, not Barclays'. If spreads move proportionally, log spread is the scale on which a residual of 0.2 means "20% cheap" for a 90bp bond and a 400bp bond alike. Its slopes $b_{k,t}$ are common across cells while the intercepts vary by cell. Letting every cell have its own slopes sounds more flexible and is, in practice, a way to fit noise in cells with eleven bonds.
 
 > **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.524:* "We identify relative value as the portion of excess spread over peers unexplained by fundamental factors and call this measure excess spread to peers (ESP)."
 >
@@ -224,7 +256,7 @@ $$
 
 where $\overline{\text{EBITDA}}^{\,\text{LT}}$ is a long-term average EBITDA. It is spread per turn of leverage, which is how a leveraged-finance banker already prices a deal. Man's raw value signal is the same idea, written schematically as `OAS / (Net Debt/EBITDA).clip(lower=0.1)`, then risk-adjusted for size, default probability, and volatility and compared within rating and sector (Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.24).
 
-Take the floor literally for a moment. An issuer with negative EBITDA has a *negative* net-debt-to-EBITDA ratio, which the floor converts to 0.1×, so its spread is divided by 0.1 and it becomes the cheapest bond in the universe. Man's later risk adjustment presumably catches this. Your implementation should not rely on "presumably." Before applying any floor, assign negative-EBITDA issuers a punitive multiple (the code in §9.11 uses 15×) or exclude them. The floor exists to stop division by a number near zero, not to promote companies that are losing money.
+Take the floor literally for a moment. An issuer with negative EBITDA has a *negative* net-debt-to-EBITDA ratio, which the floor converts to 0.1×, so its spread is divided by 0.1 and it becomes the cheapest bond in the universe. Man's later risk adjustment presumably catches this. An implementation that leans on "presumably" will one day show a cash-burning issuer as its top value pick, and the person who has to explain that to a client will not enjoy the word. The code in §9.11 assigns negative-EBITDA issuers a punitive 15× multiple before any floor is applied; excluding them works too. The floor exists to stop division by a number near zero, not to promote companies that are losing money.
 
 Dynkin p.553 lays out the menu. Regression fair spreads control many characteristics at once but overfit. Structural models are parameter-hungry and opaque. SPiDER is neither, and it aggregates cleanly across sectors and time.
 
@@ -236,7 +268,22 @@ Dynkin p.553 lays out the menu. Regression fair spreads control many characteris
 
 The third family builds a fair spread from a structural model and calls the bond cheap when its market spread exceeds the fair one (Correia, Richardson, and Tuna, 2012, *Value Investing in Credit Markets*). The step that trips people up is the change of measure, so we do it carefully.
 
-In the Merton model (Chapter 5), assets follow $dV_t = \mu V_t\,dt + \sigma_V V_t\,dW_t$ under $\mathbb{P}$, and default occurs at $T$ if $V_T < F$. The physical default probability is
+> **Math, Gently.** *The bell, its dial, and the bookmaker's odds.* **Part one: the normal distribution and its two dials.** Picture a hill of sand, highest in the middle and thinning out evenly on both sides. That is the standard normal distribution, the shape you get when many small, independent pushes add up. Put a firm's distance to default on the horizontal axis, measured in standard deviations: how many typical bad years its assets can absorb before they fall through the debt. The function $N(x)$ answers "how much of the sand lies to the left of $x$?", which here means "how likely is it that the firm ends up at least that far below where it is expected to be?" Two values are worth knowing by heart: $N(-1) \approx 16\%$ and $N(-2) \approx 2.3\%$. A firm two standard deviations from the line has about a 2.3% chance of crossing it. The inverse, $N^{-1}$, runs the dial backward: hand it a probability and it hands you the distance, so $N^{-1}(2.3\%) \approx -2$. **Part two: risk-neutral in one breath.** A bookmaker who means to stay in business does not quote the horse's true odds; he shades every price so that the outcomes that hurt him cost more. The bond market does the same with bad states of the world. It prices default as if it were likelier than it is, because defaults arrive in recessions, when a lost dollar hurts most. The risk-neutral ($\mathbb{Q}$) probability is the physical ($\mathbb{P}$) one with the dial turned toward default by $\theta\sqrt{T}$, where $\theta$ is the extra return the firm's assets earn per unit of risk. A tiny number: a four-year physical PD of 1% sits at $N^{-1}(0.01) = -2.326$; with $\theta = 0.2$ the shift is $0.2 \times \sqrt{4} = 0.4$, and the risk-neutral PD is $N(-2.326 + 0.4) = N(-1.93) \approx 2.7\%$. Same firm, same assets, nearly three times the default probability, and the difference is a price, not a forecast. The $\tfrac12\sigma^2$ that appears in the formula below is the tax a lognormal pays for being measured in logs. Chapter 6 owns the full version of both ideas (§6.1 for the tax, §6.3 for the change of measure), and Chapter 5's box on the lognormal draws the picture.
+
+Written as one line, the whole change of measure is
+
+$$
+\text{PD}^{\mathbb{Q}}_T \;=\; N\!\left(N^{-1}\!\big(\text{PD}^{\mathbb{P}}_T\big) + \theta\sqrt{T}\right),
+\qquad \theta \equiv \frac{\mu - r}{\sigma_V}. \tag{9.2}
+$$
+
+Run a five-year bond through it, and through the fair-spread formula in the derivation below, with a physical default probability of 2%, an asset Sharpe ratio $\theta = 0.25$ and a loss given default of 0.6, and the fair spread comes out at 83bp. Skip the step and the same bond's fair spread is 24bp.
+
+That gap is the **measure trap**. A desk that uses physical default probabilities as if they were risk-neutral finds that every bond in the market is cheap by about 60bp, buys all of them, and has rediscovered the credit risk premium, which is to say the index. A cross-sectional *rank* survives a monotone mapping from $\mathbb{P}$ to $\mathbb{Q}$, but only within a cell where $T$ and $\theta$ are the same. Across maturities, or across issuers with different asset correlations to the market, the mapping is not common, and any comparison of *levels*, such as "spread per unit of expected loss," is simply wrong without it.
+
+#### The Full Derivation
+
+In the Merton model (Chapter 6, §6.2), assets follow $dV_t = \mu V_t\,dt + \sigma_V V_t\,dW_t$ under $\mathbb{P}$, and default occurs at $T$ if $V_T < F$. The physical default probability is
 
 $$
 \text{PD}^{\mathbb{P}}_T \;=\; N\!\left(-\text{DD}^{\mathbb{P}}\right), \qquad
@@ -249,7 +296,7 @@ $$
 \text{DD}^{\mathbb{Q}} \;=\; \text{DD}^{\mathbb{P}} - \frac{\mu - r}{\sigma_V}\sqrt{T}
 \quad\Longrightarrow\quad
 \text{PD}^{\mathbb{Q}}_T \;=\; N\!\left(N^{-1}\!\big(\text{PD}^{\mathbb{P}}_T\big) + \theta\sqrt{T}\right),
-\qquad \theta \equiv \frac{\mu - r}{\sigma_V}. \tag{9.2}
+\qquad \theta \equiv \frac{\mu - r}{\sigma_V}.
 $$
 
 Here $\theta$ is the asset Sharpe ratio; under the CAPM it equals $\rho_{V,m}$ times the market Sharpe ratio. (We call it $\theta$ rather than the $\lambda$ some papers use, because $\lambda$ is reserved in this book for default intensity.) With recovery of a fraction $R$ of face paid at maturity (the recovery-of-Treasury convention), the zero-coupon price is $e^{-rT}\big(1 - \text{PD}^{\mathbb{Q}}_T L\big)$ with $L = 1 - R$, and the fair spread is
@@ -258,19 +305,35 @@ $$
 s^{\text{fair}}_i \;=\; -\frac{1}{T}\,\ln\!\left(1 - \text{PD}^{\mathbb{Q}}_T\,L\right), \qquad \text{value}_i = s_i - s^{\text{fair}}_i .
 $$
 
-A worked example, with illustrative inputs: five-year physical PD of 2%, $\theta = 0.25$, $L = 0.6$. Then $N^{-1}(0.02) = -2.054$, the shift is $0.25\sqrt5 = 0.559$, and $\text{PD}^{\mathbb{Q}}_5 = N(-1.495) = 6.75\%$. The fair spread is $-\tfrac15\ln(1 - 0.0405) = 83$bp. Skip the change of measure and you get $-\tfrac15\ln(1 - 0.012) = 24$bp.
-
-That gap is the **measure trap**. A desk that uses physical default probabilities as if they were risk-neutral finds that every bond in the market is cheap by about 60bp, buys all of them, and has rediscovered the credit risk premium, which is to say the index. A cross-sectional *rank* survives a monotone mapping from $\mathbb{P}$ to $\mathbb{Q}$, but only within a cell where $T$ and $\theta$ are the same. Across maturities, or across issuers with different asset correlations to the market, the mapping is not common, and any comparison of *levels*, such as "spread per unit of expected loss," is simply wrong without it.
+A worked example, with illustrative inputs: five-year physical PD of 2%, $\theta = 0.25$, $L = 0.6$. Then $N^{-1}(0.02) = -2.054$, the shift is $0.25\sqrt5 = 0.559$, and $\text{PD}^{\mathbb{Q}}_5 = N(-1.495) = 6.75\%$. The fair spread is $-\tfrac15\ln(1 - 0.0405) = 83$bp. Skip the change of measure and you get $-\tfrac15\ln(1 - 0.012) = 24$bp, the two numbers the measure trap above is built on.
 
 ### 9.3.4 The residual is cheapness or it is information
 
 Here is the most important practical fact about value in credit, and the one the RSSG reader is best placed to exploit.
 
-Two weeks into his first ESP run, Theo asked why the regression had three ratios and no "weeks of liquidity." Kaz said, "Because nobody put it in the panel." Theo put it in the panel: the runway from his 13-week cash flow model, reborn as a column. It added nothing in single-A, where nobody runs out of cash. In B and CCC it shrank the cheap decile by a fifth, removing names whose spreads were wide because they were about to need a rescue financing. Those were not cheap bonds. They were bonds pricing an event the three ratios could not see. *(Illustrative.)*
+*The desk's fictional run; the numbers are illustrative.*
+
+The Monday after the 1.9, Theo came in at seven with a printout of the ESP specification, which was one line long, and a question he had been holding since Friday. "Three ratios," he said to Kaz. "Leverage, net debt to EBITDA, coverage. Where's weeks of liquidity?"
+
+"Because nobody put it in the panel," Kaz said.
+
+So Theo put it in the panel. The runway from his 13-week cash flow model, cash plus undrawn revolver divided by the trailing weekly burn, had lived on the USB stick for six years as a habit; now it had to become a column. Most of the morning went into the dull part: mapping his issuer names to the desk's identifiers, discovering that two vendors disagreed about which entity was the parent of a third of the high-yield universe, and lagging every number by a quarter so that the regression could not read a 10-Q before it had been filed. By lunch the column existed. By two it was in the regression.
+
+In single-A it did nothing. The coefficient was a rounding error, which was the right answer: in single-A nobody runs out of cash, and the column was a list of numbers in the hundreds of weeks. In the single-B and CCC cells it was the largest coefficient after the cell intercept, and it pulled a fifth of the names out of the cheap decile.
+
+One of them he recognized. Not from a deal, from a pitch book: a sponsor-owned business-services company his old team had once pitched for a mandate PJT never won, built, as pitch books are, entirely from public filings. The pitch had been about a revolver that would go current in eighteen months. The regression had ranked the company's bonds third-cheapest in their cell. The column ranked them as a company about four quarters from a phone call to its lenders. Nothing in it was secret. It was the same 10-Q everybody had, read in weeks instead of turns.
+
+Those were not cheap bonds. They were bonds pricing an event the three ratios could not see.
+
+> **View From Another Seat.** *A long-only systematic manager with analysts standing behind the model.* Robeco has done quantitative fixed income since 1995 and has run its QI Global Multi-Factor Credits fund since 2015, and on 7 September 2026 two of its quants, Lodewijk van der Linden and Patrick Houweling, described how that seat handles Theo's problem. The design aim is "to keep first-order risks, such as rates and credit beta, close to the benchmark, so that relative returns are driven primarily by credit returns from bottom-up issuer and bond selection," which is §9.2 written as a mandate. The model ranks about 1,600 issuers in global high yield and 2,600 in investment grade, and before a ranking becomes a trade, "portfolio managers and fundamental credit analysts can challenge the model where downside risk is not adequately reflected"; more than twenty analysts screen the buy candidates. Their own example of when the challenge matters is a bond that looks cheap because spreads widened while "a major lawsuit, regulatory issue, large acquisition or other event sits outside the model's scope." That is the residual-as-information problem, stated by the people whose live record §9.10 leans on, and their answer is a human gate. Theo's column is the other answer: move some of what the analyst would have caught into the panel, so that the gate has less to catch. The two are complements. A runway fits in a column; a drop-down basket, for now, mostly does not, and that is the part Chapter 13 tries to score.
+
+Man's research team found the same ambiguity one level further down, inside a single capital structure.
 
 > **[SOURCE EXTRACTION]** *Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.25:* "Value stands out as being particularly CUSIP-specific, that is to say that within the same capital structure, even after accounting for liquidity, subordination, duration, etc., mispricing can remain."
 >
 > **Annotation.** Man's observation is that value lives at the bond level, not only at the issuer level: two bonds of the same company, after controlling for the obvious differences, can be priced inconsistently. For a pure quant, that is a statement about breadth: more CUSIPs, more independent bets. For an RSSG reader it is an invitation, because the "etc." in that sentence is where the credit agreement lives. Within one capital structure, the 2029 notes and the 2031 notes may differ in guarantor coverage, in whether they sit at an entity that can be stripped by a drop-down, or in whether they are the obvious target of a non-pro-rata exchange. A residual that a pure-quant model calls "CUSIP-specific mispricing" is sometimes exactly that, and sometimes the market correctly pricing a document risk that the model cannot read. The 2026 desk resolves the ambiguity by adding document features as regressors (Chapter 13's Priming Risk Score; Chapter 25's covenant-capacity variables). Whatever value survives *that* regression is cheapness. Whatever it removes was information, and you are better off having known it before you bought.
+
+Most of the ways a value book goes wrong in practice have less to do with what the residual means than with the plumbing that produces it.
 
 > **Ways This Blows Up.** (1) *Point-in-time fundamentals.* Use fundamentals as they were available at the time, lagged at least three months after the fiscal period end, with no restatements; otherwise the regression knows the next quarter's EBITDA. (2) *OAS versus Z-spread.* On callable high yield, a Z-spread includes the option value, so a value model built on Z-spreads finds "cheapness" in every bond with a valuable call. (3) *Tiny cells.* A rating × sector × maturity cell with eight bonds produces residuals that are mostly estimation error; pool or shrink. (4) *Negative EBITDA.* See §9.3.2. (5) *The value trap is a default.* The cheapest decile is where the next defaults are. Keep default-month returns in the backtest (recovery minus the last price), or your value factor will look better than any value factor has ever been.
 
@@ -296,17 +359,25 @@ where $R^E_{j,t-h\to t}$ is the $h$-month equity return of issuer $j(i)$; the sc
 
 ### 9.4.1 The decay clock
 
-A momentum signal is a perishable good. Barclays reports a three-month transition matrix of EMC deciles in which an issuer in the top decile "has only a 17% probability of remaining top ranked after three months" (Dynkin p.610). Treat the decile rank as a Markov chain with monthly stay probability $p_1$ for the top decile, ignoring re-entry. Then $p_1^3 \approx 0.17$, and the half-life $\tau_{1/2}$ of membership solves $p_1^{\tau_{1/2}} = \tfrac12$:
+A momentum signal is a perishable good, and the right way to measure how perishable comes from the kitchen.
+
+> **Math, Gently.** *Half-life, or how fast the coffee goes cold.* A cup of coffee does not lose a fixed number of degrees a minute; it loses a fixed *fraction* of its excess heat over the room each minute. That is exponential decay, and its natural yardstick is the half-life, the time it takes for half the excess to be gone, which is the same whether the cup started scalding or lukewarm. A signal's top decile cools the same way. Suppose that each month 80% of the bonds in the top decile are still there a month later. After one month 80% remain, after two $0.8^2 = 64\%$, after three $0.8^3 \approx 51\%$: a half-life of about three months. One logarithm turns any monthly survival rate $p$ into a half-life, $\tau_{1/2} = \ln 2 / \ln(1/p)$, here $0.693/0.223 \approx 3.1$ months. A signal like that can be traded quarterly and still be warm when you drink it. Chapter 1 cooled the same cup to show price pressure fading after a forced sale; here the thing cooling is the reason you bought the bond.
+
+Barclays reports a three-month transition matrix of EMC deciles in which an issuer in the top decile "has only a 17% probability of remaining top ranked after three months" (Dynkin p.610). Treat the decile rank as a Markov chain with monthly stay probability $p_1$ for the top decile, ignoring re-entry. Then $p_1^3 \approx 0.17$, so the monthly stay probability is $p_1 = 0.17^{1/3} \approx 0.55$, much colder than the box's 0.8, and the half-life $\tau_{1/2}$ of membership solves $p_1^{\tau_{1/2}} = \tfrac12$:
 
 $$
 \tau_{1/2} \;=\; \frac{\ln \tfrac12}{\ln p_1} \;=\; \frac{3\,\ln \tfrac12}{\ln 0.17} \;=\; \frac{3 \times (-0.693)}{-1.772} \;\approx\; 1.2 \text{ months}.
 $$
 
-Half the top decile is gone in about five weeks. Returns decay on the same clock: the outperformance is 35bp in month one, 22bp in month two, and 19bp in month three, and 95bp over six months, so about 80% arrives in the first quarter (Dynkin p.611). Monthly rebalancing is barely fast enough to harvest it, and every rebalance costs money. Figure 9.2 shows both clocks.
+Half the top decile is gone in about five weeks. If you rebalance quarterly, you are drinking cold coffee. Returns decay on the same clock: the outperformance is 35bp in month one, 22bp in month two, and 19bp in month three, and 95bp over six months, so about 80% arrives in the first quarter (Dynkin p.611). Monthly rebalancing is barely fast enough to harvest it, and every rebalance costs money. Figure 9.2 shows both clocks.
 
 ![Figure 9.2: Only 17% of the top decile is still top-ranked after three months, a half-life of about 1.2 months (left), and the outperformance of the above-median equity-momentum cohort over the below-median one fades on the same clock, with 76 of the 95bp over six months earned in the first quarter (right). Source: Dynkin et al., p.610–611, as quoted in §9.4.1; the survival curve is the one-parameter Markov chain (no re-entry) fitted to the 17% figure, and the months 4–6 bar is the remainder of the 95bp six-month total.](assets/figures/ch09_momentum_decay_clock.png)
 
 ### 9.4.2 Break-even turnover
+
+A signal that goes cold in five weeks has to be refreshed every month, and in credit every refresh is a trip to the dealer. Ines's question from the cold open, who at this table knows more than you, now has a price attached, and the price is per unit of distance travelled.
+
+> **Math, Gently.** *Turnover is a meter, and the break-even cost is where it runs out.* Think of a taxi meter that charges by how far your portfolio travels rather than by the mile. Turnover is the distance: the fraction of the book you replace each month. Replace half of it and you have sold 50% and bought 50%, and each of those trades pays half the round-trip cost (the gap between where you can buy and where you can sell), so the month's bill is turnover times the round trip. At 50% one-way turnover and a 1% round trip that is 0.5% a month, 6% a year, which is more than most credit signals earn before costs in a good year. The break-even cost turns the question around: given what the signal earns gross, how expensive can a round trip be before the meter eats all of it? Divide the monthly gross return by the turnover. A signal earning 2.4% a year that replaces a fifth of the book each month can afford round trips up to $(2.4\%/12)/0.20 = 1\%$, and not a basis point more. The formula comes next, and then Barclays' numbers, which are less forgiving.
 
 Let $\text{TO}$ be one-way turnover per month as a fraction of the portfolio, and $c$ the round-trip transaction cost as a fraction of value. Replacing a fraction $\text{TO}$ of the book means selling $\text{TO}$ and buying $\text{TO}$, each at half the round-trip cost, so the monthly cost drag is $\text{TO}\cdot c$ and
 
@@ -331,9 +402,13 @@ Any average round-trip cost above 72bp turns the strategy negative. The investme
 >
 > **Annotation.** Ines ran this one as a hand history. Kaz's version of the strategy showed the same pattern on the desk's data: a beautiful gross IR and a monthly bill from the dealers that exceeded it, and her verdict on it is in §9.1. IDO or it didn't happen, and in this case it didn't. The lesson is not that equity momentum fails in credit. It is that momentum in credit cannot be harvested as a stand-alone, high-turnover top-decile portfolio. Barclays' own response, and the 2026 desk's, is to use momentum as one input to a combined score (§9.7), to trade it with a buffer (§9.8) so that a bond sliding from the 95th to the 88th percentile is held rather than sold, and to trade it through portfolio trades and all-to-all protocols where the marginal cost is lower (Chapter 20). Momentum's gross alpha is real. Its *net* alpha is a property of your execution stack.
 
+The other Barclays number that decides momentum's fate is the one the coffee began with.
+
 > **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.610:* "an issuer with equity momentum in the top 10% (D10) has only a 17% probability of remaining top ranked after three months"
 >
 > **Annotation.** One number fixes three design choices. It fixes the *rebalancing frequency*: a signal with a five-week half-life needs at least monthly rebalancing, and quarterly rebalancing gives away most of the alpha. It fixes the *turnover budget*: by (9.3), a fast signal can be held only if its gross alpha per unit of turnover clears the cost, which in credit is a high bar. And it fixes the *combination weight*: a factor with fast decay deserves less weight in a composite traded slowly. The 2026 refinement is to stop treating the decile as the state. A continuous score with a smooth tilt (rather than in or out of decile 10) lets a portfolio decay toward a signal rather than jump in and out of it, which is the same idea as the buffer in §9.8 written in a nicer language.
+
+Even the definition of the signal is contested, and the contest is a small lesson in how two careful desks can both be right.
 
 > **Desk Myth vs. Desk Reality.** *Myth:* "Use residual equity momentum: strip the stock's market beta first, and the credit signal improves." *Reality:* It depends on whose desk you are on. Haesen, Houweling, and van Zundert (2017, *Momentum Spillover from Stocks to Corporate Bonds*) find that residual equity momentum improves the risk properties of the spillover strategy. Barclays tests the same idea and finds that it does *not* improve EMC (Dynkin p.631). Both can be true: the two studies differ in universe, period, and how the credit leg is neutralized. When two careful desks disagree, the right response is not to pick a side but to run both definitions through your own clean data and your own cost model, and to give the tie to the simpler one.
 
@@ -377,7 +452,79 @@ Equation (9.4) gives the duration part of the story a mechanism. Barclays docume
 
 ### 9.5.3 Two live reminders that low-risk is a duration bet
 
-Factor returns in this chapter are *excess* returns: duration-matched Treasuries are subtracted, so rates do not enter the factor's return. A client's total-return statement does not subtract anything. In 2022, when the Bloomberg US Aggregate fell about 13% and high yield about 11% (BlackRock_Systematic_High_Yield_Credit p.3), a low-risk book that held short-duration bonds *without* hedging rates looked brilliant in total return for reasons that had nothing to do with credit. The reverse happened in 2025–2026. Robeco's attribution for its Multi-Factor Credits fund, as of 30 September 2026, names the low-risk/quality factor as the largest detractor, "driven by an underweight in longer-dated bonds," as the long end rallied (Robeco fund page). Both are correct readings of a defensive tilt. Neither is the factor premium. A desk that reports factor performance must say, every time, whether the number is an excess return or a total return, and how the duration was hedged.
+Factor returns in this chapter are *excess* returns: duration-matched Treasuries are subtracted, so rates do not enter the factor's return. A client's total-return statement does not subtract anything. The distance between those two statements has a year named after it.
+
+#### Long Scene: 2022, the Year Low-Risk Looked Like Genius
+
+*A replay, Ines's ritual. The cast, their cards, the pension client and its letter are fictional, and the sleeve and its returns are illustrative. The tape is cut at the close of Friday 30 December 2022; index returns, cost evidence and the 2023 and 2026 facts are real and cited where they appear.*
+
+Ines ran it on a Friday at four, which is when she runs the replays she wants people to take home with them.
+
+"Close of business, Friday the thirtieth of December, 2022," she said. "The tape stops there. You know nothing about 2023. You know nothing about anything after New Year's Eve." She handed each of them a single sheet, face down, the way she used to hand out seat assignments.
+
+The year on the sheet was short to describe and long to live through. On 16 March 2022 the Federal Reserve raised rates for the first time since 2018, and then kept raising them, in what BlackRock's high-yield team would later call "the Federal Reserve's fastest rate hiking campaign in decades." By the last trading day of the year the S&P 500 had fallen over 18%, US high yield was down over 11%, and the Bloomberg US Aggregate, the index investors think of as ballast, had fallen over 13% (BlackRock_Systematic_High_Yield_Credit p.3). Nobody's bonds had protected anybody.
+
+"You run a low-risk credit sleeve for a pension client," Ines said. "Long-only, benchmarked to US high yield, built exactly the way §9.5.2 builds it: shorter maturities, higher ratings, low leverage, high profitability. Each rating cell is rescaled so its DTS matches the benchmark's, so the sleeve carries the same spread risk as the index, and the weight left over sits in Treasuries. The spec said Treasuries. It didn't say which, so the sleeve parked the residual in bills."
+
+Theo turned his sheet over. The sleeve had lost about 5% for the year in total return. The benchmark had lost over 11%. Six points ahead, in the worst year for bonds that anyone at the table had traded through.
+
+Stapled to the sheet was a letter from the client's chief investment officer. It was warm in the way such letters are warm when a manager has made a committee look clever. *We have been delighted with the sleeve's resilience in a very difficult year. The investment committee would like to discuss doubling the allocation at its January meeting.*
+
+The last item was the trading log, and it was the only part of the year that had gone worse than expected. Every month the sleeve rebalanced toward its targets, and every month the rebalancing cost more than the model said it should. Man Numeric's credit team described the same weather in their own book a few months later: "transaction costs for portfolio trading generally increased through the first half of the year," higher volatility and quantitative tightening "may also have left dealers inclined to commit less of their balance sheets to bond trading," and "the loss of customised baskets for the ETF creation/redemption process is likely to have been another aggravating factor" (Man_Revolutions_in_Credit_Trading_2023 p.3). In a later talk the same co-heads put it more bluntly, saying in effect that the change to ETF creation and redemption made it harder for the portfolio-trading desks to recycle risk, and that costs went up substantially. The sleeve's cost line for the year was nearly double its 2021 level. Nobody reading the client letter had noticed, because six points of outperformance hides a lot of commission.
+
+Kaz had not said anything yet. Kaz had, without asking, put a second chart on the big screen: the same sleeve, the same year, but measured the way this chapter measures factors, as excess return over duration-matched Treasuries, minus the benchmark's own excess return.
+
+The line was flat. It wobbled a little in June and again in October, when spreads gapped and the sleeve's higher-rated names held up slightly better than their DTS said they should, and it finished the year at about plus a tenth of a percent. You could have levelled a table with it.
+
+Theo looked from his sheet to the screen and back. "One of these is wrong."
+
+"Neither," Kaz said.
+
+Theo did what he would have done with a borrowing-base certificate that did not tie: he wrote down sources and uses. A bond's total return is its excess return plus the return on a Treasury of the same duration. The excess-return chart said the sleeve's credit choices, once the spread risk was matched, had earned almost exactly what the benchmark's had. So the six points had to be in the other line. The sleeve's bonds were short, a couple of years of rate duration against the benchmark's four or so, and the bills had none at all. In a year when Treasury yields at those maturities rose by more than two percentage points, a duration gap of a couple of years is worth several points on its own, and the arithmetic did not need anything else to get to six.
+
+"So the sleeve," Theo said slowly, "is two strategies. A credit one that matched the index. And a rates one that nobody wrote down."
+
+"That's equation (9.4) wearing a client letter," Kaz said. "Per unit of DTS, carry is one over duration. A low-risk sort *is* a duration sort. Measure it in excess returns and the duration is hedged away, and you see the credit part, which is small. Measure it in total returns and you see the duration, which this year was enormous."
+
+Mags had been reading the client letter. She put it down on the desk, face up, and tapped the word *resilience* with her pen.
+
+"You didn't pick credits," she said. "You were short duration in a year the Fed hiked. Send the client a thank-you note to Powell."
+
+"It's a defensive factor," Kaz said. "Some of the six points is defense."
+
+"A tenth of a point is defense. The rest is a rates bet that happened to be facing the right way." Mags leaned back. "A defensive tilt is two bets stapled together. One is credit, and that's the one you get paid for over time. The other is rates, and that's the one you get famous for, until the year it points the other way. Back in my day a fund would have put this year on the cover of its pitch book and then spent three years explaining it."
+
+"So what do I tell the client?" Theo asked.
+
+Ines picked up her coffee. "That," she said, "is the card."
+
+She handed out index cards. *Write three things. What you tell the client the factor earned. Whether you accept the doubled allocation. And how you would hedge the rates leg if you did.*
+
+Write yours before you read theirs.
+
+Theo wrote fast, in the hand he had used for six years of board materials. *Earned: six points ahead of benchmark, mostly from defensive duration positioning; say so plainly. Accept the doubling. No rates hedge: the Fed is still hiking, inflation is still high, and the short duration is working.* It was honest on the first line and a forecast on the third, and he knew it as he wrote it, and he left it.
+
+Kaz wrote: *Earned: +0.1% excess, i.e., nothing distinguishable from zero. Six points of total return came from a duration gap the mandate did not ask for. Decline the doubling until the rates leg is hedged. Hedge: Treasury futures across the curve to bring the sleeve's key-rate durations to the benchmark's, sized monthly from start-of-month durations, residual weight moved from bills to duration-matched Treasuries.*
+
+Mags wrote: *Earned: Powell. Take half the new money, hedged per Kaz. Tell them the half we didn't take was the half that was rates.*
+
+Ines turned the tape forward.
+
+In 2023 high yield returned over 13% and the Aggregate over 5% (BlackRock p.3). The defensive posture that had looked like skill in 2022 gave its lead back to the upside: BlackRock's eVestment numbers show the average US high-yield manager beating its benchmark by 0.47% in 2022 and lagging it by 0.68% in 2023, in a year when the market rose over 13% (BlackRock p.4). The industry had run the same round trip as the sleeve, only with less leverage on the story. For the sleeve itself, 2023 delivered neither the rates rout Theo's card was betting on nor the encore the client was hoping for. Treasury yields climbed into the autumn and came back down by December, ending the year not far from where they began, and the sleeve's six-point lead simply stopped growing on the day yields stopped rising. A committee that doubled in January bought a rates position at the price of a rates position that had already paid.
+
+Then Ines skipped to the present. Robeco's QI Global Multi-Factor Credits fund, the longest live multi-factor record in this chapter, published its attribution as of 30 September 2026. It names the low-risk/quality factor as the largest detractor, "driven by an underweight in longer-dated bonds," as the long end rallied (Robeco fund page). Same tilt, other direction. In 2022 the duration underweight made a defensive book look like genius in total return; in 2025–26 it made a defensive book the biggest drag in its own report. Both are correct readings of a defensive tilt. Neither is the factor premium.
+
+"Grade," Ines said.
+
+"Theo. Line one is right, and I'd frame it. Line three is a rates forecast inside a credit mandate, which is the one bet nobody hired you to make. You were not wrong about 2022. You were wrong about what you are paid for. If the long end had rallied in 2023 the way it did in 2026, your card would have handed the client six points back with your name on it.
+
+"Kaz. Full marks on every line, and you lose the client, because the committee stops reading after the word *nothing*. Your hedge is the right hedge. Your first sentence needs to be one a pension trustee can repeat to another pension trustee.
+
+"Mags. You take the chips, you hedge the part of the pot that isn't yours, and you tell them which part that is. That's the hand."
+
+She turned to the reader's side of the table, which in a replay is everyone who was not in the room. If your first line had a percentage in it and no word *duration* next to it, you wrote the client's next letter for them. If your second line said yes and your third line was blank, you accepted a rates mandate by accident. If your third line named futures sized from the start-of-month key-rate gap and moved the bills into matched Treasuries, you wrote Kaz's card; now rewrite its first sentence for a trustee. And if you priced what it would cost to put the doubled allocation to work, you were the only one at the table who read the trading log. The following April, Jamie Dimon's shareholder letter would say that "many of the new 'shadow bank' market makers are fair-weather friends — they do not step in to help clients in tough times" (JPMorgan Chase 2022 shareholder letter, 4 April 2023, pp. 22–23). That is a dealer bank's view of who else would have been on the other side of the new money, offered by a firm with its own stake in the answer. The cost line was going to scale with the allocation either way.
+
+Ines collected the cards. "Next time anyone on this desk shows a factor number," she said, "the first two words out of your mouth are *excess* or *total*, and the next sentence says who hedged the duration."
 
 ## 9.6 Quality, Size, and the Informed Investor
 
@@ -385,7 +532,7 @@ Factor returns in this chapter are *excess* returns: duration-matched Treasuries
 
 Quality in credit means profitability, coverage, low leverage, and, most directly, a low probability of default. Its value depends on where you stand. In investment grade, default risk is too small and too similar across issuers to sort on, and Henke, Kaufmann, Messow, and Fang-Klingler (2020, *Factor Investing in Credit*), as summarized by Man, find quality only weakly related to performance there (Man p.26–27). In high yield, quality is default avoidance, and default avoidance is most of the game: BlackRock reports that its probability-of-default signal identified 77% of the defaulted bonds in the ICE BofA High Yield Index within 24 months of default since 2010 (BlackRock_Systematic_High_Yield_Credit p.6). Chapter 11 builds that engine. One caution on signs: Chordia et al. (2017) find profitability *negatively* related to bond returns unconditionally, which is not a contradiction of Israel, Palhares, and Richardson's positive premium for gross profitability, because they compare bonds *within* DTS quintiles. Unconditionally, profitable issuers have tight spreads and low carry. Within a DTS bucket, a profitable issuer is a safer bond for the same pay.
 
-Ratings-based quality has its own structural flows. When Kaz first heard "fallen angel," he asked which Greek letter it was. Mags explained: "It's the bond an insurance company sells you at 11 a.m. because one policy says it can't hold high yield, and buys back from you at 2 p.m. because another policy says it must hold the index." Index and ratings constraints create forced sellers, and forced sellers create premia that look like factors. Dynkin's Part II covers them; for this chapter, note that a quality factor built on ratings is partly a bet against those constraints.
+Ratings-based quality has its own structural flows. When Kaz first heard "fallen angel," they asked which Greek letter it was. Mags explained: "It's the bond an insurance company sells you at 11 a.m. because one policy says it can't hold high yield, and buys back from you at 2 p.m. because another policy says it must hold the index." Index and ratings constraints create forced sellers, and forced sellers create premia that look like factors. Dynkin's Part II covers them; for this chapter, note that a quality factor built on ratings is partly a bet against those constraints.
 
 ### 9.6.2 Size, the factor that isn't
 
@@ -410,7 +557,13 @@ Man's fourth style factor reads positioning rather than fundamentals.
 >
 > Barclays finds that high equity short interest, within rating, predicts downgrades over the next 3 to 12 months and index underperformance, that bond short interest is subsumed by equity short interest, and that "bond short interest is not a useful indicator in the IG space as IG bonds are likely shorted as part of market‐making activity" (Dynkin p.794). In investment grade, a borrowed bond usually means a dealer sold a client something it did not own, which is information about the dealer's inventory rather than the issuer's prospects. The Bayesian reading links this to Chapter 3's Glosten–Milgrom model: short interest raises the posterior probability that informed traders are present, so the *change* in ESI, not its level, is the news. Man's simulated stand-alone information ratio for this factor is 0.79, the lowest of its four (Man p.28), yet Barclays reports that ESI combined with ESP "achieves almost twice the risk-adjusted return" of either alone (Dynkin p.794). It is a combination factor: weak alone, useful as a filter on value, because it flags the cheap bonds whose equity holders already know why they are cheap.
 
-Mags met bond borrow with the usual war story. "In 1998, shorting a bond meant calling a man named Sal and asking nicely. Now your prime broker emails you a spreadsheet every morning." Then she read the spreadsheet. "Fine. The spreadsheet is better than Sal."
+Mags met bond borrow with the usual war story. "In 1998, shorting a bond meant calling a man named Sal and asking nicely."
+
+Asking nicely had a price, and she itemized it. A bond from Sal cost a favour, repaid later at a moment of Sal's choosing, usually by taking the other side of something his desk could not get rid of. It cost a week, because Sal had to find the bonds in somebody's custody account and the somebody had to say yes. And it came with a recall, which in her experience arrived on exactly the morning the short started working, because the lender had read the same news she had and wanted the bonds back in time to vote them.
+
+"Now your prime broker emails you a spreadsheet every morning." It does: Man notes that prime brokers now provide daily borrow availability across the cash-bond universe (Man p.11). Then she read the spreadsheet. It told her what could be borrowed, how much, and at what fee, today. It did not tell her who else had borrowed the same bonds yesterday, or why, and the fee is the only hint, which is why Chapter 22 treats it as the closest thing credit has to a crowding gauge.
+
+"Fine. The spreadsheet is better than Sal." She put it down. "Sal used to tell you when you weren't the first person to call."
 
 There is a human version of the informed investor, too. Barclays' QPS and credit research teams, as reported by Impax (19 September 2025), found that in US investment grade the issuer-level hit rate rose from about 58% to about 66% when analyst and quant signals agreed and fell to about 52% when they conflicted. Concentrating on aligned decisions lifted excess return from 2.0% to 3.7% a year and the IR from 1.09 to 1.71. Doubling exposure to aligned signals gave 4.1% with an IR of 1.83. The analyst is an informed investor whose positioning you already have access to, if you write it down.
 

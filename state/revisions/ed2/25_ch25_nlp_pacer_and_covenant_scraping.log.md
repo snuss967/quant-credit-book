@@ -11,12 +11,12 @@
 - [x] 9. [25.3.4 Capacity is levered to add-backs] MATH-GENTLY (convex PL, indicator derivative); Badawi via Kaz. — Halyard numbers first, hockey-stick box, formulas, Kaz reads Badawi.
 - [x] 10. [25.3.5 The builder basket] WHEN-TO-APPLY inside the gag: LTM window overstated capacity. — Halyard LTM builder $65mm vs true $10mm; whole-tape sentence.
 - [x] 11. [25.4.1 Max-flow min-cut] MATH-GENTLY (flows, cuts); Full Derivation weak duality. — Pipes box 40/60/30 numbers; weak duality and augmenting-path sketch moved.
-- [ ] 12. [25.4.2 Case Study: J.Crew] EXPAND-SCENE -> Long Scene 1.
-- [ ] 13. [end of 25.4.2] ANOTHER-SEAT (CLO manager, opportunistic credit generic).
-- [ ] 14. [25.5.1 Text diffs are blind] MATH-GENTLY (count vectors, cosine); Full Derivation.
-- [ ] 15. [25.5.2 Windstream] BRIDGE + EXPAND-SCENE: parser binding vs economic binding; docket clock bridge.
-- [ ] 16. [25.6 and 25.6.1 The plumbing] LIST-TO-NARRATIVE + new Trend Watch (public vs private side).
-- [ ] 17. [25.6.2 Rate limits as a token bucket] MATH-GENTLY + SHOP-LIFE vignette.
+- [x] 12. [25.4.2 Case Study: J.Crew] EXPAND-SCENE -> Long Scene 1. — Four beats, three cards graded, I&V cross-section, Mags breaks, sequel.
+- [x] 13. [end of 25.4.2] ANOTHER-SEAT (CLO manager, opportunistic credit generic). — Kundu CCC 7.5% quote, contractual arbitrage, opportunistic buyer generic; bridge.
+- [x] 14. [25.5.1 Text diffs are blind] MATH-GENTLY (count vectors, cosine); Full Derivation. — Shopping-list box (3,2,1,0) cos 13/14; Kaz port; derivation moved.
+- [x] 15. [25.5.2 Windstream] BRIDGE + EXPAND-SCENE: parser binding vs economic binding; docket clock bridge. — Cards graded vs Furman; Additional Notes label; docket clock bridge.
+- [x] 16. [25.6 and 25.6.1 The plumbing] LIST-TO-NARRATIVE + new Trend Watch (public vs private side). — Monday-to-Friday feed week; every limit kept; public-side Trend Watch added.
+- [x] 17. [25.6.2 Rate limits as a token bucket] MATH-GENTLY + SHOP-LIFE vignette. — Tap-and-bucket box; Femi 03:07 page; day-181 silence; two-sentence spec.
 - [ ] 18. [25.7.1 From statements to a panel] MATH-GENTLY (shares, intervals, HHI, blocking); Ines opener.
 - [ ] 19. [25.7.2 The docket as a state machine] MATH-GENTLY (Poisson, exponential, MLE); Full Derivation.
 - [ ] 20. [25.7.3 Serta] EXPAND-SCENE -> Long Scene 2.

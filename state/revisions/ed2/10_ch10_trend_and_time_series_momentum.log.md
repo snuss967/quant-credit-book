@@ -1,0 +1,26 @@
+# U2 Progress Log: Chapter 10 (Trend & Time-Series Momentum)
+
+- [x] 1. [10.0 Cold Open] EXPAND-SCENE to 1,200-1,500 words; four beats; Ines's card; retire "By the end" paragraph. NOTE: 1,240 words; blotter, 0.83 cut, three futures, blank card.
+- [x] 2. [10.1] LIST-TO-NARRATIVE + BRIDGE: RSSG client scene replaces the stop-loss list paragraph. NOTE: four fictional sellers, each a rule; Paleologo extraction untouched.
+- [x] 3. [10.1.1] SHOP-LIFE vignette: roll-week series relabel; replaces §10.2.3 para 2. NOTE: Lucía vignette written; §10.2.3 retirement handled in item 7.
+- [x] 4. [10.1.2] MATH-GENTLY #1: excess return and carry hurdle (landlord). NOTE: box placed before first equation; duplicate 60 bp sentence trimmed.
+- [x] 5. [10.1.2 after Fig 10.1] WHEN-TO-APPLY in Ines dialogue; move Trend Watch to end of §10.1. NOTE: whiteboard bars; two consequences retired; Trend Watch already ends §10.1.
+- [x] 6. [10.2.1] MATH-GENTLY #2: EWMA volatility; tanh gloss in §10.2.2. NOTE: leaky bucket, 0.37/0.05, half-life 42 days; dimmer gloss added.
+- [ ] 7. [10.2.3] LIST-TO-NARRATIVE: rules as the associate's ticket; cross-link Ch 10-B.
+- [ ] 8. [10.3/10.3.1] MATH-GENTLY #3: heteroskedasticity; retire "Three consequences" lead-ins.
+- [ ] 9. [10.3.2] ANOTHER-SEAT: insurer capital desk and CLO CCC bucket.
+- [ ] 10. [10.4.1] MATH-GENTLY #4: kappa and phi (fire door); P-measure gloss.
+- [ ] 11. [10.4.1] FULL-DERIVATION-MOVE: blended weight under its own heading.
+- [ ] 12. [10.4.2] MATH-GENTLY #5: small-sample bias; Kaz at model review.
+- [ ] 13. [10.5.1-10.5.2] LIST-TO-NARRATIVE + ANOTHER-SEAT (Man 2022, Robeco 2012).
+- [ ] 14. [10.5.3] MATH-GENTLY #6: lead-lag and stale clock; Theo's line.
+- [ ] 15. [10.6.1] MATH-GENTLY #7 two parts: normal/joint normal; conditional expectation; Full Derivation heading.
+- [ ] 16. [10.6.2] MATH-GENTLY #8: capture ratio of a V.
+- [ ] 17. [10.7 Case A] NEW-SCENE: GFC replay July 2007 to June 2009, card graded.
+- [ ] 18. [10.7 Case B and C] BRIDGE only: pointers to Ch 20 and Ch 8.
+- [ ] 19. [10.7 Coda] NEW-SCENE: Liberation Day and the Pair Book.
+- [ ] 20. [inside 19] The Pair box: PB-01 with carry-hurdle algebra and ledger line.
+- [ ] 21. [10.8.1] MATH-GENTLY #9: random walk null and arccos; dealer ANOTHER-SEAT in §10.8.2.
+- [ ] 22. [10.9.1] MATH-GENTLY #10: Poisson jumps and variance adding.
+- [ ] 23. [10.10 Lab] Open listing explanations with scene moments (10.1, 10.6).
+- [ ] 24. [10.11 Debrief] Finder table + return to 4:02 p.m. card.

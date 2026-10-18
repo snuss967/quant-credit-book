@@ -1,0 +1,25 @@
+# U2 Progress Log, Chapter 21
+
+- [x] 1. [Cold open] Done: live 14 Oct 2026; three answers, trustee reports, card, objectives folded.
+- [x] 2. [§21.1] Done: term-sheet scene replaces bullets; box 1 two parts; Full Derivation.
+- [x] 3. [§21.1.1 cap] Done: box 2 lid, Kaz narration line, SE and Trend Watch kept.
+- [x] 4. [§21.2] Done: dealer seat box A; crowd-side asymmetry corrected from brief.
+- [x] 5. [§21.2.1] Done: nine-stop whiteboard scene, 2016 hand, judgment to Theo; CHECK hedged.
+- [x] 6. [§21.2.2] Done: box 3 two ledgers on the ticket; Full Derivation kept intact.
+- [x] 7. [§21.2.3] Done: Ines bridge on hand history and Versana API; Trend Watch last.
+- [ ] 8. [§21.3 CLO Anatomy] MATH-GENTLY box 4 (50 bp becomes 5.6 points); (21.3) statement; Full Derivation.
+- [ ] 9. [§21.3.2 Diversity] MATH-GENTLY box 5 (variance of a correlated sum); (21.4) and BET as Full Derivation.
+- [ ] 10. [§21.4 Long Scene A: The Cliff, March-April 2020] NEW-SCENE 2,000-2,600 words; card; ZAIS6 coda.
+- [ ] 11. [§21.4.1 Adjusted numerator] MATH-GENTLY box 6 (test as option book); (21.5) statement; Full Derivation.
+- [ ] 12. [§21.4.2 Cure-trade theorem] WHEN-TO-APPLY to Mags; thread narration between boxes.
+- [ ] 13. [§21.4.3 FSPI] MATH-GENTLY box 7 (logistic as probability dial); Full Derivation; one telling.
+- [ ] 14. [§21.5 Long Scene B: The Window, January-April 2025] NEW-SCENE 2,000-2,400 words; card; 2026 replay coda.
+- [ ] 15. [§21.5.1 Hazard] MATH-GENTLY box 8 (hazard as clock); Full Derivation; Hana fits the logit.
+- [ ] 16. [§21.5 end] ANOTHER-SEAT box B (CLO manager; Loomis Sayles quote); Trend Watch to section end.
+- [ ] 17. [§21.6 Loan ETFs vs CLO ETFs] MATH-GENTLY box 9 (sqrt-l vs l; Little's law); Full Derivation.
+- [ ] 18. [§21.6, before the Spec] SHOP-LIFE vignette (systematic asset manager reconciliation, 8 Oct 2026).
+- [ ] 19. [§21.6 after JAAA Case Study] RV BEAT, The Pair box PB-17 BKLN / HYG; update pair book.
+- [ ] 20. [§21.7 Trend and momentum] MATH-GENTLY box 10 (smoothing); Full Derivation; Ines judgment; hedge CHECK.
+- [ ] 21. [§21.8 CLOs inside the LMT] LIST-TO-NARRATIVE (Weil memo to Mags) + ANOTHER-SEAT box C (insurer, NAIC).
+- [ ] 22. [§21.8 Case Study: Two Holder Bases] EXPAND-SCENE into RV beat PB-15 Trinseo; card; update ledger.
+- [ ] 23. [§21.9 Desk Debrief] Finder table; promote Long Scenes, vignette, Pair boxes to #### headings.

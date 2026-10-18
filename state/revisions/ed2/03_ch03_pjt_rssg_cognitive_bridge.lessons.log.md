@@ -45,41 +45,49 @@
 
 ### (d) Boxes (lessons 6–8, 10)
 
-- [ ] D1. Fifteen Math, Gently against a cap of ten and one per 1,200 words; clusters at L45/L55, L75/L90, L254/L288/L300 (three in ~700 words), L454/L479/L501 (three in ~900 words). Nine are not first load-bearing uses and become one-to-three-sentence glosses keeping the picture, with pointers: distribution and risk-neutral (L45; §1.3.1, §1.5), shapes (L75; §2.2.2, Ch 5), random walk (L90; §1.5, §6.1.1), odds (L191; §1.3.3), bp of price (L254; §1B.4, Ch 4-B), beta (L288; §1B.2), exponential clock (L454; §1.5), ℙ vs ℚ (L479; §1.5, §5.1.1), half-life (L551; §1.8.1). Keep six: variance (§3.1.1), conditioning on a trade (§3.2.1, trimmed to defer the odds arithmetic to §1.3.3), winner's curse (§3.2.3, pointer to §2.3.2), shrinkage (§3.3.4, new numbers), base rates (§3.4.3), two bells (§3.6.2). Fix every reference to a retired box.
-- [ ] D2. Sign-off tic on the kept boxes ("The full version is..."): vary; say "next" where it is next.
-- [ ] D3. Runs of more than two boxed elements: §3.2.3 Poker Table → Trend Watch → Man extraction (L240–244). Move the Trend Watch to the end of §3.2.3 and thread a line of narration before the Man extraction. Script-check every run after the edits.
-- [ ] D4. Trend Watch placement (lesson 8): the 8-K token Trend Watch (L529) sits under a judgment heading → end of §3.4.2 after "Where the edge is", with the SVB distressed-fund Seat after it; the §3.6.2 Trend Watch (L627) sits mid-section → end of §3.6.2.
-- [ ] D5. Derivation order (lesson 10): §3.6.2 Full Derivation moves directly under (3.5) and "The prior" gets its own `####` heading; §3.4.3 runs box → (3.4) → extraction → Full Derivation.
+- [x] D1. Fifteen Math, Gently against a cap of ten and one per 1,200 words; clusters at L45/L55, L75/L90, L254/L288/L300 (three in ~700 words), L454/L479/L501 (three in ~900 words). Nine are not first load-bearing uses and become one-to-three-sentence glosses keeping the picture, with pointers: distribution and risk-neutral (L45; §1.3.1, §1.5), shapes (L75; §2.2.2, Ch 5), random walk (L90; §1.5, §6.1.1), odds (L191; §1.3.3), bp of price (L254; §1B.4, Ch 4-B), beta (L288; §1B.2), exponential clock (L454; §1.5), ℙ vs ℚ (L479; §1.5, §5.1.1), half-life (L551; §1.8.1). Keep six: variance (§3.1.1), conditioning on a trade (§3.2.1, trimmed to defer the odds arithmetic to §1.3.3), winner's curse (§3.2.3, pointer to §2.3.2), shrinkage (§3.3.4, new numbers), base rates (§3.4.3), two bells (§3.6.2). Fix every reference to a retired box. *Done: fifteen boxes to six; nine glosses with pointers; variance box renumbered.*
+- [x] D2. Sign-off tic on the kept boxes ("The full version is..."): vary; say "next" where it is next. *Done: kept boxes now end with next, below, or plain pointers.*
+- [x] D3. Runs of more than two boxed elements: §3.2.3 Poker Table → Trend Watch → Man extraction (L240–244). Move the Trend Watch to the end of §3.2.3 and thread a line of narration before the Man extraction. Script-check every run after the edits. *Done: Trend Watch moved after Man extraction; narration line threaded; script clean.*
+- [x] D4. Trend Watch placement (lesson 8): the 8-K token Trend Watch (L529) sits under a judgment heading → end of §3.4.2 after "Where the edge is", with the SVB distressed-fund Seat after it; the §3.6.2 Trend Watch (L627) sits mid-section → end of §3.6.2. *Done: token Trend Watch ends 3.4.2 with Seat; detector one ends 3.6.2.*
+- [x] D5. Derivation order (lesson 10): §3.6.2 Full Derivation moves directly under (3.5) and "The prior" gets its own `####` heading; §3.4.3 runs box → (3.4) → extraction → Full Derivation. *Done: CUSUM derivation under (3.5); prior heading added; Elkan order fixed.*
 
 ### (e) Research-note leaks and fiction labels (lesson 13)
 
-- [ ] E1. L422 "*(the syndicated copy of that report is unclear on the exact wording)*": hedge the sentence ("press reports put...") and log the open item in `state/cleanup_queue.md`.
-- [ ] E2. L715 "*(the summary we have does not reconcile those percentages with the \$186mm figure...)*": cut the \$62mm–\$94mm range, keep the 29–43% and the tenth-of-the-position conclusion; log the open item.
-- [ ] E3. L703 "(the event study is on the Edition 2 list)": production note in book text; cut and log.
-- [ ] E4. L585 "as summarized in the sources cited" → plain source line; L661 "as summarized by Mayer Brown" → "as reported in Mayer Brown's July 2026 note".
-- [ ] E5. Fiction labels: the cold open's label sits mid-paragraph (L5) → italic at the top; Serta's second label (L721) is a duplicate → delete; Serta's top label names Mags's position (G4). Re-grep for "CHECK", "secondary", "search" after edits.
+- [x] E1. L422 "*(the syndicated copy of that report is unclear on the exact wording)*": hedge the sentence ("press reports put...") and log the open item in `state/cleanup_queue.md`. *Done: hedged as press reports put; open item logged in cleanup queue.*
+- [x] E2. L715 "*(the summary we have does not reconcile those percentages with the \$186mm figure...)*": cut the \$62mm–\$94mm range, keep the 29–43% and the tenth-of-the-position conclusion; log the open item. *Done: dollar range cut, percentages and tenth kept; open item logged.*
+- [x] E3. L703 "(the event study is on the Edition 2 list)": production note in book text; cut and log. *Done with B14: production note cut; event-study item logged in queue.*
+- [x] E4. L585 "as summarized in the sources cited" → plain source line; L661 "as summarized by Mayer Brown" → "as reported in Mayer Brown's July 2026 note". *Done: Saks source line plain; Mayer Brown cited as its July note.*
+- [x] E5. Fiction labels: the cold open's label sits mid-paragraph (L5) → italic at the top; Serta's second label (L721) is a duplicate → delete; Serta's top label names Mags's position (G4). Re-grep for "CHECK", "secondary", "search" after edits. *Done: cold-open label italic at top; Serta duplicate cut; re-grep clean.*
 
 ### (f) Finder table and headings (lesson 11)
 
-- [ ] F1. §3.9 has bullets and the Spec but no Finder: add a ten-row table at the top (concept · equation · intuition · judgment · code), carrying the judgments retired in C1–C5 once.
-- [ ] F2. Promote scenes and decision points: "## Cold Open" heading (Ch 5 precedent); `####` decision points for SVB (9:02 a.m., 13 March 2023), Saks (last week of May 2025) and Serta (2:40 p.m., 19 June 2020).
+- [x] F1. §3.9 has bullets and the Spec but no Finder: add a ten-row table at the top (concept · equation · intuition · judgment · code), carrying the judgments retired in C1–C5 once. *Done: ten-row Finder at top of 3.9; retired judgments stated once there.*
+- [x] F2. Promote scenes and decision points: "## Cold Open" heading (Ch 5 precedent); `####` decision points for SVB (9:02 a.m., 13 March 2023), Saks (last week of May 2025) and Serta (2:40 p.m., 19 June 2020). *Done: Cold Open heading; three decision points, coda, blotter now ####.*
 
 ### (g) Cast-bible contradictions
 
-- [ ] G1. L9 "three years at PJT RSSG" → six (C3).
-- [ ] G2. L23 Mags "since the bonds came with coupons you could physically clip" → cut (C5: started 1996).
-- [ ] G3. L23 the seller "Steve" → "Stan" (C12: Steve is the dealer); L573 "Steve's card" → "Stan's card".
-- [ ] G4. L673 Mags "at a fund she does not name, she held a loan that was left outside a deal like this one" → C4 canon: fifteen million of this first lien on a bank's book, left outside on 22 June 2020 (outside holder, illustrative; Ch 1 and Ch 14 tell it).
-- [ ] G5. L717 co-op counter "1" → "0" (C6 canon; supersedes the brief's "stays at 1").
-- [ ] G6. Story clock: the SVB drill on Theo's "third Saturday" (10 Oct) precedes the Brambleworth Friday (16 Oct, C10), yet the Debrief treats SVB as the lesson after Brambleworth → the fourth weekend, the Saturday after Brambleworth (17 Oct; Monday drill 19 Oct); "first moment in three weeks" → "four weeks".
-- [ ] G7. Add Ch 3's facts to `state/cast_bible.md` (Theo six years; Stan; Mags's Serta canon applied in Ch 3; counter 0; SVB drill dates; Ines's 36 covered).
+- [x] G1. L9 "three years at PJT RSSG" → six (C3). *Done: cold open now says six years at PJT RSSG.*
+- [x] G2. L23 Mags "since the bonds came with coupons you could physically clip" → cut (C5: started 1996). *Done: coupon line cut; Mags pricing distressed paper since 1996.*
+- [x] G3. L23 the seller "Steve" → "Stan" (C12: Steve is the dealer); L573 "Steve's card" → "Stan's card". *Done: seller and Rolodex card now Stan; Steve stays the dealer.*
+- [x] G4. L673 Mags "at a fund she does not name, she held a loan that was left outside a deal like this one" → C4 canon: fifteen million of this first lien on a bank's book, left outside on 22 June 2020 (outside holder, illustrative; Ch 1 and Ch 14 tell it). *Done: Mags held fifteen million, left outside; label names her position.*
+- [x] G5. L717 co-op counter "1" → "0" (C6 canon; supersedes the brief's "stays at 1"). *Done: counter reads 0 per C6, superseding the brief.*
+- [x] G6. Story clock: the SVB drill on Theo's "third Saturday" (10 Oct) precedes the Brambleworth Friday (16 Oct, C10), yet the Debrief treats SVB as the lesson after Brambleworth → the fourth weekend, the Saturday after Brambleworth (17 Oct; Monday drill 19 Oct); "first moment in three weeks" → "four weeks". *Done: SVB drill now Saturday after Brambleworth; four weeks in.*
+- [x] G7. Add Ch 3's facts to `state/cast_bible.md` (Theo six years; Stan; Mags's Serta canon applied in Ch 3; counter 0; SVB drill dates; Ines's 36 covered). *Done: cast bible C3-C6, C10, C12, C15, Ines, Mags rows updated.*
 
 ### (h) Relative-value beat
 
-- [ ] H1. `state/rv_thread.md` now exists (it appeared during this pass). Its Pair Book assigns Ch 3 the opening of **PB-06** (Serta first-lien / second-lien term loan, 19 Jun 2020 blotter, long the fulcrum, short the junior, recovery-weighted market value, outside-holder) and the foreshadow of T7 (seniority is a document variable). The chapter has no RV beat. Write a `> **The Pair.**` box in §3.7 after Ines's "afterwards when" (Theo's RSSG instinct as a pod trade; what the hedge removes, what remains, what leaks: the window), and record PB-06 as opened in `state/rv_pair_book.md`.
+- [x] H1. `state/rv_thread.md` now exists (it appeared during this pass). Its Pair Book assigns Ch 3 the opening of **PB-06** (Serta first-lien / second-lien term loan, 19 Jun 2020 blotter, long the fulcrum, short the junior, recovery-weighted market value, outside-holder) and the foreshadow of T7 (seniority is a document variable). The chapter has no RV beat. Write a `> **The Pair.**` box in §3.7 after Ines's "afterwards when" (Theo's RSSG instinct as a pod trade; what the hedge removes, what remains, what leaks: the window), and record PB-06 as opened in `state/rv_pair_book.md`. *Done: rv_thread asks a scene beat; PB-06 written in 3.7, ledger opened.*
 
 ### (i) Close
 
-- [ ] Z1. Re-run the metric, record **after**, re-check box spacing, runs and `$$` balance.
+- [x] Z1. Re-run the metric, record **after**, re-check box spacing, runs and `$$` balance. *Done: after 30,913 words; runs, spacing, $$ and currency checks clean.*
 
 ## Fix notes
+
+- **After** (`python3 tools/prescriptiveness.py --pre 9ac1c379053d9d0254e9d524d9a40efdec4a2c71`): now 30,913 words (was 35,183), bullets 8.1% (7.1%; the share rose because prose fell while the Debrief bullets and Resource Graph stayed), modal 3.3 (3.7), imper 1.1 (1.3), rule 0.7 (0.8), dialog 7.2 (6.8), Math Gently 6 (15), Seat 3 (3). **Growth 2.06×**, above the 1.6–1.9× band. Under the orchestrator ruling on lesson 1 the remainder is single-telling material (SVB's five beats, Serta, Saks, Wolfspeed, the Tuesday vignette, the code explanations, protected extractions, Trend Watches, exercises and the Resource Graph) and stays.
+- Box spacing after the pass (prose words between kept boxes): 2,458; 1,905; 1,985; 6,640; 3,139. No run of more than two boxed elements. 60 `$$` markers (even); no unescaped currency; no code fences; six Appendix F anchors all present; last chapter line is `<!-- STATUS: COMPLETE -->`.
+- Nothing protected removed: equations (3.1)–(3.5) and every display equation kept (the Δs derivation moved inline, the CUSUM derivation moved up); all nine Source Extractions and annotations kept (the Moyer p.407 annotation lost only its "First/Second/Third" markers); three Trend Watches kept verbatim, two moved; Poker Tables, Ways This Blows Up, Docket Diary and both Spec versions kept; Exercises 1–6 untouched; every URL kept; no figures in the chapter.
+- Open items logged in `state/cleanup_queue.md`: Bloomberg 2 Jul 2024 "40% or better" wording; the Serta remand's mitigation dollar range; the Serta May–June 2020 flow event study. The Ch 3 RV figure the thread allows (recovery-weighted sizing bar) is not drawn in this pass.
+- Brief conflict resolved by canon: the brief's "co-op counter stays at 1" yields to cast bible C6 (Ch 3 = 0).
+
+<!-- STATUS: COMPLETE -->

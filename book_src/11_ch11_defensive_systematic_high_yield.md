@@ -113,7 +113,7 @@ That little table is the counterintuitive part. The *safer* the bond, the *more*
 
 Shrink the mixture's mean to one line and you get the most quoted formula in credit, which is also the most abused, because it comes in two versions that look identical on a whiteboard.
 
-> **Math, Gently. Bookmaker's odds versus true odds.** Every default probability on a desk comes in one of two flavors, and the flavor is called a *measure*. $\mathbb{P}$ is the true-odds world: how often issuers like this one actually default. $\mathbb{Q}$ is the bookmaker's world: the default probability that, dropped into a plain expected-value sum, gives back the price on the screen, which means the bookmaker's margin (fear, illiquidity, the cost of tying up capital) is already baked into the odds. Picture a CDS quoted at 300bp on a name that would lose 60% in default. Read through "spread equals default rate times loss," the market is implying a $\mathbb{Q}$ default rate of $300/60 = 5\%$ a year. Suppose the honest $\mathbb{P}$ rate, from history and from somebody's 13-week model, is 3%. The protection seller collects 300bp and expects to pay out $3\% \times 60\% = 180$bp, so the expected excess return is $300 - 180 = +120$bp a year. Run the same sum with the bookmaker's 5% and you get $300 - 300 = 0$, on this name and on every name, because the 5% was manufactured to make that sum come out at zero. A $\mathbb{Q}$ probability tells you what a bond costs; it cannot tell you whether the bond is cheap. Chapter 5 (§5.1.1) met the two measures at the racetrack and Chapter 6 writes out the change of measure; the one-line version this chapter needs is next.
+> **Math, Gently. Bookmaker's odds versus true odds.** Every default probability on a desk comes in one of two flavors, and the flavor is called a *measure*. $\mathbb{P}$ is the true-odds world: how often issuers like this one actually default. $\mathbb{Q}$ is the bookmaker's world: the default probability that, dropped into a plain expected-value sum, gives back the price on the screen, which means the bookmaker's margin (fear, illiquidity, the cost of tying up capital) is already baked into the odds. Picture a CDS quoted at 300bp on a name that would lose 60% in default. Read through "spread equals default rate times loss," the market is implying a $\mathbb{Q}$ default rate of $300/60 = 5\%$ a year. Suppose the honest $\mathbb{P}$ rate, from history and from somebody's 13-week model, is 3%. The protection seller collects 300bp and expects to pay out $3\% \times 60\% = 180$bp, so the expected excess return is $300 - 180 = +120$bp a year. Run the same sum with the bookmaker's 5% and you get $300 - 300 = 0$, on this name and on every name, because the 5% was manufactured to make that sum come out at zero. A $\mathbb{Q}$ probability tells you what a bond costs; it cannot tell you whether the bond is cheap. Chapter 5 (§5.1.1) met the two measures at the racetrack and Chapter 6 (§6.3) writes out the change of measure; the one-line version this chapter needs is next.
 
 For small $p$, with carry approximately equal to spread ($c \approx s$) and no expected spread change ($m \approx s$), the mean collapses to the credit triangle written under $\mathbb{P}$:
 
@@ -200,7 +200,11 @@ Why does a 0.91 beta cost money over a cycle? Because high yield's excess return
 
 ### 11.2.2 Convexity: the asymmetric-beta regression
 
-Real defense means the portfolio responds *less* to down months than to up months. Write the Henriksson–Merton style asymmetric regression
+Real defense means the portfolio responds *less* to down months than to up months, and the capture identity has no way to say so: it gives the manager one beta for both kinds of month. Kaz's fix was to stop asking for one slope.
+
+> **Math, Gently. A line with a kink.** Plot each month as a dot: the index's return along the bottom, the portfolio's up the side. A beta tilt puts every dot near one straight line through the origin, slope 0.9 on both sides, so the portfolio keeps 90% of the good months and suffers 90% of the bad. A real defender's dots follow a line that *bends* at zero: slope 1.0 to the right, 0.9 to the left. Run a down-then-up pair through each. With $eta^{+} = 1.0$ and $eta^{-} = 0.9$, a −5% month costs 4.5% and a +5% month pays the full 5%, so the pair compounds to $0.955 \times 1.05 - 1 = +0.28\%$ while the index compounds to $0.95 \times 1.05 - 1 = -0.25\%$. The straight 0.9 line also loses only 4.5% in the bad month, but it earns only 4.5% back, and $0.955 \times 1.045 - 1 = -0.20\%$. Same defense on the way down, different bill on the way up. In symbols, the kinked line is two slopes, one for the positive part of the index return and one for the negative part, and the regression that estimates both is next.
+
+Write the Henriksson–Merton style asymmetric regression
 
 $$
 r_{p,t} = \alpha + \beta^{+}\max(r_{b,t}, 0) + \beta^{-}\min(r_{b,t}, 0) + \epsilon_t .
@@ -208,7 +212,9 @@ $$
 
 Averaging within regimes as before, $U = \beta^{+} + \alpha/\bar r_b^{\,\mathcal{U}}$ and $D = \beta^{-} + \alpha/\bar r_b^{\,\mathcal{D}}$. "Good defense" is $\beta^{-} < \beta^{+}$: positive convexity in the active return. Where can convexity come from in a long-only bond portfolio? Only two places. One is security selection that avoids the jump, because defaults and distress cluster in down months, so a portfolio that holds fewer of the bonds that jump has a lower down-beta without a lower up-beta. The other is regime-aware exposure that adds risk after spreads overshoot (§11.8). A uniform beta tilt cannot produce it; it scales both betas together.
 
-Three traps for the person computing these numbers. Compute capture on *excess* returns if the mandate is excess-return; total-return capture smuggles in rate duration. Define regimes on the benchmark, never on the portfolio. And when $\lvert \bar r_b^{\,\mathcal{D}} \rvert$ is small (a short sample with a few mild down months), $D$ explodes; require a floor and report the regime counts.
+Theo found out how easily those numbers go wrong in his second week. A pension consultant (fictional, like the manager in question) forwarded a pitch deck that said "defensive" in forty-point type and showed a downside capture with a footnote in six-point type, plus twenty years of monthly returns in a spreadsheet. Theo, new and thorough, built capture on three tabs, and by 10:40 the three tabs described three different managers. The first sorted months by the *portfolio's* sign, so every month the manager happened to lose money was a down month by definition, and the manager looked worst exactly where it had been unlucky. The second used total returns, and 2022 turned the manager into a genius, because a short duration had dodged the rate selloff: a Treasury bet wearing a credit badge. The third ran the consultant's preferred trailing year, which held three down months, one of them a benchmark dip of 0.3bp. The down-month mean was nearly zero, and $D$ printed at 212% *(illustrative)*.
+
+Ines read the three tabs over his shoulder. "Three tabs, three managers. Which one went to the pension board?" Nobody knew. "One definition, then. Excess returns, the benchmark's months, a floor under the down mean, and the counts printed next to every ratio. Then it can only be wrong one way."
 
 > **[SOURCE EXTRACTION]** *BlackRock_Systematic_High_Yield_Credit p.3:* "Figure 1 shows the average manager tended to participate in 89.56% of down markets and 92.24% of up markets. This illustrates how the average U.S. high yield manager was building a “defensive” exposure largely by creating a portfolio that has a lower beta than the broad index."
 >
@@ -220,11 +226,39 @@ Three traps for the person computing these numbers. Compute capture on *excess* 
 
 ### 11.2.3 Case Study 1: The 2022–2023 Round Trip
 
-The benchmark facts are BlackRock's: high yield down more than 11% in 2022 and up more than 13% in 2023, with two regime pairs inside 2022 of −6.8%/+6.0% (June/July) and −4.0%/+2.8% (September/October) (BlackRock p.5, Figure 3). The average manager finished 2022 ahead and 2023 behind, and the cumulative result over the two years was a net giveback (p.4).
+*A replay, Ines's ritual: the cast and their cards are fictional, and the three portfolios are stylized (illustrative). The benchmark returns are BlackRock's (p.4–5, Figure 3), and the tape is cut at the close of Thursday 30 June 2022.*
 
-Now run three stylized portfolios through the June/July 2022 pair *(illustrative; only the benchmark returns are sourced)*. The beta tilt at $\beta = 0.91$ returns $-6.19\%$ then $+5.46\%$, a cumulative $-1.07\%$ against the benchmark's $-1.21\%$: a 14bp win, almost entirely from compounding on a down-then-up path. The issuer-level defender holds $\beta^{+} = 1.0$ and, by avoiding the bonds that gap in a down month, achieves $\beta^{-} = 0.90$: $-6.12\%$ then $+6.00\%$, a cumulative $-0.49\%$, a 72bp win. The third portfolio is the one a nervous committee builds in real time: it cuts to $\beta = 0.8$ at the end of June after the loss and rides July at that beta, $-6.80\%$ then $+4.80\%$, cumulative $-2.33\%$, a 112bp *loss* to the benchmark it was trying to protect against.
+Ines ran a short one before anyone went home on the Thursday of the bow tie. She called it a palate cleanser, which meant it would take an hour.
 
-The desk read is that the second portfolio's advantage is not a forecast of the market. It is a forecast of *which bonds* fall more than their spread duration predicts, which is a default and distress forecast. That is what §11.3 through §11.5 build.
+"June 2022," she said, and put up one number: the high yield benchmark, −6.8% for the month. "Rates are going up in three-quarter-point steps, the word on every call is *recession*, and the year to date is already the worst first half most of you have seen. It's the last day of June. You each run one portfolio. Here is how your June went."
+
+She dealt them by monitor. Theo's was the plain index-weight book, beta one, which had lost the full 6.80%. Kaz's was the industry's dimmer switch, a 0.91 beta built from cash and a light CCC underweight, which had lost 6.19%. Mags got the third, a book that held beta at one in up months but had spent the spring dropping the issuers whose default probabilities were climbing, so the bonds that gapped in June were mostly bonds it did not own. Its down-beta for the month came out at 0.90 and its June loss at 6.12%.
+
+"July," Ines said. "Write three things on the card: your beta for the month, what you sell or buy, and why."
+
+Theo looked at his 6.80% and felt the room the way he had felt a hundred lender calls: the committee would want to see that somebody had done something. He wrote *0.8. Cut a fifth of the risk. Protect what's left until the Fed stops.* It was, he would later admit, exactly the card the investment committee of a long-only fund writes at the end of a bad month, and he wrote it in the committee's handwriting.
+
+Kaz wrote *0.91, unchanged*, and under it, *the tilt is the strategy; changing it after a loss is timing, and nobody has shown me a timing model that works*. This was true and also, as Mags pointed out, the most Kaz sentence ever written on an index card.
+
+Mags wrote two words. *Which bonds?*
+
+"That's not a beta," Theo said.
+
+"It's the only question," Mags said. "My beta's one. It stays one. I want to know which names moved their PD in June and which ones just moved their price. The first lot I sell. The second lot I keep, because they're the ones that come back."
+
+Ines flipped the tape forward. July 2022: the benchmark returned +6.0%, the first leg of the bear-market rally that BlackRock pairs with June as one of its regime pairs.
+
+Theo's book, at 0.8, made 4.80%. Over the two months it compounded to −2.33% against the benchmark's −1.21%, a 112bp *loss* to the index it had been trying to protect itself from. It had taken the whole down month at full size and three-quarters of the up month.
+
+Kaz's tilt made 5.46%, for a two-month −1.07% and a 14bp win. Kaz looked pleased for about a second, until Ines pointed out where the 14bp came from: compounding on a down-then-up path. Hold 0.91 through an up-then-down pair instead and the same arithmetic hands the 14bp back. The dimmer switch had not defended anything. It had been lucky about the order of the months.
+
+Mags's book, with its beta back at one for the rally, made the full 6.00%. Two months: −0.49%, a 72bp win. Nothing about July had been predicted. The 72bp had been earned in May and June, in a spreadsheet of default probabilities, before anybody knew the rally was coming.
+
+"Grade the cards," Ines said. "Theo, you sold the bottom. That's the nervous committee, and it's the most common card in the industry; BlackRock's average manager finished 2022 ahead and 2023 behind, with a net giveback over the two years (p.4), and you just did the same thing in two months. Kaz, you held a tilt that can't lose a round trip by much and can't win one either. Mags asked the right question." Mags did not look up, which meant she had heard. September and October 2022 ran the pattern a second time, −4.0% and then +2.8% for the benchmark, and the replay's three cards would have come back in the same order.
+
+Theo turned his card over. "Mags didn't know July was coming."
+
+"Nobody did. That's the point," Ines said. "Her book's edge isn't a forecast of the market. It's a forecast of *which bonds* fall more than their spread duration says they should, and that's a default and distress forecast. Build that, and you never have to guess the month." That is what §11.3 through §11.5 build.
 
 > **Trend Watch: The Whipsaw Years, 2022–2026.** *What changed:* high yield stopped trending and started reversing, which is the regime where a beta tilt does worst. *When and how big:* 2022, US HY "down over 11%"; 2023, "up over 13%" (BlackRock p.3, Bloomberg data as of 31 March 2024). The average manager beat the benchmark by 0.47% in 2022 and lagged by 0.68% in 2023 (BlackRock p.4), giving back more than it saved. In 2024 the pattern repeated at a smaller scale: +0.35% versus benchmark in Q1, −0.37% over the rest of the year (BlackRock p.5). The ICE BofA US High Yield total return index returned +8.20% in calendar 2024 and +8.50% in 2025, then fell 3.83% from 28 February to 7 April 2025 on the tariff shock and regained its prior peak on 12 May 2025, a ten-week V; in 2026 it fell 2.87% from 27 August to 1 October and stood +0.15% year-to-date on 15 October *(our computations from FRED series BAMLHYH0A0HYM2TRIV)*. *What it means for the desk:* shallow, fast V-shaped drawdowns are the worst environment for a strategy that de-risks on price, and the best environment for one that de-risks on default probability, because PDs barely move in a ten-week V while prices move a lot. The whipsaw years are the empirical case for issuer-level defense.
 
@@ -234,13 +268,11 @@ The desk read is that the second portfolio's advantage is not a forecast of the 
 
 **Schema.** `rp`, `rb`: `float64` arrays of shape `(T,)`, monthly excess returns in decimal, aligned by month. `T >= 24`, at least 3 up and 3 down benchmark months. Output of `capture_ratios`: tuple `(U, D)` as decimals. Output of `asymmetric_beta`: dict with `alpha` (per month), `beta_up`, `beta_dn`.
 
-Here is the problem as it arrives on a Tuesday. A manager's pitch deck says "defensive," shows a down-capture number with a footnote in six-point type, and attaches twenty years of monthly returns as a spreadsheet. Your job is to find out whether the defense is alpha or just a dimmer switch. The arithmetic is two averages and a division, which is exactly why it goes wrong: one analyst defines the regimes on the portfolio's own months, another uses total return and lets rate duration sneak in, a third quietly lets a month with a 0.3bp benchmark return into the down bucket and watches $D$ blow up. A desk that evaluates dozens of managers, and thousands of backtest variants of its own, cannot afford a different definition on every tab. So the definition becomes a function that refuses to answer when the question is ill-posed.
-
-The listing has two functions and a block of self-checks. `capture_ratios` takes aligned monthly excess-return arrays for the portfolio and the benchmark, splits the months by the *sign of the benchmark* (strictly positive is up, strictly negative is down, exactly zero belongs to neither), and returns the ratio of the portfolio's mean to the benchmark's mean within each regime. It raises an error rather than answering if the arrays are not aligned one-dimensional vectors, if either regime has fewer than three months, or if either regime's benchmark mean is smaller in magnitude than the `floor` of one basis point a month, because a capture ratio is a quotient and a quotient with a near-zero denominator is a random number with a ratio's dignity. `asymmetric_beta` runs the ordinary least squares regression of §11.2.2 on a constant, the positive part of the benchmark return and the negative part, and returns `alpha` (per month), `beta_up` and `beta_dn`. Read `beta_dn` as the portfolio's loss per unit of benchmark loss; good defense is `beta_dn` below `beta_up`.
+At 10:40 three tabs disagreed about one manager, and the listing exists so that a fourth tab cannot: the definition becomes a function that refuses to answer when the question is ill-posed. It has two functions and a block of self-checks. `capture_ratios` takes aligned monthly excess-return arrays for the portfolio and the benchmark, splits the months by the *sign of the benchmark* (strictly positive is up, strictly negative is down, exactly zero belongs to neither), and returns the ratio of the portfolio's mean to the benchmark's mean within each regime. It raises an error rather than answering if the arrays are not aligned one-dimensional vectors, if either regime has fewer than three months, or if either regime's benchmark mean is smaller in magnitude than the `floor` of one basis point a month, because a capture ratio is a quotient and a quotient with a near-zero denominator is a random number with a ratio's dignity. `asymmetric_beta` runs the ordinary least squares regression of §11.2.2 on a constant, the positive part of the benchmark return and the negative part, and returns `alpha` (per month), `beta_up` and `beta_dn`. Read `beta_dn` as the portfolio's loss per unit of benchmark loss; good defense is `beta_dn` below `beta_up`.
 
 The self-checks are the point of the exercise. A synthetic benchmark of 240 months, seeded, is run through four tests: a pure 0.9 tilt must return $U = D = 0.9$; adding a monthly alpha must open the gap; the gap must equal the identity of §11.2.1 to within $10^{-12}$; and a noisy portfolio built with up-beta 1.0 and down-beta 0.8 must come back from the regression with `beta_dn` at least 0.1 below `beta_up`. The first three are exact and catch coding errors; the fourth is statistical and shows the regression can see convexity.
 
-Use it on excess returns with benchmark-defined regimes. Do not use it to rank managers on a short window, where three mild down months satisfy the guard and still produce a meaningless $D$. The edge case that bites is the one the function cannot see. It does not clean your data. A missing portfolio month turns the affected mean into NaN, and the regression has no opinion about gaps at all, so alignment and pairwise dropping must happen before the call, never by forward-filling, which converts a missing month into a zero-return month and a beta of zero in disguise. Zero-benchmark months are also asymmetric across the two functions: they are excluded from capture but remain in the regression, where they pull on `alpha` only.
+The function does not clean your data, and that is the gap the 10:40 scene did not show: a missing portfolio month turns the affected mean into NaN, the regression has no opinion about gaps at all, and forward-filling converts a missing month into a zero-return month, which is a beta of zero in disguise. Alignment and pairwise dropping happen before the call. Zero-benchmark months are also treated differently by the two functions: they are excluded from capture but remain in the regression, where they pull on `alpha` only.
 
 *The full listing is [Listing 11.1 in Appendix F](#code-11-1).*
 
@@ -256,6 +288,12 @@ Theo's first instinct was the right one, at the wrong scale. An RSSG banker deci
 
 ### 11.3.1 Equity as a call, solved backward
 
+At PJT, Theo had valued a company by building it up from the bottom: cash flows, a multiple, an enterprise value, and then the waterfall. The structural model runs the same building in reverse, from the top. It starts with the one number the market prints every second, the stock price, and asks what the assets underneath must be worth and how much they must wobble for the stock to trade there. Two ideas make that possible.
+
+> **Math, Gently. Part 1: random walk, then compounding, then the half-sigma-squared.** A *random walk* is a path built from coin flips: each step goes up or down by a random amount, and nobody, including the coin, knows the next one. Asset values walk, but they walk by *multiplying*, not adding: a good year is +40%, a bad year is −40%. Start at 100 and flip twice. The four equally likely paths end at $100 \times 1.4 \times 1.4 = 196$, at 84 (twice, up-then-down or down-then-up), and at $100 \times 0.6 \times 0.6 = 36$. Their *average* is $(196 + 84 + 84 + 36)/4 = 100$, exactly where you started. Their *typical* outcome, the middle one, is 84. The average path is held up by the rare lucky one; the path a real firm usually walks sags. That sag has a size: with volatility $\sigma_V$, the typical (median) path grows at $\mu - \tfrac12\sigma_V^2$ instead of $\mu$. At $\sigma_V = 40\%$ over one year the drag is $\tfrac12 \times 0.40^2 = 8$ points a year, which is why a volatile firm with a respectable expected return can still be drifting, typically, toward its debt. Chapter 6 (§6.1) derives the $\tfrac12\sigma^2$ properly, as Itô's lemma.
+>
+> **Part 2: equity is the call, read backward.** Shareholders own the assets but owe the debt, so equity behaves like a call option on the firm: worth $V - F$ when things go well and zero when they do not. A call moves less than its underlying in dollars (its delta, $N(d_1)$, is below one) but a lot more in percent, because it is a thin slice on top of the assets. Running that backward is the trick. Suppose the stock is worth $E = 2$ (billion), the assets $V = 6$, the delta $N(d_1) = 0.8$, and the stock's volatility is 60%. A 1% move in assets moves equity by $0.8 \times 0.06 = 0.048$, which is 2.4% of $E$, so the assets must move $1/2.4$ as much as the stock: $\sigma_V = 0.6 \times 2/(0.8 \times 6) = 25\%$. Pile on more debt and $E$ shrinks against $V$, and the gap between the scary equity volatility and the calmer asset volatility widens. The two equations that do this exactly are next.
+
 Let the firm's assets $V_t$ follow a geometric Brownian motion under $\mathbb{P}$ with drift $\mu$ and volatility $\sigma_V$, and let debt be a single zero with face $F$ due at $T$. Equity is a European call on the assets:
 
 $$
@@ -268,7 +306,11 @@ $$
 \sigma_E\,E = N(d_1)\,\sigma_V\,V .
 $$
 
-Two equations, two unknowns. For a fixed $\sigma_V$, the call value is strictly increasing in $V$, so $V(\sigma_V)$ is found by a bracketed root search on $[E,\, E + 2F]$: at $V = E$ the call is worth less than $E$, and at $V = E + 2F$ it is worth at least $V - Fe^{-rT} > E$. Then search over $\sigma_V \in (0, \sigma_E]$ for the root of $\sigma_V V(\sigma_V) N(d_1) - \sigma_E E$. The upper end works because $E \le V N(d_1)$, so the gap is non-negative at $\sigma_V = \sigma_E$; the lower end works because the gap tends to $-\sigma_E E$. The leverage effect is visible in the answer: $\sigma_V = \sigma_E E/(V N(d_1)) < \sigma_E$, and the more debt, the bigger the gap between the two volatilities.
+Two equations, two unknowns, and they always have an answer. The leverage effect is visible in it: $\sigma_V = \sigma_E E/(V N(d_1)) < \sigma_E$, and the more debt, the bigger the gap between the two volatilities.
+
+#### The Full Derivation: inverting for $V$ and $\sigma_V$
+
+For a fixed $\sigma_V$, the call value is strictly increasing in $V$, so $V(\sigma_V)$ is found by a bracketed root search on $[E,\, E + 2F]$: at $V = E$ the call is worth less than $E$, and at $V = E + 2F$ it is worth at least $V - Fe^{-rT} > E$. Then search over $\sigma_V \in (0, \sigma_E]$ for the root of $\sigma_V V(\sigma_V) N(d_1) - \sigma_E E$. The upper end works because $E \le V N(d_1)$, so the gap is non-negative at $\sigma_V = \sigma_E$; the lower end works because the gap tends to $-\sigma_E E$. Both brackets hold for every firm with positive equity, which is why the solver in Listing 11.2 can promise an answer instead of hoping for one.
 
 Distance-to-default is the number of asset standard deviations between expected asset value and the default point at the horizon, under the *physical* drift:
 
@@ -284,6 +326,12 @@ Kaz ran the model on the cross-section and announced the result with the confide
 
 Mags did not look up. "The median public firm has not been informed."
 
+What Mags meant was that Kaz had done the arithmetic right in the wrong world. Distance-to-default counts sigmas, and how much a sigma is worth depends on the shape of the bell it is counted on.
+
+> **Math, Gently. Four sigmas in two worlds.** Draw two crowds of firms lined up by distance-to-default, both with the same middle and the same spread, and walk out four sigmas to the left of each. In the first crowd, shaped like a normal bell, the curve has fallen almost flat by the time you get there: the share of firms out at four sigmas or worse is $N(-4) = 0.003\%$, about three in a hundred thousand. The second crowd has *fat tails*: near the middle it looks almost the same, but its edges thin out slowly, so four sigmas out there are still people standing around. Moody's KMV measured that second crowd on real firm-years, and a DD of 4 turns out to default at almost 1% a year (Bohn–Stein p.138). Line up a hundred thousand firms at DD 4: the bell says three of them default this year, the history says nearly a thousand. Same ruler, two worlds, a factor of about 300. The fix is to keep DD as the ruler, because it ranks firms well, and to read the probability off the history instead of off the bell, $\text{PD} = g(\text{DD})$. Chapter 5 (§5.7) explains why tails get fat, and Chapter 6 (§6.4.3) builds the empirical map; the evidence is the extraction below.
+
+Bohn and Stein put the evidence in two sentences.
+
 > **[SOURCE EXTRACTION]** *Bohn_Stein_Active_Credit_Portfolio_Management p.138:* "This convenient distributional assumption is clearly unrealistic. This becomes clear when we observe that empirically the majority of publicly traded firms have DDs greater than 4."
 >
 > **Annotation.** Bohn and Stein are describing why Moody's KMV never used $N(-\text{DD})$: the tails of realized asset returns are far fatter than Gaussian, so DD is a good *ranking* and a terrible *probability*. The fix is an empirical map $\text{PD} = g(\text{DD})$, estimated by bucketing firm-years into DD cohorts and recording realized default frequencies; under their map a DD of 4 converts to an EDF of almost 1%, about 300 times the Gaussian answer (p.138). The calibration needs data: "at least 1,000 defaults, with a minimum of 400" (p.163). That threshold is an uncomfortable fact for a desk that wants a high-yield-only model, because the US HY universe produces a few dozen issuer defaults in a benign year. The 2026 answer is to calibrate the map on the broadest default history you can license (all rated and unrated corporates, multiple decades, the NUS Credit Research Initiative as a public benchmark) and to fit HY-specific *adjustments* on top, not to fit a fresh map on 300 HY defaults and call it bespoke.
@@ -292,7 +340,7 @@ Figure 11.3 draws the gap between the Gaussian answer and an empirical map, with
 
 ![Figure 11.3: Distance-to-default ranks issuers well, but N(−DD) is not a probability: at DD = 4 the Gaussian says 0.003% while the empirical map says about 1%, roughly 300 times larger, and the sponsor-levered B issuer (DD 2.44) is 4.6%, not 0.74%. Illustrative: the placeholder map PD = exp(−0.718 − 0.9718 DD), capped at 35%, from Listing 11.2 against N(−DD); the DD = 4 conversion to almost 1% is Bohn–Stein (p.138), and the shaded region is the DD > 4 zone where they find most listed firms.](assets/figures/ch11_dd_pd_map.png)
 
-Where the structural PD breaks in high yield, in descending order of how much money it has cost people: the issuer has no listed equity (Chapter 7 cites Dynkin p.651: on 31 May 2018 the US HY index had 784 issuers, of which 576 were public, so about a quarter of issuers have no $E$ to invert); the default point is wrong because a liability management transaction has just put \$800mm of new super-priority debt ahead of the bonds you own, which changes *your* recovery without moving the firm's DD (this is exactly the job of Chapter 13's Priming Risk Score); book equity is negative after years of dividend recaps, which matters for accounting covariates but not for Merton, which uses market values; and equity volatility is stale for thinly traded small caps, which makes $\sigma_E$ too low and DD too high.
+The bell is not the only place the structural PD breaks in high yield. It also breaks when there is no stock to invert, when a liability management transaction moves the default point without moving the DD, when book equity has gone negative after years of dividend recaps (which matters for accounting covariates but not for Merton, which uses market values), and when equity volatility is stale for a thinly traded small cap, which makes $\sigma_E$ too low and DD too high. The first two, which have cost people the most money, happened to one issuer in thirteen months, and §11.4.3 tells it.
 
 ### Specification for AI Implementation
 
@@ -328,6 +376,10 @@ The equity market, in other words, is running Theo's memo every day for free, an
 >
 > **Annotation.** This is Shumway's critique as Bohn and Stein summarize it. A static model takes one observation per firm, usually the last year before default for defaulters, and throws away every earlier year in which the same firm looked just as sick and survived. The model then over-attributes default to whatever a sick firm looks like, and its PDs are too high for sick survivors. The fix is to use every firm-period as an observation. On a 2026 desk the lesson generalizes: any sample that selects on the outcome (one row per default, matched to a "similar" survivor) will flatter the model, which is Bohn and Stein's paired-sample warning at p.226 in another costume.
 
+Shumway's fix needs a different question. A static model asks "is this a firm that defaults?" The hazard model asks, every month, "given that this firm is still alive this month, how likely is it to fail before the next one?"
+
+> **Math, Gently. A hazard is the chance of failing this month, given you made it to this month.** Actuaries have kept this table for three centuries. A life table does not say "40% of people die at 80"; it says, for each age, what share of the people *alive at the start of that year* die before the end of it. That conditional rate is a *hazard*, and it is the natural way to think about a company that is still filing compliance certificates: the question is never whether it will ever die, only whether this is the month. Hazards compound into the probabilities a desk quotes. A firm with a hazard of 0.3% a month survives each month with probability 0.997, so it survives a year with probability $0.997^{12} = 0.965$, and its one-year default probability is $1 - 0.965 = 3.5\%$, a little less than $12 \times 0.3\% = 3.6\%$ because a firm cannot die twice. The model below lets the hazard change with the firm's covariates each month and squeezes it between 0 and 1 with a logit (Chapter 5, §5.5.3, explains the squeeze; §5.1.5 met the hazard first, as Theo's 13-week model). The formula is next.
+
 The discrete-time hazard for issuer $i$ in month $t$, given covariates observed $\ell$ months earlier, is
 
 $$
@@ -336,7 +388,39 @@ $$
 
 Shumway's equivalence result is that the likelihood of this hazard model is the likelihood of a logit estimated on firm-months, so a standard logit routine estimates it, with one correction: because each firm contributes many dependent rows, the logit's test statistics are overstated, and Shumway divides the chi-squared statistics by the average number of firm-periods per firm (Bohn–Stein p.237). The modern equivalent is an issuer-clustered sandwich covariance, which the code below uses. A 12-month PD is then either the compounded monthly hazard, $1 - \prod_{j=1}^{12}(1 - h_{i,t+j})$, or a logit fit directly to a 12-month-ahead label; the second is simpler but its overlapping windows make clustering mandatory.
 
-The Campbell–Hilscher–Szilagyi covariates are worth memorizing as a checklist: net income over market-valued total assets (averaged), total liabilities over market-valued total assets, excess equity return over the index (averaged), idiosyncratic equity volatility, relative size, cash over market assets, market-to-book, and log price. To these the RSSG desk adds one covariate the literature does not have:
+Kaz read the Campbell–Hilscher–Szilagyi covariates aloud from the paper, one at a time, and Theo, who had promised himself he would stop doing this, translated each one into a line of his 13-week model.
+
+"Net income over market-valued total assets, averaged."
+
+"Burn."
+
+"Total liabilities over market-valued total assets."
+
+"Leverage at market. Which is the only kind a court cares about."
+
+"Excess equity return over the index, averaged."
+
+"The market's running verdict on the forecast."
+
+"Idiosyncratic equity volatility."
+
+"How much nobody agrees with the forecast."
+
+"Relative size."
+
+"Whether a lender will take the call."
+
+"Cash over market assets."
+
+"The numerator of runway."
+
+"Market-to-book."
+
+"How much of the value is a story." Theo hesitated on the last one.
+
+"Log price," Kaz said.
+
+"Whether it's become a penny stock. Which is what a lender call does to a stock." Theo looked at the list. Eight market-scaled covariates, and every one of them was a page of his model that the equity market had already read. One line of the model was not on the list. To these the RSSG desk adds one covariate the literature does not have:
 
 $$
 x^{\text{runway}}_{i,t} = \min\!\left(13,\; \text{weeks until projected liquidity falls below the minimum-liquidity covenant}\right).
@@ -356,6 +440,10 @@ $$
 \operatorname{logit} \hat p^{\,\text{pop}} = \operatorname{logit} \hat p^{\,s} + \ln\frac{\pi\,(1 - \pi_s)}{\pi_s\,(1 - \pi)} .
 $$
 
+In odds, the correction is one multiplication (Chapter 1, §1.3.3, does Bayes in that form): a model fit on a sample with 10% defaults, applied to a population with 3%, has its odds multiplied by $(0.03/0.97)/(0.10/0.90) = 0.28$, so a sample PD of 20%, odds of one to four, becomes odds of $0.25 \times 0.28 = 0.07$ and a population PD of 6.5%.
+
+#### The Full Derivation: the intercept shift
+
 This follows from Bayes' rule: resampling changes the prior odds of default by the factor $\frac{\pi/(1-\pi)}{\pi_s/(1-\pi_s)}$ and leaves the likelihood ratio, and therefore the ranking, untouched. Bohn and Stein's point that "a poorly calibrated PD model can still be useful for ranking obligors as long as the model has predictive power" (p.247) is the same statement read the other way: power and calibration are separate repairs.
 
 ### 11.4.3 The label is the model
@@ -368,7 +456,89 @@ Kaz read the rating-agency definition aloud, more or less: an exchange in which 
 
 The Ad Hoc Group, in unison, represented by counsel: "We object to the characterization."
 
-The desk label is therefore *any* of: missed payment beyond grace, bankruptcy filing, distressed exchange, or an LME that impairs the holder (uptier, drop-down with guarantee release, par-reducing exchange), within the horizon. The label must be date-stamped at the transaction's announcement, not its closing, or the model will learn from news it could not have had. And the label must be *issuer-level*. A company with 47 bonds outstanding is one default, not 47; fitting on bonds teaches the model that defaults are clustered in large capital structures, which is true and useless.
+#### Long Scene: Saks Global, a default in four dates
+
+*A replay, Ines's ritual, run on Friday 16 October 2026 with the tape cut at each date in turn. The cast, their cards and every word they say are invented. The desk never held the notes, never sat in or spoke to any group, and every model output below is the desk's fictional run. The dates, amounts and terms are public: the company's press releases of 21 July and 8 August 2025, press and court-tracker accounts of the Chapter 11 case, and S&P actions as reported in the trade press, each cited where it appears. Named firms and advisers appear only as those sources report them, and nobody outside the desk is given a word to say.*
+
+Ines had promised Kaz a selective default on Friday, and on Friday she delivered one in a manila folder with four dates on the tab.
+
+"Same rules as always," she said. "I cut the tape at a date. You see what the market saw that day and nothing after. You write a card. Then I move the tape." She opened the folder. "Monday, 23 December 2024."
+
+**Beat 1: the new issue.** The first page was a deal summary any RSSG associate could have written in their sleep. Saks Global was buying Neiman Marcus at an enterprise value of \$2.7bn. The money came from \$2.2bn of 11.000% senior secured notes due 2029, with Jefferies as initial purchaser; a \$1.8bn asset-based revolver; \$275mm of seller financing; and about \$1.5bn of equity from new investors, among them Amazon, Authentic and Salesforce (Latham & Watkins deal announcement, December 2024; company press release, July 2025). Two department-store chains, one balance sheet, an 11% coupon on the secured paper.
+
+Kaz had the structural model of §11.3 open before Ines finished the sentence, and closed it again a moment later. "Nothing to invert. There's no stock. `no_equity_flag` equals one; it goes to the accounting model." Kaz scrolled. "This is not unusual, by the way. Chapter 7 has the count: on 31 May 2018 the US high yield index had 784 issuers, and 576 of them were public (Dynkin p.651). This is one of the other quarter."
+
+"So what's your clock?" Ines asked.
+
+Theo already had a pencil out. At PJT this was the page he would have turned to first. "The revolver. An asset-based loan lends against inventory and receivables, and it comes with an availability test: if what you can still draw falls below a floor, the lenders get control of the cash. That floor is the minimum-liquidity line on my 13-week model. It's the runway covariate of §11.4.2, except here the lenders draw it for you." He tapped the summary. "And the coupon. Eleven percent on \$2.2bn is about \$121mm every six months. Those are the only two clocks this company has that I can see from outside."
+
+Nobody wrote a card on the first date. Ines did not ask for one. "Nothing happens for five months," she said, and turned the page.
+
+**Beat 2: 47.5.** "Friday, 16 May 2025."
+
+The page had one price on it: the 11% secured notes due 2029, quoted at 47.5 (Debtwire, 16 May 2025; a vendor indication, not a TRACE print). Below it, the trade press of that week, which a desk could have read the same morning. A holder group of about 51% of the notes, with Lord Abbett, MacKay Shields, Arena and BlackRock named in the reports and Paul Weiss and Lazard advising, was weighing new financing that could rank ahead of the rest. A \$121mm coupon was due at the end of June. And the flagship store, mortgaged for \$1.25bn, sat in an unrestricted subsidiary, outside the entities whose covenants and collateral the notes could reach (Debtwire, May 2025).
+
+Kaz read the last sentence twice. "Unrestricted," Kaz said, before Theo could open his mouth. "Not released for good behavior. I was told. It means the covenants can't see it."
+
+"It means the collateral can't see it," Theo said. "Which is worse."
+
+Mags had stopped pretending to read her own screen. "A secured bond at 47 and a half, five months after it was issued. Back in my day we didn't have a word for that. We had a look."
+
+Ines dealt the cards. "Three things. The date this issuer becomes a 1 in your training set. The feature you wish you'd had on 16 May. And what you do with the bond at 47.5."
+
+They wrote in silence, which on this desk took about four minutes.
+
+Kaz went first, as usual, because Kaz always believed the first answer. *Label: bankruptcy filing. So far, nothing; it's a 0 until a court says otherwise. Feature: equity volatility, which doesn't exist. Bond: hold. The accounting model's PD is 9% (the desk's fictional run), and at 47.5 the bond is pricing far more than that. Cheap.*
+
+Theo's card was neater than usual, which meant he had rewritten it. *Label: the announcement date of whatever exchange is coming, because something is coming, and its terms are the default. Feature: the revolver's availability test, as a time series. Bond: bid only if I can work out what holders outside the 51% get. Today I can't.*
+
+Mags wrote one line in the middle of the card and underlined it. *It defaulted the day the flagship went into the unsub.* Under it, smaller: *Feature: every designation of an unrestricted subsidiary, dated. Bond: sell it to anyone who'll pay 47.5. I'm not in that group, and nobody's going to ask me.*
+
+Ines wrote her own card last, as she always did, and turned it face down. "Before I move the tape," she said, "one question for the table. What did 47.5 know?"
+
+Nobody answered, which was the answer she wanted.
+
+**Beat 3: the exchange.** "Monday, 21 July 2025."
+
+The exchange offer came as a press release with a grid in it, and Theo read it the way he used to read a term sheet at 2 a.m., which is to say twice, the second time with a calculator. Holders were asked to fund \$600mm of new notes issued through a special-purpose vehicle. For every \$1,000 of old notes, a holder who had pre-funded the new money received \$106 of the SPV notes plus \$894 of new second-out notes. A holder who joined the new-money funding later received \$550 of second-out plus \$250 of third-out. A holder who did neither received \$750 of third-out. About 91.9% of holders had already committed, and their consents stripped the old notes' covenants (Saks Global press release, 21 July 2025). S&P cut the issuer from CCC+ to CC the same month, called the deal tantamount to a default, and said it expected to lower the rating to SD or D once the exchange closed (as reported by Retail TouchPoints, July 2025).
+
+Theo drew the new capital structure on the whiteboard as a stack. "A holder who sits it out keeps an old note with no covenants under everything new. A holder who takes the worst option gets 75 cents of face in the third-out, behind the SPV notes and the second-out. Nobody missed a payment. It's a default."
+
+"Selective," said Kaz, writing it next to *selective = ?* from Thursday.
+
+"Selective like Thursday," Theo said. "The issuer chose which lenders got the better seat. Now there's a grid to prove it."
+
+"Friday, 8 August," Ines said. About 98% of the notes had tendered. The issuer's US subsidiary issued \$462.5mm of SPV notes, for \$300mm of cash, along with \$1,439.2mm of second-out and \$440.7mm of third-out notes, and the company put the discount it captured at about \$115mm (Saks Global press release, 8 August 2025). Case trackers put the old notes left outside at only about \$51mm. That month S&P moved the issuer to selective default (WWD, August 2025), and afterward re-rated it in the CCC category, the rating it would be cut from again in January (Retail Dive).
+
+Kaz looked at the whiteboard for a long time. Kaz's notes on the structural model had a made-up example in them, "\$800mm of new super-priority debt" put ahead of the bonds by a liability management transaction. Here was the real thing: nearly half a billion of new paper and \$1.44bn of second-out ahead of the third-out, which changed what an outside holder would recover without moving anything a structural model could see. "If we'd had a DD, it wouldn't have moved," Kaz said.
+
+"No," Theo said. "That's what Chapter 13's Priming Risk Score is for." He did not re-derive the exchange; Chapter 14 does that, with the arithmetic of who gains and who pays. He drew a second box beside the stack instead: one company, and now four bond lines (the SPV notes, the second-out, the third-out, and the stub of old notes). "In a bond-level panel this is four defaults. In 2026 it'll be four bankruptcy claims. It's one issuer."
+
+"One issuer, one default," Ines said. "A company with forty-seven bonds is one default, not forty-seven. Fit on bonds and the model learns that defaults happen in big capital structures, which is true and useless."
+
+**Beat 4: the courtroom.** "December 2025."
+
+The last pages went quickly, because by then the company was doing what companies do in the last month: running out. About \$126mm of interest due in December went unpaid. The revolver's minimum-availability covenant, Theo's runway line, was raised from \$200mm to \$375mm on 1 December and to \$500mm on 16 December. S&P went to SD again on 7 January 2026 (Bondoro case summary). On 13 January 2026 Saks Global filed for Chapter 11 in the Southern District of Texas (No. 26-90103, Judge Alfredo Perez) with about \$3.4bn of funded debt and a \$1.75bn debtor-in-possession facility, \$1bn of it new-money first-out at SOFR plus 11%, paid in kind. A restructuring support agreement followed on 2 April with \$500mm of exit financing. The plan was confirmed on 5 June 2026: debt cut from about \$3.4bn to about \$1.2bn, the old equity (HBC, Amazon, Authentic, G-III) cancelled, junior creditors owed about \$1.5bn left with a \$20mm litigation trust, and, by the case trackers' accounts, a class of old notes that voted against the plan crammed down. The company emerged on 26 June 2026 as Exemplar Luxury Group (The Fashion Law case timeline; Financier Worldwide, 9 June 2026).
+
+"Thirteen months from new issue to courtroom," Ines said. "Five from the exchange." She turned over her own card. It said: *Label: the price. Feature: the price. Bond: ask who's selling it to you and why.*
+
+"That's not a model," Kaz said.
+
+"No. It's what your model has to learn to beat."
+
+**Grading the cards.** Kaz's label fired on 13 January 2026, eight months after the bonds traded at 47.5 and five months after the exchange closed. A model trained on that label spends the whole of 2025 learning that this issuer is a survivor, and because 65% of 2025's defaults were exchanges like this one, it learns the same lesson from most of the year's casualties. Kaz's trade, holding a "cheap" bond on a 9% PD, was the trade a hard-default model is built to make, and it ended at the bottom of the stack Theo drew, in a case whose junior creditors, owed about \$1.5bn, shared a \$20mm trust.
+
+Theo's label fired on 21 July 2025, two months after 47.5 and eight months before the courtroom. It is codable: an announcement date, a press release, a grid. It is also the date the information existed, which is why the label is stamped at announcement and not at the 8 August settlement; a model that learns from August has learned from news it could not have had in July. His feature, the availability test as a time series, would have shown nothing in May and everything in December, which is a fair description of most liquidity covariates.
+
+Mags's label cannot be coded. Nobody outside the company could have dated the moment the flagship's value left the bondholders' reach, and a label you cannot date is a feeling. But it points at a feature that can be coded: the designation of unrestricted subsidiaries and the investment capacity that allows it, which the basket-parsing of Chapter 25 extracts and the Priming Risk Score of Chapter 13 prices. Her trade, selling at 47.5, was the best card on the table.
+
+Ines graded her own card last, and harshly. The price had known. It had not known *when*, or how, and a desk that sells everything at 47.5 also sells the bonds that come back. That is the jaw of 2003 in the cold open, and the reason the desk builds a PD at all instead of a price screen.
+
+There was one more fact on the last page, and it is the reason the label matters beyond Saks. A distressed exchange is not the end of the story; it is a change of clock. Moody's found that about 46% of 2023's distressed exchanges had already re-defaulted by April 2025, most of them inside a year (Bloomberg Law, 23 April 2025), and its longer study, in the Docket Diary of §11.6.1, puts more than 70% of eventual hard defaults within two years of the soft one. Saks took five months.
+
+Theo put his card back in the folder. "So the purpose of a default label isn't to record the day the company died," he said. "It's to tell the model which day it should have been scared." He looked at the four boxes on the whiteboard. "The label is the model."
+
+The desk label that came out of the replay is *any* of: missed payment beyond grace, bankruptcy filing, distressed exchange, or an LME that impairs the holder (uptier, drop-down with guarantee release, par-reducing exchange), within the horizon, stamped at announcement and counted once per issuer.
 
 ### 11.4.4 What machine learning adds, measured honestly
 
@@ -376,17 +546,31 @@ Alanis, Chava and Shah (2022, *Benchmarking Machine Learning Models to Predict C
 
 > **Ways This Blows Up.** *Paired samples:* matching each defaulter to a healthy survivor makes the test easy, because "it is easier to tell the difference between a Aaa and a defaulting firm than between a lower-quality firm and a defaulter" (Bohn–Stein p.226). *Look-ahead on filing dates:* a 10-K for fiscal year 2025 is dated 31 December 2025 in most databases and filed in March 2026; lag every accounting feature to its filing date. *Survivorship via exchanges:* bonds that leave the index through a distressed exchange vanish from a bond-return panel, so a backtest built on index constituents never sees the loss. *Forty-seven bonds per issuer:* one issuer, one observation (Chapter 7). *Regime calibration:* a model calibrated on 2010–2019, a benign decade with few hard defaults, deployed into 2026's soft-default regime, ranks well and is calibrated wrong.
 
+The look-ahead item in that box has a cousin that lives in the label rather than the features, and it is usually found by someone who was not looking for it.
+
+**Quant-shop life (fictional composite): what we knew when.** *The shop, Marisol and her colleagues are invented, a composite of a systematic credit asset manager; the AUC figures and counts are illustrative. The Saks dates are the real ones from the scene above.*
+
+Tuesday, 7 July 2026, 9:10 a.m. Marisol had been a data engineer at the shop for fourteen months, long enough to know that the worst emails carry the subject line "Minor methodology update." This one had come from the default-event vendor at 7:48 the previous evening, after everyone had gone home. Effective with the overnight file, `event_date` for distressed exchanges would mean the date an exchange *settled*, not the date it was *announced*, "to align with prevailing market convention," and the full history had been restated to match. The overnight job had rebuilt the issuer-month panel from the new file, as it always did. Nobody had told it not to.
+
+By 9:40 she had the diff: 212 issuers whose events had moved, almost all of them exchanges, almost all of them later by two to eight weeks *(illustrative)*. By 10:20 she had the consequence. The walk-forward AUC of the house hazard model, 0.912 on Monday's report, was 0.904 on Tuesday's.
+
+The 11:00 model review was in the small room with the broken blind. The head of risk had Monday's and Tuesday's one-pagers side by side, and she asked the question risk committees exist to ask: why is this number different from yesterday? Marisol said the model had not changed; the labels had. A portfolio manager asked whether 0.904 was worse. Marisol said it was a different question: Monday's number scored the model against announcement dates and Tuesday's against settlement dates, and until every label said which date it was, neither number meant what the one-pager said it meant. "Which one goes in the board deck?" the head of risk asked. Nobody enjoyed the answer, which was "neither, yet." The meeting ended, as they do, with an action item.
+
+The action item was the afternoon, and it was the least glamorous six hours of her quarter. She added four columns to the event table, `announced_at`, `settled_at`, `source` and `as_of`, and changed the loader so that it never overwrote a row: a restatement became a new row with a new `as_of`, and the old row stayed where it was. She rebuilt the panel from point-in-time snapshots, so that in any backtest month the model saw only the events the shop could have known about at that month-end. She wrote a test that failed if any label carried a date earlier than its `as_of`. At 5:50 she rebuilt Monday's run from Monday's snapshot and got 0.912 back to the third decimal, which was the first time that week anyone could say why a number was what it was. She sent the email at 6:05. It was read on Thursday.
+
+The row she used as her example was Saks Global's. On Monday its exchange was dated July 2025, the month it was announced, which is the month the replay's label says the information existed. On Tuesday it was dated August 2025, when it settled. Nobody at the shop had decided that. A vendor had, at 7:48 p.m.
+
 ### Specification for AI Implementation
 
 **Schema.** Panel, one row per `issuer_id`–`month` (int, int): `DD` (float, observed with noise), `runway` (weeks, float in $[0, 13]$), `exret` (monthly excess equity return proxy, decimal), `default_12m` (int 0/1: any default event in months $[t, t+12)$), `de_flag` (int 0/1: that event was a distressed exchange). Rows whose 12-month window extends past the sample end are dropped (censored). Features enter lagged by `lag` months within issuer. Cross-validation folds are issuer-disjoint and time-purged with a 12-month embargo (Chapter 7, §7.7).
 
-Every default model looks brilliant the first time someone runs it, and the first number is almost always the wrong one. A risk committee that asks "why is the out-of-sample AUC 0.99?" is not paying a compliment; it is asking what leaked. The real default history is small, expensive and full of labeling arguments, so it is a poor place to find out whether your estimator, your standard errors and your cross-validation are honest. The desk's habit is to build a world where the truth is known, run the whole pipeline through it, and only then point it at the real thing. A flight simulator is not a flight, but it is where you discover that the landing gear is optional.
+The row that moved was Saks's, and the question the head of risk asked at 11:00 (is the new number worse, or only different?) cannot be settled on the real default history, which is small, expensive and full of labeling arguments: it is a poor place to find out whether an estimator, its standard errors and its cross-validation are honest. Every default model looks brilliant the first time someone runs it, and a risk committee that asks "why is the out-of-sample AUC 0.99?" is not paying a compliment; it is asking what leaked. The desk's habit is to build a world where the truth is known, run the whole pipeline through it, and only then point it at the real thing. A flight simulator is not a flight, but it is where you discover that the landing gear is optional.
 
 The listing is that simulator plus the machinery under test. `simulate_hy_universe` builds 600 issuers over 120 months. Each has a latent distance-to-default that mean-reverts around its own level, shaken by an idiosyncratic shock and by one shock common to every issuer, which is what makes defaults cluster. Observed `DD` is the latent value plus noise; `runway` is a random walk capped at 13 weeks and pulled up by healthy DD; `exret` is an equity-return proxy that moves with changes in DD. The true monthly hazard is a logistic function of latent DD and runway, issuers leave the panel when they default, and the 12-month label marks any default in months $[t, t+12)$. About 30% of defaults are tagged as distressed exchanges, and the last twelve months are dropped because their labels are censored. `lag_features` shifts the covariates within issuer. `fit_logit` is Newton–Raphson with step-halving and an issuer-clustered sandwich covariance. `prior_shift` applies the intercept correction of §11.4.2. `auc` is the rank-based Mann–Whitney form, returning NaN when a fold has no defaults. `purged_group_cv` tests each fold on one group of issuers in one block of months and trains only on other issuers whose months sit more than twelve months from that block.
 
 The checks do the arguing. The signs on DD and runway must be negative. Clustering must widen the DD standard error, and it does, by a factor of about 2.8 in the run. Out-of-sample AUC must clear 0.75 and comes in near 0.89. A feature that peeks at the label must produce an AUC above 0.97, to show what leakage looks like. Treating distressed exchanges as survival must cut the average predicted PD below 90% of the true rate.
 
-Use the harness before touching vendor data and again after every change to the pipeline. Do not read its AUC as a forecast of live performance, because the simulator's hazard is logistic by construction. The edge case that bites is `lag_features`, which shifts by *rows*, not calendar months. The simulated panel has no gaps, so it works; a real panel with a missing month turns a three-month lag into a four-month one, silently.
+The harness runs before anyone touches vendor data and again after every pipeline change of the kind Marisol's Tuesday forced. Its AUC is not a forecast of live performance, because the simulator's hazard is logistic by construction. And `lag_features` shifts by *rows*, not calendar months: the simulated panel has no gaps, so it works, while a real panel with a missing month turns a three-month lag into a four-month one, silently.
 
 *The full listing is [Listing 11.3 in Appendix F](#code-11-3).*
 
@@ -402,19 +586,29 @@ Every systematic HY pitch book contains a sentence like BlackRock's. The sentenc
 
 ### 11.5.1 CAP, ROC, and an identity worth knowing
 
+To answer Ines's question, a desk needs a way of scoring a ranking that does not depend on where you draw the line, and it turns out there is a version of that score a poker player can price in her head.
+
+> **Math, Gently. AUC is a bet.** Take last year's issuers and put every defaulter in one hat and every survivor in another. Draw one name from each and ask the model which is riskier. If it is right, you win the bet. The *area under the ROC curve*, AUC, is nothing more than the long-run share of those bets the model wins: 0.5 is a coin flip, 1.0 is clairvoyance. You can count it by hand. Suppose four issuers defaulted and ten survived, so there are $4 \times 10 = 40$ possible defaulter-survivor pairs. If the model ranks the defaulter above the survivor in 34 of them, $\text{AUC} = 34/40 = 0.85$. The other score you will meet, the *accuracy ratio*, rescales the same bet so that a coin flip scores zero instead of one-half: $\text{AR} = 2\,\text{AUC} - 1$, so 0.85 becomes $2 \times 0.85 - 1 = 0.70$. A pitch book that says "AR of 0.7" and one that says "AUC of 0.85" are describing the same model. Neither says how much of the index the model throws out to catch its defaults; that is the question Ines asked, and it is the next subsection's. The curves behind the two scores, and why the rescaling is exact, are next.
+
 Sort issuers from riskiest to safest by model score. The cumulative accuracy profile (CAP) plots, for each cutoff, the fraction of *all* issuers flagged ($x$) against the fraction of *defaulters* flagged ($Y(x)$). The ROC curve plots the same defaulter fraction against the fraction of *survivors* flagged ($x'$). With $d$ defaulters among $n$ issuers and base rate $f = d/n$, the accuracy ratio is the area between the model's CAP and the diagonal, divided by the same area for a perfect model:
 
 $$
 \text{AR} = \frac{\int_0^1 Y(x)\,dx - \tfrac12}{\tfrac12(1-f)} = \frac{2\int_0^1 Y(x)\,dx - 1}{1-f} .
 $$
 
-The area under the ROC is a probability (Bohn–Stein p.410, below): $\text{AUC} = \mathbb{P}(\text{score}_D > \text{score}_{ND})$, the Mann–Whitney statistic. The two measures are not merely related; they are the same number in two units. Every step down the sorted list moves $x$ by $1/n$, and $1/n$ splits exactly as $dx = f\,dY + (1-f)\,dx'$, because a defaulter step has $dY = 1/d$ and a survivor step has $dx' = 1/(n-d)$. Integrating $Y$ against both pieces, $\int Y\,dY = \tfrac12$ and $\int Y\,dx' = \text{AUC}$, so
+The area under the ROC is a probability (Bohn–Stein p.410, below): $\text{AUC} = \mathbb{P}(\text{score}_D > \text{score}_{ND})$, the Mann–Whitney statistic. The two measures are not merely related; they are the same number in two units, $\text{AR} = 2\,\text{AUC} - 1$, exactly, for scores without ties, as Engelmann, Hayden and Tasche showed in 2003. Report either. An AR from one universe and an AR from another universe with a different base rate are not comparable, and the difference between them is not skill (Bohn–Stein p.426).
+
+#### The Full Derivation: why AR = 2 AUC − 1
+
+Every step down the sorted list moves $x$ by $1/n$, and $1/n$ splits exactly as $dx = f\,dY + (1-f)\,dx'$, because a defaulter step has $dY = 1/d$ and a survivor step has $dx' = 1/(n-d)$. Integrating $Y$ against both pieces, $\int Y\,dY = \tfrac12$ and $\int Y\,dx' = \text{AUC}$, so
 
 $$
 \int_0^1 Y(x)\,dx = \tfrac{f}{2} + (1-f)\,\text{AUC} \quad\Longrightarrow\quad \text{AR} = 2\,\text{AUC} - 1
 $$
 
-exactly, for scores without ties (Engelmann, Hayden and Tasche showed this in 2003). Report either; never compare an AR from one universe with an AR from another universe with a different base rate as if the difference were skill (Bohn–Stein p.426).
+exactly, for scores without ties. Substitute the first expression into the definition of AR and the $(1-f)$ cancels, which is why the identity does not depend on the base rate even though each curve does.
+
+Bohn and Stein give the bet its formal name.
 
 > **[SOURCE EXTRACTION]** *Bohn_Stein_Active_Credit_Portfolio_Management p.410:* "The quantity A, the area under the ROC, is equivalent to the probability that a randomly chosen defaulting loan will be ranked worse than a randomly chosen nondefaulting loan by a specific model"
 >

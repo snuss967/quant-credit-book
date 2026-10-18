@@ -1,0 +1,23 @@
+# Progress Log, Edition 2 (U2): Chapter 20
+
+- [x] 1. [Cold open] EXPAND-SCENE. — Convertible questions, card dealt, three answers, Ines "not yet"; bullets narrated.
+- [x] 2. [§20.1] LIST-TO-NARRATIVE + ANOTHER-SEAT. — Kaz whiteboard walks both trades; Flow Traders seat box added.
+- [x] 3. [§20.2 opening] LIST-TO-NARRATIVE. — Mags two 4:15 calls; thumb on scale; clock; speed.
+- [x] 4. [§20.2.1, before the first equation] MATH-GENTLY, two parts. — Log premium and relay box; three readings now one paragraph.
+- [ ] 5. [§20.2.1, partial adjustment] MATH-GENTLY + FULL-DERIVATION-MOVE.
+- [ ] 6. [§20.2.2] MATH-GENTLY: attenuation.
+- [ ] 7. [§20.2.3] BRIDGE.
+- [ ] 8. [§20.3 opening, §20.3.1] MATH-GENTLY + FULL-DERIVATION-MOVE + LIST-TO-NARRATIVE.
+- [ ] 9. [§20.3.2] MATH-GENTLY, two parts + FULL-DERIVATION-MOVE.
+- [ ] 10. [§20.3.2 after Poker Table] NEW: The Pair (RV beat, PB-13 stressed).
+- [ ] 11. [§20.4.1–20.4.2] LIST-TO-NARRATIVE.
+- [ ] 12. [§20.4.3] MATH-GENTLY + FULL-DERIVATION-MOVE.
+- [ ] 13. [new #### after §20.4.3] NEW-SCENE, Long Scene 1: Eight April 2025.
+- [ ] 14. [§20.5] NEW-SCENE, Long Scene 2: Nineteen March 2020.
+- [ ] 15. [§20.6] EXPAND-SCENE + MATH-GENTLY + arithmetic fix.
+- [ ] 16. [§20.6.2] BRIDGE + ANOTHER-SEAT line.
+- [ ] 17. [§20.7, before the Spec] SHOP-LIFE vignette.
+- [ ] 18. [§20.7] LIST-TO-NARRATIVE.
+- [ ] 19. [§20.8 Desk Debrief] Finder table.
+- [ ] 20. [whole chapter] WHEN-TO-APPLY inside scenes.
+- [ ] 21. [whole chapter] CHECK hygiene.

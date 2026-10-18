@@ -1,0 +1,27 @@
+# Progress Log, Edition 2 U2: Chapter 22
+
+- [x] 1. [Cold open] EXPAND-SCENE (to 1,100-1,400 words) — Cold open now 1,150 words: RFQ log, memo, nickel-versus-three-eighths card.
+- [x] 2. [§22.1 opening list and table] LIST-TO-NARRATIVE — List became Ines grading the card; three-eighths decomposed into time and rent.
+- [ ] 3. [§22.1.1] MATH-GENTLY + FULL-DERIVATION-MOVE
+- [ ] 4. [§22.1, after Desk Myth] ANOTHER-SEAT (dealer desk)
+- [ ] 5. [§22.2 opening] SHOP-LIFE vignette (bank credit-trading desk, operations seat)
+- [ ] 6. [§22.2.1] MATH-GENTLY + FULL-DERIVATION-MOVE
+- [ ] 7. [§22.2.2] MATH-GENTLY (building block: distributions)
+- [ ] 8. [§22.2.3] EXPAND-SCENE -> Long Scene B: "The rule that was approved and never happened"
+- [ ] 9. [§22.3 opening] BRIDGE
+- [ ] 10. [§22.3.1] MATH-GENTLY (random walk and sqrt time)
+- [ ] 11. [§22.3.3] EXPAND-SCENE (to 900-1,200 words)
+- [ ] 12. [§22.4.1] MATH-GENTLY (two-part) + FULL-DERIVATION-MOVE
+- [ ] 13. [§22.4.2] MATH-GENTLY (hinge regression)
+- [ ] 14. [§22.4.3] EXPAND-SCENE -> Long Scene A: "The fortnight the invoice was the market"
+- [ ] 15. [§22.5] LIST-TO-NARRATIVE + WHEN-TO-APPLY inside the scene
+- [ ] 16. [§22.5, after the Poker Table] ANOTHER-SEAT (non-bank market maker)
+- [ ] 17. [§22.6 timeline paragraph] LIST-TO-NARRATIVE
+- [ ] 18. [§22.6.1] MATH-GENTLY (risk-neutral)
+- [ ] 19. [§22.6.2] EXPAND-SCENE (to 800-1,000 words)
+- [ ] 20. [§22.6.2, end] RV beat: scene "A rule is a price, on the short leg" with The Pair box
+- [ ] 21. [§22.7] LIST-TO-NARRATIVE + ANOTHER-SEAT (insurer)
+- [ ] 22. [§22.8.1] MATH-GENTLY + FULL-DERIVATION-MOVE
+- [ ] 23. [§22.8] WHEN-TO-APPLY inside a short scene
+- [ ] 24. [Trend Watches, all sections] placement rule
+- [ ] 25. [§22.9 Desk Debrief] Finder table

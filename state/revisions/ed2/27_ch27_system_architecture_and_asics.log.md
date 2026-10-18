@@ -1,0 +1,25 @@
+# U2 Progress Log: Chapter 27
+
+- [x] 1. [27.0 Cold Open] EXPAND-SCENE (to 1,200–1,500 words). — Dated 28 Oct; Monday review, Hana queue, card, timestamps added.
+- [x] 2. [27.1 Two Clocks] LIST-TO-NARRATIVE + ANOTHER-SEAT. — Kaz-Mags whiteboard argument; non-bank market maker seat box added.
+- [x] 3. [27.1.1 The price of a microsecond] MATH-GENTLY (box 1: e-folding time). — Coffee box, Theo reads table aloud, card graded, Trend Watch moved.
+- [ ] 4. [27.2.1–27.2.3 Ingestion] SHOP-LIFE (second, short vignette, 400–600 words) + MATH-GENTLY (box 2: the lateness quantile).
+- [ ] 5. [27.3 Security Master] EXPAND-SCENE (Theo's third Tuesday, +300 words).
+- [ ] 6. [27.3.2 The bitemporal model] MATH-GENTLY (box 3: two time axes) + FULL-DERIVATION-MOVE.
+- [ ] 7. [27.3.3 Serta rows] WHEN-TO-APPLY inside the scene.
+- [ ] 8. [27.4 Pricing, Risk, OMS/EMS] LIST-TO-NARRATIVE + THE PAIR (RV beat).
+- [ ] 9. [27.5.1 Little, Pollaczek–Khinchine] MATH-GENTLY (box 4, in two parts) + FULL-DERIVATION-MOVE.
+- [ ] 10. [27.5.1 Fan-out] MATH-GENTLY (box 5, short).
+- [ ] 11. [27.5.3 CME Globex halts] EXPAND-SCENE (600–900 words).
+- [ ] 12. [27.6.1 Trigger table] MATH-GENTLY (box 6: the triangle inequality as safety) + BRIDGE.
+- [ ] 13. [27.6.2 Diffusion versus tournament] MATH-GENTLY (box 7: random walk and σ√Δ) + FULL-DERIVATION-MOVE.
+- [ ] 14. [27.6.3 Flash rally] EXPAND-SCENE (1,000–1,400 words).
+- [ ] 15. [27.7 Kill Switches] ANOTHER-SEAT (the bank dealer desk).
+- [ ] 16. [27.7.1 The hierarchy] LIST-TO-NARRATIVE.
+- [ ] 17. [27.7.2 CUSUM] MATH-GENTLY (box 8: evidence that adds up and forgets) + FULL-DERIVATION-MOVE.
+- [ ] 18. [27.7.3 Knight] NEW-SCENE, Long Scene 1 (2,000–2,800 words), promoted to `#### Long Scene: Forty-five minutes, 1 August 2012` with a `#### Decision point` subheading.
+- [ ] 19. [27.7.3 Citigroup → the Citi/Revlon wire] NEW-SCENE, Long Scene 2 (2,000–2,800 words), `#### Long Scene: The default field, 11 August 2020`.
+- [ ] 20. [Spec for AI Implementation (kill switch)] WHEN-TO-APPLY inside the scene.
+- [ ] 21. [27.8 Observability] SHOP-LIFE (main vignette, 700–1,000 words) + LIST-TO-NARRATIVE.
+- [ ] 22. [27.9 Desk Debrief] BRIDGE: Finder table.
+- [ ] 23. [27.10 Resource Graph] BRIDGE.

@@ -3,6 +3,8 @@
 
 ## 10.0 Cold Open: The Model Has No Amygdala
 
+*The desk, its cast and its positions are fictional; the spreads are ICE BofA via FRED.*
+
 At 4:02 p.m. on Thursday, 15 October 2026, the desk's trend book did something it had not done since the spring: it bought protection on CDX HY. The position was not large, but it was large enough that Ines walked over holding her coffee the way she holds a chip she has not yet decided to bet.
 
 "Theo. Why are we long protection? Is the model panicking?"
@@ -13,7 +15,29 @@ Theo had been on the desk three weeks, and he had learned to answer a question a
 
 "A 60-day EWMA is what an amygdala looks like when a quant writes the spec," Ines said.
 
+Theo pulled up the sleeve's blotter, partly to have something to do with his hands. The trend book was not one rule but a small committee of them, and the committee had not voted unanimously. The fast sleeve, a 20-day average of the CDX HY excess-return index set against a 120-day one, had crossed below zero at 3:41 and sent a ticket for protection *(illustrative, like every position in this scene)*. The slow sleeve, the one that asks only whether the index made money over the last twelve months, was still long risk. Until about 3:59 Theo had assumed that fifty-five basis points of widening would have turned it too.
+
+"The twelve-month sleeve hasn't moved," he said. "Fifty-five basis points wider, and it still thinks we're in an uptrend."
+
+"Does it?" Ines said.
+
+He did the arithmetic on the back of a cleansing-announcement template he still kept in his drawer, because old paper is good for new sums. CDX HY pays its spread every day, whether anyone is watching or not. At roughly four and a half percent of running spread and a duration of about four, a year of that carry pays for roughly a hundred and twelve basis points of widening before the twelve-month return goes negative. "We've used up half of it," he said. "Fifty-five out of a hundred and twelve. The slow sleeve isn't ignoring the widening. It's being paid to sit through it."
+
+Kaz wrote "55/112" on a yellow sticky note and stuck it to the bottom of their monitor, which from Kaz is the highest compliment available.
+
+"And before you ask," Kaz said, turning the monitor so the row could see it, "the long was already smaller before anything flipped." On the screen was the sleeve's notional: a line that had drifted down for three weeks like a tide going out. "The risk forecast scales with the spread. Duration hasn't moved, spreads went from 2.68 to 3.23, so a position that targets constant risk is 2.68 over 3.23 of what it was." They typed it into the terminal's calculator, which is the only thing Kaz trusts less than a vendor feed. "Zero point eight three. We sold seventeen percent of the long without a single signal changing its mind."
+
+"Who told it to do that?" Theo asked.
+
+"Nobody. The volatility forecast. Wider spreads move more, so the same risk budget buys less." Kaz paused. "It is a forced seller with a very good excuse."
+
 Mags spoke from the end of the row without turning her chair. "It looks like April of last year: a hundred and nineteen basis points in three sessions, and all of it back inside six weeks. It also looks like the summer of 2007, and it looks like nothing at all." Now she turned. "Back in my day we had trend-following in credit. It was called 'Sal stopped picking up the phone.' When your dealer stopped returning calls, you sold whatever you could and asked questions at Christmas."
+
+She held up one finger for each future, the way she counts a creditor class. "April. The index was 3.42 on the second, after the Rose Garden, and 4.61 on the seventh. Three sessions. By the middle of May it was back near three, and anyone who sold on the seventh paid for the privilege." A second finger. "2007. Nothing happened in a hurry. It widened all summer, it widened all autumn, it was still widening a year later, and Baa paper did not stop until it was six hundred and sixteen over Treasuries on the fourth of December 2008. If you were short in August 2007 you had sixteen months of being right." A third finger. "Nothing. August 2024. The index touched 3.93 on a Monday, on a yen trade nobody in this building could have explained to you on the Friday, and by September you had to look at a chart to remember it."
+
+"Same tape on the first day," Kaz said. "All three."
+
+"Same tape on the first day," Mags agreed. "Different bonds by Christmas."
 
 "So which one is it?" Theo asked.
 
@@ -23,11 +47,23 @@ Theo looked at the position. In his old job a bond at 60 always had momentum, to
 
 The rest of the chapter answers the question on Theo's screen: **when is a move in credit spreads information about the next move in credit spreads, and how much should you bet on it?**
 
-By the end of this chapter you will be able to: build a time-series momentum (TSMOM) signal on credit excess returns without the sign, roll, and quoting errors that break most first attempts; show that volatility targeting in credit is DTS scaling under another name, and explain why that makes trend followers into forced sellers; combine trend with carry and value in a single forecast whose coefficients you estimate, without joining either tribe; use equity returns as a leading credit trend signal and test whether the lead is real or an artifact of stale bond marks; explain trend's crisis convexity, and its V-shaped failures, from the shape of the payoff; and hand ROBO a specification it can implement without inventing a decade of whipsaw.
+It answers it the only honest way available, which is not by telling Theo which of Mags's futures he is in. Each of her futures has a formula somewhere in the next fifty pages: the carry hurdle he just found on the back of a template, the volatility law that sold seventeen percent of the long while nobody was looking, the blend in which carry and value pull against trend exactly after a widening like this one, the equity market that tends to move before the bond prints, the payoff shape that pays in a 2007 and bleeds in an April, and the jump that makes all of it the wrong tool for a single name. None of the formulas picks a future. Together they say what the position is worth in each one, and how to keep the bet small until the market says which.
+
+Ines put her coffee down on Theo's desk, the way she puts down a chip she has decided to bet, and slid a blank index card out from under it.
+
+"By Monday," she said, "write three things: the size you want, the speed you want it to think at, and the print that makes you cover."
+
+"And if I pick the wrong future?"
+
+"Then you'll have been wrong in writing, which puts you ahead of most of this table." She picked the coffee back up. The card stayed on Theo's desk, white and blank. Across the row, the sticky note on Kaz's monitor still said 55/112.
 
 ## 10.1 What a Trend Is, in Credit
 
-Start with the instinct the reader already has. Every RSSG banker has run a trend strategy without calling it one. When a client's bonds fell five points on a weak quarter, the question in the room was never "is this bond cheap?" It was "who is selling, and are they done?" A stop-loss is a trend rule. So is an issuer DTS cap, a "reduce on downgrade" policy, and a risk committee that meets after a bad month. The systematic desk takes that reflex, writes it down, gives it units, and asks the uncomfortable question the committee never asks: *does it make money, net of the times it sold the low?*
+*A remembered meeting; the client, its bonds and its holders are fictional.*
+
+Theo had sat in that room. In his third year at PJT a client he will not name, a packaging company with a sponsor and a revolver due in eighteen months, printed a quarter that missed by less than anyone had feared, and its bonds fell five points by lunch anyway. The CFO wanted to know whether the bonds were cheap. The managing director did not answer that question. He asked a different one, "who is selling, and are they done?", and over the next fortnight the answer arrived in pieces. A long-only manager had hit its stop-loss on the name. A relative-value fund had breached its issuer DTS cap without trading at all, because DTS rises with the spread and the widening had done the breaching for it. An insurance mandate had a "reduce on downgrade" clause and the agency had put the credit on watch. A hedge fund's risk committee had met after a bad month, as risk committees do, and come out smaller. Not one of those sellers would have called itself a trend follower. Each was running a rule that sold after the price fell, and between them they were the trend. Theo's managing director had a phrase for the moment the selling stopped, which was "the last guy with a rule is out," and he was usually right about it about a week late.
+
+The systematic desk takes that reflex, writes it down, gives it units, and asks the uncomfortable question the committee never asks: *does it make money, net of the times it sold the low?*
 
 Two words get used interchangeably on credit desks and should not be.
 
@@ -51,13 +87,31 @@ Trend-following was born in futures because futures are cheap to trade, cheap to
 
 The on-the-run index CDS is *unfunded* (no cash changes hands beyond the upfront), *standardized* (fixed coupons, quarterly IMM payment dates, a new series every 20 March and 20 September), *cleared*, and quoted by dealers all day. It is born an excess return: there is no Treasury leg to hedge, because selling protection carries no interest-rate duration to first order. Every one of those properties is missing in a cash bond.
 
-Kaz had once heard Ines say "Crossover" on a call and spent twenty minutes drafting what he believed was a cross-default clause. "It's 75 sub-investment-grade European names, Kaz," Ines told him. "The only thing it crosses is your P&L in March."
+Kaz had once heard Ines say "Crossover" on a call and spent twenty minutes drafting what they believed was a cross-default clause. "It's 75 sub-investment-grade European names, Kaz," Ines told him. "The only thing it crosses is your P&L in March."
 
 **Sign conventions, which cause more bugs than any model choice.** Spread up means price down. "Long risk" means you *sold* protection and are long credit. Throughout the chapter a weight $w>0$ is long risk and $w<0$ is long protection. CDX HY and the Crossover's price-quoted cousins move the opposite way to their spreads. ROBO will happily build a strategy that is long when spreads tighten and *also* long when the price rises, if both columns are named `level`. Name them `spread_dec` and `price_pts`.
 
+#### Quant-Shop Life: The Tuesday of Roll Week
+
+*Fictional composite: a systematic asset manager running long-only credit with a small index overlay. The firm, its vendor, the people, the ticket and every number are invented.*
+
+The overnight job failed at 2:14 a.m. on Tuesday, 22 September 2026, and nobody noticed until Lucía Ferrer, a second-year research associate, got in at 7:40 and saw one red line on a dashboard of green ones. The job rebuilds the CDX HY excess-return history from the vendor's file every night, from the first series to yesterday, and then runs a suite of guards over it. The history is what the overlay's trend signal is computed from, and nobody wants to learn from the PM that it is wrong. The guard that failed was the dullest in the suite: on any day when the index's spread did not move, it insists that the day's return be the carry and nothing else, the spread times the days elapsed over 360. It had passed every night for three years. Last night it failed on exactly one day, Friday 20 September 2019.
+
+She spent the morning finding out why. The answer was in a release note the vendor had sent the previous Friday, which nobody on her team had opened, because vendor release notes arrive at about four a week and are written to be ignored. From the September 2026 roll the vendor had changed how it labeled series, and it had applied the change to the whole history. On each roll date the file now carried two rows under the same generic label, the old series and the new, and her pipeline's de-duplication kept the second. On 20 September 2019 that meant subtracting the old series' Thursday close from the new series' Friday close. The new series is three months longer and holds a different hundred names, so it trades wider: about ten basis points wider that day *(illustrative)*. The pipeline booked the gap as a ten-basis-point widening that never happened, roughly forty cents of loss per hundred of notional at a duration near four. It fell on a day when the old series had closed unchanged, which is the only reason the guard could see it.
+
+The guard saw one day. Lucía checked all of them. Every roll date in the restated history carried the same phantom, twice a year, every year: a fake widening on the day the series changed. On the roll dates when the overlay had been short, September 2008 and March 2020 among them, the phantom was a fake gain. The backtest's crisis alpha had been flattered by the calendar.
+
+The fix was eleven lines: carry a `series_id` on every row and refuse to compute a return across two of them. The ticket took longer to write than the fix. She opened QR-3307, titled it "Vendor relabel splices series on roll dates; returns computed across series," attached the 2019 row and the list of forty-one roll dates, and, because she was already annoyed, added an item she had been meaning to raise for a month: the vendor annualizes volatility with 261 days and her code with 252, and the difference rescales every volatility-targeted weight by about 1.8%. Nobody had ever decided which was right. Somebody needed to.
+
+At 4:30 she wrote the e-mail to the PM, which is the part of the job no recruiting brochure mentions. "Rebuilt CDX HY ER history after a vendor relabel. Backtest Sharpe of the overlay's trend sleeve moves from 0.61 to 0.58 (2006–2026). About two-thirds of the change is the roll-day fix, which removes fake gains on roll dates when the sleeve was short, mostly 2008 and 2020; the rest is moving annualization to 252 to match the risk system. Production computes returns within series, so no live position is affected." The PM replied at 4:41 with "thanks" and a question nobody could answer, which was why a vendor would restate twenty years of history during a roll week.
+
 ### 10.1.2 Trend on returns, not on spread levels: the carry hurdle
 
-The first derivation is short, and it reverses a desk intuition. Let $s_t$ be the spread in decimal, $D^{\text{spr}}$ the spread duration, and $\Delta t$ the accrual year fraction (ACT/360 for CDS premium). To first order, the excess return of a long-risk position over one period is
+The first derivation is short, and it reverses a desk intuition, which is why the sticky note on Kaz's monitor says 55/112 and not 55/0.
+
+> **Math, Gently.** *Excess return, and why a falling price can be a good year.* Picture a landlord whose house is worth 2% less at the end of the year than at the start, in a year in which it paid 4.5% in rent. Nobody calls that a losing year: the rent paid for the dent and then some. A long-risk credit position is that landlord. It collects the spread every day as rent (the *carry*), it marks itself down when spreads widen (the *price change*), and once a Treasury hedge has taken away the interest-rate part, what is left is the *excess return*: rent plus dent. Put numbers on it. High yield at 450 bp, spread duration 4, widens by 60 bp over a year. The dent is $-4 \times 60 = -240$ bp; the rent is $+450$ bp; the year's excess return is $+210$ bp. The spread chart went the wrong way all year and the ledger went the right way, so a rule that reads the chart calls this a downtrend and a rule that reads the ledger calls it an uptrend. In symbols, one period's excess return is carry minus duration times the spread change, $s\,\Delta t - D\,\Delta s$. Add up a year of those and ask how large the widening has to be before the sum turns negative: that number is the hurdle, and it is next.
+
+Let $s_t$ be the spread in decimal, $D^{\text{spr}}$ the spread duration, and $\Delta t$ the accrual year fraction (ACT/360 for CDS premium). To first order, the excess return of a long-risk position over one period is
 
 $$
 r^{ex}_{t+1} \approx s_t\,\Delta t - D^{\text{spr}}\,\Delta s_{t+1}.
@@ -75,11 +129,19 @@ $$
 s_t - s_{t-h} > \frac{\bar s\,h\,\Delta t}{D^{\text{spr}}} \equiv \Delta s^{*}_h .
 $$
 
-This is the **carry hurdle**. For high yield at $\bar s = 4.5\%$ with $D^{\text{spr}} = 4$ and a 12-month window ($h\,\Delta t = 1$), $\Delta s^*_{12} = 0.045/4 = 112.5$ bp *(illustrative)*. HY spreads must widen by more than about 110 bp over a year before a return-based 12-month trend follower goes short. A spread chart that "looks like it's trending wider" by 60 bp is, on a return basis, a modest uptrend, because the carry paid for the widening. For IG at 1.0% spread and $D^{\text{spr}}=7$, the hurdle is about 14 bp. That asymmetry matters: the same rule is quick to turn short in IG, where carry is small relative to duration, and slow in HY, where carry is large relative to duration. Figure 10.1 plots the hurdle and shows, on two years of real HY data, how often it separates a rule on spread changes from a rule on returns.
+This is the **carry hurdle**. For high yield at $\bar s = 4.5\%$ with $D^{\text{spr}} = 4$ and a 12-month window ($h\,\Delta t = 1$), $\Delta s^*_{12} = 0.045/4 = 112.5$ bp *(illustrative)*. HY spreads have to widen by more than about 110 bp over a year before a return-based 12-month trend follower goes short; the landlord's 60 bp year is comfortably inside it. For IG at 1.0% spread and $D^{\text{spr}}=7$, the hurdle is about 14 bp. Figure 10.1 plots the hurdle and shows, on two years of real HY data, how often it separates a rule on spread changes from a rule on returns.
 
 ![Figure 10.1: The carry hurdle is the widening a 12-month return rule needs before it goes short, about 14 bp for IG and 112.5 bp for HY (left), so over the 534 trading days with a full 12-month window a rule on spread changes was short on 150 days while a rule on returns was short on only 13 (right). Source: ICE BofA US High Yield OAS via FRED (BAMLH0A0HYM2), 2 October 2024 to 15 October 2026, with the hurdle computed as the trailing 252-day mean OAS divided by D = 4 (assumed). Illustrative: the left panel is the formula of §10.1.2 with the spreads and durations shown.](assets/figures/ch10_carry_hurdle.png)
 
-Two consequences follow. First, a trend rule built on the 12-month change in OAS is a *different strategy* from one built on 12-month returns, and the difference is the carry hurdle. Write the one you mean in the spec. Second, high carry makes a trend follower structurally long credit in normal times, which is why, as §10.6 shows, much of credit trend's return is a credit beta that changes its mind.
+Ines had the chart on the whiteboard by half past four that Thursday, two bars in blue marker, one short and one tall. "Fourteen," she said, tapping the short one, "and a hundred and twelve. Same rule, same twelve months. In IG the carry is small next to the duration, so the rule turns as soon as spreads lean on it. In HY the carry is large next to the duration, so the rule sits through a widening that would have flipped IG twice. A desk that runs one lookback across both is running two strategies under one name."
+
+"Then the spec has to say which one it means," Theo said.
+
+"It has to say which one it means. A rule on the twelve-month change in OAS and a rule on twelve-month returns are different strategies, and the difference between them is this bar." She drew an arrow from the tall bar to the edge of the board. "Now the part nobody likes. In normal times the rent keeps paying, so the HY rule stays long. For most of any year a credit trend follower is a credit-beta holder that has reserved the right to change its mind." (Section 10.6 turns that sentence into a payoff diagram.)
+
+"IG prints five to nine hundred trades a day," Kaz said. "It can afford to change its mind often."
+
+"It can afford to," Ines said. "Whether it ought to is a turnover question, and turnover has its own section." (It is §10.8.) She capped the marker. The venue Kaz was pointing at did not exist in that form five years ago, which is the subject of the box below.
 
 > **Trend Watch: The index CDS market becomes the trend follower's venue, 2021–2026.** *What changed:* index CDS activity reached records while single-name activity stalled. ISDA's research note of 29 July 2026 puts total CDS trading at \$41.8tn in 2025, against a prior peak of \$38.7tn in 2022 and \$31.4tn in 2023. Index products were 93.3% of that, a record \$39.0tn (\$36.4tn in 2022, \$28.1tn in 2023), while single-name activity peaked at \$3.3tn in 2023 and fell to \$2.8tn in 2025. CDX.NA.IG was 43.4% of 2025 index activity, iTraxx Europe 32.4%, CDX.NA.HY 10.4%, and iTraxx Crossover 7.7%. CDX.NA.IG prints 500–900 trades a day, with more than 900 in Q2 2025. In stress the venue gets busier: index activity in Q1 2020 ran 78.1% above its trailing average, and in Q2 2025 it ran 20.9% above while single-name activity fell 20.7%. H1 2026 activity was \$27.4tn, up 27.8% year on year (ISDA, *CDS Market Dynamics: Five Years of Activity and a Record 2025*). Clearing and electronic execution are close to universal: more than 99% of the three benchmark indices cleared, and SEF share was 96.5–98.0% in H1 2025 (ISDA SwapsInfo H1 2025). Clarus reports cleared USD CDX of \$3.94tn in March 2026, up 46% year on year. *The listed route:* Cboe iBoxx credit futures block trades topped \$1bn a month for a second month in August 2026, and IBIG block activity overtook IBHY's for the first time (The DESK, 16 October 2026). *What it means for the desk:* the instrument trend needs, cheap two-way risk in size during a sell-off, now exists in credit at index level. It does not exist at single-name level, where activity is shrinking. Credit trend is an index strategy, and §10.9 explains why single-name trend has to be a different engine.
 
@@ -98,6 +160,10 @@ r^{\text{TSMOM}}_{t+1} = \frac{1}{N}\sum_{i=1}^{N} w_{i,t}\, r^{ex}_{i,t+1}.
 $$
 
 Here $h$ is the lookback (12 months in the headline result), $\hat\sigma_{i,t}$ is the ex ante annualized volatility, and $\sigma_{\text{tgt}}$ is the volatility target per instrument. MOP estimate $\hat\sigma$ from an exponentially weighted average of squared daily returns with a center of mass of 60 days, and they set $\sigma_{\text{tgt}} = 40\%$ per instrument so that the diversified portfolio lands near a conventional overall volatility. Both are their choices, not laws. The weight is known at $t$ and earns the return from $t$ to $t+1$. Get that one-period lag wrong and the backtest will look wonderful, because you will have taught the model to read tomorrow's newspaper.
+
+That one phrase, "exponentially weighted with a center of mass of 60 days," is doing most of the work in every volatility-targeted strategy in this book, including the one that sold seventeen percent of the long in the cold open.
+
+> **Math, Gently.** *An EWMA is a memory with a half-life.* Picture a bucket with a slow leak. Every evening you pour in today's squared return; overnight the bucket loses one sixty-first of whatever it holds, so yesterday's pour is worth 60/61 of what it was, and the day before's is worth $(60/61)^2$. The level in the bucket is the variance estimate: a quiet month lets it drain, one violent day fills it at once, and nothing ever quite leaves. The leak rate sets the memory. With $\delta = 60/61$, a return from 60 trading days ago still counts for $\delta^{60} pprox 0.37$ of what today's counts for, one from 180 days ago for about $0.05$, and the half-life, the age at which a day's weight has halved, is about 42 trading days. A fixed 60-day window would count day 60 fully and day 61 not at all, and its estimate would lurch on the day a bad print aged out; the bucket fades the print instead. The formula below is the bucket written down, with 261 turning a daily variance into an annual one.
 
 The EWMA with center of mass 60 days has decay $\delta$ satisfying $\delta/(1-\delta) = 60$, so $\delta = 60/61$, and
 
@@ -119,7 +185,7 @@ $$
 \text{sig}^{\text{ens}}_{t} = \frac{1}{|\mathcal H|}\sum_{h\in\mathcal H}\operatorname{sign}\big(M^{(h)}_t\big).
 $$
 
-In the first, $I_t$ is the cumulative excess-return index (never the spread), $f<s$ are fast and slow spans, and $\hat\sigma^{\text{lvl}}_t$ is the volatility of the gap between the two averages, which makes the argument a z-score. SG's published CTA "Trend Indicator" is a 20-day/120-day crossover (SG Prime Services, May 2025). In the second, $\mathcal H = \{1, 3, 6, 12\}$ months gives a signal in $\{-1, -\tfrac12, 0, \tfrac12, 1\}$ that scales down when horizons disagree. Dynkin's equity-momentum signal for credit (§10.5) uses the same multi-horizon idea for the same reason.
+In the first, $I_t$ is the cumulative excess-return index (never the spread), $f<s$ are fast and slow spans, and $\hat\sigma^{\text{lvl}}_t$ is the volatility of the gap between the two averages, which makes the argument a z-score. If the sign function is a light switch, the tanh is a dimmer: near zero it turns the position up gradually, and far from zero it saturates at full size. SG's published CTA "Trend Indicator" is a 20-day/120-day crossover (SG Prime Services, May 2025). In the second, $\mathcal H = \{1, 3, 6, 12\}$ months gives a signal in $\{-1, -\tfrac12, 0, \tfrac12, 1\}$ that scales down when horizons disagree. Dynkin's equity-momentum signal for credit (§10.5) uses the same multi-horizon idea for the same reason.
 
 ### 10.2.3 Building the return series correctly
 
