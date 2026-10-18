@@ -112,3 +112,30 @@ A full model would also send the exchange face into the re-default corridor, $\P
 
 **If you got this wrong, read:** §5.1.5 and its hazard-rate box for (a), and §5.1.3 for (b). For (c), read §5.6.1 (the three doors, the re-default clock, and "When the third state earns its parameters") and the Serta case in §5.6.2.
 
+**Z.05.6: Two coins after the trim**
+
+**Answer:** (a) The Kestrel spike is $60 \times (0.97 - 0.40) = -\$34.2$mm, at odds of $0.0335/0.6 = 5.6\%$ a year. The Halvorsen spike is $35 \times (0.78 - 0.40) = +\$13.3$mm, at $0.14/0.6 = 23.3\%$. (b) The expected jump P&L is $0.2333 \times 13.3 - 0.0558 \times 34.2 = 3.10 - 1.91 = +\$1.19$mm a year, and the jump standard deviation is $\sqrt{61.7 + 31.6} = \$9.66$mm. (c) Matching Kestrel's DTS takes $70{,}190/(0.78 \times 2.3 \times 1{,}400) = \$27.9$mm of Halvorsen face, and that short alone leaves $+\$0.57$mm. The other \$7.05mm of short adds $+\$0.625$mm. (d) Two lines. The short owes the lender Halvorsen's 7.25% coupon on \$35mm, about \$2.54mm a year. The borrow fee, reset to 300 bp on \$27.3mm of market value, is about \$0.82mm a year. Together that is \$3.36mm of cash cost against \$1.19mm of expected jump gain.
+
+**How:** Strip each leg to §5.1.2's coin: a spike of face times (price minus recovery), with $\mathbb{Q}$ odds $\lambda \approx s/(1-R)$. Independent coins add their means and also their between-world variances:
+
+$$
+\operatorname{Var} = 34.2^2 \times 0.0558 \times 0.9442 + 13.3^2 \times 0.2333 \times 0.7667 = 61.7 + 31.6 = 93.3 .
+$$
+
+The jump s.d. has barely moved from April's \$9.8mm, but its make-up has. The long alone is \$7.85mm. The coins-only skew of the pair is now about $-1.8$, against $-1.4$ in April, because the short's spike has shrunk from \$19.5mm to \$13.3mm and offsets less of the Kestrel tail.
+
+For (c), DTS per dollar of face is $P\,D^{\text{spr}}\,s$, and the expected jump per dollar of face is $s\,(P-R)/(1-R)$. Their ratio does not contain the spread:
+
+$$
+\frac{\text{expected jump}}{\text{DTS}} = \frac{P-R}{(1-R)\,P\,D^{\text{spr}}} .
+$$
+
+It is 0.272 for Kestrel and 0.353 for Halvorsen. In April the two were 0.270 and 0.272, which is why the April match netted to about $-\$10{,}000$. Halvorsen's fall in duration from 3.4 to 2.3 raises its ratio by 48%. Its fall in price from 90 to 78 lowers it by 12%, because there is less room to fall to 40. So even a DTS-matched \$27.9mm short carries \$0.57mm more expected default gain than the long carries expected loss. The \$7.05mm the 2:40 trim left above the match adds $0.2333 \times 7.05 \times 0.38 = \$0.625$mm.
+
+For (d), the +\$1.19mm is a $\mathbb{Q}$ number. The 23.3% is what the market charges for Halvorsen's coin, and the short pays that charge every year Halvorsen survives: in the coupon it owes the lender, and in the pull to par running against it. The fee's jump from 50 bp to 300 bp is the price of a crowd wanting to hold the same coin. Add the long's \$3.6mm coupon and roughly \$0.6mm of financing, and the pair now runs at about $-\$0.36$mm a year before the CDX HY carry.
+
+**The trap:** In (b), people net the spikes ($34.2 - 13.3 = \$20.9$mm) and call that the pair's tail, or they subtract the variances. Independent coins add variance even when their means offset. In (c), the trap is assuming a DTS match is a jump match. It is one only when prices and durations are close, as they were in April, because DTS scales with duration and the jump does not (§5.3.1). A second trap is putting all of the +\$1.19mm down to the DTS overhang and treating the CDX HY sale as the fix. The index moves neither spike. In (d), the trap is taking a positive expected jump P&L as free. At $\mathbb{Q}$ odds the short's expected gain is just what it pays in carry. Under $\mathbb{P}$ the odds are lower and the gain is smaller, while the coupon and the fee go out in cash every day.
+
+**If you got this wrong, read:** The Pair box at the end of §5.1.4 (PB-01 in April), then §1B.2 for the orange line, the 2:40 trim and the carry lines. §8D.4, "Two Jump Processes," has the expected-jump formula, and §5.3.1's Dynkin annotation explains why a jump to default ignores duration.
+
+<!-- STATUS: COMPLETE -->

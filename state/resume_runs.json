@@ -9,23 +9,6 @@
    "args": "items [] + chapters 18_ch18b, 09_ch09b, 13_ch13b, 17_ch17b, 10_ch10b (see the 15:10 ledger entry)"
   },
   {
-   "name": "appZ-1-7",
-   "task": "wtbnk5xyq",
-   "runId": "wf_dd657811-90b",
-   "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/ed2-appz-solutions-wf_dd657811-90b.js",
-   "args": {
-    "stems": [
-     "01_ch01_anthology_and_landscape",
-     "02_ch02_revolutions_in_credit_trading",
-     "03_ch03_pjt_rssg_cognitive_bridge",
-     "04_ch04_inside_the_systematic_credit_industry",
-     "05_ch05_credit_probability_distributions",
-     "06_ch06_merton_and_intensity_models",
-     "07_ch07_ml_on_small_sample_credit_data"
-    ]
-   }
-  },
-  {
    "name": "appZ-8-14",
    "task": "w1axsmeuy",
    "runId": "wf_b3bcb670-77c",
