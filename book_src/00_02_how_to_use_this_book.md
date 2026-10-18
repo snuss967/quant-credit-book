@@ -238,3 +238,143 @@ The confidence column turned out to be the most useful thing in the hand history
 
 The ninety days end where Chapter 3-B begins. Its §3B.8 takes over on the first day of the seat, with a plan that is shorter than Theo expected, because the desk does not want a plan from a new hire; it wants evidence that he can be given a clock. In days 1 to 30 he reads the feed diff, the security master, the explain and the risk pack every morning, until he can predict the unexplained line before he sees it; by days 61 to 90 he ships one feature through the first rung of the deployment ladder (replay, then paper, §27.8). The artifact that bridges the two plans is the RSSG Edge Ledger of §3.5: the inventory of what the banker brings, with a decay rate on each skill. Theo drafted his rows in the first month at the kitchen table, revised them after the Part II gate, and brought them to the desk on day one. It was the first document anybody on the desk asked him for, and the only one from the summer that he had written entirely himself.
 
+## 0.7 Run the Book
+
+*Tuesday 11 August 2026, 11:15 p.m., day forty-five of the plan. Fictional.*
+
+Theo had five CDS quotes for a single-B issuer, copied from a public source for a project, and a theory that the book's bootstrap in Appendix F would turn them into a hazard curve faster than his own version, which had taken a weekend. He pasted the quotes over the listing's example quotes, ran it, and watched it stop.
+
+`AssertionError: I: bootstrap reprices every quote`
+
+Above it, a warning: a negative hazard on the bucket ending at five years, *check quotes/recovery*.
+
+It was late, and he had a banker's reflex about documents that fail at 11 p.m., which is that someone else drafted them badly. He wrote to Kaz, who had given him an email address at the end of the interview "in case the Sharpe ratio keeps you up at night." *I think the book's code is broken. Chapter 6 bootstrap. Assert fails on real quotes.*
+
+The reply came four minutes later, which said something about Kaz's evenings. It was one line.
+
+*That's the exercise.*
+
+It was the same bucket his own bootstrap had let through without comment the week before (section 0.5). His version had produced a small negative number and carried on. The book's version had refused to carry on, by design, because a negative hazard is not a small number but an impossible one, and the listing's author had decided long before Theo arrived that the code would stop rather than hand an impossible number to whatever came next. A failing assert is not a bug report. It is the grade, delivered by someone who thought about the mistake before you made it.
+
+The mechanics, so that nothing about running the code is a mystery.
+
+**What you need.** Python 3.9 or newer (the floor the README sets, from the pinned packages and the annotations the listings use) and the seven packages in `requirements.txt`: NumPy, SciPy, pandas, scikit-learn, statsmodels, networkx and PyMuPDF. The listings themselves lean almost entirely on NumPy, SciPy, pandas and the standard library; PyMuPDF serves the tooling that indexes the source PDFs, not the reader.
+
+**Where the code lives.** Since the second edition, the chapters carry no code at all. Every listing has moved to Appendix F, grouped by chapter (§F.6 holds Chapter 6's listings, §F.7-B holds 7-B's), each with an anchor of the form `#code-6-6`, and each chapter explains in prose, at the point where a listing used to sit, what it computes, why it is built that way, and when it breaks. Within one chapter's section the listings accumulate like the cells of a notebook: a later one may use any name an earlier one defined, so a listing pasted on its own will fail with a `NameError` until the ones above it are pasted too. Nothing carries over from one chapter's section to the next.
+
+**How to run it.** The checker, `tools/check_book.py`, takes any Markdown file, joins its ```` ```python ```` blocks in order into one script, skips any block whose first line is `# sketch`, and runs the script in a fresh temporary directory, with a ten-minute timeout by default. Pointed at a chapter it now finds nothing to run, because the chapters hold no code. Theo's habit, which is as good as any, was to save one chapter's section of Appendix F as its own Markdown file and point the checker at that, with `--file` and `--run-code`. Pointed at the whole appendix, the checker runs every chapter's listings in one interpreter, one after another, which tests the appendix rather than any one chapter.
+
+**The missing directory.** The reusable engines (`bondmath.py`, `creditstats.py`, `risk_model.py` and the rest) are meant to live in `book_src/lib/`, where a later chapter's code can import them. At the time of writing that directory does not exist, and the change that would put it on the checker's path has not landed. Until it does, the README's workaround applies: set `PYTHONPATH` to the absolute path of `book_src/lib` before running the checker, which passes your environment through, or paste the defining listing above the ones that need it. This is the copy-and-paste import that section 0.2 apologised for.
+
+**What "(illustrative)" means.** The tag appears more than four hundred times in the book's source. A number so marked is a worked example on the book's fictional issuers (Halvorsen, Kestrel and their neighbours), or a replay of a real episode with invented sizes, prices or P&L. It is never a quotation of a market. Numbers that come from a source say so, with the source. The distinction matters most in exactly the place readers are most tempted to ignore it: a worked example whose numbers look plausible enough to be real is the one most likely to be repeated in an interview as though it were.
+
+#### Quant-Shop Life: Ticket Number Four
+
+*A bank's credit-trading desk, the first two weeks of a new analyst. A fictional composite; the bank, the people and the tickets are invented, and the process is a typical one rather than any firm's.*
+
+On day one there is a badge, a laptop, a desk with someone else's sticky notes still on the monitor, and a list of mandatory training modules that the analyst completes by Thursday: the code of conduct, information barriers, anti-money-laundering, the personal-trading policy, and the policy on the personal-trading policy. Her brokerage accounts go on a disclosure form. Any trade in them now needs pre-clearance, which she will discover in March when she tries to sell a mutual fund.
+
+On day two she files a request for market-data entitlements. Each vendor feed is a licence with a cost centre, so each needs the desk head's approval and the market-data team's, in that order, and the desk head is travelling. The evaluated-price feed arrives on day six. The bond reference data, without which the evaluated prices are a column of numbers attached to identifiers nobody can read, arrives on day nine.
+
+The laptop cannot reach the public package index. Packages come from an internal mirror, two minor versions behind, and anything not already on the mirror needs a ticket. She files the first ticket on day three, for a statistics package. On day four she discovers that a listing she wants to run also needs a graph library, and files a second ticket. The third, on day five, is for a package that turns out to be on the mirror under a different name. The fourth is the one she still tells people about: a request to approve a version of a package that the mirror already had, filed because the error message said a version "or later" and she had not read the "or later."
+
+Her first query against real data runs on day nine. Her desk head's only comment at the Friday review is that day nine is good for this floor. The analyst who joined the same week from a systematic fund, and who had run the book's listings on his own laptop over the summer in a clean environment, filed one ticket on day two listing every package he would need. He had his first query on day six, and he spent days six to nine finding out that the evaluated prices for one sector were three days stale, which became the first thing anybody on the desk thanked him for. The transition coach's review has a phrase for the gap between them: time to first compute. Nothing in it is about talent.
+
+#### The hand history as a listing
+
+The Sunday ritual of section 0.6 is a small computation, and by the third week Theo wanted it done the same way every week, which is the usual reason anything on a desk becomes code. His first request to ROBO was the vague version, *track my progress*, and what ROBO built from it was a progress bar that advanced by one per cent for every page of the book he marked as read. It reached 31% in the first week. It had no way to go down, which made it the most encouraging and least informative object Theo owned.
+
+What he needed instead was the markout of section 0.1, computed over a week of exercises. The listing in Appendix F takes the week's rows, one per exercise, each with its tier (`read`, `derive` or `build`), the confidence written down before checking (as a fraction between zero and one), whether the answer fell within the check (true, false, or `None` when no check exists yet), and the minutes it took. It returns four things: the hit rate with its standard error, overall and by tier; a calibration table, the realised hit rate at each stated confidence; the minutes spent at each tier, to set against the prior hours of section 0.4; and a count of unchecked rows. It is written in plain Python with nothing but the standard library, because a review that needs an entitlement ticket before it runs is a review that will not run on a Sunday.
+
+Two design choices carry the weight. An exercise without a check is counted as unchecked, never as right, because the commonest way to inflate a hit rate is to grade the exercises you cannot grade in your own favour; until Appendix Z covers an exercise, it sits in the unchecked count, visibly. And a confidence above one is refused with an error that asks whether it is a percentage, because "70" for "70%" is the unit mistake every reader makes in the first week, and silently treating it as a probability of seventy would ruin the calibration table without crashing anything.
+
+The tool is for the reader who has twenty or more checked exercises; below that, the standard errors are wide enough that the table mostly reports the noise (section 0.6). It also understates its own uncertainty in a way worth knowing. The standard error assumes the exercises are independent, and they are not: five exercises from one chapter share a reader's understanding of that chapter, the same way eleven bonds of one issuer share a waterfall, so the honest error bar is wider, by the clustering argument of §7-B.1. The edge case that bites is the week with no checked rows in a tier, which the listing reports by leaving that tier out of the table rather than printing a hit rate of zero over zero.
+
+<!-- EXPLAINED -->
+```python
+import math
+from collections import defaultdict
+
+TIERS = ("read", "derive", "build")
+
+
+def _validate(row):
+    """Return the row's tier in lower case; refuse rows whose units are wrong."""
+    tier = str(row["tier"]).lower()
+    if tier not in TIERS:
+        raise ValueError(f"tier {row['tier']!r} is not one of {TIERS}")
+    conf = row["confidence"]
+    if not 0.0 < conf <= 1.0:
+        raise ValueError(f"confidence {conf} outside (0, 1]: is it a percentage?")
+    if row["minutes"] < 0:
+        raise ValueError("minutes must be non-negative")
+    if row["correct"] not in (True, False, None):
+        raise ValueError("correct must be True, False or None (no check yet)")
+    return tier
+
+
+def hit_rate(rows):
+    """Hit rate and binomial standard error over checked rows; None if nothing is checked."""
+    checked = [r for r in rows if r["correct"] is not None]
+    n = len(checked)
+    if n == 0:
+        return None
+    p = sum(1 for r in checked if r["correct"]) / n
+    return {"n": n, "p": p, "se": math.sqrt(p * (1.0 - p) / n)}
+
+
+def hand_history(rows):
+    """Weekly review: hit rate by tier, calibration by stated confidence, minutes by tier."""
+    by_tier, by_conf = defaultdict(list), defaultdict(list)
+    minutes = defaultdict(float)
+    unchecked = 0
+    for r in rows:
+        tier = _validate(r)
+        minutes[tier] += r["minutes"]
+        if r["correct"] is None:
+            unchecked += 1
+            continue
+        by_tier[tier].append(r)
+        by_conf[round(r["confidence"], 2)].append(r)
+    return {
+        "overall": hit_rate(rows),
+        "by_tier": {t: hit_rate(by_tier[t]) for t in TIERS if by_tier[t]},
+        "calibration": {c: hit_rate(rs)["p"] for c, rs in sorted(by_conf.items())},
+        "minutes": dict(minutes),
+        "unchecked": unchecked,
+    }
+
+
+def _rows(conf, tier, n_right, n_wrong, minutes):
+    right = {"tier": tier, "confidence": conf, "correct": True, "minutes": minutes}
+    wrong = {"tier": tier, "confidence": conf, "correct": False, "minutes": minutes}
+    return [right] * n_right + [wrong] * n_wrong
+
+
+# Theo's July (illustrative): overconfident on fresh derivations, underconfident on old arithmetic.
+july = (_rows(0.9, "derive", 9, 3, 40.0)
+        + _rows(0.5, "read", 7, 3, 15.0)
+        + _rows(0.7, "build", 2, 1, 120.0)
+        + [{"tier": "build", "confidence": 0.7, "correct": None, "minutes": 90.0}] * 2)
+rep = hand_history(july)
+assert rep["overall"]["n"] == 25 and abs(rep["overall"]["p"] - 0.72) < 1e-12
+assert abs(rep["overall"]["se"] - 0.0898) < 1e-3          # sqrt(0.72 * 0.28 / 25)
+assert rep["unchecked"] == 2                              # no check yet is not "right"
+assert abs(rep["calibration"][0.9] - 0.75) < 1e-12        # said 90%, was right 75%
+assert abs(rep["calibration"][0.5] - 0.70) < 1e-12        # said 50%, was right 70%
+assert abs(rep["minutes"]["build"] - 540.0) < 1e-9
+assert set(rep["by_tier"]) == {"read", "derive", "build"}
+
+# A quarter of exercises at the same rate halves the standard error.
+quarter = _rows(0.7, "derive", 72, 28, 30.0)
+assert abs(hit_rate(quarter)["se"] - rep["overall"]["se"] / 2) < 1e-12
+
+# The edge case: a confidence written as a percentage is refused, not silently used.
+try:
+    hand_history([{"tier": "read", "confidence": 70, "correct": True, "minutes": 5.0}])
+    raise AssertionError("a percentage slipped through as a probability")
+except ValueError:
+    pass
+print("hand_history: all checks pass")
+```
+

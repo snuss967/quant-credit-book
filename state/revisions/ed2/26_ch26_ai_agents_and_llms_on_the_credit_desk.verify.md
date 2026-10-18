@@ -66,3 +66,5 @@ Real people and dialogue: no invented words for any real person. Marks and Zito 
 - **Medallia "par-weighted 60.2 in Mar-26"** appears only in the brief; the chapter says "Medallia's March mark at 60.2" (the BCRED and HLEND marks), which the dossier supports.
 - **Length.** 27.7k words against the brief's 24 to 26k target; not trimmed (no instruction to cut verified material).
 - Scene dates (30 Oct, 13 to 16 Nov, late Nov 2026) are future-dated relative to the session date by design; they match the cast bible.
+
+<!-- STATUS: COMPLETE -->
