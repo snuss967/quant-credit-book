@@ -165,95 +165,8 @@ What ROBO built from the vague version ("compute breadth"): `len(book)`. It retu
 
 The precise version: compute $1/H$ on issuer-netted GMV weights, $N_{\text{eff}}$ from (28.4) on the idiosyncratic covariance, the closed form (28.5) for equal issuer blocks as a regression test, the IR from (28.3) in both exact and approximate form, and the hit-rate standard error (28.6). Check the hit-rate law by Monte Carlo. All blocks in this chapter run in order in one interpreter.
 
-```python
-import numpy as np
-import pandas as pd
-from scipy import stats, optimize, integrate
-
-RNG = np.random.default_rng(2028)
-TRADING_DAYS = 252
-
-
-def herfindahl_breadth(gmv_weights):
-    """1/H on absolute GMV weights. Net positions to issuer level BEFORE calling."""
-    w = np.abs(np.asarray(gmv_weights, dtype=float))
-    total = w.sum()
-    if total <= 0.0:
-        raise ValueError("book has no gross exposure")
-    w = w / total
-    return 1.0 / np.sum(w ** 2)
-
-
-def effective_breadth(weights, cov):
-    """Eq. (28.4): (sum |w_i| sigma_i)^2 / (w' Sigma w), on the IDIOSYNCRATIC covariance."""
-    w = np.asarray(weights, dtype=float)
-    cov = np.asarray(cov, dtype=float)
-    sig = np.sqrt(np.clip(np.diag(cov), 0.0, None))
-    num = float(np.abs(w) @ sig) ** 2
-    den = float(w @ cov @ w)
-    if den <= 1e-18 * max(num, 1e-300):
-        raise ValueError("near-zero book variance: hedged pairs? net to issuer first")
-    return num / den
-
-
-def issuer_block_cov(issuer_ids, sigma, rho_within, rho_across):
-    """Residual covariance with one correlation inside an issuer and another across issuers."""
-    ids = np.asarray(issuer_ids)
-    same = ids[:, None] == ids[None, :]
-    corr = np.where(same, rho_within, rho_across).astype(float)
-    np.fill_diagonal(corr, 1.0)
-    sig = np.asarray(sigma, dtype=float)
-    return corr * np.outer(sig, sig)
-
-
-def n_eff_equal_blocks(n_bonds, bonds_per_issuer, rho_within, rho_across):
-    """Eq. (28.5), closed form for equal issuer blocks."""
-    m = bonds_per_issuer
-    return n_bonds / (1.0 + (m - 1) * rho_within + (n_bonds - m) * rho_across)
-
-
-def ir_from_hit_rate(p, n_eff, periods=TRADING_DAYS, exact=False):
-    """Eq. (28.3). exact=True keeps the sqrt(1-(2p-1)^2) term."""
-    edge = 2.0 * p - 1.0
-    ir = edge * np.sqrt(periods * n_eff)
-    return ir / np.sqrt(1.0 - edge ** 2) if exact else ir
-
-
-def hit_rate_se(p, n_eff, periods=TRADING_DAYS):
-    """Eq. (28.6): standard error of one year's measured hit rate."""
-    return np.sqrt(p * (1.0 - p) / (periods * n_eff))
-
-
-# --- Theo's book: 300 bonds, 60 issuers x 5 bonds -------------------------------
-issuers = np.repeat(np.arange(60), 5)
-sig_bond = np.full(300, 0.051)                       # DTS 0.147 x sigma_rel 0.35 (illustrative)
-cov_book = issuer_block_cov(issuers, sig_bond, rho_within=0.9, rho_across=0.01)
-w_book = np.full(300, 1.0 / 300)
-
-neff_num = effective_breadth(w_book, cov_book)
-neff_cf = n_eff_equal_blocks(300, 5, 0.9, 0.01)
-assert abs(neff_num - neff_cf) < 1e-8, (neff_num, neff_cf)
-assert 39.0 < neff_cf < 40.5                          # "300 bonds, 60 issuers, 40 bets"
-assert abs(herfindahl_breadth(w_book) - 300.0) < 1e-9 # 1/H ignores correlation entirely
-assert abs(n_eff_equal_blocks(10**7, 5, 0.9, 0.01) - 100.0) < 0.01  # speed-of-light limit 1/rho_a
-
-# Independent and perfectly correlated limits of (28.4)
-assert abs(effective_breadth(np.full(50, 0.02), np.eye(50) * 0.04) - 50.0) < 1e-9
-assert abs(effective_breadth(np.full(50, 0.02), np.full((50, 50), 0.04)) - 1.0) < 1e-9
-
-# Paleologo's 0.33% standard error: about 90 effective names at p = 0.505
-assert abs(hit_rate_se(0.505, 91) - 0.0033) < 1e-4
-assert abs(hit_rate_se(0.505, 40) - 0.0050) < 2e-4   # a 40-bet credit PM: SE equals the edge
-
-# Monte Carlo check of the hit-rate law: daily wins ~ Binomial(N, p), return = (2W - N)/N
-p_hit, n_bets, n_days = 0.52, 40, TRADING_DAYS * 400
-wins = RNG.binomial(n_bets, p_hit, size=n_days)
-daily = (2.0 * wins - n_bets) / n_bets
-ir_mc = daily.mean() / daily.std(ddof=1) * np.sqrt(TRADING_DAYS)
-ir_exact = ir_from_hit_rate(p_hit, n_bets, exact=True)
-assert abs(ir_mc - ir_exact) < 0.15, (ir_mc, ir_exact)          # MC SE ~ 0.05
-assert abs(ir_exact / ir_from_hit_rate(p_hit, n_bets) - 1.0) < 1e-3
-```
+<!-- EXPLAIN: Listing 28.1 -->
+> **Code Companion: Listing 28.1.** 1/H on absolute GMV weights. The full python listing is in [Appendix F, Listing 28.1](#code-28-1).
 
 The edge cases ROBO must handle: a long/short pair in two bonds of the same issuer (a basis or curve trade) makes the denominator of (28.4) nearly zero and $N_{\text{eff}}$ explode, which is why the function refuses and the spec says to net to issuer first; a book with no gross exposure raises; and negative variance from a non-positive-definite estimated covariance is clipped on the diagonal but should be repaired upstream (shrinkage, Chapter 8), not here.
 
@@ -319,60 +232,8 @@ What ROBO built from the vague version ("put each signal where it makes the most
 
 The precise version: for each signal and each tier that can express it, compute the net alpha (28.7); assign the signal to the tier with the highest positive net alpha; flag signals with no positive tier as tie-breakers only. Report the break-even half-life (28.8) for each tier at a reference $\alpha_0$.
 
-```python
-# --- Block 2: the horizon ladder ------------------------------------------------
-TIERS = pd.DataFrame(
-    {"instruments": ["CDX/iTraxx, index futures, credit ETFs",
-                     "liquid IG/HY cash, PT-eligible",
-                     "stressed, LMT candidates, post-reorg"],
-     "rt_cost": [0.0005, 0.006, 0.025]},          # round-trip cost, fraction of price (illustrative)
-    index=pd.Index([0, 1, 2], name="tier"),
-)
-
-SIGNALS = pd.DataFrame(
-    {"alpha0":       [0.05,    0.03,  0.02,   0.015, 0.012, 0.08],   # annual rate at inception (illustrative)
-     "half_life_yr": [3 / 252, 1 / 12, 2 / 12, 0.75,  1.0,   0.5],
-     "tiers":        [(0,),    (0, 1), (1,),   (1, 2), (1, 2), (2,)]},  # tiers able to express the signal
-    index=pd.Index(["etf_premium", "index_trend", "momentum", "value", "carry", "lmt_event"],
-                   name="signal"),
-)
-
-
-def break_even_half_life(rt_cost, alpha0):
-    """Eq. (28.8): shortest half-life (years) that pays its own round-trip cost."""
-    if alpha0 <= 0.0:
-        return np.inf
-    return np.log(2.0) * rt_cost / alpha0
-
-
-def net_alpha(alpha0, half_life_yr, rt_cost):
-    """Eq. (28.7): alpha0 - (ln 2 / h) * c_RT, annualized."""
-    if half_life_yr <= 0.0:
-        raise ValueError("half-life must be positive")
-    return alpha0 - np.log(2.0) / half_life_yr * rt_cost
-
-
-def horizon_ladder(signals, tiers):
-    rows = []
-    for name, sg in signals.iterrows():
-        nets = {t: net_alpha(sg.alpha0, sg.half_life_yr, tiers.loc[t, "rt_cost"]) for t in sg.tiers}
-        best = max(nets, key=nets.get)
-        rows.append({"signal": name, "best_tier": best if nets[best] > 0 else None,
-                     "net_alpha": nets[best], "tie_breaker_only": nets[best] <= 0,
-                     **{f"net_t{t}": v for t, v in nets.items()}})
-    return pd.DataFrame(rows).set_index("signal")
-
-
-ladder = horizon_ladder(SIGNALS, TIERS)
-
-assert ladder.loc["index_trend", "best_tier"] == 0               # trend lives in the index layer
-assert ladder.loc["index_trend", "net_t1"] < 0 < ladder.loc["index_trend", "net_t0"]
-assert ladder.loc["value", "best_tier"] == 1 and ladder.loc["value", "net_t2"] < 0
-assert ladder.loc["lmt_event", "best_tier"] == 2 and ladder.loc["lmt_event", "net_alpha"] > 0.04
-assert bool(ladder.loc["momentum", "tie_breaker_only"])          # cash momentum: tie-breaker only
-assert break_even_half_life(0.0005, 0.03) * TRADING_DAYS < 5      # tier 0: under a week
-assert 1.0 < break_even_half_life(0.006, 0.03) * 12 < 3.0         # tier 1: 1-3 months
-```
+<!-- EXPLAIN: Listing 28.2 -->
+> **Code Companion: Listing 28.2.** Eq. The full python listing is in [Appendix F, Listing 28.2](#code-28-2).
 
 Edge cases: a signal with $\alpha_0 \le 0$ has an infinite break-even half-life and is never traded; a half-life of zero is an error, not a very fast signal; and costs must be *stressed* costs when the ladder is used for the liquidity budget (§28.5), because a tier-1 bond at a 5× bid-ask is a tier-2 bond for as long as the stress lasts.
 
@@ -516,131 +377,8 @@ What ROBO built from the vague version ("size positions by Kelly"): it computed 
 
 The precise version: implement (28.9), (28.10)–(28.12) with the rationalized root, Merton's approximation (for comparison only, never for sizing), the fractional multiplier (28.13), the random-loss growth rate with a Beta recovery and a ruin boundary at $1/L_{\max}$, and the cluster solver (28.14). Inputs are physical-measure intensities. Long-only: return zero when the edge is not positive.
 
-```python
-# --- Block 3: Kelly with jump-to-default ----------------------------------------
-def kelly_binary(p_surv, carry, loss):
-    """Eq. (28.9): f* = p/L - q/c, floored at zero (long-only)."""
-    q = 1.0 - p_surv
-    return max(p_surv / loss - q / carry, 0.0)
-
-
-def growth_binary(f, p_surv, carry, loss):
-    if f * loss >= 1.0:
-        return -np.inf
-    return p_surv * np.log1p(f * carry) + (1.0 - p_surv) * np.log1p(-f * loss)
-
-
-def growth_jump(f, carry, lam, loss, sigma=0.0):
-    """Eq. (28.10): g(f) = f c - f^2 sigma^2 / 2 + lam ln(1 - f L). lam is P-measure."""
-    diffusive = f * carry - 0.5 * f * f * sigma * sigma
-    if lam <= 0.0:
-        return diffusive
-    if f * loss >= 1.0:
-        return -np.inf
-    return diffusive + lam * np.log1p(-f * loss)
-
-
-def kelly_jump(carry, lam, loss, sigma=0.0):
-    """Eqs. (28.11)-(28.12): the root of the FOC inside the ruin boundary 1/L."""
-    edge = carry - lam * loss
-    if edge <= 0.0:
-        return 0.0
-    if lam <= 0.0:                                     # no jump: Merton's mu / sigma^2
-        return edge / sigma ** 2 if sigma > 0.0 else np.inf
-    b = carry * loss + sigma ** 2
-    disc = (carry * loss - sigma ** 2) ** 2 + 4.0 * sigma ** 2 * lam * loss ** 2
-    return 2.0 * edge / (b + np.sqrt(disc))
-
-
-def kelly_merton_approx(carry, lam, loss, sigma):
-    """Diffusion approximation (comparison only): (c - lam L) / (sigma^2 + lam L^2)."""
-    return max((carry - lam * loss) / (sigma ** 2 + lam * loss ** 2), 0.0)
-
-
-def kelly_multiplier(rel_se_edge):
-    """Eq. (28.13): optimal fraction of Kelly when the edge has relative s.e. s."""
-    return 1.0 / (1.0 + rel_se_edge ** 2)
-
-
-def growth_random_loss(f, carry, lam, a, b, loss_max, sigma=0.0):
-    """g(f) with L = loss_max * Beta(a, b). Defined for f < 1 / loss_max."""
-    if f * loss_max >= 1.0:
-        return -np.inf
-    dist = stats.beta(a, b)
-    e_log, _ = integrate.quad(lambda u: np.log1p(-f * loss_max * u) * dist.pdf(u), 0.0, 1.0, limit=200)
-    return f * carry - 0.5 * f * f * sigma * sigma + lam * e_log
-
-
-def kelly_random_loss(carry, lam, a, b, loss_max, sigma=0.0):
-    upper = (1.0 - 1e-6) / loss_max
-    res = optimize.minimize_scalar(
-        lambda f: -growth_random_loss(f, carry, lam, a, b, loss_max, sigma),
-        bounds=(0.0, upper), method="bounded", options={"xatol": 1e-8})
-    return float(res.x)
-
-
-def kelly_cluster(n_names, carry, lam_idio, lam_common, loss):
-    """Eq. (28.14): per-name fraction for n symmetric names with one common default jump."""
-    def foc(f):
-        return (carry - lam_idio * loss / (1.0 - f * loss)
-                - lam_common * loss / (1.0 - n_names * f * loss))
-    if foc(0.0) <= 0.0:
-        return 0.0
-    hi = (1.0 - 1e-12) / (n_names * loss)
-    return optimize.brentq(foc, 0.0, hi, xtol=1e-14)
-
-
-# Kaz's 93%: c = 4.5%, q = 3.1%, L = 0.6
-f_kaz = kelly_binary(0.969, 0.045, 0.60)
-assert abs(f_kaz - 0.926) < 1e-3
-step = 1e-6
-dg = (growth_binary(f_kaz + step, 0.969, 0.045, 0.6)
-      - growth_binary(f_kaz - step, 0.969, 0.045, 0.6)) / (2 * step)
-assert abs(dg) < 1e-6 and f_kaz < 1.0 / 0.6                   # FOC holds, inside the ruin boundary
-q_star = 0.045 / (0.045 + 0.6)                                 # edge condition q < c / (c + L)
-assert kelly_binary(1 - q_star + 1e-4, 0.045, 0.6) > 0.0
-assert kelly_binary(1 - q_star - 1e-4, 0.045, 0.6) == 0.0
-
-# Continuous time: closed form, FOC, and Merton's approximation crossing the ruin boundary
-assert abs(kelly_jump(0.045, 0.031, 0.6) - (1 / 0.6 - 0.031 / 0.045)) < 1e-12
-f_j = kelly_jump(0.045, 0.031, 0.6, sigma=0.05)
-assert abs(0.045 - f_j * 0.05 ** 2 - 0.031 * 0.6 / (1 - f_j * 0.6)) < 1e-12
-assert 0.93 < f_j < 0.95
-f_m = kelly_merton_approx(0.045, 0.031, 0.6, 0.05)
-assert f_m * 0.6 > 1.0 > f_j * 0.6                             # one default wipes out the Merton bettor
-g_star = growth_jump(f_j, 0.045, 0.031, 0.6, 0.05)
-assert g_star > growth_jump(0.9 * f_j, 0.045, 0.031, 0.6, 0.05)
-assert g_star > growth_jump(1.1 * f_j, 0.045, 0.031, 0.6, 0.05)
-
-# The Q-measure proof: under the credit triangle there is no edge
-assert kelly_jump(0.045, 0.045 / 0.6, 0.6) < 1e-9
-
-# Fractional Kelly: exact 75% at half Kelly for quadratic growth; Monte Carlo check of (28.13)
-f_d = kelly_jump(0.03, 0.0, 0.6, sigma=0.10)                   # pure diffusion: mu / sigma^2 = 3
-assert abs(f_d - 3.0) < 1e-12
-assert abs(growth_jump(0.5 * f_d, 0.03, 0.0, 0.6, 0.10) / growth_jump(f_d, 0.03, 0.0, 0.6, 0.10) - 0.75) < 1e-12
-eps = RNG.normal(0.0, 1.0, size=200_000)                       # relative s.e. of the edge = 100%
-thetas = np.linspace(0.05, 1.5, 146)
-ratio = [np.mean(2 * t * (1 + eps) - (t * (1 + eps)) ** 2) for t in thetas]
-assert abs(thetas[int(np.argmax(ratio))] - kelly_multiplier(1.0)) < 0.03
-
-# Random recovery: Jensen lowers f*, and the worst recovery sets the boundary
-f_const = kelly_jump(0.045, 0.031, 0.6)
-f_loose = kelly_random_loss(0.045, 0.031, 3.0, 2.0, 1.00)      # mean L = 0.6, docs allow L -> 1
-f_tight = kelly_random_loss(0.045, 0.031, 8.0, 2.0, 0.75)      # mean L = 0.6, recovery floor 25%
-assert f_loose < f_tight < f_const
-assert f_loose < 1.0 and f_tight < 1.0 / 0.75
-
-# Clusters: a common jump shrinks every name, and the cluster obeys sum f L < 1
-f_alone = kelly_jump(0.084, 0.04 + 0.02, 0.55)
-f_clu = kelly_cluster(5, 0.084, 0.04, 0.02, 0.55)
-assert 0.0 < f_clu < f_alone and 5 * f_clu * 0.55 < 1.0
-assert kelly_cluster(5, 0.084, 0.04, 0.03, 0.55) < f_clu
-
-# The 2026 CCC case: the edge rose while Kelly fell
-f_jan, f_oct = kelly_jump(0.084, 0.06, 0.55), kelly_jump(0.128, 0.10, 0.70)
-assert (0.128 - 0.10 * 0.70) > (0.084 - 0.06 * 0.55) and f_oct < 0.6 * f_jan
-```
+<!-- EXPLAIN: Listing 28.3 -->
+> **Code Companion: Listing 28.3.** Eq. The full python listing is in [Appendix F, Listing 28.3](#code-28-3).
 
 Edge cases ROBO must handle: an edge of exactly zero returns zero, not a division by zero; `lam = 0` falls back to the diffusion fraction and is the only case where the ruin boundary does not apply; a Beta recovery with $a < 1$ or $b < 1$ has an unbounded density at an endpoint, which `quad` integrates but slowly, so the spec requires $a, b \ge 1$ for production fits; and every output fraction is a fraction of NAV *before* the cluster cap, the fractional multiplier and the leverage band of §28.7 are applied, in that order.
 
@@ -712,71 +450,8 @@ The 13-week model, it turns out, was never about the borrower. It was about the 
 
 What ROBO built from the vague version ("compute liquidity risk"): the average bid-ask over the last year, times the book. It reported \$4mm. The stressed figure was \$23mm *(illustrative)*, and ROBO's comment field read "liquidity is fine on average."
 
-```python
-# --- Block 4: LVaR, days-to-liquidate, FRTB scaling, runway ---------------------
-STRESS_MULTIPLIERS = {"eur_ig_mar2026": 1.64, "ig_costs_mar2020": 3.0,
-                      "ig_index_2007_08": 3.40 / 0.59, "ig_blocks_mar2020": 6.0}
-FRTB_LH = np.array([10, 20, 40, 60, 120])                 # MAR33.12 liquidity horizons, days
-
-
-def parametric_var(value, sigma_1d, z=2.33):
-    """Bangia eq. (3): P [1 - exp(-z sigma)]."""
-    return value * (1.0 - np.exp(-z * sigma_1d))
-
-
-def bangia_col(value, spread_mean, spread_sd, a):
-    """Bangia eq. (4): 0.5 P (S_bar + a sigma_S). Spreads are relative (fraction of mid)."""
-    return 0.5 * value * (spread_mean + a * spread_sd)
-
-
-def credit_col(mv, lcs_mean, adv, mult=1.0, eta=0.0):
-    """Eq. (28.16): exogenous stress multiple times an endogenous size term. Longs AND shorts pay."""
-    mv = np.abs(np.asarray(mv, dtype=float))
-    adv = np.maximum(np.asarray(adv, dtype=float), 1.0)          # guard: no zero-ADV division
-    return 0.5 * mult * np.asarray(lcs_mean) * mv * (1.0 + eta * np.sqrt(mv / adv))
-
-
-def days_to_liquidate(position, adv, participation):
-    """Eq. (28.17)."""
-    if participation <= 0.0:
-        raise ValueError("participation must be positive")
-    return np.abs(position) / (participation * np.maximum(adv, 1.0))
-
-
-def frtb_liquidity_es(es_by_bucket, horizons=FRTB_LH, base=10):
-    """Eq. (28.18). es_by_bucket[j] = 10-day ES shocking factors with LH >= horizons[j]."""
-    es = np.asarray(es_by_bucket, dtype=float)
-    widths = np.diff(horizons)
-    return float(np.sqrt(es[0] ** 2 + np.sum((es[1:] * np.sqrt(widths / base)) ** 2)))
-
-
-def runway_weeks(cash, liquid_sleeve, weekly_burn, haircut=0.0):
-    """Theo's 13-week model, pointed at the fund: (cash + haircut liquid sleeve) / burn."""
-    if weekly_burn <= 0.0:
-        return np.inf
-    return (cash + (1.0 - haircut) * liquid_sleeve) / weekly_burn
-
-
-# Paleologo's example: two days of volume at 4% participation takes 50 days
-assert abs(days_to_liquidate(2.0, 1.0, 0.04) - 50.0) < 1e-12
-# FRTB: all risk in HY corporate spread (LH 60) recovers sqrt(60 / 10)
-assert abs(frtb_liquidity_es([1, 1, 1, 1, 0]) - np.sqrt(6.0)) < 1e-12
-assert abs(frtb_liquidity_es([1, 0, 0, 0, 0]) - 1.0) < 1e-12
-# Bangia's a-sigma form cannot reach the 2008 multiple with a calm-window sigma
-implied_a = (3.40 - 0.59) / 0.15                              # sigma_S = 0.15 points (illustrative)
-assert implied_a > 4.5 * 3
-# The 5x problem on a $2bn gross IG book at 0.6% LCS
-col_calm = credit_col([2e9], [0.006], [1e12])[0]
-col_2008 = credit_col([2e9], [0.006], [1e12], mult=STRESS_MULTIPLIERS["ig_index_2007_08"])[0]
-assert abs(col_calm - 6e6) < 1.0 and abs(col_2008 / col_calm - 3.40 / 0.59) < 1e-12
-# Endogenous size term: cost per dollar rises with size
-small = credit_col([5e6], [0.01], [5e6], eta=0.5)[0] / 5e6
-large = credit_col([25e6], [0.01], [5e6], eta=0.5)[0] / 25e6
-assert large > small
-# Third Avenue, December 2015: about 2.7 weeks of runway, far inside 13
-ta_runway = runway_weeks(cash=200e6, liquid_sleeve=0.0, weekly_burn=317e6 / (30 / 7))
-assert 2.5 < ta_runway < 3.0 and ta_runway < 13.0
-```
+<!-- EXPLAIN: Listing 28.4 -->
+> **Code Companion: Listing 28.4.** Bangia eq. The full python listing is in [Appendix F, Listing 28.4](#code-28-4).
 
 Edge cases: zero ADV (a bond that has not traded in the window) is floored at \$1 so the size term is enormous rather than infinite, which is the right sign; a negative weekly burn (net inflows) gives infinite runway; and `credit_col` deliberately takes absolute values, because a short pays the offer just as a long pays the bid.
 
@@ -834,72 +509,8 @@ Theo's desk: $\overline{\text{LCS}} = 0.6\%$, $G = 5$, and the 2007–2008 multi
 
 What ROBO built from the vague version ("minimize drawdown"): it held cash, as it always does, and reported a maximum drawdown of zero and a Sharpe ratio of "undefined, but excellent."
 
-```python
-# --- Block 5: drawdown rules ----------------------------------------------------
-def prob_hit(x, mu, sigma, horizon):
-    """Eq. (28.19): P(min X_t <= -x by T) for X_t = mu t + sigma W_t."""
-    s = sigma * np.sqrt(horizon)
-    return (stats.norm.cdf((-x - mu * horizon) / s)
-            + np.exp(-2.0 * mu * x / sigma ** 2) * stats.norm.cdf((-x + mu * horizon) / s))
-
-
-def stop_for_lifetime_prob(prob, sharpe, sigma):
-    """Eq. (28.20): x = sigma ln(1/P) / (2 SR)."""
-    return sigma * np.log(1.0 / prob) / (2.0 * sharpe)
-
-
-def mark_to_bid_shock(gross_leverage, lcs_mean, mult, already_at_bid=True):
-    """Eq. (28.21): NAV drawdown from bid-ask widening alone, as a fraction of NAV."""
-    widen = (mult - 1.0) if already_at_bid else mult
-    return 0.5 * widen * lcs_mean * gross_leverage
-
-
-def mc_prob_hit(x, mu, sigma, horizon, n_paths, n_steps, rng):
-    """Brownian-bridge Monte Carlo of (28.19): exact for continuous monitoring."""
-    dt = horizon / n_steps
-    incr = mu * dt + sigma * np.sqrt(dt) * rng.standard_normal((n_paths, n_steps))
-    path = np.concatenate([np.zeros((n_paths, 1)), np.cumsum(incr, axis=1)], axis=1)
-    d = path + x                                           # distance above the barrier
-    below = (d <= 0.0).any(axis=1)
-    d0, d1 = np.maximum(d[:, :-1], 0.0), np.maximum(d[:, 1:], 0.0)
-    survive = np.prod(1.0 - np.exp(-2.0 * d0 * d1 / (sigma ** 2 * dt)), axis=1)
-    survive[below] = 0.0
-    return 1.0 - survive.mean()
-
-
-def simulate_two_threshold(sharpe, sigma, x, shocks):
-    """Paleologo's rule: halve capital at loss x/2, liquidate at loss x (on initial capital).
-    shocks: (n_paths, n_days) unit-variance Student-t(6) draws, reused across Sharpes."""
-    n_paths, n_days = shocks.shape
-    mu_d, sd_d = sharpe * sigma / n_days, sigma / np.sqrt(n_days)
-    r = mu_d + sd_d * shocks
-    cap, pnl = np.ones(n_paths), np.zeros(n_paths)
-    for t in range(n_days):
-        pnl += cap * r[:, t]
-        cap = np.where(pnl <= -x, 0.0, np.where(pnl <= -x / 2.0, np.minimum(cap, 0.5), cap))
-    free = r.sum(axis=1)
-    price_of_safety = 1.0 - pnl.mean() / free.mean()       # share of expected P&L given up
-    return {"mean_pnl": pnl.mean(), "p_out": float(np.mean(cap == 0.0)),
-            "price_of_safety": price_of_safety}
-
-
-# The reported 7.5% stop is what (28.20) gives a Sharpe-1, 6%-vol PM at ~8% lifetime odds
-assert abs(stop_for_lifetime_prob(np.exp(-2.5), 1.0, 0.06) - 0.075) < 1e-12
-p1 = prob_hit(0.075, 0.06, 0.06, 1.0)
-assert 0.040 < p1 < 0.050
-p1_mc = mc_prob_hit(0.075, 0.06, 0.06, 1.0, 10_000, 252, RNG)
-assert abs(p1_mc - p1) < 0.01, (p1_mc, p1)
-
-# Paleologo's ranking: the price of safety falls with the Sharpe ratio (t6 shocks, common draws)
-t6 = stats.t.rvs(df=6, size=(20_000, TRADING_DAYS), random_state=RNG) / np.sqrt(6.0 / 4.0)
-pos = [simulate_two_threshold(sr, 0.06, 0.075, t6)["price_of_safety"] for sr in (0.5, 1.0, 2.0)]
-assert pos[0] > pos[1] > pos[2] >= 0.0, pos
-
-# Theo's desk: G = 5, LCS 0.6%, the 2007-08 multiple -> through the 5% line on marks alone
-shock = mark_to_bid_shock(5.0, 0.006, 3.40 / 0.59)
-assert 0.05 < shock < 0.075
-assert abs(mark_to_bid_shock(5.0, 0.006, 5.8) - 0.072) < 1e-12
-```
+<!-- EXPLAIN: Listing 28.5 -->
+> **Code Companion: Listing 28.5.** Eq. The full python listing is in [Appendix F, Listing 28.5](#code-28-5).
 
 Edge cases: `prob_hit` requires $\sigma > 0$ and $T > 0$; a negative $\mu$ is allowed (a losing PM) and the formula still holds; `stop_for_lifetime_prob` is undefined for a non-positive Sharpe ratio, for which every stop is eventually hit; and the two-threshold simulation must measure loss on *initial* allocated capital, as Paleologo specifies, because measuring it on current capital after the cut silently moves the exit.
 
@@ -931,44 +542,8 @@ Theo's HY PM: $N_{\text{eff}} = 40$, $\sigma_{\text{DTS}} = 5\%$, $\text{SR} = 2
 
 What ROBO built from the vague version ("use as much leverage as is safe"): the ceiling without the floor, and without COL. It reported 4.74× and the word "safe."
 
-```python
-# --- Block 6: the leverage band -------------------------------------------------
-def leverage_floor(n_eff, sigma, r_min, sharpe):
-    """Eq. (28.2)."""
-    return np.sqrt(n_eff) / sigma * r_min / sharpe
-
-
-def leverage_ceiling(n_eff, sigma, dd_max, sharpe, kappa_z, col_fn=None):
-    """Eq. (28.22): fixed point G = A (DD_max - COL(G)); COL(G) is a fraction of NAV, increasing."""
-    if kappa_z <= sharpe:
-        raise ValueError("kappa * z_p must exceed the Sharpe ratio")
-    a = np.sqrt(n_eff) / (sigma * (kappa_z - sharpe))
-    if col_fn is None:
-        return a * dd_max
-    h = lambda g: g - a * (dd_max - col_fn(g))
-    hi = a * dd_max
-    return hi if h(hi) <= 0.0 else optimize.brentq(h, 0.0, hi, xtol=1e-12)
-
-
-def liquidity_speed_limit(dd_max, lcs_mean, mult):
-    """Eq. (28.23), right-hand side: 2 DD / ((m - 1) LCS)."""
-    return 2.0 * dd_max / ((mult - 1.0) * lcs_mean)
-
-
-m08 = 5.8
-c1 = 0.5 * (m08 - 1.0) * 0.008
-lo = leverage_floor(40, 0.05, 0.05, 2.0)
-hi_dry = leverage_ceiling(40, 0.05, 0.075, 2.0, 4.0)
-hi_wet = leverage_ceiling(40, 0.05, 0.075, 2.0, 4.0, col_fn=lambda g: c1 * g)
-a_band = np.sqrt(40) / (0.05 * 2.0)
-assert abs(lo - 3.162) < 1e-3 and abs(hi_dry - 4.743) < 1e-3
-assert abs(hi_wet - a_band * 0.075 / (1 + a_band * c1)) < 1e-9     # closed form (28.23)
-assert hi_wet < lo < hi_dry                                        # liquidity closes the band
-assert leverage_ceiling(10**8, 0.05, 0.075, 2.0, 4.0, lambda g: c1 * g) < liquidity_speed_limit(0.075, 0.008, m08)
-assert abs(liquidity_speed_limit(0.075, 0.008, m08) - 0.075 / c1) < 1e-12
-c1_half = 0.5 * (m08 - 1.0) * 0.004                                # halve LCS, accept a 4% hurdle
-assert leverage_floor(40, 0.05, 0.04, 2.0) < leverage_ceiling(40, 0.05, 0.075, 2.0, 4.0, lambda g: c1_half * g)
-```
+<!-- EXPLAIN: Listing 28.6 -->
+> **Code Companion: Listing 28.6.** Eq. The full python listing is in [Appendix F, Listing 28.6](#code-28-6).
 
 Edge cases: $\kappa z_p \le \text{SR}$ means the PM's Sharpe exceeds the stress quantile and the formula has no ceiling, which is a sign the inputs are wrong, so the function raises; `col_fn` must be increasing in $G$ for the fixed point to be unique; and the floor uses the *forecast* Sharpe, so a floor computed from a backtest Sharpe is a floor computed from the wrong number (deflate it, Chapter 26).
 
@@ -1000,27 +575,8 @@ Optimal coverage equals the dilution scale. Past it, each new name lowers the IR
 
 Barclays' QPS and credit research teams, as reported by Impax (19 September 2025), measured the effect directly in US investment grade. The issuer-level hit rate was about 58% overall, about 66% when analyst and quant signals agreed, and about 52% when they conflicted. Concentrating on aligned decisions lifted excess return from 2.0% to 3.7% a year and the IR from 1.09 to 1.71, and doubling exposure to aligned signals gave 4.1% with an IR of 1.83. The industry has priced the same conclusion: in late October 2025, Ares agreed to buy BlueCove, a systematic fixed-income manager with about \$5.5bn of AUM and about 60 staff, and to rebrand it Ares Systematic Credit (Alternative Credit Investor, 30 October 2025; see Chapter 4). The design rule that follows is a division of labour. Analysts own $L$, $L_{\max}$ and the document features (PRS, Chapter 13); PhDs own $\lambda^{\mathbb{P}}$, $\sigma_{\text{DTS}}$ and the covariance; and every analyst view is logged in the Edge Ledger (Chapter 3) with timestamp, horizon and confidence, so that its IC, its $\rho$ and its hit rate are measured rather than remembered. The ROBO spec is the contract between the two cultures: if a view cannot be written as a field with units, it is not yet a view.
 
-```python
-# --- Block 7: the team production function --------------------------------------
-def combined_ic(ics, corr):
-    """Eq. (28.24): sqrt(ic' C^{-1} ic)."""
-    ics = np.asarray(ics, dtype=float)
-    return float(np.sqrt(ics @ np.linalg.solve(np.asarray(corr, dtype=float), ics)))
-
-
-def optimal_coverage(n_c, e0=0.01, n_grid=None):
-    """Eq. (28.25) by brute force: argmax of e(N) sqrt(N) with e(N) = e0 n_c / (N + n_c)."""
-    n = np.arange(1, 20 * n_c + 1) if n_grid is None else n_grid
-    ir = 2.0 * e0 * n_c / (n + n_c) * np.sqrt(TRADING_DAYS * n)
-    return int(n[np.argmax(ir)])
-
-
-for rho, target in ((0.6, 0.0559), (0.0, 0.0707), (-0.2, 0.0791)):
-    two = np.sqrt((0.05 ** 2 * 2 - 2 * rho * 0.05 ** 2) / (1 - rho ** 2))
-    assert abs(combined_ic([0.05, 0.05], [[1, rho], [rho, 1]]) - two) < 1e-12
-    assert abs(two - target) < 1e-4
-assert optimal_coverage(35) == 35
-```
+<!-- EXPLAIN: Listing 28.7 -->
+> **Code Companion: Listing 28.7.** Eq. The full python listing is in [Appendix F, Listing 28.7](#code-28-7).
 
 ## 28.9 The PM Dashboard: The 13-Week Model, Reborn
 
@@ -1053,76 +609,8 @@ Theo's USB stick finally earns its keep. The PM dashboard asks the question the 
 
 Desk parameters (NAV, $\text{DD}_{\max}$, $\kappa z_p$, SR, $r_{\min}$, $m$, the two stop levels, realized drawdown, cash, liquid sleeve, weekly burn, participation, $\rho_w$, $\rho_a$, the Kelly edge s.e.) are a dictionary with units in the key names. The engine is pure: no I/O, no clock, seeded.
 
-```python
-# --- Final block: pm_playbook_engine --------------------------------------------
-def make_demo_book(rng, n_issuers=60, bonds_per=5, nav=4e8):
-    iss = np.repeat(np.arange(n_issuers), bonds_per)
-    n = iss.size
-    tier = np.where(iss < 48, 1, 2)
-    side = np.where(rng.random(n_issuers) < 0.8, 1.0, -1.0)[iss]        # same sign within issuer
-    spread = np.where(tier == 1, rng.uniform(0.008, 0.045, n), rng.uniform(0.06, 0.14, n))
-    return pd.DataFrame({
-        "bond_id": [f"B{i:04d}" for i in range(n)], "issuer_id": iss, "sector": iss % 11,
-        "tier": tier, "mv_usd": side * rng.uniform(4e6, 10e6, n),
-        "spr_dur": rng.uniform(2.0, 6.0, n), "spread": spread, "sigma_rel": rng.uniform(0.25, 0.45, n),
-        "lcs": np.where(tier == 1, 0.006, 0.025), "adv_usd": rng.uniform(2e6, 2e7, n),
-        "lam_p": np.where(tier == 1, 0.5, 0.8) * spread / 0.6,              # P-hazard below Q (illustrative)
-        "lgd_mean": np.where(tier == 1, 0.6, 0.7), "lgd_max": np.where(tier == 1, 0.8, 1.0),
-    })
-
-
-def pm_playbook_engine(book, desk):
-    gross = float(book.mv_usd.abs().sum())
-    g = gross / desk["nav_usd"]
-    sig = (book.spr_dur * book.spread * book.sigma_rel).to_numpy()
-    cov = issuer_block_cov(book.issuer_id.to_numpy(), sig, desk["rho_within"], desk["rho_across"])
-    w = book.mv_usd.to_numpy() / gross
-    n_eff = effective_breadth(w, cov)
-    by_iss = book.groupby("issuer_id").mv_usd.sum()
-    sigma_book = float(np.sqrt(w @ cov @ w) * np.sqrt(n_eff))           # per-bet vol consistent with N_eff
-    lcs_bar = float(np.average(book.lcs, weights=book.mv_usd.abs()))
-    c1 = 0.5 * (desk["mult"] - 1.0) * lcs_bar
-    floor = leverage_floor(n_eff, sigma_book, desk["r_min"], desk["sharpe"])
-    ceil = leverage_ceiling(n_eff, sigma_book, desk["dd_max"], desk["sharpe"], desk["kappa_z"],
-                            col_fn=lambda x: c1 * x)
-    iss = book.groupby("issuer_id").agg(carry=("spread", "mean"), lam=("lam_p", "mean"),
-                                        lgd=("lgd_mean", "mean"), lgd_max=("lgd_max", "max"))
-    theta = kelly_multiplier(desk["edge_rel_se"])
-    kelly = np.array([theta * kelly_jump(r.carry, r.lam, r.lgd) for r in iss.itertuples()])
-    kelly_cap = np.minimum(kelly, (1.0 - 1e-9) / iss.lgd_max.to_numpy())
-    actual = by_iss.reindex(iss.index).abs().to_numpy() / desk["nav_usd"]
-    dtl = days_to_liquidate(book.mv_usd.to_numpy(), book.adv_usd.to_numpy(), desk["participation"])
-    col = credit_col(book.mv_usd, book.lcs, book.adv_usd, mult=desk["mult"], eta=desk["eta"]).sum()
-    used = desk["realized_dd"] + mark_to_bid_shock(g, lcs_bar, desk["mult"])
-    return pd.Series({
-        "gross_leverage": g, "lev_floor": floor, "lev_ceiling": ceil,
-        "lev_speed_limit": liquidity_speed_limit(desk["dd_max"], lcs_bar, desk["mult"]),
-        "band_empty": floor > ceil, "lev_breach": g > ceil,
-        "n_eff": n_eff, "issuer_herfindahl_n": herfindahl_breadth(by_iss.to_numpy()),
-        "names_over_kelly_cap": int(np.sum(actual > kelly_cap)),
-        "stressed_col_pct_nav": col / desk["nav_usd"],
-        "pct_gross_over_20d": float(book.mv_usd.abs()[dtl > 20].sum() / gross),
-        "dd_budget_used_pct_of_cut": used / desk["stop_half"],
-        "runway_weeks": runway_weeks(desk["cash_usd"], desk["liquid_sleeve_usd"],
-                                     desk["weekly_burn_usd"], haircut=0.1),
-        "hit_rate_se_1y": hit_rate_se(0.51, n_eff),
-    })
-
-
-DESK = {"nav_usd": 4e8, "dd_max": 0.075, "kappa_z": 4.0, "sharpe": 2.0, "r_min": 0.05, "mult": 5.8,
-        "eta": 0.5, "stop_half": 0.05, "realized_dd": 0.01, "cash_usd": 6e7, "liquid_sleeve_usd": 1.5e8,
-        "weekly_burn_usd": 8e6, "participation": 0.10, "rho_within": 0.9, "rho_across": 0.01,
-        "edge_rel_se": 1.0}
-dash = pm_playbook_engine(make_demo_book(np.random.default_rng(28)), DESK)
-
-assert 1.0 < dash.n_eff < dash.issuer_herfindahl_n <= 60.0 + 1e-9    # correlation shrinks breadth
-assert dash.lev_ceiling < dash.lev_speed_limit
-assert dash.lev_breach == (dash.gross_leverage > dash.lev_ceiling)
-assert 0.0 <= dash.pct_gross_over_20d <= 1.0 and dash.stressed_col_pct_nav > 0.0
-assert dash.runway_weeks > 13.0                                      # the desk survives the quarter
-assert dash.dd_budget_used_pct_of_cut > DESK["realized_dd"] / DESK["stop_half"]   # marks count
-print(dash.to_string())
-```
+<!-- EXPLAIN: Listing 28.8 -->
+> **Code Companion: Listing 28.8.** --- Final block: pm_playbook_engine --------------------------------------------. The full python listing is in [Appendix F, Listing 28.8](#code-28-8).
 
 The one non-obvious line is `sigma_book`. Equation (28.22) is written for $N_{\text{eff}}$ equal, independent bets of volatility $\sigma_{\text{DTS}}$, so the engine backs out the per-bet volatility that, with the measured $N_{\text{eff}}$, reproduces the book's actual volatility per dollar of GMV: $\sigma_{\text{DTS}} = \sigma_{\text{GMV}}\sqrt{N_{\text{eff}}}$. Because of how (28.4) is defined, this per-bet volatility is exactly the GMV-weighted average bond volatility $\sum_i |w_i|\sigma_i$, which makes a useful audit: the band built from $(N_{\text{eff}}, \sigma_{\text{DTS}})$ reproduces the book's measured risk per dollar of GMV by construction. Feeding in a median or unweighted bond volatility breaks that identity, and the band with it.
 

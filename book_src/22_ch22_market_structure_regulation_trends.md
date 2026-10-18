@@ -146,77 +146,8 @@ The table explains a decade of market structure. For the corporate bond, rent is
 
 **The Spec You Hand the Robot.** *Vague version:* "minimize regulatory capital." *What ROBO built:* a desk with zero inventory, zero capital consumption, and zero revenue, which ROBO reported as a 100% improvement. *Precise version:* compute the balance-sheet rent of each position as (22.1) times the holding period, in bp of $|$notional$|$ and in dollars, with decimals for every ratio (5% is `0.05`), calendar days on ACT/365, and $\kappa$ taken as the max of the risk-based and leverage charges. Compute the breakeven holding period (22.4) from a bid-ask in bp of price. Reject negative ratios, ratios above one, non-positive holding periods, and a zero binding capital rate in the breakeven. Every block in this chapter runs in order in one interpreter; this first block defines the imports.
 
-```python
-import numpy as np
-import pandas as pd
-
-BP = 1e4  # basis points per unit of notional
-
-
-def capital_rate(kappa_rwa, risk_weight, kappa_lr):
-    """Binding Tier 1 per $1 of gross inventory: max(kappa_rwa * RW, kappa_lr). Decimals, not percent."""
-    k_rwa, rw, k_lr = (np.asarray(v, dtype=float) for v in (kappa_rwa, risk_weight, kappa_lr))
-    if np.any((k_rwa < 0) | (k_rwa > 1)) or np.any((k_lr < 0) | (k_lr > 1)):
-        raise ValueError("capital ratios must be decimals in [0, 1]; 5% is 0.05, not 5")
-    if np.any(rw < 0):
-        raise ValueError("risk_weight must be non-negative")
-    return np.maximum(k_rwa * rw, k_lr)
-
-
-def regulatory_carry_bp(kappa_rwa, risk_weight, kappa_lr, hurdle, holding_days):
-    """Balance-sheet rent over the holding period, in bp of |notional| (eq. 22.1 times the hold).
-    hurdle: excess annual return on Tier 1 over the funding rate. holding_days: calendar days, ACT/365."""
-    hd = np.asarray(holding_days, dtype=float)
-    h = np.asarray(hurdle, dtype=float)
-    if np.any(hd <= 0):
-        raise ValueError("holding_days must be positive")
-    if np.any(h < 0):
-        raise ValueError("hurdle must be non-negative")
-    return BP * h * capital_rate(kappa_rwa, risk_weight, kappa_lr) * hd / 365.0
-
-
-def breakeven_holding_days(bid_ask_bp, hurdle, kappa_lr, kappa_rwa=0.0, risk_weight=0.0):
-    """Holding period (calendar days) at which rent equals the half bid-ask (eq. 22.4)."""
-    if hurdle <= 0:
-        raise ValueError("hurdle must be positive")
-    c_bp_per_year = BP * hurdle * capital_rate(kappa_rwa, risk_weight, kappa_lr)
-    if np.any(c_bp_per_year <= 0):
-        raise ValueError("binding capital rate is zero: the breakeven is infinite")
-    return 365.0 * (np.asarray(bid_ask_bp, dtype=float) / 2.0) / c_bp_per_year
-
-
-def carry_table(positions, kappa_rwa, kappa_lr, hurdle):
-    """positions: DataFrame [bond_id, notional ($, signed), rw, holding_days]. Adds carry_bp, carry_usd."""
-    need = {"bond_id", "notional", "rw", "holding_days"}
-    missing = need - set(positions.columns)
-    if missing:
-        raise ValueError(f"missing columns: {sorted(missing)}")
-    out = positions.copy()
-    out["carry_bp"] = regulatory_carry_bp(kappa_rwa, out["rw"], kappa_lr, hurdle, out["holding_days"])
-    out["carry_usd"] = out["notional"].abs() * out["carry_bp"] / BP   # shorts pay rent too
-    return out
-
-
-# Sanity checks: the numerics table of 22.1.1
-ust = regulatory_carry_bp(0.105, 0.0, 0.05, 0.12, 7)         # Treasury: RW 0, leverage binds
-bbb = regulatory_carry_bp(0.105, 1.0, 0.05, 0.12, 7)         # corporate: risk-based binds
-ust_2026 = regulatory_carry_bp(0.105, 0.0, 0.0375, 0.12, 7)  # 3% + half of a 1.5% surcharge
-assert abs(ust - 1.1507) < 1e-3 and abs(bbb - 2.4164) < 1e-3 and abs(ust_2026 - 0.8630) < 1e-3
-assert abs(breakeven_holding_days(1.0, 0.12, 0.05) - 3.042) < 1e-2                  # 2y UST, 1bp wide
-assert abs(breakeven_holding_days(1.0, 0.12, 0.0375) - 4.056) < 1e-2
-assert abs(breakeven_holding_days(25.0, 0.12, 0.05, 0.105, 1.0) - 36.21) < 1e-1     # BBB, a quarter wide
-
-book = pd.DataFrame({"bond_id": ["UST_2Y_OTR", "BBB_IND_2033", "BBB_IND_2033_SHORT"],
-                     "notional": [1e8, 15e6, -15e6], "rw": [0.0, 1.0, 1.0], "holding_days": [7, 7, 7]})
-tab = carry_table(book, kappa_rwa=0.105, kappa_lr=0.05, hurdle=0.12)
-assert tab["carry_usd"].iloc[1] == tab["carry_usd"].iloc[2]      # |q|, not q
-assert abs(tab["carry_usd"].iloc[0] - 11507.0) < 5.0              # $100mm of 2y, one week
-try:
-    regulatory_carry_bp(10.5, 1.0, 5.0, 0.12, 7)                   # percent instead of decimals
-    raise AssertionError("percent inputs must be rejected")
-except ValueError:
-    pass
-```
+<!-- EXPLAIN: Listing 22.1 -->
+> **Code Companion: Listing 22.1.** Binding Tier 1 per $1 of gross inventory: max(kappa_rwa * RW, kappa_lr). The full python listing is in [Appendix F, Listing 22.1](#code-22-1).
 
 *Further reading for this section:* Duffie (2012), *Market Making Under the Proposed Volcker Rule*; Konstantinovsky and Phelps (2012) as summarized in Dynkin et al.; the NY Fed's primary dealer statistics (links in the Deep-Dive Resource Graph at the end of the chapter).
 
@@ -320,99 +251,8 @@ The shelf gives us $m$ directly, which is a pleasing accident.
 
 **The Spec You Hand the Robot.** *Vague version:* "clean TRACE and flag the regime changes." *What ROBO built:* a flag for every FINRA notice ever published, all of them set from the publication date, including a one-minute flag that switched on in 2024 and never switched off. *Precise version:* implement the block half-spread (22.6) with the positive-part guard, the censored-size impact and tail index (22.7), and a regime-flag layer driven by one dated table (`REGIME_DATES`) that every other chapter imports. Inputs: `trade_dt` timezone-aware (reject naive timestamps), `bond_id` (str, never a made-up CUSIP), `size_mm` as disseminated (\$mm), `side`, `price`, `rating_bucket` in {"IG", "HY"}. Flags compare the New York *calendar date* of the trade with the effective date. `one_minute_rule` is always False. Units are bp of price, \$mm, and minutes.
 
-```python
-def block_half_spread(lam, Q, delay, unwind_time, gamma, sigma, inferred_size=None):
-    """Zero-profit block half-spread, bp of price (eq. 22.6). lam: bp per $mm the market infers;
-    Q: true block size, $mm; delay, unwind_time: minutes; sigma: bp per sqrt(minute); gamma: per bp*$mm.
-    inferred_size: what the market believes Q is (defaults to Q; use the censored mean above the cap)."""
-    if Q <= 0 or unwind_time <= 0 or min(delay, lam, gamma, sigma) < 0:
-        raise ValueError("need Q > 0, unwind_time > 0, and non-negative delay, lam, gamma, sigma")
-    q_hat = Q if inferred_size is None else inferred_size
-    leak = max(0.0, 1.0 - delay / unwind_time)                 # positive-part guard
-    return lam * q_hat * leak + gamma * sigma**2 * Q * unwind_time / 6.0
-
-
-def pareto_alpha_from_imputed_mean(cap, imputed_mean):
-    """Tail index from the mean size above the cap (eq. 22.7): alpha = m / (m - 1), m = mean / cap."""
-    m = imputed_mean / cap
-    if m <= 1.0:
-        raise ValueError("imputed mean must exceed the cap")
-    return m / (m - 1.0)
-
-
-def censored_impact(lam, cap, alpha):
-    """Impact of any capped print: lam * alpha / (alpha - 1) * cap."""
-    if alpha <= 1.0:
-        raise ValueError("alpha must exceed 1 for a finite conditional mean")
-    return lam * alpha / (alpha - 1.0) * cap
-
-
-REGIME_DATES = {                      # New York calendar dates; imported by every later chapter
-    "sbsr_public": "2022-02-14",
-    "pt_modifier_live": "2023-05-15",
-    "t_plus_1": "2024-05-28",
-    "alloc_reports_live": "2026-06-08",
-    "affiliate_ind_voluntary": "2026-08-31",
-    "affiliate_ind_mandatory": "2027-08-02",
-}
-DISSEMINATION_CAP_MM = {"IG": 5.0, "HY": 1.0}
-
-
-def trace_regime_flags(trades):
-    """Add one boolean column per regime, plus size_capped and dup_risk. Rejects naive timestamps."""
-    need = {"trade_dt", "bond_id", "size_mm", "side", "price", "rating_bucket"}
-    missing = need - set(trades.columns)
-    if missing:
-        raise ValueError(f"missing columns: {sorted(missing)}")
-    if not isinstance(trades["trade_dt"].dtype, pd.DatetimeTZDtype):
-        raise ValueError("trade_dt must be timezone-aware (America/New_York)")
-    if not trades["rating_bucket"].isin(list(DISSEMINATION_CAP_MM)).all():
-        raise ValueError("rating_bucket must be 'IG' or 'HY'")
-    out = trades.copy()
-    ny_date = out["trade_dt"].dt.tz_convert("America/New_York").dt.tz_localize(None).dt.normalize()
-    for flag, d in REGIME_DATES.items():
-        out[flag] = ny_date >= pd.Timestamp(d)
-    out["one_minute_rule"] = False    # approved by the SEC in 2024, never effective: FINRA Notice 25-17
-    out["size_capped"] = out["size_mm"] >= out["rating_bucket"].map(DISSEMINATION_CAP_MM)
-    out["dup_risk"] = ~out["affiliate_ind_mandatory"]    # affiliate duplicates not reliably flagged yet
-    return out
-
-
-# Sanity checks
-lam, gam, sig = 0.5, 0.001, 2.5
-s15 = block_half_spread(lam, 15.0, 15.0, 120.0, gam, sig)
-s1 = block_half_spread(lam, 15.0, 1.0, 120.0, gam, sig)
-s48h = block_half_spread(lam, 15.0, 48 * 60.0, 120.0, gam, sig)
-assert abs(s15 - 8.4375) < 1e-9 and abs(s1 - 9.3125) < 1e-9          # worked example, 22.2.1
-assert abs(s48h - gam * sig**2 * 15.0 * 120.0 / 6.0) < 1e-12          # delay >= unwind: inventory only
-path = [block_half_spread(lam, 15.0, d, 120.0, gam, sig) for d in np.linspace(0.0, 240.0, 49)]
-assert np.all(np.diff(path) <= 1e-12)                                  # non-increasing in the delay
-
-alpha_ig = pareto_alpha_from_imputed_mean(5.0, 12.5)                   # Ben Dor p.364 imputed caps
-alpha_hy = pareto_alpha_from_imputed_mean(1.0, 4.0)
-assert abs(alpha_ig - 5.0 / 3.0) < 1e-12 and abs(alpha_hy - 4.0 / 3.0) < 1e-12
-assert abs(censored_impact(lam, 5.0, alpha_ig) - lam * 12.5) < 1e-12
-rng = np.random.default_rng(22)
-capped_ig = 5.0 * (1.0 + rng.pareto(alpha_ig, 200_000))               # classical Pareto above $5mm
-assert abs(np.median(capped_ig) - 5.0 * 2.0 ** (1.0 / alpha_ig)) < 0.05   # median ~ $7.6mm, mean $12.5mm
-
-trades = pd.DataFrame({
-    "trade_dt": pd.to_datetime(["2023-05-12 15:41", "2023-05-15 09:30", "2023-05-16 10:05"])
-                  .tz_localize("America/New_York"),
-    "bond_id": ["BBB_IND_2033", "B2_PKG_2029", "BBB_IND_2033"],
-    "size_mm": [2.0, 1.0, 5.0], "side": ["S", "B", "S"], "price": [97.25, 91.10, 96.90],
-    "rating_bucket": ["IG", "HY", "IG"],
-})
-flags = trace_regime_flags(trades)
-flag_cols = list(REGIME_DATES) + ["one_minute_rule"]
-assert [c for c in flag_cols if flags[c].iloc[0] != flags[c].iloc[-1]] == ["pt_modifier_live"]
-assert flags["size_capped"].tolist() == [False, True, True] and flags["dup_risk"].all()
-try:
-    trace_regime_flags(trades.assign(trade_dt=trades["trade_dt"].dt.tz_localize(None)))
-    raise AssertionError("naive timestamps must be rejected")
-except ValueError:
-    pass
-```
+<!-- EXPLAIN: Listing 22.2 -->
+> **Code Companion: Listing 22.2.** Zero-profit block half-spread, bp of price (eq. The full python listing is in [Appendix F, Listing 22.2](#code-22-2).
 
 *Further reading for this section:* Asquith, Covert and Pathak (2013/2019); Goldstein, Hotchkiss and Sirri (2007); FINRA Regulatory Notices 19-12, 22-12, 22-17, 25-17 and 26-16; FINRA Rule 6730 (links at the end of the chapter).
 
@@ -465,29 +305,8 @@ The 2024 fail data matched the identity's prediction of "not much changes": the 
 
 **The Spec You Hand the Robot.** *Vague version:* "estimate the margin saving from T+1." *What ROBO built:* the ratio $1/2$, because one day is half of two days, and a report claiming margin had halved. *Precise version:* implement (22.8) as `margin_ratio(t_old, t_new, closeout_days)` with the square root applied to the horizon *including* close-out, reject negative day counts, and check that DTCC's published ratios fall inside the $T_{\text{co}} \in \{0, 1\}$ bracket. Implement (22.9) returning both the total cost of failing and the charge, as annual decimals.
 
-```python
-from math import erf, exp, pi, sqrt
-
-
-def margin_ratio(t_old, t_new, closeout_days):
-    """IM_new / IM_old = sqrt((t_new + closeout) / (t_old + closeout)) for the volatility component (eq. 22.8)."""
-    if min(t_old, t_new, closeout_days) < 0 or t_old + closeout_days <= 0:
-        raise ValueError("day counts must be non-negative and the old horizon positive")
-    return sqrt((t_new + closeout_days) / (t_old + closeout_days))
-
-
-def fail_cost_annual(r_ref, floor=0.03):
-    """(total annual cost of failing, fails charge) per $1 of proceeds (eq. 22.9); decimals."""
-    charge = max(0.0, floor - r_ref)
-    return r_ref + charge, charge
-
-
-assert abs(margin_ratio(2, 1, 0) - 0.70711) < 1e-5 and abs(margin_ratio(2, 1, 1) - 0.81650) < 1e-5
-dtcc = {"snapshot": 9.1 / 12.8, "three_month_avg": 9.8 / 12.8}        # NSCC clearing fund, $bn (approx.)
-assert all(margin_ratio(2, 1, 0) <= v <= margin_ratio(2, 1, 1) for v in dtcc.values())
-assert fail_cost_annual(0.0) == (0.03, 0.03) and fail_cost_annual(0.045) == (0.045, 0.0)
-assert margin_ratio(2, 1, 0) != 0.5                                      # ROBO's linear answer
-```
+<!-- EXPLAIN: Listing 22.3 -->
+> **Code Companion: Listing 22.3.** IM_new / IM_old = sqrt((t_new + closeout) / (t_old + closeout)) for the volatility component (eq. The full python listing is in [Appendix F, Listing 22.3](#code-22-3).
 
 *Further reading for this section:* SEC press release 2023-29 (T+1 adoption); the DTCC/SIFMA/ICI T+1 after-action report (2024); TMPG best-practice materials on fails charges (title only).
 
@@ -573,65 +392,8 @@ For the desk, $U_t$ is a slow state variable, not a trade trigger: it is weekly 
 
 **The Spec You Hand the Robot.** *Vague version:* "simulate how much clearing saves." *What ROBO built:* a simulation with $N = 2$, where netting saves nothing and ROBO recommended against clearing. *Precise version:* Monte Carlo the netting factor for $N$ counterparties with a common directional component $m$ and idiosyncratic scale $\sigma_x$; return the simulated factor, the no-direction theory $1/\sqrt{N-1}$, and the large-$N$ floor (22.11). Provide a bisection that maps an observed netting factor to the implied $m$; implement (22.12); and calibrate the hinge (22.13) from two published sentences. Seeded; at least 1,000 simulations; reject $N < 2$.
 
-```python
-def folded_normal_mean(m, s=1.0):
-    """E|m + s Z| for standard normal Z (eq. 22.11)."""
-    return s * sqrt(2.0 / pi) * exp(-m * m / (2.0 * s * s)) + m * erf(m / (s * sqrt(2.0)))
-
-
-def netting_factor_mc(n_dealers, n_sims, seed, common_component=0.0, scale=1.0):
-    if n_dealers < 2 or n_sims < 1000 or scale <= 0:
-        raise ValueError("need n_dealers >= 2, n_sims >= 1000, scale > 0")
-    rng = np.random.default_rng(seed)
-    x = common_component + scale * rng.standard_normal((n_sims, n_dealers - 1))
-    mc = np.abs(x.sum(axis=1)).mean() / np.abs(x).sum(axis=1).mean()
-    m = abs(common_component)
-    return {"mc": float(mc), "theory": 1.0 / sqrt(n_dealers - 1),
-            "directional_floor": m / folded_normal_mean(m, scale)}
-
-
-def implied_common_component(phi_target, scale=1.0, lo=1e-9, hi=50.0, tol=1e-12):
-    """Directional component m at which the large-N floor equals phi_target (bisection; floor rises in m)."""
-    if not 0.0 < phi_target < 1.0:
-        raise ValueError("phi_target must lie in (0, 1)")
-    f = lambda m: m / folded_normal_mean(m, scale) - phi_target
-    for _ in range(200):
-        mid = 0.5 * (lo + hi)
-        lo, hi = (lo, mid) if f(lo) * f(mid) <= 0 else (mid, hi)
-        if hi - lo < tol:
-            break
-    return 0.5 * (lo + hi)
-
-
-def mandate_net_benefit(gross, phi, kappa_lr, hurdle, im, funding_spread, default_fund_cost=0.0):
-    """Left minus right side of eq. 22.12, per year, in the units of gross (e.g. $bn)."""
-    if not 0.0 <= phi <= 1.0:
-        raise ValueError("phi must lie in [0, 1]")
-    return (1.0 - phi) * gross * kappa_lr * hurdle - (im * funding_spread + default_fund_cost)
-
-
-def capacity_hinge(u_lo=0.4, u_hi=0.8, delta_sd=3.0, u_mid=0.6, level_sd=2.0):
-    """Calibrate c and U* in eq. 22.13 from two statements in Duffie et al. (2023)."""
-    c = delta_sd / (u_hi - u_lo)            # valid only if the kink lies below u_lo
-    u_star = u_mid - level_sd / c
-    if u_star > u_lo:
-        raise ValueError("kink above u_lo: the two-point calibration is invalid")
-    return c, u_star
-
-
-nf = netting_factor_mc(25, 20_000, seed=7)
-assert abs(nf["theory"] - 0.2041) < 1e-4 and abs(nf["mc"] / nf["theory"] - 1.0) < 0.02
-nd = netting_factor_mc(25, 20_000, seed=7, common_component=1.0)
-assert abs(nd["directional_floor"] - 0.857) < 1e-3 and abs(nd["mc"] - nd["directional_floor"]) < 0.01
-m_implied = implied_common_component(1.0 - 1.14 / 2.48)                 # DTCC sponsored figures (approx.)
-assert 0.4 < m_implied < 0.6
-calm = mandate_net_benefit(100.0, 0.54, 0.05, 0.12, im=2.0, funding_spread=0.005, default_fund_cost=0.02)
-one_way = mandate_net_benefit(100.0, 0.857, 0.05, 0.12, im=4.0, funding_spread=0.01, default_fund_cost=0.02)
-assert calm > one_way                                                     # netting fades, IM rises
-c_h, u_star = capacity_hinge()
-assert abs(c_h - 7.5) < 1e-12 and abs(u_star - 1.0 / 3.0) < 1e-12
-assert abs(c_h * max(0.96 - u_star, 0.0) - 4.70) < 0.01                  # 2020-03-12, excess over volatility
-```
+<!-- EXPLAIN: Listing 22.4 -->
+> **Code Companion: Listing 22.4.** E|m + s Z| for standard normal Z (eq. The full python listing is in [Appendix F, Listing 22.4](#code-22-4).
 
 *Further reading for this section:* SEC press release 2023-247 (clearing mandate); Duffie et al. (2023), NY Fed Staff Report 1070; Duffie (2020), *Still the World's Safe Haven?* (Hutchins Center); Federal Reserve releases of 2020-03-23 (SMCCF) and 2020-04-01 (SLR exclusion).
 
@@ -741,66 +503,8 @@ A before-and-after comparison with no control group is the regulatory version of
 
 **The Spec You Hand the Robot.** *Vague version:* "measure the effect of the new rule." *What ROBO built:* the mean of $y$ after the date minus the mean before it, on the treated bonds only, which correctly attributed the 2023 recovery in bank stocks to a FINRA reporting modifier. *Precise version:* implement (22.17) on a panel `[date (datetime64, New York calendar), bond_id (str), treated (bool), y (float)]`; the window is in business days relative to $t_0$, with the event day counted as post; use only bonds observed on both sides; return the 2×2 table of means, $\hat\delta$, and a cluster-bootstrap standard error (resample bonds within the treated and control groups, seeded); and provide `placebo(panel, dates, **kw)`. Reject panels with fewer than two treated or control bonds. Validate on a synthetic panel with a known effect and a concurrent market-wide shock.
 
-```python
-def event_study_did(panel, event_date, window=(-60, 60), n_boot=500, seed=0,
-                    treated_col="treated", y_col="y"):
-    """Difference-in-differences around an effective date (eq. 22.17), cluster bootstrap by bond."""
-    need = {"date", "bond_id", treated_col, y_col}
-    missing = need - set(panel.columns)
-    if missing:
-        raise ValueError(f"missing columns: {sorted(missing)}")
-    t0 = np.datetime64(pd.Timestamp(event_date).date())
-    rel = np.busday_count(t0, panel["date"].to_numpy().astype("datetime64[D]"))
-    keep = (rel >= window[0]) & (rel <= window[1])
-    df = panel.loc[keep, ["bond_id", treated_col, y_col]].copy()
-    df["post"] = rel[keep] >= 0                                   # event day counts as post
-    cell = df.groupby(["bond_id", treated_col, "post"])[y_col].mean().unstack("post")
-    if False not in cell.columns or True not in cell.columns:
-        raise ValueError("the window must contain pre and post observations")
-    cell = cell.dropna()                                          # bonds seen on both sides only
-    d = (cell[True] - cell[False]).to_numpy()
-    tmask = cell.index.get_level_values(treated_col).to_numpy(dtype=bool)
-    d_t, d_c = d[tmask], d[~tmask]
-    if d_t.size < 2 or d_c.size < 2:
-        raise ValueError("need at least two treated and two control bonds")
-    rng = np.random.default_rng(seed)
-    boots = np.array([rng.choice(d_t, d_t.size).mean() - rng.choice(d_c, d_c.size).mean()
-                      for _ in range(n_boot)])
-    table = pd.DataFrame({"pre": [cell[False][tmask].mean(), cell[False][~tmask].mean()],
-                          "post": [cell[True][tmask].mean(), cell[True][~tmask].mean()]},
-                         index=["treated", "control"])
-    table["change"] = table["post"] - table["pre"]
-    return {"table": table, "did": float(d_t.mean() - d_c.mean()), "se": float(boots.std(ddof=1)),
-            "n_treated": int(d_t.size), "n_control": int(d_c.size)}
-
-
-def placebo(panel, dates, **kwargs):
-    """DiD estimate on each fake effective date; all should be near zero."""
-    return pd.Series({pd.Timestamp(d): event_study_did(panel, d, **kwargs)["did"] for d in dates})
-
-
-# Synthetic PT-modifier panel: +2bp on treated bonds from 2023-05-15, and a concurrent
-# market-wide improvement of 3bp (the post-March-2023 healing) that a naive study would misread.
-rng = np.random.default_rng(2023)
-dates = pd.bdate_range("2022-10-03", "2023-09-29")
-n_t = n_c = 40
-ids = np.array([f"T{i:02d}" for i in range(n_t)] + [f"C{i:02d}" for i in range(n_c)])
-is_t = np.r_[np.ones(n_t, dtype=bool), np.zeros(n_c, dtype=bool)]
-post = np.asarray(dates >= pd.Timestamp("2023-05-15"))
-fe = rng.normal(0.0, 20.0, ids.size)                                # bond-level cost, bp
-market = np.cumsum(rng.normal(0.0, 0.05, dates.size)) - 3.0 * post  # market-wide cost, bp
-y = (fe[None, :] + market[:, None] + rng.normal(0.0, 1.0, (dates.size, ids.size))
-     + 2.0 * (post[:, None] & is_t[None, :]))
-panel = pd.DataFrame({"date": np.repeat(dates.to_numpy(), ids.size), "bond_id": np.tile(ids, dates.size),
-                      "treated": np.tile(is_t, dates.size), "y": y.ravel()})
-
-res = event_study_did(panel, "2023-05-15", window=(-60, 60), n_boot=400, seed=1)
-assert abs(res["did"] - 2.0) < max(4.0 * res["se"], 0.1) and res["se"] < 0.2
-naive = res["table"].loc["treated", "change"]                       # before-after, no control group
-assert naive < 0.0 < res["did"]                                     # naive says costs fell; they rose
-plac = placebo(panel, ["2023-01-17", "2023-02-15"], window=(-40, 40), n_boot=200, seed=2)
-assert (plac.abs() < 0.25).all()                                    # nothing happened on fake dates
-```
+<!-- EXPLAIN: Listing 22.5 -->
+> **Code Companion: Listing 22.5.** Difference-in-differences around an effective date (eq. The full python listing is in [Appendix F, Listing 22.5](#code-22-5).
 
 ## 22.9 Desk Debrief
 

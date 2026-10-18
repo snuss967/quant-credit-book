@@ -605,371 +605,38 @@ Sanity checks: **A** $E_0+B_0=V_0$ to $10^{-10}$; **B** Monte Carlo Merton debt 
 
 The blocks below run in order in one interpreter.
 
-```python
-# Block 0: imports, seed, and the PASS/FAIL helper
-import warnings
-import numpy as np
-from scipy.stats import norm, spearmanr
-from scipy.optimize import fsolve, brentq
-
-rng = np.random.default_rng(42)
-
-
-def check(label, ok, detail=""):
-    """Print PASS/FAIL and stop the run on failure."""
-    print(f"[{'PASS' if ok else 'FAIL'}] {label}  {detail}")
-    assert ok, label
-```
+<!-- EXPLAIN: Listing 6.1 -->
+> **Code Companion: Listing 6.1.** Print PASS/FAIL and stop the run on failure. The full python listing is in [Appendix F, Listing 6.1](#code-6-1).
 
 Block 1 is Merton under $\mathbb{Q}$ for prices and $\mathbb{P}$ for PDs. The spread uses `log1p` on the put fraction so that tiny spreads do not vanish into rounding.
 
-```python
-# Block 1: Merton (1974)
-def _d1d2(V0, F, r, sigma_V, T):
-    V0, F, T = np.asarray(V0, float), np.asarray(F, float), np.asarray(T, float)
-    sigma_V = np.clip(np.asarray(sigma_V, float), 1e-4, 5.0)
-    if np.any(V0 <= 0) or np.any(F <= 0) or np.any(T <= 0):
-        raise ValueError("V0, F and T must be strictly positive")
-    srt = sigma_V * np.sqrt(T)
-    d1 = (np.log(V0 / F) + (r + 0.5 * sigma_V**2) * T) / srt
-    return d1, d1 - srt
-
-
-def merton_prices(V0, F, r, sigma_V, T):
-    """Q-measure Merton. Returns (E0, B0, spread, pd_Q); spread is decimal, continuously compounded."""
-    d1, d2 = _d1d2(V0, F, r, sigma_V, T)
-    T = np.asarray(T, float)
-    disc_F = F * np.exp(-r * T)
-    E0 = V0 * norm.cdf(d1) - disc_F * norm.cdf(d2)
-    B0 = disc_F * norm.cdf(d2) + V0 * norm.cdf(-d1)
-    put_frac = norm.cdf(-d2) - V0 * norm.cdf(-d1) / disc_F          # put / (F e^{-rT}), >= 0
-    spread = -np.log1p(-np.maximum(put_frac, 0.0)) / T
-    return E0, B0, spread, norm.cdf(-d2)
-
-
-def merton_pd_P(V0, F, mu, sigma_V, T):
-    """P-measure distance to default and PD at horizon T."""
-    sigma_V = np.clip(np.asarray(sigma_V, float), 1e-4, 5.0)
-    T = np.asarray(T, float)
-    dd = (np.log(np.asarray(V0, float) / F) + (mu - 0.5 * sigma_V**2) * T) / (sigma_V * np.sqrt(T))
-    return dd, norm.cdf(-dd)
-
-
-V0, F, r, sV, T = 100.0, 80.0, 0.04, 0.25, 1.0
-E0, B0, s1, pdQ = map(float, merton_prices(V0, F, r, sV, T))
-dd_P, pd_P = map(float, merton_pd_P(V0, F, 0.08, sV, T))
-print(f"E0={E0:.4f}  B0={B0:.4f}  s={1e4 * s1:.1f} bp  PD_Q={pdQ:.4f}  DD_P={dd_P:.3f}  PD_P={pd_P:.4f}")
-check("A: E0 + B0 = V0", abs(E0 + B0 - V0) < 1e-10, f"err={abs(E0 + B0 - V0):.1e}")
-
-n_half = 100_000
-z = rng.standard_normal(n_half)
-z = np.concatenate([z, -z])                                            # antithetic pairs
-VT = V0 * np.exp((r - 0.5 * sV**2) * T + sV * np.sqrt(T) * z)
-pay = np.exp(-r * T) * np.minimum(VT, F)
-pair = 0.5 * (pay[:n_half] + pay[n_half:])
-mc, se = pair.mean(), pair.std(ddof=1) / np.sqrt(n_half)
-check("B: MC debt within 3 SE of closed form", abs(mc - B0) < 3 * se,
-      f"MC={mc:.4f} CF={B0:.4f} SE={se:.4f}")
-
-s_short = float(merton_prices(V0, F, r, sV, 1e-3)[2])
-check("C: Merton short-end spread -> 0", abs(s_short) < 1e-8, f"s(0.001y)={s_short:.1e}")
-```
+<!-- EXPLAIN: Listing 6.2 -->
+> **Code Companion: Listing 6.2.** Q-measure Merton. The full python listing is in [Appendix F, Listing 6.2](#code-6-2).
 
 Block 2 is KMV: the two-equation solver with the analytic Jacobian of §6.4.2, the vectorized equity inversion, the VK iteration, and the Bharath–Shumway naive DD.
 
-```python
-# Block 2: KMV inverse problem
-def merton_equity_vol(V0, F, r, sigma_V, T):
-    """Equity value and the Ito-implied equity volatility sigma_E = N(d1) sigma_V V0 / E0."""
-    d1, _ = _d1d2(V0, F, r, sigma_V, T)
-    E = merton_prices(V0, F, r, sigma_V, T)[0]
-    return E, norm.cdf(d1) * np.asarray(sigma_V, float) * V0 / E
-
-
-def solve_kmv(E0, sigma_E, F, r, T=1.0):
-    """Solve E0 = C(V0, sigma_V) and sigma_E E0 = N(d1) sigma_V V0 on log-parameters."""
-    if not (0.05 <= sigma_E <= 3.0):
-        raise ValueError(f"sigma_E={sigma_E} outside [5%, 300%]: is it annualized?")
-    sq, disc_F = np.sqrt(T), F * np.exp(-r * T)
-
-    def resid(zz):
-        V, s = np.exp(zz)
-        d1, d2 = _d1d2(V, F, r, s, T)
-        return np.array([(V * norm.cdf(d1) - disc_F * norm.cdf(d2)) / E0 - 1.0,
-                         norm.cdf(d1) * s * V / (sigma_E * E0) - 1.0])
-
-    def jac(zz):
-        V, s = np.exp(zz)
-        d1, d2 = _d1d2(V, F, r, s, T)
-        Nd1, nd1 = norm.cdf(d1), norm.pdf(d1)
-        return np.array([[V * Nd1 / E0, s * V * nd1 * sq / E0],
-                         [(s * V * Nd1 + V * nd1 / sq) / (sigma_E * E0),
-                          s * V * (Nd1 - nd1 * d2) / (sigma_E * E0)]])
-
-    V_init = E0 + disc_F
-    z0 = np.log([V_init, max(sigma_E * E0 / V_init, 0.01)])
-    zz = fsolve(resid, z0, fprime=jac, xtol=1e-10)
-    V, s = np.exp(zz)
-    if np.max(np.abs(resid(zz))) > 1e-9 or not (0.01 <= s <= 3.0) or V < E0:
-        raise RuntimeError(f"KMV solve failed: V={V:.4g}, sigma_V={s:.4g}; fall back to naive DD and flag")
-    return float(V), float(s)
-
-
-def invert_equity(E, F, r, sigma_V, T, tol=1e-12, max_iter=100):
-    """Vectorized Newton for V with C(V) = E. C is increasing and convex in V, so Newton
-    started right of the root (V = E + F e^{-rT}) converges monotonically."""
-    E = np.asarray(E, float)
-    disc_F = F * np.exp(-r * T)
-    V = E + disc_F
-    for _ in range(max_iter):
-        d1, d2 = _d1d2(V, F, r, sigma_V, T)
-        step = (V * norm.cdf(d1) - disc_F * norm.cdf(d2) - E) / np.maximum(norm.cdf(d1), 1e-12)
-        V = V - step
-        if np.max(np.abs(step) / V) < tol:
-            return V
-    raise RuntimeError("equity inversion did not converge")
-
-
-def kmv_iterate(E_series, F, r, T=1.0, periods_per_year=52, tol=1e-6, max_iter=100):
-    """Vasicek-Kealhofer iteration. Returns (implied asset path, sigma_V, iterations)."""
-    E = np.asarray(E_series, float)
-    sig_E = np.std(np.diff(np.log(E)), ddof=1) * np.sqrt(periods_per_year)
-    sig = max(sig_E * E[-1] / (E[-1] + F * np.exp(-r * T)), 0.01)
-    for it in range(1, max_iter + 1):
-        V = invert_equity(E, F, r, sig, T)
-        sig_new = np.std(np.diff(np.log(V)), ddof=1) * np.sqrt(periods_per_year)
-        if abs(sig_new - sig) < tol:
-            return V, float(sig_new), it
-        sig = sig_new
-    raise RuntimeError("VK iteration did not converge")
-
-
-def naive_dd(E0, sigma_E, F, mu, T=1.0):
-    """Bharath-Shumway (2008) naive distance to default (P-measure; mu = past equity return)."""
-    w = E0 / (E0 + F)
-    sig_V = w * sigma_E + (1.0 - w) * (0.05 + 0.25 * sigma_E)
-    return (np.log((E0 + F) / F) + (mu - 0.5 * sig_V**2) * T) / (sig_V * np.sqrt(T))
-
-
-E_true, sE_true = map(float, merton_equity_vol(V0, F, r, sV, T))
-V_hat, sV_hat = solve_kmv(E_true, sE_true, F, r, T)
-err_D = max(abs(V_hat / V0 - 1.0), abs(sV_hat / sV - 1.0))
-check("D1: KMV round trip recovers (V0, sigma_V)", err_D < 1e-6,
-      f"sigma_E={sE_true:.3f} -> V0={V_hat:.6f}, sigma_V={sV_hat:.6f}")
-
-n_weeks, dt_w = 156, 1.0 / 52
-steps = (0.08 - 0.5 * sV**2) * dt_w + sV * np.sqrt(dt_w) * rng.standard_normal(n_weeks - 1)
-V_path = V0 * np.exp(np.concatenate([[0.0], np.cumsum(steps)]))
-E_path = merton_prices(V_path, F, r, sV, T)[0]
-_, sV_vk, n_it = kmv_iterate(E_path, F, r, T)
-check("D2: VK iteration recovers sigma_V", abs(sV_vk - sV) < 0.05,
-      f"sigma_V={sV_vk:.4f} after {n_it} iterations")
-
-F_x = rng.uniform(10.0, 90.0, 200)
-sV_x = rng.uniform(0.10, 0.50, 200)
-E_x, sE_x = merton_equity_vol(V0, F_x, r, sV_x, T)
-dd_true, _ = merton_pd_P(V0, F_x, r, sV_x, T)
-rho_E, _ = spearmanr(dd_true, naive_dd(E_x, sE_x, F_x, r, T))
-check("E: naive DD ranks like the solved DD", rho_E > 0.8, f"Spearman={rho_E:.3f}")
-```
+<!-- EXPLAIN: Listing 6.3 -->
+> **Code Companion: Listing 6.3.** Equity value and the Ito-implied equity volatility sigma_E = N(d1) sigma_V V0 / E0. The full python listing is in [Appendix F, Listing 6.3](#code-6-3).
 
 Block 3 is Black–Cox, with the second term of the passage formula computed in log space so that a large $e^{-2mx_0/\sigma_V^2}$ cannot multiply a tiny $N(\cdot)$ into `inf * 0`.
 
-```python
-# Block 3: Black-Cox first passage
-def black_cox_pd(V0, K, g, mu, sigma_V, T):
-    """First-passage PD by T for barrier K_t = K exp(-g (T - t)). Use mu = r - q under Q."""
-    x0 = np.log(V0 / (K * np.exp(-g * T)))
-    if np.any(x0 <= 0):
-        raise ValueError("asset value is already at or below the barrier")
-    m, srt = mu - 0.5 * sigma_V**2 - g, sigma_V * np.sqrt(T)
-    second = np.exp(-2.0 * m * x0 / sigma_V**2 + norm.logcdf((-x0 + m * T) / srt))
-    return norm.cdf((-x0 - m * T) / srt) + second
-
-
-def black_cox_mc(V0, K, g, mu, sigma_V, T, n_paths=200_000, n_steps=12, bridge=True):
-    """Monte Carlo on the log distance to the barrier, with optional Brownian-bridge correction."""
-    dt = T / n_steps
-    m = mu - 0.5 * sigma_V**2 - g
-    x = np.full(n_paths, np.log(V0 / (K * np.exp(-g * T))))
-    alive = np.ones(n_paths, dtype=bool)
-    for _ in range(n_steps):                                    # the only Python loop: time steps
-        x_new = x + m * dt + sigma_V * np.sqrt(dt) * rng.standard_normal(n_paths)
-        hit = x_new <= 0.0
-        if bridge:
-            p_cross = np.exp(-2.0 * np.maximum(x, 0.0) * np.maximum(x_new, 0.0) / (sigma_V**2 * dt))
-            hit |= rng.uniform(size=n_paths) < p_cross
-        alive &= ~hit
-        x = x_new
-    pd_hat = 1.0 - alive.mean()
-    return pd_hat, np.sqrt(pd_hat * (1.0 - pd_hat) / n_paths)
-
-
-bc = dict(V0=100.0, K=70.0, g=0.02, mu=0.06, sigma_V=0.25, T=5.0)
-pd_cf = float(black_cox_pd(**bc))
-pd_br, se_br = black_cox_mc(**bc, n_steps=12, bridge=True)
-pd_nv, _ = black_cox_mc(**bc, n_steps=12, bridge=False)
-check("F1: bridge MC within 3 SE of closed form", abs(pd_br - pd_cf) < 3 * se_br,
-      f"CF={pd_cf:.4f} bridge={pd_br:.4f} SE={se_br:.4f}")
-check("F2: naive discrete monitoring is biased low", pd_nv < pd_cf, f"bias={pd_nv - pd_cf:+.4f}")
-
-mu_zero = 0.5 * 0.25**2 + 0.02                                  # makes m = 0
-x0_g = np.log(100.0 / (70.0 * np.exp(-0.02 * 5.0)))
-pd_m0 = float(black_cox_pd(100.0, 70.0, 0.02, mu_zero, 0.25, 5.0))
-check("G: m = 0 gives twice the terminal PD",
-      abs(pd_m0 - 2.0 * norm.cdf(-x0_g / (0.25 * np.sqrt(5.0)))) < 1e-12, f"PD={pd_m0:.6f}")
-```
+<!-- EXPLAIN: Listing 6.4 -->
+> **Code Companion: Listing 6.4.** First-passage PD by T for barrier K_t = K exp(-g (T - t)). The full python listing is in [Appendix F, Listing 6.4](#code-6-4).
 
 Block 4 is the CIR intensity: closed form, exact simulation, and a diagnostic that shows how often naive Euler goes negative when Feller fails.
 
-```python
-# Block 4: CIR intensity
-def cir_survival(lam0, kappa, theta, sigma, T):
-    """Closed-form Q-survival S(0,T) = A(T) exp(-B(T) lam0)."""
-    eta = np.sqrt(kappa**2 + 2.0 * sigma**2)
-    e = np.expm1(eta * T)
-    den = (eta + kappa) * e + 2.0 * eta
-    B = 2.0 * e / den
-    A = (2.0 * eta * np.exp(0.5 * (kappa + eta) * T) / den) ** (2.0 * kappa * theta / sigma**2)
-    return A * np.exp(-B * lam0)
-
-
-def cir_mc(lam0, kappa, theta, sigma, T, n_paths=50_000, n_steps=100):
-    """Exact noncentral chi-square transitions; trapezoid rule for the integrated intensity."""
-    if 2.0 * kappa * theta < sigma**2:
-        raise ValueError("Feller condition violated: 2 kappa theta < sigma^2")
-    dt = T / n_steps
-    c = sigma**2 * (1.0 - np.exp(-kappa * dt)) / (4.0 * kappa)
-    dof = 4.0 * kappa * theta / sigma**2
-    lam = np.full(n_paths, float(lam0))
-    integral = np.zeros(n_paths)
-    for _ in range(n_steps):
-        lam_new = c * rng.noncentral_chisquare(dof, lam * np.exp(-kappa * dt) / c)
-        integral += 0.5 * (lam + lam_new) * dt
-        lam = lam_new
-    disc = np.exp(-integral)
-    return disc.mean(), disc.std(ddof=1) / np.sqrt(n_paths)
-
-
-def cir_euler_negative_share(lam0, kappa, theta, sigma, T, n_paths=20_000, n_steps=260):
-    """Diagnostic only: share of naive-Euler paths that visit lambda < 0."""
-    dt = T / n_steps
-    lam = np.full(n_paths, float(lam0))
-    went_negative = np.zeros(n_paths, dtype=bool)
-    for _ in range(n_steps):
-        shock = sigma * np.sqrt(np.maximum(lam, 0.0) * dt) * rng.standard_normal(n_paths)
-        lam = lam + kappa * (theta - lam) * dt + shock
-        went_negative |= lam < 0.0
-    return went_negative.mean()
-
-
-cir = dict(lam0=0.03, kappa=0.5, theta=0.04, sigma=0.10, T=5.0)
-S_cf = float(cir_survival(**cir))
-S_mc, se_cir = cir_mc(**cir)
-check("H: CIR closed form vs exact-sampling MC", abs(S_mc - S_cf) < 3 * se_cir,
-      f"CF={S_cf:.5f} MC={S_mc:.5f} SE={se_cir:.5f}")
-print(f"Euler paths visiting lambda<0 with sigma=0.30 (Feller fails): "
-      f"{cir_euler_negative_share(0.03, 0.5, 0.04, 0.30, 5.0):.1%}")
-```
+<!-- EXPLAIN: Listing 6.5 -->
+> **Code Companion: Listing 6.5.** Closed-form Q-survival S(0,T) = A(T) exp(-B(T) lam0). The full python listing is in [Appendix F, Listing 6.5](#code-6-5).
 
 Block 5 is the CDS engine of §6.8: piecewise-constant hazards, both legs, a sequential Brent bootstrap that flags rather than hides negative buckets, and the credit triangle.
 
-```python
-# Block 5: CDS legs, hazard bootstrap, credit triangle
-def cum_hazard(t, knots, lams):
-    """Integrated piecewise-constant hazard; lams[k] applies on (knots[k-1], knots[k]], flat beyond."""
-    t = np.atleast_1d(np.asarray(t, float))
-    knots, lams = np.asarray(knots, float), np.asarray(lams, float)
-    lo = np.concatenate(([0.0], knots[:-1]))
-    hi = knots.copy()
-    hi[-1] = np.inf
-    overlap = np.clip(np.minimum(t[:, None], hi[None, :]) - lo[None, :], 0.0, None)
-    return overlap @ lams
-
-
-def cds_legs(knots, lams, T, c, R, discount, freq=4, n_sub=12):
-    """Returns (pv_premium, pv_protection, rpv01) per unit notional. T must be a multiple of 1/freq."""
-    pay = np.arange(1, int(round(T * freq)) + 1) / freq
-    prev = np.concatenate(([0.0], pay[:-1]))
-    S_pay = np.exp(-cum_hazard(pay, knots, lams))
-    S_prev = np.exp(-cum_hazard(prev, knots, lams))
-    rpv01 = np.sum((pay - prev) * discount(pay) * (S_pay + 0.5 * (S_prev - S_pay)))
-    grid = np.linspace(0.0, T, int(round(T * freq * n_sub)) + 1)
-    S_g = np.exp(-cum_hazard(grid, knots, lams))
-    pv_prot = (1.0 - R) * np.sum(discount(0.5 * (grid[1:] + grid[:-1])) * (S_g[:-1] - S_g[1:]))
-    return c * rpv01, pv_prot, rpv01
-
-
-def par_spread(knots, lams, T, R, discount):
-    _, prot, rpv01 = cds_legs(knots, lams, T, 1.0, R, discount)
-    return prot / rpv01
-
-
-def bootstrap_hazard(tenors, spreads_bp, R, discount):
-    """Sequential Brent bootstrap. Negative buckets are flagged and warned, never silently floored."""
-    tenors = np.asarray(tenors, float)
-    s = np.asarray(spreads_bp, float) / 1e4
-    lams = np.zeros(tenors.size)
-    negative = np.zeros(tenors.size, dtype=bool)
-    for k in range(tenors.size):
-        def err(lk, k=k):
-            trial = lams.copy()
-            trial[k] = lk
-            return par_spread(tenors, trial, tenors[k], R, discount) - s[k]
-        lams[k] = brentq(err, -1.0, 5.0, xtol=1e-14)
-        if lams[k] < 0.0:
-            negative[k] = True
-            warnings.warn(f"negative hazard {lams[k]:.4f} on bucket ending {tenors[k]}y: check quotes/recovery")
-    return lams, negative
-
-
-def credit_triangle(s, R):
-    return s / (1.0 - R)
-
-
-disc4 = lambda t: np.exp(-0.04 * np.asarray(t, float))
-disc0 = lambda t: np.ones_like(np.asarray(t, float))
-ten = np.array([1.0, 3.0, 5.0, 7.0, 10.0])
-quotes = np.array([150.0, 210.0, 260.0, 290.0, 310.0])
-lam_k, neg_k = bootstrap_hazard(ten, quotes, 0.4, disc4)
-reprice = max(abs(par_spread(ten, lam_k, T_k, 0.4, disc4) - q / 1e4) for T_k, q in zip(ten, quotes))
-check("I: bootstrap reprices every quote", reprice < 1e-8 and not neg_k.any(),
-      f"max err={reprice:.1e}; lambdas={np.round(lam_k, 5)}")
-
-tri = credit_triangle(0.03, 0.4)
-lam_f0, _ = bootstrap_hazard([5.0], [300.0], 0.4, disc0)
-lam_f4, _ = bootstrap_hazard([5.0], [300.0], 0.4, disc4)
-check("J1: credit triangle exact with flat discounting", abs(lam_f0[0] - tri) < 2e-4,
-      f"lambda={lam_f0[0]:.5f} vs s/(1-R)={tri:.5f}")
-check("J2: credit triangle approximate with r = 4%", abs(lam_f4[0] - tri) < 1e-3,
-      f"lambda={lam_f4[0]:.5f} (discrete coupons paid in arrears)")
-
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore")
-    lam_inv, neg_inv = bootstrap_hazard([1.0, 3.0, 5.0], [1500.0, 300.0, 250.0], 0.4, disc4)
-check("K: inverted curve trips the negative-hazard flag", bool(neg_inv.any()),
-      f"lambdas={np.round(lam_inv, 4)}")
-```
+<!-- EXPLAIN: Listing 6.6 -->
+> **Code Companion: Listing 6.6.** Integrated piecewise-constant hazard; lams[k] applies on (knots[k-1], knots[k]], flat beyond. The full python listing is in [Appendix F, Listing 6.6](#code-6-6).
 
 Block 6 closes the loop: it computes the Merton term structure of spreads for the §6.2.4 firm and asks what a CDS desk would infer from it.
 
-```python
-# Block 6: the structural short end, seen through the CDS bootstrap
-ten_m = np.array([0.05, 0.25, 1.0, 3.0, 5.0, 7.0, 10.0])
-s_m = merton_prices(V0, F, r, sV, ten_m)[2]
-for T_k, s_k in zip(ten_m, s_m):
-    print(f"  Merton T={T_k:5.2f}y  s={1e4 * s_k:7.1f} bp")
-peak = int(np.argmax(s_m))
-check("L: structural short end ~0 and hump-shaped curve",
-      s_m[0] < 0.05 * s_m.max() and 0 < peak < ten_m.size - 1,
-      f"s(0.05y)={1e4 * s_m[0]:.2f} bp, peak at {ten_m[peak]}y")
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore")
-    lam_m, neg_m = bootstrap_hazard(ten_m[2:], 1e4 * s_m[2:], 0.4, disc4)
-print("CDS-style hazards implied by Merton spreads (R = 40% convention):", np.round(lam_m, 4),
-      "| negative buckets:", neg_m)
-print("All chapter 6 checks passed.")
-```
+<!-- EXPLAIN: Listing 6.7 -->
+> **Code Companion: Listing 6.7.** Block 6: the structural short end, seen through the CDS bootstrap. The full python listing is in [Appendix F, Listing 6.7](#code-6-7).
 
 **Edge cases ROBO must handle, in writing.** Negative or zero $E_0$, $F$, or $T$ raise. $\sigma_E$ outside 5%–300% raises with a message asking whether it was annualized. A KMV solve that fails its residual or bound checks raises, and the batch wrapper catches it, falls back to the naive DD, and sets `dd_method="naive"`. A bootstrap that produces a negative bucket returns the raw curve plus a boolean mask; any floored curve is a separate output named `*_floored`. Every output table carries `measure`, `recovery_convention`, `sigma_frequency`, and `as_of` columns.
 

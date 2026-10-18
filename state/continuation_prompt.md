@@ -130,6 +130,18 @@ Acceptance: every chapter's Python runs clean; `state/reviews/ed2/code_ledger.md
 3. Edition 3 planning inputs exist: `state/reviews/ed2/*`, updated `state/exploratory_space.md`, writer returns consolidated.
 
 
+
+## USER DIRECTIVES, TOP PRIORITY FOR EDITION 2 (2026-10-18)
+
+Read `state/user_directives_ed2.md` and the "Edition 2 Voice Amendments" in `state/style_bible.md` before any work. They add to WP1–WP7 and remove nothing. Order of work after the restart:
+1. **Finish the in-flight work.** Run the reader-lens synthesis plus its 4 new chapters (their writers must follow the voice amendments), finish primers 04_ch04b, 07_ch07b and 12_ch12b, and run the remaining research.
+2. **U3, media and perspectives research (Sonnet):** specific podcast episodes and blog posts per chapter; public perspectives of Apollo, Ares, DE Shaw, Oaktree, Jefferies, BofA and others; public accounts of quant-shop life.
+3. **U1, code explanations (Sonnet):** replace every `<!-- EXPLAIN -->` stub. Re-run `python3 tools/move_code_to_companion.py --apply` first, to sweep any code that new writers added.
+4. **New chapters 01_ch01b and 04_ch04c (Opus,** each from a short Fable brief built on the U3 dossiers).
+5. **U2, narrative revision, chapter by chapter (a short Fable brief, then Opus),** starting with Ch 1–7 (the book's on-ramp), then Part IV (the RSSG reader's home turf).
+6. **U4, figures (Sonnet with Python scripts),** at least 3 per chapter.
+7. Then WP3–WP7 as planned.
+
 ## Resume Checklist (paused 2026-10-18 01:30 UTC at ~92% usage; scheduled restart 04:17 UTC)
 
 Run `python3 tools/status.py` first. Workflow scripts live in ~/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/.

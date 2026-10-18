@@ -142,13 +142,17 @@ Promoted to targeted expansions rather than new files this edition (see `state/c
 
 ---
 
+- **Ch 1-B `01_ch01b_a_week_in_five_quant_shops`: A Week in Five Quant Shops (user directive).** Realistic, often mundane life inside a market maker, a multi-strategy credit pod, a systematic asset manager, a bank credit-trading desk, and a distressed fund. Fictional composites grounded in public accounts.
+- **Ch 4-C `04_ch04c_other_seats_at_the_table`: Other Seats at the Table (user directive).** The same bond seen from an opportunistic credit fund (Apollo-style), a direct lender or alternative-credit manager (Ares-style), a multi-strategy RV pod (DE Shaw-style), a dealer desk (Jefferies/BofA-style), a CLO manager, an insurer, and a systematic fund. Real firms are named only for publicly stated views.
+- **App F `95_appF_code_companion`: The Code Companion (user directive; created 2026-10-18).** Every code listing in the book, by chapter. Chapters explain the code in prose and link here.
+
 ## 4. MANDATORY CHAPTER ANATOMY (EVERY SECTION MUST INCLUDE THESE 6 ELEMENTS)
 
 Whenever you write or expand a chapter or sub-section, you MUST weave in all six of the following components:
 
 1. **Intuitive Desk Framing:** Open with how a SIG market maker or a PJT RSSG partner looks at the problem in plain, ruthless trading terms. (This is where the cast from the style bible earns its keep.)
 2. **Rigorous Mathematical Derivation:** Full LaTeX equations ($inline$ and $$display$$), step-by-step proofs, variable definitions, and boundary conditions. Explain every Greek letter and operator so a technical builder can translate it into code. Use the notation table in `/state/style_bible.md`.
-3. **AI-Coder Specification Block:** A dedicated block titled `### Specification for AI Implementation` containing exact data schemas, tensor shapes, edge-case warnings, numerical stability guards, and full Python/C++/Rust reference implementations (Python must run as written).
+3. **AI-Coder Specification Block:** A dedicated block titled `### Specification for AI Implementation` that explains in prose what each reference implementation does, its data schemas, edge cases, and numerical stability guards, and when to use it. It links to the full code in Appendix F (`95_appF_code_companion.md`). Code itself never appears in chapters (user directive, Edition 2).
 4. **Source Extraction (`> [SOURCE EXTRACTION]`):** Short exact quotations from `/source_pdfs/` (via `/state/pdf_pages/`) with `book_id p.N` citations, each followed by an annotation of how the idea applies to systematic credit today and where the modern desk departs from it.
 5. **Deep-Dive Real-World Case Study:** Every concept must be anchored in a meticulous historical autopsy (e.g., *Serta Simmons 2020 Uptier*, *J.Crew 2016 IP Drop-Down*, *Incora/Wesco 2022 Vote Rigging*, *Carvana 2023 Distressed Exchange*, *Silicon Valley Bank 2023 Credit-Equity Vol Dislocation*, *Hertz 2020 Post-Reorg Equity/Warrants*, *Windstream / Aurelius CDS Default*). Include tranches, price paths, dollar values (sourced or marked approximate), and how a systematic desk would have flagged and traded it.
 6. **Curated Hyperlink & Media Ecosystem (`### Deep-Dive Resource Graph`):** At the end of *every single section*, include a categorized directory of external references:

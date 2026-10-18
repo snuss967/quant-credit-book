@@ -182,65 +182,8 @@ The desk read is that the second portfolio's advantage is not a forecast of the 
 
 **Schema.** `rp`, `rb`: `float64` arrays of shape `(T,)`, monthly excess returns in decimal, aligned by month. `T >= 24`, at least 3 up and 3 down benchmark months. Output of `capture_ratios`: tuple `(U, D)` as decimals. Output of `asymmetric_beta`: dict with `alpha` (per month), `beta_up`, `beta_dn`.
 
-```python
-# Block 1: capture ratios and asymmetric beta (Section 11.2)
-import numpy as np
-import pandas as pd
-from scipy import optimize, special, stats
-
-RNG_SEED = 11
-
-
-def capture_ratios(rp, rb, floor=1e-4):
-    """Arithmetic upside/downside capture on benchmark-defined regimes."""
-    rp = np.asarray(rp, dtype=float)
-    rb = np.asarray(rb, dtype=float)
-    if rp.shape != rb.shape or rp.ndim != 1:
-        raise ValueError("rp and rb must be aligned 1-D arrays")
-    up, dn = rb > 0, rb < 0
-    if up.sum() < 3 or dn.sum() < 3:
-        raise ValueError("need at least 3 up and 3 down benchmark months")
-    mu_up, mu_dn = rb[up].mean(), rb[dn].mean()
-    if mu_up < floor or abs(mu_dn) < floor:
-        raise ValueError("benchmark regime mean too close to zero; capture undefined")
-    return rp[up].mean() / mu_up, rp[dn].mean() / mu_dn
-
-
-def asymmetric_beta(rp, rb):
-    """OLS of rp on [1, max(rb,0), min(rb,0)]; good defense means beta_dn < beta_up."""
-    rp = np.asarray(rp, dtype=float)
-    rb = np.asarray(rb, dtype=float)
-    X = np.column_stack([np.ones_like(rb), np.maximum(rb, 0.0), np.minimum(rb, 0.0)])
-    coef, *_ = np.linalg.lstsq(X, rp, rcond=None)
-    return {"alpha": coef[0], "beta_up": coef[1], "beta_dn": coef[2]}
-
-
-rng = np.random.default_rng(RNG_SEED)
-rb_demo = rng.normal(0.004, 0.022, 240)          # 20 years of monthly HY excess returns (synthetic)
-
-# Sanity 1: a pure beta tilt has U == D == beta exactly.
-U, D = capture_ratios(0.9 * rb_demo, rb_demo)
-assert abs(U - 0.9) < 1e-12 and abs(D - 0.9) < 1e-12
-
-# Sanity 2: positive alpha opens the gap U > D (the identity of Section 11.2.1).
-U_a, D_a = capture_ratios(0.001 + 0.9 * rb_demo, rb_demo)
-assert U_a > 0.9 > D_a
-
-# Sanity 3: the identity U - D = alpha * (1/mu_up + 1/|mu_dn|) holds exactly with zero residual.
-mu_up = rb_demo[rb_demo > 0].mean()
-mu_dn = rb_demo[rb_demo < 0].mean()
-assert abs((U_a - D_a) - 0.001 * (1 / mu_up + 1 / abs(mu_dn))) < 1e-12
-
-# Sanity 4: the asymmetric regression sees through a beta tilt and recovers real convexity.
-tilt = asymmetric_beta(0.9 * rb_demo, rb_demo)
-assert abs(tilt["beta_up"] - 0.9) < 1e-10 and abs(tilt["beta_dn"] - 0.9) < 1e-10
-convex_rp = (0.0005 + 1.0 * np.maximum(rb_demo, 0) + 0.8 * np.minimum(rb_demo, 0)
-             + rng.normal(0.0, 0.002, rb_demo.size))
-cvx = asymmetric_beta(convex_rp, rb_demo)
-assert cvx["beta_dn"] < cvx["beta_up"] - 0.1
-print(f"beta tilt: U={U:.4f} D={D:.4f} | convex: beta_up={cvx['beta_up']:.3f} "
-      f"beta_dn={cvx['beta_dn']:.3f} alpha/yr={12 * cvx['alpha']:.4f}")
-```
+<!-- EXPLAIN: Listing 11.1 -->
+> **Code Companion: Listing 11.1.** Arithmetic upside/downside capture on benchmark-defined regimes. The full python listing is in [Appendix F, Listing 11.1](#code-11-1).
 
 **Edge cases for ROBO.** Months where the benchmark return is exactly zero belong to neither regime; they are excluded, not assigned. Missing portfolio months are dropped pairwise, never forward-filled (a forward-filled month is a month of zero return, which is a beta of zero in disguise). Report regime counts alongside every capture ratio.
 
@@ -292,72 +235,8 @@ Where the structural PD breaks in high yield, in descending order of how much mo
 
 **Schema.** Per issuer-date: `E` (market cap, \$mm, `> 0`), `sigma_E` (annualized decimal equity vol, `> 0`), `STD`, `LTD` (\$mm), `r` (continuously compounded, decimal), `mu` (physical asset drift, decimal), `T = 1.0` years. Output: `V`, `sigma_V`, `DD`, `PD` (12-month, $\mathbb{P}$). Issuers with `E <= 0` or no listed equity raise in the solver and must be routed to the accounting-only model with `no_equity_flag = 1`.
 
-```python
-# Block 2: Merton inversion, distance-to-default, empirical PD map (Section 11.3)
-
-def _merton_call(V, sigma_V, F, r, T):
-    sq = sigma_V * np.sqrt(T)
-    d1 = (np.log(V / F) + (r + 0.5 * sigma_V ** 2) * T) / sq
-    d2 = d1 - sq
-    E = V * stats.norm.cdf(d1) - F * np.exp(-r * T) * stats.norm.cdf(d2)
-    return E, d1, d2
-
-
-def merton_solve(E, sigma_E, F, r, T=1.0):
-    """Recover (V, sigma_V) from observed (E, sigma_E) by nested bracketed root searches."""
-    if min(E, sigma_E, F, T) <= 0:
-        raise ValueError("E, sigma_E, F, T must be positive; route issuer to accounting-only PD")
-    v_hi = E + 2.0 * F * max(1.0, np.exp(-r * T))
-
-    def V_of(sV):
-        return optimize.brentq(lambda V: _merton_call(V, sV, F, r, T)[0] - E,
-                               E, v_hi, xtol=1e-12, rtol=1e-14, maxiter=500)
-
-    def gap(sV):
-        V = V_of(sV)
-        return sV * V * stats.norm.cdf(_merton_call(V, sV, F, r, T)[1]) - sigma_E * E
-
-    if gap(sigma_E) <= 0.0:          # no leverage effect left (F negligible)
-        return V_of(sigma_E), sigma_E
-    sV = optimize.brentq(gap, 1e-6, sigma_E, xtol=1e-14, rtol=1e-14, maxiter=500)
-    return V_of(sV), sV
-
-
-def distance_to_default(V, sigma_V, F, mu, T=1.0):
-    return (np.log(V / F) + (mu - 0.5 * sigma_V ** 2) * T) / (sigma_V * np.sqrt(T))
-
-
-def kmv_default_point(std, ltd):
-    return std + 0.5 * ltd
-
-
-def empirical_pd(dd, a=-0.718, b=0.9718, pd_floor=1e-4, pd_cap=0.35):
-    """Illustrative monotone DD -> 12m PD map: PD(4) ~ 1%, PD(0.5) ~ 30%, capped at 35%."""
-    return np.clip(np.exp(a - b * np.asarray(dd, dtype=float)), pd_floor, pd_cap)
-
-
-# Sanity 1: round trip. Generate (E, sigma_E) from known (V, sigma_V), then recover them.
-for V0, sV0, F0 in [(100.0, 0.30, 75.0), (100.0, 0.25, 95.0)]:
-    E0, d1_0, _ = _merton_call(V0, sV0, F0, 0.04, 1.0)
-    sE0 = stats.norm.cdf(d1_0) * sV0 * V0 / E0
-    V_hat, sV_hat = merton_solve(E0, sE0, F0, 0.04, 1.0)
-    assert abs(V_hat / V0 - 1) < 1e-6 and abs(sV_hat / sV0 - 1) < 1e-6
-    assert sV_hat < sE0                       # leverage effect: asset vol below equity vol
-
-# Sanity 2: the empirical map is monotone and the Gaussian map is the Kaz trap.
-grid = np.linspace(-2.0, 8.0, 201)
-assert np.all(np.diff(empirical_pd(grid)) <= 0.0)
-assert abs(float(empirical_pd(4.0)) - 0.01) < 5e-4
-assert stats.norm.cdf(-4.0) < 1e-4            # 3.2e-5: "three in a hundred thousand"
-
-# A sponsor-levered B issuer (illustrative, $mm): E=2,000, sigma_E=55%, STD=600, LTD=3,000.
-F_hy = kmv_default_point(600.0, 3000.0)
-V_hy, sV_hy = merton_solve(2000.0, 0.55, F_hy, 0.04, 1.0)
-dd_hy = distance_to_default(V_hy, sV_hy, F_hy, mu=0.06)
-assert dd_hy > 0 and float(empirical_pd(dd_hy)) > stats.norm.cdf(-dd_hy)
-print(f"V={V_hy:,.0f} sigma_V={sV_hy:.3f} DD={dd_hy:.2f} "
-      f"PD_emp={float(empirical_pd(dd_hy)):.3%} vs N(-DD)={stats.norm.cdf(-dd_hy):.3%}")
-```
+<!-- EXPLAIN: Listing 11.2 -->
+> **Code Companion: Listing 11.2.** Recover (V, sigma_V) from observed (E, sigma_E) by nested bracketed root searches. The full python listing is in [Appendix F, Listing 11.2](#code-11-2).
 
 **Edge cases for ROBO.** Stale prices give `sigma_E = 0`: raise, do not divide. Equity vol must be annualized from daily returns with the same day count every time ($\sqrt{252}$), and estimated over a window long enough to be stable (one year) but short enough to see a crisis. Never feed equity vol in as asset vol. Never use `N(-DD)` as a PD.
 
@@ -431,163 +310,8 @@ Alanis, Chava and Shah (2022, *Benchmarking Machine Learning Models to Predict C
 
 **Schema.** Panel, one row per `issuer_id`–`month` (int, int): `DD` (float, observed with noise), `runway` (weeks, float in $[0, 13]$), `exret` (monthly excess equity return proxy, decimal), `default_12m` (int 0/1: any default event in months $[t, t+12)$), `de_flag` (int 0/1: that event was a distressed exchange). Rows whose 12-month window extends past the sample end are dropped (censored). Features enter lagged by `lag` months within issuer. Cross-validation folds are issuer-disjoint and time-purged with a 12-month embargo (Chapter 7, §7.7).
 
-```python
-# Block 3: synthetic HY panel, dynamic logit, clustered SEs, purged issuer-grouped CV (Section 11.4)
-
-def simulate_hy_universe(n_issuers=600, n_months=120, de_share=0.30, seed=RNG_SEED):
-    """Issuer-month panel: persistent latent DD with a common factor (default clustering),
-    a liquidity-runway covariate capped at 13 weeks, and a distressed-exchange flag."""
-    g = np.random.default_rng(seed)
-    mu_dd = g.uniform(0.5, 5.5, n_issuers)
-    dd = mu_dd + g.normal(0.0, 0.5, n_issuers)
-    runway = np.clip(g.normal(9.0, 3.0, n_issuers), 0.0, 13.0)
-    alive = np.ones(n_issuers, dtype=bool)
-    default_month = np.full(n_issuers, -1)
-    DD = np.full((n_months, n_issuers), np.nan)
-    RUN = np.full_like(DD, np.nan)
-    EXR = np.full_like(DD, np.nan)
-    for t in range(n_months):
-        dd_new = (mu_dd + 0.92 * (dd - mu_dd) + g.normal(0.0, 0.20)
-                  + g.normal(0.0, 0.35, n_issuers))
-        exret = 0.08 * (dd_new - dd) + g.normal(0.0, 0.03, n_issuers)
-        dd = dd_new
-        runway = np.clip(runway + 0.6 * np.tanh(dd - 1.5) + g.normal(0.0, 0.7, n_issuers), 0.0, 13.0)
-        DD[t, alive] = dd[alive] + g.normal(0.0, 0.25, alive.sum())
-        RUN[t, alive] = runway[alive]
-        EXR[t, alive] = exret[alive]
-        hazard = special.expit(-3.4 - 1.0 * dd - 0.12 * runway)     # true monthly hazard
-        d_now = alive & (g.random(n_issuers) < hazard)
-        default_month[d_now] = t
-        alive &= ~d_now
-    t_idx, i_idx = np.nonzero(~np.isnan(DD))
-    panel = pd.DataFrame({"issuer_id": i_idx, "month": t_idx, "DD": DD[t_idx, i_idx],
-                          "runway": RUN[t_idx, i_idx], "exret": EXR[t_idx, i_idx]})
-    dm = default_month[i_idx]
-    panel["default_12m"] = ((dm >= t_idx) & (dm < t_idx + 12)).astype(int)
-    is_de = g.random(n_issuers) < de_share
-    panel["de_flag"] = ((panel["default_12m"].to_numpy() == 1) & is_de[i_idx]).astype(int)
-    panel = panel[panel["month"] <= n_months - 12].reset_index(drop=True)   # censored labels out
-    return panel, default_month
-
-
-def lag_features(panel, cols, lag):
-    out = panel.sort_values(["issuer_id", "month"]).copy()
-    lagged_cols = [c + "_lag" for c in cols]
-    for c, cl in zip(cols, lagged_cols):
-        out[cl] = out.groupby("issuer_id")[c].shift(lag)
-    return out.dropna(subset=lagged_cols).reset_index(drop=True)
-
-
-def fit_logit(X, y, groups=None, max_iter=100):
-    """Newton-Raphson logit with step halving; issuer-clustered sandwich SEs when groups given."""
-    X1 = np.column_stack([np.ones(len(X)), np.asarray(X, dtype=float)])
-    y = np.asarray(y, dtype=float)
-    ybar = np.clip(y.mean(), 1e-6, 1 - 1e-6)
-    b = np.zeros(X1.shape[1])
-    b[0] = np.log(ybar / (1 - ybar))
-
-    def nll(beta):
-        z = X1 @ beta
-        return np.sum(np.logaddexp(0.0, z) - y * z)
-
-    f = nll(b)
-    for _ in range(max_iter):
-        p = special.expit(X1 @ b)
-        H = (X1 * (p * (1 - p))[:, None]).T @ X1
-        step = np.linalg.solve(H + 1e-10 * np.eye(len(b)), X1.T @ (y - p))
-        t = 1.0
-        while nll(b + t * step) > f + 1e-12 and t > 1e-8:
-            t *= 0.5
-        b = b + t * step
-        f = nll(b)
-        if np.max(np.abs(t * step)) < 1e-9:
-            break
-    p = special.expit(X1 @ b)
-    Hinv = np.linalg.inv((X1 * (p * (1 - p))[:, None]).T @ X1)
-    if groups is None:
-        cov = Hinv
-    else:
-        G = pd.DataFrame(X1 * (y - p)[:, None]).groupby(np.asarray(groups)).sum().to_numpy()
-        cov = Hinv @ (G.T @ G) @ Hinv
-    return b, np.sqrt(np.diag(cov))
-
-
-def predict_logit(b, X):
-    return special.expit(b[0] + np.asarray(X, dtype=float) @ b[1:])
-
-
-def prior_shift(p, pi_sample, pi_pop):
-    p = np.clip(np.asarray(p, dtype=float), 1e-12, 1 - 1e-12)
-    shift = np.log(pi_pop * (1 - pi_sample) / (pi_sample * (1 - pi_pop)))
-    return special.expit(special.logit(p) + shift)
-
-
-def auc(score, default):
-    """Mann-Whitney AUC: P(score of a defaulter > score of a survivor); ties count one half."""
-    score = np.asarray(score, dtype=float)
-    d = np.asarray(default).astype(bool)
-    n1, n0 = int(d.sum()), int((~d).sum())
-    if n1 == 0 or n0 == 0:
-        return np.nan
-    ranks = stats.rankdata(score)
-    return (ranks[d].sum() - n1 * (n1 + 1) / 2.0) / (n1 * n0)
-
-
-def purged_group_cv(panel, n_splits=5, embargo=12, seed=RNG_SEED):
-    """Issuer-disjoint folds; training rows within `embargo` months of the test block are purged."""
-    g = np.random.default_rng(seed)
-    issuers = g.permutation(panel["issuer_id"].unique())
-    fold_of = np.empty(int(issuers.max()) + 1, dtype=int)
-    for k, chunk in enumerate(np.array_split(issuers, n_splits)):
-        fold_of[chunk] = k
-    f = fold_of[panel["issuer_id"].to_numpy()]
-    m = panel["month"].to_numpy()
-    for k, block in enumerate(np.array_split(np.sort(panel["month"].unique()), n_splits)):
-        lo, hi = block[0], block[-1]
-        test = (f == k) & (m >= lo) & (m <= hi)
-        train = (f != k) & ((m < lo - embargo) | (m > hi + embargo))
-        yield np.flatnonzero(train), np.flatnonzero(test)
-
-
-FEATURES = ["DD", "runway", "exret"]
-XCOLS = [c + "_lag" for c in FEATURES]
-panel, default_month = simulate_hy_universe()
-lagged = lag_features(panel, FEATURES, lag=3)
-X_all, y_all = lagged[XCOLS].to_numpy(), lagged["default_12m"].to_numpy()
-assert (default_month >= 0).sum() >= 50                       # enough defaults to say anything
-
-b_full, se_cl = fit_logit(X_all, y_all, groups=lagged["issuer_id"])
-_, se_naive = fit_logit(X_all, y_all)
-assert b_full[1] < 0 and b_full[2] < 0       # higher DD, longer runway -> lower PD
-assert se_cl[1] > se_naive[1]                # overlapping 12m labels: clustering widens SEs
-
-oos = []
-for tr, te in purged_group_cv(lagged):
-    if y_all[te].sum() == 0:
-        print("fold skipped: no defaults in test block")
-        continue
-    b_cv, _ = fit_logit(X_all[tr], y_all[tr])
-    oos.append(auc(predict_logit(b_cv, X_all[te]), y_all[te]))
-oos_auc = float(np.mean(oos))
-assert len(oos) >= 3 and oos_auc > 0.75
-
-# Look-ahead warning: a feature that peeks at the label looks like genius.
-g_leak = np.random.default_rng(RNG_SEED + 1)
-X_leak = np.column_stack([X_all, y_all + g_leak.normal(0.0, 0.3, len(y_all))])
-b_leak, _ = fit_logit(X_leak, y_all)
-auc_leak = auc(predict_logit(b_leak, X_leak), y_all)
-assert auc_leak > 0.97
-
-# Label contamination: treating distressed exchanges as survival understates PD.
-y_hard = ((y_all == 1) & (lagged["de_flag"].to_numpy() == 0)).astype(int)
-b_hard, _ = fit_logit(X_all, y_hard)
-assert predict_logit(b_hard, X_all).mean() < 0.9 * y_all.mean()
-
-assert abs(float(prior_shift(0.5, 0.5, 0.03)) - 0.03) < 1e-12
-print(f"defaults={(default_month >= 0).sum()} beta_DD={b_full[1]:.3f} "
-      f"SE ratio clustered/naive={se_cl[1] / se_naive[1]:.2f} OOS AUC={oos_auc:.3f} "
-      f"leaky AUC={auc_leak:.3f} (WARNING: look-ahead)")
-```
+<!-- EXPLAIN: Listing 11.3 -->
+> **Code Companion: Listing 11.3.** Issuer-month panel: persistent latent DD with a common factor (default clustering), a liquidity-runway covariate capped at 13 weeks, and a distressed-exchange flag. The full python listing is in [Appendix F, Listing 11.3](#code-11-3).
 
 **Edge cases for ROBO.** A cross-validation fold with no defaults in its test block has an undefined AUC: skip it and log it, never score it as 0.5. Aggregate bonds to the issuer before fitting. Lag accounting features to the filing date, not the period end. Keep the distressed-exchange flag as a separate column so the label definition can be audited and changed without rebuilding the panel.
 
@@ -637,61 +361,8 @@ Default avoidance pays if and only if the excluded set's *excess default loss* e
 
 **Schema.** `score`: float array, higher means riskier (a PD). `default`: int 0/1 array, issuer-level, aligned. `q`: exclusion fraction in $(0,1)$. Outputs: CAP points, AUC, AR, hit rate $\text{HR}(q) = Y(q)$, and the active-return decomposition.
 
-```python
-# Block 4: CAP curve, accuracy ratio, hit rate, exclusion economics (Section 11.5)
-
-def cap_curve(score, default):
-    order = np.argsort(-np.asarray(score, dtype=float), kind="mergesort")
-    d = np.asarray(default, dtype=float)[order]
-    if d.sum() == 0:
-        raise ValueError("no defaults: CAP undefined")
-    x = np.concatenate([[0.0], np.arange(1, d.size + 1) / d.size])
-    y = np.concatenate([[0.0], np.cumsum(d) / d.sum()])
-    return x, y
-
-
-def accuracy_ratio(score, default):
-    x, y = cap_curve(score, default)
-    area = np.sum(np.diff(x) * (y[1:] + y[:-1]) / 2.0)        # trapezoid rule
-    f = float(np.mean(default))
-    return (2.0 * area - 1.0) / (1.0 - f)
-
-
-def hit_rate(score, default, q):
-    x, y = cap_curve(score, default)
-    return float(np.interp(q, x, y))
-
-
-def exclusion_active_return(q, pi_X, pi_K, s_X, s_K, L):
-    """q * [(pi_X - pi_K) * L - (s_X - s_K)], all decimals per year, P-measure."""
-    return q * ((pi_X - pi_K) * L - (s_X - s_K))
-
-
-# Sanity 1: AR = 2*AUC - 1 exactly for untied scores.
-g4 = np.random.default_rng(RNG_SEED + 4)
-dflt = (g4.random(5000) < 0.05).astype(int)
-sc = g4.normal(0.0, 1.0, 5000) + 1.2 * dflt
-assert abs(accuracy_ratio(sc, dflt) - (2 * auc(sc, dflt) - 1)) < 1e-10
-
-# Sanity 2: a perfect ranking scores AR = 1; random scores average AR ~ 0 over 20 seeds.
-assert abs(accuracy_ratio(dflt + 0.5 * g4.random(5000), dflt) - 1.0) < 1e-9
-ar_rand = []
-for s in range(20):
-    gs = np.random.default_rng(1000 + s)
-    ar_rand.append(accuracy_ratio(gs.random(5000), (gs.random(5000) < 0.05).astype(int)))
-assert abs(np.mean(ar_rand)) < 0.05
-
-# Sanity 3: the worked example of Section 11.5.2.
-act_20 = exclusion_active_return(0.20, 0.77 * 0.03 / 0.20, 0.23 * 0.03 / 0.80, 0.0420, 0.0, 0.6)
-act_40 = exclusion_active_return(0.40, 0.77 * 0.03 / 0.40, 0.23 * 0.03 / 0.60, 0.0300, 0.0, 0.6)
-assert act_20 > 0 > act_40
-
-# Apply to the Block 3 panel: in-sample PDs from the full model, one row per issuer-month.
-pd_in = predict_logit(b_full, X_all)
-print(f"panel AR={accuracy_ratio(pd_in, y_all):.3f} AUC={auc(pd_in, y_all):.3f} "
-      f"HR(10/20/30%)={[round(hit_rate(pd_in, y_all, q), 2) for q in (0.1, 0.2, 0.3)]} "
-      f"active 20%={act_20:.4%} active 40%={act_40:.4%}")
-```
+<!-- EXPLAIN: Listing 11.4 -->
+> **Code Companion: Listing 11.4.** q * [(pi_X - pi_K) * L - (s_X - s_K)], all decimals per year, P-measure. The full python listing is in [Appendix F, Listing 11.4](#code-11-4).
 
 **Edge cases for ROBO.** Tied scores (a capped PD, or a rating-based score with 20 notches) make the CAP depend on sort order; break ties by averaging, or report the AUC, which the rank formula already tie-corrects. Score at the issuer level. State the horizon of the score and the horizon of the hit window in the output, and refuse to compare them when they differ.
 
@@ -775,55 +446,8 @@ Equity momentum belongs here too, because it is a default-avoidance signal in di
 
 **The Spec You Hand the Robot.** "Exclude the worst PD quintile, tilt toward default-adjusted carry per unit of DTS, hold $w^\top\text{DTS}$ within 1% of the benchmark, long-only, fully invested, issuer cap 3%." **Schema.** One cross-section: `pd_hat` (12m PD, decimal), `spread` (OAS, decimal), `dur` ($D^{\text{spr}}$, years), `bench_w` (sums to 1). Defaulted issuers enter with DTS set to zero and are excluded before optimization. Output: weights `w` (same order), `keep` mask, solver result.
 
-```python
-# Block 5: DTS-neutral defensive portfolio (Section 11.7)
-
-def defensive_portfolio(pd_hat, spread, dur, bench_w, L=0.6, exclude_q=0.20,
-                        issuer_cap=0.03, tilt=1.0):
-    pd_hat, spread, dur, bench_w = (np.asarray(a, dtype=float) for a in (pd_hat, spread, dur, bench_w))
-    dts = dur * spread
-    dts_bench = float(bench_w @ dts)
-    keep = pd_hat <= np.quantile(pd_hat, 1.0 - exclude_q)
-    score = (spread - pd_hat * L) / dts                       # default-adjusted carry per unit DTS
-    zk = (score[keep] - score[keep].mean()) / score[keep].std()
-    w0 = bench_w[keep] * np.exp(tilt * np.clip(zk, -2.0, 2.0))
-    w0 = w0 / w0.sum()
-    dk = dts[keep]
-    if not (dk.min() <= dts_bench <= dk.max()):
-        raise ValueError("benchmark DTS unreachable long-only: refuse rather than lever")
-    cons = [{"type": "eq", "fun": lambda w: w.sum() - 1.0, "jac": lambda w: np.ones_like(w)},
-            {"type": "eq", "fun": lambda w: w @ dk / dts_bench - 1.0, "jac": lambda w: dk / dts_bench}]
-    res = optimize.minimize(lambda w: 5e3 * np.sum((w - w0) ** 2), w0,
-                            jac=lambda w: 1e4 * (w - w0), method="SLSQP",
-                            bounds=[(0.0, issuer_cap)] * int(keep.sum()), constraints=cons,
-                            options={"maxiter": 500, "ftol": 1e-14})
-    w = np.zeros_like(bench_w)
-    w[keep] = res.x
-    return w, keep, w0, dts, dts_bench
-
-
-g5 = np.random.default_rng(RNG_SEED + 5)
-n_iss = int(lagged["issuer_id"].max()) + 1
-dur_by_issuer = g5.uniform(1.5, 6.5, n_iss)
-size_by_issuer = g5.lognormal(0.0, 0.5, n_iss)
-held_def, bench_def = 0.0, 0.0
-for t0 in (24, 36, 48, 60, 72):
-    cs = lagged[lagged["month"] == t0]
-    iid = cs["issuer_id"].to_numpy()
-    pd_t = predict_logit(b_full, cs[XCOLS].to_numpy())
-    spr_t = 0.015 + 0.35 * empirical_pd(cs["DD"].to_numpy()) * np.exp(g5.normal(0.0, 0.2, len(cs)))
-    bw = size_by_issuer[iid] / size_by_issuer[iid].sum()
-    w, keep, w0, dts_t, dts_b = defensive_portfolio(pd_t, spr_t, dur_by_issuer[iid], bw)
-    assert abs(w @ dts_t / dts_b - 1.0) < 0.01            # DTS-neutral within 1%
-    assert abs(w.sum() - 1.0) < 1e-6 and w.min() > -1e-9 and np.all(w[~keep] == 0.0)
-    assert (w0 @ dts_t[keep]) / dts_b < 0.95                # market-value tilt = dimmer switch
-    y_t = cs["default_12m"].to_numpy()
-    held_def += w @ y_t
-    bench_def += bw @ y_t
-assert held_def < bench_def                                  # fewer realized defaults held
-print(f"avg 12m default exposure: held={held_def / 5:.3%} bench={bench_def / 5:.3%}; "
-      f"last MV-tilt DTS ratio={(w0 @ dts_t[keep]) / dts_b:.2f}")
-```
+<!-- EXPLAIN: Listing 11.5 -->
+> **Code Companion: Listing 11.5.** Block 5: DTS-neutral defensive portfolio (Section 11.7). The full python listing is in [Appendix F, Listing 11.5](#code-11-5).
 
 **Edge cases for ROBO.** If the benchmark DTS cannot be reached long-only within issuer caps, raise; never "solve" it with negative weights or leverage. Recompute DTS after every spread update; a bond that has defaulted carries zero DTS, or a 5,000bp spread will dominate the neutrality constraint. Turnover: penalize changes from yesterday's weights, not from the benchmark, in production.
 
@@ -879,60 +503,8 @@ The square means capacity is brutally sensitive to turnover: halve $\text{TO}$ a
 
 **Schema.** Cross-section arrays `spread`, `s_hat`, `dts`, `w` (decimals; weights sum to 1); scalars `z_ref`, `kappa`, band `(lo, hi)`, `dts_max_ratio` (largest achievable long-only DTS over benchmark DTS). Capacity inputs in decimals per year and dollars; `adv` is \$ per day.
 
-```python
-# Block 6: regime-aware DTS budget and capacity (Sections 11.8-11.9)
-
-def model_spread(pd_hat, L=0.6, m=1.8, s0=0.005):
-    return s0 + m * np.asarray(pd_hat, dtype=float) * L
-
-
-def dts_multiplier(spread, s_hat, dts, w, z_ref, kappa=0.5, band=(0.9, 1.2), dts_max_ratio=np.inf):
-    z = np.log(np.asarray(spread, dtype=float) / np.asarray(s_hat, dtype=float))
-    z_bar = float(np.sum(w * dts * z) / np.sum(w * dts))
-    mult = float(np.clip(1.0 + kappa * (z_bar - z_ref), band[0], band[1]))
-    return min(mult, dts_max_ratio), z_bar                      # no-leverage guard
-
-
-def alpha_net(C, alpha0, adv, horizon_days, kappa, turnover):
-    return alpha0 - kappa * turnover * np.sqrt(C / (adv * horizon_days))
-
-
-def capacity_closed_form(alpha0, alpha_min, adv, horizon_days, kappa, turnover):
-    return adv * horizon_days * ((alpha0 - alpha_min) / (kappa * turnover)) ** 2
-
-
-def capacity_numeric(alpha0, alpha_min, adv, horizon_days, kappa, turnover):
-    f = lambda C: alpha_net(C, alpha0, adv, horizon_days, kappa, turnover) - alpha_min
-    hi = adv * horizon_days
-    while f(hi) > 0:
-        hi *= 4.0
-    return optimize.brentq(f, 0.0, hi, xtol=1e-6, rtol=1e-14, maxiter=500)
-
-
-# Regime test on the last Block 5 cross-section.
-pd_c = predict_logit(b_full, cs[XCOLS].to_numpy())
-s_hat_c = model_spread(pd_c)
-w_eq = np.full(len(cs), 1.0 / len(cs))
-dts_c = dur_by_issuer[iid] * spr_t
-_, z_ref = dts_multiplier(spr_t, s_hat_c, dts_c, w_eq, z_ref=0.0)
-m_calm, _ = dts_multiplier(spr_t, s_hat_c, dts_c, w_eq, z_ref)
-m_shock, _ = dts_multiplier(spr_t * 461 / 259, s_hat_c, dts_c * 461 / 259, w_eq, z_ref)
-m_fund, _ = dts_multiplier(spr_t * 461 / 259, s_hat_c * 461 / 259, dts_c * 461 / 259, w_eq, z_ref)
-m_guard, _ = dts_multiplier(spr_t * 461 / 259, s_hat_c, dts_c, w_eq, z_ref, dts_max_ratio=1.05)
-assert abs(m_calm - 1.0) < 1e-12 and abs(m_fund - 1.0) < 1e-12   # fundamentals: no add
-assert m_shock > 1.0 and m_guard <= 1.05                          # overshoot: add, but never lever
-
-# Capacity: a scalable core versus a CCC / fallen-angel satellite (all inputs illustrative).
-core = dict(alpha0=0.010, alpha_min=0.0025, adv=14e9, horizon_days=20, kappa=0.03, turnover=0.6)
-niche = dict(alpha0=0.030, alpha_min=0.0100, adv=1.5e9, horizon_days=20, kappa=0.05, turnover=2.0)
-for spec in (core, niche):
-    c_cf, c_num = capacity_closed_form(**spec), capacity_numeric(**spec)
-    assert abs(c_num / c_cf - 1.0) < 1e-8
-assert capacity_closed_form(**core) > 10 * capacity_closed_form(**niche)
-print(f"DTS multiplier calm={m_calm:.2f} shock={m_shock:.2f} fundamental={m_fund:.2f} "
-      f"guarded={m_guard:.2f}; capacity core=${capacity_closed_form(**core) / 1e9:.1f}bn "
-      f"niche=${capacity_closed_form(**niche) / 1e9:.2f}bn")
-```
+<!-- EXPLAIN: Listing 11.6 -->
+> **Code Companion: Listing 11.6.** Block 6: regime-aware DTS budget and capacity (Sections 11.8-11.9). The full python listing is in [Appendix F, Listing 11.6](#code-11-6).
 
 *(The capacity inputs, including HY ADV of about \$14bn a day, are illustrative; SIFMA publishes the high yield split in its downloadable statistics, which we did not verify. With them the core sleeve's capacity is about \$49bn and the satellite's about \$1.2bn, the same order of magnitude as Blackstone's platform and Dynkin's \$2bn fallen-angel curve.)*
 

@@ -117,3 +117,22 @@ Resolve any new collision by adding a superscript or subscript, and add a senten
 1. `## N.X Desk Debrief`: 5–8 bullets with takeaways sharp enough to tape to a monitor.
 2. **The Spec You Hand the Robot**: a compact, prompt-ready summary spec for the chapter's main engine.
 3. 3–6 exercises, some funny, all real.
+
+
+## 8. Edition 2 Voice Amendments (user directives, 2026-10-18; these outrank earlier guidance)
+
+- **Teach like a novel, not a manual.** Lead with a scene, a problem, or a real credit event. Let the reader feel the question before the answer arrives. Prefer "here is what happened, and here is the idea that would have helped" over "the formula is X". Cut imperatives and bullet-lists-of-facts wherever a paragraph of story can carry the idea.
+- **Longer stories, real events.** Scenes of 2,000–4,000 words are welcome when they teach. Build them on real credit events, with sourced facts and invented dialogue only for the fictional cast. The cast can be wrong, change their minds, and argue.
+- **Quant-shop life, including the boring parts.** Show the morning P&L explain, the broken vendor feed, the reconciliation that does not tie, the model review where the risk committee asks "why is this number different from yesterday?", and the week spent cleaning TRACE data. Rotate settings across shop types: market maker, multi-strategy pod, systematic asset manager, bank credit-trading desk, distressed fund. Use fictional composites, labeled as such, and never put invented words in the mouths of real people or firms.
+- **Math, Gently** (new box, required at the FIRST use of each concept):
+
+  `> **Math, Gently.** (plain-language intuition, a picture or analogy, a tiny worked number; then "the full version is in §X")`
+
+  It covers the building blocks too: what a distribution is, how normal, lognormal, Poisson, exponential, Beta and fat-tailed distributions differ and when each one shows up on a desk, what a random walk is, why Itô needs the ½σ², and what "risk-neutral" really means.
+- **View From Another Seat** (new box): the same situation as an opportunistic credit fund, a direct lender, a multi-strategy RV pod, a dealer desk, a CLO manager, an insurer, or a systematic fund would see it. Name real firms only for publicly stated views, with a citation; otherwise describe the seat generically.
+
+  `> **View From Another Seat.** ...`
+- **When to apply it.** Every major tool gets a judgment section: when it works, when it breaks, and what a seasoned practitioner would check first.
+- **Code lives in Appendix F.** Chapters explain what each listing does, why, and when to use it, in prose, and link to `#code-N-k`. Never paste code into chapters.
+- **Figures.** Use at least 3 per chapter, generated into `assets/figures/` and embedded as `![Caption](assets/figures/chNN_name.png)`. Photos only if public-domain or CC, with attribution.
+- **Resource Graphs list specific items.** Name the episode, the post, the paper, with title, date, and a verified URL. Never just a channel or a blog's homepage.

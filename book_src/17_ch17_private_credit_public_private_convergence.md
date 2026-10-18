@@ -226,120 +226,8 @@ Three more error-prone spots, each of which has embarrassed someone.
 
 **Numerical guards.** Require at least $10(K+1)$ observations for a Dimson regression with $K$ lags. Solve least squares by SVD (`lstsq`), not normal equations, because lagged factor returns are nearly collinear in calm regimes. Refuse to unsmooth with $\theta\ge0.9$ (noise amplification above $100\times$).
 
-```python
-# ---- Chapter 17 reference engine (mark_gap), block 1: the mark as a filter ----
-import numpy as np
-import pandas as pd
-
-
-def simulate_smoothed(n, theta, beta=1.0, sigma_f=0.04, sigma_e=0.02, seed=17):
-    """True quarterly excess return x_t = beta*F_t + e_t; reported x_obs_t = sum_k theta_k x_{t-k}.
-    Returns (F, x_true, x_obs). The first K entries of x_obs are NaN (kernel not yet full)."""
-    theta = np.asarray(theta, dtype=float)
-    if theta.ndim != 1 or theta.size == 0 or np.any(theta < 0) or theta.sum() <= 0:
-        raise ValueError("theta must be a non-empty vector of non-negative weights")
-    theta = theta / theta.sum()                      # unit sum: marks eventually catch up
-    K = theta.size - 1
-    rng = np.random.default_rng(seed)
-    F = rng.normal(0.0, sigma_f, n)
-    x_true = beta * F + rng.normal(0.0, sigma_e, n)
-    x_obs = np.full(n, np.nan)
-    for t in range(K, n):
-        x_obs[t] = float(np.dot(theta, x_true[t - K:t + 1][::-1]))   # theta_0 multiplies today
-    return F, x_true, x_obs
-
-
-def glm_moments(theta):
-    """Closed-form GLM identities for a unit-sum kernel."""
-    th = np.asarray(theta, dtype=float)
-    th = th / th.sum()
-    ss = float(np.dot(th, th))
-    K = th.size - 1
-    rho = np.array([np.dot(th[:-j], th[j:]) / ss for j in range(1, K + 1)])
-    return {"var_ratio": ss, "rho": rho, "sharpe_inflation": 1.0 / np.sqrt(ss), "beta0_ratio": float(th[0])}
-
-
-def autocorr(x, j):
-    """Lag-j sample autocorrelation, ignoring NaNs at the start of the series."""
-    x = np.asarray(x, dtype=float)
-    x = x[~np.isnan(x)]
-    x = x - x.mean()
-    return float(np.dot(x[j:], x[:-j]) / np.dot(x, x))
-
-
-def dimson_beta(x_obs, F, K):
-    """Regress reported returns on current and K lagged factor returns. Returns (b_0..b_K, sum b_k)."""
-    x_obs = np.asarray(x_obs, dtype=float)
-    F = np.asarray(F, dtype=float)
-    T = x_obs.size
-    if T - K < 10 * (K + 1):
-        raise ValueError("too few observations for K lags")
-    rows, y = [], []
-    for t in range(K, T):
-        if np.isnan(x_obs[t]):
-            continue
-        rows.append([1.0] + [F[t - k] for k in range(K + 1)])
-        y.append(x_obs[t])
-    X, y = np.asarray(rows), np.asarray(y)
-    coef, *_ = np.linalg.lstsq(X, y, rcond=None)
-    return coef[1:], float(coef[1:].sum())
-
-
-def kernel_from_dimson(b):
-    """theta_hat_k = b_k / sum(b), clipped to [0, 1] and renormalised. Returns (theta_hat, clip_bound)."""
-    b = np.asarray(b, dtype=float)
-    s = b.sum()
-    if abs(s) < 1e-12:
-        raise ValueError("aggregate beta is ~0: the kernel is not identified")
-    th = b / s
-    clipped = bool(np.any(th < 0.0) or np.any(th > 1.0))
-    th = np.clip(th, 0.0, 1.0)
-    return th / th.sum(), clipped
-
-
-def unsmooth_ar1(x_obs, theta):
-    """Geltner inversion x_hat_t = (x_obs_t - theta x_obs_{t-1}) / (1 - theta)."""
-    if not 0.0 <= theta < 0.9:
-        raise ValueError("theta outside [0, 0.9): noise amplification too large")
-    x = np.asarray(x_obs, dtype=float)
-    out = np.full_like(x, np.nan)
-    out[1:] = (x[1:] - theta * x[:-1]) / (1.0 - theta)
-    return out
-
-
-# --- sanity checks, block 1 ---
-theta = (0.5, 0.3, 0.2)
-mom = glm_moments(theta)
-assert abs(mom["var_ratio"] - 0.38) < 1e-12
-assert np.allclose(mom["rho"], [0.21 / 0.38, 0.10 / 0.38])
-assert abs(mom["sharpe_inflation"] - 1.0 / np.sqrt(0.38)) < 1e-12
-
-F, x_true, x_obs = simulate_smoothed(20_000, theta)
-var_ratio = np.nanvar(x_obs) / np.var(x_true)
-assert abs(var_ratio - 0.38) < 0.02, var_ratio                      # variance deflation
-assert abs(autocorr(x_obs, 1) - mom["rho"][0]) < 0.03                 # mechanical momentum, lag 1
-assert abs(autocorr(x_obs, 2) - mom["rho"][1]) < 0.03                 # lag 2
-b0, agg0 = dimson_beta(x_obs, F, 0)
-bK, aggK = dimson_beta(x_obs, F, 2)
-assert abs(agg0 - 0.5) < 0.05, agg0                                   # contemporaneous beta = theta_0 * beta
-assert abs(aggK - 1.0) < 0.05, aggK                                   # Dimson sum recovers beta
-theta_hat, clip_bound = kernel_from_dimson(bK)
-assert np.allclose(theta_hat, theta, atol=0.05) and not clip_bound
-
-# Geltner: exact inversion of AR(1) smoothing, then noise amplification (1 + th^2) / (1 - th)^2
-th1 = 0.6
-x_ar = np.empty_like(x_true)
-x_ar[0] = (1.0 - th1) * x_true[0]
-for t in range(1, x_true.size):
-    x_ar[t] = (1.0 - th1) * x_true[t] + th1 * x_ar[t - 1]
-assert np.allclose(unsmooth_ar1(x_ar, th1)[1:], x_true[1:])
-eta = np.random.default_rng(171).normal(0.0, 0.001, x_ar.size)
-amp = np.var(unsmooth_ar1(x_ar + eta, th1)[1:] - x_true[1:]) / 0.001 ** 2
-amp_theory = (1.0 + th1 ** 2) / (1.0 - th1) ** 2                     # = 8.5
-assert abs(amp / amp_theory - 1.0) < 0.05, amp
-print("block 1 ok: var ratio %.3f, rho1 %.3f, Dimson sum %.3f, noise amp %.1f"
-      % (var_ratio, autocorr(x_obs, 1), aggK, amp))
-```
+<!-- EXPLAIN: Listing 17.1 -->
+> **Code Companion: Listing 17.1.** True quarterly excess return x_t = beta*F_t + e_t; reported x_obs_t = sum_k theta_k x_{t-k}. The full python listing is in [Appendix F, Listing 17.1](#code-17-1).
 
 **Why each check is there.** The variance ratio and the two autocorrelations are the closed-form identities; if the simulation disagrees, the kernel's time index is reversed (the most common bug: `theta[0]` multiplying the oldest return). The two Dimson runs show attenuation ($\theta_0\beta$) and recovery ($\sum_k b_k\to\beta$) in one picture. The Geltner pair shows that the inversion is exact on clean data and that it amplifies noise by the predicted factor on dirty data.
 
@@ -428,75 +316,8 @@ This is the natural experiment of the cycle, and every number below is from Blue
 
 **How a systematic desk would have traded it.** Into the merger announcement: short OBDC against a diversified basket of listed BDCs, on the view that a NAV-for-NAV exchange with OBDC below NAV transferred value away from OBDC II holders, who would resist it, and that resistance would come out of the listed price; cover on termination. Through the first quarter of 2026: long OBDC unsecured notes against short OBDC equity, because deleveraging from 1.22x to 1.11x and asset sales at par are good for bondholders and neutral at best for equity. Throughout: watch the redemption queues of Blue Owl's other non-traded vehicles as the leading indicator of further sales (§17.6). Ines replays the hand through markouts: the trade that paid was the one that read the merger terms as a statement about the marks.
 
-```python
-# ---- block 2: from listed prices and disclosures to implied marks ----
-def implied_markdown(p_nav, lev, fee_drag=0.0):
-    """m = ((1 - phi) - P/NAV) / (1 + ell), floored at 0. NaN for a non-traded vehicle."""
-    if p_nav is None or np.isnan(p_nav):
-        return np.nan
-    if lev < 0 or not 0.0 <= fee_drag < 1.0:
-        raise ValueError("leverage must be >= 0 and fee_drag in [0, 1)")
-    return max(((1.0 - fee_drag) - p_nav) / (1.0 + lev), 0.0)
-
-
-def implied_nonaccrual_mark(w_fv, w_cost, fv_over_cost=1.0):
-    """Carrying value of the non-accrual bucket as a fraction of its cost (a mark, not a recovery)."""
-    if w_cost <= 0:
-        return np.nan
-    return (w_fv / w_cost) * fv_over_cost
-
-
-def cross_holder_dispersion(soi):
-    """Per facility held by >= 2 vehicles: number of holders, mean, std and range of fv/par."""
-    df = soi.assign(px=soi["fv"] / soi["par"])
-    g = df.groupby("facility_id")["px"]
-    out = pd.DataFrame({"n_holders": g.size(), "px_mean": g.mean(),
-                        "px_std": g.std(ddof=0), "px_range": g.max() - g.min()})
-    return out[out["n_holders"] >= 2]
-
-
-def stale_mark_flag(px_by_quarter, n_unchanged=5, tol=1e-4):
-    """True where a facility's mark has been unchanged (within tol) for n_unchanged consecutive quarters."""
-    px = np.asarray(px_by_quarter, dtype=float)
-    run, flags = 1, []
-    for t in range(px.size):
-        run = run + 1 if (t > 0 and abs(px[t] - px[t - 1]) <= tol) else 1
-        flags.append(run >= n_unchanged)
-    return np.array(flags)
-
-
-obdc = pd.DataFrame({
-    "qdate": pd.to_datetime(["2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"]),
-    "nav_ps": [14.89, 14.81, 14.41, 14.26],
-    "w_na_cost": [0.027, 0.023, 0.020, 0.028],
-    "w_na_fv": [0.013, 0.011, 0.010, 0.008],
-    "net_de": [1.22, 1.19, 1.13, 1.11],
-}).set_index("qdate")
-obdc["gap_pp"] = 100.0 * (obdc["w_na_cost"] - obdc["w_na_fv"])
-obdc["na_mark"] = [implied_nonaccrual_mark(f, c, 0.98) for f, c in zip(obdc["w_na_fv"], obdc["w_na_cost"])]
-
-# --- sanity checks, block 2 ---
-assert abs(implied_markdown(0.86, 1.19, 0.05) - 0.0411) < 1e-3      # OBDC Q4 2025 buyback print
-assert abs(implied_markdown(0.50, 1.10, 0.05) - 0.2143) < 1e-3      # a name near a 50% discount
-assert implied_markdown(1.02, 1.0, 0.05) == 0.0                      # premium name: floor, not negative
-assert np.isnan(implied_markdown(np.nan, 0.9))                       # non-traded: undefined, never 1.0
-assert np.isnan(implied_nonaccrual_mark(0.0, 0.0))
-assert abs(obdc["na_mark"].iloc[-1] - 0.28) < 0.005                  # ~28c on the bad bucket, Jun 2026
-assert abs(obdc["gap_pp"].iloc[1] - 1.2) < 1e-9 and abs(obdc["gap_pp"].iloc[-1] - 2.0) < 1e-9
-
-soi_toy = pd.DataFrame({                                             # illustrative holdings
-    "facility_id": ["A", "A", "A", "B", "B", "C"],
-    "bdc_id": ["X", "Y", "Z", "X", "Y", "Z"],
-    "par": [10.0, 25.0, 5.0, 8.0, 12.0, 3.0],
-    "fv": [9.8, 14.5, 4.6, 7.92, 11.88, 2.9],
-})
-disp = cross_holder_dispersion(soi_toy)
-assert list(disp.index) == ["A", "B"]                                # C has a single holder
-assert abs(disp.loc["A", "px_range"] - 0.40) < 1e-9                  # a 40-point same-loan gap
-assert disp.loc["B", "px_range"] < 1e-9
-assert stale_mark_flag([0.97, 0.97, 0.97, 0.97, 0.97, 0.95]).tolist() == [False] * 4 + [True, False]
-print(obdc[["gap_pp", "na_mark"]].round(3))
-```
+<!-- EXPLAIN: Listing 17.2 -->
+> **Code Companion: Listing 17.2.** m = ((1 - phi) - P/NAV) / (1 + ell), floored at 0. The full python listing is in [Appendix F, Listing 17.2](#code-17-2).
 
 > **Ways This Blows Up.** (1) *Gross versus net leverage.* Use net debt to NAV as reported, and say so; gross leverage overstates $\ell$ and understates $m$. (2) *Forward versus trailing NAV.* Price-to-forward-NAV and price-to-last-reported-NAV differ by a quarter of markdowns, which in 2026 was most of the signal. (3) *Buybacks.* Repurchases below NAV are accretive: they mechanically raise NAV per share, so $P/\text{NAV}$ can fall while NAV rises. OBDC's buyback was, technically, an open market purchase, the most expensive three words in finance, deployed here to make money for the holders who stayed. Adjust NAV per share for the accretion before computing $m$. (4) *Off-balance-sheet claims.* Unfunded commitments are not in $A$ but are a call on liquidity; joint ventures and preferred equity sit between debt and equity and break the two-layer algebra. (5) *Fee drag is not a constant.* The incentive fee falls away when income approaches the hurdle, so $\phi$ shrinks exactly in stress; holding it fixed overstates $m$ in bad quarters.
 
@@ -554,67 +375,8 @@ Put it on the regime clock. September 2023 sits in the middle of the Fed's tight
 
 Then the regime flipped. When syndicated spreads compressed through 2024, borrowers ran dual tracks and refinanced in both directions, and by 2024–9M2025 the takeouts were roughly balanced. A desk that carried the excess loan premium as a live input would have forecast both waves: the 2023 drain of syndicated supply into private credit, which supported CLO loan prices by shrinking the pool, and the 2024 return flow, which added supply just as CLO issuance was strong. **How to trade it:** the takeout forecast is a supply forecast. Ahead of a predicted private-to-syndicated wave, lean against repricing-sensitive loan prices and CLO equity, whose arbitrage depends on scarce collateral, and toward CLO senior tranches, which benefit from more issuance at tight liability spreads. Chapter 21 owns the CLO side; this section owns the supply number.
 
-```python
-# ---- block 3: PC <-> BSL migration as competing risks ----
-EXITS = ("to_bsl", "to_pc", "amend_extend", "default")
-
-
-def cause_specific_hazards(base, psi, chi, omega, zeta, ds, V):
-    """Annualised hazards kappa_ij = base_j * exp(psi_j*zeta + chi_j*ds + V_i @ omega_j).
-    base, psi, chi: (J,); omega: (p, J); V: (n, p); zeta and ds are scalars. Returns (n, J)."""
-    base, psi, chi = (np.asarray(a, dtype=float) for a in (base, psi, chi))
-    V = np.atleast_2d(np.asarray(V, dtype=float))
-    omega = np.asarray(omega, dtype=float)
-    if np.any(base < 0):
-        raise ValueError("baseline hazards must be non-negative")
-    lin = zeta * psi + ds * chi + V @ omega
-    return base * np.exp(np.clip(lin, -30.0, 30.0))          # clip guards exp overflow
-
-
-def exit_probabilities(kappa, dt=0.25):
-    """Constant competing hazards over dt years: P(exit via j) = kappa_j / K * (1 - exp(-K dt)).
-    Returns (n, J + 1): exit probabilities by cause, then P(still outstanding)."""
-    kappa = np.atleast_2d(np.asarray(kappa, dtype=float))
-    if np.any(kappa < 0):
-        raise ValueError("hazards must be non-negative")
-    tot = kappa.sum(axis=1, keepdims=True)
-    p_any = 1.0 - np.exp(-tot * dt)
-    with np.errstate(invalid="ignore", divide="ignore"):
-        share = np.where(tot > 0, kappa / tot, 0.0)
-    return np.hstack([share * p_any, 1.0 - p_any])
-
-
-def bsl_supply(face, kappa, dt=0.25, naive=False):
-    """Expected face refinanced from private credit into the BSL market over the next dt years."""
-    face = np.asarray(face, dtype=float)
-    kappa = np.atleast_2d(np.asarray(kappa, dtype=float))
-    if naive:                                                  # ignores competing exits: overstates
-        return float(face @ (1.0 - np.exp(-kappa[:, 0] * dt)))
-    return float(face @ exit_probabilities(kappa, dt)[:, 0])
-
-
-# --- sanity checks, block 3 (all parameters illustrative) ---
-rng3 = np.random.default_rng(2023)
-n_loans = 400
-V = np.column_stack([rng3.normal(0.0, 0.5, n_loans),                  # log size vs median borrower
-                     (rng3.random(n_loans) < 0.21).astype(float)])     # software flag
-face = 150.0 * np.exp(V[:, 0])                                         # $mm
-base = np.array([0.12, 0.08, 0.06, 0.02])
-psi = np.array([-0.8, 0.3, 0.4, 0.2])          # tight-LL regime (zeta = +1) slows takeouts into BSL
-chi = np.array([0.5, -0.2, 0.0, 0.0])          # wider PC-minus-BSL spread (pp) pulls loans into BSL
-omega = np.array([[0.6, -0.2, 0.0, 0.0],       # size: bigger borrowers can reach the BSL market
-                  [-0.3, 0.1, 0.3, 0.4]])      # software: harder to syndicate, more A&E, more default
-kap_loose = cause_specific_hazards(base, psi, chi, omega, zeta=-1.0, ds=1.0, V=V)
-kap_tight = cause_specific_hazards(base, psi, chi, omega, zeta=+1.0, ds=1.0, V=V)
-probs = exit_probabilities(kap_loose)
-assert probs.shape == (n_loans, 5) and np.allclose(probs.sum(axis=1), 1.0)
-assert abs(exit_probabilities([[0.2, 0.0, 0.0, 0.0]])[0, 0] - (1.0 - np.exp(-0.05))) < 1e-12
-assert np.allclose(exit_probabilities([[0.0, 0.0, 0.0, 0.0]]), [[0.0, 0.0, 0.0, 0.0, 1.0]])
-s_loose, s_tight = bsl_supply(face, kap_loose), bsl_supply(face, kap_tight)
-assert s_tight < s_loose                                               # the regime turns the tap
-assert bsl_supply(face, kap_loose, naive=True) >= s_loose              # ignoring competition overstates
-print("expected PC->BSL supply next quarter ($mm, illustrative): loose %.0f, tight %.0f" % (s_loose, s_tight))
-```
+<!-- EXPLAIN: Listing 17.3 -->
+> **Code Companion: Listing 17.3.** Annualised hazards kappa_ij = base_j * exp(psi_j*zeta + chi_j*ds + V_i @ omega_j). The full python listing is in [Appendix F, Listing 17.3](#code-17-3).
 
 ### Deep-Dive Resource Graph
 
@@ -708,63 +470,8 @@ where $h$ is the haircut on the syndicated sleeve under stress and every flow in
 
 > **Trend Watch.** *The listed discount and the redemption queue, November 2025 to September 2026.* November 5–19, 2025: the OBDC/OBDC II NAV-for-NAV merger is announced and terminated within fourteen days (Blue Owl releases). February 18, 2026: OBDC repurchases stock at a reported 86% of book (check against the OBDC Q4 release); OBDC II replaces tender offers with return-of-capital distributions (Blue Owl releases). March 26, 2026: about \$13 billion of first-quarter requests, more than \$4.6 billion trapped (Bloomberg Law). End of March 2026: the median listed BDC is reported at about 0.74 times forward NAV, the widest since 2020 (Reuters/LSEG; not independently verified). April 14, 2026: the IMF estimates non-traded BDCs can meet 5% quarterly redemptions for 9–11 quarters under mild stress and 5–7 under a moderate shock. April 16, 2026: listed BDCs at "nearly a 20% discount," some large names "approaching a 50% discount" (Octus). May 8, 2026: the Fed FSR reports that, for perpetual BDCs, accepted redemptions exceeded inflows in Q1 2026, the first time since those vehicles were created. June 23, 2026: a \$26 billion fund at 16.8% requests and a \$79 billion fund at 10% (InvestmentNews). **What it means for the desk:** the dispersion of listed discounts, not their mean, is the tradable signal (§17.9), and the redemption series is its leading indicator.
 
-```python
-# ---- block 4: the redemption game and the liquidity runway ----
-def redemption_fill(a, cap=0.05):
-    """Pro-rata fill fraction f = min(1, cap / a)."""
-    return 1.0 if a <= 0 else min(1.0, cap / a)
-
-
-def stayer_value(nav, m, a, cap=0.05):
-    """True value per remaining share after pro-rata redemptions paid at smoothed NAV."""
-    paid = redemption_fill(a, cap) * a
-    return nav * ((1.0 - m) - paid) / (1.0 - paid)
-
-
-def queue_path(new_requests, cap=0.05):
-    """New requests arrive as fractions of non-queued shares; unfilled requests stay queued.
-    Shares start at 1. Returns one row per quarter."""
-    S, backlog, rows = 1.0, 0.0, []
-    for a_new in new_requests:
-        if not 0.0 <= a_new <= 1.0:
-            raise ValueError("request fractions must lie in [0, 1]")
-        new = a_new * (S - backlog)
-        demand = backlog + new
-        paid = min(demand, cap * S)
-        rows.append({"shares": S, "new": new, "demand": demand, "paid": paid,
-                     "fill": paid / demand if demand > 0 else 1.0, "backlog_end": demand - paid})
-        backlog = demand - paid
-        S -= paid
-    return pd.DataFrame(rows)
-
-
-def runway_quarters(cash, undrawn, sleeve, haircut, nav, cap, unfunded, maturities, repayments=0.0):
-    """Quarters of capped redemptions the vehicle can fund; all flows per quarter, as fractions of NAV."""
-    if not 0.0 <= haircut <= 1.0:
-        raise ValueError("haircut must lie in [0, 1]")
-    outflow = cap * nav + unfunded + maturities - repayments
-    return np.inf if outflow <= 0 else (cash + undrawn + sleeve * (1.0 - haircut)) / outflow
-
-
-# --- sanity checks, block 4 ---
-assert abs(redemption_fill(0.168) - 0.05 / 0.168) < 1e-12                 # ~30% fill at 16.8% requests
-sv = stayer_value(1.0, 0.05, 0.168)
-assert sv < 0.95 and abs(sv - 0.9474) < 1e-3                              # stayers lose vs N(1 - m)
-assert abs(stayer_value(1.0, 0.0, 0.3) - 1.0) < 1e-12                     # honest marks: no transfer
-paid = redemption_fill(0.168) * 0.168
-assert abs((1.0 - paid) * (0.95 - sv) - paid * 0.05) < 1e-12              # stayers' loss = p * m
-assert redemption_fill(0.168) * (1.0 - sv) > 0                            # requesting strictly dominates
-path = queue_path([0.168, 0.10, 0.10, 0.10])
-assert (path["paid"] <= 0.05 * path["shares"] + 1e-12).all()
-assert abs(path["new"].sum() - path["paid"].sum() - path["backlog_end"].iloc[-1]) < 1e-12
-assert path["fill"].is_monotonic_decreasing                               # fills fall with steady requests
-T0 = runway_quarters(0.002, 0.10, 0.10, 0.10, 1.0, 0.05, 0.02, 0.0)
-T1 = runway_quarters(0.002, 0.10, 0.10, 0.10, 1.0, 0.05, 0.02, 0.0, repayments=0.03)
-assert abs(T0 - 2.743) < 0.01 and abs(T1 - 4.8) < 0.01                    # repayments buy two quarters
-assert runway_quarters(0.0, 0.1, 0.0, 0.0, 1.0, 0.05, 0.0, 0.0, repayments=0.06) == np.inf
-print(path.round(4))
-print("runway (quarters): no repayments %.2f, with 3%%/qtr repayments %.2f" % (T0, T1))
-```
+<!-- EXPLAIN: Listing 17.4 -->
+> **Code Companion: Listing 17.4.** Pro-rata fill fraction f = min(1, cap / a). The full python listing is in [Appendix F, Listing 17.4](#code-17-4).
 
 The runway check is a non-traded BDC with 0.2% cash, an undrawn line of 10% of NAV and a 10% syndicated sleeve haircut by 10%, paying 5% redemptions and 2% of NAV a quarter in unfunded draws *(illustrative)*. With no repayments it lasts under three quarters; with repayments of 3% of NAV a quarter it lasts 4.8, just under the IMF's moderate-shock range. Everything turns on the repayment rate, and the repayment rate is the hazard model of §17.4.
 
@@ -834,39 +541,8 @@ $$
 
 When $G_{i,t}>0$, the price discounts more than the public data says the marks will fall: either the market knows something about this book beyond its beta (high software share, bad PIK, stale marks), or it is overreacting. The cross-sectional regression of $G$ on the §17.8.2 features separates the two, and the residual is the relative-value signal. When $G_{i,t}<0$, the price has not caught up with marks that are coming, which is the cleanest short in the book.
 
-```python
-# ---- block 5: what the public data already knows about the next marks ----
-def pending_mark(theta, beta, F_recent):
-    """Expected sum of all future reported returns already implied by public factor returns.
-    F_recent = [F_t, F_{t-1}, ..., F_{t-K+1}] (newest first). Returns beta * sum_j Theta_{j+1} F_{t-j}."""
-    th = np.asarray(theta, dtype=float)
-    th = th / th.sum()
-    K = th.size - 1
-    tail = np.array([th[j + 1:].sum() for j in range(K)])           # Theta_{j+1} = sum_{k > j} theta_k
-    F_recent = np.asarray(F_recent, dtype=float)
-    if F_recent.size != K:
-        raise ValueError("need exactly K recent factor returns, newest first")
-    return float(beta * np.dot(tail, F_recent))
-
-
-def mark_gap_signal(p_nav, lev, fee_drag, theta, beta, F_recent):
-    """G = price-implied markdown minus the markdown the public data says is still coming."""
-    m_hat = implied_markdown(p_nav, lev, fee_drag)
-    return m_hat - max(-pending_mark(theta, beta, F_recent), 0.0)
-
-
-# --- sanity checks, block 5 ---
-th = np.array([0.5, 0.3, 0.2])
-assert abs(pending_mark(th, 1.0, [-0.04, 0.0]) + 0.02) < 1e-12          # 2% of markdowns still to come
-shock = np.zeros(8)
-shock[3] = -0.04                                                         # one bad quarter at t = 3
-reported = np.array([sum(th[k] * shock[t - k] for k in range(3) if t - k >= 0) for t in range(8)])
-assert abs(reported[4:].sum() - pending_mark(th, 1.0, [shock[3], shock[2]])) < 1e-12
-G = mark_gap_signal(0.86, 1.19, 0.05, th, 1.0, [-0.04, 0.0])
-assert abs(G - (0.0411 - 0.02)) < 1e-3                                   # price discounts ~2% beyond catch-up
-print("pending mark %.4f, mark-gap signal %.4f" % (pending_mark(th, 1.0, [-0.04, 0.0]), G))
-print("mark_gap: all sanity checks passed")
-```
+<!-- EXPLAIN: Listing 17.5 -->
+> **Code Companion: Listing 17.5.** Expected sum of all future reported returns already implied by public factor returns. The full python listing is in [Appendix F, Listing 17.5](#code-17-5).
 
 ### Deep-Dive Resource Graph
 

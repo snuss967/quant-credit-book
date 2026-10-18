@@ -433,142 +433,17 @@ Barclays offers a discrete method you can audit, which is rarer than it should b
 - **Guards.** Raise if `n_bonds < n_issuers` or `rho` is outside $[0, 1]$; floor `liquidity` and `aum` at `1e-12`; take `sqrt(max(., 0))`; return $A^{*} = 0$ when $g \le 0$ (costs eat the edge at any size); combine caps with `np.minimum.reduce`; floor $f_{\text{cash}}$ at zero against rounding.
 - **Sanity asserts.** (a) $\rho = 1$ gives $BR_{\text{eff}} = M$ and $\rho = 0$ gives $N$. (b) The numeric argmax of $\Pi(A)$ is within 1% of (4.2), and $\alpha(A^{*}) = g/3$ to 1e-9. (c) $\alpha(A \to 0) \to g$. (d) Tiny AUM gives equal weights and no cash; huge AUM gives weights proportional to market value. (e) Weights depend only on $c/A$.
 
-```python
-# capacity_breadth_engine.py, block 1 of 4: breadth and the fundamental law, eq. (4.1)
-import numpy as np
-from dataclasses import dataclass
+<!-- EXPLAIN: Listing 4.1 -->
+> **Code Companion: Listing 4.1.** BR_eff = N / (1 + (m - 1) * rho), with m = N / M bonds per issuer. The full python listing is in [Appendix F, Listing 4.1](#code-4-1).
 
-SEED = 404
+<!-- EXPLAIN: Listing 4.2 -->
+> **Code Companion: Listing 4.2.** alpha(A) = alpha0 - 2T [c0 + eta * sqrt(2 T A / L)], with T one-way. The full python listing is in [Appendix F, Listing 4.2](#code-4-2).
 
-def effective_breadth(n_bonds, n_issuers, rho):
-    """BR_eff = N / (1 + (m - 1) * rho), with m = N / M bonds per issuer."""
-    if n_issuers <= 0 or n_bonds < n_issuers:
-        raise ValueError("need n_bonds >= n_issuers > 0")
-    if not 0.0 <= rho <= 1.0:
-        raise ValueError("rho must lie in [0, 1]")
-    m = n_bonds / n_issuers
-    return n_bonds / (1.0 + (m - 1.0) * rho)
+<!-- EXPLAIN: Listing 4.3 -->
+> **Code Companion: Listing 4.3.** w_i = min(1/n, w_max, cap_frac * MV_i / A); f_cash = 1 - sum(w). The full python listing is in [Appendix F, Listing 4.3](#code-4-3).
 
-def fundamental_law_ir(ic, br_eff, tc):
-    """IR = IC * sqrt(BR_eff) * TC; annual, gross of costs."""
-    return ic * np.sqrt(max(br_eff, 0.0)) * tc
-
-assert abs(effective_breadth(1800, 800, 1.0) - 800.0) < 1e-12    # (a) rho = 1: one bet per issuer
-assert abs(effective_breadth(1800, 800, 0.0) - 1800.0) < 1e-12   # (a) rho = 0: every bond counts
-assert abs(effective_breadth(47, 1, 1.0) - 1.0) < 1e-12          # ROBO's 47 bonds are one bet
-assert abs(effective_breadth(1800, 800, 0.7) - 960.0) < 1e-9     # the worked example in 4.3
-```
-
-```python
-# block 2 of 4: capacity under square-root impact, eq. (4.2). Units: $mm and annual decimals.
-def net_alpha(aum, alpha0, turnover, cost0, eta, liquidity):
-    """alpha(A) = alpha0 - 2T [c0 + eta * sqrt(2 T A / L)], with T one-way."""
-    liq = max(float(liquidity), 1e-12)
-    part = np.sqrt(np.maximum(2.0 * turnover * np.asarray(aum, dtype=float) / liq, 0.0))
-    return alpha0 - 2.0 * turnover * (cost0 + eta * part)
-
-def net_alpha_curve(alpha0, turnover, cost0, eta, liquidity, aum_grid):
-    aum = np.asarray(aum_grid, dtype=float)
-    a = net_alpha(aum, alpha0, turnover, cost0, eta, liquidity)
-    return {"aum": aum, "alpha": a, "dollar_alpha": aum * a}
-
-def aum_star_closed_form(alpha0, turnover, cost0, eta, liquidity):
-    """A* = L g^2 / (18 T^3 eta^2), g = alpha0 - 2 T c0. Zero if costs eat the edge."""
-    g = alpha0 - 2.0 * turnover * cost0
-    if g <= 0.0:
-        return 0.0
-    if turnover <= 0.0 or eta <= 0.0:
-        return np.inf
-    return liquidity * g**2 / (18.0 * turnover**3 * eta**2)
-
-P = dict(alpha0=0.015, turnover=0.6, cost0=0.0025, eta=0.02, liquidity=20_000.0)  # illustrative HY row
-g = P["alpha0"] - 2.0 * P["turnover"] * P["cost0"]
-a_star = aum_star_closed_form(**P)
-grid = np.linspace(1.0, 3.0 * a_star, 300_001)
-curve = net_alpha_curve(aum_grid=grid, **P)
-a_num = grid[np.argmax(curve["dollar_alpha"])]
-assert abs(a_num / a_star - 1.0) < 0.01                  # (b) numeric argmax matches closed form
-assert abs(net_alpha(a_star, **P) - g / 3.0) < 1e-9      # (b) the client keeps one third
-assert abs(net_alpha(1e-9, **P) - g) < 1e-6              # (c) a tiny book keeps spread-net alpha
-assert abs(net_alpha(2.25 * a_star, **P)) < 1e-9         # net alpha is zero at 9/4 of A*
-print(f"A* = ${a_star:,.0f}mm; net alpha at A* = {1e4 * net_alpha(a_star, **P):.1f}bp")
-```
-
-```python
-# block 3 of 4: Dynkin cap weights and the non-invested fraction, eq. (4.3)
-def dynkin_cap_weights(mv, aum, cap_frac=0.05, w_max=None):
-    """w_i = min(1/n, w_max, cap_frac * MV_i / A); f_cash = 1 - sum(w). mv and aum in $mm."""
-    mv = np.asarray(mv, dtype=float)
-    if mv.ndim != 1 or mv.size == 0 or np.any(mv <= 0.0):
-        raise ValueError("mv must be a non-empty 1-D array of positive market values")
-    n = mv.size
-    cap = 1.0 if w_max is None else float(w_max)
-    w = np.minimum.reduce([np.full(n, 1.0 / n), np.full(n, cap),
-                           cap_frac * mv / max(float(aum), 1e-12)])
-    return w, max(0.0, 1.0 - float(w.sum()))
-
-rng = np.random.default_rng(SEED)
-mv_fa = rng.lognormal(mean=np.log(300.0), sigma=1.0, size=60)   # 60 fallen-angel issuers (illustrative)
-w_tiny, cash_tiny = dynkin_cap_weights(mv_fa, aum=1.0)
-assert np.allclose(w_tiny, 1.0 / 60) and cash_tiny < 1e-12      # (d) tiny book: equal weights
-w_huge, _ = dynkin_cap_weights(mv_fa, aum=1e9)
-assert np.corrcoef(w_huge, mv_fa)[0, 1] > 1.0 - 1e-12           # (d) huge book: market-value weights
-w_a, _ = dynkin_cap_weights(mv_fa, aum=500.0, cap_frac=0.05)
-w_b, _ = dynkin_cap_weights(mv_fa, aum=250.0, cap_frac=0.025)
-assert np.allclose(w_a, w_b)                                     # (e) only c / A matters
-for A in (125.0, 500.0, 1000.0, 2000.0):
-    print(f"AUM ${A:,.0f}mm: invested {1.0 - dynkin_cap_weights(mv_fa, A)[1]:.0%}")
-```
-
-```python
-# block 4 of 4: score rows of the six-axis map (all parameters illustrative, not the firms' numbers)
-@dataclass
-class FrameworkScore:
-    name: str
-    br_eff: float
-    ir_gross: float
-    ir_net_at_aum: float
-    aum_star: float
-    cash_drag: float
-
-COST_KEYS = ("alpha0", "turnover", "cost0", "eta", "liquidity")
-
-def framework_score(name, row, seed=SEED):
-    br = effective_breadth(row["n_bonds"], row["n_issuers"], row["rho"])
-    ir_g = fundamental_law_ir(row["ic"], br, row["tc"])
-    kw = {k: row[k] for k in COST_KEYS}
-    a_net = float(net_alpha(row["aum"], **kw))
-    ir_n = ir_g * a_net / row["alpha0"]      # assumes costs leave tracking error unchanged (Dynkin p.711)
-    mv = np.random.default_rng(seed).lognormal(np.log(row["mv_median"]), 1.0, row["n_issuers"])
-    _, f_cash = dynkin_cap_weights(mv, row["aum"], cap_frac=row.get("cap_frac", 0.05))
-    return FrameworkScore(name, br, ir_g, ir_n, aum_star_closed_form(**kw), f_cash)
-
-ROWS = {
-    "IG long-only value": dict(n_bonds=6000, n_issuers=1000, rho=0.8, ic=0.02, tc=0.4,
-                               alpha0=0.006, turnover=0.4, cost0=0.0008, eta=0.008,
-                               liquidity=150_000.0, aum=5_000.0, mv_median=3_000.0),
-    "HY long/short multi-factor": dict(n_bonds=1800, n_issuers=800, rho=0.7, ic=0.03, tc=0.5,
-                                       **P, aum=1_500.0, mv_median=1_500.0),
-    "HY equity momentum": dict(n_bonds=1800, n_issuers=800, rho=0.7, ic=0.04, tc=0.4,
-                               alpha0=0.04, turnover=2.5, cost0=0.0025, eta=0.02,
-                               liquidity=20_000.0, aum=100.0, mv_median=1_500.0),
-    "Multi-asset allocator": dict(n_bonds=8, n_issuers=8, rho=0.0, ic=0.10, tc=0.7,
-                                  alpha0=0.01, turnover=0.3, cost0=0.002, eta=0.005,
-                                  liquidity=2_000_000.0, aum=10_000.0, mv_median=50_000.0,
-                                  cap_frac=1.0),
-    "Smart-beta HY ETF": dict(n_bonds=1800, n_issuers=800, rho=0.7, ic=0.015, tc=0.8,
-                              alpha0=0.005, turnover=0.5, cost0=0.001, eta=0.01,
-                              liquidity=20_000.0, aum=1_500.0, mv_median=1_500.0),
-}
-
-print(f"{'row':<28}{'BR_eff':>8}{'IR_g':>7}{'IR_net':>8}{'A* $mm':>14}{'cash':>7}")
-for name, row in ROWS.items():
-    s = framework_score(name, row)
-    assert row["n_issuers"] - 1e-9 <= s.br_eff <= row["n_bonds"] + 1e-9
-    assert s.ir_net_at_aum <= s.ir_gross + 1e-12 and 0.0 <= s.cash_drag < 1.0
-    print(f"{s.name:<28}{s.br_eff:>8.0f}{s.ir_gross:>7.2f}{s.ir_net_at_aum:>8.2f}"
-          f"{s.aum_star:>14,.0f}{s.cash_drag:>7.1%}")
-```
+<!-- EXPLAIN: Listing 4.4 -->
+> **Code Companion: Listing 4.4.** block 4 of 4: score rows of the six-axis map (all parameters illustrative, not the firms' numbers). The full python listing is in [Appendix F, Listing 4.4](#code-4-4).
 
 Read the output by column, as you read the map. The IG long-only row has modest IR and a capacity in the tens of billions, which is why the largest pure-play shop on the map is an IG-heavy, insurer-facing platform (§4.10). The momentum row has the best gross IR and the smallest $A^{*}$. The allocator has almost unlimited capacity and a breadth of eight. No row wins on every column. That is the point: the six axes trade off against each other, and a pitch book that claims to win on all of them is hiding a cell.
 

@@ -488,294 +488,33 @@ a bid near 36, against a desk that, assuming $\pi = 0$, would bid close to the 3
 
 **Block 1: the quote.** Equation (3.1) and its asymmetric form, the winner's-curse shading and equation (3.2).
 
-```python
-import numpy as np
-import pandas as pd
-from scipy import optimize
-
-rng = np.random.default_rng(3)
-
-
-def sigmoid(z):
-    """Overflow-safe logistic function."""
-    return 0.5 * (1.0 + np.tanh(0.5 * np.asarray(z, dtype=float)))
-
-
-def gm_half_spread(pi, q, delta):
-    """Exact Glosten-Milgrom half-spread m - b for a SELL RFQ (eq. 3.1, asymmetric form).
-    pi: P(sender informed); q: P(V = V+); delta: V+ - V- in price points.
-    For a BUY RFQ the ask-side half-spread is gm_half_spread(pi, 1 - q, delta)."""
-    pi, q, delta = (np.asarray(a, dtype=float) for a in (pi, q, delta))
-    if np.any((pi < 0) | (pi > 1)) or np.any((q <= 0) | (q >= 1)) or np.any(delta < 0):
-        raise ValueError("require 0 <= pi <= 1, 0 < q < 1, delta >= 0")
-    return delta * q * (1.0 - q) * pi / (0.5 * (1.0 - pi) + pi * (1.0 - q))
-
-
-def winners_curse_w(n_dealers, w_per_log=0.15):
-    """Shading in units of sigma_v: w(1) = 0, increasing in n. Calibrate w_per_log from cover prices."""
-    n = np.maximum(np.asarray(n_dealers, dtype=float), 1.0)
-    return w_per_log * np.log(n)
-
-
-def gm_bid(mid, sigma_v, pi_hat, n_dealers, q_inv, size, gamma, sigma_ido, w_per_log=0.15):
-    """Eq. (3.2), vectorized over RFQs. Prices and sigmas in points over the holding horizon;
-    q_inv and size in $mm face (size > 0 means the dealer buys); gamma in 1/(point * $mm)."""
-    sigma_v = np.asarray(sigma_v, dtype=float)
-    adverse = gm_half_spread(pi_hat, 0.5, 2.0 * sigma_v)
-    curse = winners_curse_w(n_dealers, w_per_log) * sigma_v
-    inventory = 0.5 * gamma * np.asarray(sigma_ido, dtype=float) ** 2 * (2.0 * np.asarray(q_inv, dtype=float) + size)
-    return np.asarray(mid, dtype=float) - adverse - curse - inventory
-
-
-# Sanity checks against the closed forms in the text
-assert np.isclose(gm_half_spread(0.12, 0.5, 2 * 1.5), 0.12 * 1.5)          # eq. (3.1): pi * sigma_v
-assert np.isclose(gm_half_spread(0.3, 0.7, 20.0), 20 * 0.063 / 0.44)       # Serta stylized: ~2.86 points
-ratio = gm_half_spread(1e-5, 0.7, 20.0) / (2 * 1e-5 * 0.7 * 0.3 * 20.0)
-assert abs(ratio - 1.0) < 1e-3                                              # small-pi approximation
-assert np.all(np.diff(gm_half_spread(np.linspace(0, 1, 11), 0.5, 3.0)) > 0)  # monotone in pi
-assert np.isclose(gm_bid(87.0, 1.5, 0.0, 1, 0.0, 0.0, 0.0, 1.0), 87.0)      # no information, no risk: bid = mid
-```
+<!-- EXPLAIN: Listing 3.1 -->
+> **Code Companion: Listing 3.1.** Overflow-safe logistic function. The full python listing is in [Appendix F, Listing 3.1](#code-3-1).
 
 **Block 2: a simulated RFQ tape, the zero-profit property and the winner's curse.** Informed senders know the two-point value; uninformed senders pick a side at random; the true $\pi(x)$ is logistic in three features. Competitors share a weak signal about the value, which is what creates the winner's curse.
 
-```python
-BETA_TRUE = np.array([-2.5, 0.6, 1.0, 1.2])   # intercept, size z-score, event window, distressed counterparty
-SIGMA_V = 1.5                                  # points over the horizon
-
-
-def simulate_rfq_flow(n_rfq=200_000, sigma_v=SIGMA_V, noise_sd=0.25, rho=0.3, rng=rng):
-    """Simulated RFQ tape (prices in points). eta = +1 when the DEALER buys (client sells)."""
-    size_z = rng.standard_normal(n_rfq)
-    event = (rng.random(n_rfq) < 0.20).astype(float)        # within 72h of a scheduled event
-    distressed = (rng.random(n_rfq) < 0.25).astype(float)   # distressed-fund counterparty flag
-    X = np.column_stack([np.ones(n_rfq), size_z, event, distressed])
-    pi_true = sigmoid(X @ BETA_TRUE)
-    informed = rng.random(n_rfq) < pi_true
-    u = np.where(rng.random(n_rfq) < 0.5, 1.0, -1.0)        # V = mid + u * sigma_v
-    mid = rng.uniform(70.0, 100.0, n_rfq)
-    client_sells = np.where(informed, u < 0, rng.random(n_rfq) < 0.5)
-    eta = np.where(client_sells, 1.0, -1.0)
-    n_dealers = rng.integers(2, 9, n_rfq)                   # 2..8 dealers in competition
-    mid_h = mid + u * sigma_v + noise_sd * rng.standard_normal(n_rfq)
-    # Competitors' price concessions (lower = better for the client); they share a signal about u.
-    conc = sigma_v * (0.08 + 0.10 * np.abs(rng.standard_normal((n_rfq, 7))))
-    conc[np.arange(7)[None, :] >= (n_dealers - 1)[:, None]] = np.inf
-    eff = conc - (eta * rho * sigma_v * u)[:, None]
-    eff_sorted = np.sort(eff, axis=1)
-    tape = pd.DataFrame({"size_z": size_z, "event": event, "distressed": distressed,
-                         "pi_true": pi_true, "informed": informed, "mid": mid, "eta": eta,
-                         "n_dealers": n_dealers, "mid_h": mid_h,
-                         "best_comp": eff_sorted[:, 0], "second_comp": eff_sorted[:, 1]})
-    return tape, X
-
-
-def se(x):
-    x = np.asarray(x, dtype=float)
-    return x.std(ddof=1) / np.sqrt(x.size)
-
-
-df, X = simulate_rfq_flow()
-
-# Test A: a single dealer that fills every RFQ. GM with the true pi(x) is zero-profit; quoting mid is not.
-h_gm = gm_half_spread(df["pi_true"].to_numpy(), 0.5, 2 * SIGMA_V)
-px_gm = df["mid"].to_numpy() - df["eta"].to_numpy() * h_gm       # bid if the dealer buys, ask if it sells
-mo_gm = df["eta"].to_numpy() * (df["mid_h"].to_numpy() - px_gm)
-mo_mid = df["eta"].to_numpy() * (df["mid_h"].to_numpy() - df["mid"].to_numpy())
-assert abs(mo_gm.mean()) < 3 * se(mo_gm), mo_gm.mean()
-assert abs(mo_mid.mean() - (-SIGMA_V * df["pi_true"].mean())) < 3 * se(mo_mid)
-assert mo_mid.mean() < -10 * se(mo_mid)                           # assuming pi = 0 loses, unmistakably
-
-
-# Test B: competition. Outcomes follow the Done / Covered / Traded Away taxonomy.
-def rfq_outcomes(h_ours, best_comp, second_comp):
-    done = h_ours < best_comp
-    covered = (~done) & (h_ours < second_comp)
-    return np.where(done, "Done", np.where(covered, "Covered", "Traded Away"))
-
-
-df["outcome"] = rfq_outcomes(h_gm, df["best_comp"].to_numpy(), df["second_comp"].to_numpy())
-df["mo_gm"] = mo_gm
-fills = (df["outcome"] == "Done").to_numpy()
-mo_fill, mo_lost = mo_gm[fills], mo_gm[~fills]                    # lost RFQs: counterfactual markouts
-assert 0.02 < fills.mean() < 0.98
-assert mo_fill.mean() < -3 * se(mo_fill)        # right pi(x), still losing on fills: the winner's curse
-assert mo_lost.mean() > mo_fill.mean()          # the hands you lose are better than the hands you win
-h_shaded = h_gm + winners_curse_w(df["n_dealers"].to_numpy()) * SIGMA_V
-fills_shaded = h_shaded < df["best_comp"].to_numpy()
-print(df["outcome"].value_counts(normalize=True).round(3).to_dict())
-print(f"fills {fills.mean():.3f}, mean markout {mo_fill.mean():+.3f} pts; "
-      f"lost (counterfactual) {mo_lost.mean():+.3f} pts; "
-      f"with w(n) shading: fills {fills_shaded.mean():.3f}, "
-      f"markout {(df['eta'].to_numpy() * (df['mid_h'].to_numpy() - (df['mid'].to_numpy() - df['eta'].to_numpy() * h_shaded)))[fills_shaded].mean():+.3f} pts")
-```
+<!-- EXPLAIN: Listing 3.2 -->
+> **Code Companion: Listing 3.2.** Simulated RFQ tape (prices in points). The full python listing is in [Appendix F, Listing 3.2](#code-3-2).
 
 **Block 3: fitting $\pi(x)$ from markout signs.** Under the symmetric model, a filled RFQ is followed by an adverse move with probability $(1 + \pi(x))/2$, so we fit that link directly by maximum likelihood rather than forcing a plain logistic regression onto the adverse-sign label.
 
-```python
-def fit_pi(X, adverse):
-    """MLE of beta in P(adverse | x) = (1 + sigmoid(x'beta)) / 2 (Sec. 3.2.2).
-    Returns (beta_hat, standard errors from the expected Fisher information)."""
-    X = np.asarray(X, dtype=float)
-    y = np.asarray(adverse, dtype=float)
-    n, eps = X.shape[0], 1e-12
-
-    def nll_and_grad(b):
-        s = sigmoid(X @ b)
-        p = np.clip(0.5 * (1.0 + s), eps, 1.0 - eps)
-        dp = 0.5 * s * (1.0 - s)
-        nll = -np.mean(y * np.log(p) + (1.0 - y) * np.log(1.0 - p))
-        grad = -(X.T @ ((y / p - (1.0 - y) / (1.0 - p)) * dp)) / n
-        return nll, grad
-
-    res = optimize.minimize(nll_and_grad, np.zeros(X.shape[1]), jac=True, method="L-BFGS-B")
-    assert np.isfinite(res.fun)
-    s = sigmoid(X @ res.x)
-    p = 0.5 * (1.0 + s)
-    weight = (0.5 * s * (1.0 - s)) ** 2 / (p * (1.0 - p))
-    info = X.T @ (X * weight[:, None])
-    return res.x, np.sqrt(np.diag(np.linalg.inv(info)))
-
-
-adverse = (df["eta"].to_numpy() * (df["mid_h"].to_numpy() - df["mid"].to_numpy()) < 0).astype(float)
-beta_hat, beta_se = fit_pi(X, adverse)
-assert np.all(np.abs(beta_hat - BETA_TRUE) < 4 * beta_se), (beta_hat, beta_se)
-pi_hat = sigmoid(X @ beta_hat)
-assert np.corrcoef(pi_hat, df["pi_true"].to_numpy())[0, 1] > 0.95
-
-# Theo's Friday RFQ: large, inside a lender-call window, from a distressed-fund account; 8 dealers.
-x_theo = np.array([1.0, 1.5, 1.0, 1.0])
-pi_theo = float(sigmoid(x_theo @ beta_hat))
-bid_theo = float(gm_bid(87.0, 6.0, pi_theo, 8, q_inv=5.0, size=15.0, gamma=0.002, sigma_ido=3.0))
-assert 0.0 < pi_theo < 1.0 and bid_theo < 87.0
-print(f"pi_hat = {pi_theo:.2f}; GM bid with a weekend sigma_v of 6 points = {bid_theo:.2f}")
-```
+<!-- EXPLAIN: Listing 3.3 -->
+> **Code Companion: Listing 3.3.** MLE of beta in P(adverse | x) = (1 + sigmoid(x'beta)) / 2 (Sec. The full python listing is in [Appendix F, Listing 3.3](#code-3-3).
 
 **Block 4: IDO markouts and shrunk counterparty scores.** The IDO reference implements §3.3.3; the hand from §3.3 is the regression test.
 
-```python
-def ido_reference_move(p_ref, d_spr, beta, d_index_spread, d_mod, d_tsy):
-    """Systematic price move (points) implied by index-spread and Treasury-yield changes (decimals)."""
-    return p_ref * (-d_spr * beta * d_index_spread - d_mod * d_tsy)
-
-
-def markouts_bp(fills_df, horizons=(1, 5, 20)):
-    """Columns needed: p0, eta, mid_{h}d; optional sys_{h}d (systematic move, points) for IDO markouts."""
-    out = {}
-    for h in horizons:
-        ref = fills_df[f"mid_{h}d"] - fills_df.get(f"sys_{h}d", 0.0)
-        out[f"mo_{h}d_bp"] = fills_df["eta"] * (ref - fills_df["p0"]) / fills_df["p0"] * 1e4
-    return pd.DataFrame(out, index=fills_df.index)
-
-
-hand = pd.DataFrame({"p0": [85.75], "eta": [1.0], "mid_5d": [81.0],
-                     "sys_5d": [ido_reference_move(87.0, 3.5, 1.3, 0.0020, 3.6, -0.0010)]})
-assert np.isclose(hand["sys_5d"].iloc[0], -0.4785, atol=1e-3)
-assert -510 < markouts_bp(hand, horizons=(5,)).iloc[0, 0] < -490     # about -500bp of price
-
-
-def shrunk_cpty_scores(fills_df, col="mo_bp"):
-    """Empirical-Bayes shrinkage of per-counterparty mean markouts (Sec. 3.3.4)."""
-    g = fills_df.groupby("cpty")[col]
-    n_c, mean_c = g.size(), g.mean()
-    dof = (n_c - 1).sum()
-    sigma2 = float((g.var(ddof=1).fillna(0.0) * (n_c - 1)).sum() / max(dof, 1))   # pooled per-fill variance
-    tau2 = max(float(mean_c.var(ddof=1) - (sigma2 / n_c).mean()), 0.0)
-    k = n_c / (n_c + sigma2 / tau2) if tau2 > 0 else n_c * 0.0
-    return pd.DataFrame({"n": n_c, "raw": mean_c, "shrink": k, "theta_hat": k * mean_c}), tau2, sigma2
-
-
-n_cp, tau_true, sig_mo = 400, 20.0, 150.0                    # bp
-theta = rng.normal(0.0, tau_true, n_cp)
-n_fills = rng.geometric(1 / 40, n_cp)                        # every counterparty has at least one fill
-cp = np.repeat(np.arange(n_cp), n_fills)
-panel = pd.DataFrame({"cpty": cp, "mo_bp": theta[cp] + sig_mo * rng.standard_normal(cp.size)})
-scores, tau2_hat, sigma2_hat = shrunk_cpty_scores(panel)
-assert scores["shrink"].between(0.0, 1.0).all() and tau2_hat >= 0.0
-mse_raw = np.mean((scores["raw"].to_numpy() - theta) ** 2)
-mse_eb = np.mean((scores["theta_hat"].to_numpy() - theta) ** 2)
-assert mse_eb < mse_raw
-print(f"tau_hat = {np.sqrt(tau2_hat):.1f}bp (true {tau_true}); MSE raw {mse_raw:.0f} vs shrunk {mse_eb:.0f}")
-```
+<!-- EXPLAIN: Listing 3.4 -->
+> **Code Companion: Listing 3.4.** Systematic price move (points) implied by index-spread and Treasury-yield changes (decimals). The full python listing is in [Appendix F, Listing 3.4](#code-3-4).
 
 **Block 5: the Bayesian 8-K and the base-rate correction.** Equations (3.3) and (3.4), with the worked example of §3.4.2 as a regression test.
 
-```python
-def elkan(p, S, T):
-    """Eq. (3.4): re-base a PD calibrated to sample default rate S onto live base rate T."""
-    p = np.asarray(p, dtype=float)
-    return T * (p - p * S) / (S - p * S + p * T - S * T)
-
-
-def update_pd_from_8k(p_prior, lr, S=None, T=None):
-    """Eq. (3.3). Optional Elkan re-basing of the prior first. lr = P(E | default) / P(E | no default)."""
-    p = np.asarray(p_prior, dtype=float)
-    lr = np.asarray(lr, dtype=float)
-    if np.any((p < 0) | (p > 1)) or np.any(lr < 0):
-        raise ValueError("require p in [0, 1] and lr >= 0")
-    if S is not None and T is not None:
-        p = elkan(p, S, T)
-    return lr * p / (1.0 - p + lr * p)
-
-
-def hazard_from_pd(p, horizon_years=1.0):
-    return -np.log1p(-np.asarray(p, dtype=float)) / horizon_years
-
-
-grid = np.linspace(0.0, 1.0, 101)
-assert np.allclose(update_pd_from_8k(grid, 1.0), grid)                         # LR = 1 is no news
-assert np.all(np.diff(update_pd_from_8k(0.06, np.linspace(0.1, 10.0, 50))) > 0)  # monotone in LR
-p_post = float(update_pd_from_8k(0.06, 2.5))
-assert np.isclose(p_post, 0.1376, atol=5e-4)
-ds_bp = 0.6 * 2.0 * (hazard_from_pd(p_post) - hazard_from_pd(0.06)) * 1e4      # L = 0.6, kappa = 2
-assert 1000 < ds_bp < 1070                                                       # about 1,030bp
-S_, T_ = 0.02, 0.05
-e = elkan(grid, S_, T_)
-assert np.all((e >= -1e-12) & (e <= 1 + 1e-12)) and np.isclose(elkan(0.5, 0.2, 0.2), 0.5)
-assert np.all((T_ / S_) * grid[grid > S_ / T_ + 1e-9] > 1.0)                    # the T/S shortcut breaks the bound
-odds = lambda z: z / (1.0 - z)
-inner = grid[1:-1]
-assert np.allclose(odds(elkan(inner, S_, T_)), odds(inner) * odds(T_) / odds(S_))  # (3.4) is an odds update
-print(f"posterior PD {p_post:.4f}; implied spread move {ds_bp:,.0f}bp")
-```
+<!-- EXPLAIN: Listing 3.5 -->
+> **Code Companion: Listing 3.5.** Eq. The full python listing is in [Appendix F, Listing 3.5](#code-3-5).
 
 **Block 6: the pre-LMT detector.** Page's CUSUM (3.5), vectorized over paths, the Lorden false-alarm bound as a test, and the PRS-dependent threshold.
 
-```python
-def cusum_lmt_detector(y, mu1, sigma_y, h):
-    """Eq. (3.5) on a (T,) or (T, n_paths) array of ADV-scaled net informed-type buying.
-    Returns (statistic path, first alarm index per path or -1)."""
-    y = np.asarray(y, dtype=float)
-    y2 = y.reshape(y.shape[0], -1)
-    llr = (mu1 / sigma_y ** 2) * (y2 - 0.5 * mu1)
-    stat = np.empty_like(y2)
-    s = np.zeros(y2.shape[1])
-    for t in range(y2.shape[0]):
-        s = np.maximum(0.0, s + llr[t])
-        stat[t] = s
-    thresh = np.broadcast_to(np.asarray(h, dtype=float), (y2.shape[1],))
-    hit = stat > thresh[None, :]
-    first = np.where(hit.any(axis=0), hit.argmax(axis=0), -1)
-    return stat.reshape(y.shape), first
-
-
-def prs_threshold(prs, h0=6.0, h_min=2.5, h_max=10.0):
-    """h(PRS) = h0 - logit(PRS), floored so that one noisy day cannot fire the alarm."""
-    prs = np.clip(np.asarray(prs, dtype=float), 1e-6, 1.0 - 1e-6)
-    return np.clip(h0 - np.log(prs / (1.0 - prs)), h_min, h_max)
-
-
-h_design, mu1, sig_y, t_max, n_paths = 4.0, 1.0, 1.0, 6000, 500
-_, first_h0 = cusum_lmt_detector(rng.standard_normal((t_max, n_paths)), mu1, sig_y, h_design)
-run_len = np.where(first_h0 >= 0, first_h0 + 1, t_max)       # censored paths count as t_max (conservative)
-assert run_len.mean() >= np.exp(h_design)                     # Lorden: ARL to false alarm >= e^h
-_, first_h1 = cusum_lmt_detector(mu1 + rng.standard_normal((400, n_paths)), mu1, sig_y, h_design)
-kl = mu1 ** 2 / (2 * sig_y ** 2)
-assert np.all(first_h1 >= 0) and (first_h1 + 1).mean() < 2 * h_design / kl + 5
-p_grid = np.linspace(0.05, 0.95, 19)
-assert np.all(np.diff(prs_threshold(p_grid)) <= 0) and np.isclose(prs_threshold(0.5), 6.0)
-print(f"ARL0 >= {run_len.mean():.0f} days (bound {np.exp(h_design):.0f}); "
-      f"mean detection delay {(first_h1 + 1).mean():.1f} days (h/KL = {h_design / kl:.0f})")
-```
+<!-- EXPLAIN: Listing 3.6 -->
+> **Code Companion: Listing 3.6.** Eq. The full python listing is in [Appendix F, Listing 3.6](#code-3-6).
 
 **What the coding agent must not do.** It must not fit $\pi(x)$ on fills only and call the result unbiased (Block 2 shows why). It must not compute markouts against a mid it has not checked for staleness. It must not let the 8-K parser use a filing's period-of-report date as its event time. It must not feed restricted-list names into the detector's counterparty set as if their silence were absence of interest. And it must not "improve" the zero-profit bid by removing the adverse-selection term because a backtest on fills says it is too wide; that backtest is the winner's curse talking.
 

@@ -128,108 +128,8 @@ With $n$ dealers in competition, the winner is the highest bidder in a first-pri
 
 Basket-level fields: response deadline (seconds), number of dealers in competition, spotting time, and the client's identity, which keys the markout history in §19.8. All costs are returned in dollars, with a bp-of-gross-MV view computed last. The python blocks in this chapter run in order in one interpreter.
 
-```python
-import time
-import numpy as np
-from dataclasses import dataclass, replace
-
-RNG = np.random.default_rng(19)
-N_SECTORS = 8
-
-@dataclass
-class Basket:
-    """Struct-of-arrays PT inquiry. All arrays shape (N,). Units in comments."""
-    ids: np.ndarray           # synthetic line ids (never real CUSIPs in examples)
-    x: np.ndarray             # signed par notional, $; + = dealer buys (client sells)
-    mid: np.ndarray           # composite mid, fraction of par (0.97 = 97.00)
-    age: np.ndarray           # business days since a print anchored the composite
-    print_frac: np.ndarray    # share of last 60 business days with a print, in (0, 1]
-    lcs: np.ndarray           # round-trip LCS at standard size, fraction of price
-    oasd: np.ndarray          # spread duration, years
-    oas: np.ndarray           # OAS, decimal (0.045 = 450bp)
-    sector: np.ndarray        # int sector code in [0, N_SECTORS)
-    sig_idio: np.ndarray      # daily idiosyncratic price vol, fraction of par
-    prs: np.ndarray           # Priming Risk Score in [0, 1] (Ch 13)
-    days_to_call: np.ndarray  # business days to next lender call; np.inf if none
-    ad_hoc: np.ndarray        # 1.0 if an ad hoc group / Rule 2019 statement is live
-
-    def __post_init__(self):
-        n = len(self.x)
-        for name, arr in self.__dict__.items():
-            if len(arr) != n:
-                raise ValueError(f"{name}: length {len(arr)} != {n}")
-        numeric = [self.x, self.mid, self.age, self.print_frac, self.lcs, self.oasd,
-                   self.oas, self.sig_idio, self.prs, self.ad_hoc]
-        if not all(np.all(np.isfinite(a)) for a in numeric):
-            raise ValueError("non-finite numeric field")
-        if np.any(self.x == 0):
-            raise ValueError("zero-notional line")
-        if np.any((self.mid <= 0) | (self.mid > 1.5)):
-            raise ValueError("mid must be a fraction of par in (0, 1.5]: was 97.0 sent?")
-        if np.any((self.print_frac <= 0) | (self.print_frac > 1)):
-            raise ValueError("print_frac must lie in (0, 1]")
-        if np.any(self.lcs < 0) or np.any((self.prs < 0) | (self.prs > 1)):
-            raise ValueError("need lcs >= 0 and prs in [0, 1]")
-        if np.any(self.sig_idio <= 0):
-            raise ValueError("sig_idio must be positive")
-
-    @property
-    def n(self):
-        return len(self.x)
-
-    def mv(self):
-        """Unsigned market value of each line, $."""
-        return np.abs(self.x) * self.mid
-
-    def drop(self, idx):
-        keep = np.ones(self.n, dtype=bool)
-        keep[np.asarray(idx, dtype=int)] = False
-        return Basket(**{k: v[keep] for k, v in self.__dict__.items()})
-
-
-def make_basket(n=150, total=212e6, seed=19):
-    """Synthetic all-HY client-sell basket matching the cold open (illustrative)."""
-    rng = np.random.default_rng(seed)
-    size = rng.lognormal(mean=np.log(1.0e6), sigma=0.6, size=n)
-    others = np.ones(n, dtype=bool)
-    others[[41, 116]] = False
-    size[41], size[116] = 18e6, 4e6                      # line 42 and line 117 (1-based)
-    size[others] *= (total - 22e6) / size[others].sum()  # hit the $212mm ticket exactly
-    mid = np.clip(rng.normal(0.97, 0.04, n), 0.70, 1.06)
-    age = rng.exponential(1.5, n)
-    pf = rng.uniform(0.15, 0.80, n)
-    lcs = np.clip(rng.lognormal(np.log(0.010), 0.45, n), 0.003, 0.06)
-    oasd = rng.uniform(2.5, 6.0, n)
-    oas = rng.uniform(0.025, 0.060, n)
-    sector = rng.integers(0, N_SECTORS, n)
-    sig = 0.0025 * rng.uniform(0.6, 1.6, n)
-    prs = rng.beta(1.0, 9.0, n)
-    dtc = np.full(n, np.inf)
-    adhoc = np.zeros(n)
-    # line 42: big, stale, wide ("last printed eight weeks ago")
-    age[41], pf[41], lcs[41], mid[41], sig[41] = 40.0, 0.05, 0.025, 0.95, 0.003
-    # line 117: the name Theo recognizes; note its realized vol looks perfectly calm
-    mid[116], oas[116], lcs[116], sig[116] = 0.82, 0.090, 0.012, 0.003
-    prs[116], dtc[116], adhoc[116] = 0.85, 3.0, 1.0
-    ids = np.array([f"L{i + 1:03d}" for i in range(n)])
-    return Basket(ids, size, mid, age, pf, lcs, oasd, oas, sector, sig, prs, dtc, adhoc)
-
-
-b0 = make_basket()
-assert b0.n == 150 and abs(np.abs(b0.x).sum() - 212e6) < 1.0
-assert np.all(b0.x > 0)                      # client sells everything: dealer buys
-try:                                         # the points-vs-fraction guard fires
-    replace(b0, mid=b0.mid * 100.0)
-    raise AssertionError("guard failed")
-except ValueError:
-    pass
-
-# Sanity (DER A): mean-variance CE is exact for CARA utility and Gaussian P&L
-gam_t, mu_t, sd_t = 1e-6, 1.0e5, 3.0e5       # 1/$, $, $
-W = RNG.normal(mu_t, sd_t, 400_000)
-ce_mc = -np.log(np.mean(np.exp(-gam_t * W))) / gam_t
-assert abs(ce_mc - (mu_t - 0.5 * gam_t * sd_t**2)) < 2_000.0
-```
+<!-- EXPLAIN: Listing 19.1 -->
+> **Code Companion: Listing 19.1.** Struct-of-arrays PT inquiry. The full python listing is in [Appendix F, Listing 19.1](#code-19-1).
 
 The Monte Carlo check is not decoration. If someone later swaps the Gaussian P&L for a jump-to-default mixture, the same check fails, and the size of the failure is the $\tfrac16\gamma^2\kappa_3$ term from Step 2: the skew that mean–variance ignores and that §19.8 charges for explicitly.
 
@@ -269,25 +169,8 @@ Composite fair values (dealer-composite and evaluated-pricing services) make the
 
 ### Specification for AI Implementation (handling cost)
 
-```python
-X_STD = 4e6   # LCS standard size, $ par (Ben_Dor p.118: "$3 to $5 million")
-
-def handling_cost(b, omega=0.5, eta=0.75, x_std=X_STD, m=1.0):
-    """Eq. 19.3: one-way handling cost per line, $. m = liquidity regime multiplier (19.7)."""
-    if not (0.0 < omega <= 1.0 and 0.5 <= eta <= 1.0 and m > 0):
-        raise ValueError("omega in (0,1], eta in [0.5,1], m > 0")
-    u = np.abs(b.x) / x_std
-    return m * omega * 0.5 * b.lcs * b.mid * np.abs(b.x) * np.maximum(1.0, u) ** eta
-
-c0 = handling_cost(b0)
-assert np.all(c0 >= 0)
-small = np.abs(b0.x) <= X_STD                     # at or below standard size: flat
-assert np.allclose(c0[small], 0.25 * b0.lcs[small] * b0.mv()[small])
-# line 42 ($18mm) pays (18/4)^0.75 ~ 3.1x the standard per-dollar rate
-assert np.isclose(c0[41] / (0.25 * b0.lcs[41] * b0.mv()[41]), 4.5 ** 0.75)
-# line 42 alone costs more to handle than the 25 cheapest lines combined
-assert c0[41] > np.sort(c0)[:25].sum()
-```
+<!-- EXPLAIN: Listing 19.2 -->
+> **Code Companion: Listing 19.2.** Eq. The full python listing is in [Appendix F, Listing 19.2](#code-19-2).
 
 The last assert is the fat tail in one line. Line 42 has about 8% of the notional and, by hand arithmetic on this synthetic basket, roughly 40% of the handling cost *(illustrative)*. Section 19.6 will want to talk to it.
 
@@ -349,62 +232,8 @@ With no basis ($\sigma_u\to0$), $h^\star=\sum_i x_i\beta_i/\beta_h$, the DTS-mat
 
 Shapes: $B$ is $(N,K)$ with $K=1+8$ (market plus eight sectors), $\Omega_T$ is $(K,K)$, $A$ is $(H,K)$ with $H=2$ (an HY ETF and CDX HY, both in the long-risk convention, so a positive $h$ sells risk), and $U$ is $(H,H)$. All covariances are over the horizon $T$. Factor and basis volatilities are *illustrative*.
 
-```python
-T_DAYS = 5.0          # unwind horizon, business days (Li 2022: ~5.3 extra days in inventory)
-SIG_MKT_D = 0.015     # daily vol of the market relative-spread factor (illustrative)
-SIG_SEC_D = 0.008     # daily vol of each sector relative-spread factor (illustrative)
-HEDGE_HALF_SPREAD = np.array([1e-4, 0.5e-4])   # $ per $ notional: ETF, CDX (illustrative)
-
-def loadings(b):
-    """B (N, K): price change (fraction of par) per unit relative spread move.
-    DTS model: dP = -P * D_spr * ds,  ds = s * g  =>  B = -P * DTS."""
-    dts = b.oasd * b.oas
-    B = np.zeros((b.n, 1 + N_SECTORS))
-    B[:, 0] = -b.mid * dts
-    B[np.arange(b.n), 1 + b.sector] = -b.mid * dts
-    return B
-
-def factor_cov(T=T_DAYS):
-    """Omega_T (K, K): independent market and sector factors over the horizon."""
-    return np.diag(np.r_[SIG_MKT_D**2, np.full(N_SECTORS, SIG_SEC_D**2)]) * T
-
-def hedge_book(T=T_DAYS, basis_scale=1.0):
-    """A (H, K) loadings per $ notional; U (H, H) basis covariance. Index DTS 0.16 / 0.14."""
-    A = np.zeros((2, 1 + N_SECTORS))
-    A[0, 0], A[1, 0] = -0.16, -0.14
-    A[0, 1:], A[1, 1:] = -0.16 / N_SECTORS, -0.14 / N_SECTORS   # equal sector weights
-    U = np.diag([0.0015**2, 0.0010**2]) * T * basis_scale**2
-    return A, U
-
-def joint_cov(b, d, T=T_DAYS, basis_scale=1.0, cond_max=1e8):
-    """Sxx (N,N), Sxf (N,H), Sff (H,H); d = (N,) idiosyncratic variance over T."""
-    B, Om = loadings(b), factor_cov(T)
-    A, U = hedge_book(T, basis_scale)
-    Sxx = B @ Om @ B.T + np.diag(d)
-    Sxf = B @ Om @ A.T
-    Sff = A @ Om @ A.T + U
-    if np.linalg.cond(Sff) > cond_max:
-        raise ValueError("hedges nearly collinear: drop one or model the basis")
-    return Sxx, Sxf, Sff
-
-def residual(Sxx, Sxf, Sff):
-    """Eq. 19.4: Schur complement = optimally re-hedged covariance for any basket."""
-    return Sxx - Sxf @ np.linalg.solve(Sff, Sxf.T)
-
-def min_var_hedge(x, Sxf, Sff):
-    """h* = Sff^{-1} Sfx x, $ notional per hedge (positive = sell risk)."""
-    return np.linalg.solve(Sff, Sxf.T @ x)
-
-d_naive = b0.sig_idio**2 * T_DAYS                    # no staleness yet (that is 19.5)
-Sxx, Sxf, Sff = joint_cov(b0, d_naive)
-Sres_naive = residual(Sxx, Sxf, Sff)
-h0 = min_var_hedge(b0.x, Sxf, Sff)
-v_unh = b0.x @ Sxx @ b0.x
-v_res = b0.x @ Sres_naive @ b0.x
-v_chk = v_unh - 2.0 * h0 @ (Sxf.T @ b0.x) + h0 @ Sff @ h0
-assert np.isclose(v_res, v_chk, rtol=1e-8)          # Schur complement == hedged variance
-assert v_res < 0.5 * v_unh                           # the hedge kills most of the lump
-```
+<!-- EXPLAIN: Listing 19.3 -->
+> **Code Companion: Listing 19.3.** B (N, K): price change (fraction of par) per unit relative spread move. The full python listing is in [Appendix F, Listing 19.3](#code-19-3).
 
 ### Deep-Dive Resource Graph
 
@@ -469,35 +298,8 @@ For line 42 ($a=40$, $\phi=0.05$, $\kappa=\xi=0.5$, $T=5$) the bracket and the i
 
 ### Specification for AI Implementation (residual covariance)
 
-```python
-def idio_var(b, T=T_DAYS, xi=0.5, kappa_stale=0.5, tau2=0.0):
-    """Eq. 19.5: horizon idio variance + stale-composite error, sparse-print bias fix, ridge."""
-    return b.sig_idio**2 * (T + kappa_stale * b.age) * b.print_frac ** (-xi) + tau2
-
-def psd_project(S, rel_floor=1e-10):
-    """Symmetrize, clip eigenvalues at rel_floor * max, symmetrize again."""
-    S = 0.5 * (S + S.T)
-    w, V = np.linalg.eigh(S)
-    w = np.maximum(w, rel_floor * w.max())
-    S = (V * w) @ V.T
-    return 0.5 * (S + S.T)
-
-def build_residual_cov(b, T=T_DAYS, basis_scale=1.0, cond_max=1e6, **kw):
-    """Returns Sxx, Sxf, Sff and the PSD-projected, condition-guarded Sigma_res."""
-    Sxx, Sxf, Sff = joint_cov(b, idio_var(b, T, **kw), T, basis_scale)
-    Sres = psd_project(residual(Sxx, Sxf, Sff))
-    if np.linalg.cond(Sres) > cond_max:
-        raise ValueError("Sigma_res ill-conditioned: raise tau2 or evict lines")
-    return Sxx, Sxf, Sff, Sres
-
-Sxx, Sxf, Sff, Sres = build_residual_cov(b0)
-assert np.all(np.linalg.eigvalsh(Sres) > 0)
-assert Sres[41, 41] > 5.0 * Sres_naive[41, 41]       # staleness is variance, not a haircut
-assert np.all(np.diag(Sres) >= idio_var(b0) * (1 - 1e-9))   # Sigma_res >= D in PSD order
-# Kaz's matrix: 150 bonds x 14 observations -> rank <= 13, i.e. 137 "riskless" directions
-R_kaz = RNG.normal(size=(14, 150))
-assert np.linalg.matrix_rank(np.cov(R_kaz, rowvar=False)) <= 13
-```
+<!-- EXPLAIN: Listing 19.4 -->
+> **Code Companion: Listing 19.4.** Eq. The full python listing is in [Appendix F, Listing 19.4](#code-19-4).
 
 ## 19.6 Eviction: Which Lines to Kick Out, and the Price of Keeping Them
 
@@ -555,46 +357,8 @@ How a systematic desk would have read it in real time: hit rates on HY PTs falli
 
 ### Specification for AI Implementation (greedy eviction)
 
-```python
-def evict_greedy(b, Sres, as_vec, gamma=1e-6, omega=0.5, eta=0.75, m=1.0,
-                 alpha=0.15, k_max=10, target=0.0045):
-    """Greedy eviction on exact removal savings (eq. 19.7). Stops at cost/MV <= target,
-    evicted MV > alpha * gross MV, or k_max lines. Returns (evicted indices, cost/MV path)."""
-    mv = b.mv()
-    c = handling_cost(b, omega, eta, m=m)
-    x = b.x.astype(float).copy()
-    alive = np.ones(b.n, dtype=bool)
-    Sx = Sres @ x
-    diag_s = np.diag(Sres)
-    budget = alpha * mv.sum()
-
-    def total():                       # x is zeroed for evicted lines
-        return c[alive].sum() + as_vec[alive].sum() + 0.5 * gamma * x @ Sres @ x
-
-    C = total()
-    path, evicted = [C / mv[alive].sum()], []
-    while len(evicted) < k_max and path[-1] > target:
-        delta = c + as_vec + gamma * x * Sx - 0.5 * gamma * diag_s * x**2
-        room = budget - mv[~alive].sum()
-        ratio = np.where(alive & (mv <= room), delta / mv, -np.inf)
-        j = int(np.argmax(ratio))
-        if not np.isfinite(ratio[j]) or ratio[j] <= path[-1]:
-            break
-        Sx -= Sres[:, j] * x[j]        # O(N) update of the coupling term
-        x[j] = 0.0
-        alive[j] = False
-        evicted.append(j)
-        C_new = total()
-        assert np.isclose(C - C_new, delta[j], rtol=1e-9, atol=1e-6)   # eq. 19.7 is exact
-        C = C_new
-        path.append(C / mv[alive].sum())
-    return evicted, np.array(path)
-
-# Without an adverse-selection model the engine evicts line 42 (index 41) and stops.
-ev_noas, path_noas = evict_greedy(b0, Sres, np.zeros(b0.n))
-assert ev_noas == [41]
-assert np.all(np.diff(path_noas) < 0)
-```
+<!-- EXPLAIN: Listing 19.5 -->
+> **Code Companion: Listing 19.5.** Greedy eviction on exact removal savings (eq. The full python listing is in [Appendix F, Listing 19.5](#code-19-5).
 
 Hold on to that last assert. The engine, run without an AS model, evicts the stale \$18mm line and is satisfied: the basket is now below its 45bp target, and line 117 stays in. Line 117 looks like a model citizen. Its realized volatility is ordinary, its LCS is unremarkable, and it diversifies nicely. Everything the covariance matrix can see about it is fine. That is the point.
 
@@ -634,32 +398,8 @@ In **March 2020** all three stress channels fired at once. Flows were one-sided,
 
 ### Specification for AI Implementation (regime and stress covariance)
 
-```python
-def regime(etf_disc_z=0.0, bidask_pct=0.5):
-    """Stress score s in [0, 2] from ETF discount z-score (negative = discount) and bid-ask
-    percentile in [0, 1]; one score drives m, gamma and basis together. At s = 2, m = 5.8,
-    Ben Dor's 0.59% -> 3.40% IG LCS range (illustrative calibration)."""
-    s = max(0.0, -etf_disc_z - 1.0) / 3.0 + max(0.0, bidask_pct - 0.8) / 0.2
-    s = min(s, 2.0)
-    return dict(s=s, m=1.0 + 2.4 * s, gamma_mult=1.0 + 1.5 * s, basis_mult=1.0 + 2.0 * s)
-
-THETA_LIQ = 0.8   # price change per unit of m per unit of LCS (illustrative)
-
-def stress_cov(b, Sres_calm, s):
-    """Eq. 19.9: calm residual covariance plus a rank-one liquidity spike."""
-    g = -THETA_LIQ * b.lcs * b.mid
-    return Sres_calm + (0.25 * s) ** 2 * np.outer(g, g)
-
-reg = regime(etf_disc_z=-2.5, bidask_pct=0.9)
-assert np.isclose(reg["s"], 1.0) and np.isclose(regime(-10.0, 1.0)["m"], 5.8)
-S_st = stress_cov(b0, Sres, reg["s"])
-spike = S_st - Sres
-assert np.linalg.matrix_rank(spike, tol=1e-8 * np.linalg.norm(spike, 2)) == 1
-# the spike does not diversify: its share of basket variance dwarfs its share of line variance
-share_basket = (b0.x @ spike @ b0.x) / (b0.x @ S_st @ b0.x)
-share_lines = np.sum(b0.x**2 * np.diag(spike)) / np.sum(b0.x**2 * np.diag(S_st))
-assert share_basket > 3.0 * share_lines
-```
+<!-- EXPLAIN: Listing 19.6 -->
+> **Code Companion: Listing 19.6.** Stress score s in [0, 2] from ETF discount z-score (negative = discount) and bid-ask percentile in [0, 1]; one score drives m, gamma and basis together. The full python listing is in [Appendix F, Listing 19.6](#code-19-6).
 
 ## 19.8 Adverse Selection in Baskets: The Mystery Box
 
@@ -698,38 +438,8 @@ The counter-proposal writes itself: *we bid the 148 at a 35bp concession; lines 
 
 ### Specification for AI Implementation (adverse selection and hand history)
 
-```python
-W_AS = dict(const=-5.0, prs=4.0, call_soon=1.5, ad_hoc=1.5, log_size=0.3)  # HY (illustrative)
-J_FLOOR, J_LMT = 0.01, 0.15        # informed move, fraction of par (illustrative)
-
-def as_charge(b, w=W_AS, j_floor=J_FLOOR, j_lmt=J_LMT):
-    """Eq. 19.10: AS_i = MV_i * Pr(informed | z_i) * J_i, $. Returns (AS_i, Pr_i)."""
-    call_soon = np.exp(-b.days_to_call / 5.0)        # 0 if no call (inf); -> 1 if imminent
-    log_size = np.log(np.abs(b.x) / np.median(np.abs(b.x)))
-    logit = (w["const"] + w["prs"] * b.prs + w["call_soon"] * call_soon
-             + w["ad_hoc"] * b.ad_hoc + w["log_size"] * log_size)
-    p = 1.0 / (1.0 + np.exp(-logit))
-    return b.mv() * p * (j_floor + j_lmt * b.prs), p
-
-as0, p0 = as_charge(b0)
-assert p0[116] > 0.5 and np.median(p0) < 0.05
-assert as0[116] > 0.5 * as0.sum()             # one line carries most of the basket's AS
-ev_as, path_as = evict_greedy(b0, Sres, as0)
-assert ev_as == [116, 41]                     # line 117 goes first now, then line 42
-
-def markouts(x, p_trade, mid_path):
-    """Hand history: per-line $ markout x_i * (mid_{t+tau} - p_i); mid_path is (N, 3),
-    already net of factor and hedge P&L (IDO or it didn't happen)."""
-    return x[:, None] * (mid_path - p_trade[:, None])
-
-rng_mo = np.random.default_rng(117)
-tau = np.array([1.0, 5.0, 20.0])
-p_trade = b0.mid.copy()
-mid_path = b0.mid[:, None] + rng_mo.normal(size=(b0.n, 3)) * b0.sig_idio[:, None] * np.sqrt(tau)
-mid_path[116] = b0.mid[116] - np.array([0.01, 0.05, 0.14])   # the uptier lands (illustrative)
-mo = markouts(b0.x, p_trade, mid_path)
-assert int(np.argmin(mo[:, 2] / b0.mv())) == 116              # the face-down card, found
-```
+<!-- EXPLAIN: Listing 19.7 -->
+> **Code Companion: Listing 19.7.** Eq. The full python listing is in [Appendix F, Listing 19.7](#code-19-7).
 
 Replayed through the markouts, Ines's hand history reads the way she expected: 149 lines of noise and one line with a 17% per-dollar loss at 20 days. The basket-level markout, averaged over \$200mm, would have called it a mildly unlucky week.
 
@@ -799,51 +509,8 @@ Here is the third aha. **"Ninety seconds" is a data-architecture statement, not 
 
 ### Specification for AI Implementation (the full engine)
 
-```python
-def price_pt(b, gamma=1e-6, omega=0.5, eta=0.75, etf_disc_z=0.0, bidask_pct=0.5,
-             target=0.0045, alpha=0.15, k_max=10, evict=True):
-    """Live path. Returns dealer cash for the kept basket (eq. 19.2; negative = dealer
-    receives) and the four-term decomposition, all in $; cost_bp is on gross MV."""
-    t0 = time.perf_counter()
-    reg = regime(etf_disc_z, bidask_pct)
-    gam, m = gamma * reg["gamma_mult"], reg["m"]
-    _, Sxf, Sff, S = build_residual_cov(b, basis_scale=reg["basis_mult"])
-    if reg["s"] > 0:
-        S = stress_cov(b, S, reg["s"])
-    as_vec, _ = as_charge(b)
-    ev = []
-    if evict:
-        ev, _ = evict_greedy(b, S, as_vec, gamma=gam, omega=omega, eta=eta, m=m,
-                             alpha=alpha, k_max=k_max, target=target)
-    keep = np.setdiff1d(np.arange(b.n), ev)
-    bk = b.drop(ev)
-    h = min_var_hedge(bk.x, Sxf[keep], Sff)
-    handling = handling_cost(bk, omega, eta, m=m).sum()
-    risk = 0.5 * gam * bk.x @ S[np.ix_(keep, keep)] @ bk.x
-    adv = as_vec[keep].sum()
-    hedge_cost = np.abs(h) @ HEDGE_HALF_SPREAD
-    cost = handling + risk + adv + hedge_cost
-    gross = bk.mv().sum()
-    return dict(cash=bk.x @ bk.mid - cost, cost=cost, cost_bp=1e4 * cost / gross,
-                handling=handling, risk=risk, adv=adv, hedge_cost=hedge_cost, hedge=h,
-                evicted=[str(b.ids[i]) for i in ev], hit_target=cost / gross <= target,
-                regime=reg, ms=1e3 * (time.perf_counter() - t0))
-
-fair = b0.x @ b0.mid
-full = price_pt(b0, evict=False)
-calm = price_pt(b0)
-assert full["cash"] < fair                                   # a bid sits below fair value
-assert np.isclose(full["cost"], full["handling"] + full["risk"] + full["adv"]
-                  + full["hedge_cost"])
-assert calm["evicted"] == ["L117", "L042"] and calm["hit_target"]
-assert calm["cost_bp"] < full["cost_bp"]                     # the counter-proposal pays
-stress = price_pt(b0, etf_disc_z=-2.5, bidask_pct=0.9, evict=False)
-assert stress["cost"] > 2.0 * full["cost"]                   # same basket, one regime later
-buy = price_pt(replace(b0, x=-b0.x), evict=False)           # client buys the same lines
-assert np.isclose(buy["cost"], full["cost"], rtol=1e-9)      # costs are side-symmetric
-assert np.isclose(buy["cash"], -fair - full["cost"])         # the ask sits above fair value
-assert calm["ms"] < 1000.0                                   # the linear algebra is the easy second
-```
+<!-- EXPLAIN: Listing 19.8 -->
+> **Code Companion: Listing 19.8.** Live path. The full python listing is in [Appendix F, Listing 19.8](#code-19-8).
 
 ### Deep-Dive Resource Graph
 

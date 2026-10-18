@@ -105,49 +105,8 @@ Order splitting makes Roll *underestimate* the spread by the factor $(1-\rho)$. 
 
 **The Spec You Hand the Robot.** *What ROBO built from the vague version ("estimate the bid–ask spread from TRACE"):* it averaged (ask print − bid print) over all prints on the same day, on a bond that traded twice a week, and reported a spread of zero for every day with one print. The precise spec: input a time-ordered vector of cleaned prices (points per 100 par) for one bond and one size bucket. Output `(spread, autocov)` in points. Require at least `min_obs` price changes. Return `NaN` when the autocovariance is non-negative, and never take an absolute value. Sanity checks: recover a known spread on simulated Roll data, recover $S(1-\rho)$ under order splitting, and return `NaN` under momentum.
 
-```python
-import numpy as np
-import pandas as pd
-from scipy import stats, integrate, signal
-
-RNG = np.random.default_rng(18)
-
-def roll_spread(prices, min_obs=20):
-    """Roll (1984) effective spread from consecutive trade prices (points per 100 par).
-    Returns (spread_points, autocov). spread is NaN when autocov >= 0 (Roll undefined)."""
-    p = np.asarray(prices, dtype=float)
-    p = p[np.isfinite(p)]
-    if p.size < min_obs + 2:
-        return np.nan, np.nan
-    dp = np.diff(p)
-    c = np.cov(dp[1:], dp[:-1], ddof=1)[0, 1]
-    if c >= 0.0:
-        return np.nan, c          # momentum or splitting dominates: never take abs()
-    return 2.0 * np.sqrt(-c), c
-
-def simulate_roll(n, spread, sigma_mid, rho=0.0, phi_mid=0.0, rng=RNG):
-    """p_t = m_t + (spread/2) I_t. I_t: symmetric +/-1 Markov chain with lag-1 autocorr rho.
-    Mid increments: AR(1) with coefficient phi_mid (phi_mid > 0 mimics informed drift)."""
-    stay = 0.5 * (1.0 + rho)
-    flips = rng.random(n) >= stay
-    flips[0] = False
-    I = rng.choice([-1.0, 1.0]) * np.where(np.cumsum(flips) % 2 == 0, 1.0, -1.0)
-    eps = rng.normal(0.0, sigma_mid, n)
-    dm = signal.lfilter([1.0], [1.0, -phi_mid], eps)
-    m = 90.0 + np.cumsum(dm)
-    return m + 0.5 * spread * I
-
-# Sanity 1: Roll recovers the spread when signs are i.i.d.
-s_hat, _ = roll_spread(simulate_roll(200_000, spread=0.50, sigma_mid=0.05))
-assert abs(s_hat - 0.50) < 0.02, s_hat
-# Sanity 2: order splitting shrinks the estimate to S(1 - rho)
-s_split, _ = roll_spread(simulate_roll(200_000, spread=0.50, sigma_mid=0.05, rho=0.6))
-assert abs(s_split - 0.50 * 0.4) < 0.02, s_split
-# Sanity 3: informed drift turns the covariance positive -> NaN, not a fake spread
-s_mom, c_mom = roll_spread(simulate_roll(50_000, spread=0.10, sigma_mid=0.10, rho=0.6, phi_mid=0.4))
-assert np.isnan(s_mom) and c_mom > 0, (s_mom, c_mom)
-gamma_bpw = lambda prices: -roll_spread(prices)[1]   # Bao-Pan-Wang illiquidity, points^2
-```
+<!-- EXPLAIN: Listing 18.1 -->
+> **Code Companion: Listing 18.1.** Roll (1984) effective spread from consecutive trade prices (points per 100 par). The full python listing is in [Appendix F, Listing 18.1](#code-18-1).
 
 The third check is worth working by hand. With $S = 0.10$ and $\rho = 0.6$, the bounce contributes $-c^2(1-\rho)^2 = -0.0025 \times 0.16 = -0.0004$ to the autocovariance. The mid increments have stationary variance $0.01/(1-0.16) \approx 0.0119$ and lag-one autocovariance $0.4 \times 0.0119 \approx 0.0048$. Momentum wins by a factor of twelve, and a well-behaved estimator says so by refusing to answer.
 
@@ -219,39 +178,8 @@ Guo, Lehalle & Xu (2021), *Transaction Cost Analytics for Corporate Bonds* (arXi
 
 Input: arrays of markouts (points, IDO-adjusted, horizon $h$ stated in the column name) and signed flow (customer buy positive; USD mm or ADV-normalized; state which). Output: slope and $t$-statistic. In production, use heteroskedasticity-robust errors clustered by issuer and day. The simulation below checks the closed form, the absence of post-trade drift under efficient pricing, and the insider's profit $\tfrac12\sigma_v\sigma_u$.
 
-```python
-def kyle_equilibrium(sigma_v, sigma_u):
-    """One-period Kyle (1985). Returns (lambda_K, beta).
-    lambda_K is in points per unit of flow; beta in flow units per point."""
-    if sigma_v <= 0 or sigma_u <= 0:
-        raise ValueError("volatilities must be positive")
-    return 0.5 * sigma_v / sigma_u, sigma_u / sigma_v
-
-def estimate_kyle_lambda(markout, signed_flow):
-    """OLS slope of markout (points) on signed flow, with intercept. Returns (slope, t_stat)."""
-    yv = np.asarray(markout, float)
-    xv = np.asarray(signed_flow, float)
-    X = np.column_stack([np.ones_like(xv), xv])
-    coef, *_ = np.linalg.lstsq(X, yv, rcond=None)
-    resid = yv - X @ coef
-    s2 = resid @ resid / (len(yv) - 2)
-    se = np.sqrt(s2 * np.linalg.inv(X.T @ X)[1, 1])
-    return coef[1], coef[1] / se
-
-sig_v, sig_u, n_k, p0 = 2.0, 5.0, 100_000, 90.0     # value std (points), noise std (USD mm)
-lam_K, beta_K = kyle_equilibrium(sig_v, sig_u)       # 0.2 points per USD mm
-v_k = p0 + RNG.normal(0.0, sig_v, n_k)
-u_k = RNG.normal(0.0, sig_u, n_k)
-x_k = beta_K * (v_k - p0)
-y_k = x_k + u_k
-p_k = p0 + lam_K * y_k
-slope_total, _ = estimate_kyle_lambda(v_k - p0, y_k)
-slope_post, t_post = estimate_kyle_lambda(v_k - p_k, y_k)
-assert abs(slope_total / lam_K - 1.0) < 0.03          # information content = lambda_K
-assert abs(t_post) < 4.0                              # efficient pricing: no post-trade drift
-assert abs(np.mean(x_k * (v_k - p_k)) / (0.5 * sig_v * sig_u) - 1.0) < 0.03
-assert abs(np.var(v_k - p_k) / (0.5 * sig_v**2) - 1.0) < 0.03   # half the information revealed
-```
+<!-- EXPLAIN: Listing 18.2 -->
+> **Code Companion: Listing 18.2.** One-period Kyle (1985). The full python listing is in [Appendix F, Listing 18.2](#code-18-2).
 
 ## 18.4 Avellaneda–Stoikov, Derived Without Skipping Steps
 
@@ -378,48 +306,8 @@ Notice the proportions: Kaz's quote was 94% greed and 6% fear. In a bond, the di
 
 **The Spec You Hand the Robot.** *Vague version:* "quote bonds using Avellaneda–Stoikov." *What ROBO built:* $T$ = 4 p.m. New York, so its quotes widened at 9:30 a.m. and tightened all afternoon, and its σ came from the CDS ladder. *Precise version:* inputs are the composite mid $s$ (points), inventory $q$ (lots of \$1mm), price volatility $\sigma$ (points/$\sqrt{\text{yr}}$, 20-day $\mathbb{P}$ forecast), $\gamma$ (per point-lot), $k$ (per point, from the fitted win curve), and holding-period horizon $\tau$ (years, never the time to the close). Outputs are bid, ask, $r^{\text{res}}$, and the fear and greed split, all in points, plus prices rounded to the instrument's tick. Guards: reject negative inputs; use the $1/k$ limit when $\gamma < 10^{-12}$; never let unit conversion happen inside the function.
 
-```python
-from scipy.optimize import minimize_scalar
-
-def as_greed(gamma, k):
-    """Per-side markup (1/gamma) ln(1 + gamma/k), in points. Tends to 1/k as gamma -> 0."""
-    if k <= 0:
-        raise ValueError("k must be positive (per point)")
-    if gamma < 1e-12:
-        return 1.0 / k
-    return np.log1p(gamma / k) / gamma
-
-def as_quotes(s, q, sigma, gamma, k, tau):
-    """Avellaneda-Stoikov (2008) approximate quotes. s points; q lots; sigma points/sqrt(yr);
-    gamma per point-lot; k per point; tau years. Returns prices and the fear/greed split."""
-    if sigma < 0 or gamma < 0 or tau < 0:
-        raise ValueError("sigma, gamma, tau must be non-negative")
-    fear = gamma * sigma**2 * tau                     # full-spread inventory term, points
-    g = as_greed(gamma, k)
-    r_res = s - q * fear                              # (18.1)
-    return {"r_res": r_res, "bid": r_res - 0.5 * fear - g, "ask": r_res + 0.5 * fear + g,
-            "spread": fear + 2.0 * g, "fear": fear, "greed": 2.0 * g}
-
-to_eighth = lambda px: np.round(np.asarray(px, float) * 8.0) / 8.0
-
-tau_hold = 5.0 / 252.0
-qa = as_quotes(s=91.25, q=3, sigma=8.0, gamma=0.005, k=3.0, tau=tau_hold)
-assert abs(qa["bid"] - 90.8947) < 1e-3 and to_eighth(qa["bid"]) == 90.875     # Kaz's quote
-assert abs(qa["spread"] - (qa["fear"] + qa["greed"])) < 1e-12                  # (18.4)
-assert qa["greed"] / qa["spread"] > 0.9                                         # mostly greed
-assert abs(as_greed(1e-9, 3.0) - 1.0 / 3.0) < 1e-9                              # gamma -> 0
-assert as_quotes(91.25, 3, 8.0, 0.005, 3.0, 0.0)["r_res"] == 91.25             # t -> T
-
-# General FOC (18.2), checked by brute force for the exponential intensity
-A_, k_, g_, Delta = 50.0, 3.0, 0.005, 0.0222
-obj = lambda d: -A_ * np.exp(-k_ * d) * (-np.expm1(-g_ * (d - Delta))) / g_
-d_star = minimize_scalar(obj, bounds=(Delta, Delta + 5.0), method="bounded",
-                         options={"xatol": 1e-10}).x
-assert abs(d_star - (Delta + as_greed(g_, k_))) < 1e-6
-
-# ROBO's unit error: spread vol in bp (200) fed as price vol in points
-assert as_quotes(91.25, 3, 200.0, 0.005, 3.0, tau_hold)["bid"] < 78.0
-```
+<!-- EXPLAIN: Listing 18.3 -->
+> **Code Companion: Listing 18.3.** Per-side markup (1/gamma) ln(1 + gamma/k), in points. The full python listing is in [Appendix F, Listing 18.3](#code-18-3).
 
 ## 18.5 GLFT: Inventory Bounds, Linear ODEs, and the Stationary Dealer
 
@@ -542,95 +430,8 @@ This is the chapter's core inventory engine: GLFT with jump-to-default, plus exa
 
 **The Spec You Hand the Robot.** *Vague:* "add default risk to the market maker." *What ROBO built:* it multiplied σ by 1.5. *Precise:* (a) `jtd_reservation(s, q, n, sigma, gamma, tau, lam_P, J, lam_Q)` returns the frozen-inventory reservation bid and ask for a block of `n` lots, from $\theta(q)$ in §18.6.1; $\mu = \lambda^{\mathbb{Q}}J$ when `s` is a $\mathbb{Q}$-fair composite. (b) `glft_quotes` and `glft_stationary` solve (18.8) by symmetric eigendecomposition, rescaled by the smallest eigenvalue to prevent overflow, and return bid and ask distances (points from mid) per inventory level, with NaN where $v$ is numerically untrustworthy or the inventory bound forbids a side. (c) Units must be consistent: per trading day throughout the GLFT block. (d) Sanity checks: short-horizon GLFT equals AS; long-horizon GLFT equals the ground state; the ground state matches (18.6) near $q = 0$; quotes are symmetric without jumps; jumps make the dealer less eager to buy and more eager to sell; the small-$\gamma$ expansion holds; inventory asymmetry holds; and Beta-recovery quadrature matches Monte Carlo and obeys Jensen.
 
-```python
-def jtd_reservation(s, q, n, sigma, gamma, tau, lam_P, J, lam_Q=0.0):
-    """Frozen-inventory reservation (bid, ask) for buying/selling a block of n lots.
-    Mid: dS = lam_Q*J dt + sigma dW - J dN, N with P-intensity lam_P. Points, lots, consistent time."""
-    if n < 1 or gamma < 0 or tau < 0:
-        raise ValueError("need n >= 1, gamma >= 0, tau >= 0")
-    def theta(qq):
-        base = qq * (s + lam_Q * J * tau) - 0.5 * gamma * qq**2 * sigma**2 * tau
-        if gamma < 1e-12:
-            return base - lam_P * tau * qq * J
-        return base - (lam_P * tau / gamma) * np.expm1(gamma * qq * J)
-    return (theta(q + n) - theta(q)) / n, (theta(q) - theta(q - n)) / n
-
-def jump_mgf_beta(u, s, a, b, scale=100.0):
-    """E[exp(u J)] for J = s - scale*R, R ~ Beta(a, b), by adaptive quadrature."""
-    f = lambda r: np.exp(u * (s - scale * r)) * stats.beta.pdf(r, a, b)
-    return integrate.quad(f, 0.0, 1.0, limit=200)[0]
-
-def glft_matrix(sigma, gamma, k, A, Q, lam=0.0, J=0.0, mu=0.0):
-    """Symmetric tridiagonal M of (18.8) on q = -Q..Q. Consistent units (e.g. per day)."""
-    if gamma <= 0 or k <= 0 or A <= 0 or Q < 1:
-        raise ValueError("need gamma, k, A > 0 and Q >= 1")
-    q = np.arange(-Q, Q + 1, dtype=float)
-    eta = A * (1.0 + gamma / k) ** (-(1.0 + k / gamma))
-    diag = 0.5 * k * gamma * sigma**2 * q**2 - k * mu * q
-    if lam > 0.0:
-        diag = diag + (k * lam / gamma) * np.expm1(gamma * q * J)
-    M = np.diag(diag) - eta * (np.eye(q.size, k=1) + np.eye(q.size, k=-1))
-    return q, M
-
-def _quotes_from_logv(q, logv, gamma, k):
-    g = as_greed(gamma, k)
-    db, da = np.full(q.size, np.nan), np.full(q.size, np.nan)
-    db[:-1] = (logv[:-1] - logv[1:]) / k + g          # no bid at q = +Q
-    da[1:] = (logv[1:] - logv[:-1]) / k + g           # no ask at q = -Q
-    return pd.DataFrame({"q": q.astype(int), "delta_bid": db, "delta_ask": da}).set_index("q")
-
-def _safe_log(v):
-    ok = v > 1e-12 * np.max(v)
-    return np.where(ok, np.log(np.where(ok, v, 1.0)), np.nan)
-
-def glft_quotes(sigma, gamma, k, A, tau, Q, lam=0.0, J=0.0, mu=0.0):
-    q, M = glft_matrix(sigma, gamma, k, A, Q, lam, J, mu)
-    w, P = np.linalg.eigh(M)
-    v = P @ (np.exp(-(w - w.min()) * tau) * (P.T @ np.ones(q.size)))   # e^{-M tau} 1, rescaled
-    return _quotes_from_logv(q, _safe_log(v), gamma, k)
-
-def glft_stationary(sigma, gamma, k, A, Q, lam=0.0, J=0.0, mu=0.0):
-    q, M = glft_matrix(sigma, gamma, k, A, Q, lam, J, mu)
-    f0 = np.abs(np.linalg.eigh(M)[1][:, 0])          # Perron ground state
-    return _quotes_from_logv(q, _safe_log(f0), gamma, k)
-
-def glft_omega(sigma, gamma, k, A):
-    """Closed-form stationary skew per lot, (18.6)."""
-    return np.sqrt(sigma**2 * gamma / (2.0 * k * A) * (1.0 + gamma / k) ** (1.0 + k / gamma))
-
-sig_d, gam, kk, A_d, Qmax = 8.0 / np.sqrt(252.0), 0.005, 3.0, 2.0, 20     # per trading day
-g0 = as_greed(gam, kk)
-short = glft_quotes(sig_d, gam, kk, A_d, tau=0.01, Q=Qmax)
-for qq in range(-3, 4):                                                     # GLFT -> AS
-    as_part = (qq + 0.5) * gam * sig_d**2 * 0.01
-    assert abs((short.loc[qq, "delta_bid"] - g0) / as_part - 1.0) < 0.02
-stat = glft_stationary(sig_d, gam, kk, A_d, Q=Qmax)
-long_run = glft_quotes(sig_d, gam, kk, A_d, tau=3000.0, Q=Qmax)
-assert np.allclose(long_run.loc[-5:5, "delta_bid"], stat.loc[-5:5, "delta_bid"], atol=1e-8)
-omega = glft_omega(sig_d, gam, kk, A_d)
-assert 0.9 < (stat.loc[0, "delta_bid"] - g0) / (0.5 * omega) < 1.15        # (18.6)
-assert np.allclose(stat.loc[-5:5, "delta_bid"].values,
-                   stat.loc[-5:5, "delta_ask"].values[::-1], atol=1e-9)    # symmetry
-tau_eff_days = omega / (gam * sig_d**2)                                     # about 13 days
-assert 10.0 < tau_eff_days < 17.0
-
-lamP_d, lamQ_d, J_lmt = 0.005, 0.004, 20.0          # per day: 2.5% vs 2.0% per week of a 20-pt gap
-jtd = glft_stationary(sig_d, gam, kk, A_d, Q=Qmax, lam=lamP_d, J=J_lmt, mu=lamQ_d * J_lmt)
-assert jtd.loc[0, "delta_bid"] > stat.loc[0, "delta_bid"]          # less eager to buy
-assert jtd.loc[0, "delta_ask"] < stat.loc[0, "delta_ask"]          # more eager to sell
-
-rb_blk, _ = jtd_reservation(91.25, 3, 8, 8.0, 0.005, tau_hold, 0.025 / tau_hold, 20.0, 0.02 / tau_hold)
-assert abs(rb_blk - 90.5716) < 1e-3                                 # used in Section 18.7
-g_s = 1e-4                                                           # small-gamma expansion
-rb1, _ = jtd_reservation(91.25, 3, 1, 8.0, g_s, tau_hold, 0.025 / tau_hold, 20.0)
-assert abs(rb1 - (91.25 - 0.5 - 3.5 * g_s * (64.0 * tau_hold + 0.025 * 400.0))) < 1e-3
-r_res = lambda qq: np.mean(jtd_reservation(91.25, qq, 1, 8.0, 0.005, tau_hold, 0.025 / tau_hold, 20.0))
-assert (91.25 - r_res(5)) > (r_res(-5) - 91.25)                    # long fears more than short wants
-M_quad = jump_mgf_beta(0.015, 91.25, 40.0, 60.0)
-M_mc = np.mean(np.exp(0.015 * (91.25 - 100.0 * RNG.beta(40.0, 60.0, 400_000))))
-assert abs(M_quad / M_mc - 1.0) < 2e-3
-assert M_quad > np.exp(0.015 * (91.25 - 40.0))                      # Jensen: uncertainty costs
-```
+<!-- EXPLAIN: Listing 18.4 -->
+> **Code Companion: Listing 18.4.** Frozen-inventory reservation (bid, ask) for buying/selling a block of n lots. The full python listing is in [Appendix F, Listing 18.4](#code-18-4).
 
 ## 18.7 RFQ Hit Rates and the Price of Staying at the Table
 
@@ -692,68 +493,8 @@ Kaz's 90.875 priced 0.355 points of the 1.03 points. Ines priced all of it, roun
 
 ### Specification for AI Implementation (win curve, hit-ratio dual, quote assembly)
 
-```python
-from scipy.optimize import minimize, brentq
-
-def win_prob(x, b0, b1):
-    """Logistic RFQ win probability; x = composite - bid (points); b1 > 0 per point."""
-    return 1.0 / (1.0 + np.exp(-(b0 - b1 * np.asarray(x, float))))
-
-def fit_win_curve(x, won):
-    """MLE of (b0, b1) from an RFQ log of distances x (points) and outcomes won in {0, 1}."""
-    x, won = np.asarray(x, float), np.asarray(won, float)
-    nll = lambda b: np.sum(np.logaddexp(0.0, b[0] - b[1] * x) - won * (b[0] - b[1] * x))
-    return minimize(nll, x0=np.array([0.0, 1.0]), method="BFGS").x
-
-def markup(gn, b1, P):
-    """(1/gn) ln(1 + gn / (b1 (1 - P))): equation (18.2) for a logistic curve and a block."""
-    base = 1.0 / (b1 * (1.0 - P))
-    return base if gn < 1e-12 else np.log1p(gn * base) / gn
-
-def optimal_distance(d, nu, b0, b1, gn=0.0, iters=80):
-    """Vectorized bisection for x = d - nu + markup(x); F(x) is increasing in x."""
-    d, nu = np.broadcast_arrays(np.asarray(d, float), np.asarray(nu, float))
-    lo, hi = d - nu, d - nu + 20.0 / b1
-    for _ in range(iters):
-        mid = 0.5 * (lo + hi)
-        neg = mid - d + nu - markup(gn, b1, win_prob(mid, b0, b1)) < 0.0
-        lo, hi = np.where(neg, mid, lo), np.where(neg, hi, mid)
-    return 0.5 * (lo + hi)
-
-def rfq_bid(s, q, n, sigma, gamma, tau, lam_P, lam_Q, J, a_tox, nu, b0, b1, tick=0.125):
-    """Market maker's equation (18.9) for a client-sell RFQ of n lots; returns the five terms."""
-    r_b, _ = jtd_reservation(s, q, n, sigma, gamma, tau, lam_P, J, lam_Q)
-    view = (lam_P - lam_Q) * J * tau
-    d = (s - r_b) + a_tox
-    x = float(optimal_distance(d, nu, b0, b1, gamma * n))
-    out = {"credit_view": view, "fear": (s - r_b) - view, "suspicion": a_tox,
-           "greed": x - d + nu, "franchise": -nu, "bid": s - x, "p_win": float(win_prob(x, b0, b1))}
-    out["bid_tick"] = float(np.round(out["bid"] / tick) * tick)
-    return out
-
-# Win-curve fit recovers known parameters
-xs = RNG.uniform(-0.2, 1.5, 20_000)
-b_hat = fit_win_curve(xs, RNG.random(xs.size) < win_prob(xs, 0.3, 4.0))
-assert abs(b_hat[0] - 0.3) < 0.15 and abs(b_hat[1] - 4.0) < 0.2
-# The cold open, solved
-co = rfq_bid(91.25, 3, 8, 8.0, 0.005, tau_hold, 0.025 / tau_hold, 0.02 / tau_hold, 20.0,
-             a_tox=0.15, nu=0.05, b0=0.0, b1=4.0)
-terms = co["credit_view"] + co["fear"] + co["suspicion"] + co["greed"] + co["franchise"]
-assert abs((91.25 - co["bid"]) - terms) < 1e-9
-assert abs(co["bid"] - 90.219) < 0.005 and co["bid_tick"] == 90.25 and co["p_win"] < 0.03
-# Raw vs quality-adjusted hit-ratio targeting (Niang 2026, in miniature)
-tox = RNG.random(4_000) < 0.3
-d_all = RNG.normal(0.35, 0.10, tox.size) + np.where(tox, 0.40, 0.05)
-hit = lambda nu: win_prob(optimal_distance(d_all, nu, 0.0, 4.0), 0.0, 4.0).mean()
-nu_raw = brentq(lambda nu: hit(nu) - 0.25, 0.0, 3.0)
-x_raw = optimal_distance(d_all, nu_raw, 0.0, 4.0)
-x_q = optimal_distance(d_all, np.where(tox, 0.0, nu_raw), 0.0, 4.0)
-pw_raw, pw_q = win_prob(x_raw, 0.0, 4.0), win_prob(x_q, 0.0, 4.0)
-pnl = lambda x, pw: np.sum(pw * (x - d_all))
-assert abs(pw_raw.mean() - 0.25) < 1e-6 and np.allclose(pw_raw[~tox], pw_q[~tox])
-assert pnl(x_q, pw_q) > pnl(x_raw, pw_raw)                          # stop subsidizing toxic flow
-assert pw_q[tox].sum() / pw_q.sum() < pw_raw[tox].sum() / pw_raw.sum()
-```
+<!-- EXPLAIN: Listing 18.5 -->
+> **Code Companion: Listing 18.5.** Logistic RFQ win probability; x = composite - bid (points); b1 > 0 per point. The full python listing is in [Appendix F, Listing 18.5](#code-18-5).
 
 ## 18.8 Decoding TRACE
 
@@ -777,63 +518,8 @@ TRACE is not a tape. It is a censored, lagged, double-counted ledger with a rule
 
 Schema (one row per report): `msg_seq` int, `orig_msg_seq` int (−1 if none), `status` in {T, X, C}, `bond_id` str (internal id, never an invented CUSIP), `rating_class` in {IG, HY}, `minute` int, `price` float (points), `reported_qty` float (USD mm, capped), `side` in {B, S} (reporting dealer's view), `contra` in {C, D}, `ats` bool, `pt` bool.
 
-```python
-CAP_MM = {"IG": 5.0, "HY": 1.0}            # dissemination caps, USD mm par (RN 25-17)
-
-def make_synthetic_trace(n_trades=400, n_bad=20, rng=RNG):
-    """Synthetic TRACE-like reports; bond ids are placeholders, not CUSIPs."""
-    ids = np.array([f"BOND_{c}" for c in "ABCDEFGH"])
-    tr = pd.DataFrame({"trade_id": np.arange(n_trades), "bond_id": rng.choice(ids, n_trades),
-                       "minute": np.sort(rng.integers(0, 390, n_trades)),
-                       "price": np.round(rng.normal(95.0, 3.0, n_trades), 3),
-                       "qty_mm": np.round(np.exp(rng.normal(0.0, 1.2, n_trades)), 3),
-                       "contra": rng.choice(["C", "D"], n_trades, p=[0.7, 0.3]),
-                       "cust_buys": rng.random(n_trades) < 0.5,
-                       "ats": rng.random(n_trades) < 0.15, "pt": rng.random(n_trades) < 0.10})
-    tr["rating_class"] = tr.bond_id.map(dict(zip(ids, ["IG"] * 4 + ["HY"] * 4)))
-    rows = []
-    for t in tr.itertuples(index=False):
-        sides = ["S", "B"] if t.contra == "D" else (["S"] if t.cust_buys else ["B"])
-        rows += [{**t._asdict(), "side": sd, "status": "T", "orig_msg_seq": -1} for sd in sides]
-    rep = pd.DataFrame(rows)
-    rep["reported_qty"] = np.minimum(rep.qty_mm, rep.rating_class.map(CAP_MM))
-    rep["msg_seq"] = np.arange(len(rep))
-    pick = rng.choice(len(rep), 2 * n_bad, replace=False)
-    m = len(rep)
-    dup = rep.iloc[pick[:n_bad]].copy()
-    dup["msg_seq"] = m + np.arange(n_bad)                                     # erroneous duplicates
-    cxl = dup.assign(status="X", orig_msg_seq=dup.msg_seq.values, msg_seq=m + n_bad + np.arange(n_bad))
-    fix = rep.iloc[pick[n_bad:]].copy()
-    fix = fix.assign(status="C", orig_msg_seq=fix.msg_seq.values, msg_seq=m + 2 * n_bad + np.arange(n_bad))
-    rep.loc[rep.index[pick[n_bad:]], "price"] += 1.0                          # originals mispriced
-    return tr, pd.concat([rep, dup, cxl, fix], ignore_index=True)
-
-def clean_trace(rep):
-    """Apply cancels/corrections, keep the sell-side leg of interdealer trades, flag caps."""
-    gone = set(rep.loc[rep.status.isin(["X", "C"]), "orig_msg_seq"])
-    r = rep[(rep.status != "X") & ~rep.msg_seq.isin(gone)]
-    r = r[~((r.contra == "D") & (r.side == "B"))]
-    r = r.assign(capped=r.reported_qty >= r.rating_class.map(CAP_MM) - 1e-9)
-    return r.sort_values(["bond_id", "minute", "msg_seq"]).reset_index(drop=True)
-
-def trace_features(clean):
-    cust = clean.contra == "C"
-    c = clean.assign(cust_buy=np.where(cust & (clean.side == "S"), clean.reported_qty, 0.0),
-                     cust_sell=np.where(cust & (clean.side == "B"), clean.reported_qty, 0.0))
-    g = c.groupby("bond_id")
-    tot = (g.cust_buy.sum() + g.cust_sell.sum()).replace(0.0, np.nan)
-    return pd.DataFrame({"n_prints": g.size(), "cust_imbalance": (g.cust_buy.sum() - g.cust_sell.sum()) / tot,
-                         "capped_share": g.capped.mean(), "pt_share": g.pt.mean(),
-                         "ats_share": g.ats.mean(), "minutes_since_print": 390 - g.minute.max()})
-
-true_tr, raw = make_synthetic_trace()
-clean = clean_trace(raw)
-assert len(clean) == len(true_tr) and clean.trade_id.is_unique          # one row per true trade
-chk = clean.merge(true_tr[["trade_id", "price"]], on="trade_id", suffixes=("", "_true"))
-assert np.allclose(chk.price, chk.price_true)                             # corrections applied
-assert (clean.reported_qty <= clean.rating_class.map(CAP_MM) + 1e-12).all()
-assert trace_features(clean).cust_imbalance.dropna().between(-1.0, 1.0).all()
-```
+<!-- EXPLAIN: Listing 18.6 -->
+> **Code Companion: Listing 18.6.** Synthetic TRACE-like reports; bond ids are placeholders, not CUSIPs. The full python listing is in [Appendix F, Listing 18.6](#code-18-6).
 
 ## 18.9 BWICs: First-Price Auctions With a Leaky List
 
@@ -857,23 +543,8 @@ with $e_3 \approx 0.85$, $e_5 \approx 1.16$, and $e_8 \approx 1.42$. With $\sigm
 
 ### Specification for AI Implementation (BWIC shading and leakage)
 
-```python
-def expected_max_std_normal(n):
-    """e_n = E[max of n iid N(0,1)] by quadrature."""
-    return integrate.quad(lambda z: z * n * stats.norm.pdf(z) * stats.norm.cdf(z) ** (n - 1), -12.0, 12.0)[0]
-
-def bwic_leakage(list_mm, p_trade, phi, lam_K_per_100mm):
-    """Pre-auction drift (points) and seller cost (USD mm) from order anticipation."""
-    drift = lam_K_per_100mm * phi * p_trade * list_mm / 100.0
-    return drift, drift * list_mm / 100.0
-
-e_n = {n: expected_max_std_normal(n) for n in (3, 5, 8)}
-assert abs(e_n[3] - 3.0 / (2.0 * np.sqrt(np.pi))) < 1e-6                 # closed form for n = 3
-assert abs(e_n[8] - RNG.standard_normal((200_000, 8)).max(axis=1).mean()) < 0.01
-assert e_n[8] > e_n[5] > e_n[3]                                           # curse grows with n
-drift, cost = bwic_leakage(300.0, 0.9, 0.3, 0.5)
-assert abs(drift - 0.405) < 1e-12 and abs(cost - 1.215) < 1e-12
-```
+<!-- EXPLAIN: Listing 18.7 -->
+> **Code Companion: Listing 18.7.** e_n = E[max of n iid N(0,1)] by quadrature. The full python listing is in [Appendix F, Listing 18.7](#code-18-7).
 
 ## 18.10 Desk Debrief
 

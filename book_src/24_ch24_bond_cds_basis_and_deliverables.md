@@ -151,77 +151,8 @@ When $U$ is negative, as for Halvorsen at $s_{\text{par}} = 370$ bp and $c = 500
 
 **The precise spec.** Inputs: flat $\mathbb{Q}$-hazard `lam` (per year, decimal), flat continuously compounded OIS rate `r`, maturity `T` in years, recovery `R` (fraction of par), quarterly ACT/360 premium. Outputs: `rpv01` (years, per unit notional), `protection_leg` (fraction of notional), `par_spread` (decimal), `hazard_from_spread` (inverse), and `upfront` (fraction of notional, positive when the buyer pays). Guards: maturity of at least one premium period; flat-curve closed form with a $\lambda + r \to 0$ branch; root bracket $[10^{-10}, 5]$. Sanity: the credit triangle within 1.5% after the ACT/360 adjustment, an exact bootstrap round trip, zero upfront at the par coupon, and the 500 bp coupon producing a payment to the buyer.
 
-```python
-import numpy as np
-import pandas as pd
-from scipy.optimize import brentq
-
-RNG = np.random.default_rng(24)
-ACT360 = 365.0 / 360.0          # CDS premium accrues ACT/360: a year pays ~365/360 of the spread
-
-
-def premium_schedule(T, freq=4):
-    """Premium dates (years) and ACT/360 accrual fractions for a T-year CDS."""
-    n = int(round(T * freq))
-    if n < 1:
-        raise ValueError("maturity shorter than one premium period")
-    t = np.arange(1, n + 1, dtype=float) / freq
-    alpha = np.full(n, ACT360 / freq)
-    return t, alpha
-
-
-def survival(t, lam):
-    return np.exp(-lam * np.asarray(t, dtype=float))
-
-
-def disc(t, r):
-    """OIS discount factor B(t); not called D because D is reserved for duration."""
-    return np.exp(-r * np.asarray(t, dtype=float))
-
-
-def rpv01(lam, r, T, freq=4, accrued_on_default=True):
-    """Risky annuity: Q-value of 1.0 (decimal) of running spread per year, paid quarterly."""
-    t, a = premium_schedule(T, freq)
-    S = survival(t, lam)
-    S_prev = np.concatenate(([1.0], S[:-1]))
-    value = np.sum(a * disc(t, r) * S)
-    if accrued_on_default:                       # half a period of premium, on average
-        value += np.sum(0.5 * a * disc(t - 0.5 / freq, r) * (S_prev - S))
-    return float(value)
-
-
-def protection_leg(lam, r, T, R):
-    """(1-R) * int_0^T B(u) lam S(u) du, closed form for flat lam and r."""
-    k = lam + r
-    if abs(k) < 1e-12:
-        return (1.0 - R) * lam * T
-    return (1.0 - R) * lam / k * (1.0 - np.exp(-k * T))
-
-
-def par_spread(lam, r, T, R):
-    return protection_leg(lam, r, T, R) / rpv01(lam, r, T)
-
-
-def hazard_from_spread(s, r, T, R):
-    """Flat Q-hazard that reprices a quoted par spread s (decimal)."""
-    return brentq(lambda x: par_spread(x, r, T, R) - s, 1e-10, 5.0)
-
-
-def upfront(s_par, coupon, lam, r, T):
-    """Fraction of notional the protection BUYER pays at trade (negative: buyer receives)."""
-    return (s_par - coupon) * rpv01(lam, r, T)
-
-
-# Sanity checks: the credit triangle, the bootstrap, and the upfront convention
-r0, T0, R0, lam0 = 0.04, 5.0, 0.40, 0.05
-s0 = par_spread(lam0, r0, T0, R0)
-assert abs(s0 / (lam0 * (1.0 - R0) / ACT360) - 1.0) < 0.015    # s ~ lam(1-R), ACT/360-adjusted
-assert abs(hazard_from_spread(s0, r0, T0, R0) - lam0) < 1e-9    # bootstrap round trip
-assert abs(upfront(s0, s0, lam0, r0, T0)) < 1e-15               # par coupon: no upfront
-pts_500 = 100.0 * upfront(s0, 0.05, lam0, r0, T0)
-assert -9.0 < pts_500 < -7.5                                     # buyer RECEIVES about 8 points
-assert rpv01(lam0, r0, T0, accrued_on_default=False) < rpv01(lam0, r0, T0)
-```
+<!-- EXPLAIN: Listing 24.1 -->
+> **Code Companion: Listing 24.1.** Premium dates (years) and ACT/360 accrual fractions for a T-year CDS. The full python listing is in [Appendix F, Listing 24.1](#code-24-1).
 
 The numbers are worth reading once. At $\lambda = 5\%$, $R = 40\%$ and $r = 4\%$, the five-year par spread is about 297 bp, slightly below the triangle's 300 bp because of the ACT/360 factor and slightly above the ACT/360-adjusted 296 bp because premiums are paid at the end of each quarter. The risky annuity is about 4.06 years. Against a 500 bp coupon, the buyer receives about 8.2 points upfront. Theo's 370 bp Halvorsen swap sits between those cases, and the same three functions price it.
 
@@ -302,58 +233,8 @@ Positive bases are not only structural. In early 2016, as European bank credit s
 
 **The precise spec.** Inputs: coupon `c` (decimal, semiannual 30/360), maturity `T` (years from a coupon date; no accrued in this sketch), market price per unit face, flat OIS rate `r`, recovery `R`, and the CDS par spread from §24.2. Outputs: `z_spread` (decimal), `pecs` (decimal, with the implied flat hazard), the bases $b^{Z}$ and $b^{\text{PE}}$ in bp, and `jtd_hedge_ratio` (CDS notional per unit face). Guards: refuse a PECS when the price is outside the model's range, typically a bond trading below the assumed recovery, and say so instead of returning a root at the bracket edge. With a term structure, shift the bootstrapped piecewise hazard curve in parallel rather than replacing it with a flat one. Sanity: a bond priced off the CDS hazard has a PECS basis of zero to $10^{-9}$, while its Z basis is positive for a discount bond and negative for a premium bond.
 
-```python
-def bond_cashflows(c, T, freq=2):
-    """Coupon dates (years) and cash flows per 1.0 face; 30/360 semiannual coupons."""
-    n = int(round(T * freq))
-    t = np.arange(1, n + 1, dtype=float) / freq
-    cf = np.full(n, c / freq)
-    cf[-1] += 1.0
-    return t, cf
-
-
-def bond_price_hazard(c, T, lam, r, R, freq=2):
-    """Q-price per 1.0 face: survival-weighted cash flows plus recovery of face R at default."""
-    t, cf = bond_cashflows(c, T, freq)
-    k = lam + r
-    rec = R * lam * T if abs(k) < 1e-12 else R * lam / k * (1.0 - np.exp(-k * T))
-    return float(np.sum(cf * np.exp(-k * t)) + rec)
-
-
-def z_spread(price, c, T, r, freq=2):
-    """Constant spread over the flat continuous OIS curve that reprices the bond."""
-    t, cf = bond_cashflows(c, T, freq)
-    return brentq(lambda z: np.sum(cf * np.exp(-(r + z) * t)) - price, -0.05, 3.0)
-
-
-def pecs(price, c, T, r, R, freq=2):
-    """Par-equivalent CDS spread: par CDS spread at the flat hazard that reprices the bond."""
-    lo, hi = 1e-10, 5.0
-    p_hi, p_lo = bond_price_hazard(c, T, hi, r, R, freq), bond_price_hazard(c, T, lo, r, R, freq)
-    if not p_hi < price < p_lo:
-        raise ValueError("price outside the model's range: is the bond below the assumed recovery?")
-    lam_star = brentq(lambda x: bond_price_hazard(c, T, x, r, R, freq) - price, lo, hi)
-    return par_spread(lam_star, r, T, R), lam_star
-
-
-def jtd_hedge_ratio(full_price, R):
-    """CDS notional per 1.0 bond face that is flat on an instantaneous default."""
-    return (full_price - R) / (1.0 - R)
-
-
-s_cds = par_spread(lam0, r0, T0, R0)
-rows = []
-for cpn in (0.04, 0.07, 0.10):                    # discount, near-par, premium bonds
-    P = bond_price_hazard(cpn, T0, lam0, r0, R0)
-    s_pe, _ = pecs(P, cpn, T0, r0, R0)
-    z = z_spread(P, cpn, T0, r0)
-    rows.append({"coupon": cpn, "price": 100.0 * P, "Z_bp": 1e4 * z, "PECS_bp": 1e4 * s_pe,
-                 "basis_Z_bp": 1e4 * (s_cds - z), "basis_PECS_bp": 1e4 * (s_cds - s_pe)})
-    assert abs(s_pe - s_cds) < 1e-9               # priced off the CDS hazard: PECS basis is zero
-basis_table = pd.DataFrame(rows)
-assert basis_table.Z_bp.iloc[0] < 1e4 * s_cds < basis_table.Z_bp.iloc[2]   # ...the Z basis is not
-assert abs(jtd_hedge_ratio(0.88, 0.40) - 0.80) < 1e-12                     # Theo's sticky note
-```
+<!-- EXPLAIN: Listing 24.2 -->
+> **Code Companion: Listing 24.2.** Coupon dates (years) and cash flows per 1.0 face; 30/360 semiannual coupons. The full python listing is in [Appendix F, Listing 24.2](#code-24-2).
 
 Note what the code's table adds to the hand calculation: the CDS leg here is ACT/360, so even the near-par bond shows a Z basis of a few bp. That is the day-count term from §24.2 appearing in a P&L, and it is a reason to run this table on every new data vendor before trusting its basis field.
 
@@ -415,25 +296,8 @@ Two more pieces of evidence shape how the desk uses the band. Choi, Shachar and 
 
 **The precise spec.** Inputs: the basis in bp ($s^{\text{CDS}} - s^{\text{bond}}$, negative for a negative basis), the repo funding spread $\phi$ in bp over the floating rate, the haircut $h \in (0,1]$, and the spread duration. Outputs: annual excess ROE on equity, and mark-to-market on equity for a given move in the basis. Guards: reject $h \le 0$. Never report an ROE without the haircut that produced it, and run the same position at the stressed haircut (at least double the current one) beside the base case. Sanity: the 4.4%, 2.4% and −45% figures above, and negative carry for a basis inside the band.
 
-```python
-def basis_package_roe(basis_bp, repo_spread_bp, haircut):
-    """Annual excess carry per unit of equity for a near-par negative-basis package."""
-    if not 0.0 < haircut <= 1.0:
-        raise ValueError("haircut must be in (0, 1]")
-    carry_bp = -basis_bp - repo_spread_bp * (1.0 - haircut)
-    return carry_bp / 1e4 / haircut
-
-
-def basis_mtm_on_equity(d_basis_bp, spread_duration, haircut):
-    """Mark-to-market on equity when the basis moves by d_basis_bp (package is long the basis)."""
-    return d_basis_bp / 1e4 * spread_duration / haircut
-
-
-assert abs(basis_package_roe(-100.0, 40.0, 0.15) - 0.044) < 1e-12     # calm
-assert abs(basis_package_roe(-100.0, 40.0, 0.30) - 0.024) < 1e-12     # haircut doubles
-assert abs(basis_mtm_on_equity(-150.0, 4.5, 0.15) + 0.45) < 1e-12     # basis -100 -> -250
-assert basis_package_roe(-30.0, 40.0, 0.15) < 0.0                     # inside the band: pays to hold
-```
+<!-- EXPLAIN: Listing 24.3 -->
+> **Code Companion: Listing 24.3.** Annual excess carry per unit of equity for a near-par negative-basis package. The full python listing is in [Appendix F, Listing 24.3](#code-24-3).
 
 > **Ways This Blows Up.** (1) *ROE without the haircut process.* A backtest at a constant 15% haircut overstates the Sharpe ratio, because the haircut rises exactly when the basis widens. Model $h_t$ as a function of a funding-stress index, or at least backtest at the stressed haircut. (2) *JTD drift.* $N^{\text{JTD}} = (P-R)/(1-R)$ changes as the bond price moves. A package set up flat at 95 is materially over-hedged at 70. Rebalance the CDS notional on a price band, and charge the rebalancing to the trade. (3) *Maturity mismatch.* A 4.3-year bond hedged with the 5-year standard swap leaves a curve position. Interpolate the CDS curve to the bond's maturity for the basis, and hedge with the two adjacent standard maturities. (4) *Treating the clearinghouse as free.* Initial margin on the CDS leg is funded. Put it in $\phi$, or the cleared package looks better than the bilateral one by exactly the amount you forgot.
 
@@ -477,36 +341,8 @@ The contract has fences against this, and they are worth knowing by name. For th
 
 **The precise spec.** Inputs: deliverables as a mapping from name to post-event price per unit face; for regime 2, coupon, remaining maturity and an event yield; for regime 1, a common recovery per unit of claim and each bond's accrued interest. Outputs: the cheapest deliverable and the swap payout $1 - \min_j P_j$. Guards: raise an error for an empty deliverable set rather than returning a payout of zero, and price on coupon dates only in this sketch (accrued handling is a separate function in production). Sanity: the 95.95 and 50.63 prices, the long bond as CTD, and a regime-1 CTD option below one point.
 
-```python
-def price_at_yield(c, T, y, freq=2):
-    """Price per 1.0 face at a semiannual-compounded yield y, on a coupon date."""
-    t, cf = bond_cashflows(c, T, freq)
-    return float(np.sum(cf / (1.0 + y / freq) ** (freq * t)))
-
-
-def ctd(deliverables):
-    """deliverables: dict name -> post-event price per 1.0 face. Returns (name, payout)."""
-    if not deliverables:
-        raise ValueError("empty deliverable set: the swap may be orphaned (Section 24.8)")
-    name = min(deliverables, key=deliverables.get)
-    return name, 1.0 - deliverables[name]
-
-
-y_event = 0.11                                    # regime 2: no acceleration (illustrative)
-no_accel = {"8% due in 1.5y": price_at_yield(0.08, 1.5, y_event),
-            "5% due in 22y": price_at_yield(0.05, 22.0, y_event)}
-assert abs(no_accel["8% due in 1.5y"] - 0.9595) < 2e-3
-assert abs(no_accel["5% due in 22y"] - 0.5063) < 2e-3
-name, pay = ctd(no_accel)
-assert name == "5% due in 22y" and pay > 0.45     # half of par from a solvent issuer
-
-R_claim = 0.30                                    # regime 1: bankruptcy, claims = par + accrued
-accel = {"8% due in 1.5y": R_claim * (1.0 + 0.08 * 0.25),
-         "5% due in 22y": R_claim * (1.0 + 0.05 * 0.25)}
-_, pay_accel = ctd(accel)
-ctd_option_accel = pay_accel - (1.0 - accel["8% due in 1.5y"])
-assert 0.0 <= ctd_option_accel < 0.01             # under a point
-```
+<!-- EXPLAIN: Listing 24.4 -->
+> **Code Companion: Listing 24.4.** Price per 1.0 face at a semiannual-compounded yield y, on a coupon date. The full python listing is in [Appendix F, Listing 24.4](#code-24-4).
 
 ## 24.6 The Two-Stage Auction
 
@@ -549,76 +385,8 @@ Windstream ran the other way. Creditflux reported that the March 2019 auction se
 
 **The precise spec.** Inputs: matched dealer bid and offer lists in points; the quotation amount; open interest in \$mm (positive = buy bonds); limit orders as (price, size) pairs; Cap Amount in points. Outputs: IMM, the tradeable quotes, Adjustment Amounts in dollars, and the final price. Guards: matched pairs only; raise an error if every market is tradeable; rounding with halves going up; a book-exhaustion fallback to 0 or par. Sanity: the hand-computed IMM of 26.875 with one crossing pair, a \$22,500 adjustment, a final price of 23.0 for \$50mm of selling, 0 when the bids run out, the cap binding against a rogue high bid, 30.0 for \$30mm of buying, and final prices that fall as selling open interest rises.
 
-```python
-def round_half_up(x, inc=0.125):
-    """Round to the auction increment with halves going UP (round() goes to even)."""
-    return float(np.floor(x / inc + 0.5) * inc)
-
-
-def inside_market(bids, offers, inc=0.125):
-    """Stage 1: drop tradeable (touching/crossing) markets, average the best half."""
-    b = np.sort(np.asarray(bids, dtype=float))[::-1]
-    o = np.sort(np.asarray(offers, dtype=float))
-    if b.size != o.size or b.size == 0:
-        raise ValueError("need matched bid/offer pairs")
-    k = 0
-    while k < b.size and b[k] >= o[k]:
-        k += 1
-    if k == b.size:
-        raise ValueError("every market is tradeable; no IMM")
-    b_keep, o_keep = b[k:], o[k:]
-    h = int(np.ceil(b_keep.size / 2.0))
-    imm = round_half_up(np.mean(np.concatenate((b_keep[:h], o_keep[:h]))), inc)
-    return imm, b[:k], o[:k]
-
-
-def adjustment_amounts(tradeable_bids, tradeable_offers, imm, quotation_amount):
-    """Dollar penalty for tradeable quotes on the wrong side of the IMM."""
-    pb = np.maximum(np.asarray(tradeable_bids, dtype=float) - imm, 0.0) / 100.0 * quotation_amount
-    po = np.maximum(imm - np.asarray(tradeable_offers, dtype=float), 0.0) / 100.0 * quotation_amount
-    return pb, po
-
-
-def final_price(imm, open_interest, limit_bids, limit_offers, cap=1.0):
-    """Stage 2. open_interest > 0: net requests to BUY bonds, filled against offers from the
-    lowest up; < 0: net requests to SELL, filled against bids from the highest down."""
-    if open_interest == 0:
-        return float(imm)
-    selling = open_interest < 0
-    if selling:
-        book = sorted(limit_bids, key=lambda order: -order[0])
-    else:
-        book = sorted(limit_offers, key=lambda order: order[0])
-    need, last = abs(open_interest), None
-    for px, size in book:
-        last = px
-        need -= size
-        if need <= 0:
-            break
-    if need > 0:                                   # book exhausted
-        return 0.0 if selling else 100.0
-    return float(min(last, imm + cap) if selling else max(last, imm - cap))
-
-
-bids = [25.0, 25.25, 25.5, 25.75, 26.0, 26.0, 26.25, 28.0]      # 8 dealers (illustrative)
-offers = [b + 2.0 for b in bids]                                 # 2 points wide; max is 3
-imm, tb, to = inside_market(bids, offers)
-assert imm == 26.875 and tb.size == 1                            # the 28.0 bid crossed 27.0
-assert round(26.8125 / 0.125) * 0.125 == 26.75                   # ROBO's banker's rounding
-pb, po = adjustment_amounts(tb, to, imm, 2_000_000)
-assert abs(pb.sum() - 22_500.0) < 1e-6 and po.sum() == 0.0
-
-QA = 2.0                                                         # $mm per stage-1 quote
-lim_bids = [(b, QA) for b in bids] + [(26.5, 10.0), (25.0, 15.0), (23.0, 20.0), (20.0, 30.0)]
-lim_offers = [(o, QA) for o in offers] + [(27.0, 5.0), (29.0, 10.0), (32.0, 20.0)]
-assert final_price(imm, 0.0, lim_bids, lim_offers) == 26.875
-assert final_price(imm, -50.0, lim_bids, lim_offers) == 23.0     # sellers walk the bids down
-assert final_price(imm, -200.0, lim_bids, lim_offers) == 0.0     # bids exhausted
-assert final_price(imm, -5.0, [(30.0, 10.0)] + lim_bids, lim_offers) == imm + 1.0   # cap binds
-assert final_price(imm, 30.0, lim_bids, lim_offers) == 30.0      # buyers walk the offers up
-fps = [final_price(imm, -oi, lim_bids, lim_offers) for oi in (5.0, 20.0, 50.0, 80.0, 120.0)]
-assert all(a >= b for a, b in zip(fps, fps[1:]))                 # more selling, lower price
-```
+<!-- EXPLAIN: Listing 24.5 -->
+> **Code Companion: Listing 24.5.** Round to the auction increment with halves going UP (round() goes to even). The full python listing is in [Appendix F, Listing 24.5](#code-24-5).
 
 ## 24.7 Trading the Basis Systematically
 
@@ -664,64 +432,8 @@ The other two uses need only a pointer here. Kim, Li and Zhang (2016, *Journal o
 
 **The precise spec.** Inputs: a weekly market-adjusted basis series in bp; entry and exit z-scores; spread duration; repo spread in bp; one-way cost in bp of notional. Outputs: fitted $(\kappa, \theta, \sigma)$, the half-life, and weekly gross and net P&L in bp of notional, with the number of entries. Guards: an error if the AR coefficient is not in $(0,1)$; decisions at $t$ use only data up to $t$, and P&L runs from $t$ to $t+\Delta$; costs charged on every change of position. Sanity: recovery of known parameters from a seeded simulation (5,200 weeks: either a century of one name or, more honestly, a hundred names for a year each, if you pretend they are independent), and a net Sharpe below the gross.
 
-```python
-def simulate_ou(n, dt, kappa, theta, sigma, b0, rng):
-    """Exact OU discretization of the basis (bp)."""
-    phi = np.exp(-kappa * dt)
-    sd = sigma * np.sqrt((1.0 - phi ** 2) / (2.0 * kappa))
-    eps = rng.standard_normal(n - 1)
-    b = np.empty(n)
-    b[0] = b0
-    for i in range(1, n):
-        b[i] = theta + (b[i - 1] - theta) * phi + sd * eps[i - 1]
-    return b
-
-
-def fit_ou(b, dt):
-    """AR(1) regression -> (kappa, theta, sigma). Fails loudly if there is no reversion."""
-    phi, a = np.polyfit(b[:-1], b[1:], 1)
-    if not 0.0 < phi < 1.0:
-        raise ValueError(f"AR(1) coefficient {phi:.4f}: no mean reversion to trade")
-    kappa = -np.log(phi) / dt
-    resid = b[1:] - (a + phi * b[:-1])
-    sigma = np.std(resid, ddof=2) * np.sqrt(2.0 * kappa / (1.0 - phi ** 2))
-    return kappa, a / (1.0 - phi), sigma
-
-
-def basis_strategy(b, dt, theta, sd_stat, z_in, z_out, dur, repo_bp, cost_bp):
-    """Long the negative-basis package when b < theta - z_in*sd; flat when b > theta - z_out*sd.
-    Weekly P&L in bp of notional: duration MTM plus carry, minus one-way costs."""
-    n = b.size
-    x = np.zeros(n)
-    for i in range(1, n):
-        if x[i - 1] == 0.0 and b[i] < theta - z_in * sd_stat:
-            x[i] = 1.0
-        elif x[i - 1] == 1.0 and b[i] > theta - z_out * sd_stat:
-            x[i] = 0.0
-        else:
-            x[i] = x[i - 1]
-    gross = x[:-1] * (dur * np.diff(b) + (-b[:-1] - repo_bp) * dt)
-    turnover = np.abs(np.diff(x, prepend=0.0))[:-1]
-    net = gross - cost_bp * turnover
-    return gross, net, int(np.sum(np.diff(x) > 0))
-
-
-def sharpe(pnl, dt):
-    return float(np.mean(pnl) / np.std(pnl, ddof=1) * np.sqrt(1.0 / dt))
-
-
-dt_w, kap, th, sig = 1.0 / 52.0, 3.0, -40.0, 60.0          # per year, bp (illustrative)
-b_sim = simulate_ou(5200, dt_w, kap, th, sig, th, RNG)
-k_hat, th_hat, sig_hat = fit_ou(b_sim, dt_w)
-assert abs(k_hat / kap - 1.0) < 0.35
-assert abs(th_hat - th) < 10.0
-assert abs(sig_hat / sig - 1.0) < 0.10
-half_life_weeks = np.log(2.0) / k_hat * 52.0                # true value is about 12 weeks
-sd_stat = sig_hat / np.sqrt(2.0 * k_hat)
-gross, net, n_entries = basis_strategy(b_sim, dt_w, th_hat, sd_stat, 1.0, 0.0, 4.5, 30.0, 60.0)
-assert n_entries > 20
-assert sharpe(gross, dt_w) > sharpe(net, dt_w)              # costs are not optional
-```
+<!-- EXPLAIN: Listing 24.6 -->
+> **Code Companion: Listing 24.6.** Exact OU discretization of the basis (bp). The full python listing is in [Appendix F, Listing 24.6](#code-24-6).
 
 ## 24.8 When the Legal Layer Breaks: Successors, Orphans and Manufactured Credit Events
 
@@ -774,53 +486,8 @@ Regulators spoke first. On 24 April 2018, three CFTC divisions stated: "Manufact
 
 **The precise spec.** Inputs: the fractions of Relevant Obligations succeeded to, by entity; whether the original entity survives; for event screening, a dictionary of observable features (event type, whether the payee is an affiliate, liquidity runway in weeks from the 13-week model, financing conditioned on the default, a newly issued long low-coupon deliverable). Outputs: a map from Successor to notional fraction, and a list of flags. Guards: shares must be non-negative and sum to at most 1; "more than 25%" is strict and "75% or more" is not; the screen is a desk heuristic, not a legal determination, and must be labeled as one. Steps Plans, the Successor Backstop Date and the "assumption" tests are out of scope and must be routed to counsel.
 
-```python
-def successors(shares, original="REFERENCE ENTITY", original_survives=True):
-    """Simplified successor thresholds: entity -> fraction of each CDS it inherits.
-    shares: entity -> fraction of Relevant Obligations it succeeded to."""
-    total = sum(shares.values())
-    if total > 1.0 + 1e-12 or min(shares.values(), default=0.0) < 0.0:
-        raise ValueError("shares must be non-negative and sum to at most 1")
-    retained = 1.0 - total
-    for e, x in shares.items():
-        if x >= 0.75:
-            return {e: 1.0}
-    big = [e for e, x in shares.items() if x > 0.25]
-    if big and retained <= 0.25:
-        return {e: 1.0 / len(big) for e in big}
-    if big:
-        heirs = big + [original]
-        return {e: 1.0 / len(heirs) for e in heirs}
-    if original_survives or not shares:
-        return {original: 1.0}
-    return {max(shares, key=shares.get): 1.0}
-
-
-def manufactured_event_flags(event):
-    """Desk heuristic for the NTCE Credit Deterioration Requirement. Not a legal test."""
-    flags = []
-    ftp = event["type"] == "failure_to_pay"
-    if ftp and event.get("payee_is_affiliate", False):
-        flags.append("payment withheld from an affiliate")
-    if ftp and event.get("liquidity_runway_weeks", 0) > 52:
-        flags.append("ample liquidity: the 13-week model says they could pay")
-    if event.get("financing_conditioned_on_default", False):
-        flags.append("financing conditioned on the default")
-    if event.get("new_long_low_coupon_deliverable", False):
-        flags.append("fresh cheap deliverable created")
-    return flags
-
-
-assert successors({"SPINCO": 0.40}) == {"SPINCO": 0.5, "REFERENCE ENTITY": 0.5}   # Windstream shape
-assert successors({"NEWCO": 0.80}) == {"NEWCO": 1.0}
-assert successors({"A": 0.40, "B": 0.40}) == {"A": 0.5, "B": 0.5}
-assert successors({"DROPCO": 0.25}) == {"REFERENCE ENTITY": 1.0}       # 25.0% is not "more than"
-assert successors({"A": 0.20, "B": 0.15}, original_survives=False) == {"A": 1.0}
-hov_like = {"type": "failure_to_pay", "payee_is_affiliate": True, "liquidity_runway_weeks": 80,
-            "financing_conditioned_on_default": True, "new_long_low_coupon_deliverable": True}
-assert len(manufactured_event_flags(hov_like)) == 4
-assert manufactured_event_flags({"type": "failure_to_pay", "liquidity_runway_weeks": 6}) == []
-```
+<!-- EXPLAIN: Listing 24.7 -->
+> **Code Companion: Listing 24.7.** Simplified successor thresholds: entity -> fraction of each CDS it inherits. The full python listing is in [Appendix F, Listing 24.7](#code-24-7).
 
 ## 24.9 Desk Debrief
 
