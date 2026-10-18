@@ -146,7 +146,7 @@ $$
 
 where $S_t$ is the mid, $q$ the inventory in lots, $\gamma$ risk aversion and $\sigma^2(T-t)$ the variance she expects to carry. Short two lots, $q = -2$, she quotes higher to get bought back in. With §18.4.2's bond numbers ($\gamma = 0.005$ per point-lot, $\sigma^2(T-t) = 1.27$ points squared for a one-week hold), two lots of inventory move the reservation price by $2 \times 0.005 \times 1.27 = 0.013$ points. That is pennies. The information update on Monday moved the value by six points on one trade. In a bond, inventory skew is the small correction and the client's information is the large one, which is why the formula needed §18.6 and §18.7 to be useful on a credit desk. A candidate who answers "make me a market" by skewing for inventory and not for information has the right formula for the wrong game.
 
-The third variant is the trap at the other end. A candidate who has been burned widens until nobody trades with him, and a market nobody trades on loses no money and learns nothing. Desks have a name for this, because the RFQ world punishes it twice: clients stop sending requests to a dealer who never wins, and a dealer who never wins has no fills to learn from. Section 18.7 prices the cost of staying at the table as a hit-ratio constraint with a shadow price per RFQ, the coupon a desk pays itself for turning up. Ines's phrasing for candidates is shorter: move the mid before you widen, and keep quoting.
+The third variant is the trap at the other end. A candidate who has been burned widens until nobody trades with him, and a market nobody trades on loses no money and learns nothing. The RFQ world punishes it twice: clients stop sending requests to a dealer who never wins, and a dealer who never wins has no fills to learn from. Section 18.7 prices the cost of staying at the table as a hit-ratio constraint with a shadow price per RFQ, the coupon a desk pays itself for turning up. Ines's phrasing for candidates is shorter: move the mid before you widen, and keep quoting.
 
 > **Ways This Blows Up.** *The number with a document answer.* Theo's real error in the cold open came before his first quote. A page count is not a random variable; it is a fact printed on a page, and the person asking may have the page. Credit desks meet this shape every week in a more expensive form: an RFQ on a bond whose indenture answers the question the price is asking (is the 2029 note structurally senior? does the exchange need the holder's consent?), sent by a client who has read it. The quote is a market on a number that has an answer, and the counterparty who keeps buying is telling you so. The defense is the sentence Theo eventually said out loud: name the fact that moves your number and which way, then go and read it.
 
@@ -494,7 +494,7 @@ The week, broken into sixty problems. Tags: [Read] means the answer is in the ho
 | 14 | Derive | 15 | Informed fraction uniform on 0–0.4: the bid. | §3.2.2 |
 | 15 | Derive | 15 | The winner's curse with three dealers. | §3.2.3 |
 | 16 | Build | 30 | Simulate fifty RFQs and plot the hand history of posteriors. | §3.3 |
-| 17 | Read | 5 | A 90% interval for the number of US HY index issuers in May 2018. | §7.6 |
+| 17 | Read | 5 | A 90% interval for the number of US HY index issuers in May 2018. | §7.1 |
 | 18 | Derive | 10 | Reservation-price shift at $q = -2$, $\gamma = 0.005$, $\sigma^2\tau = 1.27$. | §18.4.2 |
 | 19 | Derive | 10 | The greed term at $k = 3$, $\gamma = 0.005$. | §18.4.2 |
 | 20 | Read | 5 | Name a quote whose number has a document answer. | §4D.4 |

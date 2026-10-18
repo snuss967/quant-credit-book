@@ -14,7 +14,7 @@
 - [x] 12. [7-B.4 Check the proportionality] WHEN-TO-APPLY. Note: regime sentence is Mags's in Beat 4; plot kept one line.
 - [x] 13. [7-B.5] box 7 two parts + Venn seat. Note: box moved to PCA (first load-bearing use, spacing).
 - [x] 14. [7-B.5 Shrinkage + LW] box 8 + Full Derivation. Note: batting average w=0.5; LW and PCA Lagrangian moved.
-- [ ] 15. [7-B.6] MATH-GENTLY (box 9) + LIST-TO-NARRATIVE + SHOP-LIFE.
+- [x] 15. [7-B.6] box 9 + LIST-TO-NARRATIVE. Note: hat-of-slips box; Kaz's three bootstraps on runway; wild cluster payoff.
 - [ ] 16. [7-B.7] LIST-TO-NARRATIVE + WHEN-TO-APPLY.
 - [ ] 17. [7-B.8] MATH-GENTLY (box 10, two parts) + LIST-TO-NARRATIVE + SHOP-LIFE vignette.
 - [ ] 18. [7-B.9 Case Study] EXPAND-SCENE (to 900–1,200 words) and ANOTHER-SEAT.

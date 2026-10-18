@@ -14,8 +14,8 @@ Started 2026-10-18 by revision writer.
 - [x] 10. [§6-B.4.3 Skew] · MATH-GENTLY #6 (skew; one-sentence gloss on implied vol pointing to Ch 4-B's box). — Note: implied-vol gloss to 4-B; flood-insurance skew box, 12.41 vs 5.41.
 - [x] 11. [§6-B.5.2–§6-B.5.3 The model; calls and puts] · MATH-GENTLY #7, two parts ("the survivors pay the funeral", then "the put has a floor"). — Note: funeral and floor box (9%, 0.914, 0.047); bullets to prose.
 - [x] 12. [NEW `#### Long Scene: SVB Financial, 8–17 Mar 2023, the line that is not a derivative`, placed after §6-B.5.3 and before the corollaries] · NEW-SCENE (2,000–2,600 words), labeled *(a replay; the desk's position, hedge and dialogue are fictional; SVB facts from the 10-K, 8-Ks, the Fed's Barr report, the FDIC release and the press reports cited in SVB §2; Theo was at PJT in March 2023 and was not staffed on SVB, cast bible)*. — Note: hedger replay Wed 21 Oct; 167-vol implies 19% wipeout; which default.
-- [ ] 13. [§6-B.5.4–§6-B.5.5 Corollaries] · FULL-DERIVATION-MOVE + MATH-GENTLY #8 (the wing must blow up).
-- [ ] 14. [§6-B.5.6 Hedging a jump] · MATH-GENTLY #9 (the compromise delta) + WHEN-TO-APPLY inside the SVB grade.
+- [x] 13. [§6-B.5.4–§6-B.5.5 Corollaries] · FULL-DERIVATION-MOVE + MATH-GENTLY #8 (the wing must blow up). — Note: ridge box (0.785); proofs moved verbatim under one Full Derivation.
+- [x] 14. [§6-B.5.6 Hedging a jump] · MATH-GENTLY #9 (the compromise delta) + WHEN-TO-APPLY inside the SVB grade. — Note: compromise-delta box (-0.72); when-it-breaks line given to Ines in SVB.
 - [ ] 15. [NEW, before §6-B.6: `#### Shop life: the column that was a hundred times too small`] · SHOP-LIFE (450–650 words), labeled *(fictional composite; the firm, the people and the numbers are invented; the rhythms are from public accounts in LIFE §4)*.
 - [ ] 16. [§6-B.6.2–§6-B.6.3 Girsanov for an intensity] · FULL-DERIVATION-MOVE + MATH-GENTLY #10, two parts ("loading the dice versus speeding the clock"; then the decomposition).
 - [ ] 17. [§6-B.6.5 The premium ratio as a traded quantity] · ANOTHER-SEAT #2, the dealer options desk.

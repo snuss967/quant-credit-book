@@ -618,11 +618,42 @@ Used in: §5.5 (seniority in the Beta recovery model), §6.2 and Ch 6-B (equity 
 
 ## 12B.7 Time Is a Claim Too: Pricing the Clock
 
-Mags's "eventually" is a matrix. Treat the case's states as a continuous-time Markov chain with generator $\mathbf{G}$, whose off-diagonal entries $g_{xy} \ge 0$ are transition intensities per year and whose diagonal is $g_{xx} = -\nu_x$, with $\nu_x = \sum_{y \ne x} g_{xy}$. (Chapter 25 writes the same intensities as $q_{ab}$. Here they sit in $\mathbf{G}$, so that $\mathbb{Q}$ stays the measure and $q$ stays inventory.) Split the states into transient ones $\mathcal{T}$ (petition, contested, solicitation) and absorbing outcomes $\mathcal{A}$ (effective date, sale, conversion), and write $\mathbf{G}_{\mathcal{T}\mathcal{T}}$ for the transient block and $\mathbf{G}_{\mathcal{T}\mathcal{A}}$ for the exit rates. Let $T$ be the time of absorption and define the discounted outcome probabilities
+Mags's "eventually" is a matrix. Kaz says so that Monday afternoon, after the Momentive replay, having spent the long weekend with the clock table, and Mags, who has spent thirty years being paid eventually, asks to see the matrix before she agrees. It is built from two ideas, and each is small.
+
+> **Math, Gently.** *A clock that forgets, and a meter that doesn't.* **Part one.** Some waits have no memory. A case sits in a state, and the chance that something happens in the next week is the same whether it has sat there a day or a year, like a bus route with no timetable. That is the exponential clock (Chapter 5 owns the full box, §5.3.3). If events arrive at rate $\nu$ per year, the average wait is $1/\nu$, and however long you have already waited, the average remaining wait is still $1/\nu$. At $\nu = 4$ a year the average wait is three months. Discounting a dollar paid at the end of that random wait at 5% leaves $\nu/(\nu + r) = 4/4.05 = 0.988$ of a dollar. **Part two.** The value of sitting in a state is that discount times the average of what you jump to. Say that from the petition the case goes to an effective date worth 61 with probability ¾, or into a contested fight worth 50 with probability ¼; then the petition is worth $0.988 \times (0.75 \times 61 + 0.25 \times 50) = 57.5$. Meanwhile the lawyers' fees run like a taxi meter, paid before any creditor, so the class at the fulcrum is short the meter: at 4 points a year for an expected quarter of a year, about one point. Do the first part state by state, add the meter, and you have the whole section; the symbols follow.
+
+Treat the case's states as a continuous-time Markov chain with generator $\mathbf{G}$, whose off-diagonal entries $g_{xy} \ge 0$ are transition intensities per year and whose diagonal is $g_{xx} = -\nu_x$, with $\nu_x = \sum_{y \ne x} g_{xy}$. (Chapter 25 writes the same intensities as $q_{ab}$. Here they sit in $\mathbf{G}$, so that $\mathbb{Q}$ stays the measure and $q$ stays inventory.) Split the states into transient ones $\mathcal{T}$ (petition, contested, solicitation) and absorbing outcomes $\mathcal{A}$ (effective date, sale, conversion), and write $\mathbf{G}_{\mathcal{T}\mathcal{T}}$ for the transient block and $\mathbf{G}_{\mathcal{T}\mathcal{A}}$ for the exit rates. Let $T$ be the time of absorption and define the discounted outcome probabilities
 
 $$
 U_{xa}(r) = \mathbb{E}^{\mathbb{P}}_x\!\left[e^{-rT}\,\mathbf{1}\{X_T = a\}\right].
 $$
+
+**The resolvent.** Part one of the box, applied to every state at once, gives the whole table in one matrix inverse (the first-step derivation is below):
+
+$$
+\mathbf{U}(r) = \big(r\mathbf{I} - \mathbf{G}_{\mathcal{T}\mathcal{T}}\big)^{-1}\mathbf{G}_{\mathcal{T}\mathcal{A}} .
+$$
+
+At $r = 0$ this gives the absorption probabilities $\mathbf{B} = (-\mathbf{G}_{\mathcal{T}\mathcal{T}})^{-1}\mathbf{G}_{\mathcal{T}\mathcal{A}}$, and the same inverse applied to a vector of ones gives the expected time to resolution, $\mathbf{m} = (-\mathbf{G}_{\mathcal{T}\mathcal{T}})^{-1}\mathbf{1}$. If recovery in outcome $a$ is $R_a$ (from §12B.6, at that outcome's value), a claim's discounted expected recovery from state $x$ is $\Pi_x = \sum_a U_{xa} R_a$.
+
+**The fee burn.** Part two's meter, in symbols. Professional fees and other administrative expenses accrue at a rate $\phi$ (dollars per year) and are paid in cash before any prepetition class (§1129(a)(9)), so the value left at resolution is $V_T = V_0 - \phi T$. While class $j$ stays the fulcrum its recovery is linear in value, $R_j = (V_0 - \phi T - K_{j-1})/C_j$, and
+
+$$
+\mathbb{E}_x\!\left[e^{-rT} R_j\,\mathbf{1}\{X_T = a\}\right]
+= \frac{(V_0 - K_{j-1})\,U_{xa} - \phi\,W_{xa}}{C_j},
+\qquad
+\mathbf{W} = -\frac{\partial \mathbf{U}}{\partial r} = \big(r\mathbf{I} - \mathbf{G}_{\mathcal{T}\mathcal{T}}\big)^{-2}\mathbf{G}_{\mathcal{T}\mathcal{A}},
+$$
+
+so that $W_{xa} = \mathbb{E}_x[T e^{-rT}\mathbf{1}\{X_T = a\}]$. In words: the fulcrum class is short the fee rate times a resolvent squared. Senior to everyone, by statute, and paid by the hour.
+
+Mags reads the burn line twice and then tells Kaz what it means, which is not the same as what it says. "Who pays for the wait? The fulcrum. And if the fulcrum is an undersecured senior, it pays twice." The meter does not just shave the fulcrum's recovery; it moves the fulcrum. Class $j$ falls out of the money at $T_j = (V_0 - K_{j-1})/\phi$, so the **fulcrum migrates up the stack** as the case runs, and a class that was the fulcrum on the petition date can be wiped out by confirmation. Then she goes back to *Timbers* (§12B.2). An undersecured lender earns nothing for the delay, so it loses the time value of its money, and it is the class the meter is eating, so it pays the burn as well; an oversecured lender, meanwhile, accrues §506(b) interest and could wait all year. "I have never met an undersecured lender who argued for a long case," Mags says. "They push for prepacks, and they write the DIP milestones tight. Now you know why the milestones in the clock table have their names on them."
+
+Kaz is already planning the estimation. $\mathbf{G}$ is estimated from dockets ($\hat g_{ab} = N_{ab}/T_a$, §25.7.2), and Kaz wants to fit it to a hundred of them, every large case since 2018, for the standard errors.
+
+"Fit it to the ten with this judge and this DIP lender," Mags says. "A hundred dockets will tell you how long the average case takes. You don't own the average case." That is the judgment the matrix cannot make for itself: the intensities are local to a courthouse and a lender's habits, and pooling buys precision by measuring the wrong chain. One more caution belongs to the measure. Estimated from dockets, $\mathbf{G}$ is a $\mathbb{P}$ object, so $\Pi$ is a physical-measure forecast, and comparing it with a market price means adding a risk premium or tilting $\mathbf{G}$ and $R$ to $\mathbb{Q}$, then saying which you did (Law 4; Ch 6-B draws the line between the two measures).
+
+#### The Full Derivation: the resolvent and the burn
 
 **First-step analysis.** From state $x$ the chain waits an exponential time $H$ with rate $\nu_x$, so $\mathbb{E}[e^{-rH}] = \nu_x/(\nu_x + r)$, and then jumps to $y$ with probability $g_{xy}/\nu_x$. Conditioning on the first jump,
 
@@ -632,26 +663,9 @@ U_{xa} = \frac{\nu_x}{\nu_x + r} \sum_{y \ne x} \frac{g_{xy}}{\nu_x}\, U_{ya}
 (r + \nu_x)\,U_{xa} - \sum_{y \in \mathcal{T},\, y \ne x} g_{xy}\,U_{ya} = g_{xa},
 $$
 
-where $U_{aa} = 1$ was used for the absorbing target. In matrix form,
+where $U_{aa} = 1$ was used for the absorbing target. Stacking the equations for every transient $x$ gives $\big(r\mathbf{I} - \mathbf{G}_{\mathcal{T}\mathcal{T}}\big)\mathbf{U} = \mathbf{G}_{\mathcal{T}\mathcal{A}}$, which is the resolvent above.
 
-$$
-\mathbf{U}(r) = \big(r\mathbf{I} - \mathbf{G}_{\mathcal{T}\mathcal{T}}\big)^{-1}\mathbf{G}_{\mathcal{T}\mathcal{A}} .
-$$
-
-At $r = 0$ this gives the absorption probabilities $\mathbf{B} = (-\mathbf{G}_{\mathcal{T}\mathcal{T}})^{-1}\mathbf{G}_{\mathcal{T}\mathcal{A}}$, and the same inverse applied to a vector of ones gives the expected time to resolution, $\mathbf{m} = (-\mathbf{G}_{\mathcal{T}\mathcal{T}})^{-1}\mathbf{1}$. If recovery in outcome $a$ is $R_a$ (from §12B.6, at that outcome's value), a claim's discounted expected recovery from state $x$ is $\Pi_x = \sum_a U_{xa} R_a$.
-
-**The fee burn.** Professional fees and other administrative expenses accrue at a rate $\phi$ (dollars per year) and are paid in cash before any prepetition class (§1129(a)(9)), so the value left at resolution is $V_T = V_0 - \phi T$. While class $j$ stays the fulcrum its recovery is linear in value, $R_j = (V_0 - \phi T - K_{j-1})/C_j$, and
-
-$$
-\mathbb{E}_x\!\left[e^{-rT} R_j\,\mathbf{1}\{X_T = a\}\right]
-= \frac{(V_0 - K_{j-1})\,U_{xa} - \phi\,W_{xa}}{C_j},
-\qquad
-\mathbf{W} = -\frac{\partial \mathbf{U}}{\partial r} = \big(r\mathbf{I} - \mathbf{G}_{\mathcal{T}\mathcal{T}}\big)^{-2}\mathbf{G}_{\mathcal{T}\mathcal{A}},
-$$
-
-using $\partial_r (r\mathbf{I} - \mathbf{G})^{-1} = -(r\mathbf{I} - \mathbf{G})^{-2}$, so that $W_{xa} = \mathbb{E}_x[T e^{-rT}\mathbf{1}\{X_T = a\}]$. In words: the fulcrum class is short the fee rate times a resolvent squared. Senior to everyone, by statute, and paid by the hour.
-
-Three consequences. First, the **fulcrum migrates up the stack** as the case runs: class $j$ falls out of the money at $T_j = (V_0 - K_{j-1})/\phi$, so a class that was the fulcrum on the petition date can be wiped out by confirmation. Second, the *Timbers* asymmetry of §12B.2 makes the undersecured senior the party that pays for delay twice, through lost time value and through the burn, while an oversecured lender accrues §506(b) interest. That is why undersecured lenders push for prepacks and write tight DIP milestones. Third, $\mathbf{G}$ is estimated from dockets ($\hat g_{ab} = N_{ab}/T_a$, §25.7.2), which makes it a $\mathbb{P}$ object. $\Pi$ is therefore a physical-measure forecast, and comparing it with a market price means adding a risk premium or tilting $\mathbf{G}$ and $R$ to $\mathbb{Q}$, then saying which you did (Law 4).
+**The burn.** Write the fulcrum's recovery as $(V_0 - K_{j-1})/C_j - (\phi/C_j)\,T$. The first term's discounted expectation over outcome $a$ is $U_{xa}$ times a constant. The second needs $\mathbb{E}_x[T e^{-rT}\mathbf{1}\{X_T = a\}]$, which is $-\partial U_{xa}/\partial r$, because differentiating $e^{-rT}$ in $r$ brings down $-T$. Using $\partial_r (r\mathbf{I} - \mathbf{G})^{-1} = -(r\mathbf{I} - \mathbf{G})^{-2}$ gives $\mathbf{W} = (r\mathbf{I} - \mathbf{G}_{\mathcal{T}\mathcal{T}})^{-2}\mathbf{G}_{\mathcal{T}\mathcal{A}}$.
 
 Used in: §14.3 (the re-default clock, the same algebra on a different chain), §16.8 (the post-reorg book's holding-period distribution), §25.7.2 (where $\mathbf{G}$ is estimated), Ch 7-B (survival and competing risks as methods), Chapter 28 (sizing against the clock).
 

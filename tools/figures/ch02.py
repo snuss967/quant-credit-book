@@ -56,8 +56,8 @@ def pct(x, _pos=None):
 # --------------------------------------------------------------------------------------------------
 def fig_trace_censoring_pareto():
     fig, axs = new_figure("wide", ncols=2, sharey=True)
-    specs = [(axs[0], "US investment grade", IG, 5.0, 12.5, "5MM+", [5, 10, 20, 30, 40]),
-             (axs[1], "US high yield", HY, 1.0, 4.0, "1MM+", [1, 2, 4, 6, 8])]
+    specs = [(axs[0], "Investment grade", IG, 5.0, 12.5, "5MM+", [5, 10, 20, 30, 40]),
+             (axs[1], "High yield", HY, 1.0, 4.0, "1MM+", [1, 2, 4, 6, 8])]
     for ax, name, col, cap, m, tag, ticks in specs:
         alpha = m / (m - cap)                                    # the tail index implied by the imputed mean
         x = np.linspace(cap, 8 * cap, 500)
@@ -81,10 +81,8 @@ def fig_trace_censoring_pareto():
         ax.set_xlim(cap, 8 * cap)
         ax.set_ylim(0, 1.05)
         ax.set_xticks(ticks)
-        ax.set_title(name)
+        ax.set_title(f"{name}: tail index α = {alpha:.2f}")
         ax.set_xlabel("True trade size ($mm)")
-        ax.text(0.99, 0.19, f"Pareto tail index α = {alpha:.2f}\n(below 2: infinite variance)", transform=ax.transAxes,
-                ha="right", va="bottom", fontsize=8, color=INK_2)
         ax.yaxis.set_major_formatter(FuncFormatter(pct))
     axs[0].set_ylabel("Share of capped prints larger")
     return finish(fig, "ch02_trace_censoring_pareto")
@@ -217,9 +215,9 @@ def fig_rfq_neff():
                      markeredgecolor=INK_2 if phi == 0 else INK, markeredgewidth=0.8)
     up0, up45 = best(n_lo, 0) / best(n_hi, 0), best(n_lo, 0.45) / best(n_hi, 0.45)
     assert abs(up0 - 2.0) < 1e-9 and abs(up45 - 1.085) < 0.001
-    axr.text(11.2, 0.30, f"independent: halving the\nresponders doubles the\nbest quote's distance (×{up0:.1f})",
+    axr.text(10.4, 0.30, f"independent: halving the\nresponders doubles the best\nquote's distance (×{up0:.1f}, θ fixed)",
              ha="left", va="center", fontsize=8.2, color=INK_2)
-    axr.text(8.5, 0.68, f"φ = 0.45: it moves {100 * (up45 - 1):.0f}%,\nthe same θ and φ",
+    axr.text(8.5, 0.68, f"φ = 0.45: it moves {100 * (up45 - 1):.0f}%\n(θ and φ held fixed)",
              ha="left", va="center", fontsize=8.2, color=INK_2)
     axr.text(7.0, 0.93, "dots: 13.2 and 6.6 prices per RFQ\n(US high grade, 9 Apr 2025)", ha="left", va="center",
              fontsize=8.2, color=INK_2)
