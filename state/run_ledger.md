@@ -279,3 +279,10 @@ Ch 26–28 are done (PB-16 "ROBO's forty-seven pairs" in Ch 26; the PB-01 one-le
 - Launched appz-complete (wf_47f3acab-447, Sonnet): solve → fix for 14 primers/new chapters + App D, App E (+ fix-only for Ch 21, 27); the 4-D sixty-problem bank (two agents, then fix); the eight Part gates (table appended to each Part opener, worked answers in state/appZ/gates/, §0.5 summary rows kept true). Args in state/appz_complete_args.json.
 - Assembler: appendices with solutions go under "## The Appendices" at the end of App Zb.
 - Still to add when written: 13-B, 17-B, 10-B (App Z + figures); Ch 13, 14 notes once appZ-8-14 lands.
+
+## 2026-10-18 16:40 UTC: the five missing TOC chapters are written; finishing pass launched
+- missing-toc-chapters (wf_88dd2b76-e50) done: 18-B RFQ engine (~11.6k), 9-B bond data and replication (~12.1k), 13-B LMT docket diaries (~12k), 17-B marking private-credit LMEs (~11.7k), 10-B index futures and microstructure (~12k). Each has a Fable brief in state/advisor_briefs/.
+- Code mover applied: 6 listings to App F (9-B.1, 10-B.1, 13-B.1, 17-B.1, 17-B.2, 18-B.1).
+- appz-notes-fix (wf_ce9abb98-d99) done: 31 notes in 18 chapters resolved (29 fixed, 2 softened, partial rulings in Ch 10 and 23).
+- Launched new-chapter-finish (wf_0c696e1b-c8b): per chapter, Sonnet fact-check (brief CHECK list, quotes, cross-refs, Pair Book rows, hygiene) → figures/figcheck/resgraph (chapter_pipeline via workflow()) → App Z solve+fix (appz_complete via workflow()).
+- Meter ~91% at 16:30 (alarm at 105%).

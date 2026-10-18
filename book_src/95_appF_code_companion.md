@@ -14451,5 +14451,1019 @@ if __name__ == "__main__":
         assert check(answer)
 ```
 
+## F.9-B: Chapter 9-B: The Bond Data Problem and the Replication Crisis {#code-9b}
+
+Listings from `09_ch09b_the_bond_data_problem_and_the_replication_crisis.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
+
+
+### Listing 9-B.1: OLS of y on [1, x]; returns (coefficients, Newey-West t-stats) {#code-9b-1}
+
+```python
+# replication_harness.py -- Listing 9B.1 (Chapter 9-B)
+# Two gates for a candidate bond signal: (1) the signal price is never the entry
+# price; (2) every screen is ex ante. Reports premium, CAPM-B alpha (Newey-West t,
+# floor(T**0.25) lags), gap share, a look-ahead diagnostic and a non-standard-error
+# band across screening paths. A pandas mirror of the PyBondLab 0.3.0 workflow.
+import numpy as np
+import pandas as pd
+
+
+def newey_west_t(y, x=None):
+    """OLS of y on [1, x]; returns (coefficients, Newey-West t-stats)."""
+    y = np.asarray(y, float)
+    X = np.ones((len(y), 1)) if x is None else np.column_stack([np.ones(len(y)), np.asarray(x, float)])
+    beta, *_ = np.linalg.lstsq(X, y, rcond=None)
+    u = y - X @ beta
+    lags = int(np.floor(len(y) ** 0.25))
+    Xu = X * u[:, None]
+    S = Xu.T @ Xu
+    for l in range(1, lags + 1):
+        G = Xu[l:].T @ Xu[:-l]
+        S += (1.0 - l / (lags + 1.0)) * (G + G.T)
+    XtX_inv = np.linalg.inv(X.T @ X)
+    se = np.sqrt(np.diag(XtX_inv @ S @ XtX_inv))
+    return beta, beta / se
+
+
+def check_gap(panel, sig_date, base_date):
+    """Gate 1: refuse any bond-month that sorts and earns on the same price."""
+    bad = (panel[sig_date] >= panel[base_date]).mean()
+    if bad > 0:
+        raise ValueError(f"{bad:.1%} of bond-months use the signal price as the entry price")
+
+
+def exante_screen(panel, ret_cap=None, tail="both", px_range=None):
+    """Gate 2: drop bond-months using only formation-date information:
+    the return already earned in month t (ret_lag) and the formation price (prc)."""
+    keep = pd.Series(True, index=panel.index)
+    if ret_cap is not None:
+        if tail in ("left", "both"):
+            keep &= ~(panel["ret_lag"] < -ret_cap)
+        if tail in ("right", "both"):
+            keep &= ~(panel["ret_lag"] > ret_cap)
+    if px_range is not None:
+        keep &= panel["prc"].between(*px_range)
+    return panel[keep]
+
+
+def expost_winsorize(panel, ret, q=0.005):
+    """Look-ahead DIAGNOSTIC only: clip the holding-month return at full-sample
+    percentiles, to measure how much a result leans on the future."""
+    lo, hi = panel[ret].quantile([q, 1 - q])
+    out = panel.copy()
+    out[ret] = out[ret].clip(lo, hi)
+    return out
+
+
+def long_short(panel, sig, ret, n=10, within_firm=False, weight="EW"):
+    """Monthly top-minus-bottom return. Single sort: top bucket minus bottom bucket.
+    Within firm: each issuer's top-ranked bond minus its bottom-ranked bond, averaged."""
+    out = {}
+    for d, g in panel.dropna(subset=[sig, ret]).groupby("date"):
+        if within_firm:
+            g = g[g.groupby("firm")[sig].transform("nunique") >= 2]
+            if g.empty:
+                continue
+            top = g.loc[g.groupby("firm")[sig].idxmax()]
+            bot = g.loc[g.groupby("firm")[sig].idxmin()]
+            w = np.ones(len(top)) if weight == "EW" else top["VW"].to_numpy() + bot["VW"].to_numpy()
+            out[d] = np.average(top[ret].to_numpy() - bot[ret].to_numpy(), weights=w)
+        else:
+            if len(g) < 5 * n:
+                continue
+            bucket = pd.qcut(g[sig].rank(method="first"), n, labels=False)
+
+            def leg(x):
+                w = np.ones(len(x)) if weight == "EW" else x["VW"].to_numpy()
+                return np.average(x[ret].to_numpy(), weights=w)
+
+            out[d] = leg(g[bucket == n - 1]) - leg(g[bucket == 0])
+    return pd.Series(out).sort_index()
+
+
+def harness(panel, mktb_end, mktb_bgn, n=10, within_firm=False, weight="EW",
+            caps=tuple(np.round(np.arange(0.20, 0.951, 0.05), 2))):
+    panel = panel.reset_index(drop=True)
+    check_gap(panel, "sig_gap_px_date", "end_base_date")   # signal gap version
+    check_gap(panel, "sig_px_date", "bgn_base_date")       # return gap version
+    versions = {"reference (contaminated)": ("signal", "ret_end", mktb_end),
+                "signal gap": ("signal_gap", "ret_end", mktb_end),
+                "return gap": ("signal", "ret_bgn", mktb_bgn)}
+    report = {}
+    for name, (sig, ret, mkt) in versions.items():
+        ls = long_short(panel, sig, ret, n, within_firm, weight)
+        m = mkt.reindex(ls.index)
+        ok = m.notna().to_numpy()
+        (_,), (t_mu,) = newey_west_t(ls.to_numpy()[ok])
+        (a, _), (t_a, _) = newey_west_t(ls.to_numpy()[ok], m.to_numpy()[ok])
+        report[name] = {"premium": ls.mean(), "t_premium": t_mu, "alpha": a, "t_alpha": t_a,
+                        "months": int(ok.sum()), "bond_months": int(panel[[sig, ret]].dropna().shape[0])}
+    ref, gap = report["reference (contaminated)"]["premium"], report["return gap"]["premium"]
+    report["gap_share"] = 1.0 - gap / ref if ref != 0 else np.nan
+    wz = long_short(expost_winsorize(panel, "ret_bgn"), "signal", "ret_bgn", n, within_firm, weight)
+    report["lookahead_diagnostic"] = wz.mean() - gap
+    prem = [long_short(exante_screen(panel, c, tail), "signal", "ret_bgn", n, within_firm, w).mean()
+            for c in caps for tail in ("left", "right", "both") for w in ("EW", "VW")]
+    q25, q75 = np.nanpercentile(prem, [25, 75])
+    report["nse"] = {"paths": len(prem), "iqr": q75 - q25, "median": float(np.nanmedian(prem))}
+    return report
+
+
+if __name__ == "__main__":
+    # Synthetic check of section 9B.4: true returns i.i.d. (no reversal at all),
+    # month-end marks carry 0.5% noise; month-begin and gap prices are fresh draws.
+    rng = np.random.default_rng(7)
+    months = pd.period_range("2005-01", periods=120, freq="M").to_timestamp(how="end").normalize()
+    nb, sd = 600, 0.005
+    true = np.cumsum(rng.normal(0.004, 0.02, (len(months) + 2, nb)), axis=0)
+    ne, nb_, ng = (rng.normal(0, sd, true.shape) for _ in range(3))
+    rows = []
+    for k, d in enumerate(months, start=1):
+        p_end_prev, p_end, p_end_next = true[k - 1] + ne[k - 1], true[k] + ne[k], true[k + 1] + ne[k + 1]
+        p_gap, p_bgn = true[k] + ng[k], true[k] + nb_[k]
+        ret_lag = p_end - p_end_prev
+        rows.append(pd.DataFrame({
+            "date": d, "ID": np.arange(nb), "firm": np.arange(nb) // 3,
+            "signal": -ret_lag, "signal_gap": -(p_gap - p_end_prev),
+            "ret_end": p_end_next - p_end, "ret_bgn": p_end_next - p_bgn, "ret_lag": ret_lag,
+            "prc": 100 * np.exp(p_end - true[0]), "VW": 1.0 + rng.random(nb), "RATING_NUM": 15,
+            "sig_px_date": d, "sig_gap_px_date": d - pd.Timedelta(days=3),
+            "end_base_date": d, "bgn_base_date": d + pd.Timedelta(days=1)}))
+    panel = pd.concat(rows, ignore_index=True)
+    mkt_end, mkt_bgn = panel.groupby("date")["ret_end"].mean(), panel.groupby("date")["ret_bgn"].mean()
+    rep = harness(panel, mkt_end, mkt_bgn, caps=(0.20, 0.50, 0.95))
+    for key, val in rep.items():
+        print(key, val)
+    assert rep["reference (contaminated)"]["premium"] > 0.002      # about 2 x 1.75 x 0.24 x 0.5%
+    assert abs(rep["return gap"]["premium"]) < 0.0015               # nothing left with the gap
+```
+
+
+## F.10-B: Chapter 10-B: Credit Index Futures and Index Microstructure {#code-10b}
+
+Listings from `10_ch10b_credit_index_futures_and_index_microstructure.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
+
+
+### Listing 10-B.1: index_micro.py (Chapter 10-B): four small measurements of the index market {#code-10b-1}
+
+```python
+"""index_micro.py (Chapter 10-B): four small measurements of the index market.
+
+turnover / roll_window_share  volume against open interest, and the expiry calendar
+tff_net / spliced_change      CFTC positioning by category, with a reclassification flag
+intrinsic / skew              duration-weighted intrinsic spread and the quote's distance from it
+series_basis_line             the roll-day explain line (Section 8C.2)
+
+Units: volume and OI in contracts or $mm (consistently); spreads in bp; risky
+durations in years; index prices per 100; notionals in $mm. Demo numbers are the
+chapter's illustrative ones except where a comment cites a source.
+"""
+import numpy as np
+import pandas as pd
+
+
+def turnover(adv, oi):
+    """ADV / OI and the implied average holding period in trading days."""
+    adv = pd.Series(adv, dtype=float)
+    oi = pd.Series(oi, dtype=float)
+    ratio = adv / oi.where(oi > 0)              # NaN, not inf, when OI is zero
+    return pd.DataFrame({"turnover": ratio, "hold_days": 1.0 / ratio})
+
+
+def roll_window_share(daily, expiries, window=5):
+    """Share of each quarter's volume traded in the last `window` trading days
+    (days with a row in the file) before each expiry.
+
+    daily: DataFrame with 'date' and 'volume' for ONE product, any number of
+    rows per date (Cboe's file has one per contract month); they are summed.
+    """
+    d = daily.assign(date=pd.to_datetime(daily["date"]))
+    d = d.groupby("date")["volume"].sum().sort_index()
+    rows, start = [], d.index.min()
+    for exp in sorted(pd.to_datetime(list(expiries))):
+        q = d[(d.index >= start) & (d.index < exp)]
+        start = exp
+        if q.empty:
+            continue
+        w, tot = q.iloc[-window:].sum(), q.sum()
+        rows.append({"expiry": exp, "window_vol": w, "quarter_vol": tot,
+                     "share": w / tot if tot > 0 else np.nan})
+    cols = ["expiry", "window_vol", "quarter_vol", "share"]
+    return pd.DataFrame(rows, columns=cols).set_index("expiry")
+
+
+# Traders in Financial Futures column names as published; check them against the
+# dataset's metadata (publicreporting.cftc.gov, dataset gpe5-46if) on first use.
+TFF_FIELDS = {
+    "date": "report_date_as_yyyy_mm_dd",
+    "code": "cftc_contract_market_code",
+    "oi": "open_interest_all",
+    "dealer_long": "dealer_positions_long_all",
+    "dealer_short": "dealer_positions_short_all",
+    "am_long": "asset_mgr_positions_long",
+    "am_short": "asset_mgr_positions_short",
+    "lev_long": "lev_money_positions_long",
+    "lev_short": "lev_money_positions_short",
+}
+
+
+def tff_net(rows, code, fields=TFF_FIELDS, jump=0.25, oi_tol=0.05):
+    """Weekly net (long - short) by category for one contract code, with a flag
+    for probable reclassifications: one category's net moves by more than `jump`
+    x last week's OI, another moves the opposite way by more than half that, and
+    OI changes by less than `oi_tol`."""
+    df = pd.DataFrame(rows)
+    df = df[df[fields["code"]].astype(str) == str(code)].copy()
+    df["date"] = pd.to_datetime(df[fields["date"]])
+    for k in ("oi", "dealer_long", "dealer_short", "am_long", "am_short",
+              "lev_long", "lev_short"):
+        df[k] = pd.to_numeric(df[fields[k]], errors="coerce")
+    df = df.sort_values("date").set_index("date")
+    net = pd.DataFrame({
+        "dealer": df["dealer_long"] - df["dealer_short"],
+        "asset_mgr": df["am_long"] - df["am_short"],
+        "lev_funds": df["lev_long"] - df["lev_short"],
+    })
+    rel = net.diff().div(df["oi"].shift(1), axis=0)
+    up, dn = rel.max(axis=1), rel.min(axis=1)
+    big = (up > jump) | (dn < -jump)
+    opposite = (up > jump / 2) & (dn < -jump / 2)
+    flat_oi = df["oi"].pct_change().abs() < oi_tol
+    out = net.assign(oi=df["oi"], am_short_share=df["am_short"] / df["oi"])
+    out["reclass_flag"] = (big & opposite & flat_oi).fillna(False)
+    return out
+
+
+def spliced_change(series, flag):
+    """Week-on-week change with flagged weeks set to NaN: splice, do not difference."""
+    ch = series.diff()
+    ch[flag.astype(bool)] = np.nan
+    return ch
+
+
+def intrinsic(spreads_bp, durations, weights=None):
+    """Duration-weighted intrinsic spread, bp. Drop defaulted names first."""
+    s = np.asarray(spreads_bp, dtype=float)
+    dur = np.asarray(durations, dtype=float)
+    w = np.ones_like(s) if weights is None else np.asarray(weights, dtype=float)
+    if not np.all(np.isfinite(s)) or np.any(dur <= 0):
+        raise ValueError("each constituent needs a finite spread and a positive duration")
+    return float(np.sum(w * dur * s) / np.sum(w * dur))
+
+
+def skew(index_bp, spreads_bp, durations, weights=None):
+    """Quoted index spread minus intrinsic, bp (negative: index tighter than its names).
+    Quotes and constituents must share one snapshot time."""
+    return index_bp - intrinsic(spreads_bp, durations, weights)
+
+
+def series_basis_line(p_new, p_old, notional_mm, long_risk=True):
+    """Roll-day line for a price-quoted index, $mm: (P_new - P_old) x N / 100,
+    N positive for long risk. A change of instrument, not P&L (Section 8C.2)."""
+    sign = 1.0 if long_risk else -1.0
+    return sign * (p_new - p_old) * notional_mm / 100.0
+
+
+if __name__ == "__main__":
+    # Section 10B.3 (The DESK, exchange data): ADV and OI in $m.
+    adv = pd.Series({("CME", "2026-02"): 522, ("CME", "2026-08"): 253,
+                     ("Cboe", "2026-02"): 435, ("Cboe", "2026-08"): 407})
+    oi = pd.Series({("CME", "2026-02"): 689, ("CME", "2026-08"): 1610,
+                    ("Cboe", "2026-02"): 1990, ("Cboe", "2026-08"): 2170})
+    print(turnover(adv, oi).round(2))            # CME 0.76 then 0.16; Cboe 0.22, 0.19
+    # Section 10B.6 toy index: intrinsic 147.7 bp; skew -4.7 bp at a quote of 143.
+    sp, du = [60, 80, 100, 150, 400], [4.6, 4.5, 4.4, 4.2, 3.6]
+    assert abs(intrinsic(sp, du) - 147.70) < 0.01
+    print(round(skew(143.0, sp, du), 1))
+    # Exercise 5: $13mm long risk, old series 106.10, new 105.20 -> -0.117, named, not P&L.
+    print(round(series_basis_line(105.20, 106.10, 13.0), 3))
+```
+
+
+## F.13-B: Chapter 13-B: The Autopsy Room: LMT Docket Diaries {#code-13b}
+
+Listings from `13_ch13b_the_autopsy_room_lmt_docket_diaries.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
+
+
+### Listing 13-B.1: docket_diary.py (Chapter 13-B): labelled docket entries -> rulings, case paths, transition counts, and token log-odds that jump on ruling dates {#code-13b-1}
+
+```python
+"""docket_diary.py (Chapter 13-B): labelled docket entries -> rulings, case paths,
+transition counts, and token log-odds that jump on ruling dates.
+
+Direction: +1 favours excluded or non-consenting holders, -1 the majority or debtor,
+0 mixed, None for entries that are not rulings (including settlements).
+Jumps are elicited priors on the excluded side's log-odds (illustrative), not estimates.
+"""
+from __future__ import annotations
+
+import math
+from collections import Counter
+from dataclasses import dataclass
+from datetime import date
+
+STATES = ("announced", "challenged", "mtd_denied", "trial", "ruled_pos", "ruled_neg",
+          "reversed", "settled", "in_court", "emerged", "coop_close")
+ABSORBING = {"coop_close", "emerged"}
+
+
+@dataclass(frozen=True)
+class Entry:
+    case: str
+    forum: str
+    kind: str                          # "ruling", "filing", "scheduling", "settlement", ...
+    decided_at: date | None = None
+    entered_at: date | None = None
+    first_public_at: date | None = None
+    direction: int | None = None       # +1, -1, 0, or None
+    tokens: tuple[str, ...] = ()
+    state_after: str | None = None     # map state this entry moves the case into
+    jump: float = 0.0                  # elicited log-odds jump for the excluded side
+
+    def event_date(self) -> date | None:
+        """First date the market could know: public, else decided, else entered."""
+        return self.first_public_at or self.decided_at or self.entered_at
+
+
+def rulings(entries):
+    """Entries that decide something, in event-date order; scheduling orders excluded."""
+    out = [e for e in entries
+           if e.kind == "ruling" and e.direction in (-1, 0, 1) and e.event_date()]
+    for e in out:
+        if e.jump * e.direction < 0:
+            raise ValueError(f"{e.case}: jump {e.jump} has the wrong sign for {e.direction}")
+    return sorted(out, key=lambda e: e.event_date())
+
+
+def case_paths(entries):
+    """Ordered list of map states per case, from entries that carry state_after."""
+    paths: dict[str, list[str]] = {}
+    dated = [e for e in entries if e.state_after and e.event_date()]
+    for e in sorted(dated, key=lambda e: e.event_date()):
+        if e.state_after not in STATES:
+            raise ValueError(f"unknown state {e.state_after!r} in {e.case}")
+        path = paths.setdefault(e.case, ["announced"])
+        if path[-1] != e.state_after:
+            path.append(e.state_after)
+    return paths
+
+
+def transition_counts(paths):
+    """One-step moves i -> j across cases; nothing may leave an absorbing state."""
+    counts = Counter()
+    for case, path in paths.items():
+        for i, j in zip(path, path[1:]):
+            if i in ABSORBING:
+                raise ValueError(f"{case}: move out of absorbing state {i}")
+            counts[(i, j)] += 1
+    return counts
+
+
+def row_probabilities(counts, state):
+    """Empirical one-step probabilities out of one state; None if never left."""
+    row = {j: n for (i, j), n in counts.items() if i == state}
+    total = sum(row.values())
+    return {j: n / total for j, n in row.items()} if total else None
+
+
+def token_logodds(alpha, token, entries, as_of):
+    """Excluded side's log-odds for a wording token on as_of: baseline plus the jumps
+    of rulings that read the token and were public on or before as_of."""
+    return alpha + sum(e.jump for e in rulings(entries)
+                       if token in e.tokens and e.event_date() <= as_of)
+
+
+def prob(logit):
+    return 1.0 / (1.0 + math.exp(-logit))
+
+
+if __name__ == "__main__":
+    serta = [
+        Entry("Serta", "Bankr. S.D. Tex.", "ruling", decided_at=date(2023, 3, 28),
+              direction=-1, tokens=("open_market_purchase",), jump=-0.5),
+        Entry("Serta", "5th Cir.", "ruling", decided_at=date(2024, 12, 31),
+              direction=+1, tokens=("open_market_purchase",), jump=+1.0),
+        Entry("Serta", "Bankr. S.D. Tex.", "scheduling", entered_at=date(2023, 4, 3)),
+    ]
+    for d in (date(2023, 1, 1), date(2023, 6, 1), date(2025, 1, 2)):
+        x = token_logodds(0.0, "open_market_purchase", serta, d)
+        print(d, round(prob(x), 2))    # 0.5, then 0.38, then 0.62
+```
+
+
+## F.17-B: Chapter 17-B: Marking the Unmarked: Private Credit LMEs {#code-17b}
+
+Listings from `17_ch17b_marking_the_unmarked_private_credit_lmes.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
+
+
+### Listing 17-B.1: Share of shares outstanding repurchased this cycle, p = a * f (decimals) {#code-17b-1}
+
+```python
+# pc_queue.py: the redemption queue, de-duplicated and nowcast (Chapter 17-B, §17B.3)
+import numpy as np
+from scipy import optimize, stats
+
+
+def paid_share(a, f):
+    """Share of shares outstanding repurchased this cycle, p = a * f (decimals)."""
+    if not (0.0 <= a <= 1.0 and 0.0 <= f <= 1.0):
+        raise ValueError("requests a and fill f must be decimals in [0, 1]")
+    return a * f
+
+
+def split_requests(a_prev, f_prev, a_now, xi=1.0, subs=0.0):
+    """Split this cycle's requests into the returning line and new joiners.
+
+    a_prev, f_prev: last cycle's requests and fill (fill as a share of REQUESTS),
+                    both as fractions of last cycle's shares.
+    a_now: this cycle's requests, as a fraction of this cycle's shares.
+    xi: share of last cycle's unfilled requests that come back (1.0 = all of them).
+    subs: shares issued between the two offers, as a fraction of last cycle's shares.
+
+    Returns a dict:
+      returning  b_t, the resubmitted line, as a fraction of this cycle's shares;
+      new_share  a_t - b_t, new requests as a fraction of all shares;
+      joiners    (a_t - b_t) / (1 - b_t), Chapter 17's a^new;
+      resub      b_t / a_t, the resubmission share a fund letter would report.
+    With xi = 1 and subs = 0, joiners is a lower bound and resub an upper bound."""
+    if not (0.0 <= xi <= 1.0) or subs < 0.0:
+        raise ValueError("xi must be in [0, 1] and subs >= 0")
+    p = paid_share(a_prev, f_prev)
+    b = xi * (a_prev - p) / (1.0 - p + subs)
+    b = min(b, a_now)  # the floor: more returning than requested means xi is too high here
+    joiners = (a_now - b) / (1.0 - b) if b < 1.0 else np.nan
+    resub = b / a_now if a_now > 0 else np.nan
+    return {"returning": b, "new_share": a_now - b, "joiners": joiners, "resub": resub}
+
+
+def nowcast_requests(a_now, f_now, joiners_lo, joiners_hi, xi=1.0, subs=0.0):
+    """Next cycle's requests: the returning line (arithmetic) plus a range of joiners (belief).
+    Returns (returning, low, high) as fractions of next cycle's shares."""
+    p = paid_share(a_now, f_now)
+    b = xi * (a_now - p) / (1.0 - p + subs)
+    lo = b + joiners_lo * (1.0 - b)
+    hi = b + joiners_hi * (1.0 - b)
+    return b, min(lo, 1.0), min(hi, 1.0)
+
+
+def prorata_quarters(fill, target=0.5):
+    """Quarters for a holder who tenders everything every cycle to get `target` of the shares
+    out at a constant pro rata fill: the smallest n with 1 - (1 - fill)**n >= target."""
+    if not (0.0 < fill <= 1.0) or not (0.0 < target < 1.0):
+        raise ValueError("fill must be in (0, 1] and target in (0, 1)")
+    if fill == 1.0:
+        return 1
+    return int(np.ceil(np.log(1.0 - target) / np.log(1.0 - fill)))
+
+
+def littles_wait(backlog, throughput):
+    """Average wait, in quarters, in a first-come-first-served line: W = L / throughput."""
+    return np.inf if throughput <= 0 else backlog / throughput
+
+
+def fit_censored_lognormal(y, censored, x):
+    """Maximum likelihood for log(y) = mu0 + mu1 * x + sigma * eps, eps ~ N(0, 1).
+
+    Rows with censored=True are lower bounds (the filing says only that the cap bound)
+    and contribute log P(Y >= y), the survival term of Law 14, instead of a density."""
+    y = np.asarray(y, float)
+    x = np.asarray(x, float)
+    c = np.asarray(censored, bool)
+    if y.shape != x.shape or y.shape != c.shape:
+        raise ValueError("y, censored and x must have the same length")
+    if np.any(y <= 0):
+        raise ValueError("y must be positive: drop or floor zero rows before fitting")
+    ly = np.log(y)
+
+    def nll(theta):
+        mu0, mu1, log_s = theta
+        z = (ly - mu0 - mu1 * x) / np.exp(log_s)
+        ll_obs = stats.norm.logpdf(z[~c]) - log_s - ly[~c]
+        ll_cen = stats.norm.logsf(z[c])
+        return -(ll_obs.sum() + ll_cen.sum())
+
+    x0 = np.array([ly.mean(), 0.0, np.log(ly.std() + 1e-3)])
+    res = optimize.minimize(nll, x0, method="Nelder-Mead",
+                            options={"xatol": 1e-6, "fatol": 1e-7, "maxiter": 20000})
+    mu0, mu1, log_s = res.x
+    return {"mu0": float(mu0), "mu1": float(mu1), "sigma": float(np.exp(log_s)),
+            "n": int(y.size), "n_censored": int(c.sum()), "converged": bool(res.success)}
+
+
+# --- sanity checks: the chapter's numbers (computed; xi = 1, no subscriptions) ---
+otic = split_requests(0.404, 0.144, 0.381)
+assert abs(otic["new_share"] - 0.0138) < 5e-4 and abs(otic["joiners"] - 0.022) < 1e-3
+assert abs(split_requests(0.188, 0.266, 0.168)["joiners"] - 0.027) < 1e-3     # OCIC, Q3
+assert abs(split_requests(0.110, 0.452, 0.168)["joiners"] - 0.112) < 1e-3     # ADS, Q2
+assert 0.58 < split_requests(0.116, 0.430, 0.114)["resub"] < 0.64             # NHPIF: "nearly two thirds"
+assert split_requests(0.20, 0.25, 0.04)["new_share"] == 0.0                     # the floor binds
+assert prorata_quarters(0.131, 0.5) == 5 and prorata_quarters(0.131, 0.9) == 17
+assert abs(littles_wait(0.35, 0.05) - 7.0) < 1e-12
+_, lo, hi = nowcast_requests(0.168, 0.298, 0.05, 0.112)                          # ADS, pending Q3
+assert abs(lo - 0.168) < 2e-3 and abs(hi - 0.222) < 2e-3
+
+# --- the censored fit recovers known parameters; the naive fit shrinks them ---
+rng = np.random.default_rng(1702)
+n = 2000
+x = rng.normal(0.0, 1.0, n)
+y_true = np.exp(np.log(0.04) + 0.3 * x + 0.5 * rng.normal(0.0, 1.0, n))
+cap = 0.08
+cens = y_true > cap
+y_obs = np.where(cens, cap, y_true)
+fit = fit_censored_lognormal(y_obs, cens, x)
+naive = fit_censored_lognormal(y_obs, np.zeros(n, bool), x)
+assert fit["converged"] and abs(fit["mu1"] - 0.3) < 0.05 and abs(fit["sigma"] - 0.5) < 0.05
+assert naive["mu1"] < fit["mu1"] and naive["sigma"] < fit["sigma"]
+print({k: (round(v, 3) if isinstance(v, float) else v) for k, v in fit.items()})
+```
+
+
+### Listing 17-B.2: One par-weighted mark per facility, quarter and valuation process (adviser) {#code-17b-2}
+
+```python
+# pc_lme_detector.py: a dated watchlist of private-credit LMEs from public filings (Chapter 17-B, §17B.4)
+import numpy as np
+import pandas as pd
+
+STATES = ["performing", "pik_by_amendment", "non_accrual", "restructured", "re_cut"]
+SOI_COLS = ["bdc_id", "qdate", "facility_id", "borrower", "par", "fv", "pik_flag", "industry"]  # §17.8
+EXTRA_COLS = ["adviser_id", "nonaccrual_flag"]          # added here: who values it; the holder's own flag
+FEATURES = ["disp_level", "shortfall", "sponsor_hit", "dropdown", "pik_cliff", "pik_amend",
+            "software", "pending", "holder_joiners", "in_state_1", "in_state_2", "in_state_3"]
+
+
+def cluster_marks(soi):
+    """One par-weighted mark per facility, quarter and valuation process (adviser)."""
+    missing = sorted(set(SOI_COLS + EXTRA_COLS) - set(soi.columns))
+    if missing:
+        raise KeyError(f"soi is missing columns: {missing}")
+    g = (soi.groupby(["facility_id", "qdate", "adviser_id"], as_index=False)
+            .agg(par=("par", "sum"), fv=("fv", "sum"),
+                 na=("nonaccrual_flag", "max"), pik=("pik_flag", "max")))
+    g["mark"] = g["fv"] / g["par"]
+    return g
+
+
+def assign_state(f):
+    """Most advanced state any public beat supports, carried forward; a second reset is a re-cut.
+    0 performing, 1 PIK by amendment, 2 non-accrual at any valuer, 3 restructured, 4 re-cut."""
+    f = f.sort_values(["facility_id", "qdate"]).reset_index(drop=True)
+    raw = np.zeros(len(f), dtype=int)
+    raw = np.where(f["pik_amend"], 1, raw)
+    raw = np.where(f["na_share"] > 0, 2, raw)
+    raw = np.where(f["restructured"], 3, raw)
+    f["state"] = pd.Series(raw, index=f.index).groupby(f["facility_id"]).cummax()
+    n_reset = f["restructured"].astype(int).groupby(f["facility_id"]).cumsum()
+    f.loc[n_reset >= 2, "state"] = 4
+    last_reset = f["qdate"].where(f["restructured"]).groupby(f["facility_id"]).ffill()
+    f["q_since_reset"] = ((f["qdate"] - last_reset).dt.days / 91.3).round()   # §14.3's clock
+    return f
+
+
+def facility_features(soi, events=None, window=4):
+    """Facility-quarter features. events: facility_id, qdate (the date the fact became PUBLIC),
+    sponsor_equity (float or NaN), dropdown (bool), restructured (bool)."""
+    cm = cluster_marks(soi)
+    f = (cm.groupby(["facility_id", "qdate"])
+           .agg(n_valuers=("mark", "size"), mark_min=("mark", "min"), mark_max=("mark", "max"),
+                fv=("fv", "sum"), par=("par", "sum"), na_share=("na", "mean"), pik_now=("pik", "max"))
+           .reset_index().sort_values(["facility_id", "qdate"]).reset_index(drop=True))
+    f["mark_pw"] = f["fv"] / f["par"]
+    f["dispersion"] = np.where(f["n_valuers"] >= 2, f["mark_max"] - f["mark_min"], np.nan)
+    f["disp_level"] = (f.groupby("facility_id")["dispersion"]
+                         .transform(lambda s: s.rolling(window, min_periods=1).max()))
+    prev_pik = f.groupby("facility_id")["pik_now"].shift(1)
+    f["pik_amend"] = f["pik_now"].astype(bool) & (prev_pik == False)   # noqa: E712, PIK appears
+    f["pik_cliff"] = ~f["pik_now"].astype(bool) & (prev_pik == True)   # noqa: E712, PIK lapses
+    sw = soi.groupby("facility_id")["industry"].first().eq("software")
+    f["software"] = f["facility_id"].map(sw).astype(float)
+    if events is not None:
+        f = f.merge(events, on=["facility_id", "qdate"], how="left")
+    for col, default in [("sponsor_equity", np.nan), ("dropdown", False), ("restructured", False)]:
+        if col not in f.columns:
+            f[col] = default
+    f["dropdown"] = f["dropdown"].fillna(False).astype(bool)
+    f["restructured"] = f["restructured"].fillna(False).astype(bool)
+    prev_eq = f.groupby("facility_id")["sponsor_equity"].ffill().groupby(f["facility_id"]).shift(1)
+    f["sponsor_hit"] = (f["sponsor_equity"] <= 0) | (f["sponsor_equity"] <= 0.5 * prev_eq)
+    return assign_state(f)
+
+
+def design(f):
+    """Feature matrix; optional inputs (pending = Pi of §17.8.3, holder_joiners = a^new) enter as 0."""
+    X = pd.DataFrame(index=f.index)
+    X["disp_level"] = f["disp_level"].fillna(0.0)
+    X["shortfall"] = (1.0 - f["mark_min"]).clip(lower=0.0)
+    for c in ["sponsor_hit", "dropdown", "pik_cliff", "pik_amend", "software"]:
+        X[c] = f[c].astype(float) if c in f.columns else 0.0
+    X["pending"] = (-f["pending"]).clip(lower=0.0).fillna(0.0) if "pending" in f.columns else 0.0
+    X["holder_joiners"] = f["holder_joiners"].fillna(0.0) if "holder_joiners" in f.columns else 0.0
+    for k in (1, 2, 3):
+        X[f"in_state_{k}"] = (f["state"] == k).astype(float)
+    return X[FEATURES]
+
+
+def advance_label(f):
+    """1.0 if the facility sits on a later square next quarter; the mask is False on the last quarter."""
+    nxt = f.groupby("facility_id")["state"].shift(-1)
+    return (nxt > f["state"]).astype(float), nxt.notna()
+
+
+def fit_hazard(X, y, ridge=1.0, iters=100):
+    """Ridge logistic regression by Newton steps on standardized columns (the ridge is the prior)."""
+    Xv = X.to_numpy(float)
+    yv = np.asarray(y, float)
+    mu, sd = Xv.mean(axis=0), Xv.std(axis=0)
+    sd = np.where(sd > 0, sd, 1.0)
+    Z = np.column_stack([np.ones(len(Xv)), (Xv - mu) / sd])
+    w = np.zeros(Z.shape[1])
+    P = ridge * np.eye(Z.shape[1])
+    P[0, 0] = 0.0
+    for _ in range(iters):
+        p = 1.0 / (1.0 + np.exp(-np.clip(Z @ w, -30, 30)))
+        grad = Z.T @ (yv - p) - P @ w
+        H = (Z * (p * (1.0 - p))[:, None]).T @ Z + P
+        step = np.linalg.solve(H, grad)
+        w = w + step
+        if np.max(np.abs(step)) < 1e-9:
+            break
+    return {"w": w, "mu": mu, "sd": sd, "cols": list(X.columns)}
+
+
+def score(model, X):
+    Z = (X[model["cols"]].to_numpy(float) - model["mu"]) / model["sd"]
+    eta = model["w"][0] + Z @ model["w"][1:]
+    return 1.0 / (1.0 + np.exp(-np.clip(eta, -30, 30)))
+
+
+def watchlist(f, model, asof, top=25):
+    """The dated list: facilities ranked by score, each with its beat (largest contribution).
+    A ranking, not a probability. Print n_valuers beside every row."""
+    cur = f[f["qdate"] == pd.Timestamp(asof)].copy()
+    if cur.empty:
+        return cur
+    X = design(cur)
+    contrib = ((X[model["cols"]].to_numpy(float) - model["mu"]) / model["sd"]) * model["w"][1:]
+    cur["score"] = score(model, X)
+    cur["beat"] = np.array(model["cols"])[contrib.argmax(axis=1)]
+    cur["asof"] = pd.Timestamp(asof)
+    cols = ["asof", "facility_id", "state", "score", "beat", "disp_level", "mark_min", "n_valuers"]
+    return cur.sort_values("score", ascending=False)[cols].head(top).reset_index(drop=True)
+
+
+# --- check 1: Medallia, 30 June 2026 (marks from the seven 10-Qs; par set to 100 each, illustrative) ---
+med = pd.DataFrame({
+    "bdc_id": ["BCRED", "BXSL", "HLEND", "ADS", "FSK", "ONEX", "MONROE"],
+    "adviser_id": ["BX", "BX", "HPS", "APOLLO", "FSKKR", "ONEX", "MONROE"],
+    "fv": [49.5, 49.5, 49.2, 40.7, 50.1, 39.0, 41.3],
+    "nonaccrual_flag": [True, True, False, False, False, False, False],  # only the flags parsed here
+})
+med = med.assign(qdate=pd.Timestamp("2026-06-30"), facility_id="MEDALLIA_TL", borrower="Medallia",
+                 par=100.0, pik_flag=False, industry="software")
+fm = facility_features(med)
+assert fm["n_valuers"].iloc[0] == 6                         # two Blackstone rows, one opinion
+assert abs(fm["dispersion"].iloc[0] - 0.111) < 1e-9 and fm["state"].iloc[0] == 2
+
+# --- check 2: the five squares and the re-default clock on a toy facility ---
+toy = pd.DataFrame({
+    "facility_id": "X",
+    "qdate": pd.to_datetime(["2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30",
+                             "2025-06-30", "2025-12-31", "2026-03-31"]),
+    "pik_amend": [False, True, False, False, False, False, False],
+    "na_share": [0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0],
+    "restructured": [False, False, False, True, False, False, True],
+})
+st = assign_state(toy)
+assert st["state"].tolist() == [0, 1, 2, 3, 3, 3, 4]
+assert st["q_since_reset"].tolist()[4:6] == [3.0, 5.0]
+assert advance_label(st)[0].tolist()[:3] == [1.0, 1.0, 1.0]
+
+# --- check 3: a seeded panel; a Pluralsight-shaped row outranks a Zayo-shaped one ---
+rng = np.random.default_rng(1717)
+n = 4000
+sim = pd.DataFrame({
+    "disp_level": rng.gamma(2.0, 0.02, n),
+    "mark_min": np.clip(1.0 - rng.gamma(2.0, 0.03, n), 0.3, 1.0),
+    "sponsor_hit": rng.random(n) < 0.03, "dropdown": rng.random(n) < 0.01,
+    "pik_cliff": rng.random(n) < 0.02, "pik_amend": rng.random(n) < 0.05,
+    "software": (rng.random(n) < 0.2).astype(float), "state": 0,
+})
+eta = (-4.0 + 25.0 * sim["disp_level"] + 5.0 * (1.0 - sim["mark_min"]) + 3.0 * sim["sponsor_hit"]
+       + 2.0 * sim["dropdown"] + 1.5 * sim["pik_cliff"])
+y = rng.random(n) < 1.0 / (1.0 + np.exp(-eta))
+model = fit_hazard(design(sim), y)
+w = dict(zip(model["cols"], model["w"][1:]))
+assert w["disp_level"] > 0 and w["sponsor_hit"] > 0
+probe = pd.DataFrame({"disp_level": [0.136, 0.01], "mark_min": [0.834, 0.95],
+                      "sponsor_hit": [True, False], "dropdown": [False, False],
+                      "pik_cliff": [False, False], "pik_amend": [False, False],
+                      "software": [1.0, 0.0], "state": [0, 0]})
+s = score(model, design(probe))
+assert s[0] > 5 * s[1]
+wl = watchlist(fm, model, "2026-06-30")
+assert len(wl) == 1 and wl.loc[0, "beat"] in FEATURES
+print(wl)
+```
+
+
+## F.18-B: Chapter 18-B: The RFQ Response Engine {#code-18b}
+
+Listings from `18_ch18b_the_rfq_response_engine.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
+
+
+### Listing 18-B.1: rfq_engine.py (Chapter 18-B): the RFQ response engine in six small pieces {#code-18b-1}
+
+```python
+"""rfq_engine.py (Chapter 18-B): the RFQ response engine in six small pieces.
+
+Units: quote distances x in points from the composite, positive when worse for the client;
+sizes z and inventory q in $mm; rates in RFQs per day. Win curve as in Section 18.7:
+P(x) = 1 / (1 + exp(-(b0 - b1 x))). Every parameter in the demos is illustrative.
+"""
+import math
+import numpy as np
+
+
+def win_prob(x, b0, b1):
+    return 1.0 / (1.0 + np.exp(-(b0 - b1 * np.asarray(x, dtype=float))))
+
+
+def lambert_w0(z, tol=1e-14):
+    """Principal branch of Lambert W on z >= 0, by Halley's iteration."""
+    if z < 0:
+        raise ValueError("only z >= 0 is needed here")
+    w = math.log1p(z)
+    for _ in range(60):
+        ew = math.exp(w)
+        g = w * ew - z
+        step = g / (ew * (w + 1.0) - (w + 2.0) * g / (2.0 * w + 2.0))
+        w -= step
+        if abs(step) < tol * (1.0 + abs(w)):
+            break
+    return w
+
+
+def quote_from_p(p, b0, b1):
+    """Optimal distance for total effective cost p: x* = p + (1 + W0(exp(b0 - b1 p - 1))) / b1."""
+    return p + (1.0 + lambert_w0(math.exp(b0 - b1 * p - 1.0))) / b1
+
+
+def h_second(p, rate, b0, b1, eps=1e-4):
+    """H''(p) by central difference of H'(p) = -rate * P(x*(p)) (envelope theorem)."""
+    hp = lambda u: -rate * float(win_prob(quote_from_p(u, b0, b1), b0, b1))
+    return (hp(p + eps) - hp(p - eps)) / (2.0 * eps)
+
+
+def effective_dealers(n, phi):
+    """Section 2.3.2 and Listing E.1: n / (1 + (n - 1) phi)."""
+    if n < 1 or not 0.0 <= phi <= 1.0:
+        raise ValueError("need n >= 1 and 0 <= phi <= 1")
+    return n / (1.0 + (n - 1.0) * phi)
+
+
+# ---------------------------------------------------------------- 1. who answers, together
+def fit_response_corr(answers, asked, grid=None):
+    """Beta-binomial fit: answers[i] of asked[i] invited dealers responded to RFQ i. The answer
+    rate is held at its pooled value; phi_ans = 1/(a+b+1) is chosen by likelihood on a grid."""
+    k, n = np.asarray(answers, dtype=int), np.asarray(asked, dtype=int)
+    if k.shape != n.shape or k.size == 0 or np.any(k < 0) or np.any(k > n):
+        raise ValueError("need 0 <= answers <= asked, same shape, non-empty")
+    p = k.sum() / n.sum()
+    if not 0.0 < p < 1.0:
+        raise ValueError("all or none answered: the correlation is not identified")
+    pairs, counts = np.unique(np.stack([k, n], axis=1), axis=0, return_counts=True)
+    best_ll, best_rho = -math.inf, None
+    for rho in (np.linspace(0.005, 0.6, 120) if grid is None else grid):
+        s = 1.0 / rho - 1.0
+        a, b = p * s, (1.0 - p) * s
+        ll = sum(c * (math.lgamma(kk + a) + math.lgamma(nn - kk + b) - math.lgamma(nn + s)
+                      + math.lgamma(s) - math.lgamma(a) - math.lgamma(b))
+                 for (kk, nn), c in zip(pairs, counts))
+        if ll > best_ll:
+            best_ll, best_rho = ll, float(rho)
+    return {"p": float(p), "phi_ans": best_rho,
+            "n_eff_invitees": effective_dealers(float(np.median(n)), best_rho)}
+
+
+# ---------------------------------------------------------------- 2. the whole log, not the blotter
+DONE, COVERED, TRADED_AWAY, NOT_TRADED = "done", "covered", "traded_away", "not_traded"
+
+
+def _trap(y, x):
+    return float(np.sum((y[1:] + y[:-1]) * np.diff(x)) / 2.0)
+
+
+def cover_loglik(theta, records, p_ans, res_scale, m=200):
+    """Log-likelihood of every outcome when each of n rivals answers with probability p_ans at a
+    distance ~ Exponential(mean theta) and the client accepts any quote within an
+    Exponential(mean res_scale) reservation distance. records: dicts with outcome, n (rivals),
+    y (our distance) and, on DONE, cover (best rival distance, or None if no rival answered)."""
+    S = lambda x: 1.0 - p_ans * (1.0 - np.exp(-x / theta))      # rival above x, or silent
+    f = lambda x: np.exp(-x / theta) / theta
+    G = lambda x: np.exp(-x / res_scale)                        # client accepts distance x
+    groups = {}
+    for r in records:
+        groups.setdefault((r["n"], r["y"]), []).append(r)
+    ll = 0.0
+    for (n, y), rows in groups.items():
+        xs = np.linspace(0.0, y, m + 1)
+        best = n * p_ans * f(xs) * S(xs) ** (n - 1)             # density of the best rival below y
+        p_cov = n * _trap(p_ans * f(xs) * G(xs), xs) * S(y) ** (n - 1)
+        probs = {COVERED: p_cov, TRADED_AWAY: _trap(best * G(xs), xs) - p_cov,
+                 NOT_TRADED: S(y) ** n * (1.0 - G(y)) + _trap(best * (1.0 - G(xs)), xs)}
+        for r in rows:
+            if r["outcome"] in probs:
+                if probs[r["outcome"]] <= 0.0:
+                    return -math.inf
+                ll += math.log(probs[r["outcome"]])
+            elif r["cover"] is None:                            # DONE and nobody else answered
+                ll += n * math.log(1.0 - p_ans) - y / res_scale if p_ans < 1.0 else -math.inf
+            else:                                               # DONE with the cover revealed
+                c = r["cover"]
+                ll += (math.log(n * p_ans / theta) - c / theta
+                       + (n - 1) * math.log(S(c)) - y / res_scale)
+    return ll
+
+
+def fit_rival_scale(records, p_ans, res_scale, grid=None):
+    grid = np.linspace(0.3, 3.0, 136) if grid is None else np.asarray(grid)
+    return float(grid[int(np.argmax([cover_loglik(t, records, p_ans, res_scale) for t in grid]))])
+
+
+def simulate_log(m, theta, p_ans, res_scale, rng, ns=(2, 4), ys=(0.3, 0.5, 0.7)):
+    """A synthetic RFQ log, plus the best rival quote on every row, which no desk ever sees."""
+    recs, truth = [], []
+    for _ in range(m):
+        n, y = int(rng.choice(ns)), float(rng.choice(ys))
+        rivals = rng.exponential(theta, size=n)[rng.random(n) < p_ans]
+        best = float(rivals.min()) if rivals.size else math.inf
+        reserve = rng.exponential(res_scale)
+        if y < best:
+            out = DONE if reserve >= y else NOT_TRADED
+        elif reserve >= best:
+            out = COVERED if int(np.sum(rivals < y)) == 1 else TRADED_AWAY
+        else:
+            out = NOT_TRADED
+        cover = best if out == DONE and math.isfinite(best) else None
+        recs.append({"outcome": out, "n": n, "y": y, "cover": cover})
+        truth.append(best)
+    return recs, np.array(truth)
+
+
+# ---------------------------------------------------------------- 3. the target is a price
+def curvature(tiers, sigma2, phi_sigma):
+    """Stationary one-bond Riccati: A = sqrt(phi_sigma * sigma2 / K), with K the sum over tiers
+    and both sides of z * H''(0). Points of reservation-price move per $mm of inventory."""
+    k = 2.0 * sum(t["z"] * h_second(0.0, t["rate"], t["b0"], t["b1"]) for t in tiers)
+    if k <= 0 or sigma2 <= 0 or phi_sigma <= 0:
+        raise ValueError("need positive liquidity, variance and risk aversion")
+    return math.sqrt(phi_sigma * sigma2 / k)
+
+
+def tier_hit_ratio(tier, a_curv, q, shift):
+    """Two-sided win probability at inventory q, with costs A(+-q + z/2) lowered by shift."""
+    hits = [float(win_prob(quote_from_p(a_curv * (s * q + tier["z"] / 2.0) - shift,
+                                        tier["b0"], tier["b1"]), tier["b0"], tier["b1"]))
+            for s in (1.0, -1.0)]
+    return 0.5 * sum(hits)
+
+
+def tier_dual(tiers, target, r_star, sigma2, phi_sigma, q=0.0, hi=5.0):
+    """Price of a hard hit-ratio target for one tier at inventory q: the smallest shift >= 0
+    that reaches r_star, and zero when the target is slack. Returns (A, shift)."""
+    a_curv = curvature(tiers, sigma2, phi_sigma)
+    tier = next(t for t in tiers if t["name"] == target)
+    ratio = lambda s: tier_hit_ratio(tier, a_curv, q, s)
+    if ratio(0.0) >= r_star:
+        return a_curv, 0.0
+    if ratio(hi) < r_star:
+        raise ValueError("target unreachable inside the search band")
+    lo = 0.0
+    for _ in range(80):
+        mid = 0.5 * (lo + hi)
+        lo, hi = (mid, hi) if ratio(mid) < r_star else (lo, mid)
+    return a_curv, hi
+
+
+# ---------------------------------------------------------------- 4. three terms to five
+def quote_decompose(tier, side, a_curv, q, alpha=0.0, nu=0.0, eta=5.0, targeted=False):
+    """Niang's five terms for one RFQ, priced cumulatively so that they add up to the quote.
+    side 'bid' (client sells to us) or 'offer'; alpha > 0 means the desk thinks the bond is cheap."""
+    if side not in ("bid", "offer"):
+        raise ValueError("side is 'bid' or 'offer'")
+    sgn = 1.0 if side == "bid" else -1.0
+    inv = a_curv * (sgn * q + tier["z"] / 2.0)
+    view = -sgn * alpha
+    sub = math.exp(-eta * tier["chi"]) * nu if targeted else 0.0
+    steps = [0.0, inv, inv + view, inv + view + tier["chi"], inv + view + tier["chi"] - sub]
+    xs = [quote_from_p(p, tier["b0"], tier["b1"]) for p in steps]
+    names = ("riskless", "inventory", "credit_alpha", "toxicity", "subsidy")
+    out = {"riskless": xs[0]}
+    out.update({names[i]: xs[i] - xs[i - 1] for i in range(1, 5)})
+    out["quote"], out["win_prob"] = xs[4], float(win_prob(xs[4], tier["b0"], tier["b1"]))
+    return out
+
+
+# ---------------------------------------------------------------- 5. the stress switch
+def stress_switch(observed, expected, sd, enter=2.0, leave=1.0, persist=2):
+    """Switch on the residual of response counts against their expected level for that tier and
+    hour: on after `persist` z-scores below -enter, off after `persist` above -leave."""
+    obs, exp_, s = (np.asarray(v, dtype=float) for v in (observed, expected, sd))
+    if np.any(s <= 0):
+        raise ValueError("sd must be positive")
+    z = (obs - exp_) / s
+    state, run, out = False, 0, []
+    for zi in z:
+        crossing = (zi < -enter) if not state else (zi > -leave)
+        run = run + 1 if crossing else 0
+        if run >= persist:
+            state, run = not state, 0
+        out.append(state)
+    return out, z
+
+
+# ---------------------------------------------------------------- 6. the quoting game
+def play(book, account, r_star, mode, eta=5.0, hi=3.0):
+    """Tiers named in `account` share a size-weighted hit-ratio target. 'raw' charges each the
+    account-average toxicity and pays all the same nu; 'residual' charges each its own chi and
+    pays exp(-eta chi) * nu against a quality-weighted ratio. Expected values only."""
+    acct = [t for t in book if t["name"] in account]
+    if mode == "raw":
+        chi_bar = sum(t["rate"] * t["chi"] for t in acct) / sum(t["rate"] for t in acct)
+        cost, wts = (lambda t, nu: chi_bar - nu), [1.0] * len(acct)
+    elif mode == "residual":
+        cost = lambda t, nu: t["chi"] - math.exp(-eta * t["chi"]) * nu
+        wts = [math.exp(-eta * t["chi"]) for t in acct]
+    else:
+        raise ValueError("mode is 'raw' or 'residual'")
+    hit = lambda t, p: float(win_prob(quote_from_p(p, t["b0"], t["b1"]), t["b0"], t["b1"]))
+    ratio = lambda nu: (sum(w * t["rate"] * t["z"] * hit(t, cost(t, nu)) for t, w in zip(acct, wts))
+                        / sum(w * t["rate"] * t["z"] for t, w in zip(acct, wts)))
+    nu = 0.0
+    if ratio(0.0) < r_star:
+        if ratio(hi) < r_star:
+            raise ValueError("target unreachable inside the search band")
+        lo = 0.0
+        for _ in range(80):
+            mid = 0.5 * (lo + hi)
+            lo, hi = (mid, hi) if ratio(mid) < r_star else (lo, mid)
+        nu = hi
+    out = {"nu": nu}
+    for t in book:
+        p = cost(t, nu) if t in acct else t["chi"]
+        x = quote_from_p(p, t["b0"], t["b1"])
+        h = float(win_prob(x, t["b0"], t["b1"]))
+        out[t["name"]] = {"hit": h, "pnl": t["rate"] * t["z"] * h * (x - t["chi"])}
+    return out
+
+
+BOOK = [
+    {"name": "index",     "rate": 40.0, "z": 1.0, "b0": 0.0, "b1": 4.0, "chi": 0.00},
+    {"name": "asset_mgr", "rate": 30.0, "z": 1.0, "b0": 0.0, "b1": 4.0, "chi": 0.05},
+    {"name": "event_pod", "rate": 10.0, "z": 2.0, "b0": 1.5, "b1": 4.0, "chi": 0.80},
+]
+
+if __name__ == "__main__":
+    rng = np.random.default_rng(18)
+    # 1. dealers answer together: Beta(1, 3) appetite, mean 0.25, phi_ans = 1/(1+3+1) = 0.2
+    answers = rng.binomial(27, rng.beta(1.0, 3.0, size=3000))
+    fit = fit_response_corr(answers, np.full(3000, 27))
+    assert abs(fit["phi_ans"] - 0.20) < 0.06 and 3.0 < fit["n_eff_invitees"] < 7.0
+    assert np.mean(answers == 0) > 50 * (1.0 - fit["p"]) ** 27
+    # 2. the whole log recovers the rivals; the wins alone flatter them
+    log, best_rival = simulate_log(6000, 1.0, 0.5, 1.5, rng)
+    assert abs(fit_rival_scale(log, 0.5, 1.5) - 1.0) < 0.15
+    covers = [r["cover"] for r in log if r["cover"] is not None]
+    assert np.mean(covers) > 1.3 * np.mean(best_rival[np.isfinite(best_rival)])
+    # 3. a steeper bowl makes the target dearer; background flow makes it cheaper
+    a1, nu1 = tier_dual(BOOK, "asset_mgr", 0.25, sigma2=0.25, phi_sigma=1.0)
+    a2, nu2 = tier_dual(BOOK, "asset_mgr", 0.25, sigma2=1.00, phi_sigma=1.0)
+    _, nu3 = tier_dual(BOOK[1:], "asset_mgr", 0.25, sigma2=1.00, phi_sigma=1.0)
+    assert a2 > a1 and nu2 > nu1 and nu3 > nu2
+    # 4. five terms that add up, with the subsidy only where it is paid
+    parts = ("riskless", "inventory", "credit_alpha", "toxicity", "subsidy")
+    for t in BOOK:
+        d = quote_decompose(t, "bid", a1, q=5.0, nu=nu1, targeted=(t["name"] == "asset_mgr"))
+        assert abs(sum(d[k] for k in parts) - d["quote"]) < 1e-9
+        assert (d["subsidy"] < 0) == (t["name"] == "asset_mgr")
+    # 5. the afternoon is not a stress event
+    expected = np.array([12.0, 12.0, 11.0, 10.0, 9.0, 8.0, 7.0, 6.0])
+    calm, _ = stress_switch(expected, expected, np.ones(8))
+    assert any(e < 7 for e in expected) and not any(calm)
+    stressed = expected.copy()
+    stressed[2:6] /= 2.0
+    on, _ = stress_switch(stressed, expected, np.ones(8))
+    assert on[3] and on[5] and not on[7]
+    # 6. the game: raw targeting buys the toxic tier; residual targeting keeps the money
+    acct = ("asset_mgr", "event_pod")
+    total = lambda g: sum(g[t["name"]]["pnl"] for t in BOOK)
+    for r_star in (0.15, 0.20, 0.25):
+        raw, res = play(BOOK, acct, r_star, "raw"), play(BOOK, acct, r_star, "residual")
+        assert total(res) > total(raw) and raw["event_pod"]["pnl"] < 0
+    assert raw["event_pod"]["hit"] > 4 * res["event_pod"]["hit"]
+    assert res["asset_mgr"]["hit"] > raw["asset_mgr"]["hit"]
+    print("rfq_engine: all checks pass")
+```
+
 
 <!-- STATUS: COMPLETE -->
