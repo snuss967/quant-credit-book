@@ -10,8 +10,8 @@
 - [x] 8. [4B.4 The curvature] MATH-GENTLY (convexity as dispersion) + FULL-DERIVATION-MOVE — two-trucks box; identity stated; dD/dy and Cmod moved below.
 - [x] 9. [4B.4 Convexity is paid for] MATH-GENTLY in two parts (Jensen's coin, then the ½σ² that Itô will own) — coin on ten-year zero, 0.5% gap; Itô pointer to 6.1.2.
 - [x] 10. [4B.4 The three meanings] BRIDGE — Theo/Kaz exchange placed before spread-convexity paragraph.
-- [ ] 11. [4B.5 The Risk Report] MATH-GENTLY (DTS: percent, not basis points) + one telling
-- [ ] 12. [4B.5 The hedge ratio] RV BEAT, The Pair box, PB-03 pre-open as arithmetic
+- [x] 11. [4B.5 The Risk Report] MATH-GENTLY (DTS: percent, not basis points) + one telling — stock-dollar box; vivid paragraph retired to one-line pointer.
+- [x] 12. [4B.5 The hedge ratio] RV BEAT, The Pair box, PB-03 pre-open as arithmetic — PB-03 pre-open box: three rulers, idio, leak, carry; Ines line.
 - [ ] 13. [4B.6 The curve] MATH-GENTLY (bootstrapping as peeling)
 - [ ] 14. [4B.6 Discount margin] ANOTHER-SEAT (CLO manager, generic, no firm named)
 - [ ] 15. [4B.6 PECS] BRIDGE

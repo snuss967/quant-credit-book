@@ -4,7 +4,7 @@
 - [x] 2. [§12B.1] LIST-TO-NARRATIVE + MATH-GENTLY #1 (min-max threshold) — data-room ritual; shed box; springing lien callback, pronoun fixed (C7, C8).
 - [x] 3. [§12B.2] MATH-GENTLY #2 + LIST-TO-NARRATIVE + FULL-DERIVATION-MOVE (turnover) — Mags grocery anecdote; bucket box; turnover Full Derivation; Kaz DIP-consent line.
 - [x] 4. [§12B.3] MATH-GENTLY #3 + LIST-TO-NARRATIVE + ANOTHER-SEAT (CLO) — town-hall box; Ines room tactics paragraph; CLO seat after Poker Table.
-- [ ] 5. [§12B.4] MATH-GENTLY #4 + BRIDGE (timed automaton)
+- [x] 5. [§12B.4] MATH-GENTLY #4 + BRIDGE (timed automaton) — board-game box; brief's 59.5 corrected to 60.5; petition bridge.
 - [ ] 6. [§12B.5 head] NEW-SCENE Long Scene A: Saks Global, Five Months in Court
 - [ ] 7. [§12B.5 DIP/roll-up] MATH-GENTLY #5 + FULL-DERIVATION-MOVE
 - [ ] 8. [§12B.5 confirmation] NEW-SCENE, the Purdue jump

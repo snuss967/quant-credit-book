@@ -20,7 +20,8 @@ its left panel is the straight-line summary of that paper which the chapter stat
 loan, then 10 bp per further 10%), drawn as such, with PB-01 and PB-19 as the chapter's illustrative
 observations.  All other figures are ILLUSTRATIVE and are computed from the chapter's own numbers:
 8-D.1 (Cold Open), 8-D.4 (table in 8D.3), 8-D.5 (8D.4), 8-D.7 (8D.5) and 8-D.8 (8D.6); 8-D.6 simulates
-200,000 years of 252 Gaussian daily steps (seed 4) and uses the reflection principle for the fixed line.
+200,000 years of 252 Gaussian daily steps (seed 4) for the bars, draws one path (seed 15) in its left panel, and
+uses the reflection principle for the fixed line.
 Figure 8-D.8: the chapter prints only four ledger rows (PB-01, PB-19, PB-03 and the PB-12 refusal);
 the other eight rows are generated here (seed 80) inside the ranges those rows span, and the figure says so.
 

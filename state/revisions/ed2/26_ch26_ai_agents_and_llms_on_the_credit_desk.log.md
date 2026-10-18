@@ -23,5 +23,5 @@
 - [x] 21. [26.9, determinism formally] MATH-GENTLY #8 in two parts. — Done: two-part box, float order and kappa wobble; Kaz pronoun fixed.
 - [x] 22. [26.10, controls (i)-(v)] LIST-TO-NARRATIVE; white-text amendment as the day. — Done: white-text Thursday, five controls as next week; Kaz pronoun.
 - [x] 23. [26.11, Case Study A, Knight] EXPAND-SCENE to 900-1,200 words, #### heading. — Done: week-before scene, hedger cut, kill-switch rota; minutes left to Ch 27.
-- [ ] 24. [26.11, Case Study C, AI-washing] WHEN-TO-APPLY inside a beat.
+- [x] 24. [26.11, Case Study C, AI-washing] WHEN-TO-APPLY inside a beat. — Done: marketing deck beat, risk-coverage curve before attestation signed.
 - [ ] 25. [26.13 Desk Debrief] BRIDGE: Finder table; promote scenes and case studies to ####.
