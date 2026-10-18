@@ -165,7 +165,7 @@ def fig_two_worlds_mixture():
     ax.annotate("Default world: 4% of the mass,\nspread over 100 points of return", (-52, 9.5e-4),
                 xytext=(0, 26), textcoords="offset points", ha="center", va="bottom", fontsize=8.3, color=INK_2,
                 arrowprops=dict(arrowstyle="-", color=MUTED, linewidth=0.8, shrinkA=0, shrinkB=2))
-    ax.text(-58, 2.2e-4, "Lose more than 15 points (price below 77):\nmixture 1 in 29;  Gaussian rarer than 1 in 29,000",
+    ax.text(-58, 2.2e-4, "Lose more than 15 points (price below 77):\nmixture 1 in 29;  Gaussian about 1 in 150 million",
             fontsize=8.3, color=INK_2, ha="center", va="center")
     ax.plot([], [], color=BLUE, linewidth=LW, label="Survive-or-jump mixture")
     ax.plot([], [], color=ORANGE, linewidth=1.5, linestyle=(0, (4, 2)), label="Theo's Gaussian N(7%, 4.1%)")
