@@ -166,7 +166,7 @@ The second term is the one Theo's report missed. It is the variance of a coin fl
 
 The third and fourth central moments follow from the same conditioning, by centering each world at the mixture mean and expanding; the algebra is moved, unchanged, to *The Full Derivation: third and fourth central moments of the mixture* at the end of §5.1.4, and its one load-bearing term, $-q(1-q)(1-2q)J^3$, is the whole of §5.1.3.
 
-Skewness is $\mu_3/\operatorname{Var}^{3/2}$ and excess kurtosis is $\mu_4/\operatorname{Var}^2 - 3$. Two checks you should always run on formulas like these, and should make ROBO run too: at $q = 0$ they collapse to the survival world's moments, and at $q = 1$ to the default world's. Both hold here by inspection.
+Skewness is $\mu_3/\operatorname{Var}^{3/2}$ and excess kurtosis is $\mu_4/\operatorname{Var}^2 - 3$. Kaz runs two checks on any mixture formula before trusting it, and the §5.9 asserts make ROBO run them too: at $q = 0$ the moments collapse to the survival world's moments, and at $q = 1$ to the default world's. Both hold here by inspection.
 
 ### 5.1.3 Skew is minus one over root PD
 
