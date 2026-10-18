@@ -22,7 +22,7 @@
 - [x] 20. §15.5.2: six boxes: fingers, stadium, four distributions, Cox, doors, Bayes.
 - [x] 21. §15.5: survival-tool judgment passage: sample, censoring, regime, scarcity, why-pending.
 - [x] 22. §15.6: narrative base rates, Ines Acharya-Johnson hand, pod and dealer seats.
-- [ ] 23. §15.7: EXPAND-SCENE Spirit + MATH-GENTLY (jump vs diffusion)
-- [ ] 24. §15.8 WBD: EXPAND-SCENE + MATH-GENTLY (expected positive part) + Another Seat
-- [ ] 25. Before §15.9: SHOP-LIFE vignette "The security master has forty new columns"
+- [x] 23. §15.7: Mags tells Spirit, staircase-ramp box, who waits for free.
+- [x] 24. §15.8 WBD: June 10 scene, non-boycott, meter box, two seats, close.
+- [x] 25. Shop-life vignette: Priya, secmaster columns, EU clock, risk committee, ticket.
 - [ ] 26. §15.9 Desk Debrief: LIST-TO-NARRATIVE closing scene + dated podcast items

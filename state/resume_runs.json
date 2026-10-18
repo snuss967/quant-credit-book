@@ -282,29 +282,6 @@
    }
   },
   {
-   "name": "resgraph-V-b",
-   "task": "wl6vl10zt",
-   "runId": "wf_d408caac-e84",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "24_ch24_bond_cds_basis_and_deliverables",
-     "25_ch25_nlp_pacer_and_covenant_scraping",
-     "26_ch26_ai_agents_and_llms_on_the_credit_desk",
-     "27_ch27_system_architecture_and_asics",
-     "93_appD_market_plumbing_and_contract_mechanics",
-     "94_appE_laws_of_the_desk",
-     "04_ch04b_bond_math_for_the_desk",
-     "07_ch07b_statistics_for_credit_panels",
-     "12_ch12b_the_restructuring_process_as_a_state_machine"
-    ],
-    "stages": [
-     "resgraph"
-    ]
-   }
-  },
-  {
    "name": "fixes-and-cast",
    "task": "wwluacbli",
    "runId": "wf_c8095cb4-bb7",
@@ -315,6 +292,24 @@
     ]
    },
    "todo": "Relaunch the same script with stems [01_ch01_anthology_and_landscape, 05_ch05_credit_probability_distributions] once their .verify.md files are COMPLETE. Then run a lessons pass on Ch 3, 7, 13-16 (revised before the lessons existed)."
+  },
+  {
+   "name": "part-VII-u2",
+   "task": "waulio30e",
+   "runId": "wf_803b0227-6ae",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "24_ch24_bond_cds_basis_and_deliverables",
+     "25_ch25_nlp_pacer_and_covenant_scraping"
+    ],
+    "stages": [
+     "brief",
+     "revise",
+     "verify"
+    ]
+   }
   }
  ]
 }

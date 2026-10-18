@@ -609,8 +609,11 @@ SYSTEM: two-clock quoting engine for a systematic credit desk. Implement exactly
 
 **Podcasts**
 
-- Bloomberg *Odd Lots* (series): episodes on bond-market electronification, portfolio trading and high-frequency trading. No specific episode was verified for this chapter; search the archive by topic.
-- *Flirting with Models* (Corey Hoffstein, series): practitioner interviews on systematic implementation and execution. Series-level pointer only.
+- **"Inside Hudson River Trading's Blistering Token Burn"** (Bloomberg *Odd Lots*, 2026-06-05; the earlier episode, "How Hudson River Trading Actually Uses AI" with Iain Dunning, is 2025-10-31). A major market maker on token spend per employee, compute and memory bottlenecks and possible in-house chips: a firm's infrastructure budget and constraints, told aloud, for §27.6 and §27.8. https://omny.fm/shows/odd-lots/inside-hudson-river-tradings-blistering-token-burn ; https://omny.fm/shows/odd-lots/how-hudson-river-trading-actually-uses-ai
+- **"Angana Jacob - Data as the True Competitive Moat (S7E26)"** (*Flirting with Models*, 2026-02-09). Data "sourced, cleaned, standardized, linked, and delivered" is the moat once models commoditise: the audio case for the provenance rule (§27.2.2) and the security master (§27.3). https://www.flirtingwithmodels.com/episodes/DLtqprallYi
+- **"Multicast and the markets with Brian Nigito"** (*Signals and Threads*, Jane Street, 2020-09-23). Why electronic exchanges rely on single-threaded programs and multicast networking, from a veteran of early electronic exchanges; the feed handler's world for §27.2.1 and the single-writer logic behind §27.4. https://signalsandthreads.com/multicast-and-the-markets/
+- **"Programmable hardware with Andy Ray"** (*Signals and Threads*, Ron Minsky with Andy Ray of Jane Street, 2020-09-09). FPGAs, hardware tooling and "the economics of FPGAs": the best audio primer for the trigger-table section (§27.6) and the build-versus-buy of hardware. https://signalsandthreads.com/programmable-hardware/
+- **"State Machine Replication, and Why You Should Care with Doug Patti"** (*Signals and Threads*, 2022-04-20, feed date). Jane Street's Concord and Aria, built on state-machine replication for reliability, scalability and speed: a real-world instance of the deterministic order state machine of §27.4.2. The page renders by script; the feed carries the description and date. https://signals-threads.simplecast.com/episodes/state-machine-replication-and-why-you-should-care-with-doug-patti-ddqeDcTw
 
 **Practitioner Writing**
 
@@ -620,6 +623,9 @@ SYSTEM: two-clock quoting engine for a systematic credit desk. Implement exactly
 - Arista Networks, 7130 Series product documentation (Layer 1+ devices; vendor latency specifications). Title only.
 - AMD and Exegy, STAC-T0 tick-to-trade benchmark announcements (2024). Vendor claims; title only.
 - The DESK coverage of auto-quoting, no-touch rates and credit futures blocks (2025-10-08, 2026-10-08, 2026-10-16), as cited in the Trend Watch boxes. Title only.
+- **"The LMAX Architecture"** (Martin Fowler, 2011-07-12). A trading platform whose Business Logic Processor handles "6 million orders per second on a single thread", in memory, with event sourcing and lock-free Disruptors: the canonical open description of a single-writer, replayable core; read before §27.3-§27.5. https://martinfowler.com/articles/lmax.html
+- **"Can you design a chip? Announcing the protocol emulator ASIC competition"** and **"Results from the ASIC puzzle"** (Jane Street blog, 2026-09-10 and 2026-10-02). A market maker inviting chip designs it "will pay to fabricate", then a puzzle on reverse-engineering a chip from its layout: a dated sign that a top trading firm is openly working on custom silicon; read it as a marker of where the latency frontier sits, not as a design source (§27.6). https://blog.janestreet.com/protocol-emulator-asic-competition/ ; https://blog.janestreet.com/asic-puzzle-results/
+- **"Knightmare: A DevOps Cautionary Tale"** (Doug Seven, 2014-04-17). The 1 August 2012 deployment failure told as an engineering story (deployment, feature flags, humans reading checklists); check its figures against the SEC order listed under Regulation, Data & Code before quoting (§27.7.3). https://dougseven.com/2014/04/17/knightmare-a-devops-cautionary-tale/
 
 **Academic Papers**
 

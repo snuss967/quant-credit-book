@@ -8,11 +8,11 @@
 - [x] 6. [§7.2, after the box] · WHEN-TO-APPLY. Note: hypothesis list vs benchmark; DRR placebo; BH Math Gently placed here.
 - [x] 7. [§7.3 Fractional Differentiation] · MATH-GENTLY x3, then FULL-DERIVATION-MOVE. Note: walker, lognormal, memory-weights, ADF boxes; derivation moved intact; PDP scene.
 - [x] 8. [§7.3, before Ways This Blows Up] · WHEN-TO-APPLY. Note: level features, three breaks, memory-retained picture, 0.3 illustrative.
-- [ ] 9. [§7.4 Triple Barrier in DTS Space] · MATH-GENTLY + reorder.
-- [ ] 10. [§7.4] · ANOTHER-SEAT (box 1 of 3, CLO manager).
-- [ ] 11. [§7.5 Meta-Labeling] · MATH-GENTLY x2 + SHOP-LIFE.
-- [ ] 12. [§7.6 Sample Weights] · MATH-GENTLY + LIST-TO-NARRATIVE.
-- [ ] 13. [§7.6] · WHEN-TO-APPLY.
+- [x] 9. [§7.4 Triple Barrier in DTS Space] · MATH-GENTLY + reorder. Note: lever box, corridor picture first, scale derivation moved to end.
+- [x] 10. [§7.4] · ANOTHER-SEAT (box 1 of 3, CLO manager). Note: generic seat, CCC bucket, determination dates, h is business choice.
+- [x] 11. [§7.5 Meta-Labeling] · MATH-GENTLY x2 + SHOP-LIFE. Note: Phi/z box, confusion matrix box, Model Review Tuesday vignette.
+- [x] 12. [§7.6 Sample Weights] · MATH-GENTLY + LIST-TO-NARRATIVE. Note: hats/Kish box, decay and attribution argued, bootstrap box.
+- [x] 13. [§7.6] · WHEN-TO-APPLY. Note: overlap factor, overkill case, cross-parent energy 2015, first-slide check.
 - [ ] 14. [§7.7 Purged, Embargoed, Issuer-Grouped CV] · MATH-GENTLY + EXPAND-SCENE.
 - [ ] 15. [§7.7] · WHEN-TO-APPLY.
 - [ ] 16. [§7.8 Deflated Sharpe] · MATH-GENTLY x2, then FULL-DERIVATION-MOVE.

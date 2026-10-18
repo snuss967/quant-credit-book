@@ -514,8 +514,11 @@ Three edge cases deserve a warning in the spec. First, $\Sigma$ for 1,300 bonds 
 ### Deep-Dive Resource Graph
 
 **Podcasts**
-- Bloomberg *Odd Lots* (Joe Weisenthal and Tracy Alloway): the archive contains several conversations on bond ETFs, March 2020 and portfolio trading. No specific episode was verified this session, so search the archive by topic.
-- *Flirting with Models* (Corey Hoffstein): systematic-investing interviews, including fixed income practitioners (title only).
+- **A Longstanding Fear About The Corporate Debt Market May Finally Be Coming True** (Bloomberg *Odd Lots*, Chris White of Viable Markets, 2020-03-23). Recorded in the March 2020 meltdown, it frames the reach for yield, heavy issuance and the plumbing of the corporate bond market as a setup for forced selling: the mood behind the discount tape of §20.5.1. https://omny.fm/shows/odd-lots/a-longstanding-fear-about-the-corporate-debt-marke
+- **Why the True Price of a Bond Can Still Be Hard To Know** (Bloomberg *Odd Lots*, Maciej Kowara and Eric Jacobson of Morningstar, 2021-04-05). Bond pricing for infrequently traded paper is "a matter of opinion", so two firms can disagree about what the same bond is worth: the premise of §20.2, where the NAV is an opinion. https://omny.fm/shows/odd-lots/why-the-true-price-of-a-bond-can-still-be-hard-to
+- **Jeff Rosenberg: The Past, Present, and Future of Systematic Fixed Income (S7E19)** (*Flirting with Models*, Corey Hoffstein, 2025-08-18). The head of BlackRock Systematic Fixed Income, the firm behind HYG and LQD, on quant fixed income from the sell side to the buy side; read it for the practitioner view of systematic credit, since it is not an episode about creation and redemption. https://www.flirtingwithmodels.com/episodes/8V74zBaN4jN
+- **The ETF Story 3: The Approval** (*Trillions*, Eric Balchunas and Joel Weber, 2023-01-29; re-release of a 2018 series). The 1988-1993 back-and-forth between the SEC and the SPY team over "logistics, structure, and the creation-redemption process, which was inspired by commodities warehouses": the origin of the AP machine in §20.1. https://omny.fm/shows/trillions/the-etf-story-3-the-approval
+- **Words of Wisdom From Mr. ETF** (*Trillions*, guest Reggie Browne of GTS, a market maker, 2022-03-31). A live Bloomberg event in which a market maker covers how ETFs are born, the nearest audio to the market-making side of the band in §20.3. https://omny.fm/shows/trillions/words-of-wisdom-from-mr-etf
 
 **Practitioner Writing**
 - BlackRock, *Lessons from COVID-19: ETFs as a Source of Stability*, ViewPoint, July 2020 (https://www.blackrock.com/corporate/literature/whitepaper/viewpoint-lessons-from-covid-19-etfs-as-a-source-of-stability-july-2020.pdf).
@@ -525,6 +528,8 @@ Three edge cases deserve a warning in the spec. First, $\Sigma$ for 1,300 bonds 
 - etf.com, "Bond ETF Premiums Become Discounts" (https://www.etf.com/sections/news/bond-etf-premiums-become-discounts).
 - The DESK, "Commentary: Inside the fixed income ETF primary market" (https://www.fi-desk.com/commentary-inside-the-fixed-income-etf-primary-market/).
 - Man Institute, *Quantitative Credit Alpha: Early Mover* (2022) and *Revolutions in Credit Trading* (2023) (shelf copies; cited by page above).
+- **New Insights from N-CEN: Liquidity Management at Open-End Funds and Primary Market Concentration of ETFs** (Federal Reserve Board FEDS Note, 2023-01-11). Finds "a high degree of concentration of APs, especially for fixed income ETFs", about four active APs per ETF (2018-2021 N-CEN data): how many dealers actually stand behind the band of §20.3.2. https://www.federalreserve.gov/econres/notes/feds-notes/new-insights-from-n-cen-liquidity-management-at-open-end-funds-and-pmc-of-etfs-20230111.html
+- **Measuring the Forest through the Trees: The Corporate Bond Market Distress Index** (NY Fed *Liberty Street Economics*, 2021-02-22). Introduces the CMDI, one measure of joint dislocations in primary and secondary corporate bond markets: a stress gauge to overlay on the March 2020 discount tape of §20.5.1 and a candidate regime feature for the monitor of §20.7. https://libertystreeteconomics.newyorkfed.org/2021/02/measuring-the-forest-through-the-trees-the-corporate-bond-market-distress-index/
 
 **Academic Papers**
 - Shim & Todorov (2021), "ETFs, illiquid assets, and fire sales," BIS WP 975 (https://www.bis.org/publ/work975.htm).
@@ -535,6 +540,7 @@ Three edge cases deserve a warning in the spec. First, $\Sigma$ for 1,300 bonds 
 - Aramonte & Avalos (2020), BIS Bulletin No. 6, on corporate bond ETF discounts in March 2020 (https://www.bis.org/publ/bisbull06.htm).
 - Pan & Zeng (2017), "ETF Arbitrage under Liquidity Mismatch," ESRB Working Paper No. 59 (title only).
 - SEC staff, *U.S. Credit Markets: Interconnectedness and the Effects of the COVID-19 Economic Shock* (October 2020) (https://www.sec.gov/files/US-Credit-Markets_COVID-19_Report.pdf).
+- **ETF (Mis)pricing** (FCA Occasional Paper 68, first published 2025-05-30; updated 2026-06-03). A dynamic equilibrium model linking APs' inventory management and investor demand to mispricing, validated on regulatory data from 128 ETFs, 2018-2022: the theory behind the band with a balance sheet in §20.3.2. https://www.fca.org.uk/publications/occasional-papers-fca-research/occasional-paper-68-etf-mispricing (recorded as a Microstructure Exchange talk by Andrei Kirilenko: https://youtu.be/-OVIAs967AI).
 
 **Data & Code**
 - Rule 6c-11: SEC press release 2019-190 (https://www.sec.gov/news/press-release/2019-190); adopting release 33-10695 (https://www.sec.gov/rules/final/2019/33-10695.pdf); rule text, 17 CFR 270.6c-11 (https://www.law.cornell.edu/cfr/text/17/270.6c-11).

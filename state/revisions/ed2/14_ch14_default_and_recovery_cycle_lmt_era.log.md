@@ -20,6 +20,6 @@
 - [x] 18. [14.7.1] MATH-GENTLY (HMM, Bayes) + SHOP-LIFE beat -- done: umbrella box, Kaz dictates details, regime-explain risk committee vignette.
 - [x] 19. [14.7.2] MATH-GENTLY (P vs Q) + WHEN-TO-APPLY -- done: stewards-room bookmaker box; research-note scene; filter and wedge judgment.
 - [x] 20. [14.8.1 Serta] NEW-SCENE (3,000-4,000 words, three acts) -- done: Mags notebook, three acts, 2.18(c) payoff, claim tree; cert verified.
-- [ ] 21. [14.8.2 Mitel, 14.8.3 Del Monte] EXPAND-SCENE (~800 words each)
-- [ ] 22. [14.9 Five signals] LIST-TO-NARRATIVE + ANOTHER-SEAT (dealer desk)
+- [x] 21. [14.8.2 Mitel, 14.8.3 Del Monte] EXPAND-SCENE (~800 words each) -- done: Kaz wrong then reverts; Del Monte blank-row refusal as judgment.
+- [x] 22. [14.9 Five signals] LIST-TO-NARRATIVE + ANOTHER-SEAT (dealer desk) -- done: five voices answer Quillfeather at 44; dealer seat with Indap.
 - [ ] 23. [Exercises, Resource Graph] BRIDGE (pointers; dated episodes)

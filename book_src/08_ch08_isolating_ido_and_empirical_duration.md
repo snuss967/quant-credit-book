@@ -160,7 +160,9 @@ Table 8.1 restates Ben Dor's estimates (daily data, August 1998 to November 2009
 
 *Table 8.1. Empirical rate hedge ratios by rating. Source: Ben_Dor p.192, Table 7.1 (panels A and B). The last column applies $H = 1 + s\rho\sigma_s/\sigma_y$ at each rating's average spread. "n/r": not reported.*
 
-Read the table like a credit agreement: the interesting clauses are the ones that do not say what you expected. The two-factor model predicts the *ordering* well: IG near one, HY near or below zero. The regression intercepts tell a stranger story. Even as spreads go to zero, Ba bonds hedge at 0.41 and Caa at 0.07. A Ba bond at a tight spread is not a distressed instrument, so the recovery route cannot explain why it ignores Treasuries. And the $R^2$ for high yield is 0.01 to 0.06. The rate component of an HY bond's return is not merely small; it is barely there.
+Read the table like a credit agreement: the interesting clauses are the ones that do not say what you expected. The two-factor model predicts the *ordering* well: IG near one, HY near or below zero. The regression intercepts tell a stranger story. Even as spreads go to zero, Ba bonds hedge at 0.41 and Caa at 0.07. A Ba bond at a tight spread is not a distressed instrument, so the recovery route cannot explain why it ignores Treasuries. And the $R^2$ for high yield is 0.01 to 0.06. The rate component of an HY bond's return is not merely small; it is barely there. Figure 8.1 draws the table as lines in spread, which makes the 700 bp comparison visible.
+
+![Figure 8.1: Empirical hedge ratio against spread, by rating. The Baa line stays high (0.71 at 700 bp, the figure Ben Dor quotes) while Ba, B and Caa sit at or below zero at the same spread (+0.06, −0.06, −0.07), so the investment-grade/high-yield line is a break in behavior, not in spread. Source: Ben_Dor p.192, Table 7.1 (Table 8.1 here), H = β + γs; each line stops at the table's H at the maximum sample OAS, with the spread implied by the rounded coefficients; Aaa–Aa and A are omitted because no maximum is reported.](assets/figures/ch08_hedge_ratio_by_rating.png)
 
 > **[SOURCE EXTRACTION]** *Ben_Dor p.191:* "If this correlation is negative, the empirical duration would be lower than the analytical one and may even end up being negative."
 >
@@ -232,7 +234,9 @@ $$
 H^{\text{rec}} \equiv \frac{D^{\text{haz}}}{D^{\text{yld}}} = \frac{y}{r+\lambda} = \frac{c}{c + \lambda R} .
 $$
 
-The recovery-route hedge ratio is the share of the bond's value flow that still looks like a bond. As $\lambda \to 0$ it goes to one. As $\lambda \to \infty$ it goes to zero, and the price goes to $R$ whatever $r$ is. That is the restructuring desk's "trades on dollar price" written as a limit. With *illustrative* CCC inputs, $c = 9\%$, $R = 40\%$, and $\lambda = 21\%$ (roughly a 1,280 bp spread over a 60% loss given default), $H^{\text{rec}} = 0.09/(0.09 + 0.084) \approx 0.52$. Half the analytical duration of that bond is fiction before anyone has computed a correlation. To first order the two routes multiply, so $H \approx H^{\text{rec}}\,(1 + \ell s)$, and a CCC book can lose all of its rate sensitivity by either road.
+The recovery-route hedge ratio is the share of the bond's value flow that still looks like a bond. As $\lambda \to 0$ it goes to one. As $\lambda \to \infty$ it goes to zero, and the price goes to $R$ whatever $r$ is. That is the restructuring desk's "trades on dollar price" written as a limit. With *illustrative* CCC inputs, $c = 9\%$, $R = 40\%$, and $\lambda = 21\%$ (roughly a 1,280 bp spread over a 60% loss given default), $H^{\text{rec}} = 0.09/(0.09 + 0.084) \approx 0.52$. Half the analytical duration of that bond is fiction before anyone has computed a correlation. To first order the two routes multiply, so $H \approx H^{\text{rec}}\,(1 + \ell s)$, and a CCC book can lose all of its rate sensitivity by either road. Figure 8.2 shows both halves of that claim: the screen's duration and the true one separate as default intensity rises.
+
+![Figure 8.2: The recovery route to zero duration for the perpetuity of Section 8.3. Left: the duration on the risk screen (1/yield) and the bond's true sensitivity to Treasury yields (1/(r + λ)); at λ = 21% the screen says 7.7 years and the true figure is 4.0. Right: the ratio of the two, the recovery-route hedge ratio c/(c + λR), is 0.52 there and falls toward zero as default intensity rises, faster when recovery is higher. Illustrative: the model of Section 8.3 with c = 9%, R = 40% and r = 4% (r matters only for the left panel).](assets/figures/ch08_recovery_route.png)
 
 Kaz, reading over Theo's shoulder, frowned at the derivation. "So the fulcrum security is the one where the hedge ratio pivots through zero?"
 
@@ -383,7 +387,9 @@ $$
 \hat\beta_{\text{SW}} = \frac{\hat b_{-1} + \hat b_{0} + \hat b_{+1}}{1 + 2\hat\rho_f} .
 $$
 
-The denominator corrects for the factor's own autocorrelation, which univariate regressions would otherwise double-count. It recovers only one lag of smoothing, so on a bond with two days of staleness it under-corrects.
+The denominator corrects for the factor's own autocorrelation, which univariate regressions would otherwise double-count. It recovers only one lag of smoothing, so on a bond with two days of staleness it under-corrects. Figure 8.3 shows the staleness and the three estimators side by side.
+
+![Figure 8.3: Stale marks shrink beta, and lagged regressors put it back. Left: cumulative return of a bond whose marks absorb each day's news over three days (weights 0.5, 0.3, 0.2) against its true return. Right: OLS recovers only the same-day weight (0.49), Scholes–Williams one more lag (0.81), and Dimson with two lags the full beta (1.005). Illustrative: simulated from the smoothing model of Section 8.5 by Listings 8.1 to 8.4 (seed 8, 2,500 days).](assets/figures/ch08_stale_marks_beta.png)
 
 **De-smoothing the series itself.** Dimson fixes a beta; sometimes you need the whole return series, for a volatility, a drawdown, or a covariance matrix. The Dimson coefficients estimate the smoothing weights, $\hat\theta_k = \hat b_k / \sum_j \hat b_j$. Invert the moving average recursively:
 

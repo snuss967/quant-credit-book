@@ -20,6 +20,6 @@
 - [x] 18. Two judgment paragraphs: multi-obligor use, allowed claim is litigated.
 - [x] 19. Kaz clock scene, hazard/logistic/Beta boxes, MAP algebra moved to derivation.
 - [x] 20. Ines mirror check scene; rank not level; vintage, forum, holders.
-- [ ] 21. §13.9 Incora day scene + diary date fixes + Mitel cite + Saks clock
+- [x] 21. Incora four-step day, diary redated, Mitel recited, Saks, scoreboard.
 - [ ] 22. §13.10 Desk Debrief Larkspur return scene, bullets kept
 - [ ] 23. Deep-Dive Resource Graph BRIDGE (verified episodes and posts)

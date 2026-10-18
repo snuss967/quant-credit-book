@@ -10,10 +10,10 @@
 - [x] 8. [§2.3.1 S-curve] MATH-GENTLY + FULL-DERIVATION-MOVE + WHEN-TO-APPLY. -- Rumor-in-school odds box; judgment on K; logit fits moved.
 - [x] 9. [§2.3.2 RFQ as auction] MATH-GENTLY + FULL-DERIVATION-MOVE. -- Car-guessing order-statistics box; April 9 13.2-to-6.6 anchor; algebra moved.
 - [x] 10. [§2.4 All-to-All] MATH-GENTLY + ANOTHER-SEAT. -- Markout hand-history box; Man Lam/Kamenski LP seat box added.
-- [ ] 11. [§2.5 Automation, §2.5.1] LIST-TO-NARRATIVE + MATH-GENTLY + WHEN-TO-APPLY.
-- [ ] 12. [§2.6.1 Basket bid] MATH-GENTLY + FULL-DERIVATION-MOVE.
-- [ ] 13. [§2.6.2 Case Study: PT cycle] EXPAND-SCENE (~1,500 words).
-- [ ] 14. [§2.7, §2.7.1 ETFs] MATH-GENTLY + FULL-DERIVATION-MOVE + ANOTHER-SEAT.
+- [x] 11. [§2.5 Automation, §2.5.1] LIST-TO-NARRATIVE + MATH-GENTLY + WHEN-TO-APPLY. -- Ines walks BBB line; random-walk box; router judgment; algebra moved.
+- [x] 12. [§2.6.1 Basket bid] MATH-GENTLY + FULL-DERIVATION-MOVE. -- Four-term narrative, crowd-and-conductor covariance box, algebra moved after mystery.
+- [x] 13. [§2.6.2 Case Study: PT cycle] EXPAND-SCENE (~1,500 words). -- Rebalance scene: Mags 2021, Kaz on Pi and gamma, decision.
+- [x] 14. [§2.7, §2.7.1 ETFs] MATH-GENTLY + FULL-DERIVATION-MOVE + ANOTHER-SEAT. -- Gift-card band box, AP gag, ETF-maker and Apollo seat box.
 - [ ] 15. [End of §2.7.1 and §2.9.3 "March 2020"] NEW-SCENE, long (2,500–3,500 words): "The Week the ETF Was the Only Price."
 - [ ] 16. [§2.8 Non-bank LPs] LIST-TO-NARRATIVE + ANOTHER-SEAT.
 - [ ] 17. [§2.9.1 LCS] MATH-GENTLY + WHEN-TO-APPLY.

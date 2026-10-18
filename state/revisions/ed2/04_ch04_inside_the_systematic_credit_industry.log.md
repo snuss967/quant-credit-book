@@ -5,10 +5,10 @@
 - [x] 3. [§4.1, end] SHOP-LIFE vignette (security master, exchange-offer CUSIPs) — packaging-co exchange, 19 mismaps, vendor issuer_id call, Man paraphrase.
 - [x] 4. [§4.2 Why Credit Lagged] BRIDGE + AUM Trend Watch — existing box augmented (Man \$14.7→42.7bn); Mags paradox scene added.
 - [x] 5. [§4.3 Six-Axis Map, six questions] LIST-TO-NARRATIVE — six headers discovered from Man p.31, Man23 p.3, Dynkin p.207, BlackRock p.3.
-- [ ] 6. [§4.3 Scoring the breadth column] MATH-GENTLY x3 + FULL-DERIVATION + WHEN-TO-APPLY
-- [ ] 7. [§4.4 Value Q vs P] MATH-GENTLY + ANOTHER-SEAT (Apollo) + WHEN-TO-APPLY
-- [ ] 8. [§4.4 cross-sectional neutralization] MATH-GENTLY (residuals/handicap)
-- [ ] 9. [§4.5 Data stack, ex-post filter bias] MATH-GENTLY x2 + FULL-DERIVATION
+- [x] 6. [§4.3 Scoring the breadth column] MATH-GENTLY x3 + FULL-DERIVATION + WHEN-TO-APPLY — binomial, thermometers, design effect; Kaz's three versions; figure hook.
+- [x] 7. [§4.4 Value Q vs P] MATH-GENTLY + ANOTHER-SEAT (Apollo) + WHEN-TO-APPLY — actuarial vs premium box; Rowan quotes; distributor story; three checks.
+- [x] 8. [§4.4 cross-sectional neutralization] MATH-GENTLY (residuals/handicap) — golf handicap box, B2 retailers +50/−20, before IDO line.
+- [x] 9. [§4.5 Data stack, ex-post filter bias] MATH-GENTLY x2 + FULL-DERIVATION — sealed envelope, bell-and-scissors boxes; truncated-normal derivation moved; figure hook.
 - [ ] 10. [§4.5 Case Study Factor Zoo] EXPAND-SCENE 2,500-3,500 words + decision point
 - [ ] 11. [§4.6 DTS] MATH-GENTLY (proportional moves) + WHEN-TO-APPLY
 - [ ] 12. [§4.6 Man's three layers] MATH-GENTLY x2 + FULL-DERIVATION + WHEN-TO-APPLY
