@@ -609,3 +609,170 @@ print(f"bond D_spr {g['D_spr']:.3f}, DTS {g['dts']:.3f}; CDS spread gamma {gam_c
 print(f"CG per $10mm: S=30 -> {gk30['spread_bp']:.0f}bp, {gk30['delta_shares']:,.0f} sh; "
       f"S=15 -> {gk15['spread_bp']:.0f}bp, {gk15['delta_shares']:,.0f} sh  PASS")
 ```
+
+## 23.6 Capital-Structure Arbitrage: Rules, Returns, and Why Single Trades Lose
+
+Theo's first question about any cap-structure trade is "but what does the indenture say about the fulcrum?", and it is the right first question for a reason the model cannot see: the trade assumes the stock and the CDS are claims on the same value under the same rules. The second question is the model's: how far apart are they, and how fast do they come back together?
+
+**The rule (Yu, 2006, adapted).** Compute the CreditGrades spread $s^{\text{CG}}_t$ from (23.3)–(23.5) using 1000-day or longest-tenor implied equity vol, and define the relative mispricing
+
+$$
+z_t = \frac{s^{\text{mkt}}_t - s^{\text{CG}}_t}{s^{\text{CG}}_t}. \tag{23.11}
+$$
+
+If $z_t > \alpha$, the market spread is rich to the equity: sell protection and short $\delta_t$ shares. If $z_t < -\alpha$: buy protection and buy $\delta_t$ shares. Here $\delta_t$ is the CreditGrades delta from Section 23.5, rebalanced daily, and Yu tests $\alpha \in \{0.5, 1, 2\}$. Exit on convergence ($|z_t| < \epsilon$), at a 180-day limit, or at a stop. Ex post, decompose the P&L as
+
+$$
+\Delta\Pi = \underbrace{-\,\text{RPV01}\cdot\Delta(s^{\text{mkt}} - s^{\text{CG}})}_{\text{convergence}} \;+\; \underbrace{c\,\Delta t}_{\text{carry}} \;+\; \underbrace{\tfrac12\Gamma_S\,(\Delta S)^2}_{\text{gamma}} \;+\; \underbrace{\text{JTD}\cdot\Delta N}_{\text{jump}} \;-\; \text{costs},
+$$
+
+for a protection seller, with signs flipped for a buyer. Only the first term is the thesis. "IDO or it didn't happen" applies here with force: carry is compensation for the jump term, and a backtest that books the carry and simulates no defaults has discovered that selling insurance is profitable in years without fires.
+
+**What the evidence says.** Yu (2006, *Financial Analysts Journal*) runs the rule on 135,759 daily CDS spreads for 261 North American obligors over 2001–2004. Individual trades can lose heavily, because at short horizons CDS and equity are weakly correlated; an equally weighted portfolio of trades earns Sharpe ratios comparable to other fixed-income arbitrage strategies, and the speculative-grade monthly index has a Sharpe ratio of 0.75, uncorrelated with equity and bond factors. Kapadia and Pu (2012, *Journal of Financial Economics*) explain why: short-horizon pricing discrepancies are common, a significant fraction are anomalous rather than mean-reverting, and the degree of integration varies with frictions such as liquidity in both markets and idiosyncratic risk. Duarte, Longstaff and Yu (2007, *Review of Financial Studies*), asking whether fixed-income arbitrage is "nickels in front of a steamroller," find that strategies requiring more "intellectual capital," capital-structure arbitrage among them, earn significant alphas after factors and fees, with positively skewed returns. The single trade is a coin flip with a thesis attached; the portfolio is the edge.
+
+> **Poker Table.** Ines: "A convergence trade is short a straddle on time." You are paid if the gap closes before your patience, your capital, or your risk manager runs out, and you lose if it widens first, which in this market is the more common short-horizon outcome. Size so that a 2x widening is a bad day, not a career event. Then replay the hand: on the trades that lost, did the gap widen because the model was wrong (a hedge ratio problem), because the market was wrong for longer (a capital problem), or because the rules changed (a credit-agreement problem)? Only the first is fixable with math.
+
+### Case Study A: May 2005, GM and Ford, or How to Lose on Both Legs
+
+**The setup.** By spring 2005 General Motors and Ford were investment-grade issuers drifting toward high yield, and GM was one of the largest names in both the convertible market and the CDS index tranches. Hedge funds held two popular structures on it. Convertible arbitrage: long GM convertibles, short GM stock, a trade "motivated by discrepancies between the price at which convertible bonds issued by GM were trading and the price of a replicating portfolio (consisting of regular bonds plus equity call options)" (BIS *Quarterly Review*, June 2005, p.6). Correlation: sell protection on the equity tranche of the iTraxx Europe index and buy index protection as a hedge, which "would have earned a spread of 300 to 400 basis points" and is "commonly referred to as a long correlation position" (ibid.).
+
+**The timeline.**
+
+| Date (2005) | Event | Equity | Credit |
+| :-- | :-- | :-- | :-- |
+| May 3 | Last trading day before Tracinda's announcement (Schedule 14D-9) | | |
+| May 4 | Kirk Kerkorian's Tracinda offers to buy up to 28mm GM shares (about 4.95%) at \$31.00 cash; it already holds 22mm (about 3.89%) | GM up about 18% | |
+| May 5 | S&P downgrades GM two notches to BB and Ford one notch to BB+ | Falls back | Bond and CDS spreads gap wider |
+| May 9 | Tender offer commences; expires June 7 | | |
+| June 1 | Both names leave the CDX and iTraxx indices at the roll | | |
+
+**What broke.** The BIS put it in one sentence that every cap-structure desk should frame: investors "lost money on both legs of the trade: on 4 May GM's stock price increased by 18% after an offer from turnaround specialist Kirk Kerkorian to buy a large stake in the company, and then on 5 May the company's bond and CDS spreads increased after S&P's downgrade" (BIS *Quarterly Review*, June 2005, p.6). The short stock lost on the bid. The long credit lost on the downgrade. The correlation book lost separately: "Investors expecting default correlations to remain stable or increase were surprised in May when they instead fell sharply," and "at times in early May the two moved in opposite directions," meaning the mezzanine tranche and the index (ibid.). The BIS judged the episode "similar in nature, albeit certainly not in magnitude" to 1998. Convertible-arbitrage funds lost about 8% in early 2005, in what one later retrospective called "the worst environment since 1994" (Resonanz Capital, July 10, 2025). Specific fund-loss rumors at the time were denied and are not repeated here.
+
+**Why the model could not see it.** Both legs were hedged against *the same* shock to firm value. May 4 and May 5 were two different shocks: a large shareholder bidding for equity (an equity-holder event that did nothing for creditors) and a ratings action with forced-selling consequences (a creditor event that did nothing for the bid). In Merton language, $\sigma_V$ did not change; the claim structure did, because a buyer of a control-sized equity stake and an index-eligibility cliff are not in the model. In RSSG language, Theo would have asked who benefits from Kerkorian's stake, and the answer, "not the bonds," is the hedge ratio flipping sign.
+
+**How a systematic desk flags it now.** (1) *Event-sign stress:* shock the book to stock up 20% and spread up 30% at once, the May 2005 vector, and cap the loss. (2) *Fallen-angel cliff:* for issuers within a notch of high yield, model the forced-selling demand from index exits. GM and Ford were about 3% of the investment-grade bond market and potentially up to 15% of global high yield (BIS, June 2005), and index providers' average-of-three-ratings rule meant the exits were scheduled, not surprising. (3) *Concentration:* a single name that is simultaneously your largest convert hedge, a large tranche exposure, and an index constituent is one trade wearing three hats. (4) *Equity-event flags:* 13D filings, tender offers, and activist stakes route the name to a "hedge ratio unreliable" state in which the z-signal is suspended.
+
+> **Trend Watch.** *Credit got its own volatility surface.* Until recently a credit desk inferred spread volatility from regressions (Section 23.5); now it can read it off a listed index. On October 13, 2023, Cboe launched four Credit VIX indices, VIXIG (CDX North America IG), VIXHY (CDX North America HY), VIXIE (iTraxx Europe Main) and VIXXO (iTraxx Crossover), built from CDX and iTraxx swaption prices using the VIX methodology and co-developed with S&P Dow Jones Indices (Cboe press release, October 3, 2023). The pre-launch back-test shows VIXHY rising from 240.09 to 394.15 between March 2 and March 20, 2023, during the bank failures (hypothetical back-tested data, per Cboe). Volumes followed: cleared CDX swaptions were about \$107bn in Q2 2025, up 103% year on year from \$52.8bn (ION/Clarus analysis of LSEG CCPView data, one scope; approx.), and ICE cleared a record \$19.3bn of index-option notional exercised on April 16, 2025, against a prior record of \$17.7bn on October 18, 2023. *What it means:* the cross-asset trade no longer has to be level against level. The desk can trade implied against implied, equity-surface hazard against CDX swaption vol, and hedge credit vega with an instrument rather than a hope.
+
+### Specification for AI Implementation (continued): the cap-structure backtester
+
+**What ROBO built from the vague version.** Told to "backtest capital-structure arbitrage," ROBO sold protection on every name, booked the carry, simulated no defaults, and reported a Sharpe ratio of 4. It was correct about the simulation it was given. The spec below strips carry from the convergence P&L, reports it separately, and states the noise model.
+
+**Inputs.** `panel`: long DataFrame with `issuer`, `day`, `S`, `sigma_E`, `F_ps`, `s_model` (decimal, from CreditGrades), `ds_dS` (decimal per \$), `s_mkt`. Parameters: `alpha` (entry threshold on $z$), `eps` (exit), `hold_max_days = 180`, `cost_bp_cds` (running-spread equivalent, converted to upfront with RPV01), `cost_bp_eq` (bp of traded stock notional). Unit CDS notional per trade. Output: daily portfolio P&L, per-trade P&L, Sharpe, hit rate, and carry reported separately.
+
+```python
+# ---------- block 4: Yu-style capital-structure arbitrage on a synthetic panel ----------
+def simulate_cg_panel(n_issuers=20, n_days=500, T=5.0, R=0.4, r=0.03, seed=RNG_SEED):
+    """GBM equity paths (no defaults) and CreditGrades model spreads with stock-space slopes."""
+    rng = np.random.default_rng(seed)
+    dt = 1 / 252
+    frames = []
+    for i in range(n_issuers):
+        S0, sE, F_ps = rng.uniform(15, 60), rng.uniform(0.25, 0.60), rng.uniform(10, 60)
+        steps = -0.5 * sE**2 * dt + sE * np.sqrt(dt) * rng.standard_normal(n_days - 1)
+        S = S0 * np.exp(np.concatenate([[0.0], np.cumsum(steps)]))
+        s_mod = cg_cds_spread(T, S, sE, F_ps, R, r)
+        ds_dS = (cg_cds_spread(T, 1.01 * S, sE, F_ps, R, r)
+                 - cg_cds_spread(T, 0.99 * S, sE, F_ps, R, r)) / (0.02 * S)
+        frames.append(pd.DataFrame({"issuer": i, "day": np.arange(n_days), "S": S, "sigma_E": sE,
+                                    "F_ps": F_ps, "s_model": s_mod, "ds_dS": ds_dS}))
+    return pd.concat(frames, ignore_index=True)
+
+def add_market_noise(panel, phi, sd_u=0.30, seed=RNG_SEED):
+    """s_mkt = s_model * exp(u), u an AR(1) with persistence phi and stationary sd sd_u."""
+    rng = np.random.default_rng(seed)
+    u_all = []
+    for _, g in panel.groupby("issuer", sort=True):
+        eta = rng.standard_normal(len(g))
+        u = np.empty(len(g))
+        u[0] = sd_u * eta[0]
+        for t in range(1, len(g)):
+            u[t] = phi * u[t - 1] + sd_u * np.sqrt(1 - phi**2) * eta[t]
+        u_all.append(u)
+    out = panel.copy()
+    out["s_mkt"] = out["s_model"] * np.exp(np.concatenate(u_all))
+    return out
+
+def capstruct_backtest(panel, alpha=0.5, eps=0.1, hold_max_days=180,
+                       cost_bp_cds=5.0, cost_bp_eq=10.0, R=0.4, r=0.03, T=5.0):
+    """Eq. (23.11) rules. pos = +1 sold protection (short stock hedge), -1 bought (long stock)."""
+    n_days = int(panel["day"].max()) + 1
+    pnl, carry, trades = np.zeros(n_days), np.zeros(n_days), []
+    for iss, g in panel.groupby("issuer", sort=True):
+        S, sm, smod = g["S"].to_numpy(), g["s_mkt"].to_numpy(), g["s_model"].to_numpy()
+        dsdS_mkt = g["ds_dS"].to_numpy() * sm / smod          # market-spread slope in the stock
+        z = sm / smod - 1.0
+        pos, c, hedge, mtm_prev, t0, trade_pnl = 0, 0.0, 0.0, 0.0, 0, 0.0
+        for t in range(n_days):
+            exited = False
+            if pos != 0:
+                rpv = float(cds_rpv01(sm[t], R, r, T))
+                mtm = pos * (c - sm[t]) * rpv
+                step = (mtm - mtm_prev) + hedge * (S[t] - S[t - 1])
+                mtm_prev = mtm
+                carry[t] += pos * c / 252                          # reported, not in pnl
+                closing = abs(z[t]) < eps or (t - t0) >= hold_max_days or t == n_days - 1
+                if closing:
+                    step -= cost_bp_cds * 1e-4 * rpv + abs(hedge) * S[t] * cost_bp_eq * 1e-4
+                else:
+                    new_hedge = pos * rpv * dsdS_mkt[t]
+                    step -= abs(new_hedge - hedge) * S[t] * cost_bp_eq * 1e-4
+                    hedge = new_hedge
+                pnl[t] += step
+                trade_pnl += step
+                if closing:
+                    trades.append({"issuer": iss, "entry": t0, "exit": t, "side": pos, "pnl": trade_pnl})
+                    pos, hedge, exited = 0, 0.0, True
+            if pos == 0 and not exited and abs(z[t]) > alpha and t < n_days - 1:
+                pos = 1 if z[t] > 0 else -1
+                rpv = float(cds_rpv01(sm[t], R, r, T))
+                c, mtm_prev, t0 = sm[t], 0.0, t
+                hedge = pos * rpv * dsdS_mkt[t]
+                entry_cost = cost_bp_cds * 1e-4 * rpv + abs(hedge) * S[t] * cost_bp_eq * 1e-4
+                pnl[t] -= entry_cost
+                trade_pnl = -entry_cost
+    daily = pd.Series(pnl, name="pnl")
+    sd = float(daily.std())
+    tr = pd.DataFrame(trades)
+    return {"sharpe": float(np.sqrt(252) * daily.mean() / sd) if sd > 0 else 0.0,
+            "n_trades": len(tr),
+            "hit_rate": float((tr["pnl"] > 0).mean()) if len(tr) else float("nan"),
+            "carry_total": float(carry.sum()), "daily": daily, "trades": tr}
+
+# ---------- sanity checks, block 4 ----------
+# (e) a delta-hedged protection seller is not JTD-hedged: at default the short stock covers little
+jtd_gap = -(1 - 0.4) * 1e7 + gk30["delta_shares"] * 30.0
+assert jtd_gap < -0.7 * (1 - 0.4) * 1e7
+print(f"JTD on $10mm sold protection, delta-hedged at S=30: {jtd_gap:,.0f} USD")
+# (f) the Kapadia-Pu lesson: convergence Sharpe falls as mispricings become persistent
+panel = simulate_cg_panel()
+bt = {}
+for phi in (0.90, 0.98, 0.995):
+    bt[phi] = capstruct_backtest(add_market_noise(panel, phi))
+    print(f"phi={phi}: Sharpe {bt[phi]['sharpe']:.2f}, trades {bt[phi]['n_trades']}, "
+          f"hit rate {bt[phi]['hit_rate']:.2f}, carry (excluded) {bt[phi]['carry_total']:.3f}")
+assert bt[0.90]["sharpe"] > 0
+assert bt[0.90]["sharpe"] > bt[0.995]["sharpe"], "persistence should erode convergence Sharpe"
+```
+
+The Sharpe ratios this prints are large, and they are large because the only thing in the synthetic market is mean-reverting noise around a correct model. That is the point of the exercise and the reason not to put the number in a pitch book. The useful output is the *shape*: as the persistence $\phi$ of the mispricing rises toward one, the expected daily convergence per unit of noise scales like $\sqrt{(1-\phi)/(1+\phi)}$ and the Sharpe ratio decays toward zero. Kapadia and Pu's weak integration is a statement that real $\phi$ is high and varies by name.
+
+## 23.7 Convertible Arbitrage: The Original Cap-Structure Trade
+
+Mags has a word for every strategy that got a Greek letter after she was already doing it. "Back in my day we called it buying the bond and shorting the stock. We sized the short by phone and by grudge. Now it has a gamma." Then, grudgingly: "The gamma is better than the grudge."
+
+> **[SOURCE EXTRACTION]** *Moyer_Distressed_Debt_Analysis p.260:* "The classic example of a capital structure arbitrage is a hedged convertible bond trade. A convertible arbitraguer that arranges a capital structure arbitrage, which is called "putting on the trade," will purchase the convertible bond and then sell short an appropriate amount of stock."
+>
+> **Annotation.** Moyer is writing from the distressed seat, where the point of the hedge is to "lock in" the coupon with little net capital, because the short-sale proceeds fund much of the convertible. That framing is still correct about the economics and silent about the risk. The modern decomposition is that a hedged convertible is long credit (the bond floor), long equity volatility (the embedded call, which the delta hedge turns into gamma), and short borrow (the stock loan). "An appropriate amount of stock" is the delta, which depends on the hazard, which depends on the stock: the $\lambda(S)$ of Section 23.4. In 2005 the credit leg broke; in 2008 the borrow leg broke as well. A 2026 desk reports the three legs separately and stresses them jointly.
+
+**The P&L of a delta-hedged convertible.** Let $\text{CB}(S, t)$ be the convertible's value with a stock-dependent hazard, $\Delta = \partial\text{CB}/\partial S$ and $\Gamma = \partial^2\text{CB}/\partial S^2$. Over $dt$, long one bond and short $\Delta$ shares earns, before default,
+
+$$
+d\Pi \approx \tfrac12\,\Gamma\,S^2\big(\sigma_{\text{real}}^2 - \sigma_{\text{impl}}^2\big)\,dt \;+\; \big(\text{coupon} + \text{short rebate} - \text{borrow fee}\big)\,dt \;-\; \lambda(S)\,\text{JTD}\,dt ,
+$$
+
+where JTD is the loss at default net of the stock hedge's gain. The first term is the gamma trade, the second is carry, and the third is why the carry exists. Convert arb loses when realized vol undershoots implied while credit widens (2005), or when the borrow disappears and liquidity goes with it (2008, when emergency short-sale restrictions on financial stocks removed the hedge for part of the market).
+
+**Case note: Wolfspeed, 2025, when the convertible is the fulcrum.** Wolfspeed's restructuring support agreement of June 22, 2025 was signed by holders of more than 97% of its senior secured notes, more than 67% of its convertible notes, and Renesas's U.S. subsidiary; the company filed a prepackaged Chapter 11 late in June 2025, targeting roughly \$4.6bn (about 70%) of debt reduction and about a 60% cut in annual cash interest, and the plan was reported effective on September 29, 2025 *(terms as reported; approx.)*. Under the reported terms the convertible holders took new notes and the bulk of the reorganized equity, shared with Renesas. For a convert-arb book, that is the trade's endgame inverted: the "bond floor" was not a floor, the convertible *was* the equity of the new company, and the short in the old stock was the profitable leg. The systematic flags were visible a quarter ahead: convertibles trading below the straight-debt floor implied by the secured curve (the market pricing them as fulcrum), a low-strike put floor implying a double-digit hazard, and CreditGrades $z$ deep negative because the equity still had option value that the converts' price said it would not keep.
+
+> **Trend Watch.** *The convertible comeback.* After a lean 2022, the strategy and the market both revived. The HFRX Convertible Arbitrage index returned 10.1% in 2023, global issuance was about \$90bn that year (US about \$57bn), and issuers' effective cost through converts was roughly 3–4% against 7–9% in high yield over 2023–24, with short-sale rebates of 5% or more (Resonanz Capital, "Convertible Arbitrage: The 2023–2025 Comeback," July 10, 2025). Global issuance reached \$167.1bn across 264 deals in 2025, which Numerix called the strongest year on record, and 2026 issuance was reported at about \$131bn in the US through early September, about half from AI-linked issuers *(approx.; secondary reporting)*. *What it means:* the AI capex cycle is financing itself partly by selling volatility to convert-arb funds, so convertible supply is now a driver of single-name implied vol in the issuers' equity surfaces. If you trade those surfaces against CDS, the converts are a third leg you have to model.
