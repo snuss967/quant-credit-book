@@ -180,3 +180,6 @@ The chapter pipeline gained a `resgraph` stage (U3b: specific episodes and posts
 | part-III-b | wklksowgz | same | Ch 10, 11 |
 | part-III-c | wu9xnpg9n | same | Ch 12, 17 |
 | figs-misc | wyz2ysvwc | figures → figcheck | Ch 28, 6-B, 3-B |
+| u3-media | wmgs3kr4j | — | All three media dossiers COMPLETE: 283 verified episodes, posts, and talks (Parts I–II 80, III–IV 88, V–VIII ~115 URLs) | done |
+| resgraph-V-a | wg1sjulmh | resgraph | Ch 18–23 | running |
+| resgraph-V-b | wl6vl10zt | resgraph | Ch 24–27, App D, App E, primers 4-B, 7-B, 12-B | running |

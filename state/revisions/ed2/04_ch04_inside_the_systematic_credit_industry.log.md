@@ -2,7 +2,7 @@
 
 - [x] 1. [Chapter opening, 7:40 a.m.] EXPAND-SCENE (~2,000 words); learning objectives to paragraph — Man p.19 menu, Blackstone undated, Kaz defends, Mags 1998, kitchen.
 - [x] 2. [§4.1 The Five Businesses] LIST-TO-NARRATIVE + ANOTHER-SEAT (Ares/BlueCove vs ARCC) — five creditors of fictional retailer; Ares two-seats box added.
-- [ ] 3. [§4.1, end] SHOP-LIFE vignette (security master, exchange-offer CUSIPs)
+- [x] 3. [§4.1, end] SHOP-LIFE vignette (security master, exchange-offer CUSIPs) — packaging-co exchange, 19 mismaps, vendor issuer_id call, Man paraphrase.
 - [ ] 4. [§4.2 Why Credit Lagged] BRIDGE + AUM Trend Watch
 - [ ] 5. [§4.3 Six-Axis Map, six questions] LIST-TO-NARRATIVE
 - [ ] 6. [§4.3 Scoring the breadth column] MATH-GENTLY x3 + FULL-DERIVATION + WHEN-TO-APPLY

@@ -105,13 +105,6 @@
    }
   },
   {
-   "name": "u3-media",
-   "task": "wmgs3kr4j",
-   "runId": "wf_435bbdd5-840",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/u3_research_and_new_chapters.js",
-   "args": "3 media items: episodes_posts_parts_I_II, _III_IV, _V_VIII (same args as the 04:32 launch)"
-  },
-  {
    "name": "u3-perspectives-life",
    "task": "wd8z4yj3u",
    "runId": "wf_1508b41d-803",
@@ -272,6 +265,49 @@
     "stages": [
      "figures",
      "figcheck"
+    ]
+   }
+  },
+  {
+   "name": "resgraph-V-a",
+   "task": "wg1sjulmh",
+   "runId": "wf_456cef70-a68",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "18_ch18_otc_microstructure_and_avellaneda_stoikov",
+     "19_ch19_portfolio_trading_pricing_engines",
+     "20_ch20_credit_etf_creation_redemption_arb",
+     "21_ch21_leveraged_loans_and_clo_microstructure",
+     "22_ch22_market_structure_regulation_trends",
+     "23_ch23_cross_asset_convexity_and_vol_surface"
+    ],
+    "stages": [
+     "resgraph"
+    ]
+   }
+  },
+  {
+   "name": "resgraph-V-b",
+   "task": "wl6vl10zt",
+   "runId": "wf_d408caac-e84",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "24_ch24_bond_cds_basis_and_deliverables",
+     "25_ch25_nlp_pacer_and_covenant_scraping",
+     "26_ch26_ai_agents_and_llms_on_the_credit_desk",
+     "27_ch27_system_architecture_and_asics",
+     "93_appD_market_plumbing_and_contract_mechanics",
+     "94_appE_laws_of_the_desk",
+     "04_ch04b_bond_math_for_the_desk",
+     "07_ch07b_statistics_for_credit_panels",
+     "12_ch12b_the_restructuring_process_as_a_state_machine"
+    ],
+    "stages": [
+     "resgraph"
     ]
    }
   }

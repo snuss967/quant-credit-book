@@ -130,8 +130,19 @@ Seven trends, each backed by rows in the evidence table below.
 
 ## Sources
 
-*(pending)*
+Fetched or confirmed reachable this session:
+
+- Cboe: https://cdn.cboe.com/resources/futures/iboxx-ishares-contract-specs.pdf ; https://cdn.cboe.com/resources/futures/Cboe2023-iBoxx-Factsheet.pdf ; https://cdn.cboe.com/resources/futures/IBHY-IBIG_OOF_Contract_Specification.pdf ; https://cdn.cboe.com/resources/futures/10-10-23-Cboe2023-iBoxxFutures-FAQ.pdf ; https://cdn.cboe.com/data/us/futures/market_statistics/historical_data/cfevoloi.csv ; https://www.cboe.com/credit-suite ; https://www.cboe.com/tradable-products/corporate-credit/cboe-iboxx-emerging-market-bond-index-futures ; https://cdn.cboe.com/resources/education/research_publications/iBOXXImpact.pdf
+- Eurex deck (Oct 2026): https://www.eurex.com/resource/blob/4018980/3fed7a77845c591c5f2908c8ed818b00/data/presentation-global-credit-index-futures.pdf ; FOW: https://www.fow.com/insights/goldman-jp-morgan-morgan-stanley-join-eurex-credit-programe
+- CFTC: filing https://www.cftc.gov/filings/orgrules/rules08312622792.pdf ; positions API https://publicreporting.cftc.gov/resource/gpe5-46if.json
+- The DESK (fi-desk.com): /cme-group-to-begin-trading-credit-futures-in-june/ ; /cme-credit-futures-surge/ ; /cboe-block-trading-has-arrived-in-credit-index-futures-2/ ; /competition-in-credit-futures-heating-up-with-ice-marketaxess-msci-launch/ ; /eurex-five-questions-every-investment-committee-should-ask-about-credit-index-futures/ ; /the-credit-futures-market/ ; /cboe-navigating-volatility/. The volume articles (2025-09-04, 2025-10-06, 2025-11-13, 2025-12-10, 2026-01-09, 2026-03-20, 2026-04-14, 2026-09-17) and Dan Barnes (2025-12-04) are cited by title and date in the table; their URLs were not recorded.
+- Clearing and swaps data: https://www.clarusft.com/us-firms-powered-march-2026-itraxx-swaps-volume-growth/ ; https://www.clarusft.com/volumes-and-most-active-names-in-credit-derivatives-march-2026/ ; LSEG https://lseg.com/content/dam/post-trade/en_us/documents/lch/resources/cdsclear-dashboard-2024.pdf ; ICE https://images.e.theice.com/Web/IDC/%7Bdf361826-c9bd-432d-8fec-f358203f79c0%7D_ICE_CDS_Clearing_3Q_2021.pdf ; ISDA SwapsInfo H1/Q2 2026 review (PDF, cited by title). Other Clarus posts (2022-08-24, 2023-07-19, 2025-11-05, 2026-09-23) cited by title and date.
+- Academic and official: https://libertystreeteconomics.newyorkfed.org/2015/03/the-effects-of-entering-and-exiting-a-credit-default-swap-index ; https://ideas.repec.org/a/eee/jfinec/v137y2020i3p857-886.html ; Crossref records for 10.1111/jofi.12953 and 10.1016/j.jfineco.2020.03.008.
+- CME launch news: https://finadium.com/?p=139825 (the CME press release at cmegroup.com refused fetches).
+
+Seen only in search-engine summaries (treat as unverified, flagged CHECK in the table): cmegroup.com FAQ, product and tracking-error pages (403/503 to every fetch); ICE's 2024-12-12 release (ir.theice.com) and its fintechfutures.com copy; SSRN ab_id=5986474 (Rapp, Shin, Zhou and Zhu). The Bloomberg and iBoxx index methodology PDFs were not retrieved. The scope's "LCH record day" and "25-50% of quarterly notional in the roll window" were not found in any source.
 
 ## Book placement
 
-*(pending)*
+**Ch 10-B (credit index futures and index microstructure)** is the home chapter and should lead with the four-philosophies comparison, the volume-versus-liquidity diagnostic, the CFTC file, the duration-hedged contracts and the CDX roll and basis section. **Ch 8 / 8-B** takes the hedge menu and the duration-hedge residual (the index as a hedge a rule runs for you). **Ch 20 and 20-B (ETF creation/redemption and the basket triangle)** take the BTIC/TAIC/EFP-I mechanics and the index-close fragility; the public record has no futures-ETF band data, so the chapter should say so and show how to build the series. **Part III's trend chapter** takes the cost-curve and capacity consequences, with the CFTC categories as a crowding measure. **App B (data atlas) and App C (trend tracker)** take the dated launches, incentive programmes and datasets. The dossier justifies two new sections beyond the planned chapter (the CFTC file; the index-close single point of failure) and, if Ch 10-B grows past about 12,000 words, a split of the CDX roll-and-basis material into its own short chapter.
+

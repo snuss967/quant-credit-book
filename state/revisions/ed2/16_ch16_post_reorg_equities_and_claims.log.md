@@ -22,4 +22,5 @@
 - [x] 20. [§16.8.2] Note: survivor-sample Kelly scene, coin box, tanh moved, Ines ticket, judgment.
 - [x] 21. [§16.8.3] Note: five pairs as week's whiteboard questions; dealer-desk seat box added.
 - [x] 22. [§16.9] Note: Theo reads eight aloud, Ines sharpens two; flow/value answer; 16-B pointer.
-- [ ] 23. [All Deep-Dive Resource Graphs] BRIDGE (specific episodes/posts).
+- [x] 23. [Resource Graphs] Note: 9fin, Octus, ABLJ, Squire, HLS, QML, ABI, Shumway added.
+<!-- STATUS: COMPLETE -->

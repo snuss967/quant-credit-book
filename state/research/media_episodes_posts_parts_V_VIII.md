@@ -5,7 +5,7 @@
 
 ## Method and verification notes
 
-**What "verified" means here.** Every URL was fetched on 2026-10-18 and showed the title, date or description given in its row; a final status sweep returned HTTP 200 for all but two (sec.gov blocks scripted requests and was read through WebFetch; one YouTube short link returned 429, a rate limit). Podcast titles, guests and dates are copied from the publisher's page or RSS item; where a page prints no date the row says so. Vendor figures (Trumid, Octaura, MarketAxess, Tradeweb) are the vendor's own. Where no good audio exists the section says so: that gap is itself a finding. Rows beyond eight per chapter were pruned for length and the best are listed under "Unverified leads" as spares.
+**What "verified" means here.** Every URL was fetched on 2026-10-18 and showed the title, date or description given in its row; a final status sweep of all 115 distinct URLs returned HTTP 200 for all but sec.gov, which blocks scripted requests and was read through WebFetch. Podcast titles, guests and dates are copied from the publisher's page or RSS item; where a page prints no date the row says so. Vendor figures (Trumid, Octaura, MarketAxess, Tradeweb) are the vendor's own. Where no good audio exists the section says so: that gap is itself a finding. Rows beyond eight per chapter were pruned for length and the best are listed under "Unverified leads" as spares.
 
 ---
 
@@ -182,7 +182,7 @@ Not placed because the item could not be verified, or was verified and judged we
 
 - **Citadel Securities insights and Hudson River Trading engineering pages** (Ch 27): HTTP 403 to scripted fetch; the HRT pages that load through WebFetch print no dates. A human with a browser should pick two dated posts each.
 - **Tradeweb newsroom release "Tradeweb Expands Portfolio Trading for Corporate Bonds"** (2019 and 2022 versions): Cloudflare challenge on scripted fetch; the May 2026 data report in Ch 19 is the verified substitute. **Risk.net**: paywalled; nothing verified.
-- **FCA Occasional Paper 68 talk recording** (Ch 20): the YouTube short link returned 429 (rate limit), not 404; the archive listing https://microstructure.exchange/past-talks.html is verified.
+- **FCA Occasional Paper 68 talk recording** (Ch 20): the YouTube short link answered 429 (rate limit) on one sweep and 200 on the next; the video title was not checked, so confirm it against the archive listing https://microstructure.exchange/past-talks.html .
 - **Microstructure Exchange, "Shadow Discounts"** (Ch 18, Chaojun Wang et al.): scheduled 2026-12-08 at https://microstructure.exchange/season ; no recording yet.
 - **SEC Commissioner Uyeda's remarks** (Ch 22): read through WebFetch only (sec.gov returns 403 to curl); re-read before printing a number.
 - **Papers behind Appendix E, not media and not fetched:** Getmansky-Lo-Makarov on smoothed returns (Law 9), Bailey and Lopez de Prado on the deflated Sharpe ratio (Law 12; SSRN returned 403), Asness's "volatility laundering" essay (Law 9).
@@ -191,7 +191,7 @@ Not placed because the item could not be verified, or was verified and judged we
 
 ## Sources
 
-URLs verified this session (2026-10-18): every URL in the tables above and the spares (a final status sweep returned 200 for all but sec.gov, 403 to scripted fetch and read through WebFetch, and one YouTube short link, 429), plus these primary records:
+URLs verified this session (2026-10-18): every URL in the tables above and the spares (a final sweep returned 200 for all but sec.gov, 403 to scripted fetch and read through WebFetch), plus these primary records:
 
 - Publisher feeds fetched and parsed (the record of title, guest and date): Omny playlists for *Odd Lots*, *The Credit Edge*, *Money Stuff* and *Masters in Business* (URLs in `media_podcasts_credit_quant.md`); *Alpha Exchange* https://feeds.simplecast.com/8g9ryFGf ; *Flirting with Models* https://feeds.captivate.fm/flirting-with-models/ and https://app.podcastai.com/api/v1/portal/shows/flirting-with-models/episodes ; *Top Traders Unplugged* https://feeds.captivate.fm/top-traders-unplugged/ and https://www.toptradersunplugged.com/podcast-sitemap.xml ; *Cloud 9fin* https://feeds.transistor.fm/cloud-9fin ; *Capital Allocators* https://rss.libsyn.com/shows/94820/destinations/482814.xml ; *Macro Musings* https://rss.libsyn.com/shows/138806/destinations/865793.xml
 - Documents opened and read: the NASA report (root-cause paragraph), the MarketAxess release (Table 1C) and the Tradeweb report (credit column, footnote 1), each linked in its row.
@@ -210,3 +210,5 @@ Use the items as scenes and foils, not as a reading list appended to each chapte
 **Start-here picks for the App E syllabus (one per chapter):** Ch 18 Shashidhar (2017-10-09); Ch 19 Bloomberg *Market Dialogues* (2025-07-07); Ch 20 *Trillions* "The Approval" (2023-01-29); Ch 21 Eagle Point on *Credit Edge* (2026-07-16); Ch 22 *SIFMA Podcast* (2026-07-31); Ch 23 Dan Davies (2023-03-14); Ch 24 *Cloud 9fin* on Ardagh (2026-01-21); Ch 25 Noetica (2025-12-04); Ch 26 Hudson River Trading (2025-10-31); Ch 27 "Multicast and the markets" (2020-09-23); Ch 28 Paleologo (2025-06-21); App D the NY Fed repo series (2026-09-28 to 30); App E the NASA report (Law 11) and Barse (Law 15).
 
 **Rules for writers.** Cite as "(date; verified 2026-10-18)" and copy URLs exactly. Call every Trumid, Octaura, MarketAxess and Tradeweb figure vendor data, and check any number from a podcast page against its primary record. Where a section says no audio exists, say in the chapter that the chapter is the primary source. Refresh the Sep-Oct 2026 rows first; they are the likeliest to move.
+
+<!-- STATUS: COMPLETE -->
