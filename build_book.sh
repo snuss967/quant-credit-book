@@ -15,8 +15,10 @@ MASTER_MD="$OUT_DIR/Quant_Credit_Master_Book.md"
 MASTER_HTML="$OUT_DIR/Quant_Credit_Master_Book.html"
 MASTER_PDF="$OUT_DIR/Quant_Credit_Master_Book.pdf"
 BODY_MD="$(mktemp)"
-PRINT_HTML="$(mktemp --suffix=.html)"
-trap 'rm -f "$BODY_MD" "$PRINT_HTML"' EXIT
+OUT_BODY_MD="$(mktemp)"
+# The print HTML sits at the repo root so figure paths (assets/figures/...) resolve for Chromium.
+PRINT_HTML="$(pwd)/.print_book.html"
+trap 'rm -f "$BODY_MD" "$OUT_BODY_MD" "$PRINT_HTML"' EXIT
 
 EDITION=$(python3 -c "import json; print(json.load(open('state/book_state.json')).get('edition', 1))" 2>/dev/null || echo 1)
 TITLE="Systematic & Quantitative Credit: From PJT RSSG to the Automated Desk"
@@ -37,6 +39,9 @@ for f in "${CHAPTERS[@]}"; do
     printf '\n\n---\n\n' >> "$BODY_MD"
 done
 
+# Files in output/ see figures one directory up.
+sed 's#](assets/figures/#](../assets/figures/#g' "$BODY_MD" > "$OUT_BODY_MD"
+
 {
     echo "---"
     echo "title: '${TITLE}'"
@@ -45,7 +50,7 @@ done
     echo "toc-depth: 3"
     echo "---"
     echo ""
-    cat "$BODY_MD"
+    cat "$OUT_BODY_MD"
 } > "$MASTER_MD"
 
 # YAML blocks are disabled when reading the body so a stray '---' inside a chapter
@@ -56,7 +61,7 @@ PANDOC_COMMON=(-f markdown-yaml_metadata_block+lists_without_preceding_blankline
     --metadata pagetitle="Quantitative Credit Master Book")
 
 if command -v pandoc &> /dev/null; then
-    pandoc "$BODY_MD" "${PANDOC_COMMON[@]}" --mathjax -t html5 -o "$MASTER_HTML"
+    pandoc "$OUT_BODY_MD" "${PANDOC_COMMON[@]}" --mathjax -t html5 -o "$MASTER_HTML"
 
     if [ "${BUILD_PDF:-1}" = "1" ]; then
         CHROME="${CHROME_BIN:-}"
