@@ -26,13 +26,6 @@
    }
   },
   {
-   "name": "appz-notes-fix",
-   "task": "wbfh0pe8o",
-   "runId": "wf_ce9abb98-d99",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/appz_notes_fix.js",
-   "args": "lanes: two lists of the 18 stems with App Z editor notes (see the 15:55 ledger entry); after Ch 13, 14, 21, 27 land, run a second instance for their notes"
-  },
-  {
    "name": "appz-complete",
    "task": "w0x8oul5v",
    "runId": "wf_47f3acab-447",

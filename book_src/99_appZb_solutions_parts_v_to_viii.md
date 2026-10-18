@@ -216,12 +216,12 @@ On the hedge, (19.4) gives $\mathbf{h}^\star=\Sigma_{ff}^{-1}\Sigma_{fx}\mathbf{
 
 **Z.19.5: Flip the inequality**
 
-**Answer:** Take the chapter's 150-line program, with $\Sigma=B\Omega_1B^\top+D$ from Listing 19.4 at $T=1$ day. Ignoring leakage, the risk term of (19.11) caps the premium at:
+**Answer:** Take the cold-open basket `b0` as the program, with $\Sigma=B\Omega_1B^\top+D$ from Listing 19.4 at $T=1$ day. Ignoring leakage, the risk term of (19.11) caps the premium at:
 
 - **$\phi=0.9$:** $\Pi\le$ \$8.2k, or 0.40bp of the \$204mm market value.
 - **$\phi=0.6$:** $\Pi\le$ \$43.4k, or 2.1bp, which is 5.3 times as much.
 
-Add $\sum_i(1-\phi_i)c^{\text{retry}}_i$ on top: at an assumed 5bp of extra cost per retried dollar, that is another 0.5bp and 2.0bp. The 0.9 number is 2023. Electronic fill rates had risen, a ceiling under 1bp is below any dealer's margin, and so the flow goes by RFQ (Man's ">90%" electronic). The 0.6 number is 2021. The ceiling is a few basis points, and the second tier was competing $\Pi$ toward zero, so the inequality held almost everywhere.
+Add $\sum_i(1-\phi_i)c^{\text{retry}}_i$ on top: at the exercise's 5bp of extra cost per retried dollar, that is another 0.5bp and 2.0bp. The 0.9 number is 2023. Electronic fill rates had risen, a ceiling under 1bp is below any dealer's margin, and so the flow goes by RFQ (Man's ">90%" electronic). The 0.6 number is 2021. The ceiling is a few basis points, and the second tier was competing $\Pi$ toward zero, so the inequality held almost everywhere.
 
 **How:** Write $q=1-\phi$. Because $\mathbb{1}_i^2=\mathbb{1}_i$, the diagonal of $\mathbb{E}[\mathbf{u}\mathbf{u}^\top]$ carries $q$, while the off-diagonal carries $q^2$:
 
@@ -707,7 +707,7 @@ So CreditGrades tells Kaz that the AT1 at 40 is cheap, whatever recovery is type
 | CDS: sold protection | | −\$206k | |
 | **CDS leg** | | | **−\$323k** |
 
-The only line with a plus sign is the convertible's long gamma. For Wolfspeed, the first flag you can date from public data is **the convertible floor**, on by 28 March 2025 at the latest: the 2026s near 60 against a secured-curve floor of about 87. $z$ at \$2.59 comes out at about $-0.43$ to $-0.46$, which is inside Yu's lowest threshold and points the wrong way (buy the stock). The put floor cannot be rebuilt from free data.
+The only line with a plus sign is the convertible's long gamma. For Wolfspeed, the first flag you can date from public data is **the convertible floor**, on by 28 March 2025 at the latest, on a secondary report: the 2026s near 60 against a secured-curve floor of about 87. $z$ at \$2.59 comes out at about $-0.39$ to $-0.42$, which is inside Yu's lowest threshold and points the wrong way (buy the stock). These are single dated points under stated assumptions, not series: no free bond-price, CDS or option-surface history for Wolfspeed was found, so the put floor cannot be rebuilt.
 
 **How:** The setup is Listing 23.3's \$30 name: $\sigma_E = 40\%$, $F^{\text{ps}} = \$30$, $R = 40\%$, $r = 3\%$, $T = 5$. That gives a CG spread of 161bp and $ds/dS = -4.96$bp per \$. The convertible is assumed: \$10mm face, a 2% coupon, and a bond floor of 88.24 at 161bp ($D^{\text{spr}} = 4.77$). The calls are on 266,667 shares struck at \$37.50, a 25% conversion premium, worth \$9.65 each with a delta of 0.643. The convertible's hedge is short $171{,}362 + 20{,}858$ shares. The second number is the bond's credit delta, $-D^{\text{spr}} B\, ds/dS$. `cg_greeks` puts the CDS hedge at short 21,589 shares, with an RPV01 of 4.35.
 
@@ -718,9 +718,9 @@ In §23.6's decomposition, the CDS leg is convergence of −\$103k on day 1 (the
 *Wolfspeed:*
 
 - Debt per share is $6{,}658.2/156.48 = \$42.5$ (10-K stack, old shares).
-- Convert floor: the 2026s' cash flows discounted at the secured notes' yield (16.4% at 85) give about 87, against a market near 60.
-- CG with $\sigma_E$ at 80–120% and $R = 27\%$ (the plan range): at the January ATM price of \$7.20 it already shows a 25% ghost and 3,600–4,900bp at 1 year. At \$2.59 the ghost is 55% and the 1-year spread 9,100–9,600bp.
-- The converts at 60 imply about 5,200bp, so $z \approx -0.43$ to $-0.46$.
+- Convert floor (assumed: a 1 May 2026 maturity, and the secured notes' 10-K mark of 85 on 29 June, a yield of 16.4%, standing in for the March curve): the 2026s' cash flows give about 87, against a market near 60 around 28 March (a secondary report).
+- CG with $\sigma_E$ assumed at 80–120% and $R$ assumed at 27% (inside the plan's 25–30% range for the converts): at the January ATM price of \$7.20 it already shows a 25% ghost and 3,700–5,100bp at 1 year. At \$2.59 the ghost is 55% and the 1-year spread 9,400–10,000bp (8,700–9,200bp at the converts' own 1.09-year tenor).
+- The converts at 60 imply about 5,300bp (flat hazard to maturity, $R = 27\%$), so $z \approx -0.39$ to $-0.42$ at the same tenor.
 - The put floor needs OPRA history. Borrow would distort it as well: short interest was quoted at 64% in May 2025.
 
 **The trap:** Letting the market spread follow the model on day 1. Do that and the CDS leg loses only its \$13k of stock-space gamma and the convertible looks hedged. May 2005's whole lesson is that the market spread did not follow the model. On Wolfspeed, the trap is trusting $z$ at $S/F^{\text{ps}} = 0.06$, far inside the zone where Z.23.2 shows the time-zero ghost dominates the spread.
@@ -986,7 +986,7 @@ $$
 
 At $m = 2$ the easy questions contribute $0.8(1 - 0.0875^2) = 0.7939$ and the hard ones $0.2(1 - 0.5^2) = 0.15$. So coverage is 0.9439 and precision is $(0.7939 \times 0.989 + 0.15 \times 0.76)/0.9439 = 0.9526$. The point for Kaz is that $m$ moves the weights toward the type with the high $r$, which is the hard type with the low $\pi$. Hard questions go from 12.0% of accepted answers to 15.9%, and the 11.4 points of extra coverage arrive at 88.8% precision. The option is exercised by the questions you get wrong. Even in the one-type case the retries cost tokens and latency. And the i.i.d. assumption flatters them: a second draw from the same model is correlated with the first, so the answer that finally gets past a same-family verifier is selected for that verifier's blind spot. That is Ines's rebuy.
 
-**The trap:** Two numerical ones. If you weight the per-type posteriors by the prior shares, $0.8 \times 0.989 + 0.2 \times 0.76 = 0.943$, you have computed the $m \to \infty$ limit, whatever $m$ you meant, because only infinite retries accept every question. If you read "retry up to $m$ times" literally, as three attempts, you get the chapter's $m = 3$ row (0.948, 0.974). The conceptual trap is Kaz's: "the posterior doesn't depend on $m$, so retries are free". That holds for one question type, and a desk never has one.
+**The trap:** Two numerical ones. If you weight the per-type posteriors by the prior shares, $0.8 \times 0.989 + 0.2 \times 0.76 = 0.943$, you have computed the $m \to \infty$ limit, whatever $m$ you meant, because only infinite retries accept every question. If you read $m$ as a count of retries rather than attempts, so that $m = 2$ means three attempts, you get the chapter's $m = 3$ row (0.948, 0.974). The conceptual trap is Kaz's: "the posterior doesn't depend on $m$, so retries are free". That holds for one question type, and a desk never has one.
 
 **If you got this wrong, read:** §26.6, "Verifiers, retries and the Lazarus rate" and its Full Derivation; the *A checker, in odds* box for the one-type posterior; and `verified_closed_form` and `simulate_verified` in Listing 26.3 (Appendix F), which this exercise reruns at $m = 2$.
 

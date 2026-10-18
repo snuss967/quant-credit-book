@@ -115,6 +115,106 @@ with $g$ the lender-group indicator. Mags's two June 2020 sellers share the same
 
 **If you got this wrong, read:** §1.9.1 (the Docket Diary, the two-sellers decision point and the 2023–2026 coda) and §1.3.3 on what $\pi$ and $J$ each condition on. Chapter 13 builds the Priming Risk Score, and Chapter 25 scrapes the clauses.
 
+### Z.1-B Chapter 1-B: A Week in Five Quant Shops
+
+Six exercises, all short calculations on the chapter's *Math, Gently* boxes. None carries a [Read]/[Derive]/[Build] tag, and none extends the week-log listing in Appendix F (Listing 1-B.1), so there is no code to run. I recomputed every number in the chapter's brief solutions and they all hold; the places to be careful are signs, units (points versus dollars, face versus market value) and one scene detail that I flag in a NOTE under Z.1-B.5. Write your answer down before you read ours.
+
+**Z.1-B.1: The river on a passed trade**
+
+**Answer:** The trade the engine did not do has a markout of $+\$45{,}000$, which is $+187.5$ bp of price. I read "an RFQ to buy" the way the chapter's own box does: the engine would have been the dealer paying 80. Dollars, one-hour horizon, measured against the composite mid. One rally does not convict the pass.
+
+**How:** The markout of a buy is $\text{markout}_h = (S_{t+h} - P^{\text{fill}})\,n/100$, so
+
+$$
+(81.50 - 80)\times\frac{3{,}000{,}000}{100} = +\$45{,}000 ,
+$$
+
+and in §3.3.1's units, $1.5/80\times 10^4 = 187.5$ bp. Positive means the pass left money on the table. Now ask what you would want before calling it a mistake. First, strip the tide: if the market's own move explains, say, 1.0 of the 1.5 points *(illustrative)*, the IDO markout is $0.5\times 30{,}000 = \$15{,}000$, and the engine was mostly unlucky about beta (§3.3.3). Second, the counterfactual fill is the *winning* price, 80, not the engine's own lower bid, because the engine's bid lost the auction; and a thin bond's one-hour composite is partly a model, so net off the exit half-spread (a 0.50 half-spread would cut this to \$30{,}000, illustrative). Third, a pass is a decision about inventory and hedge cost, not a forecast, so grade passes as a class: a month of passes, logged with their reasons, against a month of fills, at the 1-, 5- and 20-day horizons of §3.3.1.
+
+**The trap:** Two slips travel together. One is the sign: the chapter's worked example has the price *falling* after the pass ($-\$15{,}000$, so the pass was right), and copying that sign here says the pass "saved" \$45,000 when the price rose. The other is the verdict: treating $+\$45{,}000$ as proof that the engine is broken. One passed hand, with no beta strip and no sample of other passes, cannot tell you that. (If the client were buying *from* the engine, the engine would have sold at 80 and the same move would be $-\$45{,}000$ for the trade not done; read the direction of the RFQ before you sign the number.)
+
+**If you got this wrong, read:** §3.3.1 (sign convention), §3.3.3 (IDO markouts) and §3.3.5 (only fills have markouts); the *Math, Gently* box in §1B.1.
+
+**Z.1-B.2: A pair that keeps working**
+
+**Answer:** $N \approx \$27.9$mm face of Halvorsen short (27.86 to two decimals), down from \$39mm at inception, which is about \$19.5mm of market value. Units: as in the Pair box, DTS here is face in \$mm $\times$ price/100 $\times$ spread duration $\times$ spread in bp, so 70,200 is in \$mm-bp. No probabilities are involved, so the measure question does not arise.
+
+**How:** Per \$1mm of face, the short now carries $0.70\times 2.0\times 1{,}800 = 2{,}520$ of DTS. Set it equal to the long's 70,200:
+
+$$
+N\times 2{,}520 = 70{,}200 \quad\Rightarrow\quad N = 27.86 .
+$$
+
+The ruler has moved a long way since April, when \$1mm of face carried $0.90\times 3.4\times 600 = 1{,}836$. Keeping the April size would leave $39\times 2{,}520 = 98{,}280$ against 70,200, a short of 40% of a leg, the same orange line as Tuesday. One more thing worth seeing: nearly all of that shrinkage had happened by Tuesday. At 78, 1,400 bp and 2.3 the unit DTS is 2,512, so the matched size was already \$27.95mm; the further fall to 70 moves it by about \$0.1mm, because a lower price and a shorter spread duration almost cancel the wider spread. Dov trimmed to \$35mm and sold CDX HY protection to add back the rest ($35\times 2{,}512\approx 87{,}900$ against 70,200). Either way, matching DTS removes market beta only; the exchange-offer jump is still there.
+
+**The trap:** Staying at the April face ratio of 0.65 (\$39mm), as though "matched in April" meant "matched". The second slip is arithmetic: dropping the price factor gives $70{,}200/(2.0\times 1{,}800) = 19.5$, which looks like an answer but is the short's *market value*, not its face. Divide by 0.70 to get the \$27.9mm of face you actually have to hold short.
+
+**If you got this wrong, read:** §9.2.3 (DTS-neutral construction) and the *Math, Gently* box and Pair box in §1B.2; §8D.3 for the three rulers a pod can use.
+
+**Z.1-B.3: The PM's option**
+
+**Answer:** The PM's expected pay is \$0.5mm under A and \$2.0mm under B. The platform's expected P&L under B is $-\$2.0$mm without a stop and $+\$2.0$mm with a stop at a \$12mm loss. All figures are \$mm per year under the stated 50/50 odds (a physical-measure expectation, no discounting).
+
+**How:** Pay is $0.2\max(\Pi, 0)$, so
+
+$$
+\mathbb{E}[\text{pay}_A] = 0.5\times 0.2\times 5 = 0.5, \qquad \mathbb{E}[\text{pay}_B] = 0.5\times 0.2\times 20 = 2.0 .
+$$
+
+The platform keeps 80% of a gain and all of a loss. Under B, $0.5\times 16 - 0.5\times 20 = -2.0$; because the gross expected P&L is zero, the platform's expected P&L is simply minus the PM's expected pay (under A that is $-0.5$). With the stop, the losing branch is cut at 12 and the winning branch is untouched: $0.5\times 16 - 0.5\times 12 = +2.0$. Notice what the sketch did: the gross expected P&L went from 0 to $+4$ because the stop clipped only losses and never a winner. That is the "provided" in the chapter's solution. A real stop also exits paths that would have recovered (the premium on the insurance), and a gap goes straight through it, which is why Dov worries about Halvorsen's jump more than its beta.
+
+**The trap:** Paying 20% of *expected* P&L, which is $0.2\times 0 = 0$ for both strategies, and concluding that the PM is indifferent between A and B. Pay is $0.2\max(\Pi,0)$, a call, and a call's value rises with volatility: four times the size, four times the pay. The second slip is to read the stop's $+\$2.0$mm as a free lunch rather than as the output of an assumption about how the loss arrives.
+
+**If you got this wrong, read:** the *Math, Gently* box in §1B.2 and §28.6 (the PM option and the two-threshold stop); §6-B.1 for the payoff-as-hockey-stick picture.
+
+**Z.1-B.4: One bad print**
+
+**Answer:** Before the correction, Monday is $-7.4\%$ and Tuesday is $+7.4\%$. After it, Monday is $-0.2\%$ and Tuesday is $-0.3\%$ (more precisely $-0.21\%$ and $-0.32\%$). Simple one-day returns on Friday's close of 95. For the back-test you need *both* pairs, in different jobs: the model's inputs are the as-known pair, because that is what it saw on Tuesday; its outcomes are measured on the corrected pair, because that is what the market did.
+
+**How:** With $r_t = P_t/P_{t-1} - 1$:
+
+$$
+\frac{88}{95}-1 = -7.37\%,\quad \frac{94.50}{88}-1 = +7.39\%;\qquad \frac{94.80}{95}-1 = -0.21\%,\quad \frac{94.50}{94.80}-1 = -0.32\% .
+$$
+
+The two-day return is $94.50/95 - 1 = -0.53\%$ in both versions: the correction moves the *split*, not the total, so a buy-and-hold P&L would not care, but a daily volatility, a z-score, a reversal signal or a stop trigger would. The "before" pair is exactly the fake reversal a short-term reversal signal is built to buy. So ask which question you are answering. "What did we know when we decided?" takes the as-known version (the model really did see $-7.4\%$ on Tuesday and may have traded on it). "What did the market do?" takes the corrected one. An honest back-test decides on the first and books the P&L on the second; otherwise it either never makes the mistake production made, or it books a bounce from a price nobody could trade at. That needs the archive to keep both versions with the time each became known, which is the bitemporal read of Listing 1-B.1 (`as_known`, Appendix F).
+
+**The trap:** Running the back-test on the corrected tape alone and concluding that on Tuesday the model ranked this bond on a mild decline. It did not; it ranked it on a 7% crash. The mirror error is to keep only the raw tape, so that the strategy that bought the 88 books a fake $+7.4\%$ the next day.
+
+**If you got this wrong, read:** §27.2 (the provenance rule and the two timestamps, §27.2.2); §9B.2 and §9B.3 for cleaning TRACE and keeping two prices; the *Math, Gently* box in §1B.3 (the same cancel-and-replace with the chapter's 71 and 77).
+
+**Z.1-B.5: Leaning inside the tolerance**
+
+**Answer:** Up to \$300,000 of P&L can be moved without breaching a single tolerance. If the twelve errors are honest coin flips, the chance that all twelve fall on the favourable side is $0.5^{12} = 1/4096 \approx 0.024\%$ (about 0.02%); if you count "all twelve the same way, either way," it is $0.049\%$. Units: tolerance in points of price, P&L in dollars.
+
+**How:** A tolerance of 0.75 points is 0.75% of face, and it is the same for every bond, so how the \$40mm splits across the twelve does not matter:
+
+$$
+0.75\times\frac{40{,}000{,}000}{100} = \$300{,}000 .
+$$
+
+(That is \$25,000 a bond on an average \$3.3mm.) Each mark passes its own test, so the breach report is silent. The signs are where the information is. If honest errors fall either side of the independent mid with equal odds, the number of favourable ones is Binomial$(12, \tfrac12)$: all twelve has probability $1/4096$, and even ten or more has $(66+12+1)/4096 = 79/4096 \approx 1.9\%$. "Favourable" means the long marks above the independent price and the short marks below it. The assumption doing the work is independence: a stale vendor that leans every price one way makes the pattern innocent, which is why the sign pattern is a screen that starts a conversation, not a verdict.
+
+**The trap:** Reasoning bond by bond: "no mark breaches, so nothing is wrong." A tolerance is a budget for honest disagreement, and the budget can be spent one bond at a time. A numeric trap sits next to it: 0.75 is *points of price*, so forgetting the division by 100 gives \$30mm, a 100-fold overstatement.
+
+**If you got this wrong, read:** §8C.4 (a tolerance is a policy, stated in dollars) and §8C.7 (the price test and the shadow explain); §8B.9 for the limit sheet; the *Math, Gently* box in §1B.4.
+
+**Z.1-B.6: Kaz's small-boy letter**
+
+**Answer:** Receiving the reply moves the probability that the name is in private talks from 5% to about 7.3% (posterior odds 0.079, likelihood ratio 1.5). It is a conditional probability on the stated frequencies, treating "restricted" and "in private talks" as the same event, as the chapter does.
+
+**How:** Bayes in odds form: posterior odds are prior odds times the likelihood ratio,
+
+$$
+\frac{p}{1-p} = \frac{0.05}{0.95}\times\frac{0.9}{0.6} = 0.0526\times 1.5 = 0.0789, \qquad p = \frac{0.0789}{1.0789} = 7.3\% .
+$$
+
+The direct count agrees: $\dfrac{0.05\times 0.9}{0.05\times 0.9 + 0.95\times 0.6} = \dfrac{0.045}{0.615} = 7.3\%$. Set it beside the chapter's silence, which has a ratio of 8 ($50{:}950$ to $40{:}95$) and takes the same 5% to about 30%; a ratio of 1.5 is a nudge, not a leak. But it is still a leak: two such replies would multiply the odds by 2.25, and a reader who collects them over a hundred names learns the restricted list. The general counsel's boring sentence works only because its ratio is exactly one. There is no small-boy letter, because a letter whose use depends on the state of the world is a signal.
+
+**The trap:** Reading the 90% as the answer, "there is a 90% chance they are restricted," which swaps $\mathbb{P}(\text{reply}\mid\text{restricted})$ for $\mathbb{P}(\text{restricted}\mid\text{reply})$. A milder slip is "5% times 1.5 is 7.5%": close, because the prior is small, but it multiplies a probability instead of the odds and will fail badly once the prior is large. And "it's the standard reply, so it tells you nothing" is true only when the two rates are equal.
+
+**If you got this wrong, read:** §3.4.2 (the update in odds form) and §3.4.3 (the base-rate trap); §3.6.3 (the information wall is a feature); the *Math, Gently* box in §1B.5.
+
 ### Z.02 Chapter 2: The Revolutions in Credit Trading
 
 Six exercises, one per revolution that touches a number. Write your answer down before you read ours; the gap is your markout.
@@ -230,6 +330,106 @@ The 4 p.m. link is that $c_1$ is the crowding slope. The index mark took 15.5% o
 
 **If you got this wrong, read:** §2.9.2, "The Full Derivation: optimal turnover under linear cost", then the index-mark rows of the Trend Watch in §2.6.2.
 
+### Z.2-B Chapter 2-B: Transaction Cost Analysis for Credit: Arrival, Cover, Shortfall and the Dealer Scorecard
+
+Six exercises, all short arithmetic with a judgment call at the end. None carries a [Read]/[Derive]/[Build] tag; each has a topical tag instead (benchmarks, shortfall, patience, leakage, legging, participation), so there is no [Build] exercise to extend Listing 2-B.1, though it reproduces three of the answers. The chapter prints a check value and a two-line solution for every one. All six check out; the full versions below add the reasoning, the units and the usual wrong turn. One exercise title disagrees with its own data (Z.2-B.5). Everything here is realized, physical-measure arithmetic in basis points of price (cost positive, bad for us) or dollars; no risk-neutral pricing appears.
+
+**Z.2-B.1: One sale, four benchmarks** *[benchmarks]*
+
+**Answer:** In basis points of price, cost positive, the \$3mm sale at 94.10 costs $+21.2$ against arrival (94.30), $+15.9$ against the RFQ-time mid (94.25), $-10.6$ against the cover (94.00) and $-21.3$ against the next print (93.90). In dollars that is \$6,000, \$4,500, $-\$3,000$ and $-\$6,000$. The router is judged against the RFQ-time mid: $+15.9$ bp, \$4,500. The 5.3 bp between it and arrival (\$1,500) is the delay, a process cost that belongs on its own line.
+
+**How:** A sale has $\eta = -1$, so the cost is $-(p - b)/b \times 10^4$ with $p = 94.10$:
+
+$$
+\frac{0.20}{94.30} = 21.2, \qquad \frac{0.15}{94.25} = 15.9, \qquad \frac{-0.10}{94.00} = -10.6, \qquad \frac{-0.20}{93.90} = -21.3 \text{ bp}.
+$$
+
+Each benchmark answers a different question. Arrival is the price of the decision, so it charges the whole path from signal to fill. The RFQ-time mid is the market at the door, so it forgives the delay and keeps the dealer's concession, which is what a router controls. The cover is the second-best bid, below the winner's by construction, so for a seller it can only come out negative; it measures how spread out the dealers were, not what you paid. The print says the market fell after you sold, so $-21.3$ is a favourable markout, not a saving, and one print is not a verdict. The first row minus the second, $21.2 - 15.9 = 5.3$ bp, is the $0.05$ the mid slid between `NEW` and `ROUTED`. I checked all four with `benchmarks_bp` in Listing 2-B.1 (`side = -1`). One more thing worth a look: 21.2 bp against arrival is above even the stress-day \$1–5mm bucket in §2B.5 (17.5 bp), so this ticket deserves a second glance, though a single fill is a draw, not a rating.
+
+**The trap:** The sign. Feed a sale through the buy formula and you get $-21.2$, $-15.9$, $+10.6$, $+21.3$: the router "saved" 16 bp and the cover looks like a cost. The runner-up is answering "arrival" to the router question, which bills the router for 5.3 bp of waiting it did not choose, or crowing about $-10.6$ against the cover, which is Mags's "not one losing week" in miniature: a definition, not an achievement.
+
+**If you got this wrong, read:** §2B.1.1 (Four prices, four counterfactuals), then §2B.1.3 (The cover is a survivor).
+
+**Z.2-B.2: A shortfall with a hole in it** *[shortfall]*
+
+**Answer:** The executed part is \$12,000: delay \$3,000, drift while quoting \$1,800, half-spread \$7,200. The unfilled part is \$36,000: beta \$12,000 and IDO \$24,000. The total is \$48,000 (about 48 bp of the \$10mm target), and three-quarters of it sits in the \$4mm that never traded. Units: dollars from face in \$mm and prices in points per 100; realized moves, physical measure.
+
+**How:** Perold's shortfall is the paper portfolio minus the real one. Paper buys the full \$10mm at the arrival mid; real buys \$6mm at the fill price; both are marked at the retry mid $m_T$, which here is the 101.90 at which the remainder is abandoned (I read it as a mid). That gives
+
+$$
+\text{IS} = \underbrace{\tfrac{1}{100}\sum_k x_k\,(p_k - m_{\text{NEW}})}_{\text{executed}} + \underbrace{\tfrac{1}{100}\Big(X - \sum_k x_k\Big)(m_T - m_{\text{NEW}})}_{\text{opportunity}} .
+$$
+
+The filled piece telescopes along the log's stamps: $p - m_{\text{NEW}} = 0.20 = 0.05 + 0.03 + 0.12$ points, so \$6mm $\times$ each over 100 is \$3,000, \$1,800 and \$7,200. The unfilled \$4mm moved $101.90 - 101.00 = 0.90$ points, of which $0.30$ is the predicted market part and $0.60$ is what is left, so \$12,000 and \$24,000. The filled bonds are marked at the fill, not at $m_T$, because paper and real both own them from then on. `shortfall` in Listing 2-B.1 returns exactly these five lines. Leave out `m_end` and it returns \$12,000 with the flag `unfilled_unmarked`, which is the listing refusing to let zero stand in for "we did not look."
+
+**The trap:** Reporting \$12,000, the number an execution report built from fills would print. It is a quarter of the truth, and it is Wednesday's nine bonds all over again: the unfilled line is the biggest one and it is not in anybody's column. Other slips: applying the 0.90 to the whole \$10mm (\$90,000), or calling the whole \$36,000 "adverse selection" when a third of it is beta that an index trade could have hedged.
+
+**If you got this wrong, read:** §2B.2, including The Full Derivation; §3.3.3 for stripping beta before calling the rest idiosyncratic.
+
+**Z.2-B.3: Is patience worth it?** *[patience]*
+
+**Answer:** Accept the first quotes. Rejecting is worth $0.4 \times 10 = 4$ bp in expectation; two days of waiting costs the signal $80\,(1 - 2^{-2/20}) = 5.36$ bp, so patience loses about 1.4 bp. The answer flips at a half-life of $h = 2/\log_2(1/0.95) \approx 27.0$ days: a slower signal rewards waiting, a faster one does not. At 20 days you are on the accept side. Units: bp of price, trading days, an expected (physical-measure) decay.
+
+**How:** A signal worth 80 bp now is worth $80 \cdot 2^{-t/h}$ after $t$ days, so waiting two days forfeits
+
+$$
+80\,\big(1 - 2^{-2/h}\big) \text{ bp}.
+$$
+
+The gain from rejecting is the probability of a later trade times the improvement, $0.4 \times 10 = 4$ bp, and the other 60% is treated as no better (the chapter's own simplification). Set the two equal: $1 - 2^{-2/h} = 0.05$, so $2^{-2/h} = 0.95$ and $h = 2/0.0740 = 27.0$ days. Same trade-off as the chapter's two books: the value sleeve (60 bp, 45 days) loses 1.8 bp to two days and should be patient; the event signal (40 bp, 3 days) loses 14.8 bp and should not. The margin here is 1.4 bp against inputs ("about 10 bp", "about 40%") that are each rougher than that, so this is a lean, not a law. And the simplification flatters patience: if the 60% never trades, the signal's decay is a real loss on top.
+
+**The trap:** Reading "10 bp better" as a sure thing. Ten beats 5.4, so you reject, and you have priced a 40% chance as a certainty. The other slip is treating 20 days as the e-folding time instead of the half-life: $80(1 - e^{-2/20}) = 7.6$ bp and a break-even near 39 days. The verdict stays "accept," but the flip point is out by $1/\ln 2$.
+
+**If you got this wrong, read:** §2B.2, the paragraph headed "The patience premium."
+
+**Z.2-B.4: A placebo that cannot help** *[leakage]*
+
+**Answer:** The leak is $2.4 - 1.9 = 0.5$ bp of price against the desk at a hundred minutes, with a standard error of 0.72 bp and $t \approx 0.69$. That is nothing you can tell from zero (a 95% interval of about $-0.9$ to $+1.9$ bp). No number of placebos gets the standard error to 0.25 bp: the sent sample alone contributes 0.40. Even with unlimited placebos you would need $(12/0.25)^2 = 2{,}304$ sent orders, 2.6 times what you have; at the desk's 900-to-400 mix it is about 7,500 sent and 3,300 placebos. Units: bp of price, signed so positive is against the desk; physical measure.
+
+**How:** The sent and placebo means are independent, so their variances add:
+
+$$
+\text{SE} = \sqrt{\frac{12^2}{900} + \frac{12^2}{400}} = \sqrt{0.16 + 0.36} = 0.72 .
+$$
+
+Sending more placebos shrinks only the 0.36 term. Let $n_p \to \infty$ and the SE bottoms out at $12/\sqrt{900} = 0.40$, still above 0.25, so the only lever is more sent orders, which is to say more months of trading. The chapter's own example (4,600 sent, 2,300 placebos, s.d. 10) lands at 0.26 for the same reason. Two honest caveats. This SE treats orders as independent, but orders in the same bond or on the same day share their drift, so the true SE is larger. And the placebo is itself a selected sample (§2B.3), so the 0.5 is an estimate of the leak plus whatever made a trader hold those orders back.
+
+**The trap:** Quoting 2.4 bp as "the leak." That is the cold, not the medicine: 1.9 of those 2.4 bp is what unsent orders did anyway. The second slip is reading $t = 0.7$ as "no leak." It says this sample cannot tell 0.5 bp from zero, not that the dealers are clean. Nobody gets cut on one print, or on one t-statistic.
+
+**If you got this wrong, read:** §2B.3 (The Leakage Test), especially the Math, Gently box on the sugar pill.
+
+**Z.2-B.5: Ninety minutes on one leg** *[legging]*
+
+**Answer:** The 45-minute window has a one-standard-deviation dollar P&L of about \$42,500 unhedged and about \$28,100 with a CDX bridge correlated 0.75 with the leg. These are physical-measure standard deviations of P&L over the window, in dollars. If you take the title at its word and use 90 minutes instead, the numbers are about \$60,000 and \$39,700 (see the NOTE).
+
+**How:** DTS of 50,000 means \$50,000 of P&L per 1% relative spread move, and a day's standard deviation of relative moves is 2.5%, so a full day's standard deviation is $50{,}000 \times 2.5 = \$125{,}000$. Variance accrues linearly in time, so a 45-minute window out of a 390-minute session carries $45/390$ of a day's variance and $\sqrt{45/390} = 0.340$ of its standard deviation:
+
+$$
+\sigma_{\text{window}} = 50{,}000 \times 2.5 \times \sqrt{45/390} \approx \$42{,}460 .
+$$
+
+A bridge hedge removes the part of the risk it is correlated with. Sized at the minimum-variance ratio (§8.6's regression), the residual variance is $(1 - \rho^2)$ of the original, so the residual standard deviation is $\sqrt{1 - 0.75^2} = 0.661$ of the unhedged one: \$28,085. A 0.75 correlation removes only about a third of the standard deviation (56% of the variance). If both legs have the same relative volatility, that minimum-variance bridge carries $0.75 \times 50{,}000 = 37{,}500$ of DTS, less than a DTS-matched hedge; matching the full 50,000 would leave $\sqrt{2(1 - 0.75)} = 0.71$ of the risk, about \$30,000. `legging_sd(50000, 45, 0.025, rho_bridge=0.75)` in Listing 2-B.1 returns 28,085.
+
+**The trap:** Scaling a day's risk linearly with time: $125{,}000 \times 45/390 = \$14{,}400$, a third of the truth. Variances add over time; standard deviations scale with the square root. On the hedge, the common slips are leaving out the square root ($1 - \rho^2$ times the unhedged figure gives \$18,600) or using $1 - \rho$ ($\$10{,}600$). Neither is a standard deviation of anything.
+
+**If you got this wrong, read:** §2B.7 (the Math, Gently box on legging risk); §8.6 for the residual variance of a partial hedge; §8.4 for DTS.
+
+**Z.2-B.6: The mirror and the moving denominator** *[participation]*
+
+**Answer:** The like-for-like participation is $19.0\% \times 0.94 \approx 17.9\%$, on the old, duplicate-inclusive tape the 20% line was drawn on. Equivalently, the line on the new tape is $20\%/0.94 = 21.3\%$, and 19.0% sits 2.3 points under it. Before anyone says "we are the market," the detector also needs residualised markouts turning against the desk and response counts falling in the sleeve's bonds. It fires only on all three. Units: share of TRACE dollar volume in the sleeve's bonds.
+
+**How:** Participation is the desk's volume $V_d$ over TRACE volume $V_T$. The affiliate indicator removed 6% of the old volume, so $V_T^{\text{new}} = 0.94\,V_T^{\text{old}}$ and the number printed is inflated:
+
+$$
+\frac{V_d}{V_T^{\text{new}}} = \frac{1}{0.94}\cdot\frac{V_d}{V_T^{\text{old}}} \quad\Longrightarrow\quad \frac{V_d}{V_T^{\text{old}}} = 0.94 \times 19.0\% = 17.9\% .
+$$
+
+The answer is robust to the size of the cut: at FINRA's 5.7% baseline it is 17.9%, at MarketAxess's "up to 8%" it is 17.5%. In practice you do not rescale by hand but carry a break dummy at 31 August 2026 (and one waiting at 2 August 2027) in the series and refit capacity on it. Listing 2-B.1's `participation` returns the raw ratio and the dummies, and `we_are_the_market` takes the adjusted series plus the two trends, so the markout and response-count conditions are inputs you must supply, not things the ratio can stand in for.
+
+**The trap:** Adjusting in the wrong direction. Dividing, $19.0\%/0.94 = 20.2\%$, puts the sleeve "over the line," which is the right calculation run backwards (it is how the chapter turns 18.6% into 20.2%, old to new). The tape got smaller on paper, so the printed ratio is too high and you shrink it. Subtracting six points (13%) is the other common slip: the cut is a fraction of the denominator, not points of participation.
+
+**If you got this wrong, read:** §2B.6 (Capacity From Your Own Fills), then §4.8 for where the 20% line comes from.
+
 ### Z.03 Chapter 3: Cognitive Rewiring, From PJT RSSG to Systematic Desk Head
 
 Six exercises, one for each tool in the chapter's engine. Every number below was recomputed from the chapter's equations, and the code-facing ones from Blocks 2, 4 and 6 run on their own seed (Appendix F, Listings 3.2, 3.4 and 3.6). Write your answer down before you read ours; the gap is your markout.
@@ -337,6 +537,122 @@ A client needs 56 fills before its own record gets half the weight. The IDO requ
 **The trap:** Using $\sigma/\tau = 7.5$ instead of $\sigma^2/\tau^2 = 56.25$, which gives $k(1) = 0.118$ and a score of 35bp. Another slip is to plug in Block 4's *estimated* $\hat\tau \approx 42$bp. That gives $\sigma^2/\hat\tau^2 \approx 12.5$, $k(1) = 0.074$ and a score of 22bp. The exercise asks for the true spread, and an estimate that comes out at double the truth on a seeded panel is the reason the spec re-estimates and floors $\tau^2$ rather than trusting a single fit. Watch the sign as well: a $+300$bp markout is *good* for the dealer, so ROBO's error is generosity to a lucky client, not suspicion of a toxic one.
 
 **If you got this wrong, read:** §3.3.4 (counterparty scores, shrunk, and the batting-average box), §3.3.3 (IDO markouts), §3.2.3 (the winner's curse), and Listing 3.4 in Appendix F (`shrunk_cpty_scores`).
+
+### Z.3-B Chapter 3-B: Your First Year on the Desk: The Day, the Week, the Quarter, and the Twelve Mistakes Ex-Bankers Make
+
+Seven exercises, all short calculations on the chapter's *Math, Gently* boxes and tables. None carries a [Read]/[Derive]/[Build] tag and none extends a listing, so there is no code to write, although Listing 3-B.1 (`desk_calendar.py`, Appendix F) reproduces the dates of Exercises 3 and 6 and the standard-error and Brier functions behind Exercises 1 and 5, and I ran it. I recomputed every number independently in Python, and all seven of the chapter's brief checks hold arithmetically. Three things are unusual. Exercises 2 and 7 are the same ghost (two photographs of one market) in DV01 units and in DTS units. Exercise 4 is the one §3B.6 points to ("Exercise 4 asks how far"). And Exercise 3's dates sit a week away from the dates in §12B, which I flag in a NOTE under Z.3-B.3. The chapter also has one embedded prompt, "write two things" after Wen's calendar strip in the Pair Book, but the text grades it itself (the missing row is the ratio's own date), so I have not numbered it. Write your answer down before you read ours.
+
+**Z.3-B.1: Measurement, or how noisy a 55% hit rate is**
+
+**Answer:** The standard error is 7.9 percentage points on 40 views and 2.5 points on 400. A 55% hit rate first sits two standard errors above 50% at 396 views, which is "about 400". Units: percentage points of hit rate. This is a physical-measure frequency of right calls, so no prices or risk-neutral probabilities are involved, and it assumes the views are independent.
+
+**How:** The hit rate $\hat p$ is an average of $n$ coin tosses, so
+
+$$
+\text{SE}(\hat p)=\sqrt{\frac{p(1-p)}{n}}:\qquad \sqrt{\frac{0.2475}{40}}=0.0787,\qquad \sqrt{\frac{0.2475}{400}}=0.0249 .
+$$
+
+Ten times the views buys a $\sqrt{10}=3.16$ times smaller error, not a ten times smaller one. For the third part, set the five-point edge equal to two standard errors, $0.05=2\sqrt{0.2475/n}$, so $n=4(0.2475)/0.05^2=396$. If you use the null's standard error instead ($p=0.5$, variance $0.25$) you get exactly 400, which is why Figure 3-B.8 says "near 400". Now read the 40-view number honestly. The edge is $0.05/0.0787=0.64$ standard errors; the two-standard-error band runs from 39% to 71%; and the chance that a fair coin gives 22 or more right in 40 is 0.32 (exact binomial). "Two standard errors from zero" is also not the same as "reliably detected": to catch a true 55% with 80% power at the 5% level you need about 780 views.
+
+**The trap:** Scaling the error linearly, so that 400 views gives $7.9/10=0.8$ points and 40 views already looks informative, or dropping the square root and getting a standard error of 0.6 points. Both make a year of forty bets look like evidence. The quieter slip is reading "55%, five points over a coin" as a result when the standard error is 7.9 points. A third, for later: the formula needs independent views, and two bonds of one issuer, or one sector in one sell-off, are not two views (Law 2), so the effective $n$ is smaller than the row count.
+
+**If you got this wrong, read:** §3B.7 (the *Math, Gently* box and Figure 3-B.8); §28.2, "How noisy is your hit rate?" (equation 28.6) for the year-of-bets version; §7.8 for what happens to the standard error when you count how many things you tried.
+
+**Z.3-B.2: The snap, or a perfectly hedged book that "loses" \$105,000**
+
+**Answer:** Today's report shows a phantom loss of \$105,000. Tomorrow's shows a phantom gain of \$105,000, provided yields do not move between the two photographs tomorrow. True P&L is zero on both days. Units: dollars, with yields in basis points and DV01 counted positive for the long bonds, so yields up is a loss.
+
+**How:** The bonds (DV01 \$35,000) are photographed at 4 p.m., after the 3 bp rise in yields. The short futures (DV01 equal and opposite) were photographed at 3 p.m., before it. The bond picture contains the loss and the hedge picture does not contain the matching gain. With the chapter's identity, $t_1$ = 3 p.m. for the futures and $t_2$ = 4 p.m. for the bonds,
+
+$$
+\Pi^{\text{book}}=-\text{DV01}_B\,\big(\Delta y_{t_2}-\Delta y_{t_1}\big)=-\$35{,}000\times 3=-\$105{,}000 .
+$$
+
+Tomorrow each leg is measured from its own yesterday mark, so the futures leg now carries the 3 bp it missed (a gain of \$105,000 on the short) while the bond leg carries only tomorrow's move. Add the two days and the ghost is gone. More precisely, tomorrow's phantom is $+\$105{,}000$ minus $\$35{,}000$ times tomorrow's own 3-to-4 p.m. yield move, so a fresh ghost is born every day and the old one dies. Nothing was traded, and a DV01-matched book valued at one common time loses nothing to a parallel move, which is why the true P&L is zero. The cure is one timestamp for risk and P&L (the 3 p.m. snap of Chapter 8-B).
+
+**The trap:** Signing it as a gain ("yields rose, the book is short futures, so the hedge made money"). The hedge did make money, but its photograph was taken before the move, so the report shows only the bond's loss. The costlier slip is treating the \$105,000 as real: nobody should cut the position, and no stop should fire, on a number that reverses. But a stop that reads official P&L will fire anyway, which is why the snap is a treaty and not a nicety (the Pair Book makes the same point).
+
+**If you got this wrong, read:** §3B.1 (the snap and the two *Math, Gently* boxes on DV01 and the random walk); §8C.3 (the timing line of the explain); §8.6 (the hedge matrix).
+
+**Z.3-B.3: Halvorsen's event table, from §12B.9**
+
+**Answer:** The missed coupon is \$18mm. The 30-calendar-day grace period ends on Sunday 13 December 2026 (Monday 14 December if the indenture rolls a weekend end forward). Day 28 is Friday 11 December 2026. Units: \$mm and calendar dates, with day 0 the missed date, as in §12B.9. No probabilities are involved, so the measure question does not arise.
+
+**How:** The 6% notes pay semiannually, so the coupon is
+
+$$
+\$600\text{mm}\times\frac{0.06}{2}=\$18\text{mm}.
+$$
+
+Add 30 calendar days to Friday 13 November: 17 days take you to 30 November and 13 more to 13 December. Four whole weeks is 28 days, so day 28 lands on a Friday, 11 December, and two more days land on a Sunday. That Sunday is the interesting part. Whether a grace period that expires on a non-business day extends to Monday is a drafting question in the indenture, so `grace_end` in Listing 3-B.1 returns both dates (13 and 14 December) and refuses to choose. If it does not roll, the last business day of the grace period is Friday the 11th, which is the day the RSA is signed and the company files.
+
+**The trap:** Four slips are common. Using the annual coupon (\$36mm). Reading "30-day" as 30 business days, which is 29 December, not 13 December. Counting 13 November as day 1, which puts day 28 on Thursday 10 December. And rolling the Sunday to Monday by reflex and reporting 14 December as *the* end: whether a weekend end rolls is a question for the indenture, not a default for the code.
+
+**If you got this wrong, read:** §3B.4 (the list of contract clocks and the Halvorsen windows); §3B.11 (the edge case that bites, and `grace_end`); §12B.5 (the clock table); §12B.9 (the Halvorsen files and day 28).
+
+**Z.3-B.4: JTD drift, or the right ruler on the wrong day**
+
+**Answer:** The jump-neutral protection is now $(70-40)/(100-40)=0.5$ per unit of face, so \$5mm. Theo still holds \$8mm, so he is over-hedged by \$3mm of protection. If Halvorsen defaults at a 40% recovery, he makes \$1.8mm: \$4.8mm from the swap against a \$3.0mm loss on the bonds. Units: \$mm of notional, prices in points of par, default-day P&L. The 40% recovery is an assumed scenario value, not a probability, and no measure is involved.
+
+**How:** The hedge ratio that leaves nothing to win or lose on the day of default is $N^{\text{JTD}}=(P-R)/(1-R)$ per unit of bond face. At 88 it is $48/60=0.8$, the \$8mm Theo bought. At 70 it is $30/60=0.5$. Check by the cash flows: the bonds lose $30\%\times\$10\text{mm}=\$3.0$mm (70 down to 40), and each \$1mm of protection pays 60 points, so \$5mm pays \$3.0mm and the book is flat; \$8mm pays \$4.8mm and the book is up
+
+$$
+\$8\text{mm}\times 0.60-\$10\text{mm}\times 0.30=+\$1.8\text{mm}=\$3\text{mm}\times 0.60 .
+$$
+
+So he holds a \$1.8mm bet that the company defaults, which he did not choose and which also costs him running premium on the extra \$3mm. It is a 40%-recovery statement, too: at 30% the same book makes \$1.6mm and at 50% it makes \$2.0mm (in \$mm the general form is $1+2R$), because the hedge is jump-neutral at one recovery only. Mistake 2 in §3B.6 ends on the right sentence: the ratio has a price in it, so it is a mark with a date.
+
+**The trap:** Leaving the \$8mm in place because it was right at 88. The next-most-common answer is "he is over-hedged by \$3mm, so the extra bet pays \$3mm": protection pays par minus recovery, not par, so the extra \$3mm pays \$1.8mm. A third is rescaling by price, $8\times 70/88=6.4$, which has no basis in the payoff. And do not mix the two reference points: Figure 3-B.7's orange gap (\$5.0mm at 70) is measured against a \$10mm *face* hedge; this exercise measures against the \$8mm Theo actually holds.
+
+**If you got this wrong, read:** §3B.6, mistake 2 and Figure 3-B.7; §24.3.1 (Theo's lunch ticket, "ten million cut to eight") and Listing 24.2's `jtd_hedge_ratio`; §12B.9 (PB-02, "hedge ratio is state-dependent").
+
+**Z.3-B.5: Calibration, or saying 80% and being right 60% of the time**
+
+**Answer:** Brier score 0.28 at the stated 80%, and 0.24 had he said 60%. Lower is better, the units are squared probability, and "50% every time" scores 0.25. The probabilities are Theo's subjective odds of being right, a physical-measure statement about his own calls, with no pricing measure anywhere.
+
+**How:** A hit scores $(q-1)^2$ and a miss scores $q^2$. At $q=0.8$ a hit costs $0.04$ and a miss $0.64$, so
+
+$$
+\frac{3\times 0.04+2\times 0.64}{5}=\frac{1.40}{5}=0.28 .
+$$
+
+At $q=0.6$ a hit costs $0.16$ and a miss $0.36$, so $(3\times0.16+2\times0.36)/5=1.20/5=0.24$. Read the two numbers together. Three right out of five is better than a coin, yet 0.28 is *worse* than the coin's 0.25, because Theo said 80 and the world said 60. The score splits into the base-rate term $\bar y(1-\bar y)=0.6\times0.4=0.24$ plus a calibration term $(0.8-0.6)^2=0.04$, and 0.24 + 0.04 = 0.28. Saying 60% removes the calibration term. That is where honesty ends, though. He knows 60% only because he has seen the outcomes, so 0.24 is a benchmark and not a score he could have earned in advance (mistake 8 in miniature). And with five views the hit rate itself has a standard error of $\sqrt{0.6\times0.4/5}=0.22$, so the gap between 0.28 and 0.25 is not something a review can act on; log more views.
+
+**The trap:** Scoring with absolute error, $(3\times0.2+2\times0.8)/5=0.44$, or forgetting to square. A second slip is reading the Brier score as "share wrong" (0.4). The third is the verdict: because the best constant forecast was 60%, concluding that Theo "should have said 60" is hindsight, and the review is asking whether his 80s come true about 80% of the time over a sample large enough to tell.
+
+**If you got this wrong, read:** §3B.7 (the Brier box, and the calibration paragraph above it); §7-B.3 (calibration: is 4% really 4%?); §3.5 for the Edge Ledger that records the stated probability on the day it is formed.
+
+**Z.3-B.6: ROBO's revenge, or what Columbus Day costs**
+
+**Answer:** About \$5,556 (exactly \$5,555.56). Columbus Day is not a credit event, but it is a calendar event that costs money, so ROBO was wrong about the label and right that it mattered. Units: dollars, a 5% annual funding rate on ACT/360, one calendar day.
+
+**How:** Monday 12 October 2026 is Columbus Day. SIFMA recommends a full close and the NYSE is open, so on a T+1 cycle the ETF shares settle Monday and the bonds settle Tuesday 13 October (the `settle_date` calls in Listing 3-B.1 return exactly those two dates for a Friday 9 October trade). The legs of one position are one day apart, so someone finances the value for the difference:
+
+$$
+C^{\text{gap}}=\text{Cash}\times r^{\text{fund}}\times\frac{\Delta d}{360}=\$40{,}000{,}000\times0.05\times\frac{1}{360}=\$5{,}555.56 .
+$$
+
+Who pays is whoever's leg settles first. In a redemption the AP hands over the shares on Monday and receives the bonds on Tuesday, so the AP is out the \$40mm for the day; in a creation the direction flips and the fund finances it. Appendix D's one-liner, "whoever delivers cash first", is the same idea in cash terms, and here both legs are securities. Veterans Day (11 November 2026) does the same thing, and a model that sets every settlement date equal to its trade date books this cost as zero.
+
+**The trap:** Two ways to miss. One is the label: following ROBO and flagging 12 October as a credit event, when nothing about any issuer changed. The other is arithmetic: forgetting the day fraction (\$40mm at 5% is \$2mm a year), counting the weekend and getting a three-day gap (the gap is Monday to Tuesday, one day), or using 365 and reporting \$5,479, a \$76 difference that is the convention talking. The costs per event are small. The danger is the break, not the dollars.
+
+**If you got this wrong, read:** §3B.10 (holidays that differ by venue, and ROBO's mistake); Appendix D §D.1 (the settlement gap and its formula); §20.6.1 (the settlement gap and the liquidity runway in an ETF).
+
+**Z.3-B.7: The pair's two photographs**
+
+**Answer:** Today's explain shows a phantom loss of \$120,000 for the pair from that hour. Tomorrow's shows a phantom gain of \$120,000, provided spreads do not move between the two photographs tomorrow. The hour's true P&L is zero, because the pair is DTS-neutral. Units: dollars, with DTS in the chapter's units (face in \$mm $\times$ price/100 $\times$ spread duration $\times$ spread in bp), so one unit of DTS is worth \$1 per 1% relative move in spreads. These are realized market moves, not probabilities.
+
+**How:** Let $m_t$ be the move in spreads as a fraction of their level since yesterday's snap. A spread move $m$ changes a leg's value by $-100\,\text{DTS}\times m$ dollars (a long leg loses when spreads widen, a short leg gains). The short leg is photographed at $t_1$ = 3:00 and the long at $t_2$ = 4:00, so the report carries
+
+$$
+\Pi^{\text{phantom}}_{\text{pair}}=-100\,\text{DTS}_S\,\big(m_{t_2}-m_{t_1}\big)=-100\times 60{,}000\times 0.02=-\$120{,}000 .
+$$
+
+In words: the long, marked at 4:00, shows its \$120,000 loss from the widening, and the short, marked at 3:00, has not yet shown its matching \$120,000 gain. Mark both at 4:00 and the two cancel, which is the true P&L of zero. Tomorrow the short's photograph catches up and the sign flips, with a fresh ghost of its own if spreads wander between 3:00 and 4:00 again. The formula uses the DTS of the early-photographed leg and is a statement about timing only. If the legs were not DTS-neutral, the hour would also carry a real P&L of $-100\,(\text{DTS}_L-\text{DTS}_S)\,m_{t_2}$, and that part does not reverse. The chapter's own use of the formula is the same arithmetic at 85,000 of DTS and a 1% move: the $-\$85{,}000$ of the Pair Book's last hour.
+
+**The trap:** Dropping the 100 and getting \$1,200, or using 2 for 2% and getting \$12 million. The conceptual trap is Exercise 2's: thinking the loss is real because both legs are marked and the report foots. It is a timing artefact and it reverses, which is also why it must not be allowed to trip a stop that reads official P&L. A subtler slip is the sign: the number missing from the report is the short's gain, so the pair shows a loss, not a gain.
+
+**If you got this wrong, read:** §3B.4, "The Pair Book: Two of Every Clock" (the phantom formula and the calendar strip); §3B.1 (the same ghost with DV01); §1B.2 and §8D.3 (the DTS ruler); §8C.3 (the timing line of the explain) and §8C.6, morning (c) (the pair at Vantress).
 
 ### Z.04 Chapter 4: Inside the Systematic Credit Industry
 
@@ -457,6 +773,386 @@ So the honest backtest buys the value trap and takes the loss when the 10-Q land
 
 **If you got this wrong, read:** §4.5, the "sealed envelope" box and the knowledge-time formula, then Thursday of "Rerunning Kaz's backtest on the clean panel," where Theo finds this exact join.
 
+### Z.4-D Chapter 4-D: Getting the Seat: Interviews for Market-Making and Systematic Credit, From Probability Puzzles to the Thirty-Minute Credit Pitch, and the Portfolio That Proves It
+
+Use this bank the way the interview uses you. Do each problem cold, with a timer set to the minutes in the §4D.12 table (those are for a prepared reader, so allow half again if the idea is new), write your answer down, and only then read mine. Check the **Answer** line first; read **How** only if you missed. The bank has no inputs for a few problems, so where I had to pick numbers I say so and mark them illustrative. Throughout, $\mathbb{P}$ is the physical measure (what will actually happen) and $\mathbb{Q}$ is the risk-neutral measure (what the price implies); half the traps in this chapter are a number carried across that line.
+
+**The problem bank (§4D.12)**
+
+**Z.4-D.P1: The Q-default probability of a two-point bond [Read]**
+
+**Answer:** $q_D = 25\%$. This is a risk-neutral ($\mathbb{Q}$) probability, one year, zero rates.
+
+**How:** The price is the mean of the payoffs under the weights that make the bond a fair bet to someone who is indifferent to risk:
+
+$$
+85 = 100(1-q_D) + 40\,q_D = 100 - 60\,q_D \quad\Longrightarrow\quad q_D = \frac{15}{60}.
+$$
+
+Fifteen points of discount to par, divided by a sixty-point loss on default. Say the measure out loud when you answer; the interviewer's "In which measure?" is the whole question.
+
+**The trap:** Answering "25% chance the company defaults." That is a statement about the price, not about the company. The physical probability is lower by whatever the market pays for the jump (P4 puts a number on it). The arithmetic slips are close behind: $15/40 = 37.5\%$ divides by the recovery instead of the loss, and $15\%$ treats the discount as a probability, which silently assumes a total loss.
+
+**If you got this wrong, read:** §4D.2, then the $\mathbb{P}$ and $\mathbb{Q}$ box in §5.1.1.
+
+**Z.4-D.P2: The same bond at a 4% continuous rate [Derive]**
+
+**Answer:** $q_D = 19.2\%$ ($\mathbb{Q}$, one year, 4% continuous).
+
+**How:** Today's price is the discounted $\mathbb{Q}$-expectation, so the undiscounted expected payoff is the price grown at the rate:
+
+$$
+85\,e^{0.04} = 88.47 = 100 - 60\,q_D \quad\Longrightarrow\quad q_D = \frac{11.53}{60} = 0.192.
+$$
+
+The rate has absorbed 5.8 points of the 25%; the chapter's "six points" is the same number rounded. With rates at 4%, part of the 15-point discount to par is just time value, and only 11.53 points of it is expected default loss.
+
+**The trap:** Discounting the wrong way. Multiplying the price by $e^{-0.04}$ gives $81.67$ and a $q_D$ of $30.6\%$, which is the right formula run backwards. The other common slip is leaving the rate out and quoting 25% as if rates were zero; the interviewer's follow-up exists to catch exactly that.
+
+**If you got this wrong, read:** §4D.2, paragraph beginning "The interviewer added two follow-ups".
+
+**Z.4-D.P3: Add an exchange door at 70 [Derive]**
+
+**Answer:** Weights $(a,b,c)$ on par, the 70 exchange and the 40 default price at 85 under $\mathbb{Q}$ whenever $b = 0.5 - 2c$ and $a = 0.5 + c$, with $0 \le c \le 0.25$. Two of them: $(0.60, 0.30, 0.10)$, a 10% default probability, a 40% chance of not being paid in full, standard deviation 20.1 points; and $(0.50, 0.50, 0)$, no default probability at all, standard deviation 15.
+
+**How:** Two equations, three unknowns: $a + b + c = 1$ and $100a + 70b + 40c = 85$. Substitute $a = 1 - b - c$ and you get $15 = 30b + 60c$, so $b + 2c = 0.5$. One weight stays free, and the price cannot pin it down. The corner $c = 0.25$, $b = 0$ is the original two-point bond.
+
+**The trap:** Reading 25% off the price as "the" default probability once a third outcome exists. The same 85 is consistent with default probabilities anywhere from 0 to 25%. The price gives you the mean; the shape is a model, and its biggest input is whether the door exists, which is a question about the credit agreement.
+
+**If you got this wrong, read:** §3.1.2 (three outcomes), then §4D.2, paragraph beginning "Now there's a third outcome."
+
+**Z.4-D.P4: What a 10% physical PD says about the 85 bond [Derive]**
+
+**Answer:** Under $\mathbb{P}$ (10% default, one year, zero rates) the expected payoff is 94, so a buyer at 85 expects $94/85 - 1 = 10.6\%$. It is paid for bearing the jump: default weighs 25% under $\mathbb{Q}$ and 10% under $\mathbb{P}$, and $(0.25 - 0.10) \times 60 = 9$ points of price is the risk premium.
+
+**How:** Re-weight the same two outcomes with your probabilities:
+
+$$
+\mathbb{E}^{\mathbb{P}}[V] = 0.9(100) + 0.1(40) = 94, \qquad \frac{94 - 85}{85} = 10.6\%.
+$$
+
+That 10.6% averages two very different years, $+17.6\%$ if the bond survives and $-52.9\%$ if it does not. Nobody earns the average in any single year.
+
+**The trap:** Calling the gap between 25% and 10% a forecasting error, or free money. The market is charging for a bond that can lose 60 points overnight, in the bad states where a dollar hurts most. Smaller slips: dividing the 9 points by 100 instead of by the price paid (9%), and forgetting the premium is earned only in expectation.
+
+**If you got this wrong, read:** §5.1.1 ($\mathbb{P}$ and $\mathbb{Q}$ box), then §4D.2.
+
+**Z.4-D.P5: Which measure for a hedge, a size, a forecast? [Read]**
+
+**Answer:** CDS hedge: $\mathbb{Q}$. Kelly size: $\mathbb{P}$. P&L forecast: $\mathbb{P}$.
+
+**How:** Ask what the number is for. A hedge ratio and any relative value against CDS are pricing questions: they use the weights that reproduce today's prices, which is $\mathbb{Q}$. A size and a forecast are statements about what will actually happen to your money, which is $\mathbb{P}$. Prices, hedges and relative value live in $\mathbb{Q}$; sizing, Kelly and your P&L live in $\mathbb{P}$. The hedged book is then forecast in $\mathbb{P}$ again: you price the hedge in $\mathbb{Q}$ and still have to say what you expect to earn.
+
+**The trap:** Feeding a CDS-implied default probability into a Kelly size or an expected-return forecast. Under $\mathbb{Q}$ nobody has an edge by construction, so Kelly returns zero (P30), and the usual "fix" is to splice a market spread to a historical default rate and an agency recovery. The reverse error, a historical default rate inside a CDS relative-value trade, produces a mispricing that is really a confusion.
+
+**If you got this wrong, read:** §4D.2 ("Math, Gently" box and the paragraph after it), then §28.4, subsection "Which measure, and which loss".
+
+**Z.4-D.P6: Hazard rate from a 300 bp spread [Derive]**
+
+**Answer:** $\lambda^{\mathbb{Q}} \approx 0.03/0.60 = 5\%$ a year, a risk-neutral intensity.
+
+**How:** The credit triangle says spread $\approx$ hazard $\times$ loss given default, $s = \lambda(1-R)$. With $s = 300$ bp and $R = 40\%$,
+
+$$
+\lambda^{\mathbb{Q}} = \frac{0.03}{0.60} = 0.05.
+$$
+
+For a flat curve with continuous premium the relation is exact; with quarterly coupons it is a hair off. Risk-neutral survival to one year is $e^{-0.05} = 95.1\%$, so the $\mathbb{Q}$ one-year default probability is 4.9%. Remember the 40% is a quoting convention: a CDS spread identifies only the product $\lambda(1-R)$. If you change $R$, $\lambda$ moves the other way.
+
+**The trap:** Dividing by the recovery ($0.03/0.40 = 7.5\%$) instead of the loss, or reading the 5% as a physical default rate. It is a $\mathbb{Q}$ number, so the actual default rate for this credit is lower.
+
+**If you got this wrong, read:** §6.8.3 (the bootstrap and the credit triangle).
+
+**Z.4-D.P7: Variance of the two-point and three-point bonds [Derive]**
+
+**Answer:** Both bonds are priced at 85 under $\mathbb{Q}$. Two-point (100 or 40, weights 0.75/0.25): variance 675, standard deviation 26.0 points. Three-point (100, 70, 40 with weights 0.6/0.3/0.1): variance 405, standard deviation 20.1 points.
+
+**How:** For two points, $\operatorname{Var} = p(1-p)\,\Delta^2 = 0.75 \times 0.25 \times 60^2 = 675$. For three points with no spread inside each outcome the law of total variance has only its between-scenario term:
+
+$$
+0.6(15)^2 + 0.3(15)^2 + 0.1(45)^2 = 135 + 67.5 + 202.5 = 405.
+$$
+
+The exchange door put 30% of the weight halfway down, so the typical surprise shrinks even though there are more outcomes.
+
+**The trap:** Assuming the same price means the same risk, or that adding an outcome adds variance. Same mean, different variance, different default probability (25% against 10%). Other weightings that price at 85 give other answers; $(0.5, 0.5, 0)$ gives 15.
+
+**If you got this wrong, read:** §3.1.1 (variance of a two-point distribution), then §3.1.2 (the law of total variance).
+
+**Z.4-D.P8: Q-PD across recoveries 20 to 60 at a price of 85 [Build]**
+
+**Answer:** $\mathbb{Q}$ default probability, one year, zero rates: 18.8% at $R = 20$, 21.4% at 30, 25.0% at 40, 30.0% at 50, 37.5% at 60. The product $q_D(100 - R)$ is 15 in every row.
+
+**How:** Extend Listing 4-D.1's `measure_drill` formula, $q_D = (100 - Pe^{r})/(100 - R)$, into `q_by_recovery(price, recoveries, rate=0.0)`, returning a dictionary keyed by recovery. Tests first: $R = 40$ gives 0.25; $r = 4\%$ at $R = 40$ gives 0.192; $q_D$ rises strictly with $R$; $q_D(100-R)$ equals $100 - Pe^{r}$ for every $R$; and a price at or below the recovery raises an error, since $q_D \ge 1$ is an arbitrage in the quote, not a probability. Expected output: the five rows above.
+
+**The trap:** Treating 25% as a fact about the company. The price pins down one number, the 15-point expected loss, and a recovery assumption splits it into a probability and a severity. A higher assumed recovery raises the implied probability, which surprises people.
+
+**If you got this wrong, read:** §4D.2, then §5.5.6 (the 40% that is neither a $\mathbb{P}$ nor a $\mathbb{Q}$ recovery).
+
+**Z.4-D.P9: One seller in five is informed: bid and ask [Derive]**
+
+**Answer:** Bid 64, ask 76, in price points, under $\mathbb{P}$ (the dealer's own beliefs). The 12-point spread has no fee in it.
+
+**How:** Prior one-half on 40 or 100, so the mid is 70 and $\sigma_V = 30$. On a bad day (value 40) a sale arrives 20% + 80% $\times$ 0.5 = 60% of the time; on a good day only 80% $\times$ 0.5 = 40%. Bayes gives a posterior of 0.6 on the bad state, so
+
+$$
+b = 0.6(40) + 0.4(100) = 64, \qquad a = 76 .
+$$
+
+This is Glosten–Milgrom, $b = m - \pi\sigma_V = 70 - 0.2 \times 30$. The dealer has no inventory cost, no risk aversion and no funding bill, and the spread is still 12 points: it is insurance against the one seller in five who knows.
+
+**The trap:** Bidding the unconditional average, 70. A dealer who does that pays for the seller's decision to sell every time. The fact that someone chose to sell to you is itself evidence about the bond.
+
+**If you got this wrong, read:** §3.2.1 (the binary model), then §4D.3.
+
+**Z.4-D.P10: The bid after a second sale from a new seller [Derive]**
+
+**Answer:** 58.5 (58.46), under $\mathbb{P}$. The posterior on the bad state is 0.692.
+
+**How:** Each sale multiplies the odds of the bad state by the same likelihood ratio, $0.6/0.4 = 1.5$. One sale takes the odds from 1 to 1.5; a second takes them to $1.5^2 = 2.25$, a posterior of $2.25/3.25 = 0.692$, and
+
+$$
+b_2 = 100 - 60 \times 0.692 = 58.46 .
+$$
+
+Odds are the natural currency here because independent evidence multiplies. The ask after one sale is exactly 70: a buy undoes the sale and returns the posterior to one-half, so the spread has narrowed from 12 to 11.5.
+
+**The trap:** Updating on the second sale as if it were the first, which restarts at fifty-fifty and bids 64 again. It is the base-rate trap of §3.4.3 run in reverse: instead of ignoring the prior, Theo ignored the posterior. Another slip is adding the likelihood ratios ($1.5 + 1.5 = 3$) when they multiply ($1.5^2 = 2.25$).
+
+**If you got this wrong, read:** §4D.3, then §3.4.3 (the base-rate trap).
+
+**Z.4-D.P11: The bid after a second sale from the same seller [Derive]**
+
+**Answer:** Posterior $2/3$ on the bad state, so a value (and bid) of 60 under $\mathbb{P}$, against 58.5 for two strangers.
+
+**How:** A single counterparty has one type. If the seller is informed (20%), it sells twice whenever the value is low; if uninformed (80%), each sale is an independent coin. So
+
+$$
+P(\text{two sells} \mid 40) = 0.2 + 0.8 \times 0.25 = 0.4, \qquad P(\text{two sells} \mid 100) = 0.8 \times 0.25 = 0.2,
+$$
+
+and the posterior is $0.4/(0.4 + 0.2) = 2/3$, giving $100 - 60 \times 2/3 = 60$. An informed seller would have sold twice anyway, so the repeat carries less fresh news than a second stranger does.
+
+**The trap:** Treating the repeat as a new seller and bidding 58.5. The two sales are not independent evidence: the second is partly the same fact as the first. It is the opposite of Theo's Monday error, where he forgot the first sale altogether.
+
+**If you got this wrong, read:** §4D.13, Exercise 3 (the same seller twice), then §3.2.1.
+
+**Z.4-D.P12: How many sales push the value below 50? [Derive]**
+
+**Answer:** Four sales from four new sellers, under $\mathbb{P}$. The value is 53.7 after three and 49.9 after four.
+
+**How:** Value $= 100 - 60p$ with $p = 1.5^n/(1 + 1.5^n)$. Setting the value below 50 needs $p > 5/6$, i.e. posterior odds above 5, so
+
+$$
+1.5^n > 5 \quad\Longrightarrow\quad n > \frac{\ln 5}{\ln 1.5} = 3.97 .
+$$
+
+The fourth sale clears it by a whisker: $1.5^4 = 5.06$. Six sales take the value to 44.8, which is the chapter's "about 45".
+
+**The trap:** Rounding 3.97 down to 3. Three sales leave the value at 53.7, nearly four points short. Or treating each sale as worth a fixed six points (the first one is): the sixth sale is worth only 2.1, because the posterior saturates as it nears certainty.
+
+**If you got this wrong, read:** §4D.3, including the Poker Table box.
+
+**Z.4-D.P13: Why the spread narrows as the posterior moves [Read]**
+
+**Answer:** The spread is the price of what the next trade can still teach you, and that shrinks as you near certainty. In the §4D.3 setup it runs 12.0, 11.5, 10.3, 8.6, 6.7, 5.1 and 3.7 points after zero to six sales (price points, $\mathbb{P}$).
+
+**How:** The Glosten–Milgrom half-spread is proportional to the variance of the current belief. For a small informed fraction, $m - b \approx 2\pi\,p(1-p)\,\Delta$, so the full spread is about $48\,p(1-p)$ with $\pi = 0.2$ and $\Delta = 60$. It peaks at 12 when $p = \tfrac12$ and falls to 3.7 at $p = 0.92$. Information is variance reduction: a sale moves the mid (70 to 64 to 58.5), it does not widen the market.
+
+**The trap:** Widening after being hit because "the market is moving against me, so I'm less sure." You have just learned something, so you are more sure. The dealer who widens pays the informed client at every step; the dealer who moves the mid pays once. (If you doubt $\pi$ itself, that is model uncertainty, a separate charge.)
+
+**If you got this wrong, read:** §4D.3 (the Poker Table box), then §3.1.1 ("Information is variance reduction").
+
+**Z.4-D.P14: Informed fraction uniform on 0 to 0.4: the bid [Derive]**
+
+**Answer:** 64 (price points, $\mathbb{P}$), the same as for a known $\pi = 0.2$.
+
+**How:** The bid depends on $\pi$ only through $\pi\sigma_V$, which is linear, so only $\mathbb{E}[\pi] = 0.2$ matters: $70 - 0.2 \times 30 = 64$. Integrating the joint likelihoods over $\pi$ agrees: the probability of a sale is $(1+\pi)/2$ in the bad state and $(1-\pi)/2$ in the good, both linear in $\pi$, so the posterior is $(1 + 0.2)/2 = 0.6$. In this symmetric setup a single sale carries no information about $\pi$ itself, since $P(\text{sale}) = \tfrac12$ for every $\pi$. If the same unknown $\pi$ sits behind two sales, the bid is 58.6 instead of 58.5.
+
+**The trap:** Quoting for the worst case, $\pi = 0.4$, which bids 58 and hands the uninformed flow to a competitor. A subtler one: averaging the bids rather than the joint. With a lopsided prior (say $q = 0.7$, $\Delta = 20$) the posterior is a ratio, and averaging ratios gives a half-spread of 1.88 where the right answer is 1.83, the ratio at $\mathbb{E}[\pi]$.
+
+**If you got this wrong, read:** §3.2.2 (making $\pi$ a function of the RFQ), then §3.2.1.
+
+**Z.4-D.P15: The winner's curse with three dealers [Derive]**
+
+**Answer:** The winning dealer's estimate is too high by $3\sigma/(2\sqrt{\pi}) = 0.846\,\sigma$ on average, where $\sigma$ is each dealer's error, in the units of the price (physical measure, common-value bond). With $\sigma = 1$ point the winner overpays 0.85 points.
+
+**How:** Every dealer's estimate is unbiased, but the winner of a sell RFQ is the one with the highest bid, so it is the maximum of three independent errors. The expected maximum of $n$ standard normals is 0 for one dealer, 0.564 for two, 0.846 for three, 1.164 for five and 1.424 for eight (checked by quadrature). To break even you bid as though you already knew you had won: shade by that amount, and shade more as $n$ grows.
+
+**The trap:** Reasoning that your estimate is unbiased, so your bid is fair. Unbiased before winning is not unbiased after winning; winning selects the most optimistic error. The cure is not a better estimate. It is shading, in proportion to $\sigma$ and increasing in the number of dealers in the room.
+
+**If you got this wrong, read:** §3.2.3 (many dealers, the winner's curse), then §18.9 (the BWIC as a first-price auction).
+
+**Z.4-D.P16: Simulate fifty RFQs and plot the hand history of posteriors [Build]**
+
+**Answer:** `hand_history(n=50, pi=0.2, v_lo=40, v_hi=100, seed=None)` returns, per RFQ, the flow, the posterior on the low state and the next bid and ask, and plots the posterior with the quote band around it and sells and buys marked.
+
+**How:** This is the §4D.3 recursion in miniature (Listing 3.2 is its large-scale cousin). Draw the true value once. Each arrival is informed with probability $\pi$ (sells only if the value is low, buys only if high) or a fair coin. A sale multiplies the odds of the low state by $(1+\pi)/(1-\pi) = 1.5$; a buy divides by 1.5. Tests first: quotes 64/76 before any trade; one sale gives posterior 0.6 and next quotes 58.46/70.0; sell-then-buy returns to 0.5; $\pi = 0$ never moves the posterior; the spread tracks $48\,p(1-p)$. Expected over 20,000 hands: mean final posterior 0.89 in low-state hands, 0.11 in high-state hands, 0.51 overall (a martingale). A dealer quoting from the posterior earns $-0.01 \pm 0.01$ points a fill at true $\pi = 0.2$; at a planted $\pi = 0.5$ it loses 1.38 a fill, and a dealer frozen at 64/76 loses 9.03.
+
+**The trap:** Checking only that the plot looks plausible. The markout test that recovers the planted toxicity is the one that fails when the update is wrong.
+
+**If you got this wrong, read:** §3.3 (markouts, the hand history), then §4D.3 and Figure 4-D.3.
+
+**Z.4-D.P17: A 90% interval for US HY index issuers, May 2018 [Read]**
+
+**Answer:** 784 issuers on 31 May 2018, of which 576 had public equity (Dynkin, quoted in §7.1). An interval written before looking, such as 500 to 1,200, would have caught it.
+
+**How:** A defensible chain: the index held roughly two thousand bonds with a few bonds per issuer, so a few hundred to about a thousand issuers, not tens of thousands. The point is the unit. For a model the count that matters is issuers (fewer after grouping by ultimate parent, fewer again for anything needing an equity price), not bonds or bond-months. With forty thousand bond-months and 784 issuers, rows are not observations; issuers are, and slowly.
+
+**The trap:** Answering in bonds or CUSIPs, where the figure is two to three times larger, or being overconfident: a "90%" interval of 700 to 800 feels competent and misses most of the time (P22). Write your interval down before you read the source, then record whether it caught the number.
+
+**If you got this wrong, read:** §7.1 (Defect 2, "the issuer is the observation"), then §7.6 for $N_{\text{eff}}$.
+
+**Z.4-D.P18: Reservation-price shift at $q = -2$ [Derive]**
+
+**Answer:** The reservation price sits $+0.0127 \approx 0.013$ points above the mid (price points, $\mathbb{P}$, short two \$1mm lots).
+
+**How:** The Avellaneda–Stoikov reservation price is $r^{\text{res}} = S_t - q\,\gamma\,\sigma^2(T-t)$. With $q = -2$, $\gamma = 0.005$ per point-lot and $\sigma^2\tau = 1.27$ points squared,
+
+$$
+r^{\text{res}} - S_t = -(-2)(0.005)(1.27) = +0.0127 .
+$$
+
+A short dealer quotes higher to be bought back in. Here $\sigma^2\tau$ is already a variance times a time (a week's variance), so do not square or scale it again.
+
+**The trap:** A sign error, or reaching for $(q + \tfrac12)$, which is the bid's distance in the AS quote, not the reservation price. The bigger trap is thinking it matters. One cent and a bit is pennies against the six points that Monday's single sale moved the value. In a bond, the client's information is large and the inventory skew is small, which is why a candidate who skews for inventory and not for information has the right formula for the wrong game.
+
+**If you got this wrong, read:** §18.4.2 (the answer first), then §4D.4.
+
+**Z.4-D.P19: The greed term at $k = 3$, $\gamma = 0.005$ [Derive]**
+
+**Answer:** $\tfrac{1}{\gamma}\ln(1 + \gamma/k) = 200\ln(1.001667) = 0.333$ points per side, 0.666 points across the two sides (price points, $\mathbb{P}$).
+
+**How:** This is the markup term of the AS spread, the part that survives when risk aversion goes to zero. Expand $\ln(1+x) \approx x - x^2/2$ to see it:
+
+$$
+\frac{1}{\gamma}\ln\!\Big(1 + \frac{\gamma}{k}\Big) \approx \frac{1}{k} - \frac{\gamma}{2k^2} = 0.3333 - 0.0003 .
+$$
+
+A risk-neutral dealer facing demand $Ae^{-k\delta}$ maximizes $\delta A e^{-k\delta}$ at $\delta^* = 1/k$, so this is pure market power and $k$ is the price elasticity of RFQ wins. Set the two greed terms (0.666) against the fear term $\gamma\sigma^2\tau = 0.0064$ per lot and greed is over 100 times larger: Kaz's quote was 94% greed.
+
+**The trap:** Counting the per-side markup as the whole greed in the spread (it is half), or thinking a risk-neutral dealer quotes zero spread. With $\gamma = 0$ the markup is still $1/k$. The other slip is dropping the $1/\gamma$ prefactor, which gives $\ln(1.0017) = 0.0017$.
+
+**If you got this wrong, read:** §18.4.2, "Limit 1: $\gamma \to 0$".
+
+**Z.4-D.P20: A quote whose number has a document answer [Read]**
+
+**Answer:** The page count of the 2016 Serta first-lien term loan agreement (Theo's cold open). Others from the chapter: an RFQ on a bond where the indenture answers "is the 2029 note structurally senior?" or "does the exchange need the holder's consent?"
+
+**How:** A page count is not a random variable; it is a fact printed on a page, and the person asking may have the page. A quote on such a number is a market on a number that has an answer, and a counterparty who keeps buying is telling you so. The defense is the sentence Theo eventually said: name the fact that moves your number and which way, then go and read it. Until then, price as if the other side has already read it, which means $\pi$ near one.
+
+**The trap:** Treating it as ordinary uncertainty and widening. Every extra lift then pays the holder of the document to correct you. The fact that moves your number is rarely the one you were quoting; for Theo it was the exhibits stapled to the back.
+
+**If you got this wrong, read:** §4D.4 (the "Ways This Blows Up" box on the number with a document answer), then §3.6.
+
+**Z.4-D.P21: A 25% hit-ratio target: what does its shadow price buy? [Derive]**
+
+**Answer:** Take §18.7's cold-open RFQ (illustrative: eight lots, $\beta_0 = 0$, $\beta_1 = 4$, credit view plus fear plus suspicion $d = 0.83$ points, every RFQ in the tier alike). A 25% win probability needs a bid only $x = \ln 3/\beta_1 = 0.275$ points under the composite, against 1.03 today (1.6%). The multiplier that gets there is $\nu = d + \text{greed}(x) - x = 0.83 + 0.33 - 0.275 = 0.89$ points per win, 18 times Ines's 0.05. It buys a bid near 90.98 instead of 90.22, at about 0.14 points of expected P&L per RFQ.
+
+**How:** Invert $x^* = d - \nu + \text{greed}(x^*)$: pick $P$, read $x$ off the logistic, solve for $\nu$. By the envelope theorem $\nu$ is the slope of best attainable profit against the target. A coupon passes only $(1-P)$ of itself into the bid, so a 10-cent coupon adds 0.6 points of win probability at 1.6% but 5.6 points near 25%: the next point of hit ratio gets steeply dearer.
+
+**The trap:** Paying the raw $\nu$ on every RFQ. It buys hit ratio fastest where other dealers shade hardest, in the toxic tiers (Niang). Pay it on clean tiers and withhold it elsewhere.
+
+**If you got this wrong, read:** §18.7, then §18B.1 (the target is a price).
+
+**Z.4-D.P22: Four of your ten "90%" intervals missed [Derive]**
+
+**Answer:** Quite surprised. If the intervals were truly 90%, misses are Binomial(10, 0.1): mean 1, standard deviation 0.95, and $P(X \ge 4) = 1.3\%$, about one chance in 78 (exactly four: 1.1%). The evidence says your "90%" intervals behave like 60% intervals ($\mathbb{P}$, calibration).
+
+**How:** $P(0) = 0.349$, $P(1) = 0.387$, $P(2) = 0.194$, $P(3) = 0.057$, which sum to 0.987. Taking 6 hits in 10 at face value, a 60% interval has half-width $0.84\sigma$ and a 90% interval $1.645\sigma$, so widen by roughly $1.645/0.84 \approx 2$. Alpert and Raiffa found people miss far more than one time in ten because narrowness feels like competence. Theo's page-count market of 130 to 480 looked ugly because it was honest.
+
+**The trap:** Shrugging it off as small-sample noise: a 1-in-78 event is not noise. The opposite error is demanding zero misses; that happens 35% of the time even for a perfectly calibrated forecaster, and an interval that never misses is too wide to trade on. Two misses ($P(X \ge 2) = 26\%$) would be nothing.
+
+**If you got this wrong, read:** §4D.4 (the paragraph on his first market), then §28.2, "How noisy is your hit rate?"
+
+**Z.4-D.P23: The page-count game against an informed buyer, scored by markouts [Build]**
+
+**Answer:** `play_page_game(policy, rounds, seed)` runs a document with lognormal page count (median 250, log standard deviation $\ln 1.5$) against a buyer who is informed with probability one half. An informed buyer lifts the offer if $N$ is above it and hits the bid if below; an uninformed one takes a random side whatever the price. The score is the sum of markouts in pages (offer minus $N$ on a lift).
+
+**How:** Four policies: frozen at $250 \pm 40$; widen only; move the mid to the posterior median and keep $\pm 40$; zero-profit Glosten–Milgrom quotes from a grid posterior over $(N, \text{type})$. Tests first: frozen loses exactly offer minus $N$ on each lift; given an informed buyer, the posterior after lifts is the prior truncated at the highest lifted offer; zero-profit quotes average zero ($+2 \pm 9$ pages per six-round game). Cold-open replay ($N = 420$, three lifts, informed buyer): frozen $-390$ pages, widen only $-320$, move the mid $-213$, zero-profit $-201$.
+
+**The trap:** Noise flow that ignores width crowns the widener ($+339$ pages a game against $+2$). Make uninformed flow fall as the market widens (Listing 18.5's `win_prob` will do), or markouts alone reward the dealer nobody trades with.
+
+**If you got this wrong, read:** §4D.4, then §18.7 (the franchise term) and §3.3.
+
+**Z.4-D.P24: Jump-to-default in the reservation price of a B3 bond [Derive]**
+
+**Answer:** The jump adds about 0.05 points of fear for a long of three lots, against 0.019 from the diffusion: total fear is 3.7 times what Avellaneda–Stoikov alone charges, from an event with a 3.1% annual chance. Inputs are mine (illustrative): §4D.5's bond at 98 with recovery 40 ($J = 58$ points), $\lambda^{\mathbb{P}} = 3.1\%$ a year, one-week hold $\tau = 5/252$, $\sigma^2\tau = 1.27$, $\gamma = 0.005$, $q = +3$ lots of \$1mm.
+
+**How:** The §18.6 line is $r^{\text{res}} \approx s + \mu\tau - \lambda^{\mathbb{P}}J\tau - q\gamma(\sigma^2 + \lambda^{\mathbb{P}}J^2)\tau$. Jump variance $\lambda^{\mathbb{P}}J^2 = 104$ against $\sigma^2 = 64$, so it outweighs the diffusion. With $\gamma qJ = 0.87$ the exact (18.7) factor $e^{\gamma qJ} = 2.39$ lifts the jump charge from 0.031 to 0.051. Against a $\mathbb{Q}$-fair composite the level term is only the credit view, $-(\lambda^{\mathbb{P}} - \lambda^{\mathbb{Q}})J\tau$ (0.036 if the mid carries no jump).
+
+**The trap:** Leaving out the jump variance. A second trap is charging $\lambda J\tau$ on a mid that already carries it, or using CDS-implied $\lambda^{\mathbb{Q}}$ in the variance, which charges the market's fear twice. Third, the small-$\gamma$ line understates a three-lot long by 40%.
+
+**If you got this wrong, read:** §18.6 (jump-to-default inside the HJB), then §4D.4.
+
+**Z.4-D.P25: Kelly at carry 4.5%, PD 3.1%, recovery 40% [Derive]**
+
+**Answer:** $f^* = 0.926$, i.e. 93% of NAV ($\mathbb{P}$ measure, one year, carry over financing, $L = 0.6$).
+
+**How:** Maximize $g(f) = p\ln(1 + fc) + q\ln(1 - fL)$. Setting $g'(f) = 0$ and cross-multiplying gives $f^* = (pc - qL)/(cL)$:
+
+$$
+f^* = \frac{p}{L} - \frac{q}{c} = \frac{0.969}{0.6} - \frac{0.031}{0.045} = 1.615 - 0.689 = 0.926 .
+$$
+
+The bet has an edge as long as $q < c/(c+L) = 7.0\%$, and 0.926 sits inside the ruin boundary $1/L = 1.67$, which is why Kaz called it "technically prudent". The arithmetic is correct. The inputs come from three worlds: the carry from the market, the PD from an agency cohort table, the recovery from an agency average.
+
+**The trap:** Treating 93% as a position. It is a ceiling on conviction, and the answer to "how much do you put in?" is the stop (P28 gives \$8.6mm on \$200mm, 4.3%). Ines: it is not aggressive, it is a resignation letter.
+
+**If you got this wrong, read:** §28.4 (discrete Kelly for a bond), then §4D.5.
+
+**Z.4-D.P26: Kelly's sensitivities to $L$ and to PD [Derive]**
+
+**Answer:** $\partial f^*/\partial L = -p/L^2 = -2.69$ per unit of loss given default; $\partial f^*/\partial q = -(1/L + 1/c) = -23.9$ per unit of default probability, i.e. $-0.24$ of NAV per point of PD ($\mathbb{P}$, at carry 4.5%, PD 3.1%, $L = 0.6$). Exact moves: PD at 4.6% takes $f^*$ from 0.926 to 0.568; recovery 25 ($L = 0.75$) takes it to 0.603.
+
+**How:** Differentiate $f^* = (1-q)/L - q/c$. It is linear in $q$, so 23.9 per unit is exact: 1.5 points of PD moves $f^*$ by 36 points of NAV. It is convex in $L$, so the exact fifteen-point recovery move is $-0.32$, where the slope would give $-0.40$. The two uncertainties are the same size, and only one of them, the recovery, shrinks by reading the intercreditor agreement.
+
+**The trap:** Comparing the raw derivatives, 23.9 against 2.69, and concluding that PD matters nine times more. The derivatives have different units, and what counts is the size of your ignorance times the slope: a B3 PD is known to a point and a half, a recovery to fifteen points. Using the slope for the L move overstates it by a quarter.
+
+**If you got this wrong, read:** §28.4 (the sensitivities after the discrete Kelly derivation), then §4D.5.
+
+**Z.4-D.P27: The ruin boundary at $L = 0.75$ and at $L = 1$ [Derive]**
+
+**Answer:** $f = 1/L$: 133% of NAV at $L = 0.75$ (recovery 25), 100% at $L = 1$ (recovery nothing), against 167% at the agency's $L = 0.6$. Kelly at $L = 0.6$, $0.75$ and $1$ is 0.926, 0.603 and 0.280.
+
+**How:** A default takes wealth to $1 - fL$. At $f = 1/L$ that is zero, $\ln 0 = -\infty$, and no carry outweighs it. Kelly always sits inside the boundary, but it knows where the boundary is only if you gave it the right $L$, and the boundary is set by the worst recovery the documents allow, not the average one. If they permit a non-pro-rata uptier, a lender left outside recovers close to nothing, $L \to 1$, and the boundary drops to the unlevered position. At $L = 1$ the Kelly fraction is $0.969 - 0.689 = 0.28$ (§4D.13, Exercise 2). The intercreditor agreement is the ruin boundary, priced in leverage.
+
+**The trap:** Reading "93% is inside the 167% boundary, so it is prudent" (Kaz's version), or setting the boundary from the average recovery. The first is true and useless; the second is exactly the document variable the pitch is supposed to catch.
+
+**If you got this wrong, read:** §4D.5 (the paragraph on the trapdoor), then §28.4, "Which measure, and which loss".
+
+**Z.4-D.P28: Largest long on \$200mm at a 7.5% line [Derive]**
+
+**Answer:** \$15mm / 0.58 = \$25.9mm of face (market value \$25.3mm at a price of 98), the largest single long that does not breach the 7.5% line (\$15mm) on its own default. Under a 2.5% single-default line (\$5mm) it is \$8.6mm of face.
+
+**How:** The stop turns a loss budget into a size before conviction gets a vote. A bond bought at 98 that recovers 40 loses $98 - 40 = 58$ points on default, so each dollar of face costs \$0.58. Size $= \text{budget} / \text{loss per dollar of face}$: $15/0.58 = 25.86$ and $5/0.58 = 8.62$. Note that the loss is price minus recovery, not par minus recovery. The line is the press-reported shape for one large platform (capital halved at 5%, closed at 7.5%), not a rule anyone discloses.
+
+**The trap:** Using the 60-point loss from par (\$15mm / 0.60 = \$25.0mm), dividing by the 40-point recovery, or reporting Kelly's \$185mm. The 2.5% stop, \$8.6mm, is twenty times smaller than Kelly's \$185mm, and it arrives without being told the carry, the PD or the recovery distribution, because it does not care why the P&L moved.
+
+**If you got this wrong, read:** §8D.5 (sizing to the stop), then §4D.5.
+
+**Z.4-D.P29: Fractional Kelly with a 50% relative error in the edge [Derive]**
+
+**Answer:** Bet $\theta^* = 1/(1 + s^2) = 1/1.25 = 0.80$ of full Kelly, i.e. 74% of NAV at the B3 inputs, keeping 80% of the full-Kelly growth ($\mathbb{P}$, relative standard error $s = 0.5$ in the edge).
+
+**How:** Near its maximum any growth function is quadratic, $g(\theta f^*) = g^*(2\theta - \theta^2)$. If the edge carries a relative error $\varepsilon$ with standard deviation $s$, expected growth is $g^*(2\theta - \theta^2(1 + s^2))$, maximized at $\theta^* = 1/(1+s^2)$. At $\theta^*$ the growth is $g^*/(1 + s^2) = 0.8\,g^*$. Full Kelly keeps 0.75 and half Kelly 0.69, so the curve is flat nearby. At $s = 1$ the answer is one half, the chapter's "half Kelly", and full Kelly earns zero growth.
+
+**The trap:** Saying "half Kelly, always", or $1/(1+s) = 0.67$. The shrinkage depends on the variance of the error, $s^2$, not on $s$. And do not stop at 74%: the stop in P28 allows 4.3% of capital, so the stop wins.
+
+**If you got this wrong, read:** §28.4, "Fractional Kelly is full Kelly for people with standard errors", then §4D.5.
+
+**Z.4-D.P30: Why a Q default intensity makes Kelly zero [Read]**
+
+**Answer:** Under $\mathbb{Q}$ the credit triangle holds, $c \approx \lambda^{\mathbb{Q}}L$, so the edge $c - \lambda^{\mathbb{Q}}L$ is zero for every bond and $f^* = 1/L - \lambda/c = 0$.
+
+**How:** Kelly sizes the edge, and the risk-neutral measure is the one in which nobody has an edge by construction: every price is a fair bet at the risk-free rate. A 300 bp spread with $L = 0.6$ gives $\lambda^{\mathbb{Q}} = 5\%$; at a 3% carry, $f^* = 1/0.6 - 0.05/0.03 = 0$. The edge Kelly can use is $c - \lambda^{\mathbb{P}}L$, the credit risk premium plus whatever your information adds. A Kelly fraction is a statement about $\mathbb{P}$ or it is a statement about nothing.
+
+**The trap:** "Fixing" the zero by mixing a market spread with a historical default rate and an agency recovery. That is how you get 93%: three numbers from three different worlds, each defensible alone. The zero fails safe; the repaired number does not.
+
+**If you got this wrong, read:** §28.4, "Which measure, and which loss", then §4D.2.
+
+<!-- Z4D PART 1 COMPLETE -->
+
 ## Part II: Mathematical & Probabilistic Foundations for AI Specifiers
 
 ### Z.05 Chapter 5: Probability Distributions in Distressed & High-Yield Credit
@@ -481,7 +1177,7 @@ For the BB, $q(1-q) = 0.007936$. The skew is $-0.984/0.0891 = -11.05$ and the ex
 
 **Z.05.2: The convexity tax**
 
-**Answer:** $\sigma_X = 6.74\%$, the survival-leg skew is $-0.13$, and the convexity tax is $|c|\,v = 14.8$ bp (about 15). Flip to $C^{\text{spr}} = +8$ and the volatility does not change. The skew becomes $+0.13$, and the 14.8 bp becomes a convexity *bonus* to the mean. Now put that non-call survival leg into Theo's bond ($q = 4\%$, $P_0 = 0.92$, recovery Beta with mean 40 and s.d. 27.5). The mixture skew is still about $-4.1$.
+**Answer:** $\sigma_X = 6.74\%$, the survival-leg skew is $-0.13$, and the convexity tax is $|c|\,v = 14.8$ bp (about 15). Flip to $C^{\text{spr}} = +8$ and, under §5.9.1's Gaussian spread change, the volatility does not change. The skew becomes $+0.13$, and the 14.8 bp becomes a convexity *bonus* to the mean. With §5.2.3's lognormal spreads instead, the same leg stays left-skewed, at $-0.93$. Now put that non-call survival leg into Theo's bond ($q = 4\%$, $P_0 = 0.92$, recovery Beta with mean 40 and s.d. 27.5). The mixture skew is still about $-4.1$.
 
 **How:** Here $v = \kappa^2 s^2 h = (0.35 \times 0.055)^2 = 0.000371$ and $c = \tfrac12 C^{\text{spr}} = -4$. The exact moments of §5.9.1 give
 
@@ -491,13 +1187,13 @@ $$
 
 so $\sigma_X = 6.74\%$. The convexity term adds almost nothing to the variance. The third moment is $\mu_{3,X} = 6(D^{\text{spr}})^2 c\, v^2 + 8c^3v^3 = -4.04\times10^{-5}$, and dividing by $\sigma_X^3 = 3.06\times10^{-4}$ gives a skew of $-0.132$. The mean is $x_0 + c\,v$, so the tax is $|c|\,v = 4 \times 0.000371 = 0.00148$.
 
-Flipping the sign of $C^{\text{spr}}$ flips the sign of $c$. The variance and $\mu_{4,X}$ contain only even powers of $c$, while $\mu_{3,X}$ is odd in $c$, so the skew becomes $+0.132$.
+Flipping the sign of $C^{\text{spr}}$ flips the sign of $c$. The variance and $\mu_{4,X}$ contain only even powers of $c$, while $\mu_{3,X}$ is odd in $c$, so the skew becomes $+0.132$. That sign is a property of the Gaussian $\Delta s$, which has no skew of its own to offset. With the lognormal spread of §5.2.3, $\Delta s = s\,(e^{-\kappa^2/2+\kappa Z}-1)$, the first-order term $-D^{\text{spr}}\Delta s$ already carries a skew of $-1.13$ (the spread's $+1.13$ with the sign flipped), and convexity only moves it: $-0.93$ at $C^{\text{spr}} = +8$ and $-1.35$ at $-8$. Convexity of about $+54$ would be needed to cancel it. (Exact lognormal moments, confirmed by four million draws.)
 
 For the mixture, compare the pieces of the full third moment (the Full Derivation at the end of §5.1.4). The survival leg contributes $(1-q)\,\mu_{3,X} = +0.00004$. The between-world term $-q(1-q)(1-2q)J^3$, with $J \approx 0.62$, contributes $-0.0085$. The cross term $3q(1-q)J(\sigma_X^2 - \sigma_Y^2)$ adds $-0.0061$, because the recovery lump is much wider than the survival hump. The coin outweighs the convexity by a factor of about 200.
 
-**The trap:** There are two. The first is getting the tax wrong. $|C^{\text{spr}}|\,v$ gives 30 bp, but the half belongs in $c$. Writing it as $\tfrac12 |C^{\text{spr}}|\,\kappa s$ is also wrong, because $v$ is a variance, $\kappa^2 s^2 h$. The second trap is concluding from the positive survival skew that a non-call bond "has right-skewed returns." The survival leg is a lump sitting next to a coin, and its skew is two orders of magnitude too small to change the overall shape.
+**The trap:** There are two. The first is getting the tax wrong. $|C^{\text{spr}}|\,v$ gives 30 bp, but the half belongs in $c$. Writing it as $\tfrac12 |C^{\text{spr}}|\,\kappa s$ is also wrong, because $v$ is a variance, $\kappa^2 s^2 h$. The second trap is concluding from the positive survival skew that a non-call bond "has right-skewed returns." The positive sign comes from the Gaussian $\Delta s$; with lognormal spreads the leg stays left-skewed. Either way the survival leg is a lump sitting next to a coin, and under the Gaussian its skew is two orders of magnitude too small to change the overall shape.
 
-**If you got this wrong, read:** §5.9.1, "One last derivation: exact moments of the DTS survival leg," and then the Full Derivation at the end of §5.1.4 for the cross term.
+**If you got this wrong, read:** §5.9.1, "One last derivation: exact moments of the DTS survival leg," and then the Full Derivation at the end of §5.1.4 for the cross term. For the lognormal case, read the first paragraph of §5.2.4.
 
 **Z.05.3: Find the jump**
 
@@ -1225,7 +1921,7 @@ Use non-overlapping months, roll-safe returns (§10.2.3) and HAC errors. Because
 
 **Answer:** $f(p) = p(1-p)$ has $f'(p) = 1 - 2p = 0$ at $p = \tfrac12$ and $f''(p) = -2 < 0$, so the fake lead peaks there at $\beta^{\text{ce}}/4$. For a bond that prints once every five weeks, $p = 0.2$ and the lead is **$0.2 \times 0.8 \times \beta^{\text{ce}} = 0.16\,\beta^{\text{ce}}$**, which is 0.048 at the box's $\beta^{\text{ce}} = 0.3$. **Filter:** run the regression only on bond-weeks with a print at both $t$ and $t+1$. Then $m_t = P_t$, the stale gap is zero, and the fake lead goes with it. In simulation it fell from 0.048 to 0.001. A version that wastes less data uses trade-to-trade returns: regress each bond's return from one print to the next on the equity return in the week of the earlier print. That keeps every print of every bond, and its lead in simulation is 0.000. Or measure the lead on CDX, where $p \approx 1$.
 
-**How:** The stale gap $G_t = P_t - m_t$ holds this week's equity-driven move whenever the bond did not print, which happens with probability $1-p$. Next week's print collects the gap with probability $p$. So $\operatorname{Cov}(\Delta m_{t+1}, r^{\text{eq}}_t) = p(1-p)\,\beta^{\text{ce}}\operatorname{Var}(r^{\text{eq}})$. Conditioning on $U_t = 1$ sets $G_t = 0$, which leaves $\Delta m_{t+1} = \Delta P_{t+1}$. That is independent of $r^{\text{eq}}_t$ when there is no true lead, and it keeps any lead that is real. The cost is sample size, not universe. A bond with $p = 0.2$ keeps $p^2 = 4\%$ of its weeks under the both-ends filter and $p = 20\%$ under the trade-to-trade version, but no bond is dropped. Report the lead by print-frequency bucket alongside it, as Theo did: an artifact rises as $p$ falls toward $\tfrac12$, and a real lead does not care.
+**How:** The stale gap $G_t = P_t - m_t$ holds this week's equity-driven move whenever the bond did not print, which happens with probability $1-p$. Next week's print collects the gap with probability $p$. So $\operatorname{Cov}(\Delta m_{t+1}, r^{\text{eq}}_t) = p(1-p)\,\beta^{\text{ce}}\operatorname{Var}(r^{\text{eq}})$. That is the slope of a simple regression; in the VAR of §10.5.3 the own lag is correlated with equity and rescales it by $1/(1-p^2R^2_{\text{ce}})$, which matters only when equity explains most of the bond's true move. Conditioning on $U_t = 1$ sets $G_t = 0$, which leaves $\Delta m_{t+1} = \Delta P_{t+1}$. That is independent of $r^{\text{eq}}_t$ when there is no true lead, and it keeps any lead that is real. The cost is sample size, not universe. A bond with $p = 0.2$ keeps $p^2 = 4\%$ of its weeks under the both-ends filter and $p = 20\%$ under the trade-to-trade version, but no bond is dropped. Report the lead by print-frequency bucket alongside it, as Theo did: an artifact rises as $p$ falls toward $\tfrac12$, and a real lead does not care.
 
 **The trap:** The tempting move is to filter on *bonds* by keeping only the names that print at least weekly. That throws away most of the HY universe, which is exactly the exercise's warning. It also biases the sample toward large, liquid issuers, so any lead you then find is a lead for a different universe. The other slip is to read $p = 0.2$ as "less stale, so less artifact" because it sits further from $\tfrac12$. In fact 0.16 is still about two-thirds of the maximum, 0.25. Infrequent printing does not save you until $p$ is near zero, and by then the bond has no returns to regress.
 
@@ -1460,7 +2156,7 @@ The chapter's "at least three quarters" (§12.7) is the case where the line *dra
 
 ### Z.13 Chapter 13: Codifying Liability Management Transactions (LMTs)
 
-Five exercises: Serta with the liens pulled apart, a three-member co-op's veto, a drop-down priced as a forward, Trinseo rebuilt on the clearing engine, and ROBO's empty portfolio. Every number below was recomputed in Python, using the chapter's own Listings 13.1 and 13.2 (Appendix F) wherever an exercise builds on them; we ran the listings first, and they print what the chapter says (70 events, PRS 0.903, $\mathbb{E}[\Delta R] = 0.220$, EPL 4.57 points). Where we had to choose an input, the solution says so. There are two notes for the editor, in Z.13.1 and Z.13.4. Write your answer down before you read ours.
+Five exercises: Serta with the liens pulled apart, a three-member co-op's veto, a drop-down priced as a forward, Trinseo rebuilt on the clearing engine, and ROBO's empty portfolio. Every number below was recomputed in Python, using the chapter's own Listings 13.1 and 13.2 (Appendix F) wherever an exercise builds on them; we ran all three listings first, and they print what the chapter says (70 events, PRS 0.903, $\mathbb{E}[\Delta R] = 0.220$, EPL 4.57 points). Where we had to choose an input, the solution says so. There are two notes for the editor, in Z.13.1 and Z.13.4. Write your answer down before you read ours.
 
 **Z.13.1: Unblend Serta**
 
@@ -1531,13 +2227,137 @@ $$
 \rho_{\text{OpCo}} = \frac{r}{1{,}982 + I}, \qquad R_{\text{SH}} = \frac{U + (1{,}266 + I)\,\rho_{\text{OpCo}}}{1{,}266}.
 $$
 
-Both ranges (OpCo 2–9%, Super HoldCo 60–78%) hold for **total value $V = 348 + r + U$ between \$1,122mm and \$1,400mm** (6.9 to 8.6 times 2025 EBITDA) and for **any allowed claim from 0 to \$1,508mm**. The split of $V$ is what changes with $I$. At $I = 1{,}508$: $r \in [70, 314]$ and $U \in [510, 932]$, jointly $760 \le U + 0.795\,r \le 987$. At $I = 948$: $r \in [59, 264]$, $U \in [560, 943]$. At $I = 0$: $r \in [40, 178]$, $U \in [646, 962]$. **The parameter that matters most is $U$.** With $U = 0$, Super HoldCo cannot pass 19.7% even with the full \$1,508mm note; reaching 60% would take an allowed claim of about \$7.2bn. The allowed claim, the number the lawsuit is about, matters least: at the whiteboard's $r = 175$, $U = 735$, every $I$ from zero to \$10bn keeps both recoveries inside their ranges.
+Both ranges (OpCo 2–9%, Super HoldCo 60–78%) hold for **total value $V = 348 + r + U$ between \$1,122mm and \$1,400mm** (6.9 to 8.6 times 2025 EBITDA) and for **any allowed claim from 0 to \$1,508mm**. The split of $V$ is what changes with $I$. At $I = 1{,}508$: $r \in [70, 314]$ and $U \in [510, 932]$, jointly $760 \le U + 0.795\,r \le 987$. At $I = 948$: $r \in [59, 264]$, $U \in [560, 943]$. At $I = 0$: $r \in [40, 178]$, $U \in [646, 962]$. **The parameter that matters most is $U$.** With $U = 0$, Super HoldCo cannot pass 19.7% even with the full \$1,508mm note; reaching 60% would take an allowed claim of about \$7.2bn. The allowed claim, the number the lawsuit is about, matters least: at the whiteboard's $r = 175$, $U = 735$, every $I$ from zero to about \$6.8bn keeps both recoveries inside their ranges (OpCo only drops below 2% at that point).
 
 **How:** The graph has three entities. The top holding company has value $U$ and owns OpCo (value $348 + r$) and the SPV (value 0). OpCo owes the \$348mm revolver at rank 1. At rank 2 it owes a pari pool: the \$716mm 2028 term loans, a \$1,266mm guarantee of the Super HoldCo debt, and the note $I$, whose creditor is the SPV (the pledge). At rank 3 come the \$390mm of notes. The top entity guarantees \$1,266mm, and the SPV's own \$1,266mm term loan carries `reduce_by` on both guarantees. Run through `waterfall_clearing`, this reproduces the whiteboard to the cent: 5.01% and 69.04% at $(r, U, I) = (175, 735, 1{,}508)$, 62.45% at $r = 70$, and Ines's 6.0 and 8.8 at $I = 948$ and 0. Conservation gives the $V$ range without a search, because the notes and the equity get nothing: $V = 348 + 716\rho_{\text{OpCo}} + 1{,}266R_{\text{SH}}$, which does not contain $I$. Sensitivities at the whiteboard point: \$100mm more $U$ moves Super HoldCo up 7.9 points and OpCo not at all; \$100mm more $r$ moves OpCo 2.9 points and Super HoldCo 6.3; striking the whole note ($1{,}508 \to 0$) moves OpCo up 3.8 and Super HoldCo down 2.2.
 
 **The trap:** Hunting for the multiple in the intercompany claim. However large it is allowed to be, the note scales Super HoldCo's take from OpCo by at most $(1{,}266 + I)/1{,}266$, which is 2.19 at \$1,508mm. The rest of the 7-to-39 multiple is the value upstairs divided by a small OpCo residual. That is also why the ranges cannot tell you what the court will do with $I$.
 
 **If you got this wrong, read:** §13.7, "The closed form" and "Pari-plus," then §13.7.1 from "Where's the revolver?" to Ines's count-by-count pricing; "Ways This Blows Up" items (2) and (5).
+
+**Z.13.5: ROBO minimizes priming loss**
+
+**Answer:** In one sentence: expected priming loss is minimized at zero by owning nothing, and ROBO's filter, unanimity for every amendment, matches no syndicated loan, because every credit agreement lets Required Lenders amend whatever is not a sacred right, so the feasible set was empty and cash was the exact optimum. A better objective, with weights $w_i$ in market value as a fraction of NAV and $w^0$ the current book, is
+
+$$
+\min_{w}\ \sum_i w_i\,e_i, \qquad e_i = 10^4 \times \frac{100\,\text{EPL}_i}{P_i}\quad [\text{bp of market value, 12-month horizon}],
+$$
+
+subject to
+
+$$
+\sum_i w_i = 1, \qquad 0 \le w_i \le 0.02, \qquad \sum_i w_i\,c_i \ \ge\ 450\ \text{bp a year}, \qquad \tfrac12\sum_i \lvert w_i - w^0_i\rvert \ \le\ 0.10\ \text{of NAV a month}.
+$$
+
+Here $c_i$ is loan $i$'s carry (coupon over the funding rate, divided by price) in bp of market value a year. The 2% name cap, the 450 bp floor and the 10% one-way turnover limit are illustrative desk settings. The carry floor stops the optimizer from buying a book that is almost cash; the turnover limit stops it from trading the whole book every time the score moves.
+
+**How:** The original objective has a trivial minimizer because nothing in it rewards holding risk; every constraint you add has to supply that reward. The carry floor does it directly. The equivalent penalized form is $\max_w \sum_i w_i (c_i - \lambda e_i)$, with $\lambda$ the shadow price of the floor. Units are the second fix. EPL comes out of §13.8 in fraction of par over a 12-month horizon, while carry is quoted per year on market value. Theo's random-holder Larkspur EPL of 0.033 is 3.3 points of par, but at a price of 78 it is $3.3/78 = 4.2\%$, or **423 bp of market value**, and that is the number to set against a yield. The turnover limit belongs there because the PRS is a ranking that moves with prices (Ines's "mirror"). Without it, every three-point drop in a loan's price becomes a trade.
+
+**The trap:** Fixing the empty book with "be fully invested" alone. ROBO then buys the loans with the lowest EPL, which are the highest-priced, tightest names with every blocker. That book has almost no priming loss and almost no carry: an empty portfolio with a coupon attached. The units slip is the quieter trap. If you set EPL in points of par against carry in bp of market value, every discount loan looks about a fifth safer than it is at 78, and more than that further down.
+
+**If you got this wrong, read:** §13.8, "What the desk prices" and "The Monday printout"; §13.2, Family 2 (one $\theta$ per action, and the lowest reachable one is the trapdoor); the ROBO vignette that opens "Specification for AI Implementation," where the vague version returned the whole index, the mirror image of this empty book.
+
+### Z.14 Chapter 14: The Default & Recovery Cycle in the LMT Era
+
+Six exercises. Every number below was recomputed in Python. Exercise 3 uses `coop_break_prob` from Listing 14.3, and Exercise 6 runs `fit_ms2` from Listing 14.4 (Appendix F) on 200 simulated histories at each sample size. Write your card before you read ours.
+
+**Z.14.1: Two rates, two hazards**
+
+**Answer:** The all-cause intensity is $\lambda = -\ln(1 - 0.058) = 0.0598$ a year. The ex-DE rate says 2.1 of the 5.8 points were hard defaults, so split $\lambda$ in that proportion: $\lambda_H = 0.0216$ and $\lambda_D = 0.0381$ a year, and $\lambda_D/\lambda_H = 3.7/2.1 =$ **1.76**. Over three years, **$F_H(3) = 5.9\%$** and **$F_D(3) = 10.5\%$**, and 83.6% of the cohort has had no event. The chapter's rounded 0.022 and 0.038 give 6.0% and 10.4%, the numbers carried into §14.3.3. Converting 2.1% directly gives $-\ln(0.979) = 0.0212$. That leaves $\lambda_D = 0.0385$ and a ratio of 1.82: close, but the split is the version consistent with competing risks.
+
+For the PM: "Standard North American CDS, and so the CDX, pays on bankruptcy and failure to pay. It does not pay on a distressed exchange. The hazard you back out of CDX spreads is therefore a hard-default hazard, and the only agency number it can be set against is the ex-DE rate, 2.1%, an intensity of about 2.2% a year. It cannot be set against the 5.8% headline, whose intensity is 6.0%. Put an implied hazard of 5% (illustrative: 300 bp at the 40% quoting convention) next to the headline and the market seems to be underpricing default. Put it next to the hard rate and the market is charging 2.3 times what was realized, which is an ordinary risk premium. Before you trust even that ratio, replace the 40% with a recovery that fits these names, and check that the index and the agency cohort cover the same borrowers."
+
+**How:** A twelve-month rate is a one-year cumulative incidence, not a hazard. With constant hazards, $F_k(1) = (\lambda_k/\lambda)(1 - e^{-\lambda})$ and $\sum_k F_k(1) = 1 - e^{-\lambda} = 0.058$. That fixes $\lambda$, and the ratio of the two observed incidences is the ratio of the hazards:
+
+$$
+\frac{\lambda_D}{\lambda_H} = \frac{F_D(1)}{F_H(1)} = \frac{0.058 - 0.021}{0.021} = 1.76 .
+$$
+
+Three years out, $1 - e^{-3\lambda} = 1 - e^{-0.179} = 0.164$, so $F_H(3) = 0.362 \times 0.164 = 0.059$ and $F_D(3) = 0.638 \times 0.164 = 0.105$. The direct conversion, $-\ln(1 - 0.021)$, reads 2.1% as the chance of a hard default in a world without exchanges. In this world, exchanges remove issuers before they can file, so the direct conversion slightly understates $\lambda_H$ (0.0212 against 0.0216). It is the Kaplan–Meier trap run backwards.
+
+**The trap:** Adding odometer readings: $3 \times 5.8\% = 17.4\%$ in total, or $3 \times 3.7\% = 11.1\%$ for exchanges. A subtler slip is computing each cause as if it were the only one, $1 - e^{-3\lambda_D} = 10.8\%$ and $1 - e^{-3\lambda_H} = 6.3\%$. Each ignores the other tap draining the same bucket, so between them they lose 17.1% of a cohort that only loses 16.4%. In the PM paragraph the trap is the 7:10 note itself: dividing the CDS hazard by the 6.0% headline intensity and calling the shortfall a mispricing.
+
+**If you got this wrong, read:** §14.1 (the odometer-and-speedometer box and Moody's 5.8% and 2.1%), §14.2.1 for the constant-hazard CIF and the two-cause split, and §14.7.2 for the definitional wedge and the 7:10 note.
+
+**Z.14.2: Kaz's parole question**
+
+**Answer:** Fact 3 gives $\eta = 2/1.204^{1/k}$. Hazards are per year, and pp means percentage points:
+
+| $k$ | $\eta$ (years) | $h_H(0.5)$ | $h_H(2)$ | $h_H(6)$ | Year-six increment $p\,[S_0(5)-S_0(6)]$ |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 0.8 | 1.586 | 0.116 | 0.044 | 0.0070 | 0.66 pp |
+| 1.0 | 1.661 | 0.119 | 0.055 | 0.0054 | 0.56 pp |
+| 1.2 | 1.713 | 0.115 | 0.066 | 0.0033 | 0.39 pp |
+| 1.5 | 1.767 | 0.101 | 0.082 | 0.0010 | 0.17 pp |
+
+Only **$k = 1.2$ and $k = 1.5$** satisfy all four facts. $k = 0.8$ fails fact 4 clearly and $k = 1.0$ narrowly; the pass line sits at $k \approx 1.07$. The four facts set a floor on $k$ and no ceiling, so they cannot choose between 1.2 and 1.5. For shorting, the answer is timing. With $k > 1$ the population hazard is lowest at the closing. For most of the first year it then stays within a few points of its peak of about 0.115 a year, which comes at 0.47 years for $k = 1.2$ and 0.97 years for $k = 1.5$. It is still 0.07–0.08 at two years and is below 0.01 by year five. So short a post-LME loan inside the first two years, timed to the name's own runway cliff. On the closing day you pay carry while the new money is still in the bank. After year three you are short a population that is mostly cured, against a hazard that is under 4% and falling.
+
+**How:** Facts 1 and 3 are spent on the calibration: fact 1 sets $p = 0.25$, and fact 3, $1 - S_0(2) = 0.70$, gives $(2/\eta)^k = -\ln 0.30$. Fact 2 is about a different event (a hard default *or* another exchange), so it sets $p \approx 0.35$–$0.40$ for that event and says nothing about $k$. The second half of fact 4, two-thirds clean within a decade, holds for every shape, because $p\,[1 - S_0(10)]$ lies between 0.247 and 0.250 here (and is 0.35 at the fact-2 $p$). The discriminating fact is the first half of fact 4, and year six is its binding year, because the increments shrink every year after it. The population hazard is
+
+$$
+h_H(u) = \frac{p\,f_0(u)}{(1-p) + p\,S_0(u)} = \underbrace{\frac{k}{\eta}\left(\frac{u}{\eta}\right)^{k-1}}_{\text{hazard if susceptible}} \times \underbrace{\frac{p\,S_0(u)}{(1-p) + p\,S_0(u)}}_{\mathbb{P}(\text{susceptible}\,\mid\,U > u)} .
+$$
+
+For $k > 1$ the first factor rises without limit and the second collapses as the susceptible fail out. Their product rises and then falls, and that hump is the parole window. For $k \le 1$ the hump disappears and day one is the riskiest day. One nuance on $k = 1$: Moody's says *more than* 70% within two years, and at 71.7% the constant-hazard clock passes fact 4. The chapter's "borderline" is fair.
+
+**The trap:** The first trap is the "weakest fail first" intuition, which reaches for $k < 1$. That curve passes the two-year anchor and then leaves 0.66 pp a year in the tail, against Moody's half point, and its hazard is highest on the closing day, so it tells you to short immediately. The second trap is reading the susceptible hazard as the population's. At $k = 1.2$ the susceptible hazard at $u = 6$ is 0.90 a year and still rising. The population hazard is 0.0033, because almost nobody susceptible is left. Mixing the two up is how a desk ends up shorting a six-year survivor because "the hazard is still rising."
+
+**If you got this wrong, read:** §14.3.2: the lightbulb box, Moody's four facts, the calibration table and its Full Derivation. Then §14.9 for Kaz's "inside the hump" at fourteen months.
+
+**Z.14.3: Which hump are you in?**
+
+**Answer:** At $c = 0.70$ the co-op holds a blocking position, because $1 - c = 0.30 < 0.501$. A deal needs defectors holding $m + c - 1 = 20.1\%$ of the class. At 7% per member, that is $d^\ast = \lceil 2.87 \rceil = 3$ members. At $\varphi = 0.10$ the probability of a non-pro-rata deal is $\mathbb{P}(\mathrm{Bin}(10, 0.10) \ge 3) =$ **7.0%**. Once the sponsor buys defectors up to $\varphi = 0.35$, it is **73.8%**, more than ten times as likely. Read the co-op as the room: if a deal is done, members are inside at 74 and holders outside it are primed to 25. Then joining is worth at most $\Pi \times (\mu_{\text{in}} - \mu_{\text{out}}) = 0.738 \times 49 \approx$ **36 points**, about \$3.6mm on your \$10mm. Before the sponsor started paying ($\varphi = 0.10$), the same seat was worth 3.4 points (\$0.34mm). Both figures are ceilings, before the cost of the transfer restriction you would be signing.
+
+**How:** Each of the ten members walks independently with probability $\varphi$, and the deal needs three to walk. $\mathbb{P}(X \le 2)$ is 0.930 at $\varphi = 0.10$ and 0.262 at $\varphi = 0.35$. Given a deal, the coalition mixture puts a holder's expected recovery at $\pi\mu_{\text{in}} + (1-\pi)\mu_{\text{out}}$. With no deal, the whole class is treated pro rata, and membership changes nothing. So a seat is worth
+
+$$
+\Pi(c)\,\big(\pi_{\text{member}} - \pi_{\text{outsider}}\big)\,(\mu_{\text{in}} - \mu_{\text{out}}) = 0.738 \times (1 - 0) \times 0.49 = 0.362 \text{ of par}.
+$$
+
+Notice how steep the tail is. $\Pi$ crosses one half at $\varphi = 0.26$, so a modest backstop fee turns the co-op from a wall into a coin flip, and the price of your seat moves almost one for one with what the sponsor pays defectors. That is "defection is not a coin flip, it is a price" in numbers.
+
+**The trap:** Paying the full 49 points. The gap between the humps is the value of a seat only if a deal is certain. The opposite slip is pricing the seat at $\varphi = 0.10$, 3.4 points, after the sponsor has started paying: that trusts the independence a sponsor with a fee is paid to break. The third is using the blended mean, $0.526 \times 0.74 + 0.474 \times 0.25 = 0.51$, as "the" recovery. Membership belongs to the holder, not the loan, and a blended number prices nobody's actual position.
+
+**If you got this wrong, read:** §14.5.1 (the threshold game, the jury, and "Defection is not a coin flip. It is a price."), §14.4.1 and §14.4.2 for the mixture and Stage 0, and the Lumen replay in §14.5 for what a closed door costs.
+
+**Z.14.4: The best-performing tranche**
+
+**Answer:** Nine percent simple interest from 22 June 2020 to the 7 July 2026 judgment runs for 6.04 years, which lifts the award from \$261.13mm to \$403.2mm, or **45.0 points per 100 of excluded face**. On \$5mm face that is \$2.25mm if collected, against \$1.0mm paid in January 2021: **2.25x, and a 13.4% IRR** over the 6.5 years to July 2027. At 60% the expected payoff is \$1.35mm, an **expected multiple of 1.35x**, and the IRR of that expected cash flow is **4.8% a year**. That is good, but not spectacular. The trade breaks even at a 44% chance of collection, and it needs 92% to clear the 12% litigation-finance hurdle of Kaz's tree. Even with the 2026 award and the 60% handed to you in advance, the claim discounted at 12% was worth about 13 points of face in January 2021, not the 20 paid. It is the best trade in the capital structure only on the branch where it gets paid.
+
+The assumptions a litigation-finance desk would attack:
+
+1. *Title.* Does a claim for a June 2020 breach travel with a loan bought in January 2021? That depends on the assignment documents and on whether the seller kept the claim. The award ran to the plaintiffs' \$895mm, and a buyer outside that group owns a loan, not a claim. The \$1mm price does at least clear New York's \$500,000 safe harbor from champerty.
+2. *The measure.* Damages run on face because of the sharing clause, §2.18(c). An appeal that moved to a market-value measure would shrink them, and the defendants will argue that a buyer at 20 bought after the harm and lost nothing.
+3. *Interest.* The 9% runs to judgment. Post-judgment interest in federal court accrues at the one-year Treasury rate, not 9%, and both the rate and the start date can be appealed.
+4. *The binary.* 60/40 leaves out the middle branches, a settlement at 70 cents on the dollar or a partial reversal, which is why Kaz's tree has three branches.
+5. *Timing.* July 2027 assumes no appeal, or a fast one. Paid in July 2029 instead, the expected IRR falls to 3.6%.
+6. *Collection.* Liability is several, allocated by each defendant's holdings, so each slice of the award is only as good as the particular fund behind it.
+7. *Costs.* Counsel, the funder's share, financing \$1mm for six and a half years, and tax all come out of the 2.25x.
+8. *Hindsight.* Every input is a 2026 fact. In January 2021 the buyer still faced the March 2023 loss on summary judgment and the plan's indemnity for the participants, so the ex-ante odds were far below 60%.
+
+**How:** The award per unit of excluded face is $261.13/895 = 29.2$ points. The 2,206 days to judgment are 6.044 years:
+
+$$
+V = 5 \times \frac{261.13\,(1 + 0.09 \times 6.044)}{895} = 5 \times 0.4505 = \$2.252\text{mm}.
+$$
+
+The expected payoff is $0.6 \times 2.252 = 1.351$ on 1.0 paid. The IRR solves $(1 + r)^{6.47} = 1.351$ (bought mid-January 2021, paid 7 July 2027; moving either date by a few weeks changes the result by a few basis points), so $r = 4.8\%$. The break-even probability is $1.0/2.252 = 0.444$. Clearing 12% needs $1.12^{6.47}/2.252 = 0.92$. If the 9% kept running to payment, the payoff would be 47.7 points and the expected multiple 1.43x (5.7%).
+
+**The trap:** Adding the 25 back. The "about 70 cents on face" in §14.8.1 is the court's closing valuation plus the award. But the 25 is a valuation, not cash: the plan paid non-participants about 0.6–2.4% (Chapter 13-B, PB-06), and the exercise tells you to ignore it. Count the 25 and the expected multiple jumps to 2.1x. The second slip is computing damages on the 20 you paid rather than on face. The third is averaging IRRs: $0.6 \times 13.4\% + 0.4 \times (-100\%) = -32\%$ is not the IRR of anything. Quote the IRR of the expected cash flow, and quote the conditional 13.4% beside it.
+
+**If you got this wrong, read:** §14.8.1, Act II (Mags's January 2021 sale) and Act III (the remand award, Kaz's 6.04 years and three-branch tree), then §14.6 on Robertshaw for "the remedy comes before the merits."
+
+**Z.14.5: Fix ROBO**
+
+**Answer:** One spec, 115 words:
+
+> Build `default_rates(events, ratings)`, monthly. For each month-end t, the cohort is every issuer rated at t − 12m; a rating withdrawn later is censored at withdrawal, never a default. Over (t − 12m, t], count each issuer once: `n_hard` (bankruptcy or missed payment, including one after an earlier exchange) and `n_de_only` (a distressed exchange with no hard default in the window). Output one row per t: `asof`, `n_cohort`, `n_hard`, `n_de_only`, `dr_all_mdy` = (`n_hard` + `n_de_only`)/`n_cohort`, `dr_ex_de_mdy` = `n_hard`/`n_cohort`, issuer-count fractions of the cohort over twelve months, not percent, not hazards. Never delete rows: an exchanger stays in the cohort, and its later hard default or second exchange is recorded and counted. Assert `set(de_ids) <= set(cohort_ids)`.
+
+**How:** "Exclude" is the word ROBO misread, so the spec never uses it. It defines the ex-DE rate as a *numerator* choice over an unchanged denominator. Hard defaults after an exchange count as hard defaults, because that is what CDS pays on and what the parole clock of §14.3 exists to catch. Each issuer is counted once per window, so `dr_all_mdy` minus `dr_ex_de_mdy` equals `n_de_only`/`n_cohort` by construction. The units clause blocks the two silent conversions: a twelve-month rate is not a hazard until it goes through $-\ln(1 - r)$, and 0.021 is not 2.1. The source suffix and "issuer-count" answer Hana's and Ines's questions (§14.1, §14.2.2) before anyone has to open a ticket. Withdrawals are censored for the reason in the attendance-register box. The assert tests for the exact failure ROBO produced: if any exchanger has gone missing from the denominator, the run stops.
+
+**The trap:** Deleting the rows. In the denominator it hardly shows: $2.1\%/(1 - 0.037) = 2.18\%$ instead of 2.10%, which is why nobody notices. The damage is in what the deleted issuers would have done next. At the rates of Z.14.1 and the clock of §14.3.2 ($p = 0.25$, $k = 1.2$), issuers already on parole account for about a fifth of a cohort's hard defaults in year two and 27–33% in years three to five. Delete them, and the "benign" ex-DE rate is missing a quarter to a third of its hard defaults, the very issuers about to re-default. The other common slip is naming the columns without their units. ROBO builds the most literal reading of whatever it is given, which is how §14.7.1 got its zero-and-one `regime` column, and a rate column with no units will come back as 2.1 on one refresh and 0.021 on the next.
+
+**If you got this wrong, read:** §14.1 (Hana's forty-one issuers and the "what we knew when" table), §14.2.2 on rates versus hazards and count- versus dollar-weighting, and the Specification for AI Implementation in §14.7 ("What ROBO built from the vague version").
 
 ### Z.15 Chapter 15: Event-Driven M&A, Regulatory Spreads & Change-of-Control
 
@@ -1707,7 +2527,7 @@ $$
 
 which falls from 3.92 at $s = 0$ to 3.57 at $s = 1.5$ as the capital settles. A single exponential through $w_1$ and $w_2$ reads the early, faster rate, so it underpredicts $w_3$. To see which parameter the third window pins down, differentiate the two log ratios. Both $\ln(w_2/w_1)$ and $\ln(w_3/w_2)$ load about $-0.49$ on $\theta$, but they load $-0.35$ and $-0.13$ on $\rho$. Their difference, which is the bend in the decay that only a third window can show, therefore loads $+0.22$ on $\rho$ and $-0.003$ on $\theta$. Two windows give one combination of the two speeds. The third separates them, and what it adds is $\rho$.
 
-**The trap:** Reading $w_3$ straight off the panel by differencing the cross-sectional mean on two single days. Each daily mean carries noise of $0.02/\sqrt{200} \approx 0.14$ points, so the difference carries about 0.2 points, which is as large as $w_3$ itself. With seed 16 it prints 0.33% and seems to say the opposite. Use the fitted curve, or average several days at each end. The second trap is to hear "the third window identifies $\rho$" as "the tail decays at $\rho$". It does not; see the note.
+**The trap:** Reading $w_3$ straight off the panel by differencing the cross-sectional mean on two single days. Each daily mean carries noise of $0.02/\sqrt{200} \approx 0.14$ points, so the difference carries about 0.2 points, which is as large as $w_3$ itself. With seed 16 it prints 0.33% and seems to say the opposite. Use the fitted curve, or average several days at each end. The second trap is to hear "the third window identifies $\rho$" as "the tail decays at $\rho$". It does not: the capital-arrival term decays at $\theta + \rho$ and the whole discount never decays slower than $\theta$, so slow capital can lift $w_3$ only a little (here 7.5% over the single exponential, 0.588% against 0.547%), whereas Dynkin's third window is 4.5 times its single-exponential line (0.86% against 0.19%). The bond data need a slower seller, not slower capital (§16.2.3).
 
 **If you got this wrong, read:** §16.2.2 (*The Full Derivation*: the quotient rule behind the two drift terms), §16.2.3, and Listing 16.1 in Appendix F.
 
@@ -1720,10 +2540,10 @@ which falls from 3.92 at $s = 0$ to 3.57 at $s = 1.5$ as the capital settles. A 
 | Fee, paid in shares | +62.9 | 12.6% |
 | Reserved allocation at a discount | +25.7 | 5.1% |
 | Exclusivity option | +16.7 | 3.3% |
-| The put | −10.5 | −2.1% |
-| **All-in** | **+94.8** | **19.0%** |
+| The put (on the unreserved 80%) | −8.4 | −1.7% |
+| **All-in** | **+96.9** | **19.4%** |
 
-The fee is the largest leg by a wide margin. Give it a 60% chance of surviving and it is worth \$37.7mm, still the largest, and the all-in falls to \$69.6mm (13.9%). A court can reach the fee directly. It can reach the reserved allocation and the exclusivity option only by opening the seat to the whole class, which spreads them pro rata rather than deleting them. It cannot reach the put, which is market risk borne by whoever sits in the seat. Nor can it reach the rights' own discount, which every holder already gets on equal terms.
+The fee is the largest leg by a wide margin. Give it a 60% chance of surviving and it is worth \$37.7mm, still the largest, and the all-in falls to \$71.7mm (14.3%). A court can reach the fee directly. It can reach the reserved allocation and the exclusivity option only by opening the seat to the whole class, which spreads them pro rata rather than deleting them. It cannot reach the put, which is market risk borne by whoever sits in the seat. Nor can it reach the rights' own discount, which every holder already gets on equal terms.
 
 **How:** Normalize $x_0 = 1$, so $K = 0.7$ and $m = 500/0.7 = 714.3$. A dilution factor of 0.6 makes $N_{\text{eff}} = 0.6\,m = 428.6$ and $S^{\text{post}} = 0.6\,x + 0.4\,K$. Under the chapter's driftless $\mathbb{P}$-lognormal, $\mathbb{E}[x] = 1$, so $\mathbb{E}[S^{\text{post}}] = 0.88$. The two linear legs then need no option model: the fee is $0.10 \times 714.3 \times 0.88$ and the reserved slice is $0.20 \times 714.3 \times 0.6\,(1 - 0.7)$. The other two legs use Block 2's `bs_call` and `bs_put` at $\sigma = 0.65$, $T = 0.3$ and zero rate:
 
@@ -1731,9 +2551,9 @@ $$
 C_{\text{BS}}(1, 0.7) = 0.3245, \qquad \text{Put}(1, 0.7) = C - (x_0 - K) = 0.0245 .
 $$
 
-Then the exclusivity option is $0.8 \times 0.15 \times 714.3 \times 0.6 \times 0.3245 = 16.7$ and the put is $-428.6 \times 0.0245 = -10.5$, which is exactly the fair fee $f^{*} = 2.1\%$ of the raise. A million-path Monte Carlo (seed 16) matches every leg within \$0.05mm. So the seat is paid 10% for insurance worth 2.1%. Because it is paid in shares worth 0.88 rather than 0.70, the fee is really 12.6%: six times the put on its own, before the reserved slice and the exclusivity option are even counted.
+Then the exclusivity option is $0.8 \times 0.15 \times 714.3 \times 0.6 \times 0.3245 = 16.7$ and the put is $-(1-a)\,N_{\text{eff}} \times 0.0245 = -0.8 \times 428.6 \times 0.0245 = -8.4$. The reserved slice's downside is already in the linear second leg, so the put runs only on the other 80% of the offering; on all $m$ shares it would be $-428.6 \times 0.0245 = -10.5$, which is exactly the fair fee $f^{*} = 2.1\%$ of the raise for a backstop with nothing reserved. A million-path Monte Carlo (seed 16) matches every leg within \$0.05mm. So the seat is paid 10% for insurance worth 2.1%. Because it is paid in shares worth 0.88 rather than 0.70, the fee is really 12.6%: six times the fair fee, before the reserved slice and the exclusivity option are even counted.
 
-**The trap:** Valuing the fee at cash, $f\,m\,K = \$50$mm. It is paid in shares, each worth $S^{\text{post}}$, not $K$. The runner-up is believing the chapter's Desk Myth that the fee is the smallest leg (see the note). The third is applying the 60% only to the fee and calling the seat "fixed". The reserved slice and the exclusivity option ride on the same exclusive seat.
+**The trap:** Valuing the fee at cash, $f\,m\,K = \$50$mm. It is paid in shares, each worth $S^{\text{post}}$, not $K$. The runner-up is the Desk Myth that the fee is the price of the backstop: it is the largest leg, and the put it pays for is the smallest. The third is applying the 60% only to the fee and calling the seat "fixed". The reserved slice and the exclusivity option ride on the same exclusive seat.
 
 **If you got this wrong, read:** §16.3.2 ("The all-in transfer" and the fair-fee derivation), the *ConvergeOne* bullet in §16.3.2's Trend Watch, and Listing 16.2 in Appendix F.
 
@@ -1885,7 +2705,7 @@ $$
 
 The overstatement is half of one quarter's hazard on the *other* doors. Because $\psi_P,\psi_X,\psi_D>0$, those doors widen as the market tightens: their face-weighted hazard rises from 0.109 to 0.210, and the approximation gives 1.4% and 2.6%, against the exact 1.3% and 2.6%. For a CLO-demand forecast (Chapter 21), the error points one way and is largest in proportion exactly when collateral is scarce, which is when the forecast matters. The loans it counts in are ones that were amended into PIK or defaulted, and neither kind is CLO collateral. The bias moves with the regime, so no constant calibrates it away. Keep the sizes in view, though. With these illustrative hazards the correction is 1–4%, while the regime itself moves supply by −79%, so get $\zeta$ right first. On the software-only subset the overstatement is already 3.1% at $\zeta=+1$, and a book whose other-door hazards are several times larger has a correction several times larger.
 
-**The trap:** One wrong answer is $\zeta=\ln2/0.8=0.87$ from the syndicated hazard alone. It is close here, but only because $\mathcal{K}\Delta t$ is small, so say why it is close. Another is to compare dollar gaps and conclude that the naive estimate overstates *less* in the tight regime. "By more" only makes sense as a fraction of supply.
+**The trap:** One wrong answer is $\zeta=\ln2/0.8=0.87$ from the syndicated hazard alone. It is close here, but only because $\mathcal{K}\Delta t$ is small, so say why it is close. Another is to compare dollar gaps and conclude that the naive estimate overstates *less* in the tight regime. The claim is about the fraction of supply, not the dollar gap.
 
 **If you got this wrong, read:** §17.4.2 (the three-doors box and *Why the competition term matters*), Listing 17.3, and Chapter 21 for the CLO-demand side.
 

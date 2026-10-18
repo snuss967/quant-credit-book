@@ -32,8 +32,6 @@ and the condition holds exactly at the cliff. The shape decides the answer. A me
 
 **The trap:** Defending 1.33 because it is "inside the ruin boundary of 1.67". That boundary is $1/\mathbb{E}[L]$. The credit agreement moved the worst case to $L = 1$, and there 1.33 is a 133% loss. The zero under $\mathbb{Q}$ tempts the other mistake: "fixing" it with a physical hazard while keeping the agency's average $L$, which is how Kaz got to 93% in the first place.
 
-NOTE (for the editor): "a Beta recovery of mean 0.6" literally means 60% recovery (mean loss 0.4). The bond's base case and Listing 28.3's `kelly_random_loss(0.045, 0.031, 3.0, 2.0, 1.00)` both use a Beta *loss* of mean 0.6 (recovery 40%). The exercise also gives no shape, and the answer depends on it: at these inputs every mean-0.6 Beta with $b \ge 2$ returns the boundary (1.00) and $b < 2$ returns less ($\text{Beta}(1.5, 1)$: 0.95). The literal reading, with $\text{Beta}(2, 3)$, also gives 1.00. Suggest "a Beta(3, 2) loss of mean 0.6, as in Listing 28.3".
-
 **If you got this wrong, read:** §28.4, the *P and Q* box and "Which measure, and which loss" (random $L$, and the ruin boundary set by the worst recovery); "Fractional Kelly is full Kelly for people with standard errors" for (28.13); Theo's card in the 2026 CCC case study; §28.8 for who owns which input; and `kelly_random_loss` in Listing 28.3 (Appendix F).
 
 **Z.28.3: Your fund is the borrower**
