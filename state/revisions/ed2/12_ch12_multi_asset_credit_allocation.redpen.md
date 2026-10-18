@@ -1,0 +1,13 @@
+# Red-pen log (Edition 2): 12_ch12_multi_asset_credit_allocation.md
+
+## C11 (desk-head red-pen), §12.5 regime-input part only: fixed
+
+All changes in `book_src/12_ch12_multi_asset_credit_allocation.md`. The §26.8 and §8.1 parts of C11 belong to other files and were not touched.
+
+- **§12.5, rates-block sentence (clause replaced):** "treating the Treasury factor as independent of the spread factor (an approximation; in risk-off months the correlation is negative ...)" replaced by the total-return covariance with an explicit cross term, $\rho_{y,s}\,\sigma_y\,(a D^{\text{mod}\top} + D^{\text{mod}} a^\top)$ with $a_i=\text{DTS}_i\sqrt{\Omega_{ii}}$ (unnumbered display; derived from $r_i=-\text{DTS}_i u_i - D^{\text{mod}}_i\Delta y$). $\rho_{y,s}=0$ is kept as the named shortcut, still called an approximation. The original hedges are kept: negative sign flatters long-duration IG and does little for floating-rate loans (now with the reason, almost no rate duration); positive sign in 2022 adds to long-duration variance (from Ch 8 §8.2); "changed sign twice since 2021" is Ch 8's own statement (§8.2, §8.7), no new number.
+- **§12.5, new paragraph "Make the correlation a regime input" (about 300 words with the sentence above):** $\rho_k$ estimated per state of the §12.4 chain; stated plainly that the chain stays fitted on excess returns, so $\hat\rho_k$ is a $\gamma_t(k)$-weighted statistic, not a fitted parameter; each $\rho_k$ goes inside $\Sigma_k$ and (12.2) does the mixing (no averaging of $\rho$ across states); three cautions (positive semidefiniteness check and shrinkage of $|\rho|$ or sector-by-sector estimation; shrink the thinly sampled stress-state $\hat\rho_k$ toward the full-sample value and carry an interval; a spread-based calm/stress chain may not separate growth-scare from inflation stress, fallback is the rolling-correlation flag of §8.7); estimation on smoothed probabilities, acting on filtered ones with the §12.4 delay.
+- **§12.10 listing description (one sentence added):** the `dts_cov` rates block is the independent base case $\rho_{y,s}=0$; the cross term and per-regime $\rho_k$ are the extension and not in the listing. Code in Appendix F untouched, so the asserts are unchanged.
+- **§12.11 spec block, pipeline step 3 (one parenthetical line added):** base case rho_ys = 0; total-return extension adds the rho_k cross term inside each Sigma_k (section 12.5).
+
+Verification: no web fetch (all claims rest on Ch 8 as already written). No new unverified numbers. Currency escapes: none needed. `tools/check_book.py --file` passes (16,927 words). No topic removed; the chapter's closing status line preserved.
+<!-- STATUS: COMPLETE -->

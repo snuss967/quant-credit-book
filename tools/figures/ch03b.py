@@ -89,7 +89,7 @@ def fig_snap_phantom():
     a.set_xticks([10, 12, 14, 16])
     a.set_xticklabels(["10:00", "12:00", "2:00", "4:00"])
     a.set_xlabel("Time of day (New York)")
-    a.set_ylabel("10-year yield since yesterday's snap (bp)")
+    a.set_ylabel("Treasury yield since yesterday's snap (bp)")
     lo, hi = path.min(), path.max()
     a.set_ylim(lo - 3.4, hi + 2.2)
     lo, hi = a.get_ylim()
@@ -142,7 +142,7 @@ def fig_hit_rate_se():
     a.axhline(50, color=MUTED, linewidth=0.9, linestyle=(0, (4, 3)), zorder=1)
     a.set_xscale("log")
     a.set_xlim(10, 2000)
-    a.set_ylim(25, 85)
+    a.set_ylim(20, 90)
     a.text(10.8, 49.2, "coin flip", fontsize=8.5, color=INK_2, ha="left", va="top")
     a.text(55, 55.8, "true hit rate 55%", fontsize=8.5, color=INK_2, ha="left", va="bottom")
     n40 = 40
@@ -503,11 +503,11 @@ def fig_day_timeline():
     yc = 3.1
     band_label(yc, "After the close")
     ax.add_patch(Rectangle((16.0, yc - 0.36), 2.2, 0.72, fc=BLUE_TINT, ec=BLUE, linewidth=1.0, zorder=3))
-    ax.text(16.1, yc, "marks, disputes,\nEOD risk", ha="left", va="center", fontsize=7.6, color=INK, zorder=4, linespacing=1.15)
+    ax.text(16.1, yc, "marks, disputes,\nEOD risk", ha="left", va="center", fontsize=8.0, color=INK, zorder=4, linespacing=1.15)
 
     # lane 4: venue and vendor clocks (approximate), ORANGE
     band_label(1.25, "Venue and\nvendor clocks")
-    ax.text(X0 - 0.12, 0.35, "(approximate)", ha="right", va="center", fontsize=7.2, color=MUTED, clip_on=False)
+    ax.text(X0 - 0.12, 0.35, "(approximate)", ha="right", va="center", fontsize=8.0, color=MUTED, clip_on=False)
     ax.plot([15.0], [2.0], "s", color=ORANGE, markersize=6.5, zorder=5, markeredgewidth=0)
     ax.annotate("Treasury futures settle,\nabout 3:00", (15.0, 2.0), xytext=(-8, 0), textcoords="offset points", ha="right",
                 va="center", fontsize=8.0, color=INK_2, linespacing=1.15, bbox=white)
@@ -531,6 +531,7 @@ def fig_day_timeline():
 # Figure 3-B.3 (3B.3): the year as four nested clocks, with contract clocks cutting across them
 # --------------------------------------------------------------------------------------------------
 def fig_year_clocks():
+    import matplotlib.patheffects as pe
     from matplotlib.lines import Line2D
     from matplotlib.patches import PathPatch
     from matplotlib.path import Path
@@ -567,19 +568,23 @@ def fig_year_clocks():
         radial("day", h * 15, 0.8, 1.0, color=NEUTRAL, linewidth=0.7, zorder=2)
     for d in range(7):
         radial("week", d * 360 / 7, 0, 1, color=NEUTRAL, linewidth=0.7, zorder=2)
+    def halo(face):                                   # ring letters sit above the contract hands, with a halo in the ring's face colour
+        return [pe.withStroke(linewidth=2.4, foreground=face)]
+
     for d, lab in enumerate("MTWTFSS"):
         x, y = pol(mid("week", 0.18), (d + 0.5) * 360 / 7)
-        ax.text(x, y, lab, ha="center", va="center", fontsize=7.2, color=MUTED, zorder=3)
+        ax.text(x, y, lab, ha="center", va="center", fontsize=8.0, color=MUTED, zorder=9.5,
+                path_effects=halo("#ecebe7" if d >= 5 else TINT))
     for d in range(31):
         radial("month", d * 360 / 31, 0.86, 1.0, color=NEUTRAL, linewidth=0.6, zorder=2)
     for dom in (1, 8, 15, 22):
         x, y = pol(mid("month", 0.2), (dom - 0.5) * 360 / 31)
-        ax.text(x, y, str(dom), ha="center", va="center", fontsize=7.0, color=MUTED, zorder=3)
+        ax.text(x, y, str(dom), ha="center", va="center", fontsize=8.0, color=MUTED, zorder=9.5, path_effects=halo(TINT))
     for m in range(12):
         radial("year", m * 30, 0, 1, color=NEUTRAL if m % 3 else MUTED, linewidth=0.7 if m % 3 else 1.4, zorder=2)
     for m, lab in enumerate("JFMAMJJASOND"):
         x, y = pol(mid("year", 0.16), (m + 0.5) * 30)
-        ax.text(x, y, lab, ha="center", va="center", fontsize=7.2, color=MUTED, zorder=3)
+        ax.text(x, y, lab, ha="center", va="center", fontsize=8.0, color=MUTED, zorder=9.5, path_effects=halo(TINT))
 
     def dot(ring, th, f, color, marker="o", size=6.0, zorder=6, **kw):
         x, y = pol(mid(ring, f), th)
