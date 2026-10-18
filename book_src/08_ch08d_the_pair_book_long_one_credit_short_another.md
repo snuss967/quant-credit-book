@@ -127,7 +127,7 @@ Marcus's last row is why the meeting runs long. His factor model has a rating-bu
 
 Dov does not know, an honest answer and an expensive one. PB-19's hedge-method column, *DTS; rating-bucket factor left open*, now carries a number: of the book's 0.11 of rating-bucket exposure, PB-19 contributes 0.05 that its thesis claims and four other pairs contribute 0.06 that their theses never mention. Those four belong to the conversation Chapter 9 records from the week before, when the same x-ray found the book long value with extra steps; the resize that followed fixed the value line and left this one. PB-19's 0.05 is Dov's, and it will matter on Thursday.
 
-![Figure 8-D.1: Three rulers, four market states. Each panel is one market state; the bars are the pair's P&L under the DV01, DTS and 24-week-beta rulers on a \$40mm Ford Credit long. The Ford-specific idio bar (third panel) is the same height under every ruler, \$270,000; the ruler error in the first two panels is as large as the alpha. Illustrative: the chapter's PB-19 numbers, spread duration 4.5 on both legs, spreads 180 and 120 bp.](assets/figures/ch08d_ruler_scenarios.png)
+![Figure 8-D.4: Three rulers, four market states. Each panel is one market state; the bars are the pair's P&L under the DV01, DTS and 24-week-beta rulers on a \$40mm Ford Credit long. The Ford-specific idio bar (third panel) is the same height under every ruler, \$270,000; the ruler error in the first two panels is as large as the alpha. Illustrative: the chapter's PB-19 numbers, spread duration 4.5 on both legs, spreads 180 and 120 bp.](assets/figures/ch08d_ruler_scenarios.png)
 
 <!-- FIGURE: ch08d_ruler_scenarios.png (four panels; bars DV01/DTS/beta in USD thousands: −108/0/+138; 0/+90/+205; +270/+270/+270; +180/+270/+385) -->
 
@@ -195,7 +195,7 @@ Dov did the trade at 10:15. He sold \$17.5 million of the Ford Credit notes and 
 
 Marcus had one more line on his second sheet. Kestrel, PB-01's long, is \$60 million face at about 96 with a model recovery of 40; a Kestrel default costs about \$34 million in an afternoon, more than two and a half times the distance to Dov's line. Dov's answer was that Kestrel was the best credit in the book, which was a good answer about Kestrel and no answer about the stop. Marcus wrote it down, and it went where a PM's conviction is weighed by somebody else (§8D.7).
 
-![Figure 8-D.2: The stop as a size. Largest position against assumed recovery for a single long at 95 under Dov's \$13mm distance to his first line and under the training sheet's \$15mm firing budget, with a recovery-weighted capital-structure pair for contrast; at a recovery of 40 the long is capped at \$22.5mm. Illustrative: the chapter's numbers; the threshold shape is press-reported for one firm, not a disclosed rule.](assets/figures/ch08d_stop_size_vs_recovery.png)
+![Figure 8-D.7: The stop as a size. Largest position against assumed recovery for a single long at 95 under Dov's \$13mm distance to his first line and under the training sheet's \$15mm firing budget, with a recovery-weighted capital-structure pair for contrast; at a recovery of 40 the long is capped at \$22.5mm. Illustrative: the chapter's numbers; the threshold shape is press-reported for one firm, not a disclosed rule.](assets/figures/ch08d_stop_size_vs_recovery.png)
 
 <!-- FIGURE: ch08d_stop_size_vs_recovery.png (x: recovery 0–80; y: max MV in USD mm = budget×0.95/(0.95−R) for budgets 13 and 15; cap-structure pair as a band for ±10-point recovery error; mark R=40) -->
 
@@ -222,7 +222,7 @@ PB-19's September makes it concrete. Spreads widened 8% in relative terms; Ford 
 
 Under the rows sit the book's own lines. The mean pairwise correlation of the pairs' idio P&L, §8.8's test, read 0.28 for September: twelve "independent" views moving together more than independent views should. Beta to CDX HY: +0.04 of gross. Rating bucket: 0.11 on Tuesday, 0.08 by Friday's x-ray. Largest jump-to-default long: Kestrel, about \$34 million at the model's recovery. Largest jump-to-default short: GM Financial. Borrow fee on the book, weighted by short market value: 64 bp. Distance to the first line: \$13 million.
 
-![Figure 8-D.3: The Pair Book as a figure. Twelve rows (live, replay and refused), each with September's idio, leak and friction bars and its capture ratio; PB-12's row is empty, with the reason. Book-level lines run along the bottom. Illustrative: Dov Adler's pod and Vantress are fictional composites.](assets/figures/ch08d_pair_book_ledger.png)
+![Figure 8-D.8: The Pair Book as a figure. Twelve rows (live, replay and refused), each with September's idio, leak and friction bars and its capture ratio; PB-12's row is empty, with the reason. Book-level lines run along the bottom. Illustrative: Dov Adler's pod and Vantress are fictional composites.](assets/figures/ch08d_pair_book_ledger.png)
 
 <!-- FIGURE: ch08d_pair_book_ledger.png (12 rows; PB-19 idio 162, leak −57.8, friction −45.8, κ 0.36; PB-01 κ 0.41; PB-12 empty; footer lines as in §8D.6) -->
 

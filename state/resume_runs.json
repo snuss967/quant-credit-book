@@ -93,21 +93,6 @@
    }
   },
   {
-   "name": "lessons-4",
-   "task": "wdxhee1hj",
-   "runId": "wf_a057e3f8-944",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "04_ch04_inside_the_systematic_credit_industry"
-    ],
-    "stages": [
-     "lessons"
-    ]
-   }
-  },
-  {
    "name": "rv-newfiles",
    "task": "wvsjasszl",
    "runId": "wf_c551929c-6b5",
