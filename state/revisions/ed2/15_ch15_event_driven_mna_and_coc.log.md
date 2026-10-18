@@ -19,8 +19,8 @@
 - [x] 17. §15.4.1: Theo with three prospectuses, highlighters, two obituaries, carve-out pattern.
 - [x] 18. §15.4.2: ruler and seesaw boxes, gauge judgment, four-deal narrative, bridge.
 - [x] 19. §15.5.1: ICE-MarketAxess scene, verified ICE SMR on 2033s, 2036s.
-- [ ] 20. §15.5.2: MATH-GENTLY six boxes (survival, censoring, distributions, competing risks, Cox, Bayes)
-- [ ] 21. §15.5 after Trend Watch: WHEN-TO-APPLY (survival tools)
+- [x] 20. §15.5.2: six boxes: fingers, stadium, four distributions, Cox, doors, Bayes.
+- [x] 21. §15.5: survival-tool judgment passage: sample, censoring, regime, scarcity, why-pending.
 - [ ] 22. §15.6: ANOTHER-SEAT (RV pod, dealer desk) + EXPAND Acharya-Johnson
 - [ ] 23. §15.7: EXPAND-SCENE Spirit + MATH-GENTLY (jump vs diffusion)
 - [ ] 24. §15.8 WBD: EXPAND-SCENE + MATH-GENTLY (expected positive part) + Another Seat

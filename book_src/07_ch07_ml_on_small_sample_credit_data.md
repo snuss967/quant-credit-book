@@ -227,15 +227,45 @@ So the first check a practitioner runs on an unfamiliar factor file takes minute
 
 ## 7.3 Stationarity With Memory: Fractional Differentiation of Log Spreads
 
+The first thing Theo asked to see, the Monday after the replay, was the feature Kaz's model leaned on hardest. It was the level of log OAS, and its partial-dependence plot (the model's average prediction as that one feature is swept from low to high, everything else held fixed) looked less like an economic relationship than like a calendar: flat across most of the range, then a cliff at exactly the spread levels the index had visited in late 2008 and in March 2020 *(illustrative)*. "It's learned that wide spreads get followed by tightening," Kaz said. Theo looked at the cliff for a while. "It's learned that two particular months got followed by tightening."
+
 Kaz's model in the cold open used the *level* of log OAS as a feature. That is defensible on economics (wide spreads mean-revert; valuation is a level concept, see Chapter 9) and indefensible on statistics: a level that wanders across regimes means the model learns "2008 was wide" rather than "wide predicts tightening." The textbook fix is to difference, using $\Delta \log s_t$. That is stationary, and it is also amnesiac. It throws away exactly the level information that made the feature worth having. The desk wants a dial between "level, non-stationary, full memory" and "change, stationary, no memory." Fractional differentiation is that dial (Hosking 1981; López de Prado, *Advances in Financial Machine Learning*, 2018, ch. 5).
 
-**Why log spreads and not spreads.** Before dialing anything, choose the right object.
+> **Math, Gently.** *Random walks, stationarity, and the walker who forgets nothing.* Picture a man walking home from a closing dinner, taking one random step left or right every few seconds. His *position* is a **random walk**: each step is added to all the previous ones, so where he stands depends on his entire history, and the longer he walks the farther from the restaurant he is likely to have drifted. His *steps* are **stationary**: each is drawn from the same distribution, today's is no bigger than yesterday's, and each one forgets the one before. A series is stationary when its average and its spread do not drift over time, and a model needs that property, because it learns patterns from the past on the assumption that the past is a fair sample of the future. Tiny number: give a series daily shocks with a standard deviation of 1%. After 250 trading days the *level* has a standard deviation of about $1\% \times \sqrt{250} \approx 16\%$, and it keeps growing with the square root of time; the daily *change* still has a standard deviation of exactly 1%, on day one and on day ten thousand. A spread level lives somewhere between the two pictures: it wanders like the walker for years and then, eventually, mean-reverts, which is why it is neither safe to feed to a model raw nor wise to difference away. The square-root-of-time picture in full is in §3.1.3; spreads as a distribution are in §5.2.3.
+
+**Why log spreads and not spreads.** Before anything gets dialed, there is a quieter choice to make about *which* series gets dialed, and it is a choice between two shapes of randomness.
+
+> **Math, Gently.** *Normal and lognormal, or why a 50bp move is not one size.* A **normal** distribution is the symmetric bell: a move up of a given size is exactly as likely as the same move down, and nothing stops the variable from going negative. A **lognormal** is what you get when the *logarithm* of a variable is normal. The variable itself is then always positive and skewed to the right: it can double more easily than it can fall to zero, because a fixed step in log space is a fixed *percentage* step in the level. Credit spreads look far more like the second shape. They cannot go below zero, they blow out more violently than they compress, and the size of a move tends to scale with where the spread already sits. Tiny number: a 10% relative move is 10bp for a bond at 100bp and 80bp for a bond at 800bp. In logs both are the same move, $\log(1.1) \approx 0.095$, and the model sees one kind of event; in raw basis points it sees two unrelated ones, and a normal model of spread levels that allows a 50bp shock to a 40bp spread is quietly assigning probability to a negative spread. The longer version, with the skew of the spread distribution, is in §5.2.3. Ben Dor's evidence for the proportional picture comes next.
 
 > **[SOURCE EXTRACTION]** *Ben_Dor_Quantitative_Credit_Portfolio_Management p.39:* "These results clearly indicate that absolute spread volatility is highly unstable and tends to rise with increasing spread. Computing volatilities based on relative spread change generates a more stable time series."
 >
 > **Annotation.** This is the empirical foundation of DTS (Chapter 8), and it doubles as a feature-engineering rule. If spread changes are roughly proportional to spread levels, then $\Delta s_t \approx s_{t-1}\,\Delta \log s_t$, and the stable object is the relative change $\Delta \log s_t$, with sector volatilities that Ben Dor and coauthors report clustered between about 5% and a bit over 10% per month on the same page. Feed a model raw spreads, and a 50bp move means one thing for a 100bp BBB and another for an 800bp B3. Feed it log spreads, and the scale is comparable across ratings and across regimes, which is what lets one model span 2008 and 2021 without learning a separate world for each. Where the modern desk departs: the proportionality breaks near default (a bond at 3,000bp quotes on price, not spread) and near zero (the structural floor Ben Dor's own regressions show as a positive intercept). Cap the log transform's domain, switch distressed names to price-based features, and say so in the spec.
 
-**The derivation.** Let $B$ be the backshift operator, $B x_t = x_{t-1}$. Ordinary differencing is $(1-B)x_t = x_t - x_{t-1}$. For a real exponent $d \ge 0$, define $(1-B)^d$ by the binomial series:
+**The dial, before the algebra.** Ordinary differencing replaces today's log spread with today minus yesterday: a weight of $+1$ on today, $-1$ on yesterday, and nothing on anything older. Leaving the level alone is the other extreme: $+1$ on today, zeros everywhere else, and all of history still baked into today's number. Fractional differentiation picks an exponent $d$ between 0 and 1 and produces weights in between: $+1$ on today, then a string of small negative weights on the past that shrink slowly with age. Each weight comes from the one before by a one-line rule, $w_k = -w_{k-1}(d-k+1)/k$, starting from $w_0 = 1$. The weights fade roughly like $k^{-(d+1)}$, rather than stopping dead after one lag (the ordinary difference) or never fading at all (the raw level), and the running sum of the weights is the share of the original level still left inside the feature.
+
+> **Math, Gently.** *The dial between level and change, read as a memory.* Read each weight as how much of a past day the feature still remembers, with a minus sign because the feature is today *net of* that memory. With $d = 0.4$ the weights are $1, -0.4, -0.12, -0.064, -0.0416, \ldots$: today counts in full, yesterday is subtracted at 40%, the day before at 12%, and the memories keep fading without ever quite reaching zero. Add the first five weights and you get $1 - 0.4 - 0.12 - 0.064 - 0.0416 \approx 0.37$: after four lags, about 37% of the raw level is still inside the feature. Carry the sum out to 280 lags and about 7% survives. With $d = 1$ the weights are $1, -1, 0, 0, \ldots$, the sum is zero after one lag, and none of the level survives; with $d = 0$ the weights are $1, 0, 0, \ldots$ and all of it does. The 7% sliver at $d = 0.4$ is the whole point. It is enough of the level for the feature to remember that the bond is wide, and little enough that the feature's average stops wandering with the regime. The algebra behind every number in this box is in "The Full Derivation: the fractional weights" below, and the weights themselves are Exercise 2's check.
+
+**Fixed-width window (FFD).** The expanding-window version uses more weights for later observations, which makes the transformed series non-stationary by construction (its variance depends on $t$). Fix a weight tolerance $\tau$ and keep only $k \le K(\tau)$ with $|w_k| \ge \tau$:
+
+$$
+\tilde x_t = \sum_{k=0}^{K(\tau)} w_k\, x_{t-k}.
+$$
+
+Then choose the smallest $d$ that makes the series stationary:
+
+$$
+d^\star = \min\big\{ d \in \{0, 0.05, \ldots, 1\} : \text{ADF}\big(\tilde x^{(d)}\big)\ \text{rejects a unit root at } 5\% \big\},
+$$
+
+and report $\rho\big(\tilde x^{(d^\star)}, x\big)$, the correlation between the transformed and raw series, as "memory retained." In plain terms, $d^\star$ is the least amnesia that still makes the feature stationary. Fractional differentiation is how much you remember after a closing night: enough to be stationary in the morning, not so much that you remember the covenant you agreed to at 3 a.m.
+
+One result from the derivation is needed to price the window. For large lags the weights shrink like $|w_k| \approx k^{-d-1}/|\Gamma(-d)|$, where $\Gamma$ is the Gamma function, the factorial extended to non-integers ($\Gamma(n+1) = n!$). That single line turns "how long a memory" into "how many days of history before the first usable value."
+
+**The warm-up cost, computed.** The window length is not a detail. With $d = 0.4$, $|\Gamma(-0.4)| = \Gamma(0.6)/0.4 \approx 1.489/0.4 \approx 3.72$, so $|w_k| \approx k^{-1.4}/3.72$. Setting this equal to $\tau = 10^{-4}$ gives $k^{1.4} \approx 2{,}690$, or $K \approx 280$ trading days, more than a year of warm-up before the first usable value. With $\tau = 10^{-3}$, $K \approx 54$ days. A bond issued 14 months ago has no FFD feature at $\tau = 10^{-4}$, and new issues are exactly where a lot of the relative-value action lives. The fix is to compute FFD on an *issuer-level* constant-maturity log spread (interpolated from the issuer's curve, Chapter 8) and map it to the new bond, rather than on the bond's own short history.
+
+#### The Full Derivation: the fractional weights
+
+Let $B$ be the backshift operator, $B x_t = x_{t-1}$. Ordinary differencing is $(1-B)x_t = x_t - x_{t-1}$. For a real exponent $d \ge 0$, define $(1-B)^d$ by the binomial series:
 
 $$
 (1-B)^d \;=\; \sum_{k=0}^{\infty} \binom{d}{k}(-B)^k \;=\; \sum_{k=0}^{\infty} w_k B^k,
@@ -259,22 +289,6 @@ $$
 That slow decay is the "long memory": a shock from 200 days ago still carries weight, unlike an ARMA filter whose weights decay geometrically.
 
 How much of the level survives? Use the partial-sum identity $\sum_{k=0}^{K} (-1)^k\binom{d}{k} = (-1)^K\binom{d-1}{K}$, whose magnitude behaves like $K^{-d}/\Gamma(1-d)$. As $K \to \infty$ the full filter's weights sum to $(1-1)^d = 0$, so an infinitely long fractional difference annihilates a constant level, just as ordinary differencing does. But the decay is slow, and a *truncated* filter keeps a sliver of the level proportional to $K^{-d}$. That sliver is the memory we wanted to keep. Small $d$ keeps more; $d=1$ keeps none.
-
-**Fixed-width window (FFD).** The expanding-window version uses more weights for later observations, which makes the transformed series non-stationary by construction (its variance depends on $t$). Fix a weight tolerance $\tau$ and keep only $k \le K(\tau)$ with $|w_k| \ge \tau$:
-
-$$
-\tilde x_t = \sum_{k=0}^{K(\tau)} w_k\, x_{t-k}.
-$$
-
-Then choose the smallest $d$ that makes the series stationary:
-
-$$
-d^\star = \min\big\{ d \in \{0, 0.05, \ldots, 1\} : \text{ADF}\big(\tilde x^{(d)}\big)\ \text{rejects a unit root at } 5\% \big\},
-$$
-
-and report $\rho\big(\tilde x^{(d^\star)}, x\big)$, the correlation between the transformed and raw series, as "memory retained." In plain terms, $d^\star$ is the least amnesia that still makes the feature stationary. Fractional differentiation is how much you remember after a closing night: enough to be stationary in the morning, not so much that you remember the covenant you agreed to at 3 a.m.
-
-**The warm-up cost, computed.** The window length is not a detail. With $d = 0.4$, $|\Gamma(-0.4)| = \Gamma(0.6)/0.4 \approx 1.489/0.4 \approx 3.72$, so $|w_k| \approx k^{-1.4}/3.72$. Setting this equal to $\tau = 10^{-4}$ gives $k^{1.4} \approx 2{,}690$, or $K \approx 280$ trading days, more than a year of warm-up before the first usable value. With $\tau = 10^{-3}$, $K \approx 54$ days. A bond issued 14 months ago has no FFD feature at $\tau = 10^{-4}$, and new issues are exactly where a lot of the relative-value action lives. The fix is to compute FFD on an *issuer-level* constant-maturity log spread (interpolated from the issuer's curve, Chapter 8) and map it to the new bond, rather than on the bond's own short history.
 
 > **Ways This Blows Up.** *Three ways fractional differentiation lies to you in credit.* (1) **Jumps.** A jump-to-default or an LMT announcement is a level shift that no $d<1$ makes stationary. One Serta-style uptier in the sample will dominate the ADF statistic and push $d^\star$ toward 1. Estimate $d^\star$ on a jump-filtered series (or on IG and HY separately), apply it to the raw one, and handle jumps as events, not as noise. (2) **Stale marks.** A stale bond's spread series is a step function. That manufactures positive autocorrelation in changes and makes the level look more persistent, so you can get a "low $d^\star$" from an illiquid bond whose low $d^\star$ is a liquidity artifact. Dynkin p.771 makes the same point about return autocorrelation; here it contaminates the memory estimate. (3) **Look-ahead in $d^\star$ itself.** Choosing $d^\star$ on the full sample and then backtesting uses the future to pick a preprocessing parameter. Choose $d^\star$ inside each training fold, or fix it once on a burn-in period you never test on.
 

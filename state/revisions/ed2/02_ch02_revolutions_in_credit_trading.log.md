@@ -8,8 +8,8 @@
 - [x] 6. [§2.2.2, after Ways This Blows Up] SHOP-LIFE: "Shop Life: the TRACE loader" (~800 words, labeled fictional composite). -- Femi traces 9% dip: capped drops, affiliate break, PT NaN.
 - [x] 7. [§2.3 Revolution 1] ANOTHER-SEAT + LIST-TO-NARRATIVE. -- Dealer-desk seat box; Ines teaches Theo reading the e-share table.
 - [x] 8. [§2.3.1 S-curve] MATH-GENTLY + FULL-DERIVATION-MOVE + WHEN-TO-APPLY. -- Rumor-in-school odds box; judgment on K; logit fits moved.
-- [ ] 9. [§2.3.2 RFQ as auction] MATH-GENTLY + FULL-DERIVATION-MOVE.
-- [ ] 10. [§2.4 All-to-All] MATH-GENTLY + ANOTHER-SEAT.
+- [x] 9. [§2.3.2 RFQ as auction] MATH-GENTLY + FULL-DERIVATION-MOVE. -- Car-guessing order-statistics box; April 9 13.2-to-6.6 anchor; algebra moved.
+- [x] 10. [§2.4 All-to-All] MATH-GENTLY + ANOTHER-SEAT. -- Markout hand-history box; Man Lam/Kamenski LP seat box added.
 - [ ] 11. [§2.5 Automation, §2.5.1] LIST-TO-NARRATIVE + MATH-GENTLY + WHEN-TO-APPLY.
 - [ ] 12. [§2.6.1 Basket bid] MATH-GENTLY + FULL-DERIVATION-MOVE.
 - [ ] 13. [§2.6.2 Case Study: PT cycle] EXPAND-SCENE (~1,500 words).

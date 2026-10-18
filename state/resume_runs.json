@@ -181,13 +181,6 @@
    }
   },
   {
-   "name": "u2-quality-read",
-   "task": "w0dq9p9lo",
-   "runId": "wf_5c19ff92-0be",
-   "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/ed2-u2-quality-read-wf_5c19ff92-0be.js",
-   "args": null
-  },
-  {
    "name": "part-III-a",
    "task": "wr7mis8ev",
    "runId": "wf_b92bbb19-5ce",
@@ -310,6 +303,18 @@
      "resgraph"
     ]
    }
+  },
+  {
+   "name": "fixes-and-cast",
+   "task": "wwluacbli",
+   "runId": "wf_c8095cb4-bb7",
+   "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/ed2-u2-fixes-and-cast-bible-wf_c8095cb4-bb7.js",
+   "args": {
+    "stems": [
+     "06_ch06_merton_and_intensity_models"
+    ]
+   },
+   "todo": "Relaunch the same script with stems [01_ch01_anthology_and_landscape, 05_ch05_credit_probability_distributions] once their .verify.md files are COMPLETE. Then run a lessons pass on Ch 3, 7, 13-16 (revised before the lessons existed)."
   }
  ]
 }

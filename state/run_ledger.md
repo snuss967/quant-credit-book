@@ -183,3 +183,8 @@ The chapter pipeline gained a `resgraph` stage (U3b: specific episodes and posts
 | u3-media | wmgs3kr4j | — | All three media dossiers COMPLETE: 283 verified episodes, posts, and talks (Parts I–II 80, III–IV 88, V–VIII ~115 URLs) | done |
 | resgraph-V-a | wg1sjulmh | resgraph | Ch 18–23 | running |
 | resgraph-V-b | wl6vl10zt | resgraph | Ch 24–27, App D, App E, primers 4-B, 7-B, 12-B | running |
+
+### 05:52 UTC: quality read done (w0dq9p9lo)
+Verdict: the process works where it produced scenes and fails where it stacked new text on old (Ch 1 is "a palimpsest"). Modal density rose because the prescription moved into templated "When to reach for it" and "Reading Listing" paragraphs. There are 18 Math, Gently boxes in Ch 1, three of them adjacent. Ch 6 leaks "CHECK" and "search summary" text in 5 places. Ch 1's Serta "no co-op" sentence contradicts the dossier. Output: `state/reviews/ed2/u2_lessons.md` (16 rules: growth 1.6–1.9×, one telling per fact, template ban, box budget ≤1 per 1,200 words and ≤10 per chapter, a Finder table in each Debrief, cast bible, fiction labels) and `u2_fixes_ch01_05_06.md`.
+| fixes-and-cast | wwluacbli | Sonnet cast bible → Opus fixer for Ch 6 (Ch 1 and 5 follow once their verify is COMPLETE) | running |
+Follow-up queued: a lessons pass on Ch 3, 7, 13–16, which were revised before the lessons existed.
