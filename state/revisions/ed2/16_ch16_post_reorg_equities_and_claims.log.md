@@ -1,15 +1,15 @@
 # Edition 2 Revision Log: Chapter 16 (U2)
 
-- [ ] 1. [Cold Open: Effective Date, 9:31 a.m.] EXPAND-SCENE (~2,000 words), eleven CLO clocks, Mags 2003 story, Kaz/Ines bids, Wolfspeed contrast, decision point; objectives to narrative; move measures/notation after decision.
-- [ ] 2. [§16.1.1 Desk framing] MATH-GENTLY (share is a call) + LIST-TO-NARRATIVE + BRIDGE (plan values below trading; Envision/AmSurg; Ch 12-C pointer).
-- [ ] 3. [§16.1.1, after Moyer p.370 extraction] ANOTHER-SEAT (CLO manager).
-- [ ] 4. [§16.1.2 What history says] MATH-GENTLY (mean vs median).
-- [ ] 5. [§16.2.1 Desk framing] WHEN-TO-APPLY (overhang model).
-- [ ] 6. [§16.2.2 Derivation] MATH-GENTLY x2 (martingale; exponential decay) + FULL-DERIVATION-MOVE.
-- [ ] 7. [§16.2.3 Fitting theta] MATH-GENTLY (logs turn ratios into differences).
-- [ ] 8. [§16.2.4 From model to signal] SHOP-LIFE (holder registry that did not tie).
-- [ ] 9. [§16.3.1 Desk framing] BRIDGE + WHEN-TO-APPLY (Buccola facts; ConvergeOne hedge).
-- [ ] 10. [§16.3.2 Derivation] MATH-GENTLY (put, risk-neutral) + FULL-DERIVATION-MOVE.
+- [x] 1. [Cold Open] EXPAND-SCENE. Note: eleven clocks, Mags Friday story, Wolfspeed (low unverified, halted; dated last year), decision, promise.
+- [x] 2. [§16.1.1] Note: share-is-call box, Ninefold walkthrough, AmSurg plan-value sentence, 12-C pointer.
+- [x] 3. [§16.1.1 seat] Note: CLO manager box, OC arithmetic, Weil and S&P cited only.
+- [x] 4. [§16.1.2] Note: mean-median box, three stocks, normal vs lognormal, forward pointer.
+- [x] 5. [§16.2.1] Note: when-to-apply subsection, three conditions, three breaks, election check.
+- [x] 6. [§16.2.2] Note: martingale and half-life boxes; drift, Q_s, s* moved to Full Derivation.
+- [x] 7. [§16.2.3] Note: logs box, 0.181 to 3.42, bathtub photographs, Ines speech kept.
+- [x] 8. [§16.2.4] Note: Dana registry vignette, 13F lag, OTC 13(f), old-name trustee rows.
+- [x] 9. [§16.3.1] Note: Buccola 18-of-19 opener; when-to-apply; ConvergeOne appeal hedged, open.
+- [x] 10. [§16.3.2] Note: put and risk-neutral box (37%, 0.20 corrected); d1/d2 moved.
 - [ ] 11. [§16.3.4 Hertz rights offering] EXPAND-SCENE part one + ANOTHER-SEAT (plan sponsor).
 - [ ] 12. [§16.4.2 Derivation] MATH-GENTLY x2 (fixed point; Poisson) + FULL-DERIVATION-MOVE.
 - [ ] 13. [§16.4.3 Hertz warrants] EXPAND-SCENE part two.

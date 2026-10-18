@@ -12,13 +12,13 @@
 - [x] 10. [§3.2.3] MATH-GENTLY + WHEN-TO-APPLY: winner's curse; GM judgment. — Note: coin-jar box, 0.85 verified; GM judgment with Baldauf-Mollner, Tradeweb.
 - [x] 11. [§3.3.1-3.3.3] MATH-GENTLY x2: bp of price; beta and residual. — Note: bp-of-price box; tide-and-hull beta box with −0.48 split.
 - [x] 12. [§3.3.4] MATH-GENTLY: shrinkage. — Note: April batting-average box; 56.25 ratio, +300 shrinks to +5bp.
-- [ ] 13. [§3.3.5] SHOP-LIFE vignette: Tuesday 7:40 a.m. vendor restatement.
-- [ ] 14. [§3.3, end] WHEN-TO-APPLY: markouts.
-- [ ] 15. [§3.4] NEW-SCENE: SVB Financial, March 10-22, 2023.
-- [ ] 16. [§3.4.1 table] LIST-TO-NARRATIVE: SVB filings through the rows.
-- [ ] 17. [§3.4.2] MATH-GENTLY x2 + FULL-DERIVATION-MOVE: hazard, P vs Q.
-- [ ] 18. [§3.4.3] FULL-DERIVATION-MOVE + MATH-GENTLY + WHEN-TO-APPLY: base rates.
-- [ ] 19. [§3.4, after Trend Watch] ANOTHER-SEAT: distressed fund in the 30s.
+- [x] 13. [§3.3.5] SHOP-LIFE vignette: Tuesday 7:40 a.m. vendor restatement. — Note: vendor restatement, TRACE as/of, SR 11-7 overrides, receipt-time mids.
+- [x] 14. [§3.3, end] WHEN-TO-APPLY: markouts. — Note: works for frequent printers; breaks: appointment, footprint, protocol.
+- [x] 15. [§3.4] NEW-SCENE: SVB Financial, March 10-22, 2023. — Note: 2,650-word SVB drill; unverified prices and quotes written around.
+- [x] 16. [§3.4.1 table] LIST-TO-NARRATIVE: SVB filings through the rows. — Note: walked 5.02, 2.01, 1.03, 2.04, 3.01 through SVB; gag kept.
+- [x] 17. [§3.4.2] MATH-GENTLY x2 + FULL-DERIVATION-MOVE: hazard, P vs Q. — Note: bus hazard box, bad-timing P/Q box, SVB drill answered, derivation moved.
+- [x] 18. [§3.4.3] FULL-DERIVATION-MOVE + MATH-GENTLY + WHEN-TO-APPLY: base rates. — Note: rare-disease box; Elkan algebra moved; cleansing and cross-rating breaks.
+- [x] 19. [§3.4, after Trend Watch] ANOTHER-SEAT: distressed fund in the 30s. — Note: Debtwire-sourced distressed seat; Apollo ladder quoted; unverified 30-cent claim avoided.
 - [ ] 20. [§3.5] LIST-TO-NARRATIVE + MATH-GENTLY + fix: Ledger SVB row, half-life, Ch 26.
 - [ ] 21. [§3.6.1] LIST-TO-NARRATIVE + NEW-SCENE: Saks Global.
 - [ ] 22. [§3.6.2] MATH-GENTLY + FULL-DERIVATION-MOVE + WHEN-TO-APPLY: CUSUM.

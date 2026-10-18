@@ -8,17 +8,17 @@
 - [x] 5. §1.3.1 Setup and units: Math, Gently (distribution, mean-variance). — Bag-of-slips distribution box with CE worked number added.
 - [x] 6. §1.3.2 Inventory term: Math, Gently + When to apply. — Indifference box with 0.025/0.0127 numbers; when-it-breaks paragraph added.
 - [x] 7. §1.3.3 Bayes on the RFQ: Math, Gently + LIST-TO-NARRATIVE. — Odds-form Bayes box; features rewritten as Ines-Theo dialogue.
-- [ ] 8. "The cold open, in numbers": BRIDGE.
-- [ ] 9. Ways This Blows Up: Math, Gently + Full Derivation move.
-- [ ] 10. Listing 1.1: Quant-Shop Life vignette.
-- [ ] 11. §1.4 DTS: Math, Gently + LIST-TO-NARRATIVE + When to apply.
-- [ ] 12. §1.4 Reading Listing 1.2: Math, Gently (Monte Carlo).
-- [ ] 13. §1.5 Bohn-Stein DD: Math, Gently x3 + When to apply.
-- [ ] 14. §1.5 Schmid credit triangle: Math, Gently x2 + Full Derivation move.
-- [ ] 15. §1.5 Bolder one-factor: Math, Gently + Full Derivation move.
-- [ ] 16. §1.6 Harvestable flows: LIST-TO-NARRATIVE + Another Seat (systematic fund) + Math, Gently + When to apply.
-- [ ] 17. §1.7 Where flows end up: Another Seat (opportunistic credit) + BRIDGE.
-- [ ] 18. §1.8.1 The model: Math, Gently x2.
+- [x] 8. "The cold open, in numbers": BRIDGE. — Monday replay scene with all numbers; waterfall figure payoff.
+- [x] 9. Ways This Blows Up: Math, Gently + Full Derivation move. — Normal vs Poisson box; CARA formula moved to Full Derivation.
+- [x] 10. Listing 1.1: Quant-Shop Life vignette. — Red build, TRACE capacity flags, as/of markout vignette, Jane Street cited.
+- [x] 11. §1.4 DTS: Math, Gently + LIST-TO-NARRATIVE + When to apply. — Mags-Kaz risk-report argument, two math boxes, DTS judgment section.
+- [x] 12. §1.4 Reading Listing 1.2: Math, Gently (Monte Carlo). — Monte Carlo box with 1/sqrt(N) worked number before Listing 1.2.
+- [x] 13. §1.5 Bohn-Stein DD: Math, Gently x3 + When to apply. — Lead-in scene, call option, random walk, Itô, fat-tail boxes, DD judgment.
+- [x] 14. §1.5 Schmid credit triangle: Math, Gently x2 + Full Derivation move. — Phone-ring intensity, risk-neutral boxes; triangle moved to Full Derivation.
+- [x] 15. §1.5 Bolder one-factor: Math, Gently + Full Derivation move. — Weather-watching coins box; p(Y) moved to Full Derivation, worked.
+- [x] 16. §1.6 Harvestable flows: LIST-TO-NARRATIVE + Another Seat (systematic fund) + Math, Gently + When to apply. — Theo chart opening, decile/IR box, systematic seat, judgment section.
+- [x] 17. §1.7 Where flows end up: Another Seat (opportunistic credit) + BRIDGE. — Rowan/Marks/Hertz sourced opportunistic seat; Post-it bridge to §1.8.
+- [x] 18. §1.8.1 The model: Math, Gently x2. — Conservation box and half-life box with 5.12/4.87 demo numbers.
 - [ ] 19. §1.8.2 Ford: EXPAND-SCENE (Long Scene 1).
 - [ ] 20. §1.8.3 LQD: BRIDGE.
 - [ ] 21. §1.9.1 Serta: EXPAND-SCENE (Long Scene 2).

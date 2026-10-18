@@ -13,13 +13,13 @@
 - [x] 11. [5.3.3 Kou (2002)] MATH-GENTLY + EXPAND-SCENE (short) -- bus memorylessness box; Mags one-week bill grace scene; conditions moved.
 - [x] 12. [5.3.4 What the jump model is for] WHEN-TO-APPLY + LIST-TO-NARRATIVE -- three jobs as narrative; Kou judgment; Kaz failure stories.
 - [x] 13. [5.4 Levy processes] MATH-GENTLY + FULL-DERIVATION-MOVE + WHEN-TO-APPLY -- fingerprint and racing-clock box; formulas moved; data-driven judgment.
-- [ ] 14. [5.5.1 Desk framing] EXPAND-SCENE (short) + reviewer fix
-- [ ] 15. [5.5.2 Beta and the method of moments] MATH-GENTLY
-- [ ] 16. [5.5.3 Beta regression] MATH-GENTLY + LIST-TO-NARRATIVE + FULL-DERIVATION-MOVE
-- [ ] 17. [5.5.4 Downturn recovery] MATH-GENTLY + ANOTHER-SEAT
-- [ ] 18. [5.5.6 P recovery, Q recovery, and the 40%] ANOTHER-SEAT + WHEN-TO-APPLY
-- [ ] 19. [5.6.1 The Bernoulli becomes a categorical variable] MATH-GENTLY + WHEN-TO-APPLY
-- [ ] 20. [5.6.2 Case Study: Serta Simmons and Hertz] EXPAND-SCENE (2,500-4,000 words)
+- [x] 14. [5.5.1 Desk framing] EXPAND-SCENE (short) + reviewer fix -- Mags mourns layer cake; Theo liquidation-analysis floor for Kaz.
+- [x] 15. [5.5.2 Beta and the method of moments] MATH-GENTLY -- two-knob shelf Beta box with Schmid fit, Bernoulli bound.
+- [x] 16. [5.5.3 Beta regression] MATH-GENTLY + LIST-TO-NARRATIVE + FULL-DERIVATION-MOVE -- logit box; whiteboard covariate scene; likelihoods moved to Full Derivation.
+- [x] 17. [5.5.4 Downturn recovery] MATH-GENTLY + ANOTHER-SEAT -- weather-over-farms factor box; insurer seat with Marks quote.
+- [x] 18. [5.5.6 P recovery, Q recovery, and the 40%] ANOTHER-SEAT + WHEN-TO-APPLY -- dealer distressed seat with remand valuation; target-field judgment.
+- [x] 19. [5.6.1 The Bernoulli becomes a categorical variable] MATH-GENTLY + WHEN-TO-APPLY -- three-doors competing-risks box with refile cross-check; w_in judgment.
+- [x] 20. [5.6.2 Case Study: Serta Simmons and Hertz] EXPAND-SCENE (2,500-4,000 words) -- six-year Serta scene, CLO seat, Carvana payoff, Hertz PJT hook.
 - [ ] 21. [5.7.2 Hill and peaks-over-threshold] MATH-GENTLY + FULL-DERIVATION-MOVE + WHEN-TO-APPLY
 - [ ] 22. [5.7.4 Diversification eats skew] MATH-GENTLY
 - [ ] 23. [5.8 Choosing the Shape] WHEN-TO-APPLY

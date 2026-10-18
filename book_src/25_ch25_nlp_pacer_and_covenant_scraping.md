@@ -108,7 +108,9 @@ Amend "Consolidated EBITDA" and you have touched every leverage ratio, every gro
 
 ### 25.2.3 Cycles are real; condense them
 
-Real agreements have cycles. Halyard's Run-Rate Cost Savings cap refers to Consolidated EBITDA "after giving effect to" the cost savings, and Pro Forma Basis refers to Consolidated EBITDA, which is calculated on a Pro Forma Basis. The standard fix is to compute the **strongly connected components** (Tarjan's algorithm, $O(|V| + |\mathcal{E}^{\text{dep}}|)$), collapse each component into a single super-node, and evaluate the resulting condensation, which is a directed acyclic graph by construction. Inside each component you solve a fixed point. Section 25.3 shows the fixed point for the add-back cap is a contraction, so the iteration converges, and it also shows the cap ends up larger than it looks.
+Real agreements have cycles. Halyard's Run-Rate Cost Savings cap refers to Consolidated EBITDA "after giving effect to" the cost savings, and Pro Forma Basis refers to Consolidated EBITDA, which is calculated on a Pro Forma Basis. The standard fix is to compute the **strongly connected components** (Tarjan's algorithm, $O(|V| + |\mathcal{E}^{\text{dep}}|)$), collapse each component into a single super-node, and evaluate the resulting condensation, which is a directed acyclic graph by construction. Inside each component you solve a fixed point. Section 25.3 shows the fixed point for the add-back cap is a contraction, so the iteration converges, and it also shows the cap ends up larger than it looks. Figure 25.1 draws the synthetic Section 1.01 of Listing 25.1 with both of its loops.
+
+![Figure 25.1: In the synthetic Section 1.01 of Listing 25.1, two groups of terms define each other (dashed loops: the add-back cap through Consolidated EBITDA, and the J.Crew blocker), and amending Consolidated EBITDA reaches only three other terms (shaded, β = 3) while Excluded Taxes reaches none. Illustrative: edges produced by the Listing 25.1 term matcher on the book's synthetic agreement text; an arrow runs from a term to each term its definition uses.](assets/figures/ch25_definition_graph.png)
 
 ### 25.2.4 Finding the vertices and edges
 
@@ -220,7 +222,9 @@ and $\partial \mathcal{E}/\partial A = 1$ below the add-back cap and $0$ above i
 | General basket $\max(75, 0.35\,\mathcal{E})$ | 75.0 | 93.3 |
 | **Total incremental capacity** | **75.0** | **393.3** |
 
-At the margin, each dollar of add-back buys $4.50 + 0.35 = 4.85$ dollars of debt capacity, and every one of those dollars can sit ahead of you.
+At the margin, each dollar of add-back buys $4.50 + 0.35 = 4.85$ dollars of debt capacity, and every one of those dollars can sit ahead of you. Figure 25.2 shows both halves of the arithmetic.
+
+![Figure 25.2: Measuring the 25% cap "after giving effect" lets add-backs reach 33.3% of pre-add-back EBITDA instead of 25% (left), and at Halyard those extra dollars of EBITDA lift incremental debt capacity from \$75mm to \$393.3mm (right). Illustrative: the Halyard terms of §25.3.4, with pre-add-back EBITDA E₀ = \$200mm, a 4.50x first-lien test on \$900mm of net debt with proceeds not netted, and a general basket at the greater of \$75mm and 35% of EBITDA.](assets/figures/ch25_addback_capacity.png)
 
 "This is why I don't trust anything called 'adjusted,'" said Mags. "Every adjusted dollar is worth almost five dollars of somebody else's priming debt."
 
@@ -283,7 +287,9 @@ The theorem is what makes this practical, because the min cut tells you *which* 
 - *Before you read the trapdoor*, an analyst might treat $N \to t$ as capacity $0$ (nothing in the non-guarantor bucket was supposed to reach an unrestricted subsidiary). The min cut is $\{N \to t\}$, and $\Phi = 0$.
 - *After you read it*, $c_{N\to t} = \infty$ (bounded only by what arrives at $N$). The min cut moves upstream to $\{s \to N\}$, and $\Phi = c_1 + c_2 = \$250$mm.
 
-The trapdoor did not create new capacity. It moved the min cut upstream to two baskets that everyone had priced as "small baskets for foreign subsidiaries" rather than as leakage. A list-of-baskets parser sees \$150mm and \$100mm of investment capacity in non-guarantors and moves on. A flow parser sees \$250mm of capacity to unrestricted subsidiaries, and the IP was worth \$250mm.
+The trapdoor did not create new capacity. It moved the min cut upstream to two baskets that everyone had priced as "small baskets for foreign subsidiaries" rather than as leakage. A list-of-baskets parser sees \$150mm and \$100mm of investment capacity in non-guarantors and moves on. A flow parser sees \$250mm of capacity to unrestricted subsidiaries, and the IP was worth \$250mm. Figure 25.3 draws the two readings side by side.
+
+![Figure 25.3: Reading the trapdoor as capacity zero puts the minimum cut on the trapdoor and gives Φ = 0 (top); reading it as unbounded moves the cut upstream onto the \$150mm and \$100mm baskets and gives Φ = \$250mm (bottom), the value of the IP that moved. Source: basket sizes and the \$250mm IP interest as disclosed in J.Crew's filings and summarized by Torys (May 2019) and King & Spalding; the three-node graph is the stylized model of §25.4.2, solved with the Edmonds-Karp routine of Listing 25.3.](assets/figures/ch25_jcrew_mincut.png)
 
 *Blockers are commodity-specific cuts.* The "J.Crew blocker" drafted after 2017 typically bars transfers of material intellectual property to unrestricted subsidiaries. In flow terms, it sets the capacity to zero for one commodity (Material IP) on the arcs into $t$, and leaves cash and other assets untouched. So the right model is multi-commodity, and a blocker reduces $\Phi^{\text{IP}}$, not $\Phi$. The Chapter 13 feature `unsub_capacity_pct_ev` is $\Phi^{\text{non-IP}}/\text{EV}$ plus whatever $\Phi^{\text{IP}}$ survives the blocker's definitions. That last term is usually where the next fight is.
 
@@ -315,7 +321,9 @@ $$
 1 - \cos(x, x') = \frac{1}{\|x\|^2} \le \frac{d}{n^2},
 $$
 
-where the inequality is Cauchy–Schwarz, $\|x\|^2 \ge n^2/d$. For a 300-page agreement with $n \approx 150{,}000$ tokens and $d \approx 10{,}000$, the bound gives $1 - \cos \le 4.4 \times 10^{-7}$. At Halyard's $\mathcal{E} = \$266.7$mm, the same edit adds $0.75 \times 266.7 = \$200$mm of ratio capacity. The most expensive token in the document moves cosine similarity by less than one part in two million.
+where the inequality is Cauchy–Schwarz, $\|x\|^2 \ge n^2/d$. For a 300-page agreement with $n \approx 150{,}000$ tokens and $d \approx 10{,}000$, the bound gives $1 - \cos \le 4.4 \times 10^{-7}$. At Halyard's $\mathcal{E} = \$266.7$mm, the same edit adds $0.75 \times 266.7 = \$200$mm of ratio capacity. The most expensive token in the document moves cosine similarity by less than one part in two million. Figure 25.4 sets the two measuring sticks against each other.
+
+![Figure 25.4: Swapping one token for another moves a 150,000-token agreement's cosine similarity by about 4 × 10⁻⁷, and it would take roughly 155 amended occurrences of the ratio to move it by 1% (left), while the same edit from 4.50x to 5.25x adds \$200mm of ratio-basket capacity (right). Illustrative: the §25.5.1 count-vector model with 150,000 tokens over a 10,000-word vocabulary (‖x‖² ≈ 2.4 × 10⁶), and Halyard's covenant EBITDA of \$266.7mm against \$900mm of first-lien net debt.](assets/figures/ch25_token_vs_capacity.png)
 
 *Lazy Prices* works on 10-Ks because the informative edits there are rewrites of whole risk-factor and litigation paragraphs. Covenant edits are numeric and surgical. The diff that matters is on the parsed capacity vector $K(v)$, not on tokens. For versions $v_{k-1}$ and $v_k$ we define the **dollar-weighted blast radius**
 
@@ -411,7 +419,9 @@ $$
 \log \mathcal{L} = \sum_{a}\sum_{b \ne a}\big(N_{ab}\log q_{ab} - q_{ab}\,T_a\big),
 $$
 
-and setting $\partial \log \mathcal{L}/\partial q_{ab} = N_{ab}/q_{ab} - T_a = 0$ gives $\hat q_{ab} = N_{ab}/T_a$. This is the right estimator for "how long after a group organizes does it attack exclusivity," and it stays honest about cases still in progress, because their time in state counts in $T_a$ even if no transition has happened yet.
+and setting $\partial \log \mathcal{L}/\partial q_{ab} = N_{ab}/q_{ab} - T_a = 0$ gives $\hat q_{ab} = N_{ab}/T_a$. This is the right estimator for "how long after a group organizes does it attack exclusivity," and it stays honest about cases still in progress, because their time in state counts in $T_a$ even if no transition has happened yet. Figure 25.5 draws the chain with the Hughes case below it.
+
+![Figure 25.5: The docket state machine runs from Quiet to Confirmed, and the Hughes Satellite Systems case of the Docket Diary below walked Organized to Contested in 31 days and Contested to Standstill in 10, each step marked by a docketed entry. Source: Hughes Satellite Systems Corp., Bankr. S.D. Tex. No. 26-90739, Docs. 154 (2026-08-10), 320 (2026-09-10) and 369 (2026-09-20), as cited in §25.7.2.](assets/figures/ch25_docket_state_machine.png)
 
 > **Docket Diary. Hughes Satellite Systems Corporation, Bankr. S.D. Tex. No. 26-90739 (2026).** Doc. 154 (2026-08-10): "Verified Statement of Noteholders Pursuant to Bankruptcy Rule 2019... Exhibit A." Doc. 320 (2026-09-10, 40 pp.): "The Noteholder Group's Emergency Motion to Terminate the Debtors' Exclusive Periods Pursuant to 11 U.S.C. § 1121(d)(1)," hearing set for 9/28/2026, exhibits filed under seal. Doc. 369 (2026-09-20, 36 pp.): "Stipulated Order Staying Litigation and Investigations in the Chapter 11 Cases." That is Organized → Contested in 31 days and Contested → Standstill in 10. *The Ad Hoc Group, through counsel, in unison:* "We reserve all rights. Including the right to have reserved them earlier." Ines read the sequence aloud: "A bet, a raise, and both players agreeing to check it down." (Facts beyond the docket entry text are not stated here.)
 

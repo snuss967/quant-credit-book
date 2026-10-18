@@ -22,7 +22,53 @@ Ines Okafor turns her chair a quarter turn, which is how she signals that a hand
 
 From somewhere offstage comes the sound of a Rule 2019 statement being drafted. The Ad Hoc Group, represented by counsel, speaks in unison: *"We neither confirm nor deny that we exist. We hold 51.3% of the first lien."*
 
+Ines does not acknowledge the chorus. She never does; it bills by the hour. "Say them out loud, Theo. Each seat, and the price at which that seat sells to you."
+
+Theo pulls a legal pad across the desk, which on a systematic desk counts as a regression to an earlier form of life. "Seat one is the insider. Invited, wall-crossed, has seen the term sheet. If the deal is what the headline implies, that holder is about to swap this loan into a super-priority tranche that trades well above 78, and collect whatever fee the sponsor pays for the signature. Seat one would not sell to me at 78. Seat one cannot sell to me at all, because seat one is restricted. If somebody in seat one is selling, they have not been wall-crossed yet, they suspect they are about to be, and they think the deal is bad even for the people inside it. That is a strange belief and I would want to know where it came from."
+
+"Price?"
+
+"No price. The seat is not for sale. If it shows up for sale, it is telling me something."
+
+"Seat two."
+
+"The excluded holder who knows. They rang the sponsor's banker and got a voicemail with very warm vowels. Or they heard the group is closed at 51.3% and nobody needs a fifty-second percent. They know that if this closes they sit behind new money and behind the exchanged paper. They would sell at 78. They would sell at 68. The only thing they care about is getting it done before every other seat-two holder calls me."
+
+"Price?"
+
+"Whatever I will pay. Which is the problem. If I buy from seat two, I am not buying a loan. I am buying their seat."
+
+"Seat three."
+
+Theo hesitates, then remembers a working paper he read on the train because the alternative was his phone. "The CLO. A CLO typically has a 7.5% limit on loans rated CCC or below, and the loans over the limit get marked at the lowest market value in the CCC bucket, not at their own price. If the agencies call this a distressed exchange, Larkspur goes to CCC or lower and lands in a bucket that might already be close to full. That manager sells because of a test, not because of a view. They might privately think the loan is worth 90."
+
+"Price?"
+
+"78 is their number because 78 is what they think clears before the month-end test date. Their price has nothing to do with Larkspur. It has to do with the arithmetic of their other two hundred loans."
+
+Ines nods once. "One seat cannot sell, one will sell at anything, and one sells for reasons that are not about the credit. You cannot see which one is on the wire. Here is the part they never told you in restructuring: this loan is not a claim on a foam company. It is a claim on a seat. The seat gets decided by three people you have never met, reading one clause you have not finished reading."
+
 Mags finally looks up. "Back in my day we did this with exit consents on bonds and called it an exchange offer. The innovation was doing it to the bank group. The bank group used to be the one holding the knife."
+
+She says the next word the way you might name a horse that once threw you. "Serta. Mattresses, a sponsor, a 2016 first lien and second lien. Spring of 2020 the loans are trading far below par, two lender groups are pitching the company, and the company picks one. June 22, 2020, the deal closes. The winners put in two hundred million of new money and swap their old loans into new super-priority paper. The first-lien holders who got in came out holding second-out debt that people marked around 74. The ones who didn't get in? Years later a court went back and valued their loans on closing day. Twenty-five."
+
+"Twenty-five," says Theo.
+
+"Twenty-five. Same loan, same lien, same Monday. The only difference was which room you were in on Friday."
+
+Theo does the arithmetic on a napkin, because the legal pad now feels like a commitment. If Larkspur is a Serta and he buys at 78 from seat two, the deal closes and the honest mark is somewhere near 25: a markout of about fifty points, more if he lies to himself about the bid side. He writes "−50" and circles it.
+
+"Or it's a Lumen," says Ines. "Different animal. A telecom, autumn 2023, a cooperation agreement so large it became the deal. Holders outside the agreement got primed and some of their bonds traded in the forties. Then the company sold a business, and about two and a half years later it was tendering for paper that had been left outside at close to par." Theo writes "+20?" next to the −50 and does not circle it.
+
+Kaz has been staring at the napkin. "I have a question that is probably stupid."
+
+"Those are the expensive ones," says Mags.
+
+"Serta's excluded lenders get 25. Lumen's excluded holders eventually get about 99. The word is the same. 'Excluded.' In my field, if one label produces 25 in one sample and 99 in another, the label is not the variable. Something else is. What is it?"
+
+Nobody answers. Ines looks at Mags; Mags looks at the credit agreement; the Ad Hoc Group, represented by counsel, declines to comment. The sales chat blinks: *client needs a level in 10. 78? 75? pass?*
+
+Theo lays the three options on the napkin. Bid 78 and he has paid the seller's price for a seat he cannot see. Bid 75 and the answer itself is information: if the seller hits 75 in four seconds, he has learned which seat they were in, and paid 75 for the lesson. Pass, and the desk keeps its capital and loses a client who will remember that the systematic desk went quiet on the one morning it was needed. Each choice has a story behind it. None of the stories has a number yet.
 
 Theo stares at three hundred pages of credit agreement and one rumor. **The question this chapter answers: how do you turn a document and a rumor into a number you can quote against?**
 
@@ -31,6 +77,14 @@ By the end of this chapter you will be able to: write every LMT (uptier, drop-do
 ## 13.1 The LMT Zoo, Seen From the Desk
 
 A liability management transaction is an out-of-court change to the capital structure, executed under the existing documents, that re-allocates recovery among claims that were drafted to be equal. That last clause is the whole thing. A pro rata amend-and-extend that treats every lender identically is liability management in the polite sense. The trades that make careers and lawsuits are the ones in which some holders of the same tranche end up senior to other holders of that tranche, or in which collateral that was everybody's becomes somebody's.
+
+Start with a surf company, because the cleanest way to see the species is to watch one animal move. In April 2018 Boardriders, the owner of Quiksilver and Billabong, signed a credit agreement with about \$450 million of first-lien debt. Its owner, Oaktree, was also one of its lenders. Then 2020 arrived for everyone who sold board shorts through physical stores. In August 2020 the company did a deal that looked from a distance like a rescue: \$110 million of new super-priority money came in, and \$321 million of existing loans were rolled up, at par, into the same new super-priority tranche, \$431 million in all. A majority of lenders voted to delete the covenant that limited debt and the requirement that any new intercreditor arrangement be junior or pari passu. The roll-up was papered as "open market purchase" agreements. Remember those three words. Over this chapter they will cost a great many people a great deal of money.
+
+Now look at that deal from the seats of two holders of the same loan on the same Friday. Holder A was in the group. Its loan was trading at a 40 to 50 percent discount, and it was exchanged at par into paper at the top of the stack. Holder B, one of the non-consenting lenders who together held about \$85 million, woke up on Monday holding exactly the document it had held on Friday, except that \$431 million now stood in front of it. Holder B's loan did not change a word. The words around it did.
+
+The excluded lenders, ICG and York among them, sued in New York in October 2020. On October 17, 2022, Justice Andrea Masley refused to dismiss their breach-of-contract and implied-covenant claims, finding the open-market exception ambiguous. Then comes the twist that makes Boardriders the best teaching case in the zoo. In August 2023 Authentic Brands agreed to buy the company, and the settlement tied to the sale repaid the non-participants in full. Par. The case was dismissed with prejudice in September 2023.
+
+So one uptier produced an excluded lender who was primed in 2020, litigating in 2022 and paid par in 2023. Nothing in the document predicted the par. What predicted it was the value of the company on the day the story ended, a sale large enough to pay everyone. That is half the answer to Kaz's question from the cold open; the other half, who decides which room you are in, takes until §13.5. The rest of this section builds the machine that turns "it depends what the company is worth when it ends" into a number.
 
 From the desk, every species in the zoo has the same skeleton. There is an enterprise value $V$ at some resolution date (a refinancing, a sale, a Chapter 11 plan). There is a document state $\mathcal{D}$, which encodes who has a claim against which entity, at what priority, secured by what. And there is a waterfall operator $\mathcal{W}_{\mathcal{D}}$ that maps $V$ into a vector of recoveries per dollar of face, one entry per claim:
 
@@ -44,6 +98,8 @@ $$
 \Delta_j(V) = \big[\mathcal{W}_{\mathcal{D}'}(V)\big]_j - \big[\mathcal{W}_{\mathcal{D}}(V)\big]_j .
 $$
 
+> **Math, Gently.** *Waterfalls and transfer functions.* Picture one till and one cash drawer, with creditors standing in queues. The waterfall is the house rule for service: the senior queue is paid in full before anyone behind it gets a cent, and people standing in the same queue split whatever reaches them pro rata. An LMT does not put cash in the drawer. It lets some people change queues. Tiny number: the drawer holds $V = 100$ and one class of lenders holds $F = 200$ of face, so everyone gets 50 cents on the dollar. Now let half the class, 100 of face, step into a new queue at the front. The front half is paid 100 cents, the back half gets zero, and the drawer still pays out exactly 100. The transfer function $\Delta_j(V)$ is "what claim $j$ got after the queue-jump, minus what it got before," written down for every possible size of drawer rather than just 100. Try a drawer of 250: before the jump everyone is paid in full, after it everyone is still paid in full, and the transfer is zero. Queue order matters only when the drawer is short, which is why this is a credit problem and not an accounting one. The full version, with guarantees and intercompany claims, is the clearing engine of §13.7.
+
 Two facts make this useful. First, $\Delta_j$ is a function of $V$, so it is a derivative on enterprise value and can be priced like one: integrate it against a distribution of $V$ and you have the expected transfer. Second, waterfalls conserve value. If the face amounts under the two document states are $\mathbf{F}$ and $\mathbf{F}'$, then
 
 $$
@@ -53,6 +109,10 @@ $$
 so in any state where $V$ is below both totals, the dollar transfers sum to exactly zero. An LMT does not create recovery in the states that matter. It moves recovery. (It may change $V$ itself, by buying liquidity runway or by burning fees, and we will keep that effect separate and explicit; see §13.3.)
 
 That is the sentence to say out loud on your first day: *an LMT is a zero-sum transfer among creditors in low states, wrapped in a liquidity story about high states.* The liquidity story is sometimes true. The transfer is always true.
+
+> **Math, Gently.** *What a distribution is, and why $V$ is lognormal.* Nobody knows what Larkspur will be worth when its story ends. A distribution is the honest way to say so: a histogram of possible futures, each bar as tall as the weight you put on that outcome. Different quantities want different shapes. The **normal** is the symmetric bell; it is a good first guess for things built from many small, independent pushes added together, such as a day's return or a measurement error, and it cheerfully puts weight on negative numbers. Enterprise value cannot be negative, and bad years compound rather than subtract: a 30% fall followed by another 30% fall leaves 49 out of 100, not 40. Quantities that grow and shrink by percentages are better described by the **lognormal**, whose logarithm is normal. It lives on the positive numbers, has a long right tail (the occasional sale at a lovely price) and bunches most of its mass to the left of its own mean. Tiny number: a normal with mean 2,000 and standard deviation 800 puts about 0.6% of its mass below zero (that is $\Phi(-2.5)$), which is 0.6% of futures in which the foam company is worth less than nothing; a lognormal with the same mean cannot put anything there. Two more shapes arrive in §13.8: the **Poisson**, which counts events in a window, and the **Beta**, which is a histogram over a probability itself. "Integrate the transfer against a distribution of $V$" now has a picture: in each future, multiply the bar's height by what the queue-jump costs you there, then add up the bars. The full version is the lognormal partial expectation in §13.3.
+
+Boardriders sits in the first row of the table below. The other rows are the same skeleton wearing different clothes.
 
 | Species | What moves | Who loses | Enabling clause (the trapdoor) | Canonical cases |
 | :--- | :--- | :--- | :--- | :--- |
@@ -72,15 +132,39 @@ The first column is how the press names these deals. The fourth column is how yo
 
 > **Desk Myth vs. Desk Reality.** *Myth:* "LMEs avoid bankruptcy; that's the point." *Reality:* Roe and Rotaru hand-collected 89 coercive non-pro-rata LMEs and found that fewer than half avoided both bankruptcy and re-default within a year, and "within two years, only 22% avoided both"; among firms with at least two years of post-LME history, 56% had already filed, and those that filed spent two to three times longer in bankruptcy than non-LME prepacks (Harvard Law School Bankruptcy Roundtable, Feb 24, 2026; SSRN abstract 6103369). Moody's found about 46% of 2023 distressed exchanges had already re-defaulted, most in under a year (reported by Bloomberg Law, Apr 23, 2025). Proponents cite an S&P figure that 63% of LME users avoid Chapter 11 (quoted in Antill, Jiang and Wang, HLS Roundtable, June 30, 2026; secondhand). The two camps differ in their samples, horizons, and default definitions. Whichever number you believe, the LMT is not the terminal state of the credit. It is a jump to a new state with a new, usually higher, hazard. Model it that way (§13.8).
 
+Mags puts it more simply when Theo reads the box aloud. "An LMT is a jump to a new state, and the new state has a clock on the wall. Of the eight big ones I'd make you learn, six filed anyway, and the typical gap between the deal and the petition was about a year." (Six of the eight cases in §13.9's scoreboard filed, at a median of roughly 13.5 months; Boardriders and Lumen ended without one.) That clock is the re-default hazard, and it will be a covariate before the chapter ends.
+
 ## 13.2 Legal Prose to State Space
 
 You have spent years reading credit agreements as text. The model needs them as numbers. The translation has five clause families, and each one maps to a small set of features with units. The goal is not to replace a lawyer. It is to make the lawyer's reading *comparable across 1,500 borrowers*, so that the desk can rank them.
+
+The way Theo does it for Larkspur, at 8:15 on the same Tuesday, is the way he did it at the old shop for a creditor committee: out loud, one clause at a time, with somebody else holding the marker. Today the somebody is Kaz, at the whiteboard, converting each clause into a variable with a type and a unit. Kaz is fast and precise and gets exactly one thing wrong per clause family, which turns out to be useful, because each wrong guess is the reading a model would make if nobody had told it otherwise.
+
+"Section 2.18," Theo reads. "Pro rata sharing. Then 9.02(b), the amendment section, and the list of things that need 'each Lender directly and adversely affected thereby.'"
+
+Kaz writes `affected_lender`. "Affected as in upset?"
+
+"Affected as in paid less. Feelings are not a sacred right." Theo keeps going.
 
 **Family 1: Pro rata sharing and sacred rights.** The pro rata sharing clause (Serta's was §2.18) says every lender in a tranche shares payments ratably. The amendment section (Serta's §9.02(b)) lists the "sacred rights" that need the consent of each affected lender rather than a majority. The question for an uptier is whether *subordination* of the loans, or of the liens, is on that list. If it is, a majority cannot prime the minority. That is the blocker. Features: `sacred_rights_scope` $\in$ {`payments_only`, `payments_plus_liens`, `payments_plus_subordination`}, and `has_serta_blocker` $\in \{0,1\}$, which is 1 when lien or payment subordination requires each affected lender's consent.
 
 **Family 2: Voting thresholds.** The required-lender fraction $\theta$ is the share of the class that can amend everything not on the sacred list. In syndicated loans $\theta$ is usually a simple majority. Many indentures require two-thirds for lien releases (that was the threshold the Wesco participants needed). Sacred rights are $\theta = 1$ for the affected lender. Feature: `theta_required` $\in (0, 1]$, measured *for the specific action the deal requires*, not for the agreement in general. One agreement has several $\theta$'s, and the trapdoor is usually the lowest one that can be reached.
 
+Kaz has written `required_lenders` on the board and underlined it. "So these are the lenders who are required to attend."
+
+"These are the lenders whose votes count," says Theo, "and you have just found the fight, because the real question is the denominator. 'More than 50%' of *what*?" A senior partner at Theo's old shop used to make juniors answer three questions about this one definition before they were allowed to say the word "uptier." First: who is excluded from the denominator. Defaulting lenders, the ones who failed to fund, are usually carved out of the count, which shrinks the class a coalition has to beat. Loans held by the sponsor or its affiliates are, in most documents written after about 2017, capped at a stated fraction of the class, and their votes are excluded or deemed cast in proportion to everyone else's. A model that divides by total face when the document divides by "non-defaulting, non-affiliated" face will overstate the bar. Second: can the amendment section itself be amended by Required Lenders? If changing the voting provisions, the definition of Required Lenders or the list of sacred rights is itself a sacred right, the "amend the amendment section" route is closed; if it is not, a majority can lower the bar and then walk under it. Third: what does releasing all or substantially all of the collateral take? In most secured indentures it is 66⅔% of holders; in most syndicated credit agreements it is every lender, a sacred right. (Chapter 12-B, §12B.3, tabulates the typical thresholds.) Each answer becomes a feature with the same discipline as the rest: `rl_denominator_excludes_affiliates` and `rl_denominator_excludes_defaulting` in $\{0,1\}$, `amend_amendment_is_sacred` in $\{0,1\}$, and `lien_release_theta`, which reappears in Family 5. Read against a specific agreement, not a form, because the percentages are where drafters earn their fees.
+
+"So the denominator is a political choice," says Kaz.
+
+"The denominator is the whole fight. The numerator is just counting."
+
+Theo turns the page to the assignment section, which is where Serta was won and lost.
+
 **Family 3: Buyback exceptions to pro rata.** Most agreements let the borrower buy back its own loans without offering the same deal to everyone, through Dutch auctions open to all lenders or through open market purchases. This exception is how a non-pro-rata exchange slips past the pro rata clause. Feature: `buyback_exception` $\in$ {`none`, `dutch_only`, `open_market`, `purchase`}. On December 31, 2024, two appellate courts decided on the same day that the difference between the third and fourth values is worth the entire priming loss. The Fifth Circuit held in *Serta* that "an open market purchase is a purchase of corporate debt that occurs on the secondary market for syndicated loans," so a privately negotiated exchange did not qualify. New York's First Department held in *Mitel* that an undefined "purchases" exception, with no "open market" qualifier, was unambiguous and was satisfied by an exchange paid in new loans (as summarized by Paul, Weiss, Jan 10, 2025). Same kind of deal, same day, one word, opposite results. "Open market purchase" really is the most expensive three words in finance, and the word "open" accounts for most of the bill.
+
+Kaz writes `buyback_exception` with its four values and pauses at the second. "And a Dutch auction is held where, Rotterdam?"
+
+"Anywhere. It's a descending-price auction open to every lender in the class. The point is that it's *open to every lender*. That's what makes it pro rata in spirit. The other two values are where the spirit leaves the building."
 
 **Family 4: Investments, restricted payments, and unrestricted subsidiaries.** This is drop-down territory. The question is how many dollars of value can legally leave the collateral group. The capacity is a sum of baskets:
 
@@ -90,6 +174,10 @@ $$
 
 where $B^{\text{gen}}$ is the general investment basket (often a "greater of" dollar amount and percentage of EBITDA or total assets), $B^{\text{builder}}$ is the builder basket (the "Available Amount" or "Cumulative Credit"), $B^{\text{ratio}}$ is the unlimited capacity that opens if a leverage test is met, $B^{\text{unsub}}$ is a dedicated basket for investments in unrestricted subsidiaries, and $B^{\text{other}}$ covers the capacity that hides in "Permitted Investments" clauses that can be stacked (the J.Crew trapdoor was precisely a stack: an investment in a non-guarantor restricted subsidiary, then onward from that subsidiary to an unrestricted one). Features: `unsub_capacity_pct_ev` $= C^{\text{unsub}}/\text{EV}$ and `rp_builder_pct_ev` $= B^{\text{builder}}/\text{EV}$, both dimensionless. Divide by enterprise value, not by face, because the question is what fraction of the *pie* can walk out the door.
 
+"Cumulative Credit," Kaz reads off Theo's screen, and writes `rp_builder_pct_ev`. "Like a credit score that only goes up."
+
+"Worse," says Theo. "It can go up while the company goes down." That is not a joke, and Moyer explains why.
+
 The builder basket is a running account, and Moyer lays out the classic bond-indenture version line by line.
 
 > **[SOURCE EXTRACTION]** *Moyer_Distressed_Debt_Analysis p.173:* "50% of all net income earned 100% of proceeds from the sale of common or preferred stock 100% of the proceeds from the issuance of any junior debt securities Less: 100% of all net losses 100% of all amounts distributed as"
@@ -97,6 +185,12 @@ The builder basket is a running account, and Moyer lays out the classic bond-ind
 > **Annotation.** (The extraction preserves the page's line breaks as spaces; the original is a formatted list in which each item is a line of the builder computation.) This is the accounting identity behind $B^{\text{builder}}$: a starter amount, plus half of cumulative consolidated net income, plus equity proceeds and certain junior debt proceeds, less net losses and less every restricted payment and unrestricted-subsidiary investment already made. Code it as a state variable that evolves quarterly: $B^{\text{builder}}_{t+1} = B^{\text{builder}}_t + 0.5\,\text{CNI}_t^{+} - \text{CNI}_t^{-} + \text{EqProc}_t - \text{RP}_t - \text{Inv}^{\text{unsub}}_t$, floored at zero. Two modern departures matter. First, leveraged-loan agreements written after about 2015 often build from Consolidated EBITDA minus a multiple of fixed charges, or from a "greater of" starter that grows with EBITDA, so the builder can *grow while the company deteriorates* if EBITDA add-backs are generous (Mags is right to distrust anything called "adjusted"). Second, the builder is only one of several stackable baskets; the drop-down cases were won or lost on whether baskets could be used *sequentially through intermediate subsidiaries*. The feature you want is not "the builder" but the maximum dollar amount that can reach an unrestricted subsidiary by any legal path through the entity graph, which is a max-flow problem on the definitions (the parser in Chapter 25 builds that graph).
 
 **Family 5: Lien and guarantee release, and the IP blockers.** Can a guarantor be released when it stops being wholly owned (the PetSmart/Chewy move)? Can material intellectual property be transferred out of the collateral group (the J.Crew move)? Can liens be released by a majority? Features: `jcrew_blocker`, `chewy_blocker`, `envision_blocker` (the last named for a 2022 drop-down whose details we treat as illustrative), each in $\{0, 1\}$, plus `lien_release_theta`. Also flag `non_pro_rata_extension_allowed`, which captures the amend-and-extend mechanics that the 2025 "amend-extend-and-exchange" structures exploited.
+
+Larkspur's security agreement has a springing lien in it: a lien that comes into existence on certain foreign assets only if a leverage test is failed. Kaz writes `springing_lien` and, in the column for type, "seasonal?"
+
+"It springs into being when a trigger is hit," says Theo. "It has nothing to do with spring."
+
+"It would be a much better clause if it did." Kaz changes the type to binary with a trigger date, which is correct, and draws a small flower next to it, which is not.
 
 Kaz, who has followed this so far, raises a hand. "I have a question about the blocker."
 
@@ -108,13 +202,17 @@ Kaz, who has followed this so far, raises a hand. "I have a question about the b
 
 "So it's a beta blocker for the brand." Kaz writes this down. Nobody corrects it, because it is not entirely wrong: a blocker caps the downside jump, which is exactly what a beta blocker does to a pulse.
 
+> **View From Another Seat.** *The direct lender who wrote the document.* Read the same five families from the seat of a private-credit manager holding most of a unitranche or club loan, and the questions change shape. Family 1 and Family 2 matter less, because the lender group is three or four funds that hold the votes between them; nobody can be primed by a rival lender they cannot outvote. The danger is Families 4 and 5, value leaving the collateral group with the lender's consent never asked. Pluralsight is the private-side J.Crew. Vista Equity Partners took the company private in April 2021 with, among other debt, a \$1.175bn first-lien recurring-revenue term loan at SOFR + 800, sized on revenue rather than EBITDA. In late May and early summer 2024 the company moved its intellectual property into a new restricted subsidiary, with about \$50mm from Vista funding an interest payment; lenders reportedly disputed the valuation of what moved. Around August 22, 2024, a lender group led by Blue Owl and Ares took ownership, converting about \$1.2bn of debt into equity. The marks tell the seat's story better than any quote. Ares Capital carried its \$106.2mm piece at 89.0 on December 31, 2023 and at 48.0 on June 30, 2024 (ARCC 10-Q); Blue Owl Capital Corp held the same loan at 96.8 on the December date. One loan, one coupon, two marks 7.8 points apart. From this seat the LMT question is not "will I be excluded?" but "will I end up owning the company, and is my mark telling me the truth about that?" A direct lender negotiates the blockers in Family 5 at origination, because it will not have a secondary market to sell into when it learns it should have.
+
 ### 13.2.1 The feature vector
 
-Collect the document features $x^{\text{doc}}_i$ and add three groups the document cannot tell you.
+Collect the document features $x^{\text{doc}}_i$ and add three groups the document cannot tell you. They differ mostly in how fast they move and how hard they are to get.
 
-- **Market state** $x^{\text{mkt}}_i(t)$: loan price `loan_px` (points), months to maturity, the liquidity cost score `lcs` (Ben Dor's measure, Chapter 8), three-month equity momentum or, for sponsor-owned names with no public equity, the price momentum of the loan itself.
-- **Liquidity state** $x^{\text{liq}}_i(t)$: `runway_months`, defined as unrestricted cash plus undrawn committed revolver, divided by forecast monthly cash burn. This is Theo's 13-week cash flow model, reborn for the third time in this book as a covariate. When `runway_months` falls below about nine and `loan_px` below about 80, the company is in the region where a sponsor *must* do something, and the only question is whether the something is pro rata.
-- **Holder and sponsor state** $x^{\text{hold}}_i(t)$: `sponsor_repeat_lme` (has this sponsor done a non-pro-rata deal before?), `holder_hhi` (Herfindahl concentration of the class from CLO holdings data and Rule 2019 statements), `coop_reported` (a cooperation agreement has been reported), and `forum_ny_vs_tx` (which court is likely to hear the fight).
+The **market state** $x^{\text{mkt}}_i(t)$ moves every day, and it is the easiest block to fill because somebody sells it to you. It holds the loan price `loan_px` (points), months to maturity, the liquidity cost score `lcs` (Ben Dor's measure, Chapter 8), and three-month equity momentum or, for sponsor-owned names with no public equity, the price momentum of the loan itself. On the Larkspur morning this block changed first: the mark went from 84 to a client asking about 78 before anyone had finished reading the headline. The danger of the market block is that it is so available. A model fed mostly prices learns to predict LMTs from the price fall that the rumor of an LMT causes, which is a very accurate way of being late.
+
+The **liquidity state** $x^{\text{liq}}_i(t)$ moves monthly or quarterly and has to be built. Its main entry is `runway_months`, defined as unrestricted cash plus undrawn committed revolver, divided by forecast monthly cash burn. This is Theo's 13-week cash flow model, reborn for the third time in this book as a covariate. He builds the Larkspur version from the last 10-Q and a burn forecast that he trusts about as much as he trusts the sponsor, and it says eleven months. When `runway_months` falls below about nine and `loan_px` below about 80, the company is in the region where a sponsor *must* do something, and the only question is whether the something is pro rata. Larkspur is two months and two points from that corner.
+
+The **holder and sponsor state** $x^{\text{hold}}_i(t)$ is the one nobody can download. It contains `sponsor_repeat_lme` (has this sponsor done a non-pro-rata deal before?), `holder_hhi` (Herfindahl concentration of the class from CLO holdings data and Rule 2019 statements), `coop_reported` (a cooperation agreement has been reported), and `forum_ny_vs_tx` (which court is likely to hear the fight). Each entry is assembled by hand from documents that were not written for you: trustee reports, court filings, a news wire's paraphrase of "people familiar with the matter." It is also the block that answers the cold open's question about seats, which is why §13.6 spends a whole vignette on how miserable it is to build.
 
 The full state is $x_i(t) = \big(x^{\text{doc}}_i, x^{\text{mkt}}_i(t), x^{\text{liq}}_i(t), x^{\text{hold}}_i(t)\big)$. The document block is nearly static (it changes when the agreement is amended, which is itself an event). The other blocks move daily. Section 13.8 turns $x_i(t)$ into a hazard. Sections 13.3 to 13.7 compute what the hazard is a hazard *of*.
 
@@ -151,6 +249,32 @@ R^{\text{SO}}(V) = \frac{\min\!\big((V - N)^+,\ xpF\big)}{xpF}, \qquad
 R^{\text{excl}}(V) = \frac{\min\!\big((V - K_1)^+,\ (1-p)F\big)}{(1-p)F}.
 $$
 
+Before the algebra, a picture, because the picture is the trade.
+
+> **Math, Gently.** *Three payoff shapes: the slice, the call spread and the digital.* Draw the excluded lender's recovery on graph paper, enterprise value along the bottom and cents on the dollar up the side. Before the deal it is a ramp: a straight line from the origin climbing at slope $1/F$ and flattening at 100 cents once $V$ covers the whole class. That is a **linear slice** of the firm. After the deal the ramp starts later, at $K_1$, because everyone now in front must be paid first, and it climbs more steeply, because the excluded lenders are a smaller group sharing each extra dollar. A ramp that starts at one strike and flattens at another is what an options desk calls a **call spread**: long a call struck at $K_1$, short a call struck at $K_2$. Shrink the excluded group and the ramp steepens into a cliff, zero just below $K_1$ and paid in full just above it. A payoff that jumps from nothing to everything at a single strike is a **digital**, or binary, option. The *difference* between the old ramp and the new one is a tent, rising with the old slice up to $K_1$ and falling away after it; as the excluded minority shrinks, the tent's right side becomes vertical, and what the lender lost is shaped like a **digital put**: it pays off against the lender in exactly the futures where $V$ falls short of $K_1$. Tiny number at Serta's terms (§13.3.1): $K_1 = 1{,}075$, so at $V = 1{,}000$ the old slice paid $1{,}000/2{,}400 \approx 41.7$ cents and the new one pays zero. The payoff algebra in full is in Chapter 6-B (§6-B.1), and the version for this deal is in "The Full Derivation" at the end of this section.
+
+Call the excluded lender's priming loss $\Delta R^{\text{excl}}(V) = R_0(V) - R^{\text{excl}}(V)$: the transfer function of §13.1 for the excluded claim, with the sign flipped so that a loss is a positive number.
+
+Now look at the shape. The excluded lender used to own a linear slice of the firm, $\min(V,F)/F$. It now owns a call spread on $V$ between strikes $K_1$ and $K_2$. When the excluded minority is small, $(1-p)F$ is small, the spread is steep, and the call spread is approximately a *digital call* struck at $K_1$. So the priming loss is approximately
+
+$$
+\Delta R^{\text{excl}}(V) \approx R_0(V)\,\mathbf{1}[V < K_1].
+$$
+
+**The excluded lender is short a soft digital put on enterprise value, struck at the face that now sits ahead of it, with notional equal to its old recovery.** It wrote that put on the day the uptier closed. Nobody asked it to.
+
+The participants, meanwhile, bought the same put. Per original dollar, a participant's position changed by $x R^{\text{SO}}(V) - R_0(V)$ (ignoring the new-money economics, which are usually priced generously). In low states this is large and positive. In high states it is $x - 1 < 0$: the participant paid for its put with $(1-x)$ points of face. A participant in an uptier is a lender who bought downside protection and paid the premium in principal. The excluded lender is the counterparty who wrote that protection for free.
+
+How much is the put worth? Pricing it means asking how much weight the histogram of §13.1 puts on futures below $K_1$, and how much the excluded lender would have collected in each of them.
+
+> **Math, Gently.** *Partial expectations, and the ½s² that keeps showing up.* A partial expectation is an average over only part of the histogram: add up $V$ times its weight, but only in the futures where $V$ is below some $K$. That is exactly what the excluded lender loses, because in those futures it would have collected $V/F$ and now collects nothing. For a lognormal there is a wrinkle that trips everyone once. If $\ln V$ is centred at $\mu$ with spread $s$, the mean of $V$ is not $e^{\mu}$ but $e^{\mu + s^2/2}$. Averaging multiplicative outcomes favours the big ones: from 2,000, a move up by a factor of $e^{0.4}$ lands near 2,984, a move down by the same factor lands near 1,341, and the two average about 2,162, not 2,000. The up move adds more than the down move takes away. This is the same $\tfrac12\sigma^2$ that Itô's lemma charges in continuous time, and you will meet it again in Chapter 6-B and in the credit-derivatives chapters of Part VI. In the partial expectation it also pushes the argument of $\Phi$ down by a further $s^2$, because each future is weighted by its own size and the small futures below $K$ count for less. Tiny number: with $\mu = \ln 2{,}000$, $s = 0.4$ and $K = 1{,}075$, the argument is $(\ln 1{,}075 - \ln 2{,}000 - 0.16)/0.4 \approx -1.95$, $\Phi(-1.95) \approx 0.026$, and the first-region loss is about $2{,}166 \times 0.026 / 2{,}400 \approx 2.3$ points. One more word lives next to this formula: **risk-neutral**. Pricing "under $\mathbb{Q}$" means using a histogram that has been tilted, with extra weight on the bad futures, until every asset's expected return equals the risk-free rate; the tilt is where the risk premium hides. A market price is a $\mathbb{Q}$-flavoured number, which is why the court's 25-cent closing-day price in §13.3.1 is not the same object as a desk's $\mathbb{P}$ forecast. The full version is "The Full Derivation" below, and Chapter 6-B (§6-B.6) for the two measures.
+
+The derivation makes this exact, but the headline fits on a napkin. To first order, the excluded lender's expected loss is the partial expectation of $V$ below $K_1$, divided by the old face; for a lognormal, that is the put leg of Black–Scholes with the strike at $K_1$. The answer is a statement about where you think $V$ lives. Centre the lognormal at 2,000 and Serta's first region costs about 2.3 points, because a company expected to be worth 2,000 rarely visits 1,075. Centre it at 1,200, closer to a mattress company whose loans were trading "far below par" in the spring of 2020, and the same term is about 13.5 points (illustrative; our arithmetic). The middle region, where the excluded lenders are partly paid, adds a correction to either. The put is cheap or ruinous depending almost entirely on one input, and that input is the one nobody can observe.
+
+**Where value enters.** New money is not free value. If the $N$ dollars buy runway that survives to resolution, the post-deal enterprise value is $V + \kappa N$, with $\kappa \in [0, 1]$ the fraction of new money still in the firm at resolution, and every formula above should be evaluated at $V + \kappa N$ in the post-deal world. For a company burning cash, $\kappa$ is close to zero by the time anyone files. Roe and Rotaru's evidence that leverage did not fall and ratings stayed flat after LMEs is evidence that, on average, $\kappa$ is small.
+
+#### The Full Derivation: the excluded lender's transfer
+
 **Conservation check.** Multiply each recovery by its face and add: $N R^{\text{FO}} + xpF\,R^{\text{SO}} + (1-p)F\,R^{\text{excl}} = \min(V, K_2)$. Total face fell from $F$ to $K_2 - N = F - (1-x)pF$, which is the "deleveraging" in the press release. It is real, and it is paid for entirely by the participants, in exactly those states where nobody needed it.
 
 **The excluded lender's transfer.** The priming loss is $\Delta R^{\text{excl}}(V) = R_0(V) - R^{\text{excl}}(V)$. It is piecewise linear with three regions:
@@ -166,16 +290,6 @@ $$
 
 In the first region the excluded lender loses everything it would have recovered. In the middle region the loss shrinks linearly, at slope $\frac{1}{F} - \frac{1}{(1-p)F} < 0$. In the third region the loss is *non-positive*: if $K_2 \le V < F$, the excluded lender is paid in full while it would have recovered only $V/F$ before. It gains, because the participants gave up face. (The gain is small and lives in a narrow band of states; when $V \ge F$ both recoveries are 1 and the transfer is zero.)
 
-Now look at the shape. The excluded lender used to own a linear slice of the firm, $\min(V,F)/F$. It now owns a call spread on $V$ between strikes $K_1$ and $K_2$. When the excluded minority is small, $(1-p)F$ is small, the spread is steep, and the call spread is approximately a *digital call* struck at $K_1$. So the priming loss is approximately
-
-$$
-\Delta R^{\text{excl}}(V) \approx R_0(V)\,\mathbf{1}[V < K_1].
-$$
-
-**The excluded lender is short a soft digital put on enterprise value, struck at the face that now sits ahead of it, with notional equal to its old recovery.** It wrote that put on the day the uptier closed. Nobody asked it to.
-
-The participants, meanwhile, bought the same put. Per original dollar, a participant's position changed by $x R^{\text{SO}}(V) - R_0(V)$ (ignoring the new-money economics, which are usually priced generously). In low states this is large and positive. In high states it is $x - 1 < 0$: the participant paid for its put with $(1-x)$ points of face. A participant in an uptier is a lender who bought downside protection and paid the premium in principal. The excluded lender is the counterparty who wrote that protection for free.
-
 **The expected transfer, in closed form.** Suppose $V$ is lognormal under $\mathbb{P}$ at the resolution horizon: $\ln V \sim \mathcal{N}(\mu, s^2)$. The dominant term of the expected loss is the partial expectation below the strike, which has the same form as the put leg of Black–Scholes:
 
 $$
@@ -183,8 +297,6 @@ $$
 $$
 
 So for $K_1 \le F$, the first region contributes $\frac{1}{F}e^{\mu + s^2/2}\Phi\big((\ln K_1 - \mu - s^2)/s\big)$ to $\mathbb{E}^{\mathbb{P}}[\Delta R^{\text{excl}}]$. The middle and upper regions add the correction terms. The code in §13.8 computes all three exactly by quadrature and checks the first against this closed form by Monte Carlo. This is the uptier's version of checking a simulated Merton spread against the formula: if your simulated transfer and your partial expectation disagree, your waterfall has a bug.
-
-**Where value enters.** New money is not free value. If the $N$ dollars buy runway that survives to resolution, the post-deal enterprise value is $V + \kappa N$, with $\kappa \in [0, 1]$ the fraction of new money still in the firm at resolution, and every formula above should be evaluated at $V + \kappa N$ in the post-deal world. For a company burning cash, $\kappa$ is close to zero by the time anyone files. Roe and Rotaru's evidence that leverage did not fall and ratings stayed flat after LMEs is evidence that, on average, $\kappa$ is small.
 
 ### 13.3.1 Case Study: Serta Simmons (2016–2026), in the Formula
 

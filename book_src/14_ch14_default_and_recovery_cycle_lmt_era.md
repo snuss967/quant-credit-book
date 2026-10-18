@@ -54,6 +54,12 @@ In the RSSG seat, "default" had a clear meaning. It was the day the company file
 
 The systematic desk inherits a different definition, and the gap between the two is now the most important footnote in credit.
 
+Before the definition fight starts, one piece of vocabulary, because this chapter uses two phrases for "how often companies default" and they do not mean the same thing. The number in a rating agency's headline is a *rate*: of the issuers alive a year ago, the share that defaulted. The number a model wants is an *intensity*, or *hazard*, written $\lambda_t$: how fast the survivors are defaulting at this moment. Theo met the second one in Chapter 5, when his 13-week model was turned into a hazard. Here it meets the first one, and the two are about to be asked to do the same job.
+
+> **Math, Gently.** *A default rate is an odometer; a hazard is a speedometer.* An odometer tells you how many miles the car covered this year. A speedometer tells you how fast it is going right now. A twelve-month default rate is an odometer reading: of the companies alive last June, 5.8% had defaulted by this June. A hazard rate $\lambda$ is the speedometer: the rate, per year, at which the companies still alive are defaulting at this instant. If the speed held constant all year, the share surviving the year is $e^{-\lambda}$, so a 5.8% rate means $e^{-\lambda} = 0.942$, a speed of $\lambda = -\ln(0.942) \approx 0.0597$ per year. The two numbers are close when they are small and drift apart as they grow, because a company that defaulted in March cannot default again in October; the survivors are a shrinking base. At that same constant speed, three years of survival is $e^{-3 \times 0.0597} = e^{-0.179} \approx 0.84$, so about 16% of the cohort is gone, not the $3 \times 5.8\% = 17.4\%$ you get by adding up odometer readings. A constant speed gives the **exponential distribution** for the waiting time to default: constant speed, no memory, meaning the chance of getting through the next year is the same whether the company is one year past its LBO or ten. That makes it different from a **normal** distribution, which is a symmetric bell that happily puts weight on negative numbers (a default time of minus two years is not a thing), and from a **Poisson** distribution, which counts *how many* defaults arrive in a window rather than *how long* you wait for the first; the Poisson and the exponential are the same process seen from opposite ends (§5.3.2, §6.1.4). Most of this chapter is about what happens when the speed is not constant and there are two engines instead of one. The full version, with two hazards and their cumulative incidence, is in §14.2.1. *(Random walks and Itô's $\tfrac12\sigma^2$ do no work in this chapter; their first-use boxes are in §3.1.3, §5.2.3 and §6.1.1. Risk-neutral pricing returns in §14.7.2, and its first box is in §6.2.2.)*
+
+With the vocabulary in hand, here is the sentence that makes one company's speedometer show two different speeds at once.
+
 > **[SOURCE EXTRACTION]** *Schmid_Credit_Risk_Pricing_Models p.336:* "Distressed exchanges, on the other hand, are considered defaults whenever the debtholders are offered substitute instruments with lower coupons, longer maturities, or any other diminished financial terms."
 >
 > **Annotation.** Schmid is paraphrasing S&P's definition, and it was a sensible rule when distressed exchanges were rare, voluntary bond swaps that a creditor committee negotiated with the company. The rule is unchanged. What it now catches is not. An uptier, a drop-down financing, an amend-and-extend at a discount, and a PIK toggle forced through a majority vote can all be "substitute instruments with diminished terms," so all of them can be defaults, even though no court is involved, often no payment is missed, and the company is usually re-rated out of default within weeks. On a 2026 desk this sentence is the reason one company can be "in default" for Moody's, performing for its CDS, and current for its CLO manager's interest-coverage test, all on the same Tuesday. The modern desk departs from the textbook by refusing to collapse those into one flag. It carries two event types, two hazards and two recovery laws, and decides only at the end which one a given contract pays on.
@@ -77,6 +83,16 @@ Moody's now publishes the gap directly. In June 2025 the trailing twelve-month s
 
 The punchline for a model builder is uncomfortable. A probability-of-default model trained on pre-2020 labels ("filed or missed a payment") and scored against today's agency default rate will look as if it under-predicts by roughly that factor of three. It isn't miscalibrated. It is answering a different question. Mixing Moody's DE-inclusive counts, S&P's SD, Fitch's RD and a vendor's "excluding LMEs" series in one training set produces label noise that no amount of gradient boosting will find, because it isn't noise in $X$. It is noise in the definition of $y$.
 
+Here are the same years seen from a chair that has to live with both numbers. Picture a CLO manager *(a fictional composite)* running a dozen vehicles of broadly syndicated loans from an office where the most important document is the monthly trustee report. Her job is not to beat an index. It is to keep seven numbers inside their lines, above all a CCC share under its limit, "typically set to 7.5%," and overcollateralization and interest-coverage cushions above theirs; the median CLO, by one ECB-system study, runs "within 4% of the most stringent covenant threshold" (Kundu, ESRB Working Paper 141, March 2023).
+
+In 2024 the LMT count reached a record 38 (Wachtell Lipton, 3 February 2026), and for her that year was a parade of phone calls she was not on. A sponsor's advisers would call a few large holders, a deal would close, a press release would arrive. If her vehicles were in the group, she came out with a first-out loan she could hold. If they were not, she came out with a loan rated SD for a few days and then CCC, and once her CCC bucket overflowed, the excess was marked at the lowest price in the bucket, straight out of her OC numerator. Either way the agencies' count ticked up, because an exchange is a default whichever side of it you sat on. That was the year distressed exchanges reached about three in five Moody's-rated defaults.
+
+In 2025 the count fell to 24. A consultant's deck called it the year LMEs peaked. Her trustee reports said otherwise. The deals kept coming, a few fewer and a little more consensual, and the soft share of defaults did not budge: about two-thirds by issuer count, and ahead of payment defaults and bankruptcies on a rolling twelve-month basis in every month of the year (Wachtell, 3 February 2026). Fewer coercive uptiers, more discounted amend-and-extends and equity handovers, each still a default to the agencies and still a CCC in her bucket. The technique had changed clothes, not careers.
+
+By May 2026 the Federal Reserve was saying it in its *Financial Stability Report*: defaults including distressed exchanges "remained relatively high," even while volume-weighted loan default rates sat below their median. That is a polite way of saying the odometer and the speedometer had come apart, and that the number on her monthly report depended on which one the trustee read.
+
+What she learned, and what a model builder has to learn from her, is that the *level* of the default rate became a weak signal and the *mix* became a strong one. The box below is the ledger behind that story.
+
 > **Trend Watch.** *The soft-default takeover, 2010–2026.*
 > - **Baseline.** S&P counted distressed exchanges at roughly one-third of US defaults over 2010–2023 and about half in the years to mid-2024 (S&P, *Distressed Exchanges Reached Their Highest Level Since 2009*, 15 August 2024, as cited by FTI Consulting, 9 October 2026; we could not open the S&P original).
 > - **2024.** Distressed exchanges were roughly three in five Moody's-rated defaults, a record share (Moody's AMR, 6 March 2025). LMT counts hit a high-water mark of 38 (Wachtell Lipton, *Liability Management 2026*, 3 February 2026).
@@ -93,6 +109,16 @@ How strange is a world in which most defaults happen out of court? Very, by the 
 
 Mags, who remembers 2004 as "recent," takes the long view. "We used to call it a coercive exchange, and it needed ninety percent to work. Now it needs fifty point one percent and a dictionary." She pauses. "The Fifth Circuit, to its credit, eventually bought a dictionary too." (We get to that ruling in §14.6.)
 
+**Quant-shop life (fictional composite): forty-one issuers that cannot agree.** A systematic asset manager, the Tuesday of the week a new vendor default file arrives. Nobody announces the file. It lands in a storage bucket at 6:12 a.m., the ingestion job picks it up at 6:15, and by 9:30 there is a ticket in the queue, DATA-2291, titled "default_flag mismatch, 2023 cohort," assigned to Hana, the junior quant who owns the risk-data pipeline (Chapter 5). Hana has learned that tickets with the word "mismatch" in the title never close on the day they open.
+
+The PD model's training set carries three default columns, because three sources sell default histories and the firm licenses all of them. `default_flag_mdy` is Moody's, with distressed exchanges counted. `default_flag_sp` is S&P's, where an SD counts. `default_flag_vnd` is a vendor's "ex-LME" series, which counts a default only on a filing or a missed payment. On most rows the three agree, because most companies either pay or do not. On the 2023 rows they disagree about 41 issuers *(an invented count for this composite; the real number depends on the vendor and the universe)*. Hana sorts the 41 by date, and the pattern is not subtle. Nearly every one is an uptier, a drop-down or a discounted amend-and-extend. Moody's and S&P say default; the vendor says performing. The model, trained on a column called `y`, has been told both on alternate refreshes, depending on which source a configuration file written in 2021 happened to point at.
+
+The meeting about it lasts fifty minutes, and forty of them are about names. One researcher wants a single `default_flag` with a documented precedence rule. Another wants the three source columns kept forever and a fourth, `default_type`, taking the values `HARD`, `DE` and `NONE`. Someone proposes `default_flag_v2`, and the room goes quiet the way rooms do when everyone remembers `vol_60d_v2`. Theo, invited because he "knows the restructuring side," asks the question he always asks: "What does the credit agreement call it?" Nobody knows, and it turns out to be the right question, because the credit agreement does not call it anything. The exchange was done *under* the agreement, by amendment, and on the company's own documents nothing ever went wrong. The agencies called it a default. The lenders left outside called it something that does not go in a schema.
+
+Then the point-in-time problem arrives, the one Chapter 5 called "what we knew when." One of the 41 was rated SD by S&P for nine days and then B-. The current file shows B-. A back-test run on the current file never sees the SD, and treats a company the market spent nine days pricing as a defaulter as a clean B- credit all along. The fix is dull and correct: store both ratings, each with the time it took effect and the time the firm received it, and make the training job ask for the state *as known* on each date. Hana writes it into the ticket as a schema change, a `rating_event` table keyed on issuer, agency, rating, effective time and received time, and it takes the rest of the week.
+
+By Friday the training set has a `default_type` column, three source flags, and a precedence rule written down where the risk committee can read it. Not one line of the model's own logic has changed, and its validation accuracy has moved by a few points anyway *(illustrative)*, because for two years it had been graded against an answer key that changed with the configuration. That is the "noise in the definition of $y$" from earlier in this section, seen from the desk where somebody has to fix it.
+
 The recovery side has forked the same way. Measured *at the exchange*, recoveries on distressed exchanges look excellent: Moody's put first-lien DE recoveries at 71% at end-2024, up from 55% in 2023 (as reported by Bloomberg Law, *Distress Exchange Leads to Re-Default Half the Time*, 23 April 2025). Measured *at the eventual bankruptcy*, first liens of companies that had done an LME recovered far less. PitchBook, summarizing a Fitch study of 2024 emergences, reported weighted-average first-lien recoveries of 23% for issuers with a prior LME against 53% for those without. We could not open the Fitch original, so treat the pair as indicative rather than gospel. The two numbers are not contradictory. The first is measured at a moment chosen by the borrower, for holders who were in the deal. The second is measured at the next event, which is where the excluded holders' losses and the participants' second haircut actually show up. A recovery database that records only the first number has a survivorship bias with a lawyer.
 
 So "the default rate" is now two numbers, and "the recovery rate" is now at least two distributions. The rest of the chapter builds the machinery to carry both.
@@ -106,6 +132,8 @@ So "the default rate" is now two numbers, and "the recovery rate" is now at leas
 ## 14.2 Splitting the Default Intensity: Competing Risks
 
 Every credit model in this book so far has consumed one default intensity, $\lambda_t$. The LMT era asks us to split it. The tool is competing-risks survival analysis, which epidemiologists use when a patient can die of more than one thing, and which credit people should use because a borrower can now default in more than one way.
+
+> **Math, Gently.** *Competing risks: one bucket, two taps.* Fill a bucket with water, one litre for each issuer in a cohort that has not yet had a credit event. Two taps at the bottom drain it. The hard tap lets issuers out through a filing or a missed payment; the soft tap lets them out through an exchange. Each tap runs at its own speed, $\lambda_H$ and $\lambda_D$, and the bucket empties at the combined speed $\lambda = \lambda_H + \lambda_D$. The question a desk asks is not only "how fast is the bucket emptying?" but "of the water that has left, how much went out each tap?" If the taps run at constant speed, the answer is $\lambda_k/\lambda$, and it does not depend on how long you watch: after a month or after ten years, the soft tap has taken the same share. Taps running at about 0.022 and 0.038 per year (the split derived in §14.2.1) take about 36% and 64% of the water, which is the 64% soft share read backwards. The running total that has gone out of tap $k$ by time $t$ is the *cumulative incidence* $F_k(t)$, and the water still in the bucket is the survival $S(t)$; what has left plus what remains is always the whole bucket. The classic mistake, which §14.2.2 calls the Kaplan–Meier trap, is to estimate one tap's flow by pretending the other tap is shut. You treat every issuer that left through the soft tap as if it had quietly walked out of the study, and you end up computing how much water the hard tap *would* have drained from a bucket that nobody else was draining. That bucket does not exist, and the number it produces is too big. The full version is in §14.2.1.
 
 ### 14.2.1 Cause-specific hazards and cumulative incidence
 
@@ -135,7 +163,7 @@ $$
 \sum_k F_k(t) + S(t) = 1 .
 $$
 
-To see it, note $\sum_k \lambda_k = \lambda$ and $\frac{d}{du}S(u) = -\lambda(u)S(u)$, so $\sum_k F_k(t) = \int_0^t \lambda(u)S(u)\,du = 1 - S(t)$.
+In words: everything that has left the bucket, through either tap, plus everything still in it, is the whole bucket. The proof is short and comes after the example.
 
 With constant hazards the integral is elementary:
 
@@ -149,7 +177,13 @@ With constant hazards the share is the same at every horizon, not only in the li
 
 Now put Moody's June 2025 numbers through it. Twelve-month default rates are fractions of an issuer cohort, not intensities, so convert first: $\lambda \approx -\ln(1 - 0.058) = 0.0597$ per year. The ex-DE rate is 2.1% of 5.8%, so the DE share is $3.7/5.8 \approx 0.64$. Splitting the intensity in the same proportion gives $\lambda_D \approx 0.038$ and $\lambda_H \approx 0.022$ per year *(approx.; a two-cause conversion of agency rates that ignores within-year timing and withdrawn ratings)*. These are the two numbers we will carry for the rest of the chapter.
 
+#### The Full Derivation
+
+The identity $\sum_k F_k(t) + S(t) = 1$ follows in one line. Note $\sum_k \lambda_k = \lambda$ and $\frac{d}{du}S(u) = -\lambda(u)S(u)$, so $\sum_k F_k(t) = \int_0^t \lambda(u)S(u)\,du = 1 - S(t)$. The constant-hazard formula is the same integral with $\lambda_k$ and $\lambda$ pulled outside: $F_k(t) = \lambda_k \int_0^t e^{-\lambda u}\,du = \frac{\lambda_k}{\lambda}\left(1 - e^{-\lambda t}\right)$.
+
 ### 14.2.2 Estimating CIFs without fooling yourself
+
+> **Math, Gently.** *A survival curve is an attendance register.* Take ten issuers and call the roll once a year. Survival is the share still answering "present." In year one, one of them files: one hard default among ten at risk. In year two, one of the nine survivors does an exchange: one soft default among nine at risk. The **Nelson–Aalen** estimator keeps a running tally of how dangerous each roll call was, adding 1/10 to the hard tally at year one and 1/9 to the soft tally at year two; each event is divided by the number of names in the room when it happened. The **Aalen–Johansen** estimator turns those tallies into probabilities by weighting each step by the share still present just before it: $\hat F_H(1) = 1 \times 1/10 = 0.10$, $\hat F_D(2) = 0.9 \times 1/9 = 0.10$, and $\hat S(2) = 0.9 \times (1 - 1/9) = 0.80$. The three sum to one, as they must. Now add one complication: a third issuer's rating is withdrawn after year one, because it was taken private and stopped paying an agency. It did not default. It left the register. That is **censoring**: we know it survived to year one and nothing after. The right treatment is neither to count it as a survivor forever nor as a default, but to drop it from the at-risk count from then on, so later fractions divide by fewer names. With that withdrawal the year-two exchange counts as 1/8, $\hat F_D(2) = 0.9 \times 1/8 \approx 0.11$ and $\hat S(2) = 0.9 \times 7/8 \approx 0.79$, and the three still sum to one. The general formulas follow.
 
 Given an event table with times $t_1 < t_2 < \dots$, let $n_i$ be the number at risk just before $t_i$ and $d_{k,i}$ the number of type-$k$ events at $t_i$. The Nelson–Aalen estimator of the cumulative cause-specific hazard is
 
@@ -169,16 +203,25 @@ The identity $\sum_k \hat F_k + \hat S = 1$ holds exactly at every jump time, fo
 
 ![Figure 14.2: The three outcomes always sum to one (left), and treating hard defaults as censoring overstates the chance of a distressed exchange by a gap that widens with the horizon (right, dashed line). Illustrative: closed-form constant hazards of 2.2% (hard) and 3.8% (soft) per year from §14.2.1, with no cures.](assets/figures/ch14_competing_risks_cif.png)
 
-Four places where intelligent people get this wrong:
+There are four places where intelligent people get this wrong, and the desk found all four the usual way, in an argument.
 
-1. **The Kaplan–Meier trap.** The tempting shortcut is to estimate the DE probability as $1 - \widehat{\mathrm{KM}}_D(t)$, treating hard defaults as censored. That estimates $1 - \exp(-\int_0^t \lambda_D)$, the probability of a DE *in a world where hard defaults cannot happen*. Since hard defaults do happen and remove issuers before they can exchange, $1-\widehat{\mathrm{KM}}_D(t) > F_D(t)$ for every $t>0$, and the bias grows with horizon, as the right panel of Figure 14.2 shows. It is the statistical equivalent of a recovery analysis that assumes the uptier never happened. Our code asserts the inequality so that nobody "simplifies" the estimator later.
-2. **Regressing on the wrong hazard.** A Cox model fit to $\lambda_D$ tells you how covariates move the *rate* of DEs among survivors. It does not tell you how they move the *probability* of eventually having a DE, because a covariate that raises $\lambda_H$ also lowers $F_D$ by removing issuers early. If the question is "does a sponsor-owned, loan-only capital structure raise the chance that this company's first default is an exchange?", the right tool is the Fine–Gray model on the sub-distribution hazard (Fine & Gray, 1999). Candidate covariates: `sponsor_backed`, `loan_only_structure`, `docs_vintage` (pre- or post-Serta-blocker), `coop_in_place`, and the Priming Risk Score from Chapter 13.
-3. **Rates are not hazards.** Agency default rates are issuer-count fractions over trailing twelve months, with withdrawn ratings handled by agency-specific rules. Convert them with $-\ln(1-\text{rate})$ before you put them next to a CDS-implied intensity, and keep the two causes separate when you do (§14.7.3).
-4. **Count-weighted versus dollar-weighted.** Moody's notes that in June 2025 the default *count* fell while the *dollar volume* more than doubled. A DE share computed by count and one computed by dollars can differ by tens of points in a single month. State which one you are using, in the column name.
+Kaz goes first, because Kaz has a shortcut. "We don't need a new estimator. Fit a Kaplan–Meier curve to the exchanges, treat the hard defaults as censored, and one minus the curve is the probability of an exchange. Two lines in any survival library."
+
+"No," says Mags, before Kaz has finished, with the certainty of someone who does not yet know why. Then she works out why. "A company that files in year one can't do an exchange in year three. You're counting exchanges the bankruptcy already made impossible."
+
+She is right, and the mistake has a name: **the Kaplan–Meier trap**. Kaz's shortcut estimates the DE probability as $1 - \widehat{\mathrm{KM}}_D(t)$, treating hard defaults as censored. That estimates $1 - \exp(-\int_0^t \lambda_D)$, the probability of a DE *in a world where hard defaults cannot happen*. Since hard defaults do happen, and remove issuers before they can exchange, $1-\widehat{\mathrm{KM}}_D(t) > F_D(t)$ for every $t>0$, and the bias grows with the horizon, as the right panel of Figure 14.2 shows. It is the statistical equivalent of a recovery analysis that assumes the uptier never happened. Our code asserts the inequality so that nobody "simplifies" the estimator later.
+
+Kaz regroups. "Fine. Then a Cox regression on the exchange hazard, to see which covariates matter." That is the second trap, and a subtler one: **regressing on the wrong hazard**. A Cox model fit to $\lambda_D$ tells you how covariates move the *rate* of DEs among survivors. It does not tell you how they move the *probability* of eventually having a DE, because a covariate that raises $\lambda_H$ also lowers $F_D$ by removing issuers early. Theo, who has sat through enough sponsor pitches to know what the real question is, puts it in words: does a sponsor-owned, loan-only capital structure raise the chance that this company's first default is an exchange? That question belongs to the Fine–Gray model on the sub-distribution hazard (Fine & Gray, 1999). The candidate covariates write themselves from Part IV: `sponsor_backed`, `loan_only_structure`, `docs_vintage` (pre- or post-Serta-blocker), `coop_in_place`, and the Priming Risk Score from Chapter 13.
+
+Then Theo asks the question nobody else thought to ask. "What happens to $n_i$ when an agency withdraws a rating?" The answer is the third trap: **rates are not hazards**. Agency default rates are issuer-count fractions over trailing twelve months, with withdrawn ratings handled by agency-specific rules, and every such rule changes the at-risk count without any event happening, which is censoring by another name (the attendance register above). Convert agency rates with $-\ln(1-\text{rate})$ before you put them next to a CDS-implied intensity, and keep the two causes separate when you do (§14.7.2).
+
+Ines, who has been reading markouts through all of this, lands the last one without looking up. "And when you've finished, tell me whether you counted companies or dollars." That is the fourth trap, **count-weighted versus dollar-weighted**. Moody's notes that in June 2025 the default *count* fell while the *dollar volume* more than doubled. A DE share computed by count and one computed by dollars can differ by tens of points in a single month. State which one you are using, in the column name, so that Hana's successor never has to open a ticket about it.
 
 Kaz has been listening with growing alarm. "So the soft default is a default with a bedside manner."
 
 "It's a default that sends flowers," says Mags. "The hard one sends the bill."
+
+**When competing risks are the right tool, and when they break.** The two estimators answer two different questions, and the first judgment is knowing which question you have. If you hold the loan and care about *what* happens to it, the cause-specific cumulative incidence functions are the object: they tell you how much of the cohort will have exchanged, filed, or neither by the horizon you care about, and they feed straight into the expected-loss integral of §14.3.3. If the question is *which features* make the first event an exchange rather than a filing, the sort of question a sponsor-screening model or a Priming Risk Score backtest asks, use the Fine–Gray sub-distribution model, because it puts the covariates on the probability you care about rather than on a rate among survivors. Both break in the same quiet way. They assume that a "D" in the event column means the same thing in every row, and the moment a data team harmonizes Moody's distressed exchanges, S&P's SDs and a vendor's ex-LME flags into one label without a timestamped definition table, that assumption is false and nothing in the likelihood will say so. The fitted CIFs will be smooth, the confidence bands narrow, and the soft share wrong by whatever the label mix happens to be that quarter. A seasoned practitioner reads the label dictionary before the likelihood: which agency, which definition, as of which date, and what happened to the withdrawn ratings. Only then does the estimator get a vote. Hana's forty-one issuers are what this looks like from the inside.
 
 The code for these estimators lives in the chapter's reference engine (§14.7, functions `nelson_aalen_cause` and `aalen_johansen`), together with the sanity checks that keep them honest. Before we write it, we need the piece that makes the LMT era genuinely new: what happens *after* the first event.
 
@@ -206,6 +249,8 @@ From Performing, the competing hazards of §14.2 apply. On entering Parole at th
 
 ### 14.3.2 A mixture-cure clock, calibrated to Moody's
 
+> **Math, Gently.** *Lightbulbs, unplugged bulbs, and bulbs that never burn out.* Picture a lab testing a box of lightbulbs by switching them on and writing down when each one fails. Three things make the study harder than it sounds. First, some bulbs are unplugged before they fail, because the budget ran out or the lab moved; we know they lasted *at least* that long and nothing more. That is **censoring**, the withdrawn-rating problem of §14.2.2 again, and the exchanges of 2024 and 2025 are the bulbs most recently plugged in. Second, bulbs can fail more often as they age, the way a filament thins ($k>1$ in a **Weibull** distribution), or less often as they age, because the defective ones go first ($k<1$), or at the same rate whatever their age, which is the exponential of §14.1 ($k=1$). The Weibull is the exponential with one extra dial, the shape $k$, which says whether time makes things worse or better; a second dial, the scale $\eta$, says roughly how long a typical failure takes. Third, and this is the part that matters here: suppose three-quarters of the box are LEDs that will not fail on any clock the study can run. Then no amount of waiting will see most of the box fail, and any model whose curve must eventually reach 100% is wrong in the long run however well it fits the first year. The fix is a **cure fraction**: say a share $p$ of the bulbs are the failing kind and $1-p$ are not, and give only the failing kind a Weibull clock. Worked: with $p = 0.25$, $k = 1.2$ and $\eta = 1.71$ years, a failing-kind bulb has a $1 - e^{-(2/1.71)^{1.2}} \approx 0.70$ chance of going within two years, so a bulb picked at random from the box fails within two years with probability $0.25 \times 0.70 = 0.175$, and fails ever with probability 0.25. Swap "bulb" for "issuer after an exchange" and "fail" for "hard default," and those are the Moody's facts below. The calibration algebra is in The Full Derivation later in this subsection.
+
 The facts to match come from Moody's soft-default study of 1,173 borrowers in its Default & Recovery Database, 1979–2026 (David Hamilton, *Lend, Extend, and Then?*, Moody's, 18 May 2026):
 
 1. About one in four soft credit events ended in a hard default.
@@ -229,17 +274,7 @@ $$
 
 As $u \to \infty$, $S_0 \to 0$ and $h_H(u) \to 0$: the survivors are increasingly the cured, which is fact 4 in hazard form.
 
-**Calibration.** Fact 1 sets $p = 0.25$ for hard default (use $p \approx 0.35$ to $0.40$ if your event is "hard default or another DE," which is fact 2). Fact 3 says the fraction of eventual defaulters who default by $u=2$ is $0.70$:
-
-$$
-\frac{F(2)}{p} = 1 - S_0(2) = 0.70
-\;\Longrightarrow\;
-\left(\frac{2}{\eta}\right)^k = -\ln 0.30 = 1.204
-\;\Longrightarrow\;
-\eta = \frac{2}{1.204^{1/k}} .
-$$
-
-So fact 3 pins $\eta$ once $k$ is chosen. Fact 4 then pins $k$, which is the part people get wrong. The increase in cumulative incidence over year six is $p\,[S_0(5) - S_0(6)]$:
+**Calibration.** Each Moody's fact turns one dial. Fact 1 sets $p = 0.25$ for hard default (use $p \approx 0.35$ to $0.40$ if your event is "hard default or another DE," which is fact 2). Fact 3 says the fraction of eventual defaulters who default by $u=2$ is $0.70$, which leaves one equation linking $\eta$ and $k$, $\eta = 2/1.204^{1/k}$ (derived below). So fact 3 pins $\eta$ once $k$ is chosen. Fact 4 then pins $k$, which is the part people get wrong. The increase in cumulative incidence over year six is $p\,[S_0(5) - S_0(6)]$:
 
 | Shape $k$ | Scale $\eta$ (years) | Hazard among the susceptible | Year-six increment $p\,[S_0(5)-S_0(6)]$ | Consistent with fact 4? |
 | :--- | :--- | :--- | :--- | :--- |
@@ -251,6 +286,22 @@ The intuitive guess is a decreasing hazard ($k<1$): the weakest credits fail fir
 
 ![Figure 14.3: Left: all three Weibull shapes pass through the same two-year anchor and flatten at the 25% cure ceiling, while ROBO's exponential keeps climbing, reaching two-thirds by year ten, because its hazard never decays. Right: the cure model's population hazard falls toward zero as cured issuers come to dominate the survivors, while the exponential's stays at 0.11 a year. Illustrative: the mixture-cure Weibull of §14.3.2 with p = 0.25 and the scale solved from the Moody's 70%-within-two-years fact (Hamilton, 18 May 2026).](assets/figures/ch14_redefault_clock.png)
 
+#### The Full Derivation
+
+The population hazard follows from the mixture survival function by the definition $h(u) = -\frac{d}{du}\ln \mathbb{P}(U>u)$. The derivative of $(1-p) + p\,S_0(u)$ is $-p\,f_0(u)$, so $h_H(u) = p\,f_0(u)/[(1-p) + p\,S_0(u)]$, which is the formula above.
+
+For the scale, fact 3 says that of the eventual hard defaulters, 70% default by $u = 2$. The eventual defaulters are the susceptible fraction, so the condition is on $S_0$ alone:
+
+$$
+\frac{F(2)}{p} = 1 - S_0(2) = 0.70
+\;\Longrightarrow\;
+\left(\frac{2}{\eta}\right)^k = -\ln 0.30 = 1.204
+\;\Longrightarrow\;
+\eta = \frac{2}{1.204^{1/k}} .
+$$
+
+At $k = 0.7$, $1.0$ and $1.2$ this gives $\eta = 1.53$, $1.66$ and $1.71$, the scale column of the table. For the year-six column at $k = 1.2$: $S_0(5) = \exp[-(5/1.71)^{1.2}] \approx 0.027$ and $S_0(6) = \exp[-(6/1.71)^{1.2}] \approx 0.011$, so $p\,[S_0(5) - S_0(6)] \approx 0.25 \times 0.016$, about 0.4 percentage points (the table's 0.39, which carries more decimals), under fact 4's half-point ceiling. The same arithmetic at $k = 0.7$ gives 0.68 points, which is why the decreasing hazard is rejected.
+
 That is where the 13-week model comes back from the dead. In a hazard regression the covariates enter through the cure fraction and the scale:
 
 $$
@@ -261,6 +312,24 @@ $$
 
 with $\mathbf{x}_i$ containing `liquidity_runway_weeks` (literally the output of Theo's USB stick), `new_money_fraction`, `maturity_extension_years`, `lme_type` (uptier, drop-down, amend-extend-and-exchange), `sponsor_backed`, `coop_in_place`, and `docs_vintage`. The runway variable should raise $\eta$ (later failures) and the new-money variable should lower $p$ (fewer failures). Maturity extension on its own should do little to either. An amend-and-extend that adds no new money moves the cliff three years to the right and leaves the car in the same gear.
 
+> **Math, Gently.** *The logit link, or odds as a betting line.* A probability has to live between 0 and 1, but a regression score $\mathbf{x}^\top\boldsymbol\beta$ can land anywhere on the real line, so the model needs a translator. Bookmakers already have one: odds. A probability of 0.25 is odds of 1 to 3, one chance for and three against; a probability of 0.5 is evens. Odds run from zero to infinity, and their logarithm, the **log-odds** or **logit**, $\operatorname{logit} p = \ln[p/(1-p)]$, runs from minus infinity to plus infinity, which is exactly the range a linear score covers. The way back is the inverse logit, $p = 1/(1+e^{-z})$. A score of zero is evens, $\operatorname{logit}^{-1}(0) = 0.5$. Add one unit and you are at $1/(1+e^{-1}) \approx 0.73$; subtract one and you are at 0.27. Each unit of score multiplies the odds by $e \approx 2.7$ wherever you start, so a coefficient reads as "this feature multiplies the odds of being in the susceptible group by $e^{\beta}$." The scale $\eta$ gets a log link instead, for the same reason one level down: $\eta$ must be positive, and $\ln \eta$ can be anything. Log-odds first appeared on this desk in §3.2.2, turning an RFQ into the chance of trading against someone informed; they come back in §14.4.2 and §14.6.1.
+
+Theo reads the covariate list twice before he sees it. `liquidity_runway_weeks`. He plugs in the USB stick, opens the model he built at RSSG and has rolled forward every week since out of something between habit and grief, and scrolls to the last row. Every 13-week cash flow model ends in the same place: the week in which cash crosses the minimum-liquidity line. "That's my bottom line," he says. "Literally. The last row. That's the covariate that moves $\eta$." He had spent three weeks assuming that the thing on the stick was the part of his old life he would have to leave at the door. It turns out to be a feature.
+
+Kaz, who has never read a credit agreement, asks the question that proves it. "What does a PIK toggle do to runway? 'Toggle' sounds like a light switch. Does the company turn the interest off?"
+
+"More or less," says Theo. "For a while it can pay interest in more debt instead of cash. Cash interest goes down, so runway goes up. The principal grows. You've bought time and paid for it out of recovery."
+
+"So it raises $\eta$ and raises $L$," says Kaz. "Both at once. That's not a covariate, that's a trade."
+
+"And it may lower $p$, if the extra time lets the business recover, or do nothing to $p$ at all if it just moves the cliff," says Mags. "Back in my day we called that extend and pretend, and we did it by fax."
+
+Theo wants a check against something real, and Mitel is the obvious one. In October 2022 Mitel's participating lenders put in about \$156mm of new first-out money (§14.8.2). He does not have Mitel's weekly cash burn, and he does not invent it; the reading this chapter uses is that the new money bought about two and a half years of runway. Mitel filed its prepackaged Chapter 11 on 10 March 2025, 29 months after the uptier. The clock and the cliff landed within a few months of each other. "So the runway was the clock," says Ines, "and the clock was right."
+
+"Then the hazard regression," says Kaz slowly, "is your thirteen-week model with a link function."
+
+"Please don't tell my old MD," says Theo.
+
 Three ways to get this wrong:
 
 - **Right-censoring.** Exchanges done in 2024 and 2025 have one or two years of follow-up. A naive estimate of $p$ that counts "no hard default yet" as "cured" is biased low, badly, for exactly the cohort you care about.
@@ -269,12 +338,14 @@ Three ways to get this wrong:
 
 > **Ways This Blows Up.** *What ROBO built from the vague version.* Asked to "model time to re-default," ROBO fit an exponential to a sample with fourteen months of follow-up. It reported a hazard of about 0.11 per year and an expected time to hard default of more than nine years, with a straight face. Both halves are wrong, in opposite directions. The exponential has no cure fraction, so it implies that about two-thirds of the cohort hard-defaults within a decade, against Moody's quarter. And it smears the defaults that do happen, which are front-loaded, across a decade. The fix is not a better optimizer. It is a model with a parameter for "never," plus a spec that says so (§14.7).
 
+Before the ledger, a warning about reading it. The box below carries five numbers that look as if they cannot all be true: about 25% of soft-event borrowers eventually hard-default; 46% of one cohort had re-defaulted within two years; only 22% of coercive deals got through two years clean; roughly a third filed; 56% filed or went to CCC. A desk that reads them as five noisy estimates of one quantity will average them, get something near 40%, and be wrong about every name it owns. They are five estimates of five different $p$'s. The 25% is hard defaults only, over every soft event in Moody's database since 1979. The 46% counts a repeat exchange as a re-default and is a single, stressed vintage. The 22% is a survival rate, not a default rate, for coercive non-pro-rata deals only, the riskiest slice. The third and the 56% come from a CLO-focused sample in which "re-defaulted or rated CCC+ or below" is one bucket. Change the cohort or the event definition and you change $p$, and the mixture-cure model is built to let you do exactly that: one $p$ per deal type and vintage, one $\eta$ tied to runway, and a shape $k$ shared across all of them from the long-run study. If you want to hear the authors of the most-quoted study state their own caveats aloud, the *Cloud 9fin* episode "LME Doomscrolling: Data-driven reality check" (7 April 2026; https://share.transistor.fm/s/1f62123b) has Mark Roe and Vasile Rotaru walking 9fin's Laurie Tomassian through what their sample does and does not cover.
+
 > **Trend Watch.** *The re-default ledger, 2020–2026.*
 > - **Long-run baseline.** Of 1,173 soft-event borrowers since 1979, about one in four hard-defaulted and more than 70% of those did so within two years (Moody's, 18 May 2026).
 > - **The 2023 cohort ran hot.** About 46% of 2023 distressed exchanges had already re-defaulted by April 2025, most in under a year, against a historical average of about 3.5 years (Moody's, as reported by Bloomberg Law, 23 April 2025). That figure reportedly counts repeat exchanges as re-defaults.
 > - **Coercive LMEs run hotter.** In 89 coercive non-pro-rata LMEs, fewer than half avoided bankruptcy or re-default within one year and only 22% within two. Of the firms with at least two years of history, 56% had filed, and LME debtors spent two to three times longer in bankruptcy than prepackaged cases (Roe & Rotaru, Harvard Law School Bankruptcy Roundtable, 24 February 2026).
 > - **The CLO view.** S&P CLO research, as relayed by Wellington (1 April 2026; secondary), finds that roughly a third of issuers filed after an LME, about 56% re-defaulted or were rated CCC+ or below, and about 10% repaid or reached B- or better.
-> - **The names.** Serta: uptier closed 22 June 2020, Chapter 11 on 23 January 2023, about 31 months. Mitel: uptier October 2022, Chapter 11 in March 2025, about 29 months. Wesco/Incora: notes transaction March 2022, Chapter 11 on 1 June 2023, about 15 months. Robertshaw: 2023 LME, Chapter 11 on 15 February 2024. Del Monte Foods: a 2024 financing (reported as August 2024; terms not verified here), Chapter 11 in July 2025, about 11 months (docket date not verified). Filing dates are from the S.D. Tex. and D.N.J. dockets.
+> - **The names.** Serta: uptier closed 22 June 2020, Chapter 11 on 23 January 2023, about 31 months. Mitel: uptier October 2022, Chapter 11 in March 2025, about 29 months. Wesco/Incora: one-day notes transaction 28 March 2022, Chapter 11 on 1 June 2023, about 14 months (the rulings that followed, 10 July 2024 oral, 17 January 2025 written, 8 December 2025 reversal, are in the §14.6 Docket Diary and Chapter 13). Robertshaw: 2023 LME, Chapter 11 on 15 February 2024. Del Monte Foods: a 2024 financing (reported as August 2024; terms not verified here), Chapter 11 in July 2025, about 11 months (docket date not verified). Filing dates are as reported from the S.D. Tex. and D.N.J. dockets in the case dossiers and secondary sources; we did not open every docket ourselves.
 > - **What it means for the desk.** The headline numbers (25%, 46%, 22% survival) look contradictory and are not. They differ in the event definition (hard only, or hard plus repeat exchange) and in the cohort (all soft events since 1979, a stressed vintage, or coercive deals only). Each is a valid estimate of a different $p$. The desk's job is to condition on deal type and vintage, not to pick the scariest headline. The 38 LMTs of 2024 are inside the two-year window now.
 
 ### 14.3.3 Expected loss when the path has a soft default in it
@@ -308,21 +379,15 @@ The recovery models on the shelf index $R$ by seniority, industry, and the cycle
 
 ### 14.4.1 Two humps, not one bell
 
+> **Math, Gently.** *Two humps, or why a room's spread can be mostly the gap between groups.* Measure the heights of everyone at a school open evening, half parents and half children. The room's average is somewhere around 1.4 metres, a height almost nobody in the room has. The room's spread is large, but not because adults vary much among themselves or children among themselves; most of it is the gap between the two groups. That is a **mixture**: first a coin decides which group you are in, then a group-specific distribution decides your height. The **law of total variance** makes the split exact: total variance is the average variance *within* the groups plus the variance *between* the group averages. With a coin that lands "adult" with probability $\pi$ and group averages a gap $\Delta$ apart, the between part is $\pi(1-\pi)\Delta^2$. Recovery after a non-pro-rata deal is the same room, and the next question is which distribution each group should get. Not a **normal**: its bell has tails running past 0 and past 100 cents, so it puts weight on recoveries below nothing and above par. Not a **lognormal**: it cannot go negative but has no ceiling, so it still puts weight above par. A **Beta** distribution lives on $[0,1]$ exactly, as a recovery measured as a fraction of par does, and with its two parameters it can be a hump near 0.74, a hump near 0.25, or a U with mass piled at both ends (its first-use box is in §5.5.2). Worked: with $\pi = 0.526$ and group means of 74 and 25 cents, a gap of 49 points, the between-group standard deviation is $\sqrt{0.526 \times 0.474} \times 49 \approx 24.5$ points of par, from membership alone. The formulae follow, the derivation comes after the example, and Figure 14.4 draws the room.
+
 Let $\pi = \mathbb{P}(\text{holder is in the majority group})$. Conditional on a default event in which classmates are treated differently,
 
 $$
 R \sim \pi\,\mathrm{Beta}(a_{\text{in}}, b_{\text{in}}) + (1-\pi)\,\mathrm{Beta}(a_{\text{out}}, b_{\text{out}}),
 $$
 
-with group means $\mu_g = a_g/(a_g+b_g)$ and variances $\sigma_g^2 = \mu_g(1-\mu_g)/(a_g+b_g+1)$. Let $M$ be the membership indicator. The law of total variance, $\mathrm{Var}[R] = \mathbb{E}[\mathrm{Var}(R\mid M)] + \mathrm{Var}(\mathbb{E}[R\mid M])$, gives
-
-$$
-\mathbb{E}[R] = \pi\mu_{\text{in}} + (1-\pi)\mu_{\text{out}},
-\qquad
-\mathrm{Var}[R] = \underbrace{\pi\sigma_{\text{in}}^2 + (1-\pi)\sigma_{\text{out}}^2}_{\text{within groups}} + \underbrace{\pi(1-\pi)(\mu_{\text{in}} - \mu_{\text{out}})^2}_{\text{between groups}} .
-$$
-
-The between-group term is the variance of a Bernoulli($\pi$) scaled by the squared gap in means. It is largest at $\pi = 1/2$, which is where a bare-majority uptier sits by design.
+with group means $\mu_g = a_g/(a_g+b_g)$ and variances $\sigma_g^2 = \mu_g(1-\mu_g)/(a_g+b_g+1)$. The mean recovery is the coin-weighted average of the two group means, $\pi\mu_{\text{in}} + (1-\pi)\mu_{\text{out}}$, and the variance splits, exactly as in the school hall, into a within-group part and a between-group part, $\pi(1-\pi)(\mu_{\text{in}} - \mu_{\text{out}})^2$. The between-group term is the variance of a Bernoulli($\pi$) scaled by the squared gap in means. It is largest at $\pi = 1/2$, which is where a bare-majority uptier sits by design.
 
 Now put Serta in. On the facts recited in the July 2026 remand opinion, participating lenders held about \$992mm of a \$1.887bn first-lien class, so $\pi \approx 0.526$. They exchanged at 74 cents, so $\mu_{\text{in}} \approx 0.74$, and the court valued the excluded loans at \$0.25, so $\mu_{\text{out}} \approx 0.25$. (Reading the exchange ratio and the court's valuation as "recoveries" is our *illustrative* interpretation.) Then $\mathbb{E}[R] \approx 0.51$, and the between-group variance is
 
@@ -335,6 +400,18 @@ $$
 A standard deviation of about 24.5 points of par, *from membership alone*, before any within-group noise. Figure 14.4 draws the two humps behind that number.
 
 ![Figure 14.4: The Serta class splits into two recovery humps 49 points apart, and a single Beta with the same mean and standard deviation (24.9 points: the 24.5 from membership alone plus a little within-group noise) peaks at a recovery that almost nobody receives. Illustrative: π = 0.526, Beta(74, 26) for participants and Beta(25, 75) for excluded lenders, with the 52.6%, 74 and 25 taken from the Serta remand facts (Mayer Brown, July 2026) and the Beta concentrations assumed.](assets/figures/ch14_two_humps.png)
+
+#### The Full Derivation
+
+Let $M$ be the membership indicator, so $M = 1$ with probability $\pi$ and $R \mid M$ is the Beta for the holder's group. The law of total variance, $\mathrm{Var}[R] = \mathbb{E}[\mathrm{Var}(R\mid M)] + \mathrm{Var}(\mathbb{E}[R\mid M])$, gives
+
+$$
+\mathbb{E}[R] = \pi\mu_{\text{in}} + (1-\pi)\mu_{\text{out}},
+\qquad
+\mathrm{Var}[R] = \underbrace{\pi\sigma_{\text{in}}^2 + (1-\pi)\sigma_{\text{out}}^2}_{\text{within groups}} + \underbrace{\pi(1-\pi)(\mu_{\text{in}} - \mu_{\text{out}})^2}_{\text{between groups}} .
+$$
+
+The first term is the average of the two conditional variances. The second is the variance of the conditional mean $\mathbb{E}[R \mid M]$, a two-point random variable equal to $\mu_{\text{in}}$ with probability $\pi$ and $\mu_{\text{out}}$ otherwise; its variance is $\pi(1-\pi)$ times the squared distance between the two points.
 
 > **[SOURCE EXTRACTION]** *Schmid_Credit_Risk_Pricing_Models p.103:* "The table supports our opinion that recovery rates decrease during recessions and increase during expansions."
 >
@@ -350,13 +427,27 @@ What does the trend in $\mu_{\text{out}}$ look like? The early uptiers were winn
 >
 > **Annotation.** "They" are lookup tables of historical recoveries by seniority and industry. Bohn and Stein's point was that a model with firm and market covariates does far better than the table. On a 2026 desk the gap is wider, because the most predictive covariate is not in any table: which side of the room you were on. The same authors recommend a two-stage LGD model, a probit for whether any loss occurs given default followed by a regression for its size (p.316). The LMT era adds a stage *before* those two.
 
-The engine becomes a three-stage model:
+The engine becomes a three-stage model, and the easiest way to see why is to watch Mags explain the first stage to someone who has never had to read the document it comes from.
 
-1. **Stage 0, membership.** $\pi_i = \operatorname{logit}^{-1}(\mathbf{z}_i^\top\boldsymbol\gamma)$, a logistic model for the probability that holder $i$'s position ends up inside the deal. Its features are the RSSG instincts made explicit: position size relative to the class, holder type (CLO, multi-strategy fund, distressed specialist, bank), co-op membership and type (§14.5), whether the holder has been in a prior group with the same sponsor's advisers, and the CLO share of the class.
-2. **Stage 1, any loss.** A probit for $\mathbb{P}(L > 0 \mid \text{default}, M)$, as in Bohn–Stein, now conditional on membership.
-3. **Stage 2, severity.** A Beta regression for $L \mid L > 0, M$, with the zero- and one-inflation masses of Chapter 5 given membership-specific weights.
+"You can't observe who's in the room until the deal closes," says Kaz. "So how do I estimate $\pi$ for a holder before then?"
+
+Mags pulls up a Rule 2019 statement from an old Chapter 11. "Same way I always did. This is the one time an ad hoc group has to tell the world who it is. Bankruptcy Rule 2019 makes a group that acts for more than one creditor file a verified statement: every member, and what each of them holds in each class, as of a date. Out of court you get press leaks and cleansing materials. In court you get the register." She scrolls. "Start with size. This one holds four percent of the first lien by itself; that's a phone that rings. Then type. That name ending in 'CLO 2019-1 Ltd.' is a CLO, and CLOs are bad at writing new-money checks. This one's a multi-strategy fund. This one's a distressed specialist that has been in three groups with the same financial adviser in five years. Then look at who's missing. If the class is sixty percent CLO and the group has none of them, you already know which hump the CLOs are in."
+
+"And the co-op," says Theo. "Whether there is one, and what kind."
+
+"That's §14.5," says Mags. "But yes."
+
+Kaz writes it down the way Kaz writes everything down, as a model. **Stage 0, membership**: $\pi_i = \operatorname{logit}^{-1}(\mathbf{z}_i^\top\boldsymbol\gamma)$, a logistic model (the logit box in §14.3.2) for the probability that holder $i$'s position ends up inside the deal. Its features are the RSSG instincts Mags just read off the register, made explicit: position size relative to the class, holder type (CLO, multi-strategy fund, distressed specialist, bank), co-op membership and type (§14.5), whether the holder has been in a prior group with the same sponsor's advisers, and the CLO share of the class.
+
+"Then the old question," says Mags. "Do you lose anything at all? Insiders in a good deal take out the first-out at or near par. Outsiders almost always lose something." That is **Stage 1, any loss**: a probit for $\mathbb{P}(L > 0 \mid \text{default}, M)$, as in Bohn–Stein, now conditional on membership.
+
+"And then how much," says Kaz, "with a pile at zero for the insiders who are made whole and a pile at one for the outsiders who get nothing." That is **Stage 2, severity**: a Beta regression for $L \mid L > 0, M$, with the zero- and one-inflation masses of Chapter 5 given membership-specific weights.
+
+"Now you're reading," says Mags.
 
 Stage 0 is not a portfolio-level number. It is a property of the *holder*, so the same loan has a different expected recovery in different hands. That sounds like heresy until you remember that it is what the Serta remand court computed in dollars.
+
+> **View From Another Seat.** *The direct lender: you do not get to choose your hump, because you are the class.* Everything in this section assumes a holder who is one of many in a syndicated class, choosing, or failing to choose, a side. A direct lender holding most or all of a loan has no side to choose. When the borrower runs out of runway there is no majority to join; the direct lender *is* the required lender, its "recovery" is a mark it sets itself, and the restructuring is an amendment it writes itself. Pluralsight shows what that looks like in public filings. Ares Capital (ARCC) held a \$106.2mm first-lien loan to Pluralsight, marked at 89.0 at 31 December 2023 and 48.0 at 30 June 2024, and on 30 September 2024 converted it into about \$54.7mm (at cost) of new first-lien paper and equity, with a \$60mm realized loss (ARCC 10-Q filings). Another BDC lender in the same loan carried it at 96.8 at the end of 2023, according to its own filing: two lenders, one loan, one date, almost eight points apart. Nothing in that sequence was a vote among strangers, and no Rule 2019 statement would have told anyone anything the lenders did not already know. This seat's question is not $\pi$. It is whether to put in new money and own the company, which is a private-equity decision dressed as a credit one. ARCC's president has said publicly that "we will walk away from transactions based on documentation terms" (Jim Miller, ARCC Q4 2025 earnings call, 4 February 2026), which is the direct lender's version of choosing its hump: write the document so that nobody else can get into the room. For the systematic desk, the private mark is the dataset. A mark that falls forty points in two quarters and then converts into equity is a distressed exchange in everything but an agency's name, and a PD model's labels should treat it as one.
 
 ### Deep-Dive Resource Graph (§14.3–14.4)
 

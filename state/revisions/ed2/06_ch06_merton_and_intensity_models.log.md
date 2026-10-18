@@ -11,17 +11,17 @@
 - [x] 9. [6.3.1-6.3.2 P to Q] MATH-GENTLY (Girsanov) + FULL-DERIVATION-MOVE + 6.3.3 story -- loaded-dice box, derivation subheaded, Kaz switches sides on puzzle.
 - [x] 10. [6.4.2 The solver] MATH-GENTLY (Newton, Jacobian) + FULL-DERIVATION-MOVE + SHOP-LIFE (main vignette) -- sqrt2 Newton box, Jacobian subheaded, 47-row explain vignette, SR11-7, JPM.
 - [x] 11. [6.4.3 Default point, mapping] MATH-GENTLY (isotonic) + WHEN-TO-APPLY -- staircase box with bucket counts; trust-as-rank vs probability passage.
-- [ ] 12. [6.4.4 SVB case] EXPAND-SCENE A: "The week the strike came due"
-- [ ] 13. [6.4.4 end] ANOTHER-SEAT (distressed fund vs dealer)
-- [ ] 14. [6.5.1-6.5.2 Black-Cox] MATH-GENTLY (first passage, reflection) + FULL-DERIVATION-MOVE + WHEN-TO-APPLY
-- [ ] 15. [6.5.3 Covenants, cov-lite, uptiers] LIST-TO-NARRATIVE + ANOTHER-SEAT (CLO manager)
-- [ ] 16. [6.5.4 Monte Carlo and bridge] MATH-GENTLY (Monte Carlo; bridge) + Trend Watch to prose
-- [ ] 17. [6.6.1-6.6.3 Reduced form] MATH-GENTLY x2 (Poisson/Cox; recoveries) + FULL-DERIVATION-MOVE + WHEN-TO-APPLY
-- [ ] 18. [6.7 CIR] FULL-DERIVATION-MOVE (whole section) + MATH-GENTLY (mean reversion)
-- [ ] 19. [6.8 Bootstrap, credit triangle] MATH-GENTLY + EXPAND-SCENE (Big Bang) + ISDA July 2026 note in Resource Graph
-- [ ] 20. [6.9.2-6.9.3 Equity leads credit; First Brands] MATH-GENTLY (log-linear) + EXPAND-SCENE + ANOTHER-SEAT (direct lender)
-- [ ] 21. [6.10.1 Carvana] EXPAND-SCENE B: "The put that got restruck"
-- [ ] 22. [6.10.1 end] ANOTHER-SEAT (opportunistic fund vs multi-strat pod)
+- [x] 12. [6.4.4 SVB case] EXPAND-SCENE A: "The week the strike came due" -- five beats, holdco-at-40 decision, 69/57 gap, plan, FDIC ruling.
+- [x] 13. [6.4.4 end] ANOTHER-SEAT (distressed fund vs dealer) -- recovery vs dispersion seats; IRS claim cut; Oaktree memo title.
+- [x] 14. [6.5.1-6.5.2 Black-Cox] MATH-GENTLY (first passage, reflection) + FULL-DERIVATION-MOVE + WHEN-TO-APPLY -- puddle-reflection box, 17.7%->35%, derivation subheaded, when-to-reach added.
+- [x] 15. [6.5.3 Covenants, cov-lite, uptiers] LIST-TO-NARRATIVE + ANOTHER-SEAT (CLO manager) -- one loan's life story; Serta CLO seat with remand damages.
+- [x] 16. [6.5.4 Monte Carlo and bridge] MATH-GENTLY (Monte Carlo; bridge) + Trend Watch to prose -- 10,000-futures box, 38% dip example; Trend Watch numbered leads to prose.
+- [x] 17. [6.6.1-6.6.3 Reduced form] MATH-GENTLY x2 (Poisson/Cox; recoveries) + FULL-DERIVATION-MOVE + WHEN-TO-APPLY -- rain/weather box, forty-percent-of-what box, two derivation subsections, when-to-reach.
+- [x] 18. [6.7 CIR] FULL-DERIVATION-MOVE (whole section) + MATH-GENTLY (mean reversion) -- photograph/film intuition, thermostat half-life box, formulas under Full Derivation.
+- [x] 19. [6.8 Bootstrap, credit triangle] MATH-GENTLY + EXPAND-SCENE (Big Bang) + ISDA July 2026 note in Resource Graph -- Mags's fax-era Big Bang scene; bootstrap box 8.3%; ISDA note added.
+- [x] 20. [6.9.2-6.9.3 Equity leads credit; First Brands] MATH-GENTLY (log-linear) + EXPAND-SCENE + ANOTHER-SEAT (direct lender) -- multiplier box, opacity scene with Marks quotes, decision point, lender seat.
+- [x] 21. [6.10.1 Carvana] EXPAND-SCENE B: "The put that got restruck" -- five beats on the cap-arb pair, 2 June decision, TSA, settlement.
+- [x] 22. [6.10.1 end] ANOTHER-SEAT (opportunistic fund vs multi-strat pod) -- Apollo quoted support vs Paleologo stop-loss view; outcome versus path.
 - [ ] 23. [6.10.2 Hertz] EXPAND-SCENE (plan sponsors; Theo's ATM rule)
 - [ ] 24. [6.10.3 and 6.12] LIST-TO-NARRATIVE
 - [ ] 25. [Exercises] BRIDGE (Check: numbers + two warm-ups)

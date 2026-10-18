@@ -1,17 +1,17 @@
 # Progress Log, Edition 2 (U2): Chapter 14
 
 - [x] 1. [Cold open] EXPAND-SCENE (Quillfeather, Serta comp, ~1,200 words) -- done: one-way RFQ, Serta comp, Kaz weight, seat-buying twist.
-- [ ] 2. [14.1 opening] BRIDGE + MATH-GENTLY (rate vs. hazard, exponential)
-- [ ] 3. [14.1 Trend Watch] LIST-TO-NARRATIVE (CLO manager's chair lead-in)
-- [ ] 4. [14.1 after Moyer] SHOP-LIFE vignette (three default_flag columns)
-- [ ] 5. [14.2 opening] MATH-GENTLY (competing risks, CIF) + Full Derivation move
-- [ ] 6. [14.2.2] LIST-TO-NARRATIVE + MATH-GENTLY (estimators)
-- [ ] 7. [14.3 opening] WHEN-TO-APPLY (competing risks)
-- [ ] 8. [14.3.2] MATH-GENTLY (censoring, Weibull, cure) + Full Derivation
-- [ ] 9. [14.3.2 hazard regression] MATH-GENTLY (logit) + EXPAND-SCENE (runway, Mitel)
-- [ ] 10. [14.3 Trend Watch] BRIDGE (five p's; LME Doomscrolling; Incora dates)
-- [ ] 11. [14.4.1] MATH-GENTLY (Beta, mixtures, total variance)
-- [ ] 12. [14.4.2] LIST-TO-NARRATIVE + ANOTHER-SEAT (direct lender, ARCC Pluralsight)
+- [x] 2. [14.1 opening] BRIDGE + MATH-GENTLY (rate vs. hazard, exponential) -- done: odometer/speedometer box, exponential vs normal vs Poisson, cross-refs.
+- [x] 3. [14.1 Trend Watch] LIST-TO-NARRATIVE (CLO manager's chair lead-in) -- done: CLO-manager composite walks 2024-2026 before ledger box.
+- [x] 4. [14.1 after Moyer] SHOP-LIFE vignette (three default_flag columns) -- done: Hana reconciles three flags, 41 issuers, point-in-time ratings.
+- [x] 5. [14.2 opening] MATH-GENTLY (competing risks, CIF) + Full Derivation move -- done: bucket-two-taps box; identity proof moved to Full Derivation.
+- [x] 6. [14.2.2] LIST-TO-NARRATIVE + MATH-GENTLY (estimators) -- done: attendance-register box with censoring; four traps as desk argument.
+- [x] 7. [14.3 opening] WHEN-TO-APPLY (competing risks) -- done: CIF vs Fine-Gray judgment; label dictionary before likelihood.
+- [x] 8. [14.3.2] MATH-GENTLY (censoring, Weibull, cure) + Full Derivation -- done: lightbulb/LED box; calibration algebra moved to Full Derivation.
+- [x] 9. [14.3.2 hazard regression] MATH-GENTLY (logit) + EXPAND-SCENE (runway, Mitel) -- done: logit betting-line box; runway scene, PIK toggle, Mitel check.
+- [x] 10. [14.3 Trend Watch] BRIDGE (five p's; LME Doomscrolling; Incora dates) -- done: five-p lead-in, Doomscrolling episode, Incora dates and sourcing fixed.
+- [x] 11. [14.4.1] MATH-GENTLY (Beta, mixtures, total variance) -- done: school-hall mixture box, Beta vs normal/lognormal; derivation moved.
+- [x] 12. [14.4.2] LIST-TO-NARRATIVE + ANOTHER-SEAT (direct lender, ARCC Pluralsight) -- done: Mags reads Rule 2019 for Kaz; ARCC Pluralsight direct-lender seat.
 - [ ] 13. [14.5] NEW-SCENE (Lumen, 2,500-3,500 words)
 - [ ] 14. [14.5.1] MATH-GENTLY (binomial tail) + Full Derivation
 - [ ] 15. [14.5 Trend Watch] EXPAND-SCENE (Optimum) + ANOTHER-SEAT (CLO; opportunistic)

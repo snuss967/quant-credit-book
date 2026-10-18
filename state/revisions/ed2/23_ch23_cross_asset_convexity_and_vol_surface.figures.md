@@ -1,0 +1,23 @@
+# Ch 23 figures log (Edition 2, task U4)
+
+Script: tools/figures/ch23.py (run `python3 tools/figures/ch23.py`; writes assets/figures/ch23_*.png).
+Note: no brief (section 3) and no state/research/trend_figure_data_series.md existed for this chapter; figures were chosen from the chapter's own headings, equations, worked tables and case studies. All five figures are Illustrative: they run the closed forms of the chapter (and the reference listings 23.1-23.5 in Appendix F) at the parameters the chapter states. No real-data series is used (FRED BAMLH0A0HYM2 and VIXCLS were fetched and inspected for section 23.9 but only 3 years of OAS exist and the daily lead-lag is too weak to teach anything; not drawn).
+
+## Embedded
+
+1. **ch23_waterfall_call_spreads** (Figure 23.1, section 23.1, after the payoff/fulcrum paragraph). Left: payoffs of a four-claim stack (first lien 0-40, second lien 40-55, unsecured 55-70, equity call struck at F = 70) as stacked call spreads (V_T - a_k)^+ - (V_T - b_k)^+, whose top edge is the 45-degree line. Right: risk-neutral lognormal density of V_T with the same strikes; with V0 = 62 the unsecured notes are the fulcrum, and each band's area is the chance V_T lands in that claim's interval (4%, 28%, 37%, 31%). Illustrative: V0 = 62, asset vol 25%, r = 3%, T = 1; strikes are round numbers chosen for the picture (F = 70 matches the chapter's running example).
+2. **ch23_leverage_skew** (Figure 23.2, section 23.1, after Consequence 2). Left: equity vol sigma_E vs firm assets V with asset vol fixed at 25% (46%, 73%, 117% at V = 150, 100, 75: the chapter's table). Right: Merton 1-year spread (23.2) vs V on a log axis (0.8bp, 80bp, 626bp at the same points). Illustrative: eqs. (23.1)-(23.2), F = 70, r = 3%, T = 1 (Listing 23.1).
+3. **ch23_creditgrades_ghost** (Figure 23.3, section 23.2, after Step 6). Left: CreditGrades survival S(t) for stock prices $30, $15 and $5 over 5 years; the $5 curve starts at 0.75 (the time-zero mass of 25% quoted in the chapter; $30 gives 1.3e-4). Right: CreditGrades par CDS spread vs tenor (log axis): upward-sloping at $30, flat at $15, inverted at $5. Illustrative: eqs. (23.3), (23.5), sigma_E = 40%, F_ps = $30, ell_bar = 0.5, nu = 0.3, R = 40%, r = 3% (Listing 23.1).
+4. **ch23_jtd_skew_floor** (Figure 23.4, section 23.4, after the three-readings list). Left: Black-Scholes implied vol of jump-to-default put prices vs K/S0 for lambda = 5%, with the chapter's quoted points (36% ATM, 41%, 52%, 72%, 102% at 20% moneyness) against the 30% diffusion line. Right: P(K)/K vs K/S0 for lambda = 2.5%, 5%, 10%, flat at floors 2.4%, 4.7%, 9.2% (= e^{-rT}(1 - e^{-lambda T})), against a pure diffusion that goes to zero. Illustrative: eq. (23.8), sigma = 30%, T = 1, r = 3%, q = 0 (Listing 23.2).
+5. **ch23_bank_run_runway** (Figure 23.5, section 23.8, after the worked example of the bank-override routine). Cash waterfall in $bn: opening cash 13, plus 30 of securities sold, 43 of liquidity, minus 41.6 of day-1 outflow (run rate 25%), 1.4 carried, plus 30, 31.4 of liquidity, minus 77.7 of day-2 outflow (run rate 63%, panic feedback), shortfall -46.3 = default on day 2; annotated with the Merton one-year PD of 0.36% on the same balance sheet. Illustrative: bank_run_dd of Listing 23.5 with kappa = 0.42, rho = 2.0, haircut 10%, $30bn/day capacity, equity returns -60/-30/-10%; Merton with V = 212, F = 196, sigma_V = 4%.
+
+## Considered, not drawn (cap of five)
+Persistence of the cap-structure mispricing (AR(1) half-life and the sqrt((1-phi)/(1+phi)) Sharpe decay, section 23.6); GM/Ford May 2005 and SVB/Credit Suisse March 2023 event timelines (dates only, no series); HY OAS vs VIX from FRED (BAMLH0A0HYM2 starts 2023-10-17; the daily lead-lag is weak, corr of changes 0.55 contemporaneous, 0.11 with VIX one day earlier); elasticity hedge ratio h (23.10) vs assets (0.024 at V = 100).
+
+## Notes for the chapter editor (nothing changed in the text)
+- Section 23.4 reading 1 says Black-Scholes at 30% vol prices the $5-strike put at "about 10^-11 dollars"; running (Listing 23.2 bs_put) gives about 2e-24. The 24 cents, 36/41/52/72/~100% implied vols, and the floor all reproduce.
+- Section 23.2 "Ways This Blows Up" says the time-zero mass "makes the curve too flat"; at S0 = $5 (sigma_E 40%, F_ps $30) the model curve is strongly inverted (about 4,300bp at 6 months vs 690bp at 5 years). Figure 23.3 shows the inversion.
+
+## Chapter edits
+Five insertions only (one per figure, each with a blank line before and after, none inside a list, box or display math); Figures 23.1, 23.2, 23.3 and 23.5 append one short pointer sentence to the preceding paragraph; Figure 23.4 follows the three-readings list with none.
+<!-- STATUS: COMPLETE -->

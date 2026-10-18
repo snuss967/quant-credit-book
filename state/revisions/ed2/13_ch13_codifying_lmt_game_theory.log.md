@@ -1,0 +1,25 @@
+# U2 Progress Log: Chapter 13
+
+- [x] 1. Cold open expanded: three seats priced, Serta, Lumen napkin, decision point.
+- [x] 2. Boardriders story, waterfall-queue and distribution Math Gently boxes added.
+- [ ] 3. §13.1 Desk Myth BRIDGE (Mags: jump to a state with a clock)
+- [x] 4. Families read aloud, Kaz misreads, RL denominator, Pluralsight seat box.
+- [x] 5. Three feature blocks rewritten as narrative ordered by speed of movement.
+- [x] 6. Payoff-shape and partial-expectation boxes; derivation moved after intuition.
+- [ ] 7. §13.3.1 Serta EXPAND-SCENE + unblended waterfall + decision point + Another Seat #2 (CLO)
+- [ ] 8. §13.3 Trend Watch WHEN-TO-APPLY (digital put)
+- [ ] 9. §13.4 payoff matrix Math, Gently #5, #6, #7
+- [ ] 10. §13.4 "Why prices drift" Math, Gently #8 + Incora blocking-third bridge
+- [ ] 11. §13.4 Levers WHEN-TO-APPLY (Robertshaw, knapsack wrong model)
+- [ ] 12. §13.5 Lumen NEW-SCENE + decision point + counter 3
+- [ ] 13. §13.5 Nash/Shapley Math, Gently #9, #10 + Full Derivation move
+- [ ] 14. §13.5 antitrust EXPAND-SCENE (Optimum) + Another Seat #3 (opportunistic)
+- [ ] 15. §13.6 WHEN-TO-APPLY capped forward + quant-shop-life vignette (holder_hhi)
+- [ ] 16. §13.7 Math, Gently #11 fixed points + Full Derivation move (clearing map)
+- [ ] 17. §13.7.1 Trinseo EXPAND-SCENE + decision point
+- [ ] 18. §13.7 Ways This Blows Up WHEN-TO-APPLY (two paragraphs before box)
+- [ ] 19. §13.8 opening Math, Gently #12, #13, #14 + Full Derivation move (MAP)
+- [ ] 20. §13.8 "What the desk prices" WHEN-TO-APPLY (trust PRS to rank)
+- [ ] 21. §13.9 Incora day scene + diary date fixes + Mitel cite + Saks clock
+- [ ] 22. §13.10 Desk Debrief Larkspur return scene, bullets kept
+- [ ] 23. Deep-Dive Resource Graph BRIDGE (verified episodes and posts)

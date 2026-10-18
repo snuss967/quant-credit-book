@@ -1,0 +1,28 @@
+# Progress Log, Edition 2 (U2): Chapter 15
+
+- [x] 1. Cold Open: EXPAND-SCENE. Note: Aug 27, Nov 14-26, Dec 10-12 scenes; decision point; spine question added.
+- [x] 2. §15.1.1: MATH-GENTLY. Note: bookmaker book, light switches, discounting, 98.7 to 96.6.
+- [x] 3. §15.1.2 table: EA, Kroger, WBD walk-through; make-whole circuit table; spa gag.
+- [x] 4. §15.1.3 bullets: one-week narrative of four edges; CLO-manager Another Seat box.
+- [x] 5. §15.1.3 Trend Watch: two-sentence bridge to the smoke detector added.
+- [ ] 6. §15.2.1: WHEN-TO-APPLY (the put) + EXPAND Mags's 1988 beat
+- [ ] 7. §15.2.2 Steps 1-2: MATH-GENTLY (conditional expectation/covariance; compound option)
+- [ ] 8. §15.2.2 Steps 3-4: MATH-GENTLY (PV, annuity factor, derivative as slope)
+- [ ] 9. §15.2.2 Step 5: MATH-GENTLY (logistic function)
+- [ ] 10. §15.2.2 Step 6: MATH-GENTLY (P vs Q)
+- [ ] 11. §15.2.2 Step 7: MATH-GENTLY (random walk, sigma sqrt t)
+- [ ] 12. Listing 15.1 explanation: MATH-GENTLY (normal vs lognormal, Ito half sigma squared)
+- [ ] 13. Three AI spec blocks: FULL-DERIVATION-MOVE (Engine: Full Specifications; Full Derivation subsections)
+- [ ] 14. Case Study EA 2025-26: EXPAND-SCENE (three meetings, decision point, Another Seat)
+- [ ] 15. §15.3.1: WHEN-TO-APPLY + real anchor (Focus Financial, 9fin)
+- [ ] 16. §15.3.2: MATH-GENTLY (bell curve, Phi, digital options)
+- [ ] 17. §15.4.1 bullets: LIST-TO-NARRATIVE (three prospectuses side by side)
+- [ ] 18. §15.4.2: MATH-GENTLY (mixture inversion, dollar duration) + WHEN-TO-APPLY
+- [ ] 19. §15.5.1: NEW-SCENE ICE-MarketAxess "regulator counts in working days"
+- [ ] 20. §15.5.2: MATH-GENTLY six boxes (survival, censoring, distributions, competing risks, Cox, Bayes)
+- [ ] 21. §15.5 after Trend Watch: WHEN-TO-APPLY (survival tools)
+- [ ] 22. §15.6: ANOTHER-SEAT (RV pod, dealer desk) + EXPAND Acharya-Johnson
+- [ ] 23. §15.7: EXPAND-SCENE Spirit + MATH-GENTLY (jump vs diffusion)
+- [ ] 24. §15.8 WBD: EXPAND-SCENE + MATH-GENTLY (expected positive part) + Another Seat
+- [ ] 25. Before §15.9: SHOP-LIFE vignette "The security master has forty new columns"
+- [ ] 26. §15.9 Desk Debrief: LIST-TO-NARRATIVE closing scene + dated podcast items

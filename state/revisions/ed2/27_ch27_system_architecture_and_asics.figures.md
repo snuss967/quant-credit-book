@@ -1,0 +1,17 @@
+# Ch 27 figures log (Edition 2, U4)
+
+Script: tools/figures/ch27.py (run from the repo root: `python3 tools/figures/ch27.py`). No brief file existed for this chapter, so the figures were chosen from the chapter's headings and key derivations. The chapter had no figures before this pass.
+
+Plan (5 figures): ch27_two_clocks (s27.1), ch27_edge_decay (s27.1.1), ch27_bitemporal_serta (s27.3.3), ch27_queue_tail (s27.5.1), ch27_trigger_geometry (s27.6.1).
+
+## Embedded figures
+
+1. **Figure 27.1, ch27_two_clocks.png** (s27.1, after the "FPGA does not price bonds" paragraph). Flow graph of the two-speed architecture: slow path (feeds, price store, security master, quote model, pre-trade risk and OMS/EMS, venues) in blue, fast path (trigger table, hedge data, comparator, pull/widen) in orange, with the trigger-table "writes rows" arrow and the "cancel" arrow back to the venues. Data: none; schematic of the diagram in s27.1 (caption: Illustrative).
+2. **Figure 27.2, ch27_edge_decay.png** (s27.1.1, after the "one desk, nine orders of magnitude" paragraph). Share of the edge retained, exp(-lag/T), against reaction lag on a log axis for the table's value, trend, client-RFQ and hedge-jump rows; dots at the 1%-loss lag (0.01 T) reproduce the table's third column; dashed line at 1.5 s (the cold-open p99). Data: Illustrative, from the decay model of s27.1.1 with the table's T values (63 and 42 trading days of 23,400 s, 100 s, and the 79 us OP50 mean race; 42 days is the midpoint of "one to three months").
+3. **Figure 27.3, ch27_bitemporal_serta.png** (s27.3.3, after the Serta/Hertz paragraph that follows the three questions). The three TL1 ranking rows as rectangles on valid-time (x) and knowledge-time (y) axes, with the three Serta queries marked as points 1-3 (live risk, midnight backtest, 2019 study). Data: Illustrative; row values are the table of s27.3.3 (Serta facts from Proskauer 2025-01-02); the 6 p.m. knowledge time and 2016 onboarding date are the chapter's own illustrative assumptions; axes not to scale.
+4. **Figure 27.4, ch27_queue_tail.png** (s27.5.1, after the fan-out paragraph). Left: p99 sojourn against utilisation for Kaz's engine (E[S] = 40 ms, c_s^2 = 4), the c_s^2 = 1 contrast and the mean; points at rho = 0.5, 0.7, 0.9 (0.8, 1.5, 4.5 s, matching the text). Right: P(request slow) = 1 - (1-p)^n against fan-out, with the 100-way (63%) and 150-line PT (78%) points. Data: Illustrative, from the Pollaczek-Khinchine mean wait and exponential-tail approximation stated in s27.5.1.
+5. **Figure 27.5, ch27_trigger_geometry.png** (s27.6.1, after the "price of safety is false pulls" paragraph). The (TY, HYG) move plane for a bond with beta_TY = 1.05, beta_HYG = 1.27 and theta = 0.14: the exact joint-rule band |beta.dH| = theta, the cheap per-instrument rule's no-pull box inscribed in it (corners touching), the false-pull corridor shaded, and the cold open (A) and a flight to quality (B) marked. The script asserts on a 700x700 grid that no point pulls under the exact rule but not the cheap one. Data: Illustrative; betas, theta and the cold-open move are from s27.6.1; the hedge volatilities (0.06 TY points, 0.05 HYG dollars) used to split the budget are assumed.
+
+Checks: all five PNGs opened and inspected after fixing label collisions (flow-graph label gaps, edge-decay labels, queue-panel legends, trigger-plane annotations); each under 185 KB; tools/check_book.py reports OK for the chapter; chapter edits are limited to the five figure lines plus one pointer sentence before each.
+
+<!-- STATUS: COMPLETE -->
