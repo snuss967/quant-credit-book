@@ -429,3 +429,171 @@ assert v_res < 0.5 * v_unh                           # the hedge kills most of t
 
 - FINRA Regulatory Notice 22-12 (TRACE portfolio-trade modifier) and Regulatory Notice 26-16 (affiliate indicator), via the FINRA notices index.
 - Federal Reserve SCOOS, June 2025, special questions on credit portfolio trading: https://www.federalreserve.gov/data/scoos/files/scoos_202506.pdf
+
+## 19.5 Residual Covariance for 150 Stale Bonds
+
+Kaz's `np.cov` is not just singular. It is lying with confidence. One hundred and fifty bonds with fourteen observed returns each give a sample matrix of rank at most 13, so 137 of its eigenvalues are exactly zero. Those are directions in which the basket appears to carry *no risk at all*. Any optimizer that touches the inverse (the hedge solve, the eviction loop) will find those directions and bet the desk on them. "Fine," says Kaz, "we regularize. While we're at it, Theo, is a springing lien a kind of jump process?" Theo thinks about it. "It springs when a covenant trips." "So it's a stopping time," Kaz says, satisfied. It sort of is, and it does not belong in the covariance matrix. It belongs in §19.8.
+
+### 19.5.1 Derivation: factor structure, staleness, shrinkage
+
+*Structure.* Write $\Sigma_{xx}=B\,\Omega_T\,B^\top+D$. Here $B\in\mathbb{R}^{N\times K}$ holds the loadings on $K\approx10$–$30$ factors (rating × sector × duration-bucket excess-return factors, DTS-scaled as in Chapters 8–9). $\Omega_T$ is the $K\times K$ factor covariance, estimated on the *whole* universe of several thousand bonds, so it is well conditioned. $D=\operatorname{diag}(d_i)$ holds the idiosyncratic variances, the only part estimated from each line's own sparse history. This cuts the parameter count from $N(N+1)/2=11{,}325$ to $K(K+1)/2+N$, and every one of those parameters is estimated on data that exists.
+
+*Staleness is variance.* Let $\widehat P_i$ be a composite last anchored by a print $a_i$ business days ago. Evaluated-pricing services move a stale bond with its comparables, so the *factor* part of its drift since the last print is captured. The idiosyncratic part is not. If a share $\kappa\in(0,1]$ of the idiosyncratic variance escapes the evaluator's matrix pricing, then $\operatorname{Var}(\widehat P_i-P_i^{\text{true}})\approx\kappa\,\sigma^2_{\epsilon,i}\,a_i$, where $\sigma^2_{\epsilon,i}$ is the daily idiosyncratic variance. This error is still unresolved at the moment the dealer buys, so it adds to the horizon variance.
+
+*Non-synchronous trading.* A bond that prints on a fraction $\phi_i$ of days has smoothed observed returns, and its estimated $\sigma^2_{\epsilon,i}$ is biased down. Correct with summed lagged betas (Dimson; Scholes–Williams; Chapter 8) and inflate by $\phi_i^{-\xi}$, where $\xi\in[0.5,1]$ is calibrated on bonds whose print frequency changed.
+
+*Shrinkage.* Ledoit & Wolf (2004, "A Well-Conditioned Estimator for Large-Dimensional Covariance Matrices," *JMVA* 88(2)) shrink the sample matrix $S$ toward a target $F$: $\Sigma^{\text{LW}}=(1-\delta)S+\delta F$, with optimal intensity
+
+$$
+\delta^\star=\max\Big\{0,\min\Big\{1,\;\frac{\hat\pi-\hat\rho}{\hat\zeta\,T_{\text{obs}}}\Big\}\Big\}.
+$$
+
+Here $\hat\pi$ sums the asymptotic variances of the entries of $S$, $\hat\rho$ is their covariance with the target, and $\hat\zeta=\lVert S-F\rVert_F^2$ is the misspecification. Ledoit and Wolf call that last quantity $\gamma$; we rename it because $\gamma$ is risk aversion. With the factor model as the target, shrinkage amounts to a ridge $\tau^2$ on the idiosyncratic block. Putting the pieces together, the idiosyncratic variance over the horizon is
+
+$$
+d_i \;=\; \sigma^2_{\epsilon,i}\,\big(T+\kappa\,a_i\big)\,\phi_i^{-\xi}\;+\;\tau^2 .
+\tag{19.5}
+$$
+
+For line 42 ($a=40$, $\phi=0.05$, $\kappa=\xi=0.5$, $T=5$) the bracket and the inflation multiply the naive $\sigma^2_\epsilon T$ by $(25/5)\times\sqrt{20}\approx22$. The engine is not saying line 42 is a bad bond. It is saying nobody knows what line 42 is worth, and pricing that ignorance.
+
+> **[SOURCE EXTRACTION]** *Paleologo_Advanced_Portfolio_Management p.186:* "It is possible to obtain the same solution starting from different assumptions. The first one is the linear Ledoit-Wolf shrinked covariance matrix approach [Ledoit and Wolf, 2003]."
+>
+> **Annotation.** Paleologo's point is that several roads (linear shrinkage, a ridge penalty, a Bayesian prior on idiosyncratic variance) lead to the same regularized matrix. For a PT engine that is a licence to choose the road that can be *audited*. A ridge $\tau^2$ that rises with a line's staleness is something a trader can read and challenge ("why is line 42's $\tau$ so big?"), while a global $\delta^\star$ is not. The equity setting has daily closes for every name. Credit has 150 lines and a dozen prints, so the factor target carries most of the weight, and the shrinkage intensity for the median HY line is close to one.
+
+> **[SOURCE EXTRACTION]** *Bohn_Stein p.48:* "Developing these strategies in the context of portfolio trades helps reduce the idiosyncratic impact of inexplicable behaviors of particular securities. A portfolio perspective complemented with quantitative systems sets the stage for generating high Sharpe… and Vasicek (return per unit of tail-risk contribution or return per unit of capital) ratios."
+>
+> **Annotation.** Two ideas for the risk term. First, diversification: the idiosyncratic block of $\mathbf{x}^\top\Sigma^{\text{res}}\mathbf{x}$ grows like $N$ while the notional grows like $N$, which is why the basket's per-dollar risk charge is far below the average line's standalone charge. Second, the Vasicek ratio names the right denominator for $\gamma$: capital, or tail-risk contribution. If the desk's capital is $z\,\sigma_W$ at a hurdle $\rho$ per year, matching $\tfrac12\gamma\sigma_W^2$ to the capital cost $\rho z\sigma_W T/252$ gives $\gamma=2\rho zT/(252\,\sigma_W)$. On illustrative numbers ($\rho=15\%$, $z=2.33$, $T=5$, $\sigma_W=\$500$k) that is about $3\times10^{-8}$ per dollar, roughly thirty times smaller than the $10^{-6}$ this chapter uses. The gap is what desks mean by "balance-sheet appetite." It is why $\gamma$ is backed out of won and lost PTs (the revealed-preference bid), not out of the capital plan. It is also why $\gamma$ jumps in stress, when SCOOS dealers cite balance-sheet availability as a very important decline reason.
+
+> **Ways This Blows Up.** (1) A trader bumps one line's volatility by hand, and a negative eigenvalue appears. Re-project to positive semi-definite (PSD) and recheck the condition number after *every* edit. (2) A bond downgraded last week still carries last month's IG-sector loading. Refresh $B$ on rating-change events, not on a calendar. (3) Kaz's Gaussian: inflating line 117's $\sigma_\epsilon$ to "account for the LMT risk" both under-charges the jump (variance is the wrong moment) and over-hedges it (the hedge solve now thinks line 117 is noisy, not toxic). Jumps go in $\text{AS}$.
+
+### Specification for AI Implementation (residual covariance)
+
+```python
+def idio_var(b, T=T_DAYS, xi=0.5, kappa_stale=0.5, tau2=0.0):
+    """Eq. 19.5: horizon idio variance + stale-composite error, sparse-print bias fix, ridge."""
+    return b.sig_idio**2 * (T + kappa_stale * b.age) * b.print_frac ** (-xi) + tau2
+
+def psd_project(S, rel_floor=1e-10):
+    """Symmetrize, clip eigenvalues at rel_floor * max, symmetrize again."""
+    S = 0.5 * (S + S.T)
+    w, V = np.linalg.eigh(S)
+    w = np.maximum(w, rel_floor * w.max())
+    S = (V * w) @ V.T
+    return 0.5 * (S + S.T)
+
+def build_residual_cov(b, T=T_DAYS, basis_scale=1.0, cond_max=1e6, **kw):
+    """Returns Sxx, Sxf, Sff and the PSD-projected, condition-guarded Sigma_res."""
+    Sxx, Sxf, Sff = joint_cov(b, idio_var(b, T, **kw), T, basis_scale)
+    Sres = psd_project(residual(Sxx, Sxf, Sff))
+    if np.linalg.cond(Sres) > cond_max:
+        raise ValueError("Sigma_res ill-conditioned: raise tau2 or evict lines")
+    return Sxx, Sxf, Sff, Sres
+
+Sxx, Sxf, Sff, Sres = build_residual_cov(b0)
+assert np.all(np.linalg.eigvalsh(Sres) > 0)
+assert Sres[41, 41] > 5.0 * Sres_naive[41, 41]       # staleness is variance, not a haircut
+assert np.all(np.diag(Sres) >= idio_var(b0) * (1 - 1e-9))   # Sigma_res >= D in PSD order
+# Kaz's matrix: 150 bonds x 14 observations -> rank <= 13, i.e. 137 "riskless" directions
+R_kaz = RNG.normal(size=(14, 150))
+assert np.linalg.matrix_rank(np.cov(R_kaz, rowvar=False)) <= 13
+```
+
+## 19.6 Eviction: Which Lines to Kick Out, and the Price of Keeping Them
+
+The dealer's best tool is not a better bid. It is a counter-proposal. "Clients may get better pricing if they accept suggested portfolio tweaks," as IFR put it in 2021 (Whittall, "US banks reap boom in bond portfolio and algo trading"). Translated: *take back lines 42 and 117 and I'll pay you more for the other 148.* The ex-RSSG reader knows this move from the other side of the table. It is the plan sponsor carving the fulcrum class to get the vote. The engine's job is to find the carve in under a second.
+
+### 19.6.1 Derivation: marginal cost, exact removal saving, greedy loop
+
+Total cost of carrying the basket, collecting (19.2)'s cost terms:
+
+$$
+\mathcal{C}(\mathbf{x})=\sum_i c_i(x_i)+\tfrac12\gamma\,\mathbf{x}^\top\Sigma^{\text{res}}_T\mathbf{x}+\sum_i \text{AS}_i,
+\qquad
+\text{MC}_i\equiv\frac{\partial\mathcal{C}}{\partial x_i}=c_i'(x_i)+\gamma\big(\Sigma^{\text{res}}_T\mathbf{x}\big)_i+\frac{\partial\,\text{AS}_i}{\partial x_i}.
+\tag{19.6}
+$$
+
+$\text{MC}_i$ is the vector inventory skew. Eviction is discrete, though, so we want the *exact* saving from setting $x_j$ to zero. Write $\mathbf{x}'=\mathbf{x}-x_j\mathbf{e}_j$ and expand the quadratic:
+
+$$
+\tfrac12\gamma\big(\mathbf{x}^\top\Sigma\mathbf{x}-\mathbf{x}'^\top\Sigma\mathbf{x}'\big)=\gamma\,x_j(\Sigma\mathbf{x})_j-\tfrac12\gamma\,\Sigma_{jj}x_j^2 ,
+$$
+
+so
+
+$$
+\Delta_j \;=\; c_j+\text{AS}_j+\gamma\,x_j\big(\Sigma^{\text{res}}_T\mathbf{x}\big)_j-\tfrac12\gamma\,\Sigma^{\text{res}}_{jj}\,x_j^2 .
+\tag{19.7}
+$$
+
+The gradient term double-counts the line's own variance, and the $-\tfrac12\gamma\Sigma_{jj}x_j^2$ correction removes it. Because $\Sigma^{\text{res}}$ is the re-hedged covariance (§19.4), $\Delta_j$ already includes the re-optimized hedge.
+
+*The greedy step is a descent step.* Let $M=\sum_i \text{MV}_i$ be gross market value. Evicting $j$ lowers the per-dollar cost $\mathcal{C}/M$ if and only if $(\mathcal{C}-\Delta_j)/(M-\text{MV}_j)<\mathcal{C}/M$, i.e. $\Delta_j/\text{MV}_j>\mathcal{C}/M$. Summing (19.7) over $j$ gives
+
+$$
+\sum_j\Delta_j=\mathcal{C}+\tfrac12\gamma\sum_{i\ne j}x_i\Sigma^{\text{res}}_{ij}x_j .
+$$
+
+When the off-diagonal risk is nonnegative (a one-sided basket of positively correlated bonds), $\sum_j\Delta_j\ge\mathcal{C}$. The MV-weighted average of the ratios $\Delta_j/\text{MV}_j$ is then at least $\mathcal{C}/M$, so the largest ratio is too, and the best eviction always helps. The loop: rank by $\Delta_j/\text{MV}_j$, evict the top line, update $\Sigma\mathbf{x}\leftarrow\Sigma\mathbf{x}-\Sigma_{:,j}x_j$ in $O(N)$ (the coupling term changes after every eviction, so never sort once), and stop when $\mathcal{C}/M$ reaches the competitive target $\kappa^\star$, when evicted notional reaches the client's tolerance $\alpha$, or when the count reaches $k_{\max}$. The exact problem is a knapsack. Greedy is the 90-second answer, and with $k_{\max}\le10$ it is usually the right one.
+
+*The buy-side mirror is the sweetener.* Adding a liquid, ETF-heavy line with $\Delta/\text{MV}$ below the basket average lowers $\mathcal{C}/M$, by the same inequality run backwards. That is Meli & Todorova's "crowd-sourcing liquidity": even among illiquid PTs, the median share of liquid bonds is 37%, so "the more liquid bonds cross-subsidize the less liquid bonds." Barclays found 49% of IG PTs but only 18% of HY PTs fit the crowd-sourcing pattern, because HY portfolios "need many more liquid bonds to offset illiquid ones, because the far tail of the LCS distribution is thicker in HY" (The DESK, 2022-06-01).
+
+> **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.704:* "TES blend LCS and trading volume of a bond into a single relative score that reflects both the cost and flow. Bonds with higher trading volume and lower LCS per unit of duration have lower TES."
+>
+> **Annotation.** The Trade Efficiency Score is a ready-made prior for the eviction ranking. A high-TES line is expensive *and* rarely traded, which describes the residual nobody wants to own for five days. On the same page Dynkin notes that LCS varies widely across bonds even at a single date, "so rebalancing costs… greatly depend on its composition." That is the fat tail of §19.3 restated as a portfolio fact. Our $\Delta_j$ improves on TES in two ways. It prices *covariance with the rest of the basket* (a high-TES line that hedges the others is worth keeping), and it carries the AS term, which no liquidity score can see. Sorting by TES alone evicts line 42 and keeps line 117, which is exactly the mistake the next section is about.
+
+### 19.6.2 Case Study: The H1 2022 Reversal
+
+2021 had been PT's coming-out party. Then 2022 brought higher volatility, quantitative tightening, and a dealer community that had bought market share and now wanted margin back.
+
+> **[SOURCE EXTRACTION]** *Man_Revolutions_in_Credit_Trading_2023 p.3:* "The new market environment of higher volatility and quantitative tightening may also have left dealers inclined to commit less of their balance sheets to bond trading. The loss of customised baskets for the ETF creation/redemption process is likely to have been another aggravating factor."
+>
+> **Annotation.** Man's p.3 opens the story: "transaction costs for portfolio trading generally increased through the first half of the year… ultimately pricing backed off." Read it as three terms of (19.2) moving together. Balance sheet withdrawn means $\gamma$ up, so the risk term grows. The loss of custom creation baskets closes the dealer's outlet for illiquid residue, so $c_i$ for the tail rises (Koont, Ma, Pástor and Zeng show bond ETFs tilt creation/redemption baskets toward illiquid bonds, so losing customization hits exactly those lines). Competition easing means $\pi$ rises. A dealer running this chapter's engine in Q1 2022 would have seen its eviction loop hit the $\alpha$ budget before reaching $\kappa^\star$ on HY baskets: the machine's way of saying *decline, or quote wide and lose*.
+
+How a systematic desk would have read it in real time: hit rates on HY PTs falling at constant $\pi$ (competitors widening), the ETF-to-cash ratio and creation-basket composition shifting, and the ranking $\Delta_j/\text{MV}_j$ fattening in its top decile. The buy side adapted the other way. Man routed flow back to electronic RFQ (§19.9), which is the client's own eviction decision applied to the whole protocol. The SCOOS weights confirm the dealer side four years later. Composition is "very important" to four-fifths of active dealers, market conditions to two-thirds, and relationship and balance sheet to about one-half each. Composition is the eviction term, market conditions are $m$ and $\gamma$ (§19.7), and balance sheet is $\gamma$ again.
+
+### Specification for AI Implementation (greedy eviction)
+
+```python
+def evict_greedy(b, Sres, as_vec, gamma=1e-6, omega=0.5, eta=0.75, m=1.0,
+                 alpha=0.15, k_max=10, target=0.0045):
+    """Greedy eviction on exact removal savings (eq. 19.7). Stops at cost/MV <= target,
+    evicted MV > alpha * gross MV, or k_max lines. Returns (evicted indices, cost/MV path)."""
+    mv = b.mv()
+    c = handling_cost(b, omega, eta, m=m)
+    x = b.x.astype(float).copy()
+    alive = np.ones(b.n, dtype=bool)
+    Sx = Sres @ x
+    diag_s = np.diag(Sres)
+    budget = alpha * mv.sum()
+
+    def total():                       # x is zeroed for evicted lines
+        return c[alive].sum() + as_vec[alive].sum() + 0.5 * gamma * x @ Sres @ x
+
+    C = total()
+    path, evicted = [C / mv[alive].sum()], []
+    while len(evicted) < k_max and path[-1] > target:
+        delta = c + as_vec + gamma * x * Sx - 0.5 * gamma * diag_s * x**2
+        room = budget - mv[~alive].sum()
+        ratio = np.where(alive & (mv <= room), delta / mv, -np.inf)
+        j = int(np.argmax(ratio))
+        if not np.isfinite(ratio[j]) or ratio[j] <= path[-1]:
+            break
+        Sx -= Sres[:, j] * x[j]        # O(N) update of the coupling term
+        x[j] = 0.0
+        alive[j] = False
+        evicted.append(j)
+        C_new = total()
+        assert np.isclose(C - C_new, delta[j], rtol=1e-9, atol=1e-6)   # eq. 19.7 is exact
+        C = C_new
+        path.append(C / mv[alive].sum())
+    return evicted, np.array(path)
+
+# Without an adverse-selection model the engine evicts line 42 (index 41) and stops.
+ev_noas, path_noas = evict_greedy(b0, Sres, np.zeros(b0.n))
+assert ev_noas == [41]
+assert np.all(np.diff(path_noas) < 0)
+```
+
+Hold on to that last assert. The engine, run without an AS model, evicts the stale \$18mm line and is satisfied: the basket is now below its 45bp target, and line 117 stays in. Line 117 looks like a model citizen. Its realized volatility is ordinary, its LCS is unremarkable, and it diversifies nicely. Everything the covariance matrix can see about it is fine. That is the point.

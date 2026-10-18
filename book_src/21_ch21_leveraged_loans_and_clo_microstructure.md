@@ -756,3 +756,182 @@ print(f"buffers l=1/7/20: {b1:.2%}/{b7:.2%}/{b20:.2%} (MC 99%: {q99:.2%}); "
 
 - **Practitioner Writing.** Fed FEDS Note, "Liquidity Transformation Risks in U.S. Bank Loan and High-Yield Mutual Funds: A 2026 Update" (19 Aug 2026): https://www.federalreserve.gov/econres/notes/feds-notes/liquidity-transformation-risks-in-u-s-bank-loan-and-high-yield-mutual-funds-a-2026-update-20260819.html · Janus Henderson, JAAA passes \$30bn (13 Aug 2026): https://www.janushenderson.com/en-us/advisor/press-releases/janus-hendersons-aaa-clo-etf-jaaa-the-worlds-largest-clo-etf-surpasses-30-billion-in-assets-under-management/ · Octus, "Portfolio Analytics Wrap: CLO ETF Manager Strategies Diverge as Total Assets Surpass \$50B" (7 Jul 2026): https://octus.com/resources/articles/portfolio-analytics-wrap-clo-etf-manager-strategies-diverge-as-total-assets-surpass-50b/
 - **Data & Code.** SSGA SRLN fund page (daily holdings, trade-date basis): https://www.ssga.com/us/en/intermediary/etfs/spdr-blackstone-senior-loan-etf-srln · SEC comment file S7-26-22: https://www.sec.gov/comments/s7-26-22/ · SEC EDGAR (N-PORT holdings; quarterly reporting from Nov 2027 for large funds): https://www.sec.gov/edgar
+
+## 21.7 Trend and Momentum in Loans: Smoothing, Ceilings, and Forced Sellers
+
+Kaz ran a three-month momentum backtest on daily loan marks and got a Sharpe ratio he described as "suspicious in a good way." Ines asked what the marks were made of. "Let's just assume they're prices," Kaz said, and immediately regretted it.
+
+The best academic evidence is real. Beyhaghi and Ehsani (2017) find that a momentum strategy with a three-month formation period earns a premium of 122 bp a month in the secondary loan market. The premium is concentrated in loans of the lowest-rated borrowers. Expected loan returns *decrease* with default beta, and loan and stock momentum are correlated across markets but each carries independent information *(hypothetical, backtested; sample period to CHECK)*. Mählmann reports that value and momentum in industry- and country-level loan indexes predict credit excess returns. Chapter 10 owns time-series trend in general. Three loan-specific corrections apply before you trade any of it.
+
+### 21.7.1 Derivation: what smoothing does to a mark
+
+Let the true return be $r_t$ (i.i.d., variance $\sigma^2$) and let the mark follow the Geltner smoothing model $\tilde r_t = (1 - \phi)\,r_t + \phi\,\tilde r_{t-1}$ with $0 \le \phi < 1$. Iterating gives $\tilde r_t = (1-\phi)\sum_{k \ge 0}\phi^k r_{t-k}$, so
+
+$$
+\operatorname{Var}(\tilde r) = \frac{(1-\phi)^2\sigma^2}{1-\phi^2} = \sigma^2\,\frac{1-\phi}{1+\phi}, \qquad \operatorname{Corr}(\tilde r_t, \tilde r_{t-1}) = \phi. \tag{21.10}
+$$
+
+With $\phi = 0.5$, marked volatility is $\sqrt{1/3} \approx 58\%$ of true volatility and the Sharpe ratio is inflated by about 1.7×. Positive autocorrelation appears in a series with none, and short-horizon momentum on raw marks partly rediscovers the smoother. The contemporaneous beta to an unsmoothed factor $F_t$ is $\beta(1-\phi)$. Summing slopes over $K$ lags (Dimson 1979) recovers $\beta(1 - \phi^{K+1})$. Inverting the filter, $\hat r_t = (\tilde r_t - \hat\phi\,\tilde r_{t-1})/(1 - \hat\phi)$, desmooths the series. **Desmooth, then test momentum. If the premium survives, use executable prints (venue trades) to confirm it before you size it.**
+
+**The ceiling truncates winners.** By (21.7), a loan near 100.5 in an open window has almost no price upside. Its "momentum" is carry. Condition the winner leg on headroom $(K_t - P_t)^{+}$, and expect winner momentum to live mostly in discount loans that are far from the call.
+
+**Forced sellers extend losers, then reverse.** Elkamhi and Nozawa's −3.4% CAR over the 20 weeks *before* a downgrade, followed by a temporary fire-sale impact, is a momentum-then-reversal pattern created by CLO rules. It fits Beyhaghi and Ehsani's finding that momentum concentrates in the lowest ratings. The trading rule writes itself: ride loser momentum in high-FSPI names into the downgrade, then flip to the reversal once the forced sale is done. *IDO or it didn't happen*: strip carry, the loan-index beta and the equity lead–lag (stock momentum leads loans; see Chapter 10) before calling what is left alpha.
+
+**Capacity.** With a 72 bp mean bid-ask (50 bp median) and 65% annual turnover market-wide, a monthly-rebalanced long-short that turns over half its book pays roughly 36 bp a month in half-spreads against a 122 bp gross premium *(illustrative)*. And it spends most of every holding period unsettled.
+
+> **[SOURCE EXTRACTION]** *Schmid_Credit_Risk_Pricing_Models p.177:* "The quality of the collateral manager is one of the most important but unfortunately only badly predictable factors."
+>
+> **Annotation.** Schmid cites S&P's 2002 surveillance. Top-decile CDO managers held 0.10% defaulted securities against 13.91% for the bottom decile, with recoveries of 49.49% against 2.55%. For a loan momentum strategy, that dispersion is a cross-sectional factor hidden inside the forced-flow channel. The same downgrade produces different selling depending on *which* managers hold the loan: their cushions, their habits around test dates (Loumioti and Vasvari), and their vintage. Pre-pandemic reinvesting CLOs averaged a 2.76% junior cushion and 7.08% CCC in April 2025, against 3.94% and 5.70% for post-pandemic vintages *(S&P CLO Insights, via search; CHECK)*. Manager quality is still "badly predictable." Manager *constraints* are not, and FSPI is built from constraints.
+
+### Specification for AI Implementation (stale marks)
+
+*What ROBO built from "compute momentum on loan prices":* twelve-month returns on composite marks, with an impressive Sharpe that came mostly from the smoother. The precise spec: estimate $\hat\phi$ by lag-1 autocorrelation, desmooth, report the Dimson beta with $K$ lags, and require that any momentum statistic be computed on the desmoothed series.
+
+```python
+# Block 5: stale marks. Geltner desmoothing and Dimson betas before any momentum test.
+def smooth_marks(r_true, phi):
+    """Observed (marked) returns: r_obs_t = (1 - phi) r_t + phi r_obs_{t-1}."""
+    r_obs = np.empty_like(r_true)
+    r_obs[0] = r_true[0]
+    for t in range(1, len(r_true)):
+        r_obs[t] = (1.0 - phi) * r_true[t] + phi * r_obs[t - 1]
+    return r_obs
+
+
+def lag1_autocorr(x):
+    x = np.asarray(x, dtype=float) - np.mean(x)
+    return float(np.dot(x[1:], x[:-1]) / np.dot(x, x))
+
+
+def geltner_desmooth(r_obs, phi_hat):
+    if not 0.0 <= phi_hat < 1.0:
+        raise ValueError("phi_hat must lie in [0, 1)")
+    out = np.empty_like(r_obs)
+    out[0] = r_obs[0]
+    out[1:] = (r_obs[1:] - phi_hat * r_obs[:-1]) / (1.0 - phi_hat)
+    return out
+
+
+def dimson_beta(r_obs, factor, n_lags):
+    """Sum of OLS slopes on factor_t, ..., factor_{t-n_lags} (intercept included)."""
+    T = len(r_obs)
+    cols = [np.ones(T - n_lags)] + [factor[n_lags - k: T - k] for k in range(n_lags + 1)]
+    coef, *_ = np.linalg.lstsq(np.column_stack(cols), r_obs[n_lags:], rcond=None)
+    return float(coef[1:].sum())
+
+
+T_W, BETA_L, PHI_M = 5000, 0.8, 0.5                      # weeks, true beta, smoothing
+F_idx = RNG.normal(0.0, 0.02, T_W)                         # unsmoothed factor return
+r_true = BETA_L * F_idx + RNG.normal(0.0, 0.01, T_W)
+r_obs = smooth_marks(r_true, PHI_M)
+phi_hat = lag1_autocorr(r_obs)
+assert abs(phi_hat - PHI_M) < 0.05                         # eq. (21.10): autocorr = phi
+assert np.std(r_obs) < 0.7 * np.std(r_true)                # marks understate volatility
+r_hat = geltner_desmooth(r_obs, phi_hat)
+assert abs(np.std(r_hat) / np.std(r_true) - 1.0) < 0.12
+assert abs(lag1_autocorr(r_hat)) < 0.08                    # spurious momentum removed
+naive, dimson = dimson_beta(r_obs, F_idx, 0), dimson_beta(r_obs, F_idx, 8)
+assert naive < 0.6 * BETA_L and abs(dimson / BETA_L - 1.0) < 0.05
+print(f"phi_hat {phi_hat:.3f}; beta naive {naive:.3f} vs Dimson {dimson:.3f} (true {BETA_L})")
+```
+
+## 21.8 CLOs Inside the LMT
+
+This is Theo's home turf, seen from the other side of the table. At RSSG he built uptier math for a majority group. On this desk he has to ask which seats at that table *can't* sign.
+
+> **[SOURCE EXTRACTION]** *Moyer_Distressed_Debt_Analysis p.150:* A lender's ability to act depends on whether the agent "has syndicated the loan to other participants (particularly collateralized loan obligations) or if the loan has changed hands."
+>
+> **Annotation.** In 2004 this was a caution about who you would be negotiating with. In 2026 it is a feature in a model. The CLO share of a tranche decides who can fund new money, who can accept equity or a long-dated loan, and who needs the reinstated debt rated above CCC. Moyer's p.322 note that holders can be read off amendment signature pages is still the cheapest holder-identification method, now joined by trustee reports, Rule 2019 statements and, since October 2026, agent-bank voting data on Versana.
+
+What a CLO can and cannot do in a restructuring, per Weil, "CLOs as Restructuring Participants" (May 2024):
+
+- "The vast majority of a CLO portfolio – typically in excess of 90% – is required to consist of senior secured debt obligations."
+- The manager's "primary driver" is to get the reinstated first-lien debt rated high enough "to keep it out of the 'CCC' buckets, which are typically set at 7.5%." Any excess is haircut in the OC tests and may trigger trading restrictions.
+- Equity received in a restructuring "may be discounted entirely," or face punitive treatment as a loss-mitigation loan. HoldCo PIK paper must fit a "PIK Security" bucket of "up to a maximum of 5%." Fixed-rate buckets are "typically sized at 10-15%." Long-dated buckets range "from 2.5-7.5%," with haircuts.
+- Investors now demand transparency on "snooze-drag" provisions. Kaz asked whether that was a sleep study. It is the family of amendment terms that count a lender's silence as consent or drag a minority along with the majority, which is how a CLO that cannot vote for a maturity extension gets extended anyway, often through a scheme or plan.
+- Post-2020 indentures let CLOs buy "loss mitigation" or workout loans tied to an existing position, often funded from interest proceeds. The principal used for rescue financing is typically capped around 1–3% and carries extra OC haircuts *(law-firm notes; approx.)*.
+
+**The CLO seat as a state variable.** For tranche $i$, let $\theta_i$ be the CLO share of holdings, $\bar\kappa_i$ the holder-weighted junior cushion, and $\psi_i$ the share of CLO holders whose CCC bucket is already full. A non-pro-rata uptier (Chapter 13) needs a required-lender majority that can both *sign* and *fund*. If $1 - \theta_i > 0.5$, a non-CLO majority is feasible without the CLOs. The excluded minority is then likely to be CLO-heavy, and the Priming Risk Score should rise for that minority. If $\theta_i$ is large, the majority must include CLOs. The deal then has to be "CLO-friendly": a rated first-lien exchange, new money within LML and PIK buckets, and maturity inside the long-dated bucket. A high $\psi_i$ with a thin $\bar\kappa_i$ means the CLOs will accept a worse economic deal in exchange for a better *rating* outcome. Carry $(\theta_i, \bar\kappa_i, \psi_i)$ as inputs to the PRS (Chapter 13) and to the default/recovery mixture (Chapter 14). The ad hoc group, represented by counsel, says in unison that it has always known this. (Cooperation agreements signed in this book so far: the counter overflowed in Part IV. Add one anyway. The CLOs signed this one subject to their indentures.)
+
+> **Docket Diary.** *Serta Simmons Bedding.* In June 2020 Serta completed a non-pro-rata uptier with a majority of its first-lien lenders (autopsy in Chapter 13). Excluded lenders sued, including in a federal case captioned *LCM XXII Ltd. v. Serta Simmons Bedding, LLC* (S.D.N.Y.). The lead plaintiff's name is a CLO's name, which tells you who was left out. Serta filed for chapter 11 in January 2023 in the Southern District of Texas. On 31 December 2024 the Fifth Circuit held that the 2020 transaction was not an "open market purchase." Those three words remain the most expensive in finance. For this chapter, the point is the holder base. A tranche held largely by rule-bound vehicles produces a majority that can be assembled from the vehicles with the fewest rules, and an excluded minority that cannot respond by funding new money.
+
+### Case Study: Two Holder Bases, One Uptier Proposal
+
+The numbers here are *illustrative*. Take two \$1bn first-lien term loans with identical fundamentals. Both face an uptier proposal that requires \$150mm of new super-priority money.
+
+- **Loan A: 70% CLOs, 30% hedge funds.** The hedge funds cannot form a majority alone. Any majority needs CLOs, but the CLOs' rescue-financing capacity is small: at a 2% cap on, say, \$400mm average deal size, about \$8mm each. The structure that clears is an exchange into a rated super-priority first lien, with the new money funded mostly by the hedge funds and a small CLO allocation through LML buckets. Expected outcome: near-pro-rata participation and a smaller excluded minority. The PRS for a CLO holder is moderate. The *forced-sale* risk is high if the exchange is rated SD and then CCC, because the CLOs then hit the cliff in §21.4.
+- **Loan B: 30% CLOs, 70% hedge funds and SMAs.** A 51% non-CLO majority is feasible, funds the \$150mm itself, and has no need to include CLOs. Expected outcome: a non-pro-rata uptier that excludes most CLO holders. The PRS for a CLO holder is high. The CLO's subordinated claim may be marked as a discount or CCC asset and sold. That sale is the fundamental buyer's entry point, by (21.6) at the highest-priced end of the CCC book.
+
+A systematic desk ranks every LME candidate by $(\theta_i, \bar\kappa_i, \psi_i)$ and by the non-CLO concentration. Then it asks the RSSG question the model cannot answer: *what does the credit agreement say about open market purchases, pro rata sharing and sacred rights?* The indenture says who must sell. The credit agreement says who can be primed.
+
+### Deep-Dive Resource Graph (21.8)
+
+- **Practitioner Writing.** Weil, Gotshal & Manges, "CLOs as Restructuring Participants" (May 2024) · Fitch Ratings, "U.S. CLO Indenture Features Explained" · Versana digital voting: https://www.versana.io/
+- **Academic Papers.** DeMarco, Liu and Schmidt-Eisenlohr (2020), "Who Owns U.S. CLO Securities? An Update by Tranche," FEDS Notes: https://www.federalreserve.gov/econres/notes/feds-notes/who-owns-us-clo-securities-an-update-by-tranche-20200625.html
+
+## 21.9 Desk Debrief
+
+- **A performing loan is a floater that is short a par call.** Its spread duration is about 2.7 on the way down and about 0.25 on the way up when the repricing window is open (21.7). Quote carry net of the expected repricing loss (21.8), or you are quoting fiction.
+- **The OC test is an option book written by the CLO equity.** It cannot see performing-loan prices and is short the cheapest tail of the CCC book (21.5). Past the 7.5% cliff, each dollar of new CCC costs about $(1 - p^{\ast})$, around 42 cents at Kundu's 58-cent average, through *other* loans.
+- **The cure is deterministic: sell the richest CCC** (21.6). Forced sellers sell the freshly downgraded loan, which is the one fundamental buyers want. FSPI tells you who must sell, and the reversal pays the liquidity provider.
+- **Every repricing costs CLO equity about 11× the spread cut** (21.3). The ETF bid for AAA resets is the equity's counter-move.
+- **Settlement is a risk factor, not a back-office detail.** About 20 days on average; delayed compensation is a forced repo at the base rate; a loan fund's buffer scales between $\sqrt{\ell}$ and $\ell$ (21.9).
+- **Retail liquidity moved to the tranche because the tranche settles like a bond.** JAAA could redeem in kind in April 2025. A loan ETF cannot.
+- **Desmooth the marks before you believe a momentum backtest** (21.10). Then condition winners on headroom and losers on FSPI.
+- **Ask two questions.** What does the credit agreement say? What does the CLO indenture say? The second decides who is a forced seller under the first.
+
+**The Spec You Hand the Robot.** Build `loan_clo_engine` with five deterministic, seeded modules and the asserts from Blocks 1–5:
+
+1. `acpa(pool, cash, ccc_limit)` implements (21.5): cheapest-first CCC excess, $\max(0, 1-p)$ haircuts, defaulted loans at $\min(p, R^{\text{ag}})$, discount loans at purchase price, and indenture priority "without duplication."
+2. `cure_candidates(pool)` ranks CCC sales by exact recomputed ΔACPA and checks the bound (21.6).
+3. `fspi(holdings, outstanding, cushion, excess)` returns, for each loan, the expected fraction sold. It uses the logistic calibrated to $\pi = 13.27\%$ at a 4% cushion with $+1.56$ pp per $-3.26\%$ of cushion, and it checks that holdings never exceed outstanding.
+4. `loan_price(m, s, base, T, h)` implements (21.2)/(21.7), with a monthly-logit hazard converted by $h = -12\ln(1-q)$, margin and CSA kept as separate state, one-sided spread durations, and (21.8) carry loss.
+5. `buffer_needed` and `etf_discount_bound` implement (21.9) and the band, cross-checked by simulation within 8%. Desmoothing implements (21.10) with a Dimson beta.
+
+Units: prices as fractions of par in code and points in reports, spreads as decimals, \$mm for par, business days for $\ell$. Never infer a CCC classification, a market-value source or a test trigger: read it from the parsed indenture, or raise.
+
+### Exercises
+
+1. **The cure, by hand.** A CLO has \$400mm of non-defaulted par, 9% CCC, its cheapest CCC loans at 55 and its richest at 90. Using (21.6), compute the minimum ΔACPA from selling \$4mm of the richest CCC and reinvesting at par. Then do the same for \$4mm of the cheapest. Explain to an ex-RSSG colleague why the second trade "realizes a loss without curing anything."
+2. **The 85.01 trade.** ROBO is told to "maximize the junior OC cushion" and is given a universe of performing B3 loans priced between 80 and 100, with a discount-obligation threshold of 85. Show that, under (21.5), ROBO buys the cheapest loans priced just above 85. Then explain which other indenture test (WARF, WAS or the CCC bucket) exists to stop it.
+3. **The ceiling.** Prove that (21.7) tends to par as $h \to \infty$ for any $m > s$. Derive the soft-call version, in which exercise costs one point. At what $m - s$ does a borrower with $h = 2$ prefer to wait for the soft call to expire?
+4. **Queue stress.** Using (21.9) with $\phi = 0.7$, $\sigma = 0.5\%$ and $\ell = 20$, compute the 99% buffer. Compare it with a 4.5% median liquidity ratio and with the 2–9 April 2025 bank-loan fund outflows. How large a credit line does the fund need?
+5. **Smoothing tax.** Derive (21.10). Show that the Sharpe ratio of smoothed marks is inflated by $\sqrt{(1+\phi)/(1-\phi)}$, and compute how much of Beyhaghi and Ehsani's 122 bp a month could survive a $\phi = 0.3$ smoother (state your assumptions).
+6. **Read the holder base.** A tranche is 65% CLO-held, with an average junior cushion of 1.2% and 60% of CLO holders over the CCC limit. Design the uptier that wins the CLO votes, and say which bucket (PIK, long-dated, LML, fixed-rate) binds first.
+
+### Deep-Dive Resource Graph
+
+**Podcasts**
+
+- Bloomberg *Odd Lots*. Search its archive for episodes on CLOs, leveraged loans and private credit. We do not cite an episode we have not verified.
+
+**Practitioner Writing**
+
+- LSTA secondary-trading summaries and settlement-study index: https://www.lsta.org/content-category/quarterly-secondary-settlement-data-study/
+- Creditflux CLO Guide, ch. 6: https://cloguide.creditflux.com/6-understanding-the-tests
+- Octaura, "Octaura's Loan Platform Turns 3" (28 Apr 2026): https://www.octaura.com/blog/octauras-loan-platform-turns-3-lessons-milestones-and-whats-next
+- Loomis Sayles, "Loomis on Loans Q4 2025": https://loomissayles.com/wp-content/uploads/2026/01/Loomis-on-Loans-Q4-2025-Final.pdf
+- PitchBook LCD (M. Lukatsky) on the post-SaaS-pocalypse repricing market, via Yahoo Finance (15 May 2026): https://finance.yahoo.com/markets/options/articles/market-enters-post-saas-pocalypse-103621347.html
+- William Blair, *Leveraged Finance Newsletter* Q4-2025, "Going for Gold" (PitchBook LCD data)
+- Weil, "CLOs as Restructuring Participants" (May 2024); Academy Securities, "OC Triggers" (Apr 2023)
+- Sidley, "Regulatory Update: NAIC Adopts New RBC Charges for Collateral Loans and CLOs" (Jul 2026): https://www.sidley.com/en/insights/newsupdates/2026/07/regulatory-update-naic-adopts-new-rbc-charges-for-collateral-loans-and-clos
+- Federal Reserve, *Financial Stability Report* (May 2026): https://www.federalreserve.gov/publications/files/financial-stability-report-20260508.pdf
+
+**Academic Papers**
+
+- Beyhaghi, M. and Ehsani, S. (2017), "The Cross-Section of Expected Returns in the Secondary Corporate Loan Market," *Review of Asset Pricing Studies* 7(2), 243–277: https://academic.oup.com/raps/article/7/2/243/2966151
+- Elkamhi, R. and Nozawa, Y. (2022), "Fire-Sale Risk in the Leveraged Loan Market," *JFE* 146(3): https://ideas.repec.org/a/eee/jfinec/v146y2022i3p1120-1147.html
+- Kundu, S. (2023), ESRB Working Paper No. 141: https://www.esrb.europa.eu/pub/pdf/wp/esrb.wp.141.en.pdf
+- Loumioti, M. and Vasvari, F. (2019), *Journal of Accounting and Economics* 67(2–3): https://lbsresearch.london.edu/id/eprint/1014
+- Liu, E. and Schmidt-Eisenlohr, T. (2019), "Who Owns U.S. CLO Securities?", FEDS Notes: https://www.federalreserve.gov/econres/notes/feds-notes/who-owns-us-clo-securities-20190719.htm
+- Dimson, E. (1979), "Risk Measurement When Shares Are Subject to Infrequent Trading," *Journal of Financial Economics*
+- Geltner, D. (1993), "Estimating Market Values from Appraised Values without Assuming an Efficient Market," *Journal of Real Estate Research*
+- Getmansky, M., Lo, A. and Makarov, I. (2004), "An Econometric Model of Serial Correlation and Illiquidity in Hedge Fund Returns," *Journal of Financial Economics*
+- Shelf: `Moyer_Distressed_Debt_Analysis` pp.53–55, 150, 322; `Schmid_Credit_Risk_Pricing_Models` pp.175–177, 183–184; `Bohn_Stein_Active_Credit_Portfolio_Management` p.14; `Nuveen_Multi_Asset_Credit_Quant_Framework` pp.6, 9; `Man_Quantitative_Credit_Alpha_Early_Mover_2022` p.41
+
+**Data & Code**
+
+- SEC EDGAR (CLO-fund N-CSR/N-PORT filings, e.g., Eagle Point): https://www.sec.gov/edgar · Eagle Point Income Co N-CSR FY2025: https://www.sec.gov/Archives/edgar/data/1754836/000199937126004310/eic_ncsr-123125.htm
+- CLO trustee data (CLO-i/Creditflux, Intex, Octus; commercial), FINRA TRACE securitized-products data for CLO tranches, Octaura venue data, and the Morningstar LSTA / PitchBook LCD index constituents (commercial)
+
+<!-- STATUS: COMPLETE -->

@@ -75,3 +75,5 @@ Usage reached 30% of the window in about 15 minutes, about 75% of it from Fable 
 | :--- | :--- | :--- |
 | ed1-reviews-and-trend-tracker | Fable engagement review, Fable foundations review (effort high, digest-driven), Appendix C | running |
 | Sonnet research (targeted) | Only the case studies and gaps the reviews request | queued until the reviews land |
+| trend-watch-factcheck (×2) | Sonnet checks of all 74 Trend Watch boxes, Ch 1–28, report-only | running |
+| pace-guard | Cap-only, target 97 (alarms at 91) | running |

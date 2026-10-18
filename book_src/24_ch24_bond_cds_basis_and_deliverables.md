@@ -224,3 +224,215 @@ assert rpv01(lam0, r0, T0, accrued_on_default=False) < rpv01(lam0, r0, T0)
 ```
 
 The numbers are worth reading once. At $\lambda = 5\%$, $R = 40\%$ and $r = 4\%$, the five-year par spread is about 297 bp, slightly below the triangle's 300 bp because of the ACT/360 factor and slightly above the ACT/360-adjusted 296 bp because premiums are paid at the end of each quarter. The risky annuity is about 4.06 years. Against a 500 bp coupon, the buyer receives about 8.2 points upfront. Theo's 370 bp Halvorsen swap sits between those cases, and the same three functions price it.
+
+## 24.3 Four Things People Mean by "Basis"
+
+Theo's sticky note said "basis: −110." Ines's first question was "against what?", and it was the right question, because there are at least four honest answers and they can differ by more than the signal.
+
+1. **Z-spread basis.** $b^{Z} = s^{\text{CDS}}(T) - Z$, where $Z$ is the constant spread over the OIS curve that reprices the bond's cash flows. It is the easiest to compute and the hardest to defend.
+2. **Asset-swap basis.** $b^{\text{ASW}} = s^{\text{CDS}}(T) - A$, where $A$ is the par-par asset-swap spread. You pay par for the bond (whatever its price), swap its fixed coupons for floating plus $A$, and the upfront difference $P^{\text{rf}} - P$ is amortized over the swap's annuity: $A = (P^{\text{rf}} - P)/\text{PV01}^{\text{rf}}$, where $P^{\text{rf}}$ is the bond's price discounted on the risk-free curve. This is how a bank's treasury desk thinks about the bond, and it carries the same par-versus-price problem as $Z$.
+3. **Par-equivalent CDS spread (PECS) basis.** $b^{\text{PE}} = s^{\text{CDS}}(T) - \text{PECS}$. Take the hazard curve bootstrapped from the CDS, shift it in parallel until the bond's model price under that curve, with the CDS's recovery, matches the market price, and read off the par CDS spread at the shifted curve. It is the only one of the four that compares like with like.
+4. **Issuer-level basis.** One number per issuer, aggregating all its bonds. Dynkin's version is the one most systematic research uses.
+
+> **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.216:* "We define the cash–CDS basis as the difference between the spread of a 5y CDS and the market value‐weighted OAS (computed relative to the Libor curve) of all unsecured bonds issued by the underlying reference entity."
+>
+> **Annotation.** Our analysis: this is an operational definition, built to give one basis per issuer across a large panel, and for cross-sectional research it is the right design. Note the three choices inside it, because each one becomes a parameter on a 2026 desk. "Relative to the Libor curve" now means relative to SOFR swaps or OIS, and the switch moves the level of every basis in the panel by the spread between the curves. "Market value-weighted" mixes bonds at 70 with bonds at 105, which, as the derivation below shows, mixes spurious positive and negative bases. "All unsecured bonds" excludes secured paper, correctly, since secured bonds are not what the swap is priced on, but it also excludes the loans that may be deliverable. A desk that trades the basis bond by bond should use PECS at the bond level. A desk that uses the basis as a feature can use Dynkin's definition, provided the same convention is used every month.
+
+### 24.3.1 Derivation: why a par swap and a discount bond disagree even when nothing is wrong
+
+Stay under $\mathbb{Q}$ with flat $\lambda$ and $r$, and use recovery of face value (RFV): at default, a bond of face 1 is worth $R$, whatever its coupon or price. This is the convention that matches CDS settlement, since the swap pays par minus a price quoted per unit of face. A bond with coupon $c$ paid semiannually at $t_j$, maturing at $T$, is worth
+
+$$
+P(\lambda) = \sum_{j} \frac{c}{2}\,B(t_j)\,S(t_j) \;+\; B(T)\,S(T) \;+\; R\int_0^T B(u)\,\lambda\,S(u)\,du .
+$$
+
+The Z-spread is defined by a different equation, with no explicit default:
+
+$$
+P^{\text{mkt}} = \sum_j \text{CF}_j\, e^{-(r+Z)t_j}.
+$$
+
+Discounting at $r + Z$ is what you would do if default destroyed a constant *fraction of market value*, the recovery-of-market-value (RMV) convention. Under RMV with fractional loss $L^{\text{MV}}$, the spread would be $\lambda L^{\text{MV}}$. Under RFV, the fractional loss of market value for a bond at price $P$ is roughly $(P-R)/P$, which depends on price. So a Z-spread computed from an RFV-consistent price drifts with price, while the CDS spread does not.
+
+To see the size, use continuous coupons, which makes the algebra exact. Write $k = r + \lambda$ and $a(k) = (1-e^{-kT})/k$. Then
+
+$$
+P(\lambda) = c\,a(k) + e^{-kT} + R\,\lambda\,a(k).
+$$
+
+*Par bond.* Setting $P = 1$ gives $c\,a(k) + R\lambda\,a(k) = 1 - e^{-kT} = k\,a(k)$, so $c = r + \lambda(1-R)$. The Z-spread of a par bond with continuous coupon $c$ is $c - r$, hence
+
+$$
+Z_{\text{par}} = \lambda(1-R) = s^{\text{CDS}}.
+$$
+
+For a par bond the Z-spread basis is zero, which is the FRN argument of §24.1 in fixed-coupon clothing.
+
+*Discount and premium bonds.* Take $r = 4\%$, $\lambda = 5\%$, $R = 40\%$, $T = 5$, so that $s^{\text{CDS}} = 300$ bp before the ACT/360 adjustment. Then $e^{-0.45} = 0.6376$, $a = 4.026$, and the recovery term is $R\lambda a = 0.0805$.
+
+| Coupon | Model price $P(\lambda)$ | Z-spread | PECS | $b^{Z}$ | $b^{\text{PE}}$ |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 4% | 87.92 | ≈ 285 bp | 300 bp | ≈ +15 bp | 0 |
+| 7% | 100.00 | 300 bp | 300 bp | 0 | 0 |
+| 10% | 112.08 | ≈ 313 bp | 300 bp | ≈ −13 bp | 0 |
+
+*(Hand calculation, continuous coupons, illustrative; the semiannual code below reproduces the signs and sizes.)* All three bonds are priced exactly off the CDS hazard. There is no mispricing anywhere in the table, and yet the Z-spread reports a positive basis on the discount bond and a negative basis on the premium bond. The intuition is RFV against RMV. The 4% bond at 88 loses $88 - 40 = 48$ points at default, 55% of its value. The 10% bond at 112 loses 72 points, 64% of its value. A constant Z-spread charges both the same proportional loss, so it understates the discount bond's spread and overstates the premium bond's. In a market where coupons set in 2020–2021 are trading at 85 and coupons set in 2023–2024 are trading at 103 (illustrative), the Z basis has a vintage pattern built into it that a careless signal will read as alpha.
+
+> **[SOURCE EXTRACTION]** *Schmid_Credit_Risk_Pricing_Models p.159:* "A default swap is a par product: it does not completely hedge the loss on an asset that is currently trading away from par. If the asset is trading at a discount, a default swap overhedges the credit risk and vice-versa."
+>
+> **Annotation.** Our analysis: this is Theo's sticky-note arithmetic, and it has two consequences the desk must keep separate. The first is *valuation*: comparing a par instrument with a bond at 88 requires PECS or an equivalent, or you read the table above as a trade. The second is *hedging*: the jump-to-default-neutral notional is not the bond's face. The bond loses $P - R$ at default and the swap pays $1 - R$, so the JTD-neutral CDS notional per unit of bond face is $N^{\text{JTD}} = (P - R)/(1-R)$. For Halvorsen at 88 with $R = 40\%$, that is $48/60 = 0.8$: \$8mm of protection on \$10mm of bonds. A desk that buys \$10mm is also long \$2mm of a jump-to-default bet, which is fine if intended and a hidden position if not. The modern departure is that $R$ itself is uncertain, so $N^{\text{JTD}}$ has a recovery delta. The package is flat at default only if the auction's recovery equals the bond's, which is the subject of §24.5.
+
+Two more conventions move the measured basis before any economics enters.
+
+> **[SOURCE EXTRACTION]** *Bohn_Stein_Active_Credit_Portfolio_Management p.578:* "Our own research and that of our colleagues suggests that CDS premia can be interpreted as implicit spreads over a corporate default-risk borrowing curve, which is typically 10 to 20 basis points below the dollar swap curve."
+>
+> **Annotation.** Our analysis: the discount curve is a basis input, and choosing it is a decision, not a default setting. Bohn and Stein were writing about the Libor-swap world, in which the "risk-free" curve itself contained bank credit. Since the Libor cessation the desk has SOFR OIS, a cleaner risk-free proxy, and the gap between that curve and the curve at which a levered basis trader actually funds is now the repo spread $\phi$ of §24.4. The rule for the specifier is mechanical: compute the bond's Z-spread or PECS and the CDS's hazard curve off the *same* curve, store the curve's name and date with every basis observation, and treat a switch of curve as a structural break in the time series.
+
+The second convention is seniority and security. The CDS references senior unsecured obligations; if most of an issuer's bonds are secured, the bonds trade rich to the swap for reasons that have nothing to do with mispricing.
+
+> **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.220:* "all issuers but one in the Airlines and Railroad industry had positive bases, reflecting the fact that debt in these industries is largely secured and bonds typically trade rich relative to CDS."
+>
+> **Annotation.** Our analysis: this is a deliverable-quality effect showing up in a basis table, and it is a good bridge to §24.5. A secured equipment bond pays a high recovery in default. The CDS pays par minus the auction price of whatever senior unsecured obligation is cheapest. The two are not claims on the same loss, so the basis is structurally positive. For a 2026 desk this matters most in sectors where liability management transactions have created layers of secured debt above the unsecured bonds that remain deliverable (Chapter 13). There, the basis between a new super-priority bond and the swap tells you very little about mispricing and a great deal about where the CDS will settle.
+
+Positive bases are not only structural. In early 2016, as European bank credit sold off, investors hedged with CDS faster than they sold bonds, and IHS Markit's commentary of 31 March 2016 showed bases on several bank names in positive territory, Deutsche Bank's 1.25% notes due September 2021 among them, at 95 bp in February tightening to 73 bp in March. When everyone wants protection at once, the swap leads, and the positive basis is the hedging queue.
+
+### Specification for AI Implementation (bond-level basis: Z, PECS and JTD hedge ratio)
+
+**What ROBO built from the vague version.** Told to "compute the basis," ROBO subtracted the bond's *yield* from the CDS spread, reported a basis of −580 bp on every bond in the universe, and recommended buying all of them. When asked, it pointed out that this was what had been asked.
+
+**The precise spec.** Inputs: coupon `c` (decimal, semiannual 30/360), maturity `T` (years from a coupon date; no accrued in this sketch), market price per unit face, flat OIS rate `r`, recovery `R`, and the CDS par spread from §24.2. Outputs: `z_spread` (decimal), `pecs` (decimal, with the implied flat hazard), the bases $b^{Z}$ and $b^{\text{PE}}$ in bp, and `jtd_hedge_ratio` (CDS notional per unit face). Guards: refuse a PECS when the price is outside the model's range, typically a bond trading below the assumed recovery, and say so instead of returning a root at the bracket edge. With a term structure, shift the bootstrapped piecewise hazard curve in parallel rather than replacing it with a flat one. Sanity: a bond priced off the CDS hazard has a PECS basis of zero to $10^{-9}$, while its Z basis is positive for a discount bond and negative for a premium bond.
+
+```python
+def bond_cashflows(c, T, freq=2):
+    """Coupon dates (years) and cash flows per 1.0 face; 30/360 semiannual coupons."""
+    n = int(round(T * freq))
+    t = np.arange(1, n + 1, dtype=float) / freq
+    cf = np.full(n, c / freq)
+    cf[-1] += 1.0
+    return t, cf
+
+
+def bond_price_hazard(c, T, lam, r, R, freq=2):
+    """Q-price per 1.0 face: survival-weighted cash flows plus recovery of face R at default."""
+    t, cf = bond_cashflows(c, T, freq)
+    k = lam + r
+    rec = R * lam * T if abs(k) < 1e-12 else R * lam / k * (1.0 - np.exp(-k * T))
+    return float(np.sum(cf * np.exp(-k * t)) + rec)
+
+
+def z_spread(price, c, T, r, freq=2):
+    """Constant spread over the flat continuous OIS curve that reprices the bond."""
+    t, cf = bond_cashflows(c, T, freq)
+    return brentq(lambda z: np.sum(cf * np.exp(-(r + z) * t)) - price, -0.05, 3.0)
+
+
+def pecs(price, c, T, r, R, freq=2):
+    """Par-equivalent CDS spread: par CDS spread at the flat hazard that reprices the bond."""
+    lo, hi = 1e-10, 5.0
+    p_hi, p_lo = bond_price_hazard(c, T, hi, r, R, freq), bond_price_hazard(c, T, lo, r, R, freq)
+    if not p_hi < price < p_lo:
+        raise ValueError("price outside the model's range: is the bond below the assumed recovery?")
+    lam_star = brentq(lambda x: bond_price_hazard(c, T, x, r, R, freq) - price, lo, hi)
+    return par_spread(lam_star, r, T, R), lam_star
+
+
+def jtd_hedge_ratio(full_price, R):
+    """CDS notional per 1.0 bond face that is flat on an instantaneous default."""
+    return (full_price - R) / (1.0 - R)
+
+
+s_cds = par_spread(lam0, r0, T0, R0)
+rows = []
+for cpn in (0.04, 0.07, 0.10):                    # discount, near-par, premium bonds
+    P = bond_price_hazard(cpn, T0, lam0, r0, R0)
+    s_pe, _ = pecs(P, cpn, T0, r0, R0)
+    z = z_spread(P, cpn, T0, r0)
+    rows.append({"coupon": cpn, "price": 100.0 * P, "Z_bp": 1e4 * z, "PECS_bp": 1e4 * s_pe,
+                 "basis_Z_bp": 1e4 * (s_cds - z), "basis_PECS_bp": 1e4 * (s_cds - s_pe)})
+    assert abs(s_pe - s_cds) < 1e-9               # priced off the CDS hazard: PECS basis is zero
+basis_table = pd.DataFrame(rows)
+assert basis_table.Z_bp.iloc[0] < 1e4 * s_cds < basis_table.Z_bp.iloc[2]   # ...the Z basis is not
+assert abs(jtd_hedge_ratio(0.88, 0.40) - 0.80) < 1e-12                     # Theo's sticky note
+```
+
+Note what the code's table adds to the hand calculation: the CDS leg here is ACT/360, so even the near-par bond shows a Z basis of a few bp. That is the day-count term from §24.2 appearing in a P&L, and it is a reason to run this table on every new data vendor before trusting its basis field.
+
+## 24.4 Funding, Repo, and the Counterparty: Why a Negative Basis Is Not Free
+
+Mags tells the 2008 story without names. "We owned bonds at a spread of six hundred and protection at three hundred on the same names. Minus three hundred of basis. Riskless, everyone said. Then the prime broker raised the haircut from ten to twenty-five, the basis went to minus five hundred, and the riskless trade had to be sold to the only people with balance sheet, who were the people who'd raised the haircut." It is a war story, and it is also a derivation, because each of its clauses is a term in the carry equation.
+
+### 24.4.1 Derivation: the carry of each package and the arbitrage band
+
+Work per unit of bond face for a bond near par, so that $N^{\text{JTD}} \approx 1$ and the asset-swap spread $A$, the Z-spread and PECS approximately coincide; call the bond's spread $s^{\text{bond}}$, so $b = s^{\text{CDS}} - s^{\text{bond}}$. Rates are annual, in excess of the floating rate $r$.
+
+**The negative-basis package** (long bond, long protection). The bond, asset-swapped, earns $r + s^{\text{bond}}$. The trader posts a haircut $h$ of equity and borrows $1-h$ in repo at $r + \phi$, where $\phi$ is the funding spread. The equity has opportunity cost $r$. Protection costs $s^{\text{CDS}}$. The excess carry is
+
+$$
+\pi^{-} = s^{\text{bond}} - s^{\text{CDS}} - \phi\,(1-h) = -b - \phi\,(1-h).
+$$
+
+**The positive-basis package** (short bond, short protection). The trader borrows the bond through a reverse repo, lending cash and earning the repo rate on it. If the bond is special, that rate is below general collateral by the specialness $\ell$. The trader pays the bond's coupon, worth $r + s^{\text{bond}}$, and receives $s^{\text{CDS}}$ for selling protection, so
+
+$$
+\pi^{+} = s^{\text{CDS}} - s^{\text{bond}} - \ell = b - \ell.
+$$
+
+Adding transaction and capital costs $k^{-}$ and $k^{+}$, each expressed as an annual running rate, neither package earns anything inside the band
+
+$$
+-\phi\,(1-h) - k^{-} \;\le\; b \;\le\; \ell + k^{+}.
+$$
+
+This is the frictional version of $b = 0$. The basis can move freely inside the band and is pushed back only at its edges, and the edges move with funding conditions. The band is also asymmetric. The negative edge is set by the cost of *financing* a long position, the positive edge by the cost of *borrowing* a short one, and in a crisis it is the first that blows out.
+
+> **[SOURCE EXTRACTION]** *Schmid_Credit_Risk_Pricing_Models p.255:* "One may be forced in a special repo, i.e. one may be forced to offer a repo rate that is substantially below the general collateral rate (GCR). Then the default swap spread should be increased by the difference between the GCR and the special repo rate"
+>
+> **Annotation.** Our analysis: this is the $\ell$ in the positive edge of the band, stated as an adjustment to the fair CDS spread. If the bond is hard to borrow, a positive basis up to $\ell$ is not an opportunity, because the short leg pays it away. The 2026 desk can measure $\ell$ directly, from securities-lending fee data and the repo desk's quotes, and should store it per bond as a time series. Bai and Collin-Dufresne (2019, *Financial Management* 48(2)) find the empirical counterpart: across bonds, the basis is more negative where the bond lending fee is higher and where trading liquidity, funding cost, counterparty risk and collateral quality impose larger frictions. The departure from Schmid's framing is that we no longer "adjust the spread." We put the friction on the edge of the band and let the signal live inside it.
+
+**Return on equity.** The negative-basis package's excess return on the trader's equity is
+
+$$
+\text{ROE}^{-} = \frac{-b - \phi\,(1-h)}{h}.
+$$
+
+With $b = -100$ bp, $\phi = 40$ bp and $h = 15\%$ *(illustrative)*, the carry is $100 - 34 = 66$ bp of face, and $\text{ROE}^{-} = 0.0066/0.15 = 4.4\%$ a year over cash. If the haircut doubles to 30%, ROE falls to $(100-28)/30 = 2.4\%$.
+
+**Mark-to-market.** The package is long the basis, so for a small move its value changes by $\Delta V \approx D^{\text{spr}}\,\Delta b$ per unit face. Per unit of equity this is $D^{\text{spr}}\,\Delta b / h$. If the basis widens from −100 to −250 bp with $D^{\text{spr}} = 4.5$, the package loses $0.0150 \times 4.5 = 6.75$ points, which is 45% of a 15-point haircut. Convergence is guaranteed only at maturity or default, and only up to the deliverable and recovery terms of §24.5. The trader has to survive until then, and the haircut and the basis are both driven by the same thing, the cost of balance sheet. That is Mags's story in two equations: the carry falls when $h$ rises, and the mark-to-market loss is divided by $h$.
+
+> **Poker Table.** "A negative basis is a hand you can't lose at showdown," Ines says. "Hold it to maturity and it pays. The problem is that you don't get to see the showdown if you can't cover the bets on the turn. Your stack is the haircut. The other players are the people who set it. Before you play this hand, ask how much it costs to stay in, and who decides."
+
+**Counterparty risk.** The last friction concerns the other side of the swap.
+
+> **[SOURCE EXTRACTION]** *Bohn_Stein_Active_Credit_Portfolio_Management p.577:* "Note that buying protection is similar in form to shorting a loan or bond. While the value of the position may behave similarly to a short-loan or short-bond position, the presence of this joint default probability issue makes the CDS analysis a little more involved."
+>
+> **Annotation.** Our analysis: protection is only worth what the protection seller can pay. Write $\tau_c$ for the seller's default time. The protection leg the buyer actually owns is $(1-R)\,\mathbb{E}^{\mathbb{Q}}\big[B(\tau)\,\mathbf{1}\{\tau \le T,\ \tau_c > \tau\}\big]$ plus whatever the buyer recovers from the seller, and with positive correlation between $\tau$ and $\tau_c$ (wrong-way risk) it is worth noticeably less than the clean leg. A buyer who prices that in pays a lower spread, so counterparty risk is a *negative*-basis driver, and in 2008 it was a large one, with dealers' own CDS widening alongside their clients' bonds. Central clearing changed the term but did not remove it. The counterparty is now a clearinghouse, and the cost moves into initial margin, which is a funding cost and enters through $\phi$. In 2025, 63.1% of US-reported single-name notional and 78.1% of index notional was cleared (ISDA, July 2026), so the uncleared remainder still needs a CVA charge in the basis engine.
+
+Two more pieces of evidence shape how the desk uses the band. Choi, Shachar and Shin (2019, *Management Science*) find that over 2005–2009 dealers on average traded *against* a widening bond–CDS gap, stabilizing it, until their balance-sheet constraints bound and the stabilization stopped. Oehmke and Zawadowski (2015, "Synthetic or Real? The Equilibrium Effects of Credit Default Swaps on Bond Markets," *Review of Financial Studies* 28(12)) model the CDS as a cheaper way to take credit exposure, which pulls some demand away from bonds while also making room for levered basis traders who bridge the two markets. Both point the same way. The negative basis is a price for balance sheet, and its tails come when balance sheet is scarce.
+
+> **Trend Watch: the basis in three stresses, and the clearinghouse in the middle (2008–2025).** *2008:* Bai and Collin-Dufresne's working-paper figures (as summarized in our research dossier; secondary) put the investment-grade basis, normally a few bp positive, at about −250 bp at the 2008 trough, and the high-yield basis at about −650 bp. *March 2020:* Risk.net reported the US high-yield bond–CDS basis at about −401 bp, roughly eight times its weekly average since mid-2010, and the US investment-grade basis at about −186 bp (secondary; magnitudes depend on the index and definition). The move unwound after the Federal Reserve announced its corporate credit facilities on 23 March 2020, which is consistent with the band: the facilities lowered $\phi$ and $k^{-}$, the cost of holding bonds, and the negative edge moved back in. *2023:* the regional-bank and Credit Suisse stress was a single-name event. ISDA reports single-name traded notional up 84.8% in Q1 2023 against its trailing four-quarter average, with \$161bn in financials, while index activity rose only 4.5%. *Clearing:* ICE Clear Credit reported a record \$2.57tn of USD single-name CDS cleared in 2025, against \$2.17tn in 2024 (ICE press release, 6 Jan 2026; secondary), and ICE Clear Europe stopped clearing CDS in October 2023, moving more than \$400bn of open interest (ISDA, July 2026). *What it means for the desk:* every large negative basis since 2008 has been a funding event first and a credit event second. Make the basis model regime-aware: a −150 bp basis with funding conditions calm is a signal, and the same basis with repo haircuts rising is a warning about the people already holding it.
+
+### Specification for AI Implementation (basis package carry and stress)
+
+**The precise spec.** Inputs: the basis in bp ($s^{\text{CDS}} - s^{\text{bond}}$, negative for a negative basis), the repo funding spread $\phi$ in bp over the floating rate, the haircut $h \in (0,1]$, and the spread duration. Outputs: annual excess ROE on equity, and mark-to-market on equity for a given move in the basis. Guards: reject $h \le 0$. Never report an ROE without the haircut that produced it, and run the same position at the stressed haircut (at least double the current one) beside the base case. Sanity: the 4.4%, 2.4% and −45% figures above, and negative carry for a basis inside the band.
+
+```python
+def basis_package_roe(basis_bp, repo_spread_bp, haircut):
+    """Annual excess carry per unit of equity for a near-par negative-basis package."""
+    if not 0.0 < haircut <= 1.0:
+        raise ValueError("haircut must be in (0, 1]")
+    carry_bp = -basis_bp - repo_spread_bp * (1.0 - haircut)
+    return carry_bp / 1e4 / haircut
+
+
+def basis_mtm_on_equity(d_basis_bp, spread_duration, haircut):
+    """Mark-to-market on equity when the basis moves by d_basis_bp (package is long the basis)."""
+    return d_basis_bp / 1e4 * spread_duration / haircut
+
+
+assert abs(basis_package_roe(-100.0, 40.0, 0.15) - 0.044) < 1e-12     # calm
+assert abs(basis_package_roe(-100.0, 40.0, 0.30) - 0.024) < 1e-12     # haircut doubles
+assert abs(basis_mtm_on_equity(-150.0, 4.5, 0.15) + 0.45) < 1e-12     # basis -100 -> -250
+assert basis_package_roe(-30.0, 40.0, 0.15) < 0.0                     # inside the band: pays to hold
+```
+
+> **Ways This Blows Up.** (1) *ROE without the haircut process.* A backtest at a constant 15% haircut overstates the Sharpe ratio, because the haircut rises exactly when the basis widens. Model $h_t$ as a function of a funding-stress index, or at least backtest at the stressed haircut. (2) *JTD drift.* $N^{\text{JTD}} = (P-R)/(1-R)$ changes as the bond price moves. A package set up flat at 95 is materially over-hedged at 70. Rebalance the CDS notional on a price band, and charge the rebalancing to the trade. (3) *Maturity mismatch.* A 4.3-year bond hedged with the 5-year standard swap leaves a curve position. Interpolate the CDS curve to the bond's maturity for the basis, and hedge with the two adjacent standard maturities. (4) *Treating the clearinghouse as free.* Initial margin on the CDS leg is funded. Put it in $\phi$, or the cleared package looks better than the bilateral one by exactly the amount you forgot.

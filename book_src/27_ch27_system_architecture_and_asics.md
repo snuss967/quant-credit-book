@@ -268,3 +268,233 @@ try:
 except ValueError:
     pass
 ```
+
+## 27.3 The Security Master Is the Credit Agreement of the System
+
+Theo spent four years reading credit agreements for the one clause that reprices everything. On his third Tuesday on the desk, he finds it in a database. The desk's security master is keyed on CUSIP, has one row per bond, and overwrites that row when a field changes. "So when a company does an uptier," he asks, "where does the old loan go?"
+
+"It stays," says Kaz. "We update the ranking."
+
+"And the backtest from before the uptier?"
+
+Kaz is quiet for a while. Then: "Is a drop-down the thing in the order ticket where you pick the venue?"
+
+"It's the thing where the IP moves to an unrestricted subsidiary and your recovery moves with it."
+
+Every liability-management transaction, exchange offer and reorganisation creates new instruments, new rankings and new issuer–guarantor maps (Chapters 13–16). A security master that cannot represent "this loan was first lien until 22 June 2020 and something else afterwards, and we learned that at 6 p.m." will either lie about the present or lie about the past. Both lies end up in the P&L, one in live trading and one in the backtest that justified it.
+
+### 27.3.1 What the master holds
+
+The entities are the ones Theo already knows from a capital-structure slide, made explicit:
+
+- **Issuer** (with LEI) and **obligor group**: borrower, guarantors, restricted and unrestricted subsidiaries, as a dated graph rather than a list.
+- **Instrument**, keyed by an **internal surrogate key** that the desk mints and never reuses. CUSIP, ISIN and FIGI are attributes of the instrument, not its identity. A 144A tranche, its Reg S twin and the registered exchange notes that follow are three identifiers on one economic line. They stay separate for settlement and TRACE, and are joined for risk.
+- **Terms**: coupon, maturity, call schedule, ranking, lien, and covenant flags (from the Chapter 25 parser).
+- **Events**: exchange, uptier, drop-down, distressed exchange, reorganisation, change of control. Each is a row in an event log with an effective date, a source document and the instruments it creates, retires or re-ranks.
+
+### 27.3.2 The bitemporal model, derived
+
+A **fact** is a tuple
+
+$$
+f = \big(k,\ a,\ v,\ [t^{v}_{0}, t^{v}_{1}),\ [t^{k}_{0}, t^{k}_{1})\big),
+$$
+
+where $k$ is the instrument key, $a$ an attribute (ranking, coupon, guarantor set), $v$ its value, $[t^{v}_{0}, t^{v}_{1})$ the **valid-time** interval over which the fact was true in the world, and $[t^{k}_{0}, t^{k}_{1})$ the **knowledge-time** interval over which the desk believed it. An open interval ends at $+\infty$. (Superscripts $v$ and $k$ label the two time axes; they are not powers, and this $k$ is unrelated to the order-arrival parameter $k$ of Chapter 18.) The **as-of query** is
+
+$$
+Q(k, a;\ t^{v}, t^{k}) = \big\{\, v \;:\; f \in \mathcal{S},\ t^{v}_{0} \le t^{v} < t^{v}_{1},\ t^{k}_{0} \le t^{k} < t^{k}_{1} \,\big\},
+$$
+
+and the store $\mathcal{S}$ satisfies two invariants.
+
+**(I1) Exclusion.** For each $(k,a)$, no two facts overlap in both intervals, so $|Q| \le 1$. In Postgres this is an exclusion constraint on the pair of ranges. In code it is an assert.
+
+**(I2) Append-only knowledge.** A write at wall time $c$ may only (i) insert facts with $t^{k}_{0} = c$, and (ii) change an open $t^{k}_{1} = +\infty$ to $c$. No value, no valid-time bound and no closed knowledge bound is ever edited.
+
+**Theorem (the past is immutable).** For any $t^{k} < c$, the snapshot $\{f : t^{k}_{0} \le t^{k} < t^{k}_{1}\}$ is the same whether computed before or after a write at time $c$.
+
+*Proof.* An inserted fact has $t^{k}_{0} = c > t^{k}$, so it is excluded from the snapshot. A closed fact moves from $[t^{k}_{0}, \infty)$ to $[t^{k}_{0}, c)$, and since $t^{k} < c$, membership of $t^{k}$ is unchanged. No other operation exists under (I2). $\blacksquare$
+
+**Corollary (no data-layer look-ahead).** Let the desk's information set at decision time $t$ be $\mathcal{F}_t$, the knowledge-time-$t$ snapshot. Any feature computed only from $Q(\cdot\,;\ t^{v} \le t,\ t^{k} = t)$ is $\mathcal{F}_t$-measurable, and by the theorem it gives the same answer in every future rerun of the backtest. The common bug is the other query, $Q(\cdot\,;\ t^{v} = t,\ t^{k} = \text{now})$, "what was true on date $t$, as we know it today." It silently imports every restatement, rating correction, re-ranking and late print learned after $t$. Vendor files labelled "point-in-time" are often point-in-*valid*-time only, which is the second query wearing the first one's name tag.
+
+> **[SOURCE EXTRACTION]** *Ben_Dor_Quantitative_Credit_Portfolio_Management p.102 (note 10):* "This approach prevents 'look-ahead' bias. Following Ben Dor, Dynkin, and Hyman (2005b) spread changes are normalized by the larger of the spread level or 20 bps."
+>
+> **Annotation.** Our analysis: the note sits under a research design choice, which is where look-ahead is usually discussed. The bitemporal corollary says the same discipline must hold one layer down, in the data store, because a research design that is careful about timing can still read from a table that is not. The desk departs from the research convention in one way. Ben Dor's normalisation floor (20 bp) is a modelling choice made once; knowledge time is a property of every row, recorded at write time and impossible to reconstruct later. If the master did not store `known_at` in 2020, no amount of 2026 cleverness recovers it, and every backtest over that window carries an unquantified look-ahead term.
+
+> **[SOURCE EXTRACTION]** *Bohn_Stein_Active_Credit_Portfolio_Management p.334:* "It is important to determine collaboratively with the data vendor which data are actual prices, which are matrix or evaluated, and which are quotes, which deserve special mention."
+>
+> **Annotation.** Our analysis: the `price_kind` enum of §27.2 is a lesson from the 2000s, not the 2020s, and Bohn and Stein make it a negotiation with the vendor rather than an inference by the desk. That is still right. The modern extension is to ask the vendor for knowledge time as well as kind: when did this evaluated price become available to subscribers, and was it ever revised? A vendor that cannot answer is selling valid-time data, and the master should flag every row from it as `known_at = unknown` rather than inventing a timestamp.
+
+### 27.3.3 Case Study: Serta Simmons, 22 June 2020, as a sequence of master-table rows
+
+The facts, from our LMT dossier (Proskauer, 2025-01-02): on 2020-06-22, Serta Simmons Bedding closed a transaction with a majority group of its lenders. Participating lenders provided \$200mm of new-money first-out super-priority debt and exchanged about \$1.2bn of their first- and second-lien term loans into about \$875mm of second-out super-priority debt. Non-participating lenders stayed in the original 2016 facilities, which now ranked behind both new tranches. The transaction relied on the credit agreement's "open market purchase" language. On 2024-12-31 the Fifth Circuit held that it was not an open market purchase (Chapter 13 has the litigation). The most expensive three words in finance have now also become a row in a database.
+
+Here is what a bitemporal master holds after the desk's event feed confirms the closing at 6 p.m. on the day *(the 6 p.m. knowledge time and the 2016 onboarding date are illustrative; instrument keys are internal surrogates, never invented CUSIPs)*:
+
+| Key | Attribute | Value | Valid from | Valid to | Known from | Known to |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| INS-SERTA-TL1-2016 | ranking | first_lien_pari | 2016-11-01 | ∞ | 2016-11-01 | 2020-06-22 18:00 |
+| INS-SERTA-TL1-2016 | ranking | first_lien_pari | 2016-11-01 | 2020-06-22 | 2020-06-22 18:00 | ∞ |
+| INS-SERTA-TL1-2016 | ranking | first_lien_behind_super_priority | 2020-06-22 | ∞ | 2020-06-22 18:00 | ∞ |
+| INS-SERTA-FO-2020 | ranking | super_priority_first_out | 2020-06-22 | ∞ | 2020-06-22 18:00 | ∞ |
+| INS-SERTA-SO-2020 | ranking | super_priority_second_out | 2020-06-22 | ∞ | 2020-06-22 18:00 | ∞ |
+
+Row one is never deleted. It is closed in knowledge time, which is how the database says "we used to believe this was permanent." Now ask the three questions a desk actually asks:
+
+1. *Live risk on 2020-06-23:* $Q(\text{TL1}, \text{ranking};\ 2020\text{-}06\text{-}23,\ \text{now})$ returns `first_lien_behind_super_priority`. The recovery model (Chapter 14) reprices the left-behind loan.
+2. *A backtest decision at midnight on 2020-06-22:* $Q(\text{TL1};\ 2020\text{-}06\text{-}23,\ 2020\text{-}06\text{-}22\ 00{:}00)$ returns `first_lien_pari`, because the desk did not yet know. The second-out tranche does not exist in that snapshot at all.
+3. *A historical study of 2019 rankings, run today:* $Q(\text{TL1};\ 2019\text{-}06\text{-}01,\ \text{now})$ returns `first_lien_pari`, which is true then and known now.
+
+A CUSIP-keyed, overwrite-in-place master gets question 2 wrong. It reports the post-exchange ranking for a decision made before anyone knew of it, so a backtest of an "avoid priming risk" strategy (Chapter 13's PRS) looks prescient by construction. The Ad Hoc Group, represented by counsel, would like it noted that they also knew before the desk did. That is what a Rule 2019 statement is for. Hertz's 2021 emergence gives the mirror image: new post-reorganisation equity and warrants whose economic predecessor is a claim, not a security. Chapter 16 handles the valuation; the master handles the lineage, as an event row linking predecessor and successor keys.
+
+> **Trend Watch. Identifiers become contested infrastructure (2022–2026).** *What changed:* the identifier your master is keyed on turned out to be a licensed, litigated asset. In March 2022, Dinosaur Financial Group, Hildene Capital Management and Swiss Life Investment Management sued CUSIP Global Services, S&P Global, FactSet and the American Bankers Association (*Dinosaur Financial Group LLC et al. v. S&P Global Inc. et al.*, S.D.N.Y. No. 1:22-cv-01860). The court dismissed most claims but let a Sherman Act §2 monopolisation claim proceed, and a later ruling certified a class of end-user firms and data vendors (ruling dates: see the docket). *The regulatory crack:* in Release No. 34-95148 (adopted 2022-06-23), the SEC let Form 13F filers report a FIGI for each security, optional and in addition to, not instead of, the CUSIP, with the amended form effective 2023-01-03. OpenFIGI distributes its symbology "under the MIT Open Source license at no cost and as a public good." In a 2024 SEC comment letter (file S7-2024-05), the plaintiffs' counsel backed requiring FIGI in regulatory filings. *What it means for the desk:* key the master on an internal surrogate and treat CUSIP, ISIN and FIGI as crosswalk attributes with their own valid-time history. Switching or adding an identifier scheme then becomes a data migration, not a rewrite of every join in the building.
+
+### Specification for AI Implementation (bitemporal master)
+
+**What ROBO built from the vague version.** Asked for "a security master with history," ROBO added an `updated_at` column and overwrote rows. It had history in the sense that a shredder has history. The spec: two time axes, append-only knowledge, an exclusion check, and three tests that encode the Serta questions above.
+
+```python
+# block 2 of 5: bitemporal security master; append-only on the knowledge axis.
+OPEN = pd.Timestamp.max
+
+
+class BitemporalMaster:
+    COLS = ["instrument_key", "attr", "value", "valid_from", "valid_to", "known_from", "known_to"]
+
+    def __init__(self):
+        self.rows = []
+        self._last_known = pd.Timestamp.min
+
+    def assert_fact(self, key, attr, value, valid_from, valid_to=OPEN, known_at=None):
+        """As of knowledge time known_at, attr of key had value over [valid_from, valid_to).
+        Currently believed rows that overlap are closed (known_to = known_at) and their
+        non-overlapping remainders re-inserted; nothing is edited or deleted."""
+        kt, vf, vt = pd.Timestamp(known_at), pd.Timestamp(valid_from), pd.Timestamp(valid_to)
+        if not vf < vt:
+            raise ValueError("empty valid interval")
+        if kt < self._last_known:
+            raise ValueError("knowledge time must be non-decreasing (append-only axis)")
+        self._last_known = kt
+        new_rows = []
+        for r in self.rows:
+            if r["instrument_key"] != key or r["attr"] != attr or r["known_to"] != OPEN:
+                continue
+            if r["valid_to"] <= vf or r["valid_from"] >= vt:
+                continue
+            r["known_to"] = kt
+            if r["valid_from"] < vf:
+                new_rows.append(dict(r, valid_to=vf, known_from=kt, known_to=OPEN))
+            if r["valid_to"] > vt:
+                new_rows.append(dict(r, valid_from=vt, known_from=kt, known_to=OPEN))
+        new_rows.append(dict(instrument_key=key, attr=attr, value=value, valid_from=vf,
+                             valid_to=vt, known_from=kt, known_to=OPEN))
+        self.rows.extend(new_rows)
+
+    def as_of(self, key, attr, valid_t, known_t):
+        tv, tk = pd.Timestamp(valid_t), pd.Timestamp(known_t)
+        hits = [r["value"] for r in self.rows
+                if r["instrument_key"] == key and r["attr"] == attr
+                and r["valid_from"] <= tv < r["valid_to"] and r["known_from"] <= tk < r["known_to"]]
+        if len(hits) > 1:
+            raise RuntimeError(f"exclusion violated for {key}.{attr}")
+        return hits[0] if hits else None
+
+    def snapshot(self, known_t):
+        tk = pd.Timestamp(known_t)
+        live = [r for r in self.rows if r["known_from"] <= tk < r["known_to"]]
+        df = pd.DataFrame(live, columns=self.COLS).astype({"value": object})
+        return df.sort_values(["instrument_key", "attr", "valid_from"]).reset_index(drop=True)
+
+    def check_exclusion(self):
+        def live(r):
+            return r["known_from"] < r["known_to"]
+        for i, a in enumerate(self.rows):
+            for b in self.rows[i + 1:]:
+                if (a["instrument_key"], a["attr"]) != (b["instrument_key"], b["attr"]):
+                    continue
+                if (live(a) and live(b) and a["valid_from"] < b["valid_to"] and b["valid_from"] < a["valid_to"]
+                        and a["known_from"] < b["known_to"] and b["known_from"] < a["known_to"]):
+                    return False
+        return True
+
+
+sm = BitemporalMaster()
+ONBOARD = "2016-11-01"          # illustrative onboarding date for the 2016 facilities
+CLOSE_KNOWN = "2020-06-22 18:00"  # illustrative: when the desk's event feed confirmed the closing
+EFF = "2020-06-22"
+sm.assert_fact("INS-SERTA-TL1-2016", "ranking", "first_lien_pari", ONBOARD, known_at=ONBOARD)
+sm.assert_fact("INS-SERTA-TL2-2016", "ranking", "second_lien", ONBOARD, known_at=ONBOARD)
+sm.assert_fact("INS-SERTA-FO-2020", "ranking", "super_priority_first_out", EFF, known_at=CLOSE_KNOWN)
+sm.assert_fact("INS-SERTA-SO-2020", "ranking", "super_priority_second_out", EFF, known_at=CLOSE_KNOWN)
+sm.assert_fact("INS-SERTA-TL1-2016", "ranking", "first_lien_behind_super_priority", EFF, known_at=CLOSE_KNOWN)
+sm.assert_fact("INS-SERTA-TL2-2016", "ranking", "second_lien_behind_super_priority", EFF, known_at=CLOSE_KNOWN)
+sm.assert_fact("INS-SERTA-FO-2020", "face_usd_mm_approx", 200.0, EFF, known_at=CLOSE_KNOWN)
+sm.assert_fact("INS-SERTA-SO-2020", "face_usd_mm_approx", 875.0, EFF, known_at=CLOSE_KNOWN)
+sm.assert_fact("INS-SERTA-TL1-2016", "omp_litigation", "pending", EFF, known_at=CLOSE_KNOWN)
+
+# The three Serta questions.
+assert sm.as_of("INS-SERTA-TL1-2016", "ranking", "2020-06-23", "2030-01-01") == "first_lien_behind_super_priority"
+assert sm.as_of("INS-SERTA-TL1-2016", "ranking", "2020-06-23", "2020-06-22 00:00") == "first_lien_pari"
+assert sm.as_of("INS-SERTA-SO-2020", "ranking", "2020-06-23", "2020-06-22 00:00") is None
+assert sm.as_of("INS-SERTA-TL1-2016", "ranking", "2019-06-01", "2030-01-01") == "first_lien_pari"
+
+# The past is immutable: a later fact (Fifth Circuit, 2024-12-31) leaves the 2020 snapshot unchanged.
+snap_2020 = sm.snapshot("2020-06-24")
+sm.assert_fact("INS-SERTA-TL1-2016", "omp_litigation", "5th_cir_not_open_market_purchase",
+               "2024-12-31", known_at="2025-01-02")
+assert snap_2020.equals(sm.snapshot("2020-06-24"))
+assert sm.as_of("INS-SERTA-TL1-2016", "omp_litigation", "2025-06-01", "2025-06-01") == "5th_cir_not_open_market_purchase"
+assert sm.as_of("INS-SERTA-TL1-2016", "omp_litigation", "2023-06-01", "2025-06-01") == "pending"
+assert sm.check_exclusion()
+try:
+    sm.assert_fact("INS-SERTA-TL1-2016", "ranking", "rewrite_history", "2016-11-01", known_at="2019-01-01")
+    raise AssertionError("writing into the past of the knowledge axis must fail")
+except ValueError:
+    pass
+```
+
+## 27.4 Pricing, Risk, OMS/EMS, and the Order State Machine
+
+Theo's RSSG instinct about waterfalls turns out to be the right instinct about orders. In a waterfall every dollar ends in a bucket, and "unallocated" is a bucket, not a rounding error. In an order management system every unit of target exposure ends in a state, and "unfilled" is a state with risk attached.
+
+> **[SOURCE EXTRACTION]** *Man_Revolutions_in_Credit_Trading_2023 p.4:* "Two of the key challenges for such systematic techniques are having a high certainty of execution and having a relatively good sense of the likely transaction costs"
+>
+> **Annotation.** Our analysis: read this as two service-level agreements the architecture owes the strategy. *Certainty of execution* is the fill-probability service plus an order state machine that reports partial and failed fills back to the optimiser in time to matter. *A good sense of transaction costs* is the cost model plus the provenance rule of §27.2, without which the cost model is trained on runs and composites. A modern desk adds a third SLA the 2023 text does not need to state: *bounded exposure*, meaning that no firm quote stays live longer than the trigger table allows (§27.6).
+
+### 27.4.1 The reference architecture
+
+Man's own process description (Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.7) is a usable reference design, which we redraw with the desk's components:
+
+```text
+PM / signal research (slow clock: days)
+  -> portfolio optimiser with TC model and fill-probability inputs
+  -> central trading desk (humans + auto-execution rules)
+  -> OMS: orders, allocations, compliance, state machine        <- risk engine (positions, DTS, limits)
+  -> EMS / venue gateways: RFQ, all-to-all, portfolio trade, principal, agency, streaming
+  -> fills, rejects, expiries, done-aways  ->  back to OMS, risk, optimiser, markout store
+```
+
+> **[SOURCE EXTRACTION]** *Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.7:* "whereas you can model the concept of probability of fill in quant equity strategies with fairly simple heuristics for fill rates, the concept is decidedly far more challenging in credit given the time varying nature of liquidity and a fairly large illiquid tail."
+>
+> **Annotation.** Our analysis: this is why the fill-probability service is a first-class component rather than a constant in the optimiser. It must be conditional on bond (liquidity score, Chapter 18's win curve), size, venue, protocol and *regime*, because "time varying" means the March 2020 fill curve is a different function, not the same function with noise. The modern departure is the data: a desk's own RFQ log (who was asked, who answered, at what level, how far from cover) is now rich enough to fit this service directly, and it is the one dataset nobody can sell you.
+
+### 27.4.2 The order state machine
+
+| State | Entered when | Leaves to | Risk consequence |
+| :--- | :--- | :--- | :--- |
+| `NEW` | optimiser emits a child order | `ROUTED`, `REJECTED` | none yet; reserved against limits |
+| `ROUTED` | EMS sends RFQ or order to venue(s) | `QUOTED`, `EXPIRED`, `REJECTED` | information leakage clock starts |
+| `QUOTED` | at least one dealer response is live | `FILLED`, `PARTIAL`, `DONE_AWAY`, `EXPIRED`, `CANCELLED` | the client side holds a short-dated option on the responses |
+| `PARTIAL` | some size executed | `FILLED`, `EXPIRED_PARTIAL`, `CANCELLED` | residual exposure is now *unhedged intent* |
+| terminal: `FILLED`, `EXPIRED`, `EXPIRED_PARTIAL`, `DONE_AWAY`, `REJECTED`, `CANCELLED` | as named | none | every non-`FILLED` terminal emits a residual-risk event |
+
+Two rules make this table safe. First, every transition is an event with `known_at`, written to the same bitemporal store as prices, so the optimiser's view of "what we own and what we tried to own" is reproducible in replay (§27.8). Second, a terminal state other than `FILLED` is not a quiet failure. It is a **risk event** that updates the risk engine's expected position and re-invokes the optimiser, because the portfolio it just optimised no longer exists.
+
+> **[SOURCE EXTRACTION]** *Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.19:* "when probability of fill is not 100%, and portfolio optimisers choose certain bonds, the solution the optimiser comes up with is no longer really optimal if that bond is not available for purchase. In addition, unfilled orders can lead to unintended and potentially unmodelled risk exposures."
+>
+> **Annotation.** Our analysis: the second sentence is the architectural one. If a 40-bond rebalance fills 31 bonds, the book holds the sells of the nine that failed and none of their replacements. That position nobody chose, typically short spread duration in exactly the names that were hardest to buy. The fix is a closed loop: residual-risk events re-enter the optimiser within one quote-clock cycle, with the failed bonds' fill probabilities marked down. The departure from 2022 is portfolio trading (Chapter 19), where the whole basket fills or fails at once and the residual risk is binary, which makes the loop easier to write and the failure larger.
+
+**FIX for bonds, the fields that bite** *(general knowledge; confirm against each venue's rules of engagement)*. `SecurityIDSource` (tag 22) says which identifier `SecurityID` (48) is, so the gateway must translate surrogate keys through the crosswalk of §27.3 on every message. `SecurityType` (167) = `CORP`. `PriceType` (423) distinguishes percentage of par (1), spread (6) and yield (9), and a spread quote also needs its benchmark (`BenchmarkSecurityID`, 699). `SettlDate` (64) must reflect T+1 for US corporates since May 2024 (Chapter 22). The classic credit gateway bug is a spread quote interpreted as a price. A bid of "105" meant as a spread of 105 bp over the 10-year, read as a price of 105 points, is a 10-point gift on a bond trading near 95. That is a fat finger made by a parser.
+
+**Pre-trade checks live in the gateway.** The first tier of the kill-switch hierarchy (§27.7) sits here, before any message leaves the building. SEC Rule 15c3-5 (Release No. 34-63241, 2010-11-03) requires controls "reasonably designed to prevent the entry of orders that exceed appropriate pre-set credit or capital thresholds, or that appear to be erroneous," and requires that they be "under the direct and exclusive control of the broker or dealer with market access." In credit terms: price collars against composite *and* against the desk's own last fill, notional and DV01 caps per order and per minute, a `PriceType` sanity check (a "price" below 10 or above 200 is probably a spread), and a duplicate-order detector. Mags notes that in 1997 the pre-trade check was a senior trader saying "you want to do *what*?" loud enough for the floor to hear. It had excellent recall and terrible uptime.
