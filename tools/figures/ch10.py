@@ -216,9 +216,7 @@ def fig_dts_vol_scaling():
     b.plot(t, s["dts_notional"], color=C_SPREAD, linewidth=LW, zorder=3)
     b.plot(t, s["ewma_notional"], color=C_RETURN, linewidth=LW, zorder=3)
     ev = np.datetime64("2025-04-02")
-    b.axvline(ev, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
-    b.annotate("2 Apr: OAS 3.42%", (ev, 0.5), xytext=(-4, 0), textcoords="offset points", ha="right", va="bottom",
-               fontsize=8, color=INK_2)
+    mark_event(b, ev, "2 Apr: OAS 3.42%", y_frac=0.97)   # label to the right of the line, in the empty top band
     ev2 = np.datetime64("2025-04-07")
     row7 = s[s["date"] == "2025-04-07"].iloc[0]
     b.plot([ev2], [row7["dts_notional"]], "o", color=C_SPREAD, markersize=5, zorder=5)
@@ -271,8 +269,8 @@ def fig_trend_smile():
     zz = np.linspace(-1.6, 1.6, 60)
     a.plot(zz, math.sqrt(2 / math.pi) * 0.25 / math.sqrt(1 - 0.25 ** 2) * zz ** 2, color=INK, linewidth=1.0,
            linestyle=(0, (1, 2)), zorder=4)
-    a.text(0, 3.45, "dashed: straddle limit $|r|$\ndotted: small-move parabola, $\\rho$ = 0.25", ha="center",
-           va="top", fontsize=7.8, color=INK_2)
+    a.text(0, 3.45, "dashed: straddle limit $|r|$\ndotted: small-move parabola\nfor $\\rho$ = 0.25", ha="center",
+           va="top", fontsize=7.8, color=INK_2, linespacing=1.25)
     a.set_xlim(-3.5, 4.5)
     a.set_ylim(-0.35, 3.5)
     a.set_xlabel("Next-period market return $r_{t+1}$ ($\\sigma_r$ units)")
@@ -301,8 +299,8 @@ def fig_trend_smile():
                markeredgewidth=0)
     b.text(3.2, 3.45, "right call: pays $+|r|$", ha="right", va="bottom", fontsize=8, color=INK_2)
     b.text(3.2, -3.45, "wrong call: pays $-|r|$", ha="right", va="top", fontsize=8, color=INK_2)
-    b.text(-2.2, 0.0, "bin means\n$\\pm$ 1 s.e.\n(8 bins)", ha="center", va="center", fontsize=8, color=INK_2)
-    b.text(2.55, 0.8, "closed form,\n$\\rho$ = 0.25", ha="center", va="center", fontsize=8, color=INK_2)
+    b.text(-2.45, -0.4, "bin means\n$\\pm$ 1 s.e.\n(8 bins)", ha="center", va="center", fontsize=8, color=INK_2)
+    b.text(3.3, -0.1, "closed form,\n$\\rho$ = 0.25", ha="right", va="center", fontsize=8, color=INK_2)
     b.set_xlim(-3.4, 3.4)
     b.set_ylim(-3.9, 3.9)
     b.set_xlabel("Next-period market return $r_{t+1}$ ($\\sigma_r$ units)")

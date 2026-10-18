@@ -93,26 +93,6 @@
    }
   },
   {
-   "name": "part-IV-b",
-   "task": "wholtbqen",
-   "runId": "wf_cc2956d9-745",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "16_ch16_post_reorg_equities_and_claims",
-     "15_ch15_event_driven_mna_and_coc"
-    ],
-    "stages": [
-     "figures",
-     "figcheck",
-     "brief",
-     "revise",
-     "verify"
-    ]
-   }
-  },
-  {
    "name": "part-III-a",
    "task": "wr7mis8ev",
    "runId": "wf_b92bbb19-5ce",
