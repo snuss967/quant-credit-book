@@ -1,6 +1,6 @@
 ## Z.13 Chapter 13: Codifying Liability Management Transactions (LMTs)
 
-Five exercises: Serta with the liens pulled apart, a three-member co-op's veto, a drop-down priced as a forward, Trinseo rebuilt on the clearing engine, and ROBO's empty portfolio. Every number below was recomputed in Python, using the chapter's own Listings 13.1 and 13.2 (Appendix F) wherever an exercise builds on them; we ran the listings first, and they print what the chapter says (70 events, PRS 0.903, $\mathbb{E}[\Delta R] = 0.220$, EPL 4.57 points). Where we had to choose an input, the solution says so. There are two notes for the editor, in Z.13.1 and Z.13.4. Write your answer down before you read ours.
+Five exercises: Serta with the liens pulled apart, a three-member co-op's veto, a drop-down priced as a forward, Trinseo rebuilt on the clearing engine, and ROBO's empty portfolio. Every number below was recomputed in Python, using the chapter's own Listings 13.1 and 13.2 (Appendix F) wherever an exercise builds on them; we ran all three listings first, and they print what the chapter says (70 events, PRS 0.903, $\mathbb{E}[\Delta R] = 0.220$, EPL 4.57 points). Where we had to choose an input, the solution says so. There are two notes for the editor, in Z.13.1 and Z.13.4. Write your answer down before you read ours.
 
 **Z.13.1: Unblend Serta**
 
@@ -83,3 +83,26 @@ NOTE (for the editor): The whiteboard's arithmetic puts the guarantee in OpCo's 
 
 **If you got this wrong, read:** §13.7, "The closed form" and "Pari-plus," then §13.7.1 from "Where's the revolver?" to Ines's count-by-count pricing; "Ways This Blows Up" items (2) and (5).
 
+**Z.13.5: ROBO minimizes priming loss**
+
+**Answer:** In one sentence: expected priming loss is minimized at zero by owning nothing, and ROBO's filter, unanimity for every amendment, matches no syndicated loan, because every credit agreement lets Required Lenders amend whatever is not a sacred right, so the feasible set was empty and cash was the exact optimum. A better objective, with weights $w_i$ in market value as a fraction of NAV and $w^0$ the current book, is
+
+$$
+\min_{w}\ \sum_i w_i\,e_i, \qquad e_i = 10^4 \times \frac{100\,\text{EPL}_i}{P_i}\quad [\text{bp of market value, 12-month horizon}],
+$$
+
+subject to
+
+$$
+\sum_i w_i = 1, \qquad 0 \le w_i \le 0.02, \qquad \sum_i w_i\,c_i \ \ge\ 450\ \text{bp a year}, \qquad \tfrac12\sum_i \lvert w_i - w^0_i\rvert \ \le\ 0.10\ \text{of NAV a month}.
+$$
+
+Here $c_i$ is loan $i$'s carry (coupon over the funding rate, divided by price) in bp of market value a year. The 2% name cap, the 450 bp floor and the 10% one-way turnover limit are illustrative desk settings. The carry floor stops the optimizer from buying a book that is almost cash; the turnover limit stops it from trading the whole book every time the score moves.
+
+**How:** The original objective has a trivial minimizer because nothing in it rewards holding risk; every constraint you add has to supply that reward. The carry floor does it directly. The equivalent penalized form is $\max_w \sum_i w_i (c_i - \lambda e_i)$, with $\lambda$ the shadow price of the floor. Units are the second fix. EPL comes out of §13.8 in fraction of par over a 12-month horizon, while carry is quoted per year on market value. Theo's random-holder Larkspur EPL of 0.033 is 3.3 points of par, but at a price of 78 it is $3.3/78 = 4.2\%$, or **423 bp of market value**, and that is the number to set against a yield. The turnover limit belongs there because the PRS is a ranking that moves with prices (Ines's "mirror"). Without it, every three-point drop in a loan's price becomes a trade.
+
+**The trap:** Fixing the empty book with "be fully invested" alone. ROBO then buys the loans with the lowest EPL, which are the highest-priced, tightest names with every blocker. That book has almost no priming loss and almost no carry: an empty portfolio with a coupon attached. The units slip is the quieter trap. If you set EPL in points of par against carry in bp of market value, every discount loan looks about a fifth safer than it is at 78, and more than that further down.
+
+**If you got this wrong, read:** §13.8, "What the desk prices" and "The Monday printout"; §13.2, Family 2 (one $\theta$ per action, and the lowest reachable one is the trapdoor); the ROBO vignette that opens "Specification for AI Implementation," where the vague version returned the whole index, the mirror image of this empty book.
+
+<!-- STATUS: COMPLETE -->
