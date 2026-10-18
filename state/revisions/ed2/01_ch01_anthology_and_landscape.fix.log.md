@@ -8,7 +8,7 @@
 
 ## Items
 
-- [ ] P1 · §1.8.3, line 655, first paragraph · Delete paragraph 1; keep paragraphs 2–3; retitle "Case Study B: Post-mortem of Act 1 (LQD at a 5% discount)".
+- [x] P1 · §1.8.3, line 655, first paragraph · Delete paragraph 1; keep paragraphs 2–3; retitle "Case Study B: Post-mortem of Act 1 (LQD at a 5% discount)". — *Paragraph cut, retitled; "NAV was mispriced" line kept; SMCCF date now points to Act 2.*
 - [ ] P1 · §1.8.2, lines 647–649, "What happened, and the answer" · Cut SMCCF 23 Mar / rebalance date / HY outflow sentences; keep April extension, "forced-seller event became a forced-buyer event by announcement", systematic-flag paragraph, IDO line.
 - [ ] P1 · §1.2, lines 91–115, six-chair walk · Keep chairs 1, 3, 6 as Halvorsen counterfactuals; drop chairs 2, 4, 5 from the walk; keep Ines's "Laws are what you call observations that have cost you money twice."
 - [ ] P1 · §1.9.1, line 748, "The market maker's version" · Cut to last two sentences (Ch 3 / Ch 13 pointers, hand-history loop), or give them to Ines as the scene's close.

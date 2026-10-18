@@ -4,6 +4,8 @@
 
 1. **Budget the growth at 1.6–1.9×, not 2.5×.** Ch 1 went 9.9k → 26.8k words and says most things twice. A new scene must retire the old paragraphs that said the same thing. The brief's "Must not change" list protects *topics, numbered equations, Source Extractions with page numbers, fact-checked Trend Watch wording, exercises and URLs*. It does not protect ordinary paragraphs. Say so in every brief.
 
+> **Orchestrator ruling on lesson 1 (2026-10-18, after the Part IV lessons passes).** The 1.6–1.9× growth band measures *duplication*, not length. Once every fact is told once, a chapter may stay above the band. Never cut a single-telling scene, a sourced case, or a protected item just to hit the number: the user asked for longer stories and for nothing to be removed. Ch 13 (2.34×), Ch 14 (2.79×), Ch 15 (2.55×) and Ch 16 (1.99×) are accepted as they stand.
+
 2. **One telling per fact.** Before writing a scene, list the numbers and claims it will use and grep the section for them. Whichever telling survives (usually the scene), the other becomes a one-line pointer. The brief should name the paragraph that dies when the scene is born ("Act 1 replaces §1.8.3 paragraph 1").
 
 3. **How to turn a rule into a scene (120–250 words):** the day the rule was broken → who noticed → what it cost → the sentence the desk says now. Ch 6's `sigma_frequency` vignette and Ch 1's red build are the models. The rule itself is then stated once, in the Finder table (lesson 11), not in a paragraph after the scene.

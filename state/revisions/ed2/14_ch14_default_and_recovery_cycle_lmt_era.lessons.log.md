@@ -86,3 +86,28 @@
 - [x] P2. *Found during the fixes:* Ines's cold-open list ("I want... I want...", eight wants, ~230 words) is a syllabus in costume (quality read (b)1); and "counts, not shares" is told three times (umbrella box, §14.7.1 body after the binomial equation, `binom_logf` paragraph). Cut the list to three questions; the body and listing point to the umbrellas. *Done: Ines asks three questions; counts-vs-shares told once, in umbrellas.*
 
 ## Fixes
+
+All audit items ticked above, each with its note.
+
+## After
+
+`python3 tools/prescriptiveness.py --pre 9ac1c37... book_src/14_ch14_default_and_recovery_cycle_lmt_era.md`:
+
+| ver | words | bullets% | modal | imper | rule | dialog | Math Gently | Seat |
+| :-- | --: | --: | --: | --: | --: | --: | --: | --: |
+| pre (9ac1c37) | 11,499 | 21.8 | 2.8 | 1.2 | 2.0 | 8.6 | 0 | 0 |
+| before this pass | 34,445 | 6.4 | 3.3 | 1.0 | 1.5 | 11.1 | 9 | 4 |
+| after this pass | 32,126 | 6.5 | 3.1 | 0.7 | 1.4 | 11.6 | 4 | 4 |
+
+- **Growth:** 3.00× down to 2.79× (`wc -w` 35,203 down to 33,269). Still above the 1.6–1.9× budget. What is left is mostly single tellings in scenes lesson 16 keeps (cold open, Lumen 2,555 words, Serta about 3,100, Optimum, Robertshaw, the risk committee, Del Monte). Reaching 1.9× (about 21,850 words) means retiring whole scenes, which is the brief writer's call, not this pass's. The cheapest next candidates are the Del Monte refresh (about 790 words, whose judgment the Finder row now carries), the ARCC direct-lender seat (about 300) and Act I's options paragraph.
+- **Boxes:** Math, Gently went from 9 to 4 (odometer, register, lightbulb, umbrellas), with gaps of at least 1,200 words between them. No run of more than two boxed elements remains (checked by script). Seats stay at 4.
+- **Protected text checked against the pre-pass state:** 10 Source Extractions, 3 Trend Watches (wording changed only at E1/E2), 5 figures, 5 Appendix F links, 6 exercises, 33 URLs (all identical) and 42 `$$` delimiters. No numbered equations exist in this chapter. No code block was added (the one text diagram in §14.3.1 was already there).
+
+## Open items (for `state/`)
+
+- *STG Logistics* (New York, integrated reading of the Wesco steps): the decision date is still unverified, and the chapter now gives none (E3).
+- Del Monte's 2024 financing (reported as August 2024) and its terms stay hedged by design, as the verify log decided.
+- Ch 13 still prints co-op counter values 2 (Larkspur) and 3 (Lumen). Canon C6 wants 1, 2, 2. Ch 14 now follows canon ("two, plus forty-five"), so Ch 13 needs the matching fix.
+- Exercise 2 asks for η at k = 1.0 and 1.2, which the §14.3.2 table already prints (pre-existing). A later pass could change the exercise's shapes to 0.8, 1.1, 1.5 and 2.0.
+
+<!-- STATUS: COMPLETE -->

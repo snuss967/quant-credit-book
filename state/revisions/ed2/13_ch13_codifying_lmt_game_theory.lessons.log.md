@@ -101,3 +101,28 @@ Count: 14 Math, Gently (L101, 113, 254, 270, 400, 414, 436, 452, 516, 534, 671, 
 
 ## Fix notes
 
+
+Every edit was made with the Edit tool or a single-line paragraph replacement keyed by a unique prefix, with a re-grep first. The protected-text check runs against commit 796815d (the pre-pass text; autosnaps were committing mid-pass). It found all 8 Source Extraction quotes, 2 Trend Watches, 2 Docket Diaries, 5 exercises, 5 figures and 28 display equations byte-identical, every URL and all 14 page citations present, the Appendix F links #code-13-1/2/3 present (now also in the Finder), and no heading lost. The only box text changed was one sentence of the *Separation* Ways box (B16). Pandoc check: no inline `$$`, and `$` is balanced on every prose line. No code blocks were added and no build was run. Side files: `state/research/open_items_ch13_ed2.md` (new) and `state/cast_bible.md` (G7).
+
+## (a) Metric, after
+
+`python3 tools/prescriptiveness.py --pre 9ac1c379053d9d0254e9d524d9a40efdec4a2c71 book_src/13_ch13_codifying_lmt_game_theory.md`
+
+| ver | words | bullets% | modal | imper | rule | dialog | mathgently | seat |
+| :-- | --: | --: | --: | --: | --: | --: | --: | --: |
+| pre (Ed 1) | 12,505 | 8.0 | 2.5 | 1.4 | 1.0 | 10.4 | 0 | 0 |
+| before this pass | 32,426 | 3.9 | 2.3 | 1.0 | 1.2 | 10.8 | 14 | 3 |
+| after this pass | 29,217 | 4.3 | 2.3 | 1.0 | 1.3 | 11.2 | 7 | 3 |
+
+Growth went from 2.59× to **2.34×** (−3,209 words on the tool's count; `wc -w` 31,085). That is still above the 1.6–1.9× target: reaching 1.9× needs about 5,450 more words out. Every duplicate this audit found has been merged. What remains is single-telling sourced material, so the next cuts are compressions of topics, not merges, and need an owner's decision:
+
+- the three View From Another Seat boxes (Pluralsight, CLO, opportunistic fund), about 1,000 words;
+- the two Docket Diaries, about 600;
+- the Saks and forum paragraphs of §13.9, about 650;
+- the listing-description prose of §13.8, about 1,300;
+- the Optimum scene in §13.5, about 450;
+- the Serta unblending paragraph and beats IV–V, about 900.
+
+Bullets% rose only because the word count fell; the Debrief bullets are kept by rule. Dialogue density rose from 10.8 to 11.2. Math, Gently went from 14 to 7 (cap 10, at most one per 1,200 words, none adjacent), and no run of boxed elements is longer than two. The RV beat is not applicable: `state/rv_thread.md` is absent.
+
+<!-- STATUS: COMPLETE -->
