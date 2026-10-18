@@ -1,0 +1,100 @@
+[
+  {
+    "kind": "papers",
+    "slug": "factor_replication_crisis_and_bond_data",
+    "title": "The corporate bond factor replication crisis and the open bond data pipeline",
+    "scope": "Dickerson-Robotti-Rossetti 2026 (SSRN 6088966): the 108-signal audit tables, which 26 of 432 specifications survive BH-FDR, the momentum winsorization result; Dickerson-Mueller-Robotti JFE 2023 and the BBW retraction; Open Source Bond Asset Pricing documentation (filters, duration-matched Treasury returns per van Binsbergen-Nozawa-Schwert, month-begin returns); Dick-Nielsen cleaning filters; PyBondLab. Return the exact tables and definitions a writer needs to rebuild the panel and to say which momentum and value constructions survive.",
+    "feeds": ["09_ch09b_the_bond_data_problem_and_the_replication_crisis.md", "07_ch07_ml_on_small_sample_credit_data.md", "10_ch10_trend_and_time_series_momentum.md", "91_appB_data_and_api_atlas.md"]
+  },
+  {
+    "kind": "case",
+    "slug": "lmt_autopsies_us_2020_2026",
+    "title": "US LMT autopsies for the Autopsy Room: Incora/Wesco, Boardriders, Envision, Robertshaw, Lumen, Saks Global, Revlon BrandCo, Trinseo",
+    "scope": "For each case: dated timeline (announcement, structure, participating vs excluded holders, litigation, filing, outcome), debt quantum, cooperation-agreement coverage share where one existed, loan or bond prices one week before and after each milestone (TRACE/LCD), recoveries by class, and the PRS features that would have flagged it. Incora: Judge Isgur's holdings and the final settlement. Lumen: TSA terms and co-op share. Saks: Dec 2024 issue terms through the 2026 outcome. Revlon: BrandCo structure and the Citi $900mm wire (S.D.N.Y. 2021, 2d Cir. Sep 2022) for Ch 27. Primary sources: dockets, 8-Ks, opinions.",
+    "feeds": ["13_ch13b_the_autopsy_room_lmt_docket_diaries.md", "13_ch13_codifying_lmt_game_theory.md", "14_ch14_default_and_recovery_cycle_lmt_era.md", "27_ch27_system_architecture_and_asics.md"]
+  },
+  {
+    "kind": "case",
+    "slug": "lmt_private_and_european_2024_2026",
+    "title": "Private-credit and European LMEs: Pluralsight, Zayo, Altice France, Thames Water, Atos, Fossil (Part 26A), Wolfspeed",
+    "scope": "Pluralsight 2024: IP drop-down structure, sponsor and lender identities as public, the date lenders took control, BDC 10-Q markdown path by quarter. Zayo 2025 and Altice France 2024-25: debt addressed, co-op shares, final terms, non-participant treatment. Thames Water 2025: Class A/B structure, sanctioned plan, Court of Appeal decision, outcome. Atos (sauvegarde acceleree) and Fossil (Part 26A, 31 Mar 2026) as forum exhibits. Wolfspeed 2025: filing date, prepackaged plan terms, convertible treatment, equity and CDS behavior. Dated, primary-sourced.",
+    "feeds": ["13_ch13b_the_autopsy_room_lmt_docket_diaries.md", "17_ch17b_marking_the_unmarked_private_credit_lmes.md", "23_ch23_cross_asset_convexity_and_vol_surface.md", "14_ch14_default_and_recovery_cycle_lmt_era.md"]
+  },
+  {
+    "kind": "case",
+    "slug": "courts_as_regime_variables",
+    "title": "Rulings as dated regime switches: Serta (5th Cir. 31 Dec 2024, remand damages Jul 2026), Mitel (NY App. Div. 31 Dec 2024), Incora, STG Logistics, ConvergeOne appeal, Lions Gate/Starz, Purdue (SCOTUS Jun 2024), Thames Water CoA",
+    "scope": "One paragraph of holding per ruling, the contract token it turned on (open market purchase vs purchase; integrated vs step-by-step; third-party releases), the date, the forum, rehearing or remand history, two or three subsequent rulings citing each, and three 2025-26 plans restructured after Purdue. Deliver as a table a Hamilton filter can consume: date, forum, doctrine, direction of the shift for excluded holders. Confirm the Optimum and Selecta antitrust complaint docket numbers and filing dates.",
+    "feeds": ["13_ch13b_the_autopsy_room_lmt_docket_diaries.md", "14_ch14_default_and_recovery_cycle_lmt_era.md", "16_ch16_post_reorg_equities_and_claims.md", "92_appC_trend_tracker.md"]
+  },
+  {
+    "kind": "trend",
+    "slug": "re_default_and_recovery_dataset",
+    "title": "A hand-built LME-to-outcome dataset, 2016-2026, with the published moments it must match",
+    "scope": "Every US LME (uptier, drop-down, exchange, A&E with impairment) 2016-2026 with announcement date, type, participation share, and outcome (cured, re-default date, hard default date, Chapter 11 date) from public sources (Octus/Reorg public pieces, 8-Ks, dockets, rating-agency releases). Published moments to calibrate against: Moody's 1,173-borrower soft-credit-event study (1 in 4 hard default; >70% within 24 months; <0.5pp/yr after year five), the 46% re-default of 2023 DEs, Fitch 2024-emergence first-lien recoveries (23% with prior LME vs 53% without), Octus's 11 non-pro-rata uptiers value-transfer table, S&P and Moody's DE shares 2022-2026 by quarter. Mark every row with its source and CHECK where secondary.",
+    "feeds": ["14_ch14_default_and_recovery_cycle_lmt_era.md", "13_ch13b_the_autopsy_room_lmt_docket_diaries.md", "11_ch11_defensive_systematic_high_yield.md", "05_ch05_credit_probability_distributions.md"]
+  },
+  {
+    "kind": "trend",
+    "slug": "private_credit_marks_and_redemptions_2025_2026",
+    "title": "Marking the unmarked: BDC non-accruals, redemption queues, listed-vs-private price gaps, 2024-2026",
+    "scope": "By quarter: non-accrual rates at cost and fair value for the ten largest BDCs; redemption-request percentages and amounts honored for the five largest non-traded BDCs and the largest interval funds (Schedule TO / 8-K); the OBDC-OBDC II merger collapse timeline and the 'same loans, three prices' data; First Brands, Tricolor and MFS dates and headline exposures; Q1 2026 as the first net-outflow quarter; Fed Z.1 private-credit series codes (Oct 2026); Apollo daily pricing, ICE private-loan IDs, PRIV holdings and the SEC letter; PIK and A&E as hidden defaults (Moody's 4.0% vs 5.8% adjusted); public LL software spreads vs private marks by month.",
+    "feeds": ["17_ch17b_marking_the_unmarked_private_credit_lmes.md", "17_ch17_private_credit_public_private_convergence.md", "12_ch12_multi_asset_credit_allocation.md", "91_appB_data_and_api_atlas.md", "92_appC_trend_tracker.md"]
+  },
+  {
+    "kind": "trend",
+    "slug": "listed_credit_futures_and_index_microstructure",
+    "title": "Listed credit futures (CME, Cboe iBoxx IBHY/IBIG, ICE, Eurex) and CDX/iTraxx index microstructure, 2021-2026",
+    "scope": "Launch dates, contract specs and hedge-ratio methodology for the duration-hedged family; monthly volumes and open interest 2023-2026 and block-trade growth (Cboe >$1bn/month Jul-Aug 2026); CDX roll windows carrying 25-50% of quarterly notional, LCH's record day, index skew vs intrinsic, series basis, swaption volumes vs index (Clarus); dealer price discrimination (Collin-Dufresne-Junge-Trolle); what the contracts do to the Part III trend sleeve's cost curve and to ETF-PT-futures arbitrage bands. Primary: exchange releases, CFTC COT, Clarus, ISDA/LCH data.",
+    "feeds": ["10_ch10b_credit_index_futures_and_index_microstructure.md", "08_ch08_isolating_ido_and_empirical_duration.md", "20_ch20_credit_etf_creation_redemption_arb.md", "92_appC_trend_tracker.md"]
+  },
+  {
+    "kind": "papers",
+    "slug": "rfq_quoting_frontier_2025_2026",
+    "title": "The dealer quoting frontier: hit-ratio targeting, cover prices, client tiers and effective dealer count",
+    "scope": "Barzykin-Ciceri (arXiv 2604.20406) and the quality-adjusted hit-ratio paper (arXiv 2605.30643, confirm authors): the HJB reduction, Riccati inventory curvature, the five-term quote decomposition; Fermanian-Gueant-Pu 2017 cover-price likelihood and the conservative-quotes-in-n result; Hendershott-Madhavan 2015 Table VI (dealers queried, response rates, modal counts); Hendershott et al. JF 2026 on quote presence worth 6-7 bp and trade-throughs; PLOS ONE 2026 and HSBC/IBM 2025 fill-probability benchmarks (AUC about 0.63); Kargar et al. time-to-trade. Extract equations and tables, not summaries.",
+    "feeds": ["18_ch18b_the_rfq_response_engine.md", "03_ch03_pjt_rssg_cognitive_bridge.md", "18_ch18_otc_microstructure_and_avellaneda_stoikov.md", "19_ch19_portfolio_trading_pricing_engines.md"]
+  },
+  {
+    "kind": "trend",
+    "slug": "part_v_market_structure_2026",
+    "title": "Part V market structure as of H2 2026: non-bank share, stress-day RFQ statistics, venue consolidation, rule status",
+    "scope": "Non-bank dealer share of IG and HY TRACE volume 2022-2026 (Coalition Greenwich, Citadel Securities' 14.2% block claim, HRT/Jane Street entry); RFQ response-rate and hit-rate statistics around 2-9 Apr 2025 and 27-30 Mar 2026 from MarketAxess/Tradeweb disclosures; the $89.7bn (8 Apr 2025) vs $84.7bn (30 Sep 2025) record-day definitions reconciled; ICE-MarketAxess terms and the end of monthly volume publication; duplicate affiliate prints; status as of mid-2026 of the dealer-rule vacatur, Treasury clearing deadlines, Basel III endgame re-proposal, SBSR, EU/UK tapes and T+1 2027; CDS clearing shares (ISDA Jul 2026). All with dates and primary URLs.",
+    "feeds": ["02_ch02_revolutions_in_credit_trading.md", "18_ch18b_the_rfq_response_engine.md", "22_ch22_market_structure_regulation_trends.md", "92_appC_trend_tracker.md"]
+  },
+  {
+    "kind": "case",
+    "slug": "carvana_svb_wolfspeed_capital_structure",
+    "title": "Capital-structure arbitrage pain trades: Carvana 2023 exchange and equity squeeze, SVB March 2023 holdco path, Wolfspeed 2025 one-distribution-many-strikes",
+    "scope": "Carvana: exchange terms by tranche and date (Aug-Sep 2023, PIK structure), equity path Jan-Dec 2023, bond prices before and after, public reporting on cap-arb losses. SVB: holdco note TRACE path 6-17 Mar 2023, equity and option implied vol, CDS where quoted, the Fed Barr report timeline. Wolfspeed: convert, equity, option and CDS behavior around the prepack announcement and plan terms. Deliver price tables a writer can plot.",
+    "feeds": ["23_ch23_cross_asset_convexity_and_vol_surface.md", "06_ch06_merton_and_intensity_models.md", "15_ch15_event_driven_mna_and_coc.md"]
+  },
+  {
+    "kind": "case",
+    "slug": "manufactured_credit_events",
+    "title": "Manufactured and disputed credit events: Codere 2013, Hovnanian 2018, Sears 2019 auction, Windstream 2019, Altice France Holding 2025 (300/5 no-auction), NTCE 2019 amendments",
+    "scope": "First inventory what 24_ch24 already covers (it is now 16k words) and research only the gaps: dates, the engineered or disputed trigger, the ISDA DC decision and vote, auction final prices (Windstream 29.5 from the DC results page), the Sears deliverable dispute, the Altice France 300/5 outcome and its liquidity consequence for single-name hedges, the 2019 narrowly-tailored-credit-event supplement wording, and the SNAC deliverable-obligation characteristics list against the 2014 Definitions. Primary: ISDA DC results pages, Creditex auction results, court filings.",
+    "feeds": ["24_ch24_bond_cds_basis_and_deliverables.md", "93_appD_market_plumbing_and_contract_mechanics.md", "25_ch25_nlp_pacer_and_covenant_scraping.md"]
+  },
+  {
+    "kind": "trend",
+    "slug": "insurance_capital_forced_flow",
+    "title": "The customer's regulator: NAIC CLO C-1 factors (YE2026), SVO filing-exempt discretion (Aug 2026), PBBD, private letter ratings, Solvency II, and the offshore reinsurance loop as credit demand",
+    "scope": "The adopted NAIC CLO factor schedule including the thin-tranche surcharge; SVO discretion mechanics and the first designations challenged; private-letter-rating shares of insurer holdings; the 14% to 22% / 37% to 48% private-placement migration and reserve credits reinsured 21% to 41%; Solvency II capital charges by rating and duration; how each rule maps to a dated forced-flow trigger (what sells, when, how much). Primary: NAIC meeting materials, Fed/FSOC notes, EIOPA, Z.1.",
+    "feeds": ["22_ch22_market_structure_regulation_trends.md", "17_ch17b_marking_the_unmarked_private_credit_lmes.md", "21_ch21_leveraged_loans_and_clo_microstructure.md", "92_appC_trend_tracker.md"]
+  },
+  {
+    "kind": "shelf",
+    "slug": "foundations_shelf_pages",
+    "title": "Shelf pages for the four primers: plan process and cramdown, price-yield and OAS, Greeks, the fundamental law, the Brownian-bridge correction, copulas",
+    "scope": "Using tools/pdf_search.py over /source_pdfs/ only (no web): Moyer on classes, voting, cramdown and plan process; Bohn-Stein or Schmid on lien subordination and the hazard-rate change of measure; Tuckman-style price-yield, duration, convexity and OAS derivations if on the shelf; Natenberg or Hull Greeks if on the shelf; Grinold-Kahn pages for the fundamental law so Ch 2, 4 and 28 cite one derivation; Bolder on threshold models and tail dependence; Dynkin on empirical duration regimes. Also find one citation for the Brownian-bridge first-passage correction (Beaglehole-Dybvig-Zhou). Return Book_id p.N quotations of at most 80 words each, ready for SOURCE EXTRACTION boxes.",
+    "feeds": ["04_ch04b_bond_math_for_the_desk.md", "06_ch06b_options_and_measures_for_credit.md", "07_ch07b_statistics_for_credit_panels.md", "12_ch12b_the_restructuring_process_as_a_state_machine.md", "94_appE_laws_of_the_desk.md"]
+  },
+  {
+    "kind": "trend",
+    "slug": "figure_data_series",
+    "title": "Reproducible series for the figure build and App C: FRED IDs, ICE composition, protocol shares, ETF premia",
+    "scope": "FRED series IDs and date ranges for every spread the figures plot (HY OAS, CCC OAS, BB OAS, IG OAS, HYG/LQD premium-discount from issuer data); ICE index composition by rating 2015-2026 (BB share path 37% to 54%); TRACE-reported protocol shares by quarter (PT, all-to-all, RFQ) from FINRA and platform filings; SG Trend index monthly returns; the dates behind every Trend Watch box so App C rows can be regenerated. Deliver as CSV-ready tables plus a script stub that pulls FRED with the three-year window limitation noted.",
+    "feeds": ["92_appC_trend_tracker.md", "91_appB_data_and_api_atlas.md", "08_ch08_isolating_ido_and_empirical_duration.md", "12_ch12_multi_asset_credit_allocation.md"]
+  }
+]
