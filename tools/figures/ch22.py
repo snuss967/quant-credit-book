@@ -61,7 +61,7 @@ def fig_rule_timeline():
     }
     today = D("2026-10-18")
     ax.axvspan(today, x1, color="#f1f0ec", zorder=0)
-    ax.text(today, 8.75, " Oct 2026", fontsize=7.5, color=MUTED, va="top", ha="left")
+    ax.text(today, 8.75, " Future (after Oct 2026)", fontsize=7.5, color=MUTED, va="top", ha="left")
 
     for key, (y, col, name) in lanes.items():
         ax.plot([x0, x1], [y, y], color=col, linewidth=1.2, alpha=0.55, zorder=2, solid_capstyle="butt")
@@ -75,7 +75,9 @@ def fig_rule_timeline():
         ax.axvspan(D(a), D(b), ymin=0, ymax=1, color=NEUTRAL, alpha=0.35, zorder=0.5, linewidth=0)
         ax.text(D(a) + (D(b) - D(a)) / 2, -3.45, lab, fontsize=7, color=MUTED, ha="center", va="bottom")
 
-    def ev(date, lane, text, dy, status="live", ha="left", dx=0):
+    halo = dict(boxstyle="square,pad=0.08", fc="white", ec="none", alpha=0.9)   # keeps labels clear of shaded bars
+
+    def ev(date, lane, text, dy, status="live", ha="left", dx=0, clear=True):
         y0, col, _ = lanes[lane]
         x = D(date)
         ytxt = y0 + dy
@@ -90,7 +92,7 @@ def fig_rule_timeline():
         va = "bottom" if dy > 0 else "top"
         off = (2 if ha == "left" else -2) + dx
         ax.annotate(text, (x, ytxt), xytext=(off, 0), textcoords="offset points", ha=ha, va=va,
-                    fontsize=7.4, color=INK_2, linespacing=1.15)
+                    fontsize=7.4, color=INK_2, linespacing=1.15, bbox=halo if clear else None)
 
     # Balance sheet lane
     y0, col, _ = lanes["balance"]
@@ -102,8 +104,8 @@ def fig_rule_timeline():
     ev("2023-07-27", "balance", "Jul 2023: Basel III endgame\nproposed (+16% CET1)", 0.55, "pending")
     ev("2024-09-10", "balance", "Sep 2024: re-proposal\n(+9% for G-SIBs)", -0.55, "pending", ha="right")
     ev("2026-03-19", "balance", "Mar 2026: re-proposal,\ncapital \"modestly\" lower", 1.55, "pending", ha="right")
-    ev("2026-04-01", "balance", "Apr 2026: eSLR in force\n(final Nov 2025)", -0.55, "live")
-    ev("2026-12-31", "balance", "Treasury clearing due:\ncash Dec 2026, repo Jun 2027", 0.55, "pending")
+    ev("2026-04-01", "balance", "Apr 2026: eSLR in force\n(final Nov 2025)", -0.55, "live", clear=False)
+    ev("2026-12-31", "balance", "Treasury clearing due:\ncash Dec 2026, repo Jun 2027", 0.55, "pending", clear=False)
     ax.plot([D("2026-12-31"), D("2027-06-30")], [y0, y0], color=col, linewidth=1.2, zorder=3)
     ax.plot([D("2027-06-30")], [y0], "o", markerfacecolor="white", markeredgecolor=col, markeredgewidth=1.6,
             markersize=6, zorder=4)
@@ -111,7 +113,7 @@ def fig_rule_timeline():
     # Time lane
     ev("2020-01-01", "time", "Jan 2020: Volcker 2.0\ntakes effect", 0.55, "live")
     ev("2024-05-28", "time", "May 2024: T+1\nsettlement", 0.55, "live")
-    ev("2027-10-11", "time", "Oct 2027: EU and UK\nT+1 (approx.)", 0.55, "pending")
+    ev("2027-10-11", "time", "Oct 2027: EU and UK\nT+1 (approx.)", 0.55, "pending", clear=False)
 
     # Information lane
     ev("2022-02-14", "info", "Feb 2022: SBSR\npublic CDS prints", 0.55, "live")
@@ -119,7 +121,7 @@ def fig_rule_timeline():
     ev("2024-03-25", "info", "Mar 2024: Treasury EOD\ndissemination (approx.)", 1.55, "live")
     ev("2025-12-04", "info", "Dec 2025: 1-minute rule\ndropped (placebo)", -1.55, "never", ha="right")
     ev("2026-06-08", "info", "Jun 2026: allocation\nreports (optional)", 0.55, "live", ha="right")
-    ev("2027-08-02", "info", "Aug 2027: affiliate\nindicator mandatory", 0.55, "pending", ha="left")
+    ev("2027-08-02", "info", "Aug 2027: affiliate\nindicator mandatory", 0.55, "pending", ha="left", clear=False)
 
     handles = [
         Line2D([], [], marker="o", linestyle="", color=INK_2, markersize=6, label="in force"),
@@ -151,7 +153,7 @@ def fig_regulatory_rent():
                fontsize=8, color=INK_2, va="center",
                arrowprops=dict(arrowstyle="-", color=MUTED, linewidth=0.7, shrinkA=0, shrinkB=3))
     a.text(2, 64, "Before: $\\kappa_{LR}$ = 5%", fontsize=8, color=INK_2, ha="left", va="bottom")
-    a.text(2, 40, "After: $\\kappa_{LR}$ = 3.75%", fontsize=8, color=BLUE, ha="left", va="top")
+    a.text(2, 40, "After: $\\kappa_{LR}$ = 3.75%", fontsize=8, color=INK_2, ha="left", va="top")
     a.plot([100], [rent_bp(1.0, 0.0375)], "o", color=BLUE, markeredgecolor="white", markersize=6, zorder=5)
     a.annotate("10-yr BBB, RW 100%: 126bp", (100, 126), xytext=(-8, 6), textcoords="offset points", fontsize=8,
                color=INK_2, ha="right", va="bottom")
@@ -220,6 +222,7 @@ def fig_dealer_inventory():
     ax.axhline(0, color=INK_2, linewidth=0.8, zorder=1)
     ax.set_ylim(-14, 28)
     ax.set_xlim(D("2015-01-01"), D("2028-03-01"))
+    ax.set_xticks([D(f"{y}-01-01") for y in range(2016, 2027, 2)])
     ax.set_ylabel("Net position, long minus short ($bn)")
 
     mark_event(ax, D("2020-03-23"), "Mar 2020: SMCCF,\nSLR exclusion", y_frac=0.985)
@@ -229,15 +232,15 @@ def fig_dealer_inventory():
     y17 = df.loc["2017", "total_net_mm"].mean()
     y26 = df.loc["2026", "total_net_mm"].mean()
     i26 = df.loc["2026", "ig_net_mm"].mean()
-    ax.annotate(f"2017 average: +${y17:.1f}bn", (D("2017-07-01"), y17), xytext=(0, 24),
+    ax.annotate(f"2017 average: +${y17:.1f}bn", (D("2017-07-01"), y17), xytext=(0, 44),
                 textcoords="offset points", fontsize=8, color=INK_2, ha="center",
                 arrowprops=dict(arrowstyle="-", color=MUTED, linewidth=0.7, shrinkA=0, shrinkB=2))
     ax.plot([D("2017-01-01"), D("2017-12-31")], [y17, y17], color=INK_2, linewidth=1.0, zorder=5)
     ax.plot([D("2026-01-01"), df.index[-1]], [y26, y26], color=INK_2, linewidth=1.0, zorder=5)
     ax.annotate(f"2026 to date: {y26:+.1f}bn\n(IG only {i26:+.1f}bn)".replace("+", "+$").replace("-", "-$"),
-                (D("2026-05-15"), y26), xytext=(-8, -52), textcoords="offset points", fontsize=8,
-                color=INK_2, ha="center",
-                arrowprops=dict(arrowstyle="-", color=MUTED, linewidth=0.7, shrinkA=0, shrinkB=2))
+                (D("2026-01-01"), y26), xytext=(D("2025-06-15"), -9.4), textcoords="data", fontsize=8,
+                color=INK_2, ha="right", va="center",
+                arrowprops=dict(arrowstyle="-", color=MUTED, linewidth=0.7, shrinkA=2, shrinkB=0, relpos=(1.0, 0.75)))
 
     last = ma.index[-1]
     ax.text(D("2015-03-01"), 24.2, "Weekly total", fontsize=8, color=MUTED, va="center")

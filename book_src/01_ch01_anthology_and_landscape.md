@@ -58,6 +58,8 @@ Read the equation as three bets stacked on top of each other, because that is ho
 
 In the cold open, Kaz's engine got the first two terms right and set the third to zero. That is not a modeling error you can fix with more data. It is a modeling error you fix by knowing what a lender call is.
 
+> **View From Another Seat.** *The multi-strategy relative-value pod (a generic seat, not a named firm).* A capital-structure pod inside a multi-manager fund sees the same Friday RFQ and asks a different question. It is not obliged to answer at all; nobody's franchise depends on it showing a bid in fourteen seconds. What it wants to know is whether the lender call means the capital structure is about to come apart: an uptier usually helps whoever ends up holding the new super-priority paper and hurts whoever is left behind, so the pod's question is not "what is this bond worth?" but "which Halvorsen instrument do I want to own on Monday, and what do I short against it?" The dealer has to price the third term because the RFQ is in its inbox. The pod gets to choose the hand. Much of this book is about the dealer's problem, because that is the seat Theo took, but it is worth remembering that the most dangerous seller on Friday afternoon may be someone who chose this hand very carefully.
+
 ### Why the Hybrid PJT RSSG + Quant Architect Owns the Future
 
 Pure quantitative researchers trained in equity stat-arb fail in distressed and high-yield credit because they treat CUSIPs as exchangeable time series. When a company executes a Serta-style uptier or a J.Crew trapdoor drop-down, historical price correlations break down instantaneously—a structural discontinuity occurs that a standard Kalman filter or GARCH model cannot anticipate.

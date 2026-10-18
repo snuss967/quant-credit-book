@@ -2,7 +2,7 @@
 
 - [x] 0. Restore missing §1.5 from git (ad55d97^), replace inline code with explanation + Appendix F link. — Restored verbatim from ad55d97^; listing re-added with EXPLAINED marker.
 - [x] 1. Cold open: EXPAND-SCENE (lightly) + BRIDGE. — Added 00:06 instinct beat, Monday Ines exchange, narrative promise paragraph.
-- [ ] 2. §1.1 Epistemological Clash: LIST-TO-NARRATIVE + ANOTHER-SEAT + Math, Gently (conditional expectation).
+- [x] 2. §1.1 Epistemological Clash: LIST-TO-NARRATIVE + ANOTHER-SEAT + Math, Gently (conditional expectation). — Two Mondays narrative, coin Math box, RV-pod seat box added.
 - [ ] 3. §1.1 "Why the Hybrid... Owns the Future": LIST-TO-NARRATIVE + Poker Table.
 - [ ] 4. §1.2 Market Set: LIST-TO-NARRATIVE + View From Another Seat (CLO manager).
 - [ ] 5. §1.3.1 Setup and units: Math, Gently (distribution, mean-variance).
