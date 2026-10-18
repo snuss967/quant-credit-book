@@ -1,5 +1,5 @@
 {
- "note": "Restarted 14:35 UTC (window 14:30-19:30). Resume with Workflow({scriptPath, resumeFromRunId, args}).",
+ "note": "Window 14:30-19:30 UTC; restart 19:33. Resume each with Workflow({scriptPath, resumeFromRunId, args}). Durable agents skip finished work via their logs/markers.",
  "runs": [
   {
    "name": "appz-complete",
@@ -48,7 +48,7 @@
    "task": "wny6vbgve",
    "runId": "wf_b4c8ff84-ee9",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/cleanup_queue.js",
-   "args": "5 groups (appF-listings, basis-and-pairs, facts-12-16-17-22-26, part-i-and-cast, math-2b-4b-7b-10-15); exact args are in the 16:50 ledger entry's launch message, not saved. Fixers are durable via state/revisions/ed2/cleanup_<group>.md, so a relaunch with re-typed args costs little."
+   "args": "see state/cleanup_args.json (re-typed from the launch; pass its contents as args)"
   },
   {
    "name": "appz-notes-fix-13-14",
