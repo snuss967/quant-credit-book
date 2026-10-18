@@ -268,3 +268,150 @@ where $q$ is the probability a court finds the deal impermissible. $q$ depends o
 > **[SOURCE EXTRACTION]** *Moyer_Distressed_Debt_Analysis p.86:* "as in poker, which is analogous because the “multiple-hand” format of the game is similar to the series of transactions in the distressed marketplace, to be effective one must have a credible “bluff.”"
 >
 > **Annotation.** Moyer's point is about repeated play: an investor who never holds out cannot threaten to, so investors sometimes act against their immediate interest to keep the threat credible for future deals. The LMT era made this literal. A small set of sponsors and a small set of distressed funds meet across many capital structures, and a sponsor's history of non-pro-rata deals is a public record of its type. That is why `sponsor_repeat_lme` is a feature and why it carries a positive sign. Lenders have repeated-game reputations too, and the cooperation agreement (§13.5) is the institution they built to make their threats credible collectively when no single lender's bluff is large enough to matter.
+
+## 13.5 Game Theory II: Cooperation Agreements as Commitment Devices
+
+By Thursday the Larkspur lenders who have not been called have found each other, the way excluded lenders always do: by comparing notes on who has not been called. By Friday they have counsel, a financial advisor, and a forty-page document with a sunset clause. The Ad Hoc Group, represented by counsel, announces in unison that it has "organized." (Cooperation agreements signed in this book so far: 2.)
+
+Mags reads it twice. "In 1991 this was a steering committee and a handshake. Now it's a transfer restriction with a joinder." She puts it down. "It's better. Don't repeat that."
+
+**What the document does to the game.** A cooperation agreement is a set of lenders $C$, with combined holdings $s_C = \sum_{i \in C} w_i$, who promise not to negotiate separately, require any buyer of their loans to sign on, and agree on a sunset date. The number that matters is $s_C$ against $1 - \theta$. If $s_C > 1 - \theta$, any coalition $S$ that avoids the co-op satisfies
+
+$$
+\sum_{i \in S} w_i \;\le\; 1 - s_C \;<\; \theta ,
+$$
+
+so it cannot pass the amendment. Every winning coalition must contain a co-op member, and the no-separate-deal covenant turns "contains a member" into "contains the co-op." The sponsor's knapsack from §13.4 has no feasible solution that leaves the group out. The $n$-lender game, with its invitation list and its prisoner's dilemma, collapses into bargaining between two players: the sponsor and $C$.
+
+> **Poker Table.** "A co-op," says Ines, "is the players agreeing not to play heads-up against the house. One at a time, every one of them can be dealt out. Together they're a blocking stack, and the dealer has to deal with the stack." Her hand history: the Larkspur loan, bid 78 before the co-op headline, trades at 81 the morning after *(illustrative)*. The three points are the market repricing $\Pr(\text{excluded})$, not $V$.
+
+**Nash bargaining.** Let $\Pi$ be the joint surplus from a deal (avoided Chapter 11 costs, runway, the equity's option value from an extension), $d_C$ the co-op's disagreement payoff (its litigation value or its Chapter 11 recovery), and $d_{\text{sp}}$ the sponsor's (a third-party "deal away," or Chapter 11). The generalized Nash solution maximizes $(\Pi_C - d_C)^{\eta}(\Pi_{\text{sp}} - d_{\text{sp}})^{1-\eta}$ subject to $\Pi_C + \Pi_{\text{sp}} = \Pi$, where $\eta \in (0,1)$ is the co-op's bargaining weight. Take logs and differentiate in $\Pi_C$:
+
+$$
+\frac{\eta}{\Pi_C - d_C} = \frac{1-\eta}{\Pi - \Pi_C - d_{\text{sp}}}
+\quad\Longrightarrow\quad
+\Pi_C = d_C + \eta\,\big(\Pi - d_C - d_{\text{sp}}\big),
+$$
+
+with the symmetric split at $\eta = \tfrac12$. Two boundary conditions matter. A deal exists only if $\Pi \ge d_C + d_{\text{sp}}$; otherwise each side's outside option beats the deal, and that is when you see deals away and free-fall filings. Inside the deal region, the comparative static is linear and brutal:
+
+$$
+\frac{\partial \Pi_C}{\partial d_{\text{sp}}} = -\eta .
+$$
+
+Every dollar of credible outside financing the sponsor can line up costs the co-op $\eta$ dollars at the table. This is why deals away came back in 2025, often with six-month par calls (Wachtell, Feb 2026). The par call makes the threat cheap: if the co-op folds later, the sponsor refinances the outside money at par after six months, so the cost of *executing* the threat is roughly six months of excess spread plus fees, while $d_{\text{sp}}$ rises by the full value of the alternative. The co-op's counter is to be the cheapest financing in the room. Miller (SSRN abstract 5549919) finds that "by operating collectively, incumbent lenders outbid third-party financing offers."
+
+**Carve-out premiums are Shapley values.** Inside the co-op, members bargain with each other, and small holders have more power than their size suggests. Treat the co-op's blocking power as a weighted majority game in which a subset $T \subseteq C$ blocks if $\sum_{i \in T} w_i > 1 - \theta$. The Shapley value of member $i$ is the probability, over random joining orders, that $i$ is the member who turns a non-blocking subset into a blocking one:
+
+$$
+\phi_i = \sum_{T \subseteq C \setminus \{i\}} \frac{|T|!\,(|C| - |T| - 1)!}{|C|!}\,\big(v(T \cup \{i\}) - v(T)\big), \qquad v(T) = \mathbf{1}\Big[\textstyle\sum_{j \in T} w_j > 1 - \theta\Big].
+$$
+
+Take a lien release with $\theta = \tfrac23$, so blocking needs more than a third, and a co-op of four: A holds 25%, B 6%, C and D 3% each, 37% in all. The blocking subsets are $\{A,B,C\}$ and $\{A,B,D\}$ (34% each) and all four; $\{A,C,D\}$ reaches only 31%. A and B sit in every blocking subset, so both hold vetoes. Counting orderings gives $\phi = (\tfrac{5}{12}, \tfrac{5}{12}, \tfrac{1}{12}, \tfrac{1}{12})$. B holds a quarter of A's position and an equal share of the blocking power. When B asks for a carve-out premium (a larger new-money allocation, a bigger backstop fee), it is asking to be paid its Shapley value instead of its pro rata share, and the arithmetic is on its side. A steering committee's carve-out premium is a Shapley value with a law firm attached. The code in §13.8 checks these four numbers.
+
+**Three flavours, one failure mode.** Co-ops come *open* (any holder of the class may join), *closed* (membership fixed at signing), or *tiered* (anyone may join; early signers get the premium). A closed co-op that clears $\theta$ on its own is no longer a defense against a non-pro-rata deal. It *is* one, waiting for a term sheet; Miller (2025) calls the pattern "inclusive, but unequal." This is why `coop_reported` carries the split sign in the §13.2.1 table: it lowers the probability of a deal that excludes the co-op and raises the probability of *some* LMT, because a co-op that can block can also deliver.
+
+**The antitrust attack is an attack on the commitment device.** Wachtell reports that "antitrust challenges in connection with cooperation agreements (Optimum and Selecta) are in their early days." In the model, a successful challenge voids the no-separate-deal covenant, $s_C$ becomes a sum of individual holdings that can each be bid away, and the game reverts to the §13.4 auction. Issuers have found a contractual route to the same place: Seaton (SSRN abstract 5247506) reports that Warner Bros. Discovery's 2025 bonds pioneered an "anti-cartel" provision, and that issuers' equity falls on co-op news. The second fact is the Nash solution showing up in a stock price: a co-op raises $d_C$, and the sponsor's share falls by $1 - \eta$ per dollar of it.
+
+> **Trend Watch.** *From auctions to bargaining, 2024–2026.* **Structures:** within a month of the Fifth Circuit's *Serta* ruling the market had a replacement, "amend-extend-and-exchange," which was "deployed throughout 2025"; deals away returned (Optimum/Altice USA, Altice International, Liberty Puerto Rico, KIK), often with six-month par calls (Wachtell Lipton, Feb 3, 2026). **Mix:** 25 LMEs closed in H1 2026 against 24 in H1 2025, but "the coercive uptier structures that defined 2025 have all but vanished," with equity handovers and consensual amend-and-extends dominating (9fin, Aug 28, 2026). **Hazard:** the Federal Reserve's *Financial Stability Report* of Nov 7, 2025 said the volume-weighted leveraged-loan default rate "stayed well below its historical median" while defaults including distressed exchanges "continued to be elevated relative to history"; the May 8, 2026 report repeated the point and added that in private credit "the elevated usage of payment-in-kind (PIK) provisions indicates some borrowers may face repayment difficulties." **Supply:** "\$580 billion of loans and \$625 billion of high-yield bonds mature between 2027 and 2029" (Wachtell). **What it means for the desk:** the modal 2026 game is the bilateral one of this section, not the auction of §13.4. Model `coop_reported` and deal-away capacity explicitly, let $\Pr(\text{non-pro-rata} \mid \text{LMT})$ fall with vintage, and keep the re-default hazard from the Desk Myth box: a maturity wall met by consensual extensions is a wall of candidates for a second LMT.
+
+## 13.6 Drop-Downs: Collateral Leakage Arithmetic
+
+An uptier reorders the claims and leaves the assets where they are. A drop-down leaves the claims where they are and moves the assets. Same transfer, different mechanism, and a different payoff shape.
+
+> **[SOURCE EXTRACTION]** *Moyer_Distressed_Debt_Analysis p.244:* "if the existing bank debt has a lien on substantially all the assets, there may be little or nothing to offer."
+>
+> **Annotation.** Moyer is describing the constraint on a classic coercive exchange: the issuer wants to offer bondholders secured paper, but the banks already hold the collateral. The drop-down is the modern answer to his problem. If nothing is unencumbered, *manufacture* unencumbered collateral by moving assets out of the restricted group through the investment and unrestricted-subsidiary baskets, then grant liens on them. Moyer's next item suggests offering "a structurally senior security"; the drop-down does both at once, because debt issued by the unrestricted subsidiary is structurally senior to the parent's lenders on the assets that moved. Where the desk departs: Moyer treats the absence of free collateral as a constraint. The 2026 desk treats it as a quantity, $C^{\text{unsub}}$, that a parser can measure and a model can rank.
+
+**The arithmetic.** Let the collateral group be worth $V$ before the deal. The borrower moves assets worth $T$ to an unrestricted subsidiary, with $T \le C^{\text{unsub}}$ as declared at the time of the investment. (Agreements often let the borrower value the investment itself, in good faith, which makes $C^{\text{unsub}}$ a cap on the *declared* value of $T$, not its economic value. Read the valuation clause before you trust the cap.) The subsidiary borrows $D_u$ against the assets, structurally senior on them, and a fraction $\phi$ of the proceeds comes back into the collateral group as cash or debt paydown. The restricted group keeps the subsidiary's equity, worth $(T - D_u)^+$ at resolution. The existing lenders now recover
+
+$$
+R^{\text{post}}(V) = \frac{\min\!\big(V - T + \phi D_u + (T - D_u)^+,\; F\big)}{F}.
+$$
+
+Sanity checks: $T = 0$ returns $R_0(V) = \min(V,F)/F$. With $\phi = 1$ and $D_u = T$ the lenders keep every dollar but swap an asset for cash, and cash is the first thing a distressed company spends (the $\kappa$ of §13.3 again). The J.Crew trapdoor is the opposite corner, $\phi \to 0$ and $D_u \to T$: the asset leaves, is levered to the hilt, and the proceeds pay a different class. Then
+
+$$
+\Delta R(V) = R_0(V) - R^{\text{post}}(V) = \frac{\min(V, F) - \min(V - T, F)}{F} =
+\begin{cases}
+T/F, & V \le F, \\[1ex]
+(F + T - V)/F, & F < V < F + T, \\[1ex]
+0, & V \ge F + T.
+\end{cases}
+$$
+
+Compare the shape with §13.3. The uptier's excluded lender wrote a *digital put*: it loses everything below $K_1$ and little above. The drop-down's victim sold a *forward*: it loses $T/F$ in every state where it matters. And for any $\phi \ge 0$ the loss is capped by capacity, because $V - T + \phi D_u + (T - D_u)^+ \ge V - T$ implies
+
+$$
+\Delta R(V) \;\le\; \frac{T}{F} \;\le\; \frac{C^{\text{unsub}}}{F}.
+$$
+
+That bound is why `unsub_capacity_pct_ev` is a feature, and why the IP blockers exist: a blocker sets $T$ to zero for the assets it names. It also tells you how the market prices the two species. A digital put is a tail problem that the market prices slowly, as the probability of a low $V$ rises. A forward is a level problem that the market prices on the day the investment is announced.
+
+Kaz has been reading the J.Crew filings. "So the restricted subsidiaries are on probation."
+
+"In a sense," says Theo.
+
+"And the unrestricted subsidiary has been released. For good behavior?"
+
+"Released, yes," says Mags. "Good behavior, never." She is right on the law: an unrestricted subsidiary sits outside the covenants, which is exactly why value parked there is beyond the lenders' reach.
+
+> **Docket Diary.** *J.Crew, 2016–2020.* **Dec 5, 2016:** J.Crew discloses that it "invest[ed] certain intellectual property in the Company's wholly owned unrestricted subsidiary, J.Crew Domestic Brand, LLC," and says the step "fully complied with the Company's Term Loan Agreement." **Feb 1, 2017:** the company sues Wilmington Savings Fund Society, the successor term loan agent, to confirm that position (8-K Ex. 99.1). **July 13, 2017:** the exchange closes. \$565.7mm of 7.75%/8.50% PIK toggle notes due 2019, issued at a holding company and structurally junior to the term loans, are exchanged for \$249.596mm of 13% Senior Secured Notes due 2021 of J.Crew Brand, LLC and J.Crew Brand Corp., "secured on a first priority lien basis by a 72.04% interest in the Licensed Marks," plus \$189.688mm of preferred stock and about 15% of parent equity. \$150mm of term loans are repurchased; \$97mm of new-money notes are issued at a 3% discount; the marks are licensed back for \$42.5mm plus \$16.5mm per year; and the agent is directed "to dismiss, with prejudice, certain litigation" (8-K, July 2017). **May 4, 2020:** Chapter 11 (Bankr. E.D. Va., No. 20-32181); emergence in September 2020. *The Ad Hoc Group, represented by counsel:* "We note for the record that the junior class became the senior class on the brand." In the formula, the PIK holders were the "different class" that $\phi \approx 0$ funds, and the term-lender consent and dismissal were, in effect, bought with the \$150mm repurchase: the knapsack again.
+
+**PetSmart and the guarantee lever.** BC Partners bought PetSmart in 2015 for about \$8.7bn and bought Chewy in May 2017 for \$3.35bn. In June 2018 PetSmart moved 20% of Chewy to its parent, Argos Holdings, and 16.5% to an unrestricted subsidiary, and sued the term loan agent, Citibank, that month *(approx.; Wikipedia, citing Reuters, the FT and the WSJ)*. The lever was the guarantor-release clause: the position was that a guarantor that stops being wholly owned is released. Moving 36.5% of the shares was argued to release all of the guarantee, so the effective $T$ was the guarantee's value, not the shares'. That is leverage on the transfer, and it is why the code should compute $T$ from the release clause, not from the share count. Chewy's S-1 (Apr 29, 2019) records that "PetSmart settled existing litigation with the agent for its term loan lenders regarding these transfers in April 2019," and adds that "there can be no assurance that other PetSmart creditors may not seek to challenge these transfers." Chewy listed in June 2019 at \$22. The `chewy_blocker` (no release merely because a guarantor stops being wholly owned) exists because of those two sentences.
+
+**When steps are judged together.** In *STG Logistics* (N.Y. Sup. Ct., 2025), the court viewed "amendments permitting a covenant strip, a drop-down exchange, and an intercompany loan – as a single integrated plan for purposes of analyzing 'sacred rights' (i.e., unanimous lender vote) claims," denied the motion to dismiss, and "shortly following the decision, the company filed for bankruptcy" (Wachtell, Feb 2026). A drop-down that needs only majority votes step by step can need unanimity as a whole. Section 13.9 makes that precise.
+
+## 13.7 Double-Dips and Pari-Plus: A Waterfall Engine That Conserves Value
+
+"I'm told the new financing is a double-dip," says Kaz. "Is that a hygiene issue?"
+
+"At a party," says Mags. "In a capital structure, it's a structure."
+
+The desk's working definition: a guarantee and an intercompany loan walk into the same collateral pool and order twice. Pari-plus adds a foreign subsidiary that buys the first round.
+
+> **[SOURCE EXTRACTION]** *Moyer_Distressed_Debt_Analysis p.165:* "Grants of security interests can similarly be viewed as provisions to override the general rule that property in an estate is shared pro rata among creditors."
+>
+> **Annotation.** Moyer frames liens (and, on the same page, guarantees and subordination) as overrides of the pari passu default. A double-dip is an override built from *claims* instead of liens: the new lender holds two claims of equal rank against the same obligor for one dollar of credit. Nothing about it is senior. It is counted twice in the pro rata denominator, and pro rata sharing does the rest. The desk's departure is computational. Moyer's overrides can be read off a priority chart. A double-dip can only be read off a *graph* of obligors, claims and equity ownership, which is why the engine below is a fixed-point solver rather than a lookup table.
+
+**The closed form.** A special-purpose vehicle (SPV) borrows $F_2$ from new lenders and lends the cash to OpCo under an intercompany note that ranks pari passu with OpCo's existing first lien, $F_1$. OpCo also guarantees the SPV's debt, pari passu. In a pro rata distribution of OpCo's value $V$, three claims share: the first lien ($F_1$), the guarantee ($F_2$) and the note ($F_2$), at the rate $\rho = \min\big(1, V/(F_1 + 2F_2)\big)$. The new lenders collect $\rho F_2$ on the guarantee directly and, through the SPV, the $\rho F_2$ it collects on the note, capped at what they are owed. While $2\rho < 1$, that is, $V < (F_1 + 2F_2)/2$,
+
+$$
+R^{\text{DD}} = \frac{2V}{F_1 + 2F_2}, \qquad R^{\text{1L}} = \frac{V}{F_1 + 2F_2}.
+$$
+
+The double-dipper recovers exactly twice what the first lien recovers, from a claim of the same rank. With illustrative numbers $F_1 = 1{,}000$, $F_2 = 500$ (\$mm) and $V = 800$: without the dip both would get $800/1{,}500 = 53.3$ cents; with it, the first lien gets 40 and the new money 80. The \$133mm the first lien lost is exactly the \$133mm the new money gained. Check that before you check anything else.
+
+Above $V = F_2 + F_1/2$ the new lenders are paid in full, and the excess the SPV collects on the note is SPV equity. If OpCo owns the SPV, that equity flows back into OpCo, raises every pro rata payment including the note's, and the solution is a fixed point. Let $A$ be OpCo's distributable value including the returned equity $(2\rho - 1)F_2$, with $\rho = A/(F_1 + 2F_2)$. Then
+
+$$
+A = V + \Big(\frac{2A}{F_1 + 2F_2} - 1\Big)F_2
+\quad\Longrightarrow\quad
+\rho = \frac{V - F_2}{F_1},
+$$
+
+so the new lenders take $F_2$ and the first lien takes everything else, as conservation demands. The regimes meet at $\rho = \tfrac12$, so recoveries are continuous and monotone in $V$. The fixed-point map has slope $2F_2/(F_1 + 2F_2) < 1$, so simple iteration converges geometrically.
+
+Real structures have more entities, and the general tool is the clearing framework of Eisenberg and Noe (*Systemic Risk in Financial Systems*, Management Science, 2001), extended to priority classes. For a debtor $d$ with external value $e_d$, define its distributable value as external value plus intercompany receipts plus the residual equity $E_c$ of the subsidiaries $c$ it owns. A claim $j$ of rank $r$ owed by $d$ is then paid
+
+$$
+A_d(p) = e_d + \sum_{\ell:\ \text{cred}(\ell) = d} p_\ell + \sum_{c:\ \text{parent}(c) = d} E_c(p),
+\qquad
+p_j = \bar p_j \cdot \min\!\left(1,\ \frac{\big(A_d - \sum_{\text{rank}(m) < r} p_m\big)^+}{\sum_{\text{rank}(m) = r} \bar p_m}\right),
+$$
+
+where the sums in the fraction run over $d$'s own claims and $\bar p_j$ is the amount still owed on claim $j$ (face, less anything already collected from a co-obligor on the same debt). Iterate $p \mapsto \Phi(p)$ until $\|p^{(k+1)} - p^{(k)}\|_\infty < 10^{-10}$. The invariant is conservation: payments to outside creditors plus residual outside equity equal total external value, because every intercompany payment is one entity's outflow and another's inflow.
+
+**Pari-plus.** Add a non-guarantor foreign subsidiary worth $V_f$ that guarantees the new money directly. Before the deal, $V_f$ reached the first lien only as equity flowing up to OpCo. After it, the new lenders take $\min(F_2, V_f)$ first and double-dip OpCo for the deficiency, so the first lien loses the foreign value and is diluted on the rest. With $V_f = 0$ the structure collapses to the double-dip, which the code asserts. Sabre's May 2023 financing is the template: a "\$665 million new senior secured credit facility" from "lenders led by affiliates of Centerbridge Partners, L.P." to Sabre Financial Borrower, LLC, "a newly created wholly-owned subsidiary of Sabre GLBL," "secured by an intercompany loan by the Borrower to Sabre GLBL" and by "direct guarantees from, and security interest in assets of, certain foreign subsidiaries of Sabre," with proceeds funding capped tenders for three series of notes (8-K Ex. 99.1, May 25, 2023).
+
+### 13.7.1 Case Study: Trinseo (2023–2026), the Double-Dip Meets Chapter 11
+
+On September 8, 2023, Trinseo announced "a senior secured term loan facility of \$1,077 million" borrowed by two SPVs, Trinseo Luxco Finance SPV S.à r.l. and Trinseo NA Finance SPV LLC. Of that, \$948mm was on-lent to OpCo as "2023 Term Loans" under its 2017 credit agreement. The SPV loans paid Term SOFR + 8.50% and matured May 3, 2028; the intercompany loans paid Adjusted Term SOFR + 9.66% and matured May 3, 2030. Proceeds repaid the 2018 term loans and redeemed \$385mm of 5.375% notes due 2025 (8-K, Sept 2023). Note the design: the intercompany loan pays more and runs longer than the external loan it funds, so the claim that shares pro rata with OpCo's lenders grows faster than the debt behind it.
+
+Trinseo filed for Chapter 11 on May 26, 2026 (Bankr. S.D. Tex., lead case No. 26-90545, Judge Christopher Lopez). Its disclosure statement (dated May 25, 2026, filed as 8-K Ex. 99.2) is the first full-cycle test of the closed form, and the closed form turns out to be conservative. Funded debt was about \$2.9bn. Estimated recoveries: revolver (\$348mm) 99–100%; Super HoldCo first-lien term loans (\$1,266mm, including a \$115mm Tranche C from January 2025) **60–78%**; OpCo 2028 term loans (\$716mm) **2–9%**; 7.625% notes due 2029 (\$390mm) 0%. The OpCo intercompany term loans, \$1,508mm, were pledged to the Super HoldCo lenders. The restructuring support agreement of May 13, 2026 had 100% of the revolver, about 99.9% of the Super HoldCo first lien and about 86% of the OpCo term loans; 2025 adjusted EBITDA was \$162.5mm; the plan contemplates an \$850mm exit term loan.
+
+The stylized engine says the double-dipper recovers twice what the first lien does. Trinseo's estimated multiple is roughly 7 to 39 (60/9 to 78/2). The engine's job is to say where the excess comes from: a revolver senior to everything; an intercompany claim of \$1,508mm against the \$948mm originally on-lent (later tranches, accrued interest and the make-wholes live in that gap; we do not decompose it); and collateral at Super HoldCo that OpCo's lenders do not share. The make-wholes are where the fight went. An "OpCo Investigation" flagged the intercompany make-whole claims, and the proposed settlement took the form of "a gift through a carve-out of the Collateral securing the Allowed OpCo Intercompany Term Loan Claims." CastleKnight, holding OpCo 2028 loans and 2029 notes, objects, and with Elevation CLO 2013-1 brought an adversary proceeding (No. 26-03208) seeking declaratory judgment on lien validity, priority and subordination; on June 23, 2026 the plaintiffs opposed judgment-on-the-pleadings motions by the debtors and the "Super HoldCo Lender Defendants."
+
+How a systematic desk flags it: the September 2023 8-K is machine-readable evidence of the three ingredients (a new SPV obligor, an intercompany loan pari with the existing first lien, an upstream guarantee). The parser emits `double_dip_present = 1`, the clearing engine reprices every OpCo-level claim with the new denominator, and the trade is the pair: long the dip, short (or underweight) the claims it dilutes. The pair is a bet on the recovery multiple, which the engine computes across $V$. Exercise 4 asks you to rebuild the stack and find the $V$ that reproduces the disclosure statement's ranges.
+
+> **Ways This Blows Up.** *Five ways a clearing engine lies.* (1) **Circular ownership with no outside value.** If entities own each other in a loop that has no external value, Eisenberg–Noe can have many clearing vectors: iterating down from face finds the greatest, up from zero the least. Run both. If they differ, the answer is a legal question, not a numerical one. (2) **Deficiency conventions.** The engine assumes a creditor may assert full face against each obligor until paid in full, collecting no more than face in total. Some documents and jurisdictions net co-obligor recoveries first, which shrinks the dip. Make it a parameter, never a constant. (3) **Substantive consolidation.** Moyer observes that "a substantive consolidation makes the two claims pari passu" (Moyer_Distressed_Debt_Analysis p.305). Consolidate OpCo and the SPV and the guarantee and the note become one claim; the dip disappears. (4) **The challenge list.** Moyer's checklist of attacks (p.351; list items joined) reads like an inventory of the engine's hidden parameters: "Invalidity of guarantees · Substantive consolidation · Critical creditor/vendor status · Interpretation of contractual subordination language · Violations of covenants · Transfers that might be deemed fraudulent conveyances." Each one deletes or resizes an edge in the claim graph. (5) **Claims at face plus premium.** Trinseo shows that the allowed amount of an intercompany claim is itself a litigated number. Price the dip over a range of allowed claims, not at one.

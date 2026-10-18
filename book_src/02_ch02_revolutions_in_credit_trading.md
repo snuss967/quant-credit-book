@@ -153,3 +153,307 @@ Last, a period piece from the shelf, included because it explains why some of Ma
 
 **Data & Code.** SEC Release 34-101121 (one-minute approval): https://www.sec.gov/files/rules/sro/finra/2024/34-101121.pdf. FINRA Regulatory Notice 22-12 (portfolio-trade modifier): https://www.finra.org/rules-guidance/notices/22-12. FINRA Regulatory Notice 25-17: https://www.finra.org/rules-guidance/notices/25-17. FINRA Regulatory Notice 26-16 (affiliate indicator): https://www.finra.org/rules-guidance/notices/26-16.
 
+## 2.3 Revolution 1: From Phone to RFQ
+
+Mags has a war story for every protocol, and this one begins with a run. "A run," she tells Theo, who has received several hundred and never been told what one is, "is a dealer's list of bonds and levels. It goes out at 8 a.m., is stale by 8:05, and binds nobody. It's a menu where every price says 'market.'"
+
+Man's 2022 paper describes the market the electronic RFQ was built to replace:
+
+> **[SOURCE EXTRACTION]** *Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.19:* "the bond market is structured around a Request for Quotation (RFQ) process that has hardly changed for decades. Corporate bond bid/ask prices are indicated by dealer runs that are not firm and actionable"
+>
+> **Annotation.** Two phrases carry the weight. "Hardly changed for decades" means the protocol still runs request, quote, accept. Electronification did not abolish the RFQ. It put it on a wire, sent it to many dealers at once and timestamped every answer. "Not firm and actionable" separates an *indication* from a *price*. A run is an indication. A TRACE print is a fact about a trade somebody else already did. Neither is a firm price for the trade you want now. An electronic RFQ is: $n$ dealers answer the same question at the same moment, each answer is binding for the response window, and the client can execute against the best one or walk away. Each RFQ therefore leaves a labeled record behind it: how many dealers were invited, how many answered, every quote, the winner, the cover, the timestamps, and whether it traded. Where the 2026 desk departs: the RFQ is now being split into variants (request-for-market, session-based auctions, streaming, one-click). Buy-side panelists at FILS Europe in 2026 predicted that the RFQ "in its current form" would become obsolete (The DESK, Oct 2026). If that happens, the request-quote-accept structure will have lasted most of a century. It would be the most durable thing in this chapter.
+
+Here is why a pre-RFQ quant could not build the obvious cost model directly from TRACE:
+
+> **[SOURCE EXTRACTION]** *Ben_Dor_Quantitative_Credit_Portfolio_Management p.120:* "Although it is possible to capture transaction spread data via TRACE, for most bonds the time between a broker-dealer buy and sell transaction for a given CUSIP can be very long, so it is difficult to calculate an accurate bid-ask spread using TRACE."
+>
+> **Annotation.** A bid-ask spread is a statement about two prices *at the same moment*. TRACE gives you two prices at *different* moments, a dealer buy on Tuesday and a dealer sell on Friday, with three days of spread moves mixed into the difference. Measured that way, a bond's "spread" is mostly volatility. This is why Barclays built its Liquidity Cost Score from trader quotes (§2.10), and why RFQ data is the better cost instrument: an RFQ records competing quotes for the same bond within the same two-minute window. Where the 2026 desk departs: composites such as MarketAxess CP+ and Tradeweb Ai-Price (which covers about 30,000 US corporates, per Tradeweb's FY2025 10-K) now provide a continuous estimated mid. The remaining problem is not getting a mid. It is checking whether the composite deserves your trust (§2.3.2).
+
+The first large academic look at the new protocol is Hendershott and Madhavan (2015), *Click or Call? Auction versus Search in the Over-the-Counter Market* (*Journal of Finance*). They study every US corporate bond transaction from January 2010 to April 2011, about 4.6 million trades. Electronic auctions account for 467,614 trades in 5,528 bonds and voice for 4,153,611 trades in 11,122 bonds, so about one trade in ten was electronic. Auctions lasted 5 to 20 minutes, and they turned out to be a workable source of liquidity even in bonds that rarely trade. The paper also carries a warning this book repeats often: traders choose the venue. Easy tickets go electronic and hard tickets go to the phone, so a raw comparison of "electronic cost" with "voice cost" flatters the wire. Every venue-choice model in Chapter 19 has to deal with that selection.
+
+> **Trend Watch.** **Electronic share of US corporate bond trading, 2015–2026: IG crossed the halfway line, HY parked at a third.**
+>
+> | Period | US IG e-share | US HY e-share | Source and definition |
+> | :-- | :-- | :-- | :-- |
+> | 2015 | 20% | 6% | Coalition Greenwich (McPartland, June 10, 2025); notional |
+> | 2021 | ≈34% | ≈25% | Greenwich, *U.S. corporate bond trading in 2024 by the numbers* (Jan 2025); chart reading, CHECK |
+> | 2022 | ≈41% | ≈31% | Same; chart reading, CHECK |
+> | 2023 | 45% | 33% | Same |
+> | Feb 2024 | 45% | 29% | Greenwich via The DESK (Mar 19, 2024) |
+> | 2024 (full year) | 48% | 33% | Greenwich (Jan 2025); overall 44%, ADNV \$46.2bn, 125,723 trades/day, average ticket \$381k |
+> | Feb 2025 | n/a | 30% | Greenwich Data Spotlight (Mar 17, 2025) |
+> | June 2025 | 52% | n/a | Greenwich Data Spotlight (July 14, 2025) |
+> | 2023 / 2024 / 2025 | ≈45% / 50% / 60% | ≈30% each year | MarketAxess 10-K estimates (company definition, above Greenwich's) |
+>
+> Protocol mix inside US e-volume: disclosed RFQ was 48.3% (2021), 42.3% (2022), 47.2% (2023) and 44.0% (2024) (Greenwich, Jan 2025). One systematic shop's own order flow shows the same shift more sharply. Man moved from "roughly 30% of our order flow in high yield and 60% in investment grade going through electronic venues, to over 90%" as of May 1, 2023 (`Man_Revolutions_in_Credit_Trading_2023 p.3`).
+>
+> **What it means for the desk.** Three things. First, IG crossed the halfway line on at least one definition in 2025, while HY has been stuck near a third for four years. The gap between them is the structural fact. Second, "electronic" has at least three meanings: *fully electronic* (negotiated and executed on a venue), *processed* (negotiated by voice or chat, booked electronically) and *auto-executed* (no human touched it). The same market therefore reads 48% (Greenwich), about 60% (MarketAxess) or "more than 50%" (Barclays, Sept 2025). Before you fit a trend, write down which one your series measures, and whether its denominator is notional, ticket count or customer volume. Third, HY e-share is noisy from month to month (29% in February 2024 and 30% in February 2025, against 33% for full-year 2024), and it tends to *fall* when trading gets hard, because the hard tickets go back to the phone. Monthly HY points are partly a difficulty indicator, so fit adoption curves on annual data.
+
+### 2.3.1 The adoption S-curve, with an honest ceiling
+
+Asked to "project HY electronic share to 2030," ROBO fit a constant growth rate to the move from 6% (2015) to 33% (2024), compounded it six more years and returned
+$$
+0.33 \times \left(\frac{0.33}{0.06}\right)^{6/9} \approx 1.03,
+$$
+so 103% of HY would trade electronically by 2030. Nobody told it that $K \le 1$. ROBO has discovered a market in which more bonds trade electronically than trade.
+
+The honest model is a logistic with a ceiling. Let $e_t \in (0, K)$ be the electronic share of notional in a segment at time $t$ (years):
+
+$$
+e_t = \frac{K}{1 + \exp\{-r\,(t - t_0)\}}, \qquad 0 < K \le 1,\; r > 0 .
+$$
+
+Here $K$ is the ceiling, the share that will eventually trade electronically (blocks that never leave the phone keep it below 1), $r$ is the adoption rate per year, and $t_0$ is the midpoint, where $e_{t_0} = K/2$. (This $r$ is an adoption rate, not the interest rate; the context never mixes them, but we flag it once.) Rearranging,
+
+$$
+\frac{e_t}{K - e_t} = \exp\{r\,(t - t_0)\} \quad\Longrightarrow\quad z_t(K) \equiv \ln\frac{e_t}{K - e_t} = r\,(t - t_0).
+$$
+
+For a fixed $K$, the generalized logit $z_t(K)$ is *linear in time*. Two dated observations therefore give a closed-form slope and midpoint:
+
+$$
+\hat r(K) = \frac{z_{t_2}(K) - z_{t_1}(K)}{t_2 - t_1}, \qquad \hat t_0(K) = t_1 - \frac{z_{t_1}(K)}{\hat r(K)} .
+$$
+
+Since $e_t/(K-e_t)$ is the odds of "electronic" relative to the ceiling, and those odds grow like $e^{rt}$, they double every $\ln 2/\hat r$ years.
+
+Now plug in Greenwich's 2015 and 2025 numbers with $K = 1$. For IG, $z = \ln(0.20/0.80) = -1.3863$ in 2015 and $\ln(0.48/0.52) = -0.0800$ in 2025, so $\hat r_{IG} = 1.3063/10 = 0.131$ per year and the odds double every $0.6931/0.131 = 5.3$ years. For HY, $z = \ln(0.06/0.94) = -2.7515$ and $\ln(0.32/0.68) = -0.7538$, so $\hat r_{HY} = 0.200$ per year, with odds doubling every 3.5 years. Projected to 2030 with $K=1$, IG reaches $1/(1+e^{-0.573}) = 64\%$ and HY reaches $1/(1+e^{-0.245}) = 56\%$. These are *illustrative extrapolations*, not forecasts.
+
+Two lessons sit inside that arithmetic, and both are better than the numbers.
+
+*The ceiling is not identified from two points.* Each choice of $K$ gives a different line through the same two observations. Redo the fit with $K = 0.80$, roughly the ceiling Barclays has suggested for electronic execution (via The DESK, Jan 2025). The IG slope rises to $\hat r_{IG}(0.8) = [\ln(0.48/0.32) - \ln(0.20/0.60)]/10 = 0.150$, and the 2030 projection falls to $0.8/(1 + e^{-1.158}) = 61\%$. HY becomes $\hat r = 0.211$ with a 2030 value of 53%. A lower ceiling means a *faster* implied adoption rate, because the same observed share is closer to the ceiling than it looked. You need curvature to estimate $K$, meaning at least three points with the curve visibly bending. The only bend in the US IG series is 2024 to 2025 (48% to 48%), a single year that could just as well be noise. In practice, $K$ comes from outside evidence, and here the outside evidence is blunt: in December 2023 about 90% of block trades (IG of \$5mm or more, HY of \$1mm or more) were still done by phone or chat (Greenwich, Dec 7, 2023). Section 2.9 returns to those blocks.
+
+*Fit the right object.* If you fit all three parameters by least squares on the levels, an optimizer given the IG points $\{0.20, 0.48, 0.48\}$ is free to set $K$ at about 0.48, make $r$ as steep as its bounds allow and report that US IG electronification was over by about 2017. The fit is perfect, and meaningless. Kaz tried this. Kaz now treats a fitted ceiling equal to the latest observation as a diagnostic, not a result. The code in §2.10 prints a warning when it happens.
+
+> **Ways This Blows Up.** *Splicing denominators.* Greenwich reports notional share of total market volume. MarketAxess reports its own estimate of the electronic share. Bondwave reports portfolio trading as a share of *customer* volume. A platform reports its share of TRACE, which includes interdealer prints. Splice two of these into one series and your fitted $r$ partly measures the change of definition. The rule: one series per source, and the source and denominator go in the dataframe schema (§2.10), not in a footnote.
+
+### 2.3.2 The RFQ as an auction: why eleven anchored dealers are worth about two
+
+Back to the cold open. Theo got eleven responses, and the instinct is that eleven is great. Order statistics say how great, and then say why the instinct is too generous.
+
+Let $\delta_j \ge 0$ be dealer $j$'s quote distance from fair mid, for $j = 1, \dots, n$. For Theo's buy order this is the dealer's offer minus fair mid, in points of price. Suppose first that the $\delta_j$ are i.i.d. with CDF $F$ on $[0, \infty)$. The best quote is the minimum, $\delta_{(1)} = \min_j \delta_j$. It exceeds $x$ only if every quote exceeds $x$, so $\Pr(\delta_{(1)} > x) = \big(1 - F(x)\big)^n$, and by the tail-integral identity used in §2.2.2,
+
+$$
+\mathbb{E}\big[\delta_{(1)}\big] = \int_0^\infty \big(1 - F(x)\big)^n \, dx .
+$$
+
+For exponential distances with mean $\theta$, $1 - F(x) = e^{-x/\theta}$, so $(1-F(x))^n = e^{-nx/\theta}$ and
+
+$$
+\mathbb{E}\big[\delta_{(1)}\big] = \frac{\theta}{n}.
+$$
+
+The *cover* is the second-best quote, $\delta_{(2)}$. Because the exponential is memoryless, once the best quote is known the other $n-1$ quotes exceed it by i.i.d. exponential amounts with mean $\theta$. The gap from winner to cover is the minimum of those $n-1$ excesses:
+
+$$
+\mathbb{E}\big[\delta_{(2)} - \delta_{(1)}\big] = \frac{\theta}{n-1}, \qquad \frac{\mathbb{E}[\delta_{(2)} - \delta_{(1)}]}{\mathbb{E}[\delta_{(1)}]} = \frac{n}{n-1}.
+$$
+
+In this model the expected cover gap is about as large as the winner's own distance from mid. Theo's three-eighths cover suggests his winner was also roughly three-eighths from fair, which is plausible for a B2 bond *(illustrative)*. The best quote improves like $1/n$, which is the arithmetic behind every platform's claim that more responders means better prices.
+
+Now the correction. In 2026 most dealers that answer a small RFQ do so with an auto-quoter, and every auto-quoter starts from a composite mid. Write each quote distance as a common part plus an idiosyncratic part:
+
+$$
+\delta_j = A + \varepsilon_j, \qquad A \ge 0,\;\; \mathbb{E}[A] = \phi\,\theta, \qquad \varepsilon_j \overset{\text{i.i.d.}}{\sim} \text{Exp}\big(\text{mean } (1-\phi)\,\theta\big),
+$$
+
+with $A$ independent of the $\varepsilon_j$ and $\phi \in [0,1]$ the *anchoring share*: the fraction of the average quote distance shared by every responder, such as the composite's own error or a common hedging cost. The minimum of $A + \varepsilon_j$ is $A + \min_j \varepsilon_j$, so
+
+$$
+\mathbb{E}\big[\delta_{(1)}\big] = \phi\,\theta + \frac{(1-\phi)\,\theta}{n}, \qquad \mathbb{E}\big[\delta_{(2)} - \delta_{(1)}\big] = \frac{(1-\phi)\,\theta}{n-1}.
+$$
+
+Competition can only compete away the idiosyncratic part. Define the *effective number of dealers* $n_{\text{eff}}$ as the number of independent dealers ($\phi = 0$) that would give the same expected best quote, so $\theta/n_{\text{eff}} = \phi\theta + (1-\phi)\theta/n$:
+
+$$
+n_{\text{eff}} = \frac{n}{1 + (n-1)\,\phi}, \qquad \lim_{n \to \infty} n_{\text{eff}} = \frac{1}{\phi}.
+$$
+
+This is the same formula as the effective number of independent bets in an equicorrelated portfolio, and the resemblance is not a coincidence. Set $n = 11$ and $\phi = 0.45$: $n_{\text{eff}} = 11/(1 + 4.5) = 2$. Eleven responders anchored to one composite at $\phi \ge 0.45$ are worth no more than two independent ones, and no number of responders gets you past $1/\phi$. That is the result the chapter opening promised.
+
+Three caveats turn this from a slogan into a model. First, the cover gap measures only the idiosyncratic part. Tradeweb's median distance to cover hit a record low in 2024 (The DESK, Jan 29, 2025), which is what more competition predicts, but it is *also* what more anchoring predicts. To tell them apart, measure the winning quote against an independent fair value, not against the cover. Second, non-response is censoring, not a zero. A dealer who declines to quote is telling you $\delta_j$ exceeded what they were willing to show. Chapter 18 models response probability jointly with the quote. Third, the common-value problem, which gets its own box.
+
+> **Poker Table.** Ines puts it in a sentence: "Eleven responders is a big table. Order statistics say the best quote improves like $1/n$. The winner's curse says the one guy who knows you just left a lender call improves it like minus $1/n$." This is the common-value auction. When the bond's value is uncertain and the request itself carries information, each dealer has to ask what the bond is worth *given that it won*, and winning against more rivals is worse news. A rational dealer facing a possibly informed client shades more as $n$ grows, so on toxic flow the best quote can *worsen* with competition. The hand history is the markout: compare the fill to the composite five minutes, one hour and one day later, grouped by $n$. If markouts against the winner grow with $n$, the table is telling you who is informed. In most cases that is the client. Chapter 3 builds this as a counterparty-type model. For Theo, the practical rule: if the RFQ name is anywhere near a liability-management transaction, eleven responders are not eleven independent opinions. They are eleven people deciding how much they believe you.
+
+## 2.4 Revolution 2: All-to-All, or the Buy Side Learns to Quote
+
+Kaz reads "all-to-all" as graph theory and asks, with real interest, whether the corporate bond market is now a complete graph. "It's a graph where the edges have prices," says Ines, "and half the nodes are lying about their degree." That is a fair one-line summary of what all-to-all trading changed. Anyone on the platform can respond to an RFQ, not only the dealers the client invited, and the anonymity that makes that safe for responders also hides which nodes are informed.
+
+MarketAxess launched Open Trading, the largest all-to-all pool, in 2013 according to its own FY2025 10-K. Several slide decks you will see on the desk say 2012. If your model's first feature is the launch date of its own data source, check the 10-K. The protocol is simple. A client's RFQ goes to its chosen dealers *and* to an anonymous pool of other participants, including asset managers, hedge funds, non-bank market makers and other dealers, and the platform stands between the two sides so neither has to take the other's credit. The effect was to turn the buy side from price takers into occasional price makers, and quants were among the first to take the other side:
+
+> **[SOURCE EXTRACTION]** *Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.6:* "larger players in quant credit have begun to make markets on the all-to-all electronic platforms, meaning that they are price makers as well as price takers."
+>
+> **Annotation.** This sentence changes what a quant credit fund *is*. A price taker needs a cost model. A price maker needs an *adverse-selection* model, because every time it answers an RFQ it is selling an option to whoever sent it. Man's primer put the scale at \$116.5bn of quant-fund volume on Open Trading in the first three quarters of 2020, up 150% year on year (Man, *Quant Credit: A Primer*, 2021). Where the 2026 desk departs: all-to-all has settled as a large structural minority, not a takeover. Open Trading carried 35.2%, 35.0% and 37.0% of eligible MarketAxess credit volume in 2023, 2024 and 2025, with about 1,800 participating firms (MarketAxess 10-Ks), and all-to-all was about 11% of total US market volume in April 2025 (Greenwich). The quant that answers RFQs is now an ordinary participant. What remains open is whether its quotes are smart enough to survive the RFQs it would rather not have answered.
+
+The economics show up in two places. For liquidity *takers*, MarketAxess estimates 2025 price improvement on Open Trading of \$324.9mm, plus \$171.6mm for liquidity *providers*, \$496.4mm in total, measured against its CP+ composite (FY2025 10-K). The comparable totals were \$701.9mm in 2023 and \$488.8mm in 2024. For the market as a whole, Kozora, Mizrach, Peppe, Shachar and Sokobin (2020), *Alternative Trading Systems in the Corporate Bond Market* (NY Fed Staff Report 938), find that dealer participation on ATSs lowers customer trading costs by 24 to 32 bp, and that ATS trades are smaller, more often IG, and concentrated in older, less active issues. The last finding matters: all-to-all helps most in exactly the bonds where the dealer you invited was least interested.
+
+Third, there is direct evidence that quotes from outside the relationship move prices. Hendershott, Li, Livdan, Schürhoff and Venkataraman (2026), *Quote Competition in Corporate Bonds* (*Journal of Finance* 81(4)), study dealer runs on about 24,000 bonds. A dealer's quote improves client execution by 6 to 7 bp just by being present. The best-quoting dealer wins only 15% of trades, and 16% to 40% of trades print worse than the best available quote. Non-relationship dealers handle 23% of trades when they quote, against 11% when they do not. The authors call quoting "not a zero-sum game." For a systematic desk, the 16%–40% trade-through range is a reminder that a best quote on a screen is not a fill, which is why §2.5 trains on fills.
+
+Now Ines's hand history for a liquidity provider. Let $h$ be the edge at the fill, the provider's price improvement relative to the composite, in bp of price. Let $m_H$ be the adverse markout at horizon $H$, how far the composite moves against the provider in the $H$ after the fill. The provider's expected P&L per unit notional, before hedging costs and under $\mathbb{P}$, is
+
+$$
+\mathbb{E}\big[\Pi^{\text{LP}}\big] = \mathbb{E}[h] - \mathbb{E}[m_H].
+$$
+
+The \$171.6mm in the 10-K is $\sum h$ summed over all provider fills. It is the edge the provider showed, not the hand it played. A provider whose markouts eat that edge has paid 1,800 firms for the privilege of being the last one to learn what they knew. Chapter 3 conditions $\mathbb{E}[m_H]$ on counterparty type and RFQ timing, which is where Theo's lender-call instinct becomes a feature.
+
+> **Desk Myth vs. Desk Reality.** *Myth:* All-to-all means the dealer is dead. *Reality:* Dealers are among the most active responders in all-to-all pools, disclosed RFQ to chosen dealers still carried 44% of US e-volume in 2024 (Greenwich), and the client still picks dealers by hand: more than two-thirds of buy-side traders hand-pick their RFQ dealers, and about 80% say relationships drive venue choice (Greenwich, Dec 2023). All-to-all added nodes. It did not delete the relationships, and it gave them a measurable price.
+
+### Deep-Dive Resource Graph
+
+**Podcasts.** None listed for §§2.3–2.4: we could not verify specific episode titles and dates for this edition.
+
+**Practitioner Writing.** Coalition Greenwich, Kevin McPartland, blog post on ten years of fixed-income market-structure evolution (June 10, 2025): https://www.greenwich.com/blog/ten-years-fixed-income-market-structure-evolution. Coalition Greenwich, press release on block trades as the next frontier for electronic execution (Dec 7, 2023): https://www.greenwich.com/press-release/block-trades-next-frontier-electronic-execution-corporate-bonds. Coalition Greenwich, *U.S. corporate bond trading in 2024 by the numbers* (Jan 2025): https://coalitiongreenwich.crisil.com/content/dam/coalition-greenwich/MarketViews/2025/US-corporate-bond-trading-2024-numbers-25-C4001.pdf. The DESK, Lucy Carter, on Greenwich's full-year 2024 e-trading data (Jan 21, 2025): https://www.fi-desk.com/coalition-greenwich-e-trading-boom-to-outpace-market-growth-in-2025/. Man Institute, *Quant Credit: A Primer* (2021): https://www.man.com/maninstitute/quant-credit-primer.
+
+**Academic Papers.** Hendershott & Madhavan (2015), *Click or Call? Auction versus Search in the Over-the-Counter Market*, JF 70(1), DOI 10.1111/jofi.12164. Hendershott, Li, Livdan, Schürhoff & Venkataraman (2026), *Quote Competition in Corporate Bonds*, JF 81(4), DOI 10.1111/jofi.70048. Kozora, Mizrach, Peppe, Shachar & Sokobin (2020), *Alternative Trading Systems in the Corporate Bond Market*, NY Fed Staff Report 938: https://www.newyorkfed.org/research/staff_reports/sr938. Hendershott, Livdan & Schürhoff, *All-to-All Liquidity in Corporate Bonds* (working paper). O'Hara & Zhou (2021), *The electronic evolution of corporate bond dealers* (JFE).
+
+**Data & Code.** MarketAxess 10-K FY2025 (Open Trading share, price improvement, automation counts): https://www.sec.gov/Archives/edgar/data/1278021/000119312526067009/mktx-20251231.htm. Canonical root for later filings: https://www.sec.gov/edgar.
+
+## 2.5 Revolution 3: Automation, or Algos Answering Algos
+
+Theo's eleven responses came back in under two minutes, and several came back in about a second. "Those weren't traders," says Ines. "They were parameters. Somebody set a size limit, a spread tolerance around the composite and a list of names to stay away from, and then went to lunch."
+
+Automation is the revolution hidden inside the word "electronic." On the buy side, about 60% of credit participants used some form of automated execution by late 2024, up from about 40% (Barclays survey via The DESK, Jan 2025; Man's 2025 *Systematic Credit: A New Frontier* cites the same 60%). MarketAxess counted 204, 245 and 261 client firms using its automated and algorithmic tools in 2023, 2024 and 2025, and dealers sent 32.5 million algorithmic responses in 2023 and 40.9 million in 2024 (10-Ks). On Trumid, 75% of RFQs executed "no-touch" in Q4 2024 (The DESK, Jan 10, 2025), and 88% of eligible RFQ line items did by September 2025 (The DESK, Oct 8, 2025). Tradeweb's AiEX handled more than 40% of its institutional trades in 2025, against 30% in 2021 (FY2025 10-K). Vanguard automates about 70% of its traded volume, up from about 40%, and still sends nothing without a trader watching (The DESK, Oct 2026). FINRA's own 2022 statistic from §2.2.1, that 82.9% of trades were already reported within one minute, is the regulator's view of the same thing: a print that arrives in seconds was never touched by a human booking clerk.
+
+What automation needs is a router that decides, for each line, which protocol to try and in what order. Man described the inputs to theirs:
+
+> **[SOURCE EXTRACTION]** *Man_Revolutions_in_Credit_Trading_2023 p.5:* "We can see whether a security is actually available for RFQ, filtering to only high-quality RFQ participants as well as on the frequency of RFQs, the rate of completed trades, and whether a given trade size is digestible in RFQ form."
+>
+> **Annotation.** Read it as a feature list. "Available for RFQ" is the feasible set from §2.1. "High-quality RFQ participants" is a dealer-level score built from response rates, quote quality and markouts. "Frequency of RFQs" and "rate of completed trades" are a bond-level fill-rate history. "Digestible" trade size is a size-dependent fill probability. Every item is estimated from venue logs, and none of them existed before the venues did. Where the 2026 desk departs: in 2023 this was a filter that removed bad candidates before a trader decided. On a 2026 desk, the same features feed a model that *chooses* the protocol and the order of attempts. It still keeps a human on the kill switch, because the parameters that work on a calm Tuesday are not the ones you want on a gap day.
+
+Man also named the dataset that makes the router trainable:
+
+> **[SOURCE EXTRACTION]** *Man_Revolutions_in_Credit_Trading_2023 p.4:* "Electronic venues give us greater insight into these imbalances – such as realised prints, bid/ask spreads, or trades that were attempted but not executed – and thus greater confidence in identifying and quantifying liquidity and costs."
+>
+> **Annotation.** The key phrase is "trades that were attempted but not executed." A voice market records only the trades that happened. An electronic market also records the ones that failed: the RFQ nobody answered, the quote that was too wide, the order that was pulled. Those failures are the negative labels a fill-probability model needs. Without them you are fitting $\Pr(\text{fill})$ on a sample in which every trade filled, which gives you a model that is always optimistic. On a 2026 desk this is the most valuable table in the execution database, and also the one most often dropped because it "has no trades in it."
+
+### 2.5.1 The router as a cost-minimization problem
+
+Let $p$ index protocols (all-to-all RFQ, disclosed RFQ to chosen dealers, session or mid-match, inclusion in a portfolio trade, voice). For a line with features $x$, define:
+
+- $\pi_p(x) = \Pr(\text{fill} \mid x, p)$, the fill probability, usually a logistic model fitted on attempted-and-failed labels;
+- $c_p(x) = \mathbb{E}[c \mid \text{fill}, x, p]$, the expected one-way cost given a fill, in bp of price relative to fair mid;
+- $\kappa(x)$, the cost of *not* filling: the expected cost of the next attempt plus the price of carrying the unintended position from §2.1 until then. A simple form is $\kappa = c^{\text{next}} + \tfrac{\gamma}{2}\,\sigma_\epsilon^2\, T^{\text{wait}} + \alpha^{\text{decay}}$, with $\gamma$ risk aversion, $\sigma_\epsilon^2$ the line's residual variance per year, $T^{\text{wait}}$ the expected wait in years, and $\alpha^{\text{decay}}$ the signal lost while waiting.
+
+All expectations are under $\mathbb{P}$. The expected all-in cost of a single attempt is
+
+$$
+J_p(x) = \pi_p(x)\,c_p(x) + \big(1 - \pi_p(x)\big)\,\kappa(x),
+$$
+
+and the one-shot router picks $p^\star = \arg\min_p J_p(x)$. Real routers try protocols *in sequence*, and a failed attempt has a price of its own: information leakage, $\chi_p \ge 0$, the adverse move caused by showing the order and not trading. Trying all-to-all first and falling back to disclosed RFQ costs
+
+$$
+J_{A \to R} = \pi_A c_A + (1 - \pi_A)\big(\chi_A + J_R\big).
+$$
+
+Subtract this from $J_R$ and rearrange. Trying all-to-all first is better if and only if $\pi_A (J_R - c_A) > (1 - \pi_A)\chi_A$, or, assuming $J_R > c_A$,
+
+$$
+\frac{\pi_A}{1 - \pi_A} \;>\; \frac{\chi_A}{J_R - c_A}.
+$$
+
+The odds of filling must exceed the ratio of leakage cost to savings. Take a \$2mm line of a 7-year BBB *(all numbers illustrative)*: $c_A = 4$ bp, $\pi_A = 0.55$, $J_R = 0.90 \times 7 + 0.10 \times 20 = 8.3$ bp (with $\kappa = 20$ bp), and $\chi_A = 1.5$ bp. The threshold is $1.5/4.3 = 0.35$. The fill odds are $0.55/0.45 = 1.22$, so the router tries all-to-all first, at an expected cost of $J_{A\to R} = 2.2 + 0.45 \times 9.8 = 6.6$ bp against 8.3 bp for going straight to dealers. Now make the name a stressed HY credit two weeks before an exchange offer: $\chi_A$ jumps because the anonymous pool is full of people who read the same 8-K, $\pi_A$ falls, and the inequality flips. The router sends it to a trader. It turns out the formula agrees with Mags.
+
+> **Ways This Blows Up.** *Fair-weather parameters.* Every number in the router was estimated on 2023–2025 data, mostly in calm markets. In stress, dealers widen their algorithm parameters or switch them off, fill rates fall and leakage rises, and all of it happens at once. Buy-side traders at FILS Europe in 2026 said platforms and electronic liquidity providers "help mainly in normal markets" (The DESK, Oct 2026). In March 2026, median EUR IG bid-ask rose to 64% above its January average, and it took 4 weeks (EUR IG), 6 (US HY), 8 (US IG) and 13 (EUR HY) to normalize (MarketAxess data via The DESK, Oct 1, 2026). A router trained on the calm sample will be most confident on exactly the day it is most wrong. Condition $\pi_p$, $c_p$ and $\chi_p$ on a stress regime variable (§2.7 offers one: the ETF–NAV basis), and give the kill switch to a human.
+
+## 2.6 Revolution 4: Portfolio Trading
+
+"A portfolio trade," says Mags, "is a mystery box, except the dealer gets to look inside before paying, and the index closes at four so everyone gets to be surprised at the same time."
+
+A portfolio trade (PT) is one negotiation and one price for a basket of many bonds, sometimes hundreds of lines and sometimes a mix of buys and sells, executed all-or-none with a single dealer. The dealer prices the basket as a whole, hedges its systematic risk at once (a Tradeweb executive described a 1,000-line PT hedged with at most seven Treasury trades; The DESK, Jan 29, 2025) and works off the idiosyncratic residue over days. Tradeweb says it offered the first corporate-bond PT in 2019 (FY2025 10-K). FIMSAC recommended a TRACE flag for portfolio trades in February 2020. FINRA's portfolio-trade modifier became mandatory on May 15, 2023, for trades between two parties, in at least ten unique issues, at a single basket price (FINRA RN 22-12). Before that date nobody could measure PT share from public data. After it, everybody could, and everybody used a different denominator.
+
+Man's account of the first boom:
+
+> **[SOURCE EXTRACTION]** *Man_Revolutions_in_Credit_Trading_2023 p.2:* "We found that orders attracted high fill rates as competition for trades proliferated, not only among what we would consider tier-one counterparties but also those in the second tier, with aggressive pricing offered."
+>
+> **Annotation.** This describes 2021, which Man called "the year of portfolio trading." For a systematic book, high fill rates on a basket solve the §2.1 problem at once: a 300-line rebalance either fills completely or does not fill at all, so there is no half-executed portfolio to carry. The second-tier dealers matter too, because they meant more effective competitors in the sense of §2.3.2. Where the 2026 desk departs: the boom did not last. In the first half of 2022, Man reports, PT pricing worsened as dealers pulled balance sheet and the custom ETF baskets that made baskets cheap to recycle were lost (pp.2–3). Man moved most of its flow back to single-line electronic RFQ. Fill rates are a property of dealer balance sheets, and balance sheets change.
+
+### 2.6.1 What a dealer bids for a basket
+
+Let $w$ be the vector of signed notionals in the basket ($w_i > 0$ if the dealer buys line $i$), $P_i^{\text{mid}}$ each line's fair mid, and $c_i^{\text{line}}$ its standalone half-spread. A skeleton for the dealer's bid, with the full engine in Chapter 19, is
+
+$$
+B_{\text{PT}} = \sum_i w_i P_i^{\text{mid}} \;-\; \sum_i |w_i|\, c_i^{\text{line}} \;+\; \Pi(w) \;-\; \frac{\gamma}{2}\, T_{\text{liq}}\; w^\top \Sigma_\epsilon\, w .
+$$
+
+The first term is fair value. The second is the sum of single-line costs. $\Pi(w) \ge 0$ is the *netting credit*: the value of being able to net lines against existing inventory or deliver them into an ETF creation basket. The last term is the risk charge on the residual after the hedge, with $\gamma$ the dealer's risk aversion, $T_{\text{liq}}$ the liquidation horizon in years and $\Sigma_\epsilon$ the residual covariance of returns per unit notional per year.
+
+Here is why baskets are cheaper than blocks. Take $N$ equal lines of notional $w$, total $M = Nw$, with residual variance $\sigma^2$ per line and a common residual correlation $\rho_\epsilon$. Then $w^\top \Sigma_\epsilon w = w^2\sigma^2\,[N + N(N-1)\rho_\epsilon]$, and the risk charge per dollar of basket is
+
+$$
+\frac{\gamma}{2}\,T_{\text{liq}}\,\sigma^2 M \cdot \frac{1 + (N-1)\rho_\epsilon}{N}.
+$$
+
+A single-name block of the same size $M$ carries the factor 1 in place of the fraction. So a \$100mm, 200-line basket with uncorrelated residuals carries $1/200$ of the idiosyncratic risk charge of a \$100mm block in one bond *(illustrative)*. The fraction $(1 + (N-1)\rho_\epsilon)/N$ is $1/n_{\text{eff}}$ from §2.3.2 again. Diversification across lines, like competition across dealers, cannot get past the common component. With $\rho_\epsilon = 0.1$, no basket goes below one-tenth of the block charge.
+
+The 2022 episode is now readable in the formula: $\Pi(w)$ collapsed when custom ETF baskets disappeared, and $\gamma$ rose as dealers cut balance sheet. Mags's mystery box is the term the formula leaves out, which is adverse selection. The client knows which lines it most wants to get rid of, and a basket priced on average line costs invites the client to stuff it with the worst ones. Dealers respond by pricing line by line and adding a charge for the basket's composition. Chapter 19 estimates that charge, and the trend research suggests screening lines on the Priming Risk Score of Chapter 13 before the desk prices a basket. A 150-line HY basket can hide two or three liability-management candidates, and spotting them is an RSSG skill.
+
+> **Trend Watch.** **Portfolio trading, 2021–2026: from novelty to infrastructure, measured with at least three denominators.**
+>
+> | Period | Measure | Value | Source |
+> | :-- | :-- | :-- | :-- |
+> | 2021 → 2022 | PT share of US e-volume (protocol mix) | ≈7% → ≈10% | `Man_Revolutions p.4`, Fig. 4, Greenwich MarketView; chart reading, CHECK |
+> | 2023 | PT share of TRACE | ≈7–8% | Tradeweb's Ted Husveth, via The DESK (Jan 29, 2025) |
+> | 2023 | PT share of *customer* volume | ≈5% | Bondwave, "A Market Transformed" (May 20, 2026) |
+> | 2024 | PT share of IG / HY volume | 10% / 8%; near 13% of IG in December | Greenwich (Jan 2025) |
+> | 2024 | Electronic PT ADNV | \$3.3bn (+76%); ≈85% of all PT; Tradeweb more than 2/3 | Greenwich (Jan 2025) |
+> | Dec 2024 | PT share of TRACE | 11.4% | The DESK (Jan 29, 2025) |
+> | Apr 8, 2025 | PT share of a \$89.7bn record day | 12% | Greenwich, citing Trumid (Apr 14, 2025) |
+> | Sept 30, 2025 | PT share of a \$84.7bn record day | 18% | Greenwich, *2025 by the numbers* (Jan 27, 2026) |
+> | Q1 2026 | PT share of customer volume | 19.8% | Bondwave (May 20, 2026) |
+> | Q1 2026 | Share of all corporate volume printing at the index mark | 15.5% (5% in 2016; 9.3% in 2021) | Bondwave (May 20, 2026) |
+> | Q2 2026 | MarketAxess PT ADV and its share of US credit PT | \$1.97bn (+33%); 20.6% | MarketAxess Q2 2026 release |
+>
+> **What it means for the desk.** "PT is about 11–12% of the market" and "PT is about 20% of the market" are both true. The first uses TRACE, which includes interdealer prints, as the denominator. The second uses customer volume. Pick one and label it. Index-time clustering is now a structural feature: nearly half of PT volume prints at or after the index pricing time (Bondwave), so cost models need a time-of-day term, and a backtest that fills rebalances at the 4 p.m. mark is assuming the most crowded fill of the day. The basket arbitrage is also compressing. Bondwave's PT execution-quality percentile drifted from 57.3 (May 2023) to 50.3 (February 2026), toward the median, which is what competition does to an edge.
+
+### 2.6.2 Case Study: The Portfolio-Trading Cycle, 2021–2026
+
+**2021, the boom.** ETF growth and algorithmic dealer pricing made baskets cheap. Man moved most of its order flow from voice into portfolio trades and reports high fill rates and aggressive pricing from second-tier dealers (`Man_Revolutions p.2`).
+
+**H1 2022, the reversal.** Rates rose and spreads widened. Dealers pulled balance sheet and custom ETF baskets disappeared, so PT pricing worsened (`Man_Revolutions pp.2–3`). This was a bad year for the strategy class as a whole: eVestment data cited by IFR show systematic credit funds down about 15% on average in 2022, with assets down 27% to about \$52bn, and transaction costs more than doubled (IFR, "Quant credit rebounds after tough period"). Man's response was to move more than 90% of flow onto electronic venues, mostly as single-line RFQs:
+
+> **[SOURCE EXTRACTION]** *Man_Revolutions_in_Credit_Trading_2023 p.5:* "The vast majority of our trades are now sent as RFQs, leading to significant savings in transaction costs versus portfolio trades."
+>
+> **Annotation.** This is the router of §2.5.1 run on a whole book. When $\Pi(w)$ collapses and $\gamma$ rises, $J_{\text{PT}}$ climbs above $\sum_i J_{\text{RFQ},i}$, and a cost-minimizing desk unbundles the basket. Note what Man did *not* conclude: it did not decide that PT was a fad. It changed protocol because the costs changed, and the same logic sends flow back to PT when the costs reverse. Where the 2026 desk departs: today the PT-versus-RFQ decision is made line by line and day by day, inside the router. In 2023 it was an allocation decision made by people.
+
+**2023–2026, the resurgence.** The TRACE modifier made PT measurable from May 2023. Costs fell: MarketAxess's median IG bid-ask went from 0.19 points in 2022 to 0.11 in 2024 (IFR), and the average ticket fell from about \$560k to about \$360k over four years. PT share then climbed through every denominator in the Trend Watch above, to 18% of the record day on September 30, 2025 and 19.8% of customer volume in Q1 2026.
+
+**What a systematic desk would have flagged.** (i) The PT-minus-RFQ cost spread on comparable lines, measured by markouts, as a regime variable. It turned in early 2022, months before the annual statistics showed it. (ii) ETF creation and redemption activity as an input to $\Pi(w)$. (iii) The index-mark concentration as a cost of crowding. **How it would have traded.** Route rebalances by $\min\{J_{\text{PT}}, \sum_i J_{\text{RFQ},i}\}$ every day. Add liquid "sweetener" lines to baskets, because the dealer prices them cheaply and they lower the basket's average cost, and remove illiquid lines that raise $\gamma$. Treat protocol share as **regime-switching, not a trend**: a two-state model driven by dealer balance sheet and ETF-basket economics fits 2021–2026 better than any S-curve.
+
+## 2.7 Revolution 5: ETFs as the Liquidity Backbone
+
+Bond ETFs did something the cash market could not do for itself. They gave credit an exchange-traded, continuously priced, penny-wide instrument whose underlying is a basket of bonds that might not trade all week. Global bond ETF assets went from under \$10bn in 2009 to more than \$1.2tn in 2020 (Todorov, *BIS Quarterly Review*, March 2021) and about \$2.6tn at the end of 2024, when ETFs took about 40% of fixed-income fund flows (iShares, Apr 23, 2025). US bond ETFs held \$1.8tn at end-2024, 17% of US ETF assets (ICI 2025 Fact Book). BlackRock projects \$6tn globally by 2030, which is a forecast by the largest issuer and should be read that way.
+
+The structural change was regulatory. The SEC adopted Rule 6c-11 on September 26, 2019 (press release 2019-190), allowing ETFs to use *custom* creation and redemption baskets under written policies. That turned the ETF into a tool for moving baskets of bonds. An authorized participant (AP) can now assemble a creation basket from bonds it wants to get rid of, or accept a redemption basket of bonds a dealer wants to buy. The result is what Todorov's anatomy shows: US corporate-bond ETF creation baskets cover only about 20% of holdings and redemption baskets about 35%, the holdings' bid-ask is about 17 times the ETF's (against about 5 times for equity ETFs), and for the largest bond ETF a basket can be as small as about 3% of holdings. Koont, Ma, Pástor and Zeng (NBER w30039; *RFS* 2025 with Sialm) show that ETFs actively manage these baskets, trading off index tracking against liquidity transformation, and that basket inclusion improves a bond's liquidity, except when creation or redemption imbalances are large.
+
+### 2.7.1 The ETF discount as the price of immediacy
+
+Let $P^{\text{ETF}}_t$ be the ETF's price, $\mathrm{NAV}_t$ its published net asset value per share (built from evaluated bond prices, often at the bid), $\mathcal{C}^{\text{red}}_t$ and $\mathcal{C}^{\text{cr}}_t$ the AP's per-share cost of liquidating a redemption basket or assembling a creation basket, and $f$ the fixed fee per share. An AP who buys a share, redeems it and sells the basket earns $\mathrm{NAV}_t - \mathcal{C}^{\text{red}}_t - f - P^{\text{ETF}}_t$. An AP who buys a basket, creates and sells the share earns $P^{\text{ETF}}_t - \mathrm{NAV}_t - \mathcal{C}^{\text{cr}}_t - f$. With no arbitrage, both are nonpositive, which gives the band
+
+$$
+\mathrm{NAV}_t - \mathcal{C}^{\text{red}}_t - f \;\le\; P^{\text{ETF}}_t \;\le\; \mathrm{NAV}_t + \mathcal{C}^{\text{cr}}_t + f .
+$$
+
+The band assumes $\mathrm{NAV}_t$ is the true value of the basket. It is not. Evaluated prices lag, so write true basket value as $\mathrm{NAV}_t + \eta_t$, where $\eta_t$ is the information the ETF price has and the stale marks do not. Under selling pressure, the price sits at the lower edge of the band around the *true* value:
+
+$$
+P^{\text{ETF}}_t - \mathrm{NAV}_t \;\approx\; -\,\mathcal{C}^{\text{red}}_t \;+\; \eta_t \qquad (\text{with } f \text{ absorbed}).
+$$
+
+In a sell-off both terms are negative. Liquidating the redemption basket is expensive, and the marks have not caught up with a falling market. A measured discount is therefore partly the price of immediacy and partly the NAV being wrong. Neither is a free lunch for the buyer: the first is a cost you are paid to bear, and the second goes away when the marks catch up. In March 2020, bond-ETF tracking errors exceeded 200 bp against a historical average of 0.7 bp (Todorov), and Haddad, Moreira and Muir (2021, *RFS*) found that safer bonds and IG ETFs were discounted *more* than HY. That inverted ranking is what you would expect if dealer balance sheet, not credit risk, was the scarce input. Chapter 1 (§1.8.3) shows the LQD episode. Chapter 20 builds the full engine.
+
+The discount is the cleanest real-time stress variable a credit desk has. It is observable every second, it combines the cost of immediacy with information about stale marks, and it is the regime input the router in §2.5.1 was asking for. On a calm day the ETF is an inexpensive hedge. On a stressed day it becomes the place where prices are discovered, and on April 7, 2025, US fixed-income ETFs traded a record \$98.9bn, 3.4 times the 2025 year-to-date daily average, while ETF bid-ask spreads held at one cent through April 1–8 (iShares). As a share of cash bond volume, though, credit ETFs *shrank* in calm markets: the ETF-to-cash ratio fell from 23.2% in 2022 to 16.6% in 2024 (Greenwich), as portfolio trading took over part of the basket risk transfer. ETFs, PTs and cash bonds are now three routes for the same basket risk, and credit index futures are becoming a fourth (Cboe iBoxx futures block trades topped \$1bn a month in mid-2026; The DESK, Oct 2026).
+
+And then there is the Fed. The Secondary Market Corporate Credit Facility, announced March 23, 2020, was allowed to buy IG bonds and US-listed ETFs giving broad exposure to IG corporates, and was expanded on April 9. The New York Fed began "certain" SMCCF purchases on May 12, 2020, and those first purchases were ETFs; "additional" purchases, the individual bonds, began on June 16 (NY Fed SMCCF page). So for about five weeks in 2020 the most powerful central bank on earth was trading credit through the same ticker as a dentist in Scottsdale. The more important lesson, from Haddad, Moreira and Muir, is that the *announcements* did most of the work: discounts closed well before the Fed bought much. Purchase authority expired December 31, 2020, ETF sales began June 7, 2021 and bond sales July 12, 2021, and by August 31, 2021 all holdings had been sold or had matured (NY Fed). Section 2.10 compares March 2020 with April 2025.
+
+### Deep-Dive Resource Graph
+
+**Podcasts.** None listed for §§2.5–2.7: episode titles and dates on portfolio trading and bond ETFs (for example on *Bloomberg Odd Lots*) were not verified for this edition.
+
+**Practitioner Writing.** Man Institute, *The Revolutions in Credit Trading* (June 2023): https://www.man.com/insights/revolutions-in-credit-trading. Bondwave, Paul Daley, "A Market Transformed" (May 20, 2026): https://bondwave.com/a-market-transformed/. The DESK, on record portfolio-trading volumes (Jan 29, 2025): https://www.fi-desk.com/record-volumes-but-room-to-grow-in-portfolio-trading/. The DESK, on the Barclays automation survey (Jan 2025): https://www.fi-desk.com/fixed-income-automation-surge-60-of-credit-traders-now-use-robots/. The DESK, FILS Europe coverage of buy-side views on platforms and ELPs in stress (Oct 2026): https://www.fi-desk.com/dont-rely-on-platforms-or-elps-in-stressed-markets-buyside-traders-say/. iShares, on bond ETF innovation and the April 2025 volume record (Apr 23, 2025): https://www.ishares.com/us/insights/bond-etf-innovation-opportunity. IFR, Christopher Whittall, "Quant credit rebounds after tough period": https://www.ifre.com/story/4857744/quant-credit-rebounds-after-tough-period-qq6zcqq1mt.
+
+**Academic Papers.** Todorov (2021), "The anatomy of bond ETF arbitrage," *BIS Quarterly Review*: https://www.bis.org/publ/qtrpdf/r_qt2103d.htm. Koont, Ma, Pástor & Zeng, *Steering a Ship in Illiquid Waters: Active Management of Passive Funds* (NBER w30039): https://www.nber.org/papers/w30039. Haddad, Moreira & Muir (2021), *When Selling Becomes Viral: Disruptions in Debt Markets in the COVID-19 Crisis and the Fed's Response* (RFS; NBER w27168). Meli & Todorova (Barclays), *Portfolio trading in corporate bond markets* (year to be confirmed). Shim & Todorov, *ETFs, illiquid assets, and fire sales*.
+
+**Data & Code.** FINRA Regulatory Notice 22-12 (PT modifier): https://www.finra.org/rules-guidance/notices/22-12. SEC press release 2019-190 (Rule 6c-11): https://www.sec.gov/news/press-release/2019-190. New York Fed SMCCF page: https://www.newyorkfed.org/markets/secondary-market-corporate-credit-facility. Federal Reserve SMCCF page: https://www.federalreserve.gov/monetarypolicy/smccf.htm. Tradeweb 10-K FY2025 (AiEX, Ai-Price, first PT): https://www.sec.gov/Archives/edgar/data/1758730/000175873026000015/tw-20251231.htm. ICI 2025 Investment Company Fact Book: https://www.ici.org/system/files/2025-05/2025-factbook.pdf.
+

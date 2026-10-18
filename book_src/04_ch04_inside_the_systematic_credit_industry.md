@@ -239,3 +239,476 @@ which for uncorrelated strategies is $\sum_k \theta_k^2$. With Man's four IRs, $
 
 Before you build the most sophisticated version of all this, note a survey Man cites. PGGM's survey of credit factor managers after the 2020 shock split them into "KISS" managers and sophisticated ones (`Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.30`). Keep It Simple, Stupid is a philosophy that has never once been applied to a credit agreement. It is, however, a good prior for a factor model fitted on fifteen years of sparse TRACE data, which brings us to the data stack.
 
+## 4.5 The Data Stack and the Replication Crisis
+
+Restructuring bankers have a sense of time that equity quants lack. A 10-Q for the quarter ending 30 June is not known on 30 June. It is known when EDGAR timestamps the filing, typically 40 to 45 days later. The compliance certificate arrives when the credit agreement says it arrives. The 13-week cash flow forecast is as of a Friday and wrong by the next one. Theo has spent a career asking "as of when?" It turns out to be the most valuable question in quantitative credit, and the one a large part of the academic literature forgot to ask.
+
+Man's sketch of the data a quant credit process needs (`Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.31–32`) runs from TRACE and a security master, through equity data, to alternative data such as supply-chain linkages (Revere), bond short interest and text-mined analyst notes. Each layer has its own trap. TRACE public dissemination caps the reported size of large trades (an IG print over \$5mm shows as "5MM+", an HY print over \$1mm as "1MM+"), so a block happened but you are not told how big it was. The security master must map every CUSIP to its issuer, its guarantors and its place in the waterfall, and it must keep doing so after a drop-down moves the collateral. Equity data arrive fast and clean but describe a different claim. Alt data arrive with vendor load dates that have nothing to do with when anyone could have traded on them.
+
+The discipline that ties them together fits in one line. Give every field $x$ an event time $t^{\text{ev}}(x)$ (the quarter end, the trade time) and a knowledge time $t^{\text{kn}}(x)$ (the EDGAR acceptance timestamp, the TRACE dissemination time, the vendor's load time). A signal used to trade at $t$ must be $\mathcal{F}_t$-measurable, which in database terms means
+
+$$
+s_{i,t} = f\Big(\{\,x : t^{\text{kn}}(x) \le t - \ell\,\}\Big),
+$$
+
+for a processing lag $\ell \ge 0$. There are two ways to break it. A *lead error* joins on event time when it should join on knowledge time. An *ex-post filter* drops observations because of returns realized after $t$. The second is subtler, so let us derive what it does.
+
+Suppose a bond's monthly return $r$ has mean $\mu$ and standard deviation $\sigma$, and a "data-cleaning" rule deletes the worst fraction $q$ of next-month returns as presumed errors. For a normal distribution with lower quantile $z_q = \Phi^{-1}(q)$, the mean of what survives is
+
+$$
+\mathbb{E}\big[r \mid r > \mu + z_q\sigma\big] = \mu + \sigma\,\frac{\varphi(z_q)}{1-q},
+$$
+
+where $\varphi$ is the standard normal density. For $q = 1\%$, $z_q = -2.326$ and $\varphi(z_q) = 0.0267$, so the bias is $0.027\sigma$. With a bond-level monthly volatility of 4% *(illustrative, HY)*, that is about 11bp a month, or 1.3% a year, of return created by deleting things. Credit returns are not normal. The left tail holds the defaults and distressed exchanges, so the true bias is larger. Nor is the bias symmetric across a factor. Trim the left tail of every bond and you help the leg with more left tail, which in a "downside risk" or "high-minus-low credit risk" factor is the long leg. The filter does not just add noise. It manufactures the premium.
+
+### Case Study: The Day the Factor Zoo Got Audited (2019–2026)
+
+In 2019 Bai, Bali and Wen published "Common risk factors in the cross-section of corporate bond returns" in the *Journal of Financial Economics*. It proposed a four-factor model for bonds, was cited more than four hundred times, and became a standard benchmark for quant credit research. Alexander Dickerson, Philippe Mueller and Cesare Robotti then tried to replicate it. They found that two of the factors had been built with a one-month lead error, one with a lag error, and that left-tail losses had been trimmed ex post (Warwick Business School, 9–10 September 2024). Their own paper, "Priced risk in corporate bonds" (*JFE* 150(2), 2023), concluded that beyond traded liquidity the proposed bond factors add nothing to the bond market factor. It won the Fama–DFA Prize. The *JFE* retracted the original paper, which Warwick described as the first retraction of its kind at the journal.
+
+The audit then went wholesale. In April 2026, Dickerson, Robotti and Rossetti ("The Corporate Bond Factor Replication Crisis," arXiv:2604.07880) re-examined 108 bond signals in nine clusters. They report that "the majority of previously documented factors do not produce statistically significant bond CAPM alphas after correction" for TRACE price measurement error and asymmetric ex-post return filtering. Their Open Source Bond Asset Pricing project now publishes the corrected TRACE panel and the bias-corrected factors, so any desk can rerun its backtests on the cleaned data.
+
+In equities a one-month timestamp error is a bug. In credit it was a four-factor model, four hundred citations, and a prize for the people who found it.
+
+"So the factors knew next month's returns," Kaz says.
+
+"At PJT, knowing next month's numbers took a wall-crossing and two lawyers," Theo says. "In a backtest it takes a join on the wrong date column."
+
+**How a systematic desk reads it.** The episode is not a scandal about one paper. It is a measurement of how fragile credit factor evidence is when prints are sparse and stale. It also moves the competitive frontier. If the published factors mostly vanish after cleaning, a manager's edge cannot be the factor list. It has to be the cleaning, the costs and the implementation, which is the plumbing argument of §4.3 again. Three rules go into every spec in this book:
+
+1. Every field carries $t^{\text{kn}}$, and every join is an as-of join on knowledge time, never on event time.
+2. No filter may condition on returns realized after the portfolio-formation date. Price errors are flagged only with prints known at the decision time, and every factor is reported both before and after cleaning.
+3. Every performance number is labeled gross or net, simulated or live. The table in §4.4 is gross and simulated, and it says so.
+
+## 4.6 Portfolio Construction: Guard Rails, Autopilot, GPS
+
+A recommendation becomes a plan of reorganization only after it survives the constraints: absolute priority, the voting thresholds, the cash actually in the account. Portfolio construction is the same step for a quant book. The alpha model says what you would like to own. The constraints decide what gets confirmed.
+
+### The risk unit: DTS
+
+Every framework on the map budgets risk in Duration Times Spread. Here is why. A bond's excess return from a spread move is, to first order, $r_i \approx -D^{\text{spr}}_i\,\Delta s_i$. If spread changes are proportional to spread levels, $\Delta s_i = s_i\,\delta_i$, where the relative change $\delta_i$ has a volatility $\sigma_\delta$ that is roughly common across bonds, then
+
+$$
+\sigma(r_i) \approx D^{\text{spr}}_i\,s_i\,\sigma_\delta = \text{DTS}_i\,\sigma_\delta ,
+\qquad
+\sigma\Big(\sum_i w_i r_i\Big) \approx \sigma_\delta \sum_i w_i\,\text{DTS}_i \quad \text{when the } \delta_i \text{ move together.}
+$$
+
+Systematic spread risk adds up in DTS, so DTS is the unit you budget in. Man's statistical factor risk model is DTS-adjusted (`Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.15`), and Barclays uses DTS as its risk unit throughout.
+
+> **[SOURCE EXTRACTION]** *Ben_Dor_Quantitative_Credit_Portfolio_Management p.50:* "a portfolio with a weighted spread of 200 bps and spread duration of two years is equally risky as a portfolio with a spread of 100 bps and spread duration of four years."
+>
+> **Annotation.** The arithmetic is $200 \times 2 = 100 \times 4 = 400$ bp-years, and the claim behind it is the proportional-spread-change model above. For an RSSG reader it overturns an instinct. A short-dated B3 bond at 400bp *(illustrative)* feels riskier than a ten-year BBB at 150bp, but with spread durations of 2 and 7 its DTS is 800 against 1,050, so in a broad widening the BBB loses more. The modern desk departs from the passage at both ends of the spread distribution. At very tight spreads, moves are closer to parallel than proportional, so DTS understates the risk of the tightest bonds. At distressed levels, bonds stop trading on spread and start trading on price and expected recovery, so spread duration loses its meaning. That is one more reason the distressed cell of the map is empty (§4.11).
+
+### Man's three layers, and the cost of changing your mind
+
+Man describes its process in three layers (`Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.17`). The **guard rails** are hard and soft constraints on volatility, rating, sector and issuer exposure. The **autopilot** is an objective function that pushes the portfolio toward the efficient frontier while minimizing concentration risk, unintended factor exposures and transaction costs. The **GPS** is the ongoing process that refines the portfolio over time, keeping it diversified and limiting the sources of risk. In symbols, the autopilot solves something like
+
+$$
+\max_{\mathbf{w}\in\mathcal{C}} \;\; \hat{\boldsymbol\alpha}^{\top}\mathbf{w} \;-\; \frac{\gamma}{2}\,(\mathbf{w}-\mathbf{w}^{b})^{\top}\Sigma\,(\mathbf{w}-\mathbf{w}^{b}) \;-\; \sum_i c_i\,\lvert w_i - w^{0}_i\rvert ,
+$$
+
+where $\mathbf{w}^{b}$ is the benchmark, $\mathbf{w}^{0}$ the current holdings, $\Sigma$ a DTS-scaled factor covariance plus issuer-level specific risk, $c_i$ the one-way cost per unit traded, $\gamma$ the risk aversion, and $\mathcal{C}$ the guard rails.
+
+The last term is where Man's "headroom" for alpha uncertainty lives: the objective "differentiate[s] whether the security is already held or not" (`p.17`). Take the simplest decision, swapping a held bond $j$ for a candidate $k$, with $\hat\alpha$ measured over the expected holding period. The swap pays in expectation only if $\hat\alpha_k - \hat\alpha_j > c_j + c_k$. But $\hat\alpha_k - \hat\alpha_j$ is an estimate with standard error $\sigma_\Delta$, so add a headroom of $z\,\sigma_\Delta$. If the true difference is zero, the probability that you trade anyway is
+
+$$
+\mathbb{P}\big(\hat\alpha_k - \hat\alpha_j > c_j + c_k + z\,\sigma_\Delta\big) = 1 - \Phi\!\left(\frac{c_j + c_k}{\sigma_\Delta} + z\right).
+$$
+
+With round-trip costs of 60bp and $\sigma_\Delta = 50$bp *(illustrative, HY)*, a desk with no headroom ($z = 0$) makes a pure-noise swap 11.5% of the time. With $z = 1$ that falls to 1.4%. Barclays reaches the same answer with rules rather than a formula: turnover buffers and turnover budgets (`Dynkin_Systematic_Investing_in_Credit p.724`). Either way, the cheapest trade in credit is the one you talk yourself out of.
+
+### Nuveen's identity, or the 13-week model with a covariance matrix
+
+The multi-asset allocator works one level up, at the sector index, and its forecast is an accounting identity.
+
+> **[SOURCE EXTRACTION]** *Nuveen_Multi_Asset_Credit_Quant_Framework p.3:* "Forward return estimates = yield – estimated credit loss – ∆rates MTM – ∆spread MTM"
+>
+> **Annotation.** Nuveen defines yield as yield to worst where available, credit loss from default-rate forecasts and expected recoveries, and the two MTM terms from forecast rate and spread changes using sector duration and spread duration. Its worked example for US high yield (five-year forward, as at 19 November 2025, Bloomberg US Corporate High Yield Index) reads, in our reading of the figure, $6.97 - 2.55 - 0.37 - 0.49 = 3.56\%$. The components sum exactly. The modern desk departs from the identity in two places. Yield to worst already prices the issuer's call option, so a spread-MTM term that assumes bullet behavior double counts the optionality in callable HY. And the high yield index is not the same animal over time (51% BB at year-end 2024 against 37% in 2004, `p.4`), so a spread "mean" estimated over twenty years mixes two different indices.
+
+Written with the book's notation, for sector $j$ over horizon $h$ years, annualized,
+
+$$
+\mathbb{E}^{\mathbb{P}}[R_j] \approx y_j \;-\; \underbrace{\lambda^{\mathbb{P}}_j L_j}_{\text{expected credit loss}} \;-\; \frac{D^{\text{mod}}_j\,\Delta y^{\text{TSY}} + D^{\text{spr}}_j\,\Delta s_j}{h},
+\qquad
+\Delta s_j = \big(1 - e^{-\kappa_j h}\big)(\bar s_j - s_j), \tag{4.4}
+$$
+
+where $\kappa_j$ is the speed at which spreads revert to their long-run level $\bar s_j$ (the expected path of an Ornstein–Uhlenbeck spread, so the forecast cannot overshoot the mean however long $h$ is). Note the measures. The yield is a market quantity. The loss rate must be *physical*. Plug in the risk-neutral loss rate backed out of the spread and every sector's forecast excess return becomes zero by construction, which is a correct answer to a question nobody asked.
+
+Theo reads the identity twice and laughs. Yield in, losses out, mark-to-market on top: it is his 13-week model, with a five-year horizon and a covariance matrix. He puts the USB stick back in his pocket, slightly vindicated.
+
+Nuveen then feeds these forecasts and a recency-weighted sector covariance into an index-level optimizer with sector bounds. Its best efficient portfolio has a forward Sharpe ratio of 0.40, at a 6.20% return and 6.29% volatility, with high yield constrained to 20–60% and direct lending to 0–35% (`p.5–6`). That implies a cash assumption near 3.7% (our arithmetic). Nuveen leaves execution to the portfolio managers' judgment, including liquidity and "scalability limits" (`p.3`). That is the right call for a sector allocator. It is also why row (iii) of §4.1 has huge capacity and almost no breadth: there are only a handful of sectors to be right about.
+
+## 4.7 Execution: The Revolution That Made the Industry
+
+A dealer run is a price the way a restaurant's menu is a meal. Man says it directly: runs "are not firm and actionable" (`Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.19`). A credit backtest priced off runs or composites is therefore a backtest of a market where every menu price is guaranteed, the kitchen never runs out, and the waiter does not notice that you only order the specials. Man breaks the realized cost of a trade into three pieces (`p.21`):
+
+$$
+\text{TC}_i = \tfrac12\big(P^{\text{ask}}_i - P^{\text{bid}}_i\big) + \text{slip}_i(\text{size}, \text{characteristics}) + \text{calib}_i(\text{dealer fade}),
+$$
+
+the inside half-spread, the slippage that grows with clip size and bond characteristics, and a calibration term for the gap between the quotes a model sees and the levels dealers actually honor. The third term is the one an equity quant forgets. It is the dealer reading your order flow, the hand history Ines keeps telling Theo about.
+
+> **[SOURCE EXTRACTION]** *Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.19:* "We cannot overstate the importance of transaction cost and liquidity modelling for quant credit participants, particularly in a market where spreads are at such universally tight levels and where transaction costs can easily wipe out the potential profitability of a trade."
+>
+> **Annotation.** This sentence explains the silent cells in the execution column of the map. A shop that says nothing about costs either has no cost model or considers it its moat, and in credit the second is often true. The modern desk departs from the passage in one respect: costs are no longer a constant to estimate but a state variable to forecast. They rise in stress, when dealers pull balance sheet and the electronic liquidity layer thins, which is exactly when a contrarian systematic book wants to trade. Man also notes that the bid–ask estimates still used in many academic papers, Chen, Lesmond and Wei's 25bp for AAA and 180bp for CCC (2007), are stale (`p.20`). A 2026 cost model starts from the desk's own fills, not from a 2007 table.
+
+### Break-even turnover
+
+Let $T$ be one-way annual turnover: the fraction of the book sold, and replaced, each year. Every dollar of turnover is a sale and a purchase, so with average cost $\bar c$ per dollar traded the annual cost drag is $2T\bar c$, and
+
+$$
+\alpha_{\text{net}} = \alpha_{\text{gross}} - 2T\bar c \;\ge\; 0 \quad\Longleftrightarrow\quad T \;\le\; T_{\max} = \frac{\alpha_{\text{gross}}}{2\,\bar c}. \tag{4.6}
+$$
+
+Boundary checks: with free trading, $T_{\max} = \infty$, and with no edge, $T_{\max} = 0$. Barclays gives a realistic calibration. Its combined value and equity-momentum IG book earns 2.66% a year gross and 1.78% a year net of rebalancing costs over 2007–2019, so costs take 0.88% a year, about a third of the edge. Tracking error barely moves (`Dynkin_Systematic_Investing_in_Credit p.711`), so the information ratio falls in proportion, from $2.66/1.41 = 1.89$ to $1.78/1.41 = 1.26$. Costs were 1.15% a year in 2007–2012 and 0.64% in 2013–2019. The signals did not change between the two periods. The market got cheaper to trade.
+
+Now apply (4.6) to the momentum family, which has the highest turnover on the menu (`Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.19`). A long-only HY momentum tilt with 4% gross alpha and $\bar c = 40$bp *(illustrative)* breaks even at $T_{\max} = 0.04/0.008 = 5$, or 500% one-way a year. A monthly-rebalanced signal with short holding periods can turn over more than that. This is how the 15.9% before-cost figure in §4.4 becomes a much smaller number, or a negative one, in a live book.
+
+### Case Study: Man Numeric's Execution Migration, 2021–2023
+
+The cleanest public record of a firm moving along the execution axis is Man's own. In its telling, 2021 was the year of portfolio trading: tier-one and tier-two dealers offered high fill rates and aggressive pricing on lists. In the first half of 2022, as quantitative tightening and volatility hit, portfolio-trading costs rose. Dealers pulled balance sheet, and the custom ETF creation baskets that had let them warehouse lists cheaply were no longer available. Electronic venues held up best (`Man_Revolutions_in_Credit_Trading_2023 p.2–5`).
+
+> **[SOURCE EXTRACTION]** *Man_Revolutions_in_Credit_Trading_2023 p.3:* "We have therefore moved from having roughly 30% of our order flow in high yield and 60% in investment grade going through electronic venues, to over 90% of our order flow going through electronic-trading venues."
+>
+> **Annotation.** Note what did *not* change: the signals. Man's alpha families are the same in the 2023 paper as in the 2022 one. What changed was the router and the cost model, and that moved the firm further along the execution axis than any signal research could have. The routing analytics Man describes score each RFQ counterparty on availability, participant quality, completion rate and the size it can digest (`p.5`). That is a markout table with a business card attached. The modern desk departs from the passage on one point. A shift that was rational in the calm of 2023 must be stress-tested, because buy-side traders now report that platform and non-bank liquidity "help more in quiet markets" and that flow returns to the banks in stress (The DESK, 14–15 October 2026).
+
+Ines reads the routing list and nods. "Availability, quality, completion, size. That's how you seat a poker table. Who shows up, who's good, who folds, and how big a pot they can stand. The difference is that the dealers are keeping the same notes on you."
+
+> **Trend Watch: Protocol mix and platform share, 2021–2026.**
+>
+> - **2021.** US IG e-trading reaches 37% and HY 27% of volume (Coalition Greenwich, via IFR, c. early 2022; date CHECK). Portfolio trading is the protocol of the year (`Man_Revolutions_in_Credit_Trading_2023 p.5`: "2021 was the year of portfolio trading; 2022 was the year of electronic trading").
+> - **2021→2022.** In Greenwich data reproduced by Man, disclosed RFQ falls from about 48% to 42% of IG+HY electronic volume, while portfolio trading rises from 7% to 10% and streaming and click-to-engage from 7% to 9% (`Man_Revolutions_in_Credit_Trading_2023 p.4`; figure column order CHECK).
+> - **May 2023.** Man Numeric routes over 90% of its credit order flow electronically (`p.3`).
+> - **2024.** IG and HY e-trading reach 48% and 33%; average daily notional volume is \$46.2bn (+21%); non-bank liquidity providers earn about 10% of US credit market-making revenue; Tradeweb carries more than two-thirds of electronic portfolio trading (Coalition Greenwich, January 2025).
+> - **2025.** US corporate bond trading averages over \$50bn a day for the first time (Coalition Greenwich, 27 January 2026). MarketAxess reports a record \$1.4bn of portfolio-trading ADV (+48%) and a 19% share of US credit portfolio trading (FY2025 results). In September 2025 MarketAxess, Tradeweb and Trumid each do roughly \$8.5–8.8bn of electronic credit ADV, a three-way tie at about 15% of TRACE each (The DESK, 8 October 2025).
+> - **March 2026.** Combined US IG+HY TRACE ADV is \$70.2bn (+14.7% year on year); MarketAxess portfolio-trading ADV hits a record \$2.3bn; Trumid reaches a record \$10.3bn ADV (The DESK, 9 April 2026).
+> - **July 2026.** ICE agrees to acquire MarketAxess for \$167 a share in cash, about \$6.0bn of equity value, with closing expected in the first half of 2027 (MarketAxess 8-K, Exhibit 99.1).
+> - **October 2026.** Vanguard reports that automated low- and no-touch trading is about 70% of its fixed-income desk volume, up from about 40% (The DESK, 14 October 2026).
+>
+> **What it means for the desk.** The plumbing that made systematic credit possible is now built and is consolidating. Protocol choice is itself a cost decision, and portfolio trading, all-to-all RFQ and streaming each have a different fill model and a different stress behavior. Model the cost of each protocol as a function of market state, not as a constant, and assume that the cheapest protocol in a calm month is the first to disappear in a bad one.
+
+## 4.8 Capacity: How Big Before You Are the Market
+
+Alpha is a hot tub. The more people in it, the less it is about the water. Every pitch book has a capacity slide, and almost none has a capacity derivation. Here is one.
+
+Let $\alpha_0$ be gross alpha per dollar per year, $T$ one-way annual turnover, $c_0$ the half-spread cost per dollar traded, and let market impact per dollar traded be $\eta\sqrt{2TA/\mathcal{L}}$. Here $A$ is AUM, $2TA$ is the dollar volume the strategy trades in a year, and $\mathcal{L}$ is the annual dollar liquidity available *in the names the signal actually selects*, so $2TA/\mathcal{L}$ is the participation rate and $\eta$ is the square-root impact coefficient. Net alpha and dollar alpha are
+
+$$
+\alpha(A) = \alpha_0 - 2T\Big[c_0 + \eta\sqrt{2TA/\mathcal{L}}\Big], \qquad \Pi(A) = A\,\alpha(A).
+$$
+
+Write $g \equiv \alpha_0 - 2Tc_0$ for the gross alpha left after the spread, which is what a very small book earns. Then $\Pi(A) = gA - 2T\eta\sqrt{2T/\mathcal{L}}\,A^{3/2}$. Setting $\Pi'(A) = g - 3T\eta\sqrt{2T/\mathcal{L}}\,A^{1/2} = 0$ gives
+
+$$
+A^{*} = \frac{\mathcal{L}\,g^{2}}{18\,T^{3}\eta^{2}}, \qquad \alpha(A^{*}) = \frac{g}{3}. \tag{4.2}
+$$
+
+The second result follows because impact at $A^{*}$ is $2T\eta\sqrt{2TA^{*}/\mathcal{L}} = 2T\eta \cdot g/(3T\eta) = 2g/3$. Three readings follow, and each is a question to ask a manager.
+
+1. **The one-third rule.** At the size that maximizes total dollar alpha, the client keeps one-third of the spread-net edge. A manager paid a share of dollar alpha chooses $A^{*}$. A manager paid only on assets is happy to grow past it, all the way to where net alpha hits zero. That happens when impact equals $g$, at $A_0 = \tfrac94 A^{*}$. The client, who cares about net alpha per dollar, would prefer $A \to 0$. That principal–agent gap sits behind every "capacity" asterisk.
+2. **The cube of turnover.** Holding $g$ fixed, capacity scales as $T^{-3}$: double the turnover and the book can be one-eighth the size. This is why the high-turnover momentum family is a small-capacity business even when its gross numbers are spectacular.
+3. **The right $\mathcal{L}$.** Index ADV is the wrong denominator. Signals select the bonds that are cheap, which skews toward bonds that are cheap *because* they are hard to trade. Paleologo warns that liquidity can invalidate a sizing analysis (`Paleologo_Advanced_Portfolio_Management p.145`). In credit that is the default, not the exception.
+
+A worked example *(illustrative)*. An HY long/short multi-factor book has $\alpha_0 = 150$bp, $T = 0.6$, $c_0 = 25$bp, $\eta = 0.02$ and $\mathcal{L} = \$20$bn a year. Then $g = 120$bp, $A^{*} = 20{,}000 \times 0.012^2 / (18 \times 0.216 \times 0.0004) \approx \$1.85$bn, net alpha at $A^{*}$ is 40bp, and net alpha reaches zero at about \$4.2bn. Give the same universe an equity-momentum signal with $\alpha_0 = 4\%$ and $T = 2.5$ and $g = 2.75\%$, more than twice as much, yet $A^{*}$ falls to about \$134mm. The hot tub got hotter and much smaller.
+
+Barclays offers a discrete method you can audit, which is rarer than it should be.
+
+> **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.207:* "we assume that the dollar holding in any issuer is no more than 5% of its market value while the sizes of the fallen angels' portfolios vary from \$125mn to \$2bn."
+>
+> **Annotation.** Write the rule as weights. With $n$ eligible issuers, an issuer limit $w_{\max}$ and a cap of $c$ times issuer market value $MV_i$,
+>
+> $$w_i = \min\!\Big(\tfrac{1}{n},\; w_{\max},\; \tfrac{c\,MV_i}{A}\Big), \qquad f_{\text{cash}}(A) = 1 - \sum_i w_i . \tag{4.3}$$
+>
+> The portfolio depends on $c/A$ alone, so a \$500mn book at a 5% cap is the same book as a \$250mn one at 2.5%. As $A$ grows, the book drifts from equal weights toward market-value weights and the uninvested fraction rises. Barclays finds a \$1bn three-month-reversal fallen-angel book only 53% invested in August 2004, against 98% for a buy-all version (`p.207–208`). The modern desk departs from the passage in one respect. The 5% cap is a holdings constraint, and (4.2) is a trading-cost constraint, and a real book hits both. The cap also binds hardest in exactly the issuers where an RSSG reader would want to be large: small, stressed and mispriced.
+
+### Specification for AI Implementation
+
+**What ROBO built from the vague version.** Spec: "maximize breadth." ROBO bought all 47 bonds of one issuer, reported $BR = 47$, and filed a note that diversification was excellent. Precise spec: breadth is $BR_{\text{eff}}$ from (4.1), with $\rho$ estimated from within-issuer residual returns, and both $N$ and $BR_{\text{eff}}$ are reported.
+
+**Module:** `capacity_breadth_engine.py`, numpy only, seeded, four blocks that run in order. It scores any row of the §4.3 map.
+
+- **Units.** Money in \$mm. Rates, alphas and costs are annual decimals (0.015 is 150bp). `turnover` is one-way. `cost0` is the half-spread per dollar traded. `eta` is impact per dollar traded at 100% participation. `liquidity` is annual dollar volume in the names the signal selects, not index ADV.
+- **Shapes.** `mv: float64[n]` issuer market values; `aum_grid: float64[G]`; curve functions return dicts of arrays of length `G`.
+- **Guards.** Raise if `n_bonds < n_issuers` or `rho` is outside $[0, 1]$; floor `liquidity` and `aum` at `1e-12`; take `sqrt(max(., 0))`; return $A^{*} = 0$ when $g \le 0$ (costs eat the edge at any size); combine caps with `np.minimum.reduce`; floor $f_{\text{cash}}$ at zero against rounding.
+- **Sanity asserts.** (a) $\rho = 1$ gives $BR_{\text{eff}} = M$ and $\rho = 0$ gives $N$. (b) The numeric argmax of $\Pi(A)$ is within 1% of (4.2), and $\alpha(A^{*}) = g/3$ to 1e-9. (c) $\alpha(A \to 0) \to g$. (d) Tiny AUM gives equal weights and no cash; huge AUM gives weights proportional to market value. (e) Weights depend only on $c/A$.
+
+```python
+# capacity_breadth_engine.py, block 1 of 4: breadth and the fundamental law, eq. (4.1)
+import numpy as np
+from dataclasses import dataclass
+
+SEED = 404
+
+def effective_breadth(n_bonds, n_issuers, rho):
+    """BR_eff = N / (1 + (m - 1) * rho), with m = N / M bonds per issuer."""
+    if n_issuers <= 0 or n_bonds < n_issuers:
+        raise ValueError("need n_bonds >= n_issuers > 0")
+    if not 0.0 <= rho <= 1.0:
+        raise ValueError("rho must lie in [0, 1]")
+    m = n_bonds / n_issuers
+    return n_bonds / (1.0 + (m - 1.0) * rho)
+
+def fundamental_law_ir(ic, br_eff, tc):
+    """IR = IC * sqrt(BR_eff) * TC; annual, gross of costs."""
+    return ic * np.sqrt(max(br_eff, 0.0)) * tc
+
+assert abs(effective_breadth(1800, 800, 1.0) - 800.0) < 1e-12    # (a) rho = 1: one bet per issuer
+assert abs(effective_breadth(1800, 800, 0.0) - 1800.0) < 1e-12   # (a) rho = 0: every bond counts
+assert abs(effective_breadth(47, 1, 1.0) - 1.0) < 1e-12          # ROBO's 47 bonds are one bet
+assert abs(effective_breadth(1800, 800, 0.7) - 960.0) < 1e-9     # the worked example in 4.3
+```
+
+```python
+# block 2 of 4: capacity under square-root impact, eq. (4.2). Units: $mm and annual decimals.
+def net_alpha(aum, alpha0, turnover, cost0, eta, liquidity):
+    """alpha(A) = alpha0 - 2T [c0 + eta * sqrt(2 T A / L)], with T one-way."""
+    liq = max(float(liquidity), 1e-12)
+    part = np.sqrt(np.maximum(2.0 * turnover * np.asarray(aum, dtype=float) / liq, 0.0))
+    return alpha0 - 2.0 * turnover * (cost0 + eta * part)
+
+def net_alpha_curve(alpha0, turnover, cost0, eta, liquidity, aum_grid):
+    aum = np.asarray(aum_grid, dtype=float)
+    a = net_alpha(aum, alpha0, turnover, cost0, eta, liquidity)
+    return {"aum": aum, "alpha": a, "dollar_alpha": aum * a}
+
+def aum_star_closed_form(alpha0, turnover, cost0, eta, liquidity):
+    """A* = L g^2 / (18 T^3 eta^2), g = alpha0 - 2 T c0. Zero if costs eat the edge."""
+    g = alpha0 - 2.0 * turnover * cost0
+    if g <= 0.0:
+        return 0.0
+    if turnover <= 0.0 or eta <= 0.0:
+        return np.inf
+    return liquidity * g**2 / (18.0 * turnover**3 * eta**2)
+
+P = dict(alpha0=0.015, turnover=0.6, cost0=0.0025, eta=0.02, liquidity=20_000.0)  # illustrative HY row
+g = P["alpha0"] - 2.0 * P["turnover"] * P["cost0"]
+a_star = aum_star_closed_form(**P)
+grid = np.linspace(1.0, 3.0 * a_star, 300_001)
+curve = net_alpha_curve(aum_grid=grid, **P)
+a_num = grid[np.argmax(curve["dollar_alpha"])]
+assert abs(a_num / a_star - 1.0) < 0.01                  # (b) numeric argmax matches closed form
+assert abs(net_alpha(a_star, **P) - g / 3.0) < 1e-9      # (b) the client keeps one third
+assert abs(net_alpha(1e-9, **P) - g) < 1e-6              # (c) a tiny book keeps spread-net alpha
+assert abs(net_alpha(2.25 * a_star, **P)) < 1e-9         # net alpha is zero at 9/4 of A*
+print(f"A* = ${a_star:,.0f}mm; net alpha at A* = {1e4 * net_alpha(a_star, **P):.1f}bp")
+```
+
+```python
+# block 3 of 4: Dynkin cap weights and the non-invested fraction, eq. (4.3)
+def dynkin_cap_weights(mv, aum, cap_frac=0.05, w_max=None):
+    """w_i = min(1/n, w_max, cap_frac * MV_i / A); f_cash = 1 - sum(w). mv and aum in $mm."""
+    mv = np.asarray(mv, dtype=float)
+    if mv.ndim != 1 or mv.size == 0 or np.any(mv <= 0.0):
+        raise ValueError("mv must be a non-empty 1-D array of positive market values")
+    n = mv.size
+    cap = 1.0 if w_max is None else float(w_max)
+    w = np.minimum.reduce([np.full(n, 1.0 / n), np.full(n, cap),
+                           cap_frac * mv / max(float(aum), 1e-12)])
+    return w, max(0.0, 1.0 - float(w.sum()))
+
+rng = np.random.default_rng(SEED)
+mv_fa = rng.lognormal(mean=np.log(300.0), sigma=1.0, size=60)   # 60 fallen-angel issuers (illustrative)
+w_tiny, cash_tiny = dynkin_cap_weights(mv_fa, aum=1.0)
+assert np.allclose(w_tiny, 1.0 / 60) and cash_tiny < 1e-12      # (d) tiny book: equal weights
+w_huge, _ = dynkin_cap_weights(mv_fa, aum=1e9)
+assert np.corrcoef(w_huge, mv_fa)[0, 1] > 1.0 - 1e-12           # (d) huge book: market-value weights
+w_a, _ = dynkin_cap_weights(mv_fa, aum=500.0, cap_frac=0.05)
+w_b, _ = dynkin_cap_weights(mv_fa, aum=250.0, cap_frac=0.025)
+assert np.allclose(w_a, w_b)                                     # (e) only c / A matters
+for A in (125.0, 500.0, 1000.0, 2000.0):
+    print(f"AUM ${A:,.0f}mm: invested {1.0 - dynkin_cap_weights(mv_fa, A)[1]:.0%}")
+```
+
+```python
+# block 4 of 4: score rows of the six-axis map (all parameters illustrative, not the firms' numbers)
+@dataclass
+class FrameworkScore:
+    name: str
+    br_eff: float
+    ir_gross: float
+    ir_net_at_aum: float
+    aum_star: float
+    cash_drag: float
+
+COST_KEYS = ("alpha0", "turnover", "cost0", "eta", "liquidity")
+
+def framework_score(name, row, seed=SEED):
+    br = effective_breadth(row["n_bonds"], row["n_issuers"], row["rho"])
+    ir_g = fundamental_law_ir(row["ic"], br, row["tc"])
+    kw = {k: row[k] for k in COST_KEYS}
+    a_net = float(net_alpha(row["aum"], **kw))
+    ir_n = ir_g * a_net / row["alpha0"]      # assumes costs leave tracking error unchanged (Dynkin p.711)
+    mv = np.random.default_rng(seed).lognormal(np.log(row["mv_median"]), 1.0, row["n_issuers"])
+    _, f_cash = dynkin_cap_weights(mv, row["aum"], cap_frac=row.get("cap_frac", 0.05))
+    return FrameworkScore(name, br, ir_g, ir_n, aum_star_closed_form(**kw), f_cash)
+
+ROWS = {
+    "IG long-only value": dict(n_bonds=6000, n_issuers=1000, rho=0.8, ic=0.02, tc=0.4,
+                               alpha0=0.006, turnover=0.4, cost0=0.0008, eta=0.008,
+                               liquidity=150_000.0, aum=5_000.0, mv_median=3_000.0),
+    "HY long/short multi-factor": dict(n_bonds=1800, n_issuers=800, rho=0.7, ic=0.03, tc=0.5,
+                                       **P, aum=1_500.0, mv_median=1_500.0),
+    "HY equity momentum": dict(n_bonds=1800, n_issuers=800, rho=0.7, ic=0.04, tc=0.4,
+                               alpha0=0.04, turnover=2.5, cost0=0.0025, eta=0.02,
+                               liquidity=20_000.0, aum=100.0, mv_median=1_500.0),
+    "Multi-asset allocator": dict(n_bonds=8, n_issuers=8, rho=0.0, ic=0.10, tc=0.7,
+                                  alpha0=0.01, turnover=0.3, cost0=0.002, eta=0.005,
+                                  liquidity=2_000_000.0, aum=10_000.0, mv_median=50_000.0,
+                                  cap_frac=1.0),
+    "Smart-beta HY ETF": dict(n_bonds=1800, n_issuers=800, rho=0.7, ic=0.015, tc=0.8,
+                              alpha0=0.005, turnover=0.5, cost0=0.001, eta=0.01,
+                              liquidity=20_000.0, aum=1_500.0, mv_median=1_500.0),
+}
+
+print(f"{'row':<28}{'BR_eff':>8}{'IR_g':>7}{'IR_net':>8}{'A* $mm':>14}{'cash':>7}")
+for name, row in ROWS.items():
+    s = framework_score(name, row)
+    assert row["n_issuers"] - 1e-9 <= s.br_eff <= row["n_bonds"] + 1e-9
+    assert s.ir_net_at_aum <= s.ir_gross + 1e-12 and 0.0 <= s.cash_drag < 1.0
+    print(f"{s.name:<28}{s.br_eff:>8.0f}{s.ir_gross:>7.2f}{s.ir_net_at_aum:>8.2f}"
+          f"{s.aum_star:>14,.0f}{s.cash_drag:>7.1%}")
+```
+
+Read the output by column, as you read the map. The IG long-only row has modest IR and a capacity in the tens of billions, which is why the largest pure-play shop on the map is an IG-heavy, insurer-facing platform (§4.10). The momentum row has the best gross IR and the smallest $A^{*}$. The allocator has almost unlimited capacity and a breadth of eight. No row wins on every column. That is the point: the six axes trade off against each other, and a pitch book that claims to win on all of them is hiding a cell.
+
+## 4.9 Risk: Defense Without Beta
+
+Every HY manager claims to be defensive. BlackRock's systematic HY note checks the claim with capture ratios. Define upside and downside capture over months $t$ in which the market return $r_{m,t}$ is positive or negative:
+
+$$
+UC = \frac{\sum_{t:\,r_{m,t}>0} r_{p,t}}{\sum_{t:\,r_{m,t}>0} r_{m,t}}, \qquad DC = \frac{\sum_{t:\,r_{m,t}<0} r_{p,t}}{\sum_{t:\,r_{m,t}<0} r_{m,t}} .
+$$
+
+Let the manager earn $r_{p,t} = a + \beta r_{m,t}$, where $a$ is selection alpha per month. With $n_u$ up months averaging $\bar u > 0$ and $n_d$ down months averaging $-\bar d < 0$,
+
+$$
+UC = \beta + \frac{a}{\bar u}, \qquad DC = \beta - \frac{a}{\bar d}, \qquad \mathbb{E}[r_p - r_m] = a + (\beta - 1)\,\mathbb{E}[r_m]. \tag{4.7}
+$$
+
+A pure beta tilt ($a = 0$) has $UC = DC = \beta$. It looks defensive in every down month and loses $(1-\beta)\mathbb{E}[r_m]$ on average, because a positive credit premium means up months win the long run. Defense that survives the rebound has to come from $a$, which in HY mostly means not owning the defaulters.
+
+> **[SOURCE EXTRACTION]** *BlackRock_Systematic_High_Yield_Credit p.3:* "the average manager tended to participate in 89.56% of down markets and 92.24% of up markets."
+>
+> **Annotation.** Feed the two numbers into (4.7). The paper's window (2005–2025) has 168 up months and 72 down months (`p.3–4`). Assume average up and down months of +1.3% and −1.9% *(illustrative)*. Subtracting the capture equations gives $a(1/\bar u + 1/\bar d) = 0.0268$, so $a \approx 2.1$bp a month and $\beta \approx 0.91$. The market averages about 0.34% a month on those assumptions, so the beta drag is about 3.2bp a month and the average manager nets roughly −1bp a month against the index. The modern desk reads the passage as BlackRock intends: the average active HY manager's "defense" is mostly a smaller long. A 0.9 beta is not defense. Strip it out and see what is left. IDO or it didn't happen.
+
+The selection that is left, in BlackRock's telling, is default avoidance. Its PD model "has successfully identified 77% of the defaulted bonds in the ICE BofA High Yield Index within 24 months of its default since 2010" (`BlackRock_Systematic_High_Yield_Credit p.6`). Theo reads this the way he would read a lender's recovery analysis: 77% is a *recall*. A screen that flags every bond in the index has a recall of 100% and costs you the whole spread of the innocent. The number you need next is the flag rate, the share of non-defaulters excluded, because every innocent excluded is carry forgone. Ask for both before being impressed.
+
+Blackstone adds a third idea that belongs on the risk axis, not the alpha axis: contrarian rebalancing (`Blackstone_Systematic_Credit p.1`). An optimizer with fixed risk targets mechanically adds spread risk after spreads gap wider and trims it after they tighten. That is a policy, not a forecast, and what it harvests is the liquidity term of (4.5): the premium for buying when forced sellers are selling. It is also a crowded trade, because every systematic book with a DTS budget wants to rebalance on the same day.
+
+## 4.10 Case Study: From KMV to Blackstone Corporate Bond Strategies (1990s–2026)
+
+The largest disclosed row on the map started as a default model.
+
+> **[SOURCE EXTRACTION]** *Bohn_Stein_Active_Credit_Portfolio_Management p.123:* "In the early 1990s, Stephen Kealhofer, John Andrew ("Mac") McQuown, and Oldrich Vasicek extended this model framework and provided a practical implementation of it."
+>
+> **Annotation.** "This model framework" is Merton's: equity as a call on firm assets, default when assets fall below the debt. KMV turned it into a commercial expected default frequency, which is a $\lambda^{\mathbb{P}}$ in the language of (4.5), estimated from equity prices and balance sheets rather than from spreads. That makes the default model the natural engine of a *value* strategy: compare the market's $\lambda^{\mathbb{Q}}$ with your structural $\lambda^{\mathbb{P}}$ and buy the gap. The modern desk departs from the 1990s version in calibration, not concept. Chapter 6 maps equity volatility to asset volatility properly, and the private-company problem below is where the concept needed new data.
+
+The timeline, with dates and sizes as reported:
+
+- **Early 1990s.** Kealhofer, McQuown and Vasicek build KMV's commercial implementation. Moody's acquires KMV in 2002 (`Bohn_Stein_Active_Credit_Portfolio_Management p.123`).
+- **2004.** Kealhofer and McQuown, with David Solo, found DCI to run systematic corporate credit portfolios (Institutional Investor, 30 November 2020).
+- **30 November 2020.** Blackstone agrees to acquire DCI, which manages about \$7.5bn across IG, HY and EM corporate credit, long-only and long/short. Blackstone Credit then manages about \$135bn (Institutional Investor, 30 November 2020).
+- **May 2021.** The rationale, as reported: scale liquid credit without proportionally more analysts, and apply the model to private issuers using a Blackstone database that covers about 85% of the private leveraged-loan issuer universe. Roughly 40% of the HY market consists of private companies (Institutional Investor, 5 May 2021).
+- **Today.** Blackstone describes the business as "currently the largest pure-play quantitative credit operation in the world, with over \$40 billion in assets under management" (`Blackstone_Systematic_Credit p.1`; as-of date CHECK). Its parent segment, Blackstone Credit & Insurance, reports \$443.0bn of AUM at 31 December 2025 and lists systematic strategies within liquid corporate credit (Blackstone FY2025 10-K).
+- **Coda, 2025–2026.** The template repeats. Ares agrees in late October 2025 to buy all of BlueCove, a systematic fixed-income manager founded in 2018 with about \$5.5bn of AUM and about 60 staff at 30 September 2025, and to rebrand it Ares Systematic Credit, citing insurance distribution (Alternative Credit Investor, 30 October 2025; The DESK). Completion is reported for early February 2026 (CHECK).
+
+**How a systematic desk reads it.** Three things scaled DCI from \$7.5bn to over \$40bn, and none of them was a better factor. The first is the engine. A physical default model is what makes "default-adjusted spread" a measurable quantity rather than a slogan. The second is distribution. An insurance-heavy credit platform wants liquid, rating- and capital-aware corporate books, and an optimizer that respects Solvency II charges is a product an insurer will buy at size (`Blackstone_Systematic_Credit p.1–2`). In §4.8 terms, IG-heavy long-only books have the largest $A^{*}$ of any security-selection row, and that is where this platform sits. The third is data. If 40% of HY issuers are private, the moat is not TRACE, which everyone has. It is private financials and covenants, which almost nobody can feed to a model. An RSSG analyst has read more private-company credit agreements than most quant teams have parsed.
+
+## 4.11 The Genealogy of Quant Credit and the Empty Cells
+
+The industry's family tree is short and visible. KMV begat DCI, which Blackstone bought. Man Numeric's credit business launched in 2018 with a co-head from Apollo's quant research (Hedgeweek, 10 October 2018). Acadian hired a former AQR fixed-income co-head and BGI alumnus to build its systematic credit business, announced in July 2022 (Acadian news, 19 August 2024). One of the two authors of Robeco's factor paper is now listed with Cubist Systematic Strategies, Point72's quant arm (SSRN author listing). BlueCove became Ares Systematic Credit. The people move between asset managers, pods and platforms. The six axes move with them.
+
+What does not move is the set of cells nobody fills. Start with the one Man names outright.
+
+> **[SOURCE EXTRACTION]** *Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.42:* "Quant credit is yet to move into distressed debt – this is a high-touch asset class that requires a significant degree of human intervention, but further data capture and analysis around restructurings and recovery may make this possible."
+>
+> **Annotation.** This is the empty cell with a sign on it. The "further data capture" Man asks for is a docket, a cooperation agreement, a priming basket and a recovery waterfall turned into features, which is the program of Parts IV and VII of this book. Moyer makes the discretionary case: "As much as the quantitative approach of financial econometricians would suggest that investing is fundamentally a science, in distressed investing it is more of an art" (`Moyer_Distressed_Debt_Analysis p.275`). The modern desk departs from both by refusing the choice. It does not try to automate the art. It specifies the parts of the art that are repeatable, such as LMT exposure, fulcrum location and liquidity runway, so that the humans spend their time on the parts that are not.
+
+Kaz reads "fulcrum security" in Theo's notes and starts drawing a lever arm.
+
+"It's the class that gets the equity," Theo says.
+
+"So it's a torque problem."
+
+It is, in a sense. The fulcrum is where enterprise value runs out in the waterfall, and a model that does not know the waterfall cannot find it. No framework paper on the map has a feature for it.
+
+The other empty cells, each handed to a later chapter:
+
+- **LMT-aware signals.** None of the frameworks on the map lists covenant terms or liability-management exposure among its inputs. A bond's spread can be "cheap" because its holders are about to be primed. Chapter 13 builds the Priming Risk Score.
+- **Loans and private credit.** These are data problems first. Blackstone's private-issuer database is the exception that proves the rule (Chapters 17 and 21).
+- **Sovereign, quasi-sovereign and securitized credit.** On Man's March 2024 *Long Story Short* episode, its credit co-heads named these as the next areas for systematic methods. Man 2022's own forward list adds loans, converts, EM, LDI and capital-structure arbitrage (`p.41–42`).
+- **Event-driven credit.** A fallen angel is a forced-seller event, not a factor exposure, and the trade is the index exit, not the downgrade (Chapters 9 and 14).
+
+The last empty cell lives *inside* the full ones.
+
+> **[SOURCE EXTRACTION]** *Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.8:* "there could be an element of negative selection in the construction of quant credit portfolios whereby the least liquid bonds of an issuer are referenced."
+>
+> **Annotation.** An issuer-level signal has to be expressed through one of the issuer's bonds, and an optimizer that ranks bonds on cheapness will tend to pick the cheapest one. In a capital structure the cheapest bond is often cheap for a reason: it is the least liquid, the most structurally subordinated, sitting at the entity that is about to lose its guarantee, or carrying the covenant package that permits the drop-down. This is cheapest-to-deliver into your own optimizer. The modern desk departs from the passage by treating bond choice within an issuer as a separate decision with its own model. That model is a capital-structure model, and building one is what RSSG analysts do for a living.
+
+## 4.12 Desk Debrief
+
+- **"Systematic credit" is five businesses with five binding constraints:** capacity and costs for long-only, financing and crowding for long/short, breadth for allocators, rebalance predictability for ETFs, and adverse selection for algorithmic dealers. Ask which constraint binds before you ask about factors.
+- **The alpha column is one memo. The money is in the plumbing.** Every value signal is a Q-minus-P gap (4.5). Know whether you are harvesting risk premium, liquidity or mispricing, because each one loses money in a different crisis.
+- **Bonds are not bets; issuers are.** $BR_{\text{eff}} = N/(1+(m-1)\rho)$. Forty-seven bonds of one issuer are one bet with forty-seven CUSIPs.
+- **Costs decide.** Break-even turnover is $\alpha_{\text{gross}}/(2\bar c)$. Barclays' realistic IG book gave up a third of its edge to costs, and the momentum family gives up more.
+- **At the manager's favorite size the client keeps a third.** Capacity scales with $\mathcal{L}g^2/T^3$, and net alpha is zero at $\tfrac94 A^{*}$. Ask which size the capacity slide is quoting.
+- **A 0.9 beta is not defense.** It is a smaller long. A default screen's recall is half a number until you know its flag rate.
+- **Much of the published factor zoo did not survive cleaning.** Pin every field to its knowledge time, ban ex-post filters, and label every number gross or net, simulated or live.
+- **The empty cells are distressed, LMT-aware signals, loans and private credit, securitized, and bond choice within the issuer.** They are where an RSSG brain is scarce.
+
+### The Spec You Hand the Robot
+
+> Build `capacity_breadth_engine.py` (numpy only, seed 404, units \$mm and annual decimals, turnover one-way). (1) `effective_breadth(n_bonds, n_issuers, rho)` returns $N/(1+(m-1)\rho)$; raise on `n_bonds < n_issuers` or `rho` outside $[0,1]$; `fundamental_law_ir(ic, br_eff, tc)`. (2) `net_alpha(aum, alpha0, turnover, cost0, eta, liquidity)` returns $\alpha_0 - 2T[c_0 + \eta\sqrt{2TA/\mathcal{L}}]$, where `liquidity` is the annual volume of the *selected* names; `aum_star_closed_form` returns $\mathcal{L}g^2/(18T^3\eta^2)$, or 0 if $g \le 0$. (3) `dynkin_cap_weights(mv, aum, cap_frac=0.05, w_max=None)` returns $\min(1/n, w_{\max}, c\,MV_i/A)$ and the uninvested fraction, floored at zero. (4) `framework_score(name, row)` returns $BR_{\text{eff}}$, gross IR, net IR at the row's AUM (scaled by net over gross alpha, tracking error held fixed), $A^{*}$ and cash drag. Assert: $\rho=1 \Rightarrow BR_{\text{eff}}=M$; numeric argmax of $A\alpha(A)$ within 1% of $A^{*}$; $\alpha(A^{*}) = g/3$; $\alpha(\tfrac94A^{*}) = 0$; tiny AUM gives equal weights; weights depend only on $c/A$. Never report bond count as breadth. Never use index ADV as $\mathcal{L}$. Label every output illustrative unless its inputs are sourced.
+
+### Exercises
+
+1. **Effective breadth.** A universe has 2,400 bonds from 600 issuers with within-issuer residual correlation $\rho = 0.6$. Compute $BR_{\text{eff}}$. What IC gives an IR of 0.5 with $TC = 0.5$? *(Answer: $BR_{\text{eff}} = 2{,}400/2.8 \approx 857$; $IC \approx 0.034$.)*
+2. **Kaz's Sharpe of 3.1.** Kaz's backtest earns 6.2% a year of gross alpha at 2% tracking error, with one-way turnover of 8 times a year and transaction costs "set to zero so they wouldn't bias the results." Find the average cost per dollar traded at which the IR falls to 0.5, and the cost at which it hits zero. Compare both with a realistic HY half-spread and state, in one sentence, what Kaz should tell Ines. *(Answer: about 32.5bp and 38.75bp.)*
+3. **The fee-adjusted hot tub.** Using (4.2), add a management fee $f$ per dollar of AUM. Find the AUM at which the client's net alpha after fees is zero, and show that it is below $\tfrac94 A^{*}$ for any $f > 0$. Which size does a manager paid only on assets prefer, and why does the answer depend on whether flows chase performance?
+4. **Split the clip.** Rewrite Man's raw value score $\text{OAS}_i/\max(\text{NetDebt}_i/\text{EBITDA}_i,\ 0.1)$ as a branching rule with separate branches for low positive leverage, net cash and negative EBITDA. Specify what the negative-EBITDA branch hands to the distressed model, and write one assert that would have caught the 15,000 score in §4.4.
+5. **Capture-ratio forensics.** A manager reports 105% upside capture and 85% downside capture. With average up and down months of +1.3% and −1.9%, solve (4.7) for $a$ and $\beta$. Is this defense, beta, or a back-test with regime bins defined after the fact? Name the data you would need to tell.
+6. **The 10-Q join.** A backtest joins quarterly fundamentals to bond returns on fiscal quarter end. Estimate the information lead in days for a typical non-accelerated filer, say which rule of §4.5 it breaks, and explain why the bias is larger for the deteriorating credits a value screen likes most.
+
+### Deep-Dive Resource Graph
+
+**Podcasts**
+
+- Man Group, *Long Story Short*, "Extra Credit: Algorithmic Advantage – Systematic Investing in Credit," with Man Numeric's credit co-heads, recorded March 2024: https://www.man.com/maninstitute/extra-credit-algorithmic-advantage
+- Bloomberg *Odd Lots*, "A Longstanding Fear About The Corporate Debt Market May Finally Be Coming True," with Chris White (Viable Markets), 23 March 2020 (title only).
+- Bloomberg *Odd Lots*, "The Next Stage of the Credit Cycle with Oaktree's Poli," 19 September 2024 (title only).
+
+**Practitioner Writing**
+
+- Man Institute, *Quantitative Credit: Alpha Opportunities for Early Movers* (2022) and *The Revolutions in Credit Trading* (2023) (on the shelf; cite by page).
+- Acadian, *Credit's Systematic Shift* (June 2026): https://www.acadian-asset.com/investment-insights/credit/credits-systematic-shift
+- BBH Capital Partners, Jorge Aseff, *Introducing Systematic Fixed Income* (2 March 2026): https://www.bbh.com/us/en/insights/capital-partners-insights/introducing-systematic-fixed-income.html
+- Impax, Ahmed Abdullah, *Quant meets credit* (19 September 2025): https://impaxam.com/insights-and-news/blog/quant-meets-credit-enhancing-fundamental-analysis-through-systematic-screening/
+- Institutional Investor on the DCI deal (Whyte, 30 November 2020): https://www.institutionalinvestor.com/article/b1pgy3wmwtl8l6/Blackstone-Puts-a-Quantitative-Spin-on-Its-Credit-Business ; and its rationale (Segal, 5 May 2021): https://www.institutionalinvestor.com/article/b1rpwxsmz7rxl9/Why-Traditional-Bond-Managers-Should-Pay-Attention-to-This-Blackstone-Deal
+- Institutional Investor on Acadian's build (McElhaney, 1 June 2023): https://www.institutionalinvestor.com/article/2bstrc8107qz1gcb7jdvk/corner-office/how-acadian-built-out-a-systematic-credit-strategy
+- Warwick Business School on the replication and retraction (September 2024): https://www.wbs.ac.uk/news/research-bond-market-wins-fama-dfa-prize/ and https://www.wbs.ac.uk/news/flaw-data-corporate-bond-investors/
+- The DESK platform tallies: https://www.fi-desk.com/trumids-us-electronic-credit-volume-in-sight-of-marketaxess-and-tradewebs/ (8 October 2025) and https://www.fi-desk.com/marketaxess-leads-in-record-march-electronic-credit-trading/ (9 April 2026)
+- Coalition Greenwich, Kevin McPartland (19 May 2025): https://www.greenwich.com/market-structure-technology/all-all-trading-continues-shine-volatile-markets
+- Bloomberg, "It's PhDs Against MBAs in Credit Investing as Quants Jump In" (20 May 2024) and "The race to bring quant strategies to corporate bond markets" (2 February 2026) (title only).
+
+**Academic Papers**
+
+- Houweling, P., and J. van Zundert (2017), "Factor Investing in the Corporate Bond Market," *Financial Analysts Journal* 73(2): https://rpc.cfainstitute.org/research/financial-analysts-journal/2017/factor-investing-in-the-corporate-bond-market
+- Israel, R., D. Palhares and S. Richardson (2018), "Common Factors in Corporate Bond Returns," *Journal of Investment Management* 16(2): https://joim.com/article/common-factors-in-corporate-bond-returns/
+- Dickerson, A., P. Mueller and C. Robotti (2023), "Priced risk in corporate bonds," *Journal of Financial Economics* 150(2): https://econpapers.repec.org/RePEc:eee:jfinec:v:150:y:2023:i:2:s0304405x23001393 ; replication data: https://data.mendeley.com/datasets/n66rp59tr7
+- Dickerson, A., C. Robotti and G. Rossetti (2026), "The Corporate Bond Factor Replication Crisis," arXiv:2604.07880: https://arxiv.org/abs/2604.07880
+- Kelly, B., D. Palhares and S. Pruitt (2023), "Modeling Corporate Bond Returns," *Journal of Finance* 78, DOI 10.1111/jofi.13233.
+- Bai, J., T. G. Bali and Q. Wen (2019), "Common risk factors in the cross-section of corporate bond returns," *Journal of Financial Economics* (retracted), DOI 10.1016/j.jfineco.2018.08.002.
+- Jostova, G., S. Nikolova, A. Philipov and C. Stahel (2013), "Momentum in Corporate Bond Returns," *Review of Financial Studies* 26(7).
+- Koijen, R., T. Moskowitz, L. Pedersen and E. Vrugt (2018), "Carry," *Journal of Financial Economics* 127(2).
+- Chen, L., D. Lesmond and J. Wei (2007), "Corporate Yield Spreads and Bond Liquidity," *Journal of Finance* 62(1).
+- Ben Dor, A., L. Dynkin, J. Hyman, P. Houweling, E. van Leeuwen and O. Penninga (2007), "DTS (Duration Times Spread)," *Journal of Portfolio Management*.
+
+**Data & Code**
+
+- Open Source Bond Asset Pricing (corrected TRACE panel, bias-corrected factors): https://openbondassetpricing.com/
+- FINRA (TRACE): https://www.finra.org
+- SEC EDGAR (filings and knowledge-time stamps): https://www.sec.gov/edgar
+- MarketAxess FY2025 results: https://investor.marketaxess.com/news/news-details/2026/MarketAxess-Reports-Fourth-Quarter-and-Full-Year-2025-Financial-Results/default.aspx
+- MarketAxess 8-K on the ICE agreement (Exhibit 99.1): https://www.sec.gov/Archives/edgar/data/1278021/000119312526324933/d159148dex991.htm
+

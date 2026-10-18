@@ -4,3 +4,4 @@ state/*.bak
 __pycache__/
 *.pyc
 .scratch/
+output/*.pdf
