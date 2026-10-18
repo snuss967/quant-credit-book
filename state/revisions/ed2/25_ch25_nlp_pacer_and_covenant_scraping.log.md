@@ -9,8 +9,8 @@
 - [x] 7. [25.3.2 The ratio basket] MATH-GENTLY + ANOTHER-SEAT (direct lender, Ares). — Bathtub box with 900/200 numbers; Ares Miller seat box added.
 - [x] 8. [25.3.3 The add-back fixed point] MATH-GENTLY (fixed point, contraction); Full Derivation. — 80-70-67.5-66.9-66.7 box; Banach moved; joke kept; bullets to prose.
 - [x] 9. [25.3.4 Capacity is levered to add-backs] MATH-GENTLY (convex PL, indicator derivative); Badawi via Kaz. — Halyard numbers first, hockey-stick box, formulas, Kaz reads Badawi.
-- [ ] 10. [25.3.5 The builder basket] WHEN-TO-APPLY inside the gag: LTM window overstated capacity.
-- [ ] 11. [25.4.1 Max-flow min-cut] MATH-GENTLY (flows, cuts); Full Derivation weak duality.
+- [x] 10. [25.3.5 The builder basket] WHEN-TO-APPLY inside the gag: LTM window overstated capacity. — Halyard LTM builder $65mm vs true $10mm; whole-tape sentence.
+- [x] 11. [25.4.1 Max-flow min-cut] MATH-GENTLY (flows, cuts); Full Derivation weak duality. — Pipes box 40/60/30 numbers; weak duality and augmenting-path sketch moved.
 - [ ] 12. [25.4.2 Case Study: J.Crew] EXPAND-SCENE -> Long Scene 1.
 - [ ] 13. [end of 25.4.2] ANOTHER-SEAT (CLO manager, opportunistic credit generic).
 - [ ] 14. [25.5.1 Text diffs are blind] MATH-GENTLY (count vectors, cosine); Full Derivation.

@@ -1,6 +1,6 @@
 # Progress Log, Edition 2 (U2): Chapter 12, Multi-Asset Credit Allocation
 
-- [ ] 1. [§12.0 Cold Open] EXPAND-SCENE (to 1,100–1,400 words).
+- [x] 1. [§12.0 Cold Open] EXPAND-SCENE (to 1,100–1,400 words). — Seats read aloud, Mags recoveries, queue beat, promise, card; 1,252 words.
 - [ ] 2. [§12.1] LIST-TO-NARRATIVE + ANOTHER-SEAT (insurer).
 - [ ] 3. [§12.2, before "Derivation."] MATH-GENTLY box 1: price as a hill.
 - [ ] 4. [§12.2, at "The yield is a market price"] MATH-GENTLY box 2: two measures.

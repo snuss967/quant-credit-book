@@ -304,9 +304,11 @@ $$
 B_t = S + \tfrac{1}{2}\,N_t^{+} - N_t^{-} + Q_t - U_t, \qquad \text{available}_t = \max(0, B_t). \tag{25.2}
 $$
 
-The kink at $N_t = 0$ is asymmetric: slope $\tfrac12$ above, slope $1$ below, so losses count double. And because the formula is cumulative, an LTM window gives the wrong answer; you need the whole quarterly history from the reference date. Some agreements use a retained-excess-cash-flow builder instead, and some high-yield indentures use an EBITDA-less-a-multiple-of-fixed-charges alternative. These are different node subtypes with different inputs, so do not force them into one formula.
+The kink at $N_t = 0$ is asymmetric: slope $\tfrac12$ above, slope $1$ below, so losses count double. Some agreements use a retained-excess-cash-flow builder instead, and some high-yield indentures use an EBITDA-less-a-multiple-of-fixed-charges alternative. Those are different node subtypes with different inputs, and a schema that squeezes all three into one formula gets all three slightly wrong, which is the most expensive way to be wrong.
 
-Here the running gag earns its keep. Theo's 13-week cash flow model, reborn as a state-space feature, forecasts next quarter's $\text{CNI}_q$, which forecasts $B_{t+1}$. That tells you how much builder capacity the sponsor will have on the next dividend date, before the sponsor's own treasury team has finished its spreadsheet.
+Here the running gag earns its keep. Theo's 13-week cash flow model, reborn as a state-space feature, forecasts next quarter's $\text{CNI}_q$, which forecasts $B_{t+1}$. That tells the desk how much builder capacity the sponsor will have on the next dividend date, before the sponsor's own treasury team has finished its spreadsheet.
+
+The first quarter the feature ran, it was wrong by \$55mm *(illustrative)*, and the 13-week model was innocent. ROBO had been handed "net income" from the fundamentals feed, which arrives as a trailing four quarters, and it computed Halyard's builder as a \$50mm starter plus half of a healthy LTM \$30mm: \$65mm available. Theo looked at the number on Monday morning and frowned, because he remembered the reference date. "The first full fiscal quarter after closing," he said. "They had two years of restructuring charges before this one." Cumulative CNI from that date was minus \$40mm, the deficit branch of (25.2) applied, and losses count double, so the builder was \$50mm minus \$40mm: \$10mm. The window had quietly forgiven two bad years that the agreement never forgives. Kaz changed the input from `cni_ltm` to the full quarterly tape since the reference date and added a test that fails if the tape starts late. The desk's sentence for it now: the builder has a memory, so feed it the whole tape.
 
 ### 25.3.6 Maintenance versus incurrence: two node types, two default semantics
 
@@ -320,7 +322,9 @@ Baskets do not act alone. Value leaves the collateral pool by *routes*: from the
 
 ### 25.4.1 The entity graph and max-flow min-cut
 
-Build a directed graph $H$ whose nodes are entity classes: the source $s$ (the loan parties, holding the collateral), intermediate classes such as $N$ (restricted subsidiaries that are not guarantors), and the sink $t$ (unrestricted subsidiaries, outside the covenant perimeter). Each arc $a$ has a capacity $c_a \ge 0$ in dollars: the basket that permits investments or asset transfers along that route. A **flow** $f$ assigns $0 \le f_a \le c_a$ to each arc, with inflow equal to outflow at every intermediate node. Its value $|f|$ is the net flow into $t$. The **leakage capacity** is
+> **Math, Gently.** *Flows, cuts, and the narrowest place in the plumbing.* Picture water before money. Two pipes run from a reservoir into a tank, one 40 wide and one 60 wide, and a single pipe runs out of the tank to a field. A *flow* is any way of running water that respects each pipe's width and never lets the tank fill or drain: what goes in comes out. How much can reach the field each hour? Weld the outflow pipe shut, width 0, and the answer is 0, however wide the inflows are. Open it to 30 and the answer is 30, because the outflow pipe is the bottleneck. Open it to 1,000 and the answer is 100, because now the two inflows are the bottleneck and together they carry $40 + 60$. A *cut* is any set of pipes that, sawn through, would stop all water reaching the field, and its capacity is the total width you sawed. Sawing the outflow costs 0, 30 or 1,000 in the three cases; sawing both inflows costs 100 every time. The biggest flow always equals the cheapest cut: 0, then 30, then 100. Look at the third case again. Making the outflow enormous did not add a drop beyond 100. It moved the bottleneck upstream, onto two pipes nobody had been watching. Swap water for dollars of collateral and pipe width for basket capacity, and that sentence is the next case study. The formal version is next.
+
+Now the dollars. Build a directed graph $H$ whose nodes are entity classes: the source $s$ (the loan parties, holding the collateral), intermediate classes such as $N$ (restricted subsidiaries that are not guarantors), and the sink $t$ (unrestricted subsidiaries, outside the covenant perimeter). Each arc $a$ has a capacity $c_a \ge 0$ in dollars: the basket that permits investments or asset transfers along that route. A **flow** $f$ assigns $0 \le f_a \le c_a$ to each arc, with inflow equal to outflow at every intermediate node. Its value $|f|$ is the net flow into $t$. The **leakage capacity** is
 
 $$
 \Phi = \max_{f}\; |f|.
@@ -328,21 +332,23 @@ $$
 
 (We use $\Phi$ because $\Lambda$ is reserved for order arrival and $\lambda$ for default intensity.)
 
-An $s$–$t$ **cut** $(\mathcal{S}, \mathcal{S}^c)$ splits the nodes so that $s \in \mathcal{S}$ and $t \notin \mathcal{S}$. Its capacity $c(\mathcal{S})$ is the sum of capacities on arcs leaving $\mathcal{S}$.
-
-**Weak duality (any flow ≤ any cut).** Summing conservation over the nodes in $\mathcal{S}$,
-
-$$
-|f| = \sum_{a \,\in\, \text{out}(\mathcal{S})} f_a \;-\; \sum_{a \,\in\, \text{in}(\mathcal{S})} f_a \;\le\; \sum_{a \,\in\, \text{out}(\mathcal{S})} c_a = c(\mathcal{S}),
-$$
-
-because $f_a \le c_a$ on arcs leaving $\mathcal{S}$ and $f_a \ge 0$ on arcs entering it. The **max-flow min-cut theorem** (Ford & Fulkerson, 1956) says the bound is tight:
+An $s$–$t$ **cut** $(\mathcal{S}, \mathcal{S}^c)$ splits the nodes so that $s \in \mathcal{S}$ and $t \notin \mathcal{S}$. Its capacity $c(\mathcal{S})$ is the sum of capacities on arcs leaving $\mathcal{S}$. The **max-flow min-cut theorem** (Ford & Fulkerson, 1956) says that the largest flow equals the smallest cut, exactly as it did for the water:
 
 $$
 \Phi = \min_{\mathcal{S}}\; c(\mathcal{S}).
 $$
 
-The theorem is what makes this practical, because the min cut tells you *which* baskets bind. Raising the capacity of an arc that is not in the min cut changes nothing. Raising the capacity of an arc in the min cut, including to infinity, moves the cut, and $\Phi$ jumps to the next-smallest cut. That is exactly what a trapdoor does.
+The theorem is what makes this practical, because the min cut names *which* baskets bind. Raising the capacity of an arc that is not in the min cut changes nothing. Raising the capacity of an arc in the min cut, including to infinity, moves the cut, and $\Phi$ jumps to the next-smallest cut. That is exactly what a trapdoor does, and it is the third case in the box with lawyers instead of plumbers.
+
+#### The Full Derivation: any flow is at most any cut
+
+Half of the theorem is bookkeeping. Sum the conservation condition over the nodes in $\mathcal{S}$. Every intermediate node contributes zero, and the source contributes its net outflow, which is the flow's value. Arcs with both ends inside $\mathcal{S}$ appear once as an outflow and once as an inflow and cancel, so what survives is the traffic across the boundary:
+
+$$
+|f| = \sum_{a \,\in\, \text{out}(\mathcal{S})} f_a \;-\; \sum_{a \,\in\, \text{in}(\mathcal{S})} f_a \;\le\; \sum_{a \,\in\, \text{out}(\mathcal{S})} c_a = c(\mathcal{S}),
+$$
+
+because $f_a \le c_a$ on arcs leaving $\mathcal{S}$ and $f_a \ge 0$ on arcs entering it. That is weak duality: any flow is at most any cut. The other half, that some flow attains the smallest cut, is Ford and Fulkerson's argument. Push flow along any path from $s$ to $t$ that still has room (counting the option of undoing flow already sent the other way), and repeat until no such path remains. At that moment the nodes still reachable from $s$ form a cut whose outgoing arcs are all full and whose incoming arcs are all empty, so the inequality above holds with equality and the flow equals that cut. The Edmonds–Karp routine behind Figure 25.3 is this argument run as an algorithm, choosing the shortest open path each time so that it is guaranteed to finish.
 
 ### 25.4.2 Case Study: J.Crew, 2016–2017, the Trapdoor as a Cut
 

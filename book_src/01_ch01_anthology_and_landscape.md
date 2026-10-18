@@ -6,7 +6,7 @@ The RFQ arrives the way bad news always arrives on a credit desk: politely, in a
 
 Theo's hand goes to his pocket, where the USB stick with his old 13-week cash flow model lives "for emotional support." With the other hand he opens the credit agreement: 350 pages, 2019 vintage, a definition of "Consolidated EBITDA" that runs to four pages and has never once been in a hurry.
 
-"Engine has us at 91.40," says Kaz, without looking up. "Residual vol is normal. Inventory is flat. Let's just assume Gaussian."
+"Engine has us at 91.40," says Kaz, without looking up. "Residual vol is normal. Inventory is light. Let's just assume Gaussian."
 
 "The engine wasn't on the call," says Mags.
 
@@ -88,7 +88,7 @@ The first number is about money. Barclays QPS estimates that funds using quantit
 
 ## 1.2 Evaluating the Market Set in Quantitative Credit
 
-On Theo's second afternoon, before he had been allowed to touch a quote, Ines took the marker back to the whiteboard and drew six chairs around an oval. "This is the table," she said. "Before you play a hand, you learn who is sitting at it, what each of them has to do, and when. Nobody here is stupid. Most of them are just not free." She labelled the chairs, and then, instead of explaining all six, she wrote *Halvorsen, Fri 2:58, \$15mm* in the middle of the oval. "The table below is the map. Three of these chairs could have sent you that RFQ. Tell me what Friday looked like from each of their screens."
+On the Monday afternoon after Halvorsen, with the 78 still on the screen, Ines took the marker back to the whiteboard and drew six chairs around an oval. "This is the table," she said. "Before you play a hand, you learn who is sitting at it, what each of them has to do, and when. Nobody here is stupid. Most of them are just not free." She labelled the chairs, and then, instead of explaining all six, she wrote *Halvorsen, Fri 2:58, \$15mm* in the middle of the oval. "The table below is the map. Three of these chairs could have sent you that RFQ. Tell me what Friday looked like from each of their screens."
 
 She tapped the first chair, which was the desk's own kind: another dealer or portfolio-trading desk. "Say it came from a desk like ours. They picked up \$40mm of Halvorsen in a portfolio trade on Tuesday *(illustrative)*, the name's volatility jumped on Thursday, and at 2:30 on Friday their single-B limit went red. They know nothing about any lender call. They're flattening because a number on a risk screen changed colour, and they want it gone before the close, because that's when limits are measured. From that chair, Friday was a limit breach. If that was the seller, Kaz's 91.40 was a fine bid." She paused. "Our own weakness, while we're here, is the one you watched: we're the person a well-informed seller wants to find."
 
@@ -164,13 +164,13 @@ $$
 
 Three things fall out immediately. First, the bid falls one-for-one in $q$: a desk that is already long is a worse buyer, by $\gamma\sigma^2_{\text{IDO}}h$ per \$mm of existing inventory. Second, the bid falls in the client's size, by $\tfrac12\gamma\sigma^2_{\text{IDO}}h$ per \$mm; this is the "block discount," and it is the term most often dropped by people who linearize too early. Third, letting $\Delta q \to 0$ gives the reservation mid $r^{\text{res}} = m - \gamma\sigma^2_{\text{IDO}}h\,q$, which is the Avellaneda–Stoikov reservation price with the trading horizon $T-t$ replaced by the expected holding period $h$. (The notation table reserves $r$ for interest rates, so the reservation price wears a superscript.) The same algebra for a client *buying* $\Delta q$ from us gives the ask $A^{\text{res}} = m' + \tfrac12\gamma\sigma^2_{\text{IDO}}h\,(\Delta q - 2q)$, where $m'$ conditions on a buy RFQ: a long desk is a keen seller.
 
-**Whose five days?** The Tuesday after the 8-K, Halvorsen stopped trading: no prints, no RFQs, one indicative offer at 80 from a dealer who plainly did not want to sell. The desk still held its \$5mm, and the engine still charged for it with $h = 5/252$, as though the bonds could be sold by Monday. Ines stopped behind Kaz's chair and read the input off the screen. "Whose five days?"
+**Whose five days?** The Tuesday after the 8-K, Halvorsen stopped trading: no prints, no RFQs, one indicative offer at 80 from a dealer who plainly did not want to sell. The desk still held its Halvorsen bonds, and the engine still charged for them with $h = 5/252$, as though the bonds could be sold by Monday. Ines stopped behind Kaz's chair and read the input off the screen. "Whose five days?"
 
 "The model's," Kaz said.
 
 "The market's are about a quarter," Ines said, "and nobody asked us." Kaz set $h$ to $63/252$, and the charge for each \$mm already held went from 0.025 points to 0.32 *(illustrative)*.
 
-"And that's still a charge for wiggles," Mags said from across the desk, "on a bond that just fell through a trapdoor, hedged with CDX it stopped following at 4:40 on Friday." Nobody had re-estimated $\sigma_{\text{IDO}}$ since the call. Kaz wrote three words on a sticky note, *hedge, horizon, jump*, and stuck it on the inventory term's unit test; the third word is the Ways This Blows Up box at the end of §1.3.3.
+"And that's still a charge for wiggles," Mags said from across the desk, "on a bond that just fell through a trapdoor, hedged with CDX it stopped following at 4:40 on Friday." Nobody had re-estimated $\sigma_{\text{IDO}}$ since the call. Kaz wrote three words on a sticky note, *hedge, horizon, jump*, and stuck it to the monitor beside the inventory term's code; the third word is the Ways This Blows Up box at the end of §1.3.3.
 
 ### 1.3.3 The toxicity term: Bayes on the RFQ
 
@@ -246,6 +246,8 @@ Drawn as a waterfall, the decomposition makes the point the chapter has been cir
 
 > **Poker Table.** "An RFQ from a lender who was on the 2 p.m. call is a raise from a player who just looked at the river card," Ines says. "You don't need to know what he saw. You need to know he saw it." The lesson is in the Bayes step: $\pi$ is a function of observable *counterparty state*, not of the bond. Two identical RFQs on the same CUSIP can deserve bids ten points apart because of who sent them and when. Ines's hand history, replayed through markouts, is the test: if you had bought at 91.40, your five-day markout would have been $78 - 91.40 = -13.4$ points on \$15mm, or about \$2.0mm. Across a thousand such hands the average markout on each feature bucket *is* $-\pi J$, and that is how you estimate $\pi$ without ever reading anyone's mind.
 
+Kaz wanted to know why the engine's variance charge had not caught any of this on its own. Mags answered before Ines could. "Because your variance thinks Friday was a lot of small days."
+
 > **Math, Gently.** *Normal bags and Poisson bags.* A **normal** (Gaussian) distribution is what you get when many small, independent wiggles add up: most outcomes cluster near the middle, and big surprises are so rare that a move of seven standard deviations essentially never happens. A **Poisson** process is the opposite kind of bag: "nothing, nothing, nothing, then one big thing." It counts rare events (defaults, lender calls, downgrades) arriving at some average rate, and the damage comes all at once. The two can have exactly the same mean and the same variance and still be completely different experiences. A tiny number: a 2% chance of losing 50 points has an expected loss of $0.02 \times 50 = 1$ point, the same as losing 1 point for certain. Its standard deviation is about 7 points ($\sqrt{0.02 \times 0.98 \times 50^2} = 7$). A normal bag with a mean of $-1$ and a standard deviation of 7 looks identical to the mean–variance rule: same mean, same variance, same penalty. But in the normal bag, losing 50 points is a seven-standard-deviation event, far rarer than one in a billion; in the Poisson bag it happens one time in fifty. A quadratic penalty cannot tell the two apart, and the box below shows what that costs. Chapter 5 gives both distributions their full treatment.
 
 > **Ways This Blows Up.** *Kaz: "Let's just assume Gaussian."* The mean–variance certainty equivalent treats a 50-point jump to default as if it were a lot of small wiggles. For a small position the error is small, because a risk-averse desk barely notices the difference between a rare small loss and a spread of tiny ones. But the honest penalty for a jump grows *exponentially* in the size of the position times the size of the jump, while the quadratic penalty grows only with its square, so the gap between them opens quickly and then explodes. Large blocks in jumpy names are exactly where this matters, which is why real desks cap jump-to-default exposure with hard limits rather than trusting a quadratic penalty. Kaz: "...I regret it already." Chapter 18 rebuilds the market maker's problem with a jump term, and Chapter 28 turns the limit into a sizing rule.
@@ -280,7 +282,7 @@ Drawn as a waterfall, the decomposition makes the point the chapter has been cir
 
 The spec that fixes it, with the units written into the contract and the inputs on which the function must refuse to answer, is the chapter's spec in §1.10.
 
-The cold open's arithmetic was done with a pencil, on a Monday, and the pencil is the problem. At 2:58 p.m. on a Friday there is no pencil: the RFQ is on the screen, five dealers are in competition, and the number has to leave the building before the other four. The arithmetic of (1.2) is not hard; it is easy to get wrong in a hurry. Charge the toxicity twice, once in a composite mid that already marked down when the lender call ended and again as $\pi J$, and the bid is lawful and quietly uncompetitive: the desk stops winning the flow it wants and nobody can say why. Forget the block discount, or quote in dollars what the equation wants in points, and the bid is simply wrong. A desk automates the bid for the reason it automates anything it cannot afford to get wrong once, and the tests are the part that matters. Tuesday's red build was one of them doing its job.
+The cold open's arithmetic was done with a pencil, on a Monday, and the pencil is the problem. At 2:58 p.m. on a Friday there is no pencil: the RFQ is on the screen, five dealers are in competition, and the number has to leave the building before the other four. Equation (1.2) is not hard; it is easy to get wrong in a hurry. Charge the toxicity twice, once in a composite mid that already marked down when the lender call ended and again as $\pi J$, and the bid is lawful and quietly uncompetitive: the desk stops winning the flow it wants and nobody can say why. Forget the block discount, or quote in dollars what the equation wants in points, and the bid is simply wrong. A desk automates the bid for the reason it automates anything it cannot afford to get wrong once, and the tests are the part that matters. Tuesday's red build was one of them doing its job.
 
 **Reading Listing 1.1.** The test that failed at 2:13 a.m. lives here, next to the function it guards. `reservation_bid` takes the fair-value mid `S`, the inventory `q`, the client's block `dq`, the risk aversion `gamma`, the post-hedge `sigma_ido`, the holding period `h_years`, the toxicity posterior `pi`, the informed jump `J` and the cost `c`, and returns one number: the bid, in points per 100 par. After validating its inputs it does three things. It shades the mid to the Glosten–Milgrom posterior mean, `S - pi*J`. It subtracts the inventory charge, one half of `gamma` times the horizon variance times `2q + dq`, which is the average marginal charge over the dollars you are about to buy: the inventory you already hold counts in full, the new block at half. And it subtracts `c`. Three helpers keep it honest. `posterior_informed` turns a prior and a log-likelihood ratio into `pi` by adding them on the logit scale. `glosten_milgrom_markout` simulates sellers who are informed with probability `pi`, hands the buyer the hedged noise plus a loss of `J` from the informed ones, and returns the mean markout with its standard error, which must land within three standard errors of `-pi*J`: Ines's hand history in miniature. `jump_penalty_ratio` divides the exact exponential-utility jump charge by its quadratic cousin. The script then reproduces the cold open (91.40 for Kaz's engine, 83.60 once Theo's features are in) and asserts the signs from the comparative statics, including that a short desk bids above the mid.
 
@@ -401,6 +403,8 @@ Theo met the first family on a Tuesday when Halvorsen's bonds did not trade at a
 >
 > $V_t$ and $\sigma_V$ are not observed; they are backed out of equity value and equity volatility using $\sigma_E E_t = \sigma_V V_t N(d_1)$ (Chapter 6 and Chapter 23 do it properly). The default point $F$ is a convention; the KMV choice commonly reported is short-term liabilities plus half of long-term debt. The desk use is immediate: equity trades every millisecond and the bond trades twice a week, so the equity market gives you a fresh fair-value input for the bid between bond prints.
 
+Theo asked what a DD of 4 meant in English. "Four standard deviations between the firm and its default point," Kaz said. "Which sounds like a lot. How much it is depends entirely on what shape you think the world is."
+
 > **Math, Gently.** *Thin tails, fat tails, and what $N(-4)$ really says.* The function $N(\cdot)$ is the standard normal cumulative distribution: $N(-\text{DD})$ is the probability that a bell-curve draw lands more than DD standard deviations below its mean. The bell curve's tails thin out astonishingly fast. One standard deviation down happens about 16% of the time; two, about 2.3%; three, about 0.13%; four, about 0.003%, or 3 times in 100,000. If firms' assets really wandered like a bell curve, a firm four standard deviations from its default point would essentially never default. Real default data have **fat tails**: extreme outcomes come far more often than the bell curve allows, because the world contains jumps, fraud, lawsuits and lender calls, and because the inputs ($V_t$, $\sigma_V$) are themselves uncertain. The empirical record that Moody's KMV built says a DD of 4 corresponds to a default frequency of almost 1 in 100. Same distance, a factor of about 300 in probability. That is the next extraction.
 
 > **[SOURCE EXTRACTION]** *Bohn_Stein_Active_Credit_Portfolio_Management p.138:* "under MKMV's empirical distribution and using the VK model described later in this chapter, a DD of 4 converts into an EDF of almost 1 percent."
@@ -409,7 +413,7 @@ Theo met the first family on a Tuesday when Halvorsen's bonds did not trade at a
 
 Mags had been half-listening from the recovery waterfall. "Ranking I'll give you," she said. "A DD that falls every week for a month, I want to hear about. Now try it on Halvorsen this week. The stock isn't a claim on the assets any more; it's a lottery ticket on the plan, priced on whatever the restructuring might leave shareholders. Back $V_t$ out of that and you've measured the rumour, not the firm." She went back to the waterfall, then added, without looking up: "And check what's in your $F$. A drop-down can create senior debt overnight."
 
-Kaz had no answer to either, and turned to the other family, the one that does not need the stock at all.
+Kaz had no answer to either, and went looking for a model that does not need the stock at all.
 
 > **[SOURCE EXTRACTION]** *Schmid_Credit_Risk_Pricing_Models p.128:* "the default time is unpredictable and therefore the behavior of credit spreads for short maturities can be captured more realistically." ... "their main draw-back is the missing link between firm value and corporate default."
 >
@@ -510,6 +514,8 @@ The last question: *when the company breaks, who is left holding what, and who h
 > **[SOURCE EXTRACTION]** *Moyer_Distressed_Debt_Analysis p.370:* "Banks and collateralized debt obligations (CDOs) are not natural holders of equity securities." ... "when such entities are known to be large holders of the postreorganization equity, other market participants will certainly consider their net sell disposition."
 >
 > **Annotation.** The forced-seller graph does not end at default; it rewires. Loans convert into post-reorganization equity, and the holders of those loans (CLOs, banks) are often barred from, or penalized for, holding equity. So the most predictable seller of a newly reorganized stock is its largest holder, and everybody knows it. Moyer's other forced seller is smaller and sadder: the trade creditor who "may not have the financial wherewithal to wait until the completion of a bankruptcy case to realize full value of the claim and thus is a forced seller" (p.310). Claims trading is that edge in pure form (Chapter 16).
+
+Theo added the last page himself, because it was the one he had read most often at PJT.
 
 > **[SOURCE EXTRACTION]** *Houlihan_Lokey_Distressed_MA p.35:* "Under Section 363, for example, a debtor with Court approval may sell assets free and clear of all liens, claims and encumbrances (which attach only to the proceeds of such sales)."
 >
@@ -727,7 +733,7 @@ Theo, who had been on exactly that kind of team, said nothing, but he wrote *ope
 
 Ines did the thing she does at every decision point. She turned to the room. "Same facility. Same size. Same screen price. Two sellers, an hour apart. Bid both, bid one, or pass? And what would you need to know to tell them apart?"
 
-Write your own card before reading on: bid both, bid one, or pass, and what would tell the two sellers apart?
+Write your own card before reading on.
 
 Kaz answered first, carefully. "From the loan's price history, nothing. The two trades are identical. Same instrument, same size, same price, same day. Any model that only looks at the loan gives them the same bid. So the information has to be in the features of the *sender*, not the loan."
 
@@ -771,7 +777,7 @@ Ines nodded slowly. "Which is the whole of the toxicity term."
 
 "Which is the whole of the toxicity term," Mags agreed. "I just paid for it by the trade instead of by the model."
 
-The Risk analyst missed the train. In the minutes, under *Action items*, someone wrote: "Bucket markouts by sender, not by name. (Mags, June 2020.)" Ines added a second line underneath, in the tournament-scorecard hand: *Five-day markouts on every RFQ, bucketed by Theo's features; the average per bucket is* $-\pi J$*. Kaz: the toxicity model (Ch 3). Theo: the Priming Risk Score that feeds it (Ch 13).*
+The Risk analyst missed the train. In the minutes, under *Action items*, someone wrote: "Bucket markouts by sender, not by name. (Mags, June 2020.)" Ines added a second line underneath, in the tournament-scorecard hand: "Five-day markouts on every RFQ, bucketed by Theo's features; the average per bucket is $-\pi J$. Kaz: the toxicity model (Ch 3). Theo: the Priming Risk Score that feeds it (Ch 13)."
 
 #### Coda, 2023–2026: what the words cost
 

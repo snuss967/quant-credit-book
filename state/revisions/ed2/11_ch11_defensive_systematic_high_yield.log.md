@@ -1,8 +1,8 @@
 # U2 Revision Log: Chapter 11, Defensive Systematic High Yield
 
 - [x] 1. 11.0 Cold Open: The Bow Tie, EXPAND-SCENE (~1,200 words), Post-it card, selective-default plant, objectives as Ines's three sentences. — Done: label, Post-it card, Saks plant, Ines states three-part game.
-- [ ] 2. 11.1.1 Mixture return, MATH-GENTLY #1 "A bell with a lonely spike".
-- [ ] 3. 11.1.2 Credit triangle, MATH-GENTLY #2 "Bookmaker's odds versus true odds" + LIST-TO-NARRATIVE three errors.
+- [x] 2. 11.1.1 Mixture return, MATH-GENTLY #1 "A bell with a lonely spike". — Done: Mags lead-in, box with 1.40% mean, skew −5.5.
+- [x] 3. 11.1.2 Credit triangle, MATH-GENTLY #2 "Bookmaker's odds versus true odds" + LIST-TO-NARRATIVE three errors. — Done: 300/180/120 box, Ch5/6 pointer, Kaz-Ines-Mags-Theo scene.
 - [ ] 4. 11.2.1 Capture identity, MATH-GENTLY #3 + FULL-DERIVATION-MOVE; move Whipsaw Trend Watch to end of 11.2.
 - [ ] 5. 11.2.2 Convexity, MATH-GENTLY #4 "A line with a kink" + LIST-TO-NARRATIVE traps/Spec scene.
 - [ ] 6. 11.2.3 Case Study 1 2022-2023 Round Trip, EXPAND-SCENE as replay.

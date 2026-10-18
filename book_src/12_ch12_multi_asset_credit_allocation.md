@@ -3,11 +3,17 @@
 
 ## 12.0 Cold Open: Seven Piles, One Bet
 
+*(The desk, the sleeve, its weights and every line of dialogue are fictional. The recovery figures Mags quotes are the Federal Reserve's, cited in §12.1.)*
+
 The sleeve arrived on a Monday as a spreadsheet with eleven tabs and one comment: "Make it efficient. —PM."
 
-Theo opened it the way he used to open a data room, looking for the tab somebody hoped he would skip. High yield. Leveraged loans. EM sovereigns, BB to B. EM corporates. CoCos. High-yield preferreds. ABS. CMBS BBB. CLO BBB to B. Credit-risk transfer. And at the bottom, in a different font, as if added by a different person: middle-market direct lending, held through a perpetual BDC.
+It was Monday 12 October 2026, the start of Theo's fourth week, and the sleeve was not a proposal. It was a live multi-asset credit book that the platform ran for an outside client, and its weights column already summed to one hundred.
+
+Theo opened it the way he used to open a data room, looking for the tab somebody hoped he would skip. High yield. Leveraged loans. EM sovereigns, BB to B. EM corporates. CoCos. High-yield preferreds. ABS. CMBS BBB. CLO BBB to B. Credit-risk transfer. And at the bottom, in a different font, as if added by a different person: middle-market direct lending, held through a perpetual BDC. Its current weight was thirty-five percent *(illustrative)*.
 
 Kaz had already run the optimizer. "Good news. Max Sharpe puts thirty-five percent in direct lending, which is the upper bound. Its volatility is one point nine percent. It is the best asset I have ever seen."
+
+"So the optimizer agrees with whoever bought it," Theo said.
 
 "Volatility of what?" Mags asked from two desks over, without turning around. "The quarterly letter?"
 
@@ -15,7 +21,57 @@ Kaz had already run the optimizer. "Good news. Max Sharpe puts thirty-five perce
 
 "The return series is a valuation committee with an appraisal model and a deadline. Back in my day we called that a mark. Now you call it a covariance matrix."
 
+"It is the data," Kaz said, a little stiffly. "Twenty-six quarters of it. One negative quarter, minus forty basis points, in 2022 *(illustrative)*. I did not make it up."
+
+"Nobody said you made it up," said Ines. "What's it made of?"
+
+Kaz looked at the column as if it might answer for itself. "Net asset value per share, quarterly, from the fund's filings."
+
+"And who makes the net asset value?"
+
+That one Theo knew, because he had spent six years on the other side of it. "The adviser marks the loans. A valuation firm reviews some of the marks. The board signs. Then the filing comes out about six weeks after the quarter ends." He shrugged. "At PJT, when a lender group sent us its marks, the first question anybody asked was which lender had a fund to raise."
+
 Ines rolled her chair over, looked at the eleven tabs, and did what she did with any new hand: she counted the players. "Seven piles of the same bet with different lawyers attached. HY, loans, CLO mezz, the BDC: same sponsors, same borrowers, different seats in the waterfall. EM and preferreds are the same bet in a different accent. So. What's the pot, what are the odds, and who at this table knows more than you?"
+
+Theo did not answer that yet. He did what he had done every Monday morning for six years, which was to read a capital structure aloud from the top, as if it were one company. It was not one company, but the habit was stronger than the facts.
+
+"Leveraged loans. First-lien term loan B, floating rate, sponsor-backed."
+
+"Fifty-two," Mags said, still facing her own screens. "Post-default value, cents on the dollar. The high-yield bonds below them in the same kind of company, thirty-nine."
+
+"CLO, BBB to B. A mezzanine slice of a pool of those same term loans."
+
+"Whatever the waterfall leaves after the coverage tests have finished eating. Ask me the vintage and I'll tell you how hungry they were."
+
+"Direct lending, through the BDC. First-lien unitranche, to the company one size smaller."
+
+"Direct loan, thirty-three," said Mags, "and that is the Fed's number, not mine."
+
+Kaz frowned. "Thirty-three for a first lien? Below the unsecured bonds?"
+
+"First lien on less," said Mags. "Smaller companies, thinner interest coverage, fewer people who want the assets on the day you need to sell them. Seniority is a seat. It is not a guarantee that the room has anything in it."
+
+Theo kept going. "EM sovereigns, BB to B. Unsecured, collective action clauses."
+
+"Whatever the IMF program says, after two years of meetings."
+
+"CoCos."
+
+"Zero, if a regulator decides so on a Sunday," Mags said, and nobody on the desk needed the date (it was 19 March 2023, and the bank was Credit Suisse).
+
+"Preferreds."
+
+"Equity that pays a coupon until it doesn't."
+
+"ABS, CMBS BBB, credit-risk transfer."
+
+"Collateral through a waterfall. Ask me after the trustee report."
+
+Theo had written the answers in a column down the left margin of his notebook. Eleven tabs had produced perhaps five distinct seats, and three of them were the same population of sponsor-backed, single-B, floating-rate American companies seen through different documents. He drew a bracket around the loans, the CLO tranche and the BDC and wrote *one borrower set* next to it.
+
+"Here is what bothers me," he said. "The PM wrote 'make it efficient' on a book that already holds thirty-five percent of the BDC. So the question isn't whether to buy it. We own it."
+
+"Then the question is whether to stay in line," said Ines. She had the fund's tender terms open already, which meant she had been waiting for someone to ask. "It buys back up to five percent of its shares a quarter. If more than five percent of the holders want out in the same quarter, everyone gets a slice of what they asked for. You don't own an asset with a volatility of one point nine. You own a place in a queue, and the length of the queue is set by people you've never met."
 
 "The pot is about six percent," Theo said, scrolling. "The efficient frontier runs from five-eleven to six-twenty."
 
@@ -29,7 +85,9 @@ He took the USB stick out of his pocket, the one with the 13-week cash flow mode
 
 The question this chapter answers: **how do you allocate across credit sectors when every input lies in its own way? The index yields include defaulted constituents, the volatilities are appraised, the correlations change with the weather, and one of the assets can only be sold once a quarter, five percent at a time.**
 
-By the end of this chapter you will be able to: write a sector's forward return as an accounting identity and say which measure each term lives in; compare sectors by spread per unit of expected loss, DTS risk and liquidity cost instead of by yield; fit a two-state hidden Markov model to credit excess returns without leaking the future; build a covariance matrix from DTS, EWMA and shrinkage, and desmooth a private-credit return series before it reaches the optimizer; explain why the efficient frontier in multi-asset credit is nearly flat and what that implies for how much to trust it; impose liquidity tiers, a 15% illiquid cap, a days-to-liquidate budget and a tactical tilt budget as hard constraints; and hand ROBO a spec that builds the whole engine with sanity checks.
+The answer comes in three movements. The inputs turn out to be an accounting identity with four terms, each owned by a different person and each wrong in its own direction (§12.2–12.3); the covariance and the regime are estimates whose error bars are wider than the differences the optimizer is choosing between, so the objective is nearly flat and the constraints decide (§12.4–12.6); and the constraint that binds is the exit door, whose width depends on what everyone else is doing (§12.7–12.9). The Finder table at the top of the Desk Debrief (§12.11) lists each tool the chapter builds, with the box that explains it, the scene that tests it and the listing that implements it.
+
+*Before reading on: which of the eleven tabs would you cap, and what single number would you demand for each?*
 
 ## 12.1 The MAC Universe as a Capital-Structure Map
 

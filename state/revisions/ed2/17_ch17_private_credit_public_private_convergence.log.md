@@ -1,0 +1,22 @@
+# U2 Progress Log, Chapter 17
+
+- [ ] 1. Cold Open: Volatility N/A · EXPAND-SCENE (to ~1,200 words)
+- [ ] 2. 17.1.1 Desk framing · LIST-TO-NARRATIVE + BRIDGE
+- [ ] 3. 17.1.2 What "private" actually buys · ANOTHER-SEAT (box 1: direct lender)
+- [ ] 4. 17.2.1 → 17.2.2 · MATH-GENTLY (box A, two parts)
+- [ ] 5. 17.2.2 Derivation: GLM · FULL-DERIVATION-MOVE + box B (autocorrelation)
+- [ ] 6. 17.2.3 Dimson sums · MATH-GENTLY (box C) + WHEN-TO-APPLY scene
+- [ ] 7. 17.2.4 Unsmoothing · MATH-GENTLY (box D) + LIST-TO-NARRATIVE
+- [ ] 8. 17.3.1–17.3.2 BDC P/NAV · MATH-GENTLY (box E)
+- [ ] 9. 17.3.3 Non-accrual gap · MATH-GENTLY (box F) + NEW-SCENE (Medallia)
+- [ ] 10. Case Study OBDC and OBDC II · EXPAND-SCENE → Long Scene 1 + Another Seat box 2
+- [ ] 11. 17.4.1–17.4.2 Two-way takeouts · MATH-GENTLY (box G) + Full Derivation
+- [ ] 12. Case Study Finastra 2023 · NEW-SCENE (Pluralsight)
+- [ ] 13. 17.5 Banks and insurers · LIST-TO-NARRATIVE + ANOTHER-SEAT (box 3: insurer)
+- [ ] 14. 17.6.1–17.6.2 Redemption game · MATH-GENTLY (box H, two parts)
+- [ ] 15. Case Study Redemption Quarters 2026 · EXPAND-SCENE → Long Scene 2
+- [ ] 16. 17.7.2 Five price sources · LIST-TO-NARRATIVE
+- [ ] 17. 17.8.1 · SHOP-LIFE vignette
+- [ ] 18. 17.8.2 Features worth computing · LIST-TO-NARRATIVE + dealer seat
+- [ ] 19. 17.8.3 Pending mark · MATH-GENTLY (box I) + FULL-DERIVATION-MOVE
+- [ ] 20. 17.9 and 17.10 · BRIDGE + Finder table

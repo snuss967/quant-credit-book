@@ -1,6 +1,6 @@
 # Progress Log, Edition 2 (U2): Chapter 8
 
-- [ ] 1. [8.0 Cold Open: Thirty-Seven Cents] EXPAND-SCENE (to 1,200–1,400 words): P&L explain email with "unexplained: −4 cents"; Ines's "why did rates sell off since lunch?"; cut closing paragraph to three clauses.
+- [x] 1. [8.0 Cold Open: Thirty-Seven Cents] EXPAND-SCENE (to 1,200–1,400 words): P&L explain email with "unexplained: −4 cents"; Ines's "why did rates sell off since lunch?"; cut closing paragraph to three clauses. — Done: explain email, −4¢ plug, Ines why-rates question, three-clause close.
 - [ ] 2. [8.1 The Subtraction] MATH-GENTLY (tangent and bend) + FULL-DERIVATION-MOVE; P/Q one-sentence gloss.
 - [ ] 3. [8.1 The thirty-seven cents, itemized] BRIDGE + SHOP-LIFE SEED: carry split note.
 - [ ] 4. [8.2 Empirical vs. Analytical Duration] MATH-GENTLY (regression slope, two parts) + FULL-DERIVATION-MOVE.

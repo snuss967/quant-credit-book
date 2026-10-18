@@ -3,6 +3,8 @@
 
 ## 8.0 Cold Open: Thirty-Seven Cents
 
+*The bond, the afternoon and its headline are illustrative; the desk and everyone on it are fictional.*
+
 At 2:58 p.m. on the Friday before a lender call, Theo's screen showed two numbers that refused to agree. He was long \$40mm of a B3 first-lien secured bond at +620. The 10-year had sold off 18 bp since lunch. The bond was down thirty-seven cents.
 
 "Analytical duration 4.1," Kaz said, without looking up. "You're long \$16,400 of DV01. ROBO is sizing the hedge now. Two hundred thirty-two TY contracts, short."
@@ -17,7 +19,7 @@ Ines rolled her chair over, holding a coffee she had clearly been nursing since 
 
 "So you find out how much this bond actually cares about rates before you sell something to protect yourself from them."
 
-From across the aisle, without turning around, Mags said: "In 1994 we hedged B paper by buying the long bond. Flight to quality, they told us. Lost on both. By phone."
+From across the aisle, without turning around, Mags said: "In '94 the desk I joined two years later hedged its B paper by buying the long bond. Flight to quality, they were told. Lost on both. By phone. They were still paying for it when I got there."
 
 Theo opened his old 13-week cash flow model, the one on the USB stick, the way other people touch a lucky coin. "This thing has a duration of thirteen weeks and an empirical duration of zero. Nothing in it has ever moved with Treasuries."
 
@@ -25,15 +27,49 @@ Kaz lit up. "So it's a CCC bond."
 
 Nobody laughed, mostly because it was correct.
 
-Theo wrote the question on a sticky note and put it on his monitor: *Of the thirty-seven cents this bond moved today, how much was the bond?*
+It was Theo's fourth Friday on the desk, and he had learned one thing about the place for certain: when two numbers disagree, somebody has a reconciliation, and nobody has read it. At PJT the reconciliation was the sources-and-uses tab, and the person who had not read it was usually the client. Here it was a button in the risk system labeled EXPLAIN, which nobody pressed because the same report arrived by email every evening at 6:40 whether anyone wanted it or not.
 
-By the end of this chapter you will be able to decompose a corporate bond's return into carry, rates, spread beta, convexity, and residual, with every sign correct; estimate spread-dependent empirical durations by rating and recognize when the estimate is about to betray you; de-stale a beta estimated on bonds that trade twice a week; build, diagnose, and regularize a hedge matrix across CDX HY, Treasury futures, HYG/JNK, and equity puts; and define IDO precisely enough that a coding agent computes the same number you would.
+He pressed it. Ninety seconds later the email arrived, laid out by someone who had once been shown a spreadsheet and had taken against it:
+
+*HY-FL1 B3 \$40mm. P&L today: −\$148,000 (−37¢). Explained: −\$132,000 (−33¢). Unexplained: −\$16,000 (−4¢).*
+
+The word "Unexplained" was blue and underlined. Theo clicked it. The drill-down page took eleven seconds to load and contained one line, "Residual = Total − Σ(Explained)," and, at the bottom, a view counter that some optimistic engineer had installed when the system went live. It read 1. The 1 was him.
+
+"Four cents," he said. "Who owns four cents?"
+
+"Nobody," Kaz said. "It's the plug. Plugs are orphans by construction."
+
+"At PJT the plug had an owner. Usually me, at two in the morning, before the client call."
+
+"Here it has an owner too," Ines said. She had not rolled her chair back. "You. But four cents is the small problem. The thirty-three cents of 'explained' is the big one, because it was explained with Kaz's duration, and Kaz's duration assumes something about this afternoon that none of us knows." She turned her coffee cup a quarter turn on the desk, the way other people tap a table before a bet. "Serious question, before anybody sells anything. Why did rates sell off since lunch?"
+
+Nobody answered. Kaz looked at the rates screen as if it might volunteer. Mags, across the aisle, said "Hm," which from Mags was a paragraph.
+
+Theo opened the news pane and scrolled from noon. Between 12:00 and 2:58 there was exactly one headline that a bond market could have traded on. At 12:47 a Federal Reserve governor, speaking at a lunch, had said the committee could afford to be patient on further cuts because the economy was "proving resilient."
+
+"There," Kaz said. "Resilient. Growth. The bond tightened nine basis points because growth is good for credit. Rates sold off because growth is bad for bonds. It's one story."
+
+"Or," Ines said, "patient because inflation isn't done. That's a different story, and in that one your bond doesn't tighten on the news. It widens with the ten-year, a month from now, when everyone has read the transcript."
+
+"Or," Mags said, still facing her own screens, "somebody large had to sell ten-years at one o'clock, and the headline is the excuse the tape found afterwards. Happens every week. Nobody writes a book about it."
+
+Theo wrote the three on his notepad as if they were bidders in a process: *growth, inflation, somebody had to sell.* Under growth he wrote "bond tightens: hedge less." Under inflation, "bond widens with rates: hedge more, or hedge the spread." Under the forced seller, "bond doesn't care: hedge the duration, nothing else."
+
+"So the hedge ratio depends on which one it was," he said.
+
+"The hedge ratio *is* which one it was," Ines said. "Kaz's two hundred thirty-two contracts assume the bond moves like a Treasury whatever the reason. A smaller number assumes it was growth. A bigger one assumes inflation. Every number on that screen is somebody's guess about why the ten-year moved, written down as if it were arithmetic."
+
+"The bond tightened," Kaz said. "That's evidence."
+
+"That's the bond. It might have tightened for its own reasons on a day the ten-year sold off for its. You don't get to use the answer to grade the question." She stood up. "Find out what this bond has done on days like this, and on days that only looked like this. Then tell me what you'd short."
+
+Theo looked at the three words on the notepad, then at the four cents nobody owned, then at the thirty-four cents Kaz had already called alpha. He wrote the question on a sticky note and put it on his monitor: *Of the thirty-seven cents this bond moved today, how much was the bond?*
+
+By the end of this chapter you will be able to split a bond's move into the parts you did not choose and the one part you did, to hedge each part with the instrument that actually owns it, and to say what is left precisely enough that a coding agent computes the same number you would.
 
 ## 8.1 The Subtraction: Return Decomposition With the Right Signs
 
 Every restructuring banker has built a sources-and-uses table, and every one of them knows the rule: if the columns do not foot, somebody is about to be embarrassed in front of a client. A bond's daily return is a sources-and-uses table for performance. The uses side is one number, the realized total return. The sources side is a list of things you did not choose (Treasury carry, the curve, the rate move, the market's spread move, convexity) and one thing you did: the idiosyncratic residual you were paid to find. The desk calls that residual IDO, and the desk motto, "IDO or it didn't happen," is a statement about accounting before it is a statement about skill. Until the sources foot, you do not know whether you made money or the Federal Reserve made it for you.
-
-The P&L explain that the risk system emails out every evening is this table. Nobody reads it, which is why this section exists.
 
 ### Deriving the decomposition
 

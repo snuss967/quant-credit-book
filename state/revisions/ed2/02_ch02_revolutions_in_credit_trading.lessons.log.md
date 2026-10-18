@@ -43,6 +43,28 @@ Growth 31,789 / 14,619 = **2.17×** against the 1.6–1.9× target (23,390–27,
 - [x] B26. Duplicate Specs: body "Specification for AI Implementation" Module/Schemas/Edge cases (L856–860) and the Debrief's "The Spec You Hand the Robot" (L930). Survives: the Debrief Spec, with L858's schemas merged in; L856 and L860 deleted (L866 already holds the clip/centering detail). **Done:** Body Module/Schemas/Edge cases deleted; schemas and guards merged into Debrief Spec.
 - [x] B27. Listing 2.2 paragraph L880 relists the §2.3.2 caveats (winner's curse, non-response, cover gap consistent with competition and herding), also in the Debrief. Survives: §2.3.2 and the Debrief; L880 points. **Done:** Listing 2.2 paragraph points to caveats, Poker Table, 9 April.
 
+Second sweep, found after the first fixes (tool count 28,710 = 1.96×, still above 1.9×). Line numbers refer to the file after the first sweep:
+
+- [x] B28. L71 Man p.4 annotation relists what each revolution did to the two numbers; every section's closing line says it again, and the cold-open roadmap promises it. Survives: the section closers; the annotation keeps the definitions and the forecast point. **Done:** Annotation keeps definitions; section closers carry each revolution's effect.
+- [x] B29. L87 "That is the RSSG translation" restates Ines's "relationship into a variable" (L85) before Mags's beat challenges it. Survives: Ines and Mags; L87 keeps the PJT contrast in two sentences. **Done:** RSSG translation cut to two sentences after Ines and Mags.
+- [x] B30. L432 annotation's last sentence (the table "most often dropped because it 'has no trades in it'") is Ines's line in §2.5.1. Survives: Ines. **Done:** Annotation's dropped-table sentence cut; Ines says it in §2.5.1.
+- [x] B31. ETF/lender Seat box L602 restates the band ("the choice that seat faces each afternoon is the band above ... discount closes ... stays open"), which the box, derivation and scene already tell. Survives: the band; the seat box keeps the podcast pointer and the Apollo seat. **Done:** Seat box points to the band instead of retelling it.
+- [x] B32. Bank Seat box L670 ends by restating L666's Table C12 reading. Survives: L666; the box ends on utility versus franchise. **Done:** Bank seat box ends pointing to the block counts above.
+- [x] B33. Systematic-fund Seat box L400 restates the markout logic of the box above it ("win the hands whose markouts it can live with"). Survives: the markout box; the seat keeps Lam and Kamenski and the slicing warning. **Done:** Markout logic cut from seat box; Lam, Kamenski kept.
+- [x] B34. §2.9.3 L792 hand-history paragraph re-derives both stories' winner predictions at length before the verdict. Survives: the two predictions in one sentence each and the April 16 verdict. **Done:** Winner predictions one sentence each; April 16 verdict kept.
+- [x] B35. Listing openers L816, L828, L838, L850 each retell their section before the moment (the budget question, the eleven responders, the three dialects, the PM and the head trader). Survives: the moment; each opener trimmed. **Done:** Four listing openers trimmed to the moment the function mattered.
+- [x] B36. §2.5 L424 FINRA 82.9% is the fourth telling (Trend Watch, §2.2.1 twice). Survives: §2.2.1; L424 points back without the number. **Done:** Fourth 82.9% telling replaced by pointer to §2.2.1.
+- [x] B37. §2.9.3 L744 whiteboard router paragraph restates the router's inputs one by one. Survives: the 200 bp immediacy premium and the "total confidence" line. **Done:** Router inputs compressed to one sentence on the whiteboard.
+
+Third sweep (tool count 28,302 = 1.94×):
+
+- [x] B38. §2.2.1 overnight paragraph re-explains Rule 6730's day edges after Kaz has quoted the rule. Survives: the "third queue" and the timestamp-regime point. **Done:** Overnight paragraph keeps third queue and regime column; edges compressed.
+- [x] B39. §2.1 Man p.19 annotation ("logs every unfilled order ... training label (§2.5)") repeats §2.5's attempted-but-not-executed annotation. Survives: §2.5. **Done:** Unfilled-order logging left to §2.5's attempted-but-not-executed annotation.
+- [x] B40. §2.6.2 "2021, the boom" spine entry repeats Mags's 2021 story and the p.2 annotation. Survives: Mags; the spine keeps Man's move into PT. **Done:** 2021 spine entry points to Mags; keeps Man's move.
+- [x] B41. §2.9.2 payoff paragraph restates the derivation's assumption (bets proportional to turnover; square root against a line) one paragraph before the derivation. Survives: the derivation. **Done:** Payoff paragraph drops the assumption the derivation states next.
+- [x] B42. March 2020 scene intro recaps §1.8's whiteboard; the BIS paragraph's "basket at NAV ... never for sale" restates Ines's and Mags's lines. Survives: the dialogue. **Done:** Scene intro and BIS paragraph trimmed; dialogue carries the basket.
+- [x] B43. ETF/lender Seat box tells the "edge of the map / ceiling" idea twice in its last four sentences. Survives: one telling. **Done:** Seat box tells the edge-of-map ceiling once.
+
 ## (c) Templates and detached judgment paragraphs
 
 - [x] C1. L51 Ines's syllabus ("First you date ... Then you read ... You fit ... You price ... You compute ... You treat ... And at the end") — a syllabus in costume. Cut to the one-line answer; the Debrief already gives each outcome to a cast member. **Done:** Syllabus cut; Ines stops counting at one; Debrief carries outcomes.

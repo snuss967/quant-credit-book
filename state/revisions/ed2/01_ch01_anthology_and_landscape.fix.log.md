@@ -5,6 +5,7 @@
 ## Metrics
 
 - **before** (`python3 tools/prescriptiveness.py`): words 26,823 · bullets 5.3% · modal 4.2 · imper 1.0 · rule 1.7 · dialog 11.7 · mathgently 18 · seat 4 (file: 805 lines, 27,720 wc words)
+- **after** (`python3 tools/prescriptiveness.py`): words 25,603 · bullets 5.5% · modal 3.9 · imper 0.9 · rule 1.6 · dialog 12.8 · mathgently 16 · seat 4 (file: 854 lines, 26,912 wc words; the line count rose because headings and dialogue split paragraphs)
 
 ## Items
 
@@ -40,4 +41,18 @@
 
 ## Open items
 
+- **Modal density 3.9, not the <3.0 the fix list's order-of-work expected.** The remaining modals are mostly descriptive ("must sell", "has to", forced-seller mechanics) and dialogue; no templated rule paragraphs are left. Further cuts would remove single-telling scenes, which the orchestrator ruling on lesson 1 forbids.
+- **Math, Gently count 16 against the lesson-6 budget of 10.** The fix list asked only for random walk and Itô to go; the other survey-mention boxes (fat tails, regression slope, Monte Carlo, decile/IR, one-factor) remain, now never adjacent. A later pass could fold two or three into dialogue.
+- **Co-op counter (P1):** the verifier's wording was kept. The fix list's "no cooperation agreement before the deal" was not added, because it is unverified and the dossier and Ch 5 record competing lender groups organizing before the deal.
+- **§1.8.1 still carries its own detailed ForcedSellerGraph spec** alongside §1.10 item (4). It was not in the fix list; lesson 11 would retire it to a pointer in a later pass.
+- **Halvorsen naming (cast bible C9):** Ch 1 still says "Halvorsen Building Products"; canon is Halvorsen Packaging Holdings. Out of scope here; left for the continuity pass.
+- **Resource Graphs:** still channel-level (*Odd Lots*, *Flirting with Models*); U3 item, untouched.
+
 ## Notes
+
+- Snapshot commits (`5c28057`, `05cd251`) captured in-flight edits; protected-item checks were run against the starting commit `996e1ec`. All 18 Source Extraction lines, 4 Trend Watches (verbatim, moved), 6 exercises, 7 tagged equations, 28 `$$` lines, 26 URLs and 4 `#code-1-k` links are intact; no code fences, no em dashes, no CHECK text, no odd inline `$`, every `---` padded.
+- Beyond the list, small edits in the list's spirit: one line of narration threaded into each remaining run of three boxes (§1.3.3 end, §1.5 DD, §1.7 Houlihan Lokey); the cold open's "Inventory is flat" became "light" to match q = +5 in §1.3.3; the §1.2 walk moved to the Monday after Halvorsen so it can refer to the Friday RFQ; the Serta decision point gained a reader card.
+- Appendix F: removing the stray block closed an unbalanced fence (file fence count 333 to 332).
+- Cast bible updated: Kaz's 12 bp, "Whose five days?", the phantom position; Theo's percent-column DTS slip.
+
+<!-- STATUS: COMPLETE -->
