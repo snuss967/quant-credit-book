@@ -120,3 +120,16 @@ Prep (04:19–04:30, local only): code sweep (0 new listings), `<!-- EXPLAINED -
 | pace-guard | bi16e9flv | — | — | `--target 97 --cap-only` (alarms at 91%) | running |
 
 Next in line, as slots free: U2 on Part IV (Ch 13–17), U3b (Resource Graph upgrade from the media dossiers, Sonnet), U4 figures (Sonnet + matplotlib), U1 sweep on the three primers once they finish, then U2 on the remaining Parts.
+
+### Widened at 04:44 UTC (user: "put more agents on it")
+
+| Run | Task ID | Stages | Owns | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| part-IV-a | wgzz9zxzv | figures → figcheck → brief → revise → verify | Ch 13, 14 | running |
+| part-IV-b | w0wcd6yna | figures → figcheck → brief → revise → verify | Ch 16, 15 | running |
+| figs-V-a | w4lyhs2cz | figures → figcheck | Ch 18, 19 | running |
+| figs-V-b | w8lexa6xs | figures → figcheck | Ch 20, 22 | running |
+| pace-guard v2 | b22xrgxiz | `--target 96 --cap-only --check-every 60` (alarm at 90%) | — | running (replaces bi16e9flv) |
+| autosnap | bdca3onxd | commit + push every 10 min for 2 h | — | running |
+
+Scheduled restart: 09:33 UTC (trigger trig_016k2PhmaKrabSxxMUUnipys; user-set, 4h50m after 04:43, just after the 09:30 reset). At the 90% alarm, stop every workflow, list them here under "Stopped at cap" with their run IDs, and resume them at the restart.
