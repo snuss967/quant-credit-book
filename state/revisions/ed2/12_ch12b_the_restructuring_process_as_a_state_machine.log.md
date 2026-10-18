@@ -6,9 +6,9 @@
 - [x] 4. [§12B.3] MATH-GENTLY #3 + LIST-TO-NARRATIVE + ANOTHER-SEAT (CLO) — town-hall box; Ines room tactics paragraph; CLO seat after Poker Table.
 - [x] 5. [§12B.4] MATH-GENTLY #4 + BRIDGE (timed automaton) — board-game box; brief's 59.5 corrected to 60.5; petition bridge.
 - [x] 6. [§12B.5 head] NEW-SCENE Long Scene A: Saks Global, Five Months in Court — 2,500 words, four beats, cards graded; reference subsections compacted.
-- [ ] 7. [§12B.5 DIP/roll-up] MATH-GENTLY #5 + FULL-DERIVATION-MOVE
-- [ ] 8. [§12B.5 confirmation] NEW-SCENE, the Purdue jump
-- [ ] 9. [§12B.5 clock table] WHEN-TO-APPLY in dialogue
+- [x] 7. [§12B.5 DIP/roll-up] MATH-GENTLY #5 + FULL-DERIVATION-MOVE — pie box; one-line statement; Saks two cases; milestones tied to 20 Feb.
+- [x] 8. [§12B.5 confirmation] NEW-SCENE, the Purdue jump — 660 words; guard changed on one date; Container Store split.
+- [x] 9. [§12B.5 clock table] WHEN-TO-APPLY in dialogue — Ines: lender's name rows; circles DIP-order rows.
 - [ ] 10. [§12B.6 call spreads] MATH-GENTLY #6
 - [ ] 11. [§12B.6 fulcrum] MATH-GENTLY #7, two parts
 - [ ] 12. [§12B.6 plan value] MATH-GENTLY #8 + FULL-DERIVATION-MOVE + ANOTHER-SEAT (Oaktree)

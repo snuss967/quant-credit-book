@@ -375,7 +375,17 @@ The ladder Theo drew is §364: administrative priority (§364(b)), then superpri
 >
 > **Annotation.** In 2004 "sometimes" was accurate, and the roll-up was a defensive side benefit. In the LMT era it is often the point. The ad hoc group that led an out-of-court uptier provides the DIP, rolls up its prepetition paper at one, two or more dollars per dollar of new money, and so repeats the uptier in court with a judge's signature on it. Local rules in the busiest districts make debtors flag roll-ups for the court. The desk prices the transfer, derived next.
 
-**The roll-up as a recovery transfer.** A secured class has face $F$ and will receive value $W < F$ (its secured value plus its pool share), so every holder recovers $R = W/F$. A subgroup lends new money $M$ in the DIP and rolls up $\kappa M$ of its own prepetition claims, where $\kappa$ is the roll-up ratio. The rolled claims become DIP claims, which must be paid in full in cash at emergence. They come off the top, so the remaining prepetition holders recover
+Moyer's "sometimes" is now a line on a term sheet, and the line has a price.
+
+> **Math, Gently.** *The roll-up: two slices off the top.* Ten friends are each owed 10 by a host whose pie is worth 70, so each expects 7: a 70% recovery. Two of them lend the host a little extra for the oven, and in return the host agrees to serve their old IOUs, 20 in all, first and in full. The pie has not grown, because the oven money was spent keeping the kitchen open. The eight who did not lend now share the 50 that is left on claims of 80: 62.5% each. The two lenders got 100% on their old claims, and the eight lost 7.5 points apiece without anyone touching their slice directly. Now run it again with a pie worth 100. Everyone was going to be paid in full anyway, so serving two people first costs the other eight nothing. That second run is the whole economics in one line: the transfer exists only because the pie is too small, and it grows as the pie shrinks.
+
+**The roll-up as a recovery transfer.** In symbols, the holders of a secured class of face $F$ and value $W$ who do not join a DIP that lends $M$ and rolls up $\kappa M$ of the lenders' prepetition claims lose $\kappa M\,(F - W)/\big(F\,(F - \kappa M)\big)$ of recovery, which is zero for an oversecured class and grows with the class's impairment; the derivation is below. Ines's two Saks cases are two values of $\kappa M$. If the \$750mm refinanced the revolver, the notes' $\kappa M$ is zero and so is their transfer. If it rolled up the group's notes, $\kappa M$ is \$750mm against the class's face, and the non-lenders' loss scales with how deeply the class was impaired, which on the plan's numbers was very deeply. Reading the order decides which line you are on.
+
+The DIP lender also writes the case's calendar. A final DIP order, the kind of document Saks's lenders received on 20 February, carries **milestones**, such as a bidding-procedures order by day 30 or confirmation by day 120, and missing one is a DIP default. Those are clocks with the lender's name on them, and the state machine treats them exactly like statutory clocks. So does the committee's **challenge period** (often 60–75 days from its appointment, set by the DIP order). After it, the debtor's stipulations that the prepetition liens are valid bind everyone, and the committee's best weapon expires.
+
+#### The Full Derivation: the roll-up
+
+A secured class has face $F$ and will receive value $W < F$ (its secured value plus its pool share), so every holder recovers $R = W/F$. A subgroup lends new money $M$ in the DIP and rolls up $\kappa M$ of its own prepetition claims, where $\kappa$ is the roll-up ratio. The rolled claims become DIP claims, which must be paid in full in cash at emergence. They come off the top, so the remaining prepetition holders recover
 
 $$
 R' = \frac{W - \kappa M}{F - \kappa M}, \qquad
@@ -383,7 +393,7 @@ R - R' = \frac{W}{F} - \frac{W - \kappa M}{F - \kappa M}
 = \frac{\kappa M\,(F - W)}{F\,(F - \kappa M)} .
 $$
 
-The transfer is zero when $W \ge F$: rolling up an oversecured claim costs nobody anything, because those holders were going to be paid in full regardless. It grows with the class's impairment $F - W$. A roll-up is free exactly when it does not matter. (We assume $W$ is unchanged, that is, the new money is spent inside the estate rather than added to the value the class shares.) The DIP lender also writes the case's calendar: DIP agreements carry **milestones**, such as a bidding-procedures order by day 30 or confirmation by day 120, and missing one is a DIP default. Those are clocks with the lender's name on them, and the state machine treats them exactly like statutory clocks. So does the committee's **challenge period** (often 60–75 days from its appointment, set by the DIP order). After it, the debtor's stipulations that the prepetition liens are valid bind everyone, and the committee's best weapon expires.
+The transfer is zero when $W \ge F$: rolling up an oversecured claim costs nobody anything, because those holders were going to be paid in full regardless. It grows with the class's impairment $F - W$. A roll-up is free exactly when it does not matter. (We assume $W$ is unchanged, that is, the new money is spent inside the estate rather than added to the value the class shares.)
 
 ### Two exits: the §363 sale and the plan
 
@@ -397,7 +407,33 @@ After confirmation comes the **effective date**, the state that requires exit fi
 
 ![Figure 12-B.2: Four clocks run out within six weeks of the petition, but exclusivity and the avoidance period stretch from months to years, so the case's calendar is set by a few long clocks. Source: 11 U.S.C. §§362, 365(d)(4), 502(b)(9), 503(b)(9), 546(a), 547(b)(4), 1121; Fed. R. Bankr. P. 1007(c), 2003(a), 4001(c), 6003 (the clock table of §12B.5); the challenge period is a typical DIP-order term, drawn from the petition although it runs from committee appointment.](assets/figures/ch12b_chapter11_clocks.png)
 
+#### The Purdue jump: a guard that changed on one date
+
+*The desk's conversation is invented. The case facts come from the Supreme Court's slip opinion and from press reports of the revised plan, cited where they appear.*
+
+Kaz's last question in the Saks replay, whether a plan could release the old shareholders, gets its answer at 4:15 that Friday, when the floor is empty enough for Mags to put her feet on a desk that is not hers.
+
+"Before June 2024," she says, "a sponsor bought its release with the plan." The mechanics were simple. The people who had owned or run the company, and who faced lawsuits from its creditors, contributed money to the estate; the plan released them from those suits; and because the plan bound every holder in every class that the vote carried, a creditor who voted no was released from its own lawsuit anyway. The contribution was the price, and the vote was the guard on the arrow.
+
+Purdue Pharma was the case that tested how far the price could stretch. The Sackler family had withdrawn about \$11bn from the company, roughly 75% of its assets, and the first plan offered about \$4.3bn in exchange for releases that would bind every opioid claimant, consenting or not (as the Court's opinion recounts). On 27 June 2024 the Supreme Court held, 5–4, in *Harrington v. Purdue Pharma L.P.*, that the Bankruptcy Code does not authorize a plan that "effectively seeks to discharge claims against a nondebtor without the consent of affected claimants." Justice Gorsuch wrote for the Court; Justice Kavanaugh wrote the dissent. The case went back to Judge Sean Lane, and the revised plan he confirmed on 18 November 2025 had the Sacklers paying up to \$7bn over 15 years (about \$7.4bn all-in, by press reports), with releases only for the claimants who opted in. Those who stayed out keep their right to sue.
+
+Kaz goes to the board and finds the arrow. "So a release is a guard. Before the ruling, the guard was the class vote: two-thirds in amount, half in number, and everyone is bound. After the ruling, the guard is each holder's own consent."
+
+"And it changed on one date," Theo says, "for every open case at once." That is what makes it a desk problem and not only a law-school one. A guard on a transition is a parameter of the machine. When a court changes a guard, it does not reprice one bond; it reprices the same arrow in every case that has one, overnight, and every plan in solicitation that week had to be read again.
+
+"What counts as consent?" Ines asks. "Ticking a box, or failing to untick one?"
+
+That is the open half, and it is splitting by courthouse. Some courts accept an opt-out ballot, where silence counts as consent; others demand an opt-in, where only a box actively ticked does. In *Container Store*, the district court in Houston (Judge Rosenthal, 676 B.R. 356) upheld opt-out consent in principle but held that two classes receiving nothing, the subordinated claims and the equity, could not be bound that way, and the U.S. Trustee appealed to the Fifth Circuit on 10 April 2026 (No. 26-20166). For the desk the split is a district variable on the release arrow, and it matters most to exactly the holders who have least: a zero-recovery class owns nothing in the plan except its consent, and after June 2024 its consent is something a plan proponent may have to buy.
+
+Which is the part of Theo's Saks card that was right. A claim in an impaired class is a ballot, and since Purdue a ballot can also be a refusal to release, which keeps a lawsuit alive. His bid lost because the cramdown went through, not because the idea was empty.
+
+Mags swings her feet down. "Before June 2024 a sponsor bought its release with the plan. After, one vote at a time."
+
 ### The clock table
+
+Theo prints the table and asks Ines which rows he is supposed to watch.
+
+"The ones with a lender's name on them," she says. "Statutes are slow and public. DIP milestones are fast and private." She circles the challenge period and the final DIP hearing, the two rows whose source column says *DIP order* or depends on one, and hands it back.
 
 | Clock | Starts | Length | Source | What it moves |
 | :--- | :--- | :--- | :--- | :--- |

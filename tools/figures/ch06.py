@@ -106,6 +106,7 @@ def fig_volatility_tax():
     prob = np.array([25.0, 50.0, 25.0])
     mean, median = 100.0, 99.0
     assert abs((121 + 99 + 99 + 81) / 4 - mean) < 1e-9
+    a.set_axisbelow(True)
     a.bar(ends, prob, width=3.4, color=SEQ_BLUE_STEPS[2])
     a.axvline(median, color=INK, linewidth=1.2, ymax=0.84)
     a.axvline(mean, color=ORANGE, linewidth=1.2, ymax=0.84)
@@ -124,6 +125,7 @@ def fig_volatility_tax():
     mean_v = V0 * np.exp(mu * T)
     below = float(lognorm_cdf(V0, med, sig * np.sqrt(T)))
     assert abs(med - 105.0) < 0.05 and abs(mean_v - 108.33) < 0.01 and abs(below - 0.423) < 0.001
+    b.set_axisbelow(True)
     x = np.linspace(30, 260, 1200)
     y = lognorm_pdf(x, med, sig * np.sqrt(T)) * 100
     b.fill_between(x, y, color=SEQ_BLUE_STEPS[0])
@@ -134,10 +136,8 @@ def fig_volatility_tax():
     b.vlines(mean_v, 0, top * 1.12, color=ORANGE, linewidth=1.2)
     b.text(med - 2, top * 1.15, f"median {med:.1f}", ha="right", va="bottom", fontsize=8.5, color=INK_2)
     b.text(mean_v + 2, top * 1.15, f"mean {mean_v:.1f}", ha="left", va="bottom", fontsize=8.5, color=INK_2)
-    b.annotate(f"{below:.0%} of paths end\nbelow the 100 they\nstarted with", (84, float(np.interp(84, x, y)) * 0.5),
-               xytext=(150, top * 0.62), fontsize=8, color=INK_2, ha="left",
-               arrowprops=dict(arrowstyle="-", color=NEUTRAL, lw=0.8))
-    b.set_xlim(30, 230)
+    b.text(77, top * 0.34, f"{below:.0%} end\nbelow 100", fontsize=8.5, color=INK, ha="center", va="center")
+    b.set_xlim(40, 220)
     b.set_ylim(0, top * 1.38)
     b.set_xlabel("Asset value after one year (start = 100)")
     b.set_ylabel("Probability density (% per $1)")
@@ -148,7 +148,7 @@ def fig_volatility_tax():
 # Figure 6.2  Payoff diagram and fulcrum (6.2.1)
 # --------------------------------------------------------------------------------------------
 def fig_merton_payoff_fulcrum():
-    fig, ax = new_figure((7.0, 4.5), nrows=2, ncols=2, gridspec_kw={"height_ratios": [3.3, 1]}, sharex="col")
+    fig, ax = new_figure((7.0, 4.7), nrows=2, ncols=2, gridspec_kw={"height_ratios": [3.1, 1.25]}, sharex="col")
     a, b = ax[0, 0], ax[0, 1]
     sa, sb = ax[1, 0], ax[1, 1]
 
@@ -159,9 +159,9 @@ def fig_merton_payoff_fulcrum():
     a.plot(V, V, color=NEUTRAL, linewidth=1.0, linestyle=(0, (3, 3)), zorder=1)
     a.plot(V, debt, color=BLUE, linewidth=LW + 0.4, zorder=3)
     a.plot(V, eq, color=ORANGE, linewidth=LW + 0.4, zorder=3)
-    a.text(30, 38, "firm value V", rotation=40, fontsize=8, color=MUTED, ha="center", va="center")
+    a.text(96, 118, "firm value V", rotation=40, fontsize=8, color=MUTED, ha="center", va="center")
     a.text(158, 84.5, "Debt = min(V, F)", fontsize=8.5, color=INK_2, ha="right", va="bottom")
-    a.text(132, 14, "Equity = max(V \u2212 F, 0)", fontsize=8.5, color=INK_2, ha="left", va="center")
+    a.text(124, 19, "Equity =\nmax(V \u2212 F, 0)", fontsize=8.5, color=INK_2, ha="left", va="center")
     a.axhline(F, color=NEUTRAL, linewidth=0.8, zorder=1)
     a.annotate("", (70, 80), (70, 70), arrowprops=dict(arrowstyle="<->", color=INK_2, lw=1.0, shrinkA=0, shrinkB=0))
     a.plot([70], [70], "o", color=BLUE, markersize=5, zorder=4)
@@ -181,8 +181,8 @@ def fig_merton_payoff_fulcrum():
     sa.fill_between(x, y, where=x <= F, color=DENS_DARK)
     sa.plot(x, y, color=MUTED, linewidth=1.0)
     sa.axvline(F, color=NEUTRAL, linewidth=0.8)
-    sa.text(F - 2, float(y.max()) * 0.62, f"{pd_p:.1%} of the\nmass is below F:\ndefault", fontsize=8, color=INK_2,
-            ha="right", va="center")
+    sa.annotate(f"{pd_p:.1%} of the\nmass is below\nF: default", (66, float(y.max()) * 0.12), xytext=(3, float(y.max()) * 0.62),
+                fontsize=8, color=INK_2, ha="left", va="center", arrowprops=dict(arrowstyle="-", color=NEUTRAL, lw=0.8))
     strip_axis(sa)
     sa.set_ylim(0, float(y.max()) * 1.08)
     sa.set_xlim(0, 160)
@@ -221,13 +221,14 @@ def fig_merton_payoff_fulcrum():
     sb.plot(x, y, color=MUTED, linewidth=1.0)
     for k in (K1, K2):
         sb.axvline(k, color=SURFACE, linewidth=1.0)
-    sb.text(1150, float(y.max()) * 0.78, f"{m_second:.0%} of the mass lies between\nthe second lien's two strikes:\nthe fulcrum", fontsize=8,
+    sb.text(550, float(y.max()) * 0.3, "fulcrum", fontsize=8.5, color="white", ha="center", va="center", fontweight="bold")
+    sb.text(1140, float(y.max()) * 0.62, f"{m_second:.0%} of the mass lies\nbetween the second\nlien's two strikes", fontsize=8,
             color=INK_2, ha="right", va="center")
     strip_axis(sb)
     sb.set_ylim(0, float(y.max()) * 1.08)
     sb.set_xlim(0, 1150)
     sb.set_xticks([0, 400, 700, 950])
-    sb.set_xlabel("Enterprise value at plan confirmation, V ($mm)")
+    sb.set_xlabel("Enterprise value, V ($mm)")
     sb.set_ylabel("Density")
     for axis in (a, b):
         axis.tick_params(labelbottom=False)
@@ -242,26 +243,27 @@ CCC_LOW_BP, CCC_HIGH_BP, CCC_LAST_BP = 690.0, 1282.0, 1278.0     # FRED BAMLH0A3
 
 
 def fig_merton_spread_short_end():
-    fig, ax = new_figure("wide")
+    fig, ax = new_figure((7.0, 3.9))
     T = np.geomspace(1 / 52 * 0.8, 10, 500)
     ax.axhspan(CCC_LOW_BP, CCC_HIGH_BP, color=ORANGE, alpha=0.16, linewidth=0, zorder=1)
     ax.axhline(CCC_LOW_BP, color=ORANGE, linewidth=0.8, zorder=2)
     ax.axhline(CCC_HIGH_BP, color=ORANGE, linewidth=0.8, zorder=2)
-    ax.text(0.0125, 1000, "CCC & Lower index OAS, any tenor:\nbetween 690 and 1,282 bp over the last three years",
+    ax.text(0.0145, 990, "CCC & Lower index OAS, any tenor:\nbetween 690 and 1,282 bp over the last three years",
             fontsize=8.5, color=INK_2, ha="left", va="center")
     shades = {0.15: SEQ_BLUE_STEPS[4], 0.25: SEQ_BLUE_STEPS[8], 0.35: SEQ_BLUE_STEPS[11]}
     for sig, col in shades.items():
         s = merton(100, 80, 0.04, sig, T)["s_bp"]
         ax.plot(T, s, color=col, linewidth=LW + 0.2, zorder=3)
         label_end(ax, T[-1], float(s[-1]), f"$\\sigma_V$ = {sig:.0%}", col, dx=5)
-    # the three numbers printed in 6.2.4 for the 25% firm
-    pts = [(1.0, "216 bp at one year", (8, 12), "left"),
-           (0.25, "about 70 bp at three months", (-8, 14), "right"),
-           (2.5 / 52, "under 1 bp at two and a half weeks", (8, 18), "left")]
-    for t, text, off, ha in pts:
+    # the three numbers printed in 6.2.4 for the 25% firm, each with a leader line into the empty space above the curves
+    pts = [(1.0, "216 bp at one year", dict(xytext=(1.0, 330), ha="center")),
+           (0.25, "about 70 bp\nat three months", dict(xytext=(0.27, 215), ha="left")),
+           (2.5 / 52, "under 1 bp at two\nand a half weeks", dict(xytext=(0.0145, 215), ha="left"))]
+    for t, text, kw in pts:
         sv = float(merton(100, 80, 0.04, 0.25, t)["s_bp"])
         ax.plot([t], [sv], "o", color=shades[0.25], markersize=5.5, zorder=5, markeredgecolor="white", markeredgewidth=0.8)
-        ax.annotate(text, (t, sv), xytext=off, textcoords="offset points", fontsize=8, color=INK_2, ha=ha, va="center")
+        ax.annotate(text, (t, sv), va="center", fontsize=8, color=INK_2, zorder=6,
+                    arrowprops=dict(arrowstyle="-", color=NEUTRAL, lw=0.8, shrinkA=2, shrinkB=4), **kw)
     ax.set_xscale("log")
     ax.set_xlim(0.0125, 10)
     ticks = [1 / 52, 1 / 12, 0.25, 0.5, 1, 2, 5, 10]
@@ -272,8 +274,8 @@ def fig_merton_spread_short_end():
     ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:,.0f}"))
     ax.set_xlabel("Time to maturity (log scale)")
     ax.set_ylabel("Credit spread (bp)")
-    note(ax, "Merton firm: V\u2080 = 100, F = 80, r = 4%", loc="upper left")
-    ax.texts[-1].set_position((0.01, 0.98))
+    ax.text(0.01, 0.985, "Merton firm: V$_0$ = 100, F = 80, r = 4%", transform=ax.transAxes, ha="left", va="top", fontsize=8,
+            color=MUTED)
     fig.get_layout_engine().set(rect=(0, 0, 0.93, 1))
     return finish(fig, "ch06_merton_spread_short_end")
 
@@ -290,27 +292,24 @@ P_ASSETS, P_BANK, P_CASH, P_LTD, P_OTHER = 19.679, 15.456, 2.258, 3.370, 0.305
 
 
 def fig_svb_holdco_waterfall():
-    fig, (a, b) = new_figure("panel2", ncols=2)
+    fig, (a, b) = new_figure("panel2", ncols=2, gridspec_kw={"width_ratios": [1, 1.25]})
 
     # left: the loss nobody had to mark against the equity that was supposed to absorb it
-    labels = ["Unrealized loss\non held-to-\nmaturity bonds", "Total\nstockholders'\nequity", "Loss booked\non the 8 March\nsale (after tax)"]
+    labels = ["Unrealized\nloss on HTM\nbonds", "Total\nstockholders'\nequity", "Loss booked\non the 8 March\nsale, after tax"]
     vals = [HTM_LOSS, EQUITY, AFS_LOSS]
     cols = [LOSS, ORANGE, LOSS]
     xs = np.arange(3)
+    a.set_axisbelow(True)
     bars = a.bar(xs, vals, width=0.62, color=cols)
     bars[0].set_hatch("////")
     bars[0].set_edgecolor("white")
     bars[0].set_linewidth(0)
     for x, v in zip(xs, vals):
-        a.text(x, v + 0.5, f"{v:.1f}", ha="center", va="bottom", fontsize=9, color=INK_2)
+        a.text(x, v + 0.4, f"{v:.1f}", ha="center", va="bottom", fontsize=9, color=INK_2)
     a.set_xticks(xs)
     a.set_xticklabels(labels, fontsize=8)
     a.set_ylim(0, 19.5)
-    a.set_ylabel("$ billions, 31 December 2022")
-    a.text(0.5, 0.97, "the loss the accounts did not show\nalmost equals the equity", transform=a.transAxes, ha="center", va="top",
-           fontsize=8, color=MUTED)
-    a.text(0.02, 0.03, "HTM bonds: $91.3bn at cost, $76.2bn fair value", transform=a.transAxes, fontsize=7.5, color=MUTED,
-           ha="left", va="bottom", zorder=6)
+    a.set_ylabel("$ billions, 31 Dec 2022")
 
     # right: the holdco's parent-only waterfall, assets down to what is left once the bank is worth nothing
     ex_bank = P_ASSETS - P_BANK
@@ -322,29 +321,31 @@ def fig_svb_holdco_waterfall():
     xs = np.arange(5)
     tot = [(0, P_ASSETS, MUTED), (ex_bank, P_ASSETS, LOSS), (0, ex_bank, SEQ_BLUE_STEPS[7]), (left_after_cash, ex_bank, LOSS),
            (0, left_after_cash, SEQ_BLUE_STEPS[11])]
+    b.set_axisbelow(True)
     for x, (lo, hi, col) in zip(xs, tot):
         b.bar(x, hi - lo, bottom=lo, width=0.62, color=col)
-    b.patches[1].set_hatch("////")
-    b.patches[1].set_edgecolor("white")
-    b.patches[3].set_hatch("////")
-    b.patches[3].set_edgecolor("white")
-    for p in (b.patches[1], b.patches[3]):
-        p.set_linewidth(0)
-    b.axhline(liab, color=INK, linewidth=1.1, linestyle=(0, (4, 3)), zorder=5)
-    b.text(4.45, liab + 0.35, f"parent liabilities {liab:.1f}", ha="right", va="bottom", fontsize=8, color=INK_2, zorder=6)
+    for i in (1, 3):
+        b.patches[i].set_hatch("////")
+        b.patches[i].set_edgecolor("white")
+        b.patches[i].set_linewidth(0)
+    # connectors between the steps
+    for x0, y0 in [(0, P_ASSETS), (1, ex_bank), (2, ex_bank), (3, left_after_cash)]:
+        b.plot([x0 + 0.31, x0 + 1 - 0.31], [y0, y0], color=MUTED, linewidth=0.7, zorder=2)
+    b.plot([-0.45, 5.35], [liab, liab], color=INK, linewidth=1.1, linestyle=(0, (4, 3)), zorder=5)
+    b.text(5.4, liab, "parent\nliabilities\n3.7", ha="left", va="center", fontsize=8, color=INK_2, clip_on=False)
     b.text(0, P_ASSETS + 0.4, f"{P_ASSETS:.1f}", ha="center", va="bottom", fontsize=9, color=INK_2)
     b.text(1, P_ASSETS + 0.4, f"{MINUS}{P_BANK:.1f}", ha="center", va="bottom", fontsize=9, color=INK_2)
     b.text(2, ex_bank + 0.4, f"{ex_bank:.1f}", ha="center", va="bottom", fontsize=9, color=INK_2)
     b.text(3, ex_bank + 0.4, f"{MINUS}{P_CASH:.1f}", ha="center", va="bottom", fontsize=9, color=INK_2)
-    b.text(4, left_after_cash + 0.4, f"{left_after_cash:.1f}", ha="center", va="bottom", fontsize=9, color=INK_2)
-    b.annotate(f"covers {cov_book:.0%} of\nliabilities at book", (2.0, ex_bank * 0.5), ha="center", va="center", fontsize=8,
-               color="white")
-    b.annotate(f"covers {cov_ex_cash:.0%} once the\ncash is a claim on\nthe receivership", (4.0, left_after_cash * 0.5),
-               ha="center", va="center", fontsize=7.5, color="white")
+    b.text(4, left_after_cash - 0.35, f"{left_after_cash:.1f}", ha="center", va="top", fontsize=9, color="white")
+    b.text(2.0, 17.8, f"Ex-bank assets cover {cov_book:.0%} of\nthe parent's liabilities at book,\nbut only {cov_ex_cash:.0%} if the cash is\n"
+           "a claim on the receivership", fontsize=8, color=INK_2, ha="left", va="top", linespacing=1.3)
     b.set_xticks(xs)
-    b.set_xticklabels(["Parent\nassets", "Stake in\nthe bank", "Assets\nex-bank", "Cash held\nat the bank", "Ex-bank,\nex-cash"], fontsize=8)
-    b.set_ylim(0, 22.5)
-    b.set_ylabel("$ billions, 31 December 2022, parent only")
+    b.set_xticklabels(["Parent\nassets", "Stake in\nthe bank", "Assets\nex-bank", "Cash held\nat the bank", "Left\nover"], fontsize=7.8)
+    b.set_xlim(-0.55, 4.55)
+    b.set_ylim(0, 21.5)
+    b.set_ylabel("$ billions, parent only")
+    fig.get_layout_engine().set(rect=(0, 0, 0.93, 1))
     return finish(fig, "ch06_svb_holdco_waterfall"), (cov_book, cov_ex_cash)
 
 

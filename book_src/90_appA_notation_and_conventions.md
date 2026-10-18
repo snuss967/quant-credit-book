@@ -261,4 +261,134 @@ One line each, alphabetical, with a joke where the term can bear one.
 - **Z-spread.** The constant spread added to every point on a zero-coupon discount curve so that discounted cash flows equal the bond's dirty price.
 - **Zero floor.** A minimum level (often zero, sometimes higher) for the reference rate in a floating-rate loan, so the coupon cannot fall below margin plus floor. An interest-rate option the borrower sold without pricing it.
 
+## A.10 The Phrasebook: RSSG to Quant
+
+On his second morning Theo told the desk that "the fulcrum is the seconds," and three people heard three different sentences. Ines heard a position and asked what the short was. Mags heard a recovery, eventually, after the lawyers. Kaz heard a lever and asked, with real interest, whether it was a first-class lever. Nobody misheard him. That was the problem.
+
+Section A.9 defines words; this section translates them. A restructuring banker arrives on a desk already owning a word for almost everything, and most of those words survive the trip with their spelling intact and their meaning turned a few degrees. A false friend is worse than a foreign word, because nobody stops to look it up. "Recovery" still means recovery. It now comes with a measure, a distribution and a quoting convention, and the one you meant is rarely the one on the screen.
+
+Each row reads left to right as one sentence: the banker says this, the desk means that, here is the tool, here is where the book builds it, and here is what moved. Read the last column twice. Symbols follow §A.2, and sections are cited where an idea is built, not everywhere it appears. Seventy-one rows will not cover every word Theo brought in his carry-on, but they cover the ones that cost him money in his first quarter, which is how any good phrasebook chooses.
+
+### A.10.1 Capital structure
+
+Home ground first, because it is where the drift is hardest to hear. You have used every word below correctly a thousand times in a room whose question was *who gets what at the end*. The desk's question is *what is this worth between now and Friday, and what moves it*, and the same words answer it with a probability attached.
+
+| Banker says | Desk says | Formula or tool | Built in | What changes |
+| :--- | :--- | :--- | :--- | :--- |
+| "The fulcrum" | The class whose recovery moves with value: the tranche with the most jump-to-default per point of enterprise value | $j^\star(V) = \min\{j : K_j > V\}$; expected delta $\pi_j / C_j$ | §12B.6, §12C.2 | A place in the stack becomes a probability per class, and it moves when the DIP primes. |
+| "The waterfall" | A strip of call spreads on distributable value | $R_j = \min\{(V - K_{j-1})^+, C_j\} / C_j$ | §12B.6, §12C.9 | One plan value in, one recovery out becomes a density $f_V$ in and a recovery distribution out. |
+| "Recovery" | $R$ under $\mathbb{P}$ or $\mathbb{Q}$: a Beta with mass at 0 and 1 | $s \approx \lambda(1 - R)$; Beta regression on lien and collateral | §5.5, §5.5.6, §A.6 | Your number was a $\mathbb{P}$ forecast at emergence. The screen's 40 is a $\mathbb{Q}$ quoting convention, and one spread cannot separate $\lambda$ from $R$. |
+| "We're first lien, we're covered" | Seniority as a document variable | Uptier transfer; Priming Risk Score | §13.3, §13.8 | Priority is a state the documents can change after you buy. On 22 June 2020 a non-participating first lien became junior to new money. |
+| "Equity cushion" | Distance to default | $\text{DD} = [\ln(V_0/F) + (\mu - \tfrac12\sigma_V^2)T] / (\sigma_V\sqrt{T})$ | §6.4 | Cushion in turns of EBITDA becomes cushion in standard deviations, and asset volatility matters as much as the gap. |
+| "Covenant headroom" | Distance to a barrier | Black–Cox first-passage probability | §6.5, §6.5.3 | The covenant you modeled for ninety hours is a barrier. Cov-lite deletes it; an uptier moves it after the fact. |
+| "The equity is out of the money" | A call on $V$, with vega | $E_t = V_t N(d_1) - F e^{-r(T-t)} N(d_2)$ | §6.2, §6-B.1, §16.6 | "Worthless" is a price for an option, and in 2021 Hertz's had a vega its shorts had not priced. |
+| "It's still a bond" | A short put; below about 80, an equity option that wears a tie | $B_t = F e^{-r(T-t)} - \text{Put}_t$; $D^{\text{emp}} \to 0$ | §6.2, §8.3 | Below the low 80s it trades with the stock, and DTS hedges break. |
+| "The DIP" | A package of derivatives with different owners | Fee stack, roll-up transfer, conversion option | §12C.4 | The coupon is the smallest piece; the roll-up moves every attachment point below it. |
+
+### A.10.2 Valuation
+
+Bankers value things once, carefully, as of a date. Desks value things continuously, roughly, over a horizon, and then check whether they were right. Nearly every row below is the same move: a point estimate grows a distribution, and the distribution grows a measure.
+
+| Banker says | Desk says | Formula or tool | Built in | What changes |
+| :--- | :--- | :--- | :--- | :--- |
+| "Comps" | The factor model; excess spread to peers | $x_{i,t} = \sum_k \beta_{i,k} F_{k,t} + \epsilon_{i,t}$; ESP within peer cells | §9.3.1, §8B.2, §7-B.5 | You picked the peers; the desk fits them monthly. "Cheap to comps" is a residual: cheapness, or information the peers lack (§9.3.4). |
+| "Trading levels" | A composite mid: a prior, not a price | Vendor composite; markout against it | §3B.6 (mistake 1), §20.2, §B.8 | Someone's model of where it might trade. Tell a client 92 when the bid is 89½ and they become someone else's client. |
+| "Where is it marked?" | An evaluated price, which is a filter | Smoothing model; Dimson betas | §17.2, Law 9 | A mark is a moving average of the truth, and part of a quarterly mark's calm is the averaging. |
+| "Six turns of leverage" | A denominator for spread | $\text{SPiDER} = s / (\text{Debt} / \overline{\text{EBITDA}}^{\,\text{LT}})$ | §9.3.2 | Leverage stops being the answer and becomes the unit in which spread is cheap or rich. |
+| "Adjusted EBITDA" | A fixed point | Add-back recursion in basket capacity | §25.3.3, §3B.6 (mistake 10) | Add-backs feed capacity, which permits more add-backs. Mags's suspicion of anything called "adjusted" turns out to be a theorem. |
+| "Base case" | The $\mathbb{P}$ mean of a survive-or-jump mixture | Carry if it survives, a jump if not | §5.1 | A mixture's mean is a state nobody lives in: the bond survives or jumps, and almost never earns the average. |
+| "Downside case" | The left tail: one-day 99% expected shortfall | $\text{ES}_{99}$ on the mixture | §5.1, §8B.6 | A scenario you wrote becomes a tail the model computes, and someone asks why it changed since yesterday. |
+| "The market is pricing in" | A $\mathbb{Q}$ quantity, never a forecast | $\lambda^{\mathbb{Q}}$ from CDS; premium ratio $s / (\lambda^{\mathbb{P}} L)$ | §6.3, §6-B.6, Law 4 | The price contains a risk premium. Feed a $\mathbb{Q}$ default probability to a Kelly sheet and it tells you to hold nothing (§3B.6, mistake 7). |
+| "Liquidity runway" | A first-passage time, then a hazard covariate | $\hat\tau = \min\{w : C_w < C_{\min}\}$ | §5.1.5, §3.5, §12C.9 | The 13-week model is a hazard rate with a spreadsheet problem. Mags adds that sponsors run out of patience before cash, so it needs a competing risk (§5.6). |
+| "The yield" | Yield-to-worst, then one of eight spreads | YTW; $Z$, OAS, ASW, PECS | §4B.6, §4B.7, §A.5 | "The spread" is at least five numbers. Name the measure, or ROBO will choose one. |
+| "Plan value" | A negotiated random variable with a date on it | $f_V$; three values of one company | §12C.1, §12C.2, §12C.11 | The valuation fight is the distribution, not noise around it, and the effective date is an input. |
+| "We hold to maturity" | A horizon $h$ | $\sigma_V^2(h) = \operatorname{Var}(\mathbb{E}[V \mid \mathcal{F}_{t+h}] - \mathbb{E}[V \mid \mathcal{F}_t])$ | §3.1.3 | The desk never holds to resolution. A lender call inside $h$ is a trapdoor, not a step. |
+
+### A.10.3 Process and documents
+
+Here the ex-banker is the expert in the room, and the translation runs in the flattering direction: the desk wants what you know, in a form a machine can refresh overnight. Kaz has read every row and still suspects a springing lien is seasonal.
+
+| Banker says | Desk says | Formula or tool | Built in | What changes |
+| :--- | :--- | :--- | :--- | :--- |
+| "What does the credit agreement say?" | A typed program: the definition graph | Reachability and blast radius | §25.1, §25.2 | Theo's favorite question becomes a graph traversal with tests. He is still usually right; now ROBO can be right overnight. |
+| "Basket capacity" | Node arithmetic on that graph | Ratio basket, builder basket, add-back fixed point | §25.3 | Ninety hours of reading become a function, rerun on every amendment. |
+| "Sacred rights"; "Required Lenders" | Voting thresholds | $\theta$ by action and by class | §12B.3 | Who can change the contract, and who can stop them, become numbers. Kaz still wants to know about the priest. |
+| "The lenders" | A holder vector with a blocking threshold | $w_i$; a coalition $S$ wins if $\sum_{i \in S} w_i > \theta$ | §13.4, §25.7 | The room you advised is a coalition game. Rule 2019 filings give the vector, and the pivotal holder is computable. |
+| "The co-op" | A commitment device in a repeated game | Payoffs that make defection expensive | §13.5, §14.5 | A signature is priced, not admired: it changes $u^{\text{in}}$, the value of being inside. |
+| "The uptier" | A recovery transfer from excluded to participating holders | $u^0 - u^{\text{out}} = \mathbb{E}[\Delta R^{\text{excl}}]$ | §13.3 | A transaction becomes a transfer you can price before it is announced. |
+| "The drop-down" | Collateral leakage | Leakage arithmetic; the min-cut | §13.6, §25.4 | Value walks through a door the document left open, and the door has a measurable width. |
+| "The blocker" | A feature bit | J.Crew, Serta and Chewy flags; the "open market purchase" token | §3.5, §13.2.1 | Protection becomes a covariate. "Open market purchase" is the most expensive three words in finance, and also a string match. |
+| "The amendment" | An event, read as a diff | Versioned documents | §25.5 | Text diffs are blind where it matters. At Windstream the loss lived in one defined term (§25.5.2). |
+| "The milestones" | Contract clocks | Event calendar; timed state machine | §3B.4, §12B.5, §12B.7 | A date in an RSA is a feature known in advance, and time itself is a claim with a price. |
+| "Cramdown" | A strike the court sets | $P/S = 1 - (y - c)\,a_n(y)$ | §12B.6 | The rate fight is an option on whether $c$ lands near $y$ or near prime plus two. |
+| "Change of control" | A compound option: the 101 put | Two-trigger put; portability as a short digital | §15.2, §15.3 | A smoke detector with two licensed inspectors. Portability means you may already have sold it. |
+| "The court will decide" | A random variable with timestamps | Ruling as a jump; courts as a regime | §13.9, §14.6, Law 16 | Legal risk becomes a jump with a date, which you can size, which is more than you can do with a judge. |
+| "We're restricted" | The information wall, seen from the public side | Wall-crossing, cleansing, the public tape | §3.6.3, §3B.5, §3B.6 (mistake 11) | On a private-side team the reflex is *don't*. On a public desk a public 8-K is information to trade on, and refusing it has a cost. |
+
+### A.10.4 Risk and P&L
+
+At PJT the P&L arrived as a success fee, once, if the plan was confirmed. On the desk it arrives every morning before seven and has to foot. These are the rows where a banker's instinct is closest to a trader's and furthest from a risk manager's.
+
+| Banker says | Desk says | Formula or tool | Built in | What changes |
+| :--- | :--- | :--- | :--- | :--- |
+| "A \$10mm position" | DTS, then jump-to-default | $\text{DTS} = D^{\text{spr}} \cdot s$ | §8.4, §4B.5, Law 3 | Face is the size of your claim; DTS is the size of your risk. \$10mm of a CCC can carry three times the DTS of \$10mm of a B. |
+| "Our exposure" | Four lines: DV01, CS01, DTS and JTD | $\text{JTD} = \text{MV} - R \cdot \text{Face}$ | §A.8, §8B.5, §6-B.5 | The loss if it defaults this afternoon is its own line, and the jump is charged once (Law 6). |
+| "We're hedged" | Hedged to which ruler, in which state? | The hedge matrix | §8.6, §3B.6 (mistake 2) | Ten of protection against ten of bonds at 88 is hedged to face, not to the jump. |
+| "We made money" | The explain, which foots | Line items with start-of-day betas | §8C.1–§8C.4 | P&L you cannot attribute is a story, and the risk committee does not accept stories. |
+| "The thesis worked" | IDO | $\epsilon_{i,t}$ after rates, carry and factor beta | §8.8, Law 1 | IDO or it didn't happen. Until the beta is stripped it is a benchmark with a hat on. |
+| "High conviction" | A Kelly fraction with a jump in it | Discrete Kelly with JTD; fractional Kelly | §28.4 | Conviction becomes a size. Fractional Kelly is full Kelly for people with standard errors. |
+| "I know this name cold" | Effective breadth, corrected for issuer clustering | $\text{IR} \approx \text{IC}\sqrt{\text{BR}}$ with clustered breadth | §28.2, §3B.6 (mistake 5) | Depth on one name is one bet. In debt the upside stops at par, so concentration is not rewarded. |
+| "If I'm wrong I'll get out" | A stop, which is a size | $\text{MV}_{\max} = \text{budget} \times P / (P - R)$ | §8D.5, §28.6 | The stop does not care why P&L moved, and it sets the largest position you may hold. |
+| "Double down, it's cheaper" | Exercising the PM option in a drawdown | Payout as a call on P&L | §3B.6 (mistake 6), §28.6 | Averaging down spends the platform's capital on your option; the stop exists to take it away. |
+
+### A.10.5 Execution
+
+The banker's market was a phone call to Steve. The desk's market is a screen that answers in milliseconds and remembers every answer, so getting something done turns into what doing it cost.
+
+| Banker says | Desk says | Formula or tool | Built in | What changes |
+| :--- | :--- | :--- | :--- | :--- |
+| "Short it" | Borrow the bond, buy CDS protection, short CDX or the ETF, sell the future, or short the stock: each with a cost and a basis | Rebate $= r^{\text{cash}} - \text{fee}$; the six-row menu | §8D.2, §D.3, §24.4 | At PJT "short" was a word in a pitch. Here it is a loan the lender can recall, at a fee that averaged 33 bp and reached 245 bp after a filing (2004–07). |
+| "Where's the bid?" | A reservation price, skewed by inventory, plus a markup | $r^{\text{res}} = S_t - q\gamma\sigma^2(T - t)$ | §18.4, Law 5 | A bid is a posterior, not a markup, and winning is information. |
+| "Who's the seller?" | The probability that the other side knows more | Glosten–Milgrom $\pi(x)$; shrunken counterparty score | §3.2, §3.3.4 | Curiosity becomes a likelihood ratio, updated on every RFQ. |
+| "Did we get a good price?" | A markout at horizon $h$, beta stripped | $\text{markout}_h = \text{side} \times (m_{t+h} - P_{\text{trade}})$ | §3.3, §A.7 | Graded afterward, against the mid. Ines reads this hand history before she reads anything else. |
+| "It trades" | A liquidity cost score, days to liquidate, LVaR | Per-line LCS; credit LVaR | §19.3, §28.5 | Liquidity used to be a relationship and is now a variable (§2.10). |
+| "Run a sale process" | A BWIC: a first-price auction with a leaky list | Bid shading under leakage | §18.9 | The list leaks, the winner is cursed, and the auction tells everyone what you owned. |
+| "Sell them the whole book" | A portfolio trade, priced as one lump | Four-term basket price; eviction | §19.2, §19.6, §19.8 | The dealer prices the basket, finds your best short at line 117, and charges for it. |
+| "The ETF is the market" | A wrapper with an arbitrage band | NAV against price; the band with a balance sheet | §20.2, §20.3 | In March 2020 the ETF was the only price in town, and the NAV was the opinion. |
+
+### A.10.6 Relative value
+
+"Long the fulcrum, short the junior" was always a pair; it just never had a borrow fee. A pod lives on the part of a pair that survives the hedge, and Chapter 8-D's Pair Book is where each row below is built, stressed and paid.
+
+| Banker says | Desk says | Formula or tool | Built in | What changes |
+| :--- | :--- | :--- | :--- | :--- |
+| "Here's my pitch" | The pair ticket: a thesis sentence with a date, the short leg, the ruler, the size and the exit | One row of the Pair Book ledger | §8D.1, §8D.6, §3B.6 (mistake 12) | Forty pages become five lines the platform can read, and the date is the day you agreed in advance to admit you were wrong. |
+| "Long the fulcrum, short the junior" | A recovery-weighted pair, jump-neutral by sizing | $N_{\text{2L}} / N_{\text{1L}} = (P_{\text{1L}} - R_{\text{1L}}) / (P_{\text{2L}} - R_{\text{2L}})$ | §3.7, §12B.6, §8D.4 | The instinct is right, but the hedge is for the judge, not the majority: an uptier can swap which leg is senior. |
+| "The hedge ratio" | Three rulers that disagree when it matters | Spread duration, DTS, empirical beta | §8D.3, §4B.5 | The alpha is about the size of the ruler error, so choosing the ruler is part of the trade. |
+| "Market neutral" | DTS-neutral, which is jump-neutral only on average | The difference of two jump processes | §8D.4, §5.1 | One default on the long can erase decades of convergence. Near default, match on market value. |
+| "It's company-specific" | Idio: the residual differential, defined relative to a named factor model | $\epsilon_{A,t} - \epsilon_{B,t}$; residual correlation across the book | §8.8, §9.7 | A missing factor makes a factor bet look like alpha. If the book's residuals correlate, the idio had a common part. |
+| "The trade worked" | The capture ratio | $\kappa = \text{net}/\text{idio}$, where net $=$ idio $+$ leak $+$ friction | §8D.6 | Judged on idio, paid on net. Not §11.2's up/down capture, which shares only the name. |
+| "Cap structure arb" | CDS against equity through a structural model | CreditGrades delta | §23.2, §23.6 | Single trades lose. On 4 and 5 May 2005 both legs of the GM trade lost, one day each. |
+| "The basis" | $s^{\text{CDS}} - s^{\text{bond}}$, with the bond measure named | Funding, cheapest-to-deliver, deliverables | §24.3, §24.4, §24.5 | A negative basis is not free, and the borrow fee and the basis are one variable seen from two sides. |
+| "It's crowded" | A borrow fee that is rising | Fee against the share of inventory on loan | §22.6, §9.10 | Credit crowding has no tape. The fee is the only gauge the pod can see. |
+| "The catalyst" | The date in the thesis sentence, and an exit written before the entry | The ledger's exit rule | §8D.1, §8D.7 | A catalyst you wait for becomes a deadline you set for yourself. |
+| "Post-reorg value" | Forced selling as a supply schedule | Overhang, slow capital, a drift you can schedule | §16.2, §16.8.3, Law 15 | The emergence discount has a timetable, and a "worthless" short leg can turn out to be the fulcrum's option. |
+
+### A.10.7 Careers
+
+The last table translates the job itself. Most of these words name a person or a ritual at the old firm; on the desk the person has usually become a number and the ritual a log file. It is less bleak than it sounds. The log file is fairer.
+
+| Banker says | Desk says | Formula or tool | Built in | What changes |
+| :--- | :--- | :--- | :--- | :--- |
+| "The deal team" | One of five businesses, each with its own clock | Market maker, pod, systematic manager, bank desk, distressed fund | §4.1, §1B.6, Chapter 4-C | "Systematic credit" names five different jobs. Choose the room by its clock, not by the sign on the door. |
+| "The MD signed off" | The risk manager, the limit sheet and the model review | Model risk under SR 11-7 | §8B.9, §26.8 | Approval becomes a test someone else can rerun, and a question: why is today's number different from yesterday's? |
+| "My track record" | A hit rate with a standard error | $\text{SE}(\hat p) = \sqrt{p(1-p)/n}$ | §3B.7, §28.2 | Twenty-two wins in forty bets cannot be told apart from a coin. Ask to be judged on calibration and the log. |
+| "The model I built" | An Edge Ledger row with a decay horizon | $\text{IC}(h) = \text{IC}_0 \cdot 2^{-h/h_{1/2}}$ | §3.5 | Your work is a feature with a refresh rate, a half-life and a list of who else has it. |
+| "My analyst will turn it" | ROBO, and a spec | The Spec You Hand the Robot; the citation contract | §26.4, §26.9 | ROBO builds exactly what you asked, and "minimize drawdown" holds cash forever. Units and edge cases are now your job. |
+| "The backtest shows" | A Sharpe deflated by the number of trials | Deflated Sharpe ratio | §7.8, Law 12 | Count your trials. A slide with a Sharpe of 2.9 and no count of attempts is a CIM without footnotes. |
+| "The bonus" | A call on the pod's P&L, with a stop the platform holds | Payout $\varphi\,\Pi^+$; pay per pod, risk per fund | §28.1, §28.6 | The PM is long volatility by contract, which is why the stop exists and binds before the alpha does. |
+| "My first ninety days" | A calendar, a log and twelve mistakes | `desk_calendar.py` | §3B.1, §3B.6, §3B.8 | Day one starts at 6:47 a.m. with a security-master diff and a late vendor file. That is the job, not an obstacle to it. |
+
+Theo keeps a printout of these tables under his keyboard, next to the USB stick, and marks a row each time the desk catches him using the old meaning. By December the marks cluster in valuation and relative value, which Ines says is the right place: those are the rows where the old meaning was not wrong, only unpriced. The language keeps moving, so this section is revised each edition with Appendix C. A desk word that is not here probably means something you already know, with a probability attached. That is the whole phrasebook in one sentence.
+
 <!-- STATUS: COMPLETE -->

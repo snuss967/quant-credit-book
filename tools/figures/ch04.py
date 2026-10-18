@@ -254,25 +254,25 @@ def fig_capacity():
     c = cases[0]
     a.set_xlim(0, c["xmax"])
     a.set_ylim(0, 27)
-    a.text(c["a_star"] + 0.55, 25.4, f"top at A* ≈ ${c['a_star']:.2f}bn: the client\nkeeps {c['g'] * 1e4 / 3:.0f}bp, g/3, a third\nof the {c['g'] * 1e4:.0f}bp left after the spread",
+    a.text(2.5, 26.0, f"top at A* ≈ ${c['a_star']:.2f}bn\nclient keeps {c['g'] * 1e4 / 3:.0f}bp = g/3\n(g = {c['g'] * 1e4:.0f}bp)",
            ha="left", va="top", fontsize=8.2, color=INK, bbox=BACK, zorder=7)
     a.text(c["a_star"] + 0.1, (c["p_star"] + c["e_star"]) / 2, "impact takes\ntwo thirds", ha="left", va="center",
            fontsize=8.2, color=INK_2, bbox=BACK, zorder=7)
-    a.annotate(f"edge gone at A₀ = 9/4 A*\n≈ ${c['a0']:.1f}bn", (c["a0"], 0), xytext=(c["a0"] + 0.4, 8.6),
+    a.annotate(f"edge gone at\nA₀ = 9/4 A* ≈ ${c['a0']:.1f}bn", (c["a0"], 0), xytext=(4.57, 8.6),
                ha="right", va="bottom", fontsize=8.2, color=INK, bbox=BACK, zorder=7, arrowprops=arrow)
-    a.text(0.07, 25.9, "before impact: g × A", fontsize=8.2, color=INK_2, ha="left", va="top", bbox=BACK, zorder=7)
+    a.text(0.07, 25.9, "before impact:\ng × A", fontsize=8.2, color=INK_2, ha="left", va="top", bbox=BACK, zorder=7)
     # right panel annotations
     c = cases[1]
     xs = c["scale"]
     b.set_xlim(0, c["xmax"] * xs)
     b.set_ylim(0, 4.6)
-    b.text(c["a_star"] * xs + 52, 4.4, f"top at A* ≈ ${c['a_star'] * 1000:.0f}mm: the client\nkeeps {c['g'] * 1e4 / 3:.0f}bp, g/3, a third\nof the {c['g'] * 1e4:.0f}bp left after the spread",
+    b.text(176, 4.45, f"top at A* ≈ ${c['a_star'] * 1000:.0f}mm\nclient keeps {c['g'] * 1e4 / 3:.0f}bp = g/3\n(g = {c['g'] * 1e4:.0f}bp)",
            ha="left", va="top", fontsize=8.2, color=INK, bbox=BACK, zorder=7)
     b.text(c["a_star"] * xs + 8, (c["p_star"] + c["e_star"]) / 2, "impact takes\ntwo thirds", ha="left",
            va="center", fontsize=8.2, color=INK_2, bbox=BACK, zorder=7)
-    b.annotate(f"edge gone at\n9/4 A* ≈ ${c['a0'] * 1000:.0f}mm", (c["a0"] * xs, 0), xytext=(c["a0"] * xs + 28, 0.95),
+    b.annotate(f"edge gone at\n9/4 A* ≈ ${c['a0'] * 1000:.0f}mm", (c["a0"] * xs, 0), xytext=(c["xmax"] * xs - 2, 1.4),
                ha="right", va="bottom", fontsize=8.2, color=INK, bbox=BACK, zorder=7, arrowprops=arrow)
-    b.text(4, 4.5, "before impact: g × A", fontsize=8.2, color=INK_2, ha="left", va="top", bbox=BACK, zorder=7)
+    b.text(4, 4.5, "before impact:\ng × A", fontsize=8.2, color=INK_2, ha="left", va="top", bbox=BACK, zorder=7)
     # the chapter's published numbers
     g0, as0, a00 = out[cases[0]["name"]]
     g1, as1, a01 = out[cases[1]["name"]]

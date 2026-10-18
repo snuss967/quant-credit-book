@@ -42,6 +42,13 @@ VIOLET_TINT = "#e6e2f8"
 GREY_TINT = "#f1f0ed"
 
 
+def note_ink(ax, text, loc="lower left"):
+    """Like style.note() but in INK_2 (MUTED is only 3.5:1 on white, too faint for 8 pt text that carries a claim)."""
+    x, ha = (0.01, "left") if "left" in loc else (0.99, "right")
+    y, va = (0.02, "bottom") if "lower" in loc else (0.98, "top")
+    ax.text(x, y, text, transform=ax.transAxes, ha=ha, va=va, fontsize=8, color=INK_2)
+
+
 # --------------------------------------------------------------------------------------------------
 # Figure 1.1: the cold open as a waterfall (illustrative; eq. 1.2 with the chapter's inputs)
 # --------------------------------------------------------------------------------------------------
@@ -89,15 +96,15 @@ def fig_bid_decomposition():
     # bracket for "more than ten times the other two combined"
     ax.annotate("", xy=(1.5, 89.0), xytext=(1.5, 89.0))
     ax.text(1.5, 86.6, "two small steps that every\nengine on the Street computes",
-            ha="center", va="center", fontsize=8.2, color=MUTED)
+            ha="center", va="center", fontsize=8.2, color=INK_2)
     ax.text(2.85, 82.4, "one step more than ten times\nthe other two combined", ha="center", va="center",
-            fontsize=8.2, color=MUTED)
+            fontsize=8.2, color=INK_2)
 
     # Monday's open
     ax.axhline(78, color=INK_2, linewidth=1.1, linestyle=(0, (4, 3)), zorder=1)
     ax.text(-0.5, 78.15, "Monday's open: 78", ha="left", va="bottom", fontsize=8.5, color=INK_2)
     ax.text(5.72, 78.15, "πJ is an expectation;\nFriday was the bad draw", ha="right", va="bottom", fontsize=8,
-            color=MUTED)
+            color=INK_2)
     return finish(fig, "ch01_bid_decomposition")
 
 
@@ -137,7 +144,7 @@ def fig_gauss_vs_jump():
     axl.plot([19.6], [0.62], "o", color=TOXIC, markersize=4)
     axl.text(21.3, 0.05, "Jump bag: nothing, nothing,\nthen a loss of 50: 1 in 50", va="bottom", ha="left",
              fontsize=8.2, color=INK_2)
-    note(axl, "both bags: mean loss 1, sd 7", loc="lower left")
+    note_ink(axl, "both bags: mean loss 1, sd 7", loc="lower left")
 
     # right: exact CARA jump charge divided by the quadratic charge
     xs = np.linspace(0.02, 4.0, 400)
@@ -149,12 +156,12 @@ def fig_gauss_vs_jump():
         axr.plot([x0], [y0], "o", color=TOXIC, markersize=5.5, zorder=5)
     r06, r3 = 2 * (np.expm1(0.6) - 0.6) / 0.36, 2 * (np.expm1(3.0) - 3.0) / 9.0
     assert abs((1 - 1 / r06) - 0.19) < 0.01 and abs(r3 - 3.6) < 0.1
-    axr.annotate(f"at 0.6 the Gaussian charge\nis {100 * (1 - 1 / r06):.0f}% short", (0.6, r06), xytext=(10, 22),
-                 textcoords="offset points", ha="left", va="bottom", fontsize=8.2, color=INK_2,
-                 arrowprops=dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8))
+    axr.annotate(f"at 0.6 the Gaussian\ncharge is {100 * (1 - 1 / r06):.0f}% short\n(exact is {r06:.2f}\u00d7 as large)", (0.6, r06),
+                 xytext=(2.05, 1.72), textcoords="data", ha="left", va="center", fontsize=8.2, color=INK_2,
+                 arrowprops=dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8, shrinkA=1, shrinkB=4))
     axr.annotate(f"at 3 the exact charge is\n{r3:.1f}× the Gaussian one", (3.0, r3), xytext=(-8, 8),
                  textcoords="offset points", ha="right", va="bottom", fontsize=8.2, color=INK_2)
-    axr.text(3.95, 1.0, "quadratic = 1", ha="right", va="bottom", fontsize=8, color=MUTED)
+    axr.text(3.95, 1.0, "quadratic = 1", ha="right", va="bottom", fontsize=8, color=INK_2)
     axr.set_xlim(0, 4.0)
     axr.set_ylim(0.5, 5.6)
     axr.set_xlabel("Position times jump times risk aversion, γqℓ")
@@ -206,7 +213,7 @@ def fig_price_pressure_decay():
     ax.plot([57.6], [-4.45], "o", color=TOXIC, markersize=4)
     ax.text(59.3, -4.45, f"A quarter informed (\u03c0 = 0.25):\n\u2212{perm:.2f} never comes back", ha="left",
             va="center", fontsize=8.5, color=INK_2)
-    note(ax, "\u03ba = 0.4, I/ADV = 12.8, \u03b8 = 1/20 per day, J = 13", loc="lower right")
+    note_ink(ax, "\u03ba = 0.4, I/ADV = 12.8, \u03b8 = 1/20 per day, J = 13", loc="lower right")
     return finish(fig, "ch01_price_pressure_decay")
 
 
@@ -326,7 +333,7 @@ def fig_march2020_timeline():
 
     note_ax.axis("off")
     t = note_ax.text(0.0, 0.75, "Orange: forced-seller\nevents. Blue: the Fed.\nThe line is a market-\nwide stress gauge,\nnot a Ford series.",
-                     transform=note_ax.transAxes, ha="left", va="top", fontsize=8.0, color=MUTED, linespacing=1.25)
+                     transform=note_ax.transAxes, ha="left", va="top", fontsize=8.0, color=INK_2, linespacing=1.25)
     t.set_in_layout(False)
     return finish(fig, "ch01_march2020_timeline")
 
@@ -410,7 +417,7 @@ def fig_forced_seller_flow_graph():
     ax.text(xl0, 80.0, f"Forced to sell: ${Q:.1f}bn", ha="left", va="center", fontsize=8.5, color=INK, fontweight="bold")
     ax.text(xr0, 80.0, f"Absorbed ${cap:.1f}bn; left ${resid:.1f}bn", ha="left", va="center", fontsize=8.5, color=INK,
             fontweight="bold")
-    ax.text(57.5, 80.0, "downgrade to HY", ha="center", va="center", fontsize=8.0, color=MUTED)
+    ax.text(57.5, 80.0, "downgrade to HY", ha="center", va="center", fontsize=8.0, color=INK_2)
 
     # the Fed: a dashed absorber that switches on at day 10 (Exercise 4's counterfactual, not a forecast)
     fed = FancyBboxPatch((79.5, 31.0), 19.5, 9.6, boxstyle="round,pad=0.0,rounding_size=1.2", facecolor="white",
@@ -426,7 +433,7 @@ def fig_forced_seller_flow_graph():
     ax.add_patch(FancyBboxPatch((1.0, 1.0), 98.0, 27.6, boxstyle="round,pad=0.0,rounding_size=1.5", facecolor="none",
                                 edgecolor=NEUTRAL, linewidth=1.0, linestyle=(0, (2, 3)), zorder=1))
     ax.text(2.6, 26.2, "Illustrative: one pod, Pair Book PB-01 (Chapter 1-B)", ha="left", va="center", fontsize=8.0,
-            color=MUTED)
+            color=INK_2)
     box_kw = dict(boxstyle="round,pad=0.0,rounding_size=1.2", facecolor="white", edgecolor=INK_2, linewidth=1.2, zorder=4)
     ax.add_patch(FancyBboxPatch((4.0, 6.2), 21.0, 10.0, **box_kw))
     ax.text(14.5, 11.2, "Lender\n(an asset manager)", ha="center", va="center", fontsize=8.3, color=INK, linespacing=1.2,

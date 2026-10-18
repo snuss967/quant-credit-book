@@ -135,3 +135,99 @@ By ten past seven the whiteboard on Kaz's side of the desk holds the table they 
 The table has a fifth row that neither of them writes down yet: the orders that never reached a fill have no benchmark at all, because every column above is measured from a fill price. That row is the subject of the next section.
 
 *Builds on:* §2.2 (TRACE timing and caps), §2.3.2 (order statistics, $n_{\text{eff}}$), §2.9.1 (units), §3.3.5 (survivorship), §27.4.2 (the state machine). *Used in:* §2B.2 (shortfall from the same stamps), §2B.4 (the cover as a dispersion statistic in the scorecard), Chapter 18-B (the dealer's log and FGP's likelihoods), §27.2.3 (the four timestamps of a fill), Appendix B (the RFQ-log schema).
+
+## 2B.2 Implementation Shortfall, Credit Edition
+
+*Wednesday 21 October, 9:40 a.m. The rebalance §27.4.2 uses as its example, retold from Theo's screen.*
+
+At 8:10 the optimiser emitted the week's rebalance for the desk's systematic sleeve: forty child orders, twenty sales and twenty purchases, about \$90mm each way *(all sizes and prices in this section illustrative)*. Every order was stamped `NEW` at 8:10. The router held them while the morning's new-issue announcements cleared and sent them between 9:15 and 9:35. By 9:40 Theo is watching the blotter fill like a waterfall run in reverse. The sales went first and went easily, which is what sales do: Kargar, Lester, Plante and Weill find, in every MarketAxess inquiry from 2017 to 2021, that sells complete about twice as fast as buys ("Sequential Search for Corporate Bonds," FRB Philadelphia WP 25-08, 2025). Eleven purchases filled. Nine sat with quotes too far away to take, or none. By eleven o'clock seven of them were `EXPIRED` and two `DONE_AWAY`, and thirty-one of forty is the rebalance's final score. Each of the nine terminal states fired a residual-risk event, the optimiser re-ran, and the nine went back into the queue as retries for Thursday and Friday.
+
+At 4:30 the execution system's report arrived: 31 fills, \$139.5mm, a cost of 6.4 bp against arrival, \$89,280. The nine were not in it, because a report built from fills has nowhere to put a trade that did not happen. The PM's paper-versus-real screen did have somewhere to put them, and it put them in the gain column. The market sold off after lunch, the nine bonds closed 9 bp of price below their 8:10 mids, and the \$40.5mm the desk had failed to buy was \$36,450 cheaper at the close. On Wednesday's numbers the failures paid for 40% of the fills.
+
+"We didn't save anything," Kaz says, reading the screen over Theo's shoulder. "We sold the bonds these were meant to replace, and then we didn't buy the replacements. The book was underweight \$40mm of spread duration on a day the market fell. That's a market position. We just didn't choose it."
+
+So they strip the market out, as §3.3.3 strips it out of a markout. The nine bonds' predicted systematic move from 8:10 to the close, their betas times the index's move, was $-15$ bp of price. They fell only 9. The idiosyncratic part was $+6$ bp: on a down afternoon the nine bonds the desk could not buy *outperformed* their peers. "Which is presumably why nobody wanted to sell them to us," Kaz adds. On Friday, when the retries finally filled, the nine stood 28 bp above their Wednesday 8:10 mids, 11 bp of it market and 17 bp their own.
+
+| Line | Stamps | bp of price | Notional | \$ |
+| :-- | :-- | --: | --: | --: |
+| Delay | `NEW` → `ROUTED` | 0.7 | \$139.5mm filled | 9,765 |
+| Drift while quoting | `ROUTED` → `QUOTED` | 0.5 | \$139.5mm | 6,975 |
+| Half-spread | `QUOTED` mid → fill | 5.2 | \$139.5mm | 72,540 |
+| **Executed** | | **6.4** | | **89,280** |
+| Unfilled, market part, Wednesday close | `NEW` → close | $-15$ | \$40.5mm unfilled | $-60,750$ |
+| Unfilled, IDO part, Wednesday close | | $+6$ | \$40.5mm | $+24,300$ |
+| Unfilled, market part, Friday retry | `NEW` → retry | $+11$ | \$40.5mm | $+44,550$ |
+| Unfilled, IDO part, Friday retry | | $+17$ | \$40.5mm | $+68,850$ |
+| **Shortfall at the Friday retry** | | **11.3** | \$180mm target | **202,680** |
+
+By Friday the unfilled line was \$113,400, larger than every executed line put together and 56% of the rebalance's cost. On Wednesday evening the same line had read as a \$36,450 gain. Of the four terms in the table, it is the largest, and it is the only one whose sign changed with the date on which somebody looked. That is not bad luck; it has two causes, and both are structural. The market part of an unfilled order is a beta position that nobody chose and that the desk could have closed in a minute with an index trade, which is what the residual-risk event of §27.4.2 exists to prompt; on this Wednesday the event was logged and nobody acted on it, so a cost line spent two days as a market bet. And the idiosyncratic part is adversely selected. About 30% of MarketAxess inquiries fail (Kargar et al. 2025), and the failures are not a random draw: a purchase fails when no dealer wants to sell, and dealers least want to sell the bonds they expect to rise. The router of §2.5.1 carried a failure cost $\kappa$ of 20 bp as an assumption. This week measured it: 17 bp of idiosyncratic drift, plus 11 bp of beta that a hedge could have neutralised.
+
+> **Math, Gently.** *A telescoping sum, and the paper portfolio.* Picture two portfolios. One is real. The other, drawn as a dotted line, is the portfolio the optimiser imagined: every order filled in full, instantly, at the arrival mid, with no spread. The paper portfolio is the counterfactual of §2B.1 made into a whole book, and the *implementation shortfall* is the gap between the two (Perold 1988). For a filled order the gap is the fill price minus the arrival mid, and it can be walked one stamp at a time, the way the distance from home to office is the sum of home-to-coffee-shop and coffee-shop-to-office. If arrival is 100.00, the mid at `ROUTED` is 100.03, the mid at `QUOTED` is 100.05 and the fill is 100.15, then the purchase cost 15 cents: 3 for waiting (delay), 2 for the market moving while the dealers looked (drift), 10 for crossing the spread (half-spread). The intermediate mids cancel in pairs, which is what *telescoping* means, so the pieces always add up to the whole. For the part that never filled, the paper portfolio owns it and the real one does not, so the gap is whatever the bond did between the decision and the moment the order was retried or abandoned. The full version follows.
+
+#### The Full Derivation
+
+Take one order with side $\eta$ ($+1$ to buy, $-1$ to sell), target face $X$, fills $x_k$ at prices $p_k$ (per 100 of face), and arrival mid $m_{\text{NEW}}$. Let $T$ be the time at which the unfilled remainder is retried or abandoned, with mid $m_T$. The paper portfolio trades $X$ at $m_{\text{NEW}}$; the real one trades $\sum_k x_k$ at the $p_k$; both are marked at $m_T$. Paper P&L is $\eta X (m_T - m_{\text{NEW}})/100$ and real P&L is $\eta \sum_k x_k (m_T - p_k)/100$, so the shortfall, in dollars, is
+
+$$
+\text{IS} = \frac{\eta}{100}\sum_k x_k\,(p_k - m_{\text{NEW}}) \;+\; \frac{\eta}{100}\Big(X - \sum_k x_k\Big)(m_T - m_{\text{NEW}}).
+$$
+
+The first term is the executed cost; the second is the opportunity cost. The log's stamps split each executed piece by telescoping,
+
+$$
+p_k - m_{\text{NEW}} = \underbrace{(m_{\text{ROUTED}} - m_{\text{NEW}})}_{\text{delay}} + \underbrace{(m_{\text{QUOTED}} - m_{\text{ROUTED}})}_{\text{drift while quoting}} + \underbrace{(p_k - m_{\text{QUOTED}})}_{\text{half-spread}},
+$$
+
+and the opportunity term splits along §3.3.3's line into a market part and an IDO part, $m_T - m_{\text{NEW}} = \beta_{\text{pred}} + \epsilon$, where $\beta_{\text{pred}}$ is the bond's beta times the index's price move over the same interval and $\epsilon$ is what is left. An order filled in several clips adds one more effect, *impact*: the drift between one clip's `QUOTED` stamp and the next clip's `ROUTED` stamp, which the desk's own earlier clips may have caused. The post-fill markout, the print an hour or a day later, does not enter this order's shortfall at all, because paper and real both own the filled bonds from then on. It belongs to the scorecard (§2B.4) and to the leakage test (§2B.3).
+
+**The patience premium.** Kargar et al. add one more number, and it is the reason retry logic belongs inside the fill service rather than in a trader's memory. A well-connected client buying an odd lot of investment grade takes about two days to complete after a failed inquiry; the least-connected 60% take nearly twice as long. And clients who reject the first quotes go on to trade later about 40% of the time at a price about 10 bp better than the best first offer. Whether patience pays depends on the signal. Count the rejection as worth $0.4 \times 10 = 4$ bp (treating the other 60% as no better, which is our simplification, not the paper's finding). The sleeve's value signal expects about 60 bp of price over three months and decays with a half-life of roughly 45 trading days *(illustrative)*, so two days of waiting cost it about $60 \times (1 - 2^{-2/45}) \approx 1.8$ bp of alpha: patience wins. An event-driven signal worth 40 bp with a three-day half-life loses $40 \times (1 - 2^{-2/3}) \approx 15$ bp in the same two days: patience loses badly. The same retry rule is right for one book and expensive for the other, and the shortfall ledger is where the difference shows up.
+
+*Builds on:* §2B.1 (the stamps), §2.5.1 (the failure cost $\kappa$), §3.3.3 (stripping beta), §27.4.2 (terminal states and residual-risk events), §9.8.3 (buffers: the orders the optimiser chose not to send). *Used in:* §2B.3 (unsent orders as a placebo), §2B.5 (the fill service's retry logic), §2B.7 (the two-leg version), §9.8.2 (what a trade costs), Chapter 28 (the cost budget on the PM dashboard).
+
+## 2B.3 The Leakage Test
+
+*Tuesday 20 October, 10:52 a.m., the morning of Theo's Halvorsen buy in Chapter 2.*
+
+The ticket was the sleeve's: sell \$4mm of a single-B chemicals bond, sent at 10:46 as a disclosed RFQ to five dealers *(the bond, the dealers and every level here are illustrative)*. Four answered. The best bid was half a point under the composite bid, and Theo, who had been on the desk five weeks and had opinions about being lowballed, passed. At 10:52 he closed the inquiry `DONE_AWAY` and gave the order to a voice dealer to work.
+
+At 11:14 a print landed on TRACE: `1MM+`, a dealer selling to a customer, three-eighths of a point *below* the best bid Theo had passed on. By noon his voice dealer had sold his bonds a half-point lower still. Passing had cost about \$20,000.
+
+"Somebody I showed that order to went straight out and dumped their own inventory ahead of me," Theo says. "They knew a seller was coming. I want to know which one, and I want them off the panel."
+
+"Done away?" Kaz looks up. "As in done away with? Which dealer died?"
+
+"None yet," says Theo.
+
+Ines, from across the desk: "The test comes before the accusation. Nobody gets cut on one print."
+
+The test Kaz builds that afternoon is an event study, and the version they end up trusting takes the rest of the week.
+
+> **Math, Gently.** *An event study, and why it needs a sugar pill.* An event study lines up many episodes at the moment something happened, here the `ROUTED` stamp, and averages what the price did afterwards, minute by minute. Sign each path so that a positive number means "moved against us" (down after we tried to sell, up after we tried to buy), and the average path shows how much the market tends to run away once the desk shows its hand. The trap is that the market might have run away anyway. A cold goes away in a week whether or not you take the medicine, which is why drug trials give a control group a sugar pill: the drug's effect is the *difference* between the two groups, not the treated group's recovery. Here the sugar pill is a **placebo order**, one the optimiser generated but nobody sent. If the average sent sale drifts 1.9 bp against the desk in a hundred minutes and the average unsent one drifts 1.4 bp, the inquiry's own effect is about 0.5 bp *(illustrative)*, and the other 1.4 bp is the cold getting better on its own. With 4,600 sent orders, 2,300 placebos and a per-order standard deviation near 10 bp, the uncertainty on that 0.5 is about $\sqrt{10^2/4600 + 10^2/2300} \approx 0.26$ bp. The full version is in §2B.10's engine.
+
+Kaz runs it on a year of the log: every order's composite mid from `ROUTED` to its terminal stamp and on to a hundred minutes later, split by protocol, panel size and outcome. The placebo is the set of orders the optimiser emitted that never left the building, mostly lines the buffer of §9.8.3 suppressed or a trader held back.
+
+The first surprise is that the placebo drifts in the same direction as the real orders, and by most of the same amount. Theo's instinct says that is impossible, since nobody saw the placebo. Kaz's answer is that nobody needed to. The sleeve's signal has momentum in it, and §9.8.2's dealer-seat box makes the point from the other chair: a book that sold a name yesterday will very likely sell it and its cousins today, because the signal that told it to sell is still there and so is every other book running something similar. The sleeve's sales are in bonds that were already falling. Most of the "leak" is the strategy's own footprint, the cold that was going away by itself.
+
+| Slice of the year *(illustrative)* | Sent: drift at +100 min | Placebo | Difference | Std. error |
+| :-- | --: | --: | --: | --: |
+| All orders | 1.9 | 1.4 | 0.5 | 0.26 |
+| Disclosed RFQ, up to 5 dealers | 1.7 | 1.4 | 0.3 | 0.4 |
+| Disclosed RFQ, 6 or more | 2.0 | 1.4 | 0.6 | 0.5 |
+| All-to-all | 2.2 | 1.4 | 0.8 | 0.4 |
+| PT line | 1.5 | 1.4 | 0.1 | 0.6 |
+| Voice | 1.6 | 1.4 | 0.2 | 0.6 |
+| Outcome `DONE_AWAY` | 2.5 | 1.4 | 1.1 | 0.7 |
+
+*(bp of price, signed so that positive is against the desk.)* The residual is real and small. It is largest when the desk shows a direction to many counterparties and then walks away, which is exactly Theo's Tuesday: a `DONE_AWAY` tells every losing dealer that a seller is still out there. The order of magnitude agrees with the one public study of the question we know of. Tradeweb's white paper on US investment-grade RFQs above \$1mm, January 2025 to April 2026, fits a GLM to five-minute cumulative changes in its Ai-Price spread between RFQ acceptance and TRACE publication, and finds same-direction impact for all-to-all inquiries "in the order of 0.1 to 0.3 basis points" of spread larger than for voice, more for sells and for less liquid bonds (Caretti, Mahajan and Husveth, "Information Leakage in US Credit: Evidence from All-to-All RFQs," May 2026). On a six-year bond, 0.1 to 0.3 bp of spread is roughly 0.6 to 1.8 bp of price, the same neighbourhood as the desk's 0.6 bp all-to-all excess over voice. Two caveats travel with the paper: it is vendor-authored, and protocol choice was not randomised, so the bonds sent all-to-all may differ from the bonds sent by voice in ways the model does not see.
+
+The economics of why a leak exists at all is cleaner than the measurement. Baldauf and Mollner ("Competition and Information Leakage," *Journal of Political Economy* 132(5), 2024) model the trade-off at the heart of every panel: one more dealer means more competition for the order and one more party who, on losing, can trade ahead of it. In their model the client's best response is to reveal no direction, which is why two-sided requests exist.
+
+And Theo's single print had an innocent explanation available all along. Hendershott, Li, Livdan, Schürhoff and Venkataraman ("Quote Competition in Corporate Bonds," *Journal of Finance* 81(4), 2026) find, in dealer runs from 2019–20 matched to TRACE, that the best-quoting dealer wins only about 15% of trades, and that trade-throughs, trades at a worse price than a firm quote under an hour old, run from about 17% for the best-quoting dealer to around 40% for small trades with other dealers. A customer selling to its own relationship dealer three-eighths below the best bid is a trade-through, not a front-run. On the year's numbers, a single high-yield sale's hundred-minute drift has a standard deviation of roughly 40 bp, and the placebo-adjusted expectation for a sent sale is a few basis points. Theo's three-eighths sat a little less than one standard deviation away from nothing at all.
+
+Two more things come out of the week. The placebo itself is selected: a trader who holds back an order usually has a reason, and the reason may be correlated with what the bond does next. Kaz proposes a cleaner sugar pill, a randomly chosen 5% of the optimiser's marginal orders delayed by a day, and Ines approves it on the condition that the delayed orders' opportunity cost goes into §2B.2's ledger, where it belongs, as the price of knowing. And the one-off event study becomes a standing alarm: §27.7.2's CUSUM on markouts is already watching each dealer's residualised fills, and it now watches the sent-minus-placebo drift as well, so a dealer who starts trading on the desk's inquiries trips a threshold instead of a trader's temper.
+
+> **Poker Table.** Ines puts it in a sentence and then in a hand. "Who saw your hand? Everyone you asked, and everyone they told." Every RFQ is a card shown to the table. Showing it to five players buys you five bids and gives four losers a look at what you are holding; showing it to all-to-all gives the look to whoever is watching. Whether that was a good trade depends on how much better the fifth bid was than the second, and that is a question the hand history answers only over thousands of hands. "One print is a tell," she says. "A placebo is a hand history. People get cut on hand histories."
+
+Theo's dealer stayed on the panel. The \$20,000 went into the shortfall ledger as the cost of a `DONE_AWAY`, which is where it had been all along.
+
+*Builds on:* §2B.2 (unsent orders), §3.2 (the RFQ as a poker hand), §9.8.2 (the predictable book), §9.8.3 (buffers). *Used in:* §2B.4 (leakage-adjusted dealer scores), §18.7 (hit rates and staying at the table), §19.8 (the mystery box: adverse selection in baskets), §27.7.2 (CUSUM on markouts as the standing alarm), §27.8 (replay).

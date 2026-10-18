@@ -260,3 +260,7 @@ All 12 stopped runs were resumed. New launches: rv for 3-B, 8-B, 8-C, 12-C (wvsj
 ### 14:42 UTC: user reading 14% (the meter read 14.3%, so it is accurate on the 59%@05:45 scale). User rule: "Raise the guard to stop when you count to 105%."
 The guard bphm68mek runs `--target 111 --cap-only --check-every 60` (alarm at 105% on the meter). Because the meter currently matches the user's readings, the window will probably hit the hard usage limit near 100% before the alarm fires. Every agent writes durably, so nothing beyond in-context drafts is lost, and a restart is scheduled for 19:33 UTC (trig_01WppFSgkiFUZCn8ycNV2AN6) to resume from `state/resume_runs.json`.
 Ch 1 finished its lessons pass (16 → 9 Math, Gently boxes, modal 3.9 → 3.7) and its rv beat (PB-01 rebuilt on the flow-graph equations). Figures and resgraph for Ch 1 are launched.
+
+### 15:10 UTC
+- Ch 18 and 19 revised + verified (PB-14 legging in Ch 18; the pod sending pure residual into a PT in Ch 19). Ch 2, 3, 7 have lessons + rv complete. Cleanup batch 1 is done: Listing 25.1 regex fixed and running clean, Ch 4-C weekday, Ch 13 V/F branch, arXiv citation. App A §A.10 "The Phrasebook: RSSG to Quant" written (71 entries, including RV vocabulary).
+- **Planned-but-never-written TOC files found:** 18_ch18b (RFQ response engine), 09_ch09b (bond data problem), 13_ch13b (Autopsy Room), 17_ch17b (marking the unmarked), 10_ch10b (credit index futures). Other chapters already point to them. Launched as wr9ksz5pq: Fable brief → Opus writer, each with its dossiers and its RV beat.

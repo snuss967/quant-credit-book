@@ -2,24 +2,6 @@
  "note": "Restarted 14:35 UTC (window 14:30-19:30). Resume with Workflow({scriptPath, resumeFromRunId, args}).",
  "runs": [
   {
-   "name": "u2-V-a",
-   "task": "wektlkdhs",
-   "runId": "wf_cbf26479-589",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "18_ch18_otc_microstructure_and_avellaneda_stoikov",
-     "19_ch19_portfolio_trading_pricing_engines"
-    ],
-    "stages": [
-     "brief",
-     "revise",
-     "verify"
-    ]
-   }
-  },
-  {
    "name": "u2-VII-VIII",
    "task": "wrwwe5p20",
    "runId": "wf_555f9532-3bf",
@@ -154,13 +136,6 @@
    }
   },
   {
-   "name": "cleanup-batch-1",
-   "task": "wlx5ktyer",
-   "runId": "wf_26de4e7f-ed8",
-   "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/ed2-cleanup-batch-1-wf_26de4e7f-ed8.js",
-   "args": null
-  },
-  {
    "name": "figs-ch4",
    "task": "ww95d3tpy",
    "runId": "wf_95868132-0bd",
@@ -212,6 +187,13 @@
      "resgraph"
     ]
    }
+  },
+  {
+   "name": "missing-toc-chapters",
+   "task": "wr9ksz5pq",
+   "runId": "wf_88dd2b76-e50",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/u3_research_and_new_chapters.js",
+   "args": "items [] + chapters 18_ch18b, 09_ch09b, 13_ch13b, 17_ch17b, 10_ch10b (see the 15:10 ledger entry)"
   }
  ]
 }

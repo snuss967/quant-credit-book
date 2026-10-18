@@ -221,3 +221,171 @@ The risk manager's question had a concrete answer once the ruler was chosen, and
 
 The risk manager closed his laptop. "Long A's jump," he said. "That's what it's long that it didn't mean to be. Write it on the ticket." It was the only sentence he said in the interview, apart from the question. Theo wrote it on the back of his hand, which is not a ticket, but it was what he had.
 
+## 4D.7 Wednesday: Fermi With Credit Numbers
+
+The systematic manager's office was quiet in the way a library is quiet, which is to say full of people concentrating and slightly resentful of footsteps. The researcher who interviewed Theo had a kitchen timer shaped like a tomato, set it to ninety seconds per question, and explained that the timer was not there to rush him but to make sure she stopped talking.
+
+The questions were estimates, and each had a true number somewhere in the public record, which she had in a folder. What she was grading was the chain, not the endpoint.
+
+*DV01 on \$10mm of a ten-year bond.* Theo used Chapter 4-B's arithmetic without knowing yet that it was Chapter 4-B's: a modified duration near 8, a price near 108, so about \$8 per \$1mm per basis point per point of duration times 1.08, or roughly \$8,800 per \$10mm. The anchor in her folder was the stylized 4.50% ten-year note of Table 4B.1 on 20 February 2020: \$8,785.
+
+*How much trades on TRACE in a day?* He guessed "fifty to a hundred billion," and she asked "which TRACE?", which was the real question. The DESK put average daily volume at \$70.2bn in March 2026 (Appendix C), and FINRA's monthly volume files split the tape by product: investment grade and high yield, agencies, securitized products. Before quoting a daily volume in a room, it pays to know which of those the source counted. The definition is part of the error bar.
+
+*How many firms print a block on an average day?* He had no idea and said so, then reasoned from the number of dealers he had seen on a closing call. The folder said 24.51 firms reported at least one trade of \$25mm or more on an average day in 2025, up from 17.27 in 2023 (FINRA TRACE Fact Book, Table C12; §2.8).
+
+*What does one non-bank trade?* IFR's estimate, via Rupak Ghose, put Citadel Securities at about \$2bn of corporate bonds a day in 2025 (§2.8). Jane Street's own pages say it traded "more than \$900 billion with clients globally in 2025" and prices "more than 25,000 bonds." Theo divided \$900bn by 252 trading days, got \$3.6bn a day, and was about to conclude that Jane Street traded nearly twice what Citadel Securities did when the researcher held up a hand. One number is corporate bonds from an estimate; the other is all fixed income with clients, globally, from the firm. The comparison was a units error with a nice round answer.
+
+*What does a portfolio trade look like?* A Goldman credit-trading partner described about 8,000 portfolio trades for more than 300 clients in 2023, averaging about \$60mm across about 100 CUSIPs (Coalition Greenwich webinar, January 2024; paraphrase). That is about \$480bn a year, roughly \$1.9bn a trading day, in lines averaging \$0.6mm each: the small tickets of a big trade.
+
+*How much balance sheet does it take to make markets in high yield?* There is no true number here, and the researcher said so, which Theo liked. He built one *(illustrative)*: quote 300 names in \$2mm clips, let inventory run to five clips either way before the quotes lean hard (§18.5's bounds), and the worst case is \$3bn of gross inventory. Hedges and netting bring the typical day to perhaps a quarter of that, and at a 10% capital haircut the desk needs something like \$75mm of capital at risk. For scale, an ETP market maker reported EUR 771m of trading capital for its whole business at 31 March 2020, the quarter of the ETF dislocation (Flow Traders, Q1 2020 trading update). Two derived numbers came the same way: a high-yield index position with a risky duration near 4.2 has a DV01 of about \$420,000 per basis point per \$1bn, and a venue with \$9.6bn of average daily volume (Trumid, June 2026) and lines near \$1mm is handling something like ten thousand lines a day, most of them, on its own account of eligible RFQ lines, without a human touching them (88% no-touch; The DESK, October 2025). Both are illustrative chains, labeled as such.
+
+> **Math, Gently.** *Why a Fermi chain's errors add up in logs.* A Fermi estimate is a product of ratios: names times clip times inventory limit times netting times haircut. Each factor is known only roughly, say "within a factor of two." Take logs and the product becomes a sum, $\ln(\text{answer}) = \sum_i \ln(\text{factor}_i)$, so the errors add in log space too. If four factors are each off by up to a factor of two and their errors are independent, the log errors combine like independent noise, in quadrature: $\sqrt{4} \times \ln 2 \approx 1.39$, a combined factor of about 4. If they all err in the same direction, the errors stack, $4 \ln 2$, a factor of 16. The interviewer wants to see the chain, a range for each link, and a sentence on which link is the widest. The habit transfers directly to sizing a trade, where the widest link is usually the recovery. The full version of error propagation through products is in §28.2's treatment of noisy hit rates.
+
+## 4D.8 Wednesday Afternoon: The Coding Screen
+
+After lunch the researcher opened a laptop with a file that looked like TRACE and was not quite: twelve thousand prints, some cancelled, some corrected, some reported late "as/of," and a column of ratings. There were three tasks, forty-five minutes, and a Python environment with pandas.
+
+The first was to tidy the tape: drop cancelled prints, replace corrected ones with their corrections, and keep the late reports at their trade time rather than their report time. FINRA's Rule 6730 is why the file looked like that. A dealer has fifteen minutes from execution to report a corporate bond trade, and anything reported later is flagged "as/of"; a back-test inherits every cancel, correction and late print the operations desk ever cleared. Appendix B's tidy-panel specification (§B.16) is the long version.
+
+The second task was the join, and it was where Theo lost. Each print needed the issuer's rating attached. He merged the tape to the ratings table on issuer ID, the ratings table carried each issuer's rating *as of today*, and every trade in 2024 now knew about every downgrade that happened in 2025. His back-test of "sell on downgrade" looked wonderful. The researcher let him finish, then asked what date the rating column belonged to. He looked at the column for a long time. Jane Street's Eric Mannes put the general case on the firm's podcast: a back-test is "simulating what you would've done if you had a time machine," and the defense is to "save all the data that we have access to along with the time we received it" (*Signals and Threads*, Ep 29, "Wrestling the World into Rows," 2 Sep 2026). The fix is an as-of join that, for each trade, takes the latest rating *published before* the trade. It is one line of pandas once you know to want it.
+
+> **Math, Gently.** *Why a join needs two clocks.* Every fact in a credit database has two times attached: when it was true, and when you could have known it. A downgrade is "effective" on one date and appears on a screen at a particular minute; a 10-Q covers a quarter that ended weeks before the filing; a TRACE print reported as/of was executed earlier than it was reported. A back-test that joins on the first clock alone quietly lets the past read the future. Picture two transparent sheets, one per clock, laid over a calendar: a fact may enter a trade's row only if it is to the left of the trade on *both* sheets. The full version is the point-in-time discipline of §7.7 and §7.9.
+
+The third task was cross-validation for a model predicting bond returns: purged, embargoed and grouped by issuer. Theo knew the words because Ines's reading list had included Chapter 7, and he knew why each mattered. Purging drops training labels whose windows overlap the test period; the embargo drops a buffer after it, because returns are serially correlated; grouping by ultimate parent keeps an issuer's eleven bonds from appearing on both sides of the split, which is §7.6's forty-seven hats in another costume. Ten lines, written slowly, with one bug the researcher pointed out (he grouped by ticker, and two of the tickers were the same company).
+
+#### Quant-Shop Life: The Feedback Form, Wednesday, 5:10 p.m.
+
+*A fictional composite of a systematic asset manager's hiring process; no firm's form or rubric.*
+
+Theo's afternoon ended at four. The researcher's ended at 6:20, and most of what happened in between was a web form. The applicant-tracking system wanted four scores from one to four (probability, estimation, coding, communication), a recommendation from a drop-down (*strong no, no, yes, strong yes*), and a free-text box that could not be left empty and could not exceed 1,500 characters. She wrote 1,488. She gave the join a 2 and then changed it to a 3, because he had found the bug himself once asked the right question, and the rubric said "recovers from error with prompting" was a 3. She spent eleven minutes on whether "communication" meant how he spoke or how he wrote his code, decided it meant both, and averaged. At 5:40 the system logged her out for inactivity while she was looking up how many firms print a block a day, to check that her own folder was right, and she retyped the box from memory. Thursday at 5:30 there would be a calibration meeting, where four interviewers would discover that one colleague's 3 was everyone else's 2 and spend forty minutes on it. Nobody would mention the tomato timer. It was, she thought, the best-calibrated instrument in the building.
+
+Theo later wrote his own drill set from the week, partly to stop replaying the join in his head. The problem it solves is the one every candidate has after a week like this: the games are learnable, but only by doing them under a clock with an answer key you did not write after seeing the question. `interview_drills.py` is a seeded generator of the §4D.2–§4D.7 puzzles. Each drill draws its inputs from a small menu with a random-number generator fixed by a seed, so a session can be repeated exactly and a different seed gives new numbers to keep you from memorizing answers. Each drill returns three things: the question as text, the answer computed from the formula in its home section, and a checker that accepts a reply within a tolerance suited to mental math (half a point of probability, a quarter of a point of price, ten thousand dollars of size). The answer key is the formula, not a stored number, which is the design choice that makes the drills trustworthy. The inputs are a seed and a count; the output is a list of (question, answer, checker) triples, and running the file checks the chapter's own anchors before printing a session: 25% and 19.2% for §4D.2, 64 for §4D.3, 0.926 for §4D.5, \$25.9mm for the stop, \$26.7mm for the DTS short, and the 4-B DV01.
+
+It is for speed and for catching the slips this chapter is full of: the second sale treated as the first, the rate forgotten in the measure question, the duration ruler where DTS was asked. It will not teach judgment. No drill asks "which measure?" in a form a checker can grade, and the pitch of §4D.10 has no answer key at all. The edge case that bites is the Kelly drill when there is no edge. If the default probability exceeds $c/(c+L)$, the formula returns a negative fraction, and a naive drill would ask you to "size" a short you never chose to make; this one returns `None`, meaning *no bet*, and the checker expects you to say so. The listing is [Listing 4-D.1 in Appendix F](#code-4D-1).
+
+<!-- EXPLAINED -->
+```python
+"""interview_drills.py: seeded drills for Chapter 4-D (illustrative numbers).
+
+Each drill returns (question, answer, check); check(x) is True when x is within
+the drill's tolerance of the answer. Home sections are in the docstrings.
+"""
+import math
+import random
+
+
+def _check(answer, tol):
+    return lambda x: x is not None and abs(x - answer) <= tol
+
+
+def measure_drill(rng):
+    """§4D.2: two-point bond, risk-neutral default probability, with a rate."""
+    hi, lo = 100.0, rng.choice([20.0, 30.0, 40.0, 50.0])
+    price = rng.choice([80.0, 85.0, 88.0, 92.0])
+    r = rng.choice([0.0, 0.02, 0.04])
+    q = (hi - price * math.exp(r)) / (hi - lo)   # undiscounted mean under Q
+    text = (f"Pays {hi:.0f} or {lo:.0f} in one year; price {price:.0f}; "
+            f"rate {r:.0%} continuous. Q-default probability?")
+    return text, q, _check(q, 0.005)
+
+
+def gm_drill(rng):
+    """§4D.3 and §3.2: value after n sells from new sellers, two-point prior."""
+    hi, lo = 100.0, rng.choice([30.0, 40.0, 60.0])
+    pi = rng.choice([0.1, 0.2, 0.3])
+    n = rng.randint(1, 4)
+    p_sell_bad, p_sell_good = pi + (1 - pi) / 2, (1 - pi) / 2
+    odds = (p_sell_bad / p_sell_good) ** n       # prior odds 1: fifty-fifty
+    post_bad = odds / (1 + odds)
+    value = post_bad * lo + (1 - post_bad) * hi
+    text = (f"Worth {hi:.0f} or {lo:.0f}, fifty-fifty; {pi:.0%} of sellers "
+            f"informed. Value after {n} sells from new sellers?")
+    return text, value, _check(value, 0.25)
+
+
+def kelly_drill(rng):
+    """§4D.5 and §28.4: discrete Kelly for a bond; None means no edge, no bet."""
+    c = rng.choice([0.03, 0.045, 0.06])
+    q_d = rng.choice([0.01, 0.031, 0.05, 0.08])
+    loss = rng.choice([0.4, 0.6, 0.8, 1.0])
+    f = (1 - q_d) / loss - q_d / c
+    text = (f"Carry {c:.1%}, PD {q_d:.1%}, LGD {loss:.0%}. "
+            f"Full-Kelly fraction of NAV (None if no edge)?")
+    if f <= 0:
+        return text, None, lambda x: x is None
+    return text, f, _check(f, 0.01)
+
+
+def stop_drill(rng):
+    """§4D.5 and §8D.5: largest long that one default cannot push past a line."""
+    capital = rng.choice([100.0, 200.0, 400.0])               # $mm
+    line = rng.choice([0.025, 0.05, 0.075])
+    price, recovery = rng.choice([(98.0, 40.0), (90.0, 30.0), (75.0, 25.0)])
+    size = capital * line / ((price - recovery) / 100.0)
+    text = (f"Capital ${capital:.0f}mm; one default may cost {line:.1%}. "
+            f"Bond at {price:.0f}, recovery {recovery:.0f}. Largest long, $mm?")
+    return text, size, _check(size, 0.1)
+
+
+def ruler_drill(rng):
+    """§4D.6 and §8D.3: short size under the duration, DTS or beta ruler."""
+    long_mv = rng.choice([20.0, 40.0, 60.0])
+    s_a, d_a = rng.choice([(380, 4.2), (300, 5.0), (450, 3.8)])
+    s_b, d_b = rng.choice([(520, 4.6), (600, 4.0), (410, 5.2)])
+    beta = rng.choice([0.5, 0.6, 0.8])
+    ruler = rng.choice(["duration", "dts", "beta"])
+    short = {"duration": long_mv * d_a / d_b,
+             "dts": long_mv * d_a * s_a / (d_b * s_b),
+             "beta": long_mv * d_a * beta / d_b}[ruler]
+    text = (f"Long ${long_mv:.0f}mm of A ({s_a}bp, spread duration {d_a}); "
+            f"short B ({s_b}bp, {d_b}); beta {beta}. Short by {ruler}, $mm?")
+    return text, short, _check(short, 0.1)
+
+
+def dv01_drill(rng):
+    """§4D.7 and §4B.5: DV01 per $10mm = D_mod x dirty price x face x 1e-6."""
+    d_mod = rng.choice([3.9, 4.2, 6.5, 8.11])
+    price = rng.choice([92.39, 100.0, 108.38])
+    dv01 = d_mod * price * 10_000_000 * 1e-6
+    text = f"Modified duration {d_mod}, dirty price {price}. DV01 per $10mm?"
+    return text, dv01, _check(dv01, 0.05 * dv01)              # mental-math band
+
+
+DRILLS = [measure_drill, gm_drill, kelly_drill, stop_drill, ruler_drill,
+          dv01_drill]
+
+
+def session(seed, k=6):
+    """A reproducible set of k drills: same seed, same questions."""
+    rng = random.Random(seed)
+    return [rng.choice(DRILLS)(rng) for _ in range(k)]
+
+
+if __name__ == "__main__":
+    # The chapter's anchors, recomputed from the drill formulas.
+    assert abs((100 - 85) / 60 - 0.25) < 1e-12                    # §4D.2
+    assert abs((100 - 85 * math.exp(0.04)) / 60 - 0.192) < 1e-3   # §4D.2, 4%
+    assert abs(0.6 * 40 + 0.4 * 100 - 64.0) < 1e-12               # §4D.3
+    assert abs(0.969 / 0.6 - 0.031 / 0.045 - 0.926) < 1e-3        # §4D.5
+    assert abs(15 / 0.58 - 25.86) < 0.01                          # §4D.5 stop
+    assert abs(40 * 4.2 * 380 / (4.6 * 520) - 26.69) < 0.01       # §4D.6 DTS
+    assert abs(8.11 * 108.38 * 10 - 8789.6) < 1.0   # §4D.7 (4-B prints $8,785)
+    for text, answer, check in session(seed=2026):
+        print(text)
+        assert check(answer)
+```
+
+## 4D.9 Thursday Afternoon: Kaz Asks Theo to Break It
+
+"You'll do," it turned out, meant "you'll do the next room." At 1:30 Theo was shown into a smaller glass room where Dr. Kasimir Lind, whom everyone called Kaz, sat behind a laptop with a slide already up. Kaz was not in the morning's market; Kaz was the afternoon's model.
+
+The slide was a backtest Kaz had built for interviews, on purpose, to be broken. A high-yield long/short signal, 6.2% a year of gross alpha at 2% tracking error, an information ratio of 3.1. "Why is my Sharpe 3.1?" Kaz asked, sounding genuinely curious, as if the number had arrived in the mail.
+
+Theo asked the questions he would have asked of a CIM. How many companies? What does it cost to trade? Kaz answered the second one cheerfully: turnover eight times a year one way, transaction costs "set to zero so they wouldn't bias the results." Eight times one way is sixteen dollars traded per dollar of book a year. To keep an information ratio of 0.5, net alpha has to stay at 1%, so the costs can eat 5.2% a year, 32.5 bp per dollar traded; at 38.75 bp the whole 6.2% is gone (Chapter 4, Exercise 2). Theo had learned on the Monday desk that a high-yield half-spread on an institutional ticket runs to an eighth or a quarter of a point on a liquid bond and more on the bonds a cheap-decile signal tends to pick. A quarter of a point is 25 bp of price, and at 25 bp the IR is 1.1, not 3.1. "Your Sharpe," he said, "is mostly the bid–offer you didn't pay."
+
+Kaz's second question was the issuer count, posed as a puzzle. "The US high-yield index had 784 issuers on 31 May 2018, and 576 of them had public equity. My panel has forty thousand bond-months. How many independent observations do I have in a month?" Theo answered as a banker: at most 784, fewer once bonds are grouped by ultimate parent, fewer again for anything that needs an equity price, and next month's cross-section is mostly this month's companies a month older. Rows are not observations; issuers are, and slowly (§7.6 makes this a number, $N_{\text{eff}}$). Kaz looked pleased. It is worth recording that Kaz asked exactly the right question in June and failed it on their own slide in October (§7.0), which is the most common way quants know things.
+
+Near the end Kaz closed the laptop and asked a question that was not on any rubric. "Is a *fulcrum* the thing you hang the hedge from?"
+
+Theo started to explain that the fulcrum is the class where the value runs out: the class that is impaired but still in the money, the one that ends up owning the reorganized company. Halfway through the sentence he stopped, because Kaz was half right. In the pod's version of an RSSG trade (§3.7), long the fulcrum and short the class junior to it, sized so that a default costs nothing, the hedge does hang from the fulcrum. "In a capital-structure pair," he said, "yes. Everywhere else, no." Kaz wrote it down. Theo did not know until his second week on the desk that Kaz writing something down was the highest compliment the desk offered.
+

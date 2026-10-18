@@ -127,6 +127,84 @@ RSSG teaches what falls out of the ladder by experience: where the fulcrum sits,
 
 Used in: §6.2.1 (Merton's two-tranche case), §8.3, §13.3, §13.7, §15.3, §16.3, §21.4, §23.1.
 
+### 6-B.1.5 Long Scene: Wolfspeed, 23 Jun 2025, one distribution and four strikes
+
+*A replay. The desk's cards and all dialogue are fictional, and nobody on the desk held Wolfspeed paper in 2025. Every Wolfspeed fact is from the company's 8-Ks, its FY2025 and FY2026 10-Ks and its disclosure statement; the stock prints are from the press reports and market-data vendors named where they appear; calculations are marked (calc).*
+
+Tuesday 20 October 2026, 4:45 p.m. Ines puts a folder on the table the way she puts down a coffee, like a chip. The tab says *Cut: close, Mon 23 Jun 2025*. The rules are the usual ones: you know what was public at the cut and nothing after it, you write your card before she opens the next folder, and a card executes at the first print after it was written, not at the last one before.
+
+"One exception tonight," she says. "Two numbers from the future, because tonight is about the shape of a payoff and not its level, and I don't want to watch Kaz value a chip company for an hour." She writes them on the whiteboard and boxes them: *43.56mm new shares. Plan equity value \$959.4mm, so \$22.02 a share* (calc, from the FY2026 10-K). Everything else in the folder is dated on or before the cut.
+
+**The stack.** Theo reads it aloud, from the balance sheet as the next 10-K would print it six days later, which Ines allows because nothing but accrued interest moved in those six days. Senior Secured Notes due 2030, \$1,521.2mm, paying 9.875% plus 2% in kind. Three convertible issues, all unsecured: 1.75% due 2026, \$575mm, convertible at about \$47.32 a share; 0.25% due 2028, \$750mm, at about \$127.22; 1.875% due 2029, \$1,750mm, at about \$118.88. Renesas's customer deposits, \$2,062mm, unsecured and ranking with the converts. Total debt \$6,658.2mm; cash and short-term investments \$955.4mm, down \$1.22bn in a year.
+
+The path is in the next three pages. On 28 March 2025 an out-of-court exchange failed and the stock fell about half, to \$2.59, a market capitalisation of about \$400mm. On 2 June the company did not pay the interest due on the 2029 converts and entered the 30-day grace period. On 22 June it signed a restructuring support agreement with holders of more than 97% of the secured notes, and the press release the next morning said what everyone got: the converts and Renesas would exchange about \$5.2bn of claims for \$500mm of new notes and 95% of the new common equity, and existing shareholders would receive "their pro rata share of 3% or 5% of new common equity," subject to dilution and "potential reduction from certain events." By Monday afternoon the stock was about a third lower, near 60 cents (press reports that afternoon put it at 59 and 60 cents).
+
+Theo goes to the whiteboard and draws the ladder of §6-B.1.4 with real attachment points, in \$mm: the secured notes on the rung $[0,\,1{,}521]$; the converts and Renesas, pari passu, sharing one wide rung $[1{,}521,\,6{,}658]$; the old equity, a call struck at 6,658.
+
+**The first thing that falls out.** "The converts are convertible into stock at forty-seven, a hundred and nineteen and a hundred and twenty-seven dollars," Theo says. "In March the stock was two fifty-nine. Those strikes were eighteen, forty-six and forty-nine times spot (calc). Their own call on the stock is worthless. They're not convertibles any more. They're recovery claims with a CUSIP." He circles the wide rung. "And this is where the value lands. Whatever the company is worth, it's more than the secured notes and much less than six and a half billion. So the unsecured rung is the at-the-money call spread. It's the fulcrum."
+
+"The tranche that does the most leverage," Kaz says, pleased.
+
+"The tranche whose price moves most when the valuation fight moves," Ines says. "Which is a kind of leverage, so you get half a point." The rungs above and below the money barely move: the secured notes are paid almost whatever the company is worth, and the old equity, a call struck at \$6.66bn on a firm worth perhaps a third of that, is too far out of the money to have a delta. (Six days after the cut the 10-K would mark the three convert issues at 26% of principal, and the disclosure statement would estimate their recovery at 25% to 30%. Ines shows neither yet.)
+
+**The second thing.** Kaz has been pricing the old stock all afternoon as a Merton call on the firm, struck at total debt, and has a number to four decimal places. Mags takes the RSA out of the folder and puts it on top of Kaz's printout.
+
+"The document wrote the payoff," she says. "That stock isn't a call on anything. It's a coupon for two point one eight million new shares and a lottery ticket on a government committee."
+
+This is the ladder's second lesson, and it is the one a restructuring banker knows in his bones and a model does not: *seniority is moneyness, and a restructuring support agreement moves the strikes.* The RSA does not wait for the firm's value to fall below the equity's strike. It abolishes the strike. The plan fixes one pie of new stock and cuts it by document. The exit 8-K would later print the slices to the share: 24,533,760 new shares to the converts and 1,306,896 to the old equity on the effective date, with 871,287 more to the old equity and 16,852,372 to Renesas once the Committee on Foreign Investment in the United States cleared Renesas's stake. On 43.56mm shares, 1,306,896 is the RSA's 3% and the two slices together are its 5% (calc). An uptier does the same thing by inserting a rung at the bottom of the ladder and pushing everyone's attachment points up by its face (§13.3); a drop-down does it by removing assets from $V_T$ for some rungs and not others (§13.6). Here the document went further and replaced the old equity's call with a fixed number of shares in a company that did not exist yet.
+
+Theo does the arithmetic on the board. Old shares outstanding, 156.48mm. With the committee's clearance, the old equity gets 2,178,190 new shares; at about \$22 that is \$48mm, or 31 cents an old share. Without it, 1,306,896 shares, \$29mm, 18 cents. The difference, the committee's slice, is a digital: if the committee clears Renesas by the deadline, each old share gets 0.005568 more new shares, about 12 cents at plan value; if it does not, nothing (calc).
+
+**The third thing.** "At sixty cents," Theo says, "the market is paying ninety-four million dollars for a payoff the document values at forty-eight. Twice."
+
+"Tag the rungs for vega," Ines says. "Plus or minus."
+
+He does it slowly, because it is the reading that took him longest at his old job, where nobody called it vega. A call spread is convex near its lower strike and concave near its upper one, so every rung is long volatility below its midpoint and short above it. The secured rung, whose lower strike is zero, is all concavity: short volatility everywhere, which is why secured lenders hate surprises in both directions. The equity is all convexity: long volatility everywhere. The middle rungs flip sign as the firm deteriorates, and Wolfspeed's unsecured rung, with the value landing not far above its lower strike, had flipped: it was long volatility, like equity, which is the structural reason a CCC bond starts to trade like stock (§8.3). Ninety-five per cent of the new company's shares were about to go to that rung. The converts were becoming the stock in the most literal way a document can arrange.
+
+"And the old stock?" Ines asks.
+
+Theo looks at the plus sign he has just written next to it, and crosses it out. "Before Sunday it was the all-convexity rung. Since Sunday it's 0.008352 of a share that doesn't exist yet, plus 0.005568 if a committee says yes. Its vega is whatever the new stock's vega turns out to be, times a very small number, plus a digital." He writes $g$ in the chapter's atoms:
+
+$$
+g(\text{old share})=0.008352\,S^{\text{new}}_{T_1}+0.005568\,S^{\text{new}}_{T_2}\,\mathbf 1_{\{\text{clearance by the deadline}\}},
+$$
+
+with $T_1$ the effective date and $T_2$ the day the committee rules.
+
+#### The card: a payoff function that a document wrote
+
+Ines slides three index cards across the table. *Write three things: the old stock's payoff function after the RSA, in this chapter's atoms; what you do about it, and in what size; and what kills it.*
+
+Kaz writes fast. *Short the stock against the converts, sized by the Merton delta. The model says the equity is overpriced by an order of magnitude.*
+
+Mags writes one line. *Price is what you pay; there is nothing to borrow. No trade.*
+
+Theo writes the longest card, as usual. *(1) A forward on 0.008352 new shares plus a digital on the committee worth 0.005568 more. (2) Short the stock, small: a size where a recall that forces me to buy back at double the price costs less than a day's P&L. (3) Kills it: a plan that fails to confirm, because then the old stock is a call again.*
+
+What would you write? The reader's card is graded with the others, against what happened.
+
+**The grade.** Ines opens the next folders one at a time. The company filed a prepackaged Chapter 11 in Houston on 30 June. The court confirmed the plan on 8 September, day 70. On 29 September the plan went effective, the old shares were cancelled, and each became 0.008352 of a new share. The new stock opened at \$18.00, traded as low as \$8.05 and closed at \$22.10, against the plan's \$22.02 (market-data vendor prints; Chapter 16 notes that vendors differ slightly on that day's opening and closing prints). On 29 January 2026 the committee cleared Renesas, and the old equity's 871,287 contingent shares were released, 0.005568 more per old share, at a time when the new stock was trading near \$17.
+
+Theo's payoff function was right to the share. Valued at the first day's close and at the January mark, the old share delivered about $0.008352\times22.10+0.005568\times17.33\approx\$0.28$ (calc), against 60 cents on the day of the card. The short made about half its proceeds before the cost of borrowing, and the FY2025 10-K's price table shows the old stock trading as low as \$0.41 before the fiscal year ended on 29 June, so the market came part of the way to the document within a week. Full marks on line one, most of the marks on line two. Line three is where Ines stops.
+
+"The plan confirmed," she says. "So your kill didn't happen. What nearly killed you is a line you didn't write."
+
+She turns the last page in the folder. A short in a share the plan cancels does not end on the effective date; under a standard lending agreement the borrower owes the lender whatever the share would have received (Chapter 16 runs the same mechanics on Hertz). So Theo's short at 60 cents was, on 29 September, a short of 0.008352 of a brand-new stock with no trading history, whose first day's range ran from \$8.05 to \$22.10. Buying the slice back cost anywhere from about 7 cents an old share to about 18.5 cents, depending on the minute (calc). The committee slice arrived in January as a second short, in a stock that had already wandered from \$22 to \$17. And had the short simply been left on, the way shorts on a wound-down company sometimes are, the arithmetic by 26 May 2026, when the new stock closed at \$73.50, would have been $0.013920\times73.50\approx\$1.02$ owed for every old share sold at 60 cents (calc, vendor close).
+
+"The payoff function was right on 23 June," Ines says, "and the position was still a hand you could lose. A correct $g$ tells you nothing about the path of the thing $g$ is a function of, and after Sunday that thing wasn't the firm. It was a stock nobody had seen. Your card said what you'd owe. It didn't say in what, or when you'd stop owing it."
+
+Kaz's card gets the same grade for direction and a lower one for reasoning. The Merton call was struck at \$6.66bn and the document had replaced the strike with a share count, so the model was pricing an option the RSA had already exercised; its delta was a number about an instrument that no longer existed, and the short it sized was right by accident. "The model priced an option somebody had already exercised," Ines says. "That's not a model error. That's a reading error." Kaz writes *read the RSA first* on a sticky note and puts it, for reasons nobody asks about, on Mags's monitor.
+
+Mags's card cannot be graded, and Ines says so. The folder has no borrow tape for June 2025, and the desk will not invent a fee for a stock that half the press was calling a meme. "But you're the only card that wrote down a cost," Ines tells her. "Everyone else priced the payoff and forgot the rent." Mags accepts this as her due.
+
+**The coda.** Ines leaves the last page face up. On 26 March 2026 the reorganized company sold a 1.5-lien convertible, convertible at about \$20.14 a share, and inserted it between the first and second liens, so the post-emergence stack carries four strikes on one new stock: the second-lien converts at about \$12.23, Renesas's second-lien converts at about \$18.35, the new 1.5-lien convert at about \$20.14 and Renesas's warrant at \$23.95, all around a plan value of \$22.02 (exit and March 2026 8-Ks; calc). Two months later the stock was \$73.50, 3.3 times plan value. Four strikes, one distribution: the picture Chapter 23 calls "one distribution, many strikes" (§23.1), drawn by a court and a committee instead of an options exchange.
+
+<!-- FIGURE: ch06b_wolfspeed_strikes.png (payoff diagram over new-stock value: conversion/exercise prices 12.23, 18.35, 20.14, 23.95 around the 22.02 plan value; 29 Sep 2025 open 18.00, low 8.05, close 22.10 and 26 May 2026 73.50 marked; source WOLF §3.2–3.3) -->
+
+Theo asks the question Ines was waiting for. "Where's the put chain? Why are we pricing this ladder from documents?"
+
+"Because there wasn't one we could use," she says. The desk's archive has no Wolfspeed CDS series and no listed-option surface for that summer worth fitting; the dossier behind this replay looked and found none. When nothing that pays at default trades, the ladder is priced from the documents or not at all, and that is most of high yield. The dated docket is Chapter 13-B's Wolfspeed Docket Diary, the morning the new stock first traded opens Chapter 16, and Chapter 23 reads the converts as the fulcrum from the convertible desk's side. The lesson for this chapter is the first one in it: every document is a payoff function, and on the evening of 23 June 2025 a document rewrote one while the ticker kept trading as if it had not.
+
 ## 6-B.2 Replication: One Hedge Ratio, No Opinion About the Drift
 
 ### 6-B.2.1 Desk framing: the price of an option is the cost of the factory that makes it

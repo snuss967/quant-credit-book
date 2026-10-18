@@ -643,17 +643,25 @@ The platforms' drawdown rule, as commonly reported, is two numbers: lose 5% of a
 
 ### Setting the stop with drift
 
-Model the PM's cumulative P&L as a fraction of allocated capital, $X_t = \mu t + \sigma W_t$ with $\mu = \text{SR}\cdot\sigma$. The probability of touching $-x$ before time $T$ is the classical first-passage result for Brownian motion with drift,
+> **Math, Gently.** *A random walk with a tailwind, the mirror trick, and the option a PM holds.* *Part one, the mirror.* A PM's cumulative P&L is a random walk with a tailwind: each day it moves up or down by chance, and on average it drifts up by the PM's skill. How likely is it ever to touch a stop drawn some distance below the start? Without a tailwind there is a neat trick, the reflection principle. Every path that touches the stop and then wanders back up has a mirror image, reflected at the stop from that moment on, that ends below it, and the two are equally likely; so touching the line is exactly twice as likely as finishing below it. With a tailwind the mirror paths are less likely than the originals by a fixed factor, and added up over a whole career, the chance of ever touching a stop $x$ below the start is $e^{-2\mu x/\sigma^2}$. Tiny number: a PM with 6% volatility and a Sharpe of 1, so $\mu = 6\%$ a year, and a stop at 5%: $e^{-2 \times 0.06 \times 0.05/0.0036} = e^{-1.67} \approx 19\%$. One career in five ends on the line, and it is the career of a PM with real skill. That number is measured from where the PM starts. A platform measures from the high-water mark, which keeps moving up behind a PM who is doing well, and that makes the odds worse; Dov Adler's review in §28.8 prices the difference.
+>
+> *Part two, the PM's call.* Chapter 1-B showed why a PM paid a share of profits and none of the losses is long a call option on the book. Here is the number that makes it uncomfortable. A PM with *no* skill, running 10% volatility on allocated capital and paid 20% of positive P&L, has an expected payout of $0.2 \times 10\% \times 0.399 \approx 0.8\%$ of capital a year, where 0.399 is $1/\sqrt{2\pi}$, the average of the positive half of a standard normal. The platform pays that for nothing, and pays more for more volatility. The stop is how it caps the bill. The formulas, and the stop they imply, are next.
+
+Kaz writes the desk's version on the whiteboard. Model the PM's cumulative P&L as a fraction of allocated capital, $X_t = \mu t + \sigma W_t$ with $\mu = \text{SR}\cdot\sigma$. The probability of touching $-x$ before time $T$ is the classical first-passage result for Brownian motion with drift, derived just below,
 
 $$
 \Pr\left(\min_{t \le T} X_t \le -x\right) = \Phi\!\left(\frac{-x - \mu T}{\sigma\sqrt{T}}\right) + e^{-2\mu x/\sigma^2}\,\Phi\!\left(\frac{-x + \mu T}{\sigma\sqrt{T}}\right), \tag{28.19}
 $$
 
-and as $T \to \infty$ the lifetime probability is $e^{-2\mu x/\sigma^2} = e^{-2\,\text{SR}\,x/\sigma}$. Inverting gives the stop that a desk head would set for a target lifetime stop-out probability $P$:
+and as $T \to \infty$ it becomes the box's lifetime probability, $e^{-2\mu x/\sigma^2} = e^{-2\,\text{SR}\,x/\sigma}$. Inverting gives the stop that a desk head would set for a target lifetime stop-out probability $P$:
 
 $$
 x = \frac{\sigma\,\ln(1/P)}{2\,\text{SR}}. \tag{28.20}
 $$
+
+#### The Full Derivation: the stop with drift
+
+The first term of (28.19) is the probability of finishing below the stop, $\Pr(X_T \le -x)$. The second counts the paths that touch the stop and come back above it. Without drift, the box's mirror pairs each such path, reflected after it first touches $-x$, with a path that ends at $-2x - y$ instead of $y$, and the two are equally likely. With drift they are not. Girsanov's theorem says a drifted path is a driftless one reweighted by $e^{\mu X_T/\sigma^2 - \mu^2 T/(2\sigma^2)}$; substituting $z = -2x - y$ for the mirror's endpoint, the weight of the original path becomes $e^{-2\mu x/\sigma^2}$ times the density of a Brownian motion with the *opposite* drift, $-\mu$, ending at $z$. Integrating over $z < -x$ gives the second term, $e^{-2\mu x/\sigma^2}\,\Phi\big((-x + \mu T)/(\sigma\sqrt T)\big)$. As $T \to \infty$ the first term goes to zero and the second $\Phi$ goes to one, which leaves $e^{-2\mu x/\sigma^2}$; setting it equal to $P$ and solving for $x$ gives (28.20).
 
 A PM running 6% volatility with a Sharpe of 1, held to a 10% lifetime stop-out probability, gets $x = 0.06 \times 2.303/2 = 6.9\%$, close to the reported 7.5%. At 7.5%, the lifetime probability is $e^{-2.5} = 8.2\%$, and the one-year probability from (28.19) is about 4.5%. A PM with a Sharpe of 0.5 at the same volatility and stop faces a lifetime probability of $e^{-1.25} = 29\%$. The rule is the same for both, and its price is not.
 
@@ -661,7 +669,7 @@ A PM running 6% volatility with a Sharpe of 1, held to a 10% lifetime stop-out p
 >
 > **Annotation.** This is the platform rule, simulated. Because the cuts are decided on past P&L and returns are independent of the past, expected P&L under the rule is exactly $\mu$ times expected capital-time, so the price of safety is $\mu$ times the capital-time the rule takes away. Low-Sharpe PMs lose more capital-time, because they hit the first threshold more often. Paleologo's companion line (p.166) is the one to read aloud at the risk committee: "Stop-loss exists to ensure survival of a firm, not to improve the performance of a strategy. There is a price to pay." Block 5 reproduces the simulation and its ranking.
 
-Two credit-specific notes on the rule. First, Grossman and Zhou (1993, *Optimal Investment Strategies for Controlling Drawdowns*) show that the smooth version of the rule keeps exposure proportional to the cushion above the drawdown floor, $\text{exposure}_t = k\,(X_t - (1-x)M_t)$ with $M_t$ the running maximum, which never breaches the floor in continuous time. The two-threshold rule is a two-step approximation of that policy, and it is the approximation the platforms can audit. Second, do not use ratings as stop-losses. Dynkin et al. find that rating-based stop-loss rules "lead to lower portfolio returns" at every threshold they test, with risk reductions much smaller than the returns given up, because downgraded bonds tend to outperform their new rating peers (Dynkin p.419). Use rating as an entry rule, not an exit rule.
+Kaz, who has read everything, adds a footnote from 1993. Grossman and Zhou (*Optimal Investment Strategies for Controlling Drawdowns*) show that the smooth version of the rule keeps exposure proportional to the cushion above the drawdown floor, $\text{exposure}_t = k\,(X_t - (1-x)M_t)$ with $M_t$ the running maximum, which never breaches the floor in continuous time. The two-threshold rule is a two-step approximation of that policy, and it is the approximation the platforms can audit. Rafe adds the credit footnote, because he once watched a rating-based stop take apart a book he admired. Dynkin et al. find that rating-based stop-loss rules "lead to lower portfolio returns" at every threshold they test, with risk reductions much smaller than the returns given up, because downgraded bonds tend to outperform their new rating peers (Dynkin p.419). On Rafe's book a rating is an entry rule and not an exit rule.
 
 ### The stop-loss you don't know you have
 
