@@ -10,10 +10,10 @@
 ## 1. Headline Trends
 
 1. **"Momentum in credit" is four objects with four verdicts.** Index TSMOM is largely credit-beta timing (AQR: alpha 4.4%, t 0.49, R² 33%) with a crisis-friendly payoff. Cross-sectional bond-price momentum fails the 2026 audit (6-month base premium 0.00%, 12-month −0.13%/month). Residual same-issuer momentum survives but is small (α 1.55%/yr, t 2.94). Equity- and CDS-led spillover works, decays within months, and loses about 0.11%/month to delay.
-2. **The audit moved the burden of proof to execution:** signal gap, month-begin returns, ex-ante trimming. The best "trend-like" survivor is a within-issuer spread *reversal* (dcs6, t 6.77).
+2. **The audit moved the burden of proof to execution** (signal gap, month-begin returns, ex-ante trimming). The best "trend-like" survivor is a within-issuer spread *reversal* (dcs6, t 6.77).
 3. **Trend decays and gets crowded.** Short-term trend has not paid reliably since about 2009 (Kurth et al., Jul 2026); SG says programs were "positioned the same way" in Jul 2026; momentum books crashed together in Mar 2025 and Jun–Jul 2026.
 4. **2022 and 2025 were not credit-trend years.** Trend earned +27.3% in 2022 on rates and +2.39% in 2025 against +17.89% for equities. The Baa spread widened about 60bp in H1 2022, and the April 2025 tariff spike retraced within days.
-5. **The plumbing improved.** Cboe iBoxx futures blocks exceed $1bn/month, CME's credit futures are in a CFTC positioning file (Cboe's are not), and the OBAP panel with PyBondLab makes the bond-momentum audit reproducible.
+5. **The plumbing improved:** Cboe iBoxx blocks exceed $1bn/month, CME credit futures are in a CFTC positioning file, and OBAP with PyBondLab makes the audit reproducible.
 
 ---
 
@@ -65,8 +65,7 @@
 | Apr 2026 (Table 1B; IA.XI) | **The strongest survivor near "trend" is a reversal.** dcs6 (log spread six months ago minus log spread now): within-firm VW α **−0.22%/month (t −4.98)**; EW sign-corrected α **2.46%/yr (t 6.77), IR 1.59**, the best of the 26 survivors. Within one issuer, the bond whose spread tightened most earns less next month. | Same PDFs (arXiv pp. 17–18; 94-page p. 23) |
 | Jul 2018 (WP) | Bali, Subrahmanyam & Wen (TRACE, Jul 2002–Dec 2015): momentum quintile spread **0.61%/month (t 2.61)**, 11-factor alpha **0.84% (t 3.39)**. Winners carry the spread, **IG shows none**, it is positive in only **81 of 150 months**, and it "completely disappear[s]" ex-crisis. | https://anderson-review.ucla.edu/wp-content/uploads/2021/03/Subra2018_CorporateBondReturns_SSRN-id2978861.pdf pp. 3–4, 11–14 |
 | 17 Aug 2012 | Robeco on Haesen–Houweling residual equity momentum: plain equity-momentum sorts carry time-varying equity and bond factor exposure; the firm-specific component cuts volatility "with about 50%" and raises Sharpe (no number given). Equity template: Blitz, Huij & Martens (*JEF* 2011), about **twice** the risk-adjusted profit of total-return momentum. | https://robeco.com/en-uk/insights/2012/08/residual-equity-momentum-for-corporate-bonds ; https://repub.eur.nl/pub/22252 |
-| 2019 / 2023 (*JF* 2022; *RFS* 36(8)) | **Factor momentum.** Ehsani & Linnainmaa: the average factor earns about **1bp/month** after a losing year and **53bp** after a winning year. Arnott et al.: *cross-sectional* factor momentum sits in the few highest-eigenvalue factors and is **distinct from time-series** factor momentum. | https://www.nber.org/papers/w25551 ; https://ideas.repec.org/a/oup/rfinst/v36y2023i8p3034-3070..html |
-| Jul 2026 (conf.) | Sandretto, "Corporate Bond Factor Momentum": on cleaned TRACE-based data (140+ anomalies), some subsamples show cross-sectional and time-series factor momentum of about **2.60%/yr** that survives costs. Abstract only (**CHECK** cleaning and method; page returned 403). | https://sciforum.net/paper/32753 (via search summary) |
+| 2019 / 2023 (*JF* 2022; *RFS* 36(8)) | **Factor momentum.** Ehsani & Linnainmaa: the average factor earns about **1bp/month** after a losing year and **53bp** after a winning year. Arnott et al.: *cross-sectional* factor momentum sits in the few highest-eigenvalue factors and is **distinct from time-series** factor momentum. In bonds, Sandretto (Jul 2026 conference, abstract only, **CHECK**) reports factor momentum of about **2.60%/yr** after costs on 140+ cleaned anomalies. | https://www.nber.org/papers/w25551 ; https://sciforum.net/paper/32753 ; https://ideas.repec.org/a/oup/rfinst/v36y2023i8p3034-3070..html |
 | Q1 2020 | AQR "Trends Everywhere" also tests 12-month TSMOM on 16 equity factors: Sharpe **0.95**, alpha **8.4% (t 2.05)**, R² 20%, against credit indices (alpha 4.4%, t 0.49, R² 33%). Sample ends 2017. | https://www.aqr.com/-/media/AQR/Documents/Insights/Journal-Article/AQR-Trends-Everywhere_JOIM.pdf?sc_lang=en pp. 58–61 |
 | 2018 (*RFS* 31(5)) | **Construction.** Goyal & Jegadeesh: cross-sectional strategies are zero-net-investment; time-series strategies hold a **time-varying net long**, which "largely" explains the stock gap. Across asset classes, scaled CS beats scaled TS. | https://ideas.repec.org/a/oup/rfinst/v31y2018i5p1784-1824..html |
 | 2020 (book) | Paleologo's toy case, six stocks all up over 12 months: trend following is **long all six** (weights 1, 1, .5, .25, .125, .125); momentum is long the top two and short the bottom two (1, 1, 0, 0, −1, −1). Momentum losses come from the **short side** (2009; Feb–Mar 2016, energy names +200–350%). | Shelf: Paleologo, *Advanced Portfolio Management*, book pp. 61–66 |
@@ -75,7 +74,7 @@
 | 2007–2019 | Long-only value + EMC style portfolio: **2.66%/yr gross, 1.78% net** of rebalancing costs, TEV 1.41%. The cost drag was **1.15%/yr in 2007–12** and **0.64%/yr in 2013–19**. Shorting costs are excluded. | Shelf: same, Ch. 18, p. 711 |
 | Jul 2025 | **Delay cost of momentum.** Dickerson, Nozawa & Robotti: the equity-momentum cluster has gross CAPM alpha **0.29%/month** and a delay cost of **0.11%/month** for $2m trades. Across 58 significant factors alpha falls from 0.28% to **0.09%** (large) and **0.05%** (small) after delay plus bid-ask costs. | https://www.ier.hit-u.ac.jp/Common/publication/DP/DPS-A771.pdf pp. 3–4, 28–30 |
 | 2021 (*RAPS* 11(2)) | Lee, Naranjo & Sirmans: single-name **CDS momentum 7.1%/yr**; cross-market strategies on past CDS performance earn alpha of **10.3%/yr in stocks and 7.3%/yr in bonds**, stronger in liquid CDS. Abstract only (**CHECK** sample and costs). | https://ideas.repec.org/a/oup/rasset/v11y2021i2p352-401..html |
-| 24 Sep 2024 | S&P Global Market Intelligence ("Bonding with Style Investing", iBoxx, data to Jul 2023): momentum is the 11-month excess return skipping the last month; it "performed better in more liquid bonds"; avoid CCC. Alpha figures (about 1.1% IG, 4.7% HY) are from a search summary only (**CHECK**). | https://www.fi-desk.com/sp-global-market-intelligence-bonding-with-style-investing-value-and-momentum-in-corporate-bonds/ |
+| 24 Sep 2024 | S&P Global Market Intelligence ("Bonding with Style Investing", iBoxx, data to Jul 2023): momentum is the 11-month excess return skipping the last month; it "performed better in more liquid bonds". Alpha figures (about 1.1% IG, 4.7% HY) are from a search summary only (**CHECK**). | https://www.fi-desk.com/sp-global-market-intelligence-bonding-with-style-investing-value-and-momentum-in-corporate-bonds/ |
 | 2022+ | **Bank trend product:** BBVA Credit Trend Index trades iTraxx Main and Crossover and CDX IG and HY (5-year), equal risk, with 1- and 3-month moving-average signals setting Risk ON/NEUTRAL/OFF and a volatility shock overlay. No performance data seen (**CHECK**). | https://bbvacib.com/qis-index/bbva-credit-trend-index (via search summary) |
 | 3 Apr 2025 | A Berkeley MFE thesis specifies TSMOM on credit ETFs: a **12m-1m z-score on duration-neutral LQD and HYG returns** (252 days), combined with liquidity and credit signals to time an IG short; momentum alone is the weakest of the three. Not peer reviewed (**CHECK**). | https://arxiv.org/abs/2504.06289 §3.3, §5 |
 | Summer 2015 | Bhansali et al. (PIMCO), "Carry and Trend in Lots of Places": 20 markets, 4 asset classes, 1960–2014; carry predicts "almost unconditionally" and **trend works far better when carry agrees**. Credit is not in the sample. | https://jacobslevycenter.wharton.upenn.edu/wp-content/uploads/2015/05/Carry-and-Trend-in-Lots-of-Places.pdf |
@@ -84,11 +83,11 @@
 | May 2025 | SG Prime Services: 2024 pairwise correlation across SG Trend Index managers **0.78**, yet returns ranged **nearly 15%**. The Index "behaves more like a much slower model" since 2007; faster models won in 2020. Industry AUM about **$340bn**; SG argues CTAs have "minimal impact". The pool trades "primarily futures" (2015 summary, **CHECK**), so OTC credit is marginal. | https://content.sgmarkets.com/CTA_UPDATE_KEEPING_UP_WITH_THE_TRENDFOLLOWERS_2025 pp. 2–5 |
 | 2022 (computed) | **Credit spread trend in 2022 was modest.** Moody's Baa less 10-year Treasury (FRED BAA10Y; not an OAS): **1.82% (3 Jan)**, **2.42% (1 Jul)**, **1.99% (30 Dec)**. Short credit paid in H1 and was squeezed in H2; rates trend paid all year. | https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAA10Y (lookups by hand) |
 | 2008–2025 (computed) | BAA10Y paths a credit trend rule faced: peak **6.16% (4 Dec 2008)**; **2.09% (21 Feb 2020) to 4.31% (23 Mar 2020)**, +222bp in 21 sessions; and **1.73% (2 Apr 2025) to 2.02% (7 Apr)**, with only 41% retraced by 11 Apr. | FRED BAA10Y (same download) |
-| 19 Mar 2025 | **Q1 2025 momentum crash hit time-series and cross-sectional momentum together.** SG CTA Index −4.3% YTD; one equity momentum gauge **−21% in four weeks to 10 Mar**; $800m left the $14bn iShares MSCI USA Momentum ETF; "crowded trades unwound" at some multi-managers. | https://www.hedgeweek.com/hedge-fund-momentum-trades-hit-hard-by-market-volatility/ (citing Bloomberg) |
-| Apr 2025 | UBS HF bulletin: corporate credit **long/short gained on its shorts**; long-biased credit lost; fixed-income RV was negative; "trend following strategies were challenged". HFRI Systematic Diversified **−3.98%**, Credit Arbitrage −0.15%, RV −0.92%. | https://www.ubs.com/ch/en/assetmanagement/insights/asset-class-perspectives/hedge-funds/articles/uga-hf-bulletin-april-2025.html |
+| 19 Mar 2025 | **Q1 2025 momentum crash hit time-series and cross-sectional momentum together.** SG CTA Index −4.3% YTD; one equity momentum gauge **−21% in four weeks to 10 Mar**; "crowded trades unwound" at some multi-managers. | https://www.hedgeweek.com/hedge-fund-momentum-trades-hit-hard-by-market-volatility/ (citing Bloomberg) |
+| Apr 2025 | UBS HF bulletin: corporate credit **long/short gained on its shorts**; long-biased credit lost; fixed-income RV was negative; "trend following strategies were challenged". HFRI Systematic Diversified **−3.98%**, Credit Arbitrage −0.15%. | https://www.ubs.com/ch/en/assetmanagement/insights/asset-class-perspectives/hedge-funds/articles/uga-hf-bulletin-april-2025.html |
 | 7 Jul 2026 | **Cross-sectional momentum crowding, one quarter ago.** A long/short momentum index fell >3% two weeks running (worst in 3+ years) after rising near three years to a record. Goldman PB: systematic long/short **−2.1%** in the week through Thursday, after **−3.1%** in the prior five days. UBS: positioning "elevated"; VaR limits forced cuts. | https://www.hedgeweek.com/quant-funds-suffer-steepest-momentum-drawdown-since-2023-amid-factor-rotation/ |
 
-_Rows from "9 Apr 2026 (v1)" onward were added in the 2026-10-18 session; all earlier rows come from the 2026-10-17 session._
+_Rows from "9 Apr 2026 (v1)" on were added 2026-10-18; earlier rows are from 2026-10-17._
 
 ---
 
@@ -96,21 +95,20 @@ _Rows from "9 Apr 2026 (v1)" onward were added in the 2026-10-18 session; all ea
 
 **Why the four objects behave differently.**
 
-*Beta.* Spreads tighten most of the time, so a 12-month sign rule is mostly long credit: AQR's R² is 33% with alpha near zero, and the payoff is the Hurst–Ooi–Pedersen one (positive in 8 of the 10 worst 60/40 drawdowns). It loses in gaps: BAA10Y rose 222bp in 21 sessions in Feb–Mar 2020 and 29bp in three sessions in April 2025.
+*Beta.* Spreads tighten most of the time, so a 12-month sign rule is mostly long credit: AQR's R² is 33% with alpha near zero, and the payoff is the Hurst–Ooi–Pedersen one (positive in 8 of the 10 worst 60/40 drawdowns). It loses in gaps (BAA10Y +222bp in 21 sessions in Feb–Mar 2020).
 
-*Measurement.* Noisy month-end prints enter both signal and return, and ex-post winsorization trims past losers' rebounds out of the short leg. Remove both and 6-month momentum is 0.00%. S&P's evaluated-price result is a warning, not a counter-example (interpretation): model prices are smooth by construction.
+*Measurement.* Noisy month-end prints enter both signal and return, and ex-post winsorization trims past losers' rebounds out of the short leg. Remove both and 6-month momentum is 0.00%. S&P's evaluated-price result is a warning (interpretation): model prices are smooth by construction.
 
-*Information speed.* What survives is the non-market part of a move: the bond's residual, the issuer's equity, its CDS. The lead is short. 31% of above-median EMC issuers leave the top half within a month, delay costs 0.11%/month, and the within-issuer survivor has an IR of 0.87 gross.
+*Information speed.* What survives is the non-market part of a move: the bond's residual, the issuer's equity, its CDS. The lead is short: 31% of above-median EMC issuers leave the top half within a month and delay costs 0.11%/month.
 
-*Crowding.* SG's constituents correlate at 0.78, momentum books fell together in Mar 2025 and Jun–Jul 2026, and Kurth et al. tie the post-2009 decay to a price-impact loop that broke where market making changed. Credit is untested; it is not in their sample.
+*Crowding.* SG's constituents correlate at 0.78, momentum books fell together in Mar 2025 and Jun–Jul 2026, and Kurth et al. tie the post-2009 decay to a price-impact loop broken by changes in market making. Credit is not in their sample.
 
 **Outlook, 2026–2028 (extrapolation, not forecast).**
 
-- *Base case:* spreads stay near their tights (HY OAS 2.60–3.46% in 2026), so index-trend P&L again comes from rates, equities, and commodities, as in 2022 and 2025.
-- *The live test:* HY OAS widened from 2.68% (22 Sep) to 3.23% (15 Oct 2026). A break above the 3.46% March high would be the first sustained credit trend since 2022 that a futures-only CTA can trade through CME and Cboe. Falsifiable check: leveraged funds in the CFTC file turn net short HYB as spreads widen.
-- *Residual momentum compresses.* Public code and data, a small base (1.55%/yr gross), and a multi-bond-issuer universe make it a diversifier, not a standalone strategy.
-- *Factor momentum in bonds* stays unproven until a result survives the Dickerson corrections.
-- *Crowded momentum books unwind again* when volatility rises, because VaR limits force the same cuts (Jul 2026) and pod stops (press-reported 5% to halve, 7.5% to fire) hit the same short legs.
+- *Base case:* spreads stay near their tights (HY OAS 2.60–3.46% in 2026), so trend P&L again comes from rates, equities, and commodities.
+- *The live test:* HY OAS widened from 2.68% (22 Sep) to 3.23% (15 Oct 2026). A break above the 3.46% March high would be the first sustained credit trend since 2022 that a futures-only CTA can trade via CME and Cboe. Falsifiable check: leveraged funds in the CFTC file turn net short HYB as spreads widen.
+- *Residual momentum compresses:* public code, a small base (1.55%/yr gross), and a multi-bond-issuer universe make it a diversifier. *Factor momentum in bonds* stays unproven until a result survives the Dickerson corrections.
+- *Crowded momentum books unwind again* when volatility rises: VaR limits (Jul 2026) and pod stops (press-reported 5% to halve, 7.5% to fire) force the same cuts.
 
 ---
 
@@ -118,31 +116,31 @@ _Rows from "9 Apr 2026 (v1)" onward were added in the 2026-10-18 session; all ea
 
 **For a systematic credit desk.**
 
-1. Split the sleeve by object, each with its own risk budget: index TSMOM (beta timing, crisis payoff), residual same-issuer momentum (small, capacity-limited), equity/CDS spillover (fast, cost-bound). Never report one "momentum Sharpe".
-2. Treat any bond-price momentum backtest as guilty until it shows a signal observed at least one business day before the return price, month-begin returns, ex-ante trims, and a deflated Sharpe over the specifications tried.
+1. Split the sleeve by object, each with its own risk budget: index TSMOM (beta timing), residual same-issuer momentum (small, capacity-limited), equity/CDS spillover (fast, cost-bound). Never report a blended "momentum Sharpe".
+2. Treat any bond-price momentum backtest as guilty until it shows a signal observed one business day before the return price, month-begin returns, ex-ante trims, and a deflated Sharpe over the specifications tried.
 3. Cost each signal at its decay rate: banding or staggered holds, liquid bonds only, no CCC.
-4. Scale the sleeve by forecast momentum variance and cut it in panic states.
+4. Scale the sleeve by forecast momentum variance; cut it in panic states.
 5. Test trend with carry rather than assume it (PIMCO's result excludes credit).
-6. Watch crowding with public gauges: the CFTC file for CME IQB/HYB, S&P momentum-index drawdowns, Goldman prime-brokerage systematic returns.
+6. Watch public crowding gauges: the CFTC file for CME IQB/HYB, S&P momentum-index drawdowns, Goldman PB systematic returns.
 
 **The pod overlay: long winners, short losers, hedged to isolate the residual** (a design, not evidence).
 
 - *Score:* within-issuer residual 12-1 bond momentum, issuer residual equity momentum (36-month regression, skip month), and a 6-month CDS-return trend. Raw bond-price momentum is out.
-- *Book:* long the top and short the bottom quintile inside sector × rating × DTS buckets so both legs carry the same spread risk. Set net DTS to zero per bucket, or keep the EMC tilt on purpose (net DTS −0.94 in bad equity months).
-- *Hedge:* residual DTS with CDX/iTraxx or CME/Cboe futures, duration with Treasury futures, equity beta if the signal is equity-derived. Hedge the market, not the residual.
+- *Book:* long the top and short the bottom quintile inside sector × rating × DTS buckets so both legs carry the same spread risk. Set net DTS to zero per bucket, or keep the EMC tilt on purpose (−0.94 in bad equity months).
+- *Hedge:* residual DTS with CDX/iTraxx or CME/Cboe futures, duration with Treasury futures, equity beta if the signal is equity-derived. Hedge the market, never the residual.
 - *Short leg:* the loss is the rebound of losers in a sharp recovery (Daniel–Moskowitz; Paleologo's 2016 energy case). Size shorts so a 2009- or Mar–Apr 2020-type rebound stays inside the pod stop.
-- *Risk:* variance-scale the sleeve and cut it when a monitor trips, for example a >3% two-week drawdown in a long/short momentum index (the Jul 2026 pattern).
+- *Risk:* variance-scale the sleeve; cut it when a monitor trips, for example a >3% two-week drawdown in a momentum index (the Jul 2026 pattern).
 
-**For the RSSG-to-quant reader.** "Signal gap" and "noise in the print" are the quant names for an RSSG analyst's stale mark. A short-leg loser can also gap up in one print on a liability-management deal, so short screens need the priming-risk score (Ch 13) and a capital-structure hedge (Ch 23). This is an implication, not a sourced fact.
+**For the RSSG-to-quant reader.** "Signal gap" and "noise in the print" are the quant names for a stale mark. A short-leg loser can also gap up in one print on a liability-management deal, so short screens need the priming-risk score (Ch 13) and a capital-structure hedge (Ch 23). This is an implication, not a sourced fact.
 
 ---
 
 ## 5. Quant Hooks
 
-- **Datasets:** the OBAP TRACE panel and PyBondLab; FRED BAA10Y (from 2007; ICE OAS series carry about three years); CFTC Traders in Financial Futures for IQB/HYB (dataset gpe5-46if, see `trend_listed_credit_futures_and_index_microstructure.md`); ISDA SwapsInfo; Kenneth French UMD; the AQR data library; SG Trend and BTOP50 via the monthly Top Traders Unplugged reports.
-- **Variables:** signal gap; month-begin return; ex-ante trim thresholds; rolling 36(12)-month CAPM-B residual; within-issuer rank; DTS bucket and net DTS; sleeve variance forecast; panic flag; delay cost; banding width.
-- **Signals:** S1 idimom12_1; S2 issuer residual equity momentum; S3 6-month CDS-return trend; S4 vol-targeted index TSMOM on duration-neutral spread returns (BBVA and Berkeley specifications); S5 dcs6 within issuer; S6 factor-momentum timers (time-series sign, cross-sectional rank).
-- **Tests for the Ch 10 companion code (not run here):** T1 reproduce the Fig. 6 trimming sensitivity; T2 index TSMOM against a vol-scaled passive long, net of carry; T3 trend conditional on carry agreeing; T4 variance-scaled versus static sleeve; T5 correlation of S1–S3 with UMD and with SG Trend.
+- **Datasets:** the OBAP TRACE panel and PyBondLab; FRED BAA10Y (from 2007; ICE OAS carries about three years); CFTC Traders in Financial Futures for IQB/HYB (dataset gpe5-46if, see `trend_listed_credit_futures_and_index_microstructure.md`); ISDA SwapsInfo; French UMD; the AQR data library; SG Trend and BTOP50 via monthly Top Traders Unplugged reports.
+- **Variables:** signal gap; month-begin return; ex-ante trims; rolling 36(12)-month CAPM-B residual; within-issuer rank; DTS bucket and net DTS; sleeve variance forecast; panic flag; delay cost; banding width.
+- **Signals:** S1 idimom12_1; S2 issuer residual equity momentum; S3 6-month CDS-return trend; S4 vol-targeted index TSMOM on duration-neutral spread returns; S5 dcs6 within issuer; S6 factor-momentum timers (time-series sign, cross-sectional rank).
+- **Tests for the Ch 10 companion code (not run here):** T1 reproduce Fig. 6; T2 index TSMOM against a vol-scaled passive long, net of carry; T3 trend conditional on carry; T4 variance-scaled versus static sleeve; T5 correlation of S1–S3 with UMD and SG Trend.
 
 ---
 
@@ -150,12 +148,12 @@ _Rows from "9 Apr 2026 (v1)" onward were added in the 2026-10-18 session; all ea
 
 | # | Title | Rationale | Placement |
 |---|---|---|---|
-| 1 | **Four Things Called Momentum in Credit** | Separates index TSMOM, bond-price, residual same-issuer, and equity/CDS-spillover momentum, each with its verdict, so no blended Sharpe is reported. | Ch 10 opening |
-| 2 | **The Residual Is the Signal: Same-Issuer Momentum and the Hedged Long/Short Overlay** | The pod implementation: buckets, hedges, short-leg risk, costs, with DRR Table IA.XI numbers. | Ch 10 middle; links to Ch 8, 8-B, 28 |
-| 3 | **Momentum Crashes in Credit** | Daniel–Moskowitz, the EMC negative market loading, Mar 2025 and Jul 2026, the variance-scaled sleeve. | Ch 10 before the CTA section; Ch 28 cross-reference |
-| 4 | **Trend Watch: Decay and Crowding, 2009–2026** | Kurth et al., SG's 0.78 correlation, TTU's "positioned the same way", all dated. | Ch 10 box and App C |
-| 5 | **Ch 10-C: Running Momentum in a Pod (code chapter)** | Only if Ch 10 passes 15,000 words (growth rule): signal build on OBAP, bucketed hedges, stops, crash overlay; ships `residual_momentum.py`. | After Ch 10-B |
-| 6 | **Momentum audit box** | The mom6_1 trimming sensitivity as the audit's clearest teaching case. | Ch 9-B |
+| 1 | **Four Things Called Momentum in Credit** | Separates index TSMOM, bond-price, residual same-issuer, and equity/CDS-spillover momentum, each with its verdict. | Ch 10 opening |
+| 2 | **The Residual Is the Signal: Same-Issuer Momentum and the Hedged Long/Short Overlay** | The pod implementation: buckets, hedges, short-leg risk, costs, with Table IA.XI numbers. | Ch 10 middle; links to Ch 8, 8-B, 28 |
+| 3 | **Momentum Crashes in Credit** | Daniel–Moskowitz, the EMC negative market loading, Mar 2025, Jul 2026, the variance-scaled sleeve. | Ch 10 before the CTA section; Ch 28 cross-reference |
+| 4 | **Trend Watch: Decay and Crowding, 2009–2026** | Kurth et al., SG's 0.78, TTU's "positioned the same way". | Ch 10 box; App C |
+| 5 | **Ch 10-C: Running Momentum in a Pod (code chapter)** | Only if Ch 10 passes 15,000 words: signal build on OBAP, bucketed hedges, stops, crash overlay; ships `residual_momentum.py`. | After Ch 10-B |
+| 6 | **Momentum audit box** | The mom6_1 trimming sensitivity as the clearest audit case. | Ch 9-B |
 
 ---
 
@@ -163,15 +161,15 @@ _Rows from "9 Apr 2026 (v1)" onward were added in the 2026-10-18 session; all ea
 
 URLs opened or downloaded and read on 2026-10-18: https://arxiv.org/abs/2604.07880 ; https://arxiv.org/pdf/2604.07880 ; https://openbondassetpricing.com/wp-content/uploads/2026/04/corp-bond-replication-crisis-dickerson.pdf ; https://anderson-review.ucla.edu/wp-content/uploads/2021/03/Subra2018_CorporateBondReturns_SSRN-id2978861.pdf ; https://robeco.com/en-uk/insights/2012/08/residual-equity-momentum-for-corporate-bonds ; https://repub.eur.nl/pub/22252 ; https://www.nber.org/papers/w20439 ; https://www.nber.org/papers/w25551 ; https://ideas.repec.org/a/oup/rfinst/v36y2023i8p3034-3070..html ; https://ideas.repec.org/a/oup/rfinst/v31y2018i5p1784-1824..html ; https://ideas.repec.org/a/oup/rasset/v11y2021i2p352-401..html ; https://ideas.repec.org/a/eee/jfinec/v116y2015i1p111-120.html ; https://www.aqr.com/Insights/Research/Journal-Article/Trends-Everywhere ; https://www.ier.hit-u.ac.jp/Common/publication/DP/DPS-A771.pdf ; https://www.ucc.ie/en/media/research/centreforinvestmentresearch/wp/TrendFollowingFeb2014.pdf ; https://arxiv.org/abs/2607.01550 ; https://content.sgmarkets.com/CTA_UPDATE_KEEPING_UP_WITH_THE_TRENDFOLLOWERS_2025 ; https://arxiv.org/abs/2504.06289 ; https://jacobslevycenter.wharton.upenn.edu/wp-content/uploads/2015/05/Carry-and-Trend-in-Lots-of-Places.pdf ; https://www.hedgeweek.com/hedge-fund-momentum-trades-hit-hard-by-market-volatility/ ; https://www.hedgeweek.com/quant-funds-suffer-steepest-momentum-drawdown-since-2023-amid-factor-rotation/ ; https://www.ubs.com/ch/en/assetmanagement/insights/asset-class-perspectives/hedge-funds/articles/uga-hf-bulletin-april-2025.html ; https://www.fi-desk.com/sp-global-market-intelligence-bonding-with-style-investing-value-and-momentum-in-corporate-bonds/ ; FRED CSVs for BAA10Y, BAMLH0A0HYM2, BAMLC0A0CM (https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAA10Y).
 
-Not opened (marked CHECK): sciforum.net/paper/32753, the bbvacib.com index page, the S&P PDF, the Bloomberg original. URLs in the first 38 rows were verified on 2026-10-17.
+Not opened (CHECK): sciforum.net/paper/32753, the bbvacib.com page, the S&P PDF, the Bloomberg original. URLs in the first 38 rows were verified on 2026-10-17.
 
 ---
 
 ## Book placement
 
 - **Ch 10 (primary):** TOC proposals 1–4: the four-objects frame, then AQR and Man AHL, then the residual overlay and crash material, then 2022 and 2025 as Trend Watch boxes.
-- **Ch 9 and 9-B:** the momentum audit box; dcs6 as the strongest honest survivor; the 0.11%/month delay figure in the cost curve.
-- **Ch 8 and 8-B:** residual construction, DTS-neutral buckets, and the pod stop arithmetic in `rv_pod_platforms_and_risk.md`.
-- **Ch 10-B:** the CFTC positioning file and the futures-only route into credit beta. **Ch 7:** trimming sensitivity as a worked case for the deflated Sharpe. **Ch 28:** variance-scaled sleeve and crowding monitors.
-- **App B and C:** datasets (OBAP, PyBondLab, FRED, CFTC) and dated entries for 19 Mar 2025, 9 Apr 2026, 2 Jul 2026, 7 Jul 2026, and 21 Aug 2026.
-- **See also:** `papers_factor_replication_crisis_and_bond_data.md`, `media_episodes_posts_parts_III_IV.md` (Ch 10 podcasts: Croce S6E8, the 2026 Top Traders Unplugged episodes, McElligott on Mar 2025), `rv_credit_pairs_literature_and_mechanics.md` (borrow and shorting costs).
+- **Ch 9 and 9-B:** the audit box, dcs6 as the strongest honest survivor, the 0.11%/month delay figure in the cost curve.
+- **Ch 8 and 8-B:** residual construction, DTS-neutral buckets, pod stop arithmetic (`rv_pod_platforms_and_risk.md`).
+- **Ch 10-B:** CFTC positioning file, futures-only route. **Ch 7:** trimming sensitivity and the deflated Sharpe. **Ch 28:** variance-scaled sleeve, crowding monitors.
+- **App B and C:** datasets (OBAP, PyBondLab, FRED, CFTC); dated entries for 19 Mar 2025, 9 Apr, 2 Jul, 7 Jul and 21 Aug 2026.
+- **See also:** `papers_factor_replication_crisis_and_bond_data.md`; `media_episodes_posts_parts_III_IV.md` (Ch 10 podcasts: Croce S6E8, 2026 Top Traders Unplugged, McElligott on Mar 2025); `rv_credit_pairs_literature_and_mechanics.md` (shorting costs).

@@ -179,7 +179,7 @@ def fig_signal_split():
 
     fig, ax = new_figure((7.0, 3.9))
     ax.set_axisbelow(True)
-    w = 0.44
+    w = 0.40
     halo = [pe.withStroke(linewidth=3, foreground='white')]
     for gi, (lab, parts) in enumerate(groups):
         pos, neg = 0.0, 0.0
@@ -194,16 +194,16 @@ def fig_signal_split():
                    edgecolor="white", linewidth=1.2)
             ymid = bottom + abs(v) / 2
             ax.plot([gi + w / 2], [ymid], "o", color=col[key], markersize=4, zorder=5)
-            sep = " " if abs(v) < 1.0 else "\n"   # a short segment gets a one-line label so it stays inside its own height
-            ax.annotate(f"{name[key]}{sep}{sgn(v, plus=False)}", (gi + w / 2, ymid), xytext=(5, 0), textcoords="offset points",
-                        va="center", fontsize=8.2, color=INK_2, path_effects=halo, zorder=6, linespacing=1.15)
+            dy = -5 if abs(v) < 0.5 else 0   # a short top segment: label nudged down so the 2.4 line does not cross it
+            ax.annotate(f"{name[key]}\n{sgn(v, plus=False)}", (gi + w / 2, ymid), xytext=(5, dy), textcoords="offset points",
+                        va="center", fontsize=8, color=INK_2, path_effects=halo, zorder=6, linespacing=1.15)
         if gi == 0:
             # the interaction: the gap between the sum of the standalone books and the book that was held
             ax.add_patch(Rectangle((gi - w / 2, book), w, M_alone + V_alone - book, fill=False,
                                    edgecolor=INK_2, linestyle=(0, (3, 2)), linewidth=1.1, zorder=4))
-            ax.annotate("interaction\n" + MINUS + "2.6\n(dashed box)", (gi - w / 2, 3.7), xytext=(-5, 0),
-                        textcoords="offset points", ha="right", va="center", fontsize=8, color=INK, zorder=5,
-                        linespacing=1.15)
+            ax.annotate("interaction\n" + MINUS + "2.6", (gi + w / 2, 2.85), xytext=(5, 0),
+                        textcoords="offset points", ha="left", va="center", fontsize=8, color=INK, zorder=5,
+                        linespacing=1.15, fontweight="bold")
             ax.text(gi, M_alone + V_alone + 0.12, "sum 5.0", ha="center", va="bottom", fontsize=8.5, color=INK_2)
         else:
             ax.text(gi, max(pos, 0) + 0.12, "= 2.4", ha="center", va="bottom", fontsize=8.5, color=INK_2)
@@ -215,7 +215,7 @@ def fig_signal_split():
     ax.set_xticklabels([g[0] for g in groups], fontsize=8.5)
     ax.tick_params(axis="x", length=0)
     ax.set_ylim(-1.1, 5.9)
-    ax.set_xlim(-0.95, 4.15)
+    ax.set_xlim(-0.55, 4.15)
     ax.set_ylabel("Attributed P&L, September ($mm)")
     return finish(fig, "ch08c_signal_split")
 
@@ -285,7 +285,7 @@ def fig_two_mornings():
                 textcoords="offset points", ha="left", va="center", fontsize=8.5, color=INK, fontweight="bold")
     ax.annotate("", xy=(D(2, 11), 81.62), xytext=(D(2, 11), 84.5),
                 arrowprops=dict(arrowstyle="-|>", color=INK_2, lw=0.9, linestyle=(0, (2, 2)), shrinkA=0, shrinkB=0))
-    ax.annotate("challenge\nfiled 2 Nov,\n11:00", (D(2, 11), 83.2), xytext=(-6, 0), textcoords="offset points",
+    ax.annotate("challenge\nfiled 2 Nov,\n11:00", (D(2, 11), 83.2), xytext=(-4, 0), textcoords="offset points",
                 ha="right", va="center", fontsize=8, color=INK_2, linespacing=1.15)
     ax.set_xlim(D(19.6), D(9, 11))
     ax.set_ylim(80.9, 86.2)
@@ -293,7 +293,7 @@ def fig_two_mornings():
     ax.xaxis.set_major_locator(FixedLocator([D(21), D(26), D(30), D(2, 11)]))
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%-d %b"))
     ax.set_ylabel("Corriveau 9.5% notes (price, points of par)")
-    ax.set_title("Morning (b): the true-up on a bond that did not trade", fontsize=9.5)
+    ax.set_title("Morning (b): the Corriveau true-up", fontsize=9.5)
     return finish(fig, "ch08c_two_mornings")
 
 

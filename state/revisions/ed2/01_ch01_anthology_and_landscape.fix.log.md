@@ -9,10 +9,10 @@
 ## Items
 
 - [x] P1 · §1.8.3, line 655, first paragraph · Delete paragraph 1; keep paragraphs 2–3; retitle "Case Study B: Post-mortem of Act 1 (LQD at a 5% discount)". — *Paragraph cut, retitled; "NAV was mispriced" line kept; SMCCF date now points to Act 2.*
-- [x] P1 · §1.8.2, lines 647–649, "What happened, and the answer" · Cut SMCCF 23 Mar / rebalance date / HY outflow sentences; keep April extension, "forced-seller event became a forced-buyer event by announcement", systematic-flag paragraph, IDO line.
-- [ ] P1 · §1.2, lines 91–115, six-chair walk · Keep chairs 1, 3, 6 as Halvorsen counterfactuals; drop chairs 2, 4, 5 from the walk; keep Ines's "Laws are what you call observations that have cost you money twice."
-- [ ] P1 · §1.9.1, line 748, "The market maker's version" · Cut to last two sentences (Ch 3 / Ch 13 pointers, hand-history loop), or give them to Ines as the scene's close.
-- [ ] P1 · §1.3, line 261, "The Spec You Hand the Robot" · Delete the §1.3 copy; vignette says "The chapter's spec (§1.10) says".
+- [x] P1 · §1.8.2, lines 647–649, "What happened, and the answer" · Cut SMCCF 23 Mar / rebalance date / HY outflow sentences; keep April extension, "forced-seller event became a forced-buyer event by announcement", systematic-flag paragraph, IDO line. — *Cut SMCCF/rebalance/outflow restatements; kept April extension, HY inclusion fact, flags.*
+- [x] P1 · §1.2, lines 91–115, six-chair walk · Keep chairs 1, 3, 6 as Halvorsen counterfactuals; drop chairs 2, 4, 5 from the walk; keep Ines's "Laws are what you call observations that have cost you money twice." — *Walk now three Halvorsen counterfactuals (chairs 1, 3, 6); table carries rest.*
+- [x] P1 · §1.9.1, line 748, "The market maker's version" · Cut to last two sentences (Ch 3 / Ch 13 pointers, hand-history loop), or give them to Ines as the scene's close. — *Paragraph deleted; Ines's action-item line now closes the scene.*
+- [x] P1 · §1.3, line 261, "The Spec You Hand the Robot" · Delete the §1.3 copy; vignette says "The chapter's spec (§1.10) says". — *§1.3 spec cut to pointer; §1.10 gains sigma_ido units, jump_penalty_ratio.*
 - [ ] P1 · Line 29, promise paragraph · Replace with two sentences (the number is three bets; the chapter builds each); move five outcomes to §1.10 train scene.
 - [ ] P1 · §1.9.1, line 764, co-op counter note · Reword: "no cooperation agreement before the deal; the excluded lenders organized afterwards, as plaintiffs, which is why the counter stays at 0."
 - [ ] P1 · §1.9.1, Serta scene, 11:45 a.m. RFQ (~698) · Second account explicitly "a fund I later learned had been pitched and passed".

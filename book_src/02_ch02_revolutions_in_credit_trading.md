@@ -6,11 +6,7 @@ The ticket on Theo Marsh's screen is the first one that is entirely his: **buy \
 
 He lifts the best offer. The cover, the second-best response, is three-eighths of a point behind. Done in forty seconds.
 
-"Back in my day," says Marguerite "Mags" Dunleavy, without looking up, "I priced these by phone and by grudge. You called Steve, Steve gave you a number that punished you for something you did in 1997, and the print showed up on TRACE seventy-five minutes later, if it showed up at all."
-
-"Seventy-five minutes?"
-
-"July 2002. The regulator gave us transparency the way a casino gives you a free drink: about five hundred bonds, seventy-five minutes late."
+"Back in my day," says Marguerite "Mags" Dunleavy, without looking up, "I priced these by phone and by grudge. You called Steve, Steve gave you a number that punished you for something you did in 1997, and the print showed up on the tape whenever it felt like it, if it showed up at all."
 
 Ines Okafor rolls her chair over and studies the eleven rows the way she once studied a final table. "Eleven players. Nice pot, tight cover. Now tell me which one of them just got off a lender call."
 
@@ -28,7 +24,7 @@ He refreshes at 3:43. The Halvorsen line shows the morning's prints and an odd l
 
 "It isn't broken," says Kaz, who has not looked up but has apparently heard him refresh. "Rule 6730. The reporting side has 'as soon as practicable, but no later than within 15 minutes of the Time of Execution.'" Kaz pronounces the quotation marks, with the small relish of someone quoting a rulebook they have actually read. "Most people report in seconds. Some people use the whole fifteen."
 
-"Fifteen minutes," says Mags. "Luxury. In July 2002 it was seventy-five minutes, and by the end of that year the tape covered about five hundred and twenty bonds, none of which I owned. TRACE was a newspaper that only reported the weather in towns I didn't live in."
+"Fifteen minutes," says Mags. "Luxury. In July 2002 it was seventy-five minutes, and by the end of that year the tape covered about five hundred and twenty bonds, none of which I owned. The regulator gave us transparency the way a casino gives you a free drink. TRACE was a newspaper that only reported the weather in towns I didn't live in."
 
 At 3:56 the print lands. Theo reads it twice. The price is his, to the sixteenth. The times are his: executed 15:41, reported 15:56, the counterparty having taken every one of its fifteen legal minutes. The size is not his. Where Theo bought \$4mm, the tape says `1MM+`.
 
@@ -155,9 +151,9 @@ Two strings in the TRACE feed matter more to a credit quant than any others: `5M
 
 > **[SOURCE EXTRACTION]** *Ben_Dor_Quantitative_Credit_Portfolio_Management p.162 (note 3):* "disseminates trade-by-trade corporate bond execution information within 15 minutes to all market participants. At this time, TRACE data are censored at \$5 million for investment grade and \$1 million for high-yield securities."
 >
-> **Annotation.** The Barclays authors use the right word: *censored*. A censored observation is not missing data. It tells you the true value is at least the cap, which is information, so you should neither drop it nor treat it as equal to the cap. The caps have not moved since this was written. FINRA still disseminates `5MM+` for IG and `1MM+` for HY, and RN 25-17 applies the same caps to the new allocation reports. The *ticket* has moved: average trade size fell from about \$560k to about \$360k over the four years to 2024 (IFR, citing MarketAxess data), so a larger share of trades now prints uncapped. The capped minority is the part of the market an RSSG veteran knows best.
+> **Annotation.** The Barclays authors use the right word: *censored*, the bathroom scale's "300+", not its dead battery. The caps have not moved since this was written. FINRA still disseminates `5MM+` for IG and `1MM+` for HY, and RN 25-17 applies the same caps to the new allocation reports. The *ticket* has moved: average trade size fell from about \$560k to about \$360k over the four years to 2024 (IFR, citing MarketAxess data), so a larger share of trades now prints uncapped. The capped minority is the part of the market an RSSG veteran knows best.
 
-Stacked survival probabilities make the bias easy to see. The capped size $\min(X, c)$ keeps every layer of the stack below the cap and loses every layer above it, so volume summed from capped prints biases turnover *down*, by the area under the size distribution's tail beyond the cap. Ben Dor and coauthors flag exactly this:
+A capped size keeps every layer of the stack below the cap and loses every layer above it, so turnover summed from the tape comes out low. Ben Dor and coauthors flag exactly this:
 
 > **[SOURCE EXTRACTION]** *Ben_Dor_Quantitative_Credit_Portfolio_Management p.364 (note 8):* "TRACE truncates the sizes of large transactions at \$1 million and \$5 million for high-yield and investment-grade bonds, respectively, which may cause our estimates of turnover to be downward biased."
 >
