@@ -16,7 +16,7 @@
 - [x] 14. §18.6.3 Long Scene: Altice France, 20 March 2024 (replay), PB-14 Pair box. — Altice replay scene, two RFQs, cards graded, PB-14 Pair box; open items logged.
 - [x] 15. §18.6.3 Credit Suisse AT1: EXPAND-SCENE 600-900 words. — CS AT1 weekend replay, A=0, viability misread, pointer to §23.8.
 - [x] 16. §18.7 hit rates: Box 9 + Another Seat (Jane Street) + Niang scene beat; AiEX hedge. — Box 9 win curve/MLE/nu; hit-ratio email scene; Jane Street seat; AiEX hedged.
-- [ ] 17. §18.8 TRACE: LIST-TO-NARRATIVE + Quant-Shop Life vignette.
+- [x] 17. §18.8 TRACE: LIST-TO-NARRATIVE + Quant-Shop Life vignette. — Marisol fifteen-minute clock vignette; rulebook as Theo's Tuesday read; pointers.
 - [ ] 18. §18.9 BWICs: Box 10 (winner is the most wrong) + FULL-DERIVATION-MOVE.
 - [ ] 19. §18.9.1 Long Scene: LDI BWIC week (replay) + Another Seat (TwentyFour AM).
 - [ ] 20. §18.10 Desk Debrief: Finder table; promote Exercises with difficulty tags.

@@ -952,14 +952,11 @@ Ines turned the three cards over. Theo's and Mags's said the same thing in diffe
 
 ## 21.9 Desk Debrief
 
-*Friday 30 October 2026, 6:05 p.m., on the fictional desk.* The loan from the first Wednesday settled on day twenty-seven, after compliance found the beneficial-ownership certification in a folder labeled *2025 – misc*. Theo pinned Ines's card above his screen, all three lines finally filled in. *Worth to us today: the mark, 99.40, plus or minus a half-point nobody prints; a floater short a call that is out of the money below par; plus the delayed comp the dealer has owed us since T+7. Worth to the seller yesterday: less than the 99.75 it took, because a CLO with a 1.1% cushion counts the cash as more test than the loan, and in that currency the loan was worth what its indenture let it buy with the proceeds. Why different: we have no indenture. The gap is the price of someone else's rule, and it is the edge.* Mags read it twice, which from her was applause. Under the three lines Theo had added one more, for himself: *At RSSG I read the credit agreement. Here I read the indenture of the lender.*
-
 The Finder below maps each idea to where the chapter builds it: the equation, the box that gives the intuition, the scene where someone has to use it, and the listing in Appendix F.
 
 | Concept | Equation | Intuition (box) | Judgment (scene) | Code |
 | :-- | :-- | :-- | :-- | :-- |
-| Floater short a par call | (21.1), (21.2), (21.7) | Math, Gently: *Why a floater sits at par…* and *A bond with a lid* (§21.1.1) | Long Scene B, *The Window* (§21.5) | [Listing 21.3](#code-21-3) |
-| Repricing hazard and carry loss | (21.7), (21.8) | Math, Gently: *A hazard is a clock…* (§21.5.1) | Scene B's cards, graded (§21.5 Case Study); Hana's logit (§21.5.1) | [Listing 21.3](#code-21-3) |
+| Floater short a par call, repriced by a hazard | (21.1), (21.2), (21.7), (21.8) | Math, Gently: *Why a floater sits at par…*, *A bond with a lid* (§21.1.1) and *A hazard is a clock…* (§21.5.1) | Long Scene B, *The Window*, and its graded cards (§21.5); Hana's logit (§21.5.1) | [Listing 21.3](#code-21-3) |
 | Delayed comp as forced repo | $	ext{DC}_u$ (§21.2.2) | Math, Gently: *Delayed compensation is a repo you did not agree to* | Dealer seat (§21.2); the nine stops (§21.2.1) | — |
 | CLO equity gearing | (21.3) | Math, Gently: *Why 50 bp becomes 5.6 points* (§21.3.1) | CLO-manager seat (§21.5) | — |
 | Diversity and overlap | (21.4) | Math, Gently: *Two hundred and fifty coins…* (§21.3.2) | Long Scene A, *The Cliff* (§21.4) | — |
@@ -969,6 +966,8 @@ The Finder below maps each idea to where the chapter builds it: the equation, th
 | Liquidity queue | (21.9) | Math, Gently: *Twenty coin flips…* (§21.6.1) | Quant-Shop Life, *The Cash That Was Not Spent*; PB-17 (§21.6) | [Listing 21.4](#code-21-4) |
 | Smoothed marks | (21.10) | Math, Gently: *Smoothing makes a calm series…* (§21.7.1) | Ines and Kaz's desmoothed backtest (§21.7) | [Listing 21.5](#code-21-5) |
 | Holder base in an LMT | $(\theta_i, \bar\kappa_i, \psi_i)$ (§21.8) | Insurer seat (§21.8) | The Weil memo read to Mags; PB-15 Trinseo (§21.8) | — |
+
+*Friday 30 October 2026, 6:05 p.m., on the fictional desk.* The loan from the first Wednesday settled on day twenty-seven, after compliance found the beneficial-ownership certification in a folder labeled *2025 – misc*. Theo pinned Ines's card above his screen, all three lines finally filled in. *Worth to us today: the mark, 99.40, plus or minus a half-point nobody prints; a floater short a call that is out of the money below par; plus the delayed comp the dealer has owed us since T+7. Worth to the seller yesterday: less than the 99.75 it took, because a CLO with a 1.1% cushion counts the cash as more test than the loan, and in that currency the loan was worth what its indenture let it buy with the proceeds. Why different: we have no indenture. The gap is the price of someone else's rule, and it is the edge.* Mags read it twice, which from her was applause. Under the three lines Theo had added one more, for himself: *At RSSG I read the credit agreement. Here I read the indenture of the lender.*
 
 - **A performing loan is a floater that is short a par call.** Its spread duration is about 2.7 on the way down and about 0.25 on the way up when the repricing window is open (21.7). Quote carry net of the expected repricing loss (21.8), or you are quoting fiction.
 - **The OC test is an option book written by the CLO equity.** It cannot see performing-loan prices and is short the cheapest tail of the CCC book (21.5). Past the 7.5% cliff, each dollar of new CCC costs about $(1 - p^{\ast})$, around 42 cents at Kundu's 58-cent average, through *other* loans.

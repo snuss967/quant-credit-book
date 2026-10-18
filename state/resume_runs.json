@@ -1,5 +1,5 @@
 {
- "note": "Restarted 09:34 UTC (window 09:30-14:30). Stopped at the user's ~88% rule at 06:11 UTC. To resume: Workflow({scriptPath, resumeFromRunId: runId, args}). All agents are durable, so finished items are skipped.",
+ "note": "Stopped at the user's ~88% rule at 10:43 UTC (window 09:30-14:30). Resume each with Workflow({scriptPath, resumeFromRunId: runId, args}); agents are durable.",
  "runs": [
   {
    "name": "part-III-a",

@@ -68,7 +68,7 @@ Count at start: 17 Math, Gently (L68 risk-neutral, L110 standard error, L218 fal
 
 - [x] E1. L567 Seat box "paraphrased here because the only transcript available to us is an unverified machine one" and L962 "(paraphrased; transcript unverified)": research-note voice. Recast as "paraphrased, not quoted"; log the open item. **Done:** Both paraphrase notes recast; open item logged in state/research.
 - [x] E2. L964 Odd Lots entry is channel-level with "No episode ... was verified for this edition" and no URL. Cut; log for U3. L1012 PyBondLab "its page was not verified for this edition": hedge the sentence; log. **Done:** Channel-only Odd Lots entry cut; PyBondLab hedged; both logged.
-- [ ] E3. No "CHECK", "search summary" or "secondary" strings found. Fiction labels missing at the top of the cold open, §7.1's week of data archaeology (mixes desk fiction with real FRED and SMU numbers), §7.7's fold scene and the Debrief scene. Add one italic label to each.
+- [x] E3. No "CHECK", "search summary" or "secondary" strings found. Fiction labels missing at the top of the cold open, §7.1's week of data archaeology (mixes desk fiction with real FRED and SMU numbers), §7.7's fold scene and the Debrief scene. Add one italic label to each. **Done:** Italic fiction labels added to four scenes; cold open names week.
 
 ## (f) Reference layer
 

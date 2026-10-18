@@ -228,3 +228,27 @@ Launched: **rv-thread** (wnoycfspo), reader-lens (w0vm8d6o1), research-B (wjge66
 
 ### 10:15 UTC: RV thread COMPLETE (`state/rv_thread.md`, 7.8k words; `state/rv_pair_book.md`, 27 ledger rows)
 The architect **endorsed Ch 8-D, "The Pair Book: Long One Credit, Short Another"** (canonical home for the life of a pair: sourcing, the short-leg menu and borrow, the ruler comparison, sizing to the stop, the ledger, the exit); its brief and writer are running inside the rv-thread workflow. Canonical homes: Ch 8 (mechanics), 8-B (risk regime), 8-C (pair explain), 24 (basis and the short leg's legal layer), 28 (pod economics). The held revisers were released and new ones launched; every brief and reviser now reads the thread. Runs: u2-A (Ch 4), part-III-a/b/c, part-VII-u2, rv stage for Ch 13–16 and for Ch 5, 6, 4-C, 1-B, and U2 for Ch 18–19, 20–21, 22–23, 26–28. Still to queue: primers U2 (4-B, 6-B, 7-B, 12-B); rv for Ch 1 (after its fixer), 2/3/7 (in lessons→rv), 3-B, 8-B, 8-C, 12-C; the synthesis files 00_02, 4-D, 2-B, App Z; figures and resgraph for Ch 1–7.
+
+## Stopped at the user's ~88% rule (2026-10-18 10:43 UTC; meter 85% rising 2.1%/min)
+
+All 12 workflows and the pace guard were stopped. Resume list: `state/resume_runs.json`.
+Status at the stop:
+- **Revised (log COMPLETE):** Ch 1–9, 11, 13–17, 24, 25.
+- **Revising (PARTIAL):** Ch 10, 12, 18–23, 26, 27. Ch 28 not started.
+- **Verify COMPLETE:** Ch 1–7, 13–16. Verify pending: Ch 8, 9, 11, 17, 24, 25.
+- **Lessons COMPLETE:** Ch 1, 2, 3, 13–16. PARTIAL: Ch 4, 7.
+- **Quality fixes COMPLETE:** Ch 1, 5, 6.
+- **RV beats woven:** Ch 1-B, 3, 4-C, 5, 6, 13, 14. Ch 2 PARTIAL. Still needed (rv stage): Ch 1, 7, 15, 16, 3-B, 8-B, 8-C, 12-C, primers. Revisers launched after 10:15 read the thread directly.
+- **Ch 8-D, The Pair Book: Long One Credit, Short Another:** written (12k words) and swept to App F. Needs figures, figcheck, resgraph, and verify.
+- **Pair Book ledger:** 17+ pairs (state/rv_pair_book.md).
+
+**Next window plan (14:33):**
+1. Resume everything in resume_runs.json.
+2. Run verify for Ch 8, 9, 11, 17, 24, 25 if their runs do not cover it.
+3. rv stage for Ch 1, 7, 15, 16, 3-B, 8-B, 8-C, 12-C.
+4. Ch 8-D: figures → figcheck → resgraph → verify.
+5. Primers U2 (brief→revise→verify): 4-B, 6-B, 7-B, 12-B.
+6. Figures and resgraph for Ch 1–7.
+7. Synthesis files 00_02, 4-D, 2-B; App A §A.10 dictionary; App Z last.
+8. Lessons pass for chapters revised before the lessons existed and not yet passed.
+9. Build and send the PDF.

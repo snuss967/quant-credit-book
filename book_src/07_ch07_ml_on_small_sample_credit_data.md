@@ -3,6 +3,8 @@
 
 ## 7.0 Cold Open: Forty-Seven Hats
 
+*The desk, its people, Kaz's model and every number on the slide are fictional and illustrative. The review falls in Theo's third week on the desk, early October 2026.*
+
 The invitation had arrived at 11:42 the night before, from a calendar Theo had not known he was on: *Model Review: HY Cross-Section GBM v3 (Kaz). 9:30–10:00. Optional.* At PJT nothing called "optional" had ever been optional, and Theo assumed the systematic desk worked the same way. He was right, though not for the reason he thought. Here "optional" meant that nobody would stop you from not coming, and that the model would be approved by whoever did.
 
 The attachment was one slide. It had a title (*GBM v3: Top–Bottom Decile, HY Excess Returns, 2004–2024*), a cumulative-return line that climbed from the lower left to the upper right with the serenity of a stock photograph, and a box in the corner with three numbers: *Sharpe (IS) 2.9. Hit rate 61%. Turnover 38%/mo.* There was no footnote. There was no issuer count. There was not even a page number, which Theo found more unsettling than anything else, because years of reading confidential information memoranda had taught him that the page number is where a document admits it has other pages.
@@ -64,6 +66,8 @@ The chapter answers the sticky note four times, at four layers, in the order the
 One measure convention for the whole chapter. Every expectation and probability below is under the physical measure $\mathbb{P}$, because we forecast realized excess returns and realized labels. Risk-neutral objects (OAS, a CDS-implied hazard $\lambda_t$, a Merton distance-to-default) appear only as *features*. Features may be $\mathbb{Q}$ quantities; labels and losses are always $\mathbb{P}$. In Chapter 5's race (§5.1.1), $\mathbb{Q}$ is the bookmaker's book and $\mathbb{P}$ the race card after the race, and §6.3 writes out the change of measure: a one-year CDS at 400bp with 40% recovery implies a $\mathbb{Q}$ intensity of about $0.04/0.6 \approx 6.7\%$ a year, single-B issuers have often defaulted at something like half that rate *(illustrative)*, and a model that forecasts the race card may use the 6.7% only as one more column describing what the market is charging.
 
 ## 7.1 Why Credit Is the Worst Machine-Learning Dataset in Liquid Finance
+
+*Theo's week of data archaeology, the desk's data and Kaz's classifier are fictional; the SMU study, the FRED series and their values are real and cited where they appear.*
 
 Theo spent the week after the review doing what he privately called data archaeology. Kaz had the model; Theo wanted the dig site. He started from a comparison Ines gave him on Monday morning, in the tone of someone describing the weather. An equity stat-arb researcher has about 3,000 liquid US names, each with one share class, a closing auction that produces a real price every day, and decades of clean history. A credit researcher has a panel with five structural defects, and each one breaks a textbook machine-learning assumption in a specific, predictable direction. "Find all five," she said, "before the model finds them for you." He found them in the order the week delivered them, one a day, and the rest of the chapter is a repair manual, one defect at a time.
 
@@ -462,6 +466,8 @@ Mags, still with her back to them, supplied the case the formula cannot see. "La
 
 ## 7.7 Cross-Validation That Cannot Peek: Purged, Embargoed, Issuer-Grouped
 
+*A desk scene: the bond, the label, the folds and the 1.8 are illustrative.*
+
 Kaz's in-sample Sharpe of 2.9 had a cousin, and Kaz brought it to Theo's desk the morning after the hat count, the way a patient brings a second opinion to a doctor who did not like the first. It was a cross-validated Sharpe of 1.8 from shuffled K-fold.
 
 "This is the conservative number," Kaz said. "Five folds. Every label is scored by a model that never saw it. Out of sample, every one."
@@ -822,6 +828,8 @@ The trap in this block is the matrix itself, and it is Kaz's 3,000 in miniature.
 Porting the lab to the real panel means replacing `simulate_panel` with the point-in-time TRACE and pricing-composite feed (Appendix B) and keeping every assert as a production test.
 
 ## 7.13 Desk Debrief
+
+*Kaz's rerun, Theo's report and every number on both are fictional and illustrative.*
 
 Two weeks after the cold open, Kaz reran the gradient-boosted model through the lab. The screen was much less exciting, which on this desk is how you know a number has been near the truth.
 
