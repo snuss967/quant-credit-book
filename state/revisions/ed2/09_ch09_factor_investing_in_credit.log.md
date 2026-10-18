@@ -22,4 +22,4 @@
 - [x] 20. [§9.10] NEW-SCENE Long Scene A: March 2020, the Factor Book in a Fire Drill. Note: cut 19 Mar; stale-DTS hedge twist; old three paragraphs absorbed; Ramji paraphrased.
 - [x] 21. [§9.10, after the scene] ANOTHER-SEAT (Ares/BlueCove, Blackstone/DCI). Note: insurer-seat box; Feb 2026 close verified (Business Wire); TW last.
 - [x] 22. [§9.11] BRIDGE: open lab with the CI job sentence. Note: lab framed as the CI placebo universe; listings untouched.
-- [ ] 23. [§9.12 Desk Debrief] add the Finder table.
+- [x] 23. [§9.12 Desk Debrief] add the Finder table. Note: ten-row finder above the scene; bullets and Spec kept.

@@ -16,8 +16,8 @@
 - [x] 14. 17.6.1–17.6.2 Redemption game · MATH-GENTLY (box H, two parts) — pizza transfer and queue box; transfer and runway algebra moved.
 - [x] 15. Case Study Redemption Quarters 2026 · EXPAND-SCENE → Long Scene 2 — four beats, resubmission discovery, 23 June arithmetic card graded; Trend Watch last.
 - [x] 16. 17.7.2 Five price sources · LIST-TO-NARRATIVE — Theo wires atlas with Mags; PIMCO and SEC staff as sceptics.
-- [ ] 17. 17.8.1 · SHOP-LIFE vignette
-- [ ] 18. 17.8.2 Features worth computing · LIST-TO-NARRATIVE + dealer seat
+- [x] 17. 17.8.1 · SHOP-LIFE vignette — Tomasz's earnings week: names, lots, Monroe par, dropped row, ticket.
+- [x] 18. 17.8.2 Features worth computing · LIST-TO-NARRATIVE + dealer seat — Ines's Friday review; default ladder; Handler and Dimon sentences.
 - [ ] 19. 17.8.3 Pending mark · MATH-GENTLY (box I) + FULL-DERIVATION-MOVE
 - [ ] 20. 17.9 and 17.10 · BRIDGE + Finder table
 
@@ -41,3 +41,5 @@
 - CHECK: OTIC/Golub/Goldman/Fidelity tracker figures hedged as "a widely circulated tracker"; BCRED Q1 7.9% and \$400mm feeder hedged as press reports; Arougheti 10 Jun remark hedged as reported/paraphrased.
 - CHECK: FSK ~0.56, OBDC ~0.71, median ~0.76 of book are aggregator quotes (16 Oct 2026).
 - CHECK: SEC staff PRIV letters (PRIV-SEC1/2, Feb 2025) quoted from dossier; fetch tool caps quotes; re-verify wording.
+- Cast: new minor cast Tomasz (he/him), 11 months out of a master's, systematic credit asset manager (fictional composite), Ch 17 §17.8.1 vignette; shop's coding agent is 'a literal-minded cousin of ROBO'.
+- CHECK: default ladder Fitch 6.3% (secondary) and Moody's 4.0/5.8% (DRAFT header) hedged as 'reported' / 'a Moody's analysis'.

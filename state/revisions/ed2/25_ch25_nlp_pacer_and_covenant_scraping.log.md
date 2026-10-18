@@ -22,4 +22,4 @@
 - [x] 20. [25.7.3 Serta] EXPAND-SCENE -> Long Scene 2. — Four beats, cards, 2 a.m. page, Skadden recoveries; Dynkin points back.
 - [x] 21. [25.8 Claims Registers] BRIDGE: Mags on transferee concentration. — Mags reads transferee line; back-in-my-day; HHI and blocking rule.
 - [x] 22. [25.9.1 Classifier error is an IC tax] MATH-GENTLY (base rates, Youden) + ANOTHER-SEAT (dealer). — Youden box, dealer width seat, PB-08 Pair box, derivation moved.
-- [ ] 23. [25.10 and 25.11] BRIDGE + Finder table.
+- [x] 23. [25.10 and 25.11] BRIDGE + Finder table. — Engine opener ties blocks to scenes; ten-row Finder; templates softened.

@@ -20,6 +20,6 @@
 - [x] 18. [§24.8.1] LIST-TO-NARRATIVE + MATH-GENTLY #8, thresholds and cliffs — staircase box; four-row table; Theo reads 24.9% sizing.
 - [x] 19. [§24.8.2] EXPAND-SCENE, Long Scene B: The Risk Meeting, 2 January 2018 — replay meeting; $1.04mm discovered; cards graded; Diary corrected.
 - [x] 20. [§24.8.3 Windstream] EXPAND-SCENE + fact fix — 3 April fixed; DC calendar; Ines tenor-gap spread; PB-11 box.
-- [ ] 21. [§24.8.4] ANOTHER-SEAT #3 + BRIDGE to 2026
+- [x] 21. [§24.8.4] ANOTHER-SEAT #3 + BRIDGE to 2026 — index/pod vs GSO seat; PB-12 refusal; Ardagh "with dissents"; TW last.
 - [ ] 22. [§24.9 Desk Debrief] Finder table
 - [ ] 23. [Everywhere] Template ban

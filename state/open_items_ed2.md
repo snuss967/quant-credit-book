@@ -26,3 +26,6 @@
 | Where | Claim as now printed | Open question | Status |
 | :-- | :-- | :-- | :-- |
 | §10.4.2 Math, Gently (small-sample bias) | Kendall bias on the AR(1) persistence: E[rho-hat] - rho ~ -(1+3 rho)/T; with rho = 1 - kappa = 0.97 and T = 300 the kappa bias is ~0.013, SE ~0.014 | The brief's (1+3 kappa)/T ~ 0.004 plugged kappa into a formula for rho; printed text uses rho. Confirm the approximation and wording against Kendall (1954) or a textbook (e.g., Hamilton) | open |
+| §24.8.4 Ardagh bridge | "The EMEA Determinations Committee rejected the challenge, with dissents (*Cloud 9fin*, 21 January 2026)" | 9fin page names Citi and Pimco as dissenters; not confirmed on cdsdeterminationscommittees.org; name them only after the DC record is opened | open (hedged) |
+| §24.8.2 Scene B | "On 11 April the ISDA Board issued a statement of concern about defaults engineered to trigger swaps" | ISDA Board statement [S22] not quoted; paraphrased deliberately | open (paraphrased) |
+| §24.7 PB-03 box | Ford Motor Credit basis "about −120" to "about −35 bp"; GM Financial Z 120 / CDS 110 at close | Illustrative, labeled; no Ford basis series sourced | n/a (illustrative) |

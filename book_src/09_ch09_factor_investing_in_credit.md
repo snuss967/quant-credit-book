@@ -674,7 +674,7 @@ One piece of the objective still needs a trick before a solver will touch it.
 
 > **Math, Gently.** *The hinge.* The absolute value $\lvert x\rvert$ has a kink at zero, like a door hinge, and solvers that slide smoothly downhill catch on kinks. Write every trade as a buy part and a sell part, both non-negative: a sale of 3 is $u^{+} = 0$, $u^{-} = 3$, and then $\lvert x \rvert = u^{+} + u^{-}$ is a straight line in each piece, so the hinge disappears and an ordinary quadratic-programming solver takes over.
 
-The absolute-value cost term makes the objective non-smooth. The standard fix is to split each trade into a buy and a sell, $w = w_0 + u^{+} - u^{-}$ with $u^{\pm} \ge 0$, so that the cost becomes the linear term $\sum_i c_i(u^{+}_i + u^{-}_i)$ and the problem is a quadratic program. For $\Sigma$, Man's approach normalizes bond returns by DTS, extracts statistical factors, fills new issues from issuer-level loadings, and rescales by current DTS (Man p.15). For ten thousand bonds and two thousand issuers, shrink it (Chapter 8) or the optimizer will find the eigenvector with the smallest estimated variance and put the whole book in it.
+The absolute-value cost term makes the objective non-smooth. The standard fix is to split each trade into a buy and a sell, $w = w_0 + u^{+} - u^{-}$ with $u^{\pm} \ge 0$, so that the cost becomes the linear term $\sum_i c_i(u^{+}_i + u^{-}_i)$ and the problem is a quadratic program. For $\Sigma$, Man's approach normalizes bond returns by DTS, extracts statistical factors, fills new issues from issuer-level loadings, and rescales by current DTS (Man p.15). With ten thousand bonds and two thousand issuers, an unshrunk $\Sigma$ invites the optimizer to find the eigenvector with the smallest estimated variance and put the whole book in it, which is why the desk shrinks it first (Chapter 8).
 
 ### 9.8.2 What a trade costs
 
@@ -947,9 +947,24 @@ Use this module as a regression test for any signal built from returns or price-
 
 *The full listing is [Listing 9.7 in Appendix F](#code-9-7).*
 
-Three notes on what the lab shows when you run it. First, compare each signal's `[mv]` and `[dts]` rows: the dollar-neutral value rows carry a large positive beta and the low-risk rows a negative one, and DTS-neutralization removes both, which is §9.2 in a table. Second, the `share of hidden-risk bonds` line shows how many of ESP's "cheapest" bonds are fairly priced bonds carrying a risk the three ratios cannot see, and the `ESP+PRS` row shows what a document-risk regressor buys back. Third, the momentum buffer table reproduces §9.4 and §9.8 together: gross alpha that is real, turnover that is not affordable, and a buffer that trades some of the first for much less of the second.
+The first time Theo ran the whole lab he read the output the way he used to read a first-day declaration, looking for the few numbers that would matter in court. The `[mv]` and `[dts]` rows sat side by side for every signal: the dollar-neutral value rows carried a large positive beta and the low-risk rows a negative one, and DTS-neutralization removed both, which is §9.2 in a table. The `share of hidden-risk bonds` line told him how many of ESP's "cheapest" bonds were fairly priced bonds carrying a risk the three ratios could not see, and the `ESP+PRS` row showed what a document-risk regressor bought back, which was his runway column's argument made by a machine. And the momentum buffer table reproduced §9.4 and §9.8 together: gross alpha that is real, turnover that is not affordable, and a buffer that trades some of the first for much less of the second.
 
 ## 9.12 Desk Debrief
+
+The finder below is for the reader who comes back looking for one thing: where each idea is stated, where it is built gently, where a character finds out when it breaks, and where the code lives.
+
+| Concept | Equation | Intuition (box) | Judgment (scene) | Code |
+| :--- | :--- | :--- | :--- | :--- |
+| DTS is beta | (9.1) | *Relative change, and beta as a ratio* (§9.2.1) | Mags at the 1,000bp line (§9.2.3) | Listing 9.2 |
+| Value as a residual in a peer cell | ESP regression (§9.3.1) | *A residual is the part the peers cannot explain* (§9.3.1) | Theo's runway column (§9.3.4) | Listing 9.3 |
+| The measure trap | (9.2) | *The bell, its dial, and the bookmaker's odds* (§9.3.3) | The 83bp against 24bp payoff (§9.3.3) | Listing 9.3 |
+| Break-even cost | (9.3) | *Turnover is a meter* (§9.4.2) | Long Scene A, the grading (§9.10) | Listing 9.4 |
+| Carry is the price of DTS | (9.4) | §9.5.1 | Long Scene B, 2022 (§9.5.3) | Listing 9.4 |
+| Combining factors | (9.5) | *Correlation, and two rowers* (§9.7.1) | The telecom case and the Pair Book's value loading (§9.7) | Listing 9.6 |
+| Noisy prices | (9.6) | *Two ways a backtest flatters itself* (§9.9) | Hana's red build (§9.9) | Listing 9.7 |
+| The five library rules | — | *Two ways a backtest flatters itself* (§9.9) | Kaz's whiteboard (§9.9) | Listing 9.7 |
+| Buffers and constraints | §9.8.1, §9.8.3 | *The hinge* (§9.8.1) | Long Scene A, the card (§9.10) | Listing 9.5 |
+| Live IR | §9.10 | Trend Watch, tight spreads (§9.10) | Long Scene B, the Robeco coda (§9.5.3) | Listing 9.6 |
 
 A week after the cold open, Kaz put the value strategy back on the screen, rebuilt with DTS-neutral legs inside rating × sector cells, start-of-month DTS, default months kept, and a skip-month rule between the price used for the signal and the price used for the return. The Sharpe ratio was 0.9 gross and 0.7 net. The beta was 0.02 *(illustrative)*.
 

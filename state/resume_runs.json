@@ -128,24 +128,6 @@
    }
   },
   {
-   "name": "rv-5-6-4c-1b",
-   "task": "wd3vlznsg",
-   "runId": "wf_25aa10ed-73d",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "05_ch05_credit_probability_distributions",
-     "06_ch06_merton_and_intensity_models",
-     "04_ch04c_other_seats_at_the_table",
-     "01_ch01b_a_week_in_five_quant_shops"
-    ],
-    "stages": [
-     "rv"
-    ]
-   }
-  },
-  {
    "name": "u2-V-a",
    "task": "wc9sar225",
    "runId": "wf_cbf26479-589",

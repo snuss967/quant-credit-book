@@ -13,7 +13,7 @@
 - [x] 11. [§22.3.3] EXPAND-SCENE (to 900-1,200 words) — Ops-log scene: Mags, affirmations, Kaz checks bracket, carry offset bug.
 - [x] 12. [§22.4.1] MATH-GENTLY (two-part) + FULL-DERIVATION-MOVE — Two-part netting box; folded-normal derivation added below; equations intact.
 - [x] 13. [§22.4.2] MATH-GENTLY (hinge regression) — Motorway hockey-stick box with own toy numbers; caveat clause kept.
-- [ ] 14. [§22.4.3] EXPAND-SCENE -> Long Scene A: "The fortnight the invoice was the market"
+- [x] 14. [§22.4.3] EXPAND-SCENE -> Long Scene A: "The fortnight the invoice was the market" — Mags war story, four beats, Friday card graded with (22.2), (22.13), (22.11).
 - [ ] 15. [§22.5] LIST-TO-NARRATIVE + WHEN-TO-APPLY inside the scene
 - [ ] 16. [§22.5, after the Poker Table] ANOTHER-SEAT (non-bank market maker)
 - [ ] 17. [§22.6 timeline paragraph] LIST-TO-NARRATIVE

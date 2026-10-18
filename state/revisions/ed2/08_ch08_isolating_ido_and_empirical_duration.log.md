@@ -16,7 +16,7 @@
 - [x] 14. [8.7 Case Study B: March 2023] NEW-SCENE, long: "The Hedge That Hedged Both Ways (8–13 March 2023, replayed)". — Done: ~1,800-word SVB replay, three cards graded, explain beat, coda.
 - [x] 15. [8.7 Case Study C: April 2025] EXPAND-SCENE (~1,400 words): card before table; Jersey resource. — Done: Friday card, ex-post H −4/+2/0 grading, Jersey, labels cut.
 - [x] 16. [8.8 What's Left Is IDO] MATH-GENTLY (common whisper) + LIST-TO-NARRATIVE + WHEN-TO-APPLY; IDO ledger as month-end meeting. — Done: whisper box, Theo walk-through, pod RV scene, month-end ledger meeting.
-- [ ] 17. [8.9 The IDO Engine] SHOP-LIFE vignette (500–700 words) before the Spec.
+- [x] 17. [8.9 The IDO Engine] SHOP-LIFE vignette (500–700 words) before the Spec. — Done: Elif Arslan composite; FRED truncation; committee; two spec lines.
 - [ ] 18. [8.10 Desk Debrief] BRIDGE (Finder table) + protect; add seven resources to Resource Graphs.
 - [ ] 19. [whole chapter] ANOTHER-SEAT: the insurer, at end of §8.2 before the Trend Watch.
 - [ ] 20. [whole chapter] box budget and sign-offs check.

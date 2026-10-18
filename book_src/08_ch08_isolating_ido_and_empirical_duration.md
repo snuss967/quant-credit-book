@@ -994,6 +994,24 @@ The fundamental law, $\text{IR} \approx \text{IC}\sqrt{\text{BR}}$ (Chapter 9), 
 
 ## 8.9 The IDO Engine: A Reference Implementation
 
+### Quant-Shop Life: The Window That Shrank
+
+*A fictional composite: a systematic credit asset manager running long-only, benchmark-relative portfolios with a monthly rebalance. The firm, its people, the job and its numbers are invented; FRED's change to its ICE BofA history is real and stated on the FRED series pages.*
+
+Elif Arslan had been a junior quant at the firm for ten months, long enough to own one job outright and not long enough to have chosen it. The job was `hbucket_monthly`. On the first business day of every month it pulled the ICE BofA OAS series by rating from FRED, pulled Treasury yields, re-estimated the empirical hedge ratio for each rating bucket over a 60-month window, and wrote a six-row table to a shared drive. The Treasury-futures overlay, which kept every portfolio's duration inside a band around its benchmark, read the table at 10 a.m. Nobody read it before then, including, most months, Elif.
+
+In May 2026 the job did not fail, and that was the problem. Its backfill step asked FRED for sixty months of history, got back thirty-six, and said nothing, because nothing in the code had ever asked how many rows came back. FRED's own series pages explained why: starting in April 2026 the ICE BofA series include only three years of observations. The job estimated over what it had. The single-B hedge ratio, which had sat near 1.0 for months because the 60-month window still held 2022, came out near 0.7 *(illustrative)*, and the overlay, which trusted the table the way the table trusted FRED, bought back about thirty percent of its futures short across the high-yield sleeves by lunchtime.
+
+Elif found out on the following Monday, by accident, because the overlay's trade report was longer than usual and the operations analyst who reconciles it had asked, politely, whether something had happened.
+
+The risk committee met on Tuesday. It asks one question of every number it is shown, and it asked it of this one: why is this different from last month? Elif had prepared two slides. The first said the hedge ratio had moved because the window had lost 2022, the inflation table of §8.2, so the estimate now came only from flight-table and nobody-table years. The second said that 2026 so far had in fact been a nobody table, so a lower number was not obviously wrong. The committee chair, who had sat through enough of these meetings to recognize the shape, summarized it more honestly than either slide. "So a parameter moved and a data vendor truncated a series on the same morning, and you can't yet tell us which did what."
+
+"Not yet," Elif said.
+
+"Then the overlay goes back to last month's table until you can."
+
+It took her two weeks, most of them spent rebuilding a 2021–2023 OAS history from an archived file and checking it against the firm's TRACE-based series (Appendix B), and the answer was dull: about two-thirds of the move was the window and one-third was the year. The fix was duller. Two lines went into the job's specification. The first was an assertion that the estimation window holds the number of observations its name promises, so a 60-month window that receives 36 months stops and says so. The second was an alarm on the rolling 60-day correlation between yield changes and relative spread changes that fires when it changes sign, the same guard that ends the GUARDS line of the robot spec in §8.10. Model-risk guidance has a name for this kind of thing, ongoing monitoring, which SR 11-7 lists among the three parts of model validation. The committee had a shorter name for it, which was "finally." The next time the table moved, it moved with a reason attached, and the reason was in the email.
+
 ### Specification for AI Implementation
 
 **What ROBO built from the vague version.** Asked to "hedge the rates," ROBO sold analytical-duration TY futures against a B/CCC book and reported, accurately, that the hedged P&L was more volatile than the unhedged one, which is Rudin's (2025) finding reproduced by accident. Asked to "minimize hedged variance with HYG," ROBO sold \$38mm of HYG against \$40mm of bonds and delivered a pleasant, alpha-free flat line. Both outputs were correct implementations of bad specs. The spec below names the objective, the instruments, the units, and the failure modes.

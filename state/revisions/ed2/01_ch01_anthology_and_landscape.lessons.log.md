@@ -40,7 +40,7 @@ Count: 16 Math, Gently (L37, 139, 145, 183, 251, 318, 344, 368, 390, 408, 422, 4
 
 - [x] D1. Merge "What is a distribution, and what is a certainty equivalent?" (L139) and "Pricing by indifference" (L145), two building blocks needed at once for (1.1), into one box in two parts at L139 (lesson 6); retire the "each gets its own box" promise, since fat tails will not. *Done: one two-part box (bag; indifference price); promise now points fat tails to Ch 5.*
 - [x] D2. Merge "Waiting for the phone to ring" (L422) and "What 'risk-neutral' really means" (L430) into one two-part box placed after Kaz's 12 bp beat, signing off "next" into the credit-triangle Full Derivation, which then follows it directly (lesson 10 order: statement in the annotation, box, derivation). With B7. *Done: phone/whose-phone box after Kaz's beat; derivation directly below.*
-- [x] D3. Demote six survey-mention boxes to one- or two-sentence glosses that keep the picture and the tiny number, with pointers to the chapter that owns the first load-bearing use: regression slope (L344 → §7-B.1), Monte Carlo (L368 → §6.5 and Chapter 7-B), fat tails (L408 → §5.7 and §6.4; with B6), correlation and the common factor (L444 → §5.5's weather box; the Full Derivation keeps 9.7%), decile sort and IR (L482 → Chapter 9), exponential decay and half-life (L555 → §9.4, which cites Ch 1's cooling cup, so the gloss keeps the coffee). Result after D1–D3: 8 Math, Gently. *Done: six glosses with pictures, numbers, pointers; count now 8.*
+- [x] D3. Demote six survey-mention boxes to one- or two-sentence glosses that keep the picture and the tiny number, with pointers to the chapter that owns the first load-bearing use: regression slope (L344 → §7-B.1), Monte Carlo (L368 → §6.5 and Chapter 7-B), fat tails (L408 → §5.7 and §6.4; with B6), correlation and the common factor (L444 → §5.5's weather box; the Full Derivation keeps 9.7%), decile sort and IR (L482 → Chapter 9), exponential decay and half-life (L555 → §9.4, which cites Ch 1's cooling cup, so the gloss keeps the coffee). Result after D1–D3: 8 Math, Gently. *Done: six glosses with pictures, numbers, pointers; count now 8.* *Revised at Z1: the regression-slope box is restored (pointer now §7-B.1), because Ch 9 (twice), Ch 18 and Ch 20 cite "Chapter 1's box on regression slopes" and Ch 7-B has no such box; final count 9. Ch 16's pointer to "Chapter 1's box in §1.8.1" now meets the half-life gloss; queued in `state/cleanup_queue.md`.*
 - [x] D4. The conservation box (L538) uses the Listing 1.3 demo's numbers (lesson 7): give it its own tiny number. With B9. *Done under B9: sell 10, absorb 7, dealers take 3.*
 - [x] D5. Run of three at L251–265: thread one line of narration between the Normal/Poisson box and the Ways This Blows Up box. *Done: Kaz tries the fifty-point jump; run now two.*
 - [x] D6. Move eq. (1.3) out of the Ben Dor p.61 annotation and eq. (1.4) out of the Bohn–Stein p.128 annotation into body text; extraction and the annotation's first sentence stay boxed; equation numbers unchanged. *Done: both equations and their derivations now in body text.*
@@ -70,7 +70,22 @@ Count: 16 Math, Gently (L37, 139, 145, 183, 251, 318, 344, 368, 390, 408, 422, 4
 
 ### (z) Close
 
-- [ ] Z1. Re-run the metric and record **after**; check protected items (18 Source Extractions with page numbers, 4 Trend Watches verbatim, 6 exercises, 7 `\tag`s, `$$` balance, 28 URLs, 4 `#code-1-k` links, 3 figure comments, no code fences), box runs and Math, Gently adjacency.
+- [x] Z1. Re-run the metric and record **after**; check protected items (18 Source Extractions with page numbers, 4 Trend Watches verbatim, 6 exercises, 7 `\tag`s, `$$` balance, 28 URLs, 4 `#code-1-k` links, 3 figure comments, no code fences), box runs and Math, Gently adjacency. *Done: after recorded; every protected item identical; longest run two.*
+
+## Metrics
+
+- **before** (`python3 tools/prescriptiveness.py --pre 9ac1c379053d9d0254e9d524d9a40efdec4a2c71`): words 25,603 · bullets 5.5% · modal 3.9 · imper 0.9 · rule 1.6 · dialog 12.8 · mathgently 16 · seat 4 (file 854 lines, 26,912 wc words); growth 2.58× on pre 9,923.
+- **after**: words 24,646 · bullets 5.7% · modal 3.7 · imper 0.9 · rule 1.5 · dialog 12.5 · mathgently 9 · seat 4 (file 851 lines, 26,165 wc words); growth **2.48×** against the 1.6–1.9× band. Per the orchestrator ruling on lesson 1, the remaining excess is single-telling scenes (Ford in four acts, Serta's two RFQs, the Quant-Shop Life morning), sourced cases and protected text; no duplicate telling found in the audit is left.
 
 ## Fix notes
+
+- Protected-item check against the pre-pass snapshot: 18 Source Extraction quote lines identical (page numbers intact), 4 Trend Watches verbatim, Exercises 1–6 identical, 7 `\tag`s (1.1)–(1.7) with numbers unchanged, 28 URLs identical, 4 `#code-1-k` links, 3 figure comments, no code fences, no em dashes, every inline `$` balanced. `$$` lines rose from 22 to 26 only because (1.3) and (1.4) left their blockquotes (D6).
+- The §1.8.1 spec block now follows Case Study B (F3), so §1.8 runs model → Ford → Pair box → LQD post-mortem → spec and Listing 1.3 → Resource Graph.
+- Kaz's new beat (D5: the fifty-point jump in both bags) and the Pair box's lead-in (H1) are the only new narration; both are one or two sentences.
+
+## Open items
+
+- The RV figure for Ch 1 (the flow graph gains the pod node with two arrows) is deferred; no figure script was run in this pass.
+- Ch 1-B §1B.2's "from 83 to 78" on the Friday contradicts Ch 1's 91.25 print and Monday open at 78; logged under C9 in `state/cast_bible.md` for the 1-B pass.
+- Ch 16's "Chapter 1's box in §1.8.1" and the Ch 1 *Odd Lots* entries (channel-level) are queued in `state/cleanup_queue.md`.
 

@@ -20,5 +20,5 @@
 - [x] 18. 11.8/11.8.1 April 2025 Tariff Shock, NEW-SCENE Long Scene B: Ten weeks in 2025, replayed blind. — Done: 7 Apr card, three cards graded, Dynkin moved inside.
 - [x] 19. 11.9 Capacity, MATH-GENTLY #10 (short or gloss) + LIST-TO-NARRATIVE trillion-dollar exchange. — Done: §4.8 box exists, so gloss; ranking became cast exchange.
 - [x] 20. 11.10 Desk Debrief, Finder table + promotions + Kaz Saks closing line. — Done: nine-row Finder, two decision-point headings, Kaz January line.
-- [ ] 21. Whole chapter, box discipline check.
+- [x] 21. Whole chapter, box discipline check. — Done: 9 MG (§4.8 owns #10), 3 seats, adjacency fixed, templates cut.
 - [ ] 22. Whole chapter, BRIDGE lines.

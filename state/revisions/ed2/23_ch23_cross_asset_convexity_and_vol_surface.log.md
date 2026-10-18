@@ -16,7 +16,7 @@
 - [x] 14. [§23.6] NEW-SCENE, LONG SCENE 1: GM, 3–5 May 2005 (replay), PB-04 — GM replay scene, cards graded, PB-04 closed; TW move in 15.
 - [x] 15. [§23.6, after Scene 1] MATH-GENTLY: persistence, half-life and Sharpe decay — rubber-band box, 6.6/69 days, 0.23/0.071; TW moved to end.
 - [x] 16. [§23.6] The Pair box: Carvana pointer (PB-05) — PB-05 Carvana box; H/I/L/costs; Pair Book row updated.
-- [ ] 17. [§23.7] EXPAND-SCENE (Mags) + ANOTHER-SEAT (convertible desk and replicator); Wolfspeed spine
+- [x] 17. [§23.7] EXPAND-SCENE (Mags) + ANOTHER-SEAT (convertible desk and replicator); Wolfspeed spine — Mags 1999 recall story; Two Sigma/AQR seat box; Wolfspeed spine.
 - [ ] 18. [§23.8 opening] LIST-TO-NARRATIVE
 - [ ] 19. [§23.8 Case Study B] EXPAND-SCENE, LONG SCENE 2: SVB, 8–17 March 2023
 - [ ] 20. [§23.8, after Scene 2] ANOTHER-SEAT (opportunistic credit)

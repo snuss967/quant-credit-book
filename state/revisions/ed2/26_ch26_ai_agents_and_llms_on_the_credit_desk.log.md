@@ -5,10 +5,10 @@
 - [x] 3. [26.1, after the temperature equation] MATH-GENTLY #1, "A distribution over the next word." — Done: categorical box with 0.6/0.3/0.1 temperature arithmetic added.
 - [x] 4. [26.1, P/Q convention] BRIDGE: one-sentence risk-neutral gloss, pointer to Ch 6. — Done: one-sentence Q gloss added, pointer to Chapter 6.
 - [x] 5. [26.2 Trend Watch] BRIDGE + move to end of 26.2; correlated-error paragraph dies (reborn in Scene A beat 3). — Done: TW moved last; correlated-error paragraph retired to pointer.
-- [ ] 6. [26.3] NEW-SCENE, Long Scene A: "Thirty-One Days in February".
-- [ ] 7. [Scene A, between beats 2 and 3] ANOTHER-SEAT #1, direct lender and buyer of its loans.
-- [ ] 8. [26.3, "Where does the reader earn money" items 1-5] LIST-TO-NARRATIVE.
-- [ ] 9. [26.4, claim tuple] MATH-GENTLY #2, "Three lights on one claim."
+- [x] 6. [26.3] NEW-SCENE, Long Scene A: "Thirty-One Days in February". — Done: replay scene, four beats, card graded; Ines judgment included.
+- [x] 7. [Scene A, between beats 2 and 3] ANOTHER-SEAT #1, direct lender and buyer of its loans. — Done: Marks, insurer buyers, Zito box between beats two and three.
+- [x] 8. [26.3, "Where does the reader earn money" items 1-5] LIST-TO-NARRATIVE. — Done: five-item list folded into one day-shaped paragraph; extractions kept.
+- [x] 9. [26.4, claim tuple] MATH-GENTLY #2, "Three lights on one claim." — Done: signature-page box with 10-claim counts; card graded after figure.
 - [ ] 10. [26.4, calibration and selective prediction] MATH-GENTLY #3 in two parts.
 - [ ] 11. [26.5, after Kalai's rule] MATH-GENTLY #4, "When to say I don't know."
 - [ ] 12. [26.5, controls 1-5] LIST-TO-NARRATIVE + SHOP-LIFE (Vantress applied-AI group).
