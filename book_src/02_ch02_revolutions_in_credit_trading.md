@@ -76,7 +76,7 @@ TRACE did not arrive all at once. FINRA phased it in by issue size and rating an
 > | May 15, 2023 | Portfolio-trade modifier required on corporate bond reports | Fact Book; FINRA RN 22-12 |
 > | Jan 11, 2024 | FINRA files SR-FINRA-2024-004 to cut the 15-minute outer limit to one minute | SEC Rel. 34-101121 |
 > | Sept 20, 2024 | SEC approves the one-minute rule | SEC Rel. 34-101121 |
-> | Feb 5, 2025 | FINRA says it will not set an effective date | Mayer Brown, *Free Writings*, Feb 10, 2025 |
+> | Early 2025 | FINRA signals it will not set an effective date | Mayer Brown, *Free Writings*, Feb 10, 2025 (as reported); FINRA RN 25-17, fn. 9 |
 > | Dec 4, 2025 | FINRA "is not moving forward"; the 15-minute standard stays | FINRA RN 25-17 |
 > | June 8, 2026 | Optional aggregate allocation reporting begins | FINRA RN 25-17 |
 > | Aug 31, 2026 | Expanded affiliate-principal indicator becomes available on a voluntary basis (mandatory Aug 2, 2027) | FINRA RN 26-16 |
@@ -175,7 +175,7 @@ The first large academic look at the new protocol is Hendershott and Madhavan (2
 >
 > | Period | US IG e-share | US HY e-share | Source and definition |
 > | :-- | :-- | :-- | :-- |
-> | 2015 | 20% | 6% | Coalition Greenwich (McPartland, June 10, 2025); notional |
+> | 2015 | ≈20% | ≈6% | Coalition Greenwich (McPartland, June 10, 2025); notional *(approx.; as reported, not independently verified)* |
 > | 2021 | ≈34% | ≈25% | Greenwich, *U.S. corporate bond trading in 2024 by the numbers* (Jan 2025); chart reading, CHECK |
 > | 2022 | ≈41% | ≈31% | Same; chart reading, CHECK |
 > | 2023 | 45% | 33% | Same |
@@ -183,11 +183,11 @@ The first large academic look at the new protocol is Hendershott and Madhavan (2
 > | 2024 (full year) | 48% | 33% | Greenwich (Jan 2025); overall 44%, ADNV \$46.2bn, 125,723 trades/day, average ticket \$381k |
 > | Feb 2025 | n/a | 30% | Greenwich Data Spotlight (Mar 17, 2025) |
 > | June 2025 | 52% | n/a | Greenwich Data Spotlight (July 14, 2025) |
-> | 2023 / 2024 / 2025 | ≈45% / 50% / 60% | ≈30% each year | MarketAxess 10-K estimates (company definition, above Greenwich's) |
+> | 2023 / 2024 / 2025 | ≈45% / 50% / 60% | ≈30% each year | MarketAxess 10-K estimates, as reported (company definition, above Greenwich's; not independently verified) |
 >
 > Protocol mix inside US e-volume: disclosed RFQ was 48.3% (2021), 42.3% (2022), 47.2% (2023) and 44.0% (2024) (Greenwich, Jan 2025). One systematic shop's own order flow shows the same shift more sharply. Man moved from "roughly 30% of our order flow in high yield and 60% in investment grade going through electronic venues, to over 90%" as of May 1, 2023 (`Man_Revolutions_in_Credit_Trading_2023 p.3`).
 >
-> **What it means for the desk.** Three things. First, IG crossed the halfway line on at least one definition in 2025, while HY has been stuck near a third for four years. The gap between them is the structural fact. Second, "electronic" has at least three meanings: *fully electronic* (negotiated and executed on a venue), *processed* (negotiated by voice or chat, booked electronically) and *auto-executed* (no human touched it). The same market therefore reads 48% (Greenwich), about 60% (MarketAxess) or "more than 50%" (Barclays, Sept 2025). Before you fit a trend, write down which one your series measures, and whether its denominator is notional, ticket count or customer volume. Third, HY e-share is noisy from month to month (29% in February 2024 and 30% in February 2025, against 33% for full-year 2024), and it tends to *fall* when trading gets hard, because the hard tickets go back to the phone. Monthly HY points are partly a difficulty indicator, so fit adoption curves on annual data.
+> **What it means for the desk.** Three things. First, IG crossed the halfway line on at least one definition in 2025, while HY has been stuck near a third for four years. The gap between them is the structural fact. Second, "electronic" has at least three meanings: *fully electronic* (negotiated and executed on a venue), *processed* (negotiated by voice or chat, booked electronically) and *auto-executed* (no human touched it). The same market therefore reads 48% (Greenwich), about 60% (MarketAxess) or, on broader definitions, around or above half (Barclays, Sept 2025, as reported). Before you fit a trend, write down which one your series measures, and whether its denominator is notional, ticket count or customer volume. Third, HY e-share is noisy from month to month (29% in February 2024 and 30% in February 2025, against 33% for full-year 2024), and it tends to *fall* when trading gets hard, because the hard tickets go back to the phone. Monthly HY points are partly a difficulty indicator, so fit adoption curves on annual data.
 
 ### 2.3.1 The adoption S-curve, with an honest ceiling
 
@@ -399,11 +399,11 @@ The 2022 episode is now readable in the formula: $\Pi(w)$ collapsed when custom 
 > | 2024 | PT share of IG / HY volume | 10% / 8%; near 13% of IG in December | Greenwich (Jan 2025) |
 > | 2024 | Electronic PT ADNV | \$3.3bn (+76%); ≈85% of all PT; Tradeweb more than 2/3 | Greenwich (Jan 2025) |
 > | Dec 2024 | PT share of TRACE | 11.4% | The DESK (Jan 29, 2025) |
-> | Apr 8, 2025 | PT share of a \$89.7bn record day | 12% | Greenwich, citing Trumid (Apr 14, 2025) |
+> | Apr 8, 2025 | PT share of a \$89.7bn peak-volatility day (Trumid basis) | 12% | Greenwich, citing Trumid (Apr 14, 2025) |
 > | Sept 30, 2025 | PT share of a \$84.7bn record day | 18% | Greenwich, *2025 by the numbers* (Jan 27, 2026) |
 > | Q1 2026 | PT share of customer volume | 19.8% | Bondwave (May 20, 2026) |
 > | Q1 2026 | Share of all corporate volume printing at the index mark | 15.5% (5% in 2016; 9.3% in 2021) | Bondwave (May 20, 2026) |
-> | Q2 2026 | MarketAxess PT ADV and its share of US credit PT | \$1.97bn (+33%); 20.6% | MarketAxess Q2 2026 release |
+> | Q2 2026 | MarketAxess PT ADV and its share of US credit PT | \$1.97bn (+33%); about 20% | MarketAxess Q2 2026 release |
 >
 > **What it means for the desk.** "PT is about 11–12% of the market" and "PT is about 20% of the market" are both true. The first uses TRACE, which includes interdealer prints, as the denominator. The second uses customer volume. Pick one and label it. Index-time clustering is now a structural feature: nearly half of PT volume prints at or after the index pricing time (Bondwave), so cost models need a time-of-day term, and a backtest that fills rebalances at the 4 p.m. mark is assuming the most crowded fill of the day. The basket arbitrage is also compressing. Bondwave's PT execution-quality percentile drifted from 57.3 (May 2023) to 50.3 (February 2026), toward the median, which is what competition does to an edge.
 
@@ -528,7 +528,7 @@ Kaz insists on the caveats. Bets are not independent, so $\mathrm{BR} \propto \m
 >
 > **Annotation.** This looks like a paradox, given that HY e-share falls in hard months (§2.3) and the robots widen in stress (§2.5). It is not one. When dealer voice capacity disappears, clients who still need to trade go to wherever anyone is still answering, which is the all-to-all pool and the ETF. Stress pushes the *marginal* liquidity provider onto the wire even as the *hardest* tickets go back to the phone. Where the 2026 desk departs: in 2020 this was an emergency migration. By 2025 the electronic routes already existed for the shock to use, as the second half of this case shows.
 
-**April 2025, the new plumbing under load.** The tariff shock was the same type of event: a sudden, macro-driven rush for liquidity. The plumbing behaved differently. US fixed-income ETFs traded a record \$98.9bn on April 7, with spreads held at one cent (iShares). US corporates traded a then-record \$89.7bn on April 8, 12% of it through portfolio trades (Greenwich, citing Trumid). Treasuries traded \$2.4tn on April 9, and all-to-all carried about 11% of April market volume (Greenwich, McPartland). By June, 52% of IG was trading electronically (Greenwich). There was no facility, no emergency rate cut, and no March-2020 style ETF discount spiral. A Fed note of Aug 19, 2026 adds that outflows in the tariff week did not concentrate in illiquid funds (FEDS Note).
+**April 2025, the new plumbing under load.** The tariff shock was the same type of event: a sudden, macro-driven rush for liquidity. The plumbing behaved differently. US fixed-income ETFs traded a record \$98.9bn on April 7, with spreads held at one cent (iShares). US corporates traded \$89.7bn on the peak-volatility day of April 8 (Trumid basis), 12% of it through portfolio trades (Greenwich, citing Trumid). Treasuries traded \$2.4tn on April 9, and all-to-all carried about 11% of April market volume (Greenwich, McPartland). By June, 52% of IG was trading electronically (Greenwich). There was no facility, no emergency rate cut, and no March-2020 style ETF discount spiral. A Fed note of Aug 19, 2026 adds that outflows in the tariff week did not concentrate in illiquid funds (FEDS Note).
 
 **What a systematic desk would have flagged.** In 2020: the ETF–NAV basis as a regime switch, a jump in Man-style spread calibration (dealers fading their runs), and rising fill-failure rates in the attempted-but-not-executed table. In 2025: the same indicators moved, but by much less and with faster recovery, and PT share *rose* on the worst days. **How it would have traded.** Shrink tickets, route to all-to-all and PT first under the odds threshold of §2.5.1, use the ETF as the hedge and as a price signal rather than an exit, and slow rebalancing until markouts normalize. **The lesson.** The trend is real. The same type of shock, five years later, cleared through electronic channels. But the March 2026 EUR IG episode in §2.5 is a reminder that "cleared" is a statement about one market in one shock. Chapter 28 builds the stress playbook for the day it does not clear.
 

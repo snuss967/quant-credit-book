@@ -139,7 +139,7 @@ The inquiry tape is already a signal. In March 2025, 70% of Octaura inquiry was 
 
 > **Trend Watch: settlement and e-trading, 2004–2026.**
 > *Settlement.* T+10 par / T+30 distressed conventions with delays to 120 days (`Moyer_Distressed_Debt_Analysis p.322`, 2004) → median T+12 falling to T+9 after the September 2016 delayed-comp protocol (Markets Media, Nov 2016) → a ten-year average near 20 days to January 2025 (LSTA slides; CHECK). Over the same period bonds went T+3 → T+2 (2017) → T+1 (May 2024).
-> *Volume.* Secondary loan trading was \$824bn in 2022 (then a record), \$821.4bn in 2024, and a record **\$971bn** in 2025. Trailing-twelve-month volume passed **\$1tn** in Q1 2026, then Q2 2026 fell 18% "as volatility subsided" (LSTA).
+> *Volume.* Secondary loan trading was \$824bn in 2022 (then a record), \$821.4bn in 2024, and a record **\$971bn** in 2025. Trailing-twelve-month volume passed **\$1tn** in Q1 2026, then Q2 2026 fell back as volatility subsided (LSTA; size of the decline to be checked).
 > *Electronification.* Octaura share 0% (April 2023) → 1% (April 2024) → 6.4% (July 2025) → about 7.5–7.7% (H1 2026), vendor-reported.
 > *What it means.* Execution is getting faster while settlement is not. The gap between the two is a balance-sheet cost (the forced repo above) and a liquidity mismatch (§21.6), and both scale with turnover, which is at a record.
 
