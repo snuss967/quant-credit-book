@@ -7,8 +7,8 @@
 - [x] 5. [25.2.4 Finding the vertices and edges] rule-to-scene: substring bug night; fix list to Finder. — Lucía, 212 blockers lost, run held; fix goes to Finder later.
 - [x] 6. [25.3.1 Node types] LIST-TO-NARRATIVE: Mags reads general debt basket; Kaz on "greater of". — Mags reads grower aloud; Kaz finds sponsor-controlled max; (25.2) fix.
 - [x] 7. [25.3.2 The ratio basket] MATH-GENTLY + ANOTHER-SEAT (direct lender, Ares). — Bathtub box with 900/200 numbers; Ares Miller seat box added.
-- [ ] 8. [25.3.3 The add-back fixed point] MATH-GENTLY (fixed point, contraction); Full Derivation.
-- [ ] 9. [25.3.4 Capacity is levered to add-backs] MATH-GENTLY (convex PL, indicator derivative); Badawi via Kaz.
+- [x] 8. [25.3.3 The add-back fixed point] MATH-GENTLY (fixed point, contraction); Full Derivation. — 80-70-67.5-66.9-66.7 box; Banach moved; joke kept; bullets to prose.
+- [x] 9. [25.3.4 Capacity is levered to add-backs] MATH-GENTLY (convex PL, indicator derivative); Badawi via Kaz. — Halyard numbers first, hockey-stick box, formulas, Kaz reads Badawi.
 - [ ] 10. [25.3.5 The builder basket] WHEN-TO-APPLY inside the gag: LTM window overstated capacity.
 - [ ] 11. [25.4.1 Max-flow min-cut] MATH-GENTLY (flows, cuts); Full Derivation weak duality.
 - [ ] 12. [25.4.2 Case Study: J.Crew] EXPAND-SCENE -> Long Scene 1.

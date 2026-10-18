@@ -3,6 +3,8 @@
 
 ## 11.0 Cold Open: The Bow Tie
 
+*Fiction label: the desk, Theo, Ines, Kaz and Mags, and every word they say are invented. The two spreads are the published ICE BofA closes for that day (FRED), and the CCC returns and capture ratios are real figures, sourced where they return in §11.1 and §11.2.*
+
 Thursday, 15 October 2026, 4:05 p.m. The close came up on Theo's second monitor as two numbers that did not look like they belonged to the same asset class. ICE BofA US High Yield Index option-adjusted spread: 323bp. ICE BofA CCC & Lower: 1,278bp.
 
 Ines rolled her chair over without being asked, which was how Theo knew he was about to be taught something.
@@ -19,9 +21,15 @@ Ines rolled her chair over without being asked, which was how Theo knew he was a
 
 Theo reached for the USB stick on his lanyard. The 13-week cash flow model had been his companion through four restructurings and one divorce of a client from its sponsor. It did not cover 2,000 issuers. It covered one, very well, for thirteen weeks.
 
+He had once spent a whole Saturday on a single question: could one company make one February interest payment? The CCC tier was a crowd of companies asking that question at the same time, and the 1,278 on the screen was the market's average answer for all of them. Averages, he was beginning to learn, were what the desk sold to people who did not want to read the documents.
+
 Kaz looked up from a rating-agency release. "This says the issuer is in *selective default*. Selective like a university?"
 
 "Selective like the sponsor chose which lenders got paid," Theo said.
+
+"You'll meet a famous one on Friday," Ines said. "Thirteen months from new issue to courtroom. The bonds knew about halfway through. The default label found out at the end."
+
+Kaz wrote *selective = ?* in the corner of the whiteboard, which was as close as Kaz came to applause.
 
 Mags did not look up at all. "Back in my day, CCCs did minus 30.6% in 2000 and plus 50.8% in 2003, and nobody called either one a regime. We called the first one 'the year' and the second one 'the other year.' The people who avoided all the defaults in 2000 were too scared to buy in 2003. They were very well protected. They were also very poor."
 
@@ -33,7 +41,25 @@ Theo looked at the bow tie and the necktie. "So the question is how you avoid th
 
 "That," said Ines, "is the whole game."
 
-By the end of this chapter you will be able to: write down the return distribution of a high yield bond as a mixture and say exactly where its negative skew comes from; diagnose a "defensive" track record as a beta tilt or as genuine convexity using capture ratios and an asymmetric-beta regression; build a probability-of-default (PD) engine from distance-to-default and a dynamic logit hazard, label it correctly in an era where most defaults are distressed exchanges, and validate it with power curves; read a vendor claim such as "77% of defaults identified within 24 months" and ask the one question it does not answer; size the CCC bucket by expected loss rather than by fear; construct a DTS-neutral defensive portfolio that keeps its beta at one; and estimate how much money any of this can absorb before the costs eat the alpha.
+Theo thought of it as a trap with two jaws. The first jaw was 2000, which bit the people who stayed in the CCCs. The second was 2003, which bit the people who had left. The slide on Ines's screen was the industry's answer, and as far as he could tell it was a way of being bitten gently by both.
+
+Ines peeled a yellow Post-it off the pad by her keyboard and wrote on it before anyone had opened a model, in the small square hand that had once filled in tournament scorecards. She stuck it to the bezel of Theo's monitor, directly under the necktie.
+
+*By Friday: which CCC names would you drop, what do you replace the carry with, and what do you do when they rally?*
+
+"Tomorrow?"
+
+"Next Friday. Tomorrow is the replay." She picked up her coffee. "Three questions, and they come in that order for a reason. You can't answer the first one by looking at a rating. The tier is a crowd, and you're buying one person in it, so you need a price on the person, plus an honest test of whether that price would have picked the right people at the rate you'd actually throw them out."
+
+"And the second?" Kaz asked.
+
+"Whatever you drop, you put the risk back somewhere else, so the beta stays at one and the defense comes from who you hold, not from how little. What's left in the dangerous tier you size by what it can lose, not by how it makes you feel." She set the cup down like a chip. "The third is the one the dimmer switch gets wrong. When the spread blows out and the market starts paying too much for risk, you add. And before any of it, you work out how much money the trick can take before the costs eat it."
+
+Mags finally looked up. "That's three answers to one question."
+
+"It's one answer," Ines said, "said three times, the way people learn things."
+
+Theo looked at the Post-it, then at the USB stick. Three questions he could not answer for 2,000 issuers. He could answer all three, slowly, for one. It would turn out to be the right place to start.
 
 ## 11.1 The Asymmetry: Why High Yield Needs a Defense at All
 

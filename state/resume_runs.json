@@ -1,5 +1,5 @@
 {
- "note": "Resumed 05:38 UTC after the user's 53% reading. Workflows running at 05:11 UTC. To resume one: Workflow({scriptPath, resumeFromRunId: runId, args}). For string args, copy the exact args from the run's original launch (journal or this conversation). Every agent is durable, so a fresh launch with the same args also works: finished files are skipped and partial ones resumed.",
+ "note": "Stopped at the user's ~88% rule at 06:11 UTC. To resume: Workflow({scriptPath, resumeFromRunId: runId, args}). All agents are durable, so finished items are skipped.",
  "runs": [
   {
    "name": "reader-lens",

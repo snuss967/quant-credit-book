@@ -9,6 +9,7 @@ export const meta = {
     { title: 'Brief', detail: 'Fable: revision brief per chapter', model: 'fable' },
     { title: 'Revise', detail: 'Opus: narrative revision per the brief (U2)' },
     { title: 'Verify', detail: 'Sonnet: nothing removed, new facts checked, hygiene', model: 'sonnet' },
+    { title: 'Lessons', detail: 'Opus: apply u2_lessons to chapters revised before the lessons existed' },
   ],
 }
 const ROOT = '/home/user/quant-credit-book'
@@ -120,6 +121,22 @@ For every "### Deep-Dive Resource Graph" (and any similar resource list) in the 
 Use only items from the dossier (they were verified when it was written) or items you verify yourself by fetching the page (at most 6 web calls; load WebFetch via ToolSearch). Never invent titles, dates, or URLs.
 Each Resource Graph is one Edit. Log each graph you upgraded (section, items added or replaced) as you go. Your FINAL action is appending a line containing exactly ${MARK} to the log. Return a 40-word summary.`
 
+const lessons = stem => `You are a LESSONS EDITOR (Edition 2) for the book in ${ROOT} ("Systematic & Quantitative Credit: From PJT RSSG to the Automated Desk"). Work from ${ROOT}.
+Chapter: book_src/${stem}.md. It was revised for narrative BEFORE state/reviews/ed2/u2_lessons.md existed, so it may stack new scenes on old paragraphs, overuse boxes, carry templated judgment paragraphs, or leak research notes. Log: state/revisions/ed2/${stem}.lessons.log.md.
+FIRST: if state/revisions/ed2/${stem}.verify.md lacks ${MARK}, stop and return "verify not finished". If the log ends with ${MARK}, stop and return "done". If the log exists, resume at its first unticked item.
+Read: state/user_directives_ed2.md (item 12: "a lot of prescriptiveness and not narrative"); state/reviews/ed2/u2_lessons.md (the rules); sections (b)–(d) of state/reviews/ed2/u2_quality_read.md and the Ch 1 table in state/reviews/ed2/u2_fixes_ch01_05_06.md (worked examples of this exact job); state/cast_bible.md; and "## 8. Edition 2 Voice Amendments" in state/style_bible.md.
+AUDIT first, and write it into the log as "- [ ] ..." items before any edit:
+(a) python3 tools/prescriptiveness.py --pre ${PRE} book_src/${stem}.md, recorded as "before"; growth against the 1.6–1.9× target;
+(b) duplication: every place a new scene retells what an older paragraph still states (both locations, which telling survives);
+(c) templates: grep for the banned phrasings in lesson 4 and for detached "When to reach for it" paragraphs that a scene already shows;
+(d) boxes: Math, Gently count and adjacency against the lesson-6 budget (merge or demote extras to one-sentence glosses with pointers; first load-bearing use only), and runs of more than two boxed elements;
+(e) research-note leaks ("CHECK", "search summary", "secondary") and fiction-label gaps;
+(f) the Finder table at the top of the Desk Debrief (lesson 11), and promotion of long scenes to #### headings;
+(g) cast-bible contradictions.
+Then FIX the items in order. Each item is one or more Edits; re-grep before editing, and tick each item with a 10-word note.
+Rules: remove no topic, numbered equation, Source Extraction with its page number, fact-checked Trend Watch wording, exercise, figure, Appendix F link, or verified URL. Duplicate paragraphs MAY be retired by merging them into the surviving telling. Keep the last line as ${MARK}. Pandoc math: $...$ inline and $$...$$ display on their own lines. Escape currency as \\$. Add no code blocks. Do not run builds.
+Finish by running the metric again and recording "after". Your FINAL action is appending a line containing exactly ${MARK} to the log. Return a 60-word summary with the before and after metrics and the word count.`
+
 const STAGES = {
   u1: { make: u1, phase: 'Explain code', model: 'sonnet' },
   figures: { make: figures, phase: 'Figures', model: 'sonnet' },
@@ -128,6 +145,7 @@ const STAGES = {
   brief: { make: brief, phase: 'Brief', model: 'fable', effort: 'high' },
   revise: { make: revise, phase: 'Revise' },
   verify: { make: verify, phase: 'Verify', model: 'sonnet' },
+  lessons: { make: lessons, phase: 'Lessons' },
 }
 const order = (args.stages || ['u1', 'figures', 'figcheck', 'brief', 'revise', 'verify']).filter(s => STAGES[s])
 log(`stages: ${order.join(' -> ')} for ${args.stems.length} chapters`)

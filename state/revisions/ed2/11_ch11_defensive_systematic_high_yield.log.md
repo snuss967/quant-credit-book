@@ -1,6 +1,6 @@
 # U2 Revision Log: Chapter 11, Defensive Systematic High Yield
 
-- [ ] 1. 11.0 Cold Open: The Bow Tie, EXPAND-SCENE (~1,200 words), Post-it card, selective-default plant, objectives as Ines's three sentences.
+- [x] 1. 11.0 Cold Open: The Bow Tie, EXPAND-SCENE (~1,200 words), Post-it card, selective-default plant, objectives as Ines's three sentences. — Done: label, Post-it card, Saks plant, Ines states three-part game.
 - [ ] 2. 11.1.1 Mixture return, MATH-GENTLY #1 "A bell with a lonely spike".
 - [ ] 3. 11.1.2 Credit triangle, MATH-GENTLY #2 "Bookmaker's odds versus true odds" + LIST-TO-NARRATIVE three errors.
 - [ ] 4. 11.2.1 Capture identity, MATH-GENTLY #3 + FULL-DERIVATION-MOVE; move Whipsaw Trend Watch to end of 11.2.

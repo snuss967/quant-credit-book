@@ -233,12 +233,7 @@ This is why agreements say the ratio is computed "without netting the cash proce
 
 ### 25.3.3 The add-back fixed point
 
-Back to the cold open. Let $\mathcal{E}_0$ be EBITDA before run-rate add-backs, $A$ the add-back claimed, and $c$ the cap. Everything turns on one phrase.
-
-- Cap measured *before* giving effect to the add-backs: $A \le c\,\mathcal{E}_0$.
-- Cap measured *after* giving effect to the add-backs: $A \le c\,(\mathcal{E}_0 + A)$.
-
-Rearranging the second, and using $0 < c < 1$,
+Back to the cold open, and to the phrase Kaz called recursive. Let $\mathcal{E}_0$ be EBITDA before run-rate add-backs, $A$ the add-back claimed, and $c$ the cap. Measured *before* giving effect to the add-backs, the cap says $A \le c\,\mathcal{E}_0$. Measured *after* giving effect to them, it says $A \le c\,(\mathcal{E}_0 + A)$: the add-back counts toward the base it is capped by. Rearranging the second, and using $0 < c < 1$,
 
 $$
 A(1 - c) \le c\,\mathcal{E}_0 \quad\Longrightarrow\quad A \le \frac{c}{1-c}\,\mathcal{E}_0. \tag{25.1}
@@ -246,17 +241,36 @@ $$
 
 The gap between the two readings is $\frac{c}{1-c} - c = \frac{c^2}{1-c}$ of $\mathcal{E}_0$. At $c = 25\%$ the "after" reading allows add-backs of $33.3\%$ of pre-add-back EBITDA instead of $25\%$: 8.3 extra points of EBITDA from four words. Per word, that beats "open market purchase," which needed three words and a Fifth Circuit appeal (Chapter 13).
 
-Equation (25.1) is also the general recipe for evaluating a cycle in the definition graph. Write the cycle as a map and iterate:
+The algebra solved the loop in one line because the loop was simple. Most loops in Section 1.01 are not, and ROBO needs a method that works when nobody has done the algebra for it.
+
+> **Math, Gently.** *Fixed points and contractions.* A definition that refers to itself cannot just be computed; it has to be guessed and checked. Picture a guess that corrects itself by a quarter of its own error every round. Halyard's cap is 25% of EBITDA *including* the add-back. Start from what the sponsor claims, \$80mm, on pre-add-back EBITDA of \$200mm. Round one: 25% of $200 + 80$ is 70, so 80 is too much; try 70. Round two: 25% of 270 is 67.5. Round three: 25% of 267.5 is 66.9. Round four: 66.7, and the number stops moving. A number that reproduces itself when you feed it back in is a *fixed point*; here $A = 0.25\,(200 + A)$, so $A = 66.7$. The distance to the answer goes 13.3, 3.3, 0.8, 0.2, a quarter of the previous gap each time, because each extra dollar of guess raises the cap by only 25 cents. A rule that shrinks gaps like that is a *contraction*, and a contraction lands on its fixed point from any starting guess. If each extra dollar raised the cap by a dollar or more, the guesses would never settle. Keep \$66.7mm in mind; the Halyard table in the next subsection is built on it.
+
+Equation (25.1) is the general recipe in disguise. Write the cycle as a map and iterate:
 
 $$
 A_{k+1} = T(A_k) = \min\big(A^{\text{claimed}},\; c\,(\mathcal{E}_0 + A_k)\big).
 $$
 
-$T$ is Lipschitz with constant $c < 1$, so by the Banach fixed-point theorem the iteration converges from any start, with error shrinking like $c^k$. The code in §25.10 evaluates every strongly connected component this way. If a component's map is *not* a contraction (estimated Lipschitz constant $\ge 1$), the definitions are ill-posed and the parser hands the component to a human. For Theo, that is a feature, not a bug.
+The code in §25.10 evaluates every strongly connected component this way, and a component whose map does not shrink the gaps goes to a human instead of to a number. For Theo, that is a feature, not a bug. Why the iteration is guaranteed to land is the short argument below.
+
+#### The Full Derivation: the cycle as a contraction
+
+For any two guesses $a$ and $a'$, the map $a \mapsto c\,(\mathcal{E}_0 + a)$ moves by exactly $c\,|a - a'|$, and taking a minimum with the constant $A^{\text{claimed}}$ never increases a distance. So $|T(a) - T(a')| \le c\,|a - a'|$: $T$ is Lipschitz with constant $c < 1$, and by the Banach fixed-point theorem the iteration converges from any start to the unique fixed point, with error shrinking like $c^k$. If a component's map is *not* a contraction (estimated Lipschitz constant $\ge 1$), the definitions are ill-posed and the parser hands the component to a human.
 
 ### 25.3.4 Capacity is levered to add-backs
 
-Total incremental debt capacity, from the ratio basket plus grower general-debt baskets $j$, is
+Now put the \$66.7mm to work. **Halyard, worked** *(illustrative)*. Take $\mathcal{E}_0 = \$200$mm, claimed add-backs of \$80mm, the 25% "after giving effect" cap, a first-lien net leverage incurrence test at $m = 4.50$x with existing first-lien net debt $F^{\text{sc}} = \$900$mm (proceeds not netted), and a general debt basket at the greater of \$75mm and 35% of Consolidated EBITDA. From (25.1), $A = \min(80, 66.7) = \$66.7$mm, so $\mathcal{E} = \$266.7$mm.
+
+| | No add-backs | With add-backs |
+| :--- | ---: | ---: |
+| Covenant EBITDA $\mathcal{E}$ (\$mm) | 200.0 | 266.7 |
+| Ratio capacity $\max(0, 4.5\,\mathcal{E} - 900)$ | 0.0 | 300.0 |
+| General basket $\max(75, 0.35\,\mathcal{E})$ | 75.0 | 93.3 |
+| **Total incremental capacity** | **75.0** | **393.3** |
+
+> **Math, Gently.** *Hockey sticks, kinks and slopes that switch on.* Draw Halyard's capacity against covenant EBITDA and you get a hockey stick with two bends. Below \$200mm the ratio test has no headroom, so it contributes nothing and the line sits flat at the general basket's \$75mm floor: an extra dollar of EBITDA buys nothing. At \$200mm the blade starts. Each extra dollar of EBITDA lifts $4.5\,\mathcal{E}$ by \$4.50 while the debt already in place stays put, so capacity climbs \$4.50 a dollar. At about \$214.3mm comes the second bend, where 35% of EBITDA overtakes the \$75mm floor and the general basket starts growing too, by 35 cents a dollar. Between 250 and 251, say, the ratio piece goes from 225 to 229.5 and the basket from 87.5 to 87.85, so capacity rises by \$4.85. A function made by taking the larger of straight lines can only bend upward, never down, and mathematicians call that *convex*. Its slope at any point is the sum of the slopes of the pieces that are switched on there, and the switch is written as an *indicator*, $\mathbb{1}\{\cdot\}$, which is 1 when the condition inside holds and 0 when it does not. The general formula follows.
+
+In general, total incremental debt capacity, from the ratio basket plus grower general-debt baskets $j$, is
 
 $$
 K(\mathcal{E}) = \max\big(0,\, m\,\mathcal{E} - F^{\text{sc}}\big) + \sum_j \max\big(X_j,\; p_j\,\mathcal{E}\big).
@@ -270,22 +284,17 @@ $$
 
 and $\partial \mathcal{E}/\partial A = 1$ below the add-back cap and $0$ above it.
 
-**Halyard, worked** *(illustrative)*. Take $\mathcal{E}_0 = \$200$mm, claimed add-backs of \$80mm, the 25% "after giving effect" cap, a first-lien net leverage incurrence test at $m = 4.50$x with existing first-lien net debt $F^{\text{sc}} = \$900$mm (proceeds not netted), and a general debt basket at the greater of \$75mm and 35% of Consolidated EBITDA. From (25.1), $A = \min(80, 66.7) = \$66.7$mm, so $\mathcal{E} = \$266.7$mm.
-
-| | No add-backs | With add-backs |
-| :--- | ---: | ---: |
-| Covenant EBITDA $\mathcal{E}$ (\$mm) | 200.0 | 266.7 |
-| Ratio capacity $\max(0, 4.5\,\mathcal{E} - 900)$ | 0.0 | 300.0 |
-| General basket $\max(75, 0.35\,\mathcal{E})$ | 75.0 | 93.3 |
-| **Total incremental capacity** | **75.0** | **393.3** |
-
 At the margin, each dollar of add-back buys $4.50 + 0.35 = 4.85$ dollars of debt capacity, and every one of those dollars can sit ahead of you. Figure 25.2 shows both halves of the arithmetic.
 
 ![Figure 25.2: Measuring the 25% cap "after giving effect" lets add-backs reach 33.3% of pre-add-back EBITDA instead of 25% (left), and at Halyard the resulting \$66.7mm of add-backs lift incremental debt capacity from \$75mm to \$393.3mm (right). Illustrative: the Halyard terms of §25.3.4, with pre-add-back EBITDA of \$200mm, a 4.50x first-lien test on \$900mm of net debt with proceeds not netted, and a general basket at the greater of \$75mm and 35% of EBITDA.](assets/figures/ch25_addback_capacity.png)
 
 "This is why I don't trust anything called 'adjusted,'" said Mags. "Every adjusted dollar is worth almost five dollars of somebody else's priming debt."
 
-Badawi, Dyreng, de Fontenay & Hills (draft 2021), *Contractual Complexity in Debt Agreements: The Case of EBITDA*, is the large-sample version of Mags's suspicion. They extract EBITDA definitions from 4,532 credit agreements (1996–2018), hand-code seven specific adjustments on a random subsample of 581 to build a permissiveness score from one (GAAP net income plus interest, taxes, D&A) to eight, and extend it out of sample with a Naive Bayes classifier. Mean permissiveness is 3.61 (s.d. 1.74), and it rises over the sample. More permissive definitions come with tighter covenant thresholds but *fewer* violations, and with more negative market reactions when a violation does happen. Sponsor-backed borrowers are more permissive. Two lessons carry over to the desk. EBITDA is the root of the definition graph, so it is the node whose blast radius is largest. And its complexity is itself a time series you can measure.
+Kaz already had a paper open. "This is the large-sample version of your suspicion," Kaz said, and read it to her in the flat voice Kaz uses for results that are going to annoy someone. Badawi, Dyreng, de Fontenay & Hills (draft 2021), *Contractual Complexity in Debt Agreements: The Case of EBITDA*, extracted EBITDA definitions from 4,532 credit agreements (1996–2018). They hand-coded seven specific adjustments on a random subsample of 581, built a permissiveness score running from one (GAAP net income plus interest, taxes and D&A) to eight, and extended it out of sample with a Naive Bayes classifier. Mean permissiveness is 3.61 (s.d. 1.74), and it rises over the sample.
+
+"Rises," Mags said. "Of course it rises."
+
+"It gets better," said Kaz, meaning worse. More permissive definitions come with tighter covenant thresholds but *fewer* violations, and with more negative market reactions when a violation does happen. Sponsor-backed borrowers are more permissive. Mags took the printout and read the abstract twice, which on her scale is applause. Theo wrote the two lessons the desk keeps from it in his notebook: EBITDA is the root of the definition graph, so it is the node whose blast radius is largest; and its complexity is itself a time series the desk can measure.
 
 ### 25.3.5 The builder basket, or the 13-week model gets a job
 

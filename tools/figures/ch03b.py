@@ -491,7 +491,7 @@ def fig_day_timeline():
 
     # lane 2: intraday loops, BLUE tint bars
     loops = [(5.9, "fills loop: order, booking, risk, P&L"),
-             (5.1, "hedge loop: DV01 and DTS drift vs. this morning's hedges"),
+             (5.1, "hedge loop: DV01 and DTS drift vs. morning hedges"),
              (4.3, "RFQ loop: hit ratio, cover gaps, who we win too often")]
     band_label(5.1, "Intraday loops")
     for y, txt in loops:
@@ -606,12 +606,6 @@ def fig_year_clocks():
         radial("year", dy / 365 * 360, 0.32, 0.48, color=INK_2, linewidth=1.8, zorder=5, solid_capstyle="butt")
     p_fomc = pol(mid("year", 0.40), 118.5 / 365 * 360)
 
-    # ring names, just right of 12 o'clock
-    for name in RING:
-        x, y = pol(mid(name, 0.66), 12)
-        ax.text(x, y, name, ha="center", va="center", fontsize=8.0, color=INK, fontweight="bold", zorder=8,
-                bbox=dict(boxstyle="square,pad=0.1", fc=TINT, ec="none"))
-
     # callouts
     def callout(point, text, xy, ha):
         ax.annotate(text, point, xytext=xy, textcoords="data", ha=ha, va="center", fontsize=8.0, color=INK_2,
@@ -646,8 +640,8 @@ def fig_year_clocks():
     hand(218, "NDA outside\ndate", -1)
 
     # key
-    ax.text(0, -4.72, "Each ring starts at 12 o'clock: midnight, Monday, the 1st, 1 January.\n"
-                      "The outer ring is the year: its quarter-ends and half-year rolls.", ha="center", va="center",
+    ax.text(0, -4.72, "Rings from the centre out: day, week, month, year (with its quarter-ends and half-year rolls).\n"
+                      "Each starts at 12 o'clock: midnight, Monday, the 1st, 1 January.", ha="center", va="center",
             fontsize=8.0, color=MUTED, linespacing=1.3)
     handles = [Line2D([], [], marker="o", color=BLUE, linestyle="", markersize=6, label="the desk's own clock"),
                Line2D([], [], marker="D", color=ORANGE, linestyle="", markersize=6, label="someone else's clock"),

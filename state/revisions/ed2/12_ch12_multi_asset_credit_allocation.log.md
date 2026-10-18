@@ -1,0 +1,26 @@
+# Progress Log, Edition 2 (U2): Chapter 12, Multi-Asset Credit Allocation
+
+- [ ] 1. [§12.0 Cold Open] EXPAND-SCENE (to 1,100–1,400 words).
+- [ ] 2. [§12.1] LIST-TO-NARRATIVE + ANOTHER-SEAT (insurer).
+- [ ] 3. [§12.2, before "Derivation."] MATH-GENTLY box 1: price as a hill.
+- [ ] 4. [§12.2, at "The yield is a market price"] MATH-GENTLY box 2: two measures.
+- [ ] 5. [§12.2] FULL-DERIVATION-MOVE; Nuveen as Theo's Tuesday rebuild.
+- [ ] 6. [§12.3 "three ratios"] LIST-TO-NARRATIVE.
+- [ ] 7. [§12.3 "Mean reversion and the z-score"] MATH-GENTLY box 3 + FULL-DERIVATION-MOVE.
+- [ ] 8. [§12.3 composition adjustment] WHEN-TO-APPLY inside the scene.
+- [ ] 9. [§12.4 opening] MATH-GENTLY box 4 (two parts): regimes and mixtures.
+- [ ] 10. [§12.4 "The model."] MATH-GENTLY box 5 + FULL-DERIVATION-MOVE.
+- [ ] 11. [§12.4 "What goes wrong"] LIST-TO-NARRATIVE + SHOP-LIFE vignette.
+- [ ] 12. [§12.5 Steps 1–3] MATH-GENTLY box 6 + FULL-DERIVATION-MOVE.
+- [ ] 13. [§12.5 Step 4] MATH-GENTLY box 7 + FULL-DERIVATION-MOVE + WHEN-TO-APPLY.
+- [ ] 14. [§12.6] MATH-GENTLY box 8 + FULL-DERIVATION-MOVE.
+- [ ] 15. [§12.7 Rule 22e-4 paragraph] LIST-TO-NARRATIVE.
+- [ ] 16. [§12.7 KKT] MATH-GENTLY box 9 + FULL-DERIVATION-MOVE.
+- [ ] 17. [§12.7] NEW-SCENE Long Scene B, "The Queue".
+- [ ] 18. [§12.8 opening] MATH-GENTLY box 10: turnover.
+- [ ] 19. [§12.8–12.9, Case Study A] NEW-SCENE Long Scene A, "Twenty-Five Days".
+- [ ] 20. [Case Study C] EXPAND-SCENE + ANOTHER-SEAT (CLO manager).
+- [ ] 21. [§12.10] BRIDGE listing explanations to scenes.
+- [ ] 22. [§12.11 Desk Debrief] Finder table.
+- [ ] 23. [whole chapter] Fiction labels and CHECKs.
+- [ ] 24. [whole chapter] Box spacing.

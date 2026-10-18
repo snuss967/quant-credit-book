@@ -190,3 +190,25 @@ Verdict: the process works where it produced scenes and fails where it stacked n
 Follow-up queued: a lessons pass on Ch 3, 7, 13–16, which were revised before the lessons existed.
 | resgraph-V-b | wl6vl10zt | resgraph | Ch 24–27, App D, E, 4-B, 7-B, 12-B upgraded to specific episodes/posts | done |
 | part-VII-u2 | waulio30e | brief → revise → verify | Ch 24, 25 | running |
+
+## Stopped at the user's ~88% rule (2026-10-18 06:11 UTC; meter 88.6%, calibrated at 59% at 05:45)
+
+All 11 runs were stopped. `state/resume_runs.json` lists each one with its scriptPath, runId, and args.
+State on disk:
+- **U2 revision logs COMPLETE:** Ch 1, 2, 3, 5, 6, 7, 13, 14, 15, 16. Verify COMPLETE: Ch 5, 6, 13, 14, 15, 16. Verify pending: Ch 1, 2, 3, 7. Ch 4's revision is PARTIAL.
+- **Quality fixes:** Ch 6 fix log PARTIAL. Ch 1 and Ch 5 fixes not started (they wait for verify).
+- **Part III, in revision (PARTIAL logs):** Ch 8, 9, 11, 12, plus Ch 24 and 25. Ch 10 has figures and Resource Graph done, brief pending. Ch 17 has its brief done, revision pending.
+- **Figures:** done for Ch 8–12, 13–16, 17–28, primers 4-B, 6-B, 7-B, 12-B. 03_ch03b figures PARTIAL. Ch 1–7 have none yet (they wait for their revisions).
+- **Resource Graphs upgraded:** Ch 8–12, 17–27, App D, E, 4-B, 7-B, 12-B.
+- **New files:** 12_ch12c COMPLETE (15.2k), 08_ch08b COMPLETE (14.7k), 08_ch08c PARTIAL (14.9k), 01_ch01b PARTIAL (3.2k), 04_ch04c PARTIAL (5.5k). Briefs for 01_ch01b and 04_ch04c are COMPLETE. The cast bible is COMPLETE.
+- **Research:** all COMPLETE except trend_figure_data_series (PARTIAL).
+
+**New stage `lessons`** (Opus): applies u2_lessons.md to chapters revised before the lessons existed (audit → fix → metrics). Queue it for Ch 2, 3, 7, 13, 14, 15, 16 once each one's verify is COMPLETE. Ch 1, 5, 6 get the Fable fix list (fixes-and-cast script) instead.
+
+**Restart plan (09:33):**
+1. Resume every run in resume_runs.json.
+2. Launch chapter_pipeline `lessons` for [13, 14], [15, 16], and [2, 3, 7] (gated on verify).
+3. Relaunch fixes-and-cast with stems [06, 01, 05].
+4. U2 (figures already done) for Ch 18–23, 26–28 and primers 4-B, 6-B, 7-B, 12-B: stages brief → revise → verify.
+5. Figures and Resource Graphs for Ch 1–7 and for the new files once their revisions settle.
+6. Build, send the PDF, commit.
