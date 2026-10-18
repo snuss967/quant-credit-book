@@ -335,3 +335,183 @@ There is a subtler problem. Sorting bonds on total equity return loads on time-v
 > **Annotation.** This is the practitioner's justification for the whole section. If trends live at the issuer level, the best place to observe an issuer's trend is the security that prices it fastest, which is almost always the equity and occasionally the CDS. The bond is the last to know. For the ex-RSSG reader the sentence also has a capital-structure reading: the senior secured loan, the unsecured notes, and the stock of a deteriorating issuer move together until the moment they do not, which is the liability-management event. An LMT is exactly the case where the trend is *not* consistent across the capital structure, because value is being moved from one class to another. Section 10.9 takes this up. A cross-asset trend engine needs an explicit flag for "the capital structure has stopped moving together," and the Priming Risk Score of Chapter 13 is that flag.
 
 Pitkäjärvi, Suominen, and Vaittinen (2020), *Cross-asset signals and time series momentum*, give the template for doing this across asset classes. In 20 countries, past bond returns predict equity returns positively, past equity returns predict government bond returns negatively, and a cross-asset TSMOM strategy has a Sharpe ratio about 45% higher than the standard one. They attribute it to slow-moving capital. For credit, the natural cross-asset signal for CDX HY is the trailing return of the equity market, or better the equity of the index constituents, combined with credit's own trend, with each sleeve's weight estimated as in §10.4.
+
+## 10.6 Crisis Alpha and the Shape of the Payoff
+
+Mags has heard the phrase "crisis alpha" from every trend manager who ever visited the desk. "They say it the way bankers say 'synergies.' It's real about a third of the time, and they'd like to be paid for all of it." The useful question is *which* crises, and the answer comes from the shape of the payoff.
+
+### 10.6.1 Trend is a straddle, and the smile is the receipt for momentum
+
+Take the sign strategy on one instrument, $r^{\text{TF}}_{t+1} = \operatorname{sign}(M_t)\, r_{t+1}$, and suppose $(M_t, r_{t+1})$ are jointly Gaussian with zero means and correlation $\rho$, so $\rho>0$ means momentum. Condition on the next-period market return:
+
+$$
+\mathbb{E}\big[r^{\text{TF}}_{t+1}\,\big|\, r_{t+1}\big] = r_{t+1}\,\mathbb{E}\big[\operatorname{sign}(M_t)\,\big|\,r_{t+1}\big]
+= r_{t+1}\Big[2\,\mathbb{P}\big(M_t>0 \mid r_{t+1}\big) - 1\Big].
+$$
+
+For bivariate normals, $M_t \mid r_{t+1}$ is normal with mean $\rho\,(\sigma_M/\sigma_r)\, r_{t+1}$ and standard deviation $\sigma_M\sqrt{1-\rho^2}$, so
+
+$$
+\mathbb{E}\big[r^{\text{TF}}_{t+1}\,\big|\, r_{t+1}\big] = r_{t+1}\left[2\,\Phi\!\left(\frac{\rho\, r_{t+1}}{\sigma_r\sqrt{1-\rho^2}}\right) - 1\right],
+$$
+
+where $\Phi$ is the standard normal CDF. This function is even in $r_{t+1}$ and U-shaped. For small moves, use $2\Phi(x) - 1 \approx \sqrt{2/\pi}\,x$:
+
+$$
+\mathbb{E}\big[r^{\text{TF}}_{t+1}\,\big|\, r_{t+1}\big] \approx \sqrt{\frac{2}{\pi}}\;\frac{\rho}{\sigma_r\sqrt{1-\rho^2}}\; r_{t+1}^2 ,
+$$
+
+a parabola. For large moves, $2\Phi(\cdot)-1 \to \operatorname{sign}(r_{t+1})$ and the payoff tends to $|r_{t+1}|$, which is a straddle. The quadratic coefficient is positive *if and only if* $\rho > 0$. Convexity is not a separate property of trend; it is the receipt for momentum. If the market does not trend, the smile is flat. This is the formal version of Fung and Hsieh's reading of trend followers as holders of lookback straddles (Fung and Hsieh 2001, *The Risk in Hedge Fund Strategies: Theory and Evidence from Trend Followers*), and of Hamill, Rattray, and van Hemert's finding that trend returns are positively skewed and straddle-like.
+
+The empirical test is the regression
+
+$$
+r^{\text{TF}}_{t} = b_0 + b_1\, r^{\text{HY}}_{t} + b_2\, \big(r^{\text{HY}}_{t}\big)^2 + u_t, \qquad b_2 > 0 \ \text{is the smile},
+$$
+
+with Newey–West standard errors. Run it at the horizon where $\rho$ lives: quarterly or semiannual non-overlapping returns for a 12-month signal. A daily fit finds nothing, because day-to-day the correlation between a 12-month trailing return and tomorrow's return is close to zero. Kaz ran it daily first and announced that trend was not convex. Ines asked him to run it on quarters. He did, and has not mentioned it since.
+
+**The credit twist.** Long credit is short a put on firm assets (Chapter 5's Merton model). The market return $r^{\text{HY}}$ has a positive drift (carry) and a fat left tail (defaults, gaps). A straddle on a negatively skewed asset earns most of its payoff on the left: the short-credit leg of trend is long that put, and it pays in the slow sell-offs where the put goes deep into the money over several months. The same asymmetry explains the losses. The rebound after a credit crash is a short-covering of that put, steep and fast, and a trend follower who is short is short the steepest part of the recovery. Daniel and Moskowitz (2016), *Momentum Crashes*, document the equity version: momentum crashes in panic states, after declines and at high volatility, when the losers rebound. Barroso and Santa-Clara (2015), *Momentum Has Its Moments*, show that managing momentum's own risk "virtually eliminates crashes and nearly doubles" its Sharpe ratio. In credit both effects show up most strongly in high yield, where the put is closest to the money.
+
+### 10.6.2 Whipsaw arithmetic: why trend cannot trade a V
+
+The straddle needs the move to last long enough for the signal to notice. Make that precise with a stylized V. The credit excess-return index falls linearly by $d$ over $T/2$ months, then recovers linearly by $d$ over the next $T/2$. A trend follower reacts with effective lag $L < T/2$: it is long until $L$, short from $L$ to $T/2 + L$, and long again afterward. It enters long, as it would after a quiet tightening (February 2020 and February 2025 both qualify). Add up the four legs, with slope $d/(T/2)$ on each:
+
+$$
+\text{P\&L} = \frac{d}{T/2}\Big[\underbrace{-L}_{\text{long, falling}} + \underbrace{(T/2 - L)}_{\text{short, falling}} \underbrace{-\,L}_{\text{short, rising}} + \underbrace{(T/2 - L)}_{\text{long, rising}}\Big]
+= \frac{2d\,(T - 4L)}{T}.
+$$
+
+The total available move is $2d$ (down $d$, up $d$), so the capture ratio is $(T-4L)/T$. It is negative whenever $L > T/4$. For a trailing-sum signal of length $h$ after a prior trend of similar slope, $L \approx h/2$, so a 12-month signal ($L \approx 6$ months) needs a V lasting more than about two years to break even, and a 3-month signal ($L\approx 1.5$) needs one longer than six months. March 2020 and April 2025 had $T \approx 2$ months, which no reasonable lookback beats. The 2007–2009 widening and recovery took closer to two years. Plug in $T = 20$: a 3-month signal captures $(20-6)/20 = 70\%$ of the round trip, and a 12-month signal loses $(20 - 24)/20 = -20\%$ of it *(stylized; real Vs are asymmetric and the lag depends on the preceding slope)*. Speed is a parameter, not a personality. Section 10.10 verifies the formula on a grid.
+
+### 10.6.3 Is credit trend just beta?
+
+The AQR team's out-of-sample test of trend in alternative markets, Babu, Levine, Ooi, Pedersen, and Stamelos (2020), *Trends Everywhere*, includes five CDS indices (CDX NA IG from October 2003, CDX NA HY from March 2004, iTraxx Europe and Crossover from June 2004, and an EM index from March 2004), with annualized volatilities of only 3.9–5.5%. Across all alternative assets, 12-month TSMOM earned a gross Sharpe of 1.34. Credit, however, was the weakest group once passive beta was removed. Regressed on an equal-volatility passive long portfolio, 12-month credit TSMOM had an annualized alpha of 4.4% with a *t*-statistic of 0.49, a beta of 0.52 (*t* = 8.84), and an $R^2$ of 33%, the highest of any group. Fidelity's decomposition of SG Trend Index returns (data to December 2025) finds that about 76% of a simple trend strategy's risk is beta timing, and puts the index's correlation with the S&P 500 at −0.11 unconditionally and −0.31 in down months.
+
+The desk motto applies without modification. Trend is beta that changed its mind, and it is still beta. Strip it before you call it alpha. In credit there is a structural reason the stripping removes so much. The carry hurdle (§10.1.2) keeps the 12-month signal long through most of the cycle, so a large share of credit TSMOM's return is the credit risk premium, collected while spreads drift tighter. The genuine trend component is the 10–20% of months in which the signal is short, which is why it matters so much whether those months are slow sell-offs or sharp Vs.
+
+Hurst, Ooi, and Pedersen (2017), *A Century of Evidence on Trend-Following Investing*, give the long-run base rate. Across 67 markets from 1880 to 2016, TSMOM was profitable in every decade and positive in 8 of the 10 worst drawdowns of a 60/40 portfolio, which lasted about 15 months peak to trough on average, long enough for trend to flip short. It struggled in abrupt crashes such as October 1987. For credit, this is the whipsaw arithmetic stated as history.
+
+> **Trend Watch: CTAs, speed, and crowding, 2024–2026.** CTAs, in SG's phrase, "showcase a level of adaptability akin to the Kardashians," and the last two years tested it. *The drawdown:* the SG Trend Index fell 4.9% in April 2025 and was down 9.3% for the year to that point (SG Prime Services, *CTA Industry Update*, May 2025). Its 12-month return to 30 April 2025 was −18.6%, a level it had breached only twice before (Man Group, *Trend Following and Drawdowns: Is This Time Different?*). AlphaSimplex dates the peak-to-trough drawdown at −21.8% from 15 April 2024 to 14 May 2025 (Kaminski and Wen, June 2025), and Cambridge Associates calls it the second-largest since 2000. *The recovery:* for full-year 2025, SG Trend returned +2.39% against +17.89% for the S&P 500 total return, according to Top Traders Unplugged's compilation (23 January 2026). In 2026 trend made money during the Middle East energy shock, +10.13% year to date by end-April while HY OAS peaked at only 3.46% on 30 March (FRED), and stood at +11.07% year to date at end-August (Top Traders Unplugged; secondary figures, check against SG Prime Services). *The crowding:* in July 2026 the SG Trend Index lost 1.12%, and the same compiler noted that "the programs were largely positioned the same way," so breadth across programs gave little protection. SG put the 2024 pairwise correlation of index constituents at 0.78, and Man reports that correlation was 0.87 before 2007. *The speed:* SG finds that since 2007 the index "behaves more like a much slower model," while faster models "delivered the best hypothetical returns" in 2020. Man finds that adding alternative markets, "such as power, synthetic credit indices and interest rate swaps," improved performance, more so for slower systems. *Scale:* SG cites industry AUM of about \$340bn (BarclayHedge, Q4 2024). Man AHL reports \$39.4bn of trend-following AUM across "900+ traditional and alternative markets" as of 30 June 2026. *What it means for the desk:* the 2025 drawdown was not a credit event. Credit indices are a small, slow sleeve in CTA books, and HY OAS has spent 2024–2026 in a tight band (2.59–4.61%), with few trends long enough to pass the carry hurdle. The credit trend sleeve's job in this regime is to be cheap, small, and ready for the next slow sell-off, not to earn its keep in a market that keeps snapping back.
+
+## 10.7 Case Studies: 2008, 2020, 2022, and the April 2025 Coda
+
+All four episodes are told the same way: what trend did, what it should have been measured against, and what a 2026 systematic desk would have flagged. Spread levels before October 2023 come from secondary sources or Dynkin's tables, are marked approximate, and should be checked against the full ICE BofA history, which the §10.10 code reads from a local CSV.
+
+### Case Study A: 2007–2009, the trend that paid and the rebound that charged
+
+*What trend did.* The SG Trend Index returned +20.9% in 2008 while MSCI ACWI fell 42.2% (Cambridge Associates, August 2025). Man's Robertson (2023) puts the BTOP50 at +17% from July 2007 to February 2009. Man AHL's Evolution programme got its credit exposure by selling protection on CDX and iTraxx, was short credit during 2008, and states that it had "no hard-wired long credit bias" (*The Hedge Fund Journal*, 2013). The equity-to-credit signal did what §10.5 predicts.
+
+> **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.617:* "While the corporate index has average returns of –8.07%/yr in drawdown episodes and 4.12%/yr in recovery times, the EMC strategy performed well in both regimes: 11.53%/yr in credit drawdowns and 4.30%/yr in recoveries."
+>
+> **Annotation.** This is the strongest shelf evidence that an equity-signaled credit strategy is a crisis hedge rather than a crisis amplifier, and it explains why the systematic desk prefers to get its credit trend from the equity market. Two caveats keep it honest. First, these are averages over several down-cycles in IG, gross of costs, for a long-short issuer-selection strategy. They are not the return of a short-index trend sleeve, and they do not survive the top-decile turnover of §10.5.2 without buffering. Second, the recovery number (4.30% against 4.12%) is the interesting one: the strategy did not give back its drawdown gains in recoveries *on average*. The averages hide the specific turning point that hurts, 2009, when the losers rebounded fastest. The 2026 desk reads this page as a case for equity-signaled credit trend with residualized beta (§10.5.4), not as a promise that every recovery is free.
+
+*The venue.* Trend in CDX was a very different trade from trend in cash. Dynkin's tables put the 2008 average CDX HY spread at 788 bp against 899 bp for the HY cash index, and 950 bp against 991 bp in 2009 (Dynkin_Systematic_Investing_in_Credit pp.215–216). The cash–CDS basis went deeply negative, then "reverted back toward zero as the crisis abated" (Ben_Dor_Quantitative_Credit_Portfolio_Management p.390).
+
+> **[SOURCE EXTRACTION]** *Ben_Dor_Quantitative_Credit_Portfolio_Management p.388:* "However, during the crisis, spreads of cash bonds widened by much more than CDS due to liquidity effects."
+>
+> **Annotation.** For a trend follower this sentence decides which instrument to trade. A cash-bond trend sleeve in 2008 got short late, because its marks were stale, and then covered into a market where the bid had vanished, so it paid the liquidity widening twice, once in the mark and once in the exit. An index sleeve was short the cleaner instrument, and its liquidity improved relative to cash as the crisis deepened. The modern lesson generalizes: in credit, the trend signal and the trend vehicle should be chosen separately. You can signal from cash excess returns, equity, or both, but you execute in the instrument whose liquidity survives the move you are betting on. The basis is also its own signal. A cash–CDS basis that is very negative and starting to close is a $\kappa$-flag for §10.4: the forced selling is ending, and the trend sleeve's short is about to meet the patient buyers of §10.3.2.
+
+*The rebound.* Then came 2009. AlphaSimplex dates a "GFC Recovery" drawdown in the SG Trend Index of −11.3% starting 9 March 2009, the day of the equity market low.
+
+> **[SOURCE EXTRACTION]** *Paleologo_Advanced_Portfolio_Management p.77:* "During 2008, Momentum experienced higher volatility but did not lose money (see Figure 5.9). However, in 2009 the stocks that had experienced large losses in the previous year rallied as the market rebounded."
+>
+> **Annotation.** Paleologo's account is about cross-sectional equity momentum, but the mechanism transfers exactly to credit trend, and it is worse in credit. The 2008 losers were the highest-spread, highest-beta credits, the ones closest to Merton's default boundary. When the market turned, their equity rallied like deep out-of-the-money calls coming back to life, and their bonds and CDS followed. A trend book short the index was short that convexity at the moment it exploded. The systematic desk's defense is not to predict the turn. It is to let the faster information source turn first: the equity market bottomed on 9 March 2009, so an equity-to-credit signal flipped weeks before credit's own 12-month signal did. A second defense is the $\kappa$ term of §10.4, which by early 2009 was telling every blended book that spreads were extremely wide of any long-run level. The restructuring reader knows the rest of the story from the other side: early 2009 was when par-recovery bonds were bought at 40 from sellers whose models said "trend."
+
+*What the 2026 desk would have flagged.* Three-month and 12-month credit signals short CDX HY by late 2007, with notional falling as DTS rose: a widening from about 600 bp to about 1,800 bp *(approx.)* cuts notional by two-thirds at constant risk. Equity-to-credit signal leading both into the trough and out of it. Basis and $\kappa$ flags arguing for a smaller short from late 2008. Lesson: trend was right for twenty months and wrong for the two that cost the most. The exit rule is the strategy.
+
+### Case Study B: February–June 2020, the V that trend could not trade
+
+*What happened.* Spreads went from post-crisis tights to a late-March peak (ICE BofA HY OAS roughly 1,100 bp around 23 March 2020, *approx.; check against the full series*) and most of the way back by June. On 23 March the Federal Reserve announced its corporate credit facilities, which is the cleanest $\kappa$ shock in the history of the index. Index CDS activity in Q1 2020 ran 78.1% above its trailing average (ISDA). HY bid–ask spreads gapped wider in February–March and then normalized (Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.20). The BTOP50 lost 2% over February–March 2020 (Robertson 2023), SG Trend "did not contribute positively" during COVID (Fidelity), and SG Trend ended 2020 up 6.24% (Hedgeweek, January 2021). SG notes that faster models did best that year.
+
+*Why.* The whipsaw arithmetic of §10.6.2 with $T \approx 2$ months. Any lag over two weeks loses money on the round trip, and the only trend that paid was fast. Fast trend is ruinous in cash credit, where bid–ask had gapped, and affordable in CDX, which dealers kept quoting at record volume. A long-protection trend position is not an open market purchase of anyone's bonds. It is a bet that the dealers who quote CDX IG hundreds of times a day keep doing so. In March 2020 they did, and the cash market did not.
+
+> **The Spec You Hand the Robot (vague version).** Theo, early in his first month: "Follow the trend and don't get whipsawed." *What ROBO built:* a strategy with a 36-month lookback and a 200 bp dead band that traded twice in 18 years and was long protection on CDX HY at full risk on 24 March 2020, the morning after the Fed announcement. It was never whipsawed. It simply arrived after every trend had ended. Speed is a parameter with units, and "don't get whipsawed" is an objective that the cash-in-a-drawer strategy satisfies perfectly.
+
+*What the 2026 desk would have flagged.* A fast sleeve (20/120-day crossover on CDX, cheap to trade) flipping short in late February. A slow sleeve flipping short near the wides, which is the expensive moment. A blended forecast (§10.4) whose value term by late March outweighed the trend term, so the blend was cutting the short as the slow signal was adding to it. An index-versus-cash execution rule that kept the whole sleeve out of cash bonds. Lesson: in a $\kappa$-week, the trend sleeve's job is to be small, and the blend makes it small without anyone having to forecast the Fed.
+
+### Case Study C: 2022, trend's best year was mostly duration
+
+*What happened.* The SG Trend Index returned +27.4% in 2022 while MSCI ACWI fell 18.4% (Cambridge Associates). The gains came mainly from short bond and rate trends, long US dollar, and energy (Hedgeweek, January 2023). Credit was not a named driver. HY OAS widened to roughly 600 bp in early July 2022 *(approx.; check against the full series)* and then partly recovered. Inside the record year, AlphaSimplex dates a "Fed Inflation Fight Reversal" drawdown of −10.1% from 14 June to 10 August 2022. Index CDS trading set a then-record \$36.4tn (ISDA).
+
+*Why it matters for credit.* A trend follower trading cash HY ETFs in 2022 got two trends at once: a duration trend (rates up) and a spread trend (spreads wider). CDX isolates the spread trend, and it was a much smaller one. Desks that reported "credit trend made money in 2022" from cash total returns were mostly reporting a rates trade. Strip the duration with the Chapter 8 machinery before awarding credit any credit. The spread move was also the kind that the carry hurdle filters. A widening of a few hundred basis points over a year clears the HY hurdle of about 110 bp, so the 12-month return signal went short. The summer rally then charged the trend sleeve, which is the whipsaw at the 2-month horizon inside a year that was convex at the 9-month horizon.
+
+*What the 2026 desk would have flagged.* A credit trend sleeve reported on spread excess returns, separate from any rates trend. A 3-month signal giving back part of its gain in July–August. A 12-month signal holding the short through the summer at moderate cost. Lesson: convexity and whipsaw happen in the same year at different horizons, which is the argument for a multi-horizon ensemble with weights fixed in advance.
+
+### Coda: April 2025, "Liberation Day" (FRED-verified spreads)
+
+The spread path is clean and verified. ICE BofA US HY OAS was 2.62% on 18 February 2025, 3.42% on 2 April, 4.01% on 3 April, and 4.61% on 7 April, the high for the year, before easing to 4.37% on 9 April. It was back near 3.1% by mid-May and at 2.96% on 30 June. IG OAS peaked at 1.21% on 9 April (FRED `BAMLH0A0HYM2`, `BAMLC0A0CM`). HY moved 119 bp in three sessions and completed the round trip inside about six weeks. In the same window the SG Trend Index lost 4.9% in April (SG Prime Services). Man reports that trend repositioned after the 2 April shock and was positive by 9 April, and index CDS activity in Q2 2025 ran 20.9% above its trailing average while single-name activity fell 20.7% (ISDA).
+
+These sources should be read together, not as a verdict. A gap of this kind is not tradable by trend in advance: no signal built from returns before 2 April could know about a policy announcement. A 3-month credit signal would have flipped short within days, after the gap, and then faced a six-week V. The whipsaw formula with $T \approx 1.5$ months says the round trip was a loss for any lag longer than about ten days. Index trend sleeves that were *small* in April 2025, because the 2024–2025 spread range gave the vol-targeted, carry-hurdled signal little to do, lost little. The lesson for the 2026 desk is about expectations, not engineering. Trend does not hedge gaps. It hedges the slow sell-off that sometimes follows a gap, and in April 2025 none followed.
+
+## 10.8 Turnover, Costs, and Capacity
+
+### 10.8.1 How often does a sign flip?
+
+Under the null of no trend, a sign strategy still trades, and that turnover sets the cost floor. Let returns be i.i.d. with variance $\sigma^2$, and let $M^{(h)}_t$ be the trailing $h$-period sum. Consecutive sums share $h-1$ terms, so
+
+$$
+\operatorname{Cov}\big(M^{(h)}_t, M^{(h)}_{t+1}\big) = (h-1)\,\sigma^2,
+\qquad
+\rho_h \equiv \operatorname{Corr}\big(M^{(h)}_t, M^{(h)}_{t+1}\big) = \frac{h-1}{h}.
+$$
+
+For a bivariate normal pair with correlation $\rho$, Sheppard's formula gives $\mathbb{P}(\text{signs differ}) = \arccos(\rho)/\pi$. Each flip of a unit position trades two units, so annual turnover of the pure sign strategy, with $n$ periods per year, is
+
+$$
+\text{TO}_h = 2\,n\,\frac{\arccos\!\big((h-1)/h\big)}{\pi} \;\approx\; \frac{2n}{\pi}\sqrt{\frac{2}{h}} \quad (h \text{ large}).
+$$
+
+For a monthly 12-month signal, $\arccos(11/12)/\pi \approx 0.131$, which is about 1.6 flips and 3.1 units of turnover a year. A 1-month signal flips half the time, about 12 units a year. A daily 20-day signal has $\arccos(0.95)/\pi \approx 0.101$, about 25 flips and 51 units a year. Real trends reduce these numbers, because persistence makes flips rarer. Volatility scaling adds turnover, because the weight moves even when the sign does not. Section 10.10 checks the formula by simulation.
+
+> **[SOURCE EXTRACTION]** *Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.19:* "Within classic quant, Momentum tends to have the highest turnover of any factor approach while both Size and Quality see the least churn."
+>
+> **Annotation.** The sentence sits inside a paragraph whose real subject is that the higher a strategy's turnover, the more its results depend on the accuracy of modelled transaction costs and on the availability of liquidity. Trend is momentum's time-series cousin and shares the problem, with one important difference. Cross-sectional momentum in cash bonds pays the cash bid–ask on every rank change, and §10.5.2 showed that this is enough to make top-decile EMC negative after costs. Time-series trend in index CDS trades a few units a year in the most liquid credit instrument there is. The modern desk therefore treats "momentum is expensive" as true for the cash cross-section and mostly false for the index time series, and it specifies costs per instrument and per regime rather than as one number for the whole strategy. A cost model fitted to 2019's calm bid–ask will understate the cost of the trades a trend sleeve actually makes, which cluster in the weeks when bid–ask has gapped.
+
+### 10.8.2 Break-even arithmetic
+
+Let $c^{\text{tr}}$ be the cost per unit of notional traded, roughly the half bid–offer in spread times the risky annuity. The annual cost drag is $c^{\text{tr}}\times\text{TO}$. Illustrative magnitudes *(illustrative; replace with your own execution data)*: for CDX IG with a half bid–offer of 0.25 bp and $\text{RPV01} \approx 4.5$, $c^{\text{tr}} \approx 1.1$ bp of notional, so a 12-month sign strategy pays about $3.1 \times 1.1 \approx 3.5$ bp a year. For a cash IG bond with a half bid–offer of about an eighth of a point, $c^{\text{tr}} \approx 12.5$ bp, so the same strategy pays about 39 bp a year. A top-decile cash EMC book turning over 73% a month (about 8.8 units a year) pays about 110 bp a year, which is the arithmetic behind the negative net return of §10.5.2. On costs, trend lives in the index and dies in cash.
+
+The documented index market supports the low-cost case. The CFTC's study of the Bloomberg SEF from May 2014 to September 2016 found average daily CDX IG volume of \$7.05bn across 108 trades, with a price impact for CDX HY trades above \$500mm of about 0.3 bp, about 0.5% of the spread (Haynes and McPhail, CFTC Office of the Chief Economist, 2017). By 2025, ISDA's figures imply roughly \$67bn a day of CDX IG activity on average (our arithmetic: 43.4% of \$39.0tn over about 252 trading days). The caveat comes from Collin-Dufresne, Junge, and Trolle (2020), *Market Structure and Transaction Costs of Index CDSs*. The market remains two-tiered: client trades are large, infrequent, and informed, and dealers price-discriminate on expected impact.
+
+Ines replays the trend sleeve's April 2025 entry through markouts, as she replays every hand. "Look at the hand history. Every CTA's 20/120 crossover flipped within the same two days. The dealers knew you'd call before you did, because you told them in your marketing deck. Predictable flow pays the spread twice: once in the quote, and once in the move the dealer makes before quoting you." The defenses are mechanical. Spread execution randomly over a window instead of trading at the close the signal flips. Keep the roll (where 25–50% of quarterly notional trades) out of the signal calendar. Route large clips through futures blocks where the listed market is deep enough (§10.1's Trend Watch). Measure all of it the same way the market-making desk does, with markouts at 5, 30, and 120 minutes.
+
+**Capacity** follows from turnover. A 12-month trend sleeve trading 3 units a year at \$5bn of gross index notional *(illustrative)* trades about \$15bn a year, a few hours of CDX IG volume. Capacity binds in HY, in Crossover around the roll, and in any cash implementation. It does not bind for a desk-sized index sleeve.
+
+## 10.9 Trend in the LMT Era: Jumps, Not Diffusions
+
+Everything so far has treated spread changes as diffusions with level-dependent volatility. That is a good model of an index of 100 or 125 names. It is a bad model of a single issuer with a 2027 maturity wall, a cooperative ad hoc group, and a sponsor whose counsel has just discovered the phrase "open market purchase," still the most expensive three words in finance.
+
+Theo saw this before Kaz did. "If the loan drops twelve points on an uptier, the trend signal flips short the next morning. That's when Mags buys."
+
+"That's when I buy the *excluded* tranche at a price that already assumes I lose the lawsuit," Mags said. "Your robot sells it to me because it went down. Back in my day the sellers at least had the decency to have a reason."
+
+### 10.9.1 The jump-diffusion correction to vol scaling
+
+Write the single-name excess return with a jump:
+
+$$
+r^{ex}_{i,t+1} = s_{i,t}\,\Delta t - D^{\text{spr}}_{i}\,\Delta s^{\text{diff}}_{i,t+1} - J_{i,t+1}\,\Delta N_{i,t+1},
+$$
+
+where $\Delta N_{i,t+1}\in\{0,1\}$ indicates a jump event (default, distressed exchange, or a liability-management transaction that moves value out of this tranche) with intensity $\lambda^{\text{J}}_{i,t}$ under $\mathbb{P}$, and $J_{i,t+1}$ is the loss per unit notional, for example $L = 1-R$ in a default. We add the superscript J because $\lambda_t$ is reserved for default intensity alone; an LMT jump is not a default. The conditional variance has two parts:
+
+$$
+\operatorname{Var}_t\big(r^{ex}_{i,t+1}\big) \approx (\beta^{\text{DTS}})^2\,\text{DTS}_{i,t}^2\,\Delta t + \lambda^{\text{J}}_{i,t}\,\Delta t\;\mathbb{E}\big[J^2_{i}\big].
+$$
+
+An EWMA estimates only the first part until a jump has happened, and a DTS forecast estimates only the first part, full stop. Both size the position as if the second part were zero. That error is largest in exactly the names where $\lambda^{\text{J}}$ is high, which are the names where a distressed-credit analyst would want the position to be *smallest*. The corrected weight is
+
+$$
+w_{i,t} = \frac{\sigma_{\text{tgt}}\;\text{sig}_{i,t}}{\sqrt{(\hat\beta^{\text{DTS}})^2\,\text{DTS}_{i,t}^2 + \hat\lambda^{\text{J}}_{i,t}\,\mathbb{E}[J_i^2]}},
+$$
+
+with variances annualized, so $\Delta t$ cancels. On the 2026 desk $\hat\lambda^{\text{J}}_{i,t}$ is a mapping from the Priming Risk Score of Chapter 13, $\hat\lambda^{\text{J}}_{i,t} = \lambda_0 + \lambda_1\,\text{PRS}_{i,t}$, calibrated on the post-2017 LMT sample, and $\mathbb{E}[J^2_i]$ comes from that tranche's position in the capital structure, since a non-participating first-lien loan in an uptier and a participating one have jumps of opposite sign. A trend signal from a diffusion model knows nothing about any of this. It needs to be told.
+
+**At the index level the jump diversifies.** One default in CDX HY, with 100 equally weighted names and 30% recovery, costs $0.01 \times 0.70 = 0.70$ points of notional *(illustrative)*: a bad day, not a regime. Jumps scale like $1/N$ in variance, so the diffusion approximation is good for the index and poor for the name. That is the structural reason this chapter's trend engine trades indices, and the reason single-name trend is a different engine with a jump model attached.
+
+**When the capital structure stops moving together.** Section 10.5 used Man's observation that trends are issuer-level and consistent across the capital structure. An LMT is the event that breaks that consistency, because value is being transferred between classes. During an uptier, the participating lenders' new super-priority debt rises, the excluded lenders' debt gaps down, and the equity may *rally* on the liquidity runway. A price trend in one tranche then says nothing about the issuer and a great deal about who was invited to the meeting. The cross-asset trend engine needs a decoupling flag (rolling correlation between the tranche and the issuer's equity falling below a threshold, or PRS above a threshold), and when the flag is up it switches the name from the trend engine to the event engine of Chapters 13 and 14.
+
+> **[SOURCE EXTRACTION]** *Schmid_Credit_Risk_Pricing_Models p.48:* "Rating momentum means that prior rating changes may have predictive power for the direction of future rating changes. For example, downgrade rating momentum suggests that an obligor downgraded to B is more likely to be further downgraded than upgraded within the next year."
+>
+> **Annotation.** Rating momentum is a trend in the *intensity* $\lambda$, not in the price, and it is the one kind of single-name trend that survives the jump problem, because it trends the thing that drives the jumps. Schmid presents it as a departure from Markov rating transitions: the probability of the next move depends on the direction of the last one. For a trend desk it means a downgrade raises next year's downgrade probability, which raises $\hat\lambda^{\text{J}}$ in the weight formula above, which shrinks the position before the next jump instead of after. Lee, Naranjo, and Sirmans (2021), *CDS Momentum*, connect the two channels: CDS momentum of about 7.1% a year, strongest in liquid contracts ahead of slow-moving rating changes. Ratings move slowly, and the market partly anticipates them. The modern desk does not trade rating momentum as a stand-alone signal. Downgrades are public and their predictable part is priced fast in liquid names. It uses rating momentum, together with the PRS, as an input to the jump intensity that sizes everything else. It also remembers the RSSG lesson that ratings agencies are the last to arrive at a restructuring, usually just after the professionals have sent their invoices.

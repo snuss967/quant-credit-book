@@ -422,3 +422,497 @@ where $J_{r,w}$ is the jump that ruling $r$ induces for wording $w$. It is zero 
 The Fifth Circuit gave the elicitation a head start by stating its own prior: such exceptions "will often not justify an uptier." Translate "often" into a log-odds jump of your choosing and write it down with a date. The discipline matters more than the number. A model that updates on rulings by a documented rule can be audited; a model that "absorbs" them through a re-fit on twenty observations cannot.
 
 The jumps propagate in three places. They enter the Priming Risk Score of Chapter 13 directly, since PRS inputs shift discretely at ruling dates. They enter the non-pro-rata hazard $\lambda_{\text{NPR}}$ of §14.5 through $\theta_w$. And they enter recovery through $\mu_{\text{out}}$. After the Serta remand, an excluded position in a breach case owns a damages claim with a computable value, so the excluded hump moves right. The participants' expected cost of exclusion rises too, which feeds back into a lower $\theta$ for the next deal. Mags summarizes the remand as a credit analyst would. "The best-performing tranche in the Serta capital structure was New York prejudgment interest."
+
+## 14.7 Regime Shifts in the Joint Law of $(\tau, R)$: A Markov-Switching Engine
+
+We now have two regime axes. The macro cycle moves the mean recovery, as in Schmid's table. The LMT regime moves the default mix $\lambda_D/\lambda$, the coalition weight $\pi$, and the excluded mean $\mu_{\text{out}}$. The second axis changed state somewhere around 2020 to 2022. A desk needs to know which state it is in *now*, and it would like a rule that tells it, rather than a debate.
+
+### 14.7.1 The Hamilton filter on the default mix
+
+Let $s_t \in \{0, 1\}$ be a hidden regime ("pre-LME" and "LME"), following a Markov chain with row-stochastic transition matrix $P$, where $P_{ij} = \mathbb{P}(s_{t+1} = j \mid s_t = i)$. Each year (or month) we observe $n_t$ defaults, of which $k_t$ are distressed exchanges, and we model
+
+$$
+k_t \mid s_t, n_t \sim \mathrm{Binomial}(n_t, \rho_{s_t}),
+\qquad 0 < \rho_0 < \rho_1 < 1,
+$$
+
+where $\rho_s$ is the DE share in regime $s$. Using counts rather than shares matters: a 70% share from 10 defaults and a 70% share from 150 should not carry the same weight, and the binomial likelihood weights them correctly. Let $\eta_t$ be the vector of emission likelihoods, $\eta_{t,j} = f(k_t \mid s_t = j)$, and $\hat\xi_{t\mid t-1}$ the predicted regime probabilities. The filter alternates an update and a prediction:
+
+$$
+\hat\xi_{t\mid t} = \frac{\hat\xi_{t\mid t-1} \odot \eta_t}{\mathbf{1}^\top(\hat\xi_{t\mid t-1} \odot \eta_t)},
+\qquad
+\hat\xi_{t+1\mid t} = P^\top \hat\xi_{t\mid t},
+$$
+
+where $\odot$ is the element-wise product. The log-likelihood is $\sum_t \log \mathbf{1}^\top(\hat\xi_{t\mid t-1} \odot \eta_t)$, which we maximize over $(\rho_0, \rho_1, P_{00}, P_{11})$. Start the recursion at the stationary distribution, $\mathbb{P}(s_0 = 0) = (1 - P_{11})/(2 - P_{00} - P_{11})$.
+
+Four implementation details decide whether this works:
+
+1. **Log space.** Multiply by $e^{\log \eta_t - \max_j \log\eta_{t,j}}$ and add the max back to the log-likelihood, or the binomial likelihoods underflow in big default years.
+2. **Label switching.** Parameterize $\rho_1 = \operatorname{logit}^{-1}(a + e^{b})$ with $\rho_0 = \operatorname{logit}^{-1}(a)$, so the "LME regime" is always the high-share state.
+3. **Short samples.** Roughly 45 annual observations cannot pin down four parameters plus a regime path with any confidence. Use monthly counts, pool across rating agencies only after harmonizing definitions, and put priors on $P$.
+4. **Time-varying transitions.** The ruling calendar of §14.6 is information about $P$. Let $P$ depend on $t$ through $\operatorname{logit} P_{11}(t) = c_1 + \sum_r \kappa_r \mathbf{1}\{t \ge t_r\}$, so that a ruling against priming raises the probability of leaving the LME regime. Our filter accepts a $(T, 2, 2)$ array for exactly this reason.
+
+The same machinery extends to recovery. Run a second switch on mean LGD with Schmid's $\mu_0 \approx 0.43$ and $\mu_1 \approx 0.28$ as the macro regimes. Treat the LMT regime as orthogonal: it moves $\pi$ and $\mu_{\text{out}}$, not the macro mean.
+
+### 14.7.2 $\mathbb{P}$ versus $\mathbb{Q}$: the definitional wedge
+
+Everything so far lives under $\mathbb{P}$. CDS spreads live under $\mathbb{Q}$, and they also live under a different *definition* of default.
+
+> **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.354:* "A representative average recovery rate of 40% is assumed, such that a loss of 60% is assumed to be incurred with the specified probability."
+>
+> **Annotation.** The 40% convention is the market's default prior on recovery, and it is baked into CDS quoting. It was always an average over a wide distribution. In the LMT era it is an average over two humps, neither of which sits at 40. Using it for a first lien that has already been through an LME, whose eventual recovery may look more like the 23% in the Fitch study, misstates the implied hazard. The modern desk keeps 40% for quoting, because the contracts do, and never uses it as a $\mathbb{P}$-recovery for names that have been through an LME.
+
+The credit-triangle approximation is $s \approx \lambda^{\mathbb{Q}}(1 - R^{\mathbb{Q}})$. For a fixed spread, the implied intensity under the convention is $s/0.60$, and under a 23% recovery it is $s/0.77$. The ratio is $0.60/0.77 \approx 0.78$, so the convention overstates the implied hazard by about 28% relative to the realistic recovery. On a 600bp name that is the difference between a 10% and a 7.8% annual intensity.
+
+The larger wedge is definitional. Standard North American corporate CDS trades without restructuring as a credit event, so most distressed exchanges do not trigger the contract unless they come with a bankruptcy or a failure to pay (Chapter 24 has the mechanics). CDS therefore prices something close to $\lambda_H^{\mathbb{Q}}$, while the agencies report $\lambda_H^{\mathbb{P}} + \lambda_D^{\mathbb{P}}$. A research note that divides the CDS-implied hazard by the agency default rate and declares that "the market is underpricing default" has usually just divided a hard hazard by a hard-plus-soft hazard. That is the single most common error in this corner of the literature, and it is a units error, not a market inefficiency.
+
+### Specification for AI Implementation
+
+**What ROBO built from the vague version.** Told to "exclude distressed exchanges from the default rate," ROBO deleted the DE rows, reported a 2.1% default rate, and flagged the credit cycle as "benign." The deleted issuers were the ones about to re-default. Told to "model re-default," it fit an exponential to fourteen months of follow-up (§14.3). Neither result is a bug. Both are the spec doing what it said.
+
+**The Spec You Hand the Robot.** Build `lme_cycle_engine.py`, a seeded numpy/scipy/pandas reference implementation that (1) simulates an issuer cohort through Performing → {hard default, distressed exchange, cured} under a two-state regime path, then runs a mixture-cure re-default clock after each exchange; (2) estimates cause-specific cumulative hazards and Aalen–Johansen cumulative incidence, and demonstrates the Kaplan–Meier bias; (3) fits the mixture-cure Weibull by maximum likelihood with right-censoring; (4) computes expected loss by coalition side, exactly by quadrature and by Monte Carlo; (5) fits a two-state binomial Markov-switching model to DE counts with a log-space Hamilton filter; and (6) runs the sanity checks below, printing PASS/FAIL and asserting.
+
+**Event table schema** (pandas DataFrame, one row per event; sorted by `t_event` with a stable sort):
+
+| Column | dtype | Meaning |
+| :--- | :--- | :--- |
+| `issuer_id` | int64 | Issuer key. Appears once as a first-event row, and a second time if the first event was a DE. |
+| `t_event` | float64 | Years from cohort start. Censored rows carry the censoring time. |
+| `event` | int8 | First-event rows: 0 censored, 1 hard default, 2 distressed exchange, 3 cured. Post-DE rows: 1 hard default after DE, 0 censored. |
+| `time_since_de` | float64 | NaN on first-event rows. Time on the parole clock on post-DE rows. |
+| `regime` | int8 | Regime in force in the year of the event (0 pre-LME, 1 LME). |
+| `in_majority` | int8 | 1 inside, 0 excluded, −1 not applicable (no DE). |
+| `recovery` | float64 | Fraction of par. For a DE, the value held right after the exchange. NaN unless an event with a recovery occurred. |
+
+Production versions add covariate columns (`liquidity_runway_weeks`, `new_money_frac`, `coop_coverage`, `docs_vintage`, `prs`) from Chapters 13 and 25. The reference engine leaves them out so that every column is exercised by a test.
+
+**Numerical guards and edge cases.** `np.random.default_rng(seed)` everywhere, with no global state. Beta parameters must be at least 1e-6. Work in log-survival and use `logaddexp` for the cure mixture. Clip Weibull log-parameters during optimization so that `exp` cannot overflow. Floor the filter normalizer and clip transition probabilities to $[10^{-6}, 1-10^{-6}]$. Exchanges at $t=0$ are impossible by construction, since exponential waits are strictly positive. A horizon beyond `T_max` raises. Tied event times are processed jointly per distinct time, across all causes. Never index by issuer order; always sort by time.
+
+```python
+# lme_cycle_engine.py -- Chapter 14 reference implementation (block 1 of 5: parameters and simulation)
+import math
+from dataclasses import dataclass, field
+
+import numpy as np
+import pandas as pd
+from scipy import integrate, optimize, special, stats
+
+ETA_K12 = 2.0 / (-math.log(0.30)) ** (1.0 / 1.2)   # fact 3 of Sec. 14.3.2 with k = 1.2 -> ~1.713 years
+
+
+@dataclass
+class LMEParams:
+    """All rates per year under P; recoveries as fractions of par. Index 0 = pre-LME regime, 1 = LME regime."""
+    lam_H: np.ndarray = field(default_factory=lambda: np.array([0.030, 0.022]))  # hard-default hazard
+    lam_D: np.ndarray = field(default_factory=lambda: np.array([0.008, 0.038]))  # distressed-exchange hazard
+    lam_C: float = 0.05                                    # cure / refinanced-away hazard
+    P: np.ndarray = field(default_factory=lambda: np.array([[0.90, 0.10],
+                                                             [0.15, 0.85]]))  # annual regime transitions
+    p_redefault: float = 0.25        # susceptible fraction after a DE (Moody's 2026: about 1 in 4)
+    k: float = 1.2                   # Weibull shape among the susceptible (Sec. 14.3.2 table)
+    eta: float = ETA_K12             # Weibull scale in years, so that F(2)/p = 0.70
+    pi: float = 0.526                # P(in majority group): Serta first-lien class
+    ab_in: tuple = (14.8, 5.2)       # value right after the DE, inside the group (mean 0.74)
+    ab_out: tuple = (2.0, 6.0)       # value right after the DE, excluded (mean 0.25)
+    ab_hard_noLME: tuple = (2.65, 2.35)    # recovery on a hard default with no prior LME (mean 0.53)
+    ab_hard_postLME: tuple = (1.15, 3.85)  # recovery on a hard default after an LME (mean 0.23)
+    T_max: float = 10.0
+    censor_rate: float = 0.0         # independent random censoring of the first event, per year
+
+    def __post_init__(self):
+        self.lam_H = np.asarray(self.lam_H, dtype=float)
+        self.lam_D = np.asarray(self.lam_D, dtype=float)
+        self.P = np.asarray(self.P, dtype=float)
+        assert self.lam_H.shape == (2,) and self.lam_D.shape == (2,)
+        assert self.P.shape == (2, 2) and np.allclose(self.P.sum(axis=1), 1.0)
+        assert 0.0 < self.p_redefault < 1.0 and self.k > 0.0 and self.eta > 0.0
+        for ab in (self.ab_in, self.ab_out, self.ab_hard_noLME, self.ab_hard_postLME):
+            assert min(ab) >= 1e-6, "Beta parameters must be positive"
+
+
+def beta_mean(ab):
+    a, b = ab
+    return a / (a + b)
+
+
+def beta_var(ab):
+    a, b = ab
+    return a * b / ((a + b) ** 2 * (a + b + 1.0))
+
+
+def simulate_regime_path(n_years, P, s0, rng):
+    s = np.empty(n_years, dtype=np.int8)
+    s[0] = s0
+    for j in range(1, n_years):
+        s[j] = rng.choice(2, p=P[s[j - 1]])
+    return s
+
+
+def simulate_cohort(n, prm, seed, s0=1, regime_path=None):
+    """Cohort of n issuers: Performing -> {1 hard, 2 DE, 3 cured}, then the post-DE cure-Weibull clock.
+
+    The regime path is systematic (one path per cohort): every issuer sees the same regime each year.
+    """
+    rng = np.random.default_rng(seed)
+    n_years = int(math.ceil(prm.T_max))
+    if regime_path is None:
+        s = simulate_regime_path(n_years, prm.P, s0, rng)
+    else:
+        s = np.asarray(regime_path, dtype=np.int8)
+        assert s.shape == (n_years,)
+
+    t1 = np.full(n, prm.T_max)                  # first-event time; T_max means administratively censored
+    e1 = np.zeros(n, dtype=np.int8)
+    g1 = np.full(n, s[-1], dtype=np.int8)
+    alive = np.ones(n, dtype=bool)
+    for j in range(n_years):                    # hazards are constant within each regime-year
+        idx = np.flatnonzero(alive)
+        if idx.size == 0:
+            break
+        lh, ld, lc = prm.lam_H[s[j]], prm.lam_D[s[j]], prm.lam_C
+        lam = lh + ld + lc
+        if lam <= 0.0:
+            continue
+        width = min(1.0, prm.T_max - j)
+        wait = rng.exponential(1.0 / lam, size=idx.size)
+        hit = wait < width
+        who = idx[hit]
+        t1[who] = j + wait[hit]
+        u = rng.random(who.size) * lam          # which cause fired, proportional to its hazard
+        e1[who] = np.where(u < lh, 1, np.where(u < lh + ld, 2, 3)).astype(np.int8)
+        g1[who] = s[j]
+        alive[who] = False
+
+    if prm.censor_rate > 0.0:
+        c = rng.exponential(1.0 / prm.censor_rate, size=n)
+        cens = c < t1
+        t1[cens] = c[cens]
+        e1[cens] = 0
+
+    rec1 = np.full(n, np.nan)
+    in_maj = np.full(n, -1, dtype=np.int8)
+    is_h = e1 == 1
+    rec1[is_h] = rng.beta(*prm.ab_hard_noLME, size=int(is_h.sum()))
+    de = np.flatnonzero(e1 == 2)
+    member = rng.random(de.size) < prm.pi
+    in_maj[de] = member.astype(np.int8)
+    r_in = rng.beta(*prm.ab_in, size=de.size)
+    r_out = rng.beta(*prm.ab_out, size=de.size)
+    rec1[de] = np.where(member, r_in, r_out)
+
+    susc = rng.random(de.size) < prm.p_redefault           # cured draws never hard-default
+    u_draw = np.full(de.size, np.inf)
+    u_draw[susc] = prm.eta * rng.weibull(prm.k, size=int(susc.sum()))
+    follow = prm.T_max - t1[de]
+    hit2 = u_draw <= follow
+    u_obs = np.where(hit2, u_draw, follow)
+    rec2 = np.full(de.size, np.nan)
+    rec2[hit2] = rng.beta(*prm.ab_hard_postLME, size=int(hit2.sum()))
+    t2 = t1[de] + u_obs
+    g2 = s[np.minimum(t2.astype(int), n_years - 1)]
+
+    first = pd.DataFrame({"issuer_id": np.arange(n, dtype=np.int64), "t_event": t1, "event": e1,
+                          "time_since_de": np.nan, "regime": g1, "in_majority": in_maj, "recovery": rec1})
+    post = pd.DataFrame({"issuer_id": de.astype(np.int64), "t_event": t2, "event": hit2.astype(np.int8),
+                         "time_since_de": u_obs, "regime": g2, "in_majority": in_maj[de], "recovery": rec2})
+    df = pd.concat([first, post], ignore_index=True)
+    return df.sort_values("t_event", kind="stable").reset_index(drop=True)
+```
+
+```python
+# block 2 of 5: competing-risks estimators (first events only)
+def _first_events(df):
+    f = df[df["time_since_de"].isna()]
+    return f["t_event"].to_numpy(dtype=float), f["event"].to_numpy(dtype=int)
+
+
+def _risk_table(t, e, causes):
+    order = np.argsort(t, kind="stable")
+    t, e = t[order], e[order]
+    times = np.unique(t[e > 0])                                   # distinct event times
+    n_risk = (t.size - np.searchsorted(t, times, side="left")).astype(float)
+    d = {}
+    for k in causes:                                              # ties handled per distinct time
+        tk = t[e == k]
+        d[k] = (np.searchsorted(tk, times, side="right") - np.searchsorted(tk, times, side="left")).astype(float)
+    return times, n_risk, d
+
+
+def nelson_aalen_cause(df, cause, causes=(1, 2, 3)):
+    t, e = _first_events(df)
+    times, n_risk, d = _risk_table(t, e, causes)
+    return times, np.cumsum(d[cause] / n_risk)
+
+
+def aalen_johansen(df, causes=(1, 2, 3)):
+    t, e = _first_events(df)
+    times, n_risk, d = _risk_table(t, e, causes)
+    d_all = sum(d[k] for k in causes)
+    s_after = np.cumprod(1.0 - d_all / n_risk)
+    s_before = np.concatenate(([1.0], s_after[:-1]))
+    out = {"time": times, "S": s_after}
+    for k, name in zip(causes, ("F_H", "F_D", "F_C")):
+        out[name] = np.cumsum(s_before * d[k] / n_risk)
+    return pd.DataFrame(out)
+
+
+def km_naive_cif(df, cause, causes=(1, 2, 3)):
+    """The WRONG estimator, kept for the test: 1 - KM with competing causes treated as censoring."""
+    t, e = _first_events(df)
+    times, n_risk, d = _risk_table(t, e, causes)
+    return times, 1.0 - np.cumprod(1.0 - d[cause] / n_risk)
+
+
+def step_at(times, values, t):
+    i = np.searchsorted(times, t, side="right") - 1
+    return float(np.where(i >= 0, values[np.maximum(i, 0)], 0.0))
+```
+
+```python
+# block 3 of 5: re-default clock, expected loss, coalition mixture, co-op game
+def _cure_nll(theta, u, delta):
+    a = theta[0]
+    b, c = np.clip(theta[1], -5.0, 5.0), np.clip(theta[2], -7.0, 7.0)   # log k, log eta (overflow guard)
+    k, eta = math.exp(b), math.exp(c)
+    log_p, log_1mp = -np.logaddexp(0.0, -a), -np.logaddexp(0.0, a)
+    with np.errstate(over="ignore"):
+        z = (u / eta) ** k
+    log_f0 = b - c + (k - 1.0) * (np.log(u) - c) - z
+    log_surv = np.logaddexp(log_1mp, log_p - z)                  # log[(1-p) + p S0(u)]
+    ll = np.where(delta == 1, log_p + log_f0, log_surv)
+    return -float(ll.sum())
+
+
+def fit_cure_weibull(u, delta, seed=0, n_starts=4):
+    u = np.maximum(np.asarray(u, dtype=float), 1e-8)
+    delta = np.asarray(delta, dtype=int)
+    rng = np.random.default_rng(seed)
+    best = None
+    for i in range(n_starts):
+        x0 = np.array([special.logit(0.3), 0.0, 0.5]) + (rng.normal(0.0, 0.3, 3) if i else 0.0)
+        res = optimize.minimize(_cure_nll, x0, args=(u, delta), method="Nelder-Mead",
+                                options={"xatol": 1e-6, "fatol": 1e-6, "maxiter": 5000})
+        if best is None or res.fun < best.fun:
+            best = res
+    a, b, c = best.x
+    return float(special.expit(a)), math.exp(np.clip(b, -5, 5)), math.exp(np.clip(c, -7, 7)), -float(best.fun)
+
+
+def expected_loss(prm, T, side="blend", regime=1):
+    """Exact EL(T) of Sec. 14.3.3 in a single regime, by quadrature over the exchange date."""
+    if T > prm.T_max:
+        raise ValueError("horizon beyond T_max")
+    lh, ld, lc = prm.lam_H[regime], prm.lam_D[regime], prm.lam_C
+    lam = lh + ld + lc
+    L_H = 1.0 - beta_mean(prm.ab_hard_noLME)
+    L_post = 1.0 - beta_mean(prm.ab_hard_postLME)
+    mu = {"in": beta_mean(prm.ab_in), "out": beta_mean(prm.ab_out)}
+    mu["blend"] = prm.pi * mu["in"] + (1.0 - prm.pi) * mu["out"]
+    L_D = 1.0 - mu[side]
+    F_H = lh / lam * (1.0 - math.exp(-lam * T))
+
+    def G(v):
+        return prm.p_redefault * (1.0 - math.exp(-(max(v, 0.0) / prm.eta) ** prm.k))
+
+    def integrand(x):
+        return math.exp(-lam * x) * ld * (L_D + (1.0 - L_D) * L_post * G(T - x))
+
+    de_part, _ = integrate.quad(integrand, 0.0, T)
+    return F_H * L_H + de_part
+
+
+def expected_loss_mc(df, T, side="blend"):
+    first = df[df["time_since_de"].isna()]
+    post = df[df["time_since_de"].notna()].set_index("issuer_id")
+    n = len(first)
+    h = first[(first["event"] == 1) & (first["t_event"] <= T)]
+    loss = float((1.0 - h["recovery"]).sum()) / n
+    de = first[(first["event"] == 2) & (first["t_event"] <= T)]
+    de_side = de if side == "blend" else de[de["in_majority"] == (1 if side == "in" else 0)]
+    if len(de_side) == 0:
+        return loss
+    p2 = post.loc[de_side["issuer_id"].to_numpy()]
+    redef = (p2["event"].to_numpy() == 1) & (p2["t_event"].to_numpy() <= T)
+    r_d = de_side["recovery"].to_numpy()
+    r_post = np.nan_to_num(p2["recovery"].to_numpy(), nan=1.0)
+    per_de = (1.0 - r_d) + r_d * (1.0 - r_post) * redef
+    return loss + len(de) / n * float(per_de.mean())
+
+
+def coalition_mixture_moments(pi, ab_in, ab_out):
+    m_in, m_out = beta_mean(ab_in), beta_mean(ab_out)
+    mean = pi * m_in + (1.0 - pi) * m_out
+    within = pi * beta_var(ab_in) + (1.0 - pi) * beta_var(ab_out)
+    between = pi * (1.0 - pi) * (m_in - m_out) ** 2
+    return mean, within + between, between
+
+
+def coop_break_prob(c, m=0.501, n=10, phi=0.10):
+    """Sec. 14.5.1: P(at least d* of n equal co-op members defect), independent defection prob phi."""
+    if 1.0 - c >= m:
+        return 1.0                                             # co-op below the blocking line
+    d_star = math.ceil(n * (m + c - 1.0) / c - 1e-12)
+    return float(stats.binom.sf(d_star - 1, n, phi))
+```
+
+```python
+# block 4 of 5: two-state binomial Markov-switching model on DE counts
+def hamilton_filter(logf, P, xi0=None):
+    """logf: (T, 2) log emission likelihoods; P: (2, 2) or (T, 2, 2) row-stochastic."""
+    logf = np.asarray(logf, dtype=float)
+    T_, K = logf.shape
+    Pt = np.broadcast_to(P, (T_, K, K)) if np.ndim(P) == 2 else np.asarray(P)
+    if xi0 is None:
+        denom = 2.0 - Pt[0][0, 0] - Pt[0][1, 1]
+        pi0 = (1.0 - Pt[0][1, 1]) / denom if denom > 1e-12 else 0.5
+        xi0 = np.array([pi0, 1.0 - pi0])
+    xi_pred = np.asarray(xi0, dtype=float)
+    filt = np.empty((T_, K))
+    ll = 0.0
+    for t in range(T_):
+        mx = logf[t].max()
+        w = xi_pred * np.exp(logf[t] - mx)
+        c = max(float(w.sum()), 1e-300)
+        ll += math.log(c) + mx
+        filt[t] = w / c
+        xi_pred = Pt[t].T @ filt[t]
+    return filt, ll
+
+
+def binom_logf(k, n, shares):
+    shares = np.clip(np.asarray(shares, dtype=float), 1e-9, 1.0 - 1e-9)
+    return stats.binom.logpmf(np.asarray(k)[:, None], np.asarray(n)[:, None], shares[None, :])
+
+
+def _ms2_unpack(theta):
+    a, b, c0, c1 = theta
+    s0 = special.expit(a)
+    s1 = special.expit(a + math.exp(min(b, 5.0)))             # ordered: no label switching
+    p00 = float(np.clip(special.expit(c0), 1e-6, 1 - 1e-6))
+    p11 = float(np.clip(special.expit(c1), 1e-6, 1 - 1e-6))
+    return np.array([s0, s1]), np.array([[p00, 1.0 - p00], [1.0 - p11, p11]])
+
+
+def fit_ms2(k, n, seed=0, n_starts=6):
+    rng = np.random.default_rng(seed)
+
+    def nll(theta):
+        shares, P = _ms2_unpack(theta)
+        return -hamilton_filter(binom_logf(k, n, shares), P)[1]
+
+    best = None
+    for _ in range(n_starts):
+        x0 = np.array([rng.normal(-1.0, 0.7), rng.normal(0.0, 0.5), rng.normal(2.0, 0.5), rng.normal(2.0, 0.5)])
+        res = optimize.minimize(nll, x0, method="Nelder-Mead",
+                                options={"xatol": 1e-6, "fatol": 1e-8, "maxiter": 4000})
+        if best is None or res.fun < best.fun:
+            best = res
+    shares, P = _ms2_unpack(best.x)
+    filt, ll = hamilton_filter(binom_logf(k, n, shares), P)
+    return {"shares": shares, "P": P, "filtered": filt, "loglik": ll}
+
+
+def simulate_de_share_series(n_years, shares, P, mean_defaults, seed, s0=0):
+    rng = np.random.default_rng(seed)
+    s = simulate_regime_path(n_years, np.asarray(P, dtype=float), s0, rng)
+    n = rng.poisson(mean_defaults, size=n_years)
+    k = rng.binomial(n, np.asarray(shares)[s])
+    return s, k, n
+```
+
+```python
+# block 5 of 5: sanity checks (each prints PASS/FAIL and asserts)
+def check(name, ok):
+    print(f"{'PASS' if ok else 'FAIL'}: {name}")
+    assert ok, name
+
+
+prm = LMEParams()
+check("F(2)/p = 0.70 at the calibrated eta", abs((1 - math.exp(-(2 / prm.eta) ** prm.k)) - 0.70) < 1e-12)
+
+one = LMEParams(P=np.eye(2))                                     # single-regime world for closed forms
+path1 = np.ones(10, dtype=np.int8)
+df1 = simulate_cohort(50_000, one, seed=14, regime_path=path1)
+aj = aalen_johansen(df1)
+resid = float((aj["S"] + aj["F_H"] + aj["F_D"] + aj["F_C"] - 1.0).abs().max())
+check("S + F_H + F_D + F_C = 1 at every jump (1e-10)", resid < 1e-10)
+lam1 = one.lam_H[1] + one.lam_D[1] + one.lam_C
+for t in (1.0, 3.0, 5.0):
+    for col, lk in (("F_H", one.lam_H[1]), ("F_D", one.lam_D[1])):
+        truth = lk / lam1 * (1 - math.exp(-lam1 * t))
+        est = step_at(aj["time"].to_numpy(), aj[col].to_numpy(), t)
+        se = math.sqrt(truth * (1 - truth) / 50_000)
+        check(f"Aalen-Johansen {col}({t:.0f}) within 4 SE of closed form", abs(est - truth) < 4 * se)
+
+tk, naive = km_naive_cif(df1, cause=2)
+check("Kaplan-Meier trap: 1 - KM_D(5) > F_D(5)",
+      step_at(tk, naive, 5.0) > step_at(aj["time"].to_numpy(), aj["F_D"].to_numpy(), 5.0))
+
+f1 = df1[df1["time_since_de"].isna()]
+n_h, n_d = int((f1["event"] == 1).sum()), int((f1["event"] == 2).sum())
+share_true = one.lam_D[1] / (one.lam_H[1] + one.lam_D[1])
+share_se = math.sqrt(share_true * (1 - share_true) / (n_h + n_d))
+check("DE share of first defaults -> lam_D/(lam_H+lam_D)", abs(n_d / (n_h + n_d) - share_true) < 4 * share_se)
+
+rng = np.random.default_rng(7)
+member = rng.random(400_000) < prm.pi
+r = np.where(member, rng.beta(*prm.ab_in, 400_000), rng.beta(*prm.ab_out, 400_000))
+mean_f, var_f, between_f = coalition_mixture_moments(prm.pi, prm.ab_in, prm.ab_out)
+pm = member.mean()
+between_s = pm * (1 - pm) * (r[member].mean() - r[~member].mean()) ** 2
+check("mixture mean matches simulation", abs(r.mean() - mean_f) < 0.01)
+check("mixture variance matches simulation", abs(r.var() - var_f) < 0.002)
+check("between-group variance matches simulation", abs(between_s - between_f) < 0.002)
+check("Serta between-group sd ~ 0.245",
+      abs(math.sqrt(coalition_mixture_moments(0.526, (74, 26), (25, 75))[2]) - 0.245) < 0.001)
+
+rng = np.random.default_rng(2026)
+N = 20_000
+susc = rng.random(N) < prm.p_redefault
+u_true = np.where(susc, prm.eta * rng.weibull(prm.k, N), np.inf)
+cens = rng.uniform(0.5, 10.0, N)
+u_obs, d_obs = np.minimum(u_true, cens), (u_true <= cens).astype(int)
+p_hat, k_hat, eta_hat, _ = fit_cure_weibull(u_obs, d_obs)
+print(f"cure-Weibull fit: p={p_hat:.3f}, k={k_hat:.3f}, eta={eta_hat:.3f}")
+check("cure fit: p within 0.03", abs(p_hat - prm.p_redefault) < 0.03)
+check("cure fit: k within 0.15", abs(k_hat - prm.k) < 0.15)
+check("cure fit: eta within 15%", abs(eta_hat / prm.eta - 1) < 0.15)
+check("cure fit: F(2)/p ~ 0.70", abs((1 - math.exp(-(2 / eta_hat) ** k_hat)) - 0.70) < 0.03)
+short = np.minimum(u_true, 14 / 12)                                # ROBO's 14 months of follow-up
+lam_exp = (u_true <= 14 / 12).sum() / short.sum()
+print(f"ROBO's exponential: hazard {lam_exp:.3f}/yr, mean {1 / lam_exp:.1f} yrs, "
+      f"10y default prob {1 - math.exp(-10 * lam_exp):.0%} vs truth {prm.p_redefault:.0%}")
+check("exponential on short follow-up overstates the 10y default prob", 1 - math.exp(-10 * lam_exp) > 0.5)
+
+df_el = simulate_cohort(60_000, one, seed=99, regime_path=path1)
+for side in ("in", "out", "blend"):
+    ex, mc = expected_loss(one, 3.0, side), expected_loss_mc(df_el, 3.0, side)
+    print(f"EL(3y) {side:>5}: exact {ex:.4f}  MC {mc:.4f}")
+    check(f"EL exact vs MC ({side})", abs(ex - mc) < 0.005)
+check("excluded holder's EL exceeds included holder's",
+      expected_loss(one, 3.0, "out") > expected_loss(one, 3.0, "in"))
+
+s_true, k_de, n_def = simulate_de_share_series(80, [0.30, 0.63], [[0.92, 0.08], [0.10, 0.90]], 90, seed=5)
+fit = fit_ms2(k_de, n_def, seed=1)
+filt = fit["filtered"]
+check("filtered probabilities in [0, 1]", bool(((filt >= 0) & (filt <= 1)).all()))
+check("filtered rows sum to 1", bool(np.allclose(filt.sum(axis=1), 1.0)))
+agree = float(((filt[:, 1] > 0.5).astype(int) == s_true).mean())
+print(f"MS2 shares {np.round(fit['shares'], 3)}, regime agreement {agree:.0%}")
+check("filtered regime agrees with truth > 85% of years", agree > 0.85)
+
+check("P vs Q: implied-hazard ratio 0.60/0.77 ~ 0.779", abs((0.06 / 0.77) / (0.06 / 0.60) - 0.779) < 0.001)
+check("co-op c=0.70, n=10: break prob ~7.0%", abs(coop_break_prob(0.70) - 0.0702) < 0.0005)
+check("co-op c=0.90, n=15: break prob < 0.1%", coop_break_prob(0.90, n=15) < 1e-3)
+check("co-op below the blocking line is decorative", coop_break_prob(0.40) == 1.0)
+check("Serta: 734 x 47.43% ~ 348 (USD mm)", abs(734 * 0.4743 - 348) < 1.0)
+check("Serta: 484.88 - 895 x 0.25 = 261.13 (USD mm)", abs(484.88 - 895 * 0.25 - 261.13) < 1e-9)
+```
+
+The tests double as documentation. If a later contributor "simplifies" `aalen_johansen` into one minus Kaplan–Meier, the trap test fails. If someone replaces the cure model with an exponential, the fourteen-month test prints ROBO's answer next to the truth.
+
+### Deep-Dive Resource Graph (§14.7)
+
+- **Academic Papers.** Hamilton (1989), *A New Approach to the Economic Analysis of Nonstationary Time Series and the Business Cycle*, Econometrica. Fine & Gray (1999), *A Proportional Hazards Model for the Subdistribution of a Competing Risk*, JASA 94(446). Aalen & Johansen (1978), *An Empirical Transition Matrix for Non-homogeneous Markov Chains Based on Censored Observations*, Scandinavian Journal of Statistics.
+- **Data & Code.** Moody's and S&P annual default studies (vendor) for DE counts by year; Federal Reserve FSR Figure 2.9 for a public DE-inclusive series.

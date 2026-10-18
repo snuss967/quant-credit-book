@@ -618,7 +618,7 @@ print("expected PC->BSL supply next quarter ($mm, illustrative): loose %.0f, tig
 
 ### Deep-Dive Resource Graph
 
-- **Practitioner Writing:** Kirkland & Ellis, "Kirkland Advises Finastra Group on \$5.3 Billion Refinancing" (Sep 14, 2023), https://www.kirkland.com/news/press-release/2023/09/kirkland-advises-finastra-group-on-53-billion-refinancing ; BlackRock, *Private Credit Primer* (Jan 2026), https://www.blackrock.com/gls-download/literature/market-commentary/private-credit-primer-january-2026.pdf
+- **Practitioner Writing:** Kirkland & Ellis press release on the Finastra \$5.3 billion refinancing (Sep 14, 2023), https://www.kirkland.com/news/press-release/2023/09/kirkland-advises-finastra-group-on-53-billion-refinancing ; BlackRock, *Private Credit Primer* (Jan 2026), https://www.blackrock.com/gls-download/literature/market-commentary/private-credit-primer-january-2026.pdf
 - **Academic Papers:** Banegas et al., FEDS Note (Aug 11, 2026), as in §17.1; for the estimation machinery, any graduate survival-analysis text on cause-specific hazards and the Fine–Gray subdistribution alternative (Fine and Gray, *Journal of the American Statistical Association*, 1999).
 - **Data & Code:** PitchBook LCD and KBRA DLD (subscription) for steals and takeouts; BDC schedules of investments on EDGAR for exits.
 

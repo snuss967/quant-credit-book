@@ -199,3 +199,146 @@ Ines put it in her terms. "Comparing today's HY spread to 2007's is comparing a 
 
 - ICE BofA OAS series on FRED (BAMLH0A0HYM2, BAMLH0A1HYBB, BAMLH0A2HYB, BAMLH0A3HYC): https://fred.stlouisfed.org/series/BAMLH0A0HYM2
 - Federal Reserve, *Financial Stability Report* index: https://www.federalreserve.gov/publications/financial-stability-report.htm
+
+## 12.4 Regimes: A Two-State Hidden Markov Model for Credit
+
+Kaz fit the regime model on Tuesday and presented it on Wednesday. "Two states. The calm state is ninety-seven percent persistent. The stress state lasts, on average, one month."
+
+"So your model thinks a bad month is a typo," Ines said.
+
+She was right, and the reason is a one-line derivation. In a Markov chain, the probability of staying in state $k$ for exactly $n$ periods is $P_{kk}^{\,n-1}(1 - P_{kk})$, a geometric distribution, so the expected duration of a visit is
+
+$$
+\mathbb{E}[\text{duration}_k] \;=\; \sum_{n \ge 1} n\,P_{kk}^{\,n-1}(1-P_{kk}) \;=\; \frac{1}{1 - P_{kk}} .
+$$
+
+Kaz's 97% calm state lasts 33 months on average; a stress state with $P_{kk} = 0$ lasts one month, which means the model has learned that stress is an outlier, not a state. April 2025 says otherwise: the HY OAS went from 259 bp on January 22 to 461 bp on April 7, the VIX closed at 52.33 on April 8, and the drawdown in the HY total-return index ran from February 28 to April 7 (ICE BofA and CBOE via FRED). That is a regime with a beginning, a middle and an end, spread over two months. A model that calls it a typo will be fully invested in the beginning and fully hedged in the end.
+
+> **[SOURCE EXTRACTION]** *Bolder p.524:* "In the finance and macroeconomic setting, they are used to describe business-cycle and high and low volatility state mechanics."
+>
+> **Annotation.** Bolder is introducing Markov chains for credit-risk work, where the usual object is a rating-transition matrix observed directly. In MAC allocation the chain is *hidden*: nobody publishes the regime, so it must be inferred from returns. Every formula below is the rating-migration machinery with one extra layer, a likelihood that turns observed returns into probabilities over unobserved states. The modern departure is about use, not math: the regime probability is an input to capital market assumptions and to a tilt budget (§12.8), not a switch that moves the whole book.
+
+**The model.** Let $z_t \in \{1, 2\}$ be the hidden regime in month $t$ with transition matrix $P$, $P_{jk} = \Pr(z_{t+1} = k \mid z_t = j)$. The observation is the vector of sector excess returns $r_t \in \mathbb{R}^n$, and conditional on the regime it is Gaussian: $r_t \mid z_t = k \sim \mathcal{N}(\mu_k, \Sigma_k)$. Write $f_t = \big(\phi(r_t; \mu_1, \Sigma_1),\, \phi(r_t; \mu_2, \Sigma_2)\big)^{\top}$ for the two conditional densities and $\xi_{t\mid s}$ for the vector of regime probabilities at $t$ given information $\mathcal{F}_s$.
+
+*Filter (Hamilton 1989).* Predict, then update:
+
+$$
+\xi_{t \mid t-1} = P^{\top}\,\xi_{t-1 \mid t-1}, \qquad
+\xi_{t \mid t} = \frac{\xi_{t \mid t-1} \odot f_t}{\mathbf{1}^{\top}\big(\xi_{t \mid t-1} \odot f_t\big)},
+$$
+
+where $\odot$ is the elementwise product. The denominator is the one-step predictive density of $r_t$, so the log-likelihood is $\ell(\Theta) = \sum_t \ln \mathbf{1}^{\top}(\xi_{t\mid t-1} \odot f_t)$. In code, compute $\ln f_t$, subtract its maximum over states before exponentiating, and add the maximum back into the likelihood; otherwise an eleven-dimensional density in a stress month underflows to zero and the filter divides by it.
+
+*Smoother.* The backward pass gives $\gamma_t(k) = \Pr(z_t = k \mid \mathcal{F}_T)$ and the pairwise probabilities $\xi_t(j, k) = \Pr(z_t = j, z_{t+1} = k \mid \mathcal{F}_T)$.
+
+*EM (Baum–Welch).* Given the smoothed quantities, the M-step is weighted counting and weighted moments:
+
+$$
+\hat P_{jk} = \frac{\sum_{t<T} \xi_t(j,k)}{\sum_{t<T} \gamma_t(j)}, \qquad
+\hat\mu_k = \frac{\sum_t \gamma_t(k)\, r_t}{\sum_t \gamma_t(k)}, \qquad
+\hat\Sigma_k = \frac{\sum_t \gamma_t(k)\,(r_t - \hat\mu_k)(r_t - \hat\mu_k)^{\top}}{\sum_t \gamma_t(k)} .
+$$
+
+Each iteration raises the likelihood. It converges to a local maximum, so initialize sensibly (the code labels the worst 20% of months by cross-sectional average return as stress) and align labels at the end (state 1 is the one with the higher mean excess return), because EM is indifferent to which state it calls "1."
+
+**From regimes to capital market assumptions.** Given today's filtered probabilities $\xi_{t\mid t}$, the regime distribution $j$ months ahead is $(P^{\top})^j \xi_{t\mid t}$; average over the horizon to get $\bar\pi^{(h)} = \tfrac1h \sum_{j=1}^{h} (P^{\top})^j \xi_{t\mid t}$. The predictive mean and covariance of next-period returns follow from the laws of total expectation and total variance:
+
+$$
+\mu^{(h)} = \sum_k \bar\pi^{(h)}_k\,\mu_k, \qquad
+\Sigma^{(h)} = \sum_k \bar\pi^{(h)}_k\,\Sigma_k \;+\; \sum_k \bar\pi^{(h)}_k\,(\mu_k - \mu^{(h)})(\mu_k - \mu^{(h)})^{\top}. \tag{12.2}
+$$
+
+The second term matters. When the two regimes have very different means, uncertainty about *which* regime you are in is itself a source of covariance, and it loads on every sector in the same direction: it is the correlation-goes-to-one effect, derived instead of asserted. As $h \to \infty$, $\bar\pi^{(h)}$ converges to the stationary distribution $\pi^{\star}$ solving $\pi^{\star\top} = \pi^{\star\top}P$, and (12.2) collapses to the unconditional moments, which is the strategic allocation's view. The tactical overlay is the difference between the two. (One caveat for long horizons: regime persistence makes monthly returns serially correlated, so the variance of an $h$-month cumulative return exceeds $h\,\Sigma^{(h)}$. Equation (12.2) is the per-period predictive distribution, which is what a one-year tilt needs.)
+
+> **[SOURCE EXTRACTION]** *Dynkin p.617:* "While the corporate index has average returns of –8.07%/yr in drawdown episodes and 4.12%/yr in recovery times, the EMC strategy performed well in both regimes: 11.53%/yr in credit drawdowns and 4.30%/yr in recoveries."
+>
+> **Annotation.** Dynkin and coauthors are reporting the regime-conditional performance of an equity-momentum-in-credit strategy (EMC), and the first half of the sentence is the input this section needs: the corporate index's mean return differs by about 12 percentage points a year across drawdown and recovery regimes. That gap is what makes $\mu_1 \ne \mu_2$ estimable and what gives the mixture term in (12.2) its bite. The second half is a preview of §12.8: a signal that works in both regimes is worth more to a MAC book than one that works only in calm, because the regime filter will always be a month late.
+
+**What goes wrong.** Four errors account for most of the regime models that look brilliant in backtests and do nothing live.
+
+1. *Leakage through smoothing.* The smoothed $\gamma_t$ uses returns after $t$. A backtest that trades on $\gamma_t$ knows that March 2020 was the bottom. Trade on the filtered $\xi_{t\mid t}$, and act with a one-period delay. Nystrup's 2014 DTU thesis (*Regime-Based Asset Allocation: Do Profitable Strategies Exist?*) tested exactly this: a two-state Gaussian HMM still beat static rebalancing out of sample after costs and with an action delay, which is the honest version of the claim.
+2. *Too many states.* Three hundred monthly observations support two states with full covariance in a handful of dimensions. With eleven sectors, each state's covariance has 66 free entries; three states with full covariance is about 200 parameters. Use $K = 2$, or impose the DTS factor structure of §12.5 on each $\Sigma_k$.
+3. *Label switching* between re-fits, which silently flips the sign of the tactical overlay. Align labels every time.
+4. *Smoothed inputs.* Fit the HMM on an appraisal-smoothed private series and the calm state absorbs it: the series never moves, so the model concludes it is always calm. Desmooth first (§12.5), or leave the private sleeve out of the regime model and let it inherit the regime through its factor loading.
+
+Two-state Gaussian HMMs for asset allocation have a respectable lineage: Hamilton (1989) for the filter; Ang and Bekaert (2002) and Guidolin and Timmermann (2007) for regime-switching allocation; Kritzman, Page and Turkington (2012) for the practitioner case; Nystrup, Hansen, Madsen and Lindström (2015) and Nystrup, Madsen and Lindström (2018) for adaptive estimation; and Bernis, Carassus, Docq and Scotti (2015) for credit allocation specifically, with a two-state hidden chain driving a credit benchmark. Bohn and Stein state the motivation in one sentence (Bohn_Stein p.492): "the processes that drive credit risk during times of extreme stress may be quite different than those that drive credit risk during normal or even 'pretty bad' times."
+
+> **Trend Watch: The 2026 CCC Decompression.** *What changed:* the high-yield market split in two while its headline spread stayed calm. ICE BofA option-adjusted spreads (FRED): the CCC & lower OAS went from 7.46% at year-end 2024 to 8.85% at year-end 2025 and 12.78% on October 15, 2026, a post-2023 high. Over the same dates the BB OAS went 1.86%, 1.69%, 1.97%, and the overall HY OAS sat at 3.23%. The CCC/BB spread ratio rose from 4.0 to 5.2 to 6.5; the CCC−BB gap widened from 560 bp to 716 bp to 1,081 bp. Year-to-date total returns to October 15, 2026: CCC −5.21%, BB +0.33%, HY index +0.15%. Around it, the 10-year Treasury yield was 5.10% and the effective fed funds rate had moved from 3.62% (May 19) to 3.88% (September 17) (FRED, DGS10 and DFF). The Federal Reserve's May 2026 *Financial Stability Report* noted that software had become the largest sector in private-credit portfolios and that secondary leveraged-loan spreads rose, "reflecting a high concentration of leveraged loan borrowers in the software industry." *What it means for the desk:* a two-state model on the HY *index* reads October 2026 as calm, because the index spread is near its average. A model on the BB, B and CCC *vector* sees a different regime: low common-factor volatility, very high dispersion. That is why the reference implementation plants regimes that differ in idiosyncratic volatility, not only in means (§12.10). The dispersion regime is where the loss term of (12.1) diverges across buckets, and where index-level MAC models lose the plot.
+
+## 12.5 Covariance You Can Trust: DTS Structure, EWMA, Shrinkage and Desmoothing
+
+The covariance matrix is where MAC models fail quietly. Expected returns are argued about in investment committee; covariances are taken from the risk system and nobody asks. They should, because the covariance of eleven credit sectors is mostly one number (the common spread factor's variance) multiplied by things that change: spread levels, durations and the marking practices of the people who report the returns.
+
+**Step 1: structure it with DTS.** From §12.3, a sector's excess return is $r^x_i \approx -D^{\text{spr}}_i\,\Delta s_i = -\text{DTS}_i\,u_i$ with $u_i = \Delta s_i/s_i$ the relative spread change. Stack the sectors, let $\Omega = \operatorname{Cov}(u)$, and
+
+$$
+\Sigma^{x} = \operatorname{diag}(\text{DTS})\;\Omega\;\operatorname{diag}(\text{DTS}). \tag{12.3}
+$$
+
+For total returns add the rates block, $\Sigma = \Sigma^x + \sigma_{y}^2\,D^{\text{mod}}D^{\text{mod}\top}$, treating the Treasury factor as independent of the spread factor (an approximation; in risk-off months the correlation is negative, which flatters long-duration IG and does little for floating-rate loans). The reason to estimate $\Omega$ instead of $\Sigma$ directly is stability: relative spread changes have far more stable volatility across spread levels than absolute changes do, which is the empirical finding behind DTS. When spreads double, (12.3) doubles every sector's volatility automatically through $\text{DTS}$, rather than waiting three years for the sample covariance to notice.
+
+> **[SOURCE EXTRACTION]** *Ben_Dor p.63:* "Traditionally, investment-grade credit portfolios are managed based on contributions to duration, while high-yield portfolios are managed based on market value weights. Using contributions to DTS across both markets could help bring consistency to this portfolio construction process."
+>
+> **Annotation.** Ben Dor and coauthors wrote this about core-plus mandates combining IG and HY, and MAC is the same problem with eleven markets instead of two. Market-value weights treat 10% in CLO BBB and 10% in ABS as the same bet; DTS contributions show the CLO tranche carrying several times the spread risk. The modern desk sets risk budgets in DTS contributions (§12.6) and reports market-value weights only to the client. The caveat for securitized sleeves: tranche DTS is a local measure, and mezzanine tranches gap in stress (their spread change is not proportional), so the DTS-implied volatility of a CLO BBB is a floor.
+
+**Step 2: weight recent observations.** Nuveen does this explicitly:
+
+> **[SOURCE EXTRACTION]** *Nuveen p.4:* "At Nuveen, we use a weighted covariance matrix, which gives more importance to more recent observations."
+>
+> **Annotation.** The standard implementation is the exponentially weighted moving average below. The paper does not give its decay parameter, which is the parameter that matters: it sets how fast the matrix forgets 2020 and how fast it learns April 2025. The modern desk chooses the decay by out-of-sample likelihood rather than taste, applies it to relative spread changes rather than returns, and shrinks the result (step 3), because a fast-decaying estimator has a small effective sample.
+
+The EWMA recursion on monthly relative spread changes $u_t$ is
+
+$$
+\Omega_t = \lambda\,\Omega_{t-1} + (1-\lambda)\,u_t u_t^{\top}, \qquad 0 < \lambda < 1 ,
+$$
+
+with weights $(1-\lambda)\lambda^j$ on the observation $j$ months back. The weights sum to one; the effective number of observations is about $(1+\lambda)/(1-\lambda)$ and the half-life is $\ln 2 / \ln(1/\lambda)$. At $\lambda = 0.97$ monthly, the half-life is about 23 months and the effective sample about 66 months.
+
+Mags watched Kaz tune the decay. "Back in my day we did multi-asset credit too. It was called 'whatever the dealer had left on Friday.' The covariance matrix was me remembering which dealers stopped answering the phone in 1998." She paused. "Your thing does that automatically. With a half-life. Fine."
+
+**Step 3: shrink it.** Eleven sectors have $11 \times 12/2 = 66$ distinct covariance entries. A 66-month effective window gives you roughly one effective observation per parameter, which is the regime in which sample covariance matrices produce optimizers that bet heavily on noise. Shrink toward a structured target (Ledoit and Wolf 2004):
+
+$$
+\hat\Omega = \delta\,F + (1 - \delta)\,S, \qquad 0 \le \delta \le 1 ,
+$$
+
+where $S$ is the sample (or EWMA) matrix and $F$ is a one-factor target: with market factor $m$ (the equal-weighted average of the $u_i$), $F_{ij} = \beta_i\beta_j\sigma_m^2$ off the diagonal and $F_{ii} = S_{ii}$. The target is positive semidefinite because each residual variance $S_{ii} - \beta_i^2\sigma_m^2$ is nonnegative by Cauchy–Schwarz, and a convex combination of PSD matrices is PSD. The Ledoit–Wolf intensity is
+
+$$
+\delta^{\star} = \max\!\Big(0,\; \min\!\Big(1,\; \frac{\hat\pi - \hat\rho}{\hat\gamma\,T}\Big)\Big),
+$$
+
+with $\hat\pi = \sum_{ij}\widehat{\operatorname{AVar}}(\sqrt{T}s_{ij})$ the estimation noise in $S$, $\hat\gamma = \|F - S\|_F^2$ the misspecification of the target, and $\hat\rho$ the covariance between target and sample errors. The reference code uses the diagonal part of $\hat\rho$ only (the target's diagonal equals the sample's, so those terms carry no shrinkage benefit) and drops the off-diagonal $\hat\rho$ terms. That is a documented simplification which errs toward slightly more shrinkage, the safe direction for an optimizer.
+
+**Step 4: desmooth the private sleeve.** Nuveen confronts the absence of an honest return series for direct lending directly:
+
+> **[SOURCE EXTRACTION]** *Nuveen p.9:* "Middle market direct lending (Private Credit): Proxy Index using S&P UBS Leveraged Loan B Index."
+>
+> **Annotation.** This is the right instinct: when the asset's own return series is a sequence of appraisals, import the risk from the closest traded thing. The modern desk treats the proxy as a *floor* rather than an estimate. Middle-market borrowers are smaller than single-B syndicated borrowers, with a mean interest coverage of about 2.0x against 2.7x for leveraged-loan borrowers and a post-default value of about 33% against 52% (Cai and Haque, FEDS Notes, 2024). The same spread move costs a direct-lending book more. When the sleeve's own NAV series must be used (for a BDC, say), desmooth it.
+
+Getmansky, Lo and Makarov (2004) model the reported return as a moving average of true returns:
+
+$$
+r^o_t = \sum_{j=0}^{k} \theta_j\, r_{t-j}, \qquad \theta_j \ge 0, \qquad \sum_{j=0}^{k} \theta_j = 1 .
+$$
+
+If true returns are serially uncorrelated with variance $\sigma^2$ and $r_t = \beta m_t + e_t$ for a market factor $m_t$, then
+
+$$
+\operatorname{Var}(r^o_t) = \sigma^2 \sum_j \theta_j^2 \equiv \xi\,\sigma^2, \qquad
+\operatorname{Cov}(r^o_t, m_t) = \theta_0\,\beta\,\sigma_m^2, \qquad
+\operatorname{Corr}(r^o_t, m_t) = \frac{\theta_0}{\sqrt{\xi}}\,\operatorname{Corr}(r_t, m_t).
+$$
+
+Three consequences, each of which an optimizer will exploit. Reported volatility is understated by $\sqrt{\xi} \le 1$. Reported contemporaneous beta is understated by $\theta_0$, a bigger factor; summing betas on current and lagged market returns (Dimson 1979) recovers $\beta\sum_j\theta_j = \beta$. And reported correlation is understated by $\theta_0/\sqrt{\xi}$. The long-horizon variance is *not* understated: because $\sum_j\theta_j = 1$, a year of reported returns adds up to about a year of true returns. The naive annualization $\sqrt{12}\,\sigma_{\text{monthly}}$ is what lies, because it assumes the serial correlation that smoothing created is zero.
+
+For the common AR(1) smoothing model $r^o_t = (1 - \phi)\,r_t + \phi\,r^o_{t-1}$, the weights are $\theta_j = (1-\phi)\phi^j$, so
+
+$$
+\xi = \frac{(1-\phi)^2}{1 - \phi^2} = \frac{1-\phi}{1+\phi}, \qquad \theta_0 = 1 - \phi, \qquad \frac{\theta_0}{\sqrt{\xi}} = \sqrt{1 - \phi^2}, \qquad \hat r_t = \frac{r^o_t - \phi\,r^o_{t-1}}{1 - \phi} .
+$$
+
+At $\phi = 0.8$, which is not an exotic level of persistence for appraisal-based marks, $\xi = 1/9$: true volatility is three times reported, true beta five times reported contemporaneous beta, and the correlation is understated by 40%. Kaz's 1.9% becomes about 5.7%, close to the loan proxy. Mags's verdict on the original number: "Measured by the fund or by the fund's lawyer?" The formula's verdict: $\sigma_{\text{true}} = \sigma_{\text{reported}}/\sqrt{\sum_j \theta_j^2}$, whoever measured it.
+
+> **Ways This Blows Up.** *Desmoothing the wrong series.* A listed BDC's share price is marked by the market every day; desmoothing it inflates a volatility that was never smoothed. Desmooth the NAV series and treat the price-to-NAV discount as a separate liquidity signal (Chapter 20). *Mixing frequencies.* Desmoothing a quarterly NAV series and dropping it into a monthly covariance matrix aligns nothing; aggregate the public series to quarterly first. *Non-invertible fits.* The moving-average weights are identified only up to reversal ($\theta$ and its mirror image give the same autocorrelations); the recursion that recovers true returns explodes for the non-invertible one. The code checks the roots and refuses rather than guesses.

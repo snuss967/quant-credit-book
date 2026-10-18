@@ -23,7 +23,7 @@ Ines rolled her chair over, holding a coffee she had clearly been nursing since 
 
 "So you find out how much this bond actually cares about rates before you sell something to protect yourself from them."
 
-From across the aisle, without turning around, Mags said: "In 1994 we hedged B paper with the long bond. Lost on both. By phone."
+From across the aisle, without turning around, Mags said: "In 1994 we hedged B paper by buying the long bond. Flight to quality, they told us. Lost on both. By phone."
 
 Theo opened his old 13-week cash flow model, the one on the USB stick, the way other people touch a lucky coin. "This thing has a duration of thirteen weeks and an empirical duration of zero. Nothing in it has ever moved with Treasuries."
 
@@ -443,7 +443,7 @@ At 2:58 p.m., Theo cannot short "the market spread factor." He can short what is
 
 **US Treasury futures (TY, UXY, and the rest).** The rates leg. A futures contract does not deliver one bond; it delivers whichever eligible note the short chooses, at an invoice price set by a conversion factor.
 
-> **[SOURCE EXTRACTION]** *Veronesi p.237:* "The invoice price equals the futures settlement price times a conversion factor plus accrued interest. The conversion factor is the price of the delivered note ($1 par value) to yield 6 percent."
+> **[SOURCE EXTRACTION]** *Veronesi p.237:* "The invoice price equals the futures settlement price times a conversion factor plus accrued interest. The conversion factor is the price of the delivered note (\$1 par value) to yield 6 percent."
 >
 > **Annotation.** The 6% notional coupon matters because, with yields far from 6%, the conversion factor mis-scales the deliverables and one of them becomes reliably cheapest. The futures then trade like that bond divided by its conversion factor. Hence the hedge sizing $N = \text{DV01}_{\text{target}} / (\text{DV01}_{\text{CTD}}/\text{CF})$, where $\text{DV01}_{\text{CTD}}$ is per contract face (\$100,000 for TY). For the cold-open bond, $\text{DV01}_{\text{target}} = \$40\text{mm} \times 4.1 \times 0.0001 = \$16{,}400$. With *illustrative* CTD inputs of \$63 DV01 per \$100,000 face and $\text{CF} = 0.89$, one contract carries about \$70.8 of DV01, so a full analytical hedge is 232 contracts. Two departures for a credit desk. Futures settle daily, so a precise hedge is "tailed" by the discount factor to delivery (Veronesi p.269), which matters for size and long horizons and hardly at all for a one-week hedge. And when the CTD switches, the futures' DV01 jumps, which is the futures' own convexity and a source of hedge slippage that has nothing to do with credit.
 
@@ -530,7 +530,7 @@ Back to the cold open: \$40mm of a B3 bond, analytical DV01 \$16,400, 70.8 DV01 
 | FRED B, 2026 YTD | 1.03 | 239 |
 | Ben Dor B, 1998–2009, at the average spread | −0.04 | 0 (or a tiny long) |
 
-*Table 8.2. One bond, four defensible hedges (FRED rows computed 2026-10-17; Ben Dor row from Table 8.1).*
+*Table 8.2. One bond, four defensible hedges (FRED rows computed 2026-10-17 at the B index level and its average spread, not at Theo's 620 bp; Ben Dor row from Table 8.1).*
 
 Every row is defensible, which is the indictment. The hedge ratio is a bet on *why rates will move* over the hedge horizon. The matrix approach does not remove that bet. It makes the bet explicit, and it lets the CDX leg take the spread beta that the futures were implicitly being asked to absorb. The Ad Hoc Group, represented by counsel, confirms that its members' positions are fully hedged with respect to interest rates, and declines to say with what.
 
@@ -551,3 +551,99 @@ Every row is defensible, which is the indictment. The hedge ratio is a bet on *w
 **Academic Papers.** Carr and Wu (2011), "A Simple Robust Link Between American Puts and Credit Protection," *Review of Financial Studies* 24(2): https://ideas.repec.org/a/oup/rfinst/v24y2011i2p473-505.html . Kapadia and Pu (2012), "Limited arbitrage between equity and credit markets," *Journal of Financial Economics* 105(3): https://ideas.repec.org/a/eee/jfinec/v105y2012i3p542-564.html .
 
 **Data & Code.** iShares HYG: https://www.ishares.com/us/products/239565/ishares-iboxx-high-yield-corporate-bond-etf . iShares HYGH: https://www.ishares.com/us/products/264544/ishares-interest-rate-hedged-high-yield-bond-etf . SPDR JNK: https://www.ssga.com/us/en/intermediary/etfs/spdr-bloomberg-high-yield-bond-etf-jnk . CME Group (canonical root, Treasury futures specifications): https://www.cmegroup.com . `hedge_matrix`, `hedge_qp`, and `futures_contracts` in §8.9.
+
+## 8.7 Case Studies: Three Times the Hedge Hedged the Wrong Thing
+
+The three episodes below cover all three regimes of §8.2, in four years. Each is told the same way: the levels, the mechanism in terms of $\rho_{y,s}$ and $H$, and the signal a systematic desk would have had in hand.
+
+### Case Study A: 2022, the Year "Negative Duration" Was Positive
+
+*The levels.* The 10-year Treasury yield rose from 1.52% at the end of 2021 to 3.88% at the end of 2022, with a high of 4.25% on October 24. The 2-year rose from 0.73% to 4.41% (FRED). The Bloomberg US Corporate High Yield index returned about −11.2% for the year, the IG Corporate index about −15.8%, and the US Treasury index about −12.5% *(approx.; secondary data summaries)*. The ICE BofA HY OAS went from roughly 310 bp to a peak near 600 bp in early July and ended the year in the high 400s *(approx.; FRED no longer serves 2022 OAS history, see §8.2)*. Apollo's chief economist summarized it on December 3, 2022: the HY total-return index was "down 10% so far in 2022," and his note's title attributed the year's returns mainly to moves in duration.
+
+*The mechanism.* Rates rose because of inflation, and inflation is bad for credit, so spreads widened as yields rose: $\rho_{y,s} > 0$, regime three, $H > 1$. High yield had *more* rate sensitivity than its analytical duration, not less. Consider a desk that had carried a Treasury hedge at $H \approx 0.3$ on the strength of a 1998–2009 table, or no hedge at all because "high yield has negative empirical duration." It ran an unhedged rates position into the worst bond year in decades. With intermediate Treasury yields up roughly 250–370 bp (the 10-year and 2-year moves above), a 4-year-duration book's rate leg alone cost on the order of 10–14 points before carry *(illustrative arithmetic)*. A hedge at 0.3 covered under a third of it.
+
+"In 1994 we hedged B paper by buying the long bond," Mags said. "Lost on both. In 2022 the kids hedged B paper with nothing, because a PDF said empirical duration was negative. Lost on rates and spreads. Progress is losing the same money faster." She looked at Theo's rolling-correlation monitor for a long moment. "That's good, though. I'd have killed for that. I'd have killed for a *screen*."
+
+*The systematic flag.* A rolling 60-day $\rho_{y,s}$ crossing zero from below is a regime alarm, and in 2022 it fired in the first quarter *(the exact date depends on the window; illustrative)*. The response is not "re-estimate $H$ more carefully," because a trailing window lags the regime by construction. The response is a rule: when the rolling $\rho$ is above zero, hedge at least the full analytical duration. Better, hedge rates with futures at $H = 1$ and hedge spread beta separately with CDX, so the hedge stops depending on the correlation at all (§8.8). Theo's lesson for the sticky note: *the empirical hedge ratio is a bet on why rates move.*
+
+### Case Study B: March 2023, SVB, and the Hedge That Hedged Both Ways
+
+*The levels.* The 2-year Treasury yield fell from 5.05% on March 8, 2023 to 4.03% on March 13, a 102 bp drop in three sessions. The 10-year fell from 3.98% to 3.55% (FRED). Credit went the other way. The ICE BofA HY OAS widened 42 bp in a single day, from 461 bp on Friday, March 10 to 503 bp on Monday, March 13, the largest daily widening since June 2020 (Reuters, via Kitco, March 14, 2023).
+
+*The mechanism.* A flight to quality: $\rho_{y,s}$ sharply negative for a week, regime one, the world Ben Dor's sample was built on, arriving exactly one year after the regime that broke it. Take a B book with duration 4 *(illustrative)*, intermediate yields down about 70 bp, and spreads out about 60 bp over the window. The bond gains roughly $4 \times 0.70\% = 2.8\%$ on rates and loses $4 \times 0.60\% = 2.4\%$ on spread, for a net of about +0.4%. A full analytical futures short loses 2.8%, so the "hedged" book is down about 2.4%. Hedged at $H = 0.3$, the futures lose only 0.84%, and the book is down about 0.4%. The full hedge was not a hedge. It was a short-rates position with a credit position attached, entered the week the Federal Reserve's most-watched banking question arrived.
+
+*The systematic flag.* The week's realized $\rho$ was strongly negative while the trailing 60-day $\rho$ still carried 2022's positive memory, so the two estimates disagreed sharply. That disagreement is the signal. It says the *source* of rate moves has changed: from inflation, which hurts both legs, to flight to quality, which helps the rates leg and hurts the spread leg. Conditioning the hedge ratio on the source of the rate move is a classification problem, not a regression problem, and Chapter 10 (trend) and Chapter 12 (regimes) supply the classifiers.
+
+### Case Study C: April 2025, Three Regimes in Seven Sessions
+
+*The levels* (FRED, closing OAS and yields; CCMG for the monthly path):
+
+| Date (2025) | 10-year | HY OAS | BB | B | CCC | IG | What the hedge did |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: | :--- |
+| Apr 2 | 4.20% | 342 | 212 | 353 | 925 | 96 | (baseline, before the tariff announcement) |
+| Apr 4 | 4.01% | 445 | n/r | n/r | n/r | n/r | Rally plus widening: $\rho < 0$. Full futures hedge loses on both legs |
+| Apr 7 | 4.15% | 461 | 306 | 486 | 1,137 | 120 | Sell-off plus widening: $\rho > 0$. Under-hedged book loses on both legs |
+| Apr 11 | 4.48% | 426 | n/r | n/r | n/r | n/r | Sell-off plus tightening: $\rho < 0$ again |
+| Apr 30 | 4.17% | 394 | n/r | n/r | n/r | n/r | Month: Treasuries +0.63%, HY −0.02% |
+
+*Table 8.3. April 2025 (FRED ICE BofA OAS in bp and DGS10; "n/r" = not recorded in our extract; monthly index returns from CCMG's April 2025 recap).*
+
+The month's summary statistics hide the week. For April as a whole, CCMG reports Bloomberg index returns of +0.63% for Treasuries, +0.06% for US Credit, −0.02% for High Yield, and −0.68% for the S&P 500. Victory Capital reports month-over-month widening of 13 bp in IG and 39 bp in HY. GW&K noted that the range in the 10-year yield that month was the widest since March 2023, "when Silicon Valley Bank folded." Inside that range, the sign of the rate–spread comovement flipped twice in seven sessions. A book hedged at a trailing-window $H$ was wrong on the first two days, right on the next one, and wrong again by the end of the week, in different directions.
+
+Ines replayed it as a hand history. "April 2 to 4, you had the nuts. Rates rallied, spreads gapped, and your under-hedge paid because you weren't short futures into the rally. April 7, the board paired: Treasuries sold off *with* credit, and you were still betting day-one odds. By April 11 the board changed again. Your hedge ratio is your read on the table. Update it when the board changes, not when the month ends."
+
+*The indictment of trailing windows.* The rolling 60-day CCC hedge ratio computed on FRED data was close to zero in the window ending April 30 and reached −0.66 by the window ending May 30 (and −0.78 for the window ending May 23). The *estimate* swung hard negative *after* the event, which is exactly when it was least useful. Rudin (2025), using the Bloomberg US Corporate High Yield index, makes the general point: hedging high yield with Treasury futures based on duration "often leads to increased portfolio volatility."
+
+*The systematic flag.* When the realized one-week $\rho$ changes sign within the week, the right response is to cut confidence in the hedge ratio, not to re-estimate harder. Operationally, raise the ridge penalty $\eta$ (shrinking the hedge toward a robust prior), widen the band within which the hedge is left alone, and lean on the instrument that hedges the spread factor directly (CDX HY) rather than the instrument that hedges it through a correlation (futures at $H < 1$).
+
+## 8.8 What's Left Is IDO (and How to Prove It)
+
+After the Treasury leg, the empirical rate beta, and the DTS-scaled market spread factor, the residual still is not idiosyncratic. Collin-Dufresne, Goldstein and Martin (2001) regressed credit spread changes on the variables structural models say should matter (leverage, volatility, rates, the slope of the curve) and found "rather limited explanatory power." Worse for anyone hoping for a clean residual, the unexplained part was "mostly driven by a single common factor." There is a market-wide spread shock the theory variables do not see: liquidity, risk appetite, dealer balance sheets, flows. If you call that residual IDO, you will discover in the next drawdown that every one of your "idiosyncratic" positions shared it.
+
+### The definition, in four subtractions
+
+Let $\text{DTS}_{i,t-1}$ be bond $i$'s DTS at the previous close, known before the return occurs, so the definition cannot look ahead. The pure-IDO return is defined by four subtractions:
+
+1. **Rates.** Excess return over KRD-matched Treasuries, $R^{\text{xs}}_{i,t} = R^{\text{tot}}_{i,t} - \sum_k w_{i,k}R^{\text{TSY}}_{k,t}$ (§8.1). If you hedge with futures at an empirical $H$, add back $(1 - H_i)\,D_i\,\Delta y_t$; that part of the rate move is now spread beta and the next step takes it out.
+2. **Market, sector and rating spread factors, DTS-scaled.** Regress $R^{\text{xs}}_{i,t}/\text{DTS}_{i,t-1}$ on factor returns $F_{k,t}$ with Dimson-summed loadings for stale marks (§8.5):
+$$
+\frac{R^{\text{xs}}_{i,t}}{\text{DTS}_{i,t-1}} = \sum_{k} \beta^{\text{D}}_{i,k}\,F_{k,t} + \tilde\epsilon_{i,t} .
+$$
+3. **The common residual factor.** Take the panel of scaled residuals $\tilde\epsilon$ (time by bonds), extract its leading principal component $g_t$ with loadings $v_i$, and remove it: $\tilde\epsilon^{\perp}_{i,t} = \tilde\epsilon_{i,t} - v_i\,g_t$. This is the Collin-Dufresne–Goldstein–Martin factor, estimated rather than named.
+4. **Scale back to returns.**
+$$
+\text{IDO}_{i,t} \equiv \text{DTS}_{i,t-1}\,\tilde\epsilon^{\perp}_{i,t} .
+$$
+
+What remains is small, noisy, and yours. That is not a disappointment. That is the definition.
+
+### Theo's thirty-seven cents, answered
+
+Run the cold-open bond through the four subtractions with *illustrative* market data for the day: the B-rated index's relative spread change was −1.2%, and the bond's own was $-9/620 = -1.45\%$. With $\text{DTS} = 4.0 \times 0.062 = 0.248$:
+
+| Component | Calculation | Cents on \$95 |
+| :--- | :--- | ---: |
+| Carry | §8.1 | +3 |
+| Rates (analytical) | $-4.1 \times 0.0018$ | −70 |
+| Market spread beta | $-0.248 \times (-0.012)$ | +28 |
+| Bond-specific spread (IDO) | $-0.248 \times (-0.0145 + 0.012)$ | +6 |
+| Decomposition residual | plug (probably tomorrow's stale-price catch-up) | −4 |
+| **Total** | | **−37** |
+
+Of the thirty-seven cents, about six were the bond. Four were the pricing service, and they will probably reverse tomorrow (§8.5). The rest was the Treasury market and everyone else's opinion of the economy. Kaz's "alpha" of 34 cents was 28 cents of beta and 6 cents of alpha. Theo peeled the sticky note off his monitor and wrote "6" on it.
+
+The table also shows the cleanest version of the hedge. The empirical-duration approach hedges the 28 cents of market spread beta *indirectly*: it shorts fewer futures because, on average, spreads tighten when yields rise. That works while $\rho$ holds and fails when it flips (§8.7). The two-instrument approach hedges each factor with its own instrument: futures at $H = 1$ for the 70 cents of rates, and CDX HY sized at $\text{DTS}_i/\text{DTS}_{\text{CDX}}$ for the 28 cents of spread beta. It does not depend on $\rho$ at all. It pays for that robustness with the CDX–cash basis and the index roll, and it hedges away spread beta you might have wanted to keep, which is Ines's poker hand from §8.2. Which hedge is right depends on what Theo is paid for. If his mandate is IDO, the answer is the two-instrument hedge, because a view on $\rho$ is not his job.
+
+> **[SOURCE EXTRACTION]** *Ben_Dor p.220:* "the low explanatory power (R2 = 8%) suggests that there are other factors that influence the performance of the strategy."
+>
+> **Annotation.** Ben Dor tests a DTS-neutral "short empirical duration" strategy (long Ba, short Baa) and finds a significant loading on rates (0.39, $t = 3.86$) that explains only 8% of its return variance. That is a pattern to recognize. A strategy can have a real, statistically significant factor exposure that is economically small next to its residual. The IDO ledger reports both: the loading's $t$-statistic (is the exposure real?) and the factor's share of variance (does it matter?). A residual that is 92% of variance is either a great deal of alpha or a great deal of factor you have not named yet. The ledger's job is to tell those apart.
+
+### The IDO ledger: proving it
+
+A residual is a claim until a signal predicts it. The ledger keeps three numbers per strategy, per month:
+
+- **Residual volatility**, $\sigma(\text{IDO})$ for the portfolio. This is the risk budget the strategy actually consumes after the hedges, and the number to compare with the risk model's forecast.
+- **Information coefficient.** The cross-sectional Spearman rank correlation between the signal at $t-1$ and $\text{IDO}_{i,t}$, $\text{IC}_t$, averaged over months. Rank correlation, because credit residuals have fat tails and one defaulting CCC should not decide the month.
+- **Its $t$-statistic**, $t = \overline{\text{IC}}\,\sqrt{T}/\mathrm{sd}(\text{IC}_t)$ over $T$ months. Chapter 7's warning applies: a $t$ of 2 after forty specification searches is not a $t$ of 2.
+
+The fundamental law, $\text{IR} \approx \text{IC}\sqrt{\text{BR}}$ (Chapter 9), connects the ledger to the PM's question. If the IC is measured on raw excess returns, the IR it implies is partly a beta IR, and it disappears in the first regime change. If it is measured on IDO, it is the desk's. IDO or it didn't happen.

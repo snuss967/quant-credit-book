@@ -21,7 +21,7 @@ Ines rolled her chair over without being asked, which was how Theo knew he was a
 
 "The CCC tier says something happened and nobody told the index."
 
-"So who at this table knows more than you?" She tapped the screen. "Not the index. The index is sixty percent double-B. It's wearing a 323 basis point bow tie. The CCCs are wearing a 1,278 basis point necktie. Same companies' cousins, different dress code."
+"So who at this table knows more than you?" She tapped the screen. "Not the index. The index is more than half double-B. It's wearing a 323 basis point bow tie. The CCCs are wearing a 1,278 basis point necktie. Same companies' cousins, different dress code."
 
 Theo reached for the USB stick on his lanyard. The 13-week cash flow model had been his companion through four restructurings and one divorce of a client from its sponsor. It did not cover 2,000 issuers. It covered one, very well, for thirteen weeks.
 
@@ -419,7 +419,7 @@ This follows from Bayes' rule: resampling changes the prior odds of default by t
 
 Here the RSSG reader stops being a student and becomes the teacher. In 2025, 65% of all corporate defaults counted by Moody's were distressed exchanges, not hard defaults (Moody's Analytics, *Lend, extend, and then…*, 18 May 2026). A distressed exchange is a default that files its own press release as "liability management." If your training set calls it survival, the model learns that the way never to default is to default softly, and every sponsor-owned issuer with a drop-down basket becomes, in the model's eyes, a survivor.
 
-Kaz read the definition aloud. "A distressed exchange is when the issuer offers holders a new security that amounts to a diminished financial obligation, and the purpose is to avoid default."
+Kaz read the rating-agency definition aloud, more or less: an exchange in which holders receive a diminished financial obligation, undertaken to help the issuer avoid a default.
 
 "So the purpose of the default is to avoid default," Kaz said.
 
@@ -596,3 +596,143 @@ print(f"defaults={(default_month >= 0).sum()} beta_DD={b_full[1]:.3f} "
 ```
 
 **Edge cases for ROBO.** A cross-validation fold with no defaults in its test block has an undefined AUC: skip it and log it, never score it as 0.5. Aggregate bonds to the issuer before fitting. Lag accounting features to the filing date, not the period end. Keep the distressed-exchange flag as a separate column so the label definition can be audited and changed without rebuilding the panel.
+
+## 11.5 Validation: Power Curves and What "77% Within 24 Months" Means
+
+Every systematic HY pitch book contains a sentence like BlackRock's. The sentence is true, and it is also a single point on a curve whose other coordinate is not printed. Ines reads such sentences the way she reads a player who says he won 77% of his showdowns. "Great. How many hands did you fold to get there?"
+
+> **[SOURCE EXTRACTION]** *BlackRock_Systematic_High_Yield_Credit p.6:* "Our proprietary probability of default signal that has underpinned all of our credit strategies for over 20 years has successfully identified 77% of the defaulted bonds in the ICE BofA High Yield Index within 24 months of its default since 2010."
+>
+> **Annotation.** The footnote dates the statistic (BlackRock and ICE BofA data, as of 31 March 2024, since January 2010), and the same page tells you the model's horizon is a forward 12-month PD built from accounting, equity and bond market data, ratings, and macro variables. Three things are not on the page, and a diligent allocator asks for all three. First, the exclusion rate: what fraction of the index was flagged to catch the 77%? Second, the unit: "defaulted bonds" is a bond count, and a capital structure with 47 bonds counts 47 times. Third, the horizon mismatch: a 12-month PD scored against a 24-month window gets two years to be right. None of this makes the claim weak; a modern PD with an accuracy ratio around 0.7 would produce numbers like this honestly. It makes the claim *incomplete*, and the rest of this section shows how to complete it.
+
+### 11.5.1 CAP, ROC, and an identity worth knowing
+
+Sort issuers from riskiest to safest by model score. The cumulative accuracy profile (CAP) plots, for each cutoff, the fraction of *all* issuers flagged ($x$) against the fraction of *defaulters* flagged ($Y(x)$). The ROC curve plots the same defaulter fraction against the fraction of *survivors* flagged ($x'$). With $d$ defaulters among $n$ issuers and base rate $f = d/n$, the accuracy ratio is the area between the model's CAP and the diagonal, divided by the same area for a perfect model:
+
+$$
+\text{AR} = \frac{\int_0^1 Y(x)\,dx - \tfrac12}{\tfrac12(1-f)} = \frac{2\int_0^1 Y(x)\,dx - 1}{1-f} .
+$$
+
+The area under the ROC is a probability (Bohn–Stein p.410, below): $\text{AUC} = \mathbb{P}(\text{score}_D > \text{score}_{ND})$, the Mann–Whitney statistic. The two measures are not merely related; they are the same number in two units. Every step down the sorted list moves $x$ by $1/n$, and $1/n$ splits exactly as $dx = f\,dY + (1-f)\,dx'$, because a defaulter step has $dY = 1/d$ and a survivor step has $dx' = 1/(n-d)$. Integrating $Y$ against both pieces, $\int Y\,dY = \tfrac12$ and $\int Y\,dx' = \text{AUC}$, so
+
+$$
+\int_0^1 Y(x)\,dx = \tfrac{f}{2} + (1-f)\,\text{AUC} \quad\Longrightarrow\quad \text{AR} = 2\,\text{AUC} - 1
+$$
+
+exactly, for scores without ties (Engelmann, Hayden and Tasche showed this in 2003). Report either; never compare an AR from one universe with an AR from another universe with a different base rate as if the difference were skill (Bohn–Stein p.426).
+
+> **[SOURCE EXTRACTION]** *Bohn_Stein_Active_Credit_Portfolio_Management p.410:* "The quantity A, the area under the ROC, is equivalent to the probability that a randomly chosen defaulting loan will be ranked worse than a randomly chosen nondefaulting loan by a specific model"
+>
+> **Annotation.** This is the most useful sentence in model validation, because it converts an abstract area into a bet anyone at the desk can price. Pick one defaulter and one survivor at random; AUC is the chance your model ranks them correctly. Alanis, Chava and Shah's 0.916 means the model gets that coin flip right eleven times in twelve. Two cautions. "Randomly chosen" must mean randomly chosen *issuers*, or the 47-bond capital structure turns one correct ranking into 47. And AUC is a ranking statistic, blind to calibration: a model that ranks perfectly and says every PD is 50% scores 1.0 and would destroy you in the credit triangle. Validate power with AUC, calibration with realized-versus-predicted default rates by PD bucket, and do both on issuer-disjoint, time-purged folds.
+
+### 11.5.2 From a hit rate to a return
+
+Let the model exclude a fraction $q$ of the index (set $X$) and keep the rest ($K$, weight $1-q$), and let the defensive portfolio hold $K$ scaled to full weight. Its active return against the index is $r_K - [q\,r_X + (1-q)\,r_K] = q\,(r_K - r_X)$. Apply the credit triangle to each set, $\mathbb{E}^{\mathbb{P}}[r] \approx s - \pi L$ with $\pi$ the set's default rate:
+
+$$
+\mathbb{E}^{\mathbb{P}}[r_{\text{active}}] \approx q\Big[(\pi_X - \pi_K)\,L - (s_X - s_K)\Big].
+$$
+
+Default avoidance pays if and only if the excluded set's *excess default loss* exceeds its *excess spread*. Now plug in the BlackRock-style claim on a universe with a 3% default rate. If the 77% hit rate came from excluding $q = 20\%$, the flagged set defaults at $\pi_X = 0.77 \times 3\%/0.20 = 11.6\%$ and the kept set at $\pi_K = 0.23 \times 3\%/0.80 = 0.86\%$. With $L = 0.6$ and an excess spread of 420bp in the excluded set, the active return is $0.2 \times (6.41\% - 4.20\%) \approx +44$bp a year. If the same 77% required $q = 40\%$, then $\pi_X = 5.8\%$, $\pi_K = 1.15\%$, and against a 300bp excess spread the active return is $0.4 \times (2.78\% - 3.00\%) \approx -9$bp *(all inputs illustrative)*. Same hit rate, opposite sign. And the base-rate trap is visible in the first case: even the good model flags 17.7% of the index that does not default, which is 18% of all survivors, whose carry you have handed to someone else.
+
+"A model that flags everyone catches 100% of defaults," Ines said. "That is not defense. That is leaving the casino."
+
+> **Trend Watch: The Soft-Default Regime, 2024–2026.** *What changed:* the definition of default drifted from "missed a coupon" toward "agreed to be paid less," and the default rate split by market. *When and how big:* S&P reported the US trailing-12-month speculative-grade default rate at 5.1% in December 2024 and put distressed exchanges at about 68% of 2025 defaults through April, the highest year-to-date share since 2008 *(approx.; S&P reports via search summaries, primary pages not accessed)*. Moody's counted distressed exchanges as 65% of all corporate defaults in 2025 and put the average forward one-year PD for US high yield companies at 3.2% in Q1 2026 (Moody's Analytics, 18 May 2026). Fitch forecast 2026 default rates of 2.5–3.0% for US high yield and 4.5–5.0% for US leveraged loans (Investment Executive, 3 December 2025), and its US private credit default rate hit a record 6% in April 2026 (The DESK, 27 May 2026). UBS put the 2025 USD HY default expectation at 4.8%, but 3.1% excluding two large distressed capital structures (UBS AM, 17 January 2025). *What it means for the desk:* a par-weighted default rate is driven by a handful of large names, so breadth beats tier; private credit is now the leading indicator for the public CCC tier; and any PD model trained on hard defaults alone is calibrated to a world in which two-thirds of today's defaults would have counted as survival.
+
+### Specification for AI Implementation
+
+**Schema.** `score`: float array, higher means riskier (a PD). `default`: int 0/1 array, issuer-level, aligned. `q`: exclusion fraction in $(0,1)$. Outputs: CAP points, AUC, AR, hit rate $\text{HR}(q) = Y(q)$, and the active-return decomposition.
+
+```python
+# Block 4: CAP curve, accuracy ratio, hit rate, exclusion economics (Section 11.5)
+
+def cap_curve(score, default):
+    order = np.argsort(-np.asarray(score, dtype=float), kind="mergesort")
+    d = np.asarray(default, dtype=float)[order]
+    if d.sum() == 0:
+        raise ValueError("no defaults: CAP undefined")
+    x = np.concatenate([[0.0], np.arange(1, d.size + 1) / d.size])
+    y = np.concatenate([[0.0], np.cumsum(d) / d.sum()])
+    return x, y
+
+
+def accuracy_ratio(score, default):
+    x, y = cap_curve(score, default)
+    area = np.sum(np.diff(x) * (y[1:] + y[:-1]) / 2.0)        # trapezoid rule
+    f = float(np.mean(default))
+    return (2.0 * area - 1.0) / (1.0 - f)
+
+
+def hit_rate(score, default, q):
+    x, y = cap_curve(score, default)
+    return float(np.interp(q, x, y))
+
+
+def exclusion_active_return(q, pi_X, pi_K, s_X, s_K, L):
+    """q * [(pi_X - pi_K) * L - (s_X - s_K)], all decimals per year, P-measure."""
+    return q * ((pi_X - pi_K) * L - (s_X - s_K))
+
+
+# Sanity 1: AR = 2*AUC - 1 exactly for untied scores.
+g4 = np.random.default_rng(RNG_SEED + 4)
+dflt = (g4.random(5000) < 0.05).astype(int)
+sc = g4.normal(0.0, 1.0, 5000) + 1.2 * dflt
+assert abs(accuracy_ratio(sc, dflt) - (2 * auc(sc, dflt) - 1)) < 1e-10
+
+# Sanity 2: a perfect ranking scores AR = 1; random scores average AR ~ 0 over 20 seeds.
+assert abs(accuracy_ratio(dflt + 0.5 * g4.random(5000), dflt) - 1.0) < 1e-12
+ar_rand = []
+for s in range(20):
+    gs = np.random.default_rng(1000 + s)
+    ar_rand.append(accuracy_ratio(gs.random(5000), (gs.random(5000) < 0.05).astype(int)))
+assert abs(np.mean(ar_rand)) < 0.05
+
+# Sanity 3: the worked example of Section 11.5.2.
+act_20 = exclusion_active_return(0.20, 0.77 * 0.03 / 0.20, 0.23 * 0.03 / 0.80, 0.0420, 0.0, 0.6)
+act_40 = exclusion_active_return(0.40, 0.77 * 0.03 / 0.40, 0.23 * 0.03 / 0.60, 0.0300, 0.0, 0.6)
+assert act_20 > 0 > act_40
+
+# Apply to the Block 3 panel: in-sample PDs from the full model, one row per issuer-month.
+pd_in = predict_logit(b_full, X_all)
+print(f"panel AR={accuracy_ratio(pd_in, y_all):.3f} AUC={auc(pd_in, y_all):.3f} "
+      f"HR(10/20/30%)={[round(hit_rate(pd_in, y_all, q), 2) for q in (0.1, 0.2, 0.3)]} "
+      f"active 20%={act_20:.4%} active 40%={act_40:.4%}")
+```
+
+**Edge cases for ROBO.** Tied scores (a capped PD, or a rating-based score with 20 notches) make the CAP depend on sort order; break ties by averaging, or report the AUC, which the rank formula already tie-corrects. Score at the issuer level. State the horizon of the score and the horizon of the hit window in the output, and refuse to compare them when they differ.
+
+## 11.6 The CCC Problem
+
+"CCC is where the defaults live and where the rallies live," Mags said, "which is the same sentence." She meant that the tier's return is a bet on which of its members survive, and that both the 2000 disaster and the 2003 rally were the same population answering the same question differently.
+
+The tier is also the index's risk budget. Wellington put CCC-rated bonds at 13% of the high yield index in a note dated 30 September 2026, and Loomis Sayles found that at year-end 2024 CCCs accounted for nearly 25% of the index's OAS. A tier that is an eighth of the market value and a quarter of the spread is where most of the index's credit risk is concentrated, and where any defensive strategy will place most of its bets, whether it means to or not.
+
+### 11.6.1 Why tier exclusion is the wrong tool
+
+Three facts from the historical tables, each a reason not to treat CCC as one asset. The S&P one-year transition matrix for 1980–2002 (Schmid p.28) puts the CCC-to-default rate at 31.58% and the probability of *staying* CCC at 55.82%: the tier is sticky, so a CCC bond is usually still a CCC bond a year later, collecting a coupon. CSFB's default rates by rating *at issuance* for 1993–2003 (Moyer p.44) show B at 4.23% and CCC at 4.28%, almost identical, which Moyer flags with mild surprise: the rating at issuance separates CCC from B much less than the rating after a downgrade does, because a newly issued CCC has fresh money and a fallen CCC has a problem. And recoveries are cyclical (Schmid p.103), so the same CCC default costs more in a recession, exactly when the tier's spread is widest.
+
+The structure of the right tool follows from Bolder.
+
+> **[SOURCE EXTRACTION]** *Bolder_Credit_Risk_Modelling p.324:* "if a credit counterparty has a large default probability, then much of its inherent default risk is idiosyncratic and, as such, it is less highly correlated with other credit counterparties. Conversely, very low risk counterparties predominately face systematic risk"
+>
+> **Annotation.** Bolder is explaining why the Basel IRB asset correlation falls as PD rises, from 0.24 for the safest obligors toward 0.12 for the riskiest. The insight for a CCC book is that high-PD risk diversifies. A CCC company defaults mostly because of *its own* problems (a maturity wall, a lost contract, a sponsor that stopped writing checks), and those problems are largely uncorrelated with the next CCC company's. That is the formal case for breadth: 150 CCC issuers at 0.1% each are a far safer bucket than 15 at 1% each, even with the same average PD, because the idiosyncratic part of the default variance shrinks as $1/n$. It is also why the BB tier is the place to fear the cycle: its rare defaults arrive together. A systematic desk takes the opposite of the instinctive position: concentrated and careful in BB, broad and quantitative in CCC.
+
+Sizing by expected loss rather than by fear then becomes a one-line rule. Set an annual expected-loss budget $\text{EL}^{\max}$ for the portfolio (for example 1.0%, illustrative). Fill the CCC bucket in descending order of default-adjusted carry per unit of risk, $(s_i - \hat\lambda_i L_i)/\text{DTS}_i$, subject to
+
+$$
+\sum_{i \in \text{CCC}} w_i\,\hat\lambda_i\,L_i \;\le\; \text{EL}^{\max} - \sum_{i \notin \text{CCC}} w_i\,\hat\lambda_i\,L_i, \qquad w_i \le w^{\max}_{\text{issuer}} .
+$$
+
+The bucket's size is an *output*: large when the model finds CCC names whose spread overpays their PD, small when the tier's spread is all default. There is no 5% CCC limit in this rule, which will alarm the risk committee. Show them the issuer cap.
+
+One flow fact belongs next to the model. Most CLOs face a limit of roughly 7.5% on CCC assets, above which the excess is carried at the lower of market value and par in the overcollateralization tests (Chapter 21). A wave of downgrades into CCC therefore produces forced sellers who care about rating, not PD. When your model says "avoid" and the seller is a CLO manager defending an OC test, check whether the model is seeing distress or seeing the flow. Ines put it more simply: "When someone *has* to fold, buy their chips."
+
+> **Docket Diary. After the soft default, 1979–2026.** Moody's Analytics studied 1,173 borrowers that went through a distressed exchange or similar soft credit event between 1979 and 2026 (Moody's Analytics, David Hamilton, *Lend, extend, and then…*, 18 May 2026). Roughly two-thirds avoided a hard default or a repeat event within a decade; about one in four ended in a hard default; and more than 70% of eventual hard defaults following a distressed restructuring occurred within the first two years. The same note puts Moody's private credit default proxy at 1.6% excluding distressed exchanges and 4.7% including them. *For the model:* an LME is not the end of the story; it resets the hazard clock to a higher level for about 24 months, and "months since last LME" belongs in the feature set. *The Ad Hoc Group, represented by counsel:* "The transaction was value-maximizing for all stakeholders who were invited."
+
+### 11.6.2 Case Study: The 2026 CCC Decompression
+
+On 15 October 2026 the ICE BofA US High Yield OAS closed at 323bp, BB at 197bp, single-B at 326bp, and CCC & lower at 1,278bp, one day after a three-year high of 1,282bp (FRED series BAMLH0A0HYM2, BAMLH0A1HYBB, BAMLH0A2HYB, BAMLH0A3HYC). The ratio of CCC OAS to index OAS, using month-end values, went from 2.61 in January 2025 to 2.54 in April 2025 (the tariff shock widened everything, so the ratio briefly *compressed*), then 3.15 in December 2025, 3.53 in June 2026, and 3.96 in August and October 2026 *(our computation from FRED)*. The index is calm because it is mostly double-B and short: State Street's global high yield universe was 62% BB-rated with a 3.1-year duration at year-end 2025, and Nuveen puts the BB share of the US index at 51% at year-end 2024, against 37% in 2004 (Nuveen p.4). The tier is not calm.
+
+The backdrop is a private credit default rate at a Fitch record of 6% in April 2026, distressed exchanges at 94% of downgrades to default or selective default in the twelve months to February 2026 by a rating-agency count reported in The DESK (27 May 2026), and Morgan Stanley forecasting high yield defaults of 3.5%. Any story about *why* the tier decompressed (software issuers facing AI disruption, private-credit stress spilling into public CCC capital structures) is interpretation, and we label it so.
+
+How three desks would have traded it *(illustrative)*. The tier excluder sold its CCCs in 2025 and looks brilliant in October 2026; its exposure to a 2003-style rebound is zero, and if the rebound comes, it will look exactly as brilliant as Mags's friends who sat out 2003. The beta-tilter held 90% of everything, including the 10% of CCC names that will default, and earned 90% of a bad year. The PD-ranked selector excluded the CCC names whose model PD exceeded their spread-implied break-even (§11.1.2), kept the CCCs whose spread overpaid their PD (often the sticky, newly issued, sponsor-supported ones), sized the bucket by expected loss, and used the 2026 widening to *add* to survivors as their spreads crossed the break-even line. Only the third desk has a plan for the rebound.

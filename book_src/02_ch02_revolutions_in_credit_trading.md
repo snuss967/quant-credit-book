@@ -457,3 +457,78 @@ And then there is the Fed. The Secondary Market Corporate Credit Facility, annou
 
 **Data & Code.** FINRA Regulatory Notice 22-12 (PT modifier): https://www.finra.org/rules-guidance/notices/22-12. SEC press release 2019-190 (Rule 6c-11): https://www.sec.gov/news/press-release/2019-190. New York Fed SMCCF page: https://www.newyorkfed.org/markets/secondary-market-corporate-credit-facility. Federal Reserve SMCCF page: https://www.federalreserve.gov/monetarypolicy/smccf.htm. Tradeweb 10-K FY2025 (AiEX, Ai-Price, first PT): https://www.sec.gov/Archives/edgar/data/1758730/000175873026000015/tw-20251231.htm. ICI 2025 Investment Company Fact Book: https://www.ici.org/system/files/2025-05/2025-factbook.pdf.
 
+## 2.8 Revolution 6: Non-Bank Liquidity Providers, and the Blocks That Stayed on the Phone
+
+The capital-letters responder in Theo's RFQ was probably a non-bank liquidity provider: a firm that makes markets with its own capital, prices with models rather than relationships, and hedges with ETFs, CDX and futures. Their arrival is the most recent revolution and the least well measured, so every number below carries its source and a self-reported flag where one applies.
+
+- **Jane Street** entered corporate bonds through its bond-ETF franchise. As an AP and ETF market maker it was already pricing the baskets, and pricing the individual bonds followed naturally. IFR reports it as a top-five liquidity provider in corporate bonds on Bloomberg (via Rupak Ghose, Mar 27, 2026).
+- **Citadel Securities** began trading corporate bonds in mid-2023. It traded about \$2bn a day in 2025, and IFR estimates about a 15% share of blocks over \$5mm with more than seven years to maturity (same source). In 2026 the firm itself reported a 14.2% share of IG credit block risk transfer (The DESK, Oct 2026; self-reported, CHECK).
+- **Hudson River Trading** extended its push into debt in late 2025, according to a Bloomberg report of Dec 1, 2025 (title only; not verified here).
+- **Across the market**, non-banks earned about 10% of credit market-making revenue in 2024 (Greenwich, Jan 2025) and about 13% of global credit market-making revenue in 2025 (Greenwich, June 2025). Over the same period, BCG estimates that big banks' global flow-credit revenues fell 26% from 2019 (via Ghose).
+
+The dealer economics explain why the banks let this happen. Electronic channels carried 48% of US IG activity in 2024 but only about a fifth to a quarter of dealer IG revenue: 20% in The DESK's summary, 26% in Greenwich's full report. In HY the split was 33% of activity against 10% of revenue (Greenwich, Jan 2025). Electronification is *dealer-permitted*. Banks let the small, liquid, low-margin flow move to the wire and kept voice for the blocks, where the margin is. The platforms consolidated too. On July 29, 2026, ICE agreed to buy MarketAxess for \$167 a share in cash, an enterprise value of about \$5.7bn, with closing expected in the first half of 2027 (ICE 8-K). By Q2 2026, Tradeweb's *fully electronic* US high-grade TRACE share (19.0%) had passed MarketAxess's *total* high-grade share (17.5%) (company releases). MarketAxess has also stopped publishing monthly volumes, so one of the series in the Trend Watch boxes above has stopped updating. The trend report puts it plainly: whoever owns the composite owns the benchmark for best execution, price improvement and the PT reference price.
+
+For the RFQ model of §2.3.2, the non-banks bring a lower $\theta$, because they quote tighter, and plausibly a higher $\phi$, because they all start from the same composites and hedge in the same ETFs. Whether that combination raises $n_{\text{eff}}$ is an empirical question, and your own logs can answer it.
+
+Now the part of the market none of this reached. In December 2023, about 90% of block trades (IG of \$5mm or more, HY of \$1mm or more) were still done by phone or chat. Only about 10% of buy-side block orders went electronic, and market-wide electronic growth had been "roughly flat over the past two years" (Greenwich, Dec 7, 2023). Man's Kamenski told IFR that single-name electronic costs were at "some of the lowest transaction cost levels we've ever seen," while voice blocks were "oftentimes twice as expensive or more." Pintér, Wang and Zou (2022, Bank of England SWP 970) explain why size is hard to model. Across clients, larger trades get *better* prices (a size discount), because the clients who trade large are the sophisticated ones with relationships. For a given client, larger trades cost *more* (a size penalty). A cost model fitted without client identity mixes the two effects and can get the sign of the size coefficient wrong.
+
+This is the ceiling $K < 1$ from §2.3.1, seen from the trading floor. It is also where Theo's training pays. The `5MM+` world of §2.2.2 is the world of hidden block sizes, stressed names, ad hoc groups and liability-management candidates. In that world the prices are least transparent, the router hands control to a person, and the person who has read the credit agreement knows more than the composite does. The electronic market is the market for boring risk. Theo's edge is in the rest of it.
+
+## 2.9 Why This Made Systematic Credit Possible: The Data-Exhaust Theorem
+
+Blackstone's systematic team states the size of the gap:
+
+> **[SOURCE EXTRACTION]** *Blackstone_Systematic_Credit p.2:* "While systematic strategies manage roughly 20% of global equities, they account for less than 2% of the fixed-income universe."
+>
+> **Annotation.** A factor of ten, which the rest of this section explains as a cost problem. Equity quants have traded at fractions of a basis point on public order books for two decades. Credit quants traded through the protocol of §2.3 and the dealers of §2.8. The next sentence on the same page credits "the proliferation of electronic bond trading" with making credit factor investing possible. Where the 2026 desk departs: the 2% is a stock, not a flow, and our trend data say the flow has turned. The gap closes as quickly as the cost function below falls, and in HY blocks it hardly falls at all.
+
+Man adds the operational point, that systematic credit needs "larger amounts of smaller-sized trades compared to discretionary approaches" (`Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.7`). Many small tickets are exactly what automation made cheap. The question is how much cheaper tickets are worth.
+
+### 2.9.1 Units first: LCS and the Man decomposition
+
+Barclays defines liquidity "as the cost of a roundtrip institutional-size transaction in a bond" (`Ben_Dor_Quantitative_Credit_Portfolio_Management p.111`) and measures it with the Liquidity Cost Score:
+
+> **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.702:* "For bonds quoted on spread, LCS is calculated as a product of bid–offer spread and spread duration. For lower‐quality bonds traded on price, LCS is calculated as the difference between offer and bid prices divided by the bid price."
+>
+> **Annotation.** Two conventions, one quantity, and the derivation below shows they agree. Three points about units cause most errors in practice. LCS is a *round trip*, so the one-way cost is $\mathrm{LCS}/2$. The spread must be in decimal, not bp, inside the formula. And the duration is *spread* duration, not modified duration, which differs for floaters and callables. Where the 2026 desk departs: Barclays built LCS from trader quotes because TRACE could not give a contemporaneous bid-ask (§2.3). A 2026 desk can also estimate it from RFQ quotes and composites, and should check that the two agree before trusting either.
+
+For a spread-quoted bond, the price is a function of the spread, $P(s)$, with $\Delta P/P \approx -D^{\text{spr}}\,\Delta s$. The bid side is the *higher* spread, so $s^{\text{bid}} > s^{\text{ask}}$ and $P^{\text{bid}} = P(s^{\text{bid}}) < P^{\text{ask}}$. Then
+
+$$
+\frac{P^{\text{ask}} - P^{\text{bid}}}{P^{\text{bid}}} \;\approx\; \frac{-P\,D^{\text{spr}}\,(s^{\text{ask}} - s^{\text{bid}})}{P} \;=\; D^{\text{spr}}\,\big(s^{\text{bid}} - s^{\text{ask}}\big) \;\equiv\; \mathrm{LCS}^{\text{spr}} \;>\; 0,
+$$
+
+with error of order $D^{\text{spr}}\,(s^{\text{bid}} - s^{\text{ask}})/2$ relative to LCS, from dividing by $P^{\text{bid}}$ rather than the mid. For a bond with $D^{\text{spr}} = 5$ and a 10 bp bid-offer in spread, $\mathrm{LCS} = 5 \times 0.0010 = 0.50\%$ of price round trip, or 25 bp one way.
+
+Man's actionable cost has three parts: "TC = Inside Market Spread + Slippage + Spread Calibration" (`Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.21`). The inside market spread is the best quoted bid/offer. Slippage is the extra cost of the trade itself, accounting for bond characteristics and for information leakage while the order is worked. Spread calibration measures whether dealers' actual prints fade or improve on their quoted levels, estimated from TRACE. All three must be in the same unit, bp of price one way, before you add them. Calibration can be negative, when dealers print better than their runs. Exercise 4 is about the classic mistake, adding a round-trip LCS to a one-way slippage.
+
+### 2.9.2 The theorem: cost sets breadth, and breadth sets the information ratio
+
+Grinold's fundamental law says $\mathrm{IR} \approx \mathrm{IC}\sqrt{\mathrm{BR}}$, with BR the number of independent bets per year. Suppose each unit of annual one-way turnover $\mathrm{TO}$ buys a proportional number of fresh bets, $\mathrm{BR} \propto \mathrm{TO}$. Then gross alpha per unit of gross exposure scales as $\alpha^{\text{gross}}(\mathrm{TO}) = k\sqrt{\mathrm{TO}}$, where $k > 0$ combines IC, active risk and the bets-per-turnover constant. With one-way cost $c$ (a fraction of notional), net alpha is
+
+$$
+\alpha^{\text{net}}(\mathrm{TO}) = k\sqrt{\mathrm{TO}} - c\,\mathrm{TO}.
+$$
+
+This is concave in $\mathrm{TO}$. Setting the derivative to zero, $k/(2\sqrt{\mathrm{TO}}) = c$, gives
+
+$$
+\mathrm{TO}^\star = \frac{k^2}{4c^2}, \qquad \alpha^{\text{net}\,\star} = k\cdot\frac{k}{2c} - c\cdot\frac{k^2}{4c^2} = \frac{k^2}{4c}.
+$$
+
+**Optimal turnover scales as $1/c^2$, and optimal net alpha scales as $1/c$.** The breadth a strategy can afford, $\mathrm{BR}^\star \propto 1/c^2$, rises faster than cost falls. Man reports that trading costs fell from 12 to 7.5 bp per million, with Amihud illiquidity down 37% since 2023, trade counts growing about 15% a year and about \$1.1tn of bonds moving from the illiquid to the liquid bucket over five years (Man, *Systematic Credit: A New Frontier*, data as at Sept 30, 2025). Put $c$ from 12 to 7.5 bp: $\mathrm{TO}^\star$ rises by $(12/7.5)^2 = 2.56$ times and $\alpha^{\text{net}\,\star}$ by $12/7.5 = 1.6$ times. As an illustration, a signal with $k = 0.0048$ goes from 4 turns a year and 48 bp of net alpha to 10.2 turns and 77 bp. That is the data-exhaust theorem in one line: **the same signal, on cheaper plumbing, is a better strategy.** Momentum, the highest-turnover credit factor (`Man_2022 p.19`), gains the most (Chapter 10).
+
+Kaz insists on the caveats. Bets are not independent, so $\mathrm{BR} \propto \mathrm{TO}$ holds only until you run out of distinct ideas, and the universe size caps it. Costs are not constant: $c$ rises with ticket size and with crowding, which is what the 4 p.m. index-mark clustering in §2.6 costs. And $c$ must be the *one-way* cost if $\mathrm{TO}$ is one-way turnover. With those caveats, the direction holds: what made systematic credit possible was not a new factor but a lower $c$.
+
+### 2.9.3 Case Study: Two Shocks, Five Years Apart (March 2020 and April 2025)
+
+**March 2020, the old plumbing under load.** From late February to March 23, 2020, the cash market seized. Kargar, Lester, Lindsay, Liu, Weill and Zúñiga (2021, *RFS*; NBER w27355) estimate that customers' willingness to pay for immediacy rose by about 200 bp per dollar at the peak, and that trades shifted from risky-principal to agency as dealers stopped committing capital. Bond-ETF tracking errors exceeded 200 bp (Todorov), and IG and Treasury ETFs were discounted *more* than HY (Haddad, Moreira and Muir). The Fed announced the PMCCF and SMCCF on March 23 and expanded the facilities on April 9 (to up to \$850bn together with TALF). Its first SMCCF purchases, of ETFs, came only on May 12. The announcements did most of the stabilizing. Electronic share rose during the crisis, as Man observed:
+
+> **[SOURCE EXTRACTION]** *Man_Revolutions_in_Credit_Trading_2023 p.5:* "2022 was the year of electronic trading. Interestingly and perhaps intuitively, though, some of the biggest jumps in electronic trading have come during the most stressful times in credit trading, such as 2020 and 2022."
+>
+> **Annotation.** This looks like a paradox, given that HY e-share falls in hard months (§2.3) and the robots widen in stress (§2.5). It is not one. When dealer voice capacity disappears, clients who still need to trade go to wherever anyone is still answering, which is the all-to-all pool and the ETF. Stress pushes the *marginal* liquidity provider onto the wire even as the *hardest* tickets go back to the phone. Where the 2026 desk departs: in 2020 this was an emergency migration. By 2025 the electronic routes already existed for the shock to use, as the second half of this case shows.
+
+**April 2025, the new plumbing under load.** The tariff shock was the same type of event: a sudden, macro-driven rush for liquidity. The plumbing behaved differently. US fixed-income ETFs traded a record \$98.9bn on April 7, with spreads held at one cent (iShares). US corporates traded a then-record \$89.7bn on April 8, 12% of it through portfolio trades (Greenwich, citing Trumid). Treasuries traded \$2.4tn on April 9, and all-to-all carried about 11% of April market volume (Greenwich, McPartland). By June, 52% of IG was trading electronically (Greenwich). There was no facility, no emergency rate cut, and no March-2020 style ETF discount spiral. A Fed note of Aug 19, 2026 adds that outflows in the tariff week did not concentrate in illiquid funds (FEDS Note).
+
+**What a systematic desk would have flagged.** In 2020: the ETF–NAV basis as a regime switch, a jump in Man-style spread calibration (dealers fading their runs), and rising fill-failure rates in the attempted-but-not-executed table. In 2025: the same indicators moved, but by much less and with faster recovery, and PT share *rose* on the worst days. **How it would have traded.** Shrink tickets, route to all-to-all and PT first under the odds threshold of §2.5.1, use the ETF as the hedge and as a price signal rather than an exit, and slow rebalancing until markouts normalize. **The lesson.** The trend is real. The same type of shock, five years later, cleared through electronic channels. But the March 2026 EUR IG episode in §2.5 is a reminder that "cleared" is a statement about one market in one shock. Chapter 28 builds the stress playbook for the day it does not clear.
+
