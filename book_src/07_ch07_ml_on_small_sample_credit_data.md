@@ -738,3 +738,170 @@ print(f"PBO noise {pbo_noise:.2f}   PBO with one real strategy {pbo_skill:.2f}  
 
 What the blocks demonstrate, in desk language. Block 2 shows that smoothed marks cut measured volatility and manufacture autocorrelation, which is Defect 1 in code. Block 4 prints a hat count roughly an order of magnitude below the label count. Block 5 is the chapter's central experiment: with features that are *pure noise by construction*, shuffled K-fold reports an AUC well above 0.5 because each test label's nearest neighbors are its own overlapping siblings in time, while the purged, embargoed, parent-grouped splitter reports about 0.5, which is the truth. Block 6 shows the best of 1,000 noise strategies looking significant at a naive 95% and looking like a coin flip once deflated. Port the same functions to the real panel by replacing `simulate_panel` with the point-in-time TRACE and pricing-composite feed (Appendix B) and keeping every assert as a production test.
 
+## 7.13 Desk Debrief
+
+Two weeks after the cold open, Kaz reran the gradient-boosted model through the lab. The screen was much less exciting, which on this desk is how you know a number has been near the truth.
+
+The row count was unchanged: 212,000 bond-months. Above it, in a font Kaz had made deliberately large, sat the hat count, $N_{\text{eff}} \approx 24{,}000$. Below it: shuffled K-fold AUC 0.61, purged and parent-grouped AUC 0.52; 3,000 trials; an out-of-sample Sharpe ratio of 0.30 per month across the purged folds; deflated Sharpe ratio 0.84; PBO 0.41 *(all illustrative)*. The top decile still held nine issuers. It no longer had a reason to.
+
+"It isn't a strategy," Kaz said. "It isn't nothing, either. It's mostly carry and one company."
+
+"Strip the carry," Theo said, "and then show me the one company." IDO or it didn't happen.
+
+Theo had run something smaller. His primary model was the credit-agreement read turned into flags: drop-down capacity through unrestricted subsidiaries, non-pro-rata uptier risk, and a liquidity runway from the 13-week model shorter than two quarters. That came to about forty flags a year across the high-yield universe. The secondary model, trained on purged, parent-grouped folds, learned only *when those flags were right* and sized them. He had tried four sizing models, and he wrote the number four at the top of the report as if it were a defined term. Out of sample, the result was a Sharpe ratio of 0.20 per month over 96 months, with skew −1.5 and kurtosis 8. Against the four-trial benchmark ($SR^\ast \approx 0.02$), the deflated Sharpe ratio was 0.93, and the minimum track record length was about 115 months, so he needs roughly a year and a half more of live trading before the number means what he wants it to mean *(illustrative)*.
+
+"Now," Ines said, "you're showing me a hand *and* the number of hands you folded. Sit down."
+
+Mags looked at the four. "Back in my day we had one sizing model. It was called the PM's mood, and it had an excellent track record, because the PM was the one who kept it."
+
+At the bottom of the monitor Kaz had taped the epigraph that Dickerson, Robotti, and Rossetti chose for their 2026 audit, Ronald Coase's line: "if you torture the data enough, nature will always confess." By lunch a sticky note had appeared beneath it in the unmistakable register of the Ad Hoc Group: *The data, represented by counsel, will not confess to anything absent a cooperation agreement.* None was signed, so the counter waits for Part IV.
+
+Theo put the USB stick back in his pocket. It had been a 13-week cash flow model when he arrived. It was now a vertical barrier, a primary model, and a reason to distrust anything labeled "adjusted," which Mags said was the first sign he might last.
+
+Tape these to the monitor.
+
+- **Count hats, not rows.** The issuer is the observation: the ultimate parent, not the ticker. Print $N_{\text{eff}} = \sum_i \bar u_i$ next to every result. In Kaz's panel, 212,000 bond-months come to about 24,000 hats. A model that times the whole high-yield market has roughly one observation per non-overlapping 13-week window, which is about 79 in twenty years.
+- **A mark is not a price.** Stale and smoothed marks lower measured volatility, manufacture autocorrelation, and inflate the Sharpe ratio *before* any deflation. Treat staleness as a feature and as a filter. It is worst in single-B and CCC bonds, exactly where the alpha is supposed to live.
+- **Keep the memory, lose the trend.** Fractionally difference log spreads to the smallest $d$ that passes a unit-root test. Taking $d = 1$ throws away the level information that makes a spread a spread. Warm-up rows are NaN, never zero, and the FFD window counts toward the embargo.
+- **Label the trade you would actually make.** Use triple barriers scaled by DTS, set on IDO returns (strip the carry, or the label learns the coupon), with a 13-week vertical barrier. Censor exits at the exit value rather than imputing them from peers. A distressed exchange is not an average outcome, however politely the press release calls it an "open market purchase."
+- **The credit agreement picks the side; the model picks the size.** Meta-labeling is what RSSG already did by hand. The secondary model may veto a trade. It may never reverse one.
+- **Cross-validate as if the bonds were watching.** Purge overlapping labels, embargo past the longest lookback, and group by ultimate parent. Shuffled K-fold finds signal in pure noise, and block 5 of §7.12 will demonstrate it on demand.
+- **Report the folded hands.** Every Sharpe ratio travels with $N$, $V[\widehat{SR}_n]$, the DSR, the PBO, and the MinTRL, and a new factor should clear roughly $t > 3$. ROBO refuses to print a Sharpe ratio without them, and so should you.
+- **Timestamps are covenants.** Measure returns from the first feasible price after formation (the gap), filter ex-ante and symmetrically, keep the defaults, and join only on availability time. Between a retraction, a corrigendum, and 26 surviving specifications out of 432, the 2019–2026 record says credit ML is a data-integrity discipline first and a modeling discipline second.
+
+### The Spec You Hand the Robot
+
+Paste the block below into ROBO's prompt. It compresses §7.3–7.12 into one engine. The six Python blocks in §7.12 are the executable reference, and their asserts are the acceptance tests.
+
+```text
+ROBO: build credit_ml_lab, a leakage-proof research harness for bond-level ML.
+Implement exactly this. Where something is unspecified, stop and ask; do not guess.
+
+INPUTS (point-in-time; every field carries available_at; join on nothing else)
+  xs[T,NB]       daily excess return vs duration-matched Treasuries, decimal, from marks
+  s[T,NB]        spread, decimal;  D_spr[T,NB] in years;  DTS = D_spr * s
+  stale[T,NB]    trading days since the last institutional-size TRACE print
+  parent[NB]     ULTIMATE-PARENT id (not ticker; unrestricted subs map to their parent)
+  exit_day[NB]   call/tender/maturity/exchange/default day, T+1 if none; exit_type[NB]
+  primary[T,NB]  side in {-1, 0, +1} from the analyst/covenant model (Chapter 13 flags)
+
+PIPELINE
+  1 FFD features on log s: d* = smallest d on 0.00:0.05:1.00 with DF t < -2.86
+    (approximate 5%); tau = 1e-4, or 1e-3 if the warm-up exceeds the embargo budget.
+    Warm-up rows are NaN and are dropped.
+  2 Labels: triple barrier on IDO returns (carry and factor beta stripped, Chapter 8);
+    half-width = m * 0.09 * sqrt(h/21) * DTS[t0], m = 1, h = 63 trading days.
+    An exit before t0+h closes the label at the exit value: touch="exit", censored=True.
+    Never form a label whose vertical barrier lies past the last date.
+  3 Weights: parent-level average uniqueness u in (0,1]; N_eff = sum(u); Kish size;
+    weights normalized to sum to n_labels.
+  4 CV: purged, embargoed, parent-grouped K-fold x time blocks, plus annual walk-forward.
+    embargo >= max(h, longest feature lookback including the FFD window).
+    A fold with no positive labels is skipped and reported.
+  5 Meta-label: secondary model -> p, clipped to [1e-6, 1-1e-6];
+    size = max(2*Phi((p-0.5)/sqrt(p*(1-p))) - 1, 0) * primary.  Veto yes, reversal never.
+  6 Evaluation returns start at the first feasible price AFTER signal formation (gap).
+    Return filters are ex-ante and symmetric; returns around defaults are kept.
+
+OUTPUT (one JSON record per experiment, appended to an immutable trial log)
+  n_trials_raw, n_trials_clustered, var_sr, sr, psr0, dsr, min_trl, pbo (CSCV, S=10),
+  n_labels, n_eff, kish, auc_shuffled, auc_purged, share_censored, share_stale_gt5d
+
+REFUSE
+  - to print any Sharpe ratio without n_trials, var_sr, dsr, pbo and n_eff beside it
+  - to estimate kurtosis or the DSR from fewer than 30 returns (report "unavailable")
+  - to delete a trial from the log, ever
+
+ACCEPTANCE TESTS (keep in CI)
+  - pure-noise features: auc_shuffled > auc_purged + 0.03 and |auc_purged - 0.5| < 0.06
+  - 1,000 noise strategies x 120 months: mean max SR within 10% of the formula;
+    the best has psr0 > 0.95 and dsr < 0.95
+  - FFD weights equal (-1)^k binom(d, k) to 1e-12; d = 1 reproduces np.diff
+  - two sibling bonds on identical windows get u = 0.5 each; a lone bond gets u = 1.0
+```
+
+The refusal to delete a trial is the line that matters most. A deflated Sharpe ratio is only as honest as the trial count fed into it, and the cheapest way to raise a DSR is to forget the 2,999 configurations that never made the slide. ROBO does not forget, which is the one respect in which it is a better researcher than any of us.
+
+### Exercises
+
+1. **Count Kaz's hats.** One issuer has 11 bonds. Each bond produces a daily triple-barrier label with $h = 63$ trading days over $T = 1{,}260$ days, and every label runs to its vertical barrier. (a) Show that an interior label has $\bar u_i \approx 1/(11 \times 63)$ and that the issuer contributes $N_{\text{eff}} \approx T/h \approx 20$, whatever the number of bonds. (b) Seven of the 11 bonds are guaranteed OpCo notes. Four are HoldCo notes that were primed last quarter by a drop-down into an unrestricted subsidiary. Do they remain one group for cross-validation? What new label does the drop-down create, and how would you validate a model of it? (c) Compute the Kish effective size of the weights $w = (1, 1, 1, 1, 6)$.
+   *Check:* (a) Concurrency is about $11 \times 63 = 693$ in the interior, and roughly $11 \times 1{,}197$ labels divided by 693 gives about 19. (b) They remain one group. The ultimate parent is the information unit, and splitting it lets the model read the OpCo bonds' answers off the HoldCo bonds. The drop-down does create a legitimate *within-parent* target, the OpCo–HoldCo basis, but it can only be validated across time blocks, because there is no other parent to hold out. (c) $(\sum w)^2 / \sum w^2 = 100/40 = 2.5$: five rows, two and a half opinions.
+
+2. **Memory after a closing night.** (a) Compute the first five FFD weights for $d = 0.4$ from $w_k = -w_{k-1}(d-k+1)/k$. (b) Prove that $\sum_{k=0}^{K} w_k = (-1)^K \binom{d-1}{K}$, that this partial sum is strictly positive for every finite $K$ when $d \in (0,1)$, and that it tends to zero as $K \to \infty$. (c) Block 5 of §7.12 uses a 21-day embargo because its features have no lookback. Suppose you add FFD features with $d = 0.4$ and $\tau = 10^{-4}$, whose warm-up is about 280 days (block 1). What embargo does the edge-case rule require, and how much of a 1,260-day sample split into four time blocks does it remove after each test block? What does raising $\tau$ to $10^{-3}$ buy, and what does it cost?
+   *Check:* (a) $(1, -0.4, -0.12, -0.064, -0.0416)$. (b) Since $w_k = (-1)^k \binom{d}{k}$, Pascal's rule $\binom{d}{k} = \binom{d-1}{k} + \binom{d-1}{k-1}$ makes the alternating sum telescope to $(-1)^K \binom{d-1}{K} = \prod_{j=1}^{K} (j-d)/j$. Every factor is positive for $d \in (0,1)$, and the product behaves like $K^{-d}/\Gamma(1-d) \to 0$. (c) The embargo must be at least 280 days. That is close to 90% of a 315-day block, and more than a fifth of the sample, removed after every test block. At $\tau = 10^{-3}$ the window falls to about 54 days, and the horizon $h = 63$ sets the embargo again. The cost is a larger leftover weight sum, so the filtered series carries more of the trending level, and the smallest $d$ that passes the unit-root test usually rises. You pay for the extra training data in memory.
+
+3. **Size Theo's hand.** Theo's primary model raises 40 flags a year with a precision of 35%. A winning flag earns +4% and a losing one −2% in IDO return, at unit size *(illustrative)*. The meta-model keeps 60% of the winners and lifts precision to 55%. (a) Compute the expected IDO return per trade, and per year summed over trades at unit size, with and without the meta-model. (b) Compute the bet size for $p = 0.75$ and for $p = 0.55$. In Ines's terms, explain why a 55% read earns a small position rather than a slightly-better-than-half one. (c) The meta-model's training set contains every flag Theo has ever raised, including flags on issuers that later did a drop-down. Which splitter must you use, and what goes wrong with the obvious one?
+   *Check:* (a) Without it: $0.35 \times 4 - 0.65 \times 2 = +0.10\%$ per trade, or $+4\%$ a year. With it: 8.4 winners at 55% precision means about 15.3 trades, and $0.55 \times 4 - 0.45 \times 2 = +1.30\%$ per trade, or about $+20\%$ a year from fewer than half the trades. (b) For $p = 0.75$, $z = 0.25/\sqrt{0.1875} \approx 0.577$ and $2\Phi(z) - 1 \approx 0.44$. For $p = 0.55$, $z = 0.05/\sqrt{0.2475} \approx 0.10$, giving about 0.08. The sizing rule converts the edge into a test statistic and bets the confidence that the edge exists. A 55% read is barely distinguishable from a coin flip, so it gets a chip, not a stack: bet your confidence, not your opinion. (c) Use purged, parent-grouped folds. Flags on one parent cluster in time around the same corporate event, so a shuffled split trains on the answer to the test flag.
+
+4. **Deflate the honest number.** Section 7.8 deflated Kaz's in-sample winner. Now deflate the number on his new report: a purged out-of-sample Sharpe ratio of 0.30 per month over $T = 240$ months, with skew $-0.5$ and kurtosis 5, selected from $N = 3{,}000$ trials with $V \approx 1/T$. (a) Show that the DSR is about 0.84. (b) Clustering the trial-return correlations finds about 400 effectively distinct trials. Holding $V$ fixed, recompute $SR^\ast$ and the DSR. (c) Compute the MinTRL at 95% confidence against the clustered $SR^\ast$, and compare it with the history TRACE has. (d) Explain why feeding the *in-sample* Sharpe ratio of 2.9 into the DSR is a category error.
+   *Check:* (a) $SR^\ast \approx 0.23$, the denominator is $\sqrt{1 + 0.15 + 0.09} \approx 1.11$, and $\Phi(0.07 \times 15.46 / 1.11) = \Phi(0.98) \approx 0.84$. (b) $\Phi^{-1}(1 - 1/400) \approx 2.81$ and $\Phi^{-1}(1 - 1/(400e)) \approx 3.12$, so $SR^\ast \approx 0.065 \times (0.423 \times 2.81 + 0.577 \times 3.12) \approx 0.065 \times 2.99 \approx 0.19$, and the DSR is $\Phi(0.11 \times 15.46 / 1.11) = \Phi(1.5) \approx 0.93$. It is better, and still short of 95%. (c) $T^\ast = 1 + 1.24 \times (1.645/0.11)^2 \approx 280$ months, roughly 23 years. That is about the entire life of TRACE (dissemination began in July 2002), and more than three years longer than Kaz's sample. (d) The DSR corrects for selection *across* trials. An in-sample Sharpe ratio also contains overfitting *within* the trial (the trees memorized the 47 hats), so each trial's return series must already be out of sample before it is deflated. Deflating an in-sample number is like haircutting a pro forma EBITDA that already includes the synergies.
+
+5. **The composite is not a clean gap.** In §7.9 the gap return used a month-begin price whose noise $\delta'_{t^+}$ was uncorrelated with the month-end noise $\delta_t$. Suppose instead that the month-begin price is an AI composite anchored partly on the last print, so that $\operatorname{Corr}(\delta'_{t^+}, \delta_t) = \rho > 0$, with standard deviations $\sigma_{\delta'}$ and $\sigma_\delta$. (a) Show that $\operatorname{Cov}(\tilde r_t, \tilde r^{\text{gap}}_{t+1}) = \operatorname{Cov}(r_t, r_{t^+ \to t+1}) - \rho\,\sigma_\delta \sigma_{\delta'}$. (b) The SMU Cox study found that the composite tracked efficient prices well in March 2020 but converged slowly during fire sales. What does that imply about $\rho$ in exactly the months when a reversal strategy is most active, and what would you use as the entry price instead?
+   *Check:* (a) The only noise shared by the two returns is $+\delta_t$ in $\tilde r_t$ against $-\delta'_{t^+}$ in the gap return, so the bias is $-\operatorname{Cov}(\delta_t, \delta'_{t^+}) = -\rho\,\sigma_\delta\sigma_{\delta'}$. At $\rho = 0$ it vanishes. At $\rho = 1$ with equal variances it is the full Roll bias of §7.9 again. (b) Slow convergence means the composite inherits the stale print, so $\rho$ rises precisely when dispersion and measured reversal premia are largest. Use the first executable institutional-size trade (or a dealer level you could actually have hit) as the entry price, and report the premium under both definitions.
+
+6. **ROBO and the future.** Theo's first draft of the leakage rule read: "Make sure the model doesn't use future data." ROBO complied by deleting the label column, which was the only future data in the table. Write the precise rule in at most 120 words. Name the timestamp field, the join rule, the purge condition, the embargo, and one test that fails the build if anyone breaks the rule.
+   *Check:* A good answer names `available_at` and requires an as-of join (`available_at <= t0`) for every feature. It states the purge as "drop training label $j$ if $[t_{0,j}, t_{1,j}]$ intersects $[T_0, T_1 + \text{embargo}]$," with the embargo at least $\max(h, \text{longest lookback})$. It ships the pure-noise AUC test from block 5 as the guard. Bonus credit for forbidding forward-fill across a data-release date, which is one common way the kind of error behind the 2021 corrigendum gets into a pipeline.
+
+### Deep-Dive Resource Graph
+
+**Podcasts**
+
+- *Flirting with Models* (Corey Hoffstein), Season 7, Episode 32: Ben Wellington, "Complex Feature Engineering at Two Sigma." Feature construction as a discipline, which is the step before §7.3–7.4.
+- *Flirting with Models*, Season 7, Episode 33: Stacie Mintz, "Turning Qualitative Fundamentals into Quantitative Factors." The closest podcast treatment of the primary-model idea in §7.5: analyst judgment turned into a signal a model can size.
+- *Bloomberg Odd Lots*. No episode on bond-level machine learning was verified for this edition. Search the archive for its credit market-structure episodes (companions to Part V) rather than relying on a citation here.
+
+**Practitioner Writing**
+
+- Robeco (Messow, Houweling, and 't Hoen), "The next frontier in value investing in credits: integrating machine learning" (23 June 2023): https://robeco.com/en-us/insights/2023/06/the-next-frontier-in-value-investing-in-credits-integrating-machine-learning
+- Robeco, "How machine learning enhances value investing in credits" (April 2024): https://robeco.com/en-ch/insights/2024/04/how-machine-learning-enhances-value-investing-in-credits
+- AQR, working-paper page for Dick-Nielsen, Feldhütter, Pedersen, and Stolborg, "Corporate Bond Factors: Replication Failures and a New Framework": https://www.aqr.com/Insights/Research/Working-Paper/Corporate-Bond-Factors-Replication-Failures-and-a-New-Framework ; Quantpedia's summary: https://quantpedia.com/corporate-bond-factors-replication-failures-and-a-new-framework/
+- *Systematically Biased* (Substack), "Pockets of Replicability (Post #6)" (2 June 2026), a narrative of the Bai–Bali–Wen misalignment: https://systematicallybiased.substack.com/p/pockets-of-replicability-post-6
+- Warwick Business School, news item on the Fama-DFA Prize awarded to Dickerson, Mueller, and Robotti (9 September 2024): https://www.wbs.ac.uk/news/research-bond-market-wins-fama-dfa-prize/
+- SMU Cox, *Cox Today*, on Venkataraman, Jacobsen, and Xu's study of AI-driven bond pricing (7 March 2026): https://www.smu.edu/cox/coxtoday-magazine/2026-03-07-ai-driven-technique-bond-prices ; FI Desk on MarketAxess CP+: https://www.fi-desk.com/marketaxess-bringing-transparency-to-the-muni-marketplace-with-ai-powered-pricing/
+- On the shelf: Ben Dor, Dynkin, Hyman, and Phelps, *Quantitative Credit Portfolio Management* (pp. 39, 50, 204, 338); Dynkin and coauthors, *Systematic Investing in Credit* (pp. 611, 651); Bohn and Stein, *Active Credit Portfolio Management in Practice* (pp. 465–467); Paleologo, *Advanced Portfolio Management* (pp. 49, 159); BlackRock, *Systematic High Yield Credit* (p. 6); Blackstone, *Systematic Credit* (p. 2); Man Group's 2022 and 2023 quant-credit papers (Man 2022 pp. 3, 41).
+
+**Academic Papers**
+
+*The overfitting canon.*
+
+- López de Prado (2018), *Advances in Financial Machine Learning* (Wiley): chapters 3–5 (labeling, sample weights, fractional differentiation) and chapter 7 (purged cross-validation).
+- Hosking (1981), "Fractional differencing," *Biometrika* 68(1): 165–176, DOI 10.1093/biomet/68.1.165.
+- Bailey and López de Prado (2014), "The Deflated Sharpe Ratio," *Journal of Portfolio Management* 40(5): 94–107: https://papers.ssrn.com/abstract=2460551
+- Bailey, Borwein, López de Prado, and Zhu (2017), "The Probability of Backtest Overfitting," *Journal of Computational Finance* 20(4), DOI 10.21314/jcf.2016.322: https://papers.ssrn.com/abstract=2326253
+- Bailey and López de Prado (2021), "The False Strategy Theorem," *American Mathematical Monthly* 128(9): https://escholarship.org/content/qt95t7k79q/qt95t7k79q.pdf
+- Harvey, Liu, and Zhu (2016), "... and the Cross-Section of Expected Returns," *Review of Financial Studies* 29(1): 5–68, DOI 10.1093/rfs/hhv059: https://www.nber.org/papers/w20592
+- Chordia, Goyal, and Saretto (2020), "Anomalies and False Rejections," *Review of Financial Studies* 33(5): 2134–2179, DOI 10.1093/rfs/hhaa018.
+- Jensen, Kelly, and Pedersen (2023), "Is There a Replication Crisis in Finance?" *Journal of Finance* 78(5): 2465–2518, DOI 10.1111/jofi.13249: https://www.nber.org/papers/w28432 (the optimistic counterweight, for equities).
+- Title only: Harvey and Liu (2015), "Backtesting," *Journal of Portfolio Management* 42(1); López de Prado (2019), "A Data Science Solution to the Multiple-Testing Crisis in Financial Research," *Journal of Financial Data Science*; Joubert (2022), "Meta-Labeling: Theory and Framework," *Journal of Financial Data Science*; Roll (1984), "A Simple Implicit Measure of the Effective Bid-Ask Spread in an Efficient Market," *Journal of Finance*.
+
+*The bond-factor audit.*
+
+- Bai, Bali, and Wen (2019), "Common risk factors in the cross-section of corporate bond returns," *Journal of Financial Economics* 131(3): 619–642: https://ideas.repec.org/a/eee/jfinec/v131y2019i3p619-642.html ; retraction notice, *Journal of Financial Economics* 150(3), DOI 10.1016/j.jfineco.2023.103721.
+- Dickerson, Mueller, and Robotti (2023), "Priced risk in corporate bonds," *Journal of Financial Economics* 150(2), 103707; arXiv posting: https://arxiv.org/abs/2604.05699
+- Dick-Nielsen, Feldhütter, Pedersen, and Stolborg (2023, revised 2025), "Corporate Bond Factors: Replication Failures and a New Framework," SSRN 4586652.
+- Dickerson, Robotti, and Rossetti (2026), "The Corporate Bond Factor Replication Crisis," arXiv:2604.07880: https://arxiv.org/abs/2604.07880
+- Title only: Dick-Nielsen (2009), "Liquidity Biases in TRACE"; Dick-Nielsen (2014), "How to Clean Enhanced TRACE Data."
+
+*Machine learning for bonds.*
+
+- Bianchi, Büchner, and Tamoni (2021), "Bond Risk Premiums with Machine Learning," *Review of Financial Studies* 34(2): 1046–1089, DOI 10.1093/rfs/hhaa062, and the corrigendum with Hoogteijling, *Review of Financial Studies* 34: 1090–1103, DOI 10.1093/rfs/hhaa098.
+- Gu, Kelly, and Xiu (2020), "Empirical Asset Pricing via Machine Learning," *Review of Financial Studies* 33(5).
+- Bali, Goyal, Huang, Jiang, and Wen (2020), "Predicting Corporate Bond Returns: Merton Meets Machine Learning," Swiss Finance Institute Working Paper 20-110, SSRN 3686164.
+- Kelly, Palhares, and Pruitt (2023), "Modeling Corporate Bond Returns," *Journal of Finance* 78(4): 1967–2008, DOI 10.1111/jofi.13233.
+- Feng, He, Wang, and Wu (2025), "Predicting individual corporate bond returns," *Journal of Banking & Finance* 171, 107372.
+- Bell, Kakhbod, Lettau, and Nazemi (2026), "Glass Box Machine Learning and Corporate Bond Returns," *Journal of Financial Economics* 181, DOI 10.1016/j.jfineco.2026.104294: https://www.nber.org/papers/w33320
+- Jostova, Nikolova, Philipov, and Stahel (2013), "Momentum in Corporate Bond Returns," *Review of Financial Studies* 26(7).
+- Barter, Gao, Christodoulaki, Chen, and Cartlidge (2025), the BondBERT paper, arXiv:2511.01869: https://arxiv.org/abs/2511.01869v2
+- Title only: Kelly, Malamud, and Zhou (2024), "The Virtue of Complexity in Return Prediction," *Journal of Finance*, read with Nagel (2025), "Seemingly Virtuous Complexity," as the critique; van Binsbergen, Nozawa, and Schwert, "Duration-Based Valuation of Corporate Bonds," *Review of Financial Studies*.
+
+**Data & Code**
+
+- Open Bond Asset Pricing (Dickerson and coauthors): daily and monthly TRACE panels, the 108-signal zoo, and corrected Bai–Bali–Wen factors: https://openbondassetpricing.com/ . The companion Python package, PyBondLab, is distributed on PyPI (search by name; its page was not verified for this edition).
+- Dickerson–Mueller–Robotti replication package, Mendeley Data, DOI 10.17632/n66rp59tr7.2: https://data.mendeley.com/datasets/n66rp59tr7
+- FINRA, TRACE historic data file layout, including the `As Of Indicator` reversal flag that fooled Kaz in §7.9: https://www.finra.org/filing-reporting/trace/historic-data-file-layout-post-2612-files
+- FRED, ICE BofA option-adjusted spreads for US high yield, US corporates, and CCC and lower: https://fred.stlouisfed.org/series/BAMLH0A0HYM2 , https://fred.stlouisfed.org/series/BAMLC0A0CM , https://fred.stlouisfed.org/series/BAMLH0A3HYC
+- SIFMA, US corporate bond statistics (volume, issuance, amount outstanding): https://www.sifma.org/resources/research/statistics/us-corporate-bonds-statistics/
+- Open Source Asset Pricing (Chen and Zimmermann): the equity-side model for a public, reproducible signal zoo (title only).
+- This book: Appendix B for point-in-time TRACE and pricing-composite feeds, and the reference implementation in §7.12.
+
+<!-- STATUS: COMPLETE -->
