@@ -64,3 +64,5 @@ No code fences; 40 `$$` delimiters, all on their own lines, even; no paragraph w
 - Container Store citation and appeal number rest on the dossier alone.
 - Momentive: exact petition day, whether the remand differential was actually paid, and the claim that the first-lien noteholders' class-level versus holder-level election worked as described are unchecked. Third Circuit EFH is stated as "practitioners noted" a conflict; the debtors argued the cases were consistent.
 - Length: 1.88 times baseline, near the cap. Brief item 10 asked for a bathtub box; the writer made it a prose gloss to hold the ten-box cap (ten Math, Gently boxes counted, none adjacent), a deliberate and acceptable deviation.
+
+<!-- STATUS: COMPLETE -->

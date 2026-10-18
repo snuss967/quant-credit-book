@@ -36,3 +36,4 @@ Code and consistency fixes found along the way. Lowest priority: run only when n
 - Ch 24 §24.7: PB-03's $0.75mm total leaves out financing; with financing the capture ratio is about 0.6, not two-thirds (rv Ch 8). Reconcile Ch 24 with Ch 8 §8.4. (2026-10-18)
 - Ch 12 states 99.8% for the whole $1.4bn Blue Owl sale; the press-release average was 99.7% (verify Ch 26). Reconcile Ch 12 with Ch 26. (2026-10-18)
 - Cast bible items from the 4-D writer: Theo's start date (cast bible says Tue 22 Sep 2026; the 4-D brief said Mon 21 Sep); Kaz's fulcrum misread breaks rule C7; log the Vantress interview, Owen's email and Theo's ROBO; Ch 1-B's "Ep 29" link should be Ep 15; the TRACE \$70.2bn figure is unverified. 00_02 dates Theo's offer to Sunday 28 June 2026 (per 4-D). Reconcile in state/cast_bible.md. (2026-10-18)
+- Ch 8 repeats the SVB 8-K attribution error fixed in Ch 4-B (verify 4-B). Fix Ch 8 to match. (2026-10-18)

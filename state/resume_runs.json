@@ -22,24 +22,6 @@
    }
   },
   {
-   "name": "u2-primers-a",
-   "task": "wuxvihes2",
-   "runId": "wf_bdb3d70f-3ee",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "04_ch04b_bond_math_for_the_desk",
-     "06_ch06b_options_and_measures_for_credit"
-    ],
-    "stages": [
-     "brief",
-     "revise",
-     "verify"
-    ]
-   }
-  },
-  {
    "name": "u2-primers-b",
    "task": "w25wiy3wc",
    "runId": "wf_65b018b4-c2b",
