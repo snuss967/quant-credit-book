@@ -325,19 +325,25 @@ Kaz's 93% deserves a proper autopsy, because nothing in it is an arithmetic erro
 
 ### Discrete Kelly for a bond
 
-Over one period, a fraction $f$ of NAV in the bond earns $+c$ with survival probability $p$ and loses $L$ with default probability $q = 1-p$ (excess returns over financing; pull-to-par and rolldown ignored). Expected log growth is
+> **Math, Gently.** *Kelly, and why the log.* Lose 50% and you need a 100% gain to get back to where you started; lose everything and no gain will ever get you back. Ordinary averages do not see that asymmetry, and logarithms do: $\ln 1.5 = +0.41$ but $\ln 0.5 = -0.69$, and $\ln 0 = -\infty$. Maximizing the average *log* of wealth is the same as maximizing the long-run growth rate of a bankroll that is bet over and over, and it treats ruin as infinitely bad, which is roughly how a PM experiences it. That is the **Kelly criterion**, which Chapter 16 met with a generous 60/40 coin. A credit desk's edges are thinner, so take a coin that pays even money and comes up heads 55% of the time. Bet a fraction $f$ of the bankroll on each toss, and the expected log growth per toss is $g(f) = 0.55\ln(1+f) + 0.45\ln(1-f)$. At the Kelly fraction $f^\ast = 0.55 - 0.45 = 0.10$, $g = 0.55 \times 0.0953 + 0.45 \times (-0.1054) \approx +0.005$, half a percent a toss. Bet a quarter of the bankroll instead, on the same favourable coin, and $g(0.25) = 0.55 \times 0.223 + 0.45 \times (-0.288) \approx -0.007$: the bettor with the edge goes broke, slowly and with certainty. Picture $g(f)$ as a hump. It rises from zero, peaks at $f^\ast$, sinks back through zero at about twice $f^\ast$, and falls off a cliff at the fraction where one loss takes everything. For a bond that loses $L$ per dollar on default, the cliff sits at $f = 1/L$. The bond's version is next.
 
-$$
-g(f) = p\,\ln(1 + f c) + q\,\ln(1 - f L).
-$$
-
-Setting $g'(f) = pc/(1+fc) - qL/(1-fL) = 0$ and cross-multiplying, $pc(1 - fL) = qL(1 + fc)$, so $pc - qL = fcL(p+q) = fcL$, and
+For a bond the coin is lopsided. A fraction $f$ of NAV earns the carry $c$ with survival probability $p$ and loses $L$ with default probability $q = 1-p$, and maximizing expected log growth gives
 
 $$
 f^\ast = \frac{pc - qL}{cL} = \frac{p}{L} - \frac{q}{c}. \tag{28.9}
 $$
 
-Three facts follow. The bet has positive edge, $pc - qL > 0$, if and only if $q < c/(c+L)$. The growth function is defined only for $f < 1/L$, the **ruin boundary**: at $f = 1/L$ a default takes wealth to zero and $\ln 0 = -\infty$. And for Kaz's inputs, $f^\ast = 0.969/0.6 - 0.031/0.045 = 1.615 - 0.689 = 0.926$. There is the 93%.
+Kaz reads the formula's verdicts aloud like a weather report. The bet has positive edge, $pc - qL > 0$, only if $q < c/(c+L)$. The fraction must stay below $1/L$, the **ruin boundary**, because at $f = 1/L$ a default takes wealth to zero and $\ln 0 = -\infty$. And at the cold open's inputs, $f^\ast = 0.969/0.6 - 0.031/0.045 = 1.615 - 0.689 = 0.926$. There is the 93%. "Which is comfortably inside the ruin boundary of 1.67," Kaz adds, "so technically it's prudent." Mags says nothing, in a way the whole floor can hear.
+
+#### The Full Derivation: discrete Kelly
+
+Over one period, with excess returns measured over financing and pull-to-par and rolldown ignored, expected log growth is
+
+$$
+g(f) = p\,\ln(1 + f c) + q\,\ln(1 - f L).
+$$
+
+Setting $g'(f) = pc/(1+fc) - qL/(1-fL) = 0$ and cross-multiplying, $pc(1 - fL) = qL(1 + fc)$, so $pc - qL = fcL(p+q) = fcL$, which is (28.9).
 
 Now the sensitivities, which are where the ex-RSSG analyst earns a seat. Differentiating (28.9),
 
@@ -349,25 +355,33 @@ At Kaz's inputs these are $-2.69$ and $-23.9$. The fraction is nine times more s
 
 ### Continuous time, and the jump
 
-Let a position of fraction $f$ in a bond have excess return $dP/P = c\,dt + \sigma\,dW_t - L\,dN_t$, where $\sigma$ is the diffusive (spread) volatility, $N_t$ a Poisson process with intensity $\lambda$ (the default intensity, under $\mathbb{P}$; see below), and the bond is replaced after default so the bet is stationary. Wealth follows $dX_t/X_{t^-} = f(c\,dt + \sigma\,dW_t - L\,dN_t)$. Itô's formula for a jump-diffusion gives
+> **Math, Gently.** *Two temperaments of risk, and the tax on leverage.* *Part one, the wiggle and the jump.* A **normal** distribution is the shape of many small, independent nudges added together: the bell curve, in which a move twice the typical size happens about one day in twenty and a move four times the typical size almost never. A spread wiggles like that on most days, a basis point here and two there. A **Poisson process** has the opposite temperament. It sits perfectly still, and then, at a moment nobody can schedule, it does one large thing. It counts events that arrive at a steady average rate $\lambda$ but at unpredictable times (defaults, downgrades, a lender call), and the wait for the next one is **exponential**, the coffee curve of §28.3 turned into odds: the chance that nothing has happened by time $t$ is $e^{-\lambda t}$. Tiny number: an issuer with default intensity $\lambda = 5\%$ a year survives one year with probability $e^{-0.05} \approx 95.1\%$, five years with $e^{-0.25} \approx 77.9\%$, and waits $1/\lambda = 20$ years on average. On a desk, the normal describes how a bond's price moves and the Poisson describes whether the bond still exists (Chapters 5 and 6 built both).
+>
+> *Part two, the ½σ².* Gain 50% and then lose a third, and you are back where you started: the average of the two returns is about $+8.3\%$, and the growth is zero. Volatility drags the growth of wealth below the average return, and the drag is half the variance: growth $\approx$ mean $-\tfrac12\sigma^2$. Here the returns' standard deviation is about 41.7%, half its square is about 8.7%, and that almost exactly cancels the 8.3%. On a gentler book with $\sigma = 20\%$ a year, the drag is $\tfrac12 \times 0.04 = 2\%$ a year. Itô's lemma is the formal name for this tax, and Chapter 6 collected it once. The new point for a desk head is what leverage does to it: hold a fraction $f$ of NAV and the volatility is $f\sigma$, so the drag is $\tfrac12 f^2\sigma^2$, which grows with the *square* of the leverage while the carry grows only in proportion. The jump has its own version of the tax, the log of what a default leaves, $\ln(1 - fL)$, which goes to minus infinity at the ruin boundary. The growth rate that adds up all three is next.
+
+In continuous time the bond's excess return is a carry, a wiggle and a jump: $dP/P = c\,dt + \sigma\,dW_t - L\,dN_t$, where $\sigma$ is the diffusive (spread) volatility and $N_t$ a Poisson process with intensity $\lambda$, the default intensity under $\mathbb{P}$ (the next subsection says why that measure). A position of fraction $f$ of NAV, replaced after each default so the bet is stationary, grows at the long-run rate
 
 $$
-d\ln X_t = \left(fc - \tfrac12 f^2\sigma^2\right)dt + f\sigma\,dW_t + \ln(1 - fL)\,dN_t,
+g(f) = fc - \tfrac12 f^2 \sigma^2 + \lambda \ln(1 - fL), \tag{28.10}
 $$
 
-so the long-run growth rate is
-
-$$
-g(f) = fc - \tfrac12 f^2 \sigma^2 + \lambda \ln(1 - fL). \tag{28.10}
-$$
-
-With $\sigma = 0$, $g'(f) = c - \lambda L/(1-fL) = 0$ gives
+which is the box in one line: carry, minus the leverage-squared volatility tax, plus the log of what a default leaves times how often defaults come. With no diffusion, the growth-optimal fraction is
 
 $$
 f^\ast = \frac{1}{L} - \frac{\lambda}{c}, \tag{28.11}
 $$
 
-the continuous twin of (28.9). With $\sigma > 0$, $g'(f) = c - f\sigma^2 - \lambda L/(1 - fL) = 0$. Multiply by $(1 - fL)$:
+the continuous twin of (28.9). With diffusion, $f^\ast$ is the smaller root of the quadratic (28.12), derived just below. At Kaz's inputs with $\lambda = 0.031$ and $\sigma = 5\%$, it is about 0.94.
+
+#### The Full Derivation: Kelly with a jump
+
+Wealth follows $dX_t/X_{t^-} = f(c\,dt + \sigma\,dW_t - L\,dN_t)$. Itô's formula for a jump-diffusion gives
+
+$$
+d\ln X_t = \left(fc - \tfrac12 f^2\sigma^2\right)dt + f\sigma\,dW_t + \ln(1 - fL)\,dN_t,
+$$
+
+and taking the long-run average, with $\mathbb{E}[dW_t] = 0$ and $\mathbb{E}[dN_t] = \lambda\,dt$, gives (28.10). With $\sigma = 0$, $g'(f) = c - \lambda L/(1-fL) = 0$ gives (28.11). With $\sigma > 0$, $g'(f) = c - f\sigma^2 - \lambda L/(1 - fL) = 0$. Multiply by $(1 - fL)$:
 
 $$
 \sigma^2 L\, f^2 - (cL + \sigma^2)\, f + (c - \lambda L) = 0. \tag{28.12}
@@ -379,7 +393,7 @@ $$
 f^\ast = \frac{2(c - \lambda L)}{(cL + \sigma^2) + \sqrt{(cL - \sigma^2)^2 + 4\sigma^2\lambda L^2}}.
 $$
 
-(The discriminant has been rewritten as a sum of squares, so it is never negative.) At Kaz's inputs with $\lambda = 0.031$ and $\sigma = 5\%$, $f^\ast \approx 0.94$.
+(The discriminant has been rewritten as a sum of squares, so it is never negative.)
 
 Compare the shortcut Kaz almost used, Merton's diffusion fraction with the jump replaced by a diffusion of the same mean and variance, $\lambda L$ and $\lambda L^2$:
 
@@ -387,7 +401,7 @@ $$
 f^{\text{M}} = \frac{c - \lambda L}{\sigma^2 + \lambda L^2} = \frac{0.0264}{0.0025 + 0.0112} = 1.93.
 $$
 
-Merton's approximation says to hold 193% of NAV in a bond whose default costs $1.93 \times 0.6 = 116\%$ of NAV. The approximation is excellent for small jumps and disastrous near the ruin boundary, because a diffusion never jumps over it. Bermin and Holm (2026, *Kelly trading when asset prices have jumps*; publication details CHECK) make the general point that the continuous approximation can badly underestimate bankruptcy risk when leverage is high. In credit, every default is a large jump, so the approximation is never safe for single names. Use (28.10).
+Merton's approximation says to hold 193% of NAV in a bond whose default costs $1.93 \times 0.6 = 116\%$ of NAV. The approximation is excellent for small jumps and disastrous near the ruin boundary, because a diffusion never jumps over it. A recent paper by Bermin and Holm, *Kelly trading when asset prices have jumps*, makes the general point that the continuous approximation can badly underestimate bankruptcy risk when leverage is high. In credit, every default is a large jump, so for single names the approximation is never safe, and (28.10) is the one that knows where the cliff is.
 
 ### Fractional Kelly is full Kelly for people with standard errors
 
@@ -413,7 +427,9 @@ An edge known to within 100% of itself, which is generous for a single credit, g
 
 ### Which measure, and which loss
 
-Kelly needs the physical default intensity $\lambda^{\mathbb{P}}$, never the risk-neutral $\lambda^{\mathbb{Q}}$ bootstrapped from CDS in Chapter 6. The reason is a one-line proof. Under $\mathbb{Q}$ the credit triangle holds, $c \approx \lambda^{\mathbb{Q}} L$, so the edge $c - \lambda^{\mathbb{Q}} L$ is zero and (28.11) gives $f^\ast = 0$: the risk-neutral measure is the measure in which nobody has an edge, by construction. The edge that Kelly sizes is $c - \lambda^{\mathbb{P}}L$, the credit risk premium plus whatever your information adds. That is why mixing sources is dangerous. Kaz's $c$ came from the market, his $q$ from a long-run agency cohort, and his $L$ from an agency average, and the 93% is the product of three numbers from three different worlds.
+> **Math, Gently.** *P and Q, or the odds and the bookkeeping.* Chapter 6 explained "risk-neutral" as the bookmaker's ledger; here is why a Kelly sizer must refuse to read it. Under $\mathbb{Q}$, the risk-neutral measure, probabilities are set so that every price on the screen is a fair bet at the risk-free rate. They are the bookkeeping that makes today's price fair, with every risk premium folded into the odds. Under $\mathbb{P}$, the physical measure, probabilities are how often things actually happen. Tiny number: a five-year CDS at 450 bp with $L = 0.6$ implies, through the credit triangle $s \approx \lambda L$, a risk-neutral default intensity of $0.045/0.6 = 7.5\%$ a year. The agency's cohort table for the same rating says about 3.1%. The gap is the price of bearing default risk, and it is the only reason anybody earns anything for holding credit. Feed the 7.5% into (28.11) at a 4.5% carry and $f^\ast = 1/0.6 - 0.075/0.045 = 0$: under $\mathbb{Q}$ the bet is fair by construction, so Kelly bets nothing. A Kelly fraction is a statement about $\mathbb{P}$, or it is a statement about nothing. Why the zero is no accident, and what happens when the sources are mixed, is next.
+
+Kelly needs the physical default intensity $\lambda^{\mathbb{P}}$, never the risk-neutral $\lambda^{\mathbb{Q}}$ bootstrapped from CDS in Chapter 6. The box's zero is not a coincidence of its numbers. Under $\mathbb{Q}$ the credit triangle holds, $c \approx \lambda^{\mathbb{Q}} L$, so the edge $c - \lambda^{\mathbb{Q}} L$ is zero for every bond and (28.11) always gives $f^\ast = 0$: the risk-neutral measure is the measure in which nobody has an edge, by construction. The edge that Kelly sizes is $c - \lambda^{\mathbb{P}}L$, the credit risk premium plus whatever your information adds. That is why mixing sources is dangerous. Kaz's $c$ came from the market, their $q$ from a long-run agency cohort, and their $L$ from an agency average, and the 93% is the product of three numbers from three different worlds.
 
 Recovery is not a constant either. Let $L = L_{\max} U$ with $U \sim \text{Beta}(a, b)$ (the recovery model of Chapter 5). The growth rate becomes
 

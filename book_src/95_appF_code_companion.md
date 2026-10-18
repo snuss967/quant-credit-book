@@ -9283,7 +9283,7 @@ AGREEMENT = """
 "Excluded Taxes" means taxes imposed on the Lenders.
 """
 
-DEF_RE = re.compile(r'^"(?P<term>[^"]+)"\s+means\s+(?P<body>.+)$', flags=re.M)
+DEF_RE = re.compile(r'^"(?P<term>[^"]+)"\s+means[,\s]\s*(?P<body>.+)$', flags=re.M)
 
 
 def parse_definitions(text):

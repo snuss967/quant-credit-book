@@ -1,9 +1,9 @@
 # Progress Log, Edition 2 U2: Chapter 12-B
 
 - [x] 1. [Cold Open] EXPAND-SCENE (1,200-1,500 words), the Friday card — dated day 31 (Mon 23 Nov 2026, per 4-C canon); cards sealed in envelope.
-- [ ] 2. [§12B.1] LIST-TO-NARRATIVE + MATH-GENTLY #1 (min-max threshold)
-- [ ] 3. [§12B.2] MATH-GENTLY #2 + LIST-TO-NARRATIVE + FULL-DERIVATION-MOVE (turnover)
-- [ ] 4. [§12B.3] MATH-GENTLY #3 + LIST-TO-NARRATIVE + ANOTHER-SEAT (CLO)
+- [x] 2. [§12B.1] LIST-TO-NARRATIVE + MATH-GENTLY #1 (min-max threshold) — data-room ritual; shed box; springing lien callback, pronoun fixed (C7, C8).
+- [x] 3. [§12B.2] MATH-GENTLY #2 + LIST-TO-NARRATIVE + FULL-DERIVATION-MOVE (turnover) — Mags grocery anecdote; bucket box; turnover Full Derivation; Kaz DIP-consent line.
+- [x] 4. [§12B.3] MATH-GENTLY #3 + LIST-TO-NARRATIVE + ANOTHER-SEAT (CLO) — town-hall box; Ines room tactics paragraph; CLO seat after Poker Table.
 - [ ] 5. [§12B.4] MATH-GENTLY #4 + BRIDGE (timed automaton)
 - [ ] 6. [§12B.5 head] NEW-SCENE Long Scene A: Saks Global, Five Months in Court
 - [ ] 7. [§12B.5 DIP/roll-up] MATH-GENTLY #5 + FULL-DERIVATION-MOVE

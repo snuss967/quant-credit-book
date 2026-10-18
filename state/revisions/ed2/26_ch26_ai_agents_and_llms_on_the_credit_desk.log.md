@@ -20,8 +20,8 @@
 - [x] 18. [26.7] MATH-GENTLY #7, "The best of N coin-flippers," before beat 3. — Done: coin-flipper box before 9:20 beat; owner Ch 7 cited.
 - [x] 19. [26.8] ANOTHER-SEAT #2, dealer's CIO and market maker's budget. — Done: Goldman, HRT, Man seat box; Doros pointed, not requoted.
 - [x] 20. [26.9, items 1-8] LIST-TO-NARRATIVE, one Thursday afternoon; keep pairs, METR, extractions. — Done: Thursday 8 Oct afternoon, eight ROBO misfires; METR verbatim.
-- [ ] 21. [26.9, determinism formally] MATH-GENTLY #8 in two parts.
-- [ ] 22. [26.10, controls (i)-(v)] LIST-TO-NARRATIVE; white-text amendment as the day.
-- [ ] 23. [26.11, Case Study A, Knight] EXPAND-SCENE to 900-1,200 words, #### heading.
+- [x] 21. [26.9, determinism formally] MATH-GENTLY #8 in two parts. — Done: two-part box, float order and kappa wobble; Kaz pronoun fixed.
+- [x] 22. [26.10, controls (i)-(v)] LIST-TO-NARRATIVE; white-text amendment as the day. — Done: white-text Thursday, five controls as next week; Kaz pronoun.
+- [x] 23. [26.11, Case Study A, Knight] EXPAND-SCENE to 900-1,200 words, #### heading. — Done: week-before scene, hedger cut, kill-switch rota; minutes left to Ch 27.
 - [ ] 24. [26.11, Case Study C, AI-washing] WHEN-TO-APPLY inside a beat.
 - [ ] 25. [26.13 Desk Debrief] BRIDGE: Finder table; promote scenes and case studies to ####.

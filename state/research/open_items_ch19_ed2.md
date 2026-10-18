@@ -1,0 +1,14 @@
+# Open Items, Chapter 19 (Edition 2, U2)
+
+*Facts and continuity points the U2 revision could not verify or settle within its budget; the book text hedges or labels each one. Logged 2026-10-18. (The brief named `state/open_items_ch19_ed2.md`; this file follows the convention of the other chapters' open-items files.)*
+
+1. **Chapter 18-B does not exist yet.** The Pair box in §19.6.2 says the legging cost is one "Chapter 18-B prices from the dealer's side" (rv_thread row `18_ch18b_the_rfq_response_engine`). If 18-B is not written, change the pointer to Chapter 18 §18.6.3 (Altice France, the leg-it-or-wait scene).
+2. **Story clock.** The cold open is dated Fri 23 Oct 2026 (cast bible C10), not the brief's Fri 9 Oct; the hand history, the Two Tapes replay (1 p.m.) and Wen's month-end list (2:04 p.m.) all fall on Fri 30 Oct 2026. Ch 27 also schedules a "Fri 30 Oct flash-rally replay" on Ines's desk. A crowded Friday, not a contradiction; the orchestrator may want to move one replay.
+3. **Hand-history markouts.** The brief's "line 117 down about 9 points" was not used. The scene keeps the Listing 19.7 path (about 1, 5 and 14 points at 1, 5 and 20 days) so the prose and the listing agree; the "\$200k" loss to the winning dealer is 5 points on \$4mm face.
+4. **Pair Book state after 30 Oct 2026.** Wen's scene closes six of Dov's unnumbered pairs (five named plus one pulled forward). Ch 8 has twelve open pairs at end-September and Ch 9 resizes eight; any later chapter that counts Dov's open pairs in November 2026 should reflect the closures. PB-01 and PB-19 are untouched.
+5. **Not re-fetched this pass (carried from Edition 1 or the dossiers):** MarketAxess month-end PT share 7% higher in 2022 YTD and 67% in 2021 (The DESK, 2022-11-08); Amundi's Minieri, "every line needs to be justified" (The DESK, 2019-10-06); FINRA Regulatory Notice 26-16 dates (voluntary 31 Aug 2026, mandatory 2 Aug 2027; `trend_electronification_pt_etf_liquidity.md` row 2026-07-24); Barclays lunch-hour share of US IG volume 11.3% to 12.5% (The DESK, 2025-09-17; `life_quant_shop_daily_life.md` §3.2b).
+6. **Meli & Todorova's levers are IG measures.** The 12% (correlation with LQD) and 15% (ETF ownership) interquartile effects are applied to a high-yield list in Wen's scene as a character's judgment, and the text says so ("faith with a data set attached").
+7. **Verified this pass against `state/pdf_pages/Man_Revolutions_in_Credit_Trading_2023`:** the quotations in the §19.9 View From Another Seat box (pp.2–5, including "roughly 30% ... high yield and 60% in investment grade ... to over 90%", Man Numeric as of 1 May 2023).
+8. **Listing explanations.** The template phrases banned by `u2_lessons.md` lesson 4 ("Use it for... The edge case that bites", "First... Second... Third") were reworded in the explanations of Listings 19.1–19.8; no fact, number or edge case was removed.
+
+<!-- STATUS: COMPLETE -->

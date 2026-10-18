@@ -241,6 +241,80 @@ Kaz looked back at the screen. "A modified duration computed from the 31% yield 
 
 That is the first of the two routes to zero duration in §8.3. The second, the negative correlation between rates and spreads, is the empirical duration of §8.2, which this chapter does not rebuild; the replay's hedge was already demonstrating it on the second red line, and §4B.8 grades it. The first route has a date on it, too, and the desk's next replay was built around that date.
 
+#### Long Scene: The Book That Had a Duration and a Bank That Did Not
+
+*A replay, run on Thursday 8 October 2026 at 5:10 p.m. and cut off at the close of Thursday 9 March 2023. The filings, dates and balance-sheet figures come from SVB Financial Group's 2022 Form 10-K and its March 2023 8-Ks, the Federal Reserve's April 2023 review of the bank's supervision, and the market data named in the text. The desk's marks for the note, its hedge and every line of dialogue are invented (illustrative).*
+
+*The folder.* Ines had warned them on Tuesday that the fallen angel would not be the week's only replay, and on Thursday she came back with a thinner folder. It held the 2022 Form 10-K of SVB Financial Group, filed on Friday 24 February 2023, and the 8-K from the evening of Wednesday 8 March. "This isn't your fourth-weekend folder," she told Theo. "That one comes with a bid, and you get all of it then (§3.4). Tonight I'm lending you a ruler. Cut at the close of Thursday the ninth. Kaz plays, you play. Mags remembers, and keeps it to herself."
+
+"I remember everything about that week," said Mags. "That's the trouble with me in a replay."
+
+Kaz opened the 10-K and did something Theo had never seen a quant do with a filing: went straight to the fair-value footnote and read backwards from it. The held-to-maturity securities, carried at an amortized cost of \$91.3bn, had a fair value of \$76.2bn. Add the available-for-sale book and the unrealized losses came to \$17.7bn, against common equity of \$12.4bn: 143%. Deposits were \$173.1bn, down \$16.1bn in a year. Advances from the Federal Home Loan Bank stood at \$15.0bn, where a year earlier there had been none.
+
+"This isn't a credit problem," said Kaz. "It's a duration problem with a credit problem attached." Kaz drew two boxes on the whiteboard. The left one said ASSETS: bonds bought when yields were at the floor, paying fixed coupons for years. The right one said DEPOSITS. "The left side has a duration measured in years. What's the duration of the right side? How long does it take to wire money out of a bank?"
+
+"An afternoon," said Theo. "Less, if your venture investor sends an email."
+
+"Then it's a bank that bought long duration with short money. The loss on the left is §4B.3's slope times how far rates moved. Nothing is wrong with the bonds. Every one of them is going to pay in full, on time."
+
+"If they're held to maturity," said Theo.
+
+"If the *bank* is held to maturity," said Kaz. "That's the only assumption in the accounting, and it's an assumption about the duration of the liabilities."
+
+Kaz could not read the duration of the bank's portfolio off the page, and said so. The fair-value table gives a loss, not a slope, and backing a slope out of a loss needs the yields the book was bought at, which the 10-K does not lay out in one place. The loss was enough: about a sixth of the held-to-maturity book's cost had gone at market prices, and the equity that was supposed to absorb it was smaller than the hole. Five days after the bank failed, Dan Davies told the same story at greater length on the *Odd Lots* episode in this chapter's Resource Graph (14 March 2023), as a bank reaching for yield in long-dated Treasuries when rates were at the floor. Kaz had got there from one table. The depositors' side of the story, an uninsured share that the Federal Reserve's review later put at 94%, was a number the replay's rules kept out of the room.
+
+*The note.* The holding company owed seven series of senior notes, \$3.3bn in all, one class, from the 3.50% due January 2025 to the 4.570% fixed-to-floating due April 2033. Ines's sheet carried a desk mark for one of them: the 1.800% notes due February 2031, at 75 on Wednesday's close (illustrative). Theo did what he had learned on Tuesday: dirty price, yield, slope. At 75 the yield was 5.77%, the modified duration 7.11 and the DV01 \$5,340 per \$10mm. "If we owned ten million, we'd short about \$8.9mm of seven-year Treasuries against it," he said, sizing DV01 against DV01 the way §4B.5 does. "And then we'd own the spread."
+
+"And then you'd own the spread," said Kaz. "Spread duration is the same 7.1. It's a bullet; the curve and the spread sit in the same exponent."
+
+Then the 8-K. After the close on 8 March the company announced that it had sold the available-for-sale book, \$23.97bn of it at amortized cost for \$21.45bn of proceeds, a loss of 10.5%, and that it would raise \$2.25bn of capital. The same evening Silvergate said it would wind itself down.
+
+"They've sold the part of the book they were allowed to sell, at what it was worth," said Kaz. "The loss was always there. Now it's on the income statement."
+
+"And they're raising equity to fill the hole," said Theo, "which tells every depositor how big the hole is." In six years of first-day declarations he had never seen a company announce a capital raise and a loss in the same paragraph and have the paragraph calm anybody down.
+
+*Thursday 9 March: the card.* Ines put Thursday's close into the replay. The stock had finished at \$106.04, down 60.4% from \$267.83 the day before. The desk's mark for the 2031s was 62 (illustrative). Theo reran the slope: yield 8.48%, modified duration 6.94, DV01 \$4,310 per \$10mm.
+
+"Lower DV01," he said. "Per basis point it got less risky."
+
+"That joke was funnier on Tuesday," said Kaz.
+
+Theo checked the day's loss against the slope anyway, out of the habit of a man who used to tie every model back to the cash. The yield had risen 271 basis points. Wednesday's slope said that should cost $7.11 \times 0.0271 \times 75.1 \approx 14.5$ points; the mark had fallen 13. "The duration overstated the loss by a point and a half."
+
+"Because the hill is curved," said Kaz. "Walk far enough and the slope you started with is wrong. That point and a half has a name, and it's the next section."
+
+Ines dealt the card.
+
+> *Write three things: the note's DV01, its spread duration, and which of the two you would bet on tomorrow.*
+
+Kaz wrote fast: *DV01 \$4,310 per \$10mm. Spread duration 6.9. Bet on rates: if this spreads to other banks the curve rallies, so keep the Treasury short and size it to the DV01. It is the one line on this sheet I can price.*
+
+Mags had been asked to keep quiet and wrote a card anyway, one line long: *A bank bond at 60 has no duration. It has a lawyer.*
+
+Theo wrote the two numbers and stopped at the third line. Under it he wrote a question instead of an answer: *What does the holdco own?* It was the first question of his old job. A holding company owns the stock of its subsidiaries and whatever cash it keeps upstairs, and when the subsidiary is a bank, the cash upstairs has a way of being a deposit downstairs. Ines read the card and handed it back without a word on the third line. "Fourth weekend," she said.
+
+(Your own card goes here, before Friday.)
+
+*Friday 10 March: the grading.* Ines put up the morning. Trading in the stock was halted before the open. The thirty-day implied volatility, which had spent the year near the bottom of a 52-week range of 39 to 280, was quoted at 167 before the bell. By midday the California regulator had closed Silicon Valley Bank and appointed the FDIC as receiver, and the closing order put Thursday's withdrawals at more than \$40bn. The default mechanics, and why no structural model on any desk had seen it coming, are §6.4.4's case; Ines did not replay them. She asked for one thing. "Mark the note."
+
+Nobody could, and that was the first lesson. There was no single-name CDS to read a curve from, and the notes traded by appointment; press reports in the days that followed put them in the 30s and 40s. Kaz asked for a number anyway, so Ines gave the desk's: 40 (illustrative).
+
+Then she graded the cards against it.
+
+Kaz's DV01 had been right on Thursday and meant nothing on Friday. At 40 the yield formula of §4B.2 still reported a modified duration of 6.5, because it still believed that sixteen coupons were coming. The bond's real rate duration came from the distressed route of §4B.3. Under recovery of face, with a large default intensity, the price is close to $100R\,\lambda/(\lambda+r)$, and its rate duration is $-\frac1P\,\partial P/\partial r = 1/(\lambda + r)$: the expected wait for the recovery payment, in years. At an intensity of 5 a year, a default expected within weeks, that is about 0.2. The Treasury short sized on Wednesday was hedging a rate duration that no longer existed, which made it a second position rather than a hedge. What a Treasury short did to a credit book on that Friday and the Monday after is Chapter 8's scene (§8, Case Study B), and it is not a kind one.
+
+Spread duration did no better. It measures what a small change in the spread does to the price, and Friday's change was not small; it was a jump, and a jump is priced by what is lost when it happens, the price minus whatever the claim recovers, not by a derivative. When Kaz asked the §4B.6 code for a par-CDS-equivalent spread at 40 with $R = 40\%$, it returned an error instead of a number: no hazard rate can make a bond worth less than its recovery, so at or below recovery the solver has nothing to find.
+
+"So the only number left," said Theo.
+
+"Is the price," said Mags, "and a claim. I wrote *lawyer*."
+
+The grades went on the whiteboard under Kaz's two boxes. Mags's card was the answer in eleven words. Kaz's card had both numbers right and the bet wrong, because the thing it bet on had left the bond. Theo's third line was not an answer, and it was the right question: what the claim was worth is the subject of his fourth-weekend drill (§3.4), where he bids the notes from the parent-company balance sheet. The claim's last chapter was written three and a half years later: in late August 2026, after a twelve-day bench trial, a federal court in California held that the liquidating trust that pays the senior noteholders could not recover the holding company's \$1.71bn deposit claim against the FDIC.
+
+A reader whose card bet on either duration has made Kaz's mistake, which is a good mistake to make in a replay. Both durations describe a bond that is going to keep paying its list. On Thursday night that was still the bond on the screen. On Friday morning the list was gone, and with it every number that had been computed from the list.
+
+Kaz added one line under the two boxes before wiping the board: *The book had a duration. The bank did not.* Mags read it twice, which on this desk counts as applause.
+
 ### Key-rate durations
 
 A parallel bump hedges a parallel move. Curves twist. Key-rate durations (Ho 1992) split the parallel duration across tenors. Let the zero curve be linear between key tenors $T_1 < \dots < T_J$ and flat outside. Bumping node $j$ alone by $h$ shifts the curve by $h\,\phi_j(t)$, where $\phi_j$ is a tent: one at $T_j$, falling linearly to zero at the neighbouring nodes (and flat beyond the end nodes). Under continuous compounding,
@@ -259,13 +333,19 @@ The tents are a partition of unity, so the key rates add up to the parallel dura
 
 ### The curvature
 
+> **Math, Gently.** *Two trucks with the same centre of mass.* Load one truck with a single pallet in the middle of its bed, and another with two half-pallets, one over the front axle and one over the back. Both balance at the same point, the beam of §4B.3 again, so both have the same duration. But swing them round a corner and the second one fights you, because weight far from the centre resists turning. That extra resistance, over and above what the balance point alone would predict, is the extra convexity. A tiny number: a single \$100 cheque due in ten years has $D = 10$ and $C = 10^2 = 100$. Split the same present value into two equal halves due at 2 and 18 years and the balance point is still $\tfrac12(2 + 18) = 10$, but the convexity is $\tfrac12(2^2 + 18^2) = \tfrac12(4 + 324) = 164$. The extra 64 is the spread of the load, $\tfrac12(8^2 + 8^2)$. Cash flows spread out bend the price curve more than cash flows bunched together, and a zero, with all its weight on one date, bends by exactly its duration squared and not a hair more. The identity is next.
+
 Work in continuous compounding, where the algebra is cleanest. With $P(y) = \sum_k \text{CF}_k e^{-y t_k}$ and weights $w_k = \text{CF}_k e^{-y t_k}/P$,
 
 $$
 D = \sum_k w_k\,t_k, \qquad C \equiv \frac{1}{P}\frac{d^2 P}{dy^2} = \sum_k w_k\,t_k^2 = D^2 + \sum_k w_k\,(t_k - D)^2 .
 $$
 
-The last equality is the variance decomposition $\mathbb{E}[t^2] = \mathbb{E}[t]^2 + \mathrm{Var}(t)$ under the PV weights. Convexity is duration squared plus the *dispersion* of the payment dates. A zero has no dispersion and $C = T^2$. A barbell (a 2-year and a 20-year) has the same duration as a 10-year bullet and far more dispersion, so more convexity. Differentiating $D$ itself gives the companion identity
+Convexity is duration squared plus the *dispersion* of the payment dates. A zero has no dispersion and $C = T^2$. A barbell (a 2-year and a 20-year) has the same duration as a 10-year bullet and far more dispersion, so more convexity.
+
+#### The Full Derivation
+
+The last equality is the variance decomposition $\mathbb{E}[t^2] = \mathbb{E}[t]^2 + \mathrm{Var}(t)$ under the PV weights, which a physicist would recognize as the parallel-axis theorem of the trucks. Differentiating $D$ itself gives a companion identity. Since $dw_k/dy = -t_k w_k - w_k P'/P = -w_k\,(t_k - D)$, we have $dD/dy = -\sum_k w_k\,t_k\,(t_k - D) = -(C - D^2)$, that is,
 
 $$
 \frac{dD}{dy} = D^2 - C = -\sum_k w_k\,(t_k - D)^2 \le 0,
@@ -285,6 +365,8 @@ The Taylor expansion is $\Delta P/P \approx -D^{\text{mod}}\,\Delta y + \tfrac12
 
 ### Convexity is paid for
 
+> **Math, Gently.** *Jensen's coin, and the tax Itô will collect.* **Part one.** Take a ten-year zero priced at a 5% continuous yield: $100e^{-0.5} = 60.65$. Now flip a coin. Heads, the yield goes to 6% and the price to $100e^{-0.6} = 54.88$; tails, it goes to 4% and the price to $100e^{-0.4} = 67.03$. The *average yield* is still 5%, but the *average price* is $\tfrac12(54.88 + 67.03) = 60.96$, which beats 60.65 by 0.31, or 0.5% of the price. The curve bends upward, so the tails gain more than the heads lose, and the holder of a curved payoff profits from the wobble itself. The size of the gift is half the convexity times the variance: here $C = T^2 = 100$ and the move is $\pm 1\%$, so $\tfrac12 \times 100 \times 0.01^2 = 0.5\%$, the same number the coin gave. Mathematicians call the inequality Jensen's; traders call it being long convexity. **Part two.** The same half-sigma-squared turns up whenever a curved payoff rides a noisy variable, which in this book is constantly. Chapter 6 calls it Itô's term and derives it from $(dW_t)^2 = dt$ (§6.1.2; §5.2.3 has the picture). Here it is a coin, and the paragraph after this box sends the bill.
+
 Under either measure (a volatility is the same under $\mathbb{P}$ and $\mathbb{Q}$), the expected instantaneous return from convexity is $\tfrac12 C\,\sigma_y^2$ per year if yields have volatility $\sigma_y$ (in decimal per root-year). For the fallen angel at $\sigma_y = 100$bp a year that is $\tfrac12 \times 78 \times 0.0001 = 39$bp a year. Long-convexity positions look like free money, and are not: the market charges for convexity through a lower yield, so the barbell yields less than the bullet of the same duration. Veronesi's statement of the trade-off (Veronesi_Fixed_Income_Securities p.162) is that "the gain in value from higher convexity is offset by a lower gain due to the passage of time." Convexity is the one free lunch in fixed income that arrives with a bill, and the bill is called theta. Chapter 6-B derives the same bill for options, where it is the theta–gamma relation.
 
 ### The three meanings
@@ -298,6 +380,10 @@ The word appears more than fifty times in this book, in three senses that share 
 | 3. Payoff-shape convexity | curvature of $\mathbb{E}[\text{strategy return} \mid \text{market return}]$ over a horizon | the market's horizon return | the strategy, through whipsaw losses in reversals | §10.6.1 |
 
 Meaning 1 is meaning 2 with the yield as the underlying: a bullet is long gamma in its own yield, a callable near its call price is short it (§4B.7), and a CDS protection buyer is short spread convexity (§23.5). Meaning 3 is not a derivative of any price function. It is a property of a dynamic strategy's conditional expected return, and "trend is a straddle" (§10.6.1) is an analogy to meaning 2 that holds because a trend rule approximately replicates one. When someone says "convexity," ask: *with respect to what, over what horizon, and who is short it?* The collision joins App A §A.3.
+
+"So when the trend people say convexity," Theo asked, "they mean the shape of a *strategy*, not of a bond?"
+
+"Of a strategy that behaves as if it owned a straddle," said Kaz. "Nobody sends it a theta bill. It pays in whipsaws."
 
 Spread convexity, finally, is meaning 1 with $s$ in place of $y$. For a bullet priced off $z + Z$ it equals the curve convexity. The spread-return expansion of §5.2, $X \approx s\,h + \text{roll} - D^{\text{spr}}\Delta s + \tfrac12 C^{\text{spr}}(\Delta s)^2$, now has every term built; its $C^{\text{spr}}$ turns negative for the callable high-yield bonds that dominate the index, which is the convexity tax of §5.9.
 

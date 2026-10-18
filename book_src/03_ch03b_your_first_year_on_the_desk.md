@@ -6,7 +6,7 @@
 
 *Tuesday, late September. The coffee machine is warming up, and so is the security master.*
 
-The first thing Theo Marsh sees on his first morning on the systematic desk is not a price. It is a diff: the list of everything in the security master that changed overnight. Most of it is lint, a rating outlook here and a sector code there. One row is red. **Halvorsen Packaging 7.25% senior secured notes due 2029: new CUSIP.** (Halvorsen is fictional, and every number in this chapter is illustrative unless sourced.) The old line is still there, smaller, like a house after the extension has been sold. An A/B exchange closed overnight: holders swapped their 144A notes for identical registered notes. Nothing economic happened. Every system on the floor believes something did.
+The first thing Theo Marsh sees on his first morning on the systematic desk is not a price. It is a diff: the list of everything in the security master that changed overnight. Most of it is lint, a rating outlook here and a sector code there. One row is red. **Halvorsen Packaging 7.25% senior unsecured notes due 2029: new CUSIP.** (Halvorsen is fictional, and every number in this chapter is illustrative unless sourced.) The old line is still there, smaller, like a house after the extension has been sold. An A/B exchange closed overnight: holders swapped their 144A notes for identical registered notes. Nothing economic happened. Every system on the floor believes something did.
 
 Under it, a second row: *vendor evaluated-price file: expected 06:45, received —.*
 
@@ -166,7 +166,64 @@ What would a first-year analyst have typed? Not a forecast of the LME, which nee
 
 Incora's 28 March 2022 transaction, also told in Chapter 13-B, adds one more feature to the table: four steps in one day, so "the amendment and the issuance share a date" is itself an event type.
 
-*Builds on:* §3.5 (the Edge Ledger), §5.1.5 and §18.6.2 (event features in $\lambda^{\mathbb{P}}$), §12B.5 and §12B.9 (the grace-period clock). *Used in:* §3B.11 (`desk_calendar.py`), Chapter 13 (the runway input to the Priming Risk Score), Chapter 13-B (the dated Saks and Incora diaries).
+### The Pair Book: Two of Every Clock
+
+*Dov Adler's pod at Vantress Capital Management, his analyst Wen Zhao and the platform's risk manager Marcus Oyelaran are fictional composites (Chapter 1-B, Chapter 8-D). Kestrel Roofing and Halvorsen Packaging are fictional issuers. Their coupon dates, every position, mark, fee and P&L figure below, and the market's moves on the dated days are illustrative. The index-roll convention and the 2026 FOMC dates are real.*
+
+Every clock in this chapter also runs on a pod's floor, and there it runs twice, because every position is two positions. In Theo's second week, across town, one pair met its first quarter-end.
+
+Thursday, 1 October 2026, 7:12 a.m. The platform's overnight explain reached Wen Zhao's screen with one row she did not believe. PB-01 is Dov's Kestrel/Halvorsen pair (§1B.2): long \$60mm of Kestrel's 6% notes due 2030, short \$39mm of Halvorsen's 7.25% notes due 2029, borrowed through Vantress's prime broker from an asset manager's agent lender, matched on market-value DTS when Dov opened it in April. For Wednesday, the quarter's last day, the explain had the pair down \$0.26mm *(illustrative)*, with \$0.28mm of the loss on the idiosyncratic line. Read literally, Halvorsen had beaten Kestrel by most of a point on a day when every TRACE print in Halvorsen's 2029s was lower than the day before.
+
+Wen rebuilt the day from her own marks, with both legs struck at 4:00 off the prints. On those the pair had made about \$0.22mm. "The thesis paid," she told Dov when he came in, "and the explain says it lost. There's \$475,000 in there that belongs to a clock."
+
+There were two clocks.
+
+The first was an identifier. On the morning Theo found a red row in his desk's security master, Halvorsen's 144A notes had been swapped for registered ones in an A/B exchange (the cold open). A long position moves across with the custodian, which is why Theo's forty minutes found nothing. A borrowed short moves when the lender's agent moves it, and the agent had not. The pod's own systems keyed the short to the instrument and marked it all month off the new line's trades. At quarter-end, though, the administrator's marks replace a fund's own (§3B.3), and the administrator priced what the prime broker's file said the pod was short: the old 144A stub, which nobody had quoted for a week and which sat a full point above the new line. A point on \$39mm is \$390,000, booked against the short as if Halvorsen had rallied. Three business days later the same stub, still a point too high, turned up on a systematic asset manager's break report (§8C.9).
+
+The second was the snap. Kestrel's official mark is the vendor's 4:00 composite; Halvorsen's, on the administrator's file, was an evaluated price struck at 3:00. In the illustration, high yield sold off into Wednesday's close and spreads widened by about 1% of their level in the last hour. Kestrel's photograph caught the sell-off and Halvorsen's did not, so the long leg's loss was booked and the short leg's offsetting gain was not. It is §3B.1's ghost with DTS in place of DV01. Let $m_t$ be the move in spreads, as a fraction of their level, from yesterday's snap to time $t$. If the short leg is photographed at $t_1$ and the long at $t_2$, the pair's reported P&L carries a phantom of
+
+$$
+\Pi^{\text{phantom}}_{\text{pair}} = -100\,\text{DTS}_S\,\big(m_{t_2} - m_{t_1}\big)
+$$
+
+dollars, with DTS in Chapter 1-B's units (face in \$mm × price/100 × spread duration × spread in bp). Every 10,000 of DTS on the leg photographed early is \$10,000 of phantom per 1% move between the photographs. Halvorsen's leg carried about 85,000 by then, up from 71,600 in April as its spread widened, so the last hour was worth −\$85,000. Both pieces reverse in October. Neither was a view.
+
+"So it comes back," Dov said.
+
+"In October," Wen said. "The platform reads September." The stop reads official P&L, not Wen's, and it does not care why P&L moved (Chapter 8-B). Neither does the residual panel she had cut to sixty common days on Tuesday (§8.8), which would now carry, for sixty days, a \$475,000 idiosyncratic move that never happened: nearly five months of a thesis worth about \$1.2mm a year (§5.1.4).
+
+By nine she had sent the administrator a challenge with the new line's prints, asked the prime broker to re-map the loan, and asked for both legs to be struck at one time. Then she drew something she had never drawn for a pair: its calendar, one row for every clock that could move either leg.
+
+| Date | Clock | Leg | What it does to the pair *(illustrative sizes)* |
+| :-- | :-- | :-- | :-- |
+| Every day, 3:00 and 4:00 | Snap | Both | \$1 of phantom per unit of the early leg's DTS for each 1% move between the photographs; reverses the next day |
+| Mon 21 Sep 2026 (the 20th was a Sunday) | Index roll | Book hedge | The new CDX HY series runs six months longer, so a hedge rolled notional for notional carries about a tenth more spread duration per dollar. The book's index hedge was still on the old series; Dov rolled it in October (§1B.2) |
+| Tue 22 Sep | Identifier | Short | A/B exchange; the loan stays on the old CUSIP until the agent re-maps it |
+| Wed 30 Sep | Quarter-end marks | Short | The administrator marks the stub: −\$0.39mm, back in October |
+| Thu 1 Oct | Coupon owed | Short | \$1.41mm to the lender, half a year of 7.25% on \$39mm (record date 15 Sep). Accrued daily since April it is zero on the explain; booked on the day it is paid, it is \$1.41mm of "unexplained" |
+| Wed 7 Oct | Ruler review | Both | Marcus's monthly page (§8D.3) |
+| Tue 27 – Wed 28 Oct | FOMC | Both | Two fixed-rate legs of similar duration: the clock the pair was built to ignore |
+| Any record date, once announced | Borrow | Short | Lenders who want a vote in a consent or an exchange recall their bonds before it |
+| Fri 15 Jan 2027 | Coupon received | Long | Kestrel pays \$1.8mm |
+| 2027, before Halvorsen's revolver is due | Thesis | Both | The only row the pair was opened for |
+
+*Before reading on, write two things: which rows can move PB-01's P&L without moving its thesis, and the one row Wen's strip is missing.*
+
+Marcus walked over at 10:40, which is what he does when an email will not do. He read the strip twice, the way he reads an x-ray, and put his finger on the row that was not there. "Every price on this has a time. Every coupon has a date. When was the ratio?"
+
+"April," Dov said. "At the open."
+
+"Then it's the oldest mark in your book." Marcus tapped the snap row, then the roll. "Right ruler. Wrong day. It's the commonest thing I see on this floor, and nobody's calendar has a row for it."
+
+Grade the card. Every row but the last can move the pair without touching the thesis: a phantom, a stale stub, a lump of cash, a recall, a step in the hedge's DTS. The missing row was the ratio's own date. A card that named it saw what Marcus saw; a card that listed the clocks drew a good calendar of a hedge with no date. What happened next is the grade. The ratio's next scheduled check was the ruler review on Wednesday the 7th. Halvorsen held its lender call on Friday the 9th, an event no strip had a row for, and on Tuesday the 13th the x-ray drew the orange line: an April ratio meeting an October bond (§1B.2). The clocks that can be typed in leak on schedule. The event that moves a pair most arrives unannounced, and the ratio's date is what tells you how stale the hedge already is when it does.
+
+Wen added the row before lunch, in the ledger's own words: *ratio: market-value DTS, 0.65 by face, computed April 2026; next check 7 October.* Dov added the sentence the pod says now: a ratio is a mark, with a time, a source and a day it goes stale.
+
+Read as a Pair Book entry, the strip leaves two of the three questions where §1B.2 left them and rewrites the third. **What the hedge removes** is what it removed in April: high-yield beta and the building-products sector, by market-value DTS (about 72,600 against 71,600 at the open); most of the rates, through two fixed-rate legs of similar duration (the FOMC row); and the book's residual beta, in CDX HY. **What idio remains** is Kestrel's credit against Halvorsen's, nothing new. **What leaks** is the calendar: two photographs a day, an identifier that changed on one leg only, a quarter-end mark taken from the wrong line, a hedge whose DTS steps up on roll day, a recall right the lender will use before any record date, and a ratio dated April. **What it costs** has dates too. The long earns \$3.6mm a year in two coupons of \$1.8mm (15 January and 15 July); the short owes the lender \$2.83mm a year in two of \$1.41mm (1 April and 1 October), so cash leaves in October and returns in January even though the accrual is smooth. Financing the long net of the rebate on the short's 102% cash collateral costs about \$0.6mm a year. The borrow fee, still 50 bp on Wen's sheet with 61% of the lender's inventory on loan and no recalls, comes to under \$0.2mm, so the pair carries roughly flat (§1B.2). Two legs of half-spread, in and out, are paid on days the pod chooses, except the days the calendar chooses for it: a recall forces a buy-in and a roll forces an index trade.
+
+Chapter 8-C gives each row its own line on the explain: the timing phantom and the borrow fee in §8C.3, the series roll in §8C.2, the corporate action in §8C.8.
+
+*Builds on:* §3.5 (the Edge Ledger), §5.1.5 and §18.6.2 (event features in $\lambda^{\mathbb{P}}$), §12B.5 and §12B.9 (the grace-period clock), §1B.2 (Pair Book PB-01). *Used in:* §3B.11 (`desk_calendar.py`), Chapter 13 (the runway input to the Priming Risk Score), Chapter 13-B (the dated Saks and Incora diaries).
 
 ## 3B.5 The Wall, as a Scene
 
@@ -202,11 +259,13 @@ Theo makes most of these himself; the rest he watches colleagues make, which is 
 
 **1. The composite treated as a price.** A salesperson asks Theo where Halvorsen's 7.25s are. He reads the vendor composite: 92. The desk's bid is 89½, and the client, told 92, is now annoyed with the desk rather than the bond. A composite is a weighted average of recent quotes and trades, some stale, some indications nobody would honor: a prior about where the bond might trade, not a price at which anybody will (§20.2, "NAV is an opinion"; Chapter 17-B for the private-credit version). On a banker's comps page "price" means the last number anyone wrote down. On a desk it means a number someone will trade at, now, in size.
 
-**2. Hedged to face, not to jump-to-default.** Theo buys \$10mm of protection against \$10mm of Halvorsen 6s at 88, because ten matches ten.
+**2. Hedged to face, not to jump-to-default; then to the right ruler on the wrong day.** Theo buys \$10mm of protection against \$10mm of Halvorsen 6s at 88, because ten matches ten.
 
 > **Math, Gently.** *JTD: hedge what you would lose on the day.* If Halvorsen defaults tomorrow and recovers 40, the bond falls from 88 to 40, a loss of 48 points. The swap pays par minus recovery, 60 points per unit of notional. To be flat on the day of default you need protection of $48/60 = 0.8$ per unit of bond face, so \$8mm, not \$10mm: $N^{\text{JTD}} = (P - R)/(1 - R)$. Buying \$10mm leaves Theo with an extra \$2mm bet that the company defaults. It is not wrong to hold that bet, only wrong to hold it without knowing. The full version, including what happens when $R$ itself is uncertain, is §24.3.
 
 ![Figure 3-B.7: Hedge to jump-to-default, not to face. Left, the protection that leaves a \$10mm bond position flat on default against the bond's price: with a 40% recovery it is \$8.0mm at 88 and only \$5.0mm at 70 (thin lines: recoveries of 30% and 50%), so the \$10mm face hedge's extra bet, the orange gap, is \$2.0mm of notional at 88 and grows to \$5.0mm as the bond falls to 70. Right, what that extra bet pays: the face-hedged book makes \$1.2mm if the issuer defaults tomorrow at 88 and \$3.0mm at 70, whatever the recovery, because the discount to par is the bet. Illustrative: the box's formula N = (P − R)/(1 − R) per unit of bond face, with the chapter's Halvorsen 88 and recovery of 40.](assets/figures/ch03b_jtd_hedge.png)
+
+The fix has a sequel, and it is Marcus's line in §3B.4: the right ruler on the wrong day. $(P - R)/(1 - R)$ has a price in it, so the box's \$8mm is jump-neutral at 88 and only at 88, and the left panel of Figure 3-B.7 is the same ratio going stale as the bond falls (Exercise 4 asks how far). A hedge ratio is a mark with a date, and Theo's desk now writes the date beside every ratio, as it does beside every mark.
 
 **3. The long-protection sign.** "We're long the Brambleworth CDS," Theo tells the risk manager, meaning the desk owns protection. In the risk system *long* means long credit risk, which is what a protection *seller* has. For a day the risk pack shows the hedge with the wrong sign and overstates the book's credit risk by twice the hedge. The desk now says "bought protection, short risk" in full, every time, like a pilot reading back a clearance (the legs, and who pays the upfront, are in §6.8).
 
@@ -333,6 +392,7 @@ Mags, passing again: "Back in my day we'd have found it at bonus time." A pause.
 - **Which clock has a contract attached? That one is yours.** Grace periods, record dates, consent deadlines, RSA milestones and NDA outside dates are features of $\lambda^{\mathbb{P}}$ that only someone who has read the documents can type in (Law 8).
 - **Restriction is an interval, not a state.** It starts with a signature and ends with a cleansing 8-K or an outside date, and both ends can be forecast.
 - **Every banker's mistake on a desk is a word that means two things:** composite and price, face and JTD, $\mathbb{Q}$ and $\mathbb{P}$, memo and ledger entry (Law 4).
+- **A hedge ratio is a mark with a date.** A pair has two of every clock, and its leaks are scheduled for the days when one leg's clock fires and the other's does not; the stalest number in PB-01's book that October was its April ratio (§3B.4).
 - **Forty bets measure your hit rate to about eight points; log the view, not just the P&L.** Year one is measured on calibration, process and the ledger, because outcomes cannot yet measure anything (Law 12).
 - **IDO or it didn't happen,** including in the Friday hand history (Law 1).
 - **The memo is five lines or it is not read.** View, probability, horizon, size and hedge, kill condition (Law 11).
@@ -349,6 +409,7 @@ Mags, passing again: "Back in my day we'd have found it at bonus time." A pause.
 4. *(JTD drift.)* Theo hedged \$10mm of Halvorsen bonds at 88 with \$8mm of protection, assuming 40% recovery. The bonds fall to 70. What is the JTD-neutral notional now, and what does Theo hold? **Check:** $(70 - 40)/60 = 0.5$, so \$5mm; he is over-hedged by \$3mm, a bet that pays about \$1.8mm on default.
 5. *(Calibration.)* Theo states 80% on five views, and three come true. Compute his Brier score, and the score he would have earned by saying 60%. **Check:** 0.28 and 0.24.
 6. *(ROBO's revenge.)* Was ROBO right about Columbus Day? A \$40mm in-kind ETF redemption delivers bonds that settle Tuesday against ETF shares that settle Monday. At 5% funding on ACT/360, what does the one-day gap cost? **Check:** about \$5,556, paid by whoever delivers cash first (App D). Not a credit event; a calendar event that costs money.
+7. *(The pair's two photographs.)* A DTS-neutral pair's long leg is marked on the 4:00 composite and its short leg on an evaluated price struck at 3:00. The short leg carries 60,000 of DTS (face in \$mm × price/100 × spread duration × spread in bp). High-yield spreads widen by 2% of their level between 3:00 and 4:00 and do not move afterwards. What does today's explain show for the pair from that hour, and tomorrow's? **Check:** a phantom loss of $100 \times 60{,}000 \times 0.02 = \$120{,}000$ today and a phantom gain of \$120,000 tomorrow; the hour's true P&L is the pair's net DTS times the move, zero for a DTS-neutral pair.
 
 ### Deep-Dive Resource Graph
 

@@ -78,26 +78,14 @@ $$
 y = Xb + u, \qquad \mathbb{E}[u \mid X] = 0 .
 $$
 
-OLS picks $\hat b$ to minimize the sum of squared residuals $\lVert y - Xb \rVert^2$. Setting the gradient to zero gives the normal equations:
-
-$$
-X^\top\big(y - X\hat b\big) = 0 \quad\Longrightarrow\quad \hat b = (X^\top X)^{-1} X^\top y .
-$$
-
-The normal equations are a geometric statement: the residual vector is orthogonal to every column of $X$, so $X\hat b$ is the projection of $y$ onto the space the regressors span. Substitute $y = Xb + u$:
-
-$$
-\hat b - b = (X^\top X)^{-1} X^\top u .
-$$
-
-Two facts follow. First, $\mathbb{E}[\hat b \mid X] = b$: OLS is unbiased whenever the error has conditional mean zero, whatever its variance and correlation. Second, the variance of the estimator is
+OLS picks the $\hat b$ that minimizes the sum of squared residuals, which is $\hat b = (X^\top X)^{-1} X^\top y$. It is unbiased whenever the error has conditional mean zero, whatever the error's variance and correlation, so the coefficient survives every complaint in this section. What does not survive is its variance, which is
 
 $$
 \operatorname{Var}(\hat b \mid X) = (X^\top X)^{-1}\, X^\top \Omega X\, (X^\top X)^{-1}, \qquad \Omega = \mathbb{E}[u u^\top \mid X] .
 \tag{7B.1}
 $$
 
-This is the **sandwich**. The two outer factors are the bread; $X^\top \Omega X$ is the meat. Every standard error in finance is a choice of meat.
+This is the **sandwich**. The two outer factors are the bread; $X^\top \Omega X$ is the meat. Every standard error in finance is a choice of meat. (The normal equations behind it, and the geometry that makes OLS a projection, are in the Full Derivation below, after errors in variables.)
 
 The classical formula sets $\Omega = \sigma^2 I$, so the sandwich collapses to $\sigma^2 (X^\top X)^{-1}$. That is the formula ROBO used, and it assumes the residuals are homoskedastic and uncorrelated. In a bond panel neither holds: a CCC bond's residual has ten times the variance of a BBB's, and eleven Halvorsen bonds in the same month share most of theirs. The classical formula is a sandwich made with a photograph of the meat.
 
@@ -113,7 +101,7 @@ No single $\hat u_i^2$ is a good estimate of $\mathbb{E}[u_i^2]$, but the *sum* 
 
 ### Issuer clustering: the meat that knows about siblings
 
-Now let residuals correlate arbitrarily *within* an issuer and not at all *across* issuers. Index issuers by $g = 1, \ldots, G$ and let $X_g$, $\hat u_g$ be issuer $g$'s rows, all its bonds in all months. Then $\Omega$ is block-diagonal and the meat is
+Now let residuals correlate arbitrarily *within* an issuer and not at all *across* issuers. Index issuers by $g = 1, \ldots, G$ and let $X_g$, $\hat u_g$ be issuer $g$'s rows, all its bonds in all months. The meat becomes one block per issuer:
 
 $$
 \widehat{X^\top \Omega X} = c \sum_{g=1}^G X_g^\top \hat u_g \hat u_g^\top X_g, \qquad c = \frac{G}{G-1}\cdot\frac{n-1}{n-K} .
@@ -122,16 +110,14 @@ $$
 
 The block for issuer $g$ allows every pattern of correlation inside it: sibling bonds in the same month, the same bond across months, sibling bonds across months. The factor $c$ is a small-sample correction. The asymptotics run in $G$, not $n$: the clustered estimator is reliable with roughly fifty or more clusters, and a panel of 38,412 bond-months from 206 issuers has 206 observations as far as this formula is concerned. With fewer than about fifty clusters, use the wild cluster bootstrap (§7-B.6).
 
-How much does clustering matter? Take the simplest case that still teaches: one regressor, $G$ issuers each contributing $m$ rows, regressor intra-issuer correlation $\rho_x$, residual intra-issuer correlation $\rho_u$, everything demeaned. The variance of the score $\sum_i x_i u_i$ is the sum of the $n$ diagonal terms, $n\sigma_x^2\sigma_u^2$, plus the $n(m-1)$ same-issuer cross terms, each $\rho_x\sigma_x^2\cdot\rho_u\sigma_u^2$. Divide by what the classical formula assumes:
+How much does clustering matter? In the simplest case that still teaches (one regressor, $G$ issuers each contributing $m$ rows, regressor intra-issuer correlation $\rho_x$, residual intra-issuer correlation $\rho_u$), the classical variance is too small by the **Moulton factor**:
 
 $$
 \frac{\operatorname{Var}_{\text{true}}(\hat b)}{\operatorname{Var}_{\text{classical}}(\hat b)} \approx 1 + (m-1)\,\rho_x\,\rho_u .
 \tag{7B.3}
 $$
 
-This is the **Moulton factor**. Read it twice. For an issuer-level signal such as runway, a rating, equity momentum or the PRS, every bond of the issuer carries the same value, so $\rho_x = 1$ and the factor is $1 + (m-1)\rho_u$. That is the denominator of effective breadth, $N/(1 + (m-1)\rho)$, from Law 2. The Moulton factor and effective breadth are the same formula wearing different ties: one says your standard error is too small, the other says your bets are too few, and both say forty-seven CUSIPs of one issuer are one hat.
-
-For Halvorsen's eleven bonds with sibling residual correlation 0.6, the factor is $1 + 10 \times 0.6 = 7$. A panel made entirely of Halvorsens would need its classical standard errors multiplied by $\sqrt{7} \approx 2.65$ *(illustrative)*. A bond-level signal with low sibling correlation, such as a bond's own bid–ask bounce, has $\rho_x$ near zero, and clustering barely moves it. This is why clustering hurts issuer-level signals most, and why Theo's runway lost most of its t-statistic. Figure 7-B.1 plots the multiplier and the breadth it implies.
+For an issuer-level signal such as runway, a rating, equity momentum or the PRS, every bond of the issuer carries the same value, so $\rho_x = 1$ and the factor is $1 + (m-1)\rho_u$, which is the denominator of effective breadth, $N/(1 + (m-1)\rho)$, from Law 2. It is one formula wearing two ties: one tie says your standard error is too small, the other says your bets are too few, and both say forty-seven CUSIPs of one issuer are one hat. For Halvorsen's eleven bonds with sibling residual correlation 0.6, the factor is $1 + 10 \times 0.6 = 7$, and a panel made entirely of Halvorsens would need its classical standard errors multiplied by $\sqrt{7} \approx 2.65$ *(illustrative)*. A bond-level signal with low sibling correlation, such as a bond's own bid–ask bounce, has $\rho_x$ near zero, and clustering barely moves it. That asymmetry is why Theo's runway, a company number, lost most of its t-statistic. Figure 7-B.1 plots the multiplier and the breadth it implies.
 
 ![Figure 7-B.1: Left, how far an issuer-level signal's standard error inflates over the classical formula as bonds per issuer m grows (the Moulton factor with the signal shared across the issuer). Right, the same formula as effective breadth: Halvorsen's eleven bonds at sibling correlation 0.6 carry 1.57 bonds' worth of independent information, and no number of extra rows lifts an issuer past 1/ρ. Illustrative: computed from equation 7B.3, not market data.](assets/figures/ch07b_moulton_breadth.png)
 
@@ -153,15 +139,37 @@ An **issuer fixed effect** adds one intercept per issuer. Algebraically it is th
 
 ### Errors in variables: stale marks bend the line
 
-Suppose the regressor is measured with noise, $\tilde x = x + \eta$, with $\eta$ independent of everything. Then
+Suppose the regressor is measured with noise, $\tilde x = x + \eta$, with $\eta$ independent of everything. Then the slope is biased toward zero by the share of the regressor's variance that is signal, $\sigma_x^2/(\sigma_x^2 + \sigma_\eta^2)$ (derived below). This is attenuation, and it is why betas estimated on stale marks are too small: the mark is the truth plus a lag, the lag behaves like noise in a same-day regression, and the Dimson correction of §8.5 recovers the slope by summing lagged coefficients (Law 9).
+
+The more dangerous case is *correlated* errors in variables. If the same price error enters both the signal and the next return, the bias is no longer toward zero; it manufactures a premium. A bond whose month-end price is recorded too low looks cheap on any price-based value signal, and its next-month return is spuriously high because the error reverses. Dickerson, Robotti and Rossetti (2026) build a premium out of nothing this way with two bonds and half a percent of recording noise; Chapter 9-B works their example. The fix is to break the link between the price in the signal and the price in the return, with a gap of at least a day, which §7.2 and Chapter 9-B treat in full.
+
+#### The Full Derivation: the sandwich, the cluster meat and the Moulton factor
+
+*The sandwich (7B.1).* OLS minimizes $\lVert y - Xb \rVert^2$. Setting the gradient to zero gives the normal equations:
 
 $$
-\operatorname{plim}\hat b = b\,\frac{\sigma_x^2}{\sigma_x^2 + \sigma_\eta^2} ,
+X^\top\big(y - X\hat b\big) = 0 \quad\Longrightarrow\quad \hat b = (X^\top X)^{-1} X^\top y .
 $$
 
-so the slope is biased toward zero. This is attenuation, and it is why betas estimated on stale marks are too small: the mark is the truth plus a lag, the lag behaves like noise in a same-day regression, and the Dimson correction of §8.5 recovers the slope by summing lagged coefficients (Law 9).
+The normal equations are a geometric statement: the residual vector is orthogonal to every column of $X$, so $X\hat b$ is the projection of $y$ onto the space the regressors span. Substitute $y = Xb + u$:
 
-The more dangerous case is *correlated* errors in variables. If the same price error enters both the signal and the next return, the bias is no longer toward zero; it manufactures a premium. A bond whose month-end price is recorded too low looks cheap on any price-based value signal, and its next-month return is spuriously high because the error reverses. Dickerson, Robotti and Rossetti (2026) give the cleanest example: two bonds with true price 100 and true return zero, recorded with errors of $+0.50\%$ and $-0.50\%$, produce a measured long–short return of 1.00% from nothing. The fix is to break the link between the price in the signal and the price in the return, with a gap of at least a day, which §7.2 and Chapter 9-B treat in full.
+$$
+\hat b - b = (X^\top X)^{-1} X^\top u .
+$$
+
+Two facts follow. First, $\mathbb{E}[\hat b \mid X] = b$: OLS is unbiased whenever the error has conditional mean zero, whatever its variance and correlation. Second, taking the outer product of $\hat b - b$ with itself and conditioning on $X$ gives $(X^\top X)^{-1} X^\top \mathbb{E}[uu^\top \mid X] X (X^\top X)^{-1}$, which is (7B.1).
+
+*The cluster meat (7B.2).* White's estimator above replaces each diagonal entry of $\Omega$ by a squared residual; no single $\hat u_i^2$ estimates $\mathbb{E}[u_i^2]$ well, but the $K \times K$ sum $\sum_i \hat u_i^2 x_i x_i^\top$ is consistent because it averages over $n$ rows. If residuals correlate within issuer $g$ and not across issuers, $\Omega$ is block-diagonal with one block per issuer, and $X^\top \Omega X = \sum_g X_g^\top \Omega_g X_g$. Replace each unknown block $\Omega_g$ by the outer product of that issuer's residual vector, $\hat u_g \hat u_g^\top$, and the same averaging argument, now over $G$ issuers instead of $n$ rows, makes the sum consistent as $G$ grows. The constant $c$ in (7B.2) corrects the small-sample downward bias of the plug-in residuals.
+
+*The Moulton factor (7B.3).* Take one demeaned regressor, $G$ issuers each contributing $m$ rows, regressor intra-issuer correlation $\rho_x$ and residual intra-issuer correlation $\rho_u$. The variance of the score $\sum_i x_i u_i$ is the sum of the $n$ diagonal terms, $n\sigma_x^2\sigma_u^2$, plus the $n(m-1)$ same-issuer cross terms, each $\rho_x\sigma_x^2\cdot\rho_u\sigma_u^2$. The total is $n\sigma_x^2\sigma_u^2\,[1 + (m-1)\rho_x\rho_u]$. The classical formula assumes only the diagonal, and since the bread is the same in both, the ratio of the true variance of $\hat b$ to the classical one is the bracket, which is (7B.3).
+
+*Attenuation.* With $\tilde x = x + \eta$ and $\eta$ independent of $x$ and $u$,
+
+$$
+\operatorname{plim}\hat b = \frac{\operatorname{Cov}(\tilde x, y)}{\operatorname{Var}(\tilde x)} = \frac{b\,\sigma_x^2}{\sigma_x^2 + \sigma_\eta^2} = b\,\frac{\sigma_x^2}{\sigma_x^2 + \sigma_\eta^2} ,
+$$
+
+so the slope is shrunk toward zero by the signal share of the regressor's variance, and no amount of extra data removes it.
 
 > **Ways This Blows Up.** (1) *Clustering on the CUSIP.* It looks rigorous and captures none of the sibling correlation; cluster on the ultimate parent, the same key §7.7 groups folds by. (2) *Clustering on ticker.* Two issuers under one sponsor can share a credit agreement's trapdoors; for LMT-sensitive signals, cluster on the sponsor family. (3) *Few clusters.* A regression across eleven sectors clustered by sector has eleven observations of the meat; use a wild cluster bootstrap and say so. (4) *A fixed effect that eats the signal.* Issuer fixed effects on a rating regression identify the coefficient only from rating changes, which are rare and lagged; the standard error explodes, correctly.
 

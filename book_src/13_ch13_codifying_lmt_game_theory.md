@@ -627,15 +627,16 @@ $$
 Sanity checks: $T = 0$ returns $R_0(V) = \min(V,F)/F$. With $\phi = 1$ and $D_u = T$ the lenders keep every dollar but swap an asset for cash, and cash is the first thing a distressed company spends (the $\kappa$ of §13.3 again). The J.Crew trapdoor is the opposite corner, $\phi \to 0$ and $D_u \to T$: the asset leaves, is levered to the hilt, and the proceeds pay a different class. Then
 
 $$
-\Delta R(V) = R_0(V) - R^{\text{post}}(V) = \frac{\min(V, F) - \min(V - T, F)}{F} =
+\Delta R(V) = R_0(V) - R^{\text{post}}(V) = \frac{\min(V, F) - \min\big((V - T)^+, F\big)}{F} =
 \begin{cases}
-T/F, & V \le F, \\[1ex]
+V/F, & V \le T, \\[1ex]
+T/F, & T < V \le F, \\[1ex]
 (F + T - V)/F, & F < V < F + T, \\[1ex]
 0, & V \ge F + T.
 \end{cases}
 $$
 
-Compare the shape with §13.3. The uptier's excluded lender wrote a *digital put*: it loses everything below $K_1$ and little above. The drop-down's victim sold a *forward*: it loses $T/F$ in every state where it matters. And for any $\phi \ge 0$ the loss is capped by capacity, because $V - T + \phi D_u + (T - D_u)^+ \ge V - T$ implies
+Compare the shape with §13.3. The uptier's excluded lender wrote a *digital put*: it loses everything below $K_1$ and little above. The drop-down's victim sold a *forward*: it loses $T/F$ in every state where it matters, and below $V = T$ it loses everything it would have recovered, $V/F$. And for any $\phi \ge 0$ the loss is capped by capacity, because $V - T + \phi D_u + (T - D_u)^+ \ge V - T$ implies
 
 $$
 \Delta R(V) \;\le\; \frac{T}{F} \;\le\; \frac{C^{\text{unsub}}}{F}.

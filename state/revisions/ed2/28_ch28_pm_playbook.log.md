@@ -7,9 +7,9 @@
 - [x] 5. **[§28.2 "Two definitions of effective breadth"] · MATH-GENTLY (box 3): correlation as a ceiling.** Picture: 300 umbrellas from 40 factories — DONE: Box 3 umbrellas: rho 0.03 gives 16/30/33; ceiling 1/rho; Herfindahl kept.
 - [x] 6. **[§28.2, before Block 1] · SHOP-LIFE vignette (400–600 words, labeled fictional).** *Shop type: a multi-manager platform's central risk tea — DONE: Marcus vignette 13 Oct: hierarchy re-parent, 41→27→33; spec opens 7:40.
 - [x] 7. **[§28.3 head] · MATH-GENTLY (box 4): exponential decay and half-life.** Coffee cooling; tiny number: α₀ = 3% and a 0.6% round trip give h*  — DONE: Box 4 coffee, 0.4%→5 weeks; Priya ladder walk; roles swapped; templates cut.
-- [ ] 8. **[§28.4 head] · MATH-GENTLY (box 5): Kelly and log growth.** Why log: a 50% loss needs a 100% gain; ruin is minus infinity. Tiny number: a 
-- [ ] 9. **[§28.4 "Continuous time, and the jump"] · MATH-GENTLY (box 6, two parts): Poisson jumps and Itô's ½σ².** *Part one:* normal vs Poisson in 
-- [ ] 10. **[§28.4 "Which measure, and which loss"] · MATH-GENTLY (box 7): P vs Q.** Risk-neutral is the bookkeeping that makes today's price fair, no
+- [x] 8. **[§28.4 head] · MATH-GENTLY (box 5): Kelly and log growth.** Why log: a 50% loss needs a 100% gain; ruin is minus infinity. Tiny number: a  — DONE: Box 5 Kelly 60/40 coin; (28.9) stated; discrete Full Derivation with sensitivities.
+- [x] 9. **[§28.4 "Continuous time, and the jump"] · MATH-GENTLY (box 6, two parts): Poisson jumps and Itô's ½σ².** *Part one:* normal vs Poisson in  — DONE: Box 6 Poisson/Itô two parts; (28.10)-(28.11) stated; jump Full Derivation; Kaz pronoun.
+- [x] 10. **[§28.4 "Which measure, and which loss"] · MATH-GENTLY (box 7): P vs Q.** Risk-neutral is the bookkeeping that makes today's price fair, no — DONE: Box 7 P vs Q: 450bp CDS, 7.5% vs 3.1%, f*=0.
 - [ ] 11. **[§28.4 Case Study: CCC decompression] · EXPAND-SCENE (to 1,200–1,600 words, live, Sept–Oct 2026).** Rafe's HY book has leaned into CCC car
 - [ ] 12. **[§28.4 case, after the decision] · ANOTHER-SEAT (box): the CLO manager.** Same decompression from the seat that must keep a 7.5% CCC bucke
 - [ ] 13. **[§28.5 head] · MATH-GENTLY (box 8): VaR, the lognormal, and √T.** A 1% daily σ gives a 99% one-day VaR of 1 − e^{−2.33×0.01} ≈ 2.3%; ten d

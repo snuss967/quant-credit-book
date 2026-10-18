@@ -3,6 +3,7 @@
 Code and consistency fixes found along the way. Lowest priority: run only when no research or writing is queued.
 
 - Listing 25.1 (Appendix F, `#code-25-1`): the last assertion fails. The cycle regex requires whitespace after "means", so "Pro Forma Basis" ("means, with…") is skipped. Fix the regex to allow `means[,\s]`, re-run, then update the prose in Ch 25 if it quotes the cycle size. (Found by U1, 2026-10-18.)
+  - DONE 2026-10-18: Listing 25.1 regex now means[,\s]; all asserts pass; Ch 25 loop prose reconciled
 - Ch 19 §19.8.2: the hand estimates "roughly 74bp ... about 35bp" differ from Figure 19.5's 76/37bp. The text already flags them as hand estimates; optionally align. (Found by figure check, 2026-10-18.)
 - Ch 15 §15.x after Listings 15.1–15.2: the prose cites 18–19 points, "mid-80s" survival and a 1.2× EBITDA threshold, but the code prints 15.55 points and 81% survival. Reconcile the prose with the listing output (or the listing parameters with the prose). (Found by U1, 2026-10-18.)
 - Listing 11.5 demo runs for several minutes; consider a smaller default grid so check_book.py stays fast. (Found by U1, 2026-10-18.)
@@ -12,12 +13,16 @@ Code and consistency fixes found along the way. Lowest priority: run only when n
 - Ch 4-B Table 4B.1 shows 679 where the listing gives 678.5 (rounding; optional). (Figure check, 2026-10-18.)
 - Ch 22 Resource Graph: the Uyeda speech figures must be checked against the SEC page before print (sec.gov returned 403 to scripted fetch). (resgraph, 2026-10-18)
 - Ch 13 §13.6: the ΔR cases omit the V/F branch for V<T (figure check). Fix in the lessons pass. (2026-10-18)
+  - DONE 2026-10-18: added V/F branch (V<=T) and (V-T)+ to ΔR cases
 - Listing 28.8 (App F) still sets `"sharpe": 2.0`, while revised §28.9 uses 0.7 with a standard error. Set it to 0.7, re-run, and reconcile every §28.9 number quoted from the listing's output. (Red pen, 2026-10-18.)
 - The Part I opener now points to §A.10 (the RSSG-to-quant dictionary), which does not exist yet. Write App A §A.10, synthesis item "App A §A.10 dictionary". (Red pen, 2026-10-18.)
 - §26.8 cites "OCC Bulletin 2011-12" from the synthesis; occ.gov pages returned 404. Verify before print. (Red pen, 2026-10-18.)
 - App F Listing 1.2 contains stray §1.5 prose (verify, Ch 1). Move the prose back to the chapter or delete it from the listing block. (2026-10-18)
+  - DONE 2026-10-18: already clean, no edit; fences balanced; Listing 1.3 heading intact
 - The citation 'SSRN 6088966' (Dickerson–Robotti–Rossetti 2026) could not be confirmed. The verified id is arXiv:2604.07880. Replace it wherever the book cites SSRN 6088966 (grep book_src). (TSMOM dossier, 2026-10-18)
+  - DONE 2026-10-18: dossier line 32 now cites arXiv:2604.07880; book_src already clean
 - Ch 4-C §4C.6: 'Tuesday … day 14' is a Wednesday by the chapter's own calendar (figure check). Fix the weekday. (2026-10-18)
+  - DONE 2026-10-18: Tuesday changed to Wednesday; day 14 is Wednesday (Friday day 1)
 - Ch 3 §3.4 SVB coda: the Bloomberg (2 Jul 2024) "40% or better" recovery for creditors owed \$3.5bn is now hedged as "press reports put"; confirm the exact wording against the original Bloomberg article before print. (Lessons pass, 2026-10-18.)
 - Ch 3 §3.7 "After the announcement": the remand's mitigation figures (29%–43% of observed volume vs \$62mm–\$94mm) did not reconcile with the \$186mm volume (29–43% of \$186mm is \$54mm–\$80mm); the dollar range was cut from the text. Check the Serta remand opinion (July 2026) for the base the experts used, and restore the dollar range if it can be tied. (Lessons pass, 2026-10-18.)
 - Ch 3 §3.7: an event study of Serta first-lien flow in May–June 2020 (does net buying by LME-prone accounts show the pre-uptier signature?) was promised as future work in book text; the promise was cut. Open research item if wanted. (Lessons pass, 2026-10-18.)
