@@ -444,3 +444,267 @@ Theo stared at (20.8) for a long time. Then he took the USB stick out of his poc
 The loan ETF is the cautionary template for the wrappers of 2025–2026. The SPDR SSGA Apollo IG Public & Private Credit ETF (PRIV) launched in late February 2025 with a contractual arrangement for Apollo to provide intraday bids on the private credit it sources. The SEC staff reportedly sent a public letter the day after launch raising liquidity (Rule 22e-4), valuation and naming concerns *(secondary coverage; letter date and the sponsor's response CHECK)*. On 2025-11-17 the SEC granted Dimensional exemptive relief to offer ETF share classes of mutual funds, followed by a combined notice to 30 applicants on 2025-12-22 (Seward & Kissel 40 Act blog). A bond mutual fund with an ETF share class could route redemptions through the ETF class, which would make the custom-basket machinery of §20.4 the exit door for a much larger pool of 1940 Act bond money *(which bond complexes have launched such classes by late 2026 is a CHECK item)*. Every one of these structures inherits (20.8). The question for each is the same one Theo asked about BKLN: what is the settlement lag of the assets, and what covers it?
 
 > **Trend Watch: the regulatory plumbing of the wrapper (2016–2026).** *2016-10-13:* the SEC adopts Rule 22e-4, with its four liquidity buckets, a 15% illiquid cap and a carve-out for "In-Kind ETFs"; compliance followed on 2018-12-01 for large fund complexes and 2019-06-01 for smaller ones (SEC press release 2016-215). *2019-09-26:* Rule 6c-11 adopted, effective 2019-12-23, which standardizes baskets, custom-basket procedures and premium/discount disclosure (SEC press release 2019-190; Release 33-10695). *2020-03-23 to 2021-12-17:* the SMCCF is announced, buys ETFs from 2020-05-12, ends purchases on 2020-12-31, begins selling ETFs on 2021-06-07 and has sold all of them by 2021-08-31; the SPV is terminated on 2021-12-17 (Federal Reserve; NY Fed). *2024-05-28:* the US equity and corporate bond settlement cycle moves to T+1, which widens the gap between ETF settlement and loan settlement by a day. *2025:* PRIV launches with a contractual liquidity provider, and the SEC grants the first ETF-share-class relief. *What it means:* every rule since 2016 has made the wrapper easier to launch and more transparent, while the assets going into it have become harder to settle. The arbitrage band has therefore moved from the AP's spreadsheet into the fund's liquidity policy, and that policy is now the thing to model.
+
+## 20.7 Building the Arbitrage Monitor
+
+### Specification for AI Implementation
+
+**The Spec You Hand the Robot (first draft).** *Vague version:* "Alert me when HYG trades away from NAV." *What ROBO built:* an alert on every close where price exceeded NAV. On a JNK-like year that is 206 alerts, all of them the bid-side constant $\bar c$. Theo said "only the big ones," so ROBO set the threshold at 2%, because that number appears in Rule 6c-11. It then stayed silent for eleven months and fired fifteen times in one week of March, each time after the close. *Precise version:* the six blocks below, in order. They run in one interpreter, each block uses the ones before it, and every block ends with sanity asserts.
+
+**Data schema (one row per fund per day, plus holdings).**
+
+| Table | Field | Type / unit | Notes |
+| :--- | :--- | :--- | :--- |
+| `etf_daily` | `date`, `ticker` | date, str | NAV strike date, not trade date, if they differ |
+| | `close_px`, `nav` | float, \$ per share | `close_px` is the closing bid/ask midpoint; never the last trade |
+| | `shares_out` | float | daily change × NAV is the primary flow $F$ |
+| | `nav_convention` | {"bid", "mid"} | from the prospectus; required, no default |
+| | `nav_strike_time` | time, ET | 15:00 vs. 16:00 matters for (20.1) |
+| `holdings` | `bond_id`, `units`, `eval_mid` | str, float, points | evaluated mid per the pricing service |
+| | `half_lcs` | float, fraction of price | $c_i$; LCS/2, see Dynkin p.702 |
+| | `in_create`, `in_redeem` | bool | from the published basket files |
+| `trace_disp` | `bond_id`, `date`, `u` | fraction of price | same-day half-range of institutional prints |
+
+**Guards.** All premiums and costs are fractions of NAV; convert to bp only for display. Refuse to compute a band when `nav_convention` is missing. Drop days on which no NAV was struck (holidays, early closes). Flag any fund whose basket overlap with holdings falls below 5% for a review, because custom baskets are a state variable, not a constant.
+
+```python
+import numpy as np
+from scipy.optimize import minimize
+
+rng = np.random.default_rng(20)
+
+# ---- Block 1: a synthetic HY fund and the static band (20.4) ----
+N = 120
+n_units = rng.uniform(0.5, 1.5, N)             # face per share (arbitrary units)
+mid = rng.uniform(85.0, 102.0, N)              # evaluated mid, points
+c = rng.uniform(0.0015, 0.0060, N)             # half bid-offer, fraction of price
+val = n_units * mid
+M_tilde = val.sum()
+c_bar = float((val * c).sum() / M_tilde)
+NAV = float((n_units * mid * (1 - c)).sum())   # bid-side NAV
+h = val / M_tilde                              # portfolio value weights
+assert np.isclose(NAV, M_tilde * (1 - c_bar)) and NAV < M_tilde
+
+
+def static_band(c_bar, c_create, c_redeem, f_c=1e-4, f_r=1e-4, k_c=5e-4, k_r=5e-4):
+    """Eq. (20.4). All inputs and outputs are fractions of NAV."""
+    pi_lo = (c_bar - c_redeem) - f_r - k_r
+    pi_hi = (c_bar + c_create) + f_c + k_c
+    return pi_lo, pi_hi
+
+
+lo, hi = static_band(c_bar, c_bar, c_bar)
+assert lo < 0 < hi
+lo_mid, hi_mid = lo - c_bar, hi - c_bar        # the same band under a mid-price NAV
+assert np.isclose(hi - lo, hi_mid - lo_mid)    # convention moves the center, not the width
+assert np.isclose(0.5 * (lo + hi) - 0.5 * (lo_mid + hi_mid), c_bar)
+P_edge = NAV * (1 + hi)                         # exact creation P&L at the upper edge
+exact_edge = (P_edge - M_tilde * (1 + c_bar)) / NAV - 1e-4 - 5e-4
+assert abs(exact_edge) < 1e-4                   # first-order error is -2 c_bar^2 / (1 - c_bar)
+
+# ---- Block 2: staleness (20.2) and the NAV catch-up regression (20.3) ----
+T = 4000
+eta_true, sig_r, sig_ell = 0.35, 0.004, 0.0002
+r = rng.normal(0.0, sig_r, T)
+lnM = np.cumsum(r)
+lnMt = np.empty(T)
+lnMt[0] = lnM[0]
+for t in range(1, T):
+    lnMt[t] = lnMt[t - 1] + eta_true * (lnM[t] - lnMt[t - 1])
+ell = rng.normal(0.0, sig_ell, T)
+lnP = lnM + ell
+lnNAV = lnMt + np.log(1 - c_bar)
+p = lnP - lnNAV
+s = lnM - lnMt
+assert np.allclose(p, ell + s - np.log(1 - c_bar))       # identity (20.1)
+
+
+def nav_catchup(lnNAV, p):
+    """OLS of d ln NAV_t on p_{t-1}. Returns (slope, intercept); eq. (20.3)."""
+    y = np.diff(lnNAV)
+    X = np.column_stack([np.ones(len(y)), p[:-1]])
+    beta, *_ = np.linalg.lstsq(X, y, rcond=None)
+    return float(beta[1]), float(beta[0])
+
+
+eta_hat, a_hat = nav_catchup(lnNAV, p)
+var_s = (1 - eta_true) ** 2 / (eta_true * (2 - eta_true)) * sig_r ** 2
+atten = var_s / (var_s + sig_ell ** 2)
+assert abs(eta_hat - eta_true * atten) < 0.03            # slope = eta x staleness share
+assert abs(a_hat + eta_hat * (-np.log(1 - c_bar))) < 5e-4  # intercept = -eta x c_bar
+assert abs(s[200:].var() / var_s - 1) < 0.15             # stationary variance formula
+
+# ---- Block 3: the balance-sheet band (20.5) ----
+def clearing_premium(F, kappa_r, gammas, sigma_b, T_h):
+    """Premium at which J mean-variance APs absorb net ETF selling F (dollars)."""
+    g = np.asarray(gammas, float)
+    if np.any(g <= 0) or sigma_b <= 0 or T_h <= 0:
+        raise ValueError("gammas, sigma_b and T_h must be positive")
+    g_bar = 1.0 / np.sum(1.0 / g)
+    psi = g_bar * sigma_b ** 2 * T_h
+    return -kappa_r - psi * F, psi
+
+
+def ap_redemptions(pi, kappa_r, gammas, sigma_b, T_h):
+    """Aggregate dollar redemptions sum_j X Q_j^* at premium pi."""
+    edge = max(-pi - kappa_r, 0.0)
+    return edge / (sigma_b ** 2 * T_h) * np.sum(1.0 / np.asarray(gammas, float))
+
+
+kappa_r, F = 6e-4, 2.0e9
+calm = dict(gammas=[4.4e-7] * 28, sigma_b=0.02, T_h=2 / 252)
+stress = dict(gammas=[8.8e-7] * 24, sigma_b=0.12, T_h=8 / 252)
+pi_calm, psi_calm = clearing_premium(F, kappa_r, **calm)
+pi_str, psi_str = clearing_premium(F, kappa_r, **stress)
+assert np.isclose(ap_redemptions(pi_calm, kappa_r, **calm), F)    # market clears
+assert np.isclose(ap_redemptions(pi_str, kappa_r, **stress), F)
+assert np.isclose(psi_str / psi_calm, 2 * 36 * 4 * 28 / 24)        # corollaries (a)-(b)
+assert abs(psi_calm * F - 1e-4) < 2e-6 and -0.05 < pi_str < -0.02  # 1 bp becomes about 3.4%
+
+# ---- Block 4: the custom basket QP (20.6)-(20.7) ----
+K = 40
+hK = h[:K] / h[:K].sum()
+cK = c[:K]
+vol = rng.uniform(0.03, 0.10, K)
+Sigma = np.outer(vol, vol) * (0.6 * np.ones((K, K)) + 0.4 * np.eye(K))
+axe = np.zeros(K)
+axe[rng.choice(K, 6, replace=False)] = 0.0030            # AP is axed in six bonds
+k = cK - axe - 0.5 * cK                                  # c_i - a_i - l_i, with l_i = c_i / 2
+
+
+def J_cost(w, h, k, Sigma, theta):
+    d = w - h
+    return float(k @ w + 0.5 * theta * d @ Sigma @ d)
+
+
+def basket_closed_form(h, k, Sigma, theta):
+    """Eq. (20.6), ignoring w >= 0. Returns (w*, mu*, D)."""
+    one = np.ones(len(h))
+    Si_k, Si_1 = np.linalg.solve(Sigma, k), np.linalg.solve(Sigma, one)
+    mu = (one @ Si_k) / (one @ Si_1)
+    dev = Si_k - mu * Si_1                                # Sigma^{-1}(k - mu 1)
+    return h - dev / theta, float(mu), float((k - mu * one) @ dev)
+
+
+def basket_qp(h, k, Sigma, theta, w_max=1.0):
+    """Eq. (20.6) with 0 <= w <= w_max, solved by SLSQP."""
+    cons = [{"type": "eq", "fun": lambda w: w.sum() - 1.0, "jac": lambda w: np.ones_like(w)}]
+    res = minimize(lambda w: J_cost(w, h, k, Sigma, theta), h.copy(),
+                   jac=lambda w: k + theta * Sigma @ (w - h),
+                   bounds=[(0.0, w_max)] * len(h), constraints=cons,
+                   method="SLSQP", options={"ftol": 1e-12, "maxiter": 500})
+    if not res.success:
+        raise RuntimeError(res.message)
+    return res.x
+
+
+theta = 50.0
+w_cf, mu, D = basket_closed_form(hK, k, Sigma, theta)
+assert np.isclose(w_cf.sum(), 1.0)
+assert np.isclose(J_cost(hK, hK, k, Sigma, theta) - J_cost(w_cf, hK, k, Sigma, theta),
+                  D / (2 * theta))                         # value of freedom, (20.7)
+assert np.allclose(basket_closed_form(hK, k, Sigma, 1e9)[0], hK, atol=1e-7)  # theta -> inf
+w_qp = basket_qp(hK, k, Sigma, theta)
+assert w_qp.min() >= -1e-9 and np.isclose(w_qp.sum(), 1.0, atol=1e-8)
+J_h, J_qp, J_cf = (J_cost(x, hK, k, Sigma, theta) for x in (hK, w_qp, w_cf))
+assert J_cf <= J_qp + 1e-10 and J_qp <= J_h + 1e-10       # constraints can only cost
+assert (w_qp[axe > 0] - hK[axe > 0]).mean() > 0           # axed bonds are overweighted
+print(f"basket coverage {(w_qp > 1e-4).mean():.0%}; saving vs pro rata {1e4 * (J_h - J_qp):.2f} bp")
+
+# ---- Block 5: the loan-ETF liquidity sleeve (20.8) ----
+def sleeve_path(phi0, redemptions, lag_weeks):
+    """phi_{t+1} = phi_t - R_t + R_{t-L}. Returns (path, first week exhausted or None)."""
+    R = np.asarray(redemptions, float)
+    phi = np.empty(len(R) + 1)
+    phi[0] = phi0
+    for t in range(len(R)):
+        proceeds = R[t - lag_weeks] if t >= lag_weeks else 0.0
+        phi[t + 1] = phi[t] - R[t] + proceeds
+    bust = np.flatnonzero(phi <= 0)
+    return phi, (int(bust[0]) if bust.size else None)
+
+
+weekly = np.full(13, 0.092 / (31 / 7))          # 13 weeks at the March 2020 HY pace
+phi, bust = sleeve_path(0.10, weekly, lag_weeks=3)
+assert bust is None and np.isclose(phi.min(), 0.10 - 3 * weekly[0])
+_, bust2 = sleeve_path(0.10, np.r_[0.045, 0.045, 0.045, np.zeros(10)], lag_weeks=3)
+assert bust2 == 3                               # three heavy weeks before any proceeds land
+
+# ---- Block 6: the monitor ROBO ships ----
+def classify(p_t, c_bar, band, s_hat, u_t):
+    """Regime label for a log premium p_t, per (20.1) and (20.4)."""
+    lo, hi = band
+    if lo <= p_t <= hi:
+        return "inside_band"
+    if abs(p_t - c_bar) <= u_t:
+        return "measurement_noise"
+    if abs(s_hat) >= 0.5 * abs(p_t - c_bar):
+        return "late_nav"
+    flow = p_t - c_bar - s_hat
+    return "flow_dislocation_redeem" if flow < 0 else "flow_dislocation_create"
+
+
+band = static_band(c_bar, c_bar, c_bar)
+assert classify(c_bar + 1e-4, c_bar, band, 0.0, 0.001) == "inside_band"
+assert classify(-0.004, c_bar, band, 0.0, 0.010) == "measurement_noise"
+assert classify(-0.05, c_bar, band, -0.04, 0.005) == "late_nav"
+assert classify(-0.05, c_bar, band, -0.005, 0.005) == "flow_dislocation_redeem"
+```
+
+Three edge cases deserve a warning in the spec. First, $\Sigma$ for 1,300 bonds is singular in practice, so in production replace `np.linalg.solve` with a factor-model covariance (Chapter 9) plus a diagonal, and solve with a Cholesky factor. Second, `nav_catchup` is biased toward zero whenever the flow term is noisy, as §20.2.2 showed, so report $\hat\eta$ together with the attenuation bound and never on its own. Third, `classify` uses $\hat s_t$ from the model, so it inherits the model's errors. On the day the pricing service changes its methodology, $\eta$ changes too, and the monitor should fall back to `measurement_noise` until a new $\eta$ is estimated.
+
+## 20.8 Desk Debrief
+
+- **A credit ETF is two markets and a conversion right.** The secondary market nets; only the residual reaches the APs, and the band is the price of converting.
+- **Premium = flow + staleness + bid-side constant** (20.1). Only the flow term is a trade. Staleness is a forecast of tomorrow's marks, and $\bar c$ is a decimal point in the valuation policy.
+- **The band is $[\bar c - c^R - f^R - k^R,\ \bar c + c^C + f^C + k^C]$** (20.4). Bid-side NAVs slide it up by $\bar c$, which is why calm HY ETFs "trade at a premium." Custom baskets move the two edges independently.
+- **In stress, price impact multiplies**: $\psi = \bar\gamma \sigma_b^2 T^{\text{h}}$ (20.5). Two times 36 times 4 turns a 1 bp flow into a 3% discount without anyone leaving the table.
+- **Custom baskets are worth $\mathcal{D}/(2\theta)$** (20.7): the dispersion of net costs over the fund's tracking aversion. They are how PT dealers recycle risk, and losing them in H1 2022 showed up in PT pricing.
+- **March 2020 was not a broken arbitrage.** IG's flow term collapsed because it was the most sellable risky asset. The Fed fixed it by lowering everyone's price of risk, mostly before it bought a share.
+- **Loan ETFs live or die by (20.8):** sleeve over burn rate against the settlement lag. It is Theo's 13-week model in a 40 Act wrapper.
+- **IDO or it didn't happen:** an ETF discount trade earns only the convergence, net of rate and spread beta.
+
+**The Spec You Hand the Robot.** *Vague:* "Build me an ETF arb monitor." *What ROBO built:* see §20.7, all 206 alerts of it. *Precise:* Build `etf_arb.monitor(date, ticker) -> Signal`. **Inputs:** `etf_daily` and `holdings` per the schema in §20.7, published creation and redemption baskets, TRACE same-day dispersion `u`, and the change in shares outstanding as $F$. **Compute:** $\bar c$, $c^C$ and $c^R$ from half-LCS weights; the static band (20.4) with the fund's fee schedule; $\hat\eta$ from (20.3) on a trailing 250-day calm window, reported with its attenuation bound; $\hat s_t$ from (20.2) using ETF returns as the proxy for true returns; $\hat\psi$ from (20.5) as the regression slope of the premium on $F$ over a rolling window; the regime label from `classify`. **Guards:** fractions of NAV everywhere; refuse to run without `nav_convention`; skip days with no NAV strike; mark any day with a pricing-methodology change as `measurement_noise`; never emit a trade signal from the premium alone. **Outputs:** the regime label, the band edges, the three components of (20.1), $\hat\psi$, and for loan funds the runway from (20.8). **Tests:** the asserts in Blocks 1–6, plus one replay of 2020-03-09 to 2020-03-27 that must label LQD's March 19 discount `flow_dislocation_redeem` and HYG's same-day premium `inside_band` or `measurement_noise`.
+
+### Exercises
+
+1. **The premium-day census.** JNK closed at a premium on 206 trading days of 2025 and at a discount on 44. Assume pro rata baskets and that the premium is uniformly distributed on the band (20.4). What value of $(f^R + k^R)/(2\bar c + f^C + k^C)$ does the census imply? Now explain why "uniform" is wrong in a year of net inflows, and in which direction it biases your answer.
+2. **Kaz's regression.** Kaz ran (20.3) on HYG and found $\hat\eta = 0.08$. He concluded that HY evaluated prices take more than two weeks to adjust. Using the attenuation formula of §20.2.2, give two other explanations, and design a second regression, using lagged ETF returns, that distinguishes among the three.
+3. **The departing AP.** Twenty APs share risk tolerance equally, except one, which supplies 40% of the total. That AP leaves. By how much does $\psi$ rise? Compare your answer with corollary (b), and write one sentence for a regulator explaining why counting APs is the wrong statistic.
+4. **Cardinality.** Add a fixed cost $\chi$ per bond line included in the basket to the problem in §20.4.3. Show that the problem becomes a mixed-integer QP. Propose a greedy heuristic, and explain why the resulting baskets look like the 10–35% coverage ratios in the data.
+5. **The Fed's clause.** Suppose the SMCCF had bought LQD at a premium $\pi > \pi^{\text{hi}}$. Show that APs would create shares and sell them to the Fed, and compute the transfer from the taxpayer to the APs per dollar purchased. Then explain, in one paragraph, why "materially exceed" was the most important phrase in the term sheet.
+6. **The sleeve and the line.** A loan ETF has a 7% sleeve, a three-week settlement lag and a credit line of size $B$ that costs 50 bp a year undrawn. Using `sleeve_path`, find the smallest $B$ that survives a 9% outflow concentrated in two weeks. Then tell Theo what his 13-week model would have said about the same company.
+
+### Deep-Dive Resource Graph
+
+**Podcasts**
+- Bloomberg *Odd Lots* (Joe Weisenthal and Tracy Alloway): the archive contains several conversations on bond ETFs, March 2020 and portfolio trading. No specific episode was verified this session, so search the archive by topic.
+- *Flirting with Models* (Corey Hoffstein): systematic-investing interviews, including fixed income practitioners (title only).
+
+**Practitioner Writing**
+- BlackRock, *Lessons from COVID-19: ETFs as a Source of Stability*, ViewPoint, July 2020 (https://www.blackrock.com/corporate/literature/whitepaper/viewpoint-lessons-from-covid-19-etfs-as-a-source-of-stability-july-2020.pdf).
+- MSCI (Bohák & Janosik, 2020-04-08), "Bond ETFs and underlying price uncertainty" (https://www.msci.com/research-and-insights/blog-post/bond-etfs-and-underlying-price-uncertainty).
+- ICE Data Services (Heckert) via FOW, "Exchange-traded funds in volatile markets," 2020-06-22 (https://www.fow.com/insights/3694910-exchange-traded-funds-in-volatile-markets).
+- Vanguard, "4 nuances to know about bond ETFs" (https://advisors.vanguard.com/insights/article/4-nuances-to-know-about-bond-etfs), on bid-side NAVs.
+- etf.com, "Bond ETF Premiums Become Discounts" (https://www.etf.com/sections/news/bond-etf-premiums-become-discounts).
+- The DESK, "Commentary: Inside the fixed income ETF primary market" (https://www.fi-desk.com/commentary-inside-the-fixed-income-etf-primary-market/).
+- Man Institute, *Quantitative Credit Alpha: Early Mover* (2022) and *Revolutions in Credit Trading* (2023) (shelf copies; cited by page above).
+
+**Academic Papers**
+- Shim & Todorov (2021), "ETFs, illiquid assets, and fire sales," BIS WP 975 (https://www.bis.org/publ/work975.htm).
+- Todorov (2021), "The anatomy of bond ETF arbitrage," *BIS Quarterly Review*, March (https://www.bis.org/publ/qtrpdf/r_qt2103d.htm).
+- Koont, Ma, Pástor & Zeng (2022/2025), "Steering a Ship in Illiquid Waters: Active Management of Passive Funds," NBER w30039 (https://www.nber.org/papers/w30039); *RFS* 38(10).
+- Haddad, Moreira & Muir (2020/2021), "When Selling Becomes Viral," NBER w27168 (https://www.nber.org/papers/w27168); *RFS* 34(11).
+- Gilchrist, Wei, Yue & Zakrajšek (2020/2024), "The Fed Takes on Corporate Credit Risk," NBER w27809 (https://www.nber.org/papers/w27809); *JME*.
+- Aramonte & Avalos (2020), BIS Bulletin No. 6, on corporate bond ETF discounts in March 2020 (https://www.bis.org/publ/bisbull06.htm).
+- Pan & Zeng (2017), "ETF Arbitrage under Liquidity Mismatch," ESRB Working Paper No. 59 (title only).
+- SEC staff, *U.S. Credit Markets: Interconnectedness and the Effects of the COVID-19 Economic Shock* (October 2020) (https://www.sec.gov/files/US-Credit-Markets_COVID-19_Report.pdf).
+
+**Data & Code**
+- Rule 6c-11: SEC press release 2019-190 (https://www.sec.gov/news/press-release/2019-190); adopting release 33-10695 (https://www.sec.gov/rules/final/2019/33-10695.pdf); rule text, 17 CFR 270.6c-11 (https://www.law.cornell.edu/cfr/text/17/270.6c-11).
+- Rule 22e-4: SEC press release 2016-215 (https://www.sec.gov/news/pressrelease/2016-215.html).
+- SMCCF: Federal Reserve facility page with term sheets and transaction-specific disclosures (https://www.federalreserve.gov/monetarypolicy/smccf.htm); term sheet effective 2020-07-28 (https://www.federalreserve.gov/newsevents/pressreleases/files/monetary20200728a1.pdf); NY Fed operations page (https://www.newyorkfed.org/markets/secondary-market-corporate-credit-facility) and FAQ (https://www.newyorkfed.org/markets/primary-and-secondary-market-faq/corporate-credit-facility-faq).
+- Issuer pages with daily NAV, premium/discount and baskets: HYG (https://www.ishares.com/us/products/239565/ishares-iboxx-high-yield-corporate-bond-etf), LQD (https://www.ishares.com/us/products/239566/ishares-iboxx-investment-grade-corporate-bond-etf), JNK (https://www.ssga.com/us/en/intermediary/etfs/spdr-bloomberg-high-yield-bond-etf-jnk), BKLN case study (https://www.invesco.com/us/en/insights/case-study-bkln-enabling-access-senior-loans.html).
+- SEC EDGAR (https://www.sec.gov/edgar) for Form N-CEN AP data and prospectus NAV-convention language; FINRA TRACE (https://www.finra.org/filing-reporting/trace) for same-day dispersion $u_t$; ICI *Investment Company Fact Book* (2025 edition) for primary versus secondary ETF activity (title only).
+
+<!-- STATUS: COMPLETE -->
