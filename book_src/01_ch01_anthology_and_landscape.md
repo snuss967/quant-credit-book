@@ -176,6 +176,8 @@ $$
 m \;=\; \pi\,(S_t - J) + (1-\pi)\,S_t \;=\; S_t - \pi J .
 $$
 
+> **Math, Gently.** *Bayes' rule, in the form a trader can do in his head.* Bayes' rule is how you update a belief when evidence arrives, and it is easiest in **odds** rather than probabilities. Odds are "for" divided by "against": a 20% chance is odds of $0.2/0.8 = 0.25$, or "one to four." The rule is then a single multiplication: *posterior odds = prior odds × likelihood ratio*, where the likelihood ratio of a piece of evidence is how much more often you would see it from an informed seller than from an uninformed one. Several independent pieces of evidence simply multiply. A tiny worked example, with the same inputs as Exercise 2 at the end of the chapter: suppose 3% of sellers are informed, so the prior odds are $0.03/0.97 \approx 0.031$. The account is in the lender group and sold 58 minutes after the call, which you judge to be 12 times likelier from an informed seller: odds become $0.031 \times 12 \approx 0.37$. It showed the bond to five dealers at once, a further factor of 1.5: odds $\approx 0.557$. Converting back, $\pi = 0.557/(1 + 0.557) \approx 0.36$. A 3% prior became a 36% posterior from two observations. Now take logarithms: multiplying odds becomes *adding* log-odds, and "add up the evidence on the log-odds scale" is all a logistic regression is. The full version follows.
+
 Where does $\pi$ come from? From Bayes' rule, and this is the step that turns an RSSG banker's instincts into a model. Let $\mu$ be the prior share of informed senders, and let $a_I(\mathbf{x})$ and $a_U(\mathbf{x})$ be the likelihoods that an informed or uninformed account would send *this* RFQ: this size, this bond, at 2:58 p.m., 58 minutes after a lender call, five dealers in competition. Then
 
 $$
@@ -184,7 +186,33 @@ $$
 \operatorname{logit}\pi(\mathbf{x}) \;=\; \operatorname{logit}\mu \;+\; \ln\frac{a_I(\mathbf{x})}{a_U(\mathbf{x})} .
 $$
 
-If the log-likelihood ratio is (approximately) additive across features, $\ln(a_I/a_U) = \theta^\top\mathbf{x}$, the posterior is exactly a logistic regression, $\pi(\mathbf{x}) = (1+e^{-\theta_0-\theta^\top\mathbf{x}})^{-1}$ with $\theta_0 = \operatorname{logit}\mu$. That is why every RFQ toxicity model on the Street is, under the hood, a logistic regression or a tree ensemble pretending not to be one. The features worth paying for are the ones with large likelihood ratios: minutes since a lender call or an amendment request, days to earnings, whether the account sits in a known ad hoc group (Rule 2019 statements, Ch 25), the account's own past markouts, size relative to the issue, and how many dealers were put in competition. A seller who shows the bond to one dealer at a time and a seller who blasts it to twenty are telling you different things.
+If the log-likelihood ratio is (approximately) additive across features, $\ln(a_I/a_U) = \theta^\top\mathbf{x}$, the posterior is exactly a logistic regression, $\pi(\mathbf{x}) = (1+e^{-\theta_0-\theta^\top\mathbf{x}})^{-1}$ with $\theta_0 = \operatorname{logit}\mu$. That is why every RFQ toxicity model on the Street is, under the hood, a logistic regression or a tree ensemble pretending not to be one.
+
+Which features? Ines did not give Theo a list. On the Monday after Halvorsen she gave him the Friday RFQ again, on paper, and asked one question at a time: "What would you have wanted to know?"
+
+"When the lender call ended," Theo said. "Or when the amendment request went out. The closer the RFQ is to the call, the likelier the seller heard something on it." Minutes since a lender call or an amendment request: the first feature.
+
+"What else?"
+
+"Whether earnings are next week." Days to earnings: the second.
+
+"Who is selling?"
+
+"Whether the account is in the group." Theo thought about it. "You can know that, sometimes. When an ad hoc group appears in court, its counsel files a Rule 2019 statement listing the members." Whether the account sits in a known ad hoc group, from Rule 2019 statements scraped off the docket (Chapter 25): the third, and usually the one with the largest likelihood ratio.
+
+"And if you don't know the account at all?"
+
+"Then I'd want to know how its last hundred trades went for whoever bought from it." The account's own past markouts: the fourth. Ines nodded; that one is the hand history.
+
+"How big?"
+
+"Relative to the issue, not in dollars. Fifteen million of a 300 million issue is a different statement from fifteen million of three billion." Size relative to the issue: the fifth.
+
+"Last one. How did they ask?"
+
+Theo hesitated, then saw it. "Five dealers at once. Someone who wants a quiet exit shows it to one dealer at a time. Someone who wants out *before Monday* blasts it." How many dealers were put in competition: the sixth. A seller who shows the bond to one dealer at a time and a seller who blasts it to twenty are telling you different things.
+
+"Good," Ines said. "Every one of those is a likelihood ratio. Your job is to know which ones are big. Kaz's job is to estimate them. And the markouts' job is to tell both of you when you're wrong."
 
 Adding a cost $c(\Delta q)$ for the hedge half-spread and expected liquidation cost (Ben Dor's liquidity cost score is one estimate, §1.4) gives the full bid:
 

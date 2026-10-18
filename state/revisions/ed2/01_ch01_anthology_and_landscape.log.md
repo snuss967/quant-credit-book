@@ -7,7 +7,7 @@
 - [x] 4. §1.2 Market Set: LIST-TO-NARRATIVE + View From Another Seat (CLO manager). — Six-chair table walk, generic firm column, sourced CLO seat box.
 - [x] 5. §1.3.1 Setup and units: Math, Gently (distribution, mean-variance). — Bag-of-slips distribution box with CE worked number added.
 - [x] 6. §1.3.2 Inventory term: Math, Gently + When to apply. — Indifference box with 0.025/0.0127 numbers; when-it-breaks paragraph added.
-- [ ] 7. §1.3.3 Bayes on the RFQ: Math, Gently + LIST-TO-NARRATIVE.
+- [x] 7. §1.3.3 Bayes on the RFQ: Math, Gently + LIST-TO-NARRATIVE. — Odds-form Bayes box; features rewritten as Ines-Theo dialogue.
 - [ ] 8. "The cold open, in numbers": BRIDGE.
 - [ ] 9. Ways This Blows Up: Math, Gently + Full Derivation move.
 - [ ] 10. Listing 1.1: Quant-Shop Life vignette.

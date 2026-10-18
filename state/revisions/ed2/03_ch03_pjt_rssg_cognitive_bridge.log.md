@@ -11,7 +11,7 @@
 - [x] 9. [§3.2.2] LIST-TO-NARRATIVE + MATH-GENTLY: features as Ines walk-through; odds. — Note: detective odds box; Ines replays seven features; citations kept.
 - [x] 10. [§3.2.3] MATH-GENTLY + WHEN-TO-APPLY: winner's curse; GM judgment. — Note: coin-jar box, 0.85 verified; GM judgment with Baldauf-Mollner, Tradeweb.
 - [x] 11. [§3.3.1-3.3.3] MATH-GENTLY x2: bp of price; beta and residual. — Note: bp-of-price box; tide-and-hull beta box with −0.48 split.
-- [ ] 12. [§3.3.4] MATH-GENTLY: shrinkage.
+- [x] 12. [§3.3.4] MATH-GENTLY: shrinkage. — Note: April batting-average box; 56.25 ratio, +300 shrinks to +5bp.
 - [ ] 13. [§3.3.5] SHOP-LIFE vignette: Tuesday 7:40 a.m. vendor restatement.
 - [ ] 14. [§3.3, end] WHEN-TO-APPLY: markouts.
 - [ ] 15. [§3.4] NEW-SCENE: SVB Financial, March 10-22, 2023.
