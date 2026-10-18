@@ -7,7 +7,7 @@ Every reference implementation in the book lives here, chapter by chapter. The c
 Listings from `01_ch01_anthology_and_landscape.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 1.1: Dealer bid for buying dq ($mm par) from a client: eq {#code-1-1}
+### Listing 1.1: The bid equation: inventory term, informed-flow Bayes and the jump penalty {#code-1-1}
 
 ```python
 import numpy as np
@@ -94,7 +94,7 @@ print(f"engine bid {engine_bid:.2f} | toxicity-aware bid {theo_bid:.2f} | "
 ```
 
 
-### Listing 1.2: Duration Times Spread in bp*years: D_spr in years, s_bp in basis points {#code-1-2}
+### Listing 1.2: Duration Times Spread, DTS volatility and the liquidity cost score {#code-1-2}
 
 ```python
 def dts(D_spr, s_bp):
@@ -139,7 +139,43 @@ assert abs(lcs(bid=62.0, ask=64.0, price_quoted=True) - 100 * 2 / 62) < 1e-12
 ```
 
 
-### Listing 1.3: Holder x trigger forced-supply engine: eqs {#code-1-3}
+### Listing 1.3: Distance to default, credit-triangle check, one-factor simulation {#code-1-3}
+
+```python
+from scipy.integrate import trapezoid
+from scipy.stats import norm
+
+
+def distance_to_default(V, F, mu_V, sigma_V, T=1.0):
+    """Eq. (1.4): physical distance to default (unitless)."""
+    return (np.log(V / F) + (mu_V - 0.5 * sigma_V**2) * T) / (sigma_V * np.sqrt(T))
+
+
+def credit_triangle_check(lam=0.03, R=0.40, r=0.04, T=5.0, n=200_001):
+    """Numerically integrate both CDS legs (measure Q) and return the par spread."""
+    t = np.linspace(0.0, T, n)
+    disc_surv = np.exp(-(r + lam) * t)
+    prem_annuity = trapezoid(disc_surv, t)
+    protection = (1.0 - R) * trapezoid(lam * disc_surv, t)
+    return protection / prem_annuity
+
+
+dd = distance_to_default(V=150.0, F=100.0, mu_V=0.06, sigma_V=0.10)   # illustrative IG-like firm
+assert dd > 4.0 and norm.cdf(-dd) < 1e-4                               # Gaussian: 'immortal'
+assert abs(credit_triangle_check() - 0.03 * 0.60) < 1e-10              # s = lambda (1 - R)
+
+# One-factor threshold model: Monte Carlo default rate matches p; tails fatten with rho
+rng = np.random.default_rng(RNG_SEED + 1)
+p, rho, n_sims, n_firms = 0.02, 0.20, 20_000, 500
+Y = rng.standard_normal(n_sims)
+p_cond = norm.cdf((norm.ppf(p) - np.sqrt(rho) * Y) / np.sqrt(1.0 - rho))
+loss_frac = rng.binomial(n_firms, p_cond) / n_firms
+assert abs(loss_frac.mean() - p) < 4 * loss_frac.std() / np.sqrt(n_sims)
+assert np.quantile(loss_frac, 0.99) > 5 * p                            # herds, not coin flips
+```
+
+
+### Listing 1.4: The forced-seller flow graph and the price-pressure path {#code-1-4}
 
 ```python
 class ForcedSellerGraph:
@@ -227,7 +263,7 @@ print(f"forced supply {Q:.1f}bn | dealer residual {base_run['dealer_residual']:.
 Listings from `02_ch02_revolutions_in_credit_trading.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 2.1: K=None: ceiling 1 {#code-2-1}
+### Listing 2.1: Logistic fit of an adoption S-curve: rate, midpoint and odds-doubling time {#code-2-1}
 
 ```python
 # ch02_electronification_trend.py -- block 1: the adoption S-curve (measure: P)
@@ -351,7 +387,7 @@ print(fit_ig["projection"].round(3).to_string(index=False))
 ```
 
 
-### Listing 2.2: Quote distance = common Exp(mean phi*theta) + i.i.d {#code-2-2}
+### Listing 2.2: The RFQ as an auction: best of n quotes with a common anchor {#code-2-2}
 
 ```python
 # block 2: the RFQ as an auction, with an anchoring share phi
@@ -384,7 +420,7 @@ check("11 anchored dealers quote worse than 2 independent", anchored["mc_best"],
 ```
 
 
-### Listing 2.3: Price per 100 par on a coupon date; y is the annual yield, decimal, compounded at freq {#code-2-3}
+### Listing 2.3: Bond price, spread duration, liquidity cost conventions and the Man cost decomposition {#code-2-3}
 
 ```python
 # block 3: LCS conventions and the Man cost decomposition (units!)
@@ -436,7 +472,7 @@ check("Man TC adds like units", man_tc_bp(6.0, 2.5, -1.0), abs(man_tc_bp(6.0, 2.
 ```
 
 
-### Listing 2.4: alpha_net(TO) = k*sqrt(TO) - c*TO; c is one-way cost as a fraction of notional {#code-2-4}
+### Listing 2.4: Optimal turnover and the cheapest-protocol router {#code-2-4}
 
 ```python
 # block 4: the data-exhaust theorem and the protocol router
@@ -495,7 +531,7 @@ print(pd.DataFrame(CHECKS, columns=["check", "value", "passed"]).to_string(index
 Listings from `03_ch03_pjt_rssg_cognitive_bridge.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 3.1: Overflow-safe logistic function {#code-3-1}
+### Listing 3.1: Glosten-Milgrom half-spread and winner's-curse shading for the RFQ bid {#code-3-1}
 
 ```python
 import numpy as np
@@ -546,7 +582,7 @@ assert np.isclose(gm_bid(87.0, 1.5, 0.0, 1, 0.0, 0.0, 0.0, 1.0), 87.0)      # no
 ```
 
 
-### Listing 3.2: Simulated RFQ tape (prices in points) {#code-3-2}
+### Listing 3.2: A simulated RFQ tape and its two tests: single-dealer markout and competition {#code-3-2}
 
 ```python
 BETA_TRUE = np.array([-2.5, 0.6, 1.0, 1.2])   # intercept, size z-score, event window, distressed counterparty
@@ -620,7 +656,7 @@ print(f"fills {fills.mean():.3f}, mean markout {mo_fill.mean():+.3f} pts; "
 ```
 
 
-### Listing 3.3: MLE of beta in P(adverse | x) = (1 + sigmoid(x'beta)) / 2 (Sec {#code-3-3}
+### Listing 3.3: Maximum-likelihood fit of the probability that an RFQ is adverse {#code-3-3}
 
 ```python
 def fit_pi(X, adverse):
@@ -662,7 +698,7 @@ print(f"pi_hat = {pi_theo:.2f}; GM bid with a weekend sigma_v of 6 points = {bid
 ```
 
 
-### Listing 3.4: Systematic price move (points) implied by index-spread and Treasury-yield changes (decimals) {#code-3-4}
+### Listing 3.4: Reference moves, markouts and shrunk counterparty scores {#code-3-4}
 
 ```python
 def ido_reference_move(p_ref, d_spr, beta, d_index_spread, d_mod, d_tsy):
@@ -710,7 +746,7 @@ print(f"tau_hat = {np.sqrt(tau2_hat):.1f}bp (true {tau_true}); MSE raw {mse_raw:
 ```
 
 
-### Listing 3.5: Eq {#code-3-5}
+### Listing 3.5: Re-basing a PD to the live default rate and updating it from an 8-K {#code-3-5}
 
 ```python
 def elkan(p, S, T):
@@ -752,7 +788,7 @@ print(f"posterior PD {p_post:.4f}; implied spread move {ds_bp:,.0f}bp")
 ```
 
 
-### Listing 3.6: Eq {#code-3-6}
+### Listing 3.6: CUSUM detector for the pre-LMT signature, with a PRS-dependent threshold {#code-3-6}
 
 ```python
 def cusum_lmt_detector(y, mu1, sigma_y, h):
@@ -797,7 +833,7 @@ print(f"ARL0 >= {run_len.mean():.0f} days (bound {np.exp(h_design):.0f}); "
 Listings from `04_ch04_inside_the_systematic_credit_industry.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 4.1: BR_eff = N / (1 + (m - 1) * rho), with m = N / M bonds per issuer {#code-4-1}
+### Listing 4.1: Effective breadth with issuer clustering, and the fundamental law {#code-4-1}
 
 ```python
 # capacity_breadth_engine.py, block 1 of 4: breadth and the fundamental law, eq. (4.1)
@@ -826,7 +862,7 @@ assert abs(effective_breadth(1800, 800, 0.7) - 960.0) < 1e-9     # the worked ex
 ```
 
 
-### Listing 4.2: alpha(A) = alpha0 - 2T [c0 + eta * sqrt(2 T A / L)], with T one-way {#code-4-2}
+### Listing 4.2: Net alpha under square-root impact, and the capacity A* {#code-4-2}
 
 ```python
 # block 2 of 4: capacity under square-root impact, eq. (4.2). Units: $mm and annual decimals.
@@ -864,7 +900,7 @@ print(f"A* = ${a_star:,.0f}mm; net alpha at A* = {1e4 * net_alpha(a_star, **P):.
 ```
 
 
-### Listing 4.3: w_i = min(1/n, w_max, cap_frac * MV_i / A); f_cash = 1 - sum(w) {#code-4-3}
+### Listing 4.3: Ownership-cap position weights and the uninvested fraction {#code-4-3}
 
 ```python
 # block 3 of 4: Dynkin cap weights and the non-invested fraction, eq. (4.3)
@@ -893,7 +929,7 @@ for A in (125.0, 500.0, 1000.0, 2000.0):
 ```
 
 
-### Listing 4.4: block 4 of 4: score rows of the six-axis map (all parameters illustrative, not the firms' numbers) {#code-4-4}
+### Listing 4.4: Scoring the six-axis map: breadth, gross and net IR, capacity and cash drag {#code-4-4}
 
 ```python
 # block 4 of 4: score rows of the six-axis map (all parameters illustrative, not the firms' numbers)
@@ -951,7 +987,7 @@ for name, row in ROWS.items():
 Listings from `05_ch05_credit_probability_distributions.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 5.1: Recovery R per 1.0 of par: 0 w.p {#code-5-1}
+### Listing 5.1: Recovery specification and mixture moments {#code-5-1}
 
 ```python
 # credit_mixture_lab.py, block 1 of 5: mixture moments, recovery spec, Monte Carlo.
@@ -1150,7 +1186,7 @@ assert abs(value[dflag].mean() - 0.40) < 0.005
 ```
 
 
-### Listing 5.2: Negative log-likelihood and gradient: logit mean, log precision (Ferrari-Cribari-Neto) {#code-5-2}
+### Listing 5.2: Zero-one-inflated Beta regression for recoveries {#code-5-2}
 
 ```python
 # credit_mixture_lab.py, block 2 of 5: zero-one-inflated Beta regression for recoveries.
@@ -1279,7 +1315,7 @@ for bad_target in ("recovery", "rec_trading_30d"):     # unnamed measure; all-Na
 ```
 
 
-### Listing 5.3: m log-jumps: up ~ Exp(eta1) w.p {#code-5-3}
+### Listing 5.3: Kou jump-diffusion first passage {#code-5-3}
 
 ```python
 # credit_mixture_lab.py, block 3 of 5: Kou jump-diffusion first passage (P-measure risk run).
@@ -1341,7 +1377,7 @@ assert pd_by[2.0] > pd_by[4.0] and und_by[2.0] < und_by[4.0], (pd_by, und_by)
 ```
 
 
-### Listing 5.4: Hill tail index from the top k positive losses {#code-5-4}
+### Listing 5.4: Hill tail index and peaks-over-threshold VaR and ES {#code-5-4}
 
 ```python
 # credit_mixture_lab.py, block 4 of 5: Hill and peaks-over-threshold, with a bounded-support refusal.
@@ -1402,7 +1438,7 @@ assert drift.max() / drift.min() > 3.0, drift          # no plateau, only a clif
 ```
 
 
-### Listing 5.5: Coefficient of (upper = lower) tail dependence lambda_U of a bivariate t copula {#code-5-5}
+### Listing 5.5: Tail dependence of the t copula, the limit against the finite level {#code-5-5}
 
 ```python
 # credit_mixture_lab.py, block 5 of 5: tail dependence, the limit vs. the finite level.
@@ -1442,7 +1478,7 @@ print(f"lambda_U(t4, rho=0.5) = {lam_t:.3f}; chi_hat(0.999): t = {chi_t:.3f}, Ga
 Listings from `06_ch06_merton_and_intensity_models.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 6.1: Print PASS/FAIL and stop the run on failure {#code-6-1}
+### Listing 6.1: The PASS/FAIL helper and the shared seed {#code-6-1}
 
 ```python
 # Block 0: imports, seed, and the PASS/FAIL helper
@@ -1461,7 +1497,7 @@ def check(label, ok, detail=""):
 ```
 
 
-### Listing 6.2: Q-measure Merton {#code-6-2}
+### Listing 6.2: Merton (1974): equity, debt, spread and the Q and P default probabilities {#code-6-2}
 
 ```python
 # Block 1: Merton (1974)
@@ -1516,7 +1552,7 @@ check("C: Merton short-end spread -> 0", abs(s_short) < 1e-8, f"s(0.001y)={s_sho
 ```
 
 
-### Listing 6.3: Equity value and the Ito-implied equity volatility sigma_E = N(d1) sigma_V V0 / E0 {#code-6-3}
+### Listing 6.3: The KMV inverse problem: asset value and volatility from equity {#code-6-3}
 
 ```python
 # Block 2: KMV inverse problem
@@ -1615,7 +1651,7 @@ check("E: naive DD ranks like the solved DD", rho_E > 0.8, f"Spearman={rho_E:.3f
 ```
 
 
-### Listing 6.4: First-passage PD by T for barrier K_t = K exp(-g (T - t)) {#code-6-4}
+### Listing 6.4: Black-Cox first passage: closed form and Monte Carlo {#code-6-4}
 
 ```python
 # Block 3: Black-Cox first passage
@@ -1663,7 +1699,7 @@ check("G: m = 0 gives twice the terminal PD",
 ```
 
 
-### Listing 6.5: Closed-form Q-survival S(0,T) = A(T) exp(-B(T) lam0) {#code-6-5}
+### Listing 6.5: CIR intensity: closed-form survival and an exact simulation {#code-6-5}
 
 ```python
 # Block 4: CIR intensity
@@ -1716,7 +1752,7 @@ print(f"Euler paths visiting lambda<0 with sigma=0.30 (Feller fails): "
 ```
 
 
-### Listing 6.6: Integrated piecewise-constant hazard; lams[k] applies on (knots[k-1], knots[k]], flat beyond {#code-6-6}
+### Listing 6.6: CDS legs, hazard bootstrap and the credit triangle {#code-6-6}
 
 ```python
 # Block 5: CDS legs, hazard bootstrap, credit triangle
@@ -1796,7 +1832,7 @@ check("K: inverted curve trips the negative-hazard flag", bool(neg_inv.any()),
 ```
 
 
-### Listing 6.7: Block 6: the structural short end, seen through the CDS bootstrap {#code-6-7}
+### Listing 6.7: The structural short end, seen through the CDS bootstrap {#code-6-7}
 
 ```python
 # Block 6: the structural short end, seen through the CDS bootstrap
@@ -1822,7 +1858,7 @@ print("All chapter 6 checks passed.")
 Listings from `06_ch06b_options_and_measures_for_credit.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 6-B.1: credit_options.py (Chapter 6-B) {#code-6b-1}
+### Listing 6-B.1: credit_options.py: Black-Scholes, Greeks and jump-to-default pricing under the two measures {#code-6b-1}
 
 ```python
 """credit_options.py (Chapter 6-B). Units as in the spec; every PD is measure-tagged."""
@@ -2117,7 +2153,7 @@ print(_self_test())
 Listings from `07_ch07_ml_on_small_sample_credit_data.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 7.1: w_0 = 1, w_k = -w_{k-1} (d - k + 1) / k, truncated once |w_k| < tau {#code-7-1}
+### Listing 7.1: Fractional differentiation with a fixed-width window {#code-7-1}
 
 ```python
 import numpy as np
@@ -2184,7 +2220,7 @@ print("FFD on a random walk: d* = %.2f, memory retained rho = %.2f" % min_d(rw))
 ```
 
 
-### Listing 7.2: ---------- 2. Synthetic credit panel with smoothed (stale) marks (Section 7.1) ---------- {#code-7-2}
+### Listing 7.2: A synthetic credit panel with smoothed (stale) marks {#code-7-2}
 
 ```python
 # ---------- 2. Synthetic credit panel with smoothed (stale) marks (Section 7.1) ----------
@@ -2235,7 +2271,7 @@ assert lag1(P["xs"][:, b_slow]) > lag1(P["xs_true"][:, b_slow]) + 0.2     # and 
 ```
 
 
-### Listing 7.3: ---------- 3. Triple-barrier labels in DTS space with exit censoring (Section 7.4) ---------- {#code-7-3}
+### Listing 7.3: Triple-barrier labels in DTS space with exit censoring {#code-7-3}
 
 ```python
 # ---------- 3. Triple-barrier labels in DTS space with exit censoring (Section 7.4) ----------
@@ -2274,7 +2310,7 @@ print("touch shares:", shares.round(3).to_dict())
 ```
 
 
-### Listing 7.4: ---------- 4. Parent-level average uniqueness and the hat count (Section 7.6) ---------- {#code-7-4}
+### Listing 7.4: Parent-level average uniqueness of overlapping labels {#code-7-4}
 
 ```python
 # ---------- 4. Parent-level average uniqueness and the hat count (Section 7.6) ----------
@@ -2300,7 +2336,7 @@ print(f"label rows {len(labels):,}   N_eff {n_eff:,.0f}   ratio {n_eff / len(lab
 ```
 
 
-### Listing 7.5: Test = (parents in group fold g) x (time block m) {#code-7-5}
+### Listing 7.5: Purged, embargoed, parent-grouped cross-validation against shuffled K-fold {#code-7-5}
 
 ```python
 # ---------- 5. Purged, embargoed, parent-grouped CV vs shuffled K-fold (Section 7.7) ----------
@@ -2365,7 +2401,7 @@ assert abs(auc_purged - 0.5) < 0.06           # the honest splitter finds nothin
 ```
 
 
-### Listing 7.6: Secondary-model probability -> size in [0, 1), times the primary model's side {#code-7-6}
+### Listing 7.6: Meta-label bet sizing, deflated Sharpe ratio, MinTRL and PBO {#code-7-6}
 
 ```python
 # ---------- 6. Meta-label bet sizing, deflated Sharpe, MinTRL, PBO (Sections 7.5, 7.8) ----------
@@ -2437,7 +2473,7 @@ print(f"PBO noise {pbo_noise:.2f}   PBO with one real strategy {pbo_skill:.2f}  
 Listings from `07_ch07b_statistics_for_credit_panels.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 7-B.1: Bartlett-weighted sum of score cross-products (not divided by T); rows time-ordered {#code-7b-1}
+### Listing 7-B.1: creditstats.py: OLS with clustered and Newey-West covariances, logit, survival, shrinkage, PCA, bootstrap and first-passage tools {#code-7b-1}
 
 ```python
 # creditstats.py: the statistics toolbox imported by Chapters 8-12, 14 and 15 (Chapter 7-B)
@@ -2689,7 +2725,7 @@ def first_passage_exact(x0, b, mu, sigma, T):
 ```
 
 
-### Listing 7-B.2: Acceptance tests for creditstats.py (seeded; every tolerance is derived, not tuned) {#code-7b-2}
+### Listing 7-B.2: Acceptance tests for creditstats.py {#code-7b-2}
 
 ```python
 # Acceptance tests for creditstats.py (seeded; every tolerance is derived, not tuned)
@@ -2781,7 +2817,7 @@ print("creditstats: all checks passed")
 Listings from `08_ch08_isolating_ido_and_empirical_duration.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 8.1: ---------- 0. Setup: one seeded generator, one scoreboard ---------- {#code-8-1}
+### Listing 8.1: Setup: one seeded generator and one scoreboard {#code-8-1}
 
 ```python
 # ---------- 0. Setup: one seeded generator, one scoreboard ----------
@@ -2798,7 +2834,7 @@ def report(name, ok, detail=""):
 ```
 
 
-### Listing 8.2: Split realized total returns into carry, rates, spread, convexity and residual {#code-8-2}
+### Listing 8.2: Return decomposition into carry, rates, spread, convexity and residual {#code-8-2}
 
 ```python
 # ---------- 1. Return decomposition with the right signs (Section 8.1) ----------
@@ -2836,7 +2872,7 @@ report("8.1 decomposition foots",
 ```
 
 
-### Listing 8.3: Pooled no-intercept OLS of R on [-D*dy, -D*s*dy]; H(s) = beta + gamma*s {#code-8-3}
+### Listing 8.3: Empirical duration: pooled regression and the closed form {#code-8-3}
 
 ```python
 # ---------- 2. Empirical duration: regression and closed form (Section 8.2) ----------
@@ -2879,7 +2915,7 @@ report("8.2 H near population value", abs(H_reg - H_true) < 0.15, f"H_true {H_tr
 ```
 
 
-### Listing 8.4: out[t] = f[t-k], NaN where undefined {#code-8-4}
+### Listing 8.4: Stale-price betas: Dimson, Scholes-Williams and de-smoothing {#code-8-4}
 
 ```python
 # ---------- 3. Stale-price betas: Dimson, Scholes-Williams, de-smoothing (Section 8.5) ----------
@@ -2961,7 +2997,7 @@ report("8.5 de-smoothing restores vol",
 ```
 
 
-### Listing 8.5: Excess return per unit of previous-close DTS (approximately minus the relative spread change) {#code-8-5}
+### Listing 8.5: DTS as the unit of credit beta, and the DTS pair hedge {#code-8-5}
 
 ```python
 # ---------- 4. DTS: the unit of credit beta (Section 8.4) ----------
@@ -2999,7 +3035,7 @@ report("8.4 beta equals DTS ratio", np.allclose(beta_cs, dts_cs / dts_cs.mean(),
 ```
 
 
-### Listing 8.6: Smallest ridge penalty capping cond(C + eta I) at cond_max (C a correlation matrix) {#code-8-6}
+### Listing 8.6: The hedge matrix: minimum variance, ridge, bounds and contract units {#code-8-6}
 
 ```python
 # ---------- 5. The hedge matrix: min-variance, ridge, bounds, units (Section 8.6) ----------
@@ -3123,7 +3159,7 @@ report("8.6 futures sizing matches Table 8.2", round(n_full) == 232 and round(n_
 ```
 
 
-### Listing 8.7: Remove the leading principal components from a (T, N) panel of DTS-scaled residuals {#code-8-7}
+### Listing 8.7: Stripping the common residual factor, and the IDO ledger {#code-8-7}
 
 ```python
 # ---------- 6. Common residual factor and the IDO ledger (Section 8.8) ----------
@@ -3171,7 +3207,7 @@ assert all(CHECKS.values()), [k for k, v in CHECKS.items() if not v]
 Listings from `09_ch09_factor_investing_in_credit.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 9.1: ---------- Block 1: synthetic universe and data-generating process (Sections 9.2-9.3) ---------- {#code-9-1}
+### Listing 9.1: Synthetic universe and data-generating process {#code-9-1}
 
 ```python
 # ---------- Block 1: synthetic universe and data-generating process (Sections 9.2-9.3) ----------
@@ -3274,7 +3310,7 @@ print(f"{N} bonds, {J} issuers, {T} months; mean market DTS {dts_mkt.mean():.1f}
 ```
 
 
-### Listing 9.2: Top-minus-bottom q long-short {#code-9-2}
+### Listing 9.2: DTS is beta: a top-minus-bottom backtest {#code-9-2}
 
 ```python
 # ---------- Block 2: DTS is beta (Section 9.2) ----------
@@ -3344,7 +3380,7 @@ soft_check(abs(icpt) < 0.15 * vb.mean(), "vol-DTS intercept is near zero")
 ```
 
 
-### Listing 9.3: Excess spread to peers: residual of log OAS on fundamentals, with sector and maturity intercepts, estimated by rating each month (Dynkin p.524) {#code-9-3}
+### Listing 9.3: Factor signals: excess spread to peers, SPiDER, EMC and low risk {#code-9-3}
 
 ```python
 # ---------- Block 3: signals (Sections 9.3-9.6) ----------
@@ -3428,7 +3464,7 @@ print(f"share of hidden-risk bonds in ESP top decile: {np.broadcast_to(hid_b, (T
 ```
 
 
-### Listing 9.4: ---------- Block 4: dollar-neutral vs DTS-neutral factors, costs, buffers (Sections 9.2-9.8) ---------- {#code-9-4}
+### Listing 9.4: Dollar-neutral against DTS-neutral factors, with costs and buffers {#code-9-4}
 
 ```python
 # ---------- Block 4: dollar-neutral vs DTS-neutral factors, costs, buffers (Sections 9.2-9.8) ----------
@@ -3468,7 +3504,7 @@ soft_check(buf.loc[0.10, "net_%"] > buf.loc[0.0, "net_%"], "a 10% buffer beats n
 ```
 
 
-### Listing 9.5: Benchmark: equal-weight held universe {#code-9-5}
+### Listing 9.5: Long-only DTS-matched tilt with a turnover cap {#code-9-5}
 
 ```python
 # ---------- Block 5: long-only DTS-matched tilt with a turnover cap (Section 9.8) ----------
@@ -3511,7 +3547,7 @@ soft_check(abs(ols(lo["active"], r_mkt)[0]) < 0.05, "long-only active beta ~ 0 a
 ```
 
 
-### Listing 9.6: ---------- Block 6: combining factors (Section 9.7) ---------- {#code-9-6}
+### Listing 9.6: Combining factors: equal-risk and maximum-IR weights {#code-9-6}
 
 ```python
 # ---------- Block 6: combining factors (Section 9.7) ----------
@@ -3537,7 +3573,7 @@ if off.max() < 0.3 and ir_formula < IR.max():
 ```
 
 
-### Listing 9.7: Clean prices from excess returns; observed = clean x (1 + u), u iid N(0, sig_u^2) {#code-9-7}
+### Listing 9.7: Replication under noisy prices {#code-9-7}
 
 ```python
 # ---------- Block 7: the replication module, noisy prices (Section 9.9) ----------
@@ -3575,7 +3611,7 @@ print("All hard checks passed.")
 Listings from `10_ch10_trend_and_time_series_momentum.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 10.1: r_t = s_{t-1} * (ACT/360 year fraction) - dur * (s_t - s_{t-1}); long risk is positive {#code-10-1}
+### Listing 10.1: Excess returns, CDX price returns and roll-safe stitching {#code-10-1}
 
 ```python
 # credit_tsmom.py, block 1 of 6: conventions, return construction, carry and roll guards (Sections 10.1-10.2)
@@ -3654,7 +3690,7 @@ print(f"block 1 ok: roll splice error = {r_naive.sum() - r_safe.sum():+.4%} of n
 ```
 
 
-### Listing 10.2: sign of the trailing h-period summed excess return, known at the close of t {#code-10-2}
+### Listing 10.2: Trend signals, sizing and P&L, with sign, turnover and Sheppard guards {#code-10-2}
 
 ```python
 # credit_tsmom.py, block 2 of 6: signals, sizing, P&L; sign, turnover and Sheppard guards (Sections 10.2, 10.8)
@@ -3736,7 +3772,7 @@ print(f"block 2 ok: flip rate {flip_rate:.4f} vs {np.arccos(11 / 12) / np.pi:.4f
 ```
 
 
-### Listing 10.3: monthly spread changes with AR(1) persistence phi (phi = 0 is a random walk in spreads) {#code-10-3}
+### Listing 10.3: No free lunch under a random walk: spread changes with persistence {#code-10-3}
 
 ```python
 # credit_tsmom.py, block 3 of 6: no free lunch under a random walk, real money under persistence (Section 10.2)
@@ -3764,7 +3800,7 @@ print("block 3 ok:", {k: round(v, 2) for k, v in results.items()})
 ```
 
 
-### Listing 10.4: daily spreads with log-OU dynamics, so sd(ds) is proportional to s (Ben Dor's law, beta = sigma) {#code-10-4}
+### Listing 10.4: Volatility scaling is DTS scaling: log-OU spreads and Ben Dor's law {#code-10-4}
 
 ```python
 # credit_tsmom.py, block 4 of 6: volatility scaling is DTS scaling (Section 10.3)
@@ -3814,7 +3850,7 @@ print(f"block 4 ok: beta_DTS = {beta_hat:.3f}; constant DTS exposure = {0.10 / b
 ```
 
 
-### Listing 10.5: monthly D3: ds_{t+1} = kappa (s_bar - s_t) + phi ds_t + eps, sd(eps) = beta s_t sqrt(dt) {#code-10-5}
+### Listing 10.5: Trend plus carry under the D3 model, on an expanding window {#code-10-5}
 
 ```python
 # credit_tsmom.py, block 5 of 6: trend plus carry under D3, estimated on an expanding window (Section 10.4)
@@ -3867,7 +3903,7 @@ print(f"block 5 ok: kappa_hat {c['kappa'][N_D3 - 2]:.3f} (true 0.03), phi_hat {c
 ```
 
 
-### Listing 10.6: OLS coefficients, Newey-West (Bartlett) standard errors and t-statistics; X includes a constant {#code-10-6}
+### Listing 10.6: Stale-mark lead-lag, whipsaw, convexity and the crisis table {#code-10-6}
 
 ```python
 # credit_tsmom.py, block 6 of 6: stale-mark lead-lag, whipsaw, convexity, crisis table (Sections 10.5-10.7)
@@ -3985,7 +4021,7 @@ print("all blocks ok")
 Listings from `11_ch11_defensive_systematic_high_yield.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 11.1: Arithmetic upside/downside capture on benchmark-defined regimes {#code-11-1}
+### Listing 11.1: Capture ratios and asymmetric beta {#code-11-1}
 
 ```python
 # Block 1: capture ratios and asymmetric beta (Section 11.2)
@@ -4048,7 +4084,7 @@ print(f"beta tilt: U={U:.4f} D={D:.4f} | convex: beta_up={cvx['beta_up']:.3f} "
 ```
 
 
-### Listing 11.2: Recover (V, sigma_V) from observed (E, sigma_E) by nested bracketed root searches {#code-11-2}
+### Listing 11.2: Merton inversion, distance to default and the empirical PD map {#code-11-2}
 
 ```python
 # Block 2: Merton inversion, distance-to-default, empirical PD map (Section 11.3)
@@ -4118,7 +4154,7 @@ print(f"V={V_hy:,.0f} sigma_V={sV_hy:.3f} DD={dd_hy:.2f} "
 ```
 
 
-### Listing 11.3: Issuer-month panel: persistent latent DD with a common factor (default clustering), a liquidity-runway covariate capped at 13 weeks, and a distressed-exchange flag {#code-11-3}
+### Listing 11.3: A synthetic HY panel, dynamic logit, clustered standard errors and purged issuer-grouped CV {#code-11-3}
 
 ```python
 # Block 3: synthetic HY panel, dynamic logit, clustered SEs, purged issuer-grouped CV (Section 11.4)
@@ -4279,7 +4315,7 @@ print(f"defaults={(default_month >= 0).sum()} beta_DD={b_full[1]:.3f} "
 ```
 
 
-### Listing 11.4: q * [(pi_X - pi_K) * L - (s_X - s_K)], all decimals per year, P-measure {#code-11-4}
+### Listing 11.4: CAP curve, accuracy ratio, hit rate and the economics of exclusion {#code-11-4}
 
 ```python
 # Block 4: CAP curve, accuracy ratio, hit rate, exclusion economics (Section 11.5)
@@ -4338,7 +4374,7 @@ print(f"panel AR={accuracy_ratio(pd_in, y_all):.3f} AUC={auc(pd_in, y_all):.3f} 
 ```
 
 
-### Listing 11.5: Block 5: DTS-neutral defensive portfolio (Section 11.7) {#code-11-5}
+### Listing 11.5: The DTS-neutral defensive portfolio {#code-11-5}
 
 ```python
 # Block 5: DTS-neutral defensive portfolio (Section 11.7)
@@ -4391,7 +4427,7 @@ print(f"avg 12m default exposure: held={held_def / 5:.3%} bench={bench_def / 5:.
 ```
 
 
-### Listing 11.6: Block 6: regime-aware DTS budget and capacity (Sections 11.8-11.9) {#code-11-6}
+### Listing 11.6: The regime-aware DTS multiplier and capacity {#code-11-6}
 
 ```python
 # Block 6: regime-aware DTS budget and capacity (Sections 11.8-11.9)
@@ -4454,7 +4490,7 @@ print(f"DTS multiplier calm={m_calm:.2f} shock={m_shock:.2f} fundamental={m_fund
 Listings from `12_ch12_multi_asset_credit_allocation.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 12.1: Illustrative inputs (decimals per year; durations in years). Bounds are Nuveen Fig. 5. {#code-12-1}
+### Listing 12.1: Sector inputs: expected loss, mark-to-market drag and forward return {#code-12-1}
 
 ```python
 import numpy as np
@@ -4520,7 +4556,7 @@ for s_, m_ in zip(SECTORS, MU):
 ```
 
 
-### Listing 12.2: GLM (2004) MA(k) weights by matching autocorrelations; theta >= 0, sum(theta) = 1 {#code-12-2}
+### Listing 12.2: GLM de-smoothing: fitting the MA(k) smoothing weights {#code-12-2}
 
 ```python
 def acf(x, nlags):
@@ -4574,7 +4610,7 @@ print("theta_hat", th_hat.round(3), " xi_hat", round(xi_hat, 3))
 ```
 
 
-### Listing 12.3: Covariance an optimizer sees when sector i is reported with GLM smoothing theta {#code-12-3}
+### Listing 12.3: The covariance an optimizer sees: DTS, smoothing, EWMA and Ledoit-Wolf shrinkage {#code-12-3}
 
 ```python
 SIG_U = np.array([.35, .40, .40, .35, .45, .40, .30, .45, .45, .40, .35])  # annual vol of ds/s
@@ -4638,7 +4674,7 @@ print("Ledoit-Wolf delta %.3f" % delta)
 ```
 
 
-### Listing 12.4: Defines mvn_logpdf, forward_backward, hmm2_em, stationary {#code-12-4}
+### Listing 12.4: A two-state regime model: HMM filter, EM fit and the regime-conditional return assumptions {#code-12-4}
 
 ```python
 def mvn_logpdf(X, mu, S):
@@ -4710,7 +4746,7 @@ assert np.allclose(pr_long, stationary(fit["P"]), atol=0.02)
 ```
 
 
-### Listing 12.5: Mean-variance with the tiers of eq {#code-12-5}
+### Listing 12.5: Mean-variance with tiers, equal risk contribution and the frontier {#code-12-5}
 
 ```python
 def feasible_start(lo, hi):
@@ -4857,7 +4893,7 @@ print("tilt (pp):", dict(zip(SECTORS, (100 * (w_tac - w_saa)).round(1))))
 Listings from `13_ch13_codifying_lmt_game_theory.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 13.1: Eisenberg-Noe clearing: pay by rank, pro rata within rank, route intercompany receipts and subsidiary equity upward; iterate to a fixed point {#code-13-1}
+### Listing 13.1: Waterfall clearing with priority classes, and double-dip and pari-plus recoveries {#code-13-1}
 
 ```python
 # lmt_engine.py, block (a): multi-obligor clearing with priority classes
@@ -4928,7 +4964,7 @@ assert dd_recoveries(600.0, F1, F2, 150.0, True)[0] < dd_recoveries(600.0, F1, F
 ```
 
 
-### Listing 13.2: Per-dollar recoveries (R0, first-out, second-out, excluded), Section 13.3 {#code-13-2}
+### Listing 13.2: The uptier, the sponsor's knapsack, the co-op veto and Shapley carve-outs {#code-13-2}
 
 ```python
 # block (b): uptier transfer, sponsor's knapsack, co-op veto, Shapley carve-outs
@@ -5003,7 +5039,7 @@ assert np.allclose(shapley([0.25, 0.06, 0.03, 0.03], quota=1 / 3), [5 / 12, 5 / 
 ```
 
 
-### Listing 13.3: MAP logistic: N(prior, tau^2) on slopes, Beta(a, b) on sig(b0) {#code-13-3}
+### Listing 13.3: The Bayesian Priming Risk Score and expected priming loss {#code-13-3}
 
 ```python
 # block (c): Bayesian PRS on synthetic borrower-years, then expected priming loss
@@ -5093,7 +5129,7 @@ print(f"events={int(y.sum())} PRS={prs_lark:.3f} E[dR]={e_loss:.3f} EPL={100 * e
 Listings from `14_ch14_default_and_recovery_cycle_lmt_era.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 14.1: All rates per year under P; recoveries as fractions of par {#code-14-1}
+### Listing 14.1: LME-cycle parameters and the cohort simulator along a regime path {#code-14-1}
 
 ```python
 # lme_cycle_engine.py -- Chapter 14 reference implementation (block 1 of 5: parameters and simulation)
@@ -5227,7 +5263,7 @@ def simulate_cohort(n, prm, seed, s0=1, regime_path=None):
 ```
 
 
-### Listing 14.2: The WRONG estimator, kept for the test: 1 - KM with competing causes treated as censoring {#code-14-2}
+### Listing 14.2: Competing-risks estimators, and the wrong one kept for the test {#code-14-2}
 
 ```python
 # block 2 of 5: competing-risks estimators (first events only)
@@ -5279,7 +5315,7 @@ def step_at(times, values, t):
 ```
 
 
-### Listing 14.3: Exact EL(T) of Sec {#code-14-3}
+### Listing 14.3: Re-default clock, expected loss, coalition mixture and the co-op game {#code-14-3}
 
 ```python
 # block 3 of 5: re-default clock, expected loss, coalition mixture, co-op game
@@ -5369,7 +5405,7 @@ def coop_break_prob(c, m=0.501, n=10, phi=0.10):
 ```
 
 
-### Listing 14.4: logf: (T, 2) log emission likelihoods; P: (2, 2) or (T, 2, 2) row-stochastic {#code-14-4}
+### Listing 14.4: A two-state binomial Markov-switching model of distressed-exchange counts {#code-14-4}
 
 ```python
 # block 4 of 5: two-state binomial Markov-switching model on DE counts
@@ -5437,7 +5473,7 @@ def simulate_de_share_series(n_years, shares, P, mean_defaults, seed, s0=0):
 ```
 
 
-### Listing 14.5: block 5 of 5: sanity checks (each prints PASS/FAIL and asserts) {#code-14-5}
+### Listing 14.5: Sanity checks for the cycle engine {#code-14-5}
 
 ```python
 # block 5 of 5: sanity checks (each prints PASS/FAIL and asserts)
@@ -5534,7 +5570,7 @@ check("Serta: 484.88 - 895 x 0.25 = 261.13 (USD mm)", abs(484.88 - 895 * 0.25 - 
 Listings from `15_ch15_event_driven_mna_and_coc.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 15.1: Illustrative continuously compounded UST zero rate (decimal) at tenor t (years) {#code-15-1}
+### Listing 15.1: Bond math and the 101 change-of-control put {#code-15-1}
 
 ```python
 # ---- Chapter 15 reference engine, block 1: bond math and the 101 CoC put ----
@@ -5636,7 +5672,7 @@ print(f"1.85% LBO put: {lbo['value']:.2f} +/- {lbo['stderr']:.3f} pts, M = {lbo[
 ```
 
 
-### Listing 15.2: Probability that a portable CoC put survives a sponsor who reads the test first {#code-15-2}
+### Listing 15.2: Portability as a short digital on sponsor-chosen leverage {#code-15-2}
 
 ```python
 # ---- block 2: portability as a short digital on sponsor-chosen leverage ----
@@ -5668,7 +5704,7 @@ print("put survival by add-back ratio:", dict(zip(grid, np.round(surv, 3))))
 ```
 
 
-### Listing 15.3: Constant spread (decimal) over the UST zero curve that reprices the bond {#code-15-3}
+### Listing 15.3: The special mandatory redemption gauge: Z-spread and implied break probability {#code-15-3}
 
 ```python
 # ---- block 3: special mandatory redemption gauge ----
@@ -5759,7 +5795,7 @@ print("implied break probs:", np.round(pis, 3),
 ```
 
 
-### Listing 15.4: milestones: (t, q_deal, q_break) = P(milestone passes quietly | quiet so far, hypothesis) {#code-15-4}
+### Listing 15.4: Deal clocks as competing-risks survival data {#code-15-4}
 
 ```python
 # ---- block 4: deal clocks as competing-risks survival data, from scratch ----
@@ -5894,7 +5930,7 @@ print("P(block by 2y):", round(float(np.interp(2.0, aj["t"], aj["F3"])), 3),
 Listings from `16_ch16_post_reorg_equities_and_claims.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 16.1: Trapezoid rule (avoids numpy version differences in trapz/trapezoid) {#code-16-1}
+### Listing 16.1: The forced-seller overhang model, calibrated to fallen-angel aggregates {#code-16-1}
 
 ```python
 import numpy as np
@@ -6045,7 +6081,7 @@ print(f"theta={theta_fa:.2f}/yr  half-life={12*np.log(2)/theta_fa:.1f}m  "
 ```
 
 
-### Listing 16.2: n0: plan shares before the offering, excluding fee shares (mm); m: rights shares (mm); K: subscription price per share {#code-16-2}
+### Listing 16.2: Rights offerings and backstops {#code-16-2}
 
 ```python
 # --- Block 2: rights offerings and backstops (reuses RNG, norm, trap) ---
@@ -6160,7 +6196,7 @@ print(f"Hertz ex post: fee shares ${fee_value:,.0f}mm + unsubscribed gain ${unsu
 ```
 
 
-### Listing 16.3: Galai-Schneller fixed point W = C_BS(S + omega*W, K, T, sigma, r + lam) / (1 + omega) {#code-16-3}
+### Listing 16.3: Warrants with dilution and jump-to-default: the Galai-Schneller fixed point {#code-16-3}
 
 ```python
 # --- Block 3: warrants with dilution and jump-to-default (reuses bs_call, brentq) ---
@@ -6229,7 +6265,7 @@ print(f"old-share package at $29: ${package:.2f}")
 ```
 
 
-### Listing 16.4: E[min(1, e^Y)], Y ~ N(mu_Y, s_Y^2) {#code-16-4}
+### Listing 16.4: Claims with a random denominator: expected recovery, timing and in-kind distributions {#code-16-4}
 
 ```python
 # --- Block 4: claims with a random denominator (reuses RNG, norm) ---
@@ -6312,7 +6348,7 @@ print(f"GUC {p_guc:.3f}  503(b)(9) {p_b9:.3f}  log spread {spread:.3f}")
 ```
 
 
-### Listing 16.5: --- Block 5: the post-reorg book (reuses RNG, ForcedSellerOverhang, ovh_sched, theta_fa) --- {#code-16-5}
+### Listing 16.5: The post-reorg book: simulation, Kelly size, liquidity cap and markouts {#code-16-5}
 
 ```python
 # --- Block 5: the post-reorg book (reuses RNG, ForcedSellerOverhang, ovh_sched, theta_fa) ---
@@ -6376,7 +6412,7 @@ print(f"OTC position at $200k ADV: ${otc_size:,.0f}; "
 Listings from `17_ch17_private_credit_public_private_convergence.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 17.1: True quarterly excess return x_t = beta*F_t + e_t; reported x_obs_t = sum_k theta_k x_{t-k} {#code-17-1}
+### Listing 17.1: The mark as a filter: smoothed returns and the Dimson kernel {#code-17-1}
 
 ```python
 # ---- Chapter 17 reference engine (mark_gap), block 1: the mark as a filter ----
@@ -6494,7 +6530,7 @@ print("block 1 ok: var ratio %.3f, rho1 %.3f, Dimson sum %.3f, noise amp %.1f"
 ```
 
 
-### Listing 17.2: m = ((1 - phi) - P/NAV) / (1 + ell), floored at 0 {#code-17-2}
+### Listing 17.2: Implied markdowns from BDC price to NAV, the non-accrual mark and stale-mark flags {#code-17-2}
 
 ```python
 # ---- block 2: from listed prices and disclosures to implied marks ----
@@ -6567,7 +6603,7 @@ print(obdc[["gap_pp", "na_mark"]].round(3))
 ```
 
 
-### Listing 17.3: Annualised hazards kappa_ij = base_j * exp(psi_j*zeta + chi_j*ds + V_i @ omega_j) {#code-17-3}
+### Listing 17.3: Private-credit to broadly syndicated loan migration as competing risks {#code-17-3}
 
 ```python
 # ---- block 3: PC <-> BSL migration as competing risks ----
@@ -6632,7 +6668,7 @@ print("expected PC->BSL supply next quarter ($mm, illustrative): loose %.0f, tig
 ```
 
 
-### Listing 17.4: Pro-rata fill fraction f = min(1, cap / a) {#code-17-4}
+### Listing 17.4: The redemption game and the liquidity runway {#code-17-4}
 
 ```python
 # ---- block 4: the redemption game and the liquidity runway ----
@@ -6693,7 +6729,7 @@ print("runway (quarters): no repayments %.2f, with 3%%/qtr repayments %.2f" % (T
 ```
 
 
-### Listing 17.5: Expected sum of all future reported returns already implied by public factor returns {#code-17-5}
+### Listing 17.5: The mark-gap signal: what public factor returns already imply about the next marks {#code-17-5}
 
 ```python
 # ---- block 5: what the public data already knows about the next marks ----
@@ -6735,7 +6771,7 @@ print("mark_gap: all sanity checks passed")
 Listings from `18_ch18_otc_microstructure_and_avellaneda_stoikov.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 18.1: Roll (1984) effective spread from consecutive trade prices (points per 100 par) {#code-18-1}
+### Listing 18.1: Roll (1984) effective spread, with a simulator that has order splitting {#code-18-1}
 
 ```python
 import numpy as np
@@ -6782,7 +6818,7 @@ gamma_bpw = lambda prices: -roll_spread(prices)[1]   # Bao-Pan-Wang illiquidity,
 ```
 
 
-### Listing 18.2: One-period Kyle (1985) {#code-18-2}
+### Listing 18.2: The one-period Kyle (1985) equilibrium and its lambda estimator {#code-18-2}
 
 ```python
 def kyle_equilibrium(sigma_v, sigma_u):
@@ -6819,7 +6855,7 @@ assert abs(np.var(v_k - p_k) / (0.5 * sig_v**2) - 1.0) < 0.03   # half the infor
 ```
 
 
-### Listing 18.3: Per-side markup (1/gamma) ln(1 + gamma/k), in points {#code-18-3}
+### Listing 18.3: Avellaneda-Stoikov quotes: fear plus greed {#code-18-3}
 
 ```python
 from scipy.optimize import minimize_scalar
@@ -6865,7 +6901,7 @@ assert as_quotes(91.25, 3, 200.0, 0.005, 3.0, tau_hold)["bid"] < 78.0
 ```
 
 
-### Listing 18.4: Frozen-inventory reservation (bid, ask) for buying/selling a block of n lots {#code-18-4}
+### Listing 18.4: Jump-to-default reservation prices and the streaming inventory quotes {#code-18-4}
 
 ```python
 def jtd_reservation(s, q, n, sigma, gamma, tau, lam_P, J, lam_Q=0.0):
@@ -6958,7 +6994,7 @@ assert M_quad > np.exp(0.015 * (91.25 - 40.0))                      # Jensen: un
 ```
 
 
-### Listing 18.5: Logistic RFQ win probability; x = composite - bid (points); b1 > 0 per point {#code-18-5}
+### Listing 18.5: The RFQ win curve, mark-up and the market maker's bid {#code-18-5}
 
 ```python
 from scipy.optimize import minimize, brentq
@@ -7024,7 +7060,7 @@ assert pw_q[tox].sum() / pw_q.sum() < pw_raw[tox].sum() / pw_raw.sum()
 ```
 
 
-### Listing 18.6: Synthetic TRACE-like reports; bond ids are placeholders, not CUSIPs {#code-18-6}
+### Listing 18.6: A synthetic TRACE tape: cleaning and features {#code-18-6}
 
 ```python
 CAP_MM = {"IG": 5.0, "HY": 1.0}            # dissemination caps, USD mm par (RN 25-17)
@@ -7085,7 +7121,7 @@ assert trace_features(clean).cust_imbalance.dropna().between(-1.0, 1.0).all()
 ```
 
 
-### Listing 18.7: e_n = E[max of n iid N(0,1)] by quadrature {#code-18-7}
+### Listing 18.7: The expected maximum of n normals, and BWIC leakage {#code-18-7}
 
 ```python
 def expected_max_std_normal(n):
@@ -7111,7 +7147,7 @@ assert abs(drift - 0.405) < 1e-12 and abs(cost - 1.215) < 1e-12
 Listings from `19_ch19_portfolio_trading_pricing_engines.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 19.1: Struct-of-arrays PT inquiry {#code-19-1}
+### Listing 19.1: The basket inquiry as a struct of arrays {#code-19-1}
 
 ```python
 import time
@@ -7217,7 +7253,7 @@ assert abs(ce_mc - (mu_t - 0.5 * gam_t * sd_t**2)) < 2_000.0
 ```
 
 
-### Listing 19.2: Eq {#code-19-2}
+### Listing 19.2: Per-line handling cost with a size exponent and a liquidity multiplier {#code-19-2}
 
 ```python
 X_STD = 4e6   # LCS standard size, $ par (Ben_Dor p.118: "$3 to $5 million")
@@ -7240,7 +7276,7 @@ assert c0[41] > np.sort(c0)[:25].sum()
 ```
 
 
-### Listing 19.3: B (N, K): price change (fraction of par) per unit relative spread move {#code-19-3}
+### Listing 19.3: Factor loadings, factor covariance and the minimum-variance hedge {#code-19-3}
 
 ```python
 T_DAYS = 5.0          # unwind horizon, business days (Li 2022: ~5.3 extra days in inventory)
@@ -7300,7 +7336,7 @@ assert v_res < 0.5 * v_unh                           # the hedge kills most of t
 ```
 
 
-### Listing 19.4: Eq {#code-19-4}
+### Listing 19.4: Residual covariance for stale bonds: idiosyncratic variance and PSD projection {#code-19-4}
 
 ```python
 def idio_var(b, T=T_DAYS, xi=0.5, kappa_stale=0.5, tau2=0.0):
@@ -7333,7 +7369,7 @@ assert np.linalg.matrix_rank(np.cov(R_kaz, rowvar=False)) <= 13
 ```
 
 
-### Listing 19.5: Greedy eviction on exact removal savings (eq {#code-19-5}
+### Listing 19.5: Greedy eviction on exact removal savings {#code-19-5}
 
 ```python
 def evict_greedy(b, Sres, as_vec, gamma=1e-6, omega=0.5, eta=0.75, m=1.0,
@@ -7377,7 +7413,7 @@ assert np.all(np.diff(path_noas) < 0)
 ```
 
 
-### Listing 19.6: Stress score s in [0, 2] from ETF discount z-score (negative = discount) and bid-ask percentile in [0, 1]; one score drives m, gamma and basis together {#code-19-6}
+### Listing 19.6: The stress score and the stress covariance {#code-19-6}
 
 ```python
 def regime(etf_disc_z=0.0, bidask_pct=0.5):
@@ -7407,7 +7443,7 @@ assert share_basket > 3.0 * share_lines
 ```
 
 
-### Listing 19.7: Eq {#code-19-7}
+### Listing 19.7: The adverse-selection charge and markouts {#code-19-7}
 
 ```python
 W_AS = dict(const=-5.0, prs=4.0, call_soon=1.5, ad_hoc=1.5, log_size=0.3)  # HY (illustrative)
@@ -7443,7 +7479,7 @@ assert int(np.argmin(mo[:, 2] / b0.mv())) == 116              # the face-down ca
 ```
 
 
-### Listing 19.8: Live path {#code-19-8}
+### Listing 19.8: The live pricing path: price_pt {#code-19-8}
 
 ```python
 def price_pt(b, gamma=1e-6, omega=0.5, eta=0.75, etf_disc_z=0.0, bidask_pct=0.5,
@@ -7497,7 +7533,7 @@ assert calm["ms"] < 1000.0                                   # the linear algebr
 Listings from `20_ch20_credit_etf_creation_redemption_arb.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 20.1: Eq {#code-20-1}
+### Listing 20.1: The ETF arbitrage monitor: static band, NAV catch-up, clearing premium and basket choice {#code-20-1}
 
 ```python
 import numpy as np
@@ -7690,7 +7726,7 @@ assert classify(-0.05, c_bar, band, -0.005, 0.005) == "flow_dislocation_redeem"
 Listings from `21_ch21_leveraged_loans_and_clo_microstructure.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 21.1: Haircut (par minus market value) on the CCC excess, cheapest CCC loans first {#code-21-1}
+### Listing 21.1: The CLO overcollateralization test and the cure trade {#code-21-1}
 
 ```python
 # Chapter 21 reference implementation, block 1: the OC engine and the cure trade.
@@ -7830,7 +7866,7 @@ print(f"junior OC {ratio[-1]:.4f} (cushion {cushion[-1]:+.4f}); "
 ```
 
 
-### Listing 21.2: P(a CLO sells a downgraded holding within 3 months); inputs are decimals {#code-21-2}
+### Listing 21.2: The CLO Forced-Sale Pressure Index {#code-21-2}
 
 ```python
 # Block 2: CLO Forced-Sale Pressure Index, calibrated to Elkamhi-Nozawa (2022) magnitudes.
@@ -7878,7 +7914,7 @@ print(f"FSPI median {np.median(f_now):.3f} -> stressed {np.median(f_stress):.3f}
 ```
 
 
-### Listing 21.3: a(T; rate) = integral_0^T exp(-rate u) du, stable as rate -> 0 {#code-21-3}
+### Listing 21.3: The loan as a capped floater with a repricing hazard, and CLO equity gearing {#code-21-3}
 
 ```python
 # Block 3: the loan as a capped floater with a repricing hazard; CLO equity gearing.
@@ -7967,7 +8003,7 @@ print(f"prices open/year/shut {p_open:.2f}/{p_year:.2f}/{p_shut:.2f}; "
 ```
 
 
-### Listing 21.4: Variance of the ell-day sum of stationary AR(1) flows with innovation sd sigma_eps {#code-21-4}
+### Listing 21.4: The loan-fund liquidity queue and the ETF arbitrage band {#code-21-4}
 
 ```python
 # Block 4: the loan-fund liquidity queue (21.9) and the ETF arbitrage band.
@@ -8025,7 +8061,7 @@ print(f"buffers l=1/7/20: {b1:.2%}/{b7:.2%}/{b20:.2%} (MC 99%: {q99:.2%}); "
 ```
 
 
-### Listing 21.5: Observed (marked) returns: r_obs_t = (1 - phi) r_t + phi r_obs_{t-1} {#code-21-5}
+### Listing 21.5: Stale marks: Geltner de-smoothing and Dimson betas {#code-21-5}
 
 ```python
 # Block 5: stale marks. Geltner desmoothing and Dimson betas before any momentum test.
@@ -8081,7 +8117,7 @@ print(f"phi_hat {phi_hat:.3f}; beta naive {naive:.3f} vs Dimson {dimson:.3f} (tr
 Listings from `22_ch22_market_structure_regulation_trends.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 22.1: Binding Tier 1 per $1 of gross inventory: max(kappa_rwa * RW, kappa_lr) {#code-22-1}
+### Listing 22.1: Balance-sheet rent: binding Tier 1 capital and the breakeven holding period {#code-22-1}
 
 ```python
 import numpy as np
@@ -8156,7 +8192,7 @@ except ValueError:
 ```
 
 
-### Listing 22.2: Zero-profit block half-spread, bp of price (eq {#code-22-2}
+### Listing 22.2: The zero-profit block half-spread and the TRACE regime layer {#code-22-2}
 
 ```python
 def block_half_spread(lam, Q, delay, unwind_time, gamma, sigma, inferred_size=None):
@@ -8253,7 +8289,7 @@ except ValueError:
 ```
 
 
-### Listing 22.3: IM_new / IM_old = sqrt((t_new + closeout) / (t_old + closeout)) for the volatility component (eq {#code-22-3}
+### Listing 22.3: The settlement clock: initial margin scaling and the cost of fails {#code-22-3}
 
 ```python
 from math import erf, exp, pi, sqrt
@@ -8280,7 +8316,7 @@ assert margin_ratio(2, 1, 0) != 0.5                                      # ROBO'
 ```
 
 
-### Listing 22.4: E|m + s Z| for standard normal Z (eq {#code-22-4}
+### Listing 22.4: The Treasury clearing mandate: netting factor, net benefit and capacity hinge {#code-22-4}
 
 ```python
 def folded_normal_mean(m, s=1.0):
@@ -8343,7 +8379,7 @@ assert abs(c_h * max(0.96 - u_star, 0.0) - 4.70) < 0.01                  # 2020-
 ```
 
 
-### Listing 22.5: Difference-in-differences around an effective date (eq {#code-22-5}
+### Listing 22.5: A difference-in-differences event study with placebo dates {#code-22-5}
 
 ```python
 def event_study_did(panel, event_date, window=(-60, 60), n_boot=500, seed=0,
@@ -8412,7 +8448,7 @@ assert (plac.abs() < 0.25).all()                                    # nothing ha
 Listings from `23_ch23_cross_asset_convexity_and_vol_surface.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 23.1: Equity as a call on assets {#code-23-1}
+### Listing 23.1: Equity as a call on assets: Merton and CreditGrades {#code-23-1}
 
 ```python
 import numpy as np
@@ -8562,7 +8598,7 @@ print(f"5y CG spread at sigma_E = 45%: {1e4 * s_mkt:.0f}bp; implied asset vol {s
 ```
 
 
-### Listing 23.2: Textbook Black-Scholes put (independent reference for the lam = 0 check) {#code-23-2}
+### Listing 23.2: The jump-to-default put and the unit recovery claim from a put chain {#code-23-2}
 
 ```python
 # ---------- block 2: Carr-Wu claims and the jump-to-default put ----------
@@ -8665,7 +8701,7 @@ print(f"fitted lam {fit['lam']:.4f}, sigma {fit['sigma']:.4f}, floor ratio {fit[
 ```
 
 
-### Listing 23.3: MTM per unit notional of bought protection, running coupon c, market spread s {#code-23-3}
+### Listing 23.3: Spread Greeks for CDS, bonds, Merton and CreditGrades {#code-23-3}
 
 ```python
 # ---------- block 3: Greeks in spread terms ----------
@@ -8734,7 +8770,7 @@ print(f"CG per $10mm: S=30 -> {gk30['spread_bp']:.0f}bp, {gk30['delta_shares']:,
 ```
 
 
-### Listing 23.4: GBM equity paths (no defaults) and CreditGrades model spreads with stock-space slopes {#code-23-4}
+### Listing 23.4: Capital-structure arbitrage on a synthetic CreditGrades panel {#code-23-4}
 
 ```python
 # ---------- block 4: Yu-style capital-structure arbitrage on a synthetic panel ----------
@@ -8832,7 +8868,7 @@ assert bt[0.90]["sharpe"] > bt[0.995]["sharpe"], "persistence should erode conve
 ```
 
 
-### Listing 23.5: Liquidity default day under a run whose outflow rate rises with equity losses (kappa) and with cumulative outflows (rho, the panic feedback) {#code-23-5}
+### Listing 23.5: A bank-run liquidity default against a Merton PD {#code-23-5}
 
 ```python
 # ---------- block 5: illustrative bank-run default vs. a Merton PD ----------
@@ -8869,7 +8905,7 @@ print(run["path"].round(1).to_string(index=False))
 Listings from `24_ch24_bond_cds_basis_and_deliverables.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 24.1: Premium dates (years) and ACT/360 accrual fractions for a T-year CDS {#code-24-1}
+### Listing 24.1: CDS legs, par spread, upfront and hazard bootstrap {#code-24-1}
 
 ```python
 import numpy as np
@@ -8944,7 +8980,7 @@ assert rpv01(lam0, r0, T0, accrued_on_default=False) < rpv01(lam0, r0, T0)
 ```
 
 
-### Listing 24.2: Coupon dates (years) and cash flows per 1.0 face; 30/360 semiannual coupons {#code-24-2}
+### Listing 24.2: Bond-level basis: Z-spread, PECS and the jump-to-default hedge ratio {#code-24-2}
 
 ```python
 def bond_cashflows(c, T, freq=2):
@@ -9000,7 +9036,7 @@ assert abs(jtd_hedge_ratio(0.88, 0.40) - 0.80) < 1e-12                     # The
 ```
 
 
-### Listing 24.3: Annual excess carry per unit of equity for a near-par negative-basis package {#code-24-3}
+### Listing 24.3: A negative-basis package: carry on equity and the stress mark {#code-24-3}
 
 ```python
 def basis_package_roe(basis_bp, repo_spread_bp, haircut):
@@ -9023,7 +9059,7 @@ assert basis_package_roe(-30.0, 40.0, 0.15) < 0.0                     # inside t
 ```
 
 
-### Listing 24.4: Price per 1.0 face at a semiannual-compounded yield y, on a coupon date {#code-24-4}
+### Listing 24.4: Cheapest-to-deliver under the two default regimes {#code-24-4}
 
 ```python
 def price_at_yield(c, T, y, freq=2):
@@ -9057,7 +9093,7 @@ assert 0.0 <= ctd_option_accel < 0.01             # under a point
 ```
 
 
-### Listing 24.5: Round to the auction increment with halves going UP (round() goes to even) {#code-24-5}
+### Listing 24.5: The two-stage auction: inside market, adjustment amounts and final price {#code-24-5}
 
 ```python
 def round_half_up(x, inc=0.125):
@@ -9131,7 +9167,7 @@ assert all(a >= b for a, b in zip(fps, fps[1:]))                 # more selling,
 ```
 
 
-### Listing 24.6: Exact OU discretization of the basis (bp) {#code-24-6}
+### Listing 24.6: An OU basis signal, net of costs {#code-24-6}
 
 ```python
 def simulate_ou(n, dt, kappa, theta, sigma, b0, rng):
@@ -9193,7 +9229,7 @@ assert sharpe(gross, dt_w) > sharpe(net, dt_w)              # costs are not opti
 ```
 
 
-### Listing 24.7: Simplified successor thresholds: entity -> fraction of each CDS it inherits {#code-24-7}
+### Listing 24.7: The successor map and manufactured-event flags {#code-24-7}
 
 ```python
 def successors(shares, original="REFERENCE ENTITY", original_survives=True):
@@ -9249,7 +9285,7 @@ assert manufactured_event_flags({"type": "failure_to_pay", "liquidity_runway_wee
 Listings from `25_ch25_nlp_pacer_and_covenant_scraping.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 25.1: "Consolidated Net Income" means the net income of the Borrower and its Restricted Subsidiaries for such period {#code-25-1}
+### Listing 25.1: The definition graph: parsing, strongly connected components and blast radius {#code-25-1}
 
 ```python
 # Block 1: the definition graph ------------------------------------------------
@@ -9396,7 +9432,7 @@ print("cycles:", cycles, "| self-references:", self_refs)
 ```
 
 
-### Listing 25.2: Section 6.01(b)(xii) {#code-25-2}
+### Listing 25.2: Basket arithmetic: growers, ratio baskets, the add-back fixed point and the builder {#code-25-2}
 
 ```python
 # Block 2: basket arithmetic (units: $mm) -------------------------------------
@@ -9508,7 +9544,7 @@ print(f"capacity without add-backs ${K_without:.1f}mm, with ${K_with:.1f}mm, slo
 ```
 
 
-### Listing 25.3: Edmonds-Karp {#code-25-3}
+### Listing 25.3: Leakage capacity as max-flow (Edmonds-Karp) {#code-25-3}
 
 ```python
 # Block 3: leakage capacity as max-flow (units: $mm) --------------------------
@@ -9569,7 +9605,7 @@ assert phi_ip_blocked == 0.0 and phi_cash == 250.0
 ```
 
 
-### Listing 25.4: Block 4: why token diffs miss covenant edits (Section 25.5.1) --------------- {#code-25-4}
+### Listing 25.4: Why token diffs miss covenant edits {#code-25-4}
 
 ```python
 # Block 4: why token diffs miss covenant edits (Section 25.5.1) ---------------
@@ -9589,7 +9625,7 @@ print(f"1 - cos = {1 - cos:.2e}; capacity change = ${delta_K:,.1f}mm")
 ```
 
 
-### Listing 25.5: One global bucket {#code-25-5}
+### Listing 25.5: Rate limits with a token bucket, and EDGAR hygiene {#code-25-5}
 
 ```python
 # Block 5: rate limits (Lemma 25.2) and EDGAR hygiene -------------------------
@@ -9633,7 +9669,7 @@ assert edgar_submissions_url("1234") == "https://data.sec.gov/submissions/CIK000
 ```
 
 
-### Listing 25.6: Defines polite_get {#code-25-6}
+### Listing 25.6: A polite fetcher with backoff (a sketch, not run) {#code-25-6}
 
 ```python
 # sketch: live ingest (not run here; needs network access, a real mailbox and a CourtListener token)
@@ -9666,7 +9702,7 @@ dockets = polite_get("https://www.courtlistener.com/api/rest/v4/search/",
 ```
 
 
-### Listing 25.7: 11 U.S.C {#code-25-7}
+### Listing 25.7: Rule 2019 statements to a holdings panel, and the blocking test {#code-25-7}
 
 ```python
 # Block 6: Rule 2019 statements -> holdings panel (synthetic holders; $mm face) --
@@ -9712,7 +9748,7 @@ assert 0.0 < hhi_lower < theta[2] ** 2
 ```
 
 
-### Listing 25.8: Block 7: docket state machine, transition intensities (Section 25.7.2) ------ {#code-25-8}
+### Listing 25.8: The docket state machine and its transition intensities {#code-25-8}
 
 ```python
 # Block 7: docket state machine, transition intensities (Section 25.7.2) ------
@@ -9734,7 +9770,7 @@ assert np.isclose(q_hat[("Contested", "Standstill")], 1 / 70)
 ```
 
 
-### Listing 25.9: Block 8: classifier error as an IC tax (Equation 25.3), plus the citation contract -- {#code-25-9}
+### Listing 25.9: Classifier error as an IC tax, and the citation contract {#code-25-9}
 
 ```python
 # Block 8: classifier error as an IC tax (Equation 25.3), plus the citation contract --
@@ -9764,7 +9800,7 @@ print(f"IC retained: predicted {ratio_pred:.3f}, simulated {ratio_sim:.3f}; flag
 Listings from `26_ch26_ai_agents_and_llms_on_the_credit_desk.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 26.1: Synthetic agreement: Section 6.08(b)(i)-(xii), one clause per 1-based PDF page {#code-26-1}
+### Listing 26.1: The document store and the deterministic basket calculators {#code-26-1}
 
 ```python
 # llm_desk_harness.py, block 1 of 3: document store and deterministic calculators.
@@ -9849,7 +9885,7 @@ assert STORE["pages"][7].count("$40mm") == 1 and 14 not in STORE["pages"]   # th
 ```
 
 
-### Listing 26.2: Question i asks for basket s_i; p_true is its difficulty, a property of the question {#code-26-2}
+### Listing 26.2: The stochastic reader, citation contract, calibration and abstention {#code-26-2}
 
 ```python
 # Block 2 of 3: the stochastic reader, the citation contract, calibration, abstention.
@@ -9971,7 +10007,7 @@ assert (noisy["S"] <= noisy["V"]).all()                      # S = 1 implies V =
 ```
 
 
-### Listing 26.3: Unbiased estimator of p**k (tau-bench pass^k) from c successes in n i.i.d {#code-26-3}
+### Listing 26.3: Chains, verifiers, retries, pass^k, replay and research hurdles {#code-26-3}
 
 ```python
 # Block 3 of 3: chains, verifiers, retries, pass^k, replay, research hurdles, cost frontier.
@@ -10093,7 +10129,7 @@ print("harness checks passed:", {k: round(float(v), 3) for k, v in rates.items()
 Listings from `27_ch27_system_architecture_and_asics.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 27.1: known_at - event_time in ms; a negative value beyond the clock-error bound is a clock fault {#code-27-1}
+### Listing 27.1: Provenance-typed prices, clock checks and TRACE dedupe {#code-27-1}
 
 ```python
 # ch27_desk_system.py, block 1 of 5: provenance-typed prices, clock checks, TRACE dedupe.
@@ -10212,7 +10248,7 @@ except ValueError:
 ```
 
 
-### Listing 27.2: As of knowledge time known_at, attr of key had value over [valid_from, valid_to) {#code-27-2}
+### Listing 27.2: The bitemporal security master {#code-27-2}
 
 ```python
 # block 2 of 5: bitemporal security master; append-only on the knowledge axis.
@@ -10316,7 +10352,7 @@ except ValueError:
 ```
 
 
-### Listing 27.3: Kingman / Pollaczek-Khinchine mean queueing delay (exact for M/G/1, i.e {#code-27-3}
+### Listing 27.3: Latency as a queue: Pollaczek-Khinchine, the Lindley simulation and fan-out tails {#code-27-3}
 
 ```python
 # block 3 of 5: latency as a queue. Pollaczek-Khinchine, Lindley simulation, fan-out tails.
@@ -10370,7 +10406,7 @@ assert 0.99993 < q_line < 0.99994                       # each line's p99.993
 ```
 
 
-### Listing 27.4: Bond points per hedge point for a rate hedge: dollar-duration ratio times empirical rate beta {#code-27-4}
+### Listing 27.4: Trigger tables for quote pulling: sensitivities and the joint and per-instrument rules {#code-27-4}
 
 ```python
 # block 4 of 5: trigger tables. Sensitivities, joint vs per-instrument rules, fixed point, pick-off cost.
@@ -10461,7 +10497,7 @@ assert 5_000 < jump_loss_usd < 6_000
 ```
 
 
-### Listing 27.5: ARL of G_k = max(0, G_{k-1} + X_k), X ~ N(drift, 1), alarm at G >= c {#code-27-5}
+### Listing 27.5: Kill switches: CUSUM run lengths against Siegmund, and a tiered switch {#code-27-5}
 
 ```python
 # block 5 of 5: kill switches. CUSUM run lengths vs Siegmund; tiered switch with authority rules.
@@ -10598,7 +10634,7 @@ assert ks.rearm("ines", 3.4, slow_path_ok=True) and ks.state == "ARMED"
 Listings from `28_ch28_pm_playbook.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 28.1: 1/H on absolute GMV weights {#code-28-1}
+### Listing 28.1: Block 1: Effective breadth and the hit-rate law {#code-28-1}
 
 ```python
 import numpy as np
@@ -10691,7 +10727,7 @@ assert abs(ir_exact / ir_from_hit_rate(p_hit, n_bets) - 1.0) < 1e-3
 ```
 
 
-### Listing 28.2: Eq {#code-28-2}
+### Listing 28.2: Block 2: The horizon ladder {#code-28-2}
 
 ```python
 # --- Block 2: the horizon ladder ------------------------------------------------
@@ -10749,7 +10785,7 @@ assert 1.0 < break_even_half_life(0.006, 0.03) * 12 < 3.0         # tier 1: 1-3 
 ```
 
 
-### Listing 28.3: Eq {#code-28-3}
+### Listing 28.3: Block 3: Kelly with jumps {#code-28-3}
 
 ```python
 # --- Block 3: Kelly with jump-to-default ----------------------------------------
@@ -10878,7 +10914,7 @@ assert (0.128 - 0.10 * 0.70) > (0.084 - 0.06 * 0.55) and f_oct < 0.6 * f_jan
 ```
 
 
-### Listing 28.4: Bangia eq {#code-28-4}
+### Listing 28.4: Block 4: LVaR, days-to-liquidate and runway {#code-28-4}
 
 ```python
 # --- Block 4: LVaR, days-to-liquidate, FRTB scaling, runway ---------------------
@@ -10947,7 +10983,7 @@ assert 2.5 < ta_runway < 3.0 and ta_runway < 13.0
 ```
 
 
-### Listing 28.5: Eq {#code-28-5}
+### Listing 28.5: Block 5: Stops, hitting probabilities and the mark-to-bid shock {#code-28-5}
 
 ```python
 # --- Block 5: drawdown rules ----------------------------------------------------
@@ -11017,7 +11053,7 @@ assert abs(mark_to_bid_shock(5.0, 0.006, 5.8) - 0.072) < 1e-12
 ```
 
 
-### Listing 28.6: Eq {#code-28-6}
+### Listing 28.6: Block 6: The leverage band {#code-28-6}
 
 ```python
 # --- Block 6: the leverage band -------------------------------------------------
@@ -11059,7 +11095,7 @@ assert leverage_floor(40, 0.05, 0.04, 2.0) < leverage_ceiling(40, 0.05, 0.075, 2
 ```
 
 
-### Listing 28.7: Eq {#code-28-7}
+### Listing 28.7: Block 7: The team production function {#code-28-7}
 
 ```python
 # --- Block 7: the team production function --------------------------------------
@@ -11084,7 +11120,7 @@ assert optimal_coverage(35) == 35
 ```
 
 
-### Listing 28.8: --- Final block: pm_playbook_engine -------------------------------------------- {#code-28-8}
+### Listing 28.8: The PM dashboard engine: pm_playbook_engine {#code-28-8}
 
 ```python
 # --- Final block: pm_playbook_engine --------------------------------------------
@@ -11163,7 +11199,7 @@ print(dash.to_string())
 Listings from `91_appB_data_and_api_atlas.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing B.1: US 30/360 (bond basis) day count between two Timestamps {#code-b-1}
+### Listing B.1: The tidy bond panel: security master, 30/360 bond math and a synthetic TRACE tape {#code-b-1}
 
 ```python
 # Tidy bond panel from a synthetic TRACE-like tape. Bond ids are synthetic labels, NOT CUSIPs.
@@ -11483,7 +11519,7 @@ print(monthly.head(8).to_string(index=False, float_format=lambda v: f"{v:.4f}"))
 Listings from `93_appD_market_plumbing_and_contract_mechanics.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing D.1: Accrued interest as a fraction of face (coupon an annual decimal, days on 30/360) {#code-d-1}
+### Listing D.1: plumbing.py: settlement, financing and margin mechanics, one function per rule {#code-d-1}
 
 ```python
 # plumbing.py -- Appendix D reference implementation. Illustrative numbers; seeded.
@@ -11693,7 +11729,7 @@ assert stats["q99_intraday"] >= stats["median_intraday"] >= 0.0
 Listings from `94_appE_laws_of_the_desk.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing E.1: laws_of_the_desk.py: the Laws of the Desk as data, a Debrief linter, and one checker per law {#code-e-1}
+### Listing E.1: laws_of_the_desk.py: the Laws of the Desk as data, a Debrief linter and one checker per law {#code-e-1}
 
 ```python
 """laws_of_the_desk.py: the Laws of the Desk as data, a Debrief linter, and one checker per law.
@@ -12230,53 +12266,13 @@ if __name__ == "__main__":
         print("Laws below three Debriefs:", admission_failures(cov) or "none")
 ```
 
-## F.1 (continued): Chapter 1: The Anthology of the Desk & The Modern Quant Credit Landscape
-
-Listings from `01_ch01_anthology_and_landscape.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
-
-
-### Listing 1.4: Distance to default, credit-triangle check, one-factor simulation {#code-1-4}
-
-```python
-from scipy.integrate import trapezoid
-from scipy.stats import norm
-
-
-def distance_to_default(V, F, mu_V, sigma_V, T=1.0):
-    """Eq. (1.4): physical distance to default (unitless)."""
-    return (np.log(V / F) + (mu_V - 0.5 * sigma_V**2) * T) / (sigma_V * np.sqrt(T))
-
-
-def credit_triangle_check(lam=0.03, R=0.40, r=0.04, T=5.0, n=200_001):
-    """Numerically integrate both CDS legs (measure Q) and return the par spread."""
-    t = np.linspace(0.0, T, n)
-    disc_surv = np.exp(-(r + lam) * t)
-    prem_annuity = trapezoid(disc_surv, t)
-    protection = (1.0 - R) * trapezoid(lam * disc_surv, t)
-    return protection / prem_annuity
-
-
-dd = distance_to_default(V=150.0, F=100.0, mu_V=0.06, sigma_V=0.10)   # illustrative IG-like firm
-assert dd > 4.0 and norm.cdf(-dd) < 1e-4                               # Gaussian: 'immortal'
-assert abs(credit_triangle_check() - 0.03 * 0.60) < 1e-10              # s = lambda (1 - R)
-
-# One-factor threshold model: Monte Carlo default rate matches p; tails fatten with rho
-rng = np.random.default_rng(RNG_SEED + 1)
-p, rho, n_sims, n_firms = 0.02, 0.20, 20_000, 500
-Y = rng.standard_normal(n_sims)
-p_cond = norm.cdf((norm.ppf(p) - np.sqrt(rho) * Y) / np.sqrt(1.0 - rho))
-loss_frac = rng.binomial(n_firms, p_cond) / n_firms
-assert abs(loss_frac.mean() - p) < 4 * loss_frac.std() / np.sqrt(n_sims)
-assert np.quantile(loss_frac, 0.99) > 5 * p                            # herds, not coin flips
-```
-
 
 ## F.4-B: Chapter 4-B: Bond Math for the Desk: Price, Yield, Duration, Convexity, Spread Measures and the Callable Bond {#code-4b}
 
 Listings from `04_ch04b_bond_math_for_the_desk.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 4-B.1: Year fraction from d1 to d2 {#code-4b-1}
+### Listing 4-B.1: bondmath.py: cash flows, curve, solver, price and yield {#code-4b-1}
 
 ```python
 # bondmath.py (Chapter 4-B): one list of cash flows, one curve, one solver.
@@ -12605,7 +12601,7 @@ print("Larkspur DM (bp) at 97 and 84:", [round(1e4 * discount_margin(p, 0.0375, 
 Listings from `12_ch12b_the_restructuring_process_as_a_state_machine.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 12-B.1: restructuring_state_machine.py (Chapter 12-B) {#code-12b-1}
+### Listing 12-B.1: restructuring_state_machine.py: the restructuring process as a state machine {#code-12b-1}
 
 ```python
 """restructuring_state_machine.py (Chapter 12-B).
@@ -12900,12 +12896,13 @@ if __name__ == "__main__":
     print(_self_test())
 ```
 
+
 ## F.3-B: Chapter 3-B: Your First Year on the Desk: The Day, the Week, the Quarter, and the Twelve Mistakes Ex-Bankers Make {#code-3b}
 
 Listings from `03_ch03b_your_first_year_on_the_desk.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 3-B.1: Following convention: the first business day on or after d {#code-3b-1}
+### Listing 3-B.1: desk_calendar.py: venue calendars, versioned contract clocks and event features {#code-3b-1}
 
 ```python
 # desk_calendar.py (Chapter 3-B): venue calendars, versioned contract clocks, event features, Edge Ledger.
@@ -13097,7 +13094,7 @@ if __name__ == "__main__":
 Listings from `08_ch08b_the_risk_model_and_the_limit_sheet.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 8-B.1: risk_model.py (Chapter 8-B): the morning risk model for a credit book {#code-8b-1}
+### Listing 8-B.1: risk_model.py: the morning risk model for a credit book {#code-8b-1}
 
 ```python
 """risk_model.py (Chapter 8-B): the morning risk model for a credit book.
@@ -13394,7 +13391,7 @@ print("risk_model.py: all chapter checks pass")
 Listings from `08_ch08c_the_morning_explain_pnl_attribution.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 8-C.1: Coupon accrual in dollars: a contractual fact {#code-8c-1}
+### Listing 8-C.1: pnl_explain.py: the morning explain, with named lines per position and hedge {#code-8c-1}
 
 ```python
 # pnl_explain.py (Chapter 8-C): the morning explain. Named lines per position and hedge leg,
@@ -13616,7 +13613,7 @@ assert breach[special].all() and breach.sum() - breach[special].sum() <= 2
 Listings from `12_ch12c_plan_valuation_dip_and_exit_as_derivatives.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 12-C.1: plan_value_engine.py (Chapter 12-C) {#code-12c-1}
+### Listing 12-C.1: plan_value_engine.py: plan value, the DIP and exit as derivatives {#code-12c-1}
 
 ```python
 """plan_value_engine.py (Chapter 12-C).
@@ -13832,12 +13829,13 @@ if __name__ == "__main__":
     print(_self_test())
 ```
 
+
 ## F.1-B: Chapter 1-B: A Week in Five Quant Shops {#code-1b}
 
 Listings from `01_ch01b_a_week_in_five_quant_shops.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 1-B.1: Latest version of event_id that the shop knew at time `at` (bitemporal read) {#code-1b-1}
+### Listing 1-B.1: The week log: an immutable event row and the bitemporal read {#code-1b-1}
 
 ```python
 from dataclasses import dataclass
@@ -13911,7 +13909,7 @@ def to_calendar_row(e: WeekEvent) -> dict:
 Listings from `04_ch04c_other_seats_at_the_table.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 4-C.1: One holder (a vehicle, not a firm) of one instrument, described by its leash {#code-4c-1}
+### Listing 4-C.1: The seat state vector: one holder of one instrument, described by its leash {#code-4c-1}
 
 ```python
 import math
@@ -13957,12 +13955,13 @@ def forced_pressure(states: Iterable[SeatState], outstanding_face: float,
     return min(total, 1.0)
 ```
 
+
 ## F.8-D: Chapter 8-D: The Pair Book: Long One Credit, Short Another {#code-8d}
 
 Listings from `08_ch08d_the_pair_book_long_one_credit_short_another.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 8-D.1: pair_book.py (Chapter 8-D): rulers, jumps, the stop, the borrow and the ledger row for one pair {#code-8d-1}
+### Listing 8-D.1: pair_book.py: rulers, jumps, the stop, the borrow and the ledger row for one pair {#code-8d-1}
 
 ```python
 """pair_book.py (Chapter 8-D): rulers, jumps, the stop, the borrow and the ledger row for one pair."""
@@ -14118,12 +14117,13 @@ assert np.isclose(capture(0.162, -0.0578, -0.0458), 0.3605, atol=1e-3)          
 print("pair_book.py: all chapter checks pass")
 ```
 
+
 ## F.2-B: Chapter 2-B: Transaction Cost Analysis for Credit: Arrival, Cover, Shortfall and the Dealer Scorecard {#code-2b}
 
 Listings from `02_ch02b_transaction_cost_analysis_for_credit.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 2-B.1: tca.py (Chapter 2-B): transaction cost analysis for an RFQ market {#code-2b-1}
+### Listing 2-B.1: tca.py: transaction cost analysis for an RFQ market {#code-2b-1}
 
 ```python
 """tca.py (Chapter 2-B): transaction cost analysis for an RFQ market.
@@ -14338,7 +14338,7 @@ if __name__ == "__main__":
 Listings from `04_ch04d_getting_the_seat.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 4-D.1: interview_drills.py: seeded drills for Chapter 4-D (illustrative numbers) {#code-4d-1}
+### Listing 4-D.1: interview_drills.py: seeded drills for Chapter 4-D {#code-4d-1}
 
 ```python
 """interview_drills.py: seeded drills for Chapter 4-D (illustrative numbers).
@@ -14451,12 +14451,13 @@ if __name__ == "__main__":
         assert check(answer)
 ```
 
+
 ## F.9-B: Chapter 9-B: The Bond Data Problem and the Replication Crisis {#code-9b}
 
 Listings from `09_ch09b_the_bond_data_problem_and_the_replication_crisis.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 9-B.1: OLS of y on [1, x]; returns (coefficients, Newey-West t-stats) {#code-9b-1}
+### Listing 9-B.1: replication_harness.py: look-ahead gates and the replication of a bond signal {#code-9b-1}
 
 ```python
 # replication_harness.py -- Listing 9B.1 (Chapter 9-B)
@@ -14604,7 +14605,7 @@ if __name__ == "__main__":
 Listings from `10_ch10b_credit_index_futures_and_index_microstructure.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 10-B.1: index_micro.py (Chapter 10-B): four small measurements of the index market {#code-10b-1}
+### Listing 10-B.1: index_micro.py: four small measurements of the index market {#code-10b-1}
 
 ```python
 """index_micro.py (Chapter 10-B): four small measurements of the index market.
@@ -14745,7 +14746,7 @@ if __name__ == "__main__":
 Listings from `13_ch13b_the_autopsy_room_lmt_docket_diaries.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 13-B.1: docket_diary.py (Chapter 13-B): labelled docket entries -> rulings, case paths, transition counts, and token log-odds that jump on ruling dates {#code-13b-1}
+### Listing 13-B.1: docket_diary.py: labelled docket entries to rulings, case paths and transitions {#code-13b-1}
 
 ```python
 """docket_diary.py (Chapter 13-B): labelled docket entries -> rulings, case paths,
@@ -14856,7 +14857,7 @@ if __name__ == "__main__":
 Listings from `17_ch17b_marking_the_unmarked_private_credit_lmes.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 17-B.1: Share of shares outstanding repurchased this cycle, p = a * f (decimals) {#code-17b-1}
+### Listing 17-B.1: The redemption queue, de-duplicated and nowcast {#code-17b-1}
 
 ```python
 # pc_queue.py: the redemption queue, de-duplicated and nowcast (Chapter 17-B, §17B.3)
@@ -14978,7 +14979,7 @@ print({k: (round(v, 3) if isinstance(v, float) else v) for k, v in fit.items()})
 ```
 
 
-### Listing 17-B.2: One par-weighted mark per facility, quarter and valuation process (adviser) {#code-17b-2}
+### Listing 17-B.2: The private-credit LME detector: marks, states, features and a hazard watchlist {#code-17b-2}
 
 ```python
 # pc_lme_detector.py: a dated watchlist of private-credit LMEs from public filings (Chapter 17-B, §17B.4)
@@ -15171,7 +15172,7 @@ print(wl)
 Listings from `18_ch18b_the_rfq_response_engine.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 18-B.1: rfq_engine.py (Chapter 18-B): the RFQ response engine in six small pieces {#code-18b-1}
+### Listing 18-B.1: rfq_engine.py: the RFQ response engine in six small pieces {#code-18b-1}
 
 ```python
 """rfq_engine.py (Chapter 18-B): the RFQ response engine in six small pieces.

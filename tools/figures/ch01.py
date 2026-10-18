@@ -16,7 +16,7 @@ Data.
          for Ford; the 9 Apr 2020 expansion from state/research/perspectives_dealers_and_systematic_shops.md).
   Illustrative (recomputed here from the formulas and inputs stated in the chapter): the bid waterfall (cold open,
          eq. 1.2), the Gaussian-versus-jump bag and the exact-to-quadratic penalty ratio (the Ways This Blows Up
-         derivation), the price-pressure curves (eq. 1.7, Listing 1.3 demo) and the flow graph (eq. 1.6, Listing 1.3 demo).
+         derivation), the price-pressure curves (eq. 1.7, Listing 1.4 demo) and the flow graph (eq. 1.6, Listing 1.4 demo).
 """
 import os
 import sys
@@ -171,7 +171,7 @@ def fig_gauss_vs_jump():
 
 # --------------------------------------------------------------------------------------------------
 # Figure 1.3: forced sellers leave a dent that heals; informed sellers leave one that does not
-# (illustrative; eq. 1.7 with the Listing 1.3 demo inputs)
+# (illustrative; eq. 1.7 with the Listing 1.4 demo inputs)
 # --------------------------------------------------------------------------------------------------
 def fig_price_pressure_decay():
     kappa, imb, adv, theta = 0.4, 6.4, 0.5, 1 / 20
@@ -339,7 +339,7 @@ def fig_march2020_timeline():
 
 
 # --------------------------------------------------------------------------------------------------
-# Figure 1.5: the forced-seller flow graph of the Ford-sized demo (illustrative; eq. 1.6, Listing 1.3)
+# Figure 1.5: the forced-seller flow graph of the Ford-sized demo (illustrative; eq. 1.6, Listing 1.4)
 # --------------------------------------------------------------------------------------------------
 def _ribbon(ax, x0, x1, y0a, y0b, y1a, y1b, color, alpha, zorder=2):
     t = np.linspace(0, 1, 80)
@@ -351,7 +351,7 @@ def _ribbon(ax, x0, x1, y0a, y0b, y1a, y1b, color, alpha, zorder=2):
 
 
 def fig_forced_seller_flow_graph():
-    # the Listing 1.3 demo, recomputed (holdings x fraction forced to sell; capacity pro rata; the rest to dealers)
+    # the Listing 1.4 demo, recomputed (holdings x fraction forced to sell; capacity pro rata; the rest to dealers)
     holders = [("IG index funds & ETFs", 5.0, 1.00), ("IG active funds", 8.0, 0.50), ("Insurers", 12.0, 0.25),
                ("Banks, foreign, other", 9.0, 0.10)]
     sells = [h * f for _, h, f in holders]

@@ -265,7 +265,7 @@ Theo's afternoon ended at four. The researcher's ended at 6:20, and most of what
 
 Theo later wrote his own drill set from the week, partly to stop replaying the join in his head. The problem it solves is the one every candidate has after a week like this: the games are learnable, but only by doing them under a clock with an answer key you did not write after seeing the question. `interview_drills.py` is a seeded generator of the §4D.2–§4D.7 puzzles. Each drill draws its inputs from a small menu with a random-number generator fixed by a seed, so a session can be repeated exactly and a different seed gives new numbers to keep you from memorizing answers. Each drill returns three things: the question as text, the answer computed from the formula in its home section, and a checker that accepts a reply within a tolerance suited to mental math (half a point of probability, a quarter of a point of price, a tenth of a million dollars of size). The answer key is the formula, not a stored number, which is the design choice that makes the drills trustworthy. The inputs are a seed and a count; the output is a list of (question, answer, checker) triples, and running the file checks the chapter's own anchors before printing a session: 25% and 19.2% for §4D.2, 64 for §4D.3, 0.926 for §4D.5, \$25.9mm for the stop, \$26.7mm for the DTS short, and the 4-B DV01.
 
-It is for speed and for catching this chapter's slips: the second sale treated as the first, the forgotten rate, the duration ruler where DTS was asked. It will not teach judgment. No drill asks "which measure?" in a form a checker can grade, and the pitch of §4D.10 has no answer key at all. The edge case that bites is the Kelly drill when there is no edge. If the default probability exceeds $c/(c+L)$, the formula returns a negative fraction, and a naive drill would ask you to "size" a short you never chose to make; this one returns `None`, meaning *no bet*, and the checker expects you to say so. The listing is [Listing 4-D.1 in Appendix F](#code-4D-1).
+It is for speed and for catching this chapter's slips: the second sale treated as the first, the forgotten rate, the duration ruler where DTS was asked. It will not teach judgment. No drill asks "which measure?" in a form a checker can grade, and the pitch of §4D.10 has no answer key at all. The edge case that bites is the Kelly drill when there is no edge. If the default probability exceeds $c/(c+L)$, the formula returns a negative fraction, and a naive drill would ask you to "size" a short you never chose to make; this one returns `None`, meaning *no bet*, and the checker expects you to say so. The listing is [Listing 4-D.1 in Appendix F](#code-4d-1).
 
 *The full python listing is [Listing 4-D.1 in Appendix F](#code-4d-1).*
 
@@ -492,7 +492,7 @@ He looked at the column and saw it was one test in six costumes: how do you lose
 
 - FINRA, TRACE monthly volume files: <https://www.finra.org/finra-data/trace-monthly-volume-files>. The product split behind "which TRACE?"
 - FINRA Rule 6730, TRACE reporting: <https://www.finra.org/rules-guidance/rulebooks/finra-rules/6730>. The fifteen-minute clock and as/of prints.
-- `interview_drills.py`: [Listing 4-D.1 in Appendix F](#code-4D-1).
+- `interview_drills.py`: [Listing 4-D.1 in Appendix F](#code-4d-1).
 
 
 <!-- STATUS: COMPLETE -->

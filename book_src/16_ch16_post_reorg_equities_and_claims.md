@@ -177,7 +177,7 @@ Let $v_t$ be the fundamental log value of the stock, which we treat as a $\mathb
 
 *Supply.* Constrained holders execute a fixed fraction of what remains per unit time:
 $$dQ_t = -\theta\, Q_t\,dt, \qquad Q_{t_0} = Q_0,$$
-where $\theta > 0$ is the execution rate (per year) and $t_0$ is the effective date or the lock-up expiry, whichever comes later. This is a bathtub with the plug pulled, draining faster when full because the flow is proportional to what is left, so $Q_t = Q_0 e^{-\theta(t-t_0)}$ and the natural reading is the half-life $t_{1/2} = \ln 2/\theta$: at $\theta = 3.4$ a year, about 0.20 years or 2.4 months, with three-quarters gone after two half-lives and the last few CLO vehicles always taking longer than planned (Chapter 1's box in §1.8.1 has the same curve for price pressure; we fit $\theta$ in §16.2.3).
+where $\theta > 0$ is the execution rate (per year) and $t_0$ is the effective date or the lock-up expiry, whichever comes later. This is a bathtub with the plug pulled, draining faster when full because the flow is proportional to what is left, so $Q_t = Q_0 e^{-\theta(t-t_0)}$ and the natural reading is the half-life $t_{1/2} = \ln 2/\theta$: at $\theta = 3.4$ a year, about 0.20 years or 2.4 months, with three-quarters gone after two half-lives and the last few CLO vehicles always taking longer than planned (Chapter 1's §1.8.1 has the same curve for price pressure, and the box in Chapter 9, §9.4.1, cools it for a signal; we fit $\theta$ in §16.2.3).
 
 *Capital.* Arbitrage capital arrives slowly, in the spirit of Duffie's (2010) slow-moving capital:
 $$dM_t = \rho\,(M^{*} - M_t)\,dt, \qquad M_{t_0} = M_0,$$

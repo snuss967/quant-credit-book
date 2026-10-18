@@ -559,7 +559,7 @@ This purges the *generator*, not only the label, and Theo's masked schedule is w
 
 ## 26.8 Model Risk for Stochastic Readers: SR 11-7 Meets the LLM
 
-SR 11-7, the supervisory guidance on model risk management that the Federal Reserve and the OCC issued on 4 April 2011 (OCC Bulletin 2011-12), organizes validation around three elements: evaluation of conceptual soundness, ongoing monitoring, and outcomes analysis. It also holds that a model should face "effective challenge," meaning critical analysis by objective, informed parties who are separate from the people who built it. An LLM fits that frame once you accept that you are validating a vendor model whose weights you will never see:
+SR 11-7, the supervisory guidance on model risk management that the Federal Reserve and the OCC issued jointly on 4 April 2011, organizes validation around three elements: evaluation of conceptual soundness, ongoing monitoring, and outcomes analysis. It also holds that a model should face "effective challenge," meaning critical analysis by objective, informed parties who are separate from the people who built it. An LLM fits that frame once you accept that you are validating a vendor model whose weights you will never see:
 
 | SR 11-7 element (paraphrased) | For a stochastic reader | Desk metric |
 | :-- | :-- | :-- |

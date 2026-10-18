@@ -60,7 +60,7 @@ LCS faced the same problem and solved it by quoting both branches as a percentag
 
 **Answer:** The drop does not change: it is still 5.12 points on day 0, because capacity that arrives on day 10 cannot cushion day 0. On day 10 the Fed's \$5bn takes the dealer residual from \$6.4bn to \$1.4bn, and the price jumps 2.43 points that day. The 60-day reversal rises only from 4.87 to 5.06 points, but it arrives much earlier: 4.44 points are back by day 10 instead of 2.01. The Fed's direct share of the reversal booked so far is 55% at day 10, 31% at day 20 and 4% at day 60. Who earned it? Mostly the central bank. Any P&L booked in the first three weeks was largely the Fed's own buying, and the slow decay that pays a patient desk the rest rests on a $\theta$ that assumes buyers keep arriving. In March 2020 the Fed is the reason they did. (Under the stress toggle the same run gives a 10.32-point drop, 7.9 left on dealers after day 10, and the same 2.43-point jump.)
 
-**How:** Extend Listing 1.3 so that each absorber carries an arrival day, and give `run` a `day` argument that counts only the capacity that has arrived by then. On day 0 the total capacity is 6.5 against $Q^{\text{sell}} = 12.9$, so the residual is 6.4. From day 10 it is 11.5, every absorber fills completely, the Fed takes 5.0 and the residual is 1.4. Conservation holds on both runs. Make the stress toggle switch off the private absorbers only: a policy absorber is not state-dependent capacity. Then let the imbalance in (1.7) be a step function on the trigger's clock:
+**How:** Extend Listing 1.4 so that each absorber carries an arrival day, and give `run` a `day` argument that counts only the capacity that has arrived by then. On day 0 the total capacity is 6.5 against $Q^{\text{sell}} = 12.9$, so the residual is 6.4. From day 10 it is 11.5, every absorber fills completely, the Fed takes 5.0 and the residual is 1.4. Conservation holds on both runs. Make the stress toggle switch off the private absorbers only: a policy absorber is not state-dependent capacity. Then let the imbalance in (1.7) be a step function on the trigger's clock:
 
 $$
 p_t = p^* - \kappa\,\frac{I^+(t)}{\text{ADV}}\,e^{-\theta t}, \qquad I(t) = \begin{cases} 6.4, & t < 10 \\ 1.4, & t \ge 10 \end{cases}
@@ -70,7 +70,7 @@ With $\kappa = 0.4$, ADV $= 0.5$ and $\theta = 1/20$: the dent is 5.12 on day 0 
 
 **The trap:** Putting the \$5bn into capacity on day 0. You then get a 1.12-point drop and a 1.06-point 60-day reversal, and conclude that the Fed *shrank* the trade. That run describes a different world, one where the absorber was there, or was credibly announced and priced, at the trigger. The dent never opens, and there is nothing for anyone to earn. The second trap is reading the in-model 96% share at day 60 as the desk's skill. The model hands the desk that share by assuming $\theta$; Ines's "IDO or it didn't happen" says strip the Fed and the beta first.
 
-**If you got this wrong, read:** §1.8.1 (eqs. 1.6–1.7 and the half-life gloss), then Act 4 of §1.8.2 and "What happened, and the answer"; Listing 1.3 for the `run` you are extending.
+**If you got this wrong, read:** §1.8.1 (eqs. 1.6–1.7 and the half-life gloss), then Act 4 of §1.8.2 and "What happened, and the answer"; Listing 1.4 for the `run` you are extending.
 
 **Z.01.5: ROBO literalism**
 
