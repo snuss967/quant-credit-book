@@ -12,7 +12,7 @@
 - [x] 10. [4B.4 The three meanings] BRIDGE — Theo/Kaz exchange placed before spread-convexity paragraph.
 - [x] 11. [4B.5 The Risk Report] MATH-GENTLY (DTS: percent, not basis points) + one telling — stock-dollar box; vivid paragraph retired to one-line pointer.
 - [x] 12. [4B.5 The hedge ratio] RV BEAT, The Pair box, PB-03 pre-open as arithmetic — PB-03 pre-open box: three rulers, idio, leak, carry; Ines line.
-- [ ] 13. [4B.6 The curve] MATH-GENTLY (bootstrapping as peeling)
+- [x] 13. [4B.6 The curve] MATH-GENTLY (bootstrapping as peeling) — peeling box; Wednesday 6:30 whiteboard; ASW derivation moved below.
 - [ ] 14. [4B.6 Discount margin] ANOTHER-SEAT (CLO manager, generic, no firm named)
 - [ ] 15. [4B.6 PECS] BRIDGE
 - [ ] 16. [4B.7 Yield-to-worst and the Poker Table] WHEN-TO-APPLY inside the scene

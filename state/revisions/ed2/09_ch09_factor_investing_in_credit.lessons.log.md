@@ -1,0 +1,75 @@
+# Lessons Pass, Edition 2: Chapter 9
+
+*Lessons editor pass against `state/reviews/ed2/u2_lessons.md` (including the orchestrator ruling on lesson 1: the band measures duplication, not length), run 2026-10-18 on `book_src/09_ch09_factor_investing_in_credit.md` (1,090 lines, after the U2 narrative pass in `09_ch09_factor_investing_in_credit.log.md` and the verify pass, which is COMPLETE). Worked examples read: `u2_quality_read.md` (b)–(d) and the Ch 1 table in `u2_fixes_ch01_05_06.md`; also `state/cast_bible.md`, style bible §8, `state/rv_thread.md` and `state/rv_pair_book.md`. Line numbers are the file as of the audit; re-grep the quoted phrase before each edit.*
+
+## Audit
+
+### (a) Metric
+
+- [x] A1. **Before** (`python3 tools/prescriptiveness.py --pre 9ac1c379053d9d0254e9d524d9a40efdec4a2c71`): pre 13,958 words, bullets 12.4%, modal 2.4, imper 1.0, rule 1.1, dialog 8.5, Math Gently 0, Seat 0. Now 29,156 words, bullets 6.4%, modal 2.5, imper 1.4, rule 0.9, dialog 8.1, Math Gently 8, Seat 4 (file 30,798 `wc` words). **Growth 2.09×** against the 1.6–1.9× band (22,333–26,520 words). Per the orchestrator ruling, cuts come only from duplicate tellings, templates and the box budget; single-telling scenes and protected items stay. Hot spots: the seven §9.11 listing paragraphs (L898–946: "Use... Do not... The edge case that bites"), the two Ways This Blows Up boxes (L217, L338), Kaz's numbered whiteboard (L773–777). *Done: before recorded; 2.09× growth; hot spots named for C, B.*
+
+### (b) Duplication (new telling vs old telling, and which survives)
+
+- [x] B1. Cold-open promise (L58): a syllabus ("through DTS (§9.2); through the canonical credit factors (§9.3–9.6); through combining (§9.7); through a transaction-cost budget (§9.4, §9.8); through the replication debate (§9.9); and out the other side into a specification (§9.11)") plus the 0.9 / 0.7 / 0.02 result that the Debrief scene (L969) delivers. **Survivor:** the Debrief for the numbers; L58 becomes two sentences (smaller, more honest number; the road is the chapter) with no section list. *Done: syllabus cut; numbers left to Debrief; two sentences remain.*
+- [x] B2. §9.1 (L64) states eq. (9.1)'s result and the long-beta corollary that §9.2.1–9.2.2 derive. **Survivor:** §9.2; L64 keeps "handed, free of charge, a sort on beta" and points to §9.2. *Done: L64 keeps the free beta sort, points to §9.2.*
+- [x] B3. Barclays EMC (6.34% over the index, IR 1.90, negative after costs) told at §9.1 L66, §9.4.2 L391–397 and the p.633 extraction L401; the p.633 annotation (L403) retells Ines's hand history from L66. **Survivor:** L66's scene (the tip line) and §9.4.2 + extraction for the numbers; L66 drops the numbers for a pointer; the annotation's opening retelling becomes "the strategy Ines handed back in §9.1". *Done: §9.1 numbers gone; annotation now points to Ines's hand.*
+- [ ] B4. Log-spread rationale: the residual box (L227, "One refinement... relative ruler") and L243 ("If spreads move proportionally, log spread is the scale on which a residual of 0.2 means '20% cheap'..."). **Survivor:** the box; L243 keeps only "our choice, not Barclays'" and the common-slopes point.
+- [ ] B5. DTS gives out near distress: Mags's 2,500bp energy bond (L193–199), the p.34 annotation's first caveat (L203, "First, proportionality weakens near distress, which is what Mags found"), Ways This Blows Up (4) (L217). **Survivor:** Mags's scene; the annotation keeps the 1,000bp switch as a pointer to her bond (with C2); the Ways item becomes a pointer (with B6).
+- [ ] B6. End-of-month DTS look-ahead: the ROBO spec box (L213, "never rescale with end-of-month DTS"), ROBO's second run (L215), Ways (2) (L217) and Listing 9.2's edge case (L906). **Survivor:** ROBO's second run; Ways (2) and the listing paragraph point to it. Ways (5) (leverage) is §9.5.2's annotation told early: pointer. Ways (1) (units) becomes a callback to Theo's percent-for-bp DTS slip (Ch 1 §1.4, cast bible).
+- [ ] B7. Ways This Blows Up (L338): (1) point-in-time lag is Theo's quarter lag in the runway scene (L320); (3) tiny cells is the p.553 annotation (L265, "Pool any cell with fewer than about 15 bonds"); (4) is a bare "See §9.3.2". **Survivor:** the scene and the annotation; the box keeps OAS vs Z-spread and the value-trap default, with one-line pointers for the rest.
+- [ ] B8. Momentum decay: L366 quotes the p.610 sentence that the extraction (L407) quotes again 40 lines later; the p.610 annotation (L409) re-derives the rebalancing frequency already set by "drinking cold coffee" (L372). **Survivor:** §9.4.1 text and the extraction; L366 paraphrases with a pointer; the annotation keeps the combination-weight and continuous-score points (with C3).
+- [ ] B9. Prime-broker borrow feeds: Trend Watch (L103, protected) and Mags's Sal scene (L564, "It does: Man notes that prime brokers now provide daily borrow availability... (Man p.11)"). **Survivor:** the Trend Watch; the scene points to it.
+- [ ] B10. Hinge: the Math, Gently box (L675) and the next paragraph (L677, "The standard fix is to split each trade into a buy and a sell") tell the same trick. **Survivor:** the paragraph, absorbing the hinge image and the tiny number (with D3).
+- [ ] B11. Cost drag 1.15% → 0.64% a year: p.711 annotation (L701), cost-curve Trend Watch (L709, protected) and the March 2020 scene (L851). **Survivor:** annotation and Trend Watch; L851 points back and keeps the 2008 counterfactual, the \$116.5bn and the PGGM split.
+- [ ] B12. "Value pays more when ESP is dispersed" (Dynkin p.545): §9.3.1 (L241), the March 2020 scene (L813, verbatim quote) and the tight-spread Trend Watch (L862, protected, verbatim). **Survivor:** L241 and the Trend Watch; the scene paraphrases with a pointer to §9.3.1.
+- [ ] B13. Theo's runway column: §9.3.4 (L320–326, "pulled a fifth of the names out of the cheap decile") and the Debrief scene (L975) retells it. **Survivor:** §9.3.4; the Debrief keeps only what is new there (the drop-down flag; the removed names widened over six months).
+- [ ] B14. §9.11 listing set-ups retell the chapter: L894 retells the cold open ("Mags's verdict was that Kaz had built the index with extra steps"); L902 restates §9.2's three claims; L910 restates §9.3–9.6's menu; L942 restates §9.9's claim. The listing edge cases restate §9.3.2's negative-EBITDA floor (L914) and the default-month rule (L898). **Survivor:** the chapter's scenes; each set-up is cut to the moment the function was needed and each edge case points back (with C1).
+- [ ] B15. Bell box Part one and Part two (L271) re-teach the normal distribution (Ch 5, Ch 6 §6.1) and risk-neutral pricing (Ch 3-B's two-measures box, Ch 6 §6.3); the two-ways box Part two (L719) re-tells Ch 4's "432 lottery tickets" box (§4.5: 432 specifications, 26 survivors). **Survivor:** the owning chapters; Ch 9 keeps glosses with its own tiny numbers (with D1, D2).
+- [ ] B16. Kaz's whiteboard (L771–777) is a numbered list of five rules after the scene that dramatized rule 1, and Mechanism 3 (L751) already states rules 2–3. The Debrief bullet (L985) and the Finder row keep the summary. **Survivor:** the topic stays, as Kaz's five lines read in prose with where each came from; the numbered list goes (lesson 3).
+- [ ] B17. Checked and kept: the §9.11 lab spec (L872–892) and the §9.12 Spec share acceptance tests, but they specify two objects (the synthetic lab with its DGP and schemas; the real-data engine), and the §9.12 Spec points to §9.11's asserts; cutting either breaks the pointer. The ROBO "vague version" box (L213) is the book's standing ROBO joke on one constraint, not a duplicate Spec. Robeco's attribution in the 2022 coda (L515) and the tight-spread Trend Watch (L864) use different numbers and point to each other.
+
+### (c) Templates (lesson 4) and detached judgment paragraphs (lesson 5)
+
+Grep for "It breaks in", "seasoned", "the first question", "Use it for", "do not mistake", "edge case that bites", "When to reach for it": no "When to reach for it" paragraphs and no "breaks in three places"; seven "edge case that bites" listing closers. Remaining templates:
+
+- [ ] C1. The seven §9.11 listing paragraphs (L898, 906, 914, 922, 930, 938, 946) close on the U1 template "Use this block... Do not use it... The edge case that bites is". Recast each in plain narrative; open from the scene moment (Hana's red build, ROBO's second run, the negative-EBITDA floor, Theo's first run) and point to the scene where it already shows the edge case. Also L904 and L920 ("should... should... should"; "must... must... must") read as manual voice: recast as what the tests found.
+- [ ] C2. L203, the Ben Dor annotation: "Two caveats... First, ... Second, ..." inside a paragraph. Recast without enumerators (with B5).
+- [ ] C3. L409, the p.610 annotation: "One number fixes three design choices. It fixes... It fixes... And it fixes...": a list in costume. Recast (with B8).
+- [ ] C4. L687, the dealer seat box: "knows three things the manager would rather the dealer did not": recast as the dealer's view without the count.
+- [ ] C5. L693, the LCS annotation: "Two features of the 2026 desk go beyond the definition. First, ... Second, ...": recast without enumerators; the unfilled-RFQ point points to the 8:10 vignette (L683), which already shows it.
+
+### (d) Boxes (lessons 6–8, 10)
+
+Count: 8 Math, Gently (L115, 227, 271, 364, 380, 576, 675, 719) in 29,156 words (budget about 24 by density, cap 10); none adjacent; no run of more than two boxed elements (every run threaded by a narration line). Trend Watches sit at the ends of §9.1, §9.8 and §9.10. Derivations follow the box → equation → Full Derivation order. First-load-bearing check against `book_src/`: the half-life box is the one Ch 1's Finder points to ("box in §9.4"); the beta-as-a-ratio box is the "full version" Ch 1-B's x-ray box points to; the turnover meter and the hinge are new here. Not first uses:
+
+- [ ] D1. Bell box (L271): demote to a one-paragraph gloss before eq. (9.2) with pointers to Ch 5 / Ch 6 §6.1 (the bell) and Ch 3-B / Ch 6 §6.3 (the two measures); keep its own tiny number (four-year 1% physical, θ = 0.2 → 2.7% risk-neutral), which differs from Exercise 3 and from the 83bp derivation.
+- [ ] D2. Two-ways box Part two (L719): reduce to one sentence pointing to Ch 4's 432-lottery-tickets box (§4.5) and Ch 7 §7.8, keeping the one new fact (25 of the 26 survivors are within-firm sorts, Internet Appendix IA.3); fix the wrong pointer "Chapter 7's lottery box".
+- [ ] D3. Hinge box (L675): demote into the next paragraph (with B10). Box count 8 → 6.
+- [ ] D4. Rowers box (L576): its opening re-defines correlation, which Ch 8-B's quadrature box owns; trim to a clause with the pointer. Sign-offs: box 1 (L115) and box 2 (L227) both end on "Chapter 1's box on regression slopes"; box 1 points to Ch 1-B's x-ray box instead (lesson 7, vary).
+
+### (e) Research-note leaks and fiction labels
+
+No "CHECK", "search summary" or "secondary" in book text ("secondary-market facility" at L837 is the facility's name; "as summarized by Man" at L533 is a cited secondary source, kept).
+
+- [ ] E1. L473 "In a later talk the same co-heads put it more bluntly, saying in effect that..." and L685 "in a 2024 talk they described...": unnamed sources. Both are the Man March 2024 recording (*Extra Credit: Algorithmic Advantage*, in the Resource Graph; verify log: machine transcript, paraphrase only). Name it, keep the paraphrase without quotation marks.
+- [ ] E2. Cold open: the fiction label is a parenthesis inside Kaz's first line (L8, "*(All numbers in this scene are illustrative.)*"). Move it to the top of the scene in italics, naming what is invented (lesson 13).
+
+### (f) Finder table and headings (lesson 11)
+
+The Finder exists at the top of the Debrief (L954–967, ten rows).
+
+- [ ] F1. Fix the Finder: it calls the scenes "Long Scene A" (March 2020) and "Long Scene B" (2022) but the headings carry no letters and B comes first; name them by heading. Update the measure-trap and hinge rows for D1 and D3; merge "Noisy prices" and "The five library rules" (same box, same scene); add a crowding row (Ines's napkin, March 2020) and the momentum decay clock (half-life box) so the reference layer covers §9.4.1 and §9.10; keep ten rows.
+- [ ] F2. Promote the two decision points to `####` headings: "Decision point: Friday 30 December 2022" (the 2022 card, L501) and "Decision point: Thursday 19 March 2020" (the bold "**The card.**", L825). The two Long Scenes are already `####`.
+
+### (g) Cast-bible contradictions
+
+- [ ] G1. L942 "Kaz, who has never read a credit agreement": C7 canon gives Kaz's first indenture to Ch 4-B (§4B, "reading an indenture for the first time"). Reword; add Ch 9 to C7 in the cast bible.
+- [ ] G2. §9.7.2 (L620) "Nobody had noticed": Ch 10's Coda (Thu 10 Apr 2025) has Wen find the same value tilt in Dov's twelve pairs, and its PB-01 box says the Sept 2026 x-ray would "find again" the drift (Ch 9 §9.7.2). Add one clause: the second time, and why it slipped back in (PB-01 is long the tighter name, but cheaper per turn of leverage). Note in the cast bible and the pair book.
+- [ ] G3. L910 "When Ines asked 'cheap why?' in the cold open": in the cold open the line is Theo's (L10–16). Fix the attribution.
+- [ ] G4. L10 "Theo had built leveraged-buyout returns": cast bible gives Theo generic RSSG work only (13-week models, uptier math, first-day declarations); an RSSG banker reads sponsor models more than he builds LBO returns. Soften to "had sat across from sponsor models".
+
+### (h) Relative-value beat
+
+- [ ] H1. `state/rv_thread.md` assigns Ch 9 a scene (callback to Sharpe 1.9; book-level value loading; Man Numeric telecom case; home Ch 8 §8.8). Present at §9.7.2 (L610–624): fiction label, H / I / L in order, costs (financing and borrow on the remaining gross), Marcus's "a value factor with extra steps". `state/rv_pair_book.md` already ledgers it (book loading 0.7 → 0.2). No new beat; add G2's continuity note to the ledger.
+
+## Fixes

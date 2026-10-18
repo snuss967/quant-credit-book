@@ -433,7 +433,11 @@ Desk framing. Every spread is the answer to one question, *how much more than th
 
 ### The curve
 
-A zero curve is a function $z(t)$ with discount factors $d(t) = e^{-z(t)\,t}$. Markets quote *par* yields, so the curve is bootstrapped. On a grid $t_n = n/f$ with par yields $c_n$ (interpolated from quoted tenors), a par bond maturing at $t_n$ prices to one, $\sum_{k \le n} (c_n/f)\,d(t_k) + d(t_n) = 1$, which solves forward:
+A zero curve is a function $z(t)$ with discount factors $d(t) = e^{-z(t)\,t}$. Markets quote *par* yields, so the curve is bootstrapped.
+
+> **Math, Gently.** *Bootstrapping is peeling.* The market will not tell you the price of a single \$1 cheque due in two years; it tells you the yields of whole bonds, which are bundles of cheques. So you peel them, shortest first. A one-year par bond at 4% (annual coupon) is one cheque of \$104 priced at \$100, so a \$1 one-year cheque is worth $d(1) = 100/104 = 0.9615$. The two-year par bond at 5% is a \$5 cheque in one year and a \$105 cheque in two. You already know what the first cheque is worth, $5 \times 0.9615 = 4.81$, so peel it off: the remaining $100 - 4.81 = 95.19$ must be the value of the \$105 cheque, and $d(2) = (1 - 0.05 \times 0.9615)/1.05 = 0.9066$. In continuous compounding that is a two-year zero rate of $z(2) = -\ln(0.9066)/2 = 4.90\%$. Each new bond adds exactly one unknown, and each earlier peel has already removed the rest. The general rule is the next display.
+
+On a grid $t_n = n/f$ with par yields $c_n$ (interpolated from quoted tenors), a par bond maturing at $t_n$ prices to one, $\sum_{k \le n} (c_n/f)\,d(t_k) + d(t_n) = 1$, which solves forward:
 
 $$
 d(t_n) = \frac{1 - (c_n/f)\sum_{k<n} d(t_k)}{1 + c_n/f}, \qquad z(t_n) = -\frac{\ln d(t_n)}{t_n}.
@@ -443,11 +447,13 @@ The desk keeps two curves and always names which: Treasury (for G, Z and excess 
 
 ### The eight
 
-**G-spread.** $G = y - y^{\text{TSY}}_{\text{par}}(T)$, the bond's yield minus the Treasury par yield interpolated at its maturity. One subtraction, which is its appeal and its flaw: it compares a 4.50% coupon's yield with a different-coupon par bond's yield and ignores the curve's shape between today and $T$.
+*Wednesday 7 October, 6:30 a.m.* Theo had put his card face down under Ines's coffee cup at 6:25 (it is graded in §4B.8). Kaz was already at the whiteboard with the vendor's six column names down the left-hand side and two more added in a different colour, rebuilding each one from the note's list and a single Treasury curve. Theo, who had spent the previous evening failing to find a definitions tab, decided to become one. For each column he asked the question it answered, and wrote Kaz's answer next to it.
 
-**I-spread.** The same subtraction against the par swap rate $y^{\text{SOFR}}_{\text{par}}(T)$. The difference $I - G$ is minus the swap spread at $T$; it is a fact about the curves, not the bond.
+**G-spread.** "What does it pay over the government?" The answer is one subtraction: $G = y - y^{\text{TSY}}_{\text{par}}(T)$, the bond's yield minus the Treasury par yield interpolated at its maturity. That is its appeal and its flaw: it compares a 4.50% coupon's yield with a different-coupon par bond's yield and ignores the curve's shape between today and $T$.
 
-**Z-spread.** The constant $Z$ added to every zero rate that reprices the bond:
+**I-spread.** "Same question, a different government?" Nearly: the same subtraction against the par swap rate $y^{\text{SOFR}}_{\text{par}}(T)$. The difference $I - G$ is minus the swap spread at $T$; it is a fact about the curves, not the bond.
+
+**Z-spread.** "If I lifted the whole Treasury curve by one number until the bond priced, what's the number?" That is Z, the constant added to every zero rate that reprices the bond:
 
 $$
 P^{\text{dirty}} = \sum_k \text{CF}_k\, e^{-(z(t_k) + Z)\,t_k}.
@@ -455,21 +461,27 @@ $$
 
 Linearize around the yield: $y^{\text{cc}} - Z \approx \sum_k \omega_k\,z(t_k)$ with duration weights $\omega_k \propto t_k\,\text{CF}_k e^{-y^{\text{cc}} t_k}$. The yield is the Z-spread plus a duration-weighted average zero rate. So $Z - G$ is (to first order) the par Treasury's weighted average zero minus the bond's. On an upward-sloping curve a high-coupon, high-yield bond puts its weight earlier than the low-coupon Treasury, its average zero is lower, and $Z > G$. Invert the curve, as it was for most of mid-2022 to mid-2024, and the sign flips. On a flat curve, Z in the bond's own compounding equals G exactly, and Z in continuous compounding differs only by the compounding.
 
-**Asset-swap spread (par-par).** Schmid's definition is the cleanest on the shelf.
+**Asset-swap spread (par-par).** "What does a funded buyer earn over SOFR, once the rate risk is swapped away?" Kaz did not answer that one from memory, and reached for the cleanest definition on the shelf, Schmid's.
 
 > **[SOURCE EXTRACTION]** *Schmid_Credit_Risk_Pricing_Models p.159:* "Basically, an asset swap is a synthetic structure that allows an investor to buy a fixed rate bond and then hedge out the interest rate risk by swapping the fixed payments to floating. The investor keeps the credit exposure to the fixed rate bond."
 >
 > **Annotation.** The package has a price, and the price is the spread. In the par-par version the investor pays 100 for a bond worth $P$ and swaps its coupons for SOFR plus $A$. Setting the package's value to zero gives the formula below, and makes visible what the definition leaves out: when $P$ is far from par, the investor has also made (or received) an upfront payment of $100 - P$ to the swap counterparty. That loan carries counterparty and funding risk, which is why ASW and Z diverge for discount bonds and why the March 2020 basis trades of §24.4 cared which one they used.
 
-Value the package per 100 at inception. The investor pays 100 and receives the bond ($P$). The swap's floating leg is worth $100\,(1 - d(T)) + 100\,A\,\mathcal{A}$ on the swap curve, where $\mathcal{A} = \sum_k \alpha_k d(t_k)$ is the annuity on the bond's coupon dates; the fixed leg paid away is $100\,c\,\mathcal{A}$. Let $P^{\text{sw}} = \sum_k \text{CF}_k d(t_k)$ be the bond's value on the swap curve. Then $P - 100 + 100 - 100\,d(T) + 100A\mathcal{A} - 100c\mathcal{A} = P - P^{\text{sw}} + 100\,A\,\mathcal{A} = 0$, so
+With $P^{\text{sw}}$ the bond's value on the swap curve and $\mathcal{A}$ the annuity on its coupon dates (both defined just below), the package is worth zero at
 
 $$
 A^{\text{par}} = \frac{P^{\text{sw}} - P^{\text{dirty}}}{100\,\mathcal{A}}, \qquad A^{\text{mkt}} = A^{\text{par}}\,\frac{100}{P^{\text{dirty}}} .
 $$
 
-The market-value variant puts the floating leg on the dirty price instead of par. For a bond at 70 the two differ by a factor of 1.4.
+The market-value variant puts the floating leg on the dirty price instead of par. For a bond at 70 the two differ by a factor of 1.4. "So the par version," said Theo, "is the market-value version plus a loan to the swap dealer that nobody mentions." Kaz wrote *loan* on the board, then *of $100 - P$*, and underlined it.
 
-**Discount margin.** For a floater or loan paying $b + m$ (base rate plus contractual margin), DM is the spread over the base rate that reprices it, under the convention that the base rate stays at today's level. On a reset date, a floater paying $b + m$ and discounted at $b + m$ is worth par by backward induction (each period's coupon is exactly the period's discount), so $\text{DM} = m$ at a price of 100, and to first order
+#### The Full Derivation: valuing the package
+
+Value the package per 100 at inception. The investor pays 100 and receives the bond ($P$). The swap's floating leg is worth $100\,(1 - d(T)) + 100\,A\,\mathcal{A}$ on the swap curve, where $\mathcal{A} = \sum_k \alpha_k d(t_k)$ is the annuity on the bond's coupon dates; the fixed leg paid away is $100\,c\,\mathcal{A}$. Let $P^{\text{sw}} = \sum_k \text{CF}_k d(t_k)$ be the bond's value on the swap curve. Then $P - 100 + 100 - 100\,d(T) + 100A\mathcal{A} - 100c\mathcal{A} = P - P^{\text{sw}} + 100\,A\,\mathcal{A} = 0$, which is the first formula above; the second scales the floating leg to $P$ instead of 100.
+
+#### The rest of the eight
+
+**Discount margin.** "What does a loan pay over its base rate, if the base rate never moves again?" For a floater or loan paying $b + m$ (base rate plus contractual margin), DM is the spread over the base rate that reprices it, under the convention that the base rate stays at today's level. On a reset date, a floater paying $b + m$ and discounted at $b + m$ is worth par by backward induction (each period's coupon is exactly the period's discount), so $\text{DM} = m$ at a price of 100, and to first order
 
 $$
 \text{DM} \approx m + \frac{100 - P}{100\,a(T)},
@@ -477,11 +489,11 @@ $$
 
 with $a(T)$ the annuity at $b + \text{DM}$: the loan form of the premium identity, and (21.2) of §21.1 solved for $s$. The Larkspur Foam 2029 first-lien term loan of Chapter 13 pays SOFR + 375bp. At 97, with a flat 4.00% base rate and the common three-year-life convention *(illustrative)*, its DM is about 490bp. At the 84 mark of the morning of the headline it is about 1,040bp, at which point the desk stops quoting DM and starts quoting recovery. State whether the floor is priced: a floor is an option the lender owns, and the flat-forward convention values it at intrinsic only.
 
-**Yield-to-worst.** The lowest yield over maturity and every call date, each at its call price: §4B.7, because it needs a call schedule.
+**Yield-to-worst.** "What is the least I earn if the issuer does whatever hurts me most?" The lowest yield over maturity and every call date, each at its call price: §4B.7, because it needs a call schedule.
 
-**OAS.** The spread over the curve that reprices the bond *after* valuing its options on a rate model: §4B.7, because it needs a lattice.
+**OAS.** "And what is left once somebody has priced the issuer's option?" The spread over the curve that reprices the bond *after* valuing its options on a rate model: §4B.7, because it needs a lattice.
 
-**Par CDS equivalent (PECS).** Find the flat hazard $\lambda$ that reprices the bond with recovery of face $R$ (the formula of §4B.2, from §6.6.3), then read the par CDS spread off the same $(\lambda, R)$ with the legs of §6.8 and §24.2:
+**Par CDS equivalent (PECS).** "What would the CDS have to be?" Find the flat hazard $\lambda$ that reprices the bond with recovery of face $R$ (the formula of §4B.2, from §6.6.3), then read the par CDS spread off the same $(\lambda, R)$ with the legs of §6.8 and §24.2:
 
 $$
 P^{\text{dirty}} = \sum_k \text{CF}_k d(t_k)e^{-\lambda t_k} + 100R\!\int_0^{T}\!\lambda e^{-\lambda u}d(u)\,du, \qquad s^{\text{PECS}} = \frac{(1-R)\int_0^T \lambda e^{-\lambda u}d(u)\,du}{\text{RPV01}(\lambda)} \approx \lambda(1 - R).
@@ -492,6 +504,8 @@ PECS is the bond spread that a CDS basis should use (App A §A.5), and it exceed
 > **[SOURCE EXTRACTION]** *Schmid_Credit_Risk_Pricing_Models p.159:* "A default swap is a par product: it does not completely hedge the loss on an asset that is currently trading away from par. If the asset is trading at a discount, a default swap overhedges the credit risk and vice-versa."
 >
 > **Annotation.** Two consequences on a 2026 desk. For *valuation*, compare a discount bond with CDS only through PECS, or the convention masquerades as a basis. For *hedging*, the jump-to-default-neutral notional is $(P - R)/(1 - R)$ per unit of face (derived in §24.3), so \$10mm of the fallen angel at 70.73 with $R = 40\%$ needs about \$5.1mm of protection, not \$10mm. The departure from Schmid: $R$ is itself random and is now a property of the transaction (§5.5, §5.6), so PECS has a recovery delta that the desk must report next to it (Law 7).
+
+By half past seven the whiteboard was the definitions tab the vendor file had never had, and Theo photographed it before anyone could wipe it. Kaz turned it into a table.
 
 | Spread | Reference | Solves for | State with it |
 | :--- | :--- | :--- | :--- |

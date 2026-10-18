@@ -3,8 +3,8 @@
 - [x] 1. [7-B.0 Cold Open] EXPAND-SCENE. Note: dateline, DRR/Menkveld printouts, Theo's RSSG realization, notation re-headed.
 - [x] 2. [7-B.1 Desk framing] BRIDGE + MATH-GENTLY box 1. Note: re-deal wobble, Moulton 2.5, two-way wedding-guest inclusion-exclusion.
 - [x] 3. [7-B.1 The estimator … through Errors in variables] FULL-DERIVATION-MOVE. Note: one-line (7B.1–3), Full Derivation after EIV, DRR pointer.
-- [ ] 4. [new `#### Long Scene: One March, Counted Once` after Errors in variables, before Ways This Blows Up] NEW-SCENE (2,200–2,800 words), the chapter's first long scene and its RV beat.
-- [ ] 5. [7-B.1 Ways This Blows Up] LIST-TO-NARRATIVE.
+- [x] 4. [new `#### Long Scene: One March, Counted Once`] NEW-SCENE. Note: 2,430 words; PB-03 card; pointer §9.6.1 not §9.4 (fallen angels live there).
+- [x] 5. [7-B.1 Ways This Blows Up] LIST-TO-NARRATIVE. Note: Theo's CUSIP evening dramatized; box rows kept, row 1 shortened.
 - [ ] 6. [7-B.2 Desk framing + How much overlap] MATH-GENTLY (box 2) + WHEN-TO-APPLY.
 - [ ] 7. [7-B.3 Desk framing] LIST-TO-NARRATIVE + MATH-GENTLY (box 3).
 - [ ] 8. [7-B.3 Calibration] MATH-GENTLY (box 4) + ANOTHER-SEAT.

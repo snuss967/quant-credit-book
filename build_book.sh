@@ -24,6 +24,7 @@ EDITION=$(python3 -c "import json; print(json.load(open('state/book_state.json')
 TITLE="Systematic & Quantitative Credit: From PJT RSSG to the Automated Desk"
 SUBTITLE="Mathematical Foundations, Microstructure, LMT Game Theory, and Alpha Isolation (Edition $EDITION, Build: $TIMESTAMP)"
 
+python3 tools/check_figures.py || true  # warn only: a missing PNG renders as a broken image
 shopt -s nullglob
 CHAPTERS=(./book_src/*.md)
 if [ ${#CHAPTERS[@]} -eq 0 ]; then

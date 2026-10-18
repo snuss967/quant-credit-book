@@ -64,9 +64,7 @@ This chapter closes Part II because everything after it leans on it. Chapters 8�
 
 ### Desk framing: every regression is a claim about a conditional mean
 
-Every regression in this book says one thing: when $x$ is higher by one unit, the average of $y$ is higher by $b$. Empirical duration (§8.2) says a bond's return moves $b$ per basis point of Treasury yield. A trend regression (§10.4) says next quarter's return moves $b$ per unit of signal. Theo's regression says next month's IDO return moves $b$ per week of runway. The coefficient is usually the easy part. The hard part, and the part that decides whether a desk allocates risk, is the error bar, and the error bar depends entirely on what you assume about how the rows are related.
-
-Theo's cold open printed one slope and three t-statistics: 6.1, 2.4 and 2.1. Same coefficient, same 38,412 rows. Everything that changed between them was one assumption about which rows are related to which, and that assumption is worth having a picture of before it gets its algebra.
+A regression is a claim about a conditional mean: when $x$ is one unit higher, the average of $y$ is $b$ higher (the Friday replay at the end of this section collects the desk's examples, from empirical duration in §8.2 to the trend book in §10.4). Theo's cold open printed one slope and three t-statistics: 6.1, 2.4 and 2.1. Same coefficient, same 38,412 rows. Everything that changed between them was one assumption about which rows are related to which, and that assumption is worth having a picture of before it gets its algebra.
 
 > **Math, Gently.** *The error bar, and the two ways a panel's rows are related.* **Part 1: the wobble.** A regression slope is the single straight line drawn through a cloud of points (Chapter 1's box in §1.4 builds it). Its **standard error** is how much that slope would wobble if you could re-deal the panel and draw the line again (Chapter 7's box in §7.1 does the $\sqrt n$ arithmetic for a plain average). The re-deal is the whole idea, and the only question is what you are allowed to re-deal. If every row were its own hand of cards you could re-deal rows. A bond panel is one hand photographed many times: the four bonds of one issuer are four pictures of one company's month, and re-dealing the pictures without re-dealing the company manufactures certainty. Tiny number: an issuer with four bonds whose residuals correlate 0.5 with one another, and a signal, like runway, that is the same for all four. Each extra sibling adds half a bond's worth of shared noise, so the printed variance is too small by a factor of $1 + (4-1)(0.5) = 2.5$, and the honest standard error is $\sqrt{2.5} \approx 1.58$ times the printed one. A printed t of 3.2 is an honest 2.0. **Part 2: two directions at once.** A credit panel's rows are related in two ways. Siblings share an issuer, and every bond in the same month shares that month's market shock. Clustering by issuer lets the noise inside each company be as correlated as it likes; clustering by month does the same inside each month. Doing both is the arithmetic of counting wedding guests who came with the bride's family or with the groom's: add the two lists, then subtract the cousins who are on both, or they get counted twice. Tiny number: if the issuer-clustered variance is 4, the month-clustered variance is 3 and the variance clustered on single issuer-month cells is 1, the two-way variance is $4 + 3 - 1 = 6$. The full version, with the sandwich it all hangs on, is next.
 
@@ -171,7 +169,99 @@ $$
 
 so the slope is shrunk toward zero by the signal share of the regressor's variance, and no amount of extra data removes it.
 
-> **Ways This Blows Up.** (1) *Clustering on the CUSIP.* It looks rigorous and captures none of the sibling correlation; cluster on the ultimate parent, the same key §7.7 groups folds by. (2) *Clustering on ticker.* Two issuers under one sponsor can share a credit agreement's trapdoors; for LMT-sensitive signals, cluster on the sponsor family. (3) *Few clusters.* A regression across eleven sectors clustered by sector has eleven observations of the meat; use a wild cluster bootstrap and say so. (4) *A fixed effect that eats the signal.* Issuer fixed effects on a rating regression identify the coefficient only from rating changes, which are rare and lagged; the standard error explodes, correctly.
+#### Long Scene: One March, Counted Once
+
+*A Friday-afternoon replay in October 2026, run as a review rather than blind: the data runs to 30 June 2020 and everyone may look at all of it. The desk, its 2020 panel and every regression, spread level and statistic attributed to it are fictional (the desk's fictional run, illustrative). Dov Adler's pod at Vantress and its Pair Book are fictional composites (Chapter 1-B; Chapter 8 §8.4). The dated market events are real and sourced in Chapter 1 §1.8.2.*
+
+Most Friday afternoons Ines runs a replay, and most replays are blind: the calendar goes back to a date and nobody may mention what happened next. This one was not. "You've all played this hand," she said, uncapping a marker. "We traded it on a Saturday, off Mags's run sheets. Today we don't trade it. We count it."
+
+She wrote five dates down the left edge of the whiteboard, one per line, the way she writes a hand history. Thursday 12 March 2020, when LQD closed five percent below its own net asset value. Monday 23 March, when the Fed announced its secondary-market corporate facility. Wednesday 25 March, when S&P cut Ford to BB+ (as reported by Bloomberg), with roughly \$36bn of Ford debt due out of the investment-grade index at the 31 March rebalance (T. Rowe Price, Nov 2020). Thursday 9 April, when the Fed extended its facilities to issuers that had been investment grade as of 22 March, which covered Ford. And Tuesday 12 May, the first day the Fed bought corporate-bond ETFs. The Saturday replay had traded those dates as a hand, one day at a time (§1.8.2). Today's rule, Ines said, was different: every number that went on the board needed an error bar, and every error bar needed to say what it had counted.
+
+Kaz had come prepared, which with Kaz meant a panel. Six hundred and forty bonds from two hundred issuers, everything in the desk's universe that had started 2020 investment grade, every trading day from 1 April to 30 June: 63 days, 40,320 bond-days. The left-hand side was each bond's daily IDO return, what was left after carry, rates and DTS-scaled market beta had been stripped out, because on this desk a return with beta still in it was not allowed in the room. The right-hand side was a single dummy, equal to one for every Ford bond after the rebalance and zero for everything else. Thirty-six Ford CUSIPs in all.
+
+"Every regression on this desk says the same thing," Ines said while it loaded. "When $x$ is one unit higher, the average $y$ is $b$ higher. Empirical duration says it per basis point of Treasury yield. The trend book says it per unit of signal. Theo's says it per week of runway. Kaz's says it per fallen angel. The $b$ is the easy part. The error bar decides whether anybody gets paid. Kaz, the $b$."
+
+"Four point one basis points a day of idio," Kaz said, "for a bond that has just been thrown out of its index. Classical t of fourteen point two." They paused, in the manner of someone who had rehearsed the pause. "Annualized that's about ten points of alpha. Fallen angels are the best trade in credit and I have a fourteen to prove it."
+
+Theo looked at the Post-it on the bottom of his monitor.
+
+"That's one company," he said. "And one spring."
+
+He was surprised by how quickly it came out. A week earlier he would have asked for the confidence interval and written it down. "Thirty-six CUSIPs of Ford are one Ford. If Ford's bonds had a good April they had it together, because the reason they had it was Ford's. And all six hundred and forty bonds had the same April, because the reason for that was the Fed."
+
+Kaz clustered by issuer, and the t fell from 14.2 to 2.6. Clustered by trading day, so that every bond on a given day shared that day's shock, it fell to 4.0. Two-way, issuer and day with the doubly counted cells subtracted, it came out at 1.8.
+
+"Below two," Kaz said, "which is a respectable place to be, for a t-statistic or a credit rating."
+
+"And the 1.8 is generous," Ines said. "Issuer clustering learns how much a block can wobble by looking at all the blocks. The question you're asking is about one block. A formula that has one treated cluster to learn from can't tell you how far that cluster would move on a re-deal, so I don't believe the 1.8 in either direction." She wrote *wild cluster bootstrap, §7-B.6* on the board and underlined it twice, which on Ines's board means *later, and not optional*. "How many independent fallen angels are in this regression?"
+
+"One," Theo said.
+
+From the far end of the desk Mags said, without looking up: "Back in my day we called that a position, not a sample."
+
+Kaz was not finished, and was not wrong to keep going. "Fine. Daily idio is noise. The effect is the reversal. Sixty trading days after the rebalance the forced selling is over and the discount comes back." They built the label in front of everyone: the Ford block's sixty-day forward IDO return over the panel's, measured from each of the 63 days of the quarter, so every observation looked sixty days ahead. Newey–West with fifty-nine lags, the textbook $h - 1$. A t of 3.3.
+
+"Your consecutive labels share fifty-nine of their sixty days," Theo said.
+
+"That's what the lags are for."
+
+"The lags get you about two-thirds of the way," Ines said, "even when the sample is long, because of how the Bartlett weights taper. Section 7-B.2 does the arithmetic. Your sample isn't long. You have 63 start dates and every label is sixty days, so the whole thing spans 123 trading days. That is two non-overlapping sixty-day returns, Kaz, and both of them are Ford."
+
+"Then I need more data."
+
+"You need more fallen angels," Mags said. "Since TRACE started, the tape has four waves of them in it: 2005, 2008 and 2009, the energy names in 2015 and 2016, and this one. That's your sample size for the reversal. Four. One of them is the one you're looking at." Chapter 9 counts them as a factor (§9.6.1), and the count does not get much bigger there either.
+
+Ines wrote it underneath the dates, because it was the sentence she wanted people to leave with. "Twenty years of an annual signal is about twenty observations, a sample that would embarrass a focus group. When the horizon is a big slice of the sample, Newey–West over-rejects whatever kernel you hand it. The cure isn't a better kernel. It's a longer history, more independent instruments, or humility."
+
+"I'll start with humility," Kaz said. "It's the only one I can get by Monday."
+
+Ines turned the whiteboard round. On the back she had already drawn the hand she had come to deal.
+
+It was a pair. Long Ford Motor Credit senior unsecured, short GM Financial senior unsecured, sized so that the two legs carried the same market-value DTS, the leftover index beta trimmed in CDX IG. It was, leg for leg, the third row of the Pair Book that Dov Adler's pod keeps at Vantress, a replay Dov had built of exactly this spring (§8.4), and Ines knew it because her desk quotes the pod most weeks and had quoted its GM protection earlier that month (Chapter 8-D). Dov had written the thesis as he writes all of them, one sentence with a date: Ford Credit's notes give back the discount that index-forced selling put on them, measured against an auto lender that stayed investment grade, by 30 September 2020. GM had stayed investment grade. Ford had not. The two captive lenders fund the same car buyers through the same dealers, so the hedge removes the common auto factor along with the market, and what it leaves is the part of Ford's spread that was a mandate's price rather than a credit's.
+
+"Chapter 8 says this pair needs a half-life," Ines said, "so Kaz has fitted one."
+
+Kaz had fitted it the way they had fitted the dummy: on everything. Ford Credit had thirty-six bonds in the panel and GM Financial twenty-two, so Kaz had built every Ford-minus-GM spread differential across the 792 CUSIP pairs, stacked them, and run one pooled AR(1) on the daily differential from 1 April to 30 June. The autoregressive coefficient was 0.93 a day, which is a half-life of $\ln 2/(-\ln 0.93) \approx 9.6$ trading days, and the t-statistic on the pull toward the mean was minus forty-two.
+
+"Which," Kaz said, "is the answer to everything."
+
+#### Decision point: the Ford–GM card
+
+It is a Friday afternoon in October 2026. Dov's pod has the same two names on again, live, as Chapter 8-D's PB-19, with a thesis that ends *half of it is gone by 31 March 2027*. Kaz's 2020 estimate is on the board. Ines handed out the cards. *Write three things: the half-life you estimate for the differential, the t-statistic you would defend for it, and your size, as a fraction of the replay's \$25mm long.* Before you read on, write yours.
+
+Kaz wrote: *9.6 days. t = −42. Full size, and add.*
+
+Theo wrote: *One pair, so one series: 63 days. t about −1.5. Half-life: don't know. Half size.*
+
+Mags wrote: *As long as a forced sale lasts. No t. Whatever I can carry to the far end of my not knowing.*
+
+Ines turned the cards over and graded them the way she grades everything, against what was actually on the table.
+
+**The answer.** The 792 CUSIP pairs are one pair photographed 792 times. Every Ford bond shared Ford's news and every GM Financial bond shared GM's, so stacking them multiplies the rows and adds no information, and the t of −42 is roughly the honest t multiplied by $\sqrt{792} \approx 28$. Cluster by issuer pair and there is exactly one cluster, which no clustering formula can use; the honest unit is the single differential series, 63 daily points. On 63 points the AR(1) coefficient of 0.93 has a standard error of about $\sqrt{(1 - 0.93^2)/63} \approx 0.046$, so the t on the pull toward the mean is about $-0.07/0.046 \approx -1.5$, and even that is read against the wrong bar: a test of whether a series mean-reverts at all is a Dickey–Fuller test (Chapter 7's box in §7.3), whose 5% critical value with a constant is about $-2.9$, not $-1.96$. A 95% interval for the coefficient runs from about 0.84 to 1.02, which is a half-life of four days at one end and never at the other. Two more things push the 9.6 days the wrong way. The fastest "reversion" in the sample happened on one day, 9 April, when the Fed's eligibility decision lifted every recent fallen angel at once; that is the rating-bucket factor moving, not Ford's discount closing, and with that day dummied out the coefficient rises to about 0.96, a half-life of 17 days. And on a short sample an estimated autoregressive coefficient is biased toward zero by roughly $(1 + 3\varphi)/T$, about 0.06 here (Kendall worked this out in 1954), so a fitted 0.96 is consistent with anything up to a random walk. The half-life the data can defend is "longer than this sample can see". The t it can defend is below any bar worth the name. And the size is the one you would hold if the half-life were the long end of the interval, because for as long as the differential behaves like a random walk the pair's P&L does too, and then the stop sets the size (Chapter 8-B), not the t.
+
+**What happened.** In the replay the pod took about five of its six points of convergence by September and closed the pair on Ford's bond–CDS basis (Chapter 24 §24.7), a pace that, fitted after the fact, is a half-life of roughly two months on the whole move *(illustrative)*. The platform's x-ray put about \$0.5mm of the \$1.25mm gross on the fallen-angel factor rather than on Ford, which is the 9 April day showing up as money. Kaz's 9.6 days was too fast by a factor of five and was mostly the Fed. Theo's card got the t and the interval right and the size roughly right. Mags's card had no numbers on it and was the closest to the truth, which Ines said was not a compliment to the card.
+
+"And Dov's live sentence," Ines said, tapping *31 March 2027*, "implies a half-life of about seven months. That's not Kaz's ten days and it shouldn't be. In 2026 there's no forced seller and no central bank, only a rating-bucket toll. A half-life is a property of a regime, and you've measured one regime once."
+
+Mags had come over to look at the board. "The last time somebody told me Ford and GM were two observations," she said, "was May 2005. S&P cut them both on the same Thursday." She did not tell the rest; Chapter 6 §6.9.2 deals that hand and Chapter 23 §23.6 grades it, including what the two names weighed in each index. "Two names, one cluster. Write that on the card too."
+
+> **The Pair.** *Pair Book PB-03 as this chapter's statistics see it (Dov Adler's pod at Vantress, fictional composites; legs, sizes and costs are Chapter 8 §8.4's, a 2020 replay, all illustrative).*
+>
+> **Pair.** Long \$25mm face of Ford Motor Credit senior unsecured, short about \$39mm face of GM Financial senior unsecured.
+>
+> **Hedge.** Market-value DTS at 1.65; the GM leg in borrowed bonds through the prime broker; beta residue in CDX IG; the DV01 residue in Treasury futures.
+>
+> **Removed.** Index spread beta and the common auto-lender factor, since both captives fund the same car buyers.
+>
+> **Remains.** Ford's forced-seller discount and its refinancing story: one pair, one regime, a half-life somewhere between four days and never, and a t of about −1.5 on 63 days.
+>
+> **Leaks.** The rating-bucket factor, left open on purpose (Ford high yield, GM investment grade), so 9 April's facility news arrived as a factor jump that an AR(1) reads as reversion; and the GM borrow, recallable on a day's notice.
+>
+> **Costs.** A borrow fee of 35 bp, about \$0.13mm a year, plus the CDX carry on the residue; near-zero coupon carry; about \$0.45mm of half-spreads each way. The toll is getting in and out, not waiting.
+
+The first of those mistakes had been Theo's, on the evening of the cold open. After Ines walked away he tried to reproduce Kaz's issuer-clustered 2.4 on his own, to be sure he understood it, and the first identifier he reached for was the CUSIP, because at PJT the CUSIP was what you traded and what the claims register listed. The t-statistic came back at 5.8, and for about four minutes he believed he had defended his six. Kaz, passing behind him with a coat on, read the screen. "That is a rigorous way of doing nothing," they said. A CUSIP cluster lets each bond's own months correlate with one another, which is real and small. It says nothing about eleven Halvorsen bonds sharing one company, which was the whole problem: with runway identical on every sibling, the sibling correlation was where the t had been hiding. The mistake cost four minutes and a second Post-it, *parent, not CUSIP*, which by the desk's standards was cheap. "Cluster on whatever makes the rows move together," Kaz said from the door. "For a company number, that's the company." The box keeps the other three ways the same mistake comes back.
+
+> **Ways This Blows Up.** (1) *Clustering on the CUSIP* (Theo's evening, above): cluster on the ultimate parent, the same key §7.7 groups folds by. (2) *Clustering on ticker.* Two issuers under one sponsor can share a credit agreement's trapdoors; for LMT-sensitive signals, cluster on the sponsor family. (3) *Few clusters.* A regression across eleven sectors clustered by sector has eleven observations of the meat; use a wild cluster bootstrap and say so. (4) *A fixed effect that eats the signal.* Issuer fixed effects on a rating regression identify the coefficient only from rating changes, which are rare and lagged; the standard error explodes, correctly.
 
 *Used in:* §8.2 (empirical duration), §8.5 (Dimson betas), §8.6 (minimum-variance hedges), §9.3.4 and §9.7 (factor residuals and combinations), §10.4 and §10.5.3 (trend–carry and lead–lag regressions), §11.2.2 (asymmetric-beta regression), §11.4.2 (issuer-clustered hazard logit), §17.2 (pooled desmoothing regressions), §28.2 (effective breadth); Chapter 9-B (correlated errors in variables).
 
@@ -180,23 +270,13 @@ so the slope is shrunk toward zero by the signal share of the regressor's varian
 
 ### Desk framing: the 12-month return you counted twelve times
 
-Chapter 10's trend signal predicts a 12-month return, and the natural way to test it is to sample that 12-month return every month. Consecutive observations then share eleven of their twelve months. You have not collected 240 observations in twenty years; you have collected about twenty, each photographed twelve times from slightly different angles.
+Chapter 10's trend signal predicts a 12-month return, and the natural way to test it is to sample that 12-month return every month. Consecutive observations then share eleven of their twelve months. You have not collected 240 observations in twenty years; you have collected about twenty, each photographed twelve times from slightly different angles. Kaz's sixty-day reversal labels in the Friday replay were the same problem at a daily frequency, and with a sample barely longer than the label.
+
+> **Math, Gently.** *Overlap: one rumor, twelve messengers.* Suppose a rumor reaches you from twelve people. If each of them heard it on their own, twelve is strong evidence. If all twelve heard it from the same man at the same bar, you have heard it once, twelve times. An overlapping return is the second kind of rumor. A three-month return measured at the end of every month shares two of its three months with the one before it, so each month's news turns up in three consecutive observations; count them as independent and every piece of news has been counted three times. The variance of your average is then about three times what the naive formula reports, and the t-statistic is too large by $\sqrt 3$. Tiny number: a naive t of 3.5 on three-month returns sampled monthly is an honest $3.5/\sqrt 3 \approx 2.0$. The general rule, that an $h$-period return sampled every period is too confident by $\sqrt h$, comes from counting how many messengers share each piece of news, and the full version is next.
 
 ### How much overlap inflates a t-statistic
 
-Let one-period returns $r_t$ be i.i.d. with variance $\sigma^2$, and define the $h$-period overlapping return $R_t = \sum_{j=0}^{h-1} r_{t-j}$. Two such returns $k < h$ periods apart share $h - k$ terms, so
-
-$$
-\operatorname{Cov}(R_t, R_{t-k}) = (h-k)\,\sigma^2, \qquad \operatorname{Corr}(R_t, R_{t-k}) = 1 - \frac{k}{h} .
-$$
-
-The variance of the sample mean of $T$ such observations is, for $T \gg h$,
-
-$$
-\operatorname{Var}\big(\bar R\big) \approx \frac{h\sigma^2}{T}\Big[1 + 2\sum_{k=1}^{h-1}\Big(1 - \frac{k}{h}\Big)\Big] = \frac{h\sigma^2}{T}\cdot h ,
-$$
-
-because the bracket sums to $1 + 2(h-1) - (h-1) = h$. The naive formula reports $h\sigma^2/T$. It is too small by a factor of $h$, so the naive t-statistic is too large by $\sqrt h$. For a 12-month return sampled monthly that is $\sqrt{12} \approx 3.5$: a naive t-statistic of 7 is an honest 2. The same arithmetic applies to any overlapping label, which is why §7.4's triple-barrier labels need §7.6's uniqueness weights.
+Let one-period returns be i.i.d. and let $R_t$ be the $h$-period return ending at $t$, sampled every period. Two such returns $k < h$ periods apart share $h - k$ of their periods, so their correlation is $1 - k/h$, a triangle that falls from one to zero over $h$ lags. Summing the triangle shows that the variance of the sample mean is $h$ times what the naive formula reports (derived below), so the naive t-statistic is too large by $\sqrt h$. For a 12-month return sampled monthly that is $\sqrt{12} \approx 3.5$: a naive t-statistic of 7 is an honest 2. The same arithmetic applies to any overlapping label, which is why §7.4's triple-barrier labels need §7.6's uniqueness weights.
 
 ### The Newey–West estimator
 
@@ -211,23 +291,43 @@ $$
 
 The triangular (Bartlett) weights are not decoration. Summing autocovariances with equal weights up to lag $L$ (the Hansen–Hodrick choice) is exactly right for an MA($h-1$) but can produce a negative variance in a finite sample. Up to end effects, the Bartlett-weighted sum is the average outer product of score sums over windows of length $L+1$, divided by $L+1$: a scaled sample variance, and a variance of anything cannot be negative.
 
-The price of that guarantee is under-correction. Suppose the truth is the overlap triangle above and you set $L = h - 1$, the textbook choice. The estimator recovers
+The price of that guarantee is under-correction, and it is larger than most people expect. With the textbook choice $L = h - 1$ and a 12-month return sampled monthly, Newey–West reports a variance multiplier of about 8.0 where the truth is 12: two-thirds of the variance, and a t-statistic still about 22% too large. With $L = 2h - 1 = 23$ it recovers about 10.0, or 83% (the arithmetic is in the Full Derivation below). That is why the desk sets $L$ to at least $1.5h$–$2h$ for overlapping returns, and reports beside the Newey–West result the $h$ non-overlapping subsamples (start in January, start in February, and so on), whose dispersion is a useful honesty check on its own. For autocorrelation that is not mechanical (stale marks in daily illiquid-bond returns) the plug-in rule $L = \lfloor 4(T/100)^{2/9} \rfloor$ is a reasonable floor, and the larger of the two lag choices wins. Figure 7-B.2 shows where the missing variance goes.
+
+![Figure 7-B.2: A 12-month return sampled monthly. Left, the Bartlett weights times the overlap triangle show where the variance goes missing. Right, with the textbook L = 11 lags Newey–West recovers a variance multiplier of 8.0 against a truth of 12, so the t-statistic stays about 22% too large; L = 23 recovers 10.0. Illustrative: exact calculation from equation 7B.4 for i.i.d. one-month returns, h = 12.](assets/figures/ch07b_newey_west_shortfall.png)
+
+No lag choice rescues a horizon that is a large slice of the sample; that limit, and the three cures for it, belong to the Friday replay above, where Kaz's sixty-day labels on sixty-three days turned out to be two observations of one company.
+
+#### The Full Derivation: the overlap triangle and the Bartlett shortfall
+
+*The triangle.* Let one-period returns $r_t$ be i.i.d. with variance $\sigma^2$, and define the $h$-period overlapping return $R_t = \sum_{j=0}^{h-1} r_{t-j}$. Two such returns $k < h$ periods apart share $h - k$ terms, so
+
+$$
+\operatorname{Cov}(R_t, R_{t-k}) = (h-k)\,\sigma^2, \qquad \operatorname{Corr}(R_t, R_{t-k}) = 1 - \frac{k}{h} .
+$$
+
+*The factor of $h$.* The variance of the sample mean of $T$ such observations is, for $T \gg h$,
+
+$$
+\operatorname{Var}\big(\bar R\big) \approx \frac{h\sigma^2}{T}\Big[1 + 2\sum_{k=1}^{h-1}\Big(1 - \frac{k}{h}\Big)\Big] = \frac{h\sigma^2}{T}\cdot h ,
+$$
+
+because the bracket sums to $1 + 2(h-1) - (h-1) = h$. The naive formula reports $h\sigma^2/T$. It is too small by a factor of $h$, so the naive t-statistic is too large by $\sqrt h$.
+
+*The Bartlett shortfall.* Suppose the truth is the overlap triangle and you set $L = h - 1$. Newey–West weights the lag-$k$ autocorrelation $1 - k/h$ by $1 - k/h$ again, so the estimator recovers
 
 $$
 1 + 2\sum_{k=1}^{h-1}\Big(1 - \frac{k}{h}\Big)^2 \quad\text{instead of}\quad h .
 $$
 
-For $h = 12$ the sum is $\frac{1}{144}\sum_{j=1}^{11} j^2 = \frac{506}{144} \approx 3.51$, so Newey–West reports a multiplier of about 8.0 where the truth is 12: two-thirds of the variance, and a t-statistic still about 22% too large. With $L = 2h - 1 = 23$ the same calculation gives about 10.0, or 83%. The desk rule follows: for overlapping returns set $L$ to at least $1.5h$–$2h$, and report beside the Newey–West result the $h$ non-overlapping subsamples (start in January, start in February, and so on), whose dispersion is a useful honesty check on its own. For autocorrelation that is not mechanical (stale marks in daily illiquid-bond returns) the plug-in rule $L = \lfloor 4(T/100)^{2/9} \rfloor$ is a reasonable floor; take the larger of the two. Figure 7-B.2 shows where the missing variance goes.
+For $h = 12$ the sum is $\frac{1}{144}\sum_{j=1}^{11} j^2 = \frac{506}{144} \approx 3.51$, so the multiplier is $1 + 2 \times 3.51 \approx 8.0$ against a truth of 12, and $\sqrt{12/8.0} \approx 1.22$ is the 22% by which the t-statistic stays too large. With $L = 23$ the weights become $1 - k/24$ on the same triangle, and the multiplier is about 10.0. For large $h$ with $L = h - 1$ the recovered share tends to two-thirds, which is why Kaz's $L = 59$ on sixty-day labels fell short by the same third.
 
-![Figure 7-B.2: A 12-month return sampled monthly. Left, the Bartlett weights times the overlap triangle show where the variance goes missing. Right, with the textbook L = 11 lags Newey–West recovers a variance multiplier of 8.0 against a truth of 12, so the t-statistic stays about 22% too large; L = 23 recovers 10.0. Illustrative: exact calculation from equation 7B.4 for i.i.d. one-month returns, h = 12.](assets/figures/ch07b_newey_west_shortfall.png)
-
-There is a limit no estimator removes. A 20-year backtest of an annual signal has about twenty independent observations, a sample size that would embarrass a focus group. Newey–West t-statistics over-reject when $h/T$ is large, and the cure is not a better kernel but a longer history, more independent instruments, or humility.
-
-> **Trend Watch.** *The second error bar (2009–2026).* **(1) The baseline.** Petersen (2009, *Estimating Standard Errors in Finance Panel Data Sets*, Review of Financial Studies 22(1)) showed that a large share of published finance panel studies reported standard errors that ignored firm or time correlation, and that the bias could be large; issuer clustering became the default in bond-panel work over the following decade. **(2) Non-standard errors.** In June 2024 Menkveld and coauthors published *Nonstandard Errors* (Journal of Finance 79(3), 2339–2390): 164 research teams tested the same hypotheses on the same data, the dispersion of their estimates was sizable, and the teams underestimated it. **(3) Bonds.** In April 2026 Dickerson, Robotti and Rossetti applied the idea to 108 corporate-bond factors (*The Corporate Bond Factor Replication Crisis*, arXiv:2604.07880). Across 648 defensible data-filtering paths per factor, the average non-standard error of a factor premium was 0.35% per month against an average premium of 0.33%, a ratio to the ordinary standard error of 1.15; across 168 methodological constructions the ratio averaged 1.45. Of 432 factor–specification combinations, only 26 bond-CAPM alphas survived a Benjamini–Hochberg false-discovery control, and correlated measurement error inflated price-based premia by 15–90 bp per month. **What it means for the desk:** report two error bars. One is the sampling error this section computes. The other is the specification error: the spread of your estimate across the defensible choices you did not make. When the second exceeds the first, the clustered t-statistic is not the most important number on the page. The full audit is §7.2 and Chapter 9-B.
+Kaz read the Trend Watch below off the back of Theo's printout, the one Ines had striped in green, and then read it again.
 
 "So the error bar has an error bar," Kaz said.
 
 "Everything does," Ines said. "The trick is knowing which one is bigger before you push the chips in."
+
+> **Trend Watch.** *The second error bar (2009–2026).* **(1) The baseline.** Petersen (2009, *Estimating Standard Errors in Finance Panel Data Sets*, Review of Financial Studies 22(1)) showed that a large share of published finance panel studies reported standard errors that ignored firm or time correlation, and that the bias could be large; issuer clustering became the default in bond-panel work over the following decade. **(2) Non-standard errors.** In June 2024 Menkveld and coauthors published *Nonstandard Errors* (Journal of Finance 79(3), 2339–2390): 164 research teams tested the same hypotheses on the same data, the dispersion of their estimates was sizable, and the teams underestimated it. **(3) Bonds.** In April 2026 Dickerson, Robotti and Rossetti applied the idea to 108 corporate-bond factors (*The Corporate Bond Factor Replication Crisis*, arXiv:2604.07880). Across 648 defensible data-filtering paths per factor, the average non-standard error of a factor premium was 0.35% per month against an average premium of 0.33%, a ratio to the ordinary standard error of 1.15; across 168 methodological constructions the ratio averaged 1.45. Of 432 factor–specification combinations, only 26 bond-CAPM alphas survived a Benjamini–Hochberg false-discovery control, and correlated measurement error inflated price-based premia by 15–90 bp per month. **What it means for the desk:** report two error bars. One is the sampling error this section computes. The other is the specification error: the spread of your estimate across the defensible choices you did not make. When the second exceeds the first, the clustered t-statistic is not the most important number on the page. The full audit is §7.2 and Chapter 9-B.
 
 *Used in:* §7.4 and §7.6 (overlapping labels and uniqueness), §7.8 (Sharpe-ratio inference), §10.2.3 and §10.4 (trend tests on overlapping returns), §10.6.1 (the straddle regression with Newey–West errors), §10.5.3 (lead–lag at the right horizon), §28.3 (signal half-lives); Chapter 9-B (non-standard errors in the factor zoo).
 

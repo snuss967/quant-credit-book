@@ -1,3 +1,52 @@
 # RV weave log: Ch 3-B (03_ch03b_your_first_year_on_the_desk), Edition 2, user directive 13
 
-*RV weaver, 2026-10-18. In progress.*
+*RV weaver, 2026-10-18. Thread entry (`state/rv_thread.md` §(e), row `03_ch03b_your_first_year_on_the_desk`): scene; PB-01; tool = the desk as clocks; H nothing new, I nothing new, L the pair's calendar (coupon dates owed on the short, record dates and recalls, the 20 Mar / 20 Sep roll, month-end marks); one of the Twelve Mistakes becomes "hedged with the right ruler on the wrong day"; event = roll dates; home Ch 8-C; optional figure = pair calendar strip.*
+
+## Preconditions
+
+- `state/rv_thread.md` present, ends `<!-- STATUS: COMPLETE -->`.
+- No prior `.rv.md` log for this chapter; no `03_ch03b_your_first_year_on_the_desk.log.md` (no agent mid-revision). The figures, figcheck and resgraph logs for this chapter all end COMPLETE.
+- Read: rv_thread (spine, homes, Ch 3-B row, rules), rv_pair_book (PB-01 row, re-read before editing because the Ch 2 weaver updated it during this pass), cast_bible (Dov, Wen, Marcus, C9, C10, C16, story clock), u2_lessons, style_bible §8, PAIRS R11 (borrow mechanics: coupons owed to the lender, on-demand recall, 102% collateral) and §5.2; POD had nothing on the calendar beyond the stop. Read for canon: Ch 1-B §1B.2 (PB-01 box, the FCM roll), Ch 5 §5.1.4 (thesis ≈ \$1.2mm a year), Ch 8 §8.8 Long Scene (Wen's sixty-day panel, Tue 29 Sep), Ch 8-C §8C.2, §8C.3, §8C.8, §8C.9 (series roll, timing line, corporate actions, the stale old-144A-CUSIP break report), Ch 8-D cold open and §8D.3 (61% on loan, 50 bp, no recalls; the Wed 7 Oct ruler review), Ch 10 and Ch 27 PB-01 boxes, Ch 22 §22.6 (PB-01 borrow stress, Tue 20 Oct).
+
+## What I wrote, and where
+
+**§3B.4, new `###` scene "The Pair Book: Two of Every Clock"** (after the Incora paragraph, before the section's *Builds on* line). About 1,700 words including the label, one unnumbered display and a ten-row table. Placed at the end of §3B.4 because it needs every clock the chapter has introduced by then: the snap (§3B.1), the roll and the month-end true-up (§3B.3), record dates and contract clocks (§3B.4).
+
+- **Label** once, in italics, at the top: Dov's pod, Vantress, Wen and Marcus as fictional composites; Kestrel and Halvorsen fictional; coupon dates, positions, marks, fees, P&L and the market's moves on the dated days illustrative; the index-roll convention and the 2026 FOMC dates real.
+- **Dated spine.** Thu 1 Oct 2026, 7:12 a.m. to lunch (Theo's second week, which is where §3B.4 opens), looking back to the real roll (Sun 20 Sep 2026, trading from Mon 21 Sep), the cold open's A/B exchange (Tue 22 Sep), quarter-end (Wed 30 Sep), and forward to Marcus's ruler review (Wed 7 Oct, §8D.3), the FOMC (27–28 Oct 2026, real), the lender call (Fri 9 Oct, Ch 1) and the orange line (Tue 13 Oct, §1B.2).
+- **Beat 1, the explain that does not foot.** Platform explain for 30 Sep: PB-01 −\$0.26mm, idio −\$0.28mm; Wen's 4:00 marks: +\$0.22mm. Gap \$0.475mm = two clocks.
+- **Beat 2, the identifier clock.** The A/B exchange on the short leg's bonds (the same red row as Theo's cold open): a long moves across with the custodian, a borrowed short moves when the lender's agent moves it. At quarter-end the administrator's marks replace the fund's (§3B.3) and price the old 144A stub a point high: \$39mm × 1% = \$390,000. Ties to the same stub on the §8C.9 break report three business days later.
+- **Beat 3, the snap clock, with the chapter's tool.** §3B.1's ghost rewritten with DTS in place of DV01, as an unnumbered display: $\Pi^{\text{phantom}}_{\text{pair}} = -100\,\text{DTS}_S(m_{t_2} - m_{t_1})$, DTS in Ch 1-B's units; \$1 of phantom per unit of early-leg DTS per 1% move; short leg ≈ 85,000 DTS (up from 71,600 in April), 1% move in the last hour gives −\$85,000. Wen: "The platform reads September" (the stop and the sixty-day residual panel of §8.8 read official P&L; the fake \$475,000 is nearly five months of the §5.1.4 thesis).
+- **The strip (a table, ten rows).** Snap, CDX roll (a notional-for-notional roll adds about a tenth of spread duration per dollar; the book hedge rolled in October, consistent with §1B.2), A/B exchange, quarter-end mark, coupon owed (\$1.41mm on 1 Oct; zero on an accrual explain, \$1.41mm "unexplained" on a cash one), the ruler review, the FOMC (the clock the pair is built to ignore), record-date recalls, Kestrel's coupon, the thesis row.
+- **Decision card** (u2 lesson 9): which rows move P&L without the thesis, and the missing row. Marcus walks over (10:40): "When was the ratio?" / "April." / "Then it's the oldest mark in your book... Right ruler. Wrong day." Graded against what happened: next scheduled check 7 Oct, lender call 9 Oct (on no strip), orange line 13 Oct: an April ratio meeting an October bond. Wen adds the ratio's date to the ledger row; the pod's sentence: a ratio is a mark, with a time, a source and a day it goes stale.
+- **The isolation, explicit.** Legs (long \$60mm Kestrel 6% 2030; short \$39mm Halvorsen 7.25% 2029 borrowed through Vantress's prime broker from an asset manager's agent lender, 102% cash collateral, on-demand recall); hedge construction (market-value DTS, 72,600 vs 71,600, 0.65 by face; book CDX HY for residual beta); what it removes (HY beta, the sector, most rates); idio (Kestrel vs Halvorsen, nothing new); what leaks (the calendar, six items); costs with dates (\$3.6mm in, two coupons of \$1.8mm on 15 Jan / 15 Jul; \$2.83mm owed, two of \$1.41mm on 1 Apr / 1 Oct; ≈\$0.6mm financing net of rebate; 50 bp fee under \$0.2mm with 61% on loan and no recalls; carry roughly flat per §1B.2; half-spreads on days the calendar can choose).
+- **Cross-reference to the canonical home (one):** "Chapter 8-C gives each row its own line on the explain: the timing phantom and the borrow fee in §8C.3, the series roll in §8C.2, the corporate action in §8C.8."
+
+**§3B.6, mistake 2 (the thread's "one of the Twelve Mistakes becomes ...").** Heading now "Hedged to face, not to jump-to-default; then to the right ruler on the wrong day." New three-sentence paragraph after Figure 3-B.7: the sequel is Marcus's line in §3B.4; $(P-R)/(1-R)$ has a price in it, so the box's \$8mm is jump-neutral at 88 only; Figure 3-B.7's left panel is the ratio going stale (Exercise 4 asks how far; not solved here); Theo's desk now dates every ratio. Still twelve mistakes; no topic removed.
+
+**§3B.12 Desk Debrief.** One bullet: "A hedge ratio is a mark with a date" (two of every clock; leaks scheduled for the days one leg's clock fires and the other's does not; PB-01's April ratio).
+
+**Exercises.** New Exercise 7, "The pair's two photographs" (60,000 DTS, 2% move between 3:00 and 4:00; Check: \$120,000 phantom loss today, gain tomorrow; true P&L of the hour zero for a DTS-neutral pair). Different numbers from the scene (85,000; 1%).
+
+**§3B.4 Builds on line:** added "§1B.2 (Pair Book PB-01)".
+
+**Cold open, one word (canon C9):** "Halvorsen Packaging 7.25% senior secured notes due 2029" → "senior unsecured", because the scene identifies that bond as PB-01's short leg and the cast bible's C9 canon (and the PB-01 ledger) make the 7.25% 2029s senior unsecured.
+
+## Retired (one telling per fact)
+
+Nothing retired. No existing paragraph in Ch 3-B told the pair's calendar, the two-legged snap or the ratio's date; the desk's own roll (§3B.3), the DV01 snap (§3B.1) and the Debrief's stale-series morning stay as the desk's tellings, and the scene points to them rather than repeating them. No topic, equation, Source Extraction, Trend Watch, exercise, figure, Appendix F link or URL was removed or renumbered. No code blocks added. The chapter's last line is still `<!-- STATUS: COMPLETE -->`. Chapter grows 11,598 → about 13,560 words (`wc -w`).
+
+## State files
+
+- `state/rv_pair_book.md`, PB-01 row (edited cell by cell; the Ch 2 weaver had just changed the row, so it was re-read and the 13-cell structure re-verified): Stressed-in gains the Ch 3-B scene; Status now "stressed (Ch 2, 3-B, 5, 11, 27)"; Idio share gains "Ch 3-B (30 Sep, one day): true idio ≈ +\$0.20mm, explain's idio −\$0.28mm; the \$0.475mm gap is calendar, not idio"; What leaked gains the calendar list and the 1 Oct costs. Ratio unchanged (0.65 by face at open; the scene records the ratio's date, April 2026).
+- `state/cast_bible.md`: new section "Ch 3-B additions (RV weave, 2026-10-18)" before Contradictions: the scene's facts and lines for Wen, Marcus and Dov; new fictional coupon dates (Halvorsen 7.25% 2029s 1 Apr / 1 Oct, record 15 Mar / 15 Sep; Kestrel 6% 2030 15 Jan / 15 Jul); the book hedge rolled in October; the C9 one-word fix in the cold open.
+
+## Flags and open items (not changed here)
+
+- **Figure (thread's optional "pair calendar strip").** Not drawn: inserting a figure in §3B.4 would renumber Figures 3-B.6 to 3-B.8, which other chapters may cite. The scene's table carries the strip. A U4 pass could draw it as Figure 3-B.9 placed in §3B.4 only if the renumbering is handled.
+- **Late-September Halvorsen level is not canon.** Ch 1-B has 83 before the 9 Oct call; Ch 1's cold-open print is 91.25 the same afternoon (C9 open item). The scene quotes no Halvorsen price for 30 Sep; its ≈85,000 DTS for the short leg assumes roughly 83 / 1,100 bp / spread duration 2.4, between the April (71,600) and 13 Oct (98,000) values.
+- **"Roll week" in Ch 1-B §1B.2 vs the real 20 Sep roll.** The scene says the pod's book hedge was still on the old series on 1 Oct and was rolled in October, which is consistent with 1-B's dates (OMS Friday, FCM Monday, the week of 13 Oct) but not with 1-B calling that week "roll week". Ch 10 (orange line "in September 2026") and Ch 22 ("the September trim") place the 1-B Tuesday in September; the majority canon (Ch 1, 1-B weaver, 8-D "four days away" from 9 Oct) is Tue 13 Oct. Continuity should reconcile Ch 10 and Ch 22.
+- **Halvorsen 7.25% 2029s seniority.** Ch 4-C (PB-02, "secured, pari passu with the TLB") and Ch 12-B (table: "7.25% senior secured notes due 2029") still treat them as secured, against C9 canon and the PB-01 ledger. Ch 3-B now follows C9.
+- **CDX roll step "about a tenth more spread duration per dollar"** is an approximation for a five-year index rolling six months longer (about 4.0 → 4.4 at HY spreads); worded as "about", no series numbers named.
+- **§3B.7 View From Another Seat** still contains "machine transcript, CHECK before print" for the Paleologo *Odd Lots* quotation, which u2 lesson 13 forbids in book text. Not an RV item and not touched; the next lessons or fact-check pass should re-listen or paraphrase.
+<!-- STATUS: COMPLETE -->

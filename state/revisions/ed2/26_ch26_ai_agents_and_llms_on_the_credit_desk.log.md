@@ -24,4 +24,8 @@
 - [x] 22. [26.10, controls (i)-(v)] LIST-TO-NARRATIVE; white-text amendment as the day. — Done: white-text Thursday, five controls as next week; Kaz pronoun.
 - [x] 23. [26.11, Case Study A, Knight] EXPAND-SCENE to 900-1,200 words, #### heading. — Done: week-before scene, hedger cut, kill-switch rota; minutes left to Ch 27.
 - [x] 24. [26.11, Case Study C, AI-washing] WHEN-TO-APPLY inside a beat. — Done: marketing deck beat, risk-coverage curve before attestation signed.
-- [ ] 25. [26.13 Desk Debrief] BRIDGE: Finder table; promote scenes and case studies to ####.
+- [x] 25. [26.13 Desk Debrief] BRIDGE: Finder table; promote scenes and case studies to ####. — Done: Finder table, manual table; scenes and cases are #### headings.
+
+Notes: Knight minute-by-minute left to Ch 27 §27.7.3 (lesson 2); Ch 26 tells the week before. Vantress AI lead renamed Ruth -> Ingrid (Ch 24 collision). Scene B card placed before the hurdle beat (lesson 9). Proposed new figures not embedded (U4 owns figures). Cast bible and PB-16 ledger updated.
+
+<!-- STATUS: COMPLETE -->

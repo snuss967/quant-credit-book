@@ -10,9 +10,9 @@
 - [x] 8. **[§28.4 head] · MATH-GENTLY (box 5): Kelly and log growth.** Why log: a 50% loss needs a 100% gain; ruin is minus infinity. Tiny number: a  — DONE: Box 5 Kelly 60/40 coin; (28.9) stated; discrete Full Derivation with sensitivities.
 - [x] 9. **[§28.4 "Continuous time, and the jump"] · MATH-GENTLY (box 6, two parts): Poisson jumps and Itô's ½σ².** *Part one:* normal vs Poisson in  — DONE: Box 6 Poisson/Itô two parts; (28.10)-(28.11) stated; jump Full Derivation; Kaz pronoun.
 - [x] 10. **[§28.4 "Which measure, and which loss"] · MATH-GENTLY (box 7): P vs Q.** Risk-neutral is the bookkeeping that makes today's price fair, no — DONE: Box 7 P vs Q: 450bp CDS, 7.5% vs 3.1%, f*=0.
-- [ ] 11. **[§28.4 Case Study: CCC decompression] · EXPAND-SCENE (to 1,200–1,600 words, live, Sept–Oct 2026).** Rafe's HY book has leaned into CCC car
-- [ ] 12. **[§28.4 case, after the decision] · ANOTHER-SEAT (box): the CLO manager.** Same decompression from the seat that must keep a 7.5% CCC bucke
-- [ ] 13. **[§28.5 head] · MATH-GENTLY (box 8): VaR, the lognormal, and √T.** A 1% daily σ gives a 99% one-day VaR of 1 − e^{−2.33×0.01} ≈ 2.3%; ten d
+- [x] 11. **[§28.4 Case Study: CCC decompression] · EXPAND-SCENE (to 1,200–1,600 words, live, Sept–Oct 2026).** Rafe's HY book has leaned into CCC car — DONE: Rafe CCC scene; Sunita docs L_max=1; card; TW moved to end.
+- [x] 12. **[§28.4 case, after the decision] · ANOTHER-SEAT (box): the CLO manager.** Same decompression from the seat that must keep a 7.5% CCC bucke — DONE: CLO seat box: Kundu 7.5% bucket, sells higher-priced CCCs first.
+- [x] 13. **[§28.5 head] · MATH-GENTLY (box 8): VaR, the lognormal, and √T.** A 1% daily σ gives a 99% one-day VaR of 1 − e^{−2.33×0.01} ≈ 2.3%; ten d — DONE: Box 8 VaR 2.3%, √10; FRTB Full Derivation subsection; 22e-4 kept.
 - [ ] 14. **[§28.5 Case Study: Third Avenue] · NEW-SCENE, Long Scene (2,000–2,800 words), promoted to `####`.** *Ines's replay ritual (before 22 Sep 2
 - [ ] 15. **[§28.5 after the scene] · WHEN-TO-APPLY inside the scene.** Give (28.16)–(28.17) to Ines at the card's answer: COL is a pre-trade number f
 - [ ] 16. **[§28.6 head] · MATH-GENTLY (box 9, two parts): a random walk with drift, and the PM's call.** *Part one:* the reflection trick in one pict
