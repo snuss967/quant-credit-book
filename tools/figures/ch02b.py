@@ -242,7 +242,7 @@ def fig_cost_curves():
         return a, k
 
     a_c, k_c = fit(s, calm)                       # calm: all four buckets
-    a_s, k_s = fit(s[:3], stress[:3])             # April 2025: the three buckets above the minimum count
+    a_s, k_s = fit(s[:3], stress[:3])             # April 2025: the three buckets the chapter table reports as means (n=19 is under the engine's floor of 30 and is flagged on the plot)
     grid = np.logspace(np.log10(0.3), np.log10(30), 200)
     curve_c = a_c + k_c * np.sqrt(grid)
     curve_s = a_s + k_s * np.sqrt(grid)
@@ -274,7 +274,7 @@ def fig_cost_curves():
     ax.plot(grid, env, color=ORANGE, linewidth=1.2, linestyle=(0, (4, 3)), zorder=2)
     label_end(ax, 30, curve_c[-1], "Calm 2024 fit", BLUE, dx=5)
     label_end(ax, 30, curve_s[-1], "April 2025 fit", ORANGE, dx=5)
-    label_end(ax, 30, env[-1], "March 2020 envelope\n(3× calm spread,\nhalf the responses)", ORANGE, dx=5)
+    label_end(ax, 30, env[-1], "April 2025 envelope\n(3× calm spread,\nhalf the responses)", ORANGE, dx=5)
 
     ax.plot(q, calm, "o", color=BLUE, markersize=7, zorder=5)
     ax.plot(q[:3], stress[:3], "o", color=ORANGE, markersize=7, zorder=5)
@@ -283,8 +283,8 @@ def fig_cost_curves():
         ax.annotate(f"n={n:,}", (x, y), xytext=o, textcoords="offset points", fontsize=7.8, color=INK_2,
                     ha="left", va="center")
     for x, y, n in zip(q[:3], stress[:3], n_stress[:3]):
-        ax.annotate(f"n={n:,}", (x, y), xytext=(8, -11), textcoords="offset points", fontsize=7.8, color=INK_2,
-                    ha="left", va="center")
+        ax.annotate(f"n={n:,}" + (" (<30)" if n < 30 else ""), (x, y), xytext=(8, -11), textcoords="offset points",
+                    fontsize=7.8, color=INK_2, ha="left", va="center")
     # the thin top stress bucket: raw point greyed, prior drawn in its place
     ax.plot([q[3]], [stress[3]], "X", color=NEUTRAL, markersize=8, zorder=5)
     ax.annotate("raw mean −3 (n=4):\ntwo PT lines, one rally", (q[3], stress[3]), xytext=(-8, 0), textcoords="offset points",
@@ -326,7 +326,7 @@ def _waterfall(ax, steps, total_label, report, report_label, fmt, ymax):
     ax.plot([xr - 0.36, xr + 0.62], [run, run], color=INK_2, linewidth=0.9, linestyle=(0, (3, 2)), zorder=2)
     ax.annotate("", (xr + 0.5, run), (xr + 0.5, report), arrowprops=dict(arrowstyle="<->", color=INK_2, linewidth=0.9,
                                                                          shrinkA=0, shrinkB=0))
-    ax.set_xticks(xt); ax.set_xticklabels(lab, fontsize=7.1)
+    ax.set_xticks(xt); ax.set_xticklabels(lab, fontsize=7.7)
     ax.set_xlim(-0.55, xr + 0.95)
     ax.set_ylim(0, ymax)
     return run, xr
@@ -349,6 +349,7 @@ def fig_two_leg():
     tot2, xr2 = _waterfall(a2, steps2, "Two-leg\ntotal", 14.0, "Execution\nreport", lambda v: f"{v:,.1f}", 28.5)
     a2.set_title("The 2:40 trim of 13 October ($ thousand)", fontsize=9)
     a2.text(xr2 + 0.42, (tot2 + 14) / 2, "6.4", fontsize=7.8, color=INK_2, ha="right", va="center")
+    note(a2, "Parts are rounded: 14.00 + 1.94 + 4.43 = 20.36.", loc="upper left")
     a1.legend(handles=[Patch(color=BLUE, label="in the execution report"), Patch(color=ORANGE, label="not in it")],
               loc="upper left", fontsize=7.8, handlelength=1.1)
     return finish(fig, "ch02b_two_leg_shortfall")

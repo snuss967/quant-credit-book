@@ -94,7 +94,7 @@ def fig_interview_funnel():
             body = "\n".join(textwrap.wrap(what, 19))
             ax.text(j + 0.5, i + 0.42, body, ha="center", va="center", fontsize=7.0, color=INK, zorder=3,
                     linespacing=1.22)
-            ax.text(j + 0.5, i + 0.89, where, ha="center", va="center", fontsize=6.8, color=INK_2, zorder=3,
+            ax.text(j + 0.5, i + 0.89, where, ha="center", va="center", fontsize=7.0, color=INK_2, zorder=3,
                     fontstyle="italic")
     # arrow down the left margin: the order of the stages
     ax.annotate("", xy=(-0.82, 5.95), xytext=(-0.82, 0.05),
@@ -160,6 +160,9 @@ def fig_one_price_three_worlds():
     bars(a2, [40, 100], two, Q_COLOR, -3.2)
     bars(a2, [40, 70, 100], three, THIRD_COLOR, +3.2)
     a2.plot([85], [0], marker="^", color=INK_2, markersize=9, zorder=6, clip_on=False, markeredgewidth=0)
+    # AQUA is below 3:1 on white, so the third world is also labelled directly (the bar at 70 exists only in it)
+    a2.annotate("three doors", (70 + 3.2, 0.30), xytext=(0, 17), textcoords="offset points", ha="center",
+                va="bottom", fontsize=8, color=INK_2)
     a2.set_xlim(25, 114)
     a2.set_ylim(0, 1.32)
     a2.set_xticks([40, 70, 100])
@@ -209,7 +212,7 @@ def fig_live_counterparty_update():
     k = np.arange(7)
     fig, (a1, a2) = new_figure("wide", ncols=2)
 
-    a1.axhline(0.5, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
+    a1.plot([0, 6], [0.5, 0.5], color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
     a1.plot(k, pi_noise, "-o", color=BLUE, zorder=3)
     a1.plot(k, pi_inf, "-o", color=ORANGE, zorder=4)
     for i, t in enumerate(noise_path, start=1):
@@ -271,18 +274,23 @@ def fig_kelly_trapdoor():
     L = np.linspace(0.3, 1.0, 400)
     qs = [0.01, 0.02, 0.031, 0.045, 0.06]
     cols = [SEQ_BLUE(v) for v in np.linspace(0.22, 0.95, len(qs))]
-    floor = 0.03
+    floor = 0.05      # a log axis cannot show zero: each curve is cut at 5% of capital
     ax.set_yscale("log")
     # ruin line
     ax.plot(L, 1 / L, color=INK_2, linewidth=1.2, linestyle=(0, (5, 3)), zorder=2)
     ax.annotate("ruin line  f = 1/L:  one default wipes out the fund", (0.44, 1 / 0.44), xytext=(0, 7),
                 textcoords="offset points", ha="left", va="bottom", fontsize=8, color=INK_2)
-    # pod stop ceilings
-    stop_big, stop_small = 25.9 / 200, 8.6 / 200
-    for y, txt in [(stop_big, "pod stop: \\$25.9mm on \\$200mm = 12.9%"),
-                   (stop_small, "single-default line: \\$8.6mm = 4.3%")]:
-        ax.axhline(y, color=MUTED, linewidth=1.2, zorder=1)
-        ax.text(0.305, y * 1.07, txt, ha="left", va="bottom", fontsize=8, color=INK_2)
+    # pod stop and single-default line: a dollar loss limit divided by L, so both ceilings fall as L rises.
+    # The chapter's $25.9mm (12.9%) and $8.6mm (4.3%) are their values at L = 0.58, the 98-dollar bond that
+    # recovers 40; the dots mark that point.
+    l_hy = 0.58
+    assert abs(0.075 / l_hy - 25.9 / 200) < 5e-4 and abs(0.025 / l_hy - 8.6 / 200) < 5e-4
+    for lim, txt in [(0.075, "pod stop: \\$15mm loss limit / L\n12.9% = \\$25.9mm at the dot"),
+                     (0.025, "single-default line: \\$5mm / L\n4.3% = \\$8.6mm at the dot")]:
+        ax.plot(L, lim / L, color=MUTED, linewidth=1.2, zorder=1)
+        ax.plot([l_hy], [lim / l_hy], "o", color=MUTED, markersize=4.5, zorder=2)
+        ax.annotate(txt, (1.0, lim / 1.0), xytext=(7, 0), textcoords="offset points", ha="left", va="center",
+                    fontsize=8, color=INK_2, linespacing=1.15)
     # Kelly curves, one per default probability
     for q, col in zip(qs, cols):
         f = kelly(q, L)
@@ -303,19 +311,20 @@ def fig_kelly_trapdoor():
                 va="center", fontsize=8.4, color=INK, linespacing=1.15,
                 arrowprops=dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8, shrinkA=2, shrinkB=5))
     ax.plot([1.0], [doc], "o", color="white", markersize=8, zorder=6, markeredgecolor=INK, markeredgewidth=1.4)
-    ax.annotate("same bond after an uptier,\nL = 1: Kelly 28%, ruin line 100%", (1.0, doc), xytext=(-12, -26),
-                textcoords="offset points", ha="right", va="center", fontsize=8.2, color=INK,
-                arrowprops=dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8))
-    ax.set_xlim(0.3, 1.12)
-    ax.set_ylim(floor, 5.0)
+    ax.annotate("same bond after an uptier,\nL = 1: Kelly 28%,\nruin line 100%", (1.0, doc), xytext=(0.99, 0.158),
+                textcoords="data", ha="left", va="center", fontsize=8.2, color=INK, linespacing=1.15,
+                arrowprops=dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8, shrinkA=2, shrinkB=6))
+    ax.set_xlim(0.3, 1.36)
+    ax.set_ylim(0.017, 5.0)
     ax.set_xlabel("Loss given default L (share of the position lost)")
     ax.set_ylabel("Position, % of capital (log scale)")
-    ticks = [0.05, 0.1, 0.25, 0.5, 1.0, 2.0, 4.0]
+    ticks = [0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.0, 4.0]
     ax.set_yticks(ticks)
-    ax.set_yticklabels([f"{t:.0%}" for t in ticks])
+    ax.set_yticklabels([f"{t * 100:g}%" for t in ticks])
     ax.minorticks_off()
     ax.set_xticks([0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
-    note(ax, "Carry c = 4.5%.  A curve ends where the formula turns negative: no bet.", loc="upper right")
+    note(ax, "Carry c = 4.5%.  Curves are cut at 5% of capital; a little further right f* is negative: no bet.",
+         loc="upper right")
     return finish(fig, "ch04d_kelly_trapdoor")
 
 

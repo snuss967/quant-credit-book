@@ -62,3 +62,32 @@ NOTE (for the editor): $p(1-p)\beta^{\text{ce}}$ is the slope from a *simple* re
 
 **If you got this wrong, read:** §10.5.3 (the wall-clock box and the four-line derivation), then Listing 10.6(a) in Appendix F, which plants the artifact at $p = \tfrac12$ and finds it at $t \approx 9.9$.
 
+**Z.10.5: Liberation Day, priced**
+
+**Answer:** The capture is zero at $L = T/4 = 0.375$ months. That is about **8 trading days**, or 11 calendar days. For a lag of a few weeks, the formula predicts a **loss**. The capture is −23% of the round trip at a 2-week lag and −84% at 3 weeks. The worst case is −100%, at $L = T/2$, about 3¼ weeks. Beyond that the formula changes branch to $2L/T - 2$ (−77% at 4 weeks), and the loss shrinks until the signal never flips ($L \ge T$, capture 0). In money terms, the round trip was about 119 bp out and back at $D = 4$, so $2d \approx 9.5\%$ of notional, and a 3-week lag at unit size loses about 8%. A vol-targeted, carry-hurdled sleeve loses less for four reasons:
+
+1. Its legs after the gap are smaller, because the DTS forecast cut notional to $342/461 = 0.74$ and the EWMA forecast cut it to 0.61.
+2. A fractional signal (ensemble or tanh) shrinks as its components start to disagree.
+3. Components behind a carry hurdle flip late or not at all, and a signal that never flips captures zero, not a loss.
+4. The real V was lopsided: 3 sessions out and 24 back. The symmetric formula overstates the loss on a gap.
+
+On the real tape, Listing 10.6's sleeve lost 0.88% of capital from 2 April to 14 May. That is 0.66% per unit of the notional it held on 2 April, against 1.7% for a fixed-size crossover sign.
+
+**How:** Sum the four legs of the stylized V to get capture $= (T-4L)/T$, then set it to zero to find $L = T/4$. In trading days, $0.375 \times 21 = 7.9$. With a 3-week lag of 0.69 months, the capture is $(1.5 - 2.76)/1.5 = -0.84$. Now make the V lopsided: it falls over $a$ periods and recovers over $b$, and the lag sits between them ($a < L < b$). The follower is long through the whole fall ($-d$), then long, short for $a$ periods, and long again on the way up. The legs sum to
+
+$$
+\text{P\&L} = -d + \frac{d}{b}\big[(L-a) - a + (b-L)\big] = -\frac{2ad}{b},
+\qquad \text{capture} = -\frac{a}{b},
+$$
+
+and the lag cancels out. On FRED HY OAS the fall took 3 sessions (3.42% on 2 April to 4.61% on 7 April) and the recovery to 3.15% took 24, which gives a capture of about −12.5%. The gap did the damage before any lag mattered. On the tape, the sleeve's weight went from −1.33 on 2 April to −0.53 on 5 May. Volatility rose from 4.7% to 7.5%, which offset the stronger signal, and the ensemble decayed to zero as the 1-month and 12-month signals turned long. So the short it carried into the recovery shrank while the recovery was happening.
+
+NOTE (for the editor): The coda (§10.7, cut two) says a lag of more than a quarter of the 1.5-month V is "about ten days". A quarter of 1.5 months is 0.375 months, which is 7.9 trading days or 11.4 calendar days, and this exercise's check says "roughly eight trading days". Changing the coda to "about eight trading days" would make the two agree.
+
+NOTE (for the editor): The coda's fictional run puts the fast 20/120 sleeve "one session from flipping short" at the close on 3 April, with the slow sleeve held long by the carry hurdle. Listing 10.6, run on the chapter's own FRED series (`BAMLH0A0HYM2`, $D = 4$), gives a different picture. After the drift from 2.62% to 3.55%, the tanh crossover went negative on 17 March and stood at −0.74 on 2 April, so it entered the gap already short, at 62% of full risk, not small. The 12-month return rule was still long at the 3 April close (59 bp of 12-month widening against a 74 bp hurdle). It flipped short at the 4 April close (106 bp), and those are the 13 short days in Figure 10.1, 4–30 April. At unit notional it lost 5.6% from 3 April to 14 May. The CDX sleeve is fictional and may differ. Even so, Ines's grade of Theo's slow-sleeve line ("the carry hurdle doing its job") sits uneasily with the chapter's own tape. One sentence saying that the 12-month signal cleared the hurdle a session later and was whipsawed would square them.
+
+**The trap:** One common wrong answer is a positive sign: it was a huge move, trend is a straddle, so crisis alpha. The smile pays on large moves only when the move outlasts the lag (§10.6.1). A V is two large moves of opposite sign inside one lag. The other wrong answer comes from using $(T-4L)/T$ past its range. At a 4-week lag it gives −145%, which is worse than shorting at the top and covering at the bottom. Once $L > T/2$ the signal flips after the trough, and the legs give $2L/T - 2$ instead (Figure 10.4's caption). A capture below −100% means you are on the wrong branch.
+
+**If you got this wrong, read:** §10.6.2 and Figure 10.4 for the whipsaw arithmetic and both branches, §10.3 for the 0.74, §10.1.2 for the hurdle, and the §10.7 Coda for the week itself.
+
+<!-- STATUS: COMPLETE -->

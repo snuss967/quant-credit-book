@@ -134,7 +134,7 @@ $$
 
 with $x$ the distance from the composite, $p$ the tier's total effective cost, and $W_0$ a function most people meet once and forget.
 
-> **Math, Gently.** *The Lambert W function, or how to solve the equation §18.7 iterated.* Some equations hide the unknown both outside and inside an exponential, like $w\,e^{w} = 3$. No logarithm gets $w$ out, so the answer has a name: $W(3)$, about 1.05, the number whose product with its own exponential is 3. It turns up here because §18.7's first-order condition, $x - p = 1/\big(\beta_1(1 - P(x))\big)$, has $x$ on the left and inside the logistic's exponential on the right. Kaz solved it by iterating; Lambert W solves it in one step. A tiny number: with $\beta_0 = 0$, $\beta_1 = 4$ and a total cost of $p = 0.5$ points, $e^{0 - 2 - 1} = e^{-3} \approx 0.050$, $W_0(0.050) \approx 0.048$, and the quote sits $0.5 + 1.048/4 \approx 0.76$ points from the composite, where it wins about 4.5% of the time. Check: $1/\big(4 \times (1 - 0.045)\big) \approx 0.26$, and $0.76 - 0.5 = 0.26$. The full version is in Niang (2026) and in `quote_from_p` in §18B.9.
+> **Math, Gently.** *The Lambert W function, or how to solve the equation §18.7 iterated.* Some equations hide the unknown both outside and inside an exponential, like $w\,e^{w} = 3$. No logarithm gets $w$ out, so the answer has a name: $W(3)$, about 1.05, the number whose product with its own exponential is 3. It turns up here because §18.7's first-order condition, $x - p = 1/\big(\beta_1(1 - P(x))\big)$, has $x$ on the left and inside the logistic's exponential on the right. Kaz solved it by iterating; Lambert W solves it in one step. A tiny number: with $\beta_0 = 0$, $\beta_1 = 4$ and a total cost of $p = 0.5$ points, $e^{0 - 2 - 1} = e^{-3} \approx 0.050$, $W_0(0.050) \approx 0.048$, and the quote sits $0.5 + 1.048/4 \approx 0.76$ points from the composite, where it wins about 4.5% of the time. The first-order condition agrees: $1/\big(4 \times (1 - 0.045)\big) \approx 0.26$, and $0.76 - 0.5 = 0.26$. The full version is in Niang (2026) and in `quote_from_p` in §18B.9.
 
 The result is the five-term decomposition that §18.7 attributed to Barzykin and Ciceri. It is Niang's:
 
@@ -327,7 +327,7 @@ It is built from closed forms on purpose. The Lambert-W quote and the Riccati sq
 
 It is the right tool for a desk deciding *whether* a target is worth paying for and *whom* to pay, and for a model review that wants to see the five terms add up. It is the wrong tool for live quoting: it has one bond, no inventory dynamics in the game, logistic curves that a real tier will not obey, and a toxicity that is known rather than estimated with error. The edge case that bites is the order of the five terms. Because the win curve is nonlinear, pricing the toxicity before the subsidy gives slightly different term sizes from pricing it after; only the total is order-free. The listing fixes the order to match the formula, and a desk comparing two decompositions has to use the same order in both.
 
-![Figure 18-B.3: The same \$1mm bid priced for three tiers, as five cumulative terms from `quote_decompose`: the index rebalancer gets the riskless spread and inventory skew only; the asset manager also receives a subsidy bar, because its fills count toward the target; the event-driven pod pays a toxicity bar and receives almost no subsidy, because its weight $e^{-\eta\chi}$ is close to zero. Illustrative: the synthetic book of §18B.9 at an inventory of +\$5mm.](assets/figures/ch18b_five_terms_by_tier.png)
+![Figure 18-B.3: The same bond's bid priced for three tiers, as five cumulative terms from `quote_decompose`: the index rebalancer gets the riskless spread and inventory skew only; the asset manager also receives a subsidy bar, because its fills count toward the target; the event-driven pod pays a toxicity bar and receives almost no subsidy, because its weight $e^{-\eta\chi}$ is close to zero. Illustrative: the synthetic book of §18B.9 at an inventory of +\$5mm.](assets/figures/ch18b_five_terms_by_tier.png)
 
 <!-- EXPLAINED -->
 ```python
@@ -672,3 +672,5 @@ Build `rfq_engine.py` to quote one bond for a book of client tiers. Inputs: tier
 
 **Data & Code**
 - `rfq_engine.py` (Appendix F), with the RFQ-log schema in Appendix B. Jacobsen, Venkataraman and Xu (2025), working paper with MarketAxess data, https://microstructure.exchange/papers/JVX_20250904.pdf . Man's buy-side RFQ filter on frequency and completion rate (shelf: `Man_Revolutions_in_Credit_Trading_2023` p.5).
+
+<!-- STATUS: COMPLETE -->
