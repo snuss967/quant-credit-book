@@ -525,7 +525,7 @@ $$
 
 This is the dollar value of a private read of the credit documents. If you plug CDS-implied intensities in as $\lambda^{\mathbb{P}}$, you charge the jump twice, once in the composite and once in your skew, and you never win an RFQ in a name the market is already worried about. The variance term, by contrast, needs $\lambda^{\mathbb{P}}$, because risk is borne under the physical measure.
 
-**Random jump sizes.** For default, $J = s - 100R$ with recovery $R \sim \text{Beta}(a,b)$ (Chapter 5, §5.5.2). Replace $e^{\gamma qJ}$ with the moment generating function $M_J(\gamma q) = \mathbb{E}[e^{\gamma q J}]$, computed by quadrature. By Jensen's inequality $M_J(\gamma q) \ge e^{\gamma q\,\mathbb{E}[J]}$, so recovery *uncertainty* costs inventory on top of expected recovery. Mags: "Price is what you pay. Recovery is what you get, eventually, after the lawyers." The MGF is how the lawyers enter the HJB.
+**Random jump sizes.** For default, $J = s - 100R$ with recovery $R \sim \text{Beta}(a,b)$ (Chapter 5, §5.5.2). In $\theta(q)$, replace $e^{\gamma qJ}$ with the moment generating function $M_J(\gamma q) = \mathbb{E}[e^{\gamma q J}]$, computed by quadrature, and take the difference as before: the bid's jump term is $\frac{\lambda^{\mathbb{P}}\tau}{\gamma}\big[M_J(\gamma(q+1)) - M_J(\gamma q)\big]$, not the factored $e^{\gamma qJ}(e^{\gamma J}-1)$ of (18.7), which holds only for a fixed $J$. By Jensen's inequality $M_J(\gamma q) \ge e^{\gamma q\,\mathbb{E}[J]}$, so recovery *uncertainty* costs inventory on top of expected recovery. Mags: "Price is what you pay. Recovery is what you get, eventually, after the lawyers." The MGF is how the lawyers enter the HJB.
 
 **Inside GLFT.** The jump adds $\lambda^{\mathbb{P}}[u(s-J) - u] = \lambda^{\mathbb{P}}u(e^{\gamma qJ} - 1)$ to the HJB, and the drift adds $\mu\,\partial_s u$. Repeating §18.5 gives
 
@@ -841,7 +841,7 @@ and because the drift lands on every line, the seller pays about \$1.215mm *(ill
 
 Theo read it twice. "So the leak is a fee the pension fund pays to everyone who read its list."
 
-"And your pre-hedge," Ines said to Kaz, "is us collecting a share of that fee from a client whose list we're about to bid, by selling into the same bids that will set our cover." She drew a line under the 0.405. "This is the seller's dilemma. Send the list to three desks and you get three envelopes and a fat $e_n$-sized discount from each of them. Send it to thirty and you get competition, and you pay this. The manager chose thirty. In that week I'd have chosen thirty too."
+"And your pre-hedge," Ines said to Kaz, "is us collecting a share of that fee from a client whose list we're about to bid, by selling into the same bids that will set our cover." She drew a line under the 0.405. "This is the seller's dilemma. Send the list to three desks and you get three envelopes and a fat discount from the winner. Send it to thirty and you get competition, and you pay this. The manager chose thirty. In that week I'd have chosen thirty too."
 
 Kaz crossed out the pre-hedge. Mags said, to nobody in particular, "Back in my day a BWIC was a fax with a deadline, and the leak was whoever stood next to the fax machine." Then, after a moment: "It was cheaper. It wasn't better."
 

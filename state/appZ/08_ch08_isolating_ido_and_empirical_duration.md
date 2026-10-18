@@ -28,8 +28,6 @@ Contracts are $N = H \cdot \text{DV01}_{\text{target}}/(\text{DV01}_{\text{CTD}}
 
 **If you got this wrong, read:** §8.2, "The two-factor derivation" and "Three regimes", then the Trend Watch table; §8.6, the Veronesi extraction on futures sizing, and Table 8.2.
 
-NOTE (for the editor): §8.2 ("The two-factor derivation") says that with $\ell \approx -19$ "a B bond at 500 bp has $H \approx 0.03$." With the exact $\ell = -19.25$ the figure is $0.0375$ (0.04), and with $\ell = -19$ it is 0.05. Neither rounds to 0.03. The same paragraph says Theo's bond at 620 bp "comes out slightly below zero." The figure is $-0.19$, a 45-contract long, which may be worth stating.
-
 **Z.08.2: Kaz's fulcrum**
 
 **Answer:** $\lambda = c/R = 0.07/0.35 = 20\%$ a year. Check: $H^{\text{rec}} = 0.07/(0.07 + 0.20 \times 0.35) = 0.07/0.14 = 0.5$. The sentence for Kaz: *the fulcrum's value is the recovery itself, a share of the reorganized company that the plan values off enterprise value and not off any Treasury curve, so for that class $\lambda$ is effectively infinite, $c/(c + \lambda R)$ goes to zero, and a ratio of one-half belongs to a bond that still collects about half its value as coupons.*

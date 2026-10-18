@@ -28,10 +28,6 @@ Multiply by the face still outstanding to get dollars. Then read the same arithm
 
 **If you got this wrong, read:** §15.2.2 Steps 3–4 for the post-close price and the coupon-vintage table, then cuts two and three of the EA case study in §15.2. PB-10 in the same section turns the two defeased values into a hedge ratio.
 
-NOTE (for the editor): After the Listing 15.1 description, §15.2 says "Under these illustrative inputs the 1.85% bond's put comes out at eighteen to nineteen points at signing." The listing as printed reports 15.55 ± 0.02 points for its check-(3) LBO ($M = 1.052$; 14.78 independent), and the constant-350bp check-(1) inputs give 17.82. Neither is eighteen to nineteen. Suggest "about fifteen and a half points (about eighteen at a constant 350bp)".
-
-NOTE (for the editor): The paragraph on the four checks gives the mean-preserving lognormal as an example "with $\sigma = 0.5$", median $e^{-0.125} \approx 88\%$ of a 350bp mean. Readers will take that as check (3)'s setting, but the listing uses $\sigma = 0.35$, whose median is $e^{-0.061} \approx 94\%$ of the mean (329bp, which matches the simulated median). Either change the example to 0.35 or say that the listing uses a smaller $\sigma$.
-
 **Z.15.2: The blind thermometer**
 
 **Answer:** The two legs meet after a **parallel rally of about 38bp from issue**. Take a three-year 4.60% tranche issued at par (4.60% bond-equivalent, a 4.548% continuous yield) with the ruling a quarter away. The legs meet when the close leg's yield has fallen to 4.21%, and both are then worth 101.09. At issue the ruler is not zero. It is 1.00 point long, 100.00 against 100.99, because the fail leg carries the one-point premium plus accrued. Each basis point of rally shortens it by about 0.026 points, the gap between the two legs' dollar durations (roughly 2.8 years against 0.25, on about 101). Measured from the worked example's marks instead (close leg at 99.00, $y_f = 4.60\%$), the blind spot is a **77bp** rally away. On Listing 15.1's Nelson–Siegel curve with a flat 23bp issuer spread, it is 42bp.
@@ -59,8 +55,6 @@ Why undefined: $\partial P_0/\partial\pi_f = G_f - P^{\text{close}} = 0$ there, 
 **The trap:** "Zero: the gauge goes blind when rates are back where they were at issue, because the bond is at par." At par the close leg is 100 and the fail leg is about 101, so the gauge reads perfectly well. The holder only turns short the digital once a rally has lifted the close leg above 101 plus the carry difference. The second trap is to clip, or report 0.5, at the blind spot. Clipping a ratio of two noises produces a confident number. The honest output is "no information".
 
 **If you got this wrong, read:** §15.4.2, the ruler box and "The sign flips with rates", then "Reading the gauge" for Ines's three-cent ruler, and the paragraph on Listing 15.3's `tol` guard.
-
-NOTE (for the editor): "The sign flips with rates" in §15.4.2 says "If rates have fallen, $P^{\text{close}} > G_f$ and the holder is short a digital." On the section's own three-year 4.60% example, a tranche issued at par still has $P^{\text{close}} < G_f$ (100.00 against 100.99) after any rally smaller than about 38bp. The ruler box gets it right ("When rates fall far enough"). Suggest "If rates have fallen far enough (about 40bp on a three-year tranche issued at par)".
 
 **Z.15.3: The vintage anomaly**
 

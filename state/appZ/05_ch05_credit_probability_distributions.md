@@ -20,7 +20,7 @@ For the BB, $q(1-q) = 0.007936$. The skew is $-0.984/0.0891 = -11.05$ and the ex
 
 **Z.05.2: The convexity tax**
 
-**Answer:** $\sigma_X = 6.74\%$, the survival-leg skew is $-0.13$, and the convexity tax is $|c|\,v = 14.8$ bp (about 15). Flip to $C^{\text{spr}} = +8$ and the volatility does not change. The skew becomes $+0.13$, and the 14.8 bp becomes a convexity *bonus* to the mean. Now put that non-call survival leg into Theo's bond ($q = 4\%$, $P_0 = 0.92$, recovery Beta with mean 40 and s.d. 27.5). The mixture skew is still about $-4.1$.
+**Answer:** $\sigma_X = 6.74\%$, the survival-leg skew is $-0.13$, and the convexity tax is $|c|\,v = 14.8$ bp (about 15). Flip to $C^{\text{spr}} = +8$ and, under §5.9.1's Gaussian spread change, the volatility does not change. The skew becomes $+0.13$, and the 14.8 bp becomes a convexity *bonus* to the mean. With §5.2.3's lognormal spreads instead, the same leg stays left-skewed, at $-0.93$. Now put that non-call survival leg into Theo's bond ($q = 4\%$, $P_0 = 0.92$, recovery Beta with mean 40 and s.d. 27.5). The mixture skew is still about $-4.1$.
 
 **How:** Here $v = \kappa^2 s^2 h = (0.35 \times 0.055)^2 = 0.000371$ and $c = \tfrac12 C^{\text{spr}} = -4$. The exact moments of §5.9.1 give
 
@@ -30,15 +30,13 @@ $$
 
 so $\sigma_X = 6.74\%$. The convexity term adds almost nothing to the variance. The third moment is $\mu_{3,X} = 6(D^{\text{spr}})^2 c\, v^2 + 8c^3v^3 = -4.04\times10^{-5}$, and dividing by $\sigma_X^3 = 3.06\times10^{-4}$ gives a skew of $-0.132$. The mean is $x_0 + c\,v$, so the tax is $|c|\,v = 4 \times 0.000371 = 0.00148$.
 
-Flipping the sign of $C^{\text{spr}}$ flips the sign of $c$. The variance and $\mu_{4,X}$ contain only even powers of $c$, while $\mu_{3,X}$ is odd in $c$, so the skew becomes $+0.132$.
+Flipping the sign of $C^{\text{spr}}$ flips the sign of $c$. The variance and $\mu_{4,X}$ contain only even powers of $c$, while $\mu_{3,X}$ is odd in $c$, so the skew becomes $+0.132$. That sign is a property of the Gaussian $\Delta s$, which has no skew of its own to offset. With the lognormal spread of §5.2.3, $\Delta s = s\,(e^{-\kappa^2/2+\kappa Z}-1)$, the first-order term $-D^{\text{spr}}\Delta s$ already carries a skew of $-1.13$ (the spread's $+1.13$ with the sign flipped), and convexity only moves it: $-0.93$ at $C^{\text{spr}} = +8$ and $-1.35$ at $-8$. Convexity of about $+54$ would be needed to cancel it. (Exact lognormal moments, confirmed by four million draws.)
 
 For the mixture, compare the pieces of the full third moment (the Full Derivation at the end of §5.1.4). The survival leg contributes $(1-q)\,\mu_{3,X} = +0.00004$. The between-world term $-q(1-q)(1-2q)J^3$, with $J \approx 0.62$, contributes $-0.0085$. The cross term $3q(1-q)J(\sigma_X^2 - \sigma_Y^2)$ adds $-0.0061$, because the recovery lump is much wider than the survival hump. The coin outweighs the convexity by a factor of about 200.
 
-**The trap:** There are two. The first is getting the tax wrong. $|C^{\text{spr}}|\,v$ gives 30 bp, but the half belongs in $c$. Writing it as $\tfrac12 |C^{\text{spr}}|\,\kappa s$ is also wrong, because $v$ is a variance, $\kappa^2 s^2 h$. The second trap is concluding from the positive survival skew that a non-call bond "has right-skewed returns." The survival leg is a lump sitting next to a coin, and its skew is two orders of magnitude too small to change the overall shape.
+**The trap:** There are two. The first is getting the tax wrong. $|C^{\text{spr}}|\,v$ gives 30 bp, but the half belongs in $c$. Writing it as $\tfrac12 |C^{\text{spr}}|\,\kappa s$ is also wrong, because $v$ is a variance, $\kappa^2 s^2 h$. The second trap is concluding from the positive survival skew that a non-call bond "has right-skewed returns." The positive sign comes from the Gaussian $\Delta s$; with lognormal spreads the leg stays left-skewed. Either way the survival leg is a lump sitting next to a coin, and under the Gaussian its skew is two orders of magnitude too small to change the overall shape.
 
-NOTE (for the editor): The "right-skewed survival leg" comes from §5.9.1's Gaussian $\Delta s$, not from the bond. §5.2.4 says a lognormal spread (skew $+1.1$ at $\kappa = 0.35$) gives a survival-world return skew of "about $-1.1$," which positive convexity pushes back on only "a little." I simulated the same leg with lognormal relative spread changes, $\Delta s = s\,(e^{-\kappa^2/2 + \kappa Z} - 1)$, and four million draws. The skew is $-0.93$ at $C^{\text{spr}} = +8$, $-1.13$ at 0 and $-1.35$ at $-8$. The exercise's "show that the survival leg of a non-call bond is right-skewed" therefore holds only under the Gaussian-$\Delta s$ assumption. I suggest "under §5.9.1's Gaussian spread change, show that…", perhaps with a closing clause noting that with §5.2.3's lognormal spreads the leg stays left-skewed.
-
-**If you got this wrong, read:** §5.9.1, "One last derivation: exact moments of the DTS survival leg," and then the Full Derivation at the end of §5.1.4 for the cross term.
+**If you got this wrong, read:** §5.9.1, "One last derivation: exact moments of the DTS survival leg," and then the Full Derivation at the end of §5.1.4 for the cross term. For the lognormal case, read the first paragraph of §5.2.4.
 
 **Z.05.3: Find the jump**
 

@@ -44,8 +44,6 @@ Risk is $\gamma$ times variance, so two of the three dials multiply each other, 
 
 **The trap:** The trap is Kaz's card: move $\gamma$ alone and leave costs and basis at calm, and you get about 116bp, \$7.3mm short of the engine. Close behind is assuming the hedge protects you more in stress. It protects you less, because the basis eats the hedge ratio.
 
-NOTE (for the editor): §19.7.2 (Two Tapes) says that at $s=2$ "the eviction loop exhausts its $\alpha$ budget, 15% of the market value handed back", and the §19.6.2 annotation says the loop "hit the $\alpha$ budget before reaching $\kappa^\star$". With Listing 19.5's defaults it is $k_{\max}$ that binds. The loop stops at 10 lines and 14.4% of MV (315.7bp at $s=2$, 286.9bp at $s=1.85$), and $\alpha$ binds only if $k_{\max}$ is lifted (11 lines, 15.0%).
-
 **If you got this wrong, read:** §19.7.1 for the multiplier and the spike, §19.4.1 for basis attenuation, Two Tapes in §19.7.2 for "one score, three dials", and §19.10 for what a wrapper does with `hit_target=False`.
 
 **Z.19.3: ROBO and the stale universe**
@@ -79,18 +77,16 @@ On the hedge, (19.4) gives $\mathbf{h}^\star=\Sigma_{ff}^{-1}\Sigma_{fx}\mathbf{
 
 **The trap:** The trap is thinking that more variance is more conservative. It is the wrong moment: the charge comes out too small, it is symmetric, and it disappears for a fearless dealer. It also moves the toxicity out of the AS column, where the hand history could score it, and into a covariance nobody audits by line.
 
-NOTE (for the editor): The exercise says the variance version "distorts $\mathbf{h}^\star$", and §19.5's Ways This Blows Up (3) says it "over-hedges it". In Listing 19.3's factor model $\mathbf{h}^\star$ does not depend on `sig_idio`, so the hedge is unchanged: \$79.8mm of ETF and \$157.1mm of CDX in both versions. An over-hedge (+\$86.7mm, to \$109.0mm of ETF and \$214.6mm of CDX) appears only if the bump also scales L117's factor loadings, and a different hedge appears only through a changed eviction (multipliers of 9× or less). Suggest rewording to "distorts the eviction ranking and, if applied to the whole return series, $\mathbf{h}^\star$".
-
 **If you got this wrong, read:** §19.2.1 (Step 2 and the edges of the master equation), §19.8.1 for (19.10), §19.4.1 for what $\Sigma_{fx}$ contains, and the springing-lien exchange at the top of §19.5.
 
 **Z.19.5: Flip the inequality**
 
-**Answer:** Take the chapter's 150-line program, with $\Sigma=B\Omega_1B^\top+D$ from Listing 19.4 at $T=1$ day. Ignoring leakage, the risk term of (19.11) caps the premium at:
+**Answer:** Take the cold-open basket `b0` as the program, with $\Sigma=B\Omega_1B^\top+D$ from Listing 19.4 at $T=1$ day. Ignoring leakage, the risk term of (19.11) caps the premium at:
 
 - **$\phi=0.9$:** $\Pi\le$ \$8.2k, or 0.40bp of the \$204mm market value.
 - **$\phi=0.6$:** $\Pi\le$ \$43.4k, or 2.1bp, which is 5.3 times as much.
 
-Add $\sum_i(1-\phi_i)c^{\text{retry}}_i$ on top: at an assumed 5bp of extra cost per retried dollar, that is another 0.5bp and 2.0bp. The 0.9 number is 2023. Electronic fill rates had risen, a ceiling under 1bp is below any dealer's margin, and so the flow goes by RFQ (Man's ">90%" electronic). The 0.6 number is 2021. The ceiling is a few basis points, and the second tier was competing $\Pi$ toward zero, so the inequality held almost everywhere.
+Add $\sum_i(1-\phi_i)c^{\text{retry}}_i$ on top: at the exercise's 5bp of extra cost per retried dollar, that is another 0.5bp and 2.0bp. The 0.9 number is 2023. Electronic fill rates had risen, a ceiling under 1bp is below any dealer's margin, and so the flow goes by RFQ (Man's ">90%" electronic). The 0.6 number is 2021. The ceiling is a few basis points, and the second tier was competing $\Pi$ toward zero, so the inequality held almost everywhere.
 
 **How:** Write $q=1-\phi$. Because $\mathbb{1}_i^2=\mathbb{1}_i$, the diagonal of $\mathbb{E}[\mathbf{u}\mathbf{u}^\top]$ carries $q$, while the off-diagonal carries $q^2$:
 
@@ -101,8 +97,6 @@ $$
 At $q=0.1$ that is $7.26+0.90=$ \$8.2k; at $q=0.4$ it is $29.0+14.3=$ \$43.4k. A Monte Carlo over 20,000 fill draws gives \$8.17k and \$43.4k. Lonely lines (the diagonal) are 89% of the $\phi=0.9$ number. Moving from $q=0.1$ to $q=0.4$ multiplies the diagonal part by 4 and the pair part by 16, which is why the total grows between 4 and 16 times. One caution on scale: 96% of the diagonal is L042, the big stale line. Switch off the staleness term in (19.5) and the ceilings fall to \$1.6k (0.08bp) and \$17.0k (0.83bp). Using $\Sigma^{\text{res}}$, as a client that hedges would, gives \$7.2k and \$30.1k.
 
 **The trap:** The most common slip is to put $q^2$ on the diagonal too, as if the unfilled residual were a scaled-down copy of the whole program. That gives \$1.6k and \$26.0k, and understates the 2023 number five times because it forgets that a miss is usually one lonely line. The opposite slip, $q$ everywhere, gives \$16.2k and \$64.9k.
-
-NOTE (for the editor): The exercise asks for "a 150-line IG program" with "$\Sigma$ from §19.5", but §19.5 builds $\Sigma$ only for the HY cold-open basket, and the exercise gives no $c^{\text{retry}}$. The numbers above use `b0` at $T=1$, and an IG program would come out lower. Suggest saying "use `b0` as the program" and giving a retry cost, such as 5bp per dollar.
 
 **If you got this wrong, read:** §19.9.1 (the derivation, then Wen's Month-End List for the same three terms with a leak), and §19.5.1 for where $\Sigma$ and its staleness term come from.
 

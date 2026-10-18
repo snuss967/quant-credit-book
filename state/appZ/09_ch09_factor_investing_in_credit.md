@@ -90,8 +90,6 @@ so the latest mark error enters the signal with a plus sign and the next return 
 
 **The trap:** "Bond momentum is inflated, because noise makes everything look better." Under independent errors the shared price makes momentum look *worse*, the mirror image of how it manufactures short-term reversal. A second trap is calling ESI immune. Its returns are still measured on bond marks, and when I made the marks stale instead of noisy (not updated with probability 0.2 in IG and 0.5 in HY), ESI's gross fell from 2.71% to 1.78% a year. Stale marks book the planted widening after the position has rotated out. Bond momentum fell further still, to −6.6% a year.
 
-NOTE (for the editor): the exercise asks which signal the Blume–Stambaugh mechanism "inflates" more. On the chapter's own noise model (Listing 9.7, iid errors), my run of the extension moves bond momentum by −46bp a month (−5.4% a year against +0.05% clean) and ESI by +0.7bp a month. The noise deflates the bond-price signal, as the $-\sigma_u^2$ covariance of §9.9 predicts for a buy-winners sort. Consider "distort" for "inflate", or ask the reader to predict the sign first.
-
 **If you got this wrong, read:** §9.9, Mechanisms 1 and 2 and the Full Derivation, then §9.11 on Listing 9.7, including its paragraph on why stale marks are not cleared by a one-month skip.
 
 ### Z.09.6: First-day declaration
