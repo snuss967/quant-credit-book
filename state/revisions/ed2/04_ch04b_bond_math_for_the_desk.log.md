@@ -1,9 +1,9 @@
 # Progress log: 04_ch04b_bond_math_for_the_desk (Ed2 U2)
 
-- [ ] 1. [Cold Open: Six Columns Called "Spread"] EXPAND-SCENE (to 1,000–1,300 words)
-- [ ] 2. [Prerequisites box] BRIDGE
-- [ ] 3. [4B.1 The list] MATH-GENTLY (present value and the discount factor)
-- [ ] 4. [4B.2 The street formula] MATH-GENTLY (a yield is a price in another font)
+- [x] 1. [Cold Open: Six Columns Called "Spread"] EXPAND-SCENE (to 1,000–1,300 words) — replay frame, data-room Article I, ROBO note, card added.
+- [x] 2. [Prerequisites box] BRIDGE — MIT 15.401 lectures and recitation added as one sentence.
+- [x] 3. [4B.1 The list] MATH-GENTLY (present value and the discount factor) — cheque-stack box after The list; Agnieszka 31st-rule vignette added.
+- [x] 4. [4B.2 The street formula] MATH-GENTLY (a yield is a price in another font) — one-dial box; premium identity stated; Full Derivation holds proofs.
 - [ ] 5. [4B.3 Macaulay: the balance point] MATH-GENTLY (duration as a slope)
 - [ ] 6. [4B.3 Spread duration, and the two routes to zero] LIST-TO-NARRATIVE
 - [ ] 7. [4B.3, new `#### Long Scene: The Book That Had a Duration and a Bank That Did Not` (before Key-rate durations)] NEW-SCENE (2,000–2,500 words)

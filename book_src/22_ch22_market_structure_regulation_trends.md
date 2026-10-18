@@ -406,6 +406,8 @@ Kaz's flag is item (5) of the Ways This Blows Up box below, and Table 22.1, in t
 >
 > *What it means for the desk:* a liquidity feature built on raw TRACE volume from 2020 to 2027 crosses at least four definitional breaks. Volume did not change on those dates; the meaning of a print did.
 
+A table of dates helps only a model that reads it, and the replay had already shown the ways a model manages not to.
+
 > **Ways This Blows Up.** (1) *A liquidity model fit on 2020–2026 volume* straddles the PT modifier and the allocation-report change, so the fitted "trend in liquidity" is partly a trend in reporting conventions. (2) *Averaging capped sizes at the cap* understates IG block volume by a factor of $m = 2.5$ on the capped share; averaging them at \$12.5mm is right on average and wrong for every individual trade. (3) *Fitting $\alpha$ on the live feed* is impossible, since the live feed is censored by construction; use the historic file. (4) *PT prints as bond prices.* A portfolio-trade line carries a basket-level price allocated across bonds. Feed those prints to a bond-level fair-value model and it learns the dealer's allocation scheme. (5) *Setting `one_minute_rule = True` from the approval date* because the approval was in the news: the rule was approved and never took effect.
 
 ### Specification for AI Implementation (TRACE regime layer)
@@ -924,6 +926,19 @@ The function answers any effective-date question that has a plausible control gr
 *The full listing is [Listing 22.5 in Appendix F](#code-22-5).*
 
 ## 22.9 Desk Debrief
+
+The chapter in eight rows, for the reader who comes back looking for one tool and the afternoon that taught it.
+
+| Concept | Equation | Intuition (box) | Judgment (scene) | Code (listing) |
+| :--- | :--- | :--- | :--- | :--- |
+| Rent on balance sheet, and the skew it puts in a quote | (22.1)–(22.4); switching point (22.14) | *The rent* (parking garage) and *The indifference price* (§22.1.1) | Cold open (the three-eighths); Scene A's Friday 20 March 2020 card, where rent alone was wrong by an order of magnitude (§22.4.3); the ante row (§22.5.1) | [Listing 22.1](#code-22-1), `reg_cost_engine`: `capital_rate`, `regulatory_carry_bp`, `breakeven_holding_days` |
+| The reporting delay as an option | (22.5)–(22.6) | *The variance of a triangle* (§22.2.1) | Scene B, the one-minute rule, and its February 2024 card (§22.2.3) | [Listing 22.2](#code-22-2): `block_half_spread`, `trace_regime_flags` |
+| What hides behind the size cap | (22.7) | *Tails that have no variance* (§22.2.2) | Exercise 2 (pooling at the cap) | [Listing 22.2](#code-22-2): `pareto_alpha_from_imputed_mean`, `censored_impact` |
+| Margin and the settlement clock | (22.8)–(22.9) | *Why risk grows with the square root of time* (§22.3.1) | The double-settlement Wednesday: Kaz checks DTCC's fall against the bracket, and the hard-coded `2` in the accrual code (§22.3.3) | [Listing 22.3](#code-22-3): `margin_ratio`, `fail_cost_annual` |
+| Multilateral netting, and why it stops | (22.10)–(22.12) | *Netting, in two parts* (§22.4.1) | Scene A, the grading of the Friday card: why nobody could net their way out of a one-way March (§22.4.3) | [Listing 22.4](#code-22-4): `netting_factor_mc`, `folded_normal_mean`, `implied_common_component` |
+| Dealer capacity as a hinge | (22.13) | *A hockey stick* (§22.4.2) | Scene A, beat 2: the balance sheet is full, and three cards for one \$25mm bid (§22.4.3) | [Listing 22.4](#code-22-4): `capacity_hinge` |
+| CVA and the clearing inequality | (22.15) | *What "risk-neutral" means* (§22.6.1) | 9 April 2025, 8:20 a.m.: index or single-name hedge (§22.6.2); the short leg's borrow, PB-01 (§22.6.2) | None here; the CVA machinery is in Chapter 24 |
+| Difference-in-differences around a date | (22.16)–(22.17) | *The two-by-two table* (§22.8.1) | The placebo date Scene B earned (§22.2.3); Kaz's affiliate-indicator run and its contaminated controls (§22.8.1); Theo's calendar (§22.7) | [Listing 22.5](#code-22-5): `event_study_did`, `placebo` |
 
 - **A dealer sells balance sheet, time, and information, and every rule is a tax or a subsidy on one of them.** The desk does not comply with rules; it prices them, and it dates them.
 - **Rent is $h\cdot\max(\kappa_{\text{RWA}}\text{RW}, \kappa_{\text{LR}})\cdot\tau^{\text{hold}}$.** A flat dealer widens both sides; a long dealer skews. For a 2-year Treasury, rent is the whole spread (breakeven hold of three to four days); for a BBB, it is a rounding error (about a month). That inequality explains why Treasuries went agency first.

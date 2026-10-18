@@ -23,5 +23,7 @@
 - [x] 21. [§22.7] LIST-TO-NARRATIVE + ANOTHER-SEAT (insurer) — Morning-meeting calendar scene, insurer seat box, Thames coda; facts verified.
 - [x] 22. [§22.8.1] MATH-GENTLY + FULL-DERIVATION-MOVE — Two-lines 2x2 box, equations stated, fixed-effects algebra moved below.
 - [x] 23. [§22.8] WHEN-TO-APPLY inside a short scene — Kaz affiliate-indicator DiD; Theo, Ines expose contaminated controls; template removed.
-- [ ] 24. [Trend Watches, all sections] placement rule
-- [ ] 25. [§22.9 Desk Debrief] Finder table
+- [x] 24. [Trend Watches, all sections] placement rule — Five audited at section ends; thread added; CDS box closes stresses.
+- [x] 25. [§22.9 Desk Debrief] Finder table — Eight-row Finder: concept, equation, box, scene, listing links added.
+
+<!-- STATUS: COMPLETE -->

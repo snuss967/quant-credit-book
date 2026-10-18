@@ -1,8 +1,8 @@
 # Progress log: Ch 28 PM Playbook (Ed2 U2)
 
-- [ ] 1. **[§28.0 Cold Open] · EXPAND-SCENE (to 1,000–1,300 words).** Keep every existing beat (lanyard, "two billion", Kaz's 93%, Mags's CFO breathi
-- [ ] 2. **[§28.1, before the identity] · MATH-GENTLY (box 1, two parts).** *Part one, risk is the budget:* poker bankroll analogy (Ines: a \$1m bank
-- [ ] 3. **[§28.1 "three substitutions"] · LIST-TO-NARRATIVE.** Turn the numbered list into one paragraph in Theo's voice (he tries to hand out \$500
+- [x] 1. **[§28.0 Cold Open] · EXPAND-SCENE (to 1,000–1,300 words).** Keep every existing beat (lanyard, "two billion", Kaz's 93%, Mags's CFO breathi
+- [x] 2. **[§28.1, before the identity] · MATH-GENTLY (box 1, two parts).** *Part one, risk is the budget:* poker bankroll analogy (Ines: a \$1m bank — DONE: Box 1 two parts: bankroll four-bets 5%, DTS 5.1% vs 0.5%.
+- [x] 3. **[§28.1 "three substitutions"] · LIST-TO-NARRATIVE.** Turn the numbered list into one paragraph in Theo's voice (he tries to hand out \$500 — DONE: Email scene; Ines's three finger-points replace list; bridges added.
 - [ ] 4. **[§28.2 head] · MATH-GENTLY (box 2): what a distribution is, via the hit rate.** A distribution is a list of outcomes with weights; the ±1 
 - [ ] 5. **[§28.2 "Two definitions of effective breadth"] · MATH-GENTLY (box 3): correlation as a ceiling.** Picture: 300 umbrellas from 40 factories
 - [ ] 6. **[§28.2, before Block 1] · SHOP-LIFE vignette (400–600 words, labeled fictional).** *Shop type: a multi-manager platform's central risk tea
@@ -23,3 +23,4 @@
 - [ ] 21. **[§28.8] · LIST-TO-NARRATIVE and keep the reviewer fixes.** D7 (calibration, ρ, hit rate with SE) and the covariates-vs-estimator softening
 - [ ] 22. **[§28.9–28.10] · BRIDGE and the Finder table.** The dashboard table is the payoff and stays; the desk-head reviewer's C9 asks (P&L panel, m
 - [ ] 23. **[whole chapter] · BRIDGE.** Thread one line of narration between every two boxed elements; never three boxes in a row (§28.1 currently sta
+  - note 1: cold open ~1,150w; drill label; four PMs; Bram renamed; spine bold. (Plan: swap roles in §28.3, Rafe=HY cash value/carry/quality, Bram=ETF/PT arb; Dov→Rafe in Poker Table and Block 2 text.)

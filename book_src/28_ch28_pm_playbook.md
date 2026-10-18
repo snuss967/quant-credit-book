@@ -3,11 +3,25 @@
 
 ## 28.0 Cold Open: The Keys to the Table
 
-Thursday, 15 October 2026, 4:05 p.m. The ICE BofA US High Yield index has closed at an option-adjusted spread of 323 bp. Its CCC-and-lower subindex has closed at 1,278 bp, a day after its widest level in at least three years (FRED). The index looks bored. Its basement is on fire.
+*A drill: "Desk Head for a Day," Ines lending Theo the lanyard until six. The desk, its four PMs, their books and the risk officer are fictional composites; the index levels are ICE BofA via FRED.*
 
-Ines drops a lanyard on Theo's keyboard. It says RISK, in a font chosen by Compliance.
+Thursday, 15 October 2026, 4:05 p.m. Three minutes earlier the desk's trend book bought protection on CDX HY (Chapter 10 tells that story), and the floor has not quite stopped looking at the blotter. Ines drops a lanyard on Theo's keyboard. It says RISK, in a font chosen by Compliance.
 
-"You're not an analyst anymore. You have four PMs, a \$2bn gross book, and a risk officer who marks to bid. What's the pot?"
+"Desk Head for a Day," she says. "I run it on every new hire in the fourth week, because by the fourth week they think they understand the desk. It's yours until six. Then you give it back and tell me what you'd change."
+
+She leans over him, takes his second monitor without asking, and reads the close aloud the way a dealer reads a hand to the table. "High-yield index, 323 over. CCC-and-lower, 1,278, a day after the widest it's been in at least three years. The index is bored and the basement is on fire. Now read me the room."
+
+Theo turns his chair. The room is four PMs, and on this particular afternoon each of them is long something different.
+
+Priya, nearest the window, runs the index trend book. Her fast sleeve crossed at 3:41 and the ticket for protection went out at 4:02; her slow sleeve, which asks only whether the index made money over the last year, is still long risk. So her book is long and short the same index at two speeds, and she is the calmest person on the floor, because her rules decided this morning what she will do tomorrow.
+
+Rafe runs the high-yield cash book: value, carry and quality, held for quarters. Since January his carry tilt has leaned him a little further into the CCC tier every month, because that is where the coupons are. The basement Ines just read aloud is, in large part, Rafe's basement. He is reading the same screen and has not yet said a word.
+
+Bram runs the arbitrage book: ETF creations and redemptions against their baskets, portfolio trades bought from the Street and unwound back into it, everything held for days. He is long investment-grade bonds and short the ETF shares that wrap them, at about five times his capital, which is safe in the way a bicycle is safe at speed.
+
+Sunita, ex-RSSG like Theo, runs the event book: liability-management candidates, post-reorg equities, trades that end when a judge rules. Today she is long two first-lien loans whose credit agreements she has read twice and short a bond whose indenture she has read three times. She is the only one of the four who would understand the USB stick.
+
+"You have four PMs, a \$2bn gross book, and a risk officer who marks to bid," Ines says. "What's the pot?"
 
 Theo starts to say "two billion," hears how wrong it is on the way out, and stops. Ines nods. It is the first good thing he has done as a desk head.
 
@@ -17,29 +31,47 @@ Kaz rolls over with a laptop. "I ran Kelly on the book. Good news: it's very con
 
 "The one with the fattest spread."
 
+Rafe looks up for the first time. Nobody says anything.
+
 Mags, from the corner, without looking up: "Back in my day the stop-loss was a phone call from the CFO. You could hear the drawdown in his breathing."
 
 ROBO has posted to the desk channel. Asked last night to "maximize the book's Sharpe ratio," it has found the highest-Sharpe asset in the building: a 2027 IG bond whose matrix-priced mark has not moved in eleven weeks, because nobody has traded it. Realized volatility 0.4%, Sharpe 11. ROBO proposes moving the whole book into it. The arithmetic is fine. The volatility has not gone away. It is sitting in the mark, waiting for the first trade.
+
+Bram reads the post, laughs, and then stops laughing, because two of the bonds in his creation basket have not traded in eleven weeks either.
 
 Theo puts his hand on the USB stick with the 13-week cash flow model on it, for emotional support, and asks the only question he trusts. "But what does the credit agreement say?"
 
 "There isn't one," says Ines. "That's the job. You write it. How much risk, in which horizon, in which names, for how long, and with whom?"
 
-By the end of this chapter you will be able to: set a leverage band for a credit book from its effective breadth, its DTS-scaled volatility and its liquidity cost; put each signal in the horizon and instrument tier where it survives its own transaction costs; size a default bet with Kelly when the bet has a jump, a recovery and a ruin boundary; compute liquidity-adjusted VaR and days-to-liquidate for a book of RFQ-traded bonds; run a drawdown rule you can defend, with the mark-to-bid shock budgeted inside the rule rather than discovered on top of it; and build a team whose breadth survives contact with its own hit rate.
+"By six?"
+
+"By six you write the term sheet. The covenants take the rest of your career." She taps the CCC number on the screen. "And write it for one week, not for an average one. Every platform on the Street has some version of a five percent line. You read the press reports in March, when a lot of those lines were touched in the same week. Most weeks the rule and the alpha agree with each other, and you never find out which one is running the book. Then a week like that comes, and you do."
+
+She goes back to her desk. Theo opens his notebook to a clean page, the way he used to open a fresh tab for a new borrower, and writes the borrower's name at the top: *the desk*. Under it, because Ines has a way of asking the question behind the question, he writes the covenant the whole term sheet has to satisfy:
+
+**On the week when every 5% line on the Street is hit at once, will my alpha own this book, or will the rule?**
+
+The two hours that follow are the chapter. Each section prices one clause of the term sheet Ines asked for (the risk budget, the bet count, the sizing rule, the exit clock, the stop, the leverage band and the people who widen it). Ines fills the gaps between them with replays of the weeks when someone else's clause failed, and by six the 13-week model has become a dashboard pointed at the desk itself, with a short list beside it of the things it cannot see.
 
 ## 28.1 Risk, Not Capital: The Desk Head's Accounting Identity
 
-Theo's first instinct, inherited from four years of sources-and-uses tables, is to hand out dollars: \$500mm of gross to each of his four PMs, done by lunch. It is the wrong unit. A PM cannot spend dollars. A PM can only spend risk: volatility while the position is alive, drawdown when it goes wrong, and liquidity when it has to be sold. Dollars are what you get when you divide a risk budget by how risky the instrument is, and in credit that divisor changes by a factor of ten between a three-year A-rated bond and a CCC with a lender call on Monday.
+At 4:20 Theo does what six years of sources-and-uses tables taught him to do with a new pile of money. He opens an email to the four PMs, types *\$500mm of gross each*, and has the cursor on Send when Ines, passing behind him with a coffee, says, "Wrong unit." He knows what she means a half-second before she says it, which does not stop her saying it. A PM cannot spend dollars. A PM can only spend risk: volatility while the position is alive, drawdown when it goes wrong, and liquidity when it has to be sold. Dollars are what you get when you divide a risk budget by how risky the instrument is, and in credit that divisor changes by a factor of ten between a three-year A-rated bond and a CCC with a lender call on Monday.
 
 > **[SOURCE EXTRACTION]** *Paleologo_Advanced_Portfolio_Management p.88:* "Return on GMV is performance relative to a capital budget. But the real scarce resource is not capital; it is risk."
 >
 > **Annotation.** Paleologo writes this for an equity long/short book, where it is already true. In credit it is truer, for two reasons. First, the dollar size of a position is a poor proxy for its risk, because a bond's volatility scales with its spread and its spread duration (DTS), so \$50mm of a 5-year BB and \$50mm of a 2-year CCC are different animals that happen to weigh the same. Second, credit has a third risk budget the equity book barely notices, which is liquidity: the cost and the time of getting out. A 2026 desk head allocates three numbers per PM (a volatility budget, a drawdown budget, and a liquidity budget expressed in days-to-liquidate and liquidation cost) and lets the dollars fall out. The rest of this chapter computes each of the three.
+
+Theo deletes the email. Ines, who has watched every new hire write it, reads him the translation she keeps on a sticky note under her second monitor.
 
 > **Desk Myth vs. Desk Reality.** *Myth:* "We allocate \$200mm to the HY PM." *Reality:* "We allocate the HY PM 6% annualized volatility on \$200mm of allocated capital, which is \$12mm of vol, a 7.5% drawdown limit, which is \$15mm, and no more than 20% of the book beyond 20 days to liquidate *(all illustrative)*. The \$200mm is the denominator the investor letter prints."
 
 ### The identity, and why credit needs three substitutions
 
 A notational warning first. Paleologo writes $s$ for the Sharpe ratio and $L$ for leverage. In this book $s$ is a credit spread and $L = 1 - R$ is loss given default, and both letters are busy in this chapter. We write $\text{SR}$ for the book's Sharpe ratio and $G$ for gross leverage, $G = \text{GMV}/\text{NAV}$, and use these throughout.
+
+> **Math, Gently.** *Risk is the budget, and DTS is its unit.* *Part one, the bankroll.* Ines learned this at a card table before she learned it on a desk. A player who sits down with a \$1mm bankroll has not staked \$1mm. Nobody pushes the bankroll into the middle of the table. The stake is what can be lost on one hand, and the bankroll is how many bad hands the player can survive before getting up. A credit book works the same way: capital is the bankroll, and what a PM actually spends is volatility, the size of a typical bad hand. Now a number to redo in the margin. Take four independent bets, each with 10% annual volatility, and put a quarter of the book in each. Their wobbles partly cancel, so the book's volatility per dollar of gross is $\sqrt{4 \times (0.25 \times 10\%)^2} = 10\%/\sqrt{4} = 5\%$. If the desk's skill is worth a Sharpe ratio of 1 on whatever volatility it runs, the four-bet book earns 5% per dollar of gross, where one bet at the same Sharpe would have earned 10%. Diversification halved the risk, and the pay went with it. To earn 15% on capital, the desk must own three dollars of bonds for every dollar of capital. That is leverage, and it is the whole content of (28.1) and (28.2).
+>
+> *Part two, the unit.* A bond's volatility is, to a good approximation, its spread duration times its spread times the volatility of relative spread changes, $\text{DTS}\times\sigma_{\text{rel}}$; Chapter 8 (§8.4) owns the argument. A five-year high-yield bond with spread duration 4.2 years at a 3.5% spread, in a market where spreads typically move by 35% of themselves in a year, wobbles by about $4.2 \times 0.035 \times 0.35 \approx 5.1\%$ of its price a year. The same \$50mm in a two-year single-A bond at 80 bp wobbles by about $1.9 \times 0.008 \times 0.35 \approx 0.5\%$. Same dollars, about a tenth of the risk. The identity is next.
 
 Let the book have net asset value (allocated capital) $K$ and gross market value $\text{GMV} = G K$. Split the GMV into $N$ positions with GMV shares $w_i$, $\sum_i |w_i| = 1$. Let $\sigma_i$ be the annualized idiosyncratic volatility of position $i$, as a fraction of its market value. If the $N$ bets are independent and equal, $w_i = 1/N$ and $\sigma_i = \sigma$, the volatility of the book per dollar of GMV is
 
@@ -61,23 +93,19 @@ $$
 
 Read (28.2) as a sentence: a well-diversified book of low-volatility bets needs a lot of leverage to pay anyone's salary. Diversification lowers the risk per dollar of GMV, and so it lowers the return per dollar of GMV, and the only way to earn the hurdle is to own more GMV. That is why the platforms run what they run (see the Trend Watch below), and why the ceiling on $G$ in §28.7 matters more than the floor.
 
-Credit forces three substitutions into (28.1)–(28.2). Each gets a section.
-
-1. **$\sigma \to \sigma_{\text{DTS}}$.** A bond's excess return over a short horizon is approximately $-D^{\text{spr}}_i\,\Delta s_i = -D^{\text{spr}}_i s_i\,(\Delta s_i/s_i)$. If relative spread changes $\Delta s_i/s_i$ have annualized volatility $\sigma_{\text{rel}}$, then
+Theo rewrites the email in risk units, a volatility budget and a drawdown limit for each PM with (28.2) turning each budget into gross, and is pleased with it for about four minutes, which is how long Ines takes to come back. She puts a finger on the $\sigma$. "Six percent of *what*?" He had used one volatility for all four books, and a bond's volatility is not a property of its dollar size. Over a short horizon a bond's excess return is approximately $-D^{\text{spr}}_i\,\Delta s_i = -D^{\text{spr}}_i s_i\,(\Delta s_i/s_i)$, so if relative spread changes $\Delta s_i/s_i$ have annualized volatility $\sigma_{\text{rel}}$, then
 
 $$
-\sigma_i \approx D^{\text{spr}}_i\, s_i\, \sigma_{\text{rel}} = \text{DTS}_i \cdot \sigma_{\text{rel}}.
+\sigma_i \approx D^{\text{spr}}_i\, s_i\, \sigma_{\text{rel}} = \text{DTS}_i \cdot \sigma_{\text{rel}},
 $$
 
-This is the empirical regularity of Ben Dor et al., below: the volatility of a bond scales with its DTS, not with its duration or its spread alone. A 5-year HY bond at 350 bp has $D^{\text{spr}} \approx 4.2$ years and $s = 0.035$, so $\text{DTS} \approx 0.147$; at $\sigma_{\text{rel}} = 0.35$ a year *(illustrative)*, $\sigma_i \approx 5.1\%$ of market value per year.
-
-2. **$N \to N_{\text{eff}}$.** Three hundred bonds are not three hundred bets when they come from sixty issuers in eleven sectors (§28.2).
-
-3. **The drawdown budget includes liquidity.** The ceiling on $G$ (§28.7) is set by how much the book can lose, and in credit a book can lose money with no change in any issuer's fundamentals, simply because the bid moves away from the mid (§28.5–§28.6).
+which is the box's 5.1% for a five-year high-yield bond at 350 bp *(illustrative)* and the empirical regularity of Ben Dor et al., below: a bond's volatility scales with its DTS, not with its duration or its spread alone. So $\sigma$ becomes $\sigma_{\text{DTS}}$, and §28.4 finds out what happens when the spread is so wide that even DTS stops describing the risk. Her finger moves to the $N$. "How many hands is that?" Rafe's book holds three hundred bonds, and Theo had typed 300. They come from sixty issuers in eleven sectors, and three hundred bonds from sixty issuers are not three hundred bets, so $N$ becomes $N_{\text{eff}}$, which is §28.2's problem. Then she asks what nobody at PJT ever asked him about a new-money term sheet, because the exit was always somebody else's: "And how do you get out?" The drawdown limit in his email assumes that a loss arrives because an issuer got worse. In credit a book can lose money with no change in any issuer's fundamentals, simply because the bid moves away from the mid (§28.5–§28.6), so the drawdown budget has to include liquidity, and it is that budget that sets the ceiling on $G$ in §28.7. Theo had three numbers in the email, and he cannot yet defend any of them.
 
 > **[SOURCE EXTRACTION]** *Ben_Dor_Quantitative_Credit_Portfolio_Management p.50:* "a portfolio with a weighted spread of 200 bps and spread duration of two years is equally risky as a portfolio with a spread of 100 bps and spread duration of four years"
 >
 > **Annotation.** This is DTS doing in one sentence what a rating-bucket risk system needs a page of tables to approximate. Ben Dor and coauthors show that excess-return volatility rises roughly linearly in DTS, with a slope equal to the volatility of relative spread changes, which is why $\sigma_{\text{DTS}} = \text{DTS}\times\sigma_{\text{rel}}$ is the volatility we put into every sizing formula in this chapter. The modern departure is in the slope. $\sigma_{\text{rel}}$ is not a constant: it jumps in stress, and in 2026 it has been visibly higher for CCCs than for the rest of the index (§28.4). Estimate it by bucket and by regime, and carry the stress multiplier as a parameter ($\kappa$, §28.7). For a distressed issuer, the same authors note that managing DTS contributions becomes roughly equivalent to managing market weights (p.63): once the spread is large enough, the bond trades on price and recovery, and the DTS approximation hands the job over to the jump model of §28.4.
+
+The platforms that buy idiosyncratic risk at scale have spent two years running, with real money, the experiment Theo is starting with a lanyard, and their numbers are the weather every allocation on this floor is made in.
 
 > **Trend Watch: The platform becomes the operating system, 2024–2026.** *What changed:* the multi-manager platform, with centrally set drawdown rules, pass-through costs and very large gross books, became the main buyer of idiosyncratic risk and the main employer of the people who produce it. *How big, with dates:* Cambridge Associates' review of 2024 audited statements (published 10 October 2025) found that "all reviewed multi-manager platforms" pass through additional expenses, ranging from 0.87% to 12.99% of assets with a median of 4.53%. For 2025, Millennium returned about 10.5%, Citadel's flagship about 10.2%, ExodusPoint about 18% and Schonfeld's flagship about 12.5%, against 16.5% for the S&P 500 (Hedgeweek relaying the FT, 5 January 2026). Point72 reportedly returned about 18% and had expanded to 190 pods per Bloomberg *(not independently verified)*, and HFR put industry capital at a record \$5.15trn, up \$642.8bn in 2025 (The Daily Upside, 23 February 2026). In March 2026, the Iran-war shock forced an unwind of crowded positions, and ExodusPoint, Balyasny, Citadel and Millennium gave up all or part of their January–February gains (Bloomberg, 2 April 2026). The Fed's May 2026 *Financial Stability Report* described hedge-fund leverage as "stable at record-high levels," concentrated in a small number of large funds. In September 2026 a Goldman Sachs prime-insights head was reported as saying that multi-strategy managers had attracted about \$500bn of additional assets over the past year, roughly 25% growth, while sector headcount rose only 10–11%, and as citing a JPMorgan estimate of 645% average multi-strategy leverage (Hedgeweek, 15 September 2026; industry estimates, not independently verified). The drawdown convention is commonly reported rather than disclosed: per the WSJ as relayed by eFinancialCareers (5 December 2025), Millennium PMs who lose 5% of allocated capital "typically" have it halved, and those who lose another 2.5% are "usually" let go; the firm declined to comment. *What it means for the desk:* about a quarter more capital chasing about a tenth more PMs means each PM's risk is rationed by rule, and the rule binds before the alpha does. A rule shared across firms also produces shared behaviour: when everyone's 5% line is hit in the same week, everyone sells the same bonds. The engineering in this chapter is about making the alpha and the rule compatible *before* the week arrives.
 

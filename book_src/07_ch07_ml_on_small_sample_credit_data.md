@@ -328,7 +328,7 @@ with a vertical barrier at $u = h$. The label is $y_{i,t} = +1$ if $\bar b$ is t
 
 **The Pair Book panel.** *A scene at Vantress in the first week of September 2026, before Theo's first day. Dov Adler's pod, Vantress and the platform's pair screen are fictional composites; the panel, the labels and every number are illustrative; the Collin-Dufresne, Goldstein and Martin finding is real and cited.*
 
-The platform's research team shipped a pair screen to the credit pods that week, and Dov's ran first: about 400 candidate pairs over six years, triple-barrier labels in DTS space, a top-decile backtest Sharpe of 2.4. Wen read the label's definition before the chart, the way she reads a short leg's contract. The barrier sat on the change in the spread gap between the two legs.
+Platform research shipped the credit pods a pair screen that week, and Dov's ran first: about 400 candidate pairs over six years, triple-barrier labels in DTS space, a top-decile backtest Sharpe of 2.4. Wen read the label's definition before the chart, the way she reads a short leg's contract. The barrier sat on the change in the spread gap between the legs.
 
 "Then it's paid for carry," she said. "The wider name wins on coupon alone."
 
@@ -336,9 +336,9 @@ Research relabeled on the residual differential: each leg's return after market 
 
 Marcus read the feature list standing up. "That's a factor with a great backtest. It's a line on my sheet, and the platform owns it for a few basis points without you. What is the screen long that it didn't mean to be?"
 
-Wen answered with a number. The top decile's residual differentials moved together, a mean pairwise correlation near 0.35, much as Collin-Dufresne, Goldstein and Martin (2001) found the residuals of their credit-spread-change regressions "highly cross-correlated," driven mostly by "a single common factor."
+Wen answered with a number: the top decile's residual differentials had a mean pairwise correlation near 0.35, much as Collin-Dufresne, Goldstein and Martin (2001) found the residuals of their credit-spread-change regressions "highly cross-correlated," driven mostly by "a single common factor."
 
-Dov wrote the rule on the screen's ticket: *the model may predict only what no factor on Marcus's sheet can see; whatever it predicts in every pair at once is a factor we forgot to name.* Chapter 7-B (§7-B.5, PCA on a residual panel) tests that correlation properly, and §8.8 measures it on the live book.
+Dov wrote the rule on the screen's ticket: *the model may predict only what no factor on Marcus's sheet can see; whatever it predicts in every pair at once is a factor we forgot to name.* Section 7-B.5 tests that correlation properly; §8.8 measures it on the live book.
 
 **The trapdoor.** Because the floor of the corridor gives way rather than holding, the realized return at touch can sit many barrier-widths below $\underline b$, and the sign alone throws that depth away. The label keeps it, $X_{i,t}(t_{1,i}-t)$, beside the $-1$: §7.6 uses it for return-attribution weights, and the sizing layer in §7.5 needs to know that $-1$ labels in CCC carry fatter losses than $+1$ labels carry gains (Chapter 5's mixture distributions). The same asymmetry argues for $\underline m < \bar m$ in the lowest ratings, a tighter stop on the side where the distribution has a jump component, which is how a risk manager would actually run the position.
 
@@ -1025,6 +1025,7 @@ Each exercise replays a scene from this chapter with the numbers in your hands: 
 - Dickerson, Mueller, and Robotti (2023), "Priced risk in corporate bonds," *Journal of Financial Economics* 150(2), 103707; arXiv posting: https://arxiv.org/abs/2604.05699
 - Dick-Nielsen, Feldhütter, Pedersen, and Stolborg (2023, revised 2025), "Corporate Bond Factors: Replication Failures and a New Framework," SSRN 4586652.
 - Dickerson, Robotti, and Rossetti (2026), "The Corporate Bond Factor Replication Crisis," arXiv:2604.07880: https://arxiv.org/abs/2604.07880
+- Collin-Dufresne, Goldstein, and Martin (2001), "The Determinants of Credit Spread Changes," *Journal of Finance* 56(6): 2177–2207: https://ideas.repec.org/a/bla/jfinan/v56y2001i6p2177-2207.html . Why: the residuals' single common factor behind the Pair Book panel in §7.4.
 - Title only: Dick-Nielsen (2009), "Liquidity Biases in TRACE"; Dick-Nielsen (2014), "How to Clean Enhanced TRACE Data."
 
 *Machine learning for bonds.*

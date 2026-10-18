@@ -53,25 +53,25 @@ Growth 35,365 / 12,571 = **2.81×** against the 1.6–1.9× target (20,114–23,
 - [x] C8. L630–634, "When the identity works... It breaks in three places... a seasoned allocator checks first": deleted (B13). **Done under B13:** Nuveen three-places paragraph absent on re-grep; nothing further.
 - [x] C9. L670–674, "When break-even turnover is a ceiling... The check an experienced PM runs": L672 deleted (B4); L674's involuntary turnover becomes Mags's beat; heading deleted. **Done under B4:** heading gone; Mags's involuntary-turnover beat verified in place.
 - [x] C10. L724, "Two things... The first... The second...": one line (B4). **Done under B4:** ordinals gone; Theo's line-by-line recognition is one line.
-- [ ] C11. L771–775, Ines's "The first question... The second question... The third question": keep the scene, drop the ordinal frame.
-- [ ] C12. L789–791, "The first is... The second... The third..." and "The question an experienced risk manager asks": a three-row table of Ines's series; the exit-days question becomes hers.
-- [ ] C13. L892, "a good first question to ask... The first is... The second is...": Theo counts BlackRock's down months; heading retitled; L896 deleted (B11).
-- [ ] C14. L939, "Three things... The first... The second... The third...": B22.
-- [ ] C15. Listing explanations L818–852: "Use it to/for... Do not mistake... The edge that bites" ×4 (lesson 12). Open each with the chapter's moment; keep the content, drop the template phrases.
+- [x] C11. L771–775, Ines's "The first question... The second question... The third question": keep the scene, drop the ordinal frame. **Done:** Ordinal frame gone; Ines asks three quoted questions to the slide.
+- [x] C12. L789–791, "The first is... The second... The third..." and "The question an experienced risk manager asks": a three-row table of Ines's series; the exit-days question becomes hers. **Done:** Three-row series table; exit-days question is Ines's own line now.
+- [x] C13. L892, "a good first question to ask... The first is... The second is...": Theo counts BlackRock's down months; heading retitled; L896 deleted (B11). **Done earlier (B11):** Theo counts months; no template phrases on re-grep.
+- [x] C14. L939, "Three things... The first... The second... The third...": B22. **Done under B22:** three-things paragraph replaced by the single A-star sentence.
+- [x] C15. Listing explanations L818–852: "Use it to/for... Do not mistake... The edge that bites" ×4 (lesson 12). Open each with the chapter's moment; keep the content, drop the template phrases. **Done:** Template phrases absent; block 3 now opens with Ines's allocator.
 
 ## (d) Boxes (lessons 6–8, 10)
 
-- [ ] D1. 20 Math, Gently in 35,365 words (limit 10, at most one per 1,200 words, never two adjacent); ten are second tellings of boxes in Ch 1, 1-B, 2, 3 and 3-B. Keep 8: L249+L253 merged (sqrt-N recalled from Ch 3-B in one sentence; thermometers, own numbers); L415 sealed envelope; L419 trimming a tail (bell intro cut to a pointer); L505 432 tickets (audit numbers left to Friday); L565 optimizer; L610 leash (random-walk half cut to a pointer to Ch 3-B); L753+L761 merged (square root; the hill in miniature, own numbers); L866 capture ruler (own numbers). Demote to glosses with pointers: L263 design effect; L311 two measures (Ch 3-B); L331 handicap (Ch 3-B, Ch 8); L537 points or percent (Ch 1 §1.4); L577 z-score (Ch 3); L646 cost function (Ines); L805 three ceilings (prose); L882 recall (Ch 3, §7.5); L906 Merton (Ch 1 §1.5, Ch 6). Delete L664 (B7). Vary the "The full version is" sign-offs.
-- [ ] D2. Adjacency and runs: L646 + L648 + L652 is three boxed elements in a row (fixed by D1); L415/L419 one line apart (move the envelope above its equation, lesson 10); L753/L761 (merged); L797 + L805 and L902 + L906 (fixed by D1).
-- [ ] D3. Lesson 8: §4.2 Trend Watch L179 sits before the scene that uses its numbers. Move it to the end of §4.2; rewrite L192's "the Man line" so the scene stands first.
+- [x] D1. 20 Math, Gently in 35,365 words (limit 10, at most one per 1,200 words, never two adjacent); ten are second tellings of boxes in Ch 1, 1-B, 2, 3 and 3-B. Keep 8: L249+L253 merged (sqrt-N recalled from Ch 3-B in one sentence; thermometers, own numbers); L415 sealed envelope; L419 trimming a tail (bell intro cut to a pointer); L505 432 tickets (audit numbers left to Friday); L565 optimizer; L610 leash (random-walk half cut to a pointer to Ch 3-B); L753+L761 merged (square root; the hill in miniature, own numbers); L866 capture ruler (own numbers). Demote to glosses with pointers: L263 design effect; L311 two measures (Ch 3-B); L331 handicap (Ch 3-B, Ch 8); L537 points or percent (Ch 1 §1.4); L577 z-score (Ch 3); L646 cost function (Ines); L805 three ceilings (prose); L882 recall (Ch 3, §7.5); L906 Merton (Ch 1 §1.5, Ch 6). Delete L664 (B7). Vary the "The full version is" sign-offs. **Done:** Eight boxes remain; handicap, DTS, ceilings, cost, Merton now glosses.
+- [x] D2. Adjacency and runs: L646 + L648 + L652 is three boxed elements in a row (fixed by D1); L415/L419 one line apart (move the envelope above its equation, lesson 10); L753/L761 (merged); L797 + L805 and L902 + L906 (fixed by D1). **Done:** Envelope precedes its equation; no run exceeds two boxed elements.
+- [x] D3. Lesson 8: §4.2 Trend Watch L179 sits before the scene that uses its numbers. Move it to the end of §4.2; rewrite L192's "the Man line" so the scene stands first. **Done under B25:** Trend Watch moved after Poker Table; scene rewritten first.
 
 ## (e) Research-note leaks and fiction labels (lesson 13)
 
-- [ ] E1. Trend Watch L183, "(per press reports, IFR, c. early 2022; date unconfirmed)": hedge as "(as reported by IFR in early 2022)"; log the open item in `state/open_items_ed2.md`.
-- [ ] E2. Table L94, "no public source for a pod's credit book was found"; L229, L231, L232 "Silent (none found)"; L96 "(approx.; aggregator data: stockanalysis.com)". Reword as reader-facing hedges.
-- [ ] E3. L133 Quant-Shop Life label calls the setting a different firm, yet Theo (third week) is in it and §4.3/§4.5 call it the desk's own. Relabel to the desk's own report, naming what is invented.
-- [ ] E4. L557 tight-decile numbers (60bp, 10bp) lack "(illustrative)".
-- [ ] E5. Resource Graph "(title only)" ×3 (L1033, L1034, L1047): Edition 1 text, diffed identical by the verifier; left for U3, not edited here.
+- [x] E1. Trend Watch L183, "(per press reports, IFR, c. early 2022; date unconfirmed)": hedge as "(as reported by IFR in early 2022)"; log the open item in `state/open_items_ed2.md`. **Done:** Hedged as IFR early 2022; open item row added to state.
+- [x] E2. Table L94, "no public source for a pod's credit book was found"; L229, L231, L232 "Silent (none found)"; L96 "(approx.; aggregator data: stockanalysis.com)". Reword as reader-facing hedges. **Done:** Pod, aggregator and none-found notes reworded; open items logged.
+- [x] E3. L133 Quant-Shop Life label calls the setting a different firm, yet Theo (third week) is in it and §4.3/§4.5 call it the desk's own. Relabel to the desk's own report, naming what is invented. **Done:** Label now says the desk's own Thursday, naming invented parts.
+- [x] E4. L557 tight-decile numbers (60bp, 10bp) lack "(illustrative)". **Done:** Tight-decile scene gets top italic label naming its invented numbers.
+- [x] E5. Resource Graph "(title only)" ×3 (L1033, L1034, L1047): Edition 1 text, diffed identical by the verifier; left for U3, not edited here. **Left for U3:** Edition 1 Resource Graph lines untouched, as audited.
 
 ## (f) Finder table and headings (lesson 11)
 

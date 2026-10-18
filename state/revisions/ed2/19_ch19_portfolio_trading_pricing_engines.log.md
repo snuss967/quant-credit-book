@@ -16,8 +16,8 @@
 - [x] 14. [§19.7.2] NEW-SCENE Long Scene Two Tapes (12 Mar 2020 and 7 Apr 2025). — Note: two tapes replay, cards graded, one score three dials.
 - [x] 15. [§19.8] MATH-GENTLY (B10 log-odds/logistic) + FULL-DERIVATION-MOVE; two cautions to Kaz and Ines. — Note: log-odds dial box; cautions given to Kaz and Ines.
 - [x] 16. [§19.8.2] EXPAND-SCENE The Hand History: Friday 16 October 2026. — Note: scene dated Fri 30 Oct; counter, AON reply, markouts, clock fixed.
-- [ ] 17. [§19.9] ANOTHER-SEAT (systematic AM) + Wen builds basket narrative + Full Derivation.
-- [ ] 18. [§19.10] SHOP-LIFE vignette (bank systematic trading group, TRACE dedup).
-- [ ] 19. [§19.10 table and Trend Watch] BRIDGE sentence between table and Trend Watch.
+- [x] 17. [§19.9] ANOTHER-SEAT (systematic AM) + Wen builds basket narrative + Full Derivation. — Note: Man seat box; Bernoulli prose; Wen two-way month-end list scene.
+- [x] 18. [§19.10] SHOP-LIFE vignette (bank systematic trading group, TRACE dedup). — Note: Yusuf's red Wednesday; affiliate dedup, PT print_frac, lunch coda.
+- [x] 19. [§19.10 table and Trend Watch] BRIDGE sentence between table and Trend Watch. — Note: human rows dwarf machine rows; Mags's fax half-hour line.
 - [ ] 20. [§19.11 Desk Debrief] Finder table; promote scenes to #### headings.
 - [ ] 21. [Whole file] one telling per fact; no CHECK; templates removed; open items logged.

@@ -2,27 +2,6 @@
  "note": "Restarted 14:35 UTC (window 14:30-19:30). Resume with Workflow({scriptPath, resumeFromRunId, args}).",
  "runs": [
   {
-   "name": "part-III-a",
-   "task": "wkhblxney",
-   "runId": "wf_b92bbb19-5ce",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "08_ch08_isolating_ido_and_empirical_duration",
-     "09_ch09_factor_investing_in_credit"
-    ],
-    "stages": [
-     "figures",
-     "figcheck",
-     "resgraph",
-     "brief",
-     "revise",
-     "verify"
-    ]
-   }
-  },
-  {
    "name": "part-III-b",
    "task": "whczu9vre",
    "runId": "wf_bb2c1276-ba3",
@@ -301,6 +280,23 @@
      "figures",
      "figcheck",
      "resgraph"
+    ]
+   }
+  },
+  {
+   "name": "lessons-rv-8-9",
+   "task": "wnxwwzef6",
+   "runId": "wf_261e7e3b-cd9",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "08_ch08_isolating_ido_and_empirical_duration",
+     "09_ch09_factor_investing_in_credit"
+    ],
+    "stages": [
+     "lessons",
+     "rv"
     ]
    }
   }

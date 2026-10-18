@@ -85,8 +85,21 @@ Count at start: 17 Math, Gently (L68 risk-neutral, L110 standard error, L218 fal
 
 ## (h) Relative-value beat
 
-- [ ] H1. `state/rv_thread.md` assigns Ch 7 a scene in §7.4–7.5 on the Pair Book panel: the label is on the residual differential, not the spread; what the model is allowed to predict; a missing factor becomes a feature with a great backtest (T3; R9 Collin-Dufresne, Goldstein and Martin 2001: residuals "highly cross-correlated"); homes Ch 7-B and Ch 8 §8.8. Ch 7 has no Pair Book beat. Write a 200–250-word scene after "Strip the carry" (L327), fiction label at top, Dov, Wen and Marcus only, then update `state/rv_pair_book.md` and the cast bible.
+- [x] H1. `state/rv_thread.md` assigns Ch 7 a scene in §7.4–7.5 on the Pair Book panel: the label is on the residual differential, not the spread; what the model is allowed to predict; a missing factor becomes a feature with a great backtest (T3; R9 Collin-Dufresne, Goldstein and Martin 2001: residuals "highly cross-correlated"); homes Ch 7-B and Ch 8 §8.8. Ch 7 has no Pair Book beat. Write a 200–250-word scene after "Strip the carry" (L327), fiction label at top, Dov, Wen and Marcus only, then update `state/rv_pair_book.md` and the cast bible. **Done:** 253-word pod scene; residual label, rating-bucket leak; ledger updated.
 
 ## Fix log
 
 (Items are ticked above as they are fixed, each with a ten-word note.)
+
+## (a) Metric, after
+
+`python3 tools/prescriptiveness.py --pre 9ac1c379053d9d0254e9d524d9a40efdec4a2c71 book_src/07_ch07_ml_on_small_sample_credit_data.md`
+
+| ver | words | bullets% | modal | imper | rule | dialog | mathgently | seat |
+| :-- | --: | --: | --: | --: | --: | --: | --: | --: |
+| pre (Ed 1) | 14,523 | 14.0 | 3.6 | 1.2 | 1.0 | 9.0 | 0 | 0 |
+| before this pass | 34,543 | 6.3 | 2.9 | 0.9 | 0.7 | 7.6 | 17 | 4 |
+| after this pass | 31,983 | 6.8 | 2.9 | 0.7 | 0.8 | 8.2 | 10 | 4 |
+
+Growth 31,983 / 14,523 = **2.20×** (from 2.38×); `wc -w` 33,447. The pass retired 26 duplicate tellings, five detached judgment paragraphs and seven boxes, then added the ten-row Finder (about 400 words) and the 253-word Pair Book scene. What keeps the chapter above 1.9× is single-telling material the orchestrator ruling protects: the two long scenes, the three sourced cases, the Spec, six exercises and the Resource Graph (§7.13 Debrief 5,064 words; §7.2 3,809; §7.12 3,773). Math, Gently: ten, none adjacent; no run of more than two boxed elements; no "CHECK", "search summary" or "secondary" strings. Open items logged earlier stay open: the Paleologo paraphrase (E1) and the Odd Lots and PyBondLab URLs (E2), for U3.
+<!-- STATUS: COMPLETE -->

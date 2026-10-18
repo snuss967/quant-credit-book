@@ -780,17 +780,97 @@ $$
 \mathbb{E}[V \mid x_i = x,\ i \text{ wins}] = x - \sigma_\varepsilon\, e_n, \qquad e_n = \int_{-\infty}^{\infty} z\, n\,\phi(z)\Phi(z)^{n-1}\,dz,
 $$
 
-with $e_3 \approx 0.85$, $e_5 \approx 1.16$, and $e_8 \approx 1.42$, the box's three numbers. For $n = 3$ the integral has a closed form, $3/(2\sqrt{\pi})$, which is the check Listing 18.7 runs before it trusts the others.
+with $e_3 \approx 0.85$, $e_5 \approx 1.16$, and $e_8 \approx 1.42$, the box's three numbers. For $n = 3$ the integral has a closed form, $3/(2\sqrt{\pi})$.
 
 #### The leak, the reserve, and the survivors
 
-**Leakage.** Once the list circulates, anyone who sees it is an order anticipator. If they pre-sell a fraction $\phi$ of the expected flow $Q\,p_{\text{trade}}$, Kyle's impact gives a pre-auction drift of $\Delta P = -\lambda^{K}\phi\,p_{\text{trade}}\,Q$, which the seller pays on the whole list. A \$300mm list with $p_{\text{trade}} = 0.9$, $\phi = 0.3$, and $\lambda^{K} = 0.5$ points per \$100mm drifts about 0.4 points and costs about \$1.2mm *(illustrative)*. A DNT reveals that the reserve was above the best bid, which is a reserve-price signal. BWIC prints are survivors: in stress the bonds that fail reserves are the weak ones, so marks built from BWIC covers are biased upward precisely when it matters.
+**Leakage.** Once the list circulates, anyone who sees it is an order anticipator. If they pre-sell a fraction $\phi$ of the expected flow $Q\,p_{\text{trade}}$, Kyle's impact gives a pre-auction drift of $\Delta P = -\lambda^{K}\phi\,p_{\text{trade}}\,Q$, which the seller pays on the whole list; the replay below puts numbers on it. A DNT reveals that the reserve was above the best bid, which is a reserve-price signal. BWIC prints are survivors: in stress the bonds that fail reserves are the weak ones, so marks built from BWIC covers are biased upward precisely when it matters, and §18.9.1 shows what that does to a desk that trusts its composite.
 
-### 18.9.1 Case Study: The LDI BWIC Week, October 2022
+### 18.9.1 Long Scene: The LDI BWIC Week, 27 September to 7 October 2022 (replay)
 
-> **Trend Watch: BWIC supply, 2021–2026.** *2021:* total BWIC volume averaged \$5.2bn a quarter; *Q2-2022:* \$6.8bn, with CLOs 55% of volume (TwentyFour AM, 2022-07-11). *Late September 2022:* the UK mini-Budget triggered the gilt and LDI crisis, and the Bank of England began temporary long-gilt purchases on 28 September. *The following week:* more than €1.5bn of CLOs were listed via BWICs, with perhaps another €1bn traded away from the broader market; one Tuesday alone saw about €400m listed, predominantly AA. "Sales over the past week-and-a-half could exceed the previous three months combined." Almost all AAA and AA paper traded, while many BB and B bonds "didn't meet reserves." AA cash prices were "in the 80s," and LDI funds "had no choice but to sell" (TwentyFour AM, 2022-10-05). *2025–2026:* 9fin (2025-12-02) reported an insurer listing more than \$1bn of triple-A US CLOs in a single BWIC, and SCI (2026-02-16) headlined a \$56bn twelve-month US BSL CLO BWIC total led by triple-A supply *(headline-level; period CHECK)*. *What it means:* the BWIC is now a primary liquidity venue for structured credit, and its leak rate is a cost line.
+*A replay, cut off at 8:00 a.m. London on Monday 3 October 2022 and run on a Friday afternoon in October 2026. The desk's 2022 structured-credit seat, the 38-line list and its seller, every bid, size, cover and fill, and the numbers on Kaz's whiteboard are fictional and illustrative (the desk's fictional run). The mini-Budget, the Bank of England's operation, the market-wide BWIC volumes, the pattern of what traded and what did not, and the quotations are real and sourced, chiefly to TwentyFour Asset Management's note of 5 October 2022 and to Reuters. The desk was one of many dealers on the list and an outside bidder in every sense.*
 
-*Autopsy.* LDI holders were Harris's purest utilitarian sellers: forced, uninformed about collateral, and on a margin clock. That should mean low suspicion, so $a_c \approx 0$. The winner's curse was mild for AAA (small $\sigma_\varepsilon$) and severe for BB (large $\sigma_\varepsilon$, few bidders, failed reserves). Leakage was enormous, because every list told the street that more lists were coming. A systematic desk would have read the ETF and gilt stress as an exogenous-seller regime and set $\nu > 0$ for that client tier: win the forced flow, at prices where the "cost of trading [was] rising every few hours." Survivorship bias would then have flattered the BB marks drawn from those prints.
+Ines put dates on the first slide and nothing else, because the dates were the hand. Friday 23 September 2022: the UK government's mini-Budget, and a sell-off in long-dated gilts violent enough that within days the central bank was buying them. The days after: British pension funds running liability-driven investment (LDI) strategies, whose gilt hedges were leveraged, facing collateral calls they had to meet in cash. Wednesday 28 September: the Bank of England announcing temporary purchases of long-dated gilts, due to end on 14 October. And over the week of 26 September, more than €1.5bn of European CLO tranches listed for sale through BWICs, with close to another €1bn believed to have traded away from the broader market (TwentyFour AM, 5 Oct 2022).
+
+"Why CLOs?" Theo asked. In October 2022 he had been at PJT, and the gilt crisis had been something he read on his phone between drafts of a cleansing deck.
+
+"Because they were the most liquid thing those funds owned that wasn't a gilt," Ines said. "Triple-A and double-A European CLO paper, held for the spread. When the margin call comes you sell what will sell."
+
+The second slide was the list. In 2022 the desk had kept a small structured-credit seat in London that bid CLO lists for its own book *(illustrative)*, and on the Monday morning a manager acting for a pension client had sent it, along with every other desk the manager could think of, 38 lines of European CLO tranches: eleven AAA, fifteen AA, six A, four BBB and two BB, about €300mm of face in all, bids due at 2 p.m. London on Tuesday *(illustrative)*. Each line carried the CLO manager's name, the deal's vintage, and a column the desk's system had filled in overnight: the composite, built from dealer runs and from the covers of the last few weeks' auctions.
+
+Kaz had the spreadsheet open before Ines finished the slide. "This is the easy one. We have a composite for every line. Composite minus $\sigma_\varepsilon e_n$, eight bidders, one point of noise, round, send. Thirty-eight bids by lunch."
+
+"Eight bidders on every line?"
+
+"It's a big list. Everybody got it."
+
+"Everybody got it," Ines agreed. "Did everybody want all of it?" She left the question on the table and dealt the cards.
+
+*Pick three lines to bid. For each, write your bid against the composite, and how many bidders you think are on it.*
+
+The reader gets a card too. The list is mostly double-A, the seller is on a margin clock, and the composites were built from last month's covers. Three lines, three shades, three guesses at $n$, before the tape runs on.
+
+Theo took the longest. He sorted the list by yield at the composite, and the two BB lines sat at the bottom of the screen, yielding far more than anything else on it. His reasoning was a restructuring banker's: the seller was forced, forced sellers take what they are offered, and the deepest discount would be in the paper furthest from the money. He bid both BBs four points under the composite and one BBB two under, and wrote $n = 3$ beside each, "because BB is a specialist's market."
+
+Mags read his card over his shoulder, which the replay rules did not forbid. "Cheap to what?"
+
+"To the composite."
+
+"And the composite is what? The last print that *traded*." She tapped the BB column. "In a week like this, the BB lines nobody wants don't print. They go back to the seller with a DNT and leave no mark. So the only BB covers in that number are the ones somebody liked. You're taking four points off a price that was flattered before you touched it."
+
+Kaz's card had eight lines, all AAA and AA, each at the composite minus 1.42, with *$n = 8$, $\sigma_\varepsilon = 1$, see §18.9* written underneath. Mags's card had three lines, the three largest AA positions on the list, €25mm each, bid "in the 80s, whatever the coupon," and below them: *The seller isn't selling a bond. He's selling a margin call.* She had left the $n$ column blank. Asked, she wrote *everybody with a balance sheet and no gilts*.
+
+Ines collected the cards without reading them, put them in an envelope, and ran the tape forward a day.
+
+*Tuesday 4 October.* The selling had not stopped. That day alone about €400m of predominantly AA CLO tranches were listed through BWICs across the market (TwentyFour AM, 5 Oct 2022). On the replay's tape the desk's salesperson heard by nine that "the thirty-eight-line list" was being discussed on two other desks, and that AA paper from the same managers was being offered out of competition, below Monday's composite *(illustrative)*. TwentyFour's note caught the texture of the day in one sentence: "the cost of what liquidity there was increased every few hours as spreads were rapidly adjusted to the new situation."
+
+Kaz had a proposal. "We own €20mm of AA from two of these managers already. If we win fifteen AA lines at two o'clock we'll be very long. Sell the twenty now, while there are bids, and then bid the list flat."
+
+"Sell to whom?"
+
+"Whoever's bidding."
+
+"The same accounts who will bid this list at two," Ines said. "Look at Harris's table again. You've just moved yourself into the row called *order anticipators*. Price it."
+
+Kaz priced it on the whiteboard, in dollars, because Listing 18.7 works in dollars and the euro was trading close to parity that week. A list of \$300mm. A probability of 0.9 that any line trades. Suppose everyone who has seen the list pre-sells, between them, a fraction $\phi = 0.3$ of the flow they expect it to release, into a market whose Kyle $\lambda^K$ is 0.5 points per \$100mm. The pre-auction drift is
+
+$$
+\Delta P = -\lambda^{K}\phi\,p_{\text{trade}}\,Q = -\frac{0.5}{100}\times 0.3\times 0.9\times 300 = -0.405 \text{ points},
+$$
+
+and because the drift lands on every line, the seller pays about \$1.215mm *(illustrative)* before a single envelope is opened.
+
+Theo read it twice. "So the leak is a fee the pension fund pays to everyone who read its list."
+
+"And your pre-hedge," Ines said to Kaz, "is us collecting a share of that fee from a client whose list we're about to bid, by selling into the same bids that will set our cover." She drew a line under the 0.405. "This is the seller's dilemma. Send the list to three desks and you get three envelopes and a fat $e_n$-sized discount from each of them. Send it to thirty and you get competition, and you pay this. The manager chose thirty. In that week I'd have chosen thirty too."
+
+Kaz crossed out the pre-hedge. Mags said, to nobody in particular, "Back in my day a BWIC was a fax with a deadline, and the leak was whoever stood next to the fax machine." Then, after a moment: "It was cheaper. It wasn't better."
+
+*Two o'clock.* Ines opened the envelope she had sealed in 2022. It held the desk's results on the list, and a printout of the TwentyFour note from the next morning, Wednesday 5 October. The note set out the market-wide pattern: almost all AAA and AA CLO bonds that were auctioned traded, a large number of BBs and Bs did not meet reserves, and "however high the coupon was on a AA bond, the cash price bid would likely still be in the 80s." The desk's own list had done what the market did *(illustrative)*. All eleven AAA lines traded, covering within half a point of Monday's composite, mostly, the 2022 salesperson's notes said, to bank treasuries. Fourteen of the fifteen AA lines traded, between 82 and 87, two to four points below the composite. Both BBs came back DNT.
+
+Ines graded Kaz first, because Kaz's card was the cleanest piece of mathematics in the envelope and the most instructive way to lose money. On the AAA lines, a crowd of bidders had agreed on value to within a quarter of a point. With $\sigma_\varepsilon$ near 0.25 the honest shade for eight bidders was about 0.36 points, so Kaz's 1.42 left every AAA line to someone else by a point. On the AA lines the problem ran the other way. Kaz's bids at composite minus 1.42 would have been the best bids on four of them, a point and a half above the covers. "You'd have won," Ines said. "Congratulations. Now tell me what the second-best bidder knew."
+
+"That the composite was stale," Kaz said slowly. "It was built from covers before the repricing. That isn't private noise. Everybody's composite was wrong by the same amount. Shading by $e_n$ fixes the error that's *mine*. It does nothing for the error that's *ours*."
+
+"Which is why the curse has two halves," Ines said. "The half the integral handles, and the half where everybody in the room is using last week's price."
+
+Theo's BBs had failed reserve, and he had expected to be told he had been lucky. Ines read the DNT another way. "A DNT is a price. It says the seller's reserve sat above the best bid, yours included. Your forced seller wasn't forced on the BBs. He was forced on the paper that would clear, which was the senior paper. The reserve tells you which part of the list is the margin call." Theo wrote that on the back of his card, under the four points he would have lost on a flattering composite if the reserve had not saved him from himself.
+
+Mags had bid where the seller was forced, in size, at a price set by the seller's clock rather than by Monday's mark. Her three AA lines would have won two at 84 and 85 and been covered on the third *(illustrative)*. TwentyFour's note reported that dealers were already seeing better execution and broader client engagement, and its author read that as a sign valuations had bottomed for now. Six weeks later Reuters reported that the biggest discounts had come at the height of the LDI crisis and that prices on the tranches had since recovered somewhat (Reuters, 18 Nov 2022). Mags accepted the grade with the expression of someone who had been right about forced sellers before and had not enjoyed it then either.
+
+If your three lines were AA, your $n$ was large and your shade came from the seller's clock rather than the composite, you bid the way that market cleared. If you went to the bottom of the list for value, you sat in Theo's chair, and the reserve did you the favor it did him. If you shaded every line by the same amount, you were Kaz, and you were careful, and the care was spent on the wrong error.
+
+Ines finished the replay by opening the franchise line of (18.9), the $\nu$ that §18.7 set for a client's index flow, and setting it for a new tier the desk's system had never had: *forced seller, exogenous clock*. "Positive," she said. "A seller who's selling because of a gilt knows nothing about the loans inside a CLO, so $a_c$ is about zero. And the manager who sent this list will send another one next year and remember who bid in the week it mattered."
+
+"Why subsidize a seller at all?" Theo asked. "That's money."
+
+"It costs us the $\nu$. Pay the same $\nu$ to an Altice co-op member on the morning of the call and it costs us the bond. A utilitarian seller deserves a subsidy and an informed one deserves a charge, and the only hard part of the job is telling them apart before two o'clock."
+
+> **View From Another Seat.** *The buyers' side of the same week: a CLO investor, and an insurer.* TwentyFour Asset Management, a fixed-income manager that invests in European CLOs, published its read of the week on 5 October 2022, while the selling was still going on (Aza Teeuwen, "Where are CLOs trading after the Truss Tantrum?"). Its account of who was buying is a census of balance sheets without a gilt clock: "mostly US investors seeing value in European CLOs," hedge funds "using cheap leverage for IG assets," "bank treasuries for AAAs," and European insurance companies "reportedly becoming more active at these levels." The note also saw the spread tiering between the best- and worst-regarded CLO managers widen, longer deals widen more than shorter ones, and BBB tranches yield "almost 10% in euros," nearly what CLO equity had yielded at the start of that year. Six weeks later Reuters reported that Apollo's co-president Scott Kleinman had put CLO trading volume during the crisis at 800% above average levels, and that Athene, Apollo's annuities business, had bought \$1.1 billion of AAA and AA CLO tranches (Reuters, Nell Mackenzie, 18 Nov 2022). Seen from an insurer's chair, the list that was a margin call to its seller was a rare offer: senior, rated, floating-rate paper at a cash price in the 80s, sold by someone who needed cash rather than someone who knew something. The insurer in §18.1's table is a utilitarian *seller* of fallen angels. In October 2022 a balance sheet of the same kind was the patient buyer, because the seller across the table had a collateral call and it had none. Which row of Harris's table a firm sits in depends on its liabilities that week more than on its views. For a dealer bidding the same list, it meant that the toughest competition on the senior lines came from buyers with no inventory limit and no 4 p.m.
+
+*Autopsy.* The beats priced the hand; the autopsy asks what a machine could have seen before the list arrived. The gilt sell-off and the stress in credit ETFs were public before the first list landed, and both said the same thing: sellers with an exogenous clock. A systematic desk reading them as a regime switch would have set the tier's $a_c$ near zero and its $\nu$ above zero before Monday, widened the $\sigma_\varepsilon$ it assumed on junior lines, and marked down its confidence in every composite built from covers. Leakage was enormous all week, because every list told the street that more lists were coming, so each seller paid the drift for the sellers behind it as well as for itself.
+
+> **Trend Watch: BWIC supply, 2021–2026.** *2021:* total BWIC volume averaged \$5.2bn a quarter; *Q2-2022:* \$6.8bn, with CLOs 55% of volume (TwentyFour AM, 2022-07-11). *Late September 2022:* the UK mini-Budget triggered the gilt and LDI crisis, and the Bank of England began temporary long-gilt purchases on 28 September. *The following week:* more than €1.5bn of CLOs were listed via BWICs, with perhaps another €1bn traded away from the broader market; one Tuesday alone saw about €400m listed, predominantly AA. "Sales over the past week-and-a-half could exceed the previous three months combined." Almost all AAA and AA paper traded, while many BB and B bonds "didn't meet reserves." AA cash prices were "in the 80s," and some sellers "seemed to have no choice but to sell in order to meet liquidity needs" (TwentyFour AM, 2022-10-05). *2025–2026:* 9fin (2025-12-02) reported an insurer listing more than \$1bn of triple-A US CLOs in a single BWIC, and SCI (2026-02-16) headlined a \$56bn twelve-month US BSL CLO BWIC total led by triple-A supply *(headline-level figures; the twelve-month window was not verified)*. *What it means:* the BWIC is now a primary liquidity venue for structured credit, and its leak rate is a cost line.
 
 ### Specification for AI Implementation (BWIC shading and leakage)
 
@@ -799,6 +879,22 @@ The shading constant $e_n$ and the leakage bill are the two numbers a BWIC desk 
 *The full listing is [Listing 18.7 in Appendix F](#code-18-7).*
 
 ## 18.10 Desk Debrief
+
+**Finder.** One row per tool: where its equation lives, the picture that explains it, the scene where it worked or broke, and its listing.
+
+| Concept | Equation | Intuition (box) | Judgment (scene) | Code |
+| :--- | :--- | :--- | :--- | :--- |
+| Roll's effective spread | $S = 2\sqrt{-\text{Cov}(\Delta p_t,\Delta p_{t-1})}$, §18.2.1 | A ball between two walls (§18.2) | The NaN on Altice France's secured notes, three sessions running (§18.2.1) | [Listing 18.1](#code-18-1) |
+| Kyle's $\lambda^K$ | $\lambda^K = \text{Cov}(v,y)/\text{Var}(y) = \tfrac12\sigma_v/\sigma_u$, §18.3.2 | The best guess is a straight line (§18.3.2) | Ines's napkin and Theo's first markout study of the Halvorsen seller (§18.3.3) | [Listing 18.2](#code-18-2) |
+| AS spread: fear and greed | (18.1)–(18.4), §18.4 | A wobble in points and a phone that rings less; fear as a number; the exponential of a wobble; $\ln(1+x) \approx x$ (§18.4) | The cold open's 90.875, and the 9:31 page (§18.4.4) | [Listing 18.3](#code-18-3) |
+| GLFT effective horizon | (18.5)–(18.6), $\tau_{\text{eff}} = 1/(2\sqrt{\alpha\eta})$, §18.5 | A marble in a bowl (§18.5) | The Credit Suisse AT1 weekend, when $A = 0$ (§18.6.3) | [Listing 18.4](#code-18-4) |
+| JTD reservation price | (18.7)–(18.8), §18.6 | The jump's exponential, part one (§18.6) | Altice France, two RFQs forty minutes apart (§18.6.3) | [Listing 18.4](#code-18-4) |
+| $\mathbb{P}$ versus $\mathbb{Q}$, charged once | $(\lambda^{\mathbb{P}}-\lambda^{\mathbb{Q}})J\tau$ in (18.9), §18.6–§18.7 | Whose odds you are using, part two (§18.6) | Altice's 1.47 points of credit view (§18.6.3); the RSSG bridge (§18.6.2) | [Listing 18.5](#code-18-5) |
+| Win curve and the franchise $\nu$ | Logistic $P(x)$ and $x^* = d - \nu + \text{greed}(x^*)$, §18.7 | A win curve, and a constraint that is a price (§18.7) | The panel-review e-mail (§18.7); the forced-seller tier (§18.9.1) | [Listing 18.5](#code-18-5) |
+| TRACE caps and flags | No equation: "5MM+" and "1MM+" caps, the 15-minute clock, the flags, §18.8 | The fifteen-minute clock (Quant-Shop Life, §18.8) | Theo's Tuesday with the rulebook (§18.8) | [Listing 18.6](#code-18-6) |
+| Winner's curse and leakage | $x - \sigma_\varepsilon e_n$; $\Delta P = -\lambda^K\phi\,p_{\text{trade}}\,Q$, §18.9 | The winner is the most wrong (§18.9) | The LDI BWIC week (§18.9.1) | [Listing 18.7](#code-18-7) |
+
+The bullets below are the same chapter with the scenes taken out, short enough to tape to a monitor.
 
 - **A quote is five numbers, not one:** credit view, fear, suspicion, greed, and franchise. Equation (18.9) on one line. If you can't name all five, you priced one.
 - **In bonds, diffusive fear is pennies.** The AS spread is mostly greed, $\tfrac2\gamma\ln(1+\gamma/k) \to 2/k$. The real fear is the jump term $\lambda^{\mathbb{P}}J^2$ and the factor $e^{\gamma qJ}$.
@@ -811,14 +907,14 @@ The shading constant $e_n$ and the leakage bill are the two numbers a BWIC desk 
 
 **The Spec You Hand the Robot.** *Vague:* "Build an RFQ auto-quoter." *What ROBO built:* it maximized the hit ratio, bid par for everything, and owned the bond market by Thursday. *Precise:* Build `rfq_engine.quote(rfq, state) -> Quote`. **Inputs:** `rfq` = {bond_id, side, size_lots, n_dealers, client_tier, protocol, timer_s}; `state` = {composite_mid (points, $\mathbb{Q}$-fair), inventory_lots, sigma_pts_per_sqrt_yr (20-day $\mathbb{P}$ forecast), gamma_per_pt_lot, holding_tau_yr, lam_P_per_yr (baseline + event calendar × PRS), lam_Q_per_yr (CDS/composite-implied), jump_pts or recovery Beta(a, b), a_tox_pts[client_tier] (residual markout conditional on win), win-curve coefficients, nu_pts[client_tier] (quality-adjusted hit-ratio dual), tick}. **Computation:** block reservation price from $\theta(q)$ (§18.6) in logs; the markup from (18.2) with the logistic curve; the five terms of (18.9); round to tick. **Guards:** no quote if the reservation price is below recovery or $|q + n| > Q$; clip to composite ± band; widen or stop when the stress regime is on (ETF discount z-score, bid–ask percentile); stop a session when realized markouts breach 3σ of their forecast. **Logs (the hand history):** every term, $P(\text{win})$, the cover when lost, and 1/5/20-day IDO markouts. **Tests:** the asserts in this chapter, plus one that raw hit-ratio targeting fails on a synthetic toxic tier.
 
-**Exercises**
+### Exercises
 
-1. Show that $\tfrac1\gamma\ln(1+\gamma/k) \to 1/k$ as $\gamma \to 0$, and that $1/k$ maximizes $\delta Ae^{-k\delta}$. Explain to Kaz why a risk-neutral dealer still has a spread.
-2. Re-derive (18.7) with $J = s - 100R$, $R \sim \text{Beta}(a,b)$. Show that the MGF $M_J(\gamma q)$ replaces $e^{\gamma qJ}$, and use Jensen to sign the effect of recovery uncertainty on the bid.
-3. On a TRACE extract with "5MM+" caps, estimate the Roll spread by size bucket ($<$\$100k, \$100k–\$1mm, \$1–5mm, capped). Which buckets return NaN, and why does order splitting make the capped bucket's estimate *too small*?
-4. Compute the winner's-curse shading for a 3-dealer versus an 8-dealer BWIC with $\sigma_\varepsilon = 0.75$ points. Then argue whether the *equilibrium* bid rises or falls with $n$.
-5. ROBO has been told to "maximize the hit ratio." Describe its inventory one week later, its markouts, and the email from risk. Then write the one-line constraint that fixes it.
-6. Using `glft_stationary`, find the $A$ at which a dealer's stationary skew per lot equals the AS skew with a one-week horizon. Interpret the answer as "how often must this bond be asked about for AS to be right?"
+1. *(Warm-up)* Show that $\tfrac1\gamma\ln(1+\gamma/k) \to 1/k$ as $\gamma \to 0$, and that $1/k$ maximizes $\delta Ae^{-k\delta}$. Explain to Kaz why a risk-neutral dealer still has a spread.
+2. *(Stretch)* Re-derive (18.7) with $J = s - 100R$, $R \sim \text{Beta}(a,b)$. Show that the MGF $M_J(\gamma q)$ replaces $e^{\gamma qJ}$, and use Jensen to sign the effect of recovery uncertainty on the bid.
+3. *(Core, data)* On a TRACE extract with "5MM+" caps, estimate the Roll spread by size bucket ($<$\$100k, \$100k–\$1mm, \$1–5mm, capped). Which buckets return NaN, and why does order splitting make the capped bucket's estimate *too small*?
+4. *(Core)* Compute the winner's-curse shading for a 3-dealer versus an 8-dealer BWIC with $\sigma_\varepsilon = 0.75$ points. Then argue whether the *equilibrium* bid rises or falls with $n$.
+5. *(Warm-up)* ROBO has been told to "maximize the hit ratio." Describe its inventory one week later, its markouts, and the email from risk. Then write the one-line constraint that fixes it.
+6. *(Stretch, code)* Using `glft_stationary`, find the $A$ at which a dealer's stationary skew per lot equals the AS skew with a one-week horizon. Interpret the answer as "how often must this bond be asked about for AS to be right?"
 
 ### Deep-Dive Resource Graph
 

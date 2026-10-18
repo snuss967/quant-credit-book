@@ -1,0 +1,25 @@
+# Progress Log, Edition 2 U2: Chapter 12-B
+
+- [ ] 1. [Cold Open] EXPAND-SCENE (1,200-1,500 words), the Friday card
+- [ ] 2. [§12B.1] LIST-TO-NARRATIVE + MATH-GENTLY #1 (min-max threshold)
+- [ ] 3. [§12B.2] MATH-GENTLY #2 + LIST-TO-NARRATIVE + FULL-DERIVATION-MOVE (turnover)
+- [ ] 4. [§12B.3] MATH-GENTLY #3 + LIST-TO-NARRATIVE + ANOTHER-SEAT (CLO)
+- [ ] 5. [§12B.4] MATH-GENTLY #4 + BRIDGE (timed automaton)
+- [ ] 6. [§12B.5 head] NEW-SCENE Long Scene A: Saks Global, Five Months in Court
+- [ ] 7. [§12B.5 DIP/roll-up] MATH-GENTLY #5 + FULL-DERIVATION-MOVE
+- [ ] 8. [§12B.5 confirmation] NEW-SCENE, the Purdue jump
+- [ ] 9. [§12B.5 clock table] WHEN-TO-APPLY in dialogue
+- [ ] 10. [§12B.6 call spreads] MATH-GENTLY #6
+- [ ] 11. [§12B.6 fulcrum] MATH-GENTLY #7, two parts
+- [ ] 12. [§12B.6 plan value] MATH-GENTLY #8 + FULL-DERIVATION-MOVE + ANOTHER-SEAT (Oaktree)
+- [ ] 13. [§12B.6 absolute priority] BRIDGE to Saks
+- [ ] 14. [§12B.6 cramdown] NEW-SCENE Long Scene B: Momentive + MATH-GENTLY #9
+- [ ] 15. [§12B.7] MATH-GENTLY #10 two parts + FULL-DERIVATION-MOVE + WHEN-TO-APPLY
+- [ ] 16. [§12B.8] SHOP-LIFE vignette: the transfer notice + LIST-TO-NARRATIVE
+- [ ] 17. [§12B.9] EXPAND-SCENE Halvorsen, grade the Friday cards
+- [ ] 18. [§12B.9 after settlement] WHEN-TO-APPLY inside the scene
+- [ ] 19. [§12B.9 end] RV beat, The Pair box, PB-02
+- [ ] 20. [§12B.10 Case Study] keep length; rewrite code explanation per lesson 12
+- [ ] 21. [§12B.10 before Spec] ANOTHER-SEAT (dealer desk)
+- [ ] 22. [§12B.11] Finder table; keep bullets and Spec
+- [ ] 23. [Whole chapter] box discipline

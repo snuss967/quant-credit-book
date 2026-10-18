@@ -4,9 +4,13 @@
 
 ## Cold Open: Six Columns Called "Spread"
 
-*Tuesday, 6:55 p.m.* The backtest had one job: replay the Chapter 1 fallen angel through March 2020 and ask whether a desk that absorbed the index sellers would have been paid for it (§1.8.2). Kaz had loaded the history. Theo opened the file and found six columns with "spread" in the name.
+*Tuesday 6 October 2026, 6:55 p.m., Theo Marsh's third week. A replay, run by Ines's rule of cutting a real episode off at a date and trading it blind (§1.8.2). The dates and Treasury yields are real; the bond is a stylized composite, its prices and spreads are illustrative, and every word the desk says is invented.*
 
-On 23 March 2020 they read, left to right: `g_spd 824`, `z_spd 804`, `asw_par 679`, `asw_mm 959`, `oas 804`, `cds_equiv 945`. (The bond is a stylized ten-year 4.50% note of a BBB− auto issuer, held at constant maturity; the Treasury yields are real, the bond's yields are illustrative, and every number in this chapter is reproduced by the code in §4B.9.)
+The folder was called `FA_2020_cut0323`, and Ines had stuck the rules to Theo's monitor on a yellow Post-it, in the handwriting that once filled in tournament scorecards: *Cut it at 23 March. Trade it blind. Nobody looks at April.* Inside was a backtest with one job: replay the Chapter 1 fallen angel through March 2020 and ask whether a desk that absorbed the index sellers would have been paid for it (§1.8.2). Kaz had loaded the history up to the cut. Neither of them had a memory to cheat with. Kaz had spent that March in a university library finishing a thesis on stochastic filtering; Theo had spent it ten weeks into PJT, building thirteen-week cash forecasts for clients who were drawing every revolver they had. Mags and Ines had both been on dealer desks that month, which was why the Post-it said *blind* and why the two of them had been asked to keep quiet.
+
+Theo opened the vendor file the way he used to open a data room. At PJT the first click never varied: the credit agreement, Article I, Definitions, because a number in a deal is worth exactly what the paragraph defining it says. "Consolidated EBITDA" had run to four pages and eleven add-backs in his last deal, and he could still recite the fight over each one. He looked for the vendor file's Article I. There was a tab called `data`; a tab called `meta`, which listed forty-one columns in alphabetical order, every one of type `float64`; and a README of two lines: *Spreads in bp. See methodology.* The methodology was a link to a PDF dated 2017. He bookmarked it and did not open it, a decision that would cost the desk forty minutes the next morning (§4B.8).
+
+Six of the forty-one columns had "spread" in the name. On 23 March 2020 they read, left to right: `g_spd 824`, `z_spd 804`, `asw_par 679`, `asw_mm 959`, `oas 804`, `cds_equiv 945`. (The bond is a stylized ten-year 4.50% note of a BBB− auto issuer, held at constant maturity; the Treasury yields are real, the bond's yields are illustrative, and every number in this chapter is reproduced by the code in §4B.9.)
 
 "Which one is the spread?" Theo asked.
 
@@ -14,21 +18,39 @@ On 23 March 2020 they read, left to right: `g_spd 824`, `z_spd 804`, `asw_par 67
 
 "They differ by 280 basis points. In my old job, 280 basis points was a covenant reset and two weeks of lawyers."
 
-Mags, from the next desk, without looking up: "In 1994 there was one spread. It was whatever the man on the phone said, minus whatever he thought you knew."
+Mags, from the next desk, without looking up: "When I started there was one spread. It was whatever the man on the phone said, minus whatever he thought you knew."
 
 Ines came over with her coffee and read the row the way she reads a hand history. "Wrong question. Ask which one is the pot. Which of these numbers did money actually move on that day, and which ones are just the way somebody chose to count?"
 
-ROBO had been asked the week before to "add the spread to the feature set." It had added all six, and reported, accurately, that they were highly correlated.
+ROBO had been asked the week before to "add the spread to the feature set." It had added all six, and reported, accurately, that they were highly correlated. Its note ran to one line, *pairwise correlation 0.97 to 0.99, 2010–2020; recommend retaining one*, and did not say which one, because nobody had asked and ROBO does not guess.
 
 Theo scrolled to the duration column: 8.11 on 20 February, 7.40 on 23 March. "The bond got *less* risky? It lost thirty-eight points."
 
 "Per basis point," said Kaz. "Per basis point it got less risky. There were just a lot more basis points."
 
-That exchange is this chapter. Every later chapter quotes a duration, a convexity, a DV01 or one of the six spreads, and none of them stops to build the thing. This chapter builds all of them once, from one price and one curve, and then reprices the fallen angel in every measure to sort the numbers that moved from the numbers that were conventions.
+The replay had dealt them a position along with the data: \$10mm of the note, bought in February, and \$9.5mm of ten-year Treasuries sold short against it, a hedge somebody had sized from that same duration column (§4B.5). The Treasury had rallied hard into the cut. So on the screen in front of Theo the bond was losing money and the hedge that was supposed to protect it was losing money too, in the same red, on adjacent lines.
 
-**By the end of this chapter you will be able to** write down the price–yield function of a fixed-rate bond from its indenture; compute clean and dirty prices and accrued interest on the right day count; derive Macaulay, modified, effective, spread and key-rate duration and know which one a hedge needs; separate the three things "convexity" means on this desk; produce DV01, CS01 and DTS and size a Treasury hedge; compute G, I, Z, asset-swap, discount-margin and par-CDS-equivalent spreads from one curve; price a callable bond on a calibrated lattice so that OAS, yield-to-worst and the make-whole are computed rather than named; and ship `bondmath.py`, which Chapters 5, 8, 9, 10, 12, 15 and 19 import.
+"So which one do I load?" Theo asked. "And what does the risk report say tonight?"
 
-> **Prerequisites.** Calculus to second order (Taylor's theorem), continuous discounting $e^{-rt}$, and what a coupon is. Nothing else. The hazard-rate bond price in §4B.6 borrows one formula from §6.6.3 and says so; the lattice in §4B.7 is self-contained. A reader who already prices callables on a calibrated tree can skip to the case in §4B.8 and the code in §4B.9. Later chapters cite this one as §4B.N.
+"Z," said Kaz. "It's the only one built from a curve. G is a subtraction, the asset swaps are a package with a swap stapled to it, and the CDS one is an opinion about recovery."
+
+Mags had been asked to keep quiet and had taken it as an instruction about volume. "Load the price."
+
+"Price isn't a spread."
+
+"No," said Mags. "That's what I like about it."
+
+Ines did not take a side. She took an index card from the stack she keeps by the coffee machine, wrote on it, and put it face down on Theo's keyboard. He turned it over.
+
+> *Write three things: which column you would load into the model, what the risk line should have read on 23 March, and whether you would have kept the Treasury hedge.*
+
+"Due when?"
+
+"Seven-forty tomorrow. Before Kaz rebuilds the columns." She picked up her coffee. "If you write it after, you'll write whatever Kaz built."
+
+**By the end of this chapter you will be able to** build every number on that row, and every number behind it, from one list of cash flows and one curve: price and accrued, yield, the five durations, the three things "convexity" means, DV01, CS01 and DTS, the eight spreads, OAS on a calibrated lattice, and the make-whole. You will also be able to say which of them are the pot and which are counting conventions, and to ship `bondmath.py`, which Chapters 5, 8, 9, 10, 12, 15 and 19 import; the capabilities come back as the Finder table at the top of the Desk Debrief (§4B.10).
+
+> **Prerequisites.** Calculus to second order (Taylor's theorem), continuous discounting $e^{-rt}$, and what a coupon is. Nothing else. The hazard-rate bond price in §4B.6 borrows one formula from §6.6.3 and says so; the lattice in §4B.7 is self-contained. A reader who already prices callables on a calibrated tree can skip to the case in §4B.8 and the code in §4B.9. Later chapters cite this one as §4B.N. The free evening before this chapter is Andrew Lo's MIT OpenCourseWare 15.401, "Lectures 4–6: Fixed-Income Securities" and "Recitation 2a" (Fall 2008), which derive spot rates, yield and Macaulay duration in MBA language and leave this chapter to do the credit desk's version (the lectures are linked in the Resource Graph; the recitation sits on the same course page).
 
 **Notation added in this chapter.** $c$ is the annual coupon rate (decimal), $f$ the number of coupons per year, $N$ the number of remaining coupons, $w \in (0,1]$ the fraction of the current coupon period still to run, and $\text{AI}$ accrued interest per 100 of face. The discount factor is $d(t)$, in lower case so it cannot be confused with duration $D$; the continuously compounded zero rate is $z(t)$, also lower case, because upper-case $Z$ is the Z-spread. Convexities carry the same decorations as durations: $C^{\text{mod}}$ (to yield), $C^{\text{spr}}$ (to spread), $C^{\text{eff}}$ (to a curve shift, by repricing). The issuer's call value in §5.2.2 keeps $C^{\text{call}}$ and the call price keeps $K_{\text{call}}$, so no convexity is ever undecorated. $A$ is an asset-swap spread and $\text{DM}$ a discount margin. These join App A §A.3.
 
@@ -47,6 +69,8 @@ $$
 $$
 
 A US corporate has $f = 2$. Each coupon is the same size whatever the calendar says, because 30/360 makes every half-year exactly 180 days. That is the whole point of the convention: it was designed so that a clerk with a pencil could compute a coupon, and it survives because a court can still check one.
+
+> **Math, Gently.** *A bond is a stack of post-dated cheques.* Picture the note as twenty cheques in an envelope, each with a date and an amount on it: nineteen for \$2.25 and one for \$102.25. Nobody will hand you \$2.25 today for a cheque dated 2030, because money held now can earn something in the meantime. The *discount factor* $d(t)$ is the price today of a \$1 cheque dated $t$ years out, and it is below one for that reason; with continuous compounding at rate $z$ it is $d(t) = e^{-zt}$. A tiny number to redo in the margin: a \$100 cheque due in two years at 5% is worth $100e^{-0.05 \times 2} = 100e^{-0.10} = 90.48$ today, since $e^{-0.1} \approx 1 - 0.1 + 0.005 = 0.905$. The bond's price is each cheque's amount times its own discount factor, added up: twenty small multiplications and one sum. Every number in this chapter, from yield to OAS, turns out to be a different way of choosing those twenty discount factors. The formula opens §4B.2, once the calendar has had its say.
 
 ### Day counts
 
@@ -70,6 +94,8 @@ Bonds are quoted clean and settle dirty (App A §A.5). Worked example: the falle
 
 Why quote clean? Because the dirty price is a sawtooth. It rises linearly by $100c/f$ over each period and drops by the coupon on the payment date. Quote dirty and every bond in the index would crash twice a year on a published schedule, and somebody would build a factor on it. (It happens: a return computed from dirty prices without adding back the coupon shows exactly that crash, and Chapter 9-B's return-construction rules exist partly to catch it.) Bonds in default trade *flat*: no accrued is added, and whatever claim to unpaid interest the holder has is inside the price (App A §A.5).
 
+*Quant-Shop Life, a fictional composite: the operations desk of a systematic asset manager, the first break report of a month.* Agnieszka had been a reconciler for eleven weeks, long enough to stop reading the break report and start diffing it. It had one line: \$1,250 on \$10mm of a 4.50% note paying on 31 March and 30 September, bought for settlement on 31 October. She laid the firm's accrued and the custodian's side by side, field by field, and the only difference was a day: the custodian counted thirty from 30 September to 31 October, the firm's library thirty-one. The library had been written by a contractor and tested on the fifteenth of every month. The fix was four characters. The meeting about why nobody had caught it took an hour and left the sentence the desk still says before any pricing function goes live: "Accrued to settlement, thirty-first to thirtieth."
+
 > **Ways This Blows Up.** A 30/360 function that forgets the "31st" rule is wrong by one day on every trade that starts or ends on the 31st. On \$10mm of a 4.50% bond one day of accrued is \$1,250. ROBO will not notice. The client's back office will, on the first trade of the month, and will send you a break for each one.
 
 *Used in:* §15.2 (the change-of-control put at 101 plus accrued), §21.1 (ACT/360 loan interest), §24.2–§24.3 (CDS premium accrual and `bond_cashflows`), §24.5 (accrued at default and the deliverable), App A §A.4–§A.5, App D (settlement cycles).
@@ -80,19 +106,15 @@ Desk framing. A yield is a price written in a different font. It is the single d
 
 ### The street formula
 
+> **Math, Gently.** *The one dial.* Take the envelope of cheques from §4B.1 and suppose that, instead of twenty discount factors, you are allowed one dial: a single rate applied to every cheque. Turn it up and every cheque is worth less, so the stack is worth less; turn it down and the stack is worth more. Somewhere on the dial the stack is worth exactly what the bond traded at, and that setting is the yield. Nobody observes a yield. A trader observes a price, and a solver turns the dial until the stack matches, the way you hunt for the right shower temperature: too hot, too cold, closer. Tiny number: a one-year 5% annual-pay bond trades at 99, so the stack is a single cheque for \$105, and the dial that makes it worth 99 solves $105/(1+y) = 99$, so $y = 105/99 - 1 = 6.06\%$. That 6.06% was on no screen until a division put it there. With twenty cheques no division does it, only the dial, and the dial is the formula next.
+
 With $w$ the fraction of the current period still to run (on the bond's own day count), the street price–yield function with periodic compounding at frequency $f$ is
 
 $$
 P^{\text{dirty}}(y) = \sum_{k=1}^{N} \frac{\text{CF}_k}{\left(1 + y/f\right)^{k - 1 + w}} .
 $$
 
-On a coupon date $w = 1$ and the exponent is simply $k$. Write $v = (1 + y/f)^{-1}$ and $i = y/f$. The coupons form a geometric series, $\sum_{k=1}^{N} v^k = v\,(1 - v^N)/(1 - v) = (1 - v^N)/i$, so
-
-$$
-P(y) = \frac{100\,c}{y}\left[1 - \left(1 + \frac{y}{f}\right)^{-N}\right] + 100\left(1 + \frac{y}{f}\right)^{-N}.
-$$
-
-Rearranging gives the identity that every bond trader carries in their head without knowing it is an identity:
+On a coupon date $w = 1$ and the exponent is simply $k$. Summed in closed form (the derivation is just below), the formula hides the identity that every bond trader carries in their head without knowing it is an identity:
 
 $$
 P(y) - 100 = 100\,(c - y)\,a_N(y), \qquad a_N(y) = \frac{1 - (1 + y/f)^{-N}}{y} .
@@ -100,16 +122,24 @@ $$
 
 A bond's premium is the present value of the coupon it overpays, and its discount is the present value of the coupon it underpays. The factor $a_N(y)$ is an annuity in years: the present value of receiving one unit a year, paid $f$ times a year, for the bond's remaining life. At par, $c = y$ and $P = 100$. That is the definition of a par yield, and it is the first unit test in §4B.9.
 
-### Properties, with proofs
+#### The Full Derivation
 
-Differentiate term by term. Every cash flow is positive and every exponent $e_k = k - 1 + w$ is positive, so
+Write $v = (1 + y/f)^{-1}$ and $i = y/f$. On a coupon date the coupons form a geometric series, $\sum_{k=1}^{N} v^k = v\,(1 - v^N)/(1 - v) = (1 - v^N)/i$, so
+
+$$
+P(y) = \frac{100\,c}{y}\left[1 - \left(1 + \frac{y}{f}\right)^{-N}\right] + 100\left(1 + \frac{y}{f}\right)^{-N}.
+$$
+
+Subtract 100 from both sides, write $100 = 100\,(y/y)\left[1 - (1+y/f)^{-N}\right] + 100\,(1+y/f)^{-N}$, and the premium identity above falls out.
+
+The properties of $P(y)$ come from differentiating term by term. Every cash flow is positive and every exponent $e_k = k - 1 + w$ is positive, so
 
 $$
 \frac{dP}{dy} = -\frac{1}{f}\sum_{k} e_k\,\text{CF}_k\left(1 + \frac{y}{f}\right)^{-e_k - 1} < 0, \qquad
 \frac{d^2P}{dy^2} = \frac{1}{f^2}\sum_{k} e_k(e_k+1)\,\text{CF}_k\left(1 + \frac{y}{f}\right)^{-e_k - 2} > 0 .
 $$
 
-Price is strictly decreasing and strictly convex in yield. Two consequences follow. First, the yield is *unique*: a strictly monotone function crosses any price level once, so a bracketing solver cannot find the wrong root and cannot fail if the price lies between $P(\infty) = 0$ and $P(y_{\min})$. Second, the boundary cases are clean and make good tests: as $y \to 0$, $P \to 100\,(1 + cN/f)$, the undiscounted sum of the list; as $y \to \infty$, $P \to 0$. For a zero-coupon bond, $P = 100\,(1+y/f)^{-fT}$ and every result below should collapse to something you can do in your head.
+Price is strictly decreasing and strictly convex in yield. Two consequences follow. The yield is *unique*: a strictly monotone function crosses any price level once, so a bracketing solver cannot find the wrong root and cannot fail if the price lies between $P(\infty) = 0$ and $P(y_{\min})$; the shower has one right temperature. And the boundary cases are clean enough to make good tests: as $y \to 0$, $P \to 100\,(1 + cN/f)$, the undiscounted sum of the list; as $y \to \infty$, $P \to 0$. For a zero-coupon bond, $P = 100\,(1+y/f)^{-fT}$ and every result below collapses to something you can do in your head.
 
 ### Continuous compounding, and the first convention
 

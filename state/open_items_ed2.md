@@ -9,9 +9,12 @@
 | Cold open; §4.10 Today bullet; §4.10 story | Blackstone Corporate Bond Strategies "over \$40 billion" (`Blackstone_Systematic_Credit p.1`), printed as undated | As-of date of the \$40bn figure; the BCBS web page also appears undated | open |
 | §4.1 Ares box; §4.10 Coda bullet; §4.10 story | Ares/BlueCove completion "early February 2026" | Resolved: Business Wire, "Ares Completes Acquisition of BlueCove to Launch Systematic Credit Strategy" (release ID 20260202) | resolved |
 | §4.2 annotation on the fundamental law (CDS vs cash breadth) | Cboe IBIG and IBHY block trades topped \$1bn a month in July and August 2026, "according to exchange data reported by The DESK, 16 October 2026" | Primary Cboe volume data not opened | open |
-| §4.3 map, Capacity column, BlackRock / Robeco / Acadian rows | "Silent (none found)" | Confirm no capacity statement in these firms' public material | open |
+| §4.3 map, Capacity column, BlackRock / Robeco / Acadian rows | "Silent" (lessons pass, 2026-10-18: "(none found)" removed from book text) | Confirm no capacity statement in these firms' public material | open |
 | §4.7 dealer View From Another Seat | Jefferies and Bank of America named only as examples of the bank-desk seat; the box now attributes no view to either (verifier, 2026-10-18, corrected an earlier line saying no public statement existed) | `perspectives_dealers_and_systematic_shops.md` holds Jefferies heads-of-credit-trading statements (Orlan, Jallot, Parrenin); none found for Bank of America. A later pass may add a cited Jefferies line | open |
 | §4.1 pod scene, closing sentence | "the pay, netting and capacity arithmetic in Chapter 28, which proves what Ines has just asserted" | Ch 28 as of this date has no fee-waterfall or netting section (`rv_thread.md` row T12 assigns it); the Ch 28 reviser must supply it or this sentence must be softened | open |
+| §4.2 Trend Watch, 2021 line | BlueCove's 0.4% of a \$66trn universe against 15% for quant equity, "(as reported by IFR in early 2022)" (lessons pass, 2026-10-18; was "per press reports, IFR, c. early 2022; date unconfirmed") | Exact IFR article and date not opened | open |
+| §4.1 table, row (iv) | IGEB and HYDB at about \$1.4bn and \$1.5bn on 16 Oct 2026, "as fund-data aggregators report them" (lessons pass; was "approx.; aggregator data: stockanalysis.com") | iShares fund pages not opened; aggregator figures are secondary | open |
+| §4.1 table, row (ii) | Pods "publish nothing about their credit books" (lessons pass; was "no public source for a pod's credit book was found") | None; restated as a reader-facing fact about disclosure | resolved |
 
 ## 24_ch24_bond_cds_basis_and_deliverables (U2, 2026-10-18)
 
