@@ -13908,5 +13908,130 @@ if __name__ == "__main__":
     print(_self_test())
 ```
 
+## F.1-B: Chapter 1-B: A Week in Five Quant Shops {#code-1b}
+
+Listings from `01_ch01b_a_week_in_five_quant_shops.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
+
+
+### Listing 1-B.1: Latest version of event_id that the shop knew at time `at` (bitemporal read) {#code-1b-1}
+
+```python
+from dataclasses import dataclass
+from datetime import date, datetime
+from enum import Enum
+from typing import Iterable, Optional
+
+
+class Shop(Enum):
+    MARKET_MAKER = "market_maker"
+    POD = "pod"
+    SYSTEMATIC_AM = "systematic_am"
+    BANK_DESK = "bank_desk"
+    DISTRESSED = "distressed"
+
+
+class ClockType(Enum):
+    REGULATION = "regulation"      # a rule sets the clock (e.g. FINRA 6730, 5310; SEC 15c3-5)
+    SOURCED_PRACTICE = "sourced"   # a cited public account describes the routine
+    COMPOSITE = "composite"        # invented for the story, labelled as such
+
+
+@dataclass(frozen=True)
+class WeekEvent:
+    event_id: str                        # logical id; a correction is a new row, same id
+    shop: Shop
+    task_class: str                      # "reconciliation", "model_review", "restricted_list", ...
+    clock_type: ClockType
+    occurred_at: datetime                # when it happened (or is scheduled to happen)
+    known_at: datetime                   # when the shop learned this version
+    source: Optional[str] = None         # citation; required unless COMPOSITE
+    instrument_id: Optional[str] = None  # surrogate key, never a CUSIP (see Chapter 3-B)
+    ends_at: Optional[datetime] = None   # interval end; None means open ("next 8-K")
+    ticket_opened: Optional[date] = None
+
+    def __post_init__(self) -> None:
+        if self.clock_type is not ClockType.COMPOSITE and not self.source:
+            raise ValueError(f"{self.event_id}: a non-composite event needs a source")
+        if self.ends_at is not None and self.ends_at < self.occurred_at:
+            raise ValueError(f"{self.event_id}: interval ends before it starts")
+
+    def ticket_age_days(self, on: date) -> Optional[int]:
+        return None if self.ticket_opened is None else (on - self.ticket_opened).days
+
+
+def as_known(events: Iterable[WeekEvent], event_id: str, at: datetime) -> Optional[WeekEvent]:
+    """Latest version of event_id that the shop knew at time `at` (bitemporal read).
+    Ties on known_at are broken by list order; production feeds carry a sequence number."""
+    best = None
+    for e in events:
+        if e.event_id == event_id and e.known_at <= at:
+            if best is None or e.known_at >= best.known_at:
+                best = e
+    return best
+
+
+def to_calendar_row(e: WeekEvent) -> dict:
+    """Row shape for Chapter 3-B's desk_calendar.py (event id, date, known-at date, source)."""
+    return {
+        "event_id": e.event_id,
+        "instrument_id": e.instrument_id,
+        "event_date": e.occurred_at.date(),
+        "known_at": e.known_at.date(),
+        "source": e.source or "composite",
+    }
+```
+
+
+## F.4-C: Chapter 4-C: Other Seats at the Table: One Bond, Seven Owners {#code-4c}
+
+Listings from `04_ch04c_other_seats_at_the_table.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
+
+
+### Listing 4-C.1: One holder (a vehicle, not a firm) of one instrument, described by its leash {#code-4c-1}
+
+```python
+import math
+from dataclasses import dataclass
+from datetime import date
+from typing import Iterable, Optional
+
+
+@dataclass(frozen=True)
+class SeatState:
+    """One holder (a vehicle, not a firm) of one instrument, described by its leash."""
+    vehicle_id: str               # e.g. one CLO, one BDC, one insurer account
+    seat_type: str                # "clo", "insurer", "bdc", "systematic", "dealer", "pod", "opportunistic"
+    instrument_id: str
+    face: float                   # vehicle's face holding in the instrument, $
+    as_of: date                   # date of the source record (trustee report, filing, tender notice)
+    next_check: Optional[date]    # next date the binding rule is tested
+    rule: str                     # "ccc_bucket", "jr_oc", "rbc", "redemption_cap", "risk_budget", ...
+    slack: float                  # distance to the threshold, decimal; <= 0 means binding
+
+
+def tightness(s: SeatState, scale: float = 0.02) -> float:
+    """1.0 at or past the threshold, decaying exponentially with slack."""
+    return 1.0 if s.slack <= 0 else math.exp(-s.slack / scale)
+
+
+def forced_pressure(states: Iterable[SeatState], outstanding_face: float,
+                    rated_ccc: bool, today: date,
+                    max_age_days: int = 45, horizon_days: int = 30) -> float:
+    """Share of the issue held by CLO vehicles near a binding test inside the horizon."""
+    if outstanding_face <= 0 or not rated_ccc:
+        return 0.0
+    total = 0.0
+    for s in states:
+        if s.seat_type != "clo" or s.next_check is None:
+            continue
+        if (today - s.as_of).days > max_age_days:
+            continue                                  # stale record: holder may have sold
+        days_to_check = (s.next_check - today).days
+        if not 0 <= days_to_check <= horizon_days:
+            continue
+        total += (s.face / outstanding_face) * tightness(s)
+    return min(total, 1.0)
+```
+
 
 <!-- STATUS: COMPLETE -->

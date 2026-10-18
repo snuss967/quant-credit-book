@@ -64,3 +64,118 @@ Mercer (May 2023) arrays platforms against "centralized" funds on a spectrum: mo
 - **What is not public:** any pod's credit gross, net, borrow cost, hedge ratios, or P&L attribution; the share of pod flow in CDX; the number of credit pods per platform. Treat any such number you see in a secondary blog as unsourced.
 - **Why equity pod logic transfers imperfectly.** In *Flirting with Models* S7E19 (18 Aug 2025) the BlackRock systematic fixed income head is asked about "Equity vs. fixed income: Comparing the pod shop model" (chapter at 1:06:59; page read, transcript not). The show notes say "implementation and transaction costs [are] critical challenges compared to equities".
 
+## 3. Pass-through fees, and why the platform pays for idiosyncratic return
+
+### 3.1 Mechanism in plain language
+
+A classic hedge fund charges its investors a management fee plus a performance fee on the fund's net profit. A platform adds a second layer: each pod keeps its own P&L, the platform pays the PM a share of that P&L (Mercer: "typically receives 15-25% of profits generated"), and the cost of that payout and the rest of the machine is charged to the fund. Mercer lists what can be passed through: "PM salary and incentive payouts, talent acquisition costs (e.g. hiring bonuses), business professionals' compensation, infrastructure costs such as technology and rent, as well as travel and entertainment." Cambridge Associates (10 Oct 2025): "Employee compensation consistently emerges as the primary component of these pass-through expenses across all managers reviewed" and "Variable compensation is generally charged in addition to a fund level incentive fee, exposing investors to possible netting risk." ExodusPoint's own page calls it a "Cost pass through structure designed to align interests between management and investors."
+
+Why the investor accepts it, as the practitioners explain it: the platform sits between a single-manager fund and a fund of funds. Paleologo (Odd Lots, 20 May 2024, **CHECK**): a fund of funds "do[es] not have the ability to observe from a close-distance", while a platform can see PM skill daily, "give them more capital" or "take capital away from them or let them go", and "centralize some of the functions that make them better". Pass-through "transfers the risk directly" from the firm's P&L to the LPs. Albourne's Cosgrave (Odd Lots, 26 May 2025, **CHECK**): "if allocators had their way, they probably wouldn't want to invest in pass-throughs. But the fact is that they don't have a choice", and a pass-through manager "has to be around one-third more levered than the two-layer fees, two-and-twenty manager" in their simulations.
+
+### 3.2 Worked fee waterfall (reproduces Mercer, Figure 1)
+
+Assumptions from Mercer: management fee 1.0%, "operations, talent acquisition and retention" 3.0%, PM incentive 20% of gross return above those operating costs, fund-level incentive 20% of what is left after all of the above. My formulas, which reproduce Mercer's published table to one decimal:
+
+| Gross return | PM incentive = 20% x (g - 3%) | Fund incentive | Total cost | Net to LP | Net / gross |
+| --: | --: | --: | --: | --: | --: |
+| 5% | 0.40% | 0.12% | 4.52% | 0.48% | 9.6% |
+| 10% | 1.40% | 0.92% | 6.32% | 3.68% | 36.8% |
+| 15% | 2.40% | 1.72% | 8.12% | 6.88% | 45.9% |
+| 20% | 3.40% | 2.52% | 9.92% | 10.08% | 50.4% |
+| 25% | 4.40% | 3.32% | 11.72% | 13.28% | 53.1% |
+
+Mercer's conclusion: "for an investor to achieve a 10% net return, a fund must generate a gross return of approximately 20% or more". That is the arithmetic behind "pods need to run levered": at 3% fixed drag, a pod at 5% gross on allocated capital returns the LP 0.5% and the GP (PM plus firm) keeps 90% of the gross. For the book: this is the first thing a restructuring banker should compute when told that a credit RV pod "makes 6% a year".
+
+### 3.3 Netting risk
+
+*Two-pod toy (Albourne):* one pod is up $10, one is down $10, payout 20%. The fund is flat gross, but the winning PM is paid $2, so the investor is down $2. In a classic fund "nobody gets paid"; the competing platform can call the unpaid PM and promise to pay "if you make money". That is why netting risk is a recruiting weapon as well as a cost. Albourne's simulations put the average cost "around 1% a year".
+
+*36-PM version (Morillo, Odd Lots, 7 Oct 2024, **CHECK**):* pay each of 36 PMs 15% of their own P&L and "you pay about 25% more in comp costs" than paying a share of the netted total; put the 36 into teams of three that net internally and the extra cost is "only 5%, 5% to 6%". He gives no volatility inputs. My simulation (illustrative, parameters mine): 36 PMs, each with Sharpe 0.75 and 5% annual volatility, 15% payout, 200,000 trials.
+
+| Pairwise correlation | Individual payout / fully netted payout | Teams of 3 / fully netted |
+| --: | --: | --: |
+| 0.0 | 1.17 | 1.04 |
+| 0.1 | 1.17 | 1.05 |
+
+My individual-pod premium is 17% rather than his 25% and my team-of-three premium is 4-5%; the gap is down to inputs he did not state. The shape matches: most of the cost goes away when pods net in small groups. For Ch 28, that is an argument for modelling pay as an option on each pod, not as a share of fund profit.
+
+### 3.4 What the platform is really buying: low-correlation residual
+
+The platform needs many *independent* return streams, because diversification saturates. Morillo's arithmetic (Odd Lots, 7 Oct 2024, **CHECK**): with N risk-takers each at Sharpe SR and pairwise correlation rho, the aggregate Sharpe is SR x sqrt(N / (1 + (N-1) rho)), which is capped at SR / sqrt(rho).
+
+| rho | Cap at SR 0.75 | N = 15 | N = 45 | N = 100 |
+| --: | --: | --: | --: | --: |
+| 0.05 | 3.35 | 2.23 | 2.81 | 3.07 |
+| 0.10 | 2.37 | 1.88 | 2.17 | 2.27 |
+| 0.20 | 1.68 | 1.49 | 1.61 | 1.64 |
+
+At rho = 0.10, 45 risk-takers capture 91% of the cap (he says "about 95%"); at rho = 0.20 the cap falls to 1.68 however many PMs are added. His conclusion: "a little bit of correlation has an enormous impact".
+
+This is why a credit RV pod that is secretly long spread beta is worth little to the platform even if profitable: it raises rho for everyone. Paleologo's second risk-management principle, "true diversification", is exactly this: "if everybody takes a little bit of factor exposure in the same direction and then you sum this across 300 PMs, it becomes a big factor exposure." Yelvington (Odd Lots, 7 Jul 2025, **CHECK**) says risk managers watch for lookalike return profiles: if a credit trader and a short-end rates trader see their "month to month return started looking identical", "that would set off a red flag for me", and "if their return profile looks too similar, that probably sets off some red flags."
+
+Falk-Wallace (Odd Lots, 25 Jul 2024, **CHECK**) on why leverage attaches to the residual: "what you're levering is just that residual term". So the pod's gross exposure is limited by the volatility of the *residual* (after the factor x-ray), not by market beta. In the sibling dossier's language: idio is defined relative to a factor model, and the factor model is the platform's property. Paleologo notes a failure mode that bites credit: "when rates went up, a lot of equity portfolios moved and they really didn't know why, and there was no interest rate sensitivity in commercial factor models."
+
+## 4. Pod risk regimes
+
+### 4.1 The control stack
+
+Mercer (May 2023) lists what differs at the PM level: "overall exposure ranges (i.e. long, short, gross, net), concentration, factor risk, and stop-loss implementation", customised by sub-strategy (a long/short equity PM and a convertible-arbitrage PM have different limits). Paleologo (Odd Lots, 20 May 2024, **CHECK**) names three jobs for the risk function: stop-losses ("a primitive tail insurance" on the left tail of a PM who otherwise "is a little bit like somebody who's holding a call option"), true diversification across pods (the summed factor exposure), and keeping people "in scope". The factor model is bought off the shelf and shown to the PM as "an x-ray of your body in real time". Mercer adds that "many platforms dictate a factor-neutral positioning or very tight constraints at the underlying PM level", and that financing is part of the stack: prime brokers give large platforms "preferred financing arrangements (e.g. lower cost, 60-90 day terms)".
+
+*Scope* matters for credit. Yelvington (Odd Lots, 7 Jul 2025, **CHECK**): a PM hired for credit cannot ask for limits in an unrelated market, and the risk manager reads the return stream for a disguised version of a trade the pod is not mandated to run.
+
+### 4.2 Reported thresholds (none is a firm disclosure)
+
+| Source (date) | What is claimed | Status |
+| :-- | :-- | :-- |
+| WSJ via eFinancialCareers (5 Dec 2025) | Millennium PMs who lose 5% of allocated capital "typically have their capital halved. If they lose another 2.5%, they're usually fired." Fund declined to comment | Press report of one firm; second-hand |
+| Hedgeweek (10 Mar 2025), "previous reports" | "teams can have their buying power cut in half if losses hit 5%, while a 7.5% drawdown can result in portfolio managers being dismissed, though exceptions can be made" | Same source family |
+| Yelvington, recruiter, Odd Lots (7 Jul 2025, **CHECK**) | stop limits are "usually somewhere between 7 and 10 percent for what's called a stopout", with capital reduced "well before that three and a half or five"; measured peak to trough, so a PM can be "fired ... and be up money on the year"; allocations "three and four times their notional value" | Practitioner generalisation |
+| Kumar, Goose Hollow, Odd Lots (26 Feb 2024, **CHECK**) | lose more than 3% and capital "is going to kind of get cut in half"; lose "5, 6%" and "you're probably getting stopped out"; LPs promised no more than 10%, so strategies are managed to lose no more than 3% | Practitioner generalisation |
+| Quant Enthusiasts (5 Jun 2026, free preview) | Allocation cut "around 5% from its high-water mark", book liquidated and team dismissed "somewhere in the range of 7.5% to 10%" | Substack, unattributed; **CHECK** |
+| eFinancialCareers (20 Oct 2023) | Brevan Howard tolerant of breaches; Eisler: reached stops, "we sat them out for a bit, and then we reloaded"; Point72's CIO: no "binary outcomes with drawdowns" for junior PMs | Culture, not numbers |
+| *The Economist* (23 May 2025) | A European regulator: multi-managers are "much quicker to cut and run, cultivating a hair-trigger approach to risk management"; "truer of firms like Millennium ... than Citadel" | Regulator quote, anonymous |
+
+Take-away for the book: the shape (halve at a few percent, fire at 7-10%, measured from the peak) is consistent; the level varies by firm, strategy and PM track record. Do not print "5%/7.5%" as an industry rule; print it as the best-reported Millennium rule and add the range.
+
+### 4.3 Stop arithmetic, worked
+
+*A stop-out is likelier than a PM thinks.* Take a PM with a stop of 5% or 7.5% on allocated capital, measured peak to trough from a start at zero, daily returns normal. Annual probability of touching the stop, 40,000 paths (my simulation, illustrative):
+
+| PM Sharpe | Vol 4%, 5% stop | Vol 4%, 7.5% | Vol 6%, 5% | Vol 6%, 7.5% |
+| --: | --: | --: | --: | --: |
+| 0.0 | 37.5% | 10.3% | 71.9% | 37.0% |
+| 0.5 | 22.9% | 4.4% | 57.7% | 22.9% |
+| 1.0 | 12.4% | 1.5% | 42.6% | 12.4% |
+| 1.5 | 6.3% | 0.5% | 29.5% | 6.5% |
+| 2.0 | 2.8% | 0.1% | 19.2% | 2.9% |
+
+A Sharpe-1 PM running 6% volatility on allocated capital touches a 5% stop in 43% of years; at 4% volatility it is 12%. Yelvington: "Even a really great PM is going to have a significant drawdown every two to five years." So leverage is not chosen for return, it is chosen for survival: volatility on allocated capital sets the stop-out rate, and the platform pays for the Sharpe, not the raw return. Quant Enthusiasts (preview): the economics "reward a high Sharpe ratio over a high raw return".
+
+*Stops add up at the top.* Allocated capital is a multiple of LP equity. With Yelvington's 3-4x take 3.5x: LP equity $10bn, allocated capital $35bn. If every pod hit a 5% stop together the loss is $1.75bn, 17.5% of LP equity; at 7.5% it is 26%. Pods are not perfectly correlated, so this is an upper bound. It nevertheless explains Kumar's design logic ("if all of them lose at the same time, you've now blown through your 10% limit") and the sentence Griffin gave at a Bloomberg conference in Singapore on 9 Nov 2023: "Could you see the multimanager hedge funds take a joint 10, 15, 20% hit to their equity? It's possible ... painful, but not systemic."
+
+### 4.4 What the stop does to a credit book
+
+Credit returns are asymmetric: a long bond earns spread and occasionally loses a large fraction of par. Use illustrative inputs (mine): PM allocated capital $200m, halving line 5% ($10m), firing line 7.5% ($15m).
+
+- **Single-name HY long.** A bond at 98 with 40 recovery loses 58 points on default. $40m long: $23.2m, 11.6% of capital, beyond both lines in one event. The largest long that does not breach the firing line on its own is $15m / 0.58 = $25.9m; if the PM wants a single default to cost no more than 2.5% of capital ($5m), the long is $8.6m.
+- **Capital-structure pair.** Long $20m first-lien at 98 with 70 recovery: default loses 28 points, $5.6m. Short second-lien at 70 with 20 recovery gains 50 points per dollar, so $11.2m of short offsets the first-lien jump. The pair is jump-to-default-neutral by sizing, not by beta, and sits comfortably inside the lines. This is the sense in which "long the fulcrum, short the junior" is a pod-compatible trade (Ch 3, Ch 12-B).
+- **Index and ETF legs.** A CDX or HY-ETF short hedges spread beta in one ticker but leaves basis risk (Ch 20, Ch 24); the stop is indifferent to why the P&L moved.
+
+Ironshield's podcast, a long/short credit fund and not a pod, gives the same sizing rule in one line: "Maximum position size (% of NAV) = loss budget / downside in points". A 35-point downside against a 50bp budget caps a position at 1.4% of NAV (Fixed + Floating E18, 4 Aug 2026). On shorts it says the constraint is often borrow, not loss: at 3-4 points of capital risk "the loss budget no longer sets the size. How many bonds you can borrow does."
+
+### 4.5 Center book
+
+Mercer defines it neutrally: "a central trading portfolio ('center-book') sometimes used in order to enhance or hedge certain exposures." Morillo (ex-Citadel) says he had "responsibility for the center book where a lot of that central stuff ... happens" (the hedging and risk-model work; Odd Lots 7 Oct 2024, **CHECK**). The Hedge Fund Journal's Nickel profile (21 Apr 2026), a crypto platform contrasting itself with the traditional model, says its design has "no 'centre book', occasionally used by some funds to replicate pods' trades and/or reverse engineer their intellectual property". That is a competitor's characterisation, not an admission by any pod shop; I found no firm describing its own centre book in a page I could open. A search surfaced a claim that Balyasny's head of quant research described a central liquidity book (**CHECK**; not opened).
+
+### 4.6 Leverage and financing numbers, with their weaknesses
+
+| Figure | Source | Caveat |
+| :-- | :-- | :-- |
+| Hedge funds "can borrow upwards of ten times the capital they raise" | *The Economist*, 23 May 2025 | Journalism |
+| Leverage "from less than 1x to 6x under regulatory collateral requirements", "plausible ... 20-30x" with derivatives and repo | Mercer, May 2023 | Different definitions |
+| Average platform leverage 645% | JPMorgan estimate, quoted by Hedgeweek 15 Sep 2026 | Definition not given |
+| Multi-strategy and quant gross 444% and 645% | Resonanz Capital, 13 Jul 2026, citing Reuters/Goldman | Second-hand; **CHECK** |
+| "$1 ... four or five dollars of exposure" | Kumar, Odd Lots, 26 Feb 2024 | Practitioner |
+| Citadel finances with "more than 40 institutional counterparties", $1.6bn of bonds, investment-grade rating | Citadel COO in *The Economist* | Firm claim |
+| Fed, 8 May 2026: hedge fund leverage "near all-time highs" and concentrated in the largest funds | Orrick summary of the Fed's Financial Stability Report | Summary of primary |
+

@@ -2,13 +2,6 @@
  "note": "Restarted 09:34 UTC (window 09:30-14:30). Stopped at the user's ~88% rule at 06:11 UTC. To resume: Workflow({scriptPath, resumeFromRunId: runId, args}). All agents are durable, so finished items are skipped.",
  "runs": [
   {
-   "name": "u3-perspectives-life",
-   "task": "wt0odrxzq",
-   "runId": "wf_1508b41d-803",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/u3_research_and_new_chapters.js",
-   "args": "items: life quant_shop_daily_life, perspectives buyside_credit_managers, perspectives dealers_and_systematic_shops; chapters: 04_ch04c_other_seats_at_the_table, 01_ch01b_a_week_in_five_quant_shops"
-  },
-  {
    "name": "u2-A",
    "task": "w8b9ar4yf",
    "runId": "wf_2e88049d-039",
@@ -230,6 +223,25 @@
    "runId": "wf_845cc0c4-eec",
    "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/research-resilient-wf_bd451f4f-5fb.js",
    "args": "one item: trend_following_tsmom_credit (finish PARTIAL; feeds Ch 10; includes momentum as an RV overlay)"
+  },
+  {
+   "name": "newch-1b-4c",
+   "task": "wzxviedcs",
+   "runId": "wf_f1dec755-d63",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "01_ch01b_a_week_in_five_quant_shops",
+     "04_ch04c_other_seats_at_the_table"
+    ],
+    "stages": [
+     "u1",
+     "figures",
+     "figcheck",
+     "resgraph"
+    ]
+   }
   }
  ]
 }

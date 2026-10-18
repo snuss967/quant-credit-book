@@ -87,10 +87,10 @@ Adjacent pairs: l.669/671, l.685/687. Runs over two: l.281-291 (Math, Gently, Wa
 - [x] 2. §15.1.1 box: risk-neutral part to one sentence with a Ch 6 pointer (D11); vary sign-off. Done: risk-neutral cut to one pointer sentence; tiny number kept; sign-off varied.
 - [x] 3. §15.1.2: shorten the three-instrument walk; D20 pointer; Kaz make-whole callback (C7). Done: walk cut to one paragraph; WBD quote left to §15.8; callback.
 - [x] 4. §15.2.1: delete "When the put matters" (D10, template); Mags RJR to "learned it from people who were there" (C5). Done: template deleted; Mags learned RJR secondhand, started 1996.
-- [ ] 5. §15.2.2: merge raffle and umbrella boxes into one two-part box; trim Step 2 to the statement.
-- [ ] 6. §15.2.2: demote PV/annuity, logistic, P-vs-Q and random-walk boxes to glosses with pointers; Step 6 carries the 25%/15% example (D11).
-- [ ] 7. §15.2.2: break the four-box run: move the Schmid extraction under the vintage table; thread narration between Ways and Veronesi.
-- [ ] 8. §15.2 listing: trim bridge; demote lognormal box; rewrite template and First/Second paragraphs.
+- [x] 5. §15.2.2: merge raffle and umbrella boxes into one two-part box; trim Step 2 to the statement. Done: raffle and umbrella now one box; Step 2 is the statement.
+- [x] 6. §15.2.2: demote PV/annuity, logistic, P-vs-Q and random-walk boxes to glosses with pointers; Step 6 carries the 25%/15% example (D11). Done: four boxes now glosses in Steps 4-7, numbers kept, pointers added.
+- [x] 7. §15.2.2: break the four-box run: move the Schmid extraction under the vintage table; thread narration between Ways and Veronesi. Done: Schmid under vintage table; Kaz line threads Ways and Veronesi.
+- [x] 8. §15.2 listing: trim bridge; demote lognormal box; rewrite template and First/Second paragraphs. Done: bridge trimmed; lognormal now a gloss; grid bug told as event.
 - [ ] 9. EA case: replay label (C1); D9 and D10 merges; leak at l.344; Hana's ticket; promote decision point; trim.
 - [ ] 10. §15.3.1: recast "When portability bites" as a beat at the decision point; keep the podcast references.
 - [ ] 11. §15.3.2: trim Phi box; D16 pointers; recast "Two conclusions"; rewrite the Listing 15.2 template; fix lognormal-box pointers.

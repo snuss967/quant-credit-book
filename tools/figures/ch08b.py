@@ -109,6 +109,8 @@ def _chip(ax, x, y, text, fill, fg, w=9.5, h=3.6, fs=7.5):
 # --------------------------------------------------------------------------------------------
 def fig_factor_tree():
     fig, ax = new_figure((7.0, 5.6))
+    fig.set_layout_engine("none")
+    ax.set_position([0.0, 0.0, 1.0, 1.0])
     ax.set_xlim(0, 100)
     ax.set_ylim(0, 100)
     ax.axis("off")
@@ -119,9 +121,10 @@ def fig_factor_tree():
         ("Key-rate DV01s", r"$-\,\mathrm{KRD}_{i,m}\,\Delta y_m$", C_GAUSS, 11,
          ["Net DV01, $k per bp (band ±15 soft, ±25 hard):",
           f"2y {MINUS}6    5y +9    10y +13    30y {MINUS}2"]),
-        ("Rating × sector spread cells", r"$-\,\mathrm{DTS}_i\,b_{g(i),k}\,F_k$", C_GAUSS, 16,
-         ["Loss for a 10% widening of the cell, $mm (soft 1.2, hard 1.5):",
-          "B Industrials 1.62    B Consumer 0.98    B Healthcare 0.58",
+        ("Rating × sector spread cells", r"$-\,\mathrm{DTS}_i\,b_{g(i),k}\,F_k$", C_GAUSS, 17,
+         ["$mm lost if the cell widens 10% (soft 1.2, hard 1.5):",
+          ("B Industrials 1.62", "HARD", C_HARD, "white"),
+          "B Consumer 0.98    B Healthcare 0.58",
           "BB Energy 0.77    BB Industrials 0.71",
           "CCC Retail 0.36    CCC Industrials 0.21"]),
         ("Liquidity", r"$\beta^{L}_i\,F^{L}$", C_GAUSS, 8,
@@ -133,10 +136,11 @@ def fig_factor_tree():
           "Treasury futures–cash curve $40k per bp"]),
         ("Issuer residual", r"$\epsilon_{i}$, by rating × price bucket", C_IDIO, 8,
          ["Book's one-day idiosyncratic σ: $0.38mm"]),
-        ("Jump layer", r"$\mathbf{1}\{\tau_i\leq h\}\,\mathrm{JTD}_i$, path by path", C_JUMP, 12,
+        ("Jump layer", r"$\mathbf{1}\{\tau_i\leq h\}\,\mathrm{JTD}_i$, path by path", C_JUMP, 14,
          ["Issuer JTD, top ten ($mm):",
-          "Halvorsen 7.56, bank holdco 4.15, Brambleworth 2.20,",
-          "seven more, each ≤ 1.9"]),
+          ("Halvorsen 7.56", "SOFT", C_SOFT, INK),
+          "bank holdco 4.15    Brambleworth 2.20",
+          "seven more, each \u2264 1.9"]),
     ]
     gap, gap_group, top = 2.0, 3.0, 96.0
     y = top
@@ -145,19 +149,25 @@ def fig_factor_tree():
         if k == 5:
             y -= gap_group - gap
         y0 = y - h
-        ax.add_patch(FancyBboxPatch((20, y0), 33, h, boxstyle="round,pad=0,rounding_size=0.8",
+        ax.add_patch(FancyBboxPatch((19, y0), 31, h, boxstyle="round,pad=0,rounding_size=0.8",
                                     facecolor="#f6f5f2", edgecolor=NEUTRAL, linewidth=0.8, zorder=2))
-        ax.add_patch(Rectangle((20, y0), 2.0, h, facecolor=col, edgecolor="none", zorder=3))
-        ax.text(23.4, y - h * 0.30, name, fontsize=8.8, color=INK, fontweight="bold", va="center", zorder=4)
-        ax.text(23.4, y - h * 0.70, loading, fontsize=8.3, color=INK_2, va="center", zorder=4)
+        ax.add_patch(Rectangle((19, y0), 2.0, h, facecolor=col, edgecolor="none", zorder=3))
+        ax.text(22.4, y - h * 0.30, name, fontsize=8.6, color=INK, fontweight="bold", va="center", zorder=4)
+        ax.text(22.4, y - h * 0.70, loading, fontsize=8.3, color=INK_2, va="center", zorder=4)
         n = len(lines)
         for j, ln in enumerate(lines):
             yy = y - h / 2 + (n - 1) * 1.55 - j * 3.1 if n > 1 else y - h / 2
-            ax.text(56, yy, ln, fontsize=8, color=INK, va="center", zorder=4)
+            chip = None
+            if isinstance(ln, tuple):
+                ln, *chip = ln
+            t = ax.text(53, yy, ln, fontsize=8, color=INK, va="center", zorder=4)
+            if chip:
+                bb = t.get_window_extent(fig.canvas.get_renderer()).transformed(ax.transData.inverted())
+                _chip(ax, bb.x1 + 1.2, yy, chip[0], chip[1], chip[2], w=6.8, h=3.0)
         centers.append(y - h / 2)
         y = y0 - gap
     # connectors from the root to every row
-    trunk_x, root_x1 = 16.5, 13.0
+    trunk_x, root_x1 = 15.5, 12.5
     mid = (centers[0] + centers[-1]) / 2
     ax.add_patch(FancyBboxPatch((1, mid - 7), root_x1 - 1, 14, boxstyle="round,pad=0,rounding_size=0.8",
                                 facecolor="#f6f5f2", edgecolor=INK_2, linewidth=1.0, zorder=2))
@@ -167,12 +177,9 @@ def fig_factor_tree():
     ax.plot([root_x1, trunk_x], [mid, mid], color=INK_2, lw=1.0, zorder=1)
     ax.plot([trunk_x, trunk_x], [centers[0], centers[-1]], color=INK_2, lw=1.0, zorder=1)
     for c in centers:
-        ax.plot([trunk_x, 20], [c, c], color=INK_2, lw=1.0, zorder=1)
-    # breach chips on the two rows that carry Tuesday's hard and soft breaches
-    _chip(ax, 81.5, centers[1] - 4.65, "B Industrials: HARD", C_HARD, "white", w=16.5)
-    _chip(ax, 79.5, centers[6] + 3.1, "Halvorsen: SOFT", C_SOFT, INK, w=16.5)
+        ax.plot([trunk_x, 19], [c, c], color=INK_2, lw=1.0, zorder=1)
     # legend
-    ly = 2.2
+    ly = 1.6
     for x0, col, txt in [(1.0, C_GAUSS, "Gaussian layer: factors shared by every bond"),
                          (44.5, C_IDIO, "Gaussian layer: leftover"),
                          (70.0, C_JUMP, "Jump layer: charged once")]:
@@ -235,16 +242,19 @@ def fig_mixture_traps():
     var_b = norm.isf(0.01) * sd_blend
     a.plot([var_h], [0.01], "o", color=INK, markersize=6, markerfacecolor="white", markeredgewidth=1.5, zorder=6)
     a.plot([var_b], [0.01], "o", color=C_SHORT, markersize=6, markerfacecolor="white", markeredgewidth=1.5, zorder=6)
-    a.annotate(f"VaR {var_h:.2f}", (var_h, 0.01), xytext=(-5, -13), textcoords="offset points", ha="right",
-               va="top", fontsize=8.3, color=INK_2)
-    a.annotate(f"folded-in VaR {var_b:.2f}", (var_b, 0.01), xytext=(6, 10), textcoords="offset points",
+    a.annotate(f"VaR {var_h:.2f}\nES {es_h:.2f}", (var_h, 0.01), xytext=(-6, -6), textcoords="offset points",
+               ha="right", va="top", fontsize=8.3, color=INK_2)
+    a.annotate(f"VaR {var_b:.2f}", (var_b, 0.01), xytext=(7, 7), textcoords="offset points",
                ha="left", va="bottom", fontsize=8.3, color=INK_2)
-    a.annotate("1% line", (13, 0.01), xytext=(0, 3), textcoords="offset points", ha="right", va="bottom",
+    a.annotate("1% line", (0.045, 0.01), xytext=(0, 3), textcoords="offset points", ha="left", va="bottom",
                fontsize=8, color=MUTED)
-    a.annotate(f"default plateau: 0.099% of days,\nmean loss $7.56mm; ES {es_h:.2f}", (3.0, p1), xytext=(0, 14),
+    a.plot([6.0], [p1], "o", color=INK, markersize=4, zorder=6)
+    a.annotate("mixture: default plateau at\n0.099% of days, mean loss $7.56mm", (6.0, p1), xytext=(0, 8),
                textcoords="offset points", ha="center", va="bottom", fontsize=8.3, color=INK_2)
-    a.annotate("one Gaussian\nwith the jump's\nvariance", (0.95, 6e-4), xytext=(0, 0), textcoords="offset points",
-               ha="left", va="center", fontsize=8.3, color=INK_2)
+    x_dot = 1.07
+    a.plot([x_dot], [3e-5], "o", color=C_SHORT, markersize=4, zorder=6)
+    a.annotate("one Gaussian with the\njump's variance folded in", (x_dot, 3e-5), xytext=(6, 0),
+               textcoords="offset points", ha="left", va="center", fontsize=8.3, color=INK_2)
     # ---- right: ES on the mixture divided by sqrt(h) times the one-day ES
     hs = np.arange(1, 15.01, 0.25)
     books = [("A", 20.0, 0.0015, "Table 8-B.2 book\n(JTD $20mm, 0.15% a day)", "-", 1.9),
@@ -265,25 +275,26 @@ def fig_mixture_traps():
     b.plot(hs, res["A"][1], color=C_JUMP, linewidth=1.1, linestyle=(0, (1, 1.6)), zorder=3)
     b.axhline(1.0, color=C_SHORT, linewidth=1.2, linestyle=(0, (4, 2.5)), zorder=2)
     b.set_xlim(1, 15)
-    b.set_ylim(0.7, 3.1)
+    b.set_ylim(0.6, 3.25)
     b.set_xticks([1, 5, 10, 15])
     b.set_xlabel("Horizon h (days)")
-    b.set_ylabel("Mixture ÷ (√h × one-day figure)")
+    b.set_ylabel("Mixture \u00f7 (\u221ah \u00d7 one-day figure)")
     b.axvline(10, color=NEUTRAL, linewidth=0.8, zorder=1)
-    b.annotate("10 days", (10, 3.05), xytext=(3, 0), textcoords="offset points", fontsize=8, color=MUTED, va="top")
-    b.annotate("√h rule is exact here", (14.9, 1.0), xytext=(0, -5), textcoords="offset points", ha="right",
+    b.annotate("10 days", (10, 3.2), xytext=(3, 0), textcoords="offset points", fontsize=8, color=MUTED, va="top")
+    iA = int(np.where(hs == 10)[0][0])
+    eA, eB, vA = res["A"][0], res["B"][0], res["A"][1]
+    b.annotate("VaR, Table 8-B.2 book: the default\nenters the worst 1% near day 7", (6.9, 3.0), ha="left", va="center",
+               fontsize=8.3, color=INK_2)
+    b.annotate("ES, Table 8-B.2 book", (15, eA[-1]), xytext=(0, 7), textcoords="offset points", ha="right",
+               va="bottom", fontsize=8.3, color=INK_2)
+    b.annotate("\u221ah rule: exact", (15, 1.0), xytext=(0, 3), textcoords="offset points", ha="right",
+               va="bottom", fontsize=8.3, color=INK_2)
+    b.annotate("ES, Exercise 2 book", (15, eB[-1]), xytext=(0, -6), textcoords="offset points", ha="right",
                va="top", fontsize=8.3, color=INK_2)
-    iA, iB = int(np.where(hs == 10)[0][0]), int(np.where(hs == 10)[0][0])
-    b.annotate("Table 8-B.2 book:\nVaR, understated", (7.4, 2.75), xytext=(-5, 0), textcoords="offset points",
-               ha="right", va="center", fontsize=8.3, color=INK_2)
-    b.annotate("same book, ES:\nunderstated", (10.0, res["A"][0][iA]), xytext=(18, 4), textcoords="offset points",
-               ha="left", va="bottom", fontsize=8.3, color=INK_2,
-               arrowprops=dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8, shrinkA=0, shrinkB=2))
-    b.annotate("Exercise 2 book,\nES: overstated", (10.0, res["B"][0][iB]), xytext=(14, -22), textcoords="offset points",
-               ha="left", va="top", fontsize=8.3, color=INK_2,
-               arrowprops=dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8, shrinkA=0, shrinkB=2))
-    for key in ("A", "B"):
-        b.plot([10], [res[key][0][iA]], "o", color=C_JUMP, markersize=5, zorder=6)
+    for key, arr, dy in (("A", eA, 6), ("B", eB, -7)):
+        b.plot([10], [arr[iA]], "o", color=C_JUMP, markersize=5, zorder=6)
+        b.annotate(f"{arr[iA]:.2f}\u00d7", (10, arr[iA]), xytext=(-5, dy), textcoords="offset points",
+                   ha="right", va="center", fontsize=8.3, color=INK_2)
     print("mixture figure:", f"Halvorsen VaR {var_h:.3f}, ES {es_h:.3f}, folded sd {sd_blend:.3f}, folded VaR {var_b:.3f};",
           f"ES ratio at 10d: A {res['A'][0][iA]:.2f}, B {res['B'][0][iB]:.2f}; VaR ratio A {res['A'][1][iA]:.2f}")
     return finish(fig, "ch08b_mixture_traps")

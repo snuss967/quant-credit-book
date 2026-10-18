@@ -269,50 +269,7 @@ The listing defines two things. The first is a record, `SeatState`, with the hol
 
 Use it for loans and secured bonds held in CLOs, where the inputs are monthly and the rule is mechanical. It is a poor fit for insurer holdings and private placements, for the reasons above, and it says nothing about fundamentals; a high score is a statement about supply, to be paired with a view of value. The edge case that bites is the pre-emptive seller. A manager who sells the week before a downgrade still appears in last month's trustee report as a holder, with slack, so the score counts selling that has already happened. Cross-checking against TRACE volume since the report date catches most of it.
 
-<!-- EXPLAINED -->
-```python
-import math
-from dataclasses import dataclass
-from datetime import date
-from typing import Iterable, Optional
-
-
-@dataclass(frozen=True)
-class SeatState:
-    """One holder (a vehicle, not a firm) of one instrument, described by its leash."""
-    vehicle_id: str               # e.g. one CLO, one BDC, one insurer account
-    seat_type: str                # "clo", "insurer", "bdc", "systematic", "dealer", "pod", "opportunistic"
-    instrument_id: str
-    face: float                   # vehicle's face holding in the instrument, $
-    as_of: date                   # date of the source record (trustee report, filing, tender notice)
-    next_check: Optional[date]    # next date the binding rule is tested
-    rule: str                     # "ccc_bucket", "jr_oc", "rbc", "redemption_cap", "risk_budget", ...
-    slack: float                  # distance to the threshold, decimal; <= 0 means binding
-
-
-def tightness(s: SeatState, scale: float = 0.02) -> float:
-    """1.0 at or past the threshold, decaying exponentially with slack."""
-    return 1.0 if s.slack <= 0 else math.exp(-s.slack / scale)
-
-
-def forced_pressure(states: Iterable[SeatState], outstanding_face: float,
-                    rated_ccc: bool, today: date,
-                    max_age_days: int = 45, horizon_days: int = 30) -> float:
-    """Share of the issue held by CLO vehicles near a binding test inside the horizon."""
-    if outstanding_face <= 0 or not rated_ccc:
-        return 0.0
-    total = 0.0
-    for s in states:
-        if s.seat_type != "clo" or s.next_check is None:
-            continue
-        if (today - s.as_of).days > max_age_days:
-            continue                                  # stale record: holder may have sold
-        days_to_check = (s.next_check - today).days
-        if not 0 <= days_to_check <= horizon_days:
-            continue
-        total += (s.face / outstanding_face) * tightness(s)
-    return min(total, 1.0)
-```
+*The full python listing is [Listing 4-C.1 in Appendix F](#code-4c-1).*
 
 ## 4C.10 Desk Debrief
 
