@@ -41,8 +41,9 @@ BLUE_TINT = "#dbe8f9"
 # The chapter's Listing (desk_calendar.py), executed unchanged so the dates in the figures are the dates the chapter computes.
 # --------------------------------------------------------------------------------------------------
 def load_listing():
-    path = os.path.join(ROOT, "book_src", "03_ch03b_your_first_year_on_the_desk.md")
+    path = os.path.join(ROOT, "book_src", "95_appF_code_companion.md")      # the listing lives in Appendix F (code-3b-1)
     txt = open(path, encoding="utf-8").read()
+    txt = txt[txt.index("{#code-3b-1}"):]
     code = re.search(r"```python\n(.*?)```", txt, re.S).group(1)
     ns = {"__name__": "desk_calendar"}      # not "__main__": the listing's own tests are not rerun here
     exec(compile(code, "desk_calendar.py", "exec"), ns)
