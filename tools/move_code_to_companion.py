@@ -3,7 +3,7 @@
 
 Each fenced code block (python, cpp, rust, sql, bash, json, ...) in a chapter or appendix is
 moved, in order, to book_src/95_appF_code_companion.md as "Listing N.k". In the chapter it is
-replaced by a short linked stub. Later editions expand the stub into a plain-language explanation
+replaced by a short linked stub (or by a bare link when the writer marked the block <!-- EXPLAINED -->). Later editions expand the stub into a plain-language explanation
 of what the code does and why. `text` fences stay in place: they are diagrams and box layouts.
 Idempotent: files whose code has already moved hold no movable fences.
 """
@@ -65,7 +65,15 @@ def main():
                 anchor = f"code-{lab.lower().replace('-', '')}-{k}"
                 desc = describe(code)
                 listings.append((k, anchor, lang, code, desc))
-                out.append(f"<!-- EXPLAIN: Listing {lab}.{k} -->\n> **Code Companion: Listing {lab}.{k}.** {desc}. The full {lang} listing is in [Appendix F, Listing {lab}.{k}](#{anchor}).")
+                # A writer who already explained the listing in prose marks it <!-- EXPLAINED -->: leave a link, not a stub.
+                prev = len(out) - 1
+                while prev >= 0 and not out[prev].strip():
+                    prev -= 1
+                if prev >= 0 and out[prev].strip() == "<!-- EXPLAINED -->":
+                    del out[prev:]
+                    out.append(f"*The full {lang} listing is [Listing {lab}.{k} in Appendix F](#{anchor}).*")
+                else:
+                    out.append(f"<!-- EXPLAIN: Listing {lab}.{k} -->\n> **Code Companion: Listing {lab}.{k}.** {desc}. The full {lang} listing is in [Appendix F, Listing {lab}.{k}](#{anchor}).")
                 i = j + 1
                 continue
             out.append(lines[i])
