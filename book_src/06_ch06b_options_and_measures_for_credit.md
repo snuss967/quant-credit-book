@@ -56,7 +56,7 @@ This chapter builds that page, from the hockey stick to the hazard multiplier, t
 
 ### 6-B.1.1 Desk framing: every document is a payoff function
 
-RSSG trained Theo to read a waterfall: who gets paid, in what order, from what pot. An options desk reads the same thing as a function $g(\cdot)$ from a terminal value to a cash flow. Once you can write $g$, pricing is a separate and much more boring problem, and most credit-desk errors happen at the first step: the wrong $g$, written from the summary of the indenture instead of the definitions (Law 8, App E). In June 2025 a restructuring support agreement did exactly this to a listed stock, rewriting its $g$ overnight while the ticker kept trading as if nothing had happened; §6-B.1.5 replays the evening.
+RSSG trained Theo to read a waterfall: who gets paid, in what order, from what pot. An options desk reads the same thing as a function $g(\cdot)$ from a terminal value to a cash flow. Once you can write $g$, pricing is a separate and much more boring problem, and most credit-desk errors happen at the first step: the wrong $g$, written from the summary of the indenture instead of the definitions (Law 8, App E). How literal that is became visible in June 2025, when a restructuring support agreement rewrote a listed stock's $g$ overnight while the ticker kept trading as if nothing had happened; §6-B.1.5 replays the evening.
 
 Three atoms build every payoff in this book. Let $S_T$ be the value of some underlying at date $T$: a share price, a firm's asset value $V_T$, a post-close bond price, a pool's adjusted par.
 
@@ -123,7 +123,7 @@ payoff
 
 Price each call with any model you like and the tranche values follow: $\text{value}_j=C(a_j)-C(a_{j+1})$, with $C(0)=V_0$. In Merton's lognormal model this is the §6.2.3 formula applied tranche by tranche. Chapter 23 calls the same picture "one distribution, many strikes" (§23.1).
 
-RSSG teaches what falls out of the ladder by experience: where the fulcrum sits, why seniority is moneyness, which tranches are long volatility and which are short it. Those three readings are easier to watch on a real stack, on the evening a document moved its strikes, than to memorize as a list, so §6-B.1.5 deals them one at a time on Wolfspeed. Kaz, who once asked whether the fulcrum was "the tranche that does the most leverage," turns out there to have been accidentally half right.
+RSSG teaches what falls out of the ladder by experience: where the fulcrum sits, why seniority is moneyness, which tranches are long volatility and which are short it. Those three readings are easier to watch on a real stack, on the evening a document moved its strikes, than to memorize as a list, so §6-B.1.5 deals them one at a time on Wolfspeed. Kaz, who once asked whether the fulcrum was "the tranche that does the most leverage," will turn out there to have been accidentally half right.
 
 Used in: §6.2.1 (Merton's two-tranche case), §8.3, §13.3, §13.7, §15.3, §16.3, §21.4, §23.1.
 
@@ -135,7 +135,7 @@ Tuesday 20 October 2026, 4:45 p.m. Ines puts a folder on the table the way she p
 
 "One exception tonight," she says. "Two numbers from the future, because tonight is about the shape of a payoff and not its level, and I don't want to watch Kaz value a chip company for an hour." She writes them on the whiteboard and boxes them: *43.56mm new shares. Plan equity value \$959.4mm, so \$22.02 a share* (calc, from the FY2026 10-K). Everything else in the folder is dated on or before the cut.
 
-**The stack.** Theo reads it aloud, from the balance sheet as the next 10-K would print it six days later, which Ines allows because nothing but accrued interest moved in those six days. Senior Secured Notes due 2030, \$1,521.2mm, paying 9.875% plus 2% in kind. Three convertible issues, all unsecured: 1.75% due 2026, \$575mm, convertible at about \$47.32 a share; 0.25% due 2028, \$750mm, at about \$127.22; 1.875% due 2029, \$1,750mm, at about \$118.88. Renesas's deposits, \$2,062mm, unsecured and ranking with the converts. Total debt \$6,658.2mm; cash and short-term investments \$955.4mm, down \$1.22bn in a year.
+**The stack.** Theo reads it aloud, from the balance sheet as the next 10-K would print it six days later, which Ines allows because no face amount on it changed in those six days. Senior Secured Notes due 2030, \$1,521.2mm, paying 9.875% plus 2% in kind. Three convertible issues, all unsecured: 1.75% due 2026, \$575mm, convertible at about \$47.32 a share; 0.25% due 2028, \$750mm, at about \$127.22; 1.875% due 2029, \$1,750mm, at about \$118.88. Renesas's deposits, \$2,062mm, unsecured and ranking with the converts. Total debt \$6,658.2mm; cash and short-term investments \$955.4mm, down \$1.22bn in a year.
 
 The path is in the next three pages. On 28 March 2025 an out-of-court exchange failed and the stock fell about half, to \$2.59, a market capitalisation of about \$400mm. On 2 June the company did not pay the interest due on the 2029 converts and entered the 30-day grace period. On 22 June it signed a restructuring support agreement with holders of more than 97% of the secured notes, and the press release the next morning said what everyone got: the converts and Renesas would exchange about \$5.2bn of claims for \$500mm of new notes and 95% of the new common equity, and existing shareholders would receive "their pro rata share of 3% or 5% of new common equity," subject to dilution and "potential reduction from certain events." By Monday afternoon the stock was about a third lower, near 60 cents (press reports that afternoon put it at 59 and 60 cents).
 
@@ -193,11 +193,11 @@ She turns the last page in the folder. A short in a share the plan cancels does 
 
 "The payoff function was right on 23 June," Ines says, "and the position was still a hand you could lose. A correct $g$ tells you nothing about the path of the thing $g$ is a function of, and after Sunday that thing wasn't the firm. It was a stock nobody had seen. Your card said what you'd owe. It didn't say in what, or when you'd stop owing it."
 
-Kaz's card gets the same grade for direction and a lower one for reasoning. The Merton call was struck at \$6.66bn and the document had replaced the strike with a share count, so the model was pricing an option the RSA had already exercised; its delta was a number about an instrument that no longer existed, and the short it sized was right by accident. "The model priced an option somebody had already exercised," Ines says. "That's not a model error. That's a reading error." Kaz writes *read the RSA first* on a sticky note and puts it, for reasons nobody asks about, on Mags's monitor.
+Kaz's card gets the same grade for direction and a lower one for reasoning. The Merton call was struck at \$6.66bn and the document had replaced the strike with a share count; its delta described an instrument that no longer existed, and the short it sized was right by accident. "The model priced an option somebody had already exercised," Ines says. "That's not a model error. That's a reading error." Kaz writes *read the RSA first* on a sticky note and puts it, for reasons nobody asks about, on Mags's monitor.
 
 Mags's card cannot be graded, and Ines says so. The folder has no borrow tape for June 2025, and the desk does not invent fees for stocks in the week of their restructuring. "But you're the only card that wrote down a cost," Ines tells her. "Everyone else priced the payoff and forgot the rent." Mags accepts this as her due.
 
-**The coda.** Ines leaves the last page face up. On 26 March 2026 the reorganized company sold a 1.5-lien convertible, convertible at about \$20.14 a share, and inserted it between the first and second liens, so the post-emergence stack carries four strikes on one new stock: the second-lien converts at about \$12.23, Renesas's second-lien converts at about \$18.35, the new 1.5-lien convert at about \$20.14 and Renesas's warrant at \$23.95, all around a plan value of \$22.02 (exit and March 2026 8-Ks; calc). Two months later the stock was \$73.50, 3.3 times plan value. Four strikes, one distribution: the picture Chapter 23 calls "one distribution, many strikes" (§23.1), drawn by a court and a committee instead of an options exchange.
+**The coda.** Ines leaves the last page face up. On 26 March 2026 the reorganized company sold a 1.5-lien convertible, convertible at about \$20.14 a share, and inserted it between the first and second liens, so the post-emergence stack carries four strikes on one new stock: the second-lien converts at about \$12.23, Renesas's second-lien converts at about \$18.35, the new 1.5-lien convert at about \$20.14 and Renesas's warrant at \$23.95, all around a plan value of \$22.02 (exit and March 2026 8-Ks; calc). Two months later the stock was \$73.50, 3.3 times plan value. Four strikes, one distribution: the picture Chapter 23 calls "one distribution, many strikes" (§23.1), drawn by a plan and its aftermath instead of by an options exchange.
 
 <!-- FIGURE: ch06b_wolfspeed_strikes.png (payoff diagram over new-stock value: conversion/exercise prices 12.23, 18.35, 20.14, 23.95 around the 22.02 plan value; 29 Sep 2025 open 18.00, low 8.05, close 22.10 and 26 May 2026 73.50 marked; source WOLF §3.2–3.3) -->
 
@@ -235,7 +235,7 @@ $$
 P_0=e^{-r\Delta t}\Big[(1-\pi^{\mathbb{Q}})\,100+\pi^{\mathbb{Q}}R\Big]\quad\Longrightarrow\quad \pi^{\mathbb{Q}}=\frac{100-P_0e^{r\Delta t}}{100-R}.
 $$
 
-At $P_0=90$, $r=4\%$, $\Delta t=1$ and $R=40$, $P_0e^{r\Delta t}=93.67$ and $\pi^{\mathbb{Q}}=6.33/60\approx10.5\%$ *(illustrative)*. This is the default probability *implied by the price*, not the one Theo believes after reading the 10-Q. The two-point bond of §3.1 should be read this way: priced under $\mathbb{Q}$, then forecast under $\mathbb{P}$, with the gap between $\pi^{\mathbb{Q}}$ and Theo's $\pi^{\mathbb{P}}$ being the premium of §6-B.6 rather than an inconsistency.
+At $P_0=90$, $r=4\%$, $\Delta t=1$ and $R=40$, $P_0e^{r\Delta t}=93.67$ and $\pi^{\mathbb{Q}}=6.33/60\approx10.5\%$ *(illustrative)*. This is the default probability *implied by the price*, not the one Theo believes after reading the 10-Q. The two-point bond of §3.1 reads correctly this way: priced under $\mathbb{Q}$, then forecast under $\mathbb{P}$, with the gap between $\pi^{\mathbb{Q}}$ and Theo's $\pi^{\mathbb{P}}$ being the premium of §6-B.6 rather than an inconsistency.
 
 ### 6-B.2.3 Continuous time: delta hedging and the Black–Scholes PDE
 
@@ -287,7 +287,7 @@ Now translate. A Merton bondholder is short a put on the firm (§6.2.1), so a he
 
 ### 6-B.2.5 The Black–Scholes formula, and the two probabilities of one event
 
-> **Math, Gently.** *Two probabilities of one event.* Ask two accountants how likely it is that a one-year call struck at 100 finishes in the money, and tell one to keep the books in dollars and the other in shares. The dollar accountant weights every path the same way the risk-neutral measure does. The share accountant has a quirk: a path on which the stock ends at 150 is, to her, a path on which a share is worth half again as much, so she counts high-stock paths more heavily than low-stock ones. Both are doing correct arithmetic about the same event and they disagree, because they are counting in different currencies. *A tiny number:* $S_0=K=100$, $\sigma=30\%$, $r=4\%$, $T=1$. Then $d_2=(0+0.04-0.045)/0.30=-0.017$ and $d_1=d_2+0.30=0.283$, so the dollar accountant says $N(d_2)=0.493$ and the share accountant says $N(d_1)=0.611$. The call is worth $100\times0.611-96.08\times0.493=13.75$, the same 13.75 that sat in the parity lunchbox of §6-B.1.2. Sixty-one per cent and forty-nine per cent are both the probability of finishing in the money, under two numeraires, and neither is a forecast. What a forecast would need is next.
+> **Math, Gently.** *Two probabilities of one event.* Ask two accountants how likely it is that a one-year call struck at 100 finishes in the money, and tell one to keep the books in dollars and the other in shares. The dollar accountant weights every path the same way the risk-neutral measure does. The share accountant has a quirk: a path on which the stock ends at 150 is, to her, a path on which a share is worth half again as much, so she counts high-stock paths more heavily than low-stock ones. Both are doing correct arithmetic about the same event and they disagree, because they are counting in different currencies. *A tiny number:* $S_0=K=100$, $\sigma=30\%$, $r=4\%$, $T=1$. Then $d_2=(0+0.04-0.045)/0.30=-0.017$ and $d_1=d_2+0.30=0.283$, so the dollar accountant says $N(d_2)=0.493$ and the share accountant says $N(d_1)=0.611$. Carried to five places, $N(d_1)=0.61154$ and $N(d_2)=0.49335$, the call is worth $100\times0.61154-96.079\times0.49335\approx13.75$, the same 13.75 that sat in the parity lunchbox of §6-B.1.2. Sixty-one per cent and forty-nine per cent are both the probability of finishing in the money, under two numeraires, and neither is a forecast. What a forecast would need is next.
 
 Stated once, with $N(\cdot)$ the standard normal distribution function:
 
@@ -400,7 +400,7 @@ Three readings. The CCC bond is a third of the firm by delta, and it moves fifty
 | Rho | $\partial f/\partial r$ | DV01, and the hedge ratio that is not modified duration | Treasury futures | Ch 4-B; §8.2 |
 | JTD | $f(\text{post})-f(\text{pre})$ | $R-P$ per bond; $(1-R)-\text{MTM}$ per unit of bought CDS | Put spreads; CDS | §6-B.5; §23.5; §28.4 |
 
-At 7:40 that Monday, twenty minutes before his first risk meeting, Theo prints the table and lays it beside his own report, column against row. Market value and carry are theta's family. DV01 is rho. CS01 is delta in spread space, and the index beta is delta to the CDX hedge. DTS is a delta scaled for the fact that wide spreads move more. The ninth column, now that Kaz has shown him the one bond that makes it, is vega. He draws a line from each of his columns to a row of the table, and every line lands on a derivative: a slope, or the slope of a slope.
+*Same Monday, live (fictional; the book and its numbers are the cold open's).* At 7:40, twenty minutes before his first risk meeting, Theo prints the table and lays it beside his own report, column against row. Market value and carry are theta's family. DV01 is rho. CS01 is delta in spread space, and the index beta is delta to the CDX hedge. DTS is a delta scaled for the fact that wide spreads move more. The ninth column, now that Kaz has shown him the one bond that makes it, is vega. He draws a line from each of his columns to a row of the table, and every line lands on a derivative: a slope, or the slope of a slope.
 
 Except one. The tenth column, JTD, lands on the last row, and the last row is not a derivative of anything. It is a finite difference across the default event: what the book is worth the instant after the issuer is gone minus what it is worth now, $(R-P)\times$ face for each bond, summed. His −\$6.3mm is that sum over forty-one bonds *(illustrative)*. It does not shrink when you look more closely, the way a slope does when you zoom in on a curve. It is the same size at any magnification.
 
@@ -723,11 +723,25 @@ Theo deletes the request and types a different one: the desk's own structural PD
 
 Used in: §1.3.1 (the bid equation's measure), §3.1, §6.3 (extended here), §11.3–11.4 (PD models are $\mathbb{P}$), §13.8 (PRS), §14.1 and §14.9 (two default rates), §15.4 (the SMR gauge), §16.3 (`Q_nominal`), §24.3 (stripping liquidity before decomposing), §28.4.
 
+Across town, on another firm's floor, the same two-measure mistake had once been made with a position on, and the Pair Book records it.
+
+> **The Pair.** *Pair Book entry PB-07, opened. Owen Achterberg's capital-structure pod at Vantress Capital Management (fictional composites). A replay, cut at the close of Wednesday 17 June 2020; every Hertz date, price and plan term is from the filings and press reports cited in Chapters 6 and 16; sizes, the model's outputs and the borrow fee are illustrative.* **Thesis**, written as a sentence with a date in it: *Hertz's stock is worth less than \$2 and its unsecured notes more than 27; by the confirmation hearing one of those two prices is wrong.* It is Theo's whiteboard card from §6.10.2, "equity worthless, fleet falls," in a pod's handwriting, and it is the pod's $\mathbb{P}$. **Legs.** Long \$10mm face of Hertz's 6% senior unsecured notes due 2028 at 27, \$2.7mm of market value. Short 540,000 shares of old Hertz common at the \$2.00 close of 17 June, \$1.08mm, borrowed through the platform's prime broker. **The hedge.** A $\mathbb{Q}$ delta. Owen reads the plan as the ladder of §6-B.1.4: the notes are a call spread on the value left for the unsecured class, the stock the call struck above them. Price both rungs on one lognormal value and size the short so a small move in that value moves both legs by the same dollars: 40 cents of stock per dollar of notes, Merton's bond-per-equity ratio $N(-d_1)/N(d_1)$ in the plan's units, not resized.
+>
+> **What the hedge removes.** Direction in $V$: whether the fleet, and with it the estate, is worth more or less next month. Down the path the bond market was pricing that June, the fleet goes to auction, the notes recover in the teens and the stock is cancelled; the two legs roughly offset. **What idio remains.** The disagreement between two prices about one plan value. The pod's fictional run, calibrated to the notes, values a share at about \$0.50 against the screen's \$2.00, so the idio is the stock's premium to the notes' implied value, about \$0.81mm on 540,000 shares if the two prices ever agree. Chapter 12-C will call the thing underneath it, the plan's value, a negotiated random variable, and that is where this pair is stressed.
+>
+> **What leaks.** The pod is short a call it priced in $\mathbb{Q}$ at a $\mathbb{P}$ it believed. The 0.40 is a slope, and slopes move: if the value climbs toward the point where the notes are paid in full, the notes' delta falls toward zero and the stock's rises toward one, and the pair becomes a short call on the equity with a bond stapled to it, short vega in exactly the sense of §6-B.3.4. The pod had already watched the leak in miniature before it opened. From the filing on 22 May to early June the stock went from about \$0.59 to about \$5.50, while the company itself sold about \$29mm of new shares under a prospectus warning that they "could ultimately be worthless" (Chapter 6, §6.10.2). A short opened at the filing would have been losing more than eight times its own proceeds at the peak (calc). Owen waited for the share sale to be shelved, on 17 June, which is why the replay is cut there. **What it costs.** The notes pay no coupon in the case: post-petition interest on an unsecured claim is unmatured interest, disallowed by §502(b)(2) except where a solvent debtor must pay it, the exception Hertz's noteholders later litigated (Chapter 16, §16.5–16.6). The borrow has no public tape for a bankrupt stock in a retail rally; Wen Zhao assumes 25% a year, which she calls "a guess with a decimal point," and every lender keeps a recall right that a rally makes more likely to be used.
+>
+> **One line per leg, by measure.** The bond is priced in $\mathbb{Q}$, as a recovery, and sized in $\mathbb{P}$, on Owen's view of the fleet. The stock is shorted at a $\mathbb{Q}$ delta on a $\mathbb{P}$ view, with no listed way to buy back the call it has sold. PB-07 is marked *open*. Chapter 16 closes it, on the day the unsecured are paid in full and old equity receives \$1.53 a share in cash, a share of 3% of the new company and warrants or rights, and writes the sentence this box is building toward: the short leg was the fulcrum's option.
+
+<!-- FIGURE: ch06b_pb07_hertz_pair.png (payoff diagram across plan equity value: long unsecured notes plus short common at the 0.40 Merton delta; the short leg's loss growing without bound as the plan pays equity; the 1.53 cash, 3% and warrants outcome marked; illustrative hedge ratio) -->
+
+The premium that PB-07 sold without noticing is not a constant either, and the last word of this section belongs to the record of how much it moves.
+
 > **Trend Watch.** *The premium moves, and the instruments that read it moved too (2002–2026).* **The ratio is not a constant.** Berndt, Douglas, Duffie and Ferguson (NBER Working Paper 24213, 2018), using Markit CDS against Moody's Analytics EDFs, find premia peaking in 2002, 2008–09 and the second half of 2011; normalized by expected loss, median premia move by more than a factor of ten, and the premium per unit of expected loss rises in distress, more so for investment grade. **The single-name market thinned.** By one 2025 count of cleared volumes, single-name CDS was on the order of 6% of index notional *(approx.; see §23.3)*, so for most high-yield issuers $\lambda^{\mathbb{Q}}$ must now be read from bonds (with a recovery assumption) or from listed puts (with a corridor assumption). **What it means for the desk:** a $\xi$ fitted in 2021 is not a parameter in 2026. It is a state variable, countercyclical, and largest exactly where expected loss looks smallest. Store it as a time series per issuer, not as a constant in a config file.
 
 ## 6-B.7 The Desk's Option Book: Eight Instruments You Already Own
 
-This section is the single home for the option readings that Parts III–V use. Each later chapter applies one entry and back-references it here.
+*Monday 12 October, 1:05 p.m. (fictional).* Ines pays off the cold open's "Price them" the way she pays off most things, by turning it into a hand. She pulls Theo's forty-one bonds onto one screen, sorts them by rating, and walks down the list with a pen, writing one word next to each line: the row of the table below that it belongs to. Most of the book is the second row, plain high-yield paper, short a put on its issuer. Three names are wide enough to be the first row. Eleven indentures carry a 101 change-of-control put, and two of those have a portability carve-out the sponsor can steer. None of the bonds is a loan, but four of the issuers have term loans that sit in CLOs, so the last two rows are the neighbours whose forced selling moves Theo's prices. And one name, if its lender call goes the way Halvorsen's did, will one day hand him a right, a backstop or a warrant. "Eight instruments," she says. "You own six of them directly and the other two own you." This section is the single home for those readings; each later chapter applies one entry and points back here.
 
 | Instrument | Payoff, in this chapter's atoms | Measure | Home |
 | :-- | :-- | :-- | :-- |
@@ -740,11 +754,11 @@ This section is the single home for the option readings that Parts III–V use. 
 | Leveraged loan | Floater minus a borrower call at par | $\mathbb{Q}$ | §21.1, §21.5 |
 | CLO OC test | Short puts, barrier digitals, short order statistics | $\mathbb{Q}$ prices, $\mathbb{P}$ defaults | §21.4 |
 
-**The CCC bond is an equity option that wears a tie to work (§8.3).** The table in §6-B.3.4 says it in numbers: at 1,307 bp the Merton bond has a delta of a third of the firm, moves fifty cents per dollar of equity, and carries nearly twice the vega of the double-B. It has a coupon, a CUSIP and a trustee, which is the tie. Underneath, it is a third of a share of the firm plus a short put with a large vega. Its interest-rate duration collapses for the same reason (§8.3's recovery route): the payoff is dominated by the default leg, which does not discount at the Treasury curve. In a multi-tranche structure, a junior bond whose call spread sits near its *lower* strike is even long volatility, like equity, which is the §6-B.1.4 picture.
+**The CCC bond is an equity option that wears a tie to work (§8.3).** At 1,307 bp the §6-B.3.4 Merton bond is a third of the firm by delta, moves fifty cents per dollar of equity and carries nearly twice the double-B's vega; the coupon, the CUSIP and the trustee are the tie. Its interest-rate duration collapses for the same reason (§8.3's recovery route): the payoff is dominated by the default leg, which does not discount at the Treasury curve. In a multi-tranche structure, a junior bond whose call spread sits near its *lower* strike is even long volatility, like equity, which is the §6-B.1.4 picture.
 
 **High yield is a short put that pays a coupon (Ch 11).** From $e^{-sT}=B_0/(Fe^{-rT})=1-\text{Put}/(Fe^{-rT})$, the spread is the put premium paid in installments: $s\approx\text{Put}/(Fe^{-rT}T)$. For the §6.2.4 firm that is $1.64/76.86\approx2.13\%$ against the exact 2.16%. The P&L shape is the gamma rent of §6-B.3.3: collect the decay, pay for the moves. The Bernoulli default leg has skewness $-(1-2p)/\sqrt{p(1-p)}$, which is why Chapter 11 calls BB defense tail avoidance and CCC defense pricing (§11.10).
 
-**The 101 change-of-control put (§15.2)** pays $\mathbf 1_{\{\text{deal}\}}\mathbf 1_{\{\text{trig}\}}(K-P^{\text{post}})^+$ with $K=101$ plus accrued. It is a put gated by two digitals, and the rating-event digital is positively correlated with the put's moneyness (§15.2's ratio $M>1$), so multiplying the probabilities underprices it. Nothing listed spans a deal closing: `Q_nominal`.
+**The 101 change-of-control put (§15.2)** pays $\mathbf 1_{\{\text{deal}\}}\mathbf 1_{\{\text{trig}\}}(K-P^{\text{post}})^+$ with $K=101$ plus accrued. A put gated by two digitals, the rating-event one positively correlated with the put's moneyness (§15.2's ratio $M>1$), so multiplying the probabilities underprices it; nothing listed spans a deal closing, hence `Q_nominal`.
 
 **Portability as a digital (§15.3).** A carve-out that cancels the put when pro-forma leverage is below a test $\bar\ell$ makes the holder short $V_{\text{CoC}}\times\mathbf 1_{\{\ell\le\bar\ell\}}$: a digital. §6-B.1.3 says a digital's gamma is unbounded at the strike. §15.3 adds the twist that matters: the counterparty *chooses* $\ell$ after reading $\bar\ell$, so the probability of passing is a decision variable, not a distribution. Kaz's diagnosis is correct, for once: "It's a digital where the other side sets the spot." Ines: "That's not a digital. That's a gift."
 
@@ -752,7 +766,7 @@ This section is the single home for the option readings that Parts III–V use. 
 
 **Plan warrants (§16.4).** A warrant is $1/(1+\omega)$ calls on the diluted equity value, solved as a fixed point; by §6-B.5.3 a jump to zero raises it at a fixed share price. Thirty-year warrants are mostly vega and survival; the Hertz warrants live in §16.6.
 
-**The leveraged loan is short a call (§21.1).** When the borrower can refinance at will, the lender holds $\min(P^{\text{nc}},100)=P^{\text{nc}}-(P^{\text{nc}}-100)^+$, where $P^{\text{nc}}$ is the value of the same loan without the call. In the 101 soft-call window the strike is 101 for repricings. The call caps the price near par and makes the loan negatively convex in spread: tightening is given away, widening is kept. That is §21.5's repricing wave, the borrower exercising. When the borrower is sick the call is far out of the money, and the loan becomes what Merton says every debt claim is, a short put on the firm. Larkspur Foam's 2029 first-lien term loan at 84 (Chapter 13's cold open) is not short a call in any meaningful sense; it is short a put struck where the drop-down basket lets the sponsor move the assets. **A loan is short a call when it is healthy and short a put when it is sick. The one thing it is never long is optionality.**
+**The leveraged loan is short a call (§21.1).** When the borrower can refinance at will, the lender holds $\min(P^{\text{nc}},100)=P^{\text{nc}}-(P^{\text{nc}}-100)^+$, where $P^{\text{nc}}$ is the value of the same loan without the call. In the 101 soft-call window the strike is 101 for repricings. The call caps the price near par and makes the loan negatively convex in spread: tightening is given away, widening is kept. That is §21.5's repricing wave, the borrower exercising. When the borrower is sick the call is far out of the money and the loan is what Merton says every debt claim is, a short put on the firm: Larkspur Foam's 2029 first-lien term loan at 84 (Chapter 13's cold open) is short a put struck where the drop-down basket lets the sponsor move the assets. **A loan is short a call when it is healthy and short a put when it is sick. The one thing it is never long is optionality.**
 
 **The OC test as an option book (§21.4).** The adjusted collateral principal amount (21.5) is a sum of option payoffs on loan prices. The pool is short a put on each defaulted loan struck at the agency recovery, short barrier digitals on discount obligations, and short the lowest order statistics of its own CCC bucket. The cushion $\kappa_k$ of each test is a function of those prices. The diversion of interest when $\kappa_k<0$ is a digital on the cushion, which is where the gamma lives: one CCC downgrade near the trigger moves the equity tranche's cash flow discontinuously. That is the mechanism behind the forced sellers of §11.6 and §16.2.
 
@@ -760,13 +774,37 @@ Used in: §8.3, Ch 11 (especially §11.1 and §11.6), Ch 13 (Larkspur, from the 
 
 ## 6-B.8 Worked Case: Halvorsen on Monday, One Bond, One Put, Three Measures
 
-*Halvorsen is fictional; its capital structure is in the issuer bible of the front matter. All numbers are illustrative.* It is the Monday after Chapter 1's lender call. The Halvorsen 7.25% senior unsecured notes due 2029 have opened at 78. The stock is \$6.00. The one-year listed \$1 put is \$0.136 mid, and the at-the-money implied vol is 80%. `bondmath.py` (Chapter 4-B) gives the notes a Z-spread of 1,150 bp. Theo's own numbers are $\mathbb{P}$ numbers: the desk's structural model gives a one-year default probability of 6.0%, and his RSSG waterfall, run on the documents and not the summary, recovers 40 cents for the notes.
+*Live, Monday 12 October 2026. Halvorsen is fictional; its capital structure is in the issuer bible of the front matter. All numbers are illustrative.*
+
+Go back to the Monday of the cold open. The replays came later in the week; this is the afternoon the question was asked. At 2:10 p.m. the Halvorsen 7.25% senior unsecured notes due 2029, which opened this morning at 78, are still at 78. The stock is \$6.00, down 60% since Friday's 8-K. The one-year listed \$1 put is \$0.136 mid, and the at-the-money implied vol is 80%. `bondmath.py` (Chapter 4-B) gives the notes a Z-spread of 1,150 bp. Theo's own numbers are $\mathbb{P}$ numbers: the desk's structural model gives a one-year default probability of 6.0%, and his RSSG waterfall, run on the documents and not the summary, recovers 40 cents for the notes.
+
+Ines writes the three numbers on the whiteboard in a row, \$0.136, 1,150 bp and 6.0% / 40, and draws a line between the first two and the third. "This morning you asked whose probabilities go into the expectation," she says to Theo. "Two of these are the market's. One is yours. Before anybody computes anything, cards."
+
+#### The card: two prices and a view
+
+*Write three things: what the \$0.136 put is a price of, what the 1,150 bp is a price of, and which of the two numbers you would bet against.*
+
+Kaz writes without looking up. *Both are volatility. The put is 80% vol on a \$6 stock; the spread is asset vol through Merton. Bet against the put: at 80% a \$1 strike is six standard deviations away.*
+
+Mags writes one word, then, because Ines raises an eyebrow, a sentence. *Recovery. The put doesn't care what the bonds get when it dies, and the spread does.*
+
+Theo writes slowly. *The put is the price of Halvorsen dying. The spread is the price of dying times what the notes lose when it does. I'd bet against the recovery, because that is the only one I have read.*
+
+What would you write? The cards go face down under Ines's coffee cup, and the five steps below grade them.
+
+Kaz checks the first card before anyone asks, because Kaz cannot help it. A Black–Scholes put at 80% on a \$6 stock, struck at \$1, one year, 4% rates: seven-tenths of a cent. The screen says 13.6 cents. "Either the market is insane," Kaz says, "or nineteen-twentieths of that put isn't volatility." Ines says nothing, which is the grade.
 
 **Step 1: the put gives the hazard, without a recovery ($\mathbb{Q}$).** By (6B.1) and (6B.2), the \$1 put is a default claim plus a corridor leak. At 80% vol the leak is about \$0.004 (§6-B.5.4), so the American unit recovery claim is about 0.132, and solving $U^{\text{Am}}(\lambda)=0.132$ gives $\lambda^{\mathbb{Q}}\approx14.5\%$. No recovery assumption was needed: in a wipe-out the stock goes to roughly zero whatever the bonds recover.
 
 **Step 2: the bond gives the product, so the pair gives the recovery ($\mathbb{Q}$).** The credit triangle on the flat-curve approximation gives $L^{\mathbb{Q}}=s/\lambda^{\mathbb{Q}}=0.115/0.145=0.793$, so the market's recovery is about 21 cents. Every "CDS-implied PD at 40% recovery" screen hides that number.
 
+It is 3:20. This is the point at which Theo asked ROBO to convert a vendor PD for the next step and the request bounced (§6-B.6.6); he uses the desk's own structural number instead, tagged `P`.
+
 **Step 3: Theo's numbers ($\mathbb{P}$).** $\lambda^{\mathbb{P}}=-\ln(1-0.06)=6.19\%$ and $L^{\mathbb{P}}=0.60$. The hazard multiplier is $\xi=14.5/6.19=2.34$, close to the Driessen benchmark: the market's fear of default *frequency* is ordinary. The premium ratio is $\text{PR}=0.115/(0.0619\times0.60)=3.10$.
+
+"Two point three four," Kaz says. "That's a textbook number."
+
+"That's the point," Ines says. "The market isn't panicking about whether Halvorsen dies. It's charging the ordinary premium for the frequency. Look at what's left over."
 
 **Step 4: decompose the spread with (6B.5).**
 
@@ -781,6 +819,8 @@ The disagreement is not about whether Halvorsen defaults. It is about what the n
 
 ![Figure 6-B.5: For Halvorsen, the put-implied risk-neutral hazard of 14.5% is 2.34 times Theo's physical 6.19%, so one-year survival is 86.5% in the market's eyes against 94.0% in his (left), and the 1,150 bp spread splits into 371 bp of expected loss, 499 bp of hazard premium and 280 bp of recovery premium (right). Illustrative: the fictional Halvorsen notes, with the numbers of §6-B.8 computed by spread_decomposition() of Listing 6-B.1.](assets/figures/ch06b_halvorsen_two_measures.png)
 
+The table is a description; step 5 is a position. Theo wants to own the one line he believes is wrong, the recovery premium, and nothing else. That means owning the notes, which carry all three lines, and selling off the two he has no view on: the expected loss, which he agrees with, and the hazard premium, which he has just been told is ordinary.
+
 **Step 5: isolate the recovery view.** Buy the notes and buy enough \$1 puts that the default payoff is zero *at the market's recovery*. Per 100 face the notes lose $78-21=57$ points at default, so buy 57 points of put payout: \$570,000 of \$1 strikes, 5,700 contracts per \$1mm face, costing about \$77,500. In the recovery-of-market-value approximation of §6.6.3, with constant intensities and payment at default, the expected excess return per year in points is, for the notes, $\lambda^{\mathbb{Q}}(78-R^{\mathbb{Q}})-\lambda^{\mathbb{P}}(78-R^{\mathbb{P}})$, and for the puts $-(\lambda^{\mathbb{Q}}-\lambda^{\mathbb{P}})\times57$. Add them and the hazard premium cancels exactly:
 
 $$
@@ -791,7 +831,31 @@ All of it arrives in the default state: plus 19 points if Theo's 40 is right, no
 
 ![Figure 6-B.6: Buying 57 points of put payout against the notes makes the payoff at default zero at the market's 21-cent recovery and +19 points at Theo's 40 (left), and the hazard premium cancels between the notes (+5.9 points a year) and the puts (−4.7), leaving the 1.2 points a year that is the recovery view alone (right). Illustrative: the fictional Halvorsen notes bought at 78, with risk-neutral and physical hazards of 14.5% and 6.19% as in §6-B.8; the left panel is before carry and the put premium.](assets/figures/ch06b_halvorsen_recovery_bet.png)
 
-**What kills it.** *Which default?* A distressed exchange that leaves the equity alive pays the puts nothing while the notes take the haircut: the worst state, and the $\lambda_D$ the put chain cannot see (§14.1–14.2). *The corridor.* The leak is 3% here and all of it in a slow bleed. *The recovery is a mixture.* Theo's 40 must be conditioned on coalition membership (§14.4) and come out of the Chapter 12-B state machine, not a pre-LMT waterfall.
+Ines makes him say it as a pair, because that is how the pods across town will see it when his orders reach them. "Long the notes, long the puts. What does the second leg remove?"
+
+"The default event at the market's recovery," Theo says, "and with it the hazard premium, because I'm paying the same $\lambda^{\mathbb{Q}}$ on the puts that I'm collecting on the notes. What's left is $R^{\mathbb{P}}-R^{\mathbb{Q}}$, nineteen points, paid only if it dies."
+
+"What leaks?"
+
+"Anything that isn't a clean wipe-out with my recovery on the other side. We'll get to that."
+
+"What does it cost?"
+
+He reads it off Figure 6-B.6. Per 100 face, the notes earn about 5.9 points a year of excess return over the riskless rate in this approximation, and the puts give back about 4.7 of it, so the view nets 1.2. In cash, the puts cost about \$77,500 up front per \$1mm of notes, almost eight points, against a coupon of 7.25 on a bond financed at 78. "It's a position that pays for its own insurance and keeps about a point and a bit," he says. "If I'm right."
+
+Kaz runs the chain through `credit_options.py` while they talk, to make sure the hand arithmetic and the module agree. At 3:40 they do not, quite, by a quarter of a cent; §6-B.9 has the reason, and it is not a bug.
+
+Theo checks the boring part last, which Ines says is the part that should come first. The \$1 puts have open interest in the tens of thousands of contracts and a market a penny wide either side of 13.6 cents *(illustrative)*; 5,700 contracts is a size the screen can absorb without the desk's own buying becoming the price. The notes are another matter, and he has known since Friday at 2:58 what a no-bid in that name feels like.
+
+Ines lets him put it on in a size she calls tuition: \$1mm face of the notes against 5,700 contracts of the \$1 puts *(illustrative)*. Then she asks the question she asks of every position on the day it opens: what kills it? The answers come from three chairs.
+
+"*Which default?*" Ines says first. "A distressed exchange that leaves the equity alive pays the puts nothing while the notes take the haircut. That's the worst state you can be in, and it's the $\lambda_D$ the put chain can't see (§14.1–14.2). Halvorsen's 8-K said 'liability management transaction.' It did not say 'filing.'"
+
+"*The corridor,*" Mags says. "Your leak is 3% here, and all of it lives in a slow bleed. If this thing drifts to a dollar over two years instead of dying on a Tuesday, your 'default claim' was a vol position the whole time and nobody told the puts."
+
+Theo gives the third himself, because it is his number. "*The recovery is a mixture.* My 40 is a pre-LMT waterfall. It has to be conditioned on who's inside the coalition and who isn't (§14.4), and it should come out of Chapter 12-B's state machine, not out of my old model." He touches the USB stick in his pocket, which for once he does not find comforting.
+
+Ines turns the cards over. Kaz's card bet against the wrong number for the wrong reason: the put was 97% default claim and 3% volatility, so betting against it at 80% vol was betting that Halvorsen could not die. Mags's card named the right number. Theo's named the right number and the right reason, which was not that he was clever but that he had read the documents, and recovery is the one question on this desk where reading the documents is an edge. The reader's card is graded against the same three: if it said "recovery," it is in good company; if it said "volatility," it was in Kaz's.
 
 > **Poker Table.** Ines replays the hand twenty days later: notes 80, puts \$0.12, position flat within a quarter point *(illustrative)*. Theo is disappointed. "That's what a hedged recovery bet does before the river," Ines says. "Nothing. You bought the right to be paid for being right about one number on one day. If it makes money before that day, find the risk you forgot to hedge."
 
@@ -815,9 +879,9 @@ The second layer is credit. `merton` prices debt as a riskless bond minus a put 
 
 The third layer is the proof. `_self_test` checks parity, the §6.2.4 firm, the $\lambda=0$ reduction, implied-vol round trips above the wing floor, the \$1 put, the Halvorsen chain and a seeded Monte Carlo within four standard errors. It runs on import: comforting in a notebook, wasteful in a nightly job.
 
-Use it for single-name, dividend-free European pricing and for reading a hazard off a liquid low-strike put. Do not use it where a distressed exchange is the likely default; the put never sees that default.
+At 3:40 on the Halvorsen afternoon the round trip did not close. Kaz had fed the \$0.136 put into `hazard_from_put`, got $\lambda\approx14.5\%$, and repriced it with `jtd_price` as a check, the way you add a column back up after subtracting. The answer came back \$0.1333, a quarter-cent short of the quote. Nothing was broken. `hazard_from_put` defaults to `american=True` and uses the corridor claim, while `jtd_price` always uses the European one, so the two functions were answering slightly different questions about the same put. Passed `american=False`, the round trip closes exactly, at $\lambda\approx14.8\%$. The desk's habit since that afternoon is one convention per workflow, written down next to the number it produced.
 
-The edge case that bites is quiet. `hazard_from_put` defaults to `american=True` and uses the corridor claim, but `jtd_price` always uses the European claim. Feed in Halvorsen's \$0.136 put, get $\lambda\approx14.5\%$, reprice with `jtd_price`, and you land on \$0.1333, a quarter-cent short of the quote. Pass `american=False` and the round trip closes exactly, at $\lambda\approx14.8\%$. Pick one convention per workflow and write it down.
+The module is at home pricing single-name, dividend-free European options and reading a hazard off a liquid low-strike put. It is blind where a distressed exchange is the likely default, because the put never sees that default; Ines's first answer to "what kills it" on Halvorsen is the module's limit, said by a person instead of a docstring.
 
 *The full listing is [Listing 6-B.1 in Appendix F](#code-6b-1).*
 
@@ -826,6 +890,22 @@ The edge case that bites is quiet. `hazard_from_put` defaults to `american=True`
 Used in: §8.3 and §8.8 (bond-to-equity sensitivities), §11.3 (structural PDs, tagged $\mathbb{P}$), §15.2–15.3 (`Q_nominal` digitals), §16.3–16.4 (backstops and warrants), §21.4 (pool Greeks), §23.2–23.5 (the surface engine imports `jtd_price`, `hazard_from_put` and `implied_vol`), §28.4.
 
 ## 6-B.10 Desk Debrief
+
+**Finder.** Where each idea of the chapter lives: the equation, the gentle version, the scene where somebody had to use it, and the function in Listing 6-B.1.
+
+| Concept | Equation | Intuition (Math, Gently) | Judgment (scene) | Code (Listing 6-B.1) |
+| :-- | :-- | :-- | :-- | :-- |
+| Payoff atoms and the ladder | §6-B.1.1; $C(a_j)-C(a_{j+1})$ (§6-B.1.4) | Two lunchboxes (§6-B.1.2); the butterfly (§6-B.1.3) | Wolfspeed, 23 Jun 2025 (§6-B.1.5) | `bs_price` |
+| Replication | Black–Scholes PDE; gamma rent (§6-B.2.3–2.4) | The factory, two parts (§6-B.2.2) | Veronesi annotation (§6-B.2.4) | `bs_greeks` |
+| Two probabilities of one event | $N(d_1)$, $N(d_2)$ (§6-B.2.5) | Two accountants (§6-B.2.5) | §6-B.2.5 and its Full Derivation | `bs_price` |
+| Greeks and JTD | §6-B.3.2 table; §6-B.3.5 table | A Greek is a bump (§6-B.3.1) | Theo's eleven columns (§6-B.3.5); SVB (§6-B.5.3) | `bs_greeks` |
+| Implied vol and skew | no-arbitrage bounds (§6-B.4.2) | The ground-floor premium (§6-B.4.3) | Desk Myth (§6-B.4.3); SVB's 167 | `implied_vol` |
+| Jump-to-default put | (6B.1)–(6B.3) | Funeral and floor (§6-B.5.2); the ridge (§6-B.5.5) | SVB (§6-B.5.3); Halvorsen Step 1 (§6-B.8) | `jtd_price`, `hazard_from_put`, `wing_floor_vol` |
+| Jump hedge | $\Delta^*$ (§6-B.5.6) | The compromise delta (§6-B.5.6) | SVB's grade (§6-B.5.3) | `jump_hedge_ratio` |
+| Hazard multiplier and premia | (6B.4)–(6B.6) | Clock and bill (§6-B.6.3) | Halvorsen Steps 3–4 (§6-B.8); PB-07 (§6-B.6) | `spread_decomposition` |
+| Measure tags | Law 4 (§6-B.6.6) | — | ROBO's refused `to_q` (§6-B.6.6) | `MeasuredPD` |
+
+The rule the `to_q` scene taught, in one line for the table's sake: every probability and expectation carries its measure (`P`, `Q` or `Q_nominal`); prices and implied quantities are $\mathbb{Q}$, forecasts, hedges and sizes are $\mathbb{P}$, and conversion goes only through a sourced multiplier.
 
 - **Write the payoff before you price it.** Every clause is a call, a put or a digital; the capital structure is a ladder of call spreads, and the fulcrum is the one at the money. (Law 8)
 - **$N(d_2)$ is a price, not a forecast.** Replication deletes the drift, and $\mathbb{Q}$ is the second derivative of the price list. (Law 4)
@@ -840,8 +920,8 @@ Used in: §8.3 and §8.8 (bond-to-equity sensitivities), §11.3 (structural PDs,
 ### Exercises
 
 1. *(Payoffs.)* Write Larkspur Foam's first-lien loan, second-lien notes and equity as call spreads on $V_T$. Insert a super-priority uptier tranche at $a=0$ and show which tranche's delta rises most. Which tranche did the Ad Hoc Group just become?
-2. *(Measures.)* A screen shows a "CDS-implied PD" of 9% at 40% recovery beside a 4% agency default rate for the bucket. Compute the naive $\xi$, give three reasons it is not a premium ratio (recovery convention, $\lambda_D$, liquidity), and explain to ROBO in one sentence why `to_q` raised.
-3. *(Corridors.)* With (6B.2), find the largest strike on a \$6 stock at 80% vol whose corridor leak is under 1% of $U^{\text{Eur}}$ at $\lambda=14.5\%$. Repeat at 40% vol. Why do low-vol names make better corridor instruments, and why is that exactly when nobody wants their puts?
+2. *(Measures.)* A screen shows a "CDS-implied PD" of 9% at 40% recovery beside a 4% agency default rate for the bucket. Compute the naive $\xi$, give three reasons it is not a premium ratio (recovery convention, $\lambda_D$, liquidity), and explain to ROBO in one sentence why `to_q` raised. **Check:** naive $\xi=9/4=2.25$ on the probabilities, about 2.31 on the hazards ($-\ln0.91/-\ln0.96$).
+3. *(Corridors.)* With (6B.2), find the largest strike on a \$6 stock at 80% vol whose corridor leak is under 1% of $U^{\text{Eur}}$ at $\lambda=14.5\%$. Repeat at 40% vol. Why do low-vol names make better corridor instruments, and why is that exactly when nobody wants their puts? **Check:** by the (6B.2) bound, about \$0.49 at 80% vol and about \$2.04 at 40%; the actual leak, $\text{Put}_{\text{BS}}(6,B,1,\sigma,0.185)/B$, allows about \$0.75 and \$2.72.
 4. *(Kaz hedges.)* Kaz proposes offsetting the cold open's −\$41k of vega with equity calls on all forty-one issuers, "because calls are long vega." Using §6-B.1.4 and §6-B.5.3, say what this hedges, what it does not, and what happens on the day an uptier crushes the bonds while the stocks rally.
 
 ### Deep-Dive Resource Graph

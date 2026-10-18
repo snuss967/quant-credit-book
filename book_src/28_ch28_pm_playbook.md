@@ -51,7 +51,7 @@ She goes back to her desk. Theo opens his notebook to a clean page, the way he u
 
 **On the week when every 5% line on the Street is hit at once, will my alpha own this book, or will the rule?**
 
-The two hours that follow are the chapter. Each section prices one clause of the term sheet Ines asked for (the risk budget, the bet count, the sizing rule, the exit clock, the stop, the leverage band and the people who widen it). Ines fills the gaps between them with replays of the weeks when someone else's clause failed, and by six the 13-week model has become a dashboard pointed at the desk itself, with a short list beside it of the things it cannot see.
+The two hours that follow, and the evening after them, are the chapter. Each section prices one clause of the term sheet Ines asked for (the risk budget, the bet count, the sizing rule, the exit clock, the stop, the leverage band and the people who widen it). Ines fills the gaps between them with replays of the weeks when someone else's clause failed, and by the end of the evening the 13-week model has become a dashboard pointed at the desk itself, with a short list beside it of the things it cannot see.
 
 ## 28.1 Risk, Not Capital: The Desk Head's Accounting Identity
 
@@ -191,6 +191,8 @@ The ex-RSSG instinct is to concentrate: you did the work, you read the intercred
 >
 > **Annotation.** The payoff of a bond is capped at par plus coupons and floored at recovery, so the right tail that rewards a concentrated equity bet does not exist. A concentrated credit bet earns the same spread as a diversified one and carries more default variance. The modern desk keeps the principle and adds an exception the authors would recognize: when the PM's information is genuinely about $L$ rather than about $\lambda$ (a recovery the market has mispriced because it has not read the documents), the bet is less a default bet than a recovery bet, and §28.4 sizes it with Kelly. Even then, the single-name cap comes from the ruin boundary, not from conviction.
 
+Sunita, who has made a career of concentrated bets, objects that one fulcrum view she has read to the last page is worth more than forty she has skimmed. The next extraction is Kaz's reply, and it is about where the risk goes rather than where the return comes from.
+
 > **[SOURCE EXTRACTION]** *Bolder_Credit_Risk_Modelling p.391:* "One half of the total risk can … be allocated to the 16 largest obligors"
 >
 > **Annotation.** Bolder's example is a 100-obligor one-factor portfolio, and the punchline generalizes: tail risk concentrates far faster than position count suggests. On the same pages Bolder argues for expected shortfall over VaR as the economic-capital measure, because ES contributions are stable with feasible simulation sizes while VaR contributions are not. On a desk this becomes a dashboard column (§28.9): ES contribution by issuer, ranked, with the top decile of names flagged when they carry more than half the tail.
@@ -229,7 +231,7 @@ The harness is where the listing earns its place. It builds Theo's book and asse
 
 Run it as a regression suite whenever the covariance estimator, the issuer mapping or the netting rule changes. On the live book only the matrix function applies, because the closed form needs equal weights, equal volatilities and equal blocks; there it is the test, not the tool. The Monte Carlo confirms that the algebra of (28.3) is right. It cannot tell you whether your bets are independent, since it assumes they are.
 
-The edge case that bites is upstream of the code: `effective_breadth` trusts whatever covariance it is handed. Feed it total-return covariance instead of the idiosyncratic residual and the shared spread beta dominates every off-diagonal term, so $N_{\text{eff}}$ collapses toward one or two. The code will not warn you; it will report, correctly, how many bets you have in a world where you have not hedged beta.
+The trap is upstream of the code: `effective_breadth` trusts whatever covariance it is handed. Feed it total-return covariance instead of the idiosyncratic residual and the shared spread beta dominates every off-diagonal term, so $N_{\text{eff}}$ collapses toward one or two. The code will not warn you; it will report, correctly, how many bets you have in a world where you have not hedged beta.
 
 *The full listing is [Listing 28.1 in Appendix F](#code-28-1).*
 
@@ -272,6 +274,8 @@ The literature adds two refinements, and Kaz insists on both. Gârleanu and Pede
 > **[SOURCE EXTRACTION]** *Man_Revolutions_in_Credit_Trading_2023 p.4:* "Liquidity modelling is essential too: an optimised portfolio is not optimal if you can't trade it. Furthermore, unfilled orders may create unintended and potentially unmodelled risk exposures in the portfolio."
 >
 > **Annotation.** The horizon ladder below is the desk-level response. A fill probability below one is a hidden cost in (28.7): if a fraction $1-\pi$ of intended trades fail, the realized position lags the target, so a fast signal decays further before it is expressed. Man's companion point (same page) is that with more than 90% of its flow electronic, it could make "more frequent, smaller trades," which lowers $c^{\text{RT}}$ for small tickets and so lowers $h^\ast$. Electronification moves signals *down* the ladder: a signal that needed tier 0 in 2015 may be viable in liquid cash in 2026, if the tickets are small.
+
+Man's earlier paper had already put that hidden cost at the centre of the business, and named the signal that pays it most often.
 
 > **[SOURCE EXTRACTION]** *Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.19:* "We cannot overstate the importance of transaction cost and liquidity modelling for quant credit participants" … "Momentum tends to have the highest turnover of any factor approach while both Size and Quality see the least churn."
 >
@@ -493,15 +497,15 @@ What ROBO built from the vague version ("size positions by Kelly"): it computed 
 
 The precise version: implement (28.9), (28.10)–(28.12) with the rationalized root, Merton's approximation (for comparison only, never for sizing), the fractional multiplier (28.13), the random-loss growth rate with a Beta recovery and a ruin boundary at $1/L_{\max}$, and the cluster solver (28.14). Inputs are physical-measure intensities. Long-only: return zero when the edge is not positive.
 
-The CCC story shows why sizing cannot live in a spreadsheet cell. Kaz's 93% came from a correct formula fed a plausible table. ROBO's 4,000% came from a correct formula fed three months of marks. In October the right answer moved by 40% while the spread screen said buy more. Every one of those errors is a property of how the inputs are chosen and where the formula is allowed to run, and a desk sizes hundreds of positions a day, so the discipline has to be written into a function that refuses to misbehave. It also has to survive the afternoon someone "simplifies" it in a refactor and quietly deletes the ruin boundary.
+At 4:50 Kaz had (28.11) typed into a spreadsheet cell, and the CCC story shows why sizing cannot live there. Kaz's 93% came from a correct formula fed a plausible table. ROBO's 4,000% came from a correct formula fed three months of marks. In October the right answer moved by 40% while the spread screen said buy more. Every one of those errors is a property of how the inputs are chosen and where the formula is allowed to run, and a desk sizes hundreds of positions a day, so the discipline has to be written into a function that refuses to misbehave. It also has to survive the afternoon someone "simplifies" it in a refactor and quietly deletes the ruin boundary.
 
 The listing holds nine small functions. `kelly_binary` is (28.9), floored at zero because the desk is long-only. `growth_binary` and `growth_jump` are the expected log growth rates, which return minus infinity when a default is possible and the position times the loss reaches one, the ruin boundary expressed as code. `kelly_jump` returns the root of the first-order condition in the numerically stable (rationalized) form of the quadratic, and it still works when the diffusion term is zero. `kelly_merton_approx` exists only so the harness can show how wrong it is. `kelly_multiplier` is (28.13). `growth_random_loss` and `kelly_random_loss` put a Beta distribution on the loss and find the optimum numerically, with the search capped just inside $1/L_{\max}$. `kelly_cluster` solves (28.14) for $n$ symmetric names that share one common jump.
 
 The harness reproduces the chapter. Kaz's inputs give 0.926, the derivative of growth at that point is zero, and the edge appears exactly at $q < c/(c+L)$. With a diffusion term, the Kelly fraction stays inside the ruin boundary while Merton's overshoots it, which means one default would wipe out the Merton bettor. In the pure-diffusion case half Kelly gets exactly 75% of the growth, a Monte Carlo confirms the multiplier, random recoveries lower the fraction by Jensen, a common jump shrinks every name, and the CCC example shows the edge rising while the fraction falls by more than 40%.
 
-Use it as the upper bound on single-name and cluster size, with the fractional multiplier and the leverage band applied afterwards. Do not use it for shorts, or for books whose dependence is richer than one common jump.
+It sets the upper bound on single-name and cluster size, with the fractional multiplier and the leverage band applied afterwards. It is not built for shorts, or for books whose dependence is richer than one common jump.
 
-The edge case that bites is the measure. `lam` must be the physical default intensity. Hand the function the spread-implied hazard, $s/L$, and the harness shows what happens: the edge is zero and the answer is zero. The opposite error is quieter: a physical hazard that is too low looks like a bargain, and the function will lever it toward the ruin boundary without complaint.
+The input that decides everything is the measure. `lam` must be the physical default intensity. Hand the function the spread-implied hazard, $s/L$, and the harness shows what happens: the edge is zero and the answer is zero. The opposite error is quieter: a physical hazard that is too low looks like a bargain, and the function will lever it toward the ruin boundary without complaint.
 
 *The full listing is [Listing 28.3 in Appendix F](#code-28-3).*
 
@@ -525,9 +529,9 @@ $$
 \text{VaR} = P\left[1 - e^{-2.33\,\sigma}\right], \qquad \text{COL} = \tfrac12 P\left(\bar S + a\,\tilde\sigma\right), \qquad \text{LVaR} = \text{VaR} + \text{COL}, \tag{28.15}
 $$
 
-where $S = (\text{Ask} - \text{Bid})/\text{Mid}$ is the relative spread, $\bar S$ and $\tilde\sigma$ are its mean and volatility, and the multiplier $a$ "ranges from 2.0 to 4.5 depending on the instrument" (they measured 2.5 for JPY and 3.5 for THB in 1997–98). The factor $\tfrac12$ is there because liquidating at the bid costs half the bid-ask. Two translations make it a credit formula.
+where $S = (\text{Ask} - \text{Bid})/\text{Mid}$ is the relative spread, $\bar S$ and $\tilde\sigma$ are its mean and volatility, and the multiplier $a$ "ranges from 2.0 to 4.5 depending on the instrument" (they measured 2.5 for JPY and 3.5 for THB in 1997–98). The factor $\tfrac12$ is there because liquidating at the bid costs half the bid-ask. Kaz translates it into credit in two moves.
 
-First, for a spread-quoted bond the relative bid-ask in price terms *is* the LCS, so $\text{COL}_i = \tfrac12 |\text{MV}_i| \cdot \text{LCS}_i^{\text{stress}}$, and shorts pay at the offer just as longs pay at the bid. Second, the $\bar S + a\tilde\sigma$ form does not reach 5× in practice. To get from 0.59% to 3.40% you need $a\tilde\sigma = 2.81$ points; a calm-window $\tilde\sigma$ of 0.10–0.20 points *(illustrative)* would need $a$ between 14 and 28, four to ten times Bangia's FX range. Credit liquidity does not wiggle around a mean. It jumps between regimes. So the desk carries a multiplicative stress factor $m$ instead:
+The easy move is that for a spread-quoted bond the relative bid-ask in price terms *is* the LCS, so $\text{COL}_i = \tfrac12 |\text{MV}_i| \cdot \text{LCS}_i^{\text{stress}}$, and shorts pay at the offer just as longs pay at the bid. The hard move is that the $\bar S + a\tilde\sigma$ form does not reach 5× in practice. To get from 0.59% to 3.40% you need $a\tilde\sigma = 2.81$ points; a calm-window $\tilde\sigma$ of 0.10–0.20 points *(illustrative)* would need $a$ between 14 and 28, four to ten times Bangia's FX range. Credit liquidity does not wiggle around a mean. It jumps between regimes. So the desk carries a multiplicative stress factor $m$ instead:
 
 $$
 \text{COL}_i^{\text{exo}} = \tfrac12\, m\, \overline{\text{LCS}}_i\, |\text{MV}_i|, \qquad m \in \{1.64,\ 3,\ 5.8,\ 6\},
@@ -689,7 +693,7 @@ Figure 28.4 sets the marks against the two thresholds and shows what they do to 
 
 *A replay of March 2020, cut at the close on four dates between 16 and 27 March 2020, then a coda on March 2026 told from the desk's own books. Bram's book, its sizes and P&L, the cards and the desk's dialogue are fictional and illustrative; the costs, flows and dates are from the Federal Reserve (Sharpe and Zhou, FEDS Notes, 7 October 2020), Kargar et al., the first-quarter 2020 earnings calls of BlackRock, JPMorgan and Bank of America, the New York Fed, FRED and The DESK.*
 
-At 5:35 p.m. Ines has one folder left and fifty-five minutes of lanyard. "Bram," she says. "Your book, as it stands tonight, run through March 2020."
+At 5:30 p.m. Ines has one folder left and half an hour of lanyard. "Bram," she says. "Your book, as it stands tonight, run through March 2020."
 
 Bram, who in March 2020 ran a smaller version of the same book at another firm and has told everyone so, protests that he was hedged. His book is long investment-grade bonds he warehouses for ETF creations and portfolio trades, and short the ETF shares that wrap them. "Half of it is hedged," Ines agrees, "and Chapter 20 runs that half as its own replay. Tonight we look at the half that doesn't trade. Five times NAV of IG bonds, marked to bid by a risk officer who has never once been talked out of a mark. I'll be the risk officer."
 
@@ -799,7 +803,7 @@ The algebra above is short enough to do on a napkin, and the desk still codes it
 
 The listing is three functions and a test that replays Theo's HY PM. `leverage_floor` is (28.2) and `leverage_ceiling` is (28.22). Given a linear cost the answer has the closed form (28.23), but the function accepts any increasing `col_fn`, such as the size-sensitive cost of (28.16), and finds the fixed point by bracketing between zero and the cost-free ceiling and calling `brentq`. `liquidity_speed_limit` is the right-hand bound of (28.23). The test checks that the numerical root matches the closed form to nine decimals, that a book with $10^8$ effective bets still stays under the speed limit, and that halving the LCS while accepting a 4% hurdle reopens the band.
 
-The edge case that bites is that an empty band is an answer, not an error. The functions return a floor and a ceiling separately, and nothing in them compares the two. The caller has to check, and the test does it on the line `hi_wet < lo`.
+The surprise is that an empty band is an answer, not an error. The functions return a floor and a ceiling separately, and nothing in them compares the two. The caller has to check, and the test does it on the line `hi_wet < lo`.
 
 *The full listing is [Listing 28.6 in Appendix F](#code-28-6).*
 
@@ -967,7 +971,7 @@ The one non-obvious line is `sigma_book`. Equation (28.22) is written for $N_{\t
 | Value an analyst by her $\rho$ and staff to the dilution scale | (28.24)–(28.25) | Two thermometers (§28.8, in the text) | Sunita and Kaz on the fulcrum and the Barclays table (§28.8) | [Listing 28.7](#code-28-7) |
 | Pay for idio, charge for beta, and grant capital to the corner | (28.21)–(28.22) applied to a pod | The PM's call (§28.6) | Dov Adler's review: you are Marcus (§28.8) | [Listing 28.8](#code-28-8) |
 
-At 7:40 p.m. Theo writes the term sheet Ines asked for at 4:05, on one page, and the four PMs, who have stayed to see what the new hire would do with their books, read it. It has the risk budgets, the tiers, the capped half-Kelly, the four clocks, the stop with the marks inside it and the band. Its last clause is the answer to the question in bold at the top of his notebook. On the week when every 5% line on the Street is hit at once, the desk de-risks together and through Priya's overlay first, so that its own four books do not sell the same bonds against each other into the same bid, and nobody sells a cash bond for a rule's sake until the dashboard says the alpha has stopped owning the book. Rafe signs it. Bram signs it. Sunita reads it twice, the way she reads every agreement, and signs it. Priya signs it without reading it, because her rules had already decided. Theo signs it last, as the borrower. (Cooperation agreements signed in this book so far: the counter overflowed in Part IV, so add one anyway. This is the first one the borrower signed.)
+At 7:40 p.m. Theo writes the term sheet Ines asked for at 4:05, on one page, and the four PMs, who have stayed to see what the new hire would do with their books, read it. It has the risk budgets, the tiers, the capped half-Kelly, the four clocks, the stop with the marks inside it and the band. Its last clause is the answer to the question in bold at the top of his notebook. On the week when every 5% line on the Street is hit at once, the desk de-risks together and through Priya's overlay first, so that its own four books do not sell the same bonds against each other into the same bid, and the marks are already inside every stop, so that if the rule fires that week it fires on the alpha's losses and not on the bid's. Rafe signs it. Bram signs it. Sunita reads it twice, the way she reads every agreement, and signs it. Priya signs it without reading it, because her rules had already decided. Theo signs it last, as the borrower. (Cooperation agreements signed in this book so far: the counter overflowed in Part IV, so add one anyway. This is the first one the borrower signed.)
 
 The Ad Hoc Group, represented by counsel, has formed in the corner as usual. It notes for the record that the agreement contains no exception for open market purchases, and announces in unison that, after the Fifth Circuit, it is retiring the phrase. Mags asks who will tell the lawyers. Nobody volunteers.
 

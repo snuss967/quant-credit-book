@@ -156,7 +156,8 @@ def fig_adoption_ceiling():
         ax.yaxis.set_major_formatter(FuncFormatter(pct))
         r1, r8 = chk[(seg, 1.0)][2], chk[(seg, 0.8)][2]
         ax.text(0.99, 0.10, f"in 2030: {100 * r1:.0f}% if K = 1,\n{100 * r8:.0f}% if K = 0.8", transform=ax.transAxes,
-                ha="right", va="bottom", fontsize=8.2, color=INK_2)
+                ha="right", va="bottom", fontsize=8.2, color=INK_2, zorder=7,
+                bbox=dict(boxstyle="square,pad=0.15", fc=SURFACE, ec="none"))
         ax.set_xlabel("Year")
     axs[0].set_ylabel("Electronic share of notional")
     # ROBO's constant-growth rule, high yield only
@@ -225,7 +226,7 @@ def fig_rfq_neff():
     axr.set_ylim(0, 1.05)
     axr.set_xticks([1, 5, 10, 15, 20])
     axr.set_xlabel("Dealers responding, n")
-    axr.set_ylabel("Expected best quote ÷ θ")
+    axr.set_ylabel("Expected best-quote distance ÷ θ")
     return finish(fig, "ch02_rfq_neff")
 
 
@@ -248,7 +249,7 @@ def fig_data_exhaust_curve():
     fig, ax = new_figure("wide")
     ax.axhline(0, color=INK_2, linewidth=0.9, zorder=2)
     ax.plot(x, gross, color=NEUTRAL, linewidth=LW, zorder=2)
-    ax.text(10.6, 160, "gross alpha, k√TO", fontsize=8.2, color=INK_2, ha="left", va="center")
+    ax.text(11.8, 150, "gross alpha, k√TO", fontsize=8.2, color=INK_2, ha="left", va="center")
     for c_bp, col in ((12.0, OLD_COST), (7.5, NEW_COST)):
         net = gross - c_bp * x
         ax.plot(x, net, color=col, linewidth=LW, zorder=4)
@@ -261,7 +262,7 @@ def fig_data_exhaust_curve():
                 textcoords="data", ha="left", va="center", fontsize=8.5, color=INK_2, arrowprops=LEADER)
     ax.annotate("", xy=(10.0, 70.5), xytext=(4.25, 51.0),
                 arrowprops=dict(arrowstyle="-|>", color=INK_2, linewidth=1.1, mutation_scale=9, shrinkA=0, shrinkB=0))
-    ax.text(1.0, 98, "cutting the cost from 12 to 7.5 bp\nmultiplies the best turnover by 2.56\nand the net alpha by 1.6",
+    ax.text(0.5, 147, "cutting the cost from 12 to 7.5 bp\nmultiplies the best turnover by 2.56\nand the net alpha by 1.6",
             fontsize=8.5, color=INK_2, ha="left", va="center")
     ax.set_xlim(0, 17)
     ax.set_ylim(-14, 175)
@@ -283,16 +284,18 @@ def fig_two_shocks_timeline():
     up20 = round(100 * (s[d("2020-03-23")] - s[d("2020-02-20")]))
     up25 = round(100 * (s[d("2025-04-07")] - s[d("2025-04-02")]))
     assert up20 == 226 and up25 == 29
+    win25 = s[(s.index >= "2025-03-31") & (s.index <= "2025-05-14")]
+    assert win25.max() == s[d("2025-04-07")] == s[d("2025-04-09")]       # the April 2025 high is a tie (the note says so)
 
     ev20 = [("2020-03-12", 4.95, "12 Mar: LQD closes 5.0% below NAV"),
             ("2020-03-23", 4.58, "23 Mar: Fed announces the SMCCF and PMCCF"),
             ("2020-04-09", 4.21, "9 Apr: facilities expanded to up to $850bn with TALF"),
-            ("2020-05-12", 3.84, "12 May: first purchases, of ETFs"),
-            ("2020-06-16", 3.47, "16 Jun: first purchases of bonds")]
+            ("2020-05-12", 3.84, "12 May: first ETF purchases"),
+            ("2020-06-16", 3.47, "16 Jun: first bond purchases")]
     ev25 = [("2025-04-07", 4.95, "7 Apr: US fixed-income ETFs trade a record $98.9bn at one-cent spreads"),
             ("2025-04-08", 4.58, "8 Apr: $89.7bn of corporates trade, 12% by portfolio trade; LQD 0.22% below NAV"),
             ("2025-04-09", 4.21, "9 Apr: prices per RFQ fall from 13.2 to 6.6; tariff pause that afternoon"),
-            ("2025-04-16", 3.84, "within a week: back to 11.3 prices per RFQ"),
+            ("2025-04-16", 3.84, "by 16 Apr (within a week): back to 11.3 prices per RFQ"),
             ("2025-04-30", 3.47, "30 Apr: about $92bn record day;\nportfolio trades 22.4% of IG")]
 
     fig, axs = new_figure((7.0, 6.1), nrows=2, sharey=True)
@@ -309,7 +312,7 @@ def fig_two_shocks_timeline():
             ax.plot([ts, ts], [seg[seg.index <= ts].iloc[-1] + 0.06, y], color=NEUTRAL, linewidth=0.9,
                     linestyle=(0, (3, 3)), zorder=1)
             ax.annotate(txt, (ts, y), xytext=(3, 0), textcoords="offset points", ha="left", va="center",
-                        fontsize=8.2, color=INK_2)
+                        fontsize=8.2, color=INK_2, bbox=dict(boxstyle="square,pad=0.15", fc=SURFACE, ec="none"))
         ax.set_title(title)
         ax.xaxis.set_major_locator(loc)
         ax.xaxis.set_major_formatter(mdates.DateFormatter(fmt))
@@ -321,7 +324,7 @@ def fig_two_shocks_timeline():
     note(axs[0], f"+{up20} bp from 20 Feb (2.05%) to the 23 Mar peak (4.31%)", loc="lower right")
     pk25 = d("2025-04-07")
     axs[1].plot([pk25], [s[pk25]], "o", color=IG, markersize=5.5, zorder=6)
-    note(axs[1], f"+{up25} bp from 2 Apr (1.73%) to the 7 Apr peak (2.02%)", loc="lower right")
+    note(axs[1], f"+{up25} bp from 2 Apr (1.73%) to the 7 Apr high (2.02%, equalled on 9 Apr)", loc="lower right")
     return finish(fig, "ch02_two_shocks_timeline")
 
 

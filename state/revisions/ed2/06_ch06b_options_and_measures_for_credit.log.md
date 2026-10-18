@@ -20,9 +20,11 @@ Started 2026-10-18 by revision writer.
 - [x] 16. [§6-B.6.2–§6-B.6.3 Girsanov for an intensity] · FULL-DERIVATION-MOVE + MATH-GENTLY #10, two parts ("loading the dice versus speeding the clock"; then the decomposition). — Note: clock-and-bill box (0.865; 420=150+150+120); densities moved; Trend Watch to section end.
 - [x] 17. [§6-B.6.5 The premium ratio as a traded quantity] · ANOTHER-SEAT #2, the dealer options desk. — Note: options market-maker seat; Optiver rhythm; Hertz 2026 borrow-as-delta-hedge.
 - [x] 18. [§6-B.6.6 The rule: say which measure you are in] · LIST-TO-NARRATIVE. — Note: four rules become ROBO to_q refusal scene; annotation reference repointed.
-- [ ] 19. [§6-B.6, after 6.6.6: `> **The Pair.** PB-07`] · RV BEAT (box, 400–600 words), per RV row for 6-B.
-- [ ] 20. [§6-B.7 The Desk's Option Book] · BRIDGE, then trim.
-- [ ] 21. [§6-B.8 Worked Case: Halvorsen] · EXPAND-SCENE to 2,000–2,400 words, same five steps, same numbers.
-- [ ] 22. [§6-B.9 Specification] · WHEN-TO-APPLY inside the Spec, and de-template.
-- [ ] 23. [§6-B.10 Desk Debrief] · Finder table (lesson 11).
-- [ ] 24. [Whole chapter] · fiction labels and cast.
+- [x] 19. [§6-B.6, after 6.6.6: `> **The Pair.** PB-07`] · RV BEAT (box, 400–600 words), per RV row for 6-B. — Note: PB-07 box on Ch 16 canonical legs (17 Jun 2020 cut).
+- [x] 20. [§6-B.7 The Desk's Option Book] · BRIDGE, then trim. — Note: Ines walks the forty-one bonds; three paragraphs tightened, facts kept.
+- [x] 21. [§6-B.8 Worked Case: Halvorsen] · EXPAND-SCENE to 2,000–2,400 words, same five steps, same numbers. — Note: Monday 2:10 scene, card, spoken kills, pair isolation, grades; numbers unchanged.
+- [x] 22. [§6-B.9 Specification] · WHEN-TO-APPLY inside the Spec, and de-template. — Note: templates replaced by 3:40 round-trip moment and Ines-limit sentence.
+- [x] 23. [§6-B.10 Desk Debrief] · Finder table (lesson 11). — Note: nine-row Finder table, Law 4 one-liner, Checks on exercises 2 and 3.
+- [x] 24. [Whole chapter] · fiction labels and cast. — Note: labels checked, open items logged, cast bible and Pair Book updated.
+
+<!-- STATUS: COMPLETE -->

@@ -28,7 +28,7 @@ At 7:28 he has the answer. At 9:40, when product control has a real quote, he wi
 
 **What does a P&L explain have to contain before anyone is allowed to believe the number at the bottom?**
 
-By the end of this chapter you will be able to: split a bond's daily P&L into lines that each have a source and an owner, keeping custodian facts apart from model forecasts; give every hedge leg its own lines, including variation margin, the index series roll and an ETF's premium; account for financing, fees, FX and day-one P&L, and remove the phantom that two timestamps create; foot the explain to the official P&L, set a tolerance on the residual and say what happens when it is breached; run a month-end true-up and a price dispute; answer "which signal made the money?" with issuer netting and a stated rule for the cross-term; read the explain's own history for clusters; and specify `pnl_explain.py` for ROBO.
+By the end of this chapter you will be able to: split a bond's daily P&L into lines that each have a source and an owner, keeping custodian facts apart from model forecasts; give every hedge leg its own lines, including variation margin, the index series roll and an ETF's premium; account for financing, fees, FX and day-one P&L, and remove the phantom that two timestamps create; foot the explain to the official P&L, set a tolerance on the residual and say what happens when it is breached; run a month-end true-up and a price dispute; regroup a long/short pair's lines into idio, leak and friction, with the hedge priced as it stood at the open, and read its capture ratio; answer "which signal made the money?" with issuer netting and a stated rule for the cross-term; read the explain's own history for clusters; and specify `pnl_explain.py` for ROBO.
 
 ## 8C.1 From One Bond to a Book
 
@@ -230,11 +230,11 @@ For two signals it averages the two sequential answers, momentum $\tfrac12(3.0 +
 
 One more check stands between a signal's P&L and its reputation, and it is the markout (§3.3). September's momentum P&L came heavily from three issuers that gapped on news nine days after the signal had entered them. The 1-, 5- and 20-day markouts on momentum's entries that month were flat. Momentum held the right bonds when the news came, but it did not cause the news, and its entries did not predict it. A signal's P&L becomes its edge only when the markouts agree, and in September they did not. Kaz conceded "obviously" on the following Tuesday.
 
-> **View From Another Seat.** *The multi-strategy platform.* On a pod platform the attribution question is a compensation question, and the platform answers it in advance. Portfolio managers are typically paid a share of their own P&L, with factor exposure hedged or charged centrally, so the platform's explain strips factors first and pays on what is left. Cross-terms between pods are mostly invisible to the pods themselves, because each pod sees only its own book. The platform sees the sum, nets the overlaps and keeps the interaction as its own P&L or cost. (Public accounts of this structure include the *Odd Lots* episodes listed in this chapter's Resource Graph; we describe the seat generically.) A single systematic desk running several signals faces the same question with one difference: the person dividing the interaction also runs the signals, which is a reason to fix the convention before the month starts rather than after it ends.
+> **View From Another Seat.** *The multi-strategy platform.* On a pod platform the attribution question is a compensation question, and the platform answers it in advance: its explain strips factors first and judges each pod on what is left. Morning (c) of §8C.6 reads one pod's pair that way, line by line. Cross-terms between pods are mostly invisible to the pods themselves, because each pod sees only its own book. The platform sees the sum, nets the overlaps and keeps the interaction as its own P&L or cost. (Public accounts of this structure include the *Odd Lots* episodes listed in this chapter's Resource Graph; we describe the seat generically.) A single systematic desk running several signals faces the same question with one difference: the person dividing the interaction also runs the signals, which is a reason to fix the convention before the month starts rather than after it ends.
 
 *Builds on:* §8.8 (the IDO ledger), §8.9 (`ido_engine`), §3.3 (markouts), §3.5 (the Edge Ledger), Law 2. *Used in:* §28.3 (allocation across signal horizons), §28.9 (net alpha by signal), Chapter 9 (the factor sleeves).
 
-## 8C.6 Two Worked Mornings
+## 8C.6 Three Worked Mornings
 
 ### Morning (a): the stale series
 
@@ -295,7 +295,69 @@ This is Law 9 working in both directions. A mark is a moving average of the trut
 
 ![Figure 8-C.3: The two mornings side by side, before and after. Left: Monday's explain with the residual at −\$119,000 (stale-series signature highlighted), then corrected to −\$9,000 inside the tolerance band. Right: the Corriveau true-up line at −\$240,000, the dispute evidence (the TRACE print, dealer runs and composite history) on a timeline, and the revised line at −\$40,000. Illustrative.](assets/figures/ch08c_two_mornings.png)
 
-*Builds on:* §8C.2 (the series roll), §8C.4 (tolerance and dispute), Appendix B (TRACE and evaluated-price sources), Law 9. *Used in:* §8C.9 (the explain's hand history), Chapter 10-B (rolls), Chapter 17-B (marks as contested prices).
+### Morning (c): the pair, at Vantress
+
+*Dov Adler's pod at Vantress Capital Management, his analyst Wen Zhao and the platform's risk manager Marcus Oyelaran are fictional composites (Chapter 1-B, Chapter 8-D), and Kestrel Roofing and Halvorsen Packaging are fictional issuers. Every position, mark, fee, market move and P&L figure below is illustrative. This is the morning after Chapter 1-B's Tuesday.*
+
+Ines's desk reads its explain by the book. A pod reads the same report by the pair, because the pair is what it is paid for, and one leg's line says nothing until the other leg's line is beside it.
+
+At 7:15 on Wednesday 14 October, Wen Zhao had finished the weather (Halvorsen's fee still 300 bp, no recalls overnight) and opened the platform's explain for Tuesday. It is §8C.1's report with the pod's tags on it, every bond and hedge leg in named lines. Each morning Wen folds those lines back into pairs, and each pair into four groups: **idio**, the thesis; **leak**, whatever the hedge was meant to remove and did not; **friction**, what the pair paid to exist; and **net**. PB-01 had had the busiest Tuesday on the ledger. Its legs are long \$60mm of Kestrel's 6% notes due 2030 and short \$39mm of Halvorsen's 7.25% senior unsecured notes due 2029: the bonds themselves, borrowed from an asset manager's agent lender through Vantress's prime broker against 102% cash collateral, recallable on demand. Dov matched them on market-value DTS in April, 0.65 by face. By Tuesday morning the view had paid and moved the ruler (§1B.2). Kestrel at 97 carried 70,200 of DTS, Halvorsen at 78 carried 98,000, and the pair was net short the high-yield market by about 40% of a leg, the orange line on the 7:15 x-ray. At 2:40 Dov bought back \$4mm of the short at 78.75 and sold about \$13mm of CDX HY protection against the 17,700 of DTS the trim left over. By 5:10 the line was grey.
+
+The platform's default pair report agreed with the grey line. It priced PB-01's market exposure on the 4:00 positions, the trimmed short plus the index sale, on which the pair was flat, so its market line was zero and its Tuesday read idio +\$77,300, leak −\$6,000, friction −\$26,860, net +\$44,440. Beneath those sat a line Wen had not asked for, *book hedge, allocated*. The report spreads the book's CDX HY lines across the pairs in proportion to their DTS gaps, and PB-01, with the largest gap on the book, had been handed most of them, including most of the \$140,000 roll break that Dov's operations contact had traced on Tuesday to the OMS and the FCM disagreeing about the date of a roll (§1B.2).
+
+*Write PB-01's Tuesday as four numbers (idio, leak, friction, net) and its capture ratio before reading on. Say which hedge ratio prices the market line, and where the roll break goes.*
+
+Wen priced the market line on the ratio the pair held when the day began, the one the 7:15 x-ray had drawn. High yield rallied on Tuesday: spreads closed about 2% tighter, most of it before ten. At \$1 per unit of DTS for each 1% move (§3B.4), the long made $70{,}200 \times 2 = \$140{,}400$ and the short lost $98{,}000 \times 2 = \$196{,}000$. The hedge removed what the two legs shared: \$140,400 of the short's loss was cancelled by the long's gain, along with the building-products factor both legs load on. What it did not remove, −\$55,600, was the ruler: a market position the pair carried from the open to 2:40, which nobody chose and which a trim at 2:40 could not reach back and hedge. The rates line leaked too. Matched on spread risk, the legs were never matched on rate risk, and the fall to 78 had shortened Halvorsen's duration along with its price, so the pair was long about \$12,000 of DV01. Treasuries half a basis point higher cost \$6,000.
+
+What remained after the hedge was the thesis. Kestrel tightened 3 bp more than the market explained, +\$62,900. Halvorsen lagged the rally by 10 bp, +\$70,000 on the short: the lender call working its way into the price. Idio, \$132,900.
+
+The friction lines keep §8C.1's split between facts and forecasts. Kestrel's accrual, +\$10,000, is the custodian's; the coupon the short owes the lender, −\$7,850, is the prime broker's; the pull-to-par lines, +\$1,170 on Kestrel and −\$5,970 on Halvorsen, are the model's. Then come the borrow fee, 300 bp a year on \$30.4mm of market value, −\$2,540; financing the long net of the rebate on the short's collateral, −\$1,670; and the day's two trades. The cover, at 78.75 when the composite at 2:40 was 78.35, is a day-one line of −\$16,000 (§8C.3), and the index sale cost about \$4,000 of half-spread. The eleven points of gain Dov booked on the \$4mm at 2:40 were already in the marks; on the explain, realizing them is a reclassification, not P&L.
+
+| PB-01, Tuesday 13 October 2026 *(illustrative)* | Group | Source | \$ |
+| :--- | :--- | :--- | ---: |
+| Factor spread, long Kestrel (start-of-day DTS 70,200) | hedged | risk model × factors | +140,400 |
+| Factor spread, short Halvorsen (start-of-day DTS 98,000) | hedged | risk model × factors | −196,000 |
+| Market, net of the hedge: the ruler | leak | the two lines above | −55,600 |
+| Rates residue (about \$12,000 of DV01 net long) | leak | risk model × curve | −6,000 |
+| **Leak** | | | **−61,600** |
+| Idiosyncratic, Kestrel (3 bp tighter on its own) | idio | issuer curve | +62,900 |
+| Idiosyncratic, Halvorsen (10 bp wider on its own) | idio | issuer curve | +70,000 |
+| **Idio** | | | **+132,900** |
+| Accrual, Kestrel | friction | custodian | +10,000 |
+| Coupon owed on the short | friction | prime broker | −7,850 |
+| Pull-to-par, Kestrel and Halvorsen | friction | model | +1,170 and −5,970 |
+| Borrow fee, 300 bp | friction | prime broker | −2,540 |
+| Financing, net of the rebate | friction | treasury | −1,670 |
+| Day-one, \$4mm cover at 78.75 | friction | blotter vs composite | −16,000 |
+| Half-spread, CDX HY sale | friction | blotter | −4,000 |
+| **Friction** | | | **−26,860** |
+| **Net** | | | **+44,440** |
+
+The capture ratio, net over idio, was $44{,}440 / 132{,}900 = 0.33$: of every dollar the view earned on Tuesday, the pod kept a third. The platform judges the pod on the idio line and pays it on what reaches the bottom of the page, and how much of the bottom it pays is Chapter 28's subject. The Pair Book's ledger row carries the ratio monthly (§8D.6), where PB-01's September reads 0.41. A single day's capture ratio is a curiosity, and Tuesday's is mostly the price of two trades.
+
+The default report's numbers were not bad arithmetic. They were the 4:00 ratio applied to ten o'clock. Priced on the close's hedge, the pair had been flat all day, so the morning's −\$55,600 had nowhere to go but idio: the view shrank to \$77,300, the leak all but vanished, and the capture ratio rose to 0.57 (Figure 8-C.4). The net is the same either way. What changes is the lesson the pod takes from it, and the default report taught two wrong ones: that Dov's documents were worth less than they were, and that his ruler was fine.
+
+Marcus Oyelaran walked over at 7:40, which he does when an email would be read the wrong way. "Your x-ray was grey at 5:10," he said. "Your explain says you were short the market all morning."
+
+"Grey at 5:10. Orange at ten," Wen said. "The explain prices the hedge you had, or the 2:40 trade gets paid for hedging ten o'clock."
+
+He read the leak lines twice. The platform's risk model, which had moved Halvorsen into its equity regime on Monday's run (§8B.9), would have drawn the morning differently again. Wen had priced the pair's market lines on DTS because DTS was the ruler Dov sized the hedge with, and a pair's explain judges a hedge against the ruler it was built on; which ruler is right is §8D.3's argument, not the explain's. "Right ruler," Marcus said. "Right day. And the rates? What is it long that it didn't mean to be?"
+
+"Twelve thousand dollars a basis point of Treasuries," Wen said. "The short got cheaper, so it got shorter."
+
+She had already deleted *book hedge, allocated*. The roll break is a disagreement between two systems about a date, not a cost of holding Kestrel against Halvorsen, and it stays on the book's page as a named line with a ticket; Chapter 27 treats it as the bitemporal bug it is. What PB-01 does own, from 2:40 on Tuesday, is its slice of the index. Dov's sale is tagged to the pair, so its factor line, its coupon and, every March and September, its series-roll line (§8C.2, Chapter 10-B) now join PB-01's explain. The pair has three legs, and the third one rolls.
+
+Where the carry goes is a convention, and the report's header names it. This pod books coupons and pull with the friction, because they are what the short costs to hold; the year-end review packet Marcus circulates (§28.8) folds the coupon differential into idio. Either can be defended. A report that does not say which cannot (§8C.5).
+
+The line Dov stopped on when he came in at 7:55 was neither the leak nor the convention. Take out the two trades and PB-01 cost \$6,860 to exist on Tuesday, about \$2.5mm a year at Tuesday's prices. The borrow sheet's version of the same cost (coupons, fee and financing) comes to about \$3,000 a business day (§1B.2). The explain's is more than twice that because it also charges the pull. A short in a bond at 78 owes the drift toward par as well as the coupon, about five and a half points a year at an unchanged yield, and that drift is what the short pays, day by day, for the default it holds (§5.1.4). If Halvorsen defaults, the pull comes back at once. On every other day it is a cost, set against a thesis Dov sized in April at about \$1.2mm a year.
+
+"Tuesday was a lender-call week," Dov said. "The idio was big. On a quiet day it's a few thousand dollars, and the friction is still nearly seven."
+
+Wen wrote the pod's new sentence on the wall under PB-01's row, below the one from the first of the month about ratios being marks: *Price the hedge as it stood at the open. The view is the idio line, the ruler is the leak, and the pair is the net.*
+
+![Figure 8-C.4: One pair's Tuesday in four groups. PB-01 (long \$60mm Kestrel 6% 2030; short \$39mm Halvorsen 7.25% 2029, borrowed at 300 bp, trimmed to \$35mm at 2:40 with a CDX HY sale), Tuesday 13 October 2026. Left: the market line priced on the start-of-day ratio: idio +\$132,900, leak −\$61,600, friction −\$26,860, net +\$44,440, capture ratio 0.33. Right: the same day priced on the 4:00 ratio, which moves the morning's −\$55,600 from leak into idio and reads 0.57. The net is identical; only the split changes. Illustrative: Dov Adler's pod and Vantress are fictional composites, and every number is the scene's.](assets/figures/ch08c_pair_explain_waterfall.png)
+
+*Builds on:* §8C.2 (the series roll), §8C.4 (tolerance and dispute), Appendix B (TRACE and evaluated-price sources), Law 9; §1B.2 (PB-01, the 2:40 trim and the roll break). *Used in:* §8C.9 (the explain's hand history), §8D.6 (the Pair Book's capture column), Chapter 10-B (rolls), Chapter 17-B (marks as contested prices), Chapter 27 (the roll as a bitemporal bug), §28.8 (the pod's year).
 
 ## 8C.7 Case Study: The Whale's Explain (JPMorgan's Chief Investment Office, 2012)
 
@@ -315,7 +377,7 @@ The report is the U.S. Senate Permanent Subcommittee on Investigations staff rep
 
 **The outside explain.** The resolution came from counterparties, not from inside the bank. The Chief Investment Office and the bank's own Investment Bank "assigned different values to identical credit derivative holdings," and the counterparties who posted collateral against their own marks objected. The resulting collateral disputes peaked at \$690 million (p.6). In May the CIO was told to mark as the Investment Bank did, which "used an independent pricing service to identify the midpoints," and that "resolved the collateral valuation disputes in favor of the CIO's counterparties" (p.6). On 13 July 2012 the bank restated its first quarter for an additional \$660 million of losses (p.98).
 
-![Figure 8-C.4: The Senate report's shadow explain and the dates around it. Left: for 12–16 March 2012 the CIO book reported a year-to-date loss of \$161mm, while the marker's own spreadsheet at midpoints showed \$593mm, an unexplained of \$432mm (hatched). Right: the daily P&L footed to the desk's own marks until May, when the CIO was told to mark as the Investment Bank did, from an independent pricing service, and the first-quarter restatement followed on 13 July. Source: U.S. Senate Permanent Subcommittee on Investigations, *JPMorgan Chase Whale Trades* (15 March 2013), pp.5–6, 98 and 185, as quoted in §8C.7.](assets/figures/ch08c_whale_shadow.png)
+![Figure 8-C.5: The Senate report's shadow explain and the dates around it. Left: for 12–16 March 2012 the CIO book reported a year-to-date loss of \$161mm, while the marker's own spreadsheet at midpoints showed \$593mm, an unexplained of \$432mm (hatched). Right: the daily P&L footed to the desk's own marks until May, when the CIO was told to mark as the Investment Bank did, from an independent pricing service, and the first-quarter restatement followed on 13 July. Source: U.S. Senate Permanent Subcommittee on Investigations, *JPMorgan Chase Whale Trades* (15 March 2013), pp.5–6, 98 and 185, as quoted in §8C.7.](assets/figures/ch08c_whale_shadow.png)
 
 "So they had an explain," Theo says. "They had a shadow explain. They had a price test and five limits. What was missing?"
 
@@ -379,7 +441,7 @@ What the table says is what Chapter 3-B's calendar predicted. The unexplained cl
 
 Theo's Edge Ledger (§3.5, §3B.11) gets its first row that is not a trade idea: *22 September, found the residual, \$110,000, stale old-series index mark, roll day; fix: stale-signature check on roll-day job.* The desk counts that row as edge, because it was money the desk would otherwise have misreported, and because the fix keeps paying every March and September.
 
-![Figure 8-C.5: The unexplained by day over the third quarter: daily bars of $U$ against the shaded ±\$10,000 tolerance band, with month-ends and roll week marked by vertical lines; seven of the twelve breaches sit on those six days. Illustrative: the twelve breaches are set to the ledger table's cause totals (\$903,000), the quiet days are simulated to sum to its \$290,000, and the axis is three 21-day months.](assets/figures/ch08c_unexplained_by_day.png)
+![Figure 8-C.6: The unexplained by day over the third quarter: daily bars of $U$ against the shaded ±\$10,000 tolerance band, with month-ends and roll week marked by vertical lines; seven of the twelve breaches sit on those six days. Illustrative: the twelve breaches are set to the ledger table's cause totals (\$903,000), the quiet days are simulated to sum to its \$290,000, and the axis is three 21-day months.](assets/figures/ch08c_unexplained_by_day.png)
 
 > **Quant-shop life (a fictional composite).** *The break report, at a systematic asset manager.* At 6:10 p.m. on the third business day of October, the fund administrator's break file arrives: 412 rows in which the administrator's numbers and the manager's differ. Dev, the product controller (a composite; no real person), has a train at 7:48. Sorting by cause takes four minutes. Of the rows, 409 are one bond. A 144A note held across 409 separately managed account lots paid its coupon on a Monday, the administrator booked it on the record date and the manager on the payment date, and every lot breaks by the same few dollars. Two rows are the September index coupon. The 20th fell on a Sunday, and the administrator accrued the protection to the unadjusted date while the manager accrued to Monday the 21st. The difference is one day of 500 bp on the notional, which on \$40mm is \$5,556. The last row is the A/B exchange from Chapter 3-B: the administrator is still pricing the old 144A CUSIP, which nobody has quoted for two weeks, at a level that is a full point stale. Dev clears 411 rows by 8:35 and misses the train. The last row needs the pricing vendor's challenge form, deadline 4 p.m. tomorrow, and the form's only required field is "evidence of executable levels." She attaches two dealer runs and a screenshot of the new CUSIP's TRACE prints, and eats noodles that have been cold since 6:30. The vendor accepts the challenge at 2:15 the next afternoon. Nothing in the file involved a model, a factor or a view on credit. Most of what a book does not understand about itself turns out to be about dates and identifiers.
 
@@ -419,6 +481,7 @@ Theo's USB stick is in his pocket. The 13-week model and the explain turn out to
 - **The hedge has its own P&L, and in stress its own cash call.** The jump-to-default line nets the bond and its protection for the issuer, once (Law 6).
 - **The foot is an identity; the tolerance is a policy.** It is stated in dollars and sized to the book, so it shrinks in relative terms as positions grow (§8C.4, §8C.7).
 - **A mark is a moving average of the truth, and the true-up is where the average catches up,** sometimes to somebody else's truth. A dispute carries evidence, not feelings (Law 9).
+- **A pair is judged on idio and paid on the net.** Price its market line with the hedge as it stood at the open, or the afternoon's trade is paid for the morning's hedge. Carry, the borrow fee, financing and two legs of half-spread decide most pairs, and the capture ratio, net over idio, goes on the ledger row (§8C.6, §8D.6).
 - **"Which signal made the money?" has a cross-term.** Issuer-netted IDO splits linearly; the interaction does not, and the report header names the convention used (Laws 1 and 2).
 - **A plug is a lie with a line number.** An unexplained of exactly zero is a finding, and the person who finds it goes looking for the line that made it.
 
@@ -437,6 +500,8 @@ Theo's USB stick is in his pocket. The 13-week model and the explain turn out to
 **Exercise 8C.5 (tolerance at scale).** Using §8C.7's illustrative CIO-sized line, \$45mm of CS01, how much P&L does a 6 bp mark tolerance permit? What does this desk's policy allow for a book with \$20bn of NAV and a 1-day ES of \$400mm? *Check:* \$270mm per line, against $\min(\$2\text{mm}, \$20\text{mm}) = \$2$mm for the whole book.
 
 **Exercise 8C.6 (ROBO, again).** Asked to "explain everything," ROBO adds a line called *market* to every bond, equal to that bond's residual. The report foots to the cent. Which check in `foot` catches it, and what would catch a cleverer ROBO that named the line *liquidity premium* with source `risk_model`? *Check:* the name is in `PLUG_NAMES`, so the first guard refuses it. The renamed version passes the name check and is caught by `suspicious_zero`, because $U$ is exactly zero. The deeper defense is structural: a line computed from the mark it explains is a plug whatever it is called, so line values are built only from sensitivities, moves and facts.
+
+**Exercise 8C.7 (the morning's ratio).** A pair starts the day long 50,000 and short 65,000 of DTS, in Chapter 1-B's units. Spreads tighten 3% of their level before noon and do not move after; at 1:00 the PM trims the short to 50,000. The idiosyncratic lines sum to +\$40,000 and the friction lines to −\$12,000. Compute the leak, the net and the capture ratio with the start-of-day ratio, then with the 4:00 ratio. What does the second report tell the PM about the view? *Check:* at \$1 per unit of DTS per 1% move, the start-of-day market line is $(50{,}000 - 65{,}000) \times 3 = -\$45{,}000$, so the net is $40{,}000 - 45{,}000 - 12{,}000 = -\$17{,}000$ and the capture ratio is $-17{,}000 / 40{,}000 = -0.43$: the view paid and the ruler lost more. On the 4:00 ratio the pair is flat, the market line is zero, and the idio line becomes $-17{,}000 + 12{,}000 = -\$5{,}000$, so the report says the view lost money and the hedge was perfect, and its capture ratio, $-17{,}000 / -5{,}000 = 3.4$, means nothing. When the idio line is negative, the ledger prints the lines and leaves the ratio blank.
 
 ### Deep-Dive Resource Graph
 

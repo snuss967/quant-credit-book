@@ -5,25 +5,27 @@ Run:  python3 tools/figures/ch08d.py      (writes assets/figures/ch08d_*.png)
 Order of appearance in the chapter (the numbers in the captions follow this order):
   8-D.1  ch08d_fee_flip            PB-19's expected year at a 25 bp fee and at 70 bp           (Cold Open)
   8-D.2  ch08d_borrow_fee          The loan-market slope and what signals do to the fee         (8D.2)
-  8-D.3  ch08d_ben_dor_rulers      Ben Dor et al.: correlation vs systematic share, calm/crisis (8D.3)
-  8-D.4  ch08d_ruler_scenarios     Three rulers, four market states (existing embed)            (8D.3)
+  8-D.3  ch08d_ruler_scenarios     Three rulers, four market states (existing embed)            (8D.3, after the table)
+  8-D.4  ch08d_ben_dor_rulers      Ben Dor et al.: correlation vs systematic share, calm/crisis (8D.3, after the crisis box)
   8-D.5  ch08d_two_spikes          One year of jump P&L for the DTS-neutral Ford/GM pair        (8D.4)
-  8-D.6  ch08d_stop_out_odds       How often a 5% stop fires: fixed line vs drawdown            (8D.5)
-  8-D.7  ch08d_stop_size_vs_recovery  The stop as a size (existing embed)                      (8D.5)
+  8-D.6  ch08d_stop_size_vs_recovery  The stop as a size (existing embed)                      (8D.5, after the sizing)
+  8-D.7  ch08d_stop_out_odds       How often a 5% stop fires: fixed line vs drawdown            (8D.5, after the random-walk box)
   8-D.8  ch08d_pair_book_ledger    The Pair Book as a figure, twelve rows (existing embed)      (8D.6)
 
-Data.  Figure 8-D.3 is REAL: Ben Dor, Dynkin, Hyman and Phelps, Quantitative Credit Portfolio Management,
+Data.  Figure 8-D.4 is REAL: Ben Dor, Dynkin, Hyman and Phelps, Quantitative Credit Portfolio Management,
 Table 8.1 (Nov 2003 to Dec 2006, 392 same-industry CDX.NA.IG CDS pairs, 24-week betas) and Table 10.3
 (2007-2008, 26-week betas), as transcribed in state/research/rv_credit_pairs_literature_and_mechanics.md (R7).
 The right panel of 8-D.2 is REAL: Asquith, Au, Covert and Pathak (2013), same dossier (R11); the slope in
 its left panel is the straight-line summary of that paper which the chapter states (30 bp flat to 70% on
 loan, then 10 bp per further 10%), drawn as such, with PB-01 and PB-19 as the chapter's illustrative
 observations.  All other figures are ILLUSTRATIVE and are computed from the chapter's own numbers:
-8-D.1 (Cold Open), 8-D.4 (table in 8D.3), 8-D.5 (8D.4), 8-D.7 (8D.5) and 8-D.8 (8D.6); 8-D.6 simulates
+8-D.1 (Cold Open), 8-D.3 (table in 8D.3), 8-D.5 (8D.4), 8-D.6 (8D.5) and 8-D.8 (8D.6); 8-D.7 simulates
 200,000 years of 252 Gaussian daily steps (seed 4) for the bars, draws one path (seed 15) in its left panel, and
 uses the reflection principle for the fixed line.
-Figure 8-D.8: the chapter prints only four ledger rows (PB-01, PB-19, PB-03 and the PB-12 refusal);
-the other eight rows are generated here (seed 80) inside the ranges those rows span, and the figure says so.
+Figure 8-D.8: the chapter prints only four ledger rows (PB-01, PB-19, PB-03 and the PB-12 refusal).  Two more
+(PB-09, PB-10) are drawn at the capture ratios state/rv_pair_book.md records (about 0.8 and 0.2); PB-02, PB-07 and
+PB-11 are text rows because the ledger records no usable capture ratio for them; the last three (PB-08, PB-14,
+PB-16) are generated here (seed 80) and the figure says so.
 
 Colour roles, fixed across the chapter's figures:
   Rulers (8-D.3, 8-D.4):   BLUE = spread duration (DV01 / PV01), ORANGE = DTS, AQUA = empirical beta
@@ -146,13 +148,13 @@ def fig_borrow_fee():
     a2.set_ylim(-1.2, 5.6)
     a2.grid(axis="y", visible=False)
     a2.grid(axis="x", visible=True)
-    a2.set_xlabel("Annual borrow fee, 2004-07 (bp)")
+    a2.set_xlabel("Annual borrow fee, 2004–07 (bp)")
     a2.tick_params(axis="y", length=0)
     return finish(fig, "ch08d_borrow_fee")
 
 
 # --------------------------------------------------------------------------------------------
-# 8-D.3  Ben Dor et al.: the beta hedge wins on correlation and loses on everything else
+# 8-D.4  Ben Dor et al.: the beta hedge wins on correlation and loses on everything else
 # --------------------------------------------------------------------------------------------
 BEN_DOR = {   # PV01, DTS, 24/26-week beta; Table 8.1 (calm) and Table 10.3 (crisis, full set)
     "corr_calm": (0.37, 0.23, 0.11),
@@ -162,7 +164,7 @@ BEN_DOR = {   # PV01, DTS, 24/26-week beta; Table 8.1 (calm) and Table 10.3 (cri
 
 
 def fig_ben_dor():
-    fig, axes = new_figure((7.2, 3.5), ncols=3)
+    fig, axes = new_figure((7.7, 3.5), ncols=3)
     cols = [C_DV01, C_DTS, C_BETA]
     names = ["PV01", "DTS", "Beta"]
 
@@ -181,9 +183,9 @@ def fig_ben_dor():
         xs = [0, 1, 2, 3.6, 4.6, 5.6]
         ax.bar(xs, list(calm) + list(crisis), width=0.82, color=cols + cols)
         for x, v in zip(xs, list(calm) + list(crisis)):
-            ax.text(x, v + ymax * 0.02, fmt.format(v), ha="center", va="bottom", fontsize=7.2, color=INK_2)
+            ax.text(x, v + ymax * 0.02, fmt.format(v), ha="center", va="bottom", fontsize=7.6, color=INK_2)
         ax.set_xticks(xs)
-        ax.set_xticklabels(["PV01", "DTS", "Beta"] * 2, fontsize=7.2)
+        ax.set_xticklabels(["PV01", "DTS", "Beta"] * 2, fontsize=7.6)
         ax.set_title(ttl, fontsize=9.2)
         ax.set_ylabel(ylab)
         ax.set_ylim(0, ymax)
@@ -205,7 +207,7 @@ def fig_ben_dor():
 
 
 # --------------------------------------------------------------------------------------------
-# 8-D.4  Three rulers, four market states (the existing embed)
+# 8-D.3  Three rulers, four market states (the existing embed)
 # --------------------------------------------------------------------------------------------
 def scenario_table():
     """The four-state P&L table of 8D.3 in $ thousands, recomputed from first principles."""
@@ -248,7 +250,7 @@ def fig_ruler_scenarios():
         ax.set_title(ttl, fontsize=8.2, loc="center")
         ax.set_ylim(-180, 480)
         ax.tick_params(axis="x", length=0)
-    axes[0].set_ylabel("P&L on the $40mm long ($ thousands)")
+    axes[0].set_ylabel("Pair P&L, $40mm Ford long ($ thousands)")
     axes[0].text(-0.45, 285, "alpha = +270\n(15 bp of Ford news)", fontsize=7.8, color=MUTED, ha="left", va="bottom",
                  linespacing=1.15)
     return finish(fig, "ch08d_ruler_scenarios")
@@ -300,7 +302,7 @@ def fig_two_spikes():
 
 
 # --------------------------------------------------------------------------------------------
-# 8-D.6  How often a 5% stop fires
+# 8-D.7  How often a 5% stop fires
 # --------------------------------------------------------------------------------------------
 def drawdown_hit(vol, sharpe, dd=0.05, n=252, paths=200_000, chunk=20_000, seed=4):
     rng = np.random.default_rng(seed)
@@ -327,11 +329,11 @@ def fig_stop_out_odds():
     a1.step(d, 100 * stop_line, where="post", color=ORANGE, linewidth=1.3)
     a1.axhline(-5, color=NEUTRAL, linewidth=1.0, linestyle=(0, (3, 3)))
     a1.plot([hit], [100 * x[hit]], "o", color=INK, markersize=6, zorder=6)
-    a1.annotate(f"day {hit}: down 5% from the peak,\nstill up {100 * x[hit]:.1f}% on the year", (hit, 100 * x[hit]),
-                xytext=(hit - 6, -1.2), textcoords="data", fontsize=8, color=INK_2, ha="right", va="top",
+    a1.annotate(f"day {hit}: down 5% from the peak,\nstill up {100 * x[hit]:.1f}% from the start", (hit, 100 * x[hit]),
+                xytext=(n - 2, -0.9), textcoords="data", fontsize=8, color=INK_2, ha="right", va="top",
                 arrowprops=dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8, shrinkA=1, shrinkB=3))
-    a1.annotate("fixed line, 5% below the start", (3, -5), xytext=(0, 4), textcoords="offset points", fontsize=8,
-                color=INK_2, ha="left", va="bottom")
+    a1.annotate("fixed line, 5% below the start", (n, -5), xytext=(0, 4), textcoords="offset points", fontsize=8,
+                color=INK_2, ha="right", va="bottom")
     ia = int(np.argmax(x))
     a1.annotate("equity", (ia, 100 * x[ia]), xytext=(0, 8), textcoords="offset points", fontsize=8.5, color=INK_2,
                 ha="center", va="bottom")
@@ -359,7 +361,7 @@ def fig_stop_out_odds():
 
 
 # --------------------------------------------------------------------------------------------
-# 8-D.7  The stop as a size (the existing embed)
+# 8-D.6  The stop as a size (the existing embed)
 # --------------------------------------------------------------------------------------------
 def single_cap(budget, rec, price=0.95):
     return budget * price / (price - rec)
@@ -394,8 +396,8 @@ def fig_stop_size():
                 color=INK_2, va="bottom", ha="right")
     label_end(ax, 75, float(s15[-1]), "$15mm budget", ORANGE)
     label_end(ax, 75, float(s13[-1]), "$13mm to Dov's line", BLUE)
-    ax.annotate("capital-structure pair, same two budgets", (2, float(p15[int(2 / 75 * 300)])), xytext=(0, 6),
-                textcoords="offset points", fontsize=8.5, color=INK_2, ha="left", va="bottom")
+    ax.annotate("capital-structure pair, same two budgets", (2, float(p13[0])), xytext=(0, -5),
+                textcoords="offset points", fontsize=8.5, color=INK_2, ha="left", va="top")
     ax.set_xlim(0, 75)
     ax.set_ylim(0, 112)
     ax.set_xlabel("Assumed recovery (points of par)")
@@ -409,36 +411,49 @@ def fig_stop_size():
 # 8-D.8  The Pair Book as a figure (the existing embed)
 # --------------------------------------------------------------------------------------------
 def ledger_rows():
-    """Twelve rows.  Chapter rows (exact): PB-19 (from 8D.6's September), PB-01 (kappa 0.41), PB-03 (kappa ~0.67,
-    idio $0.75mm from the pair book), PB-12 (refused).  The other eight are generated, seed 80, $ thousands."""
+    """Twelve rows, $ thousands.  Statuses follow state/rv_pair_book.md: PB-01, PB-02 and PB-19 are open on 8 October;
+    the rest are replays or a refusal.  Drawn at the figure's scale: PB-19 (8D.6's September), PB-01 (kappa 0.41),
+    PB-03 (kappa 0.67, idio $0.75mm), and, from the Pair Book's recorded capture ratios, PB-09 (0.8: idio +0.80mm,
+    net +0.65mm) and PB-10 (0.2: idio about 0.9mm, net about 0.17mm).  Text rows (no bars): PB-02 (idio about 0, capture
+    not defined), PB-07 (capture about 5, off the scale), PB-11 (idio flat, the P&L was the jump overhang), PB-12
+    (refused).  Generated, seed 80: PB-08, PB-14, PB-16."""
     rng = np.random.default_rng(80)
     fixed = {
         "PB-01": (210.0, -66.0, -58.0), "PB-03": (750.0, -150.0, -100.0),
+        "PB-09": (800.0, -100.0, -50.0), "PB-10": (900.0, -430.0, -300.0),
         "PB-19": (162.0, -(51.8 + 6.0), -(12.5 + 13.3 + 20.0)),
+    }
+    notes = {   # rows with no bars: the reason, in the bar panel
+        "PB-02": "Idio about zero at the last explain, so\nthe capture ratio is not defined",
+        "PB-07": "Idio +$0.81mm, net +$4.19mm: paid by a\nleak (capture about 5), off this scale",
+        "PB-11": "Idio about flat; the P&L was the jump-\nto-default overhang: no capture ratio",
+        "PB-12": "Declined: no short leg exists once\nthe credit event is manufactured (\u00a724.8.2)",
     }
     meta = [  # id, name, status
         ("PB-01", "Kestrel / Halvorsen", "live"), ("PB-02", "Halvorsen secured / unsecured", "live"),
         ("PB-03", "Ford Credit / GM Financial", "replay"), ("PB-07", "Hertz bonds / stock", "replay"),
-        ("PB-08", "Level 3 / Lumen", "replay"), ("PB-09", "Kroger SMR / non-SMR", "live"),
-        ("PB-10", "EA put / defeasance", "live"), ("PB-11", "Windstream bond / CDS", "replay"),
-        ("PB-12", "Hovnanian", "refused"), ("PB-14", "Altice France sec. / unsec.", "live"),
-        ("PB-16", "OBDC / HYG", "live"), ("PB-19", "Ford Credit / GM Financial", "live"),
+        ("PB-08", "Level 3 / Lumen", "replay"), ("PB-09", "Kroger SMR / non-SMR", "replay"),
+        ("PB-10", "EA put / defeasance", "replay"), ("PB-11", "Windstream bond / CDS", "replay"),
+        ("PB-12", "Hovnanian", "refused"), ("PB-14", "Altice France sec. / unsec.", "replay"),
+        ("PB-16", "OBDC / HYG", "replay"), ("PB-19", "Ford Credit / GM Financial", "live"),
     ]
     rows = []
     for pid, name, status in meta:
+        note_txt = notes.get(pid)
         if pid in fixed:
             idio, leak, fric = fixed[pid]
-            gen = False
-        elif status == "refused":
+            src = "chapter" if pid in ("PB-01", "PB-03", "PB-19") else "pair book"
+        elif note_txt:
             idio = leak = fric = None
-            gen = False
+            src = "text"
         else:
             idio = float(5 * round(rng.uniform(70, 260) / 5))
             leak = -round(idio * rng.uniform(0.15, 0.45), 1)
             fric = -round(idio * rng.uniform(0.15, 0.35), 1)
-            gen = True
+            src = "generated"
         kappa = None if idio is None else (idio + leak + fric) / idio
-        rows.append(dict(id=pid, name=name, status=status, idio=idio, leak=leak, fric=fric, kappa=kappa, gen=gen))
+        rows.append(dict(id=pid, name=name, status=status, idio=idio, leak=leak, fric=fric, kappa=kappa, src=src,
+                         note=note_txt))
     return rows
 
 
@@ -447,43 +462,55 @@ def fig_ledger():
     by = {r["id"]: r for r in rows}
     assert abs(by["PB-19"]["kappa"] - 0.36) < 0.005 and abs(by["PB-01"]["kappa"] - 0.41) < 0.005
     assert abs(by["PB-03"]["kappa"] - 0.67) < 0.005
+    assert abs(by["PB-09"]["kappa"] - 0.8) < 0.02 and abs(by["PB-10"]["kappa"] - 0.2) < 0.02   # the Pair Book's values
     assert abs(by["PB-19"]["idio"] + by["PB-19"]["leak"] + by["PB-19"]["fric"] - 58.4) < 0.05
+    assert [r["status"] for r in rows].count("live") == 3 and [r["status"] for r in rows].count("refused") == 1
+    assert all(0.25 < r["kappa"] < 0.7 for r in rows if r["src"] == "generated")
     n = len(rows)
-    fig = plt.figure(figsize=(7.2, 7.0), layout="constrained")
-    fig.get_layout_engine().set(rect=(0.0, 0.135, 1.0, 0.865))
-    gs = fig.add_gridspec(1, 2, width_ratios=[4.3, 1.1])
+    fig = plt.figure(figsize=(7.2, 7.4), layout="constrained")
+    fig.get_layout_engine().set(rect=(0.0, 0.165, 1.0, 0.835))
+    gs = fig.add_gridspec(1, 3, width_ratios=[4.0, 1.4, 0.62])
     ab = fig.add_subplot(gs[0, 0])
     ak = fig.add_subplot(gs[0, 1], sharey=ab)
+    ast = fig.add_subplot(gs[0, 2], sharey=ab)
+    ast.axis("off")
     ys = np.arange(n)[::-1].astype(float)      # first row at the top
     bh = 0.26
     for y, r in zip(ys, rows):
         if r["idio"] is None:
-            ab.text(-285, y, "Declined: no short leg exists once\nthe credit event is manufactured (\u00a724.8.2)",
-                    ha="left", va="center", fontsize=7.8, color=INK_2, style="italic", linespacing=1.2)
+            ab.text(25, y, r["note"], ha="left", va="center", fontsize=7.8, color=INK_2, style="italic",
+                    linespacing=1.2)
             continue
         ab.barh(y + bh, r["idio"], height=bh * 0.9, color=C_THESIS)
         ab.barh(y, r["leak"], height=bh * 0.9, color=C_LEAK)
         ab.barh(y - bh, r["fric"], height=bh * 0.9, color=C_FRIC)
+    top = rows[0]          # direct labels on the first row (the aqua friction bars need them, as well as the legend)
+    ab.text(top["idio"] + 14, ys[0] + bh, "idio", ha="left", va="center", fontsize=7.8, color=INK_2)
+    ab.text(top["leak"] - 10, ys[0], "leak", ha="right", va="center", fontsize=7.8, color=INK_2)
+    ab.text(top["fric"] - 10, ys[0] - bh, "friction", ha="right", va="center", fontsize=7.8, color=INK_2)
     ab.axvline(0, color=INK_2, linewidth=0.8, zorder=2)
     ab.set_yticks(ys)
     ab.set_yticklabels([f"{r['id']}  {r['name']}" for r in rows], fontsize=8)
-    ab.set_xlim(-300, 820)
+    ab.set_xlim(-500, 1000)
     ab.set_ylim(-0.7, n - 0.3)
     ab.grid(axis="y", visible=False)
     ab.grid(axis="x", visible=True)
-    ab.set_xlabel("September P&L, $ thousands")
+    ab.set_xlabel("P&L, $ thousands (September; a replay's own window)")
     ab.tick_params(axis="y", length=0)
-    # capture ratio panel, with the row status on its right edge
+    # capture ratio panel; the row status sits in its own column to the right
     for y, r in zip(ys, rows):
-        ak.text(1.1, y, r["status"], transform=ak.get_yaxis_transform(), ha="left", va="center", fontsize=7.4,
-                color=MUTED, clip_on=False)
+        ast.text(0.0, y, r["status"], transform=ast.get_yaxis_transform(), ha="left", va="center", fontsize=7.8,
+                 color=MUTED)
         if r["kappa"] is None:
-            ak.text(0.5, y, "\u2014", ha="center", va="center", fontsize=9, color=MUTED)
+            if r["id"] == "PB-07":
+                ak.text(0.04, y, "about 5 \u2192", ha="left", va="center", fontsize=8, color=INK_2)
+            else:
+                ak.text(0.5, y, "\u2014", ha="center", va="center", fontsize=9, color=MUTED)
             continue
         ak.plot([0, r["kappa"]], [y, y], color=NEUTRAL, linewidth=1.0, zorder=1)
         ak.plot([r["kappa"]], [y], "o", color=INK_2, markersize=6, zorder=3)
-        ak.text(r["kappa"] + 0.06, y, f"{r['kappa']:.2f}", ha="left", va="center", fontsize=8, color=INK_2)
-    ak.set_xlim(0, 1.0)
+        ak.text(r["kappa"] + 0.09, y, f"{r['kappa']:.2f}", ha="left", va="center", fontsize=8, color=INK_2)
+    ak.set_xlim(0, 1.25)
     ak.set_xticks([0, 0.5, 1.0])
     ak.set_xticklabels(["0", "0.5", "1"])
     ak.set_xlabel("Capture ratio\n(net / idio)")
@@ -494,12 +521,13 @@ def fig_ledger():
     fig.legend(handles=[Patch(color=C_THESIS, label="idio"), Patch(color=C_LEAK, label="leak"),
                         Patch(color=C_FRIC, label="friction")], loc="outside upper center", ncol=3, fontsize=8.5,
                handlelength=1.2, columnspacing=1.8)
-    foot = ("Book lines, Thursday 8 October: mean pairwise idio correlation 0.28 (\u00a78.8 test); beta to CDX HY +0.04 of gross;\n"
-            "rating bucket 0.08 (0.11 on Tuesday); largest jump-to-default long Kestrel (about $34mm), short GM Financial;\n"
-            "borrow fee on the book 64 bp; distance to the first line $13mm.\n"
-            "Bars: September for live rows, the replay's own month for replay rows. PB-01, PB-03, PB-12 and PB-19\n"
-            "follow the chapter; the other eight rows are generated for this figure (seed 80).")
-    fig.text(0.012, 0.118, foot, ha="left", va="top", fontsize=7.4, color=INK_2, linespacing=1.45)
+    foot = ("Book lines for all twelve live pairs, Thursday 8 October: mean pairwise idio correlation 0.28 (\u00a78.8 test);\n"
+            "beta to CDX HY +0.04 of gross; rating bucket 0.08 (0.11 on Tuesday); largest jump-to-default long\n"
+            "Kestrel (about $34mm), short GM Financial; borrow fee on the book 64 bp; distance to the first line $13mm.\n"
+            "Bars: September for live rows, the replay's own window for replay rows. PB-01, PB-03, PB-12 and PB-19 follow\n"
+            "the chapter; PB-09 and PB-10 use the capture ratios the Pair Book records (0.8, 0.2); PB-02, PB-07 and PB-11\n"
+            "are text rows (no usable capture ratio); PB-08, PB-14 and PB-16 are generated for this figure (seed 80).")
+    fig.text(0.012, 0.148, foot, ha="left", va="top", fontsize=7.8, color=INK_2, linespacing=1.4)
     return finish(fig, "ch08d_pair_book_ledger")
 
 

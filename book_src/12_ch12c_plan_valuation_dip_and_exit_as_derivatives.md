@@ -378,7 +378,7 @@ h_V \;=\; \frac{\partial\,\mathbb{E}[R_{1\text{L}}]/\partial V}{\partial\,\mathb
 \;\approx\; \frac{6.1}{2.4} \;\approx\; 2.5 .
 $$
 
-The first lien moves about 6.1 points for each \$100mm of plan value, because it is the fulcrum 83% of the time. The 6s move about 2.4: less than a point from their thin slice of unencumbered value, the rest from the 17% of paths where the first lien is whole and the surplus spills down to them. A pair that is flat on plan value needs two and a half dollars of 6s for each dollar of 7.25s. Owen has 0.38. His long gains \$605,000 when the judge's number rises \$100mm, his short gives back \$90,000, and the pair is long \$515,000 for every \$100mm. "Eighty-five percent of the long is still a long," he says. "I'm holding a position in the judge with a default hedge stapled to it."
+The first lien moves about 6.1 points for each \$100mm of plan value, because it is the fulcrum 83% of the time. The 6s move about 2.4: less than a point from their thin slice of unencumbered value, the rest from the 17% of paths where the first lien is whole and the surplus spills down to them. A pair that is flat on plan value needs two and a half dollars of 6s, by face, for each dollar of 7.25s. Owen has 0.38. His long gains \$605,000 when the judge's number rises \$100mm, his short gives back \$90,000, and the pair is long \$515,000 for every \$100mm. "Eighty-five percent of the long is still a long," he says. "I'm holding a position in the judge with a default hedge stapled to it."
 
 "And at two and a half, what's left?"
 

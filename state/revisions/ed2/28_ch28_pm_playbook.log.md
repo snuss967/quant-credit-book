@@ -22,5 +22,15 @@
 - [x] 20. **[§28.8 after the hybrid-shop case] · NEW-SCENE, Long Scene (2,500–3,000 words), promoted to `####`: "Dov Adler's Year-End Review: the Pair — DONE: Dov's review packet; Pair box 31/-6/-12.5/+12.5, 0.40; four beats; Marcus card.
 - [x] 21. **[§28.8] · LIST-TO-NARRATIVE and keep the reviewer fixes.** D7 (calibration, ρ, hit rate with SE) and the covariates-vs-estimator softening — DONE: Barclays inside Sunita-Kaz exchange; thermometer gloss; Sunita's first-month story; D7 kept.
 - [x] 22. **[§28.9–28.10] · BRIDGE and the Finder table.** The dashboard table is the payoff and stays; the desk-head reviewer's C9 asks (P&L panel, m — DONE: Mags line verbatim; 10-row Finder; co-op signed; OMP retired; templates fixed.
-- [ ] 23. **[whole chapter] · BRIDGE.** Thread one line of narration between every two boxed elements; never three boxes in a row (§28.1 currently sta
+- [x] 23. **[whole chapter] · BRIDGE.** Thread one line of narration between every two boxed elements; never three boxes in a row (§28.1 currently sta — DONE: No adjacent boxes; templates removed; CHECK only in U3's §28.11.
   - note 1: cold open ~1,150w; drill label; four PMs; Bram renamed; spine bold. (Plan: swap roles in §28.3, Rafe=HY cash value/carry/quality, Bram=ETF/PT arb; Dov→Rafe in Poker Table and Block 2 text.)
+
+## Notes for the orchestrator
+- Words 18,942 → ~31,800 (1.68×). Boxes: 10 Math, Gently; 2 View From Another Seat; 1 The Pair. Prescriptiveness: modal 3.9 → 3.2, imper 1.6 → 0.7, bullets 6.5% → 3.5%.
+- Protected text verified against e1af4b8: all 19 Source Extractions, 3 Trend Watches (CCC TW moved to end of its case, wording unchanged), 2 Myth boxes, Ways This Blows Up, 5 figures and captions, 8 Debrief bullets, ROBO spec, Exercises 1–5, §28.11 unchanged; (28.1)–(28.25) each tagged once; all #code-28-1…8 links kept.
+- One deliberate cross-reference edit inside a protected annotation: Ben Dor p.112 annotation's last sentence "That is the next case." → "That was the edge the gate removed." (the extraction now sits inside the Third Avenue case).
+- PM roles: Ed1's "Dov" renamed Bram (cast bible); Rafe/Bram roles swapped (Rafe = HY cash value/carry/quality; Bram = ETF/PT arb) so the CCC case and the March 2020 IG replay fit the brief. No other chapter references these PMs.
+- Box 7 uses a 300 bp CDS (not the brief's 450 bp) because Exercise 2 owns 450 bp (lesson 7). Box 5 uses a 55/45 coin because Ch 16 owns the 60/40 coin.
+- Web: 2 calls (NY Fed Liberty Street post findings verified; Rule 22e-4 adopted 13 Oct 2016 verified).
+- Open: §28.11 still carries "Bermin and Holm (2026) ... (CHECK)" (U3 owns; body text now hedged without publication details). PB-01 reviewed but not closed in Ch 28 (Ch 8-D's end-Oct committee date postdates the story clock; logged in rv_pair_book.md). Brief §3's six new figures are for U4 and are not embedded.
+<!-- STATUS: COMPLETE -->

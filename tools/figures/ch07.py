@@ -191,7 +191,7 @@ def fig_purged_folds():
                 a.add_patch(Rectangle((x0, y0), w, h, facecolor=C_NAIVE))
                 a.text(c + 0.5, K - 1 - r + 0.5, "test", ha="center", va="center", fontsize=8.5, color="white", fontweight="bold")
             elif r == test_row or c == test_col:
-                a.add_patch(Rectangle((x0, y0), w, h, facecolor=GRID))
+                a.add_patch(Rectangle((x0, y0), w, h, facecolor=GRID, edgecolor=NEUTRAL, linewidth=0.5))
             else:
                 a.add_patch(Rectangle((x0, y0), w, h, facecolor=C_FIX))
                 if c == test_col - 1:      # purge strip at the right edge of the block before the test block
@@ -220,7 +220,8 @@ def fig_purged_folds():
     T0, T1 = 0, L + H
     fs = np.arange(-40, 120, 5)
     ypos = np.arange(len(fs))
-    b.axvspan(T0, L, color=C_NAIVE, alpha=0.14, linewidth=0, zorder=0)
+    y_arrow = len(fs) - 0.2
+    b.fill_betweenx([-2.2, y_arrow + 0.6], T0, L, color=C_NAIVE, alpha=0.14, linewidth=0, zorder=0)
     counts = dict(train=0, aside=0, purge=0, embargo=0)
     for y, f in zip(ypos, fs):
         t0, t1 = f, f + H
@@ -236,22 +237,21 @@ def fig_purged_folds():
         if kind == "train":
             b.barh(y, H, left=t0, height=0.62, color=C_FIX)
         elif kind == "aside":
-            b.barh(y, H, left=t0, height=0.62, color=GRID)
+            b.barh(y, H, left=t0, height=0.62, facecolor=GRID, edgecolor=NEUTRAL, linewidth=0.5)
         else:
             b.barh(y, H, left=t0, height=0.62, facecolor="white", edgecolor=INK_2, linewidth=0.5,
                    hatch=HATCH_PURGE if kind == "purge" else HATCH_EMBARGO)
-    for x in (T0, T1, T1 + ETA):
-        b.axvline(x, color=INK_2, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
+    for x in (T0, T1, T1 + ETA):      # guide lines stop at the embargo arrow so the label below needs no white box
+        b.vlines(x, -2.2, y_arrow + 0.6, color=INK_2, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
     ytop = -1.2
     b.text(T0 - 1, ytop, "T0", fontsize=8, color=INK_2, ha="right", va="center")
     b.text(T1 + 1, ytop, "T1", fontsize=8, color=INK_2, ha="left", va="center")
     b.text(T1 + ETA + 1, ytop, "T1 + η", fontsize=8, color=INK_2, ha="left", va="center")
     b.text(L / 2, 25.5, "test block:\nset aside", fontsize=8, color=INK_2, ha="center", va="center")
-    b.annotate("", xy=(T1, len(fs) - 0.2), xytext=(T1 + ETA, len(fs) - 0.2),
+    b.annotate("", xy=(T1, y_arrow), xytext=(T1 + ETA, y_arrow),
                arrowprops=dict(arrowstyle="<->", color=INK_2, linewidth=0.9, shrinkA=0, shrinkB=0))
-    b.text(T1 + ETA / 2, len(fs) + 0.9, "embargo η: the FFD window,\nabout 280 days at τ = 10⁻⁴", fontsize=8, color=INK_2,
-           ha="center", va="top", zorder=6,
-           bbox=dict(facecolor="white", edgecolor="none", pad=1.5))
+    b.text(T1 + ETA / 2 + 4, len(fs) + 0.9, "embargo η: the FFD window,\nabout 280 days at τ = 10⁻⁴", fontsize=8,
+           color=INK_2, ha="center", va="top", zorder=6)
     b.set_ylim(len(fs) + 7.6, -2.2)
     b.set_xlim(-46, 136)
     b.set_yticks([])
@@ -263,7 +263,7 @@ def fig_purged_folds():
 
     handles = [Patch(facecolor=C_NAIVE, label="test cell"),
                Patch(facecolor=C_FIX, label="training"),
-               Patch(facecolor=GRID, label="set aside (shares the test row or column)"),
+               Patch(facecolor=GRID, edgecolor=NEUTRAL, linewidth=0.5, label="set aside (shares the test row or column)"),
                Patch(facecolor="white", edgecolor=INK_2, hatch=HATCH_PURGE, linewidth=0.5, label="purged"),
                Patch(facecolor="white", edgecolor=INK_2, hatch=HATCH_EMBARGO, linewidth=0.5, label="embargoed")]
     fig.legend(handles=handles, loc="outside lower center", ncol=5, fontsize=8, handlelength=1.3,
@@ -313,10 +313,10 @@ def fig_dsr_noise_max():
                 fontsize=8, color=INK_2)
     oos = 0.30 * ann
     ax.axhline(oos, color=C_NAIVE, linewidth=LW, zorder=3)
-    ax.annotate("Kaz's purged out-of-sample Sharpe: 0.30 a month, %.2f annualized" % oos, (2.2, oos),
+    ax.annotate("Kaz's purged out-of-sample Sharpe: 0.30 a month, %.2f annualized" % oos, (1.7, oos),
                 xytext=(0, 5), textcoords="offset points", fontsize=8.5, color=INK_2, ha="left", va="bottom")
-    ax.plot([2.2], [oos], "o", color=C_NAIVE, markersize=4, zorder=5, clip_on=False)
-    ax.set_xlim(2, 1.6e5)
+    ax.plot([1.7], [oos], "o", color=C_NAIVE, markersize=4, zorder=5, clip_on=False)
+    ax.set_xlim(1.5, 1.6e5)
     ax.set_ylim(0, 1.3)
     ax.set_xticks([10, 100, 1000, 10000, 100000])
     ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:,.0f}"))
@@ -334,22 +334,23 @@ def fig_dsr_noise_max():
 # 5. Short-term reversal: textbook vs gap constructions (section 7.9). REAL data, from the dossier.
 # --------------------------------------------------------------------------------------------
 def fig_reversal_gap():
-    # Dickerson, Robotti, Rossetti (2026), Table 1, value-weighted decile, monthly %, 2002-2024
-    # (state/research/papers_factor_replication_crisis_and_bond_data.md section 3.2).
+    # Dickerson, Robotti, Rossetti (2026), Table 1 Panel A (str row), value-weighted decile, % a month,
+    # sample 2002-09 to 2024-12 (T = 268); t-statistics Newey-West. Cumulative $1 from the paper's Fig. 3
+    # (single-sort str, sign-corrected): $12 unadjusted, $1.1 signal gap, $1.4 return gap (text of the same section).
     prem = [-0.99, -0.09, -0.17]
-    tstat = [-4.46, -0.51, None]
+    tstat = [-4.46, -0.51, -0.98]
     names = ["Textbook:\nmonth-end price\nin both", "Signal gap:\nsignal 1\u201310 days\nbefore month-end",
              "Return gap:\nreturn starts at\nmonth-begin"]
     cols = [C_NAIVE, C_FIX, C_FIX]
+    dollars = [12.0, 1.1, 1.4]
+    dtxt = ["about $12", "$1.10", "$1.40"]
 
-    fig, (a, b) = new_figure("wide", ncols=2, gridspec_kw={"width_ratios": [1.35, 1]})
+    fig, (a, b) = new_figure("wide", ncols=2, gridspec_kw={"width_ratios": [1.2, 1]})
     x = np.arange(3)
     a.bar(x, prem, width=0.6, color=cols, edgecolor="white")
     a.axhline(0, color=INK_2, linewidth=0.9, zorder=3)
     for xi, p, t in zip(x, prem, tstat):
-        txt = f"{p:.2f}%".replace("-", MINUS)
-        if t is not None:
-            txt += f"\nt = {t:.2f}".replace("-", MINUS)
+        txt = f"{p:.2f}%\nt = {t:.2f}".replace("-", MINUS)
         a.annotate(txt, (xi, p), xytext=(0, -4), textcoords="offset points", ha="center", va="top", fontsize=8.5, color=INK_2)
     a.set_xticks(x)
     a.set_xticklabels(names, fontsize=8)
@@ -363,18 +364,17 @@ def fig_reversal_gap():
     a.tick_params(axis="x", length=0)
     a.spines["bottom"].set_visible(False)
 
-    # Right: what $1 became, August 2002 to December 2024
-    b.bar([0], [12.0], width=0.55, color=C_NAIVE, edgecolor="white")
-    b.bar([1], [0.30], bottom=1.10, width=0.55, color=C_FIX, edgecolor="white")
-    b.axhline(1.0, color=INK_2, linewidth=0.9, linestyle=(0, (4, 3)), zorder=1)
-    b.annotate("about $12", (0, 12.0), xytext=(0, 4), textcoords="offset points", ha="center", va="bottom", fontsize=8.5, color=INK_2)
-    b.annotate("$1.10 to $1.40", (1, 1.40), xytext=(0, 4), textcoords="offset points", ha="center", va="bottom", fontsize=8.5, color=INK_2)
-    b.annotate("the starting $1", (1.45, 1.0), xytext=(0, -4), textcoords="offset points", ha="right", va="top", fontsize=8, color=INK_2)
-    b.set_xticks([0, 1])
-    b.set_xticklabels(["Textbook:\nmonth-end price\nin both", "Adjusted:\neither gap"], fontsize=8)
-    b.set_xlim(-0.55, 1.55)
+    # Right: what $1 became, September 2002 to December 2024 (same three constructions, same colors)
+    b.bar(x, dollars, width=0.6, color=cols, edgecolor="white")
+    b.axhline(1.0, color=INK_2, linewidth=0.9, linestyle=(0, (4, 3)), zorder=4)
+    for xi, v, t in zip(x, dollars, dtxt):
+        b.annotate(t, (xi, v), xytext=(0, 4), textcoords="offset points", ha="center", va="bottom", fontsize=8.5, color=INK_2)
+    b.annotate("start $1", (2.36, 1.0), xytext=(0, 3), textcoords="offset points", fontsize=8, color=INK_2, ha="left", va="bottom")
+    b.set_xticks(x)
+    b.set_xticklabels(["Textbook", "Signal\ngap", "Return\ngap"], fontsize=8)
+    b.set_xlim(-0.55, 3.2)
     b.set_ylim(0, 14)
-    b.set_ylabel("Value of $1, Aug 2002 to Dec 2024")
+    b.set_ylabel("Value of $1, Sep 2002 to Dec 2024")
     b.set_title("What a dollar became", fontsize=9.5)
     b.tick_params(axis="x", length=0)
     return finish(fig, "ch07_reversal_gap")

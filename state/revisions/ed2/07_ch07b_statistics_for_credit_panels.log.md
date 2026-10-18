@@ -16,7 +16,11 @@
 - [x] 14. [7-B.5 Shrinkage + LW] box 8 + Full Derivation. Note: batting average w=0.5; LW and PCA Lagrangian moved.
 - [x] 15. [7-B.6] box 9 + LIST-TO-NARRATIVE. Note: hat-of-slips box; Kaz's three bootstraps on runway; wild cluster payoff.
 - [x] 16. [7-B.7] LIST-TO-NARRATIVE. Note: boosted model learned Halvorsen; monotone constraint; recalibration; (4)-(5) as prose.
-- [ ] 17. [7-B.8] MATH-GENTLY (box 10, two parts) + LIST-TO-NARRATIVE + SHOP-LIFE vignette.
-- [ ] 18. [7-B.9 Case Study] EXPAND-SCENE (to 900–1,200 words) and ANOTHER-SEAT.
-- [ ] 19. [7-B.10] BRIDGE.
-- [ ] 20. [7-B.11 Desk Debrief] Finder table + ANOTHER-SEAT kept.
+- [x] 17. [7-B.8] box 10 + vignette + Kaz control variate + bridge derivation. Note: Jonah Feld (new minor cast).
+- [x] 18. [7-B.9 Case Study] EXPAND-SCENE + pod risk seat. Note: one row a day; Friday 24-spec argument; 43% via §8D.5.
+- [x] 19. [7-B.10] BRIDGE. Note: opening sentence ties each scene to a creditstats.py function.
+- [x] 20. [7-B.11 Desk Debrief] Finder table + sweep. Note: ten-row Finder; ban-list and modal sweep; CLO seat kept.
+
+Notes: growth 13.2k → 24.6k words (1.86×); modal 2.7 → 1.9, imperatives 1.1 → 0.4, bullets 12.4% → 5.5% (tools/prescriptiveness.py vs 461bdc3); 10 Math, Gently, 4 seats. Open items logged in state/open_items_ed2.md (Saks clock 5 vs 13 for the figures pass; §9.6.1 pointer). Cast bible and Pair Book notes added.
+
+<!-- STATUS: COMPLETE -->

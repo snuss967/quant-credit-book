@@ -78,7 +78,7 @@ def panel(ax, pnl, show_ylabel, labels):
     if show_ylabel:
         ax.set_ylabel("Probability per $1mm bin (log scale)")
     ax.axvline(FIRST_LINE, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
-    ax.annotate("first line,\n-$24mm", (FIRST_LINE, 0.98), xycoords=("data", "axes fraction"), xytext=(-3, 0),
+    ax.annotate("first line,\n−$24mm", (FIRST_LINE, 0.98), xycoords=("data", "axes fraction"), xytext=(-3, 0),
                 textcoords="offset points", fontsize=8, color=INK_2, va="top", ha="right")
     for x, y, text, ha in labels:
         ax.annotate(text, (x, y), fontsize=8, color=INK_2, ha=ha, va="bottom")
@@ -89,7 +89,7 @@ def fig_pair_two_spikes():
     smear = simulate(beta_recovery=True)
     fig, axes = new_figure("wide", ncols=2, sharey=True)
     panel(axes[0], fixed, True, [
-        (-43.0, 1.6e-2, "Kestrel defaults\n5.8%: -$33.6mm", "center"),
+        (-43.0, 1.6e-2, "Kestrel defaults\n5.8%: −$33.6mm", "center"),
         (33.0, 3.0e-2, "Halvorsen defaults\n10%: +$19.5mm", "center"),
         (6.0, 0.14, "both survive, 85%", "left"),
         (-14.1, 8e-3, "both\n0.6%", "center"),

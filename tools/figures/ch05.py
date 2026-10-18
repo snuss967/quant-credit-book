@@ -83,7 +83,7 @@ def fig_skew_vs_pd():
                 ha="right", va="center", fontsize=8.3, color=INK_2)
     ax.text(0.0215, -1.2, "Gaussian: skew 0 at every q", fontsize=8.3, color=INK_2, va="top", ha="left")
     ax.text(0.0215, 12.8, "right-skewed: price near recovery", fontsize=8.3, color=MUTED, va="top", ha="left")
-    ax.legend(loc="lower right", bbox_to_anchor=(1.0, 0.02), fontsize=8.3)
+    ax.legend(loc="lower right", bbox_to_anchor=(0.865, 0.02), fontsize=8.3)   # left of the q = 1/2 line
 
     ax.set_xlim(0.02, 95)
     ax.set_ylim(-72, 14)
@@ -138,7 +138,7 @@ def fig_two_worlds_mixture():
     assert abs(stats.skew(draw) + 5.1) < 0.1 and abs(stats.kurtosis(draw) - 28) < 1.0     # -5.1 and 28
     assert abs((1 - float(mixture_cdf(draw.mean()))) - 0.70) < 0.01                       # 70%
 
-    edges = np.arange(-1.0, 0.2001, 0.02)
+    edges = np.arange(-1.0, 0.3001, 0.02)
     centers = (edges[:-1] + edges[1:]) / 2
     mix = np.diff(mixture_cdf(edges))
     gau = np.diff(stats.norm.cdf(edges, MU_X, SD_X))
@@ -224,7 +224,7 @@ def fig_recovery_beta_shapes():
                 color=INK_2, arrowprops=leader)
     ax.annotate("density \u2192 \u221e at 0", (0.0, ymax), xytext=(4, -9), textcoords="offset points", ha="left",
                 va="top", fontsize=8, color=MUTED)
-    ax.annotate("density \u2192 \u221e at par", (1.0, ymax), xytext=(-4, -9), textcoords="offset points", ha="right",
+    ax.annotate("density \u2192 \u221e at par", (0.955, ymax), xytext=(0, -9), textcoords="offset points", ha="right",
                 va="top", fontsize=8, color=MUTED)
     ax.text(1.005, 0.05, "par", fontsize=8, color=MUTED, ha="left", va="bottom")
     ax.set_xlabel("Recovery (fraction of par)")
@@ -250,16 +250,17 @@ def fig_carvana_stack():
     a1.plot(xs, ys, color=BLUE, linewidth=LW, marker="o", markersize=5.5, zorder=4)
     for d, v in STACK_MARKS:
         a1.annotate(f"{v:g}", (d, v), xytext=(0, 7), textcoords="offset points", ha="center", va="bottom",
-                    fontsize=8.3, color=INK_2)
+                    fontsize=8.3, color=INK_2, zorder=3.5,
+                    bbox=dict(boxstyle="square,pad=0.12", fc="white", ec="none"))
     d18 = dt.date(2022, 11, 18)
     a1.plot([d18, d18], [37, 48], color=NEUTRAL, linewidth=3.2, solid_capstyle="butt", zorder=3)
     a1.annotate("quoted 37–48\non 18 Nov", (d18, 37), xytext=(3, -5), textcoords="offset points", ha="left",
                 va="top", fontsize=8.0, color=MUTED)
     a1.annotate("A year earlier\n(31 Dec 2021):\n99.5", (dt.date(2022, 11, 4), 90), ha="left", va="center",
-                fontsize=8.3, color=INK_2)
+                fontsize=8.3, color=INK_2, zorder=3.5, bbox=dict(boxstyle="square,pad=0.15", fc="white", ec="none"))
     events = [(dt.date(2023, 3, 22), 128, "22 Mar: exchange offered"),
-              (dt.date(2023, 6, 2), 118, "2 Jun: exchange fails (the decision)"),
-              (dt.date(2023, 7, 17), 108, "17 Jul: deal signed, over 90%"),
+              (dt.date(2023, 6, 2), 118, "2 Jun: exchange fails"),
+              (dt.date(2023, 7, 17), 108, "17 Jul: deal signed"),
               (dt.date(2023, 9, 1), 98, "1 Sep: settled")]
     for d, h, txt in events:
         a1.plot([d, d], [22, h], color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
@@ -268,6 +269,7 @@ def fig_carvana_stack():
     a1.set_ylim(22, 135)
     a1.set_xlim(dt.date(2022, 11, 1), dt.date(2024, 1, 20))
     a1.set_yticks([40, 50, 60, 70, 80, 90, 100])
+    a1.spines["left"].set_bounds(22, 100)
     a1.xaxis.set_major_locator(FixedLocator(mdates.date2num([d for d, _ in STACK_MARKS])))
     a1.xaxis.set_major_formatter(mdates.DateFormatter("%b %y"))
     a1.set_ylabel("Notes' fair value, % of carrying amount")
@@ -287,9 +289,7 @@ def fig_carvana_stack():
     a2.set_ylim(0, 112)
     a2.set_yticks([0, 20, 40, 60, 80, 100])
     a2.set_ylabel("Cents per $1 of old face")
-    a2.annotate("bond in the\ncold open's chair", (2, 66.6), xytext=(0, 28), textcoords="offset points", ha="center",
-                va="bottom", fontsize=7.8, color=INK_2,
-                arrowprops=dict(arrowstyle="-", color=MUTED, linewidth=0.8, shrinkA=0, shrinkB=2))
+    a2.text(2, 33, "cold open's chair", rotation=90, ha="center", va="center", fontsize=8.0, color=INK)
     a2.text(0, 40, "cash tender", rotation=90, ha="center", va="center", fontsize=8.0, color=INK_2)
     return finish(fig, "ch05_carvana_stack")
 
@@ -311,7 +311,7 @@ def fig_serta_recovery_fork():
     a1.set_axisbelow(True)
     a1.grid(axis="y", visible=False)
     a1.grid(axis="x", visible=True)
-    rows = ["Plan, participants", "Plan, everyone else", "Struck 22 Jun 2020", "Court's value, 7 Jul 2026"]
+    rows = ["Plan, participants", "Plan, everyone else", "Struck 22 Jun 2020", "Court's value, as of 2020"]
     ypos = [3, 2, 1, 0]
     a1.barh(3, 100 - 73.7, left=73.7, height=0.46, color=BLUE)
     a1.barh(2, 2.4 - 0.6, left=0.6, height=0.46, color=ORANGE)
@@ -324,12 +324,12 @@ def fig_serta_recovery_fork():
         a1.annotate(lab, (x, 1), xytext=off, textcoords="offset points", ha="right", va="center", fontsize=8.3,
                     color=INK_2)
     a1.plot([25], [0], "D", color=INK_2, markersize=6, zorder=5, markeredgecolor="white", markeredgewidth=0.8)
-    a1.annotate("excluded loans valued at 25 cents", (25, 0), xytext=(8, 0), textcoords="offset points",
+    a1.annotate("excluded loans valued at 25 cents (ruling of 7 Jul 2026)", (25, 0), xytext=(8, 0), textcoords="offset points",
                 ha="left", va="center", fontsize=8.3, color=INK_2)
     a1.set_yticks(ypos, rows)
     a1.set_ylim(-0.6, 3.6)
     a1.set_xlim(0, 100)
-    a1.set_xlabel("Cents per dollar of first-lien claim")
+    a1.set_xlabel("Cents per dollar of claim")
     a1.tick_params(axis="y", length=0)
     a1.spines["left"].set_visible(False)
 

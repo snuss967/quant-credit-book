@@ -16,10 +16,11 @@
 - [x] 14. [§12B.6 cramdown] NEW-SCENE Long Scene B: Momentive + MATH-GENTLY #9 — four beats, web-checked remand facts; annuity box; law paragraphs retired.
 - [x] 15. [§12B.7] MATH-GENTLY #10 two parts + FULL-DERIVATION-MOVE + WHEN-TO-APPLY — clock/meter box; Mags on Timbers; ten dockets line.
 - [x] 16. [§12B.8] SHOP-LIFE vignette: the transfer notice + LIST-TO-NARRATIVE — Hollis, Tallowmere; bar date, confi, big-boy letter; 503(b)(9) last.
-- [ ] 17. [§12B.9] EXPAND-SCENE Halvorsen, grade the Friday cards
-- [ ] 18. [§12B.9 after settlement] WHEN-TO-APPLY inside the scene
-- [ ] 19. [§12B.9 end] RV beat, The Pair box, PB-02
-- [ ] 20. [§12B.10 Case Study] keep length; rewrite code explanation per lesson 12
-- [ ] 21. [§12B.10 before Spec] ANOTHER-SEAT (dealer desk)
-- [ ] 22. [§12B.11] Finder table; keep bullets and Spec
-- [ ] 23. [Whole chapter] box discipline
+- [x] 17. [§12B.9] EXPAND-SCENE Halvorsen, grade the Friday cards — envelope opened at effective date; four cards graded; numbers kept.
+- [x] 18. [§12B.9 after settlement] WHEN-TO-APPLY inside the scene — Theo silo, Kaz roll-up W, Mags singular generator.
+- [x] 19. [§12B.9 end] RV beat, The Pair box, PB-02 — walk by state, leaks, carry/borrow, ledger line; T6.
+- [x] 20. [§12B.10 Case Study] keep length; rewrite code explanation per lesson 12 — opens with 40 and \$750mm; template dropped; edges kept.
+- [x] 21. [§12B.10 before Spec] ANOTHER-SEAT (dealer desk) — Jefferies roles only; dealer sees flow before docket.
+- [x] 22. [§12B.11] Finder table; keep bullets and Spec — ten rows incl. §1129(a) tests and claim machine.
+- [x] 23. [Whole chapter] box discipline — ten Math Gently, none adjacent; no CHECK; modal 1.7.
+<!-- STATUS: COMPLETE -->

@@ -91,7 +91,7 @@ def fig_pair_corridor():
     ax.text(1, BARRIER + 0.04, "ceiling  +%.2f%% of the long (about $320k)" % BARRIER,
             fontsize=8, color=INK_2, va="bottom")
     ax.text(1, -BARRIER - 0.04, "floor  %s%.2f%%" % ("−", BARRIER), fontsize=8, color=INK_2, va="top")
-    ax.text(H_DAYS - 1, 1.12, "wall, 13 weeks", fontsize=8, color=INK_2, ha="right", va="bottom")
+    ax.text(H_DAYS - 1, 1.12, "wall: 63 trading days (13 weeks)", fontsize=8, color=INK_2, ha="right", va="bottom")
 
     ax.set_xlim(0, H_DAYS + 1)
     ax.set_ylim(-1.2, 1.3)

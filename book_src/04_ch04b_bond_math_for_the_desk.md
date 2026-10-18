@@ -261,13 +261,13 @@ Kaz opened the 10-K and did something Theo had not seen a quant do with a filing
 
 "If the *bank* is held to maturity," said Kaz. "That's the only assumption in the accounting, and it's an assumption about the duration of the liabilities."
 
-Kaz could not read the duration of the bank's portfolio off the page, and said so. The fair-value table gives a loss, not a slope, and backing a slope out of a loss needs the yields the book was bought at, which the 10-K does not lay out in one place. The loss was enough: about a sixth of the held-to-maturity book's cost had gone at market prices, and the equity that was supposed to absorb it was smaller than the hole. Five days after the bank failed, Dan Davies told the same story at greater length on the *Odd Lots* episode in this chapter's Resource Graph (14 March 2023), as a bank reaching for yield in long-dated Treasuries when rates were at the floor. Kaz had got there from one table. The depositors' side of the story, an uninsured share that the Federal Reserve's review later put at 94%, was a number the replay's rules kept out of the room.
+Kaz could not read the duration of the bank's portfolio off the page, and said so. The fair-value table gives a loss, not a slope, and backing a slope out of a loss needs the yields the book was bought at, which the 10-K does not lay out in one place. The loss was enough: about a sixth of the held-to-maturity book's cost had gone at market prices, and the equity that was supposed to absorb it was smaller than the hole. Four days after the bank failed, Dan Davies told the same story at greater length on the *Odd Lots* episode in this chapter's Resource Graph (14 March 2023), as a bank reaching for yield in long-dated Treasuries when rates were at the floor. Kaz had got there from one table. The depositors' side of the story, an uninsured share that the Federal Reserve's review later put at 94%, was a number the replay's rules kept out of the room.
 
 *The note.* The holding company owed seven series of senior notes, \$3.3bn in all, one class, from the 3.50% due January 2025 to the 4.570% fixed-to-floating due April 2033. Ines's sheet carried a desk mark for one of them: the 1.800% notes due February 2031, at 75 on Wednesday's close (illustrative). Theo did what he had learned on Tuesday: dirty price, yield, slope. At 75 the yield was 5.77%, the modified duration 7.11 and the DV01 \$5,340 per \$10mm. "If we owned ten million, we'd short about \$8.9mm of seven-year Treasuries against it," he said, sizing DV01 against DV01 the way §4B.5 does. "And then we'd own the spread."
 
 "And then you'd own the spread," said Kaz. "Spread duration is the same 7.1. It's a bullet; the curve and the spread sit in the same exponent."
 
-Then the 8-K. After the close on 8 March the company announced that it had sold the available-for-sale book, \$23.97bn of it at amortized cost for \$21.45bn of proceeds, a loss of 10.5%, and that it would raise \$2.25bn of capital. The same evening Silvergate said it would wind itself down.
+Then the 8-K. After the close on 8 March the company announced that it had sold substantially all of its available-for-sale book, at an after-tax loss of about \$1.8bn, and that it would raise \$2.25bn of capital. (A filing the following week put the sale at \$23.97bn of book value for \$21.45bn of proceeds, a loss of 10.5% before tax.) The same evening Silvergate said it would wind itself down.
 
 "They've sold the part of the book they were allowed to sell, at what it was worth," said Kaz. "The loss had been there all along. Now it's on the income statement."
 
@@ -295,15 +295,15 @@ Theo wrote the two numbers and stopped at the third line. Under it he wrote a qu
 
 (Your own card goes here, before Friday.)
 
-*Friday 10 March: the grading.* Ines put up the morning. Trading in the stock was halted before the open. The thirty-day implied volatility, which had spent the year near the bottom of a 52-week range of 39 to 280, was quoted at 167 before the bell. By midday the California regulator had closed Silicon Valley Bank and appointed the FDIC as receiver, and the closing order put Thursday's withdrawals at more than \$40bn. The default mechanics, and why no structural model on any desk had seen it coming, are §6.4.4's case; Ines did not replay them. She asked for one thing. "Mark the note."
+*Friday 10 March: the grading.* Ines put up the morning. Trading in the stock was halted before the open. The thirty-day implied volatility, which had spent the year near the bottom of a 52-week range of 39 to 280, was quoted at 167 before the bell. Before the day was out the California regulator had closed Silicon Valley Bank and appointed the FDIC as receiver; the Federal Reserve's review later put Thursday's withdrawals at more than \$40bn. The default mechanics, and why no structural model on any desk had seen it coming, are §6.4.4's case; Ines did not replay them. She asked for one thing. "Mark the note."
 
-Nobody could, and that was the first lesson. There was no single-name CDS to read a curve from, and the notes traded by appointment; press reports in the days that followed put them in the 30s and 40s. Kaz asked for a number anyway, so Ines gave the desk's: 40 (illustrative).
+Nobody could, and that was the first lesson. The replay's data held no usable CDS curve for the name, and the notes traded by appointment; press reports in the days that followed put them in the 30s and 40s. Kaz asked for a number anyway, so Ines gave the desk's: 40 (illustrative).
 
 Then she graded the cards against it.
 
 Kaz's DV01 had been right on Thursday and meant nothing on Friday. At 40 the yield formula of §4B.2 still reported a modified duration of 6.5, because it still believed that sixteen coupons were coming. The bond's real rate duration came from the distressed route of §4B.3. Under recovery of face, with a large default intensity, the price is close to $100R\,\lambda/(\lambda+r)$, and its rate duration is $-\frac1P\,\partial P/\partial r = 1/(\lambda + r)$: the expected wait for the recovery payment, in years. At an intensity of 5 a year, a default expected within weeks, that is about 0.2. The Treasury short sized on Wednesday was hedging a rate duration that no longer existed, which made it a second position rather than a hedge. What a Treasury short did to a credit book on that Friday and the Monday after is Chapter 8's scene (§8, Case Study B), and it is not a kind one.
 
-Spread duration did no better. It measures what a small change in the spread does to the price, and Friday's change was not small; it was a jump, and a jump is priced by what is lost when it happens, the price minus whatever the claim recovers, not by a derivative. When Kaz asked the §4B.6 code for a par-CDS-equivalent spread at 40 with $R = 40\%$, it returned an error instead of a number: no hazard rate can make a bond worth less than its recovery, so at or below recovery the solver has nothing to find.
+Spread duration did no better. It measures what a small change in the spread does to the price, and Friday's change was not small; it was a jump, and a jump is priced by what is lost when it happens, the price minus whatever the claim recovers, not by a derivative. When Kaz asked the §4B.6 code for a par-CDS-equivalent spread at 40 with $R = 40\%$, it did return a number, but not one anyone could use: with the price sitting on the recovery, the price barely depends on the hazard rate, so the answer swung from about 3,500bp to about 6,000bp as the discount rate moved from 4.5% to 3.5%. A point lower, at 39, the solver raised an error instead, since no hazard rate can take a bond much below its recovery. Either way the spread was not information.
 
 "So the only number left," said Theo.
 
@@ -592,7 +592,7 @@ The first one failed at 1:10 on Wednesday morning. A plain bullet, no call anywh
 
 ### Negative convexity
 
-Near the call price the issuer's option binds and the callable's price flattens toward the strike as rates fall; Veronesi's Treasury callable shows the same thing, where "the bond price has to converge to the call price ($100) as interest rates decline" (Veronesi_Fixed_Income_Securities p.464). Effective convexity turns negative there, and far from the call, where the option is worthless, the two curves merge and convexity is positive again.
+Near the call price the issuer's option binds and the callable's price flattens toward the strike as rates fall; Veronesi's Treasury callable shows the same thing, where "the bond price has to converge to the call price (\$100) as interest rates decline" (Veronesi_Fixed_Income_Securities p.464). Effective convexity turns negative there, and far from the call, where the option is worthless, the two curves merge and convexity is positive again.
 
 ```text
 Sketch 4B.1 (schematic, not a numbered figure). Price against the level of rates (or spreads) at fixed OAS.
@@ -770,7 +770,7 @@ At 7:40 on Wednesday the function Kaz needed first was the one that would not re
 
 *Where it belongs.* It is built for research, for the risk report's analytics, and for checking a vendor; it found Kaz's three basis points. It is not a production library: no holiday calendars, no odd coupons beyond $w$, a CDS premium leg paid continuously on ACT/360 (within a basis point or two of §24.2's quarterly model), and a Ho–Lee tree whose normal rates go negative at the bottom nodes. A lognormal desk will disagree with this OAS by a few basis points, and each will be right about its own model (Veronesi p.467, §4B.7).
 
-*Where it refuses, and why.* The function `pecs` on a bond at or below its assumed recovery has no solution, since no hazard can make a bond worth less than its recovery; it raises, as it did on the SVB holdco note at 40 in §4B.3's replay, and the right response is to quote price and recovery, not to lower $R$ until the solver is happy. A clean price passed as dirty gives a smooth, plausible yield that is off by the accrued; the solver cannot know, so the argument is named `p_dirty`. And the lattice refuses a cash flow off its step dates, because rounding a coupon to the nearest node moves it by up to half a step and the OAS absorbs the error silently.
+*Where it refuses, and why.* The function `pecs` on a bond at or below its assumed recovery has no solution, since no hazard can take a bond much below its recovery; it raises there, and just above recovery it returns a spread that swings by thousands of basis points with the discount rate, as it did on the SVB holdco note at 40 in §4B.3's replay. In both cases the right response is to quote price and recovery, not to lower $R$ until the solver is happy. A clean price passed as dirty gives a smooth, plausible yield that is off by the accrued; the solver cannot know, so the argument is named `p_dirty`. And the lattice refuses a cash flow off its step dates, because rounding a coupon to the nearest node moves it by up to half a step and the OAS absorbs the error silently.
 
 *Tests.* Every identity in the chapter is an assertion at the bottom of the listing, from the 0.50 of accrued and the 31st rule to the lattice identities of §4B.7 and the make-whole proposition, and so is the 23 March column of Table 4B.1.
 
@@ -791,7 +791,7 @@ At 7:40 on Wednesday the function Kaz needed first was the one that would not re
 | Hedge ratio, Treasury and pair | $-\text{DV01}_{\text{bond}}/\text{DV01}_H$, §4B.5 | The Pair, PB-03 before it opens (§4B.5) | The hedge line of the 23 March cards (§4B.8, Beat 3): analytic 0.545 against Ben Dor's −0.26; Ines's "the alpha is the size of the hedge-ratio error" | `dv01`, `effective` (empirical ratio: §8.2) |
 | The curve and the eight spreads | Bootstrap; Z, ASW, DM and PECS, §4B.6 | Bootstrapping is peeling (§4B.6); six rulers, one length (§4B.8) | Kaz's whiteboard (§4B.6) and the reconciliation (§4B.8, Beat 1): attach the definition; the CLO seat reads DM differently (§4B.6) | `curve_from_par`, `z_spread`, `asw_par`, `discount_margin`, `pecs` |
 | YTW, OAS, the lattice and the make-whole | Ho–Lee fit, backward induction, the four identities and the proposition, §4B.7 | What "risk-neutral" means (§4B.7) | Theo's objection (§4B.7): issuers call for covenants and M&A; the 1:10 a.m. assert; *Article III* on the card (§4B.8, Beat 3) | `ytw`, `ho_lee`, `on_grid`, `lattice_price`, `oas` |
-| Implied numbers and the solver | Bracketed bisection, §4B.9 | An implied number is a question asked backwards (§4B.9) | PECS at 40 in the SVB replay (§4B.3): the solver's refusal is the signal | `solve`, `pecs` |
+| Implied numbers and the solver | Bracketed bisection, §4B.9 | An implied number is a question asked backwards (§4B.9) | PECS at 40 in the SVB replay (§4B.3): a spread that swings with the discount rate is the signal | `solve`, `pecs` |
 
 - **A bond is a list, and a yield is a price in another font.** Every spread is the one constant that makes the list reprice against some curve. Name the curve, the compounding and the dirty price, or the number means nothing. (Law 11)
 - **Duration answers two questions that share a number by coincidence.** For a callable, a floater or a bond at 60, reprice; in a crisis, hedge with §8.2's empirical duration, because the analytic one can have the wrong sign. (Law 1)
@@ -799,7 +799,7 @@ At 7:40 on Wednesday the function Kaz needed first was the one that would not re
 - **Per basis point the fallen angel got safer; per percent it got four times riskier.** Size, limit and scale in DTS; keep CS01 for the hedge. (Law 3)
 - **On a flat curve, every gap between spreads is a convention**: compounding ($\approx y^2/2f$), $100/P$, par versus price. Those conventions moved the measured spread change by 300bp in one month. (Law 11)
 - **OAS is model output.** State $\sigma$ and the tree. For a bond trading wider than its make-whole spread, OAS equals Z and the adjustment is zero. (Law 13)
-- **Below about 70, stop quoting spreads.** Quote price and recovery, and treat the solver's refusal as the signal. (Law 7)
+- **Below about 70, stop quoting spreads.** Quote price and recovery, and treat the solver's refusal, or a spread that swings with the discount rate, as the signal. (Law 7)
 
 **The Spec You Hand the Robot.** "Implement `bondmath.py` per §4B.9: 30/360 (31st rule), ACT/360, ACT/365F and accrued to settlement; price, YTM and YTW over every call-window coupon date; analytic and effective duration and convexity, tent key rates; DV01, DTS; flat and bootstrapped curves; G, Z, both asset swaps, DM, PECS; a Ho–Lee tree fitted by Arrow–Debreu prices with fixed-strike and make-whole calls, and OAS. One bracketed bisection that raises when unbracketed. Prices per 100 dirty, decimals, years. Tests: every identity in §4B.9 and Table 4B.1's 23 March column."
 
@@ -827,4 +827,3 @@ At 7:40 on Wednesday the function Kaz needed first was the one that would not re
 *Used in:* every chapter that quotes a duration, a DV01 or a spread; the Debrief bullets feed App E (Laws 1, 3, 7, 11, 13) and App A §A.3 (the convexity and duration collisions).
 
 <!-- STATUS: COMPLETE -->
-
