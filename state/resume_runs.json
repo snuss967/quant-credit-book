@@ -44,24 +44,6 @@
    }
   },
   {
-   "name": "part-VII-u2",
-   "task": "wi1wgwn1n",
-   "runId": "wf_803b0227-6ae",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "24_ch24_bond_cds_basis_and_deliverables",
-     "25_ch25_nlp_pacer_and_covenant_scraping"
-    ],
-    "stages": [
-     "brief",
-     "revise",
-     "verify"
-    ]
-   }
-  },
-  {
    "name": "lessons-rv-3-2-7",
    "task": "wlidanyfd",
    "runId": "wf_6ac67a00-da1",

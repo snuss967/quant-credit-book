@@ -191,6 +191,8 @@ Theo opened his mouth to object and found that he could not. The fulcrum securit
 
 ### Modified: the derivative
 
+> **Math, Gently.** *Duration is a slope.* Plot the bond's price against its yield and you get a hill that falls away to the right: the higher the dial of §4B.2, the lower the price. Stand on the hill at today's yield and ask how steep it is where you are standing. That steepness, measured as the fraction of price lost per unit of yield, is modified duration. A walker's version: if the path drops 8 metres for every 100 metres forward, a one-metre step costs 8 centimetres. Tiny number: on 20 February the note had $D^{\text{mod}} = 8.11$ and a price of 108.38, so one basis point (0.0001) of yield moves the price by $8.11 \times 0.0001 \times 108.38 = 0.088$ points, about \$8,785 on \$10mm. The steepness changes as you walk, because the hill is curved, and the curve is §4B.4's subject. The derivative behind the slope is next.
+
 From §4B.2, $dP/dy = -\frac{1}{f(1+y/f)}\sum_k e_k\,\text{CF}_k\,(1+y/f)^{-e_k}$. Divide by $-P$:
 
 $$

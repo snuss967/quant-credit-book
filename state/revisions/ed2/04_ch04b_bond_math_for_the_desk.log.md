@@ -4,7 +4,7 @@
 - [x] 2. [Prerequisites box] BRIDGE — MIT 15.401 lectures and recitation added as one sentence.
 - [x] 3. [4B.1 The list] MATH-GENTLY (present value and the discount factor) — cheque-stack box after The list; Agnieszka 31st-rule vignette added.
 - [x] 4. [4B.2 The street formula] MATH-GENTLY (a yield is a price in another font) — one-dial box; premium identity stated; Full Derivation holds proofs.
-- [ ] 5. [4B.3 Macaulay: the balance point] MATH-GENTLY (duration as a slope)
+- [x] 5. [4B.3 Macaulay: the balance point] MATH-GENTLY (duration as a slope) — hill-slope box at Modified; fulcrum exchange kept verbatim.
 - [ ] 6. [4B.3 Spread duration, and the two routes to zero] LIST-TO-NARRATIVE
 - [ ] 7. [4B.3, new `#### Long Scene: The Book That Had a Duration and a Bank That Did Not` (before Key-rate durations)] NEW-SCENE (2,000–2,500 words)
 - [ ] 8. [4B.4 The curvature] MATH-GENTLY (convexity as dispersion) + FULL-DERIVATION-MOVE

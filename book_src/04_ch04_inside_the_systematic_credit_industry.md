@@ -508,7 +508,9 @@ Then Kaz puts the audit's own scoreboard on the screen, because the desk's numbe
 
 Theo reads the list twice and sees what it is telling him, in a vocabulary he has spent years in. Within-firm means comparing the bonds of one company with each other: the 2029s against the 2031s, the secured against the unsecured, the bond with the better guarantor package against the one without. That is not a factor. It is a capital-structure question, and he knows how to ask it.
 
-**Decision point.** It is 4 p.m. on Friday. Ines has promised an allocator a strategy document by month-end for a long-only high-yield mandate. On the table: a value sleeve that survives at half strength, gross, with no cost model yet; a set of within-firm results that are the most robust in the literature and that a long-only book cannot fully express, since it cannot short the rich bond of a pair; and a backtest that shrank from 3.1 to 0.9 in four days. Kaz wants to ship the value sleeve as it stands and let the costs be measured live. Ines wants to shrink it, sizing it to whatever survives the cost model, and nothing larger. Theo wants to redesign it around within-firm bets, because that is where the evidence is and, he suspects, where his own edge is. Mags wants to know what the sleeve would have done in the months the old filters deleted.
+#### Decision point: Friday, 4 p.m.
+
+It is 4 p.m. on Friday. Ines has promised an allocator a strategy document by month-end for a long-only high-yield mandate. On the table: a value sleeve that survives at half strength, gross, with no cost model yet; a set of within-firm results that are the most robust in the literature and that a long-only book cannot fully express, since it cannot short the rich bond of a pair; and a backtest that shrank from 3.1 to 0.9 in four days. Kaz wants to ship the value sleeve as it stands and let the costs be measured live. Ines wants to shrink it, sizing it to whatever survives the cost model, and nothing larger. Theo wants to redesign it around within-firm bets, because that is where the evidence is and, he suspects, where his own edge is. Mags wants to know what the sleeve would have done in the months the old filters deleted.
 
 Ship it, shrink it, or redesign it for within-firm bets only? What would you do, and why? The chapter's own answer arrives in pieces. §4.6–§4.8 show that costs and capacity, not the alpha, decide how big a sleeve can be. §4.11 shows that a within-firm bet in a long-only book is really a decision about *which bond expresses the view*, which is a capital-structure decision before it is a statistical one.
 
@@ -682,7 +684,9 @@ Mags's argument was the shortest. "Wait a week." The value signals are slow, she
 
 Ines closes the file. "So. You're me, in June 2022. Pay, slice, or wait?"
 
-**Decision point.** The rebalance gains about 45bp if it is done. A portfolio trade costs about 60bp today, three times April's price. Slicing the list into RFQs costs less on the liquid lines and leaves an uncertain number of the illiquid ones unfilled, with the risk exposures that come with them. Waiting costs whatever the fast signals lose in a week, and bets that the cost spike is temporary. What would you do, and why?
+#### Decision point: June 2022, pay, slice or wait?
+
+The rebalance gains about 45bp if it is done. A portfolio trade costs about 60bp today, three times April's price. Slicing the list into RFQs costs less on the liquid lines and leaves an uncertain number of the illiquid ones unfilled, with the risk exposures that come with them. Waiting costs whatever the fast signals lose in a week, and bets that the cost spike is temporary. What would you do, and why?
 
 Theo thinks about it the way he would think about a tender offer with a consent deadline. Before answering, he wants three things: how much of the 45bp sits in the fast signals and how much in the slow ones; what each half of the list costs to trade by itself; and how much of the book's tracking error a partial fill leaves behind. Ines grins, because those are the right questions and because she had none of those numbers in June 2022.
 
@@ -952,7 +956,7 @@ He thinks of Ines's question from that first morning: which of these desks are w
 | Concept | Eq. | Intuition (box) | Judgment (scene) | Code |
 | :-- | :-- | :-- | :-- | :-- |
 | Effective breadth | (4.1) | Thermometers in one room, §4.3 | Three CUSIPs (§4.1) and Kaz's breadth engine (§4.3): honest on liquid IG and BB with a correct issuer map, a $\rho$ measured across regimes and fills close to the wanted book; report a stressed $\rho$; below BB, cluster by class | Listing 4.1 |
-| Value as a Q-minus-P gap | (4.5) | Two measures (gloss; box in Ch 3-B); the golf handicap (gloss, §4.4) | The distributor at 1,500 over (§4.4): split the clip, print the top twenty, look at the worst months, and ask whether the $\lambda^{\mathbb{P}}$ is a default rate | Exercise 4 |
+| Value as a Q-minus-P gap | (4.5) | Two measures (gloss; box in Ch 3-B); the golf handicap (gloss, §4.4) | The distributor at 1,500 over (§4.4): split the clip, print the top twenty, look at the worst months, and ask whether the $\lambda^{\mathbb{P}}$ is a default rate | (none; Exercise 4 splits the clip) |
 | Knowledge time, ex-post filters, multiple testing | As-of rule and truncated mean, §4.5 | The sealed envelope; trimming a tail; 432 lottery tickets, §4.5 | Rerunning Kaz's backtest, Monday to Friday (§4.5): join on knowledge time, judge a print only with that day's prints, label gross or net, simulated or live | (none) |
 | DTS as the risk unit | §4.6 | Points or percent (gloss, §4.6; box in Ch 1 §1.4) | The week the tight decile moved in points (§4.6): near the floor spreads move in points, and a bond at 45 trades on recovery | (none) |
 | Turnover headroom | Pure-noise swap, §4.6 | What an optimizer is, §4.6 | The exchange offer the rebalance would have slept through (§4.6): headroom for signals that keep, a calendar for events | (none) |

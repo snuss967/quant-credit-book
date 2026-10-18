@@ -75,8 +75,8 @@ Growth 35,365 / 12,571 = **2.81×** against the 1.6–1.9× target (20,114–23,
 
 ## (f) Finder table and headings (lesson 11)
 
-- [ ] F1. Add a ten-row Finder table (concept · eq. · intuition (box) · judgment (scene) · code) at the top of §4.12, before the six o'clock scene.
-- [ ] F2. Promote the decision points L517 and L714 to `####` headings; retitle the surviving "When ..." headings as scenes (breadth engine, tight decile, exchange-offer near miss, seventy-two down months, three measured series).
+- [x] F1. Add a ten-row Finder table (concept · eq. · intuition (box) · judgment (scene) · code) at the top of §4.12, before the six o'clock scene. **Done:** Ten-row Finder heads §4.12; breadth judgment paragraph lives there now.
+- [x] F2. Promote the decision points L517 and L714 to `####` headings; retitle the surviving "When ..." headings as scenes (breadth engine, tight decile, exchange-offer near miss, seventy-two down months, three measured series). **Done:** Both decision points are #### headings; When-headings all retitled as scenes.
 
 ## (g) Cast bible
 
