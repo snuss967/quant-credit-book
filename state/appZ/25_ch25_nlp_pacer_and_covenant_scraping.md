@@ -105,8 +105,6 @@ Key on these fields: `doc_class`; the filer, resolved from `description` to a st
 
 **The trap:** Most wrong specs key on the filer's name. A deny-list on "utility" fails the next time the filer is the Ad Hoc Committee of Trade Creditors. An allow-list on "Ad Hoc" still pages at 2:11 for Doc. 289, the Ad Hoc *Equity* Group. Keying on "amended" alone pages at 2:26 for the utilities' supplement (Doc. 311) and stays silent for the day-one original from the excluded lenders (Doc. 75). Quiet hours are not a fix either: they delay the page that matters along with the ones that don't.
 
-NOTE (for the editor): §25.7.3 says, below the Rule 2019 table, that "only three of the seven rows move a term-loan recovery." By the table's own rows, four do: Docs. 69, 75, 389 and 1116, the two lender groups. Three do not: 273, 289 and 311, the utilities and the equity group. Suggest "four of the seven rows" or "three of the seven rows do not."
-
 **If you got this wrong, read:** §25.7.3, beat three (the 2 a.m. page) and the `type=rd` table; §25.7.1 on endogenous sampling (why an amendment from a known group is the event); and the `docket_entries` and `r2019_lots` schemas in §25.10.
 
 <!-- STATUS: COMPLETE -->

@@ -710,7 +710,7 @@ Ines laid four prices on the desk in a row. "Par, to a pension fund that wants y
 
 Ines turned the cards over.
 
-Kaz's card was graded first, and gently, because Kaz had graded it already. A 90-day $\tau$ coded in October would have been wrong by a factor of two at a fund like HPS's and by something nearer seven at the technology fund, and the 35% would have walked into the first quarter in which the gate bound for everybody at once. "The covariance said stay," Kaz said. "The covariance was measuring the NAV, and the NAV was measuring the adviser."
+Kaz's card was graded first, and gently, because Kaz had graded it already. A 90-day $\tau$ coded in October would have been wrong by a factor of two at a fund like HPS's and by something nearer eight at the technology fund, and the 35% would have walked into the first quarter in which the gate bound for everybody at once. "The covariance said stay," Kaz said. "The covariance was measuring the NAV, and the NAV was measuring the adviser."
 
 Mags's card scored best, for the least sophisticated reason. In the fourth-quarter cycle, the tenders that closed around the turn of the year, most of the large funds still paid every request in full: HPS's flagship had requests of about 4% of shares and filled them all. Blue Owl's technology fund, with requests already above 15%, was the exception, and the exception told you where the line would form first. A holder who tendered its full allowance in that window, as Mags's card said, would most likely have been paid, at NAV, before the line formed. "I didn't know anything you didn't," she said. "I just know that queues are made of people, and people read."
 

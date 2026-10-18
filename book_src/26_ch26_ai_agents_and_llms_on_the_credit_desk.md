@@ -441,7 +441,7 @@ Two caveats break the independence these formulas assume. A judge from the gener
 
 #### The Full Derivation: retries and the Lazarus rate
 
-Let the harness retry a rejected step up to $m$ times. On each attempt the output is accepted and right with probability $a_R = p(1-f)$, accepted and wrong with probability $a_W = (1-p)(1-d)$, and rejected with probability $r = 1 - a_R - a_W$. Summing the geometric series over attempts gives
+Let the harness make up to $m$ attempts at a step, retrying after each rejection. On each attempt the output is accepted and right with probability $a_R = p(1-f)$, accepted and wrong with probability $a_W = (1-p)(1-d)$, and rejected with probability $r = 1 - a_R - a_W$. Summing the geometric series over attempts gives
 
 $$
 \Pr(\text{right and accepted within } m) = a_R\,\frac{1 - r^m}{1 - r} = \frac{a_R}{a_R + a_W}\,\big(1 - r^m\big).
@@ -730,7 +730,7 @@ A reader that is right nine times in ten sounds like a product. A desk, though, 
 
 *Consistency.* `pass_hat_k` is the unbiased estimator of $p^k$ from $c$ successes in $n$ attempts, $\binom{c}{k}/\binom{n}{k}$. `pass_at_k` is its flattering cousin, the chance that at least one of $k$ attempts works. Two thousand simulated agents with $p = 0.7$ confirm that the average estimate of pass^5 lands near $0.7^5 = 0.168$, while 14 successes in 20 give pass@5 above 0.99. A simulated ten-step chain at 0.95 per step succeeds about 60% of the time.
 
-*Verifiers and retries.* `verified_closed_form` takes a mixture of question types, a verifier's detection power $d$, its false-reject rate $f$ and a retry limit $m$, and returns precision on accepted answers and coverage. `simulate_verified` plays the same game path by path. For an 80/20 mix of easy and hard questions, going from one try to three raises coverage from 0.83 to 0.97 and lowers precision from 0.96 to 0.95: retries buy coverage with accuracy.
+*Verifiers and retries.* `verified_closed_form` takes a mixture of question types, a verifier's detection power $d$, its false-reject rate $f$ and a limit of $m$ attempts, and returns precision on accepted answers and coverage. `simulate_verified` plays the same game path by path. For an 80/20 mix of easy and hard questions, going from one try to three raises coverage from 0.83 to 0.97 and lowers precision from 0.96 to 0.95: retries buy coverage with accuracy.
 
 *Context, replay, hurdles.* `lost_in_the_middle` is a toy U-curve in which the hit rate sinks as evidence moves to the middle of the context (roughly 0.71, 0.56, 0.72 across thirds). `frame_hash` fingerprints a table, `log_record` keys an output by a SHA-256 of prompt, model, sorted sampling parameters and timestamp, and `agreement_rate` compares two runs on `fixed`, `pct` and `page`. `expected_max_sharpe` is the luck hurdle: 0.95 for 20 trials, 1.72 for 2,000. `admissible` keeps only dates strictly after a model's cutoff.
 

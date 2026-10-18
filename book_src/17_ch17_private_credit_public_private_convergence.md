@@ -570,7 +570,7 @@ $$
 \frac{\kappa^{(B)}_i}{\mathcal{K}_i}\Big(1-e^{-\mathcal{K}_i\Delta t}\Big)=\kappa^{(B)}_i\Delta t\;g(\mathcal{K}_i\Delta t)\;\le\;\kappa^{(B)}_i\Delta t\;g(\kappa^{(B)}_i\Delta t)=1-e^{-\kappa^{(B)}_i\Delta t}.
 $$
 
-The naive number always overstates supply, and it overstates most in exactly the stressed regime where amend-and-extend and default hazards are high. A loan that gets amended into PIK this quarter cannot also be refinanced into a CLO.
+The naive number always overstates supply, and by a larger fraction in exactly the stressed regime where amend-and-extend and default hazards are high. A loan that gets amended into PIK this quarter cannot also be refinanced into a CLO.
 
 **Assumptions and estimation.** Hazards are proportional within a regime, and the exit cause is observed with a lag (announcements, not closings). Estimate each cause-specific hazard by partial likelihood, treating the other exits as censoring.
 
@@ -1022,7 +1022,7 @@ Mags's one line, it turns out, was the desk's trade. The other two cards are wor
 2. **Marking the discount.** A listed BDC trades at 0.62 of NAV with net leverage 1.25x and an estimated fee drag of 4%. Compute $m$. Then argue, without computing, whether the true markdown is higher or lower once you admit that the BDC's unsecured notes are not money-good, and say which chapter's model you would use to find out.
 3. **The bad bucket.** A BDC reports non-accruals of 3.1% at cost and 1.0% at fair value, with portfolio fair value at 97% of cost. What is the implied carrying value of its non-accrual loans? Compare it with the roughly 50-cent restructuring recoveries Octus reported in April 2026, and state which number you would put in a Chapter 14 recovery model, and why neither is a recovery.
 4. **Kaz's fix.** Kaz proposes eliminating redemption queues by raising the cap to 100%. With requests at 40% of shares and a true markdown of 8%, compute the stayers' true value per share under a 5% cap and under Kaz's 100% cap. Then explain why the 100% cap does not end the game but changes it into a classic bank run, and what Diamond and Dybvig would have told him.
-5. **Takeout season.** Using block 3, find the regime value $\zeta$ at which expected private-to-syndicated supply halves relative to $\zeta=0$. Then show that the naive supply estimate overstates the competing-risks one by more in the tight regime, and explain why that matters for a CLO-demand forecast.
+5. **Takeout season.** Using block 3, find the regime value $\zeta$ at which expected private-to-syndicated supply halves relative to $\zeta=0$. Then show that the naive supply estimate overstates the competing-risks one by a larger fraction in the tight regime, and explain why that matters for a CLO-demand forecast.
 6. **The thirteen-week model, reborn.** Take any perpetual BDC's latest 10-Q and fill in Theo's runway: cash, undrawn lines (net of any borrowing-base exclusion for PIK or non-accrual loans), the syndicated sleeve, unfunded commitments, debt maturities and trailing repayments. How many quarters of 5% redemptions can it fund? Now cut repayments by half, as in the 2022–2024 tight regime, and recompute. Write down what the credit agreement says about the borrowing base before you trust either number.
 
 ### Deep-Dive Resource Graph (Chapter 17)

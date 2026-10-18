@@ -16,8 +16,6 @@ Down the table the denominator falls from 37.5 to 23.8 to 13.1, so $n$ rises. Th
 
 **The trap:** Answering "ROBO sells 61%." That is the cut in the weight, mistaken for a trade. An investor who bought and held would see the weight fall further, to 3.7% of a NAV of 81.1, so measured against doing nothing ROBO is a buyer. It is a seller only against a constant-weight book, which would still hold 21.7%. That comparison is the one the committee sentence should make.
 
-NOTE (for the editor): §23.1 says that at $V = 75$ the overlay "is selling hard into a stock whose only news is arithmetic." With $\sigma_V$ held constant, as both the scene and this exercise stipulate, it never sells a share. Dollar vol per share, $\sigma_V V N(d_1)$, falls from \$37.5 to \$13.1, so shares per \$100 of risk capital rise from 0.267 to 0.763. What falls is the *weight*, from 21.7% to 8.5%, which leaves it 13 points underweight a constant-weight book. It sells shares only if $\sigma_V$ itself rises. Suggest "trims its weight" or "runs underweight" in the scene, or let asset vol rise there. The table's figures (46%, 73%, 117%; $E$ = 82.1, 32.6, 11.2) and Figure 23.2's 626bp all check.
-
 **If you got this wrong, read:** §23.1, "The Merton identity" (23.1) and "Sliding the assets down the table."
 
 **Z.23.2: Chase the ghost**
@@ -111,7 +109,7 @@ So CreditGrades tells Kaz that the AT1 at 40 is cheap, whatever recovery is type
 | CDS: sold protection | | −\$206k | |
 | **CDS leg** | | | **−\$323k** |
 
-The only line with a plus sign is the convertible's long gamma. For Wolfspeed, the first flag you can date from public data is **the convertible floor**, on by 28 March 2025 at the latest: the 2026s near 60 against a secured-curve floor of about 87. $z$ at \$2.59 comes out at about $-0.43$ to $-0.46$, which is inside Yu's lowest threshold and points the wrong way (buy the stock). The put floor cannot be rebuilt from free data.
+The only line with a plus sign is the convertible's long gamma. For Wolfspeed, the first flag you can date from public data is **the convertible floor**, on by 28 March 2025 at the latest, on a secondary report: the 2026s near 60 against a secured-curve floor of about 87. $z$ at \$2.59 comes out at about $-0.39$ to $-0.42$, which is inside Yu's lowest threshold and points the wrong way (buy the stock). These are single dated points under stated assumptions, not series: no free bond-price, CDS or option-surface history for Wolfspeed was found, so the put floor cannot be rebuilt.
 
 **How:** The setup is Listing 23.3's \$30 name: $\sigma_E = 40\%$, $F^{\text{ps}} = \$30$, $R = 40\%$, $r = 3\%$, $T = 5$. That gives a CG spread of 161bp and $ds/dS = -4.96$bp per \$. The convertible is assumed: \$10mm face, a 2% coupon, and a bond floor of 88.24 at 161bp ($D^{\text{spr}} = 4.77$). The calls are on 266,667 shares struck at \$37.50, a 25% conversion premium, worth \$9.65 each with a delta of 0.643. The convertible's hedge is short $171{,}362 + 20{,}858$ shares. The second number is the bond's credit delta, $-D^{\text{spr}} B\, ds/dS$. `cg_greeks` puts the CDS hedge at short 21,589 shares, with an RPV01 of 4.35.
 
@@ -122,14 +120,12 @@ In §23.6's decomposition, the CDS leg is convergence of −\$103k on day 1 (the
 *Wolfspeed:*
 
 - Debt per share is $6{,}658.2/156.48 = \$42.5$ (10-K stack, old shares).
-- Convert floor: the 2026s' cash flows discounted at the secured notes' yield (16.4% at 85) give about 87, against a market near 60.
-- CG with $\sigma_E$ at 80–120% and $R = 27\%$ (the plan range): at the January ATM price of \$7.20 it already shows a 25% ghost and 3,600–4,900bp at 1 year. At \$2.59 the ghost is 55% and the 1-year spread 9,100–9,600bp.
-- The converts at 60 imply about 5,200bp, so $z \approx -0.43$ to $-0.46$.
+- Convert floor (assumed: a 1 May 2026 maturity, and the secured notes' 10-K mark of 85 on 29 June, a yield of 16.4%, standing in for the March curve): the 2026s' cash flows give about 87, against a market near 60 around 28 March (a secondary report).
+- CG with $\sigma_E$ assumed at 80–120% and $R$ assumed at 27% (inside the plan's 25–30% range for the converts): at the January ATM price of \$7.20 it already shows a 25% ghost and 3,700–5,100bp at 1 year. At \$2.59 the ghost is 55% and the 1-year spread 9,400–10,000bp (8,700–9,200bp at the converts' own 1.09-year tenor).
+- The converts at 60 imply about 5,300bp (flat hazard to maturity, $R = 27\%$), so $z \approx -0.39$ to $-0.42$ at the same tenor.
 - The put floor needs OPRA history. Borrow would distort it as well: short interest was quoted at 64% in May 2025.
 
 **The trap:** Letting the market spread follow the model on day 1. Do that and the CDS leg loses only its \$13k of stock-space gamma and the convertible looks hedged. May 2005's whole lesson is that the market spread did not follow the model. On Wolfspeed, the trap is trusting $z$ at $S/F^{\text{ps}} = 0.06$, far inside the zone where Z.23.2 shows the time-zero ghost dominates the spread.
-
-NOTE (for the editor): The Wolfspeed half cannot be built as *series* from what the book cites. The research dossier (`case_carvana_svb_wolfspeed_capital_structure.md` §3.3) records no TRACE series, no CDS and no option surface. The only datable convert points are "near 60" around 28 March 2025 (secondary, tagged CHECK) and 26% of principal on 29 June (10-K). The same secondary source gives the stock at \$2.70 on that day, against the chapter's \$2.59. The solution therefore gives the method and the datable points, and labels its $\sigma_E$ and recovery inputs as assumptions.
 
 **If you got this wrong, read:** §23.5 (the Natenberg map, (23.10), and Theo's whiteboard on JTD); §23.6, the P&L decomposition and "The Tape, and the Cards Graded"; §23.7, the Wolfspeed case note.
 

@@ -691,7 +691,7 @@ Here is the whole sequence the CourtListener `type=rd` query returns for the cas
 | 2023-03-01 | 389 | Ad Hoc Priority Lender Group | Amended verified statement |
 | 2023-06-21 | 1116 | Ad Hoc Priority Lender Group | Second amended verified statement |
 
-The table is what the classifier has to rank by class: the utilities' and the equity group's statements are valid Rule 2019 filings, and only three of the seven rows move a term-loan recovery.
+The table is what the classifier has to rank by class: the utilities' and the equity group's statements are valid Rule 2019 filings, and only four of the seven rows move a term-loan recovery.
 
 Huang, Lewellen & Wang, *Creditor Coalitions in Bankruptcy* (SSRN 4854111; HLS Bankruptcy Roundtable, Feb 11, 2025) is what turns this feed from a who's-who into a return predictor. Working from Chapter 11 filings, "especially Rule 2019 disclosures," they find coalitions are more likely in large classes with dispersed ownership and illiquid debt, and that "coalition announcements are associated with increased bond prices," with significant positive returns across creditor classes. (Sample sizes and magnitudes are not reproduced here pending the paper's own tables.)
 

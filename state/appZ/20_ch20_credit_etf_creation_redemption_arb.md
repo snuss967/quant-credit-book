@@ -32,8 +32,6 @@ Flow noise is independent of true returns, so it never enters the covariance. It
 
 **The trap:** Treating the slope as $\eta$ and stopping there. The wobbling ruler always flattens the slope and never steepens it, so $\hat\eta$ is a lower bound on how fast the NAV catches up, not an estimate of it. The subtler trap is to think the only alternative is "noisy ETF". A very *fresh* NAV also gives a small slope, because there is little staleness for the premium to carry.
 
-NOTE (for the editor): The display just above (20.3) reads $\Delta \ln \text{NAV}_t = \Delta \ln \tilde M_t - \Delta \ln(1 - \bar c_t)$. Since $\text{NAV}_t = \tilde M_t(1 - \bar c_t)$, the sign should be $+\Delta\ln(1-\bar c_t)$. With the printed sign, widening spreads would *raise* NAV returns. The last paragraph of §20.2.2 calls "$-\Delta \ln(1 - \bar c_t)$" a "negative drag", which is true only of $+\Delta\ln(1-\bar c_t)$. The economics is right and the sign is wrong in both places. (20.3) itself is unaffected, because it assumes a constant $\bar c$.
-
 **If you got this wrong, read:** §20.2.2 (the Math, Gently box "A ruler with a wobbling zero" and the attenuation formula), then §20.2.1 for (20.2), and Block 2 of Listing 20.1 (`nav_catchup`).
 
 **Z.20.3: The departing AP**
@@ -71,8 +69,6 @@ $$
 which matches a brute-force re-solve to $10^{-17}$. Drop $\arg\min_i \Delta J_i$ while it is below $\chi$, and drop any line the re-solve pushes negative. Two features of the score do the work. It is quadratic in $w_i^*$, so a line at the pro rata weight $\sim 1/N$ is worth $O(1/N^2)$ in tracking, while it costs a full $\chi$. And $1/q_i$ is the line's variance *conditional on the rest*, so a bond with close substitutes is cheap to drop and an idiosyncratic one is expensive. To see the scaling, we extended Listing 20.1's Block 4 to $N$ bonds, with lognormal index weights, 5% of lines axed and $\theta$ scaled with $N$. With $\chi = 0$ the $w \ge 0$ corners keep about 80% of lines at every $N$. At $\chi = 0.05$–$0.5$ bp per line, a 1,300-bond fund keeps 11–26% of its lines, which still carry 35–58% of the index weight and most of the axes. Redemptions add the fund's shadow value $\ell_i$ to the gaps, so they have more lines with big tilts than creations do, which is why redemption coverage runs above creation coverage (about 20% against 10% in Shim–Todorov).
 
 **The trap:** Relaxing $\ell_0$ to $\ell_1$, as in a lasso. On the budget simplex, $\sum_i |w_i| = \mathbf{1}^\top w = 1$ for every feasible basket, so the $\ell_1$ penalty is a constant and selects nothing. The other trap is dropping lines by smallest *weight* rather than by $\Delta J_i$: a small, idiosyncratic line can cost more to drop than a larger one with close substitutes.
-
-NOTE (for the editor): §20.4.3 says "the fractional baskets in the data are the corner solutions of this problem." Listing 20.1's own Block 4 prints `basket coverage 92%` at the $w \ge 0$ corners, and our scaled runs give about 80% at $\chi = 0$. The 10–35% in the data needs the per-line cost of this exercise as well. Suggest "partly the corner solutions of this problem, and partly a fixed cost per line (Exercise 4)."
 
 **If you got this wrong, read:** §20.4.3 (the Math, Gently box "Pegs on springs inside a rubber band", (20.6)–(20.7) and the derivation's remark on $w \ge 0$), §20.4.2 for the coverage ratios, and Block 4 of Listing 20.1 (`basket_qp`), which this exercise extends.
 

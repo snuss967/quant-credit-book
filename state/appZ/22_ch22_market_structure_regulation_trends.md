@@ -42,8 +42,6 @@ The inventory term $\gamma\sigma^2 Q T_u/6$ cancels, so the neutral point is $Q 
 
 **The trap:** The common wrong answer is "the cap always helps the dealer, because hiding size is good", or a neutral point at $Q = C$. The cap does not hide size. It replaces it with the pool's average, and the average is \$12.5mm, which is bigger than most capped trades. A \$6mm ticket is being priced as if it were twice its size.
 
-NOTE (for the editor): In the §22.2.3 Poker Table, Ines says "nobody at this table will ever vote to *lower* the cap." Under (22.7) with $\alpha$ fixed, lowering the cap *helps* her \$15mm block: a \$3mm cap gives $mC = \$7.5$mm and a subsidy of $0.5 \times 7.5 \times 0.875 = 3.28$bp, against 1.09bp at \$5mm. Raising the cap is what hurts it: at \$10mm, $mC = \$25$mm and the block pays a 4.38bp tax. "Raise" or "lift" looks like the intended word.
-
 **If you got this wrong, read:** §22.2.2 (eq. 22.7 and the pooling paragraph), with (22.6) from §22.2.1; Beat 3 of §22.2.3 for the 2019 pilot.
 
 **Z.22.3: Negative specials**

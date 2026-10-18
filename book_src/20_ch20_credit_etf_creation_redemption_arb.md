@@ -167,7 +167,7 @@ The boundary cases check out. At $\eta = 1$ the evaluator is perfectly fresh and
 Equation (20.2) has a testable implication. The NAV's own log return is
 
 $$
-\Delta \ln \text{NAV}_t = \Delta \ln \tilde M_t - \Delta \ln(1 - \bar c_t) = \eta\,\left(s_{t-1} + r_t\right) - \Delta \ln(1 - \bar c_t).
+\Delta \ln \text{NAV}_t = \Delta \ln \tilde M_t + \Delta \ln(1 - \bar c_t) = \eta\,\left(s_{t-1} + r_t\right) + \Delta \ln(1 - \bar c_t).
 $$
 
 Suppose the flow term is small ($\ell_t \approx 0$) and the spread is stable ($\bar c_t \approx \bar c$). Then (20.1) gives $s_{t-1} = p_{t-1} - \bar c$, and
@@ -190,7 +190,7 @@ $$
 
 $\eta$ times the staleness share of premium variance. A small slope can mean a fresh NAV or a noisy ETF, and only a second instrument (the ETF's own lagged returns, or a matched fund) can tell which.
 
-The spread itself is the other thing hiding in the regression. $\bar c_t$ is not constant in stress: spreads widen, so $-\Delta \ln(1 - \bar c_t)$ becomes a negative drag on NAV returns in exactly the weeks when everyone most wants the estimate. That is why the desk estimates $\eta$ on calm windows and then asks, as a separate question, whether it falls in stress.
+The spread itself is the other thing hiding in the regression. $\bar c_t$ is not constant in stress: spreads widen, so $+\Delta \ln(1 - \bar c_t)$ becomes a negative drag on NAV returns in exactly the weeks when everyone most wants the estimate. That is why the desk estimates $\eta$ on calm windows and then asks, as a separate question, whether it falls in stress.
 
 ### 20.2.3 The three readings of a discount
 
@@ -374,7 +374,7 @@ $$
 w = h - \frac{1}{\theta}\, \Sigma^{-1} \left(k - \mu \mathbf{1}\right).
 $$
 
-Impose the budget constraint. Because $\mathbf{1}^\top h = 1$, we need $\mathbf{1}^\top \Sigma^{-1}(k - \mu \mathbf{1}) = 0$, which pins down the multiplier at $\mu^*$ and gives (20.6). The boundary cases are sensible. As $\theta \to \infty$ (tracking is all that matters), $w^* \to h$, the pro rata basket. As $\theta \to 0$, the tilts grow without bound, and the nonnegativity constraint $w \ge 0$, which (20.6) ignores, takes over. The fractional baskets in the data are the corner solutions of this problem.
+Impose the budget constraint. Because $\mathbf{1}^\top h = 1$, we need $\mathbf{1}^\top \Sigma^{-1}(k - \mu \mathbf{1}) = 0$, which pins down the multiplier at $\mu^*$ and gives (20.6). The boundary cases are sensible. As $\theta \to \infty$ (tracking is all that matters), $w^* \to h$, the pro rata basket. As $\theta \to 0$, the tilts grow without bound, and the nonnegativity constraint $w \ge 0$, which (20.6) ignores, takes over. Corner solutions are fractional baskets, but how fractional depends on $\theta$: at the tracking aversion of Listing 20.1's Block 4 ($\theta = 50$) the basket still covers 92% of its lines, so reaching the 10–35% in the data takes a much smaller $\theta$ or a fixed cost per line (Exercise 4).
 
 To value the freedom, substitute $w^*$ into $J$. The linear term saves $k^\top (h - w^*) = \frac{1}{\theta} k^\top \Sigma^{-1}(k - \mu^* \mathbf{1})$. Because $\mathbf{1}^\top \Sigma^{-1}(k - \mu^* \mathbf{1}) = 0$, we may subtract $\mu^* \mathbf{1}^\top$ inside, which turns that saving into $\frac{1}{\theta}\mathcal{D}$, with $\mathcal{D}$ as defined above. The tracking cost at the optimum is $\frac{\theta}{2} \cdot \frac{1}{\theta^2}\mathcal{D} = \frac{1}{2\theta}\mathcal{D}$. The saving less the tracking cost is (20.7).
 
