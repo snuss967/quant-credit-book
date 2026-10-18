@@ -651,3 +651,487 @@ assert (0.128 - 0.10 * 0.70) > (0.084 - 0.06 * 0.55) and f_oct < 0.6 * f_jan
 ```
 
 Edge cases ROBO must handle: an edge of exactly zero returns zero, not a division by zero; `lam = 0` falls back to the diffusion fraction and is the only case where the ruin boundary does not apply; a Beta recovery with $a < 1$ or $b < 1$ has an unbounded density at an endpoint, which `quad` integrates but slowly, so the spec requires $a, b \ge 1$ for production fits; and every output fraction is a fraction of NAV *before* the cluster cap, the fractional multiplier and the leverage band of §28.7 are applied, in that order.
+
+## 28.5 LVaR, Days-to-Liquidate and the 5× Problem
+
+The risk officer marks to bid. Theo thinks this is a technicality until Ines explains what it does to his P&L on the day the bid moves. A long bond marked at the bid loses money when the bid-ask widens, whether or not anything has happened to the issuer. A short bond marked at the offer loses money too. On a gross book the bid-ask is a short volatility position, and it is short exactly the volatility that arrives with every stress.
+
+> **[SOURCE EXTRACTION]** *Ben_Dor_Quantitative_Credit_Portfolio_Management p.112:* "We define LCS as the bond's OASD multiplied by this spread. Consequently, a bond's LCS can be interpreted as the cost, in percentage points, of immediately executing a roundtrip transaction." … "Over this time period, the LCS for the IG Index ranged from 0.59% to 3.40%."
+>
+> **Annotation.** The period is January 2007 to June 2009, and the move from 0.59% (January 2007) to 3.40% (November 2008) is a 5.8× widening of the round-trip cost of the US IG index. The same page notes that the index's LCS had already doubled between June and September 2007, more than a year before Lehman, and the next page that the HY-minus-IG gap went from about 40 bp to more than 400 bp. So "bid-ask widens 5×" is not a stress scenario somebody made up for a risk committee. It is the 2007–2008 base case for investment grade, and HY was worse. The modern departure is speed: in March 2020 IG costs roughly tripled in three weeks (below), and in March 2026 EUR IG spreads rose 64% above their January average in days. The multiplier is a parameter, and it has to sit inside the sizing before the stress, because afterwards it sits inside the P&L.
+
+### From Bangia's LVaR to a credit LVaR
+
+Bangia, Diebold, Schuermann and Stroughair (1998/99, *Modeling Liquidity Risk, With Implications for Traditional Market Risk Measurement and Management*) add the cost of liquidation to parametric VaR. For a position of value $P$ with daily log-return volatility $\sigma$,
+
+$$
+\text{VaR} = P\left[1 - e^{-2.33\,\sigma}\right], \qquad \text{COL} = \tfrac12 P\left(\bar S + a\,\tilde\sigma\right), \qquad \text{LVaR} = \text{VaR} + \text{COL}, \tag{28.15}
+$$
+
+where $S = (\text{Ask} - \text{Bid})/\text{Mid}$ is the relative spread, $\bar S$ and $\tilde\sigma$ are its mean and volatility, and the multiplier $a$ "ranges from 2.0 to 4.5 depending on the instrument" (they measured 2.5 for JPY and 3.5 for THB in 1997–98). The factor $\tfrac12$ is there because liquidating at the bid costs half the bid-ask. Two translations make it a credit formula.
+
+First, for a spread-quoted bond the relative bid-ask in price terms *is* the LCS, so $\text{COL}_i = \tfrac12 |\text{MV}_i| \cdot \text{LCS}_i^{\text{stress}}$, and shorts pay at the offer just as longs pay at the bid. Second, the $\bar S + a\tilde\sigma$ form does not reach 5× in practice. To get from 0.59% to 3.40% you need $a\tilde\sigma = 2.81$ points; a calm-window $\tilde\sigma$ of 0.10–0.20 points *(illustrative)* would need $a$ between 14 and 28, four to ten times Bangia's FX range. Credit liquidity does not wiggle around a mean. It jumps between regimes. So the desk carries a multiplicative stress factor $m$ instead:
+
+$$
+\text{COL}_i^{\text{exo}} = \tfrac12\, m\, \overline{\text{LCS}}_i\, |\text{MV}_i|, \qquad m \in \{1.64,\ 3,\ 5.8,\ 6\},
+$$
+
+with the menu calibrated to EUR IG in March 2026 (+64%), IG costs in March 2020 (about 3×), the IG index in 2007–2008 (5.8×), and IG blocks in March 2020 (more than 6×), all sourced in this section.
+
+Bangia's model covers only *exogenous* liquidity, the market-wide spread. The *endogenous* part is that your own size moves the price. Man's modelled HY transaction costs by ticket size, \$1mm to \$20mm, span roughly 0.5% to 4.0% of price over 2004–2021 (Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.22, read from a chart), so the cost of a ticket is a function of the ticket. We use the simplest form that respects that evidence:
+
+$$
+\text{COL}_i = \tfrac12\, m\, \overline{\text{LCS}}_i\, |\text{MV}_i| \left(1 + \eta \sqrt{\frac{|\text{MV}_i|}{\text{ADV}_i}}\right), \tag{28.16}
+$$
+
+with $\eta$ fitted to the desk's own markouts by ticket size *(functional form illustrative)*. Because (28.16) grows faster than linearly in position size, the liquidity cost of the whole book grows faster than linearly in leverage, and that is what turns the leverage ceiling of §28.7 into a fixed point.
+
+### Days-to-liquidate, and the regulatory clocks
+
+A position of $q_i$ dollars in a bond that trades $\text{ADV}_i$ a day, sold at a participation rate $\pi$, takes
+
+$$
+T_i = \frac{q_i}{\pi\,\text{ADV}_i} \tag{28.17}
+$$
+
+days to exit. Paleologo's example (p.126) is a position of two days' volume at 4% participation: 50 days. For a HY bond that trades \$5mm a day, a \$25mm position at 10% participation is also 50 days *(illustrative)*, which is to say most of a quarter. VaR over a liquidation horizon scales the one-day risk by roughly $\sqrt{T_i}$, and the Basel FRTB rules make that scaling explicit. With base horizon $T = 10$ days and liquidity horizons $LH_j \in \{10, 20, 40, 60, 120\}$, the liquidity-adjusted expected shortfall is
+
+$$
+\text{ES} = \sqrt{\text{ES}_T(P)^2 + \sum_{j \ge 2}\left(\text{ES}_T(P, j)\sqrt{\frac{LH_j - LH_{j-1}}{T}}\right)^2}, \tag{28.18}
+$$
+
+where $\text{ES}_T(P, j)$ is the 10-day ES from shocking only the risk factors with horizon at least $LH_j$ (Basel Framework MAR33.4; horizons in MAR33.12). A book whose risk is all HY corporate spread (60 days) has $\text{ES} = \text{ES}_T\sqrt{1 + 1 + 2 + 2} = \text{ES}_T\sqrt{6} = \text{ES}_T\sqrt{60/10}$, which is the square-root-of-time rule recovered as a sanity check. For a registered fund, the clock is SEC Rule 22e-4: "highly liquid" means convertible to cash within three business days, "illiquid" means not reasonably expected to be sold in seven calendar days without significantly changing the market value, and illiquid holdings are capped at 15% of net assets.
+
+Which bonds do you sell first? Ben Dor's answer is counterintuitive.
+
+> **[SOURCE EXTRACTION]** *Ben_Dor_Quantitative_Credit_Portfolio_Management p.112:* "a strategy of selling illiquid bonds at the beginning of a liquidity crisis may be more productive than selling liquid bonds first."
+>
+> **Annotation.** The logic is the cost of waiting. If the LCS of the illiquid bucket widens faster as the crisis deepens, every day you hold it raises its exit cost, so you sell it while the bid exists. In March 2020 most investors did the opposite and sold their most liquid bonds first (O'Hara and Zhou, 2021, *Anatomy of a Liquidity Crisis: Corporate Bonds in the COVID-19 Crisis*, *Journal of Financial Economics*), because that was where the bids were. For a fund with redeemable shares the choice has a second edge: selling liquid bonds first to meet early redemptions leaves the illiquid ones for the investors who stay, which rewards running. That is the next case.
+
+### Case Study: Third Avenue Focused Credit Fund, December 2015
+
+The facts are from the SEC's temporary order (Investment Company Act Release No. 31943, 16 December 2015). The Focused Credit Fund had "\$1.1 billion in estimated net outflows for the year to date through December 9, 2015, which was more than 145% of its remaining net asset value at that date," which puts the remaining NAV near \$0.75bn. Net redemptions in November alone were \$317mm, and the institutional NAV per share fell from \$7.81 to \$7.08 that month. By early December the fund had raised cash to "over \$200 million." On 9 December its board adopted a plan of liquidation, sales of shares were suspended from 10 December, and the SEC's order under §22(e)(3) permitted the suspension of redemptions. The SEC noted that institutional holders would otherwise have redeemed first, to the detriment of retail investors. The unwind took roughly a year.
+
+Now run Theo's 13-week model on the *fund*. Cash of about \$200mm against a burn of about \$73mm a week (\$317mm over November's 4.3 weeks) is a runway of about 2.7 weeks. In the RSSG seat, a borrower with under one quarter of liquidity runway is a going-concern question and a first-day-of-engagement conversation. The fund was the borrower, its redemptions were the debt service, and its portfolio of distressed and stressed bonds was the collateral that could not be sold at the mark in seven calendar days. A systematic desk would have flagged it from public data: a fund-level runway under 13 weeks, a high share of tier-2 holdings, NAV falling while outflows accelerated, and a liquidation cost under (28.16) that was a large fraction of NAV. It would then have done two things. It would not have bought what the fund was certain to sell until the fund had sold it, and it would have been ready with capacity to provide liquidity after the gate, when the price of immediacy was highest and the information content of the selling was lowest (forced, not informed). Ines calls this "the only hand where you know the other player has to fold."
+
+The 13-week model, it turns out, was never about the borrower. It was about the gap between when cash leaves and when assets can be sold, and every leveraged book has that gap.
+
+### Specification for AI Implementation (Block 4): LVaR, Days-to-Liquidate and Runway
+
+What ROBO built from the vague version ("compute liquidity risk"): the average bid-ask over the last year, times the book. It reported \$4mm. The stressed figure was \$23mm *(illustrative)*, and ROBO's comment field read "liquidity is fine on average."
+
+```python
+# --- Block 4: LVaR, days-to-liquidate, FRTB scaling, runway ---------------------
+STRESS_MULTIPLIERS = {"eur_ig_mar2026": 1.64, "ig_costs_mar2020": 3.0,
+                      "ig_index_2007_08": 3.40 / 0.59, "ig_blocks_mar2020": 6.0}
+FRTB_LH = np.array([10, 20, 40, 60, 120])                 # MAR33.12 liquidity horizons, days
+
+
+def parametric_var(value, sigma_1d, z=2.33):
+    """Bangia eq. (3): P [1 - exp(-z sigma)]."""
+    return value * (1.0 - np.exp(-z * sigma_1d))
+
+
+def bangia_col(value, spread_mean, spread_sd, a):
+    """Bangia eq. (4): 0.5 P (S_bar + a sigma_S). Spreads are relative (fraction of mid)."""
+    return 0.5 * value * (spread_mean + a * spread_sd)
+
+
+def credit_col(mv, lcs_mean, adv, mult=1.0, eta=0.0):
+    """Eq. (28.16): exogenous stress multiple times an endogenous size term. Longs AND shorts pay."""
+    mv = np.abs(np.asarray(mv, dtype=float))
+    adv = np.maximum(np.asarray(adv, dtype=float), 1.0)          # guard: no zero-ADV division
+    return 0.5 * mult * np.asarray(lcs_mean) * mv * (1.0 + eta * np.sqrt(mv / adv))
+
+
+def days_to_liquidate(position, adv, participation):
+    """Eq. (28.17)."""
+    if participation <= 0.0:
+        raise ValueError("participation must be positive")
+    return np.abs(position) / (participation * np.maximum(adv, 1.0))
+
+
+def frtb_liquidity_es(es_by_bucket, horizons=FRTB_LH, base=10):
+    """Eq. (28.18). es_by_bucket[j] = 10-day ES shocking factors with LH >= horizons[j]."""
+    es = np.asarray(es_by_bucket, dtype=float)
+    widths = np.diff(horizons)
+    return float(np.sqrt(es[0] ** 2 + np.sum((es[1:] * np.sqrt(widths / base)) ** 2)))
+
+
+def runway_weeks(cash, liquid_sleeve, weekly_burn, haircut=0.0):
+    """Theo's 13-week model, pointed at the fund: (cash + haircut liquid sleeve) / burn."""
+    if weekly_burn <= 0.0:
+        return np.inf
+    return (cash + (1.0 - haircut) * liquid_sleeve) / weekly_burn
+
+
+# Paleologo's example: two days of volume at 4% participation takes 50 days
+assert abs(days_to_liquidate(2.0, 1.0, 0.04) - 50.0) < 1e-12
+# FRTB: all risk in HY corporate spread (LH 60) recovers sqrt(60 / 10)
+assert abs(frtb_liquidity_es([1, 1, 1, 1, 0]) - np.sqrt(6.0)) < 1e-12
+assert abs(frtb_liquidity_es([1, 0, 0, 0, 0]) - 1.0) < 1e-12
+# Bangia's a-sigma form cannot reach the 2008 multiple with a calm-window sigma
+implied_a = (3.40 - 0.59) / 0.15                              # sigma_S = 0.15 points (illustrative)
+assert implied_a > 4.5 * 3
+# The 5x problem on a $2bn gross IG book at 0.6% LCS
+col_calm = credit_col([2e9], [0.006], [1e12])[0]
+col_2008 = credit_col([2e9], [0.006], [1e12], mult=STRESS_MULTIPLIERS["ig_index_2007_08"])[0]
+assert abs(col_calm - 6e6) < 1.0 and abs(col_2008 / col_calm - 3.40 / 0.59) < 1e-12
+# Endogenous size term: cost per dollar rises with size
+small = credit_col([5e6], [0.01], [5e6], eta=0.5)[0] / 5e6
+large = credit_col([25e6], [0.01], [5e6], eta=0.5)[0] / 25e6
+assert large > small
+# Third Avenue, December 2015: about 2.7 weeks of runway, far inside 13
+ta_runway = runway_weeks(cash=200e6, liquid_sleeve=0.0, weekly_burn=317e6 / (30 / 7))
+assert 2.5 < ta_runway < 3.0 and ta_runway < 13.0
+```
+
+Edge cases: zero ADV (a bond that has not traded in the window) is floored at \$1 so the size term is enormous rather than infinite, which is the right sign; a negative weekly burn (net inflows) gives infinite runway; and `credit_col` deliberately takes absolute values, because a short pays the offer just as a long pays the bid.
+
+## 28.6 Drawdown Control: The Two-Threshold Rule, the PM Option and Marking to Bid
+
+The platforms' drawdown rule, as commonly reported, is two numbers: lose 5% of allocated capital and your capital is halved; lose another 2.5% and you are out (WSJ via eFinancialCareers, 5 December 2025; the firm did not comment). Theo's four PMs know the rule better than they know their own positions. The desk head's job is to understand what the rule is for, what it costs, and how a credit book can trip it without anything going wrong.
+
+> **[SOURCE EXTRACTION]** *Paleologo_Advanced_Portfolio_Management p.164:* "Stop-loss rules are a partial hedge for the PM call option. … it is in the interest of the manager to run with the highest possible volatility, independently of her skill."
+>
+> **Annotation.** A PM paid a fraction $\varphi$ of positive annual P&L $\Pi$ holds a call. If $\Pi \sim N(\mu, \sigma^2)$, the payout is worth $\varphi\left[\mu\,\Phi(\mu/\sigma) + \sigma\,\phi(\mu/\sigma)\right]$, and its derivative with respect to $\sigma$ is $\varphi\,\phi(\mu/\sigma) > 0$ for every $\mu$, skilled or not. The stop-loss caps how much volatility the PM can harvest before the option is taken away. In credit there is a second, sneakier volatility: concentration in names with jump-to-default. A PM can sell default insurance, collect carry for three years, and look like a low-volatility genius until the jump. The stop-loss does not hedge that, because the jump arrives in one print. The Kelly cluster bound of §28.4 does.
+
+### Setting the stop with drift
+
+Model the PM's cumulative P&L as a fraction of allocated capital, $X_t = \mu t + \sigma W_t$ with $\mu = \text{SR}\cdot\sigma$. The probability of touching $-x$ before time $T$ is the classical first-passage result for Brownian motion with drift,
+
+$$
+\Pr\left(\min_{t \le T} X_t \le -x\right) = \Phi\!\left(\frac{-x - \mu T}{\sigma\sqrt{T}}\right) + e^{-2\mu x/\sigma^2}\,\Phi\!\left(\frac{-x + \mu T}{\sigma\sqrt{T}}\right), \tag{28.19}
+$$
+
+and as $T \to \infty$ the lifetime probability is $e^{-2\mu x/\sigma^2} = e^{-2\,\text{SR}\,x/\sigma}$. Inverting gives the stop that a desk head would set for a target lifetime stop-out probability $P$:
+
+$$
+x = \frac{\sigma\,\ln(1/P)}{2\,\text{SR}}. \tag{28.20}
+$$
+
+A PM running 6% volatility with a Sharpe of 1, held to a 10% lifetime stop-out probability, gets $x = 0.06 \times 2.303/2 = 6.9\%$, close to the reported 7.5%. At 7.5%, the lifetime probability is $e^{-2.5} = 8.2\%$, and the one-year probability from (28.19) is about 4.5%. A PM with a Sharpe of 0.5 at the same volatility and stop faces a lifetime probability of $e^{-1.25} = 29\%$. The rule is the same for both, and its price is not.
+
+> **[SOURCE EXTRACTION]** *Paleologo_Advanced_Portfolio_Management p.167:* "a two-threshold one (cut capital in half when loss reaches (x/2)%, and liquidate at x% loss). To approximate heavy-tailed returns … returns distribution in the simulation is not Gaussian, but a Student with 6 degrees of freedom." … "The price of safety is higher for lower-Sharpe PMs than higher-Sharpe ones."
+>
+> **Annotation.** This is the platform rule, simulated. Because the cuts are decided on past P&L and returns are independent of the past, expected P&L under the rule is exactly $\mu$ times expected capital-time, so the price of safety is $\mu$ times the capital-time the rule takes away. Low-Sharpe PMs lose more capital-time, because they hit the first threshold more often. Paleologo's companion line (p.166) is the one to read aloud at the risk committee: "Stop-loss exists to ensure survival of a firm, not to improve the performance of a strategy. There is a price to pay." Block 5 reproduces the simulation and its ranking.
+
+Two credit-specific notes on the rule. First, Grossman and Zhou (1993, *Optimal Investment Strategies for Controlling Drawdowns*) show that the smooth version of the rule keeps exposure proportional to the cushion above the drawdown floor, $\text{exposure}_t = k\,(X_t - (1-x)M_t)$ with $M_t$ the running maximum, which never breaches the floor in continuous time. The two-threshold rule is a two-step approximation of that policy, and it is the approximation the platforms can audit. Second, do not use ratings as stop-losses. Dynkin et al. find that rating-based stop-loss rules "lead to lower portfolio returns" at every threshold they test, with risk reductions much smaller than the returns given up, because downgraded bonds tend to outperform their new rating peers (Dynkin p.419). Use rating as an entry rule, not an exit rule.
+
+### The stop-loss you don't know you have
+
+Paleologo writes (p.163) that "there is the stop-loss that you have, and the one you don't know you have." In credit, the one you don't know you have is the mark. Let a book with gross leverage $G$ be marked to bid on longs and offer on shorts, with average round-trip cost $\overline{\text{LCS}}$. When the bid-ask widens by a factor $m$, the marks move by half the change, and the drawdown in NAV, with no change in any issuer, is
+
+$$
+\Delta^{\text{mark}} = \tfrac12\,(m - 1)\,\overline{\text{LCS}}\;G. \tag{28.21}
+$$
+
+Theo's desk: $\overline{\text{LCS}} = 0.6\%$, $G = 5$, and the 2007–2008 multiple $m = 5.8$ give $\Delta^{\text{mark}} = 0.5 \times 4.8 \times 0.006 \times 5 = 7.2\%$ of NAV. That is through the 5% cut and within 30 bp of the 7.5% exit, from marks alone. The effective stop is $x - \Delta^{\text{mark}}$. If it is not budgeted before the stress, the rule fires at the bottom, on the day the price of immediacy is highest, and forces the desk to sell to the people who budgeted for it.
+
+> **[SOURCE EXTRACTION]** *BlackRock_Systematic_High_Yield_Credit p.5:* "these managers gave up more excess return in subsequent "Very Positive" regimes than was mitigated on the downside during "Very Negative""
+>
+> **Annotation.** BlackRock's sample covers the 2013 taper tantrum, 2018, 2020 and 2022, and its finding is that the defensive HY managers who de-risked on the way down lost more on the rebound than they saved. A forced de-risking caused by marks is the worst version of this, because it sells for a reason unrelated to the forecast. Blackstone's systematic credit description states the mirror image: "When credit spreads widen aggressively (often due to market panic rather than fundamental deterioration), the model algorithmically increases credit exposure" (Blackstone_Systematic_Credit p.1). That is possible only for a book whose drawdown budget survived the marks.
+
+### Case Study: March 2020 and March 2026
+
+*March 2020.* The Fed's own retrospective (Sharpe and Zhou, FEDS Notes, 7 October 2020) has IG transaction costs rising from about 30 bp in February to nearly 90 bp in mid-March, IG block-trade costs from 24 bp to over 150 bp by 23 March, and bond mutual fund outflows above \$250bn in March, about 5% of assets. Kargar et al. (NBER WP 27355; *Review of Financial Studies* 2021) estimate that customers' willingness to pay for immediacy rose by about 200 bp per dollar traded at the peak. On 23 March the Fed announced the Secondary Market Corporate Credit Facility. Treat the block-cost numbers as round-trip LCS *(an assumption)*, and (28.21) puts the mark-to-bid hit on a 5× IG book at $\tfrac12 \times (1.50\% - 0.24\%) \times 5 = 3.2\%$ of NAV, two-thirds of the way to the first threshold with no default anywhere. A desk whose rule ignored the marks was cut in the week the Fed announced it would buy. A desk that had budgeted (28.21) kept its gross, and was among the buyers.
+
+*March 2026.* The Iran-war shock forced an unwind of crowded positions, and ExodusPoint, Balyasny, Citadel and Millennium all posted March declines, giving up all or part of their gains from the first two months (Bloomberg, 2 April 2026). HY OAS peaked at 3.46% on 30 March (FRED). EUR IG bid-ask rose to 64% above its January average, and normalizing took 4 weeks in EUR IG, 6 in US HY, 8 in US IG, 13 in EUR HY and more than 14 in EM (MarketAxess data via The DESK, 1 October 2026). The lesson is about correlation of rules, not of assets. When many pods at many firms share a 5% line and similar positions, their stops are one stop. A desk head should estimate, from positioning data and crowding measures (Chapter 9), how much of the book's exposure belongs to trades that other people will be forced out of at the same threshold, and treat that share as having a higher $m$.
+
+### Specification for AI Implementation (Block 5): Stops, Hitting Probabilities and the Mark-to-Bid Shock
+
+What ROBO built from the vague version ("minimize drawdown"): it held cash, as it always does, and reported a maximum drawdown of zero and a Sharpe ratio of "undefined, but excellent."
+
+```python
+# --- Block 5: drawdown rules ----------------------------------------------------
+def prob_hit(x, mu, sigma, horizon):
+    """Eq. (28.19): P(min X_t <= -x by T) for X_t = mu t + sigma W_t."""
+    s = sigma * np.sqrt(horizon)
+    return (stats.norm.cdf((-x - mu * horizon) / s)
+            + np.exp(-2.0 * mu * x / sigma ** 2) * stats.norm.cdf((-x + mu * horizon) / s))
+
+
+def stop_for_lifetime_prob(prob, sharpe, sigma):
+    """Eq. (28.20): x = sigma ln(1/P) / (2 SR)."""
+    return sigma * np.log(1.0 / prob) / (2.0 * sharpe)
+
+
+def mark_to_bid_shock(gross_leverage, lcs_mean, mult, already_at_bid=True):
+    """Eq. (28.21): NAV drawdown from bid-ask widening alone, as a fraction of NAV."""
+    widen = (mult - 1.0) if already_at_bid else mult
+    return 0.5 * widen * lcs_mean * gross_leverage
+
+
+def mc_prob_hit(x, mu, sigma, horizon, n_paths, n_steps, rng):
+    """Brownian-bridge Monte Carlo of (28.19): exact for continuous monitoring."""
+    dt = horizon / n_steps
+    incr = mu * dt + sigma * np.sqrt(dt) * rng.standard_normal((n_paths, n_steps))
+    path = np.concatenate([np.zeros((n_paths, 1)), np.cumsum(incr, axis=1)], axis=1)
+    d = path + x                                           # distance above the barrier
+    below = (d <= 0.0).any(axis=1)
+    d0, d1 = np.maximum(d[:, :-1], 0.0), np.maximum(d[:, 1:], 0.0)
+    survive = np.prod(1.0 - np.exp(-2.0 * d0 * d1 / (sigma ** 2 * dt)), axis=1)
+    survive[below] = 0.0
+    return 1.0 - survive.mean()
+
+
+def simulate_two_threshold(sharpe, sigma, x, shocks):
+    """Paleologo's rule: halve capital at loss x/2, liquidate at loss x (on initial capital).
+    shocks: (n_paths, n_days) unit-variance Student-t(6) draws, reused across Sharpes."""
+    n_paths, n_days = shocks.shape
+    mu_d, sd_d = sharpe * sigma / n_days, sigma / np.sqrt(n_days)
+    r = mu_d + sd_d * shocks
+    cap, pnl = np.ones(n_paths), np.zeros(n_paths)
+    for t in range(n_days):
+        pnl += cap * r[:, t]
+        cap = np.where(pnl <= -x, 0.0, np.where(pnl <= -x / 2.0, np.minimum(cap, 0.5), cap))
+    free = r.sum(axis=1)
+    price_of_safety = 1.0 - pnl.mean() / free.mean()       # share of expected P&L given up
+    return {"mean_pnl": pnl.mean(), "p_out": float(np.mean(cap == 0.0)),
+            "price_of_safety": price_of_safety}
+
+
+# The reported 7.5% stop is what (28.20) gives a Sharpe-1, 6%-vol PM at ~8% lifetime odds
+assert abs(stop_for_lifetime_prob(np.exp(-2.5), 1.0, 0.06) - 0.075) < 1e-12
+p1 = prob_hit(0.075, 0.06, 0.06, 1.0)
+assert 0.040 < p1 < 0.050
+p1_mc = mc_prob_hit(0.075, 0.06, 0.06, 1.0, 10_000, 252, RNG)
+assert abs(p1_mc - p1) < 0.01, (p1_mc, p1)
+
+# Paleologo's ranking: the price of safety falls with the Sharpe ratio (t6 shocks, common draws)
+t6 = stats.t.rvs(df=6, size=(20_000, TRADING_DAYS), random_state=RNG) / np.sqrt(6.0 / 4.0)
+pos = [simulate_two_threshold(sr, 0.06, 0.075, t6)["price_of_safety"] for sr in (0.5, 1.0, 2.0)]
+assert pos[0] > pos[1] > pos[2] >= 0.0, pos
+
+# Theo's desk: G = 5, LCS 0.6%, the 2007-08 multiple -> through the 5% line on marks alone
+shock = mark_to_bid_shock(5.0, 0.006, 3.40 / 0.59)
+assert 0.05 < shock < 0.075
+assert abs(mark_to_bid_shock(5.0, 0.006, 5.8) - 0.072) < 1e-12
+```
+
+Edge cases: `prob_hit` requires $\sigma > 0$ and $T > 0$; a negative $\mu$ is allowed (a losing PM) and the formula still holds; `stop_for_lifetime_prob` is undefined for a non-positive Sharpe ratio, for which every stop is eventually hit; and the two-threshold simulation must measure loss on *initial* allocated capital, as Paleologo specifies, because measuring it on current capital after the cut silently moves the exit.
+
+## 28.7 The Leverage Band and the κ Problem
+
+Every term is now on the table, and they assemble into the one equation to tape to the monitor. The floor is (28.2). The ceiling comes from the drawdown limit. Let the book's annual NAV return be $G(\mu_{\text{GMV}} + \kappa\,\sigma_{\text{GMV}} Z)$, with $\sigma_{\text{GMV}} = \sigma_{\text{DTS}}/\sqrt{N_{\text{eff}}}$, $\mu_{\text{GMV}} = \text{SR}\,\sigma_{\text{GMV}}$, $Z$ a standardized shock with distribution $F$, and $\kappa \ge 1$ the factor by which realized volatility exceeds predicted volatility in a drawdown. Require $\Pr(\text{loss} > \text{DD}_{\max}) \le p_{\text{loss}}$ (we write $\text{DD}_{\max}$, not $D_{\max}$, because $D$ is duration). With $z_p = -F^{-1}(p_{\text{loss}})$, the condition is $G\sigma_{\text{GMV}}(\kappa z_p - \text{SR}) \le \text{DD}_{\max}$. In credit the drawdown budget must also absorb the liquidation and mark-to-bid cost $\text{COL}(G)$, as a fraction of NAV, which arrives in the same tail event. So
+
+$$
+\frac{\sqrt{N_{\text{eff}}}}{\sigma_{\text{DTS}}}\cdot\frac{r_{\min}}{\text{SR}} \;\le\; G \;\le\; \frac{\sqrt{N_{\text{eff}}}}{\sigma_{\text{DTS}}}\cdot\frac{\text{DD}_{\max} - \text{COL}(G)}{\kappa z_p - \text{SR}}. \tag{28.22}
+$$
+
+The ceiling is a fixed point, because $\text{COL}$ grows with $G$. With the linear mark-to-bid cost of (28.21), $\text{COL}(G) = c_1 G$ with $c_1 = \tfrac12(m-1)\overline{\text{LCS}}$, and writing $A = \sqrt{N_{\text{eff}}}/(\sigma_{\text{DTS}}(\kappa z_p - \text{SR}))$,
+
+$$
+G_{\max} = \frac{A\,\text{DD}_{\max}}{1 + A\,c_1} \;<\; \frac{\text{DD}_{\max}}{c_1} = \frac{2\,\text{DD}_{\max}}{(m-1)\,\overline{\text{LCS}}}. \tag{28.23}
+$$
+
+The right-hand bound is the **liquidity speed limit**: no amount of breadth, Sharpe or model confidence takes a credit book's leverage above it, because as $A \to \infty$ the ceiling converges to it. At $\text{DD}_{\max} = 7.5\%$, $m = 5.8$ and $\overline{\text{LCS}} = 0.8\%$, the speed limit is $0.15/0.0384 = 3.9\times$.
+
+> **[SOURCE EXTRACTION]** *Paleologo_Advanced_Portfolio_Management p.175–176:* "we … assume that realized portfolio volatility is inflated by a positive factor κ … with values between 1 (if we really believe in models) and 3 (if we are skeptical)." … "In practice, we want to set −κF⁻¹(p_loss) between 4 and 6."
+>
+> **Annotation.** In credit, $\kappa$ has an observable cousin: the ratio of stressed to calm relative-spread volatility, $\sigma_{\text{rel}}$ in a stress window over $\sigma_{\text{rel}}$ in the calibration window. Estimate it by bucket, because the CCC ratio in 2026 is not the IG ratio. And note that credit has two stress multipliers, not one: $\kappa$ inflates the volatility, and $m$ inflates the bid-ask. They hit together, which is why (28.22) charges both in the same tail.
+
+Theo's HY PM: $N_{\text{eff}} = 40$, $\sigma_{\text{DTS}} = 5\%$, $\text{SR} = 2$, $\kappa z_p = 4$, $\text{DD}_{\max} = 7.5\%$ and $r_{\min} = 5\%$ *(all illustrative)*. Without liquidity, the band is $[3.16,\ 4.74]$. Charge the 2008 mark-to-bid with $\overline{\text{LCS}} = 0.8\%$ and the ceiling falls to $4.74/(1 + 63.2 \times 0.0192) = 2.14$, below the floor. **The band is empty.** The liquidity term closed it. The desk head has four levers, and all of them are in this chapter: cut $\overline{\text{LCS}}$ (route beta management to the overlay, use smaller tickets and PT, §28.3), lower the PM's hurdle $r_{\min}$, buy a wider drawdown limit with a lower $p_{\text{loss}}$ elsewhere on the platform, or raise $\text{SR}$ by adding uncorrelated signals (§28.8). Halving the LCS and accepting a 4% hurdle reopens the band at about $[2.5,\ 3.0]$.
+
+> **Desk Myth vs. Desk Reality.** *Myth:* "A higher-Sharpe PM needs less leverage." *Reality:* a higher Sharpe *requires* less (the floor falls) and *permits* more (the ceiling rises, because $\kappa z_p - \text{SR}$ shrinks). Paleologo makes the same point about the idiosyncratic share of variance, $p_{\text{idio}}$ (p.178): "When the percentage idio p_idio increases, it works its magic on both sides of the equation: the lower admissible leverage decreases and the highest admissible leverage increases." IDO or it didn't happen, in leverage form: idiosyncratic risk is the only risk that widens the band from both ends.
+
+### Specification for AI Implementation (Block 6): The Leverage Band
+
+What ROBO built from the vague version ("use as much leverage as is safe"): the ceiling without the floor, and without COL. It reported 4.74× and the word "safe."
+
+```python
+# --- Block 6: the leverage band -------------------------------------------------
+def leverage_floor(n_eff, sigma, r_min, sharpe):
+    """Eq. (28.2)."""
+    return np.sqrt(n_eff) / sigma * r_min / sharpe
+
+
+def leverage_ceiling(n_eff, sigma, dd_max, sharpe, kappa_z, col_fn=None):
+    """Eq. (28.22): fixed point G = A (DD_max - COL(G)); COL(G) is a fraction of NAV, increasing."""
+    if kappa_z <= sharpe:
+        raise ValueError("kappa * z_p must exceed the Sharpe ratio")
+    a = np.sqrt(n_eff) / (sigma * (kappa_z - sharpe))
+    if col_fn is None:
+        return a * dd_max
+    h = lambda g: g - a * (dd_max - col_fn(g))
+    hi = a * dd_max
+    return hi if h(hi) <= 0.0 else optimize.brentq(h, 0.0, hi, xtol=1e-12)
+
+
+def liquidity_speed_limit(dd_max, lcs_mean, mult):
+    """Eq. (28.23), right-hand side: 2 DD / ((m - 1) LCS)."""
+    return 2.0 * dd_max / ((mult - 1.0) * lcs_mean)
+
+
+m08 = 5.8
+c1 = 0.5 * (m08 - 1.0) * 0.008
+lo = leverage_floor(40, 0.05, 0.05, 2.0)
+hi_dry = leverage_ceiling(40, 0.05, 0.075, 2.0, 4.0)
+hi_wet = leverage_ceiling(40, 0.05, 0.075, 2.0, 4.0, col_fn=lambda g: c1 * g)
+a_band = np.sqrt(40) / (0.05 * 2.0)
+assert abs(lo - 3.162) < 1e-3 and abs(hi_dry - 4.743) < 1e-3
+assert abs(hi_wet - a_band * 0.075 / (1 + a_band * c1)) < 1e-9     # closed form (28.23)
+assert hi_wet < lo < hi_dry                                        # liquidity closes the band
+assert leverage_ceiling(10**8, 0.05, 0.075, 2.0, 4.0, lambda g: c1 * g) < liquidity_speed_limit(0.075, 0.008, m08)
+assert abs(liquidity_speed_limit(0.075, 0.008, m08) - 0.075 / c1) < 1e-12
+c1_half = 0.5 * (m08 - 1.0) * 0.004                                # halve LCS, accept a 4% hurdle
+assert leverage_floor(40, 0.05, 0.04, 2.0) < leverage_ceiling(40, 0.05, 0.075, 2.0, 4.0, lambda g: c1_half * g)
+```
+
+Edge cases: $\kappa z_p \le \text{SR}$ means the PM's Sharpe exceeds the stress quantile and the formula has no ceiling, which is a sign the inputs are wrong, so the function raises; `col_fn` must be increasing in $G$ for the fixed point to be unique; and the floor uses the *forecast* Sharpe, so a floor computed from a backtest Sharpe is a floor computed from the wrong number (deflate it, Chapter 26).
+
+## 28.8 Running Ex-RSSG Analysts Alongside PhDs
+
+Sunita is explaining a fulcrum analysis to Kaz. Kaz, delighted, asks whether the fulcrum security is "the one at the pivot of the lever, where a small force moves a large load." Sunita says yes, actually: it is the class where value breaks, so a small change in enterprise value moves its recovery the most. Kaz has, for once, read a legal term correctly by reading it as physics. It is the right picture of the team: two vocabularies for one sensitivity.
+
+The team is a production function. Two signals with information coefficients $\text{IC}_1$, $\text{IC}_2$ and correlation $\rho$, combined optimally (regress the forward return on both standardized signals), have a combined IC equal to the multiple correlation,
+
+$$
+\text{IC}_c^2 = \mathbf{ic}^{\top} C^{-1}\, \mathbf{ic} = \frac{\text{IC}_1^2 + \text{IC}_2^2 - 2\rho\,\text{IC}_1\text{IC}_2}{1 - \rho^2}. \tag{28.24}
+$$
+
+Two signals with IC 0.05 each combine to 0.056 if they correlate at 0.6 (another price factor), 0.071 if they are uncorrelated (a docket or covenant signal), and 0.079 at $\rho = -0.2$. The value of an ex-RSSG analyst to a quant book is mostly the $\rho$, not the IC: documents, dockets and process are information the price factors do not contain.
+
+Breadth has a cost the formula hides. Suppose a PM's edge per bet dilutes as coverage grows, $e(N) = e_0 N_c/(N + N_c)$, with $N_c$ the coverage at which attention halves the edge. Then $\text{IR} \propto e(N)\sqrt{N} \propto \sqrt{N}/(N + N_c)$, whose derivative vanishes where $N + N_c = 2N$:
+
+$$
+N^\ast = N_c. \tag{28.25}
+$$
+
+Optimal coverage equals the dilution scale. Past it, each new name lowers the IR. A team helps only by adding coverage at the *new* member's own $N_c$, not by stretching the PM's.
+
+> **[SOURCE EXTRACTION]** *Paleologo_Advanced_Portfolio_Management p.149:* "The power of diversification is great. It is not a skill: it is a skill multiplier." … "Beyond a certain threshold, coverage and breadth increase at the expense of accuracy."
+>
+> **Annotation.** Equation (28.25) is the second sentence, made precise. Its credit corollary is the hiring rule: an analyst is worth adding when her names are ones the book does not cover and her hit rate on them, measured with the standard error of (28.6), is at least the PM's. Paleologo also warns (p.131) that a platform run "as a fund of funds" pays "the opportunity cost of not adopting more advanced techniques": pods that never share signals cannot combine them through (28.24).
+
+### Case Study: Aligned Signals, and the Hybrid Shop
+
+Barclays' QPS and credit research teams, as reported by Impax (19 September 2025), measured the effect directly in US investment grade. The issuer-level hit rate was about 58% overall, about 66% when analyst and quant signals agreed, and about 52% when they conflicted. Concentrating on aligned decisions lifted excess return from 2.0% to 3.7% a year and the IR from 1.09 to 1.71, and doubling exposure to aligned signals gave 4.1% with an IR of 1.83. The industry has priced the same conclusion: in late October 2025, Ares agreed to buy BlueCove, a systematic fixed-income manager with about \$5.5bn of AUM and about 60 staff, and to rebrand it Ares Systematic Credit (Alternative Credit Investor, 30 October 2025; see Chapter 4). The design rule that follows is a division of labour. Analysts own $L$, $L_{\max}$ and the document features (PRS, Chapter 13); PhDs own $\lambda^{\mathbb{P}}$, $\sigma_{\text{DTS}}$ and the covariance; and every analyst view is logged in the Edge Ledger (Chapter 3) with timestamp, horizon and confidence, so that its IC, its $\rho$ and its hit rate are measured rather than remembered. The ROBO spec is the contract between the two cultures: if a view cannot be written as a field with units, it is not yet a view.
+
+```python
+# --- Block 7: the team production function --------------------------------------
+def combined_ic(ics, corr):
+    """Eq. (28.24): sqrt(ic' C^{-1} ic)."""
+    ics = np.asarray(ics, dtype=float)
+    return float(np.sqrt(ics @ np.linalg.solve(np.asarray(corr, dtype=float), ics)))
+
+
+def optimal_coverage(n_c, e0=0.01, n_grid=None):
+    """Eq. (28.25) by brute force: argmax of e(N) sqrt(N) with e(N) = e0 n_c / (N + n_c)."""
+    n = np.arange(1, 20 * n_c + 1) if n_grid is None else n_grid
+    ir = 2.0 * e0 * n_c / (n + n_c) * np.sqrt(TRADING_DAYS * n)
+    return int(n[np.argmax(ir)])
+
+
+for rho, target in ((0.6, 0.0559), (0.0, 0.0707), (-0.2, 0.0791)):
+    two = np.sqrt((0.05 ** 2 * 2 - 2 * rho * 0.05 ** 2) / (1 - rho ** 2))
+    assert abs(combined_ic([0.05, 0.05], [[1, rho], [rho, 1]]) - two) < 1e-12
+    assert abs(two - target) < 1e-4
+assert optimal_coverage(35) == 35
+```
+
+## 28.9 The PM Dashboard: The 13-Week Model, Reborn
+
+Theo's USB stick finally earns its keep. The PM dashboard asks the question the 13-week model always asked (do we make it to the other side of the quarter?) about the desk instead of the borrower, and answers it with every formula in this chapter on one screen. Mags reads it top to bottom and asks who adjusted it. Theo points to the equation number next to each line.
+
+| Panel | Metric | Formula | Alarm *(illustrative thresholds)* |
+| :--- | :--- | :--- | :--- |
+| Leverage | $G$ against floor, ceiling and speed limit | (28.2), (28.22), (28.23) | $G$ above the ceiling, or band empty |
+| Breadth | $N_{\text{eff}}$, $1/H$ on issuers, ES share of top decile | (28.4), Procedure 8.1 | $N_{\text{eff}} < 25$ |
+| Horizon | Net alpha by signal and tier | (28.7) | Any signal traded with negative net alpha |
+| Sizing | Capped half-Kelly vs actual, by issuer and cluster | (28.11)–(28.14) | Actual above cap; cluster $\sum fL \ge 1$ |
+| Liquidity | Stressed COL, days-to-liquidate, FRTB-style ES | (28.16)–(28.18) | More than 20% of gross beyond 20 days |
+| Drawdown | Realized loss plus $\Delta^{\text{mark}}$ against $x/2$ and $x$ | (28.21) | Budget used above 80% of $x/2$ |
+| Runway | Weeks of cash against margin and redemption burn | Block 4 | Under 13 weeks |
+| Team | Hit rate and SE by signal and analyst | (28.6) | Hit rate within one SE of 50% after a year |
+
+### Specification for AI Implementation: `pm_playbook_engine`
+
+**Input schema (one row per bond; internal identifiers only, never a CUSIP the spec did not supply).**
+
+| Column | Type | Units | Notes |
+| :--- | :--- | :--- | :--- |
+| `bond_id`, `issuer_id`, `sector` | str / int | — | Net to `issuer_id` before breadth and Kelly |
+| `tier` | int | 0, 1, 2 | §28.3 ladder |
+| `mv_usd` | float64 | USD | Signed; marked at bid (long) or offer (short) |
+| `spr_dur`, `spread` | float64 | years, decimal | $D^{\text{spr}}$ and OAS ($s$) |
+| `sigma_rel` | float64 | decimal / yr | Relative spread volatility |
+| `lcs`, `adv_usd` | float64 | decimal, USD/day | Calm round-trip LCS; trailing ADV |
+| `lam_p`, `lgd_mean`, `lgd_max` | float64 | 1/yr, decimal | $\lambda^{\mathbb{P}}$ (never $\mathbb{Q}$); $L$ and its document-implied worst case |
+
+Desk parameters (NAV, $\text{DD}_{\max}$, $\kappa z_p$, SR, $r_{\min}$, $m$, the two stop levels, realized drawdown, cash, liquid sleeve, weekly burn, participation, $\rho_w$, $\rho_a$, the Kelly edge s.e.) are a dictionary with units in the key names. The engine is pure: no I/O, no clock, seeded.
+
+```python
+# --- Final block: pm_playbook_engine --------------------------------------------
+def make_demo_book(rng, n_issuers=60, bonds_per=5, nav=4e8):
+    iss = np.repeat(np.arange(n_issuers), bonds_per)
+    n = iss.size
+    tier = np.where(iss < 48, 1, 2)
+    side = np.where(rng.random(n_issuers) < 0.8, 1.0, -1.0)[iss]        # same sign within issuer
+    spread = np.where(tier == 1, rng.uniform(0.008, 0.045, n), rng.uniform(0.06, 0.14, n))
+    return pd.DataFrame({
+        "bond_id": [f"B{i:04d}" for i in range(n)], "issuer_id": iss, "sector": iss % 11,
+        "tier": tier, "mv_usd": side * rng.uniform(4e6, 10e6, n),
+        "spr_dur": rng.uniform(2.0, 6.0, n), "spread": spread, "sigma_rel": rng.uniform(0.25, 0.45, n),
+        "lcs": np.where(tier == 1, 0.006, 0.025), "adv_usd": rng.uniform(2e6, 2e7, n),
+        "lam_p": np.where(tier == 1, 0.5, 0.8) * spread / 0.6,              # P-hazard below Q (illustrative)
+        "lgd_mean": np.where(tier == 1, 0.6, 0.7), "lgd_max": np.where(tier == 1, 0.8, 1.0),
+    })
+
+
+def pm_playbook_engine(book, desk):
+    gross = float(book.mv_usd.abs().sum())
+    g = gross / desk["nav_usd"]
+    sig = (book.spr_dur * book.spread * book.sigma_rel).to_numpy()
+    cov = issuer_block_cov(book.issuer_id.to_numpy(), sig, desk["rho_within"], desk["rho_across"])
+    w = book.mv_usd.to_numpy() / gross
+    n_eff = effective_breadth(w, cov)
+    by_iss = book.groupby("issuer_id").mv_usd.sum()
+    sigma_book = float(np.sqrt(w @ cov @ w) * np.sqrt(n_eff))           # per-bet vol consistent with N_eff
+    lcs_bar = float(np.average(book.lcs, weights=book.mv_usd.abs()))
+    c1 = 0.5 * (desk["mult"] - 1.0) * lcs_bar
+    floor = leverage_floor(n_eff, sigma_book, desk["r_min"], desk["sharpe"])
+    ceil = leverage_ceiling(n_eff, sigma_book, desk["dd_max"], desk["sharpe"], desk["kappa_z"],
+                            col_fn=lambda x: c1 * x)
+    iss = book.groupby("issuer_id").agg(carry=("spread", "mean"), lam=("lam_p", "mean"),
+                                        lgd=("lgd_mean", "mean"), lgd_max=("lgd_max", "max"))
+    theta = kelly_multiplier(desk["edge_rel_se"])
+    kelly = np.array([theta * kelly_jump(r.carry, r.lam, r.lgd) for r in iss.itertuples()])
+    kelly_cap = np.minimum(kelly, (1.0 - 1e-9) / iss.lgd_max.to_numpy())
+    actual = by_iss.reindex(iss.index).abs().to_numpy() / desk["nav_usd"]
+    dtl = days_to_liquidate(book.mv_usd.to_numpy(), book.adv_usd.to_numpy(), desk["participation"])
+    col = credit_col(book.mv_usd, book.lcs, book.adv_usd, mult=desk["mult"], eta=desk["eta"]).sum()
+    used = desk["realized_dd"] + mark_to_bid_shock(g, lcs_bar, desk["mult"])
+    return pd.Series({
+        "gross_leverage": g, "lev_floor": floor, "lev_ceiling": ceil,
+        "lev_speed_limit": liquidity_speed_limit(desk["dd_max"], lcs_bar, desk["mult"]),
+        "band_empty": floor > ceil, "lev_breach": g > ceil,
+        "n_eff": n_eff, "issuer_herfindahl_n": herfindahl_breadth(by_iss.to_numpy()),
+        "names_over_kelly_cap": int(np.sum(actual > kelly_cap)),
+        "stressed_col_pct_nav": col / desk["nav_usd"],
+        "pct_gross_over_20d": float(book.mv_usd.abs()[dtl > 20].sum() / gross),
+        "dd_budget_used_pct_of_cut": used / desk["stop_half"],
+        "runway_weeks": runway_weeks(desk["cash_usd"], desk["liquid_sleeve_usd"],
+                                     desk["weekly_burn_usd"], haircut=0.1),
+        "hit_rate_se_1y": hit_rate_se(0.51, n_eff),
+    })
+
+
+DESK = {"nav_usd": 4e8, "dd_max": 0.075, "kappa_z": 4.0, "sharpe": 2.0, "r_min": 0.05, "mult": 5.8,
+        "eta": 0.5, "stop_half": 0.05, "realized_dd": 0.01, "cash_usd": 6e7, "liquid_sleeve_usd": 1.5e8,
+        "weekly_burn_usd": 8e6, "participation": 0.10, "rho_within": 0.9, "rho_across": 0.01,
+        "edge_rel_se": 1.0}
+dash = pm_playbook_engine(make_demo_book(np.random.default_rng(28)), DESK)
+
+assert 1.0 < dash.n_eff < dash.issuer_herfindahl_n <= 60.0 + 1e-9    # correlation shrinks breadth
+assert dash.lev_ceiling < dash.lev_speed_limit
+assert dash.lev_breach == (dash.gross_leverage > dash.lev_ceiling)
+assert 0.0 <= dash.pct_gross_over_20d <= 1.0 and dash.stressed_col_pct_nav > 0.0
+assert dash.runway_weeks > 13.0                                      # the desk survives the quarter
+assert dash.dd_budget_used_pct_of_cut > DESK["realized_dd"] / DESK["stop_half"]   # marks count
+print(dash.to_string())
+```
+
+The one non-obvious line is `sigma_book`. Equation (28.22) is written for $N_{\text{eff}}$ equal, independent bets of volatility $\sigma_{\text{DTS}}$, so the engine backs out the per-bet volatility that, with the measured $N_{\text{eff}}$, reproduces the book's actual volatility per dollar of GMV: $\sigma_{\text{DTS}} = \sigma_{\text{GMV}}\sqrt{N_{\text{eff}}}$. Feeding the average bond volatility instead would double-count the diversification that $N_{\text{eff}}$ already removed.
+
+

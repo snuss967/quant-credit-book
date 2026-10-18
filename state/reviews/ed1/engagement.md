@@ -161,3 +161,48 @@ Ranked by (reader grip) × (desk usefulness) × (fit with an existing engine). E
 - *"Open market purchase"* (48 hits, 18 files) works; give it the Dec 31 2024 payoff in Ch 14 and let the Ad Hoc Group retire the phrase in Ch 28.
 - *The 13-week model* needs Ch 28 written; the Part VIII opener promises the dashboard and Mags's line ("the first adjusted number she has ever trusted, and then asks who adjusted it"), which is the best closing joke in the book and currently exists only in a Part opener.
 - *Mags's "back in my day"* is well paced (35 hits); add the one war story the book keeps gesturing at and never tells: pricing bonds by phone in the 2008 basis blow-up (Ch 24's cold open sets it up).
+
+## 6. Edition 2 Expansion Targets (ranked by reader impact)
+
+Finishing beats adding: the first seven lines are unfinished Edition 1 files, and they are where a market-making reader currently hits a wall.
+
+1. `28_ch28_pm_playbook.md`: finish 28.2–28.11 per the in-file plan (effective breadth, horizon allocation, Kelly with jump-to-default, LVaR and the 5× problem with Third Avenue 2015, drawdown control with March 2020/March 2026, the leverage band, the team chapter, the PM dashboard as the 13-week model's final form). Remove the writer-plan comment. This is the book's ending.
+2. `24_ch24_bond_cds_basis_and_deliverables.md`: complete from §24.3 onward: four bases, funding and repo band, CTD option and the two-stage auction, successor arithmetic, orphaned CDS, manufactured events (Codere, Hovnanian, Sears, Windstream lens), Debrief, exercises.
+3. `19_ch19_portfolio_trading_pricing_engines.md`: add eviction, stale-mark adjustment (§19.5 is referenced in code and absent), stress liquidity commonality, basket adverse selection, the 90-second pipeline case study, Debrief and exercises.
+4. `27_ch27_system_architecture_and_asics.md`: security master, latency budgets, FPGA trigger tables for quote pulling, kill switches with Knight Capital and the Citi/Revlon wire, Debrief.
+5. `23_ch23_cross_asset_convexity_and_vol_surface.md`: Case Study B (SVB vol surface), Case Study C (Carvana 2023 cap-arb squeeze), Wolfspeed 2025 as a one-distribution-many-strikes exhibit, Debrief and exercises.
+6. `20_ch20_credit_etf_creation_redemption_arb.md`, `21_ch21_leveraged_loans_and_clo_microstructure.md`, `22_ch22_market_structure_regulation_trends.md`: Desk Debrief, Spec You Hand the Robot and exercises for each; Ch 22 also needs the Basel III endgame and CDS clearing sections the TOC promises.
+7. `92_appC_trend_tracker.md`: does not exist; the TOC lists it. Build it from the 48 Trend Watch boxes already in the text, dated and sourced, one line each.
+8. `13_ch13b_lmt_docket_diaries.md`: "Chapter 13-B: The Autopsy Room," ten Docket Diaries at 300 words each (Boardriders, Envision, Incora, Robertshaw, Altice France, Lumen, Pluralsight, Saks, Zayo, Wolfspeed), each ending with the PRS features that would have flagged it and the excluded holder's markout. Converts §13.9 from prose into the chapter the RSSG reader buys the book for.
+9. `17_ch17b_private_credit_lmes_and_the_mark.md`: "Chapter 17-B: When the Mark Meets the Trapdoor": Pluralsight, the 2025 BDC non-accrual cycle, OBDC II redemption fights, and a systematic PC-LME detector built on public filings.
+10. `00_01_tape_to_your_monitor.md`: a two-page front-matter sheet of the forty best Debrief bullets, grouped by Part, plus the fictional-issuer bible (Halvorsen, Brambleworth, Larkspur).
+11. `state/style_bible.md`: add the fictional-issuer bible, the Trade of the Chapter and Hand-History Replay box formats, the figure-per-chapter rule, the cooperation-agreement counter sequence, and the "IDO" frequency cap.
+12. `14_ch14b_courts_as_regime_variables.md`: "Chapter 14-B: Forum Shopping for Quants": Fifth Circuit Serta, NY Mitel, Isgur's Incora, SCOTUS Purdue, UK Thames Water, encoded as dated log-odds jumps with a maintained table the Trend Tracker can cite.
+13. `25_ch25b_llm_covenant_extraction_bench.md`: "Chapter 25-B: The Covenant Bench," a public benchmark of clause extraction on real agreements (EDGAR exhibits), with the Ch 26 harness scoring open models; the cheapest way to give Part VII a reproducible artifact.
+14. `10_ch10b_credit_futures_and_listed_trend.md`: listed credit futures (CME/Eurex launches 2023–26) and what they do to the Part III trend sleeve's costs and capacity; a short TREND chapter.
+15. `figures/`: a directory of chapter-numbered scripts that render the forty figures in §5 from the chapters' own code, so a build step regenerates them.
+
+## 7. Research Requests for Sonnet Researchers
+
+Each request: topic, scope, the exact facts needed, and the chapter that consumes them. Researchers should return dated facts with primary-source citations (dockets, 8-Ks, court opinions, FINRA/SEC releases, FRED/ICE series) and label anything secondary.
+
+1. **Pluralsight 2024 LME.** Scope: May–Sep 2024. Needed: sponsor and lender identities (as public), the IP-transfer entity structure, debt quantum, the date lenders took control, lender recovery estimate, whether any public marks (BDC 10-Qs) show the markdown path quarter by quarter. For Ch 17 §17.4 and Ch 13 §13.6.
+2. **Lumen Technologies 2024 TSA/LME.** Scope: Oct 2023–Dec 2024. Needed: total debt addressed, cooperation-agreement coverage share at signing, the new super-priority tranches, treatment of non-participants, bond and loan prices one week before and after each milestone (TRACE/LCD). For Ch 13 §13.5, Ch 14 §14.5.
+3. **Saks Global 2024–26.** Scope: Dec 2024 bond issuance to the 2026 outcome. Needed: issue terms, the first LME announcement date and structure (FILO/uptier, participating vs excluded holders), litigation if any, Chapter 11 filing date and first-day declarations, bond prices at each step. For Ch 14 §14.8 and Ch 3 §3.6.
+4. **Incora/Wesco opinion and settlement.** Scope: 2022 uptier through final 2025–26 resolution. Needed: Judge Isgur's holdings (which steps were unwound, which survived), recoveries by class, dates. For Ch 13 §13.9, Ch 14 §14.6.
+5. **Serta Fifth Circuit and Mitel NY Appellate Division, 31 Dec 2024, plus 2025–26 follow-ons.** Needed: holdings in one paragraph each, the "open market purchase" reasoning, any rehearing or remand outcomes, and the two or three subsequent rulings that cite them. For Ch 14 opening scene and the courts table.
+6. **Revlon: BrandCo drop-down (2019–20) and the Citi \$900mm wire (Aug 2020; S.D.N.Y. 2021; 2d Cir. Sep 2022).** Needed: structure of the BrandCo transaction, amounts, the lender litigation outcome; for the wire, the amount, the recipients, the district court's holding and the Second Circuit's reversal reasoning. For Ch 13 §13.6 and Ch 27.
+7. **Carvana 2023 exchange and equity squeeze.** Needed: exchange terms (dates, tranches, PIK structure), the equity price path Jan–Dec 2023, bond prices before and after, and any public reporting on cap-arb losses. For Ch 23.
+8. **Purdue (Harrington v. Purdue Pharma, June 2024) and plan structuring after it.** Needed: the holding, vote counts, and three 2025–26 plans that restructured releases to comply. For Ch 14 §14.6, Ch 16.
+9. **Thames Water 2025 restructuring plan.** Needed: Class A and B creditor structure, the sanctioned plan's terms, the Court of Appeal decision date and reasoning, and the final 2025–26 outcome. For Ch 14 §14.6 (UK column).
+10. **Manufactured credit events for Ch 24: Codere 2013, Hovnanian 2018, Sears 2019 auction.** Needed: dates, the engineered trigger, the ISDA DC decision and vote, the auction final price and the deliverable dispute (Sears), and the 2019 ISDA narrowly-tailored-credit-event amendments. For Ch 24.
+11. **Wolfspeed 2025.** Needed: filing date, prepackaged plan terms, convertible treatment, equity and CDS behavior around the announcement. For Ch 23 and Ch 15.
+12. **Spirit Airlines second filing (2025).** Needed: emergence date from the first case, equity recovery under plan one, the date and cause of the second filing, treatment of the first plan's new equity. For Ch 16 §16.7 and Ch 14 §14.3.
+13. **Zayo 2025 and Altice France 2024–25 LMEs.** Needed: for each, debt addressed, co-op share, final terms, non-participant treatment, dates. For Ch 13 §13.5.
+14. **Private-credit stress series, 2025–26.** Needed: BDC non-accrual rates by quarter (cost and fair value), redemption-request percentages for the five largest non-traded BDCs by quarter, the First Brands and Tricolor filing dates and headline exposures. For Ch 17 §17.6 Trend Watch and Ch 12 §12.9B.
+15. **Part V market structure.** Needed: (a) non-bank dealer share of IG and HY TRACE volume 2022–26 with source; (b) RFQ response-rate and hit-rate statistics around 2–9 April 2025 from MarketAxess/Tradeweb disclosures; (c) status of the SEC dealer rule (vacatur date) and Treasury clearing mandate deadlines as of mid-2026; (d) listed credit futures volumes 2023–26. For Ch 2, 18, 22 and the proposed Ch 10-B.
+16. **Figure data.** Needed: FRED series IDs and date ranges for every spread plotted (HY OAS, CCC OAS, IG OAS, HYG/LQD premium-discount), ICE index composition by rating 2015–26 (BB share), and the TRACE-reported protocol shares by quarter, so the figures in §5 are reproducible from a script.
+
+*Word count note: this report runs over the 4,000-word brief; §3 (the canonical-home table) and the figure list in §5 are reference material the Showrunner can lift verbatim, which is why they were kept at full length.*
+
+<!-- STATUS: COMPLETE -->

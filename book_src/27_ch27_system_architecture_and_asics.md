@@ -5,8 +5,8 @@
 27.3 bitemporal security master (Trend Watch 3, Serta case, block 2); 27.4 OMS/EMS and the order state machine;
 27.5 latency budgets as queues (CME halts case, block 3); 27.6 FPGA trigger tables (Trend Watch 4,
 2014 flash rally case, block 4); 27.7 kill switches as stopping rules (Knight and Citi cases, block 5);
-27.8 observability, replay, deployment; 27.9 resilience beyond your walls; 27.10 Desk Debrief, Spec, Exercises;
-27.11 Deep-Dive Resource Graph. -->
+27.8 observability, deployment, resilience beyond your walls; 27.9 Desk Debrief, Spec, Exercises;
+27.10 Sources and Links (Deep-Dive Resource Graph). -->
 
 ## 27.0 Cold Open: The Fastest Thing on the Desk
 
@@ -740,7 +740,7 @@ beta = np.array([beta_rate(95 * 8.0 / 1e4, 0.065, 0.9),
                  beta_credit(95.0, 8.0, 130 / 325, 80.0, 3.0)])        # [TY, HYG]
 H_HALF, MIN_MARGIN, GUARD = 0.19, 0.04, 0.01
 THETA = H_HALF - MIN_MARGIN - GUARD
-SIGMA_H = np.array([0.10, 0.08])                                       # 1-second hedge vols, points
+SIGMA_H = np.array([0.10, 0.08])                                       # stress-window hedge vols, points (illustrative)
 tau = allocate_tau(beta, SIGMA_H, THETA)
 move = np.array([-6 / 32, -0.14])                                      # TY -6/32, HYG -14 cents
 assert abs(float(beta @ move) + 0.375) < 0.005                         # three-eighths
@@ -758,12 +758,12 @@ dH = RNG.multivariate_normal(np.zeros(2), cov, size=n) * np.sqrt(RNG.chisquare(4
 TICK = np.array([1 / 64, 0.01])                                        # hedge price grids (illustrative)
 ticks = np.round(dH / TICK).astype(np.int64)
 dH = ticks * TICK                                                      # both rules see on-grid moves
-jp = np.array([joint_pull(beta, d, THETA, +1) or joint_pull(beta, d, THETA, -1) for d in dH])
-bp = np.abs(dH) > tau
-bp = bp.any(axis=1)
+fv = dH @ beta                                                         # linearised fair-value moves
+jp = np.abs(fv) > THETA                                                # joint rule, either side
+bp = (np.abs(dH) > tau).any(axis=1)                                    # per-instrument rule
 assert not np.any(jp & ~bp)                                            # never misses a joint pull
 false_pull_rate = float((bp & ~jp).mean())
-assert 0.0 < false_pull_rate < 0.5
+assert bp.mean() >= jp.mean() and false_pull_rate > 0.0                # safety is paid for in false pulls
 
 # Fixed point: beta in Q.16 bond points per tick; integer multiply-accumulate; error bound holds.
 FRAC = 16
@@ -775,7 +775,8 @@ exact = ticks @ (beta * TICK)
 bound = 2.0 ** (-FRAC - 1) * np.abs(ticks).sum(axis=1) + 2.0 ** -FRAC
 mismatch = fixed_pull != jp
 assert np.all(np.abs(np.abs(exact[mismatch]) - THETA) <= bound[mismatch])
-assert bound.max() < GUARD                                             # guard band covers rounding
+max_ticks = float((2.0 / TICK).sum())                                  # moves up to 2 points per refresh;
+assert 2.0 ** (-FRAC - 1) * max_ticks + 2.0 ** -FRAC < GUARD           # larger ones hit Tier-0 collars first
 
 # Pick-off: closed form vs Monte Carlo at 15 minutes; zero at 1.5 s; the jump loss is the cold open.
 SIGMA_S = 0.5 / math.sqrt(23_400)
@@ -786,3 +787,292 @@ assert bachelier_pickoff(H_HALF, SIGMA_S, 1.5) < 1e-12
 jump_loss_usd = max(abs(float(beta @ move)) - H_HALF, 0.0) * 3_000_000 / 100
 assert 5_000 < jump_loss_usd < 6_000
 ```
+
+## 27.7 Kill Switches as Stopping Rules
+
+"Folding before the river," Ines says, "is not cowardice. It's a stopping rule with a measure attached. You decide in advance what evidence makes you get up from the table, and how often you're willing to get up for nothing." The kill switch is the sacred right of the system: no majority of components can amend it, and no single component can waive it. Kaz asks whether that means it needs unanimous consent to change. "It means it needs two humans to turn back *on*," says Ines. "Anyone can turn it off."
+
+### 27.7.1 The hierarchy
+
+| Tier | What fires it | Where it lives | Time scale | Example controls |
+| :--- | :--- | :--- | :--- | :--- |
+| 0: hard limits | a single message violates a pre-set bound | gateway / FPGA, before the wire | ns–µs | price collar vs composite and last fill; max order value and volume; message-rate throttle; notional and DV01 caps; `PriceType` sanity |
+| 1: sequential tests | accumulating evidence of being picked off or of abnormal fills | risk engine, streaming | seconds–minutes | CUSUM on markouts; fill-ratio and child-to-parent ratio tests |
+| 2: system health | the machine is not the machine you tested | ops plane | seconds | version and config-checksum skew across servers; hedge-feed heartbeat lost; clock fault; venue session down |
+| 3: loss limits | the strategy, not the plumbing, is failing | PM and risk committee | days | drawdown stop-loss (Paleologo), capital reallocation (Chapter 28) |
+
+**Authority** is part of the design, not an org chart. Anyone and anything (a human, a monitor, ROBO) may *trip* any tier, instantly, and a trip cancels all live orders and quotes in its scope. Only the slow path, with two distinct authorised humans, may *re-arm*. Every trip records who, what and why, and every order carries the algorithm, trader and desk responsible for it. This is the regulator's floor, and it is a good design anyway. MiFID II RTS 6 (Delegated Regulation (EU) 2017/589, applying from 2018-01-03) requires the ability to "cancel immediately, as an emergency measure, any or all of its unexecuted orders" (Art. 12), pre-trade price collars, maximum order values and volumes and message limits (Art. 15), and states that "Real-time alerts shall be generated within five seconds after the relevant event" (Art. 16). SEC Rule 15c3-5 is principles-based and puts no number on alert latency. RTS 6's five seconds is the only regulatory clock on the slow lane, and a desk should treat it as a ceiling, not a target.
+
+### 27.7.2 CUSUM on markouts, derived
+
+Let fill $k$ have a markout $m_k$ (points, against hedge-implied fair value one minute after the fill, signed so that positive is good for the desk). It arrives long before TRACE does. Healthy: $m_k \sim N(\mu_0, \sigma^2)$ i.i.d. Picked off: $m_k \sim N(\mu_1, \sigma^2)$ with $\mu_1 < \mu_0$. The log-likelihood ratio of one observation is
+
+$$
+\ell_k = \ln\frac{f_1(m_k)}{f_0(m_k)} = \frac{\mu_0 - \mu_1}{\sigma^2}\left(\frac{\mu_0 + \mu_1}{2} - m_k\right) = \delta\left(z_k - \frac{\delta}{2}\right),
+\qquad z_k = \frac{\mu_0 - m_k}{\sigma},\quad \delta = \frac{\mu_0 - \mu_1}{\sigma}.
+$$
+
+Page's CUSUM accumulates the evidence and forgets it whenever it favours health:
+
+$$
+G_k = \max\!\Big(0,\ G_{k-1} + z_k - \tfrac{\delta}{2}\Big),\quad G_0 = 0, \qquad K_c = \inf\{k : G_k \ge c\}.
+$$
+
+(We write the alarm index as $K_c$ because $\tau$ is reserved for default time.) It is a sequence of SPRTs, each restarted at zero, and it minimises the worst-case detection delay among all procedures with the same false-alarm rate (Lorden 1971; Moustakides 1986). The average run length for increments $N(\mu_G, 1)$ has Siegmund's approximation
+
+$$
+\text{ARL}(\mu_G) \approx \frac{e^{-2\mu_G b} + 2\mu_G b - 1}{2\mu_G^2}, \qquad b = c + 1.166,
+$$
+
+with $\mu_G = -\delta/2$ when healthy ($\text{ARL}_0$, the mean time between false alarms) and $\mu_G = +\delta/2$ when picked off ($\text{ARL}_1$, the detection delay). For a one-standard-deviation deterioration ($\delta = 1$) and $c = 5$: $\text{ARL}_0 \approx 938$ fills and $\text{ARL}_1 \approx 10.3$ fills. At 200 auto-quoted fills a day *(illustrative)*, that is a false alarm about every five trading days and detection within about ten bad fills. Raise $c$ to 6 and $\text{ARL}_0 \approx 2{,}570$ fills (about 13 days) while $\text{ARL}_1 \approx 12.3$. **Tripling the quiet time costs two fills of delay**, because to first order the delay grows only with the log of the false-alarm interval, $\text{ARL}_1 \approx \ln(\text{ARL}_0)/\mathcal{K}$ with $\mathcal{K} = \delta^2/2$ the Kullback–Leibler information per fill. The desk head chooses $c$, and in doing so chooses both numbers. Ines calls this reading the hand history in real time. The river is the bad fill that would have cost you the session; the CUSUM folds about ten bad fills in, which is long before the river and long after your ego would have liked.
+
+> **[SOURCE EXTRACTION]** *Paleologo_Advanced_Portfolio_Management p.164:* "Stop-loss rules are a partial hedge for the PM call option. ... Since the value of the option increases with the volatility of the underlying asset, it is in the interest of the manager to run with the highest possible volatility, independently of her skill. The stop-loss is a constraint that limits the value of this option."
+>
+> **Annotation.** Our analysis: Tier 3 is Paleologo's stop-loss moved from the PM's contract to the machine, and the option argument applies to algorithms too. An auto-quoter rewarded on volume or hit rate holds a call option on its own variance, and will "run with the highest possible volatility" if its parameters let it, through wider size and tighter quotes in fast markets. The tiers below are the faster, finer versions of the same constraint. The modern desk departs from the PM framing in one respect: the stop-loss for an algorithm must be paired with an *automatic* re-arm prohibition. A human PM who is stopped out goes home and thinks. An algorithm that is stopped out will be restarted by a well-meaning engineer at 10:02 a.m. unless the design says only two humans and the slow path can do that.
+
+### 27.7.3 Case Study: Knight Capital (2012) and Citigroup (2022), mapped to tiers
+
+**Knight, 2012-08-01** (SEC Release No. 34-70694, 2013-10-16). While processing 212 small retail orders, Knight's SMARS router "routed millions of orders into the market over a 45-minute period, and obtained over 4 million executions in 154 stocks for more than 397 million shares." Knight ended up net long about \$3.5bn in 80 stocks and net short about \$3.15bn in 74, and "lost over \$460 million." The new code reused a flag that had once activated "Power Peg," functionality Knight "had discontinued using many years earlier." A technician "did not copy the new code to one of the eight SMARS computer servers," there was no second-technician review, and orders that reached the eighth server ran the dormant code. Before the open, the system sent 97 automated e-mails referencing the error to a group of Knight personnel, and Knight "did not design these types of messages to be system alerts." Throughout, "Knight remained connected to the markets and continued to send orders." The civil money penalty was \$12mm. Chapter 26 told this as a story about specifications. Here it is a story about four missing tiers. *Tier 2* (version skew) would have refused to open with one server out of eight on different code. *Tier 1* (a child-to-parent fill-ratio test) would have fired within seconds, because Power Peg kept sending child orders without counting fills. *Tier 0* (cumulative notional caps per strategy) would have stopped the position long before \$3.5bn. And *authority* would have answered the question nobody did for 45 minutes: who is allowed to pull the plug, and does pulling it actually disconnect?
+
+**Citigroup, 2022-05-02** (FCA final notice 2024-05-22, as reported in coverage of the notice; figures to be checked against the notice itself). A trader meant to sell a basket worth \$58mm, and an input error produced one worth \$444bn. Controls blocked \$255bn; \$189bn reached an algorithm; about \$1.4bn of shares sold on European venues before the trader cancelled, coinciding with a brief, sharp drop in several European indices. The FCA found no hard block that would have rejected the whole basket, a pop-up warning the trader could click through without reading, and real-time monitoring that was too slow to escalate. Fines from the FCA (£27.77mm) and PRA (£33.9mm) totalled about £61.6mm. The lesson fits in one line of the spec below: **a warning that can be clicked past is a suggestion, not a control.** The Tier-0 function takes no override argument.
+
+### Specification for AI Implementation (kill switch)
+
+**What ROBO built from the vague version.** Asked to "add a kill switch," ROBO added a button that set `enabled = False` in the pricing loop. Live quotes on the venues stayed live, because nothing cancelled them. The button worked perfectly and changed nothing, which is Knight's 45 minutes in one line. The spec: trip cancels everything in scope; Tier 0 has no override; a dead-man heartbeat trips Tier 2; anyone may trip; only two distinct humans plus a passing slow-path check may re-arm; and CUSUM run lengths are checked against Siegmund.
+
+```python
+# block 5 of 5: kill switches. CUSUM run lengths vs Siegmund; tiered switch with authority rules.
+def siegmund_arl(drift, c):
+    """ARL of G_k = max(0, G_{k-1} + X_k), X ~ N(drift, 1), alarm at G >= c."""
+    b = c + 1.166
+    if abs(drift) < 1e-12:
+        return b * b
+    return (math.exp(-2.0 * drift * b) + 2.0 * drift * b - 1.0) / (2.0 * drift ** 2)
+
+
+def simulate_arl(drift, c, runs, rng, max_steps=200_000):
+    g = np.zeros(runs)
+    alarm_at = np.full(runs, -1)
+    alive = np.ones(runs, dtype=bool)
+    k = 0
+    while alive.any() and k < max_steps:
+        k += 1
+        g[alive] = np.maximum(0.0, g[alive] + rng.normal(drift, 1.0, int(alive.sum())))
+        hit = alive & (g >= c)
+        alarm_at[hit] = k
+        alive &= ~hit
+    if alive.any():
+        raise RuntimeError("raise max_steps")
+    return float(alarm_at.mean())
+
+
+DELTA, C = 1.0, 5.0
+arl0, arl1 = siegmund_arl(-DELTA / 2, C), siegmund_arl(+DELTA / 2, C)
+assert 930 < arl0 < 945 and 10.0 < arl1 < 10.6
+assert abs(simulate_arl(-DELTA / 2, C, 2_000, RNG) / arl0 - 1.0) < 0.10
+assert abs(simulate_arl(+DELTA / 2, C, 2_000, RNG) / arl1 - 1.0) < 0.10
+assert siegmund_arl(-0.5, 6.0) > 2.5 * arl0 and siegmund_arl(0.5, 6.0) - arl1 < 2.5
+
+
+class KillSwitch:
+    """Any authorised tripper (human or monitor) trips instantly; a trip cancels all live orders.
+    Re-arm needs two distinct authorised humans and a passing slow-path check."""
+
+    def __init__(self, limits, can_trip, can_rearm):
+        self.limits, self.can_trip, self.can_rearm = limits, set(can_trip), set(can_rearm)
+        self.state, self.log, self.live, self.votes = "ARMED", [], {}, set()
+        self.msg_times, self.last_heartbeat = [], 0.0
+
+    def _trip(self, tier, reason, t):
+        if self.state == "TRIPPED":
+            return []
+        self.state = "TRIPPED"
+        self.log.append((t, tier, reason))
+        cancelled = sorted(self.live)
+        self.live.clear()
+        self.votes.clear()
+        return cancelled
+
+    def pre_trade(self, order, t):
+        """Tier 0 hard limits. There is deliberately no override parameter."""
+        if self.state != "ARMED":
+            return False, "switch_tripped"
+        lim = self.limits
+        self.msg_times = [x for x in self.msg_times if t - x < 1.0] + [t]
+        if len(self.msg_times) > lim["max_msgs_per_s"]:
+            self._trip(0, "message_rate", t)
+            return False, "message_rate"
+        if order["price_type"] == "PRICE" and not lim["price_floor"] <= order["price"] <= lim["price_cap"]:
+            return False, "price_type_sanity"
+        if abs(order["price"] - order["ref_price"]) > lim["collar_pts"]:
+            return False, "price_collar"
+        if order["qty_mm"] > lim["max_order_mm"]:
+            return False, "max_order_value"
+        if sum(o["qty_mm"] for o in self.live.values()) + order["qty_mm"] > lim["max_live_mm"]:
+            return False, "max_live_notional"
+        self.live[order["id"]] = order
+        return True, "ok"
+
+    def heartbeat(self, t):
+        self.last_heartbeat = t
+
+    def check_deadman(self, t):
+        if t - self.last_heartbeat > self.limits["heartbeat_s"]:
+            return self._trip(2, "heartbeat_lost", t)
+        return []
+
+    def trip(self, who, tier, reason, t):
+        if who not in self.can_trip:
+            raise PermissionError(who)
+        return self._trip(tier, reason, t)
+
+    def rearm(self, who, t, slow_path_ok):
+        if who not in self.can_rearm:
+            raise PermissionError(who)
+        if self.state != "TRIPPED":
+            return False
+        self.votes.add(who)
+        if len(self.votes) >= 2 and slow_path_ok:
+            self.state = "ARMED"
+            self.log.append((t, "rearm", tuple(sorted(self.votes))))
+            self.votes.clear()
+            return True
+        return False
+
+
+LIMITS = dict(max_msgs_per_s=50, price_floor=10.0, price_cap=200.0, collar_pts=2.0,
+              max_order_mm=50.0, max_live_mm=150.0, heartbeat_s=2.0)
+ks = KillSwitch(LIMITS, can_trip={"ines", "theo", "robo_monitor", "cusum_monitor"}, can_rearm={"ines", "theo"})
+good = dict(id="o1", price_type="PRICE", price=95.10, ref_price=95.00, qty_mm=3.0)
+assert ks.pre_trade(good, t=0.0) == (True, "ok")
+fat_basket = dict(id="o2", price_type="PRICE", price=95.00, ref_price=95.00, qty_mm=444_000.0)
+assert ks.pre_trade(fat_basket, t=0.1) == (False, "max_order_value")      # the whole basket, hard-blocked
+spread_as_price = dict(id="o3", price_type="PRICE", price=105.0, ref_price=95.0, qty_mm=1.0)
+assert ks.pre_trade(spread_as_price, t=0.2) == (False, "price_collar")     # 105 bp read as 105 points
+try:
+    ks.pre_trade(good, t=0.3, override=True)
+    raise AssertionError("there is no pop-up to click through")
+except TypeError:
+    pass
+
+ks.heartbeat(0.0)
+assert ks.check_deadman(1.0) == []
+assert ks.check_deadman(2.5) == ["o1"] and ks.state == "TRIPPED"          # dead man cancels everything
+assert ks.pre_trade(good, t=2.6) == (False, "switch_tripped")
+try:
+    ks.rearm("robo_monitor", 3.0, slow_path_ok=True)
+    raise AssertionError("machines may trip but never re-arm")
+except PermissionError:
+    pass
+assert not ks.rearm("theo", 3.1, True) and not ks.rearm("theo", 3.2, True)  # one human is not two
+assert not ks.rearm("ines", 3.3, slow_path_ok=False)                        # two humans, failing check
+assert ks.rearm("ines", 3.4, slow_path_ok=True) and ks.state == "ARMED"
+```
+
+## 27.8 Observability, Deployment, and Resilience Beyond Your Walls
+
+**Replay.** Every input carries `known_at` (§27.2) and every decision is a pure function of the knowledge-time snapshot plus the code and configuration version. So any minute of any day can be replayed bit-for-bit, and "why did we bid that?" has an answer that is not a shrug. Configuration is code: versioned, checksummed, and compared across every server before the open. The Tier-2 version-skew check is just this comparison with teeth.
+
+**Paper versus live.** The most important system metric is not latency. It is the gap between the paper portfolio and the dollar portfolio.
+
+> **[SOURCE EXTRACTION]** *Paleologo_Advanced_Portfolio_Management p.145:* "If these skills are there pro forma in a paper portfolio, but are not realized in the dollar portfolio, then we can be assured that this has to do with the deployment of the strategy – maybe its capacity is lower than we thought – or with the execution of the strategy itself"
+>
+> **Annotation.** Our analysis: Paleologo writes this about a PM's skill, but it is also the definition of an infrastructure bug. Paper minus live, attributed by component (fill probability, cost model, latency-driven pick-offs, unfilled residuals from §27.4), is the desk's integration test, and it should be a dashboard line, not a quarterly post-mortem. The departure for credit is that the paper portfolio must be simulated with *provenance-typed* fills (§27.2). A paper book filled at composites will always beat the live book, and the gap will be blamed on execution when it is really the data.
+
+**Deployment discipline.** Knight's eighth server is the archetype, and the modern one is outside the trading stack entirely. On 2024-07-19 a defective CrowdStrike content update for Windows hosts disrupted airlines and banks, and SGX's clearing arm suffered an operational failure of five hours and six minutes (Risk.net). A kernel-mode agent your security team installed is part of your latency and availability budget, whether or not anyone told the desk. Hence rings and canaries for *every* change that touches a trading host, including vendor agents, and a deployment kill switch that halts a rollout when the canary's markouts, rejects or latency drift. Finally, the "97 e-mails" rule: **an alert without an owner and an action is a log line.** Every alert names who acts, what they do, and the deadline (RTS 6 Art. 16's five seconds is a fine default for anything that can lose money).
+
+**Beyond your walls.** On 2023-11-08/09, LockBit ransomware hit ICBC Financial Services, the US broker-dealer arm of ICBC. BNY Mellon, its Treasury settlement agent, disconnected it and settled its trades manually; ICBC FS owed BNY about \$9bn in unsettled trades until the parent injected capital (Reuters and other coverage). On 2015-04-17, Bloomberg terminals went dark for several hours from about 8:30 a.m. London, and the UK Debt Management Office postponed a gilt operation of about £3bn, citing "ongoing issues with the third-party platform supplier." And the composite and venue layer is consolidating: ICE agreed on 2026-07-29 to buy MarketAxess. Each case is the same lesson. Your fastest system is bounded by your slowest counterparty's recovery plan, so every external dependency (settlement agent, chat and pricing terminal, composite vendor, hedge venue) needs a named fallback and a Tier-2 trigger that says what happens to live quotes when it disappears.
+
+Mags listens to all of this with her arms folded. "Back in my day the kill switch was the head trader unplugging the phone bank, and the dead-man switch was the head trader going to lunch. Nothing traded until he came back." A pause. "Fine. Yours doesn't go to lunch."
+
+## 27.9 Desk Debrief
+
+- **Two clocks, one desk.** The quote clock runs in seconds to minutes; the hedge clock runs in microseconds. Speed is worth $\Delta\ell/T$ of your edge, so buy it in proportion to $1/T$ of the information you act on, not in proportion to how much you enjoy hardware.
+- **The fastest thing on the desk is the thing that says no.** The fast path compares precomputed numbers and may only pull. Only the slow path, which can be audited, may say yes again.
+- **Every price says what it is and when you knew it.** `price_kind` plus `known_at`, or it does not get a badge. Labels, fills and cost targets come from prints and firm quotes only.
+- **The security master is the credit agreement of the system.** Use internal surrogate keys, bitemporal rows and append-only knowledge time. Serta's 22 June 2020 is a test case, not an anecdote.
+- **The p99 is the number the sniper trades against, and it is worst when the market moves.** Little, Pollaczek–Khinchine and fan-out turn "40 ms" into "1.5 seconds on FOMC day, and 78% of PTs slow."
+- **The cheap trigger rule is safe by the triangle inequality, and it costs false pulls in a flight to quality.** Store dollar sensitivities, budget the threshold, and set a guard band above fixed-point and convexity error.
+- **A kill switch is a stopping rule with two numbers attached.** The desk head picks the false-alarm interval, and the detection delay comes with it, growing only with its log. Anyone can trip, two humans re-arm, and nothing can be clicked past.
+- **Silence is not safety.** A dead hedge feed, a missing eighth server or a counterparty in manual settlement is a Tier-2 event with a named owner and a five-second deadline.
+
+### The Spec You Hand the Robot
+
+```text
+SYSTEM: two-clock quoting engine for a systematic credit desk. Implement exactly this; ask before guessing.
+
+1. PRICE STORE. Every record: instrument_key (internal surrogate), value, price_type in {PRICE, SPREAD, YIELD},
+   side, size_mm (USD mm par; flag TRACE-capped), price_kind in {TRADED, FIRM_QUOTE, INDICATIVE_RUN, EVALUATED,
+   COMPOSITE}, source, event_ns, known_ns. Only TRADED and FIRM_QUOTE may be labels, fills or cost targets.
+   Late records go to a correction stream; never overwrite. TRACE affiliate duplicates are MARKED, never deleted;
+   tag regime {no_flag, flag_voluntary (from 2026-08-31), flag_mandatory (from 2027-08-02)}.
+2. SECURITY MASTER. Bitemporal facts (key, attr, value, valid [from, to), known [from, to)); knowledge time
+   non-decreasing; exclusion constraint per (key, attr). Backtests query as_of(valid <= t, known = t) only.
+   Test: Serta 2016 first-lien loan as of 2020-06-23 known 2020-06-22 00:00 returns first_lien_pari.
+3. LATENCY. Measure sojourn (arrival to response), not service time. Report p50/p99/p99.9 by utilisation band.
+   Alert when the p99 at current load exceeds the trigger-table refresh budget.
+4. TRIGGER TABLE (fast path). Per exposed quote i: side, hedge reference prices H_ref[j], beta[i,j] in bond points
+   per hedge point, theta_i = h_i - m_i - guard (points), tau[i,j] = theta_ij / |beta[i,j]| with
+   theta_ij proportional to |beta[i,j]| * sigma_j. Pull if any |H_j - H_ref_j| > tau[i,j] (or if the joint rule
+   |beta_i . dH| > theta_i fires). Fixed point Q.16; guard >= rounding bound + convexity bound. Pull only;
+   re-arm only by a new row from the slow path, gated on realised hedge volatility.
+5. KILL SWITCH. Tier 0 (no override argument): price collar, PriceType sanity, max order, max live notional,
+   message rate. Tier 1: CUSUM on 1-minute markouts, delta and c from config; log ARL0 and ARL1. Tier 2: version or
+   config skew, hedge-feed heartbeat gap, clock fault, venue down -> pull all quotes referencing it. Tier 3:
+   drawdown stop-loss. Any authorised human or monitor may trip; trip cancels everything in scope;
+   re-arm requires two distinct humans plus a passing slow-path check. Every alert has an owner and a 5 s deadline.
+6. TESTS. The asserts in blocks 1-5 of this chapter, plus the cold open: TY -6/32, HYG -14c must pull the bid.
+```
+
+### Exercises
+
+1. **Kaz's engine on a CPI morning.** With $\mathbb{E}[S] = 40$ ms and $c_s^2 = 4$, find the utilisation $\rho$ at which the approximate p99 *waiting time* equals 500 ms. If the trigger-table refresh budget is 500 ms, what fraction of quote refreshes must be shed or batched when load rises from $\rho = 0.5$ to $\rho = 0.9$? Then rerun block 3 with $c_s^2 = 1$ and explain, in one sentence for the risk meeting, why "make the slow requests less slow" beats "make the average request faster."
+2. **Add LQD and CDX IG to the table.** Derive $\beta_{i,\text{LQD}}$ by the method of §27.6.1, allocate $\theta_i$ across TY, LQD and CDX IG, and construct a move vector for which the per-instrument rule pulls and the joint rule does not. Using a covariance of your choosing (state it), estimate the false-pull rate by simulation, and show that it never misses a joint-rule pull.
+3. **The J.Crew drop-down as rows.** Write the bitemporal rows for an IP transfer to an unrestricted subsidiary (Chapter 13), including the guarantor-map change and the event row. Which as-of query must a backtest of Chapter 25's covenant-flag signal use? What specifically goes wrong if the vendor's "point-in-time" file is valid-time only?
+4. **Your PM says "never false-alarm."** Compute the CUSUM detection delay as $c \to \infty$, then explain the result to her using only poker terms. Then choose $c$ so that, at 200 fills a day and $\delta = 0.75$, false alarms average no more than one a month (21 trading days), and report $\text{ARL}_1$.
+5. **ROBO and the zero-pick-off mandate.** ROBO receives the spec "make sure we never get picked off." Describe what it builds (hint: §27.6.2 has a closed form for the expected loss of a quote that is never shown). Then rewrite the spec with units, a loss budget per day, and boundary conditions so that the optimal policy is not "quote nothing."
+6. **Kaz wants the callable-bond OAS model on the FPGA.** Write the one-paragraph memo declining the request. It should cite the convexity term, the re-synthesis cycle and the "table is data, logic is fixed" principle, and offer the alternative: stream callables from the slow path at a wider $h$, or not at all.
+
+## 27.10 Sources and Links
+
+### Deep-Dive Resource Graph
+
+**Podcasts**
+
+- Bloomberg *Odd Lots* (series): episodes on bond-market electronification, portfolio trading and high-frequency trading. No specific episode was verified for this chapter; search the archive by topic.
+- *Flirting with Models* (Corey Hoffstein, series): practitioner interviews on systematic implementation and execution. Series-level pointer only.
+
+**Practitioner Writing**
+
+- Kevin McPartland, "What the buy side wants from their bond dealers," Coalition Greenwich blog, 2024-02-13. https://www.greenwich.com/blog/what-buy-side-wants-their-bond-dealers
+- Fleming, Johansson, Keane and Meyer, "From the Vault: A Look Back at the October 15, 2014 Flash Rally," *Liberty Street Economics*, 2019-10-15. https://libertystreeteconomics.newyorkfed.org/2019/10/from-the-vault-a-look-back-at-the-october-15-2014-flash-rally/
+- Man Group papers on systematic credit (2022 and 2023), cited from the shelf as Man_Quantitative_Credit_Alpha_Early_Mover_2022 and Man_Revolutions_in_Credit_Trading_2023.
+- Arista Networks, 7130 Series product documentation (Layer 1+ devices; vendor latency specifications). Title only.
+- AMD and Exegy, STAC-T0 tick-to-trade benchmark announcements (2024). Vendor claims; title only.
+- The DESK coverage of auto-quoting, no-touch rates and credit futures blocks (2025-10-08, 2026-10-08, 2026-10-16), as cited in the Trend Watch boxes. Title only.
+
+**Academic Papers**
+
+- Matteo Aquilina, Eric Budish and Peter O'Neill (2020), "Quantifying the High-Frequency Trading 'Arms Race': A Simple New Methodology and Estimates," FCA Occasional Paper 50; later published in the *Quarterly Journal of Economics*. https://www.fca.org.uk/publication/occasional-papers/occasional-paper-50.pdf
+- Eric Budish, Peter Cramton and John Shim (2015), "The High-Frequency Trading Arms Race: Frequent Batch Auctions as a Market Design Response," *Quarterly Journal of Economics* 130(4).
+- Jeffrey Dean and Luiz André Barroso (2013), "The Tail at Scale," *Communications of the ACM* 56. https://research.google/pubs/the-tail-at-scale/
+- John D. C. Little (1961), "A Proof for the Queuing Formula: L = λW," *Operations Research* 9(3).
+- J. F. C. Kingman (1961), "The Single Server Queue in Heavy Traffic," *Proceedings of the Cambridge Philosophical Society* 57.
+- E. S. Page (1954), "Continuous Inspection Schemes," *Biometrika* 41; Gary Lorden (1971), "Procedures for Reacting to a Change in Distribution," *Annals of Mathematical Statistics* 42; George Moustakides (1986), "Optimal Stopping Times for Detecting Changes in Distributions," *Annals of Statistics* 14.
+- David Siegmund (1985), *Sequential Analysis: Tests and Confidence Intervals*, Springer (the ARL approximation used in §27.7).
+- Lockwood, Gupte, Mehta, Blott, English and Vissers (2012), "A Low-Latency Library in FPGA Hardware for High-Frequency Trading (HFT)," IEEE Symposium on High-Performance Interconnects.
+- Richard T. Snodgrass (1999), *Developing Time-Oriented Database Applications in SQL*, Morgan Kaufmann (the bitemporal model of §27.3).
+
+**Regulation, Data & Code**
+
+- SEC, *In the Matter of Knight Capital Americas LLC*, Release No. 34-70694 (2013-10-16). https://www.sec.gov/litigation/admin/2013/34-70694.pdf
+- SEC, Risk Management Controls for Brokers or Dealers with Market Access (Rule 15c3-5), Release No. 34-63241 (2010-11-03). https://www.sec.gov/rules/final/2010/34-63241.pdf
+- SEC press release 2014-260, adoption of Regulation SCI (2014-11-19). https://www.sec.gov/news/press-release/2014-260
+- Commission Delegated Regulation (EU) 2017/589 (MiFID II RTS 6, algorithmic trading). https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32017R0589
+- FINRA Rule 4590, Synchronization of Member Business Clocks. https://www.finra.org/rules-guidance/rulebooks/finra-rules/4590
+- FINRA TRACE overview and specifications. https://www.finra.org/filing-reporting/trace (Regulatory Notices 25-17 and 26-16: title only.)
+- OpenFIGI symbology and mapping API. https://www.openfigi.com/ and https://www.openfigi.com/api
+- CourtListener REST API, for the docket of *Dinosaur Financial Group LLC v. S&P Global Inc.*, S.D.N.Y. No. 1:22-cv-01860. https://www.courtlistener.com/help/api/
+- This chapter's reference implementation: `ch27_desk_system.py`, blocks 1–5 above (provenance and dedupe, bitemporal master, queueing, trigger tables, kill switch).
+
+<!-- STATUS: COMPLETE -->
