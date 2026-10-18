@@ -38,7 +38,7 @@ How the book gets made, edition after edition. Every stage has one owner, one se
 5. **Usage pacing.** Cap live agents at about 20 (about 10 workflows). Priority order: (a) the current edition's chapters, (b) research feeding the next edition, (c) reviews, (d) cleanup. Launch a lower tier only when the higher tiers are already running.
 6. **Limit handling.** When agents fail with a session or usage limit, stop launching. Record the reset time in the ledger, schedule a resume (`send_later`) for reset + 2 minutes, and resume from `tools/status.py`.
 7. **Retry once.** Workflow scripts retry a failed agent once. Persistent failures are returned in the result and recorded in the ledger.
-8. **Snapshots.** A background auto-commit runs every 10 minutes, plus a commit at every turn boundary, so partial files reach the remote within 10 minutes.
+8. **Snapshots.** Commit at every turn boundary. A background auto-commit loop can run every 10 minutes, but background jobs cap at 2 hours, so turn-boundary commits are the real guarantee, so partial files reach the remote within 10 minutes.
 9. **Let unsaved work finish.** Do not kill a running agent that holds unsaved research unless it is duplicating other work. A stopped agent's context is lost.
 
 ## Usage Economics & Pacing Playbook (measured 2026-10-17)
