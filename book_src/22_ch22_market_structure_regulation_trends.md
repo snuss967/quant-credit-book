@@ -710,3 +710,165 @@ The customer's regulation moves flow too, and a systematic desk should model it 
 > **[SOURCE EXTRACTION]** *Blackstone_Systematic_Credit p.2:* "dynamically adjust portfolios to minimize capital charges for insurance clients under regulatory frameworks like Solvency II"
 >
 > **Annotation.** Our analysis: this is the buy-side mirror of (22.1). An insurer pays rent on its holdings too, through Solvency II in Europe and NAIC risk-based capital in the US, and its rent jumps at rating boundaries. Nuveen's framework makes the same point, describing the need to "limit exposure to certain sectors due to regulatory capital requirements" (`Nuveen_Multi_Asset_Credit_Quant_Framework p.5`). The flow consequence is predictable selling: fallen angels sold by insurers, CCC buckets cured by CLOs, and sector limits enforced at quarter-ends. A dealer that knows the customer's capital function knows when the customer is a forced seller, which in Ines's vocabulary is the most valuable thing at the table: an opponent who must fold. Where the modern desk departs from the asset manager's framing is in the direction of the optimization: Blackstone minimizes the client's charge, and the market maker prices the trades that minimization forces.
+
+## 22.8 The Regulatory Event-Study Engine
+
+Every section of this chapter ended in a date. This section turns the dates into a tool that answers the second half of the cold-open question: *did the rule change the data, or did something else?*
+
+### 22.8.1 Derivation: difference-in-differences around an effective date
+
+Let $y_{it}$ be an outcome for bond $i$ on business day $t$ (an effective half-spread in bp, a TRACE volume, a dealer hit rate), $D_i \in \{0,1\}$ mark the bonds the rule touches (treated), and $\text{Post}_t = \mathbf{1}\{t \ge t_0\}$ mark the dates on or after the effective date $t_0$. The two-way fixed-effects model is
+
+$$
+y_{it} = \alpha_i + \mu_t + \delta\,D_i\,\text{Post}_t + \epsilon_{it},
+\tag{22.16}
+$$
+
+with $\alpha_i$ a bond effect (its permanent liquidity level), $\mu_t$ a date effect (everything that hits all bonds at once: rates, the VIX, quarter-end, the healing after the March 2023 bank stress), and $\delta$ the effect of the rule. Average each bond over the pre-window and the post-window, and take the difference $d_i = \bar y_i^{\text{post}} - \bar y_i^{\text{pre}}$. In a balanced panel, $\alpha_i$ cancels within the bond and $\bar\mu^{\text{post}} - \bar\mu^{\text{pre}}$ is common to every bond, so
+
+$$
+\hat\delta = \bar d_{\text{T}} - \bar d_{\text{C}} = \delta + \big(\bar{\Delta\epsilon}_{\text{T}} - \bar{\Delta\epsilon}_{\text{C}}\big),
+\tag{22.17}
+$$
+
+which is unbiased if the treated and control groups would have moved in parallel without the rule, $\mathbb{E}[\Delta\epsilon_i \mid D_i = 1] = \mathbb{E}[\Delta\epsilon_i \mid D_i = 0]$. That parallel-trends assumption is the whole identification, and it is testable only indirectly: with pre-trend checks and with **placebo dates**, fake effective dates on which $\hat\delta$ should be zero. Errors are correlated within a bond over time, so the standard error comes from a cluster bootstrap that resamples whole bonds.
+
+A before-and-after comparison with no control group is the regulatory version of reporting raw returns. It attributes $\bar\mu^{\text{post}} - \bar\mu^{\text{pre}}$, the market, to the rule. IDO or it didn't happen.
+
+*Worked example.* The PT modifier went live on 2023-05-15. Treated bonds: issues that appear often in portfolio trades (index-eligible, recently issued, high PT share in 2022). Controls: matched bonds by rating, maturity, and size that rarely appear in PTs. Outcome: TRACE-measured effective half-spread. The obvious confounder is that market-wide liquidity was healing after the March 2023 stress, which pushes every bond's measured costs down at the same time; the control group absorbs it, and a naive before-and-after on the treated bonds alone would report the healing as a rule effect. Placebos: two pre-event dates, plus the best placebo in the book, 2025-12-04, when the one-minute rule was abandoned without ever having taken effect.
+
+### Specification for AI Implementation (event-study engine)
+
+**The Spec You Hand the Robot.** *Vague version:* "measure the effect of the new rule." *What ROBO built:* the mean of $y$ after the date minus the mean before it, on the treated bonds only, which correctly attributed the 2023 recovery in bank stocks to a FINRA reporting modifier. *Precise version:* implement (22.17) on a panel `[date (datetime64, New York calendar), bond_id (str), treated (bool), y (float)]`; the window is in business days relative to $t_0$, with the event day counted as post; use only bonds observed on both sides; return the 2×2 table of means, $\hat\delta$, and a cluster-bootstrap standard error (resample bonds within the treated and control groups, seeded); and provide `placebo(panel, dates, **kw)`. Reject panels with fewer than two treated or control bonds. Validate on a synthetic panel with a known effect and a concurrent market-wide shock.
+
+```python
+def event_study_did(panel, event_date, window=(-60, 60), n_boot=500, seed=0,
+                    treated_col="treated", y_col="y"):
+    """Difference-in-differences around an effective date (eq. 22.17), cluster bootstrap by bond."""
+    need = {"date", "bond_id", treated_col, y_col}
+    missing = need - set(panel.columns)
+    if missing:
+        raise ValueError(f"missing columns: {sorted(missing)}")
+    t0 = np.datetime64(pd.Timestamp(event_date).date())
+    rel = np.busday_count(t0, panel["date"].to_numpy().astype("datetime64[D]"))
+    keep = (rel >= window[0]) & (rel <= window[1])
+    df = panel.loc[keep, ["bond_id", treated_col, y_col]].copy()
+    df["post"] = rel[keep] >= 0                                   # event day counts as post
+    cell = df.groupby(["bond_id", treated_col, "post"])[y_col].mean().unstack("post")
+    if False not in cell.columns or True not in cell.columns:
+        raise ValueError("the window must contain pre and post observations")
+    cell = cell.dropna()                                          # bonds seen on both sides only
+    d = (cell[True] - cell[False]).to_numpy()
+    tmask = cell.index.get_level_values(treated_col).to_numpy(dtype=bool)
+    d_t, d_c = d[tmask], d[~tmask]
+    if d_t.size < 2 or d_c.size < 2:
+        raise ValueError("need at least two treated and two control bonds")
+    rng = np.random.default_rng(seed)
+    boots = np.array([rng.choice(d_t, d_t.size).mean() - rng.choice(d_c, d_c.size).mean()
+                      for _ in range(n_boot)])
+    table = pd.DataFrame({"pre": [cell[False][tmask].mean(), cell[False][~tmask].mean()],
+                          "post": [cell[True][tmask].mean(), cell[True][~tmask].mean()]},
+                         index=["treated", "control"])
+    table["change"] = table["post"] - table["pre"]
+    return {"table": table, "did": float(d_t.mean() - d_c.mean()), "se": float(boots.std(ddof=1)),
+            "n_treated": int(d_t.size), "n_control": int(d_c.size)}
+
+
+def placebo(panel, dates, **kwargs):
+    """DiD estimate on each fake effective date; all should be near zero."""
+    return pd.Series({pd.Timestamp(d): event_study_did(panel, d, **kwargs)["did"] for d in dates})
+
+
+# Synthetic PT-modifier panel: +2bp on treated bonds from 2023-05-15, and a concurrent
+# market-wide improvement of 3bp (the post-March-2023 healing) that a naive study would misread.
+rng = np.random.default_rng(2023)
+dates = pd.bdate_range("2022-10-03", "2023-09-29")
+n_t = n_c = 40
+ids = np.array([f"T{i:02d}" for i in range(n_t)] + [f"C{i:02d}" for i in range(n_c)])
+is_t = np.r_[np.ones(n_t, dtype=bool), np.zeros(n_c, dtype=bool)]
+post = np.asarray(dates >= pd.Timestamp("2023-05-15"))
+fe = rng.normal(0.0, 20.0, ids.size)                                # bond-level cost, bp
+market = np.cumsum(rng.normal(0.0, 0.05, dates.size)) - 3.0 * post  # market-wide cost, bp
+y = (fe[None, :] + market[:, None] + rng.normal(0.0, 1.0, (dates.size, ids.size))
+     + 2.0 * (post[:, None] & is_t[None, :]))
+panel = pd.DataFrame({"date": np.repeat(dates.to_numpy(), ids.size), "bond_id": np.tile(ids, dates.size),
+                      "treated": np.tile(is_t, dates.size), "y": y.ravel()})
+
+res = event_study_did(panel, "2023-05-15", window=(-60, 60), n_boot=400, seed=1)
+assert abs(res["did"] - 2.0) < max(4.0 * res["se"], 0.1) and res["se"] < 0.2
+naive = res["table"].loc["treated", "change"]                       # before-after, no control group
+assert naive < 0.0 < res["did"]                                     # naive says costs fell; they rose
+plac = placebo(panel, ["2023-01-17", "2023-02-15"], window=(-40, 40), n_boot=200, seed=2)
+assert (plac.abs() < 0.25).all()                                    # nothing happened on fake dates
+```
+
+## 22.9 Desk Debrief
+
+- **A dealer sells balance sheet, time, and information, and every rule is a tax or a subsidy on one of them.** The desk does not comply with rules; it prices them, and it dates them.
+- **Rent is $h\cdot\max(\kappa_{\text{RWA}}\text{RW}, \kappa_{\text{LR}})\cdot\tau^{\text{hold}}$.** A flat dealer widens both sides; a long dealer skews. For a 2-year Treasury, rent is the whole spread (breakeven hold of three to four days); for a BBB, it is a rounding error (about a month). That inequality explains why Treasuries went agency first.
+- **A reporting delay is an option the block dealer holds**, worth $2\lambda Q/T_u$ of spread per unit of delay. The fifteen-minute, \$5mm/\$1mm equilibrium has survived attacks from both sides since 2019. It is priced into every block you quote.
+- **Behind "5MM+" is a Pareto tail** with $\alpha \approx 1.67$ for IG and $1.33$ for HY, so block-size variance does not exist. Use the historic file, medians, and rating-specific tails; never average at the cap.
+- **Square roots and floors.** T+1 cut the volatility component of margin by between $1-\sqrt{2/3}$ and $1-\sqrt{1/2}$, and DTCC's 23–29% landed inside the bracket. Netting shrinks exposure by $1/\sqrt{N-1}$ in a two-way market and by almost nothing in a one-way market, which is the only market in which you need it.
+- **Dealer capacity is a hinge:** rent in calm markets, convex in stress, with the kink near a third of utilization. Make the liquidity model's dealer term a slow state variable, not a constant.
+- **Capital rules are dated changes in $\kappa$.** For each one, ask which inventories are leverage-bound and which are risk-bound; the 2023–2026 endgame saga moved them in opposite directions.
+- **Every effective date is a structural break, and every abandoned rule is a placebo.** No control group, no effect: IDO or it didn't happen.
+
+### The Spec You Hand the Robot
+
+*Vague version:* "make the models regulation-aware." *What ROBO built:* a dummy variable for every page of the Federal Register since 2002, a model with more regulatory features than bonds, and a perfect in-sample fit. *Precise version (prompt-ready):*
+
+> Build `reg_cost_engine.py` (numpy and pandas only; every random draw seeded). (1) `regulatory_carry_bp(kappa_rwa, risk_weight, kappa_lr, hurdle, holding_days)`: $10^4\,h\,\max(\kappa_{\text{RWA}}\text{RW}, \kappa_{\text{LR}})\,\text{days}/365$, decimals only, reject ratios outside [0, 1] and non-positive days; `breakeven_holding_days` per (22.4); `carry_table` over a positions frame using $|$notional$|$. (2) `block_half_spread` per (22.6) with the positive-part guard and an optional inferred size; `pareto_alpha_from_imputed_mean` and `censored_impact` per (22.7), with $\alpha > 1$ enforced. (3) `margin_ratio` per (22.8) on the horizon including close-out; `fail_cost_annual` per (22.9). (4) `netting_factor_mc` returning simulated, theoretical ($1/\sqrt{N-1}$) and directional-floor (22.11) factors; `mandate_net_benefit` per (22.12); `capacity_hinge` calibrated from two published sentences. (5) `REGIME_DATES` as the single dated table, and `trace_regime_flags`, which rejects naive timestamps, compares New York calendar dates, keeps `one_minute_rule` False forever, and flags capped sizes by rating bucket. (6) `event_study_did` per (22.17) with a cluster bootstrap by bond, and `placebo`. Acceptance tests: the asserts in this chapter, unchanged, including: Treasury rent 1.15bp a week at 5% and 12%; margin ratios 0.7071 and 0.8165 bracketing DTCC's 0.71 and 0.77; netting factor within 2% of 0.204 at $N = 25$; a synthetic +2bp rule effect recovered within four standard errors despite a −3bp concurrent market move; placebo estimates below 0.25bp. Do not invent bond identifiers; use descriptive `bond_id` strings.
+
+### Exercises
+
+1. **The ante.** A 5-year on-the-run Treasury trades 0.5bp of price wide. With $h = 12\%$, compute the breakeven holding period at $\kappa_{\text{LR}} = 5\%$ and at $3.75\%$. A dealer's average holding period in Treasuries is two days. Is it a principal market maker or an agent with extra steps? *(Answer sketch: $\tau^\ast = 0.25/60$ years, about 1.5 days, and 0.25/45 years, about 2.0 days; the eSLR rule moved this dealer from losing money on the hold to breaking even.)*
+2. **Pooling at the cap.** Using (22.6) and (22.7) with the IG parameters of §22.2, find the block size $Q$ at which the cap neither helps nor hurts the dealer, and show that for $C < Q < mC$ the cap *widens* the competitive block spread. Explain, as Ines would, why small-block dealers and large-block dealers lobby differently on the caps.
+3. **Negative specials.** Using (22.9), show that a short seller who can either fail or borrow the bond in repo at the special rate $r^{\text{sp}}$ is indifferent when $r^{\text{sp}} = \min(0,\ r^{\text{ref}} - 3\%)$. Compute the floor for $r^{\text{ref}} = 0.25\%$ and $r^{\text{ref}} = 4\%$, and reconcile the first number with Veronesi's account of May 2009.
+4. **When does netting give up?** For $m = 0.5\sigma_x$, compute $\phi(N)$ by simulation for $N \in \{5, 10, 25, 100\}$ and find the $N$ at which it is within 5% of the floor (22.11). What does that say about the benefit of adding more clearing members in a one-way market?
+5. **Kaz's event date.** Kaz proposes studying the Treasury clearing mandate with an event date of 2025-12-31, "because that's the date in the release." Explain what is wrong with this, design a treated and control set and a placebo set for the actual cash compliance date (2026-12-31, or whatever it has become by the time you read this), and say what result would make you distrust your own estimate.
+6. **ROBO maximizes transparency.** ROBO is told to "maximize transparency" and sets $\Delta = 0$ and $C = \infty$. Using (22.6), describe the block market it builds, which trades survive, and which protocols (Chapters 19 and 20) absorb the rest. Then cite the empirical result from Asquith, Covert and Pathak that would most worry ROBO's sponsor.
+
+### Deep-Dive Resource Graph
+
+**Podcasts**
+- Bloomberg *Odd Lots* (Joe Weisenthal and Tracy Alloway), episodes on Treasury market plumbing, the basis trade, and the March 2020 dash for cash *(search the archive; title only)*.
+- *Macro Musings* (David Beckworth), conversations on Treasury market resilience and central clearing *(title only)*.
+
+**Practitioner Writing**
+- FINRA Regulatory Notice 25-17 (2025-12-04; one-minute rule dropped, allocation reports, caps restated): https://www.finra.org/rules-guidance/notices/25-17
+- FINRA Regulatory Notice 19-12 (block-size dissemination pilot): https://www.finra.org/rules-guidance/notices/19-12
+- FINRA Regulatory Notice 22-12 (PT modifier): https://www.finra.org/rules-guidance/notices/22-12
+- FINRA Regulatory Notice 22-17 (one-minute proposal): https://www.finra.org/rules-guidance/notices/22-17
+- FINRA Regulatory Notice 26-16 (affiliate indicator): https://www.finra.org/rules-guidance/notices/26-16
+- FINRA rule filing SR-FINRA-2024-004: https://www.finra.org/rules-guidance/rule-filings/sr-finra-2024-004
+- SEC press release 2023-247 (Treasury clearing mandate): https://www.sec.gov/news/press-release/2023-247
+- SEC press release 2023-29 (T+1 adoption): https://www.sec.gov/news/press-release/2023-29
+- SEC press release 2024-14 (dealer rule): https://www.sec.gov/news/press-release/2024-14
+- SEC press release 2025-43 (Treasury clearing compliance extension, 2025-02-25) *(title only)*.
+- Federal Reserve, Basel III endgame proposal (2023-07-27): https://www.federalreserve.gov/newsevents/pressreleases/bcreg20230727a.htm
+- Federal Reserve, Barr speech on the capital re-proposal (2024-09-10): https://www.federalreserve.gov/newsevents/speech/barr20240910a.htm
+- Federal Reserve, eSLR final rule (2025-11-25): https://www.federalreserve.gov/newsevents/pressreleases/bcreg20251125b.htm
+- Federal Reserve, Basel III re-proposal (2026-03-19): https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260319a.htm
+- Federal Reserve, SLR temporary exclusion (2020-04-01): https://www.federalreserve.gov/newsevents/pressreleases/bcreg20200401a.htm
+- Federal Reserve, Volcker Rule revisions (2019-10-08): https://www.federalreserve.gov/newsevents/pressreleases/bcreg20191008a.htm
+- Federal Reserve, Secondary Market Corporate Credit Facility: https://www.federalreserve.gov/monetarypolicy/smccf.htm
+- CFTC press release 6429-12 (first swap clearing determination, 2012-11-28): https://www.cftc.gov/PressRoom/PressReleases/6429-12
+- ISDA research portal (including *CDS Market Dynamics: Five Years of Activity and a Record 2025*): https://www.isda.org/category/research/
+- ESMA, consolidated tape providers: https://www.esma.europa.eu/esmas-activities/markets-and-infrastructure/consolidated-tape-providers
+- MarketAxess 8-K Exhibit 99.1 (ICE transaction announcement, 2026): https://www.sec.gov/Archives/edgar/data/1278021/000119312526324933/d159148dex991.htm
+- DTCC, SIFMA and ICI, T+1 after-action report (2024) *(title only)*; FINRA TRACE FactBook 2025 *(title only)*; Matt Levine, *Money Stuff*, on TRACE, Treasury clearing, and manufactured credit events *(title only)*.
+
+**Academic Papers**
+- Asquith, Covert and Pathak (2013, rev. 2019), *The Effects of Mandatory Transparency in Financial Market Design: Evidence from the Corporate Bond Market*, NBER w19417: https://www.nber.org/papers/w19417
+- Duffie, Fleming, Keane, Nelson, Shachar and Van Tassel (2023), *Dealer Capacity and U.S. Treasury Market Functionality*, NY Fed Staff Report 1070: https://www.newyorkfed.org/research/staff_reports/sr1070
+- *Title only:* Bessembinder, Maxwell and Venkataraman (2006), *Market Transparency, Liquidity Externalities, and Institutional Trading Costs in Corporate Bonds*; Edwards, Harris and Piwowar (2007), *Corporate Bond Market Transaction Costs and Transparency*; Goldstein, Hotchkiss and Sirri (2007), *Transparency and Liquidity: A Controlled Experiment on Corporate Bonds*; Bao, O'Hara and Zhou (2018), *The Volcker Rule and Corporate Bond Market Making in Times of Stress*; Duffie (2012), *Market Making Under the Proposed Volcker Rule*; Duffie (2020), *Still the World's Safe Haven?*; Avellaneda and Stoikov (2008), *High-Frequency Trading in a Limit Order Book*; Kyle (1985), *Continuous Auctions and Insider Trading*.
+
+**Data & Code**
+- NY Fed primary dealer statistics (FR 2004): https://www.newyorkfed.org/markets/counterparties/primary-dealers-statistics
+- FINRA Rule 6730 (TRACE reporting): https://www.finra.org/rules-guidance/rulebooks/finra-rules/6730
+- FINRA Rule 6750 (TRACE dissemination, including Treasuries): https://www.finra.org/rules-guidance/rulebooks/finra-rules/6750
+- SEC EDGAR: https://www.sec.gov/edgar
+- FRED (Federal Reserve Economic Data): https://fred.stlouisfed.org/
+- This chapter's `REGIME_DATES` table, which Chapters 19, 20, 24 and Appendix C import as the single dated source for regulatory structural breaks.
+
+<!-- STATUS: COMPLETE -->

@@ -91,7 +91,7 @@ This is the empirical regularity of Ben Dor et al., below: the volatility of a b
 
 ## 28.2 Effective Breadth When Issuers Cluster
 
-Theo's book has 300 bonds. Kaz's breadth calculation therefore says 300. Ines looks at the issuer column and asks how many hands Theo is actually playing. The answer turns out to be about forty, and the gap between 300 and 40 is the difference between a Sharpe ratio of 2.7 and one of 1.0 at the same hit rate.
+Theo's book has 300 bonds. Kaz's breadth calculation therefore says 300. Ines looks at the issuer column and asks how many hands Theo is actually playing. The answer turns out to be about forty, and the gap between 300 and 40 is the difference between an information ratio of 2.7 and one of 1.0 at the same 50.5% hit rate.
 
 ### The Fundamental Law in hit-rate form
 

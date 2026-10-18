@@ -776,3 +776,162 @@ where JTD is the loss at default net of the stock hedge's gain. The first term i
 **Case note: Wolfspeed, 2025, when the convertible is the fulcrum.** Wolfspeed's restructuring support agreement of June 22, 2025 was signed by holders of more than 97% of its senior secured notes, more than 67% of its convertible notes, and Renesas's U.S. subsidiary; the company filed a prepackaged Chapter 11 late in June 2025, targeting roughly \$4.6bn (about 70%) of debt reduction and about a 60% cut in annual cash interest, and the plan was reported effective on September 29, 2025 *(terms as reported; approx.)*. Under the reported terms the convertible holders took new notes and the bulk of the reorganized equity, shared with Renesas. For a convert-arb book, that is the trade's endgame inverted: the "bond floor" was not a floor, the convertible *was* the equity of the new company, and the short in the old stock was the profitable leg. The flags a systematic desk would watch in a name like this are the ones this chapter builds: convertibles trading below the straight-debt floor implied by the secured curve (the market pricing them as the fulcrum), a low-strike put floor in (23.8) implying a hazard far above the CDS-free model, and a CreditGrades $z$ that disagrees with the converts' price about how much option value the old equity will keep. We have not reconstructed those series for Wolfspeed; Exercise 5 asks you to.
 
 > **Trend Watch.** *The convertible comeback.* After a lean 2022, the strategy and the market both revived. The HFRX Convertible Arbitrage index returned 10.1% in 2023, global issuance was about \$90bn that year (US about \$57bn), and issuers' effective cost through converts was roughly 3–4% against 7–9% in high yield over 2023–24, with short-sale rebates of 5% or more (Resonanz Capital, "Convertible Arbitrage: The 2023–2025 Comeback," July 10, 2025). Global issuance reached \$167.1bn across 264 deals in 2025, which Numerix called the strongest year on record, and 2026 issuance was reported at about \$131bn in the US through early September, about half from AI-linked issuers *(approx.; secondary reporting)*. *What it means:* the AI capex cycle is financing itself partly by selling volatility to convert-arb funds, so convertible supply is now a driver of single-name implied vol in the issuers' equity surfaces. If you trade those surfaces against CDS, the converts are a third leg you have to model.
+
+## 23.8 When the Surface Lies: Banks, Runs, and Contractual Inversions
+
+Everything so far assumes that default is a firm-value diffusion crossing a barrier, so that the equity surface and the credit curve are two views of one process. The surface lies exactly where that is false. There are three ways it fails, and an ex-RSSG analyst has an edge in all three, because in each one the contract or the run decides who gets paid, not the diffusion.
+
+### Case Study B: SVB, March 8–10, 2023
+
+**The facts.** On March 8, 2023, SVB Financial Group announced the balance-sheet restructuring from the cold open. In the Federal Reserve's words, "the bank faced a run by depositors on March 9. Deposit outflows were over \$40 billion on March 9, and management expected \$100 billion more" on March 10 (Federal Reserve, April 28, 2023). At year-end 2022, about 94% of deposits were uninsured, and the HTM portfolio had a weighted-average duration of 6.2 years. On March 10 the California Department of Financial Protection and Innovation closed Silicon Valley Bank and appointed the FDIC as receiver; at December 31, 2022 the bank had about \$209.0bn of assets and \$175.4bn of deposits (FDIC press release PR-23-016, March 10, 2023). The Fed's review notes that the stock had been "relatively stable" until March 8 "before deteriorating sharply," and that as of March 1 analysts had 12 Buy, 11 Hold, and 1 Sell ratings on it.
+
+**The price path** *(approx.; secondary press reports of TRACE prints)*:
+
+| Date (2023) | Equity | Holdco senior notes (cents) |
+| :-- | :-- | :-- |
+| Week of March 6 | Stable until the March 8 announcement | Mid-80s |
+| March 9 | Down about 60% | 1.8% 2026s reportedly 115bp wider, to 241bp |
+| March 10 | Halted; bank closed | About 37–42 at the close |
+| March 13 | Delisted path; holdco equity effectively gone | About 47–50 after the deposit guarantee |
+| March 17 | Holdco files Chapter 11 | About 60 by that week's end |
+
+**Why the surface was wrong.** Three reasons, in increasing order of importance. First, the asset vol was wrong: Nagel and Purnanandam (2020, *Review of Financial Studies*) show that bank assets are themselves loans, short puts on borrowers' assets, so the bank's asset payoff is concave and its asset volatility *rises* after bad shocks; constant-volatility structural models "can seriously understate banks' default risk" in good times. Second, the leverage was wrong: for a bank, debt per share is mostly deposits, and ROBO's 12bp came from treating them as equity. Third, and decisively, the default event was wrong. SVB did not fail because $V_t$ crossed $F$; the HTM book was never marked to market before the closure. It failed because liquidity went negative:
+
+$$
+\text{default at } \tau = \inf\Big\{t : \text{outflows}_t > \text{cash}_t + \text{monetizable}_t\Big\}, \qquad \text{outflow rate}_t = \kappa\,\max(0, -r^E_t) + \rho\,\frac{D^{u}_0 - D^{u}_t}{D^{u}_0},
+$$
+
+where $D^u_t$ is uninsured deposits, $r^E_t$ is the equity return, and the second term is the panic feedback: depositors leave faster when other depositors have left. Equity vol in this model is an *output* of the run, not an input to it. A put surface that "makes no sense unless the stock is going to zero" was the only instrument pricing the run correctly.
+
+Theo's 13-week cash flow model, which has followed him through this book on a USB stick, finally meets its natural habitat. A bank's default model *is* a liquidity runway: sources, uses, and the day the line crosses zero. For SVB the 13 weeks were two days.
+
+> **[SOURCE EXTRACTION]** *Bohn_Stein_Active_Credit_Portfolio_Management p.198:* "the assumption that equity prices are only affected by changes in the firm's underlying asset value may lead an analyst astray when the equity price becomes overwhelmed by liquidity or market bubble issues or when the information that informs the prices (e.g., the value of inventories, etc.) is observed imperfectly by market participants."
+>
+> **Annotation.** Bohn and Stein wrote this about the 1987, 2007, and 2008 sell-offs, and recommended hybrid models that add non-asset-value factors. For banks in 2023 the warning applies in the opposite direction: the equity price was *not* overwhelmed by noise, it was the first market to process a liquidity fact (uninsured, concentrated, networked depositors) that the asset-value model had no state variable for. The modern desk's fix is the hybrid they describe, specialized: for financials, route the name out of CreditGrades entirely and into a liquidity model whose state includes the uninsured share, HTM unrealized losses relative to CET1, the duration gap, and deposit beta, and let the equity surface be a check on that model rather than its input.
+
+> **Docket Diary.** *SVB Financial Group, Chapter 11, filed March 17, 2023 (S.D.N.Y.).* The holding company, no longer owning the bank, filed with \$3,279mm of senior notes outstanding across seven series, and about \$2bn of its cash in accounts at the FDIC's bridge bank, which the FDIC froze; an interim order later gave limited access. Bond prices around 60 cents in the following week said the market expected the holdco's creditors to recover a large fraction of par from cash and non-bank businesses, not from the bank. The Ad Hoc Group, represented by counsel, would like to note for the record that it would like its \$2bn back.
+
+### Case Study C: Credit Suisse AT1, March 19, 2023
+
+On March 19, 2023, FINMA ordered "a complete write-down of the nominal value of all AT1 debt of Credit Suisse in the amount of around CHF 16 billion," triggered by extraordinary government support, as UBS agreed to acquire the bank (FINMA press release, March 19, 2023). Shareholders received 1 UBS share per 22.48 Credit Suisse shares, CHF 0.76 per share, "a total consideration of CHF 3 billion" (UBS media release, March 19, 2023). A claim senior to equity received zero while equity received CHF 3bn. No Merton diagram, no CreditGrades barrier, and no Carr–Wu corridor produces that outcome, because all of them assume the waterfall is ordered by priority. The contract had a viability trigger, and the trigger reordered the waterfall.
+
+> **Desk Myth vs. Desk Reality.** *Myth:* AT1 is senior to equity, so an AT1 trading below the equity-implied recovery is an arbitrage. *Reality:* AT1 is senior to equity in liquidation. Before liquidation, its write-down clause lets a regulator's viability determination zero it while the equity is sold for consideration. Kaz, reading the prospectus, asked whether "point of non-viability" was a topology term. It is a legal one, and it is a strike the regulator sets.
+
+### Case Study D: Hertz, 2020–21, the Happy Inversion
+
+Hertz filed for Chapter 11 on May 22, 2020, with an equity that every model said was worthless; in June 2020 it announced, and then shelved, a \$500mm at-the-money stock offering into a market that kept bidding for its shares. Used-car prices and a bidding war among plan sponsors then raised the value of the estate. The plan, confirmed June 10, 2021 and effective June 30, 2021, repaid the unsecured notes in full in cash, and gave existing shareholders 14,133,075 shares of new common, about 3% of 471,102,514, plus, for those not in the rights offering, 89,049,029 warrants exercisable until June 30, 2051 at an initial \$13.80 (Hertz Form 8-K filed July 7, 2021); secondary reporting adds about \$239mm of cash to old equity *(approx.)*. The sponsors (Knighthead, Certares, Apollo) put in \$2.781bn of new common, \$1.5bn of Apollo preferred, and a \$1.635bn backstopped rights offering. The equity was a call on enterprise value that finished in the money. The surface that priced Hertz equity above zero in bankruptcy was not irrational; it was long volatility on an estate whose value distribution had a fat right tail. Mags's verdict: "Recovery is what you get, eventually, after the lawyers. Sometimes the lawyers are on your side."
+
+### Specification for AI Implementation (continued): the bank override
+
+**Rule.** Any issuer with deposits above 50% of liabilities, or any instrument with a contractual write-down or conversion trigger, is routed out of the CreditGrades engine. Banks go to a liquidity-runway model; trigger instruments carry a `contractual_waterfall_override = True` flag, and the risk system refuses to net them against equity as if priority held. The code is purely illustrative: inputs are round numbers loosely scaled to a \$200bn bank, not SVB's balance sheet.
+
+```python
+# ---------- block 5: illustrative bank-run default vs. a Merton PD ----------
+def bank_run_dd(cash, securities, haircut, max_monetize_per_day, uninsured, kappa, rho, equity_rets):
+    """Liquidity default day under a run whose outflow rate rises with equity losses (kappa)
+    and with cumulative outflows (rho, the panic feedback). All amounts in $bn; illustrative."""
+    dep_u, liquid, sec = float(uninsured), float(cash), float(securities)
+    path = []
+    for day, ret in enumerate(equity_rets, start=1):
+        rate = min(1.0, kappa * max(0.0, -ret) + rho * (1.0 - dep_u / uninsured))
+        outflow = rate * dep_u
+        raised = min(sec * (1.0 - haircut), max_monetize_per_day)
+        sec -= raised / (1.0 - haircut)
+        liquid += raised
+        path.append({"day": day, "outflow": outflow, "liquidity": liquid})
+        if outflow > liquid:
+            return {"default_day": day, "path": pd.DataFrame(path)}
+        liquid -= outflow
+        dep_u -= outflow
+    return {"default_day": None, "path": pd.DataFrame(path)}
+
+run = bank_run_dd(cash=13.0, securities=115.0, haircut=0.10, max_monetize_per_day=30.0,
+                  uninsured=165.0, kappa=0.42, rho=2.0, equity_rets=[-0.60, -0.30, -0.10])
+_, _, d2_bank = merton_equity(212.0, 196.0, 0.03, 0.04, 1.0)
+merton_pd_bank = float(norm.cdf(-d2_bank))
+assert run["default_day"] == 2 and merton_pd_bank < 0.01
+print(f"liquidity default on day {run['default_day']}; Merton 1y PD on the same bank {merton_pd_bank:.2%}")
+print(run["path"].round(1).to_string(index=False))
+```
+
+## 23.9 Cross-Asset Trend: Does the Surface Lead the Spread?
+
+The last use of the surface is as a clock. If equity and credit are two strikes on one distribution but different investors trade them at different speeds, the faster market leads. The evidence says equity usually does: Dynkin's team finds that each +1% per month of sector equity momentum predicts about +5–8bp of subsequent bond excess return, stronger in US high yield (Dynkin_Systematic_Investing_in_Credit p.644). The specification is a panel lead–lag regression,
+
+$$
+r^{\text{xs}}_{i,t+1} = a + b\,r^{E}_{i,t} + c\,\Delta\sigma^{\text{impl}}_{i,t} + d\,\Delta\widehat{\lambda}^{\text{put}}_{i,t} + \epsilon_{i,t+1},
+$$
+
+where $r^{\text{xs}}$ is bond excess return over duration-matched Treasuries, $r^E$ the equity return, $\Delta\sigma^{\text{impl}}$ the change in implied vol, and $\Delta\widehat\lambda^{\text{put}}$ the change in the put-floor hazard from (23.8). Use Chapter 10's overlapping-window corrections and Chapter 8's IDO residuals for the left side, or you will rediscover beta.
+
+> **[SOURCE EXTRACTION]** *Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.25:* "equity performance often has a spillover into bond pricing."
+>
+> **Annotation.** Man's framing is the practical one: equity momentum in credit (the EMC factor of Ben Dor and co-authors, 2021) is a factor you can harvest because bond investors update slowly. The cross-asset surface sharpens it. Equity returns tell you the stock moved; the change in the put floor tells you whether the move was about the *tail*. A 10% stock drop with no change in the low-strike wing is a valuation event; a 10% drop with the wing doubling is a credit event that the bond market has not priced yet.
+
+> **Trend Watch.** *Equity first, high yield second, private marks last (early 2026).* iCapital's February 6, 2026 *Market Pulse* dates the trigger to an AI product rollout by Anthropic on January 30, 2026: software stocks fell about 10% after it and were about 20% down year to date as of February 4, "the worst start to the year in history," with no software index member above its 200-day moving average. In credit, software high-yield spreads were about 400bp and technology about 340bp (iBoxx, February 4, 2026), against 264bp for broad high yield; software was about 20% of public BDC loans (LSEG/Bloomberg, September 30, 2025), and no loan-mark changes had been reported. *What it means:* this is the lead–lag in three speeds. Public equity repriced in days, public high yield in weeks, and private marks had not moved. For the desk, equity and put-surface signals are the earliest read on private-credit marks (Chapter 17), and the gap between them is a forecast of the next round of valuations.
+
+## 23.10 Desk Debrief
+
+- **The capital structure is one distribution sliced at different strikes.** Equity is the call, bonds are short puts, CDS is the put without rates, and a low-strike equity put is a CDS that forgot to tell anyone.
+- **Equity vol is leveraged asset vol** ($\sigma_E E = \sigma_V V N(d_1)$). Cheap stocks are mechanically high-vol stocks, the skew is built in, and plugging $\sigma_E$ in for $\sigma_V$ overstates default risk by the leverage.
+- **CreditGrades is the production bridge**, with honest warts: the time-zero ghost, a reported error in the published closed form, two different recoveries, and $\nu$ fitted on non-financials. Integrate the legs yourself and test against Monte Carlo.
+- **A put spread inside the default corridor is a model-free default claim** (Carr–Wu). Match the payment convention (American pays at default, European at expiry) before you trade the basis against CDS.
+- **The low-strike floor $P(K)/K$ is the hazard.** Jumps make it flatten to a constant; stochastic vol sends it to zero. Diagnose with prices, not implied vols.
+- **Hedge ratios are the part of Merton that works.** Cap-structure arbitrage bets the ratio is right and the price is wrong; single trades lose, portfolios earn. Strip carry, simulate defaults, and stress the May 2005 vector (stock up, spread up).
+- **The surface breaks where the process is not a diffusion:** runs (SVB), contractual triggers (Credit Suisse AT1), and estates whose value tail was fatter than anyone modeled (Hertz). The credit agreement, the prospectus, and the deposit base decide those cases, and reading them is the ex-RSSG analyst's edge.
+
+**The Spec You Hand the Robot.** Build `ch23_cross_asset_surface`, numpy/scipy/pandas only, seeded RNG (`seed=23`), no network. (1) `cg_survival`, `cg_cds_spread`, `cg_implied_vol` per (23.3)–(23.5), with the leg integration monthly, the time-zero mass in the protection leg, `nan` outside the inversion range, and a Monte Carlo check with a Brownian-bridge correction. (2) `urc_from_puts` per (23.6), returning bid and ask bounds and a payment `convention`, and `urc_from_cds` per (23.7) with a matching `payment` argument; raise on convention mismatch. (3) `jtd_put_price` and `jtd_fit` per (23.8), fitting $(\sigma, \lambda)$ jointly on $P(K)/K$, with borrow backed out of at-the-money parity first and the `floor_ratio` diagnostic. (4) `spread_greeks` (CS01, convexity, DTS) and `cg_greeks` (shares per \$10mm, stock-space gamma, equity and asset vega), plus JTD per notional reported as its own line. (5) `capstruct_backtest` with Yu's rules, carry reported separately from convergence, defaults simulated at the CDS-implied hazard in production runs, and an event-sign stress (stock +20%, spread +30%). (6) A router that sends any issuer with deposits above 50% of liabilities to `bank_run_dd`, and flags any instrument with a contractual write-down trigger as `contractual_waterfall_override`. Inputs in decimals and years; outputs in bp, \$, and shares, with units in every column name. Every function raises on non-positive prices, vols, or debt.
+
+### Exercises
+
+1. **ROBO targets volatility.** ROBO is told to "keep each position at 10% annualized vol" and holds a stock whose asset vol is constant at 25%. Using (23.1) and the table in Section 23.1, compute how much ROBO sells as assets fall from 150 to 75. Explain in one sentence to the risk committee why the strategy is short the fulcrum.
+2. **Chase the ghost.** Simulate the *true* CreditGrades model, a lognormal against a barrier drawn once at $t = 0$, and compare its $1 - \mathcal{S}(0)$ and 1- and 5-year spreads with (23.3) for $S_0 \in \{5, 30\}$, $\sigma_E = 40\%$, $F^{\text{ps}} = 30$. At what stock price does the time-shift approximation move the 1-year spread by more than 50bp?
+3. **Trade the basis.** Given a European put chain generated by `jtd_put_price` with $\lambda = 6\%$ and a CDS quote of 250bp at 40% recovery, compute $\text{basis}_U$ in claim units and in bp, size a default-neutral put-spread-versus-CDS trade for \$10mm CDS notional, and explain what happens to it if the stock drifts slowly into the corridor, GM-style, instead of jumping through it.
+4. **Kaz and the prospectus.** Kaz argues that an AT1 trading at 40 while the equity trades at a positive price is an arbitrage "because seniority." Write the `contractual_waterfall_override` logic, list the three prospectus fields it must parse, and show what CreditGrades would have said about Credit Suisse AT1 recovery on March 17, 2023 (use illustrative inputs and say so).
+5. **Both legs, again.** Build a book that is long \$10mm of a convertible (approximated as a 5-year bond plus calls) and short delta in stock, plus \$10mm of sold CDS protection hedged with stock, on a \$30 name. Apply the May 2005 vector, stock +18% then spread +30%, using the block 3 Greeks, and decompose the loss by leg. Then reconstruct the convertible-floor, put-floor, and $z$ series a desk would have watched for Wolfspeed in the first half of 2025 from public data, and say which flag fired first.
+6. **Three speeds.** Using the iCapital February 2026 figures, estimate the high-yield spread move per 10% of software equity drawdown, then state the private-mark markdown your lead–lag model would forecast for a software loan book at 97.8% of par, and the one assumption that would make your forecast wrong.
+
+### Deep-Dive Resource Graph
+
+**Podcasts**
+
+- *Bloomberg Odd Lots* (Joe Weisenthal and Tracy Alloway): episodes on the March 2023 bank failures, on Credit Suisse AT1s, and on convertible bonds. Search the show archive by topic; episode numbers are not given here.
+- *Flirting with Models* (Corey Hoffstein): conversations with volatility and convertible-arbitrage managers on carry, skew, and short-vol risk.
+
+**Practitioner Writing**
+
+- Matt Levine, *Money Stuff* (Bloomberg Opinion): the March 2023 columns on SVB's deposit run and on the Credit Suisse AT1 write-down, and his recurring explanations of capital-structure seniority.
+- BIS *Quarterly Review*, June 2005, the overview and the box on the GM and Ford downgrades and CDS index tranches (pp.4–6).
+- Board of Governors of the Federal Reserve System, *Review of the Federal Reserve's Supervision and Regulation of Silicon Valley Bank* (April 28, 2023). Root: https://www.federalreserve.gov
+- FDIC press releases PR-23-016 (March 10, 2023, SVB) and PR-23-034 (May 1, 2023, First Republic). Root: https://www.fdic.gov
+- FINMA press release and UBS media release, March 19, 2023, on Credit Suisse.
+- Cboe press release, October 3, 2023, on the Credit VIX indices.
+- Resonanz Capital, "Convertible Arbitrage: The 2023–2025 Comeback" (July 10, 2025); iCapital, "Market Pulse: Surveying the Software Space" (February 6, 2026).
+- Finger, C. C. (ed.), V. Finkelstein, J.-P. Lardy, G. Pan, T. Ta, and J. Tierney (2002), *CreditGrades Technical Document*, RiskMetrics Group (hosted by MSCI).
+
+**Academic Papers**
+
+- Carr, P., and L. Wu (2011), "A Simple Robust Link Between American Puts and Credit Protection," *Review of Financial Studies* 24(2), 473–505. DOI 10.1093/rfs/hhq129.
+- Carr, P., and L. Wu (2010), "Stock Options and Credit Default Swaps: A Joint Framework for Valuation and Estimation," *Journal of Financial Econometrics* 8(4), 409–449. DOI 10.1093/jjfinec/nbp010.
+- Cruz López, J., and A. Ibáñez (2021), "European Puts, Credit Protection, and Endogenous Default," *Quarterly Journal of Finance* 11(1). DOI 10.1142/S2010139221500014.
+- Yu, F. (2006), "How Profitable Is Capital Structure Arbitrage?" *Financial Analysts Journal* 62(5), 47–62. DOI 10.2469/faj.v62.n5.4282.
+- Kapadia, N., and X. Pu (2012), "Limited Arbitrage between Equity and Credit Markets," *Journal of Financial Economics* 105(3), 542–564. DOI 10.1016/j.jfineco.2011.10.014.
+- Duarte, J., F. A. Longstaff, and F. Yu (2007), "Risk and Return in Fixed-Income Arbitrage: Nickels in Front of a Steamroller?" *Review of Financial Studies* 20(3), 769–811. DOI 10.1093/rfs/hhl026.
+- Schaefer, S. M., and I. A. Strebulaev (2008), "Structural Models of Credit Risk Are Useful: Evidence from Hedge Ratios on Corporate Bonds," *Journal of Financial Economics* 90(1), 1–19.
+- Zhang, B. Y., H. Zhou, and H. Zhu (2009), "Explaining Credit Default Swap Spreads with the Equity Volatility and Jump Risks of Individual Firms," *Review of Financial Studies* 22(12), 5099–5131. DOI 10.1093/rfs/hhp004.
+- Cremers, M., J. Driessen, P. Maenhout, and D. Weinbaum (2008), "Individual Stock-Option Prices and Credit Spreads," *Journal of Banking & Finance* 32(12), 2706–2715.
+- Culp, C. L., Y. Nozawa, and P. Veronesi (2018), "Option-Based Credit Spreads," *American Economic Review* 108(2), 454–488. DOI 10.1257/aer.20151606.
+- Nagel, S., and A. Purnanandam (2020), "Banks' Risk Dynamics and Distance to Default," *Review of Financial Studies* 33(6), 2421–2467. DOI 10.1093/rfs/hhz125.
+- Collin-Dufresne, P., R. S. Goldstein, and F. Yang (2012), "On the Relative Pricing of Long-Maturity Index Options and Collateralized Debt Obligations," *Journal of Finance* 67(6), 1983–2014. DOI 10.1111/j.1540-6261.2012.01779.x.
+- Linetsky, V. (2006), on pricing equity derivatives subject to bankruptcy in a CEV-with-default model; Andersen, L., and D. Buffum (2003), on calibrating and implementing convertible-bond models with stock-dependent hazard (titles not verified here).
+
+**Data & Code**
+
+- SEC EDGAR (Schedule 14D-9 and 13D filings for tender offers and activist stakes; Form 8-K for plan effectiveness): https://www.sec.gov/edgar
+- CourtListener REST API, for Chapter 11 dockets such as SVB Financial Group (S.D.N.Y., 2023): https://www.courtlistener.com/help/api/
+- FINRA TRACE, for corporate bond prints (price paths in Case Study B).
+- OPRA consolidated options data, for listed put chains (the `OptionChain` schema).
+- DTCC and clearing-house public CDS volume reports, and Cboe's Credit VIX index data, for the credit vol surface.
+- Shelf cross-references: Dynkin_Systematic_Investing_in_Credit pp.87–88, 93, 644; Bohn_Stein_Active_Credit_Portfolio_Management pp.169, 198; Ben_Dor_Quantitative_Credit_Portfolio_Management p.70; Schmid_Credit_Risk_Pricing_Models p.154; Moyer_Distressed_Debt_Analysis p.260; Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.25.
+
+<!-- STATUS: COMPLETE -->
