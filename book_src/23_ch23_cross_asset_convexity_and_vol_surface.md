@@ -528,12 +528,22 @@ where $r^{\text{xs}}$ is bond excess return over duration-matched Treasuries, $r
 
 **Podcasts**
 
-- *Bloomberg Odd Lots* (Joe Weisenthal and Tracy Alloway): episodes on the March 2023 bank failures, on Credit Suisse AT1s, and on convertible bonds. Search the show archive by topic; episode numbers are not given here.
-- *Flirting with Models* (Corey Hoffstein): conversations with volatility and convertible-arbitrage managers on carry, skew, and short-vol risk.
+- **Dan Davies On What Brought Down Silicon Valley Bank** (*Odd Lots*, Joe Weisenthal and Tracy Alloway with Dan Davies, March 14, 2023). Recorded within days of the run: why the bank's customer base "turned out to be so much more flighty than expected" and why it reached for yield, the setting for the contractual inversion in Case Study B (§23.8). https://omny.fm/shows/odd-lots/dan-davies-on-what-brought-down-silicon-valley-ban
+- **The Regulatory Blunder That Gave Us the Silicon Valley Bank Disaster** (*Odd Lots*, with Lev Menand of Columbia Law, March 16, 2023). Menand on "the defanging of bank supervisors" in the run-up; pair it with Davies, one explains the depositors and the other the supervisors (Case Study B, §23.8). https://omny.fm/shows/odd-lots/the-regulatory-blunder-that-gave-us-the-silicon-va
+- **Swiss AT1 Bond Carnage, Leisure Sector Risk** (*The Credit Edge*, Bloomberg Intelligence, March 23, 2023). Four days after the March 19 UBS takeover, which per the episode page "included pulling the pin on $17 billion" of AT1 CoCo bonds: a real-time account of the contractual inversion in Case Study C (§23.8). https://omny.fm/shows/the-credit-edge-by-bloomberg-intelligence/swiss-at1-bond-carnage-leisure-sector-risk
+- **Dean Curnutt - The Reflexivity of Equity Volatility (S6E16)** (*Flirting with Models*, Corey Hoffstein with Dean Curnutt of Macro Risk Advisors, September 11, 2023). Endogenous risk, reflexivity, crowding and options on variance across 1987, LTCM, 2008 and the XIV implosion; a second voice on the vol-targeting feedback loop of §23.1 and Exercise 1. https://www.flirtingwithmodels.com/episodes/l8s5fwO9IGb
+- **Kris Abdelmessih - Life Through a Volatility Lens (S7E10)** (*Flirting with Models*, Corey Hoffstein with Kris Abdelmessih, July 29, 2024). A former option-pit market maker who later ran a relative-value volatility book, on reading trades through payoffs and optionality; the options-desk view behind the put-surface fit (§23.4) and the spread Greeks (§23.5). https://www.flirtingwithmodels.com/episodes/EdhZsWMO5mh
+- No verified episode on convertible arbitrage or on capital-structure arbitrage was found for this chapter, so none is listed; Sections 23.6 and 23.7 rest on the papers below.
+
+**Talks and Reports**
+
+- **Applications of Option-Pricing Theory: Twenty-Five Years Later** (Robert C. Merton, Nobel Prize Lecture, December 9, 1997). The author of the structural model on what option-pricing theory had been applied to over twenty-five years; the primary-source opener for §23.1. https://www.nobelprize.org/prizes/economic-sciences/1997/merton/lecture/
+- **Initial Findings from Independent Review of Silicon Valley Bank** (Michelle W. Bowman, Federal Reserve Vice Chair for Supervision, September 18, 2026). Announces the first report of an independent review by Starling Advisory Group (seven findings, the first in a series) and frames the failure as having spread to Signature and First Republic; the newest primary source for Case Study B (§23.8), so read the report itself before quoting findings. https://www.federalreserve.gov/newsevents/speech/bowman20260918b.htm
+- **Report on the 2023 banking turmoil** (Basel Committee on Banking Supervision, October 5, 2023). The supervisors' assessment of causes, responses and initial lessons for SVB and Credit Suisse alike; the reference to cite beside both §23.8 case studies. https://www.bis.org/publications/report-2023-banking-turmoil
 
 **Practitioner Writing**
 
-- Matt Levine, *Money Stuff* (Bloomberg Opinion): the March 2023 columns on SVB's deposit run and on the Credit Suisse AT1 write-down, and his recurring explanations of capital-structure seniority.
+- Matt Levine, *Money Stuff* (Bloomberg Opinion): the March 2023 columns on SVB's deposit run and on the Credit Suisse AT1 write-down, and his recurring explanations of capital-structure seniority. No specific column is cited here: none is in the verified-item dossier for this chapter, and Bloomberg pages could not be fetched to confirm a title and date.
 - BIS *Quarterly Review*, June 2005, the overview and the box on the GM and Ford downgrades and CDS index tranches (pp.4–6).
 - Board of Governors of the Federal Reserve System, *Review of the Federal Reserve's Supervision and Regulation of Silicon Valley Bank* (April 28, 2023). Root: https://www.federalreserve.gov
 - FDIC press releases PR-23-016 (March 10, 2023, SVB) and PR-23-034 (May 1, 2023, First Republic). Root: https://www.fdic.gov

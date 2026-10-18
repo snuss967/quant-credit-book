@@ -307,6 +307,7 @@ def fig_tier_oas():
         assert abs(ratio[k].iloc[0] - v) < 0.006, (k, ratio[k].iloc[0], v)
 
     fig, (a, b) = new_figure("wide", ncols=2, gridspec_kw={"width_ratios": [1.55, 1]})
+    fig.get_layout_engine().set(wspace=0.09)
 
     # left: daily OAS by tier
     a.plot(df.index, df.HY, color=NEUTRAL, linewidth=2.8, zorder=2)

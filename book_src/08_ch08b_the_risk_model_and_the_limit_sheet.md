@@ -298,3 +298,83 @@ The backtest runs bucket by bucket as well as for the whole book: realized volat
 A failing backtest licenses a change, and the change has a procedure: a written finding, a challenger model run in shadow beside the champion, a comparison on data the challenger was not tuned on, and a promotion through the same rings and canaries that §27.8 uses for code. What the failure does not license is retuning the model in the drawdown that produced the exceptions. Two years earlier, in the week Larkspur Foam's loan fell to 84 on the drop-down headline (Chapter 13), a junior quant at the desk had shortened the EWMA half-life from 60 days to 15 on the third day of losses, "to make it more responsive." The re-run backtest was immaculate. It had been tuned on the very exceptions it was then graded on, which is look-ahead in a lab coat, and the shorter half-life spent the following quiet quarter overstating risk by 40% and squeezing the desk out of positions it would have been paid to hold. Mags's verdict at the time was the shortest model review in the desk's history: "You wrote the exam and then you graded it."
 
 *Builds on:* §7-B.2 (likelihood ratios), §7-B.5 (EWMA half-lives), §27.8 (deployment discipline). *Used in:* §8B.9 (the backtest line on the limit sheet), §28.9 (the dashboard's model-health panel).
+
+## 8B.9 The Limit Sheet
+
+The risk committee met on the first Monday of November, and Mags prepared Theo for it the way she once prepared junior lawyers for a confirmation hearing: by telling him about the worst one she knew.
+
+### Case Study: The Whale and the Five Limits (JPMorgan's Chief Investment Office, 2012)
+
+"Everything you need to know about limit sheets," she said, "is in a Senate report about a bank that had a perfectly good one."
+
+The book was the Synthetic Credit Portfolio of JPMorgan Chase's Chief Investment Office, a portfolio of credit index and tranche positions originally meant to hedge the bank's credit exposure. In the first quarter of 2012 its traders tripled its net notional, from \$51bn to \$157bn, including at least \$62bn in a US investment-grade credit index, \$71bn in a European investment-grade index and \$22bn in a US high-yield index (Senate Permanent Subcommittee on Investigations, *JPMorgan Chase Whale Trades: A Case History of Derivatives Risks and Abuses*, staff report, 15 Mar 2013, PDF p.12). The portfolio had five risk metrics with limits or advisories attached: VaR, CS01, a credit-spread-widening-of-10% measure called CSW10%, stress-loss limits and stop-loss advisories. In the first three months of the year it breached all five, and from 1 January to 30 April the limits and advisories were breached more than 330 times (PDF p.15).
+
+Theo, who had been reading this chapter's drafts for a month, recognized every line. CS01 is his CS01 ladder. CSW10% is his DTS cell limit, a loss for a 10% relative widening, under another name. The stress limit is his stress library. Only the jump line is missing, and the report notes something close to it: concentration limits, "commonplace for the same instruments" at the bank's investment bank, were absent at the CIO (PDF p.15).
+
+"So the sheet was fine," he said. "What went wrong?"
+
+"Everything that happens *after* the sheet," Mags said.
+
+In January 2012 the portfolio breached the VaR limit of both the CIO and the bank as a whole for four days, a breach reported to the bank's most senior management (PDF p.15). While it was in breach, an alternative VaR model was "hurriedly adopted," approved on 30 January, and it immediately cut the portfolio's VaR by 50%, from \$132mm to \$66mm (PDF pp.16, 188). The breach ended. The positions did not. A recommendation had been made to lower the CIO's VaR limit from \$95mm to \$70mm when the new model went live; the report found that it was not done, and summarized the result in a sentence Mags read aloud: "rather than remove the offending credit derivative positions to reduce the amount of risk in the SCP, JPMorgan Chase removed the brakes instead" (PDF p.191). The new model, it later emerged, ran on spreadsheets fed by hand and contained "calculation errors involving hazard rates and correlation estimates that improperly lowered the VaR results" (PDF p.194). On 10 May the bank revoked it and reinstated the old one, and the revised first-quarter VaR came out at \$129mm, twice what had first been reported (PDF pp.16, 21).
+
+The CS01 limit had a different fate. The portfolio exceeded it by 100% in January, by 270% in early February and by more than 1,000% by mid-April (PDF p.15). By 30 March it had been in breach for 59 trading days. On 17 April an automated end-of-day notice read, in full, "MtM cs bpv limit is in excession by 1074% and has been in excession for 71 days" (PDF p.211). A risk measure called the Comprehensive Risk Measure had warned in February of a possible \$6.3bn loss over a year; it was dismissed internally as "garbage" (PDF p.15). The report's verdict on the breaches as a group was that they "were largely ignored or ended by raising the relevant risk limit" (PDF p.15). The portfolio lost at least \$6.2bn in 2012 (PDF p.12).
+
+Kaz read the hazard-rate sentence twice. "They put the jump inside the spreadsheet," they said. "Hazards and correlations, hand-keyed, feeding a VaR. No separate layer, no backtest on the new model before it went live, and it was swapped in during the breach it was supposed to measure." They looked at the Larkspur half-life note still pinned above their monitor. "That's §8B.8 with ten figures."
+
+Ines put it as a hand. "Five tells, all showing, for four months. Nobody at the table folded. They changed the deck instead."
+
+What the desk took from the case is less a list of prohibitions than a description of what a limit is for. A limit is a pre-agreed conversation: it says which number, crossing which line, obliges which person to explain what to whom, by when. Its value is entirely in the conversation happening. A model change that halves the risk number is a limit change, whether or not anyone edits the limit, and so it goes to the same committee. A breach that lasts seventy-one days has stopped being a breach and become the new limit, decided by nobody. And an override is a loan of risk capacity, which is why on Theo's desk every override has a size, a reason, a name and an expiry date, and a second override of the same line in a quarter puts the line itself on the committee's agenda.
+
+### The sheet
+
+Here is the sheet Theo's desk runs, with the soft and hard thresholds that turn exposures into conversations *(illustrative levels for a \$400mm high-yield book)*.
+
+| Line | Measured as | Soft | Hard |
+| :--- | :--- | ---: | ---: |
+| DTS, each rating × sector cell | loss for a 10% relative widening of the cell, \$mm | 1.2 | 1.5 |
+| CS01 ladder (0–3y, 3–7y, 7y+) | \$k per bp of spread | 60 / 90 / 70 | 80 / 120 / 90 |
+| Key-rate DV01, net of hedges (2, 5, 10, 30y) | \$k per bp; a band around the target | ±15 | ±25 |
+| Issuer JTD, top ten | \$mm, by issuer rating | B 7.0, CCC 4.0 | B 9.0, CCC 5.5 |
+| ES 99%, 1-day and 10-day | \$mm, on the mixture (§8B.6) | 2.5 / 9.0 | 3.0 / 11.0 |
+| Stress loss | worst library scenario, Gaussian plus jump, \$mm | 15 | 20 |
+| Days to liquidate (§28.5) | days at 10% of average daily volume | 5 | 10 |
+| Share of an issue | % of the issue outstanding | 7.5% | 10% |
+| Backtest exceptions | count in 250 days at 99% | 5 | 10 |
+
+*Table 8-B.4. The limit sheet. A soft breach starts a written explanation from the PM by noon; a hard breach requires a reduction by the close or a written override, with an expiry date, from the risk function's delegated approver; anything open for three days escalates to the desk head and the chief risk officer's office.*
+
+Two rows carry ideas from earlier in the book. *Days to liquidate* is the 13-day model to the 13-week model's sibling, as Theo put it when he added a second file to the USB stick: a position of \$q$ in a bond that trades $\text{ADV}$ a day, sold at participation $\kappa$, takes $q/(\kappa\,\text{ADV})$ days to exit, and the limit bounds the forced-seller problem of §16.2 from the desk's own side. *Share of an issue* is the concentration limit the Whale did not have, and it bounds something no volatility measures: whether the desk *is* the market in a bond, in which case the mark is the desk's own opinion and the exit is a negotiation.
+
+ROBO had been asked, early in the project, to "set sensible limits." It set every line to the book's current exposure plus one dollar, which was sensible in the sense that the book was inside every limit at the moment of setting, and put the desk in breach on eleven lines by 9:32 a.m. the following day. The specification it got the second time, in §8B.11, says where each threshold comes from.
+
+The committee's first question that Monday was the one every risk committee asks. "Why is the ten-day ES 11% higher than on Friday, when the desk sold bonds on Friday?" Theo had the answer, because the model's change report had produced it at 7:30: on Friday evening one rating agency had completed a sector review of building products and downgraded twelve issuers, and the desk's rating rule (the middle of three agency ratings) had moved forty bonds from the B cells to the CCC cells. Every one of them now had a larger cell sensitivity, a higher idiosyncratic bucket and a tighter JTD limit. Nothing had traded. The book was riskier because the same bonds now meant something different, which is the DTS loading of §8B.2 working exactly as designed. The committee chair wrote one word on her pad, which Theo later learned was *good*.
+
+![Figure 8-B.3: Tuesday's risk report grown into the limit sheet: each line's exposure against its soft and hard thresholds, with the three breaches of the cold open marked and the forty-bond migration shown as the before-and-after change in the CCC cells. Illustrative.](assets/figures/ch08b_limit_sheet.png)
+
+*Builds on:* §4B.5 (CS01 and DV01), §16.2 (forced sellers), §21.4 (the OC test as a limit), §28.5 (days-to-liquidate). *Used in:* §28.9 (the dashboard's risk-versus-limits panel), Chapter 3-B (the 7:30 risk pack), Chapter 8-C.
+
+## 8B.10 When to Apply It, and When It Breaks
+
+A factor risk model is at its best on ordinary days in a book with many issuers, where its job is to say where the risk is and to stop the desk from building a concentration by accident. It is at its worst on the days it is most needed, and a seasoned risk manager reads it with four suspicions.
+
+The first is that correlations are regimes, not constants. The rate–spread correlation $\rho_{y,s}$ changed sign twice between 2021 and 2025 (§8.2, §8.7), and in April 2025 it changed sign twice in seven sessions. The model therefore takes $\rho_{y,s}$ as a regime input from the hidden Markov model of §12.4 rather than as one estimated number; where §12.5's covariance holds the rate–spread correlation at zero for a multi-asset book, this engine supplies the regime value instead. The second is that correlations rise together in exactly the stress the model was built for, which is why the stress library shocks factors jointly rather than trusting the covariance to do it.
+
+> **View From Another Seat.** *The dealer in March 2020.* A dealer's risk system sees the same failure from the other side of the trade. Describing March 2020 to analysts, Morgan Stanley's then chief financial officer said: "Historical relationships broke down and liquidity dried up. Clients reacted by reducing risk and raising cash" (Morgan Stanley first-quarter 2020 earnings call, 16 Apr 2020). For a dealer, broken relationships mean hedges that do not hedge and inventory that cannot be sold at the mark; for a buy-side desk, the same sentence means that the covariance estimated on calm years is a description of a market that no longer exists until the regime passes.
+
+The third suspicion is about inputs. Stale marks understate volatility, because a moving average moves less than the thing it averages, and the de-smoothing of §8.5 and §12.5 is part of the model, not an option. And the model is only as good as the security master (§27.3) and the corporate-actions feed (Appendix B, §B.16): a bond that was exchanged, tendered or called and is still in the master at its old terms will carry a loading, a DTS and a JTD for a claim that no longer exists.
+
+The fourth is numerical. A factor covariance with sixty factors can be nearly singular, and an optimizer fed such a matrix will find enormous positions that the matrix believes are riskless.
+
+> **Math, Gently.** *The condition number: how close a matrix is to dividing by zero.* A covariance matrix stretches some directions and squashes others; the condition number is the ratio of its largest stretch to its smallest. A value of 10 means every direction is roughly equally well measured. A value of 10 million means some combination of factors looks almost riskless, usually because the data cannot tell two factors apart, and anything that inverts the matrix will lean on that combination hard. Tiny example: two factors with correlation 0.999 give a two-by-two correlation matrix with condition number $(1+0.999)/(1-0.999) \approx 2{,}000$. The engine raises an alarm above a threshold and shrinks harder (§7-B.5).
+
+Finally, the hedges themselves have a band. A KRD or CDX hedge that is rebalanced on every wiggle pays the bid–offer all day, and one that is never rebalanced lets the mismatch become risk. If the mismatch $x$ drifts like a random walk with variance rate $s^2$, the desk pays $c$ per unit traded and charges itself $\tfrac{\gamma}{2}x^2$ per unit time for holding the mismatch, the best policy is to leave $x$ alone inside a band $[-b, b]$ and trade only at its edges. Inside the band the mismatch spends equal time everywhere, so its average squared size is $b^2/3$; pushing it back at the edges costs about $c\,s^2/(2b)$ per unit time. Minimizing $\gamma b^2/6 + c\,s^2/(2b)$ gives
+
+$$
+b^{*} = \left(\frac{3\,c\,s^{2}}{2\,\gamma}\right)^{1/3}.
+$$
+
+Since $\gamma$ is risk aversion times the variance of the factor being hedged, costly hedges get wide bands and hedges against volatile factors get narrow ones, and both only by the cube root: halving the cost narrows the band by about a fifth. That is the band in the KRD row of Table 8-B.4, and the derivation in hedge-matrix form belongs with §8.6.
+
+> **Trend Watch.** *The volume inputs moved in 2026.* A liquidity factor built from trading volumes rests on series that changed definition this year. In its second-quarter 2026 release of 30 July 2026, published as ICE agreed to acquire it for \$167 a share in cash (an equity value of about \$6.0bn), MarketAxess said it was "suspending its practice of issuing monthly volumes press releases" (MarketAxess Q2-2026 release, pp. 4–5, 9; ICE 8-K, Exhibit 99.1). FINRA's affiliate-principal indicator, voluntary from 31 August 2026 and mandatory from 2 August 2027, suppresses the inter-affiliate leg of qualifying trades from dissemination (FINRA Regulatory Notice 26-16, 26 Aug 2026); FINRA's own baseline put such trades at up to about 5.7% of 2025 transactions, counted by trades rather than dollars (SR-FINRA-2026-009, pp. 19–21). Tradeweb's September 2026 report noted that the change lowered reported US high-grade TRACE volumes and that prior periods were not restated. *What it means for the desk:* any volume-based liquidity factor or days-to-liquidate input needs a structural-break dummy at 31 August 2026, and platform series cannot be spliced across it.
+
+*Builds on:* §8.2, §8.6, §8.7, §12.4–§12.5, §27.3, Appendix B §B.16. *Used in:* §9.8 (the optimizer's covariance guard), §12.5.
