@@ -330,6 +330,15 @@ Grade your own card from Tuesday at 7:30 against the week. The short leg: GM CDS
 - *Odd Lots*, "How to Succeed at Multi-Strategy Hedge Funds" (Giuseppe Paleologo), 20 May 2024: <https://omny.fm/shows/odd-lots/how-to-succeed-at-multi-strategy-hedge-funds>. The x-ray and the risk manager's three jobs.
 - *Odd Lots*, "The Math That Explains How Multi-Strategy Hedge Funds Make Money" (Dan Morillo), 7 Oct 2024: <https://omny.fm/shows/odd-lots/100724-odd-lots-dan-morillo-master>. Why a little correlation among pods' "idio" caps the platform's Sharpe ratio.
 
+**Episodes and Posts, by Section**
+
+- **"Duration Times Spread: measuring credit risk"** (Robeco, Erik van Leeuwen, Olaf Penninga and Patrick Houweling, 2 September 2024). The originators' own account of DTS, the ruler Dov chooses for PB-19 in §8D.3; read it before deciding whether the toll or the hedge is the thesis. <https://www.robeco.com/en-uk/insights/2024/09/duration-times-spread-measuring-credit-risk>
+- **"Debunking the high credit beta myth"** (Christoph Schon, SimCorp, 2024; the page is undated, the year is from its URL). High spread is high volatility but not necessarily high beta to the index, the warning behind the noisy 24-week betas and the rating-bucket factor in §8D.3. <https://www.simcorp.com/resources/insights/industry-articles/2024/Debunking-the-high-credit-beta-myth>
+- **"Seix Fears More Zombie Borrower Distress as Interest Rates Stay High"** (*The Credit Edge*, with George Goudelias of Seix, 22 January 2026). The B3/B- and CCC "zombie" profile, weak interest coverage and no free cash flow, is the kind of name that makes a short idea in §8D.2 and then makes its borrow fee jump. <https://omny.fm/shows/the-credit-edge-by-bloomberg-intelligence/seix-fears-more-zombie-borrower-distress-as-interest-rates-stay-high>
+- **"Gimme Credit"** (Howard Marks, Oaktree memo, 6 March 2025). Marks sets the spread against credit losses, the discretionary statement of the arithmetic Kaz puts on the whiteboard in §8D.4, where a spread is the price of an expected jump. <https://www.oaktreecapital.com/insights/memo/gimme-credit>
+- **"Fallen Angels Part 2: Forced Selling and Recovery"** (QML Solutions, Substack, 17 December 2025). An empirical look at the forced selling that follows a downgrade to high yield, the cousin of the PB-03 replay and its fallen-angel factor in §8D.6; read it as bonds, not equities. <https://qmlsolutions.substack.com/p/sold-before-the-fall-forced-selling>
+- **"Inside the Blood Sport of Creditor-on-Creditor Violence"** (*Odd Lots*, with Sujeet Indap of the Financial Times, 25 November 2024). How cov-lite documents turned into creditor-on-creditor fights, the legal layer that can invert a pair's legs after the trade is on, on the refusals list in §8D.8. <https://omny.fm/shows/odd-lots/inside-the-blood-sport-of-creditor-on-creditor-vio>
+
 **Practitioner Writing**
 
 - Mercer, "Multi-Manager Platforms: A due diligence perspective," May 2023: <https://insightcommunity.mercer.com/api/v1/uploads/Multi_Manager_Hedge_Funds_614b3c4909.pdf?public=true>. Factor-neutral mandates, stops and the centre book, from an allocator.

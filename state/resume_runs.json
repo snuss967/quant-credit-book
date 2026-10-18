@@ -84,23 +84,6 @@
    "args": "items [] + chapters 04_ch04d, 02_ch02b, 00_02 (see the 14:35 launch in the ledger)"
   },
   {
-   "name": "lessons-rv-8-9",
-   "task": "wnxwwzef6",
-   "runId": "wf_261e7e3b-cd9",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "08_ch08_isolating_ido_and_empirical_duration",
-     "09_ch09_factor_investing_in_credit"
-    ],
-    "stages": [
-     "lessons",
-     "rv"
-    ]
-   }
-  },
-  {
    "name": "missing-toc-chapters",
    "task": "wr9ksz5pq",
    "runId": "wf_88dd2b76-e50",
