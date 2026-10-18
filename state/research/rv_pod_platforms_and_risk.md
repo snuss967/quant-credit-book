@@ -264,3 +264,50 @@ I found no public measurement of pod share of CDX, iTraxx, HYG or LQD flow, no c
 - **Giving capital back.** Citadel "has handed back $25bn in profits to investors since 2017"; Millennium locks up capital "for up to five years" (Economist).
 - **"Scale paradox".** Hedgeweek (1 Jun 2026) uses the phrase for rapid asset and headcount growth straining efficiency; Verition positions itself as a "long-term career platform" rather than a short-term pod shop.
 
+## 8. Evidence table
+
+Source keys [S#] and [P#] are defined in Sources. "Q" = my computation from the cited inputs. Rows marked **CHECK** rest on aggregators, previews or machine transcripts.
+
+| date | fact | source |
+| :-- | :-- | :-- |
+| Mar 2020 | LMR's main multi-strategy fund "plunged by a record 24%", mostly vol arb; Fed stepped in on the basis trade; Citadel down, "not meaningful" | [S3] |
+| 2020, 2022 | Index-rebalancing crowding lost money for pods; one manager: a dozen firms did it in 1998, at least 50 recently | [S3] |
+| May 2023 | PM payout 15-25% of own P&L; pass-through covers comp, hiring bonuses, tech, rent, travel; Barclays sample of 42: 40% none, 30% partial, 30% full; ~20% gross needed for 10% net | [S1] |
+| May 2023 | PM turnover "as high as 20-30% at times"; 52% of platforms allocate to external PMs (Goldman) | [S1] |
+| 2 Oct 2023 | Dmitry Balyasny: "$21 billion", "2,000 employees across 15 global offices" | [P12] |
+| 20 Oct 2023 | Citadel "comparatively centralized", Millennium not; Eisler: limits "not a gilded cage"; Brevan tolerant of breaches | [S9] |
+| 9 Nov 2023 | Griffin: a joint "10, 15, 20%" hit to multi-managers' equity "is possible ... painful, but not systemic" | [S3] |
+| 30 Nov 2023 | 55 pod shops, $368bn at mid-2023 (29 firms, $149bn in 2018); 30% of gross US stock value; Citadel-Millennium overlap 93% of $90.7bn; prime broker limiting leverage | [S3] |
+| 11 Jan 2024 | AIMA/bfinance: apart from multi-managers most funds charge well below 2-and-20; "Pass-through is quite polarizing" | [S25] |
+| 26 Feb 2024 | Platform assets ~$400bn growing 10-15% a year; strategies run to lose no more than 3% so the LP 10% limit holds **CHECK** | [P1] |
+| 2 Apr 2024 | Ten biggest multistrats: 15,665 staff (7,103 investment); five biggest added 1,663 in a year; ex-JPMorgan HY trader stopped out at ExodusPoint | [S10] |
+| 19 Apr 2024 | Balyasny event-driven book lost $100m; "may also have been linked to" a US credit PM (unconfirmed) | [S11] |
+| 20 May 2024 | Platform sits between single manager and fund of funds; pass-through "makes really a platform"; 20% PM turnover **CHECK** | [P2] |
+| 7 Oct 2024 | Sharpe cap SR/sqrt(rho); individual pod pay ~25% costlier than full netting, teams of three 5-6% **CHECK** | [P5] |
+| 11 Feb 2025 | Bailey: pods "deleverage rapidly in stress conditions"; MFA: "losses are siloed" | [S7] |
+| Feb 2025 | Millennium -1.3% (worst month in six years, ~$900m from two index-rebalancing teams); HFR composite -0.47% | [S5] |
+| 1-13 Mar 2025 | Citadel -1.7% in Feb and -1.7% early Mar; Millennium -1.4% to 7 Mar, liquidating a $1bn financials book; Balyasny stopped out PMs; DE Shaw Oculus -4.4% after +36% in 2024 | [S6] |
+| 10 Mar 2025 | Griffin: three teams "had been sure of something that turned out to be wrong" | [S4] |
+| 23 May 2025 | Top-5 staff 6,000 to 15,000 (2019-25); notional $1.6trn; top-10 share of borrowing 32% to 41%; pass-through 6.2% of assets (Barclays); Griffin wary of private credit | [S4] |
+| 26 May 2025 | Albourne: netting cost ~1% a year; pass-through manager ~one-third more levered **CHECK** | [P6] |
+| 2 Jun 2025 | Millennium hires Laurion's Grau, Brevan's Reich (CDS and CMBS indices), ex-LMR credit head; $73bn, 330+ teams; Feb-Mar losses, -1.4% to April, +15% in 2024 | [S13] |
+| 7 Jul 2025 | Stops "between 7 and 10 percent"; reductions at 3.5-5%; allocations 3-4x notional **CHECK** | [P8] |
+| 10 Oct 2025 | Pass-through 0.87%-12.99%, mean 5.93%, median 4.53%; comp is the main component; netting risk | [S2] |
+| 5 Dec 2025 | WSJ-sourced: 5% loss halves capital, further 2.5% usually fires; Millennium +0.5% in Nov after two index pods lost "hundreds of millions" | [S8] |
+| 8 Dec 2025 | BIS: swap-spread trade drove most of the past year's growth in hedge fund repo leverage; basis flat since early 2024 | [S22] |
+| 13 Jan 2026 | Aviva: $4.3tn industry, $994bn multi-strategy (Mar 2024); pod RV spans curve, basis, swap spread, short vol, credit index and single names | [S21] |
+| 25 Feb 2026 | Two-thirds of Citadel fixed income and macro PMs home-grown; 60% of Point72 equity PMs via LaunchPoint | [S12] |
+| Early Mar 2026 | Reported synchronized platform losses (~$1.5bn x2, ~$1bn x2) **CHECK** | [S29], [S28] |
+| 8 May 2026 | Fed: hedge fund leverage "near all-time highs", concentrated in largest funds | [S23] |
+| 1 Jul 2026 | ExodusPoint $14.9BN, 718 staff; Point72 ~$58.5b, 200+ teams (private credit); credit = fundamental L/S, index and options, macro, new issue, systematic | [S32] |
+| 4 Aug 2026 | Loss budget / downside = max size (35 pts vs 50bp = 1.4% NAV); shorts bound by borrow | [P20] |
+| 7 Aug 2026 | Jain hires MS London HY head; credit is one of seven "legs" | [S15] |
+| 20 Aug 2026 | Balyasny IG team: "long and short" with "relative-value opportunities" | [S14] |
+| 15 Sep 2026 | Multi-strat assets +$500bn (~25%) vs headcount +10-11%; JPM avg leverage 645% | [S17] |
+| 1 Oct 2026 | Balyasny $37B, 2000+ staff | [S32] |
+| 6-13 Oct 2026 | IMF: hedge fund gross assets ~$13tn, notional >$40tn; Treasury share ~9% (4% in 2022); crowded stocks +10 pts vol, -4 pts losses in stress **CHECK** | [S19], [S20], [S35] |
+| 13 Oct 2026 | Billion Dollar Club $4.6tn; DE Shaw $103bn; Millennium near $100bn | [S24] |
+| 18 Oct 2026 | Millennium site: $95BN+, 7,100+ staff, 370+ teams | [S32] |
+| Q | Fee waterfall reproduces Mercer: net 0.48%/3.68%/6.88%/10.08%/13.28% at gross 5/10/15/20/25% | section 3.2 |
+| Q | Single HY long at 98 / 40 recovery: JTD $23.2m on $40m long = 11.6% of $200m capital | section 4.4 |
+

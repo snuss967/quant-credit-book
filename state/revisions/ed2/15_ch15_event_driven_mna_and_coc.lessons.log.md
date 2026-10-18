@@ -95,8 +95,8 @@ Adjacent pairs: l.669/671, l.685/687. Runs over two: l.281-291 (Math, Gently, Wa
 - [x] 10. §15.3.1: recast "When portability bites" as a beat at the decision point; keep the podcast references. Done: Mags's 'When was it printed?' beat; podcasts kept.
 - [x] 11. §15.3.2: trim Phi box; D16 pointers; recast "Two conclusions"; rewrite the Listing 15.2 template; fix lognormal-box pointers. Done: box trimmed; barriers told once; nan bug as event; pointers fixed.
 - [x] 12. §15.4.1: replay framing for the three-prospectus evening (C1); D1; Kaz pronoun (C8). Done: evening moved to replay night; quote points back; Kaz they.
-- [ ] 13. §15.4.2: fold seesaw box into the duration paragraph and move its Full Derivation below it (D8); cut "When the gauge" to one Ines beat (D3-D6); Ways points to scenes.
-- [ ] 14. §15.4.2: D7 (delete l.536, trim l.527).
+- [x] 13. §15.4.2: fold seesaw box into the duration paragraph and move its Full Derivation below it (D8); cut "When the gauge" to one Ines beat (D3-D6); Ways points to scenes. Done: seesaw in text; derivation follows; Ines ruler beat; Ways points back.
+- [x] 14. §15.4.2: D7 (delete l.536, trim l.527). Done: handbag line merged into four-deal paragraph; duplicate deleted.
 - [ ] 15. §15.4 listing: rewrite template, merge l.566 (D6).
 - [ ] 16. ICE scene: fiction label at top; promote decision point; trim; give Mags the "why is it pending" check (from l.713).
 - [ ] 17. §15.5.2: merge survival into the censoring box; demote distributions, Cox and Bayes boxes; delete l.713 (D12-D15).

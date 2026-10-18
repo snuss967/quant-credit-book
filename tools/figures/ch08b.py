@@ -26,6 +26,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from style import *  # noqa: E402,F401,F403
 import numpy as np  # noqa: E402
+from matplotlib.lines import Line2D  # noqa: E402
 from matplotlib.patches import FancyBboxPatch, Rectangle  # noqa: E402
 from matplotlib.ticker import FuncFormatter  # noqa: E402
 from scipy.optimize import brentq  # noqa: E402
@@ -52,7 +53,7 @@ E_RATING = {r: sum(v for _, g, v in CELLS if g == r) for r in ("BB", "B", "CCC")
 E_HEDGE = 4.8          # CDX HY and HY-ETF shorts: gain per +10% move of the HY index factor
 E_LIQ = 0.35           # per 1 sigma adverse liquidity-factor day
 E_PC1 = 0.30           # per 1 sigma adverse common-residual day
-E_ETF, E_STRUCT, E_CDX = 0.15, 0.06, 0.025   # basis: $mm per ETF-NAV point, structured point, CDX-cash bp
+E_ETF, E_STRUCT, E_CDX = 0.14, 0.06, 0.025   # basis: $mm per ETF-NAV point, structured point, CDX-cash bp
 SIGMA_IDIO = 0.38      # one-day sigma of the book's idiosyncratic P&L
 JTD_CLASS = {"sub80": 9.0, "cb": 14.0, "bb": 6.0, "bank": 4.15}   # issuer JTD by class (Halvorsen is 7.56 of sub80)
 
@@ -132,7 +133,7 @@ def fig_factor_tree():
         ("Common residual (§8.8)", r"$\beta^{C}_i\,F^{C}$", C_GAUSS, 8,
          ["$0.30mm per 1σ day of the first residual component"]),
         ("Basis: CDX, ETF, futures", r"$\sum_j \beta^{B}_{i,j}\,F^{B}_j$", C_GAUSS, 11,
-         ["CDX–cash \\$25k per bp    ETF–NAV \\$150k per point",
+         ["CDX–cash \\$25k per bp    ETF–NAV \\$140k per point",
           "Treasury futures–cash curve $40k per bp"]),
         ("Issuer residual", r"$\epsilon_{i}$, by rating × price bucket", C_IDIO, 8,
          ["Book's one-day idiosyncratic σ: $0.38mm"]),
@@ -213,7 +214,7 @@ def _var_es(sd, p, J, alpha=0.99, hi=60.0):
 
 
 def fig_mixture_traps():
-    fig, (a, b) = new_figure("panel2", ncols=2, gridspec_kw={"width_ratios": [1.05, 1]})
+    fig, (a, b) = new_figure((7.0, 3.7), ncols=2, gridspec_kw={"width_ratios": [1.05, 1]})
     # ---- left: Halvorsen's one-day loss, exceedance probability on log-log axes
     p1 = 1 - np.exp(-0.25 / 252)                       # 0.099%
     J = _halvorsen_J()
@@ -248,13 +249,13 @@ def fig_mixture_traps():
                ha="left", va="bottom", fontsize=8.3, color=INK_2)
     a.annotate("1% line", (0.045, 0.01), xytext=(0, 3), textcoords="offset points", ha="left", va="bottom",
                fontsize=8, color=MUTED)
-    a.plot([6.0], [p1], "o", color=INK, markersize=4, zorder=6)
-    a.annotate("mixture: default plateau at\n0.099% of days, mean loss $7.56mm", (6.0, p1), xytext=(0, 8),
-               textcoords="offset points", ha="center", va="bottom", fontsize=8.3, color=INK_2)
+    a.plot([2.6], [p1], "o", color=INK, markersize=4, zorder=6)
+    a.annotate("default plateau:\n0.099% of days,\nmean loss $7.56mm", (2.6, p1), xytext=(0, -8),
+               textcoords="offset points", ha="center", va="top", fontsize=8.3, color=INK_2)
     x_dot = 1.07
     a.plot([x_dot], [3e-5], "o", color=C_SHORT, markersize=4, zorder=6)
-    a.annotate("one Gaussian with the\njump's variance folded in", (x_dot, 3e-5), xytext=(6, 0),
-               textcoords="offset points", ha="left", va="center", fontsize=8.3, color=INK_2)
+    a.annotate("one Gaussian,\nvariance folded in", (x_dot, 3e-5), xytext=(-6, 0),
+               textcoords="offset points", ha="right", va="center", fontsize=8.3, color=INK_2)
     # ---- right: ES on the mixture divided by sqrt(h) times the one-day ES
     hs = np.arange(1, 15.01, 0.25)
     books = [("A", 20.0, 0.0015, "Table 8-B.2 book\n(JTD $20mm, 0.15% a day)", "-", 1.9),
@@ -275,26 +276,24 @@ def fig_mixture_traps():
     b.plot(hs, res["A"][1], color=C_JUMP, linewidth=1.1, linestyle=(0, (1, 1.6)), zorder=3)
     b.axhline(1.0, color=C_SHORT, linewidth=1.2, linestyle=(0, (4, 2.5)), zorder=2)
     b.set_xlim(1, 15)
-    b.set_ylim(0.6, 3.25)
+    b.set_ylim(0.6, 3.6)
     b.set_xticks([1, 5, 10, 15])
     b.set_xlabel("Horizon h (days)")
     b.set_ylabel("Mixture \u00f7 (\u221ah \u00d7 one-day figure)")
     b.axvline(10, color=NEUTRAL, linewidth=0.8, zorder=1)
-    b.annotate("10 days", (10, 3.2), xytext=(3, 0), textcoords="offset points", fontsize=8, color=MUTED, va="top")
+    b.annotate("10 days", (10, 0.62), xytext=(3, 0), textcoords="offset points", fontsize=8, color=MUTED, va="bottom")
     iA = int(np.where(hs == 10)[0][0])
-    eA, eB, vA = res["A"][0], res["B"][0], res["A"][1]
-    b.annotate("VaR, Table 8-B.2 book: the default\nenters the worst 1% near day 7", (6.9, 3.0), ha="left", va="center",
-               fontsize=8.3, color=INK_2)
-    b.annotate("ES, Table 8-B.2 book", (15, eA[-1]), xytext=(0, 7), textcoords="offset points", ha="right",
-               va="bottom", fontsize=8.3, color=INK_2)
-    b.annotate("\u221ah rule: exact", (15, 1.0), xytext=(0, 3), textcoords="offset points", ha="right",
-               va="bottom", fontsize=8.3, color=INK_2)
-    b.annotate("ES, Exercise 2 book", (15, eB[-1]), xytext=(0, -6), textcoords="offset points", ha="right",
-               va="top", fontsize=8.3, color=INK_2)
-    for key, arr, dy in (("A", eA, 6), ("B", eB, -7)):
+    eA, eB = res["A"][0], res["B"][0]
+    for arr, dy in ((eA, 7), (eB, -8)):
         b.plot([10], [arr[iA]], "o", color=C_JUMP, markersize=5, zorder=6)
-        b.annotate(f"{arr[iA]:.2f}\u00d7", (10, arr[iA]), xytext=(-5, dy), textcoords="offset points",
-                   ha="right", va="center", fontsize=8.3, color=INK_2)
+        b.annotate(f"{arr[iA]:.2f}\u00d7", (10, arr[iA]), xytext=(6, dy), textcoords="offset points",
+                   ha="left", va="center", fontsize=8.3, color=INK_2)
+    handles = [Line2D([0], [0], color=C_JUMP, linewidth=1.9),
+               Line2D([0], [0], color=C_JUMP, linewidth=1.9, linestyle=(0, (4, 2.5))),
+               Line2D([0], [0], color=C_JUMP, linewidth=1.1, linestyle=(0, (1, 1.6))),
+               Line2D([0], [0], color=C_SHORT, linewidth=1.2, linestyle=(0, (4, 2.5)))]
+    b.legend(handles, ["ES, Table 8-B.2 book", "ES, Exercise 2 book", "VaR, Table 8-B.2 book", "\u221ah rule (ratio = 1)"],
+             loc="upper left", frameon=False, fontsize=8.3, handlelength=2.4, borderaxespad=0.2, labelspacing=0.3)
     print("mixture figure:", f"Halvorsen VaR {var_h:.3f}, ES {es_h:.3f}, folded sd {sd_blend:.3f}, folded VaR {var_b:.3f};",
           f"ES ratio at 10d: A {res['A'][0][iA]:.2f}, B {res['B'][0][iA]:.2f}; VaR ratio A {res['A'][1][iA]:.2f}")
     return finish(fig, "ch08b_mixture_traps")
@@ -313,14 +312,15 @@ def fig_stress_library():
         ax.barh(y + bw / 2 + 0.02, sc["gauss"], height=bw, color=C_GAUSS, zorder=3)
         ax.barh(y - bw / 2 - 0.02, sc["jump"], height=bw, color=C_JUMP, zorder=3)
         ax.text(sc["gauss"] + 0.2, y + bw / 2 + 0.02, f"{sc['gauss']:.1f}", va="center", fontsize=8.3, color=INK_2)
-        ax.text(sc["jump"] + 0.2, y - bw / 2 - 0.02, f"{sc['jump']:.1f}", va="center", fontsize=8.3, color=INK_2)
-        ax.text(1.0, y, f"total {sc['total']:.1f}", va="center", ha="right", fontsize=8.3, color=INK_2,
-                transform=ax.get_yaxis_transform())
+        ax.text(sc["jump"] + 0.2, y - bw / 2 - 0.02, f"{sc['jump']:.1f}" if sc["jump"] > 0 else "0", va="center",
+                fontsize=8.3, color=INK_2)
+        ax.text(20.0, y, f"total {sc['total']:.1f}", va="center", ha="right", fontsize=8.5, color=INK)
     ax.set_yticks(ypos)
     ax.set_yticklabels([sc["name"] for sc in SCENARIOS])
     ax.tick_params(axis="y", length=0)
-    ax.set_xlim(0, 17.5)
-    ax.set_ylim(ypos.min() - 0.6, ypos.max() + 0.7)
+    ax.set_xlim(0, 20)
+    ax.set_xticks(range(0, 17, 2))
+    ax.set_ylim(ypos.min() - 0.6, ypos.max() + 0.6)
     ax.set_xlabel("Loss on Tuesday's book ($mm)")
     ax.grid(axis="y", visible=False)
     ax.grid(axis="x", visible=True)
@@ -328,8 +328,8 @@ def fig_stress_library():
     ax.axvline(0, color=NEUTRAL, linewidth=0.8)
     ax.legend(handles=[Rectangle((0, 0), 1, 1, color=C_GAUSS), Rectangle((0, 0), 1, 1, color=C_JUMP)],
               labels=["Factors and idiosyncratic (Gaussian layer)", "Jump-to-default overlay"],
-              loc="upper right", bbox_to_anchor=(0.84, 1.0), frameon=False, fontsize=8.3, handlelength=1.1,
-              handleheight=0.9)
+              loc="lower center", bbox_to_anchor=(0.45, 1.0), ncol=2, frameon=False, fontsize=8.3,
+              handlelength=1.1, handleheight=0.9, columnspacing=1.8)
     ax.spines["left"].set_visible(False)
     print("stress library:")
     for sc in SCENARIOS:
@@ -359,14 +359,12 @@ def fig_backtest():
                  color=INK_2)
     top.annotate("isolated", (152, 0.62), xytext=(0, 4), textcoords="offset points", ha="center", fontsize=8.3,
                  color=INK_2)
-    top.annotate("3 in a row\n(the Halvorsen gap)", (236, 0.62), xytext=(-5, 4), textcoords="offset points",
-                 ha="right", fontsize=8.3, color=INK_2)
-    top.annotate("2 in a row", (243.5, 0.62), xytext=(5, 4), textcoords="offset points", ha="left", fontsize=8.3,
-                 color=INK_2)
+    top.annotate("3 in a row (the Halvorsen gap),\nthen 2 in a row", (244, 0.62), xytext=(4, 4),
+                 textcoords="offset points", ha="right", fontsize=8.3, color=INK_2)
     top.set_yticks([])
     top.grid(False)
     top.spines["left"].set_visible(False)
-    top.set_xlabel("Trading day in the trailing 250 (each red mark is a day the loss exceeded the published 99% VaR)")
+    top.set_xlabel("Trading day in the trailing 250 (red = a day the loss exceeded the 99% VaR)")
     # ---- bottom left: the count under a correct model
     xs = np.arange(0, 13)
     pm = binom.pmf(xs, n, p)
@@ -379,7 +377,8 @@ def fig_backtest():
     a.annotate("Theo: 7", (7, 100 * pm[7]), xytext=(3, 38), textcoords="offset points", ha="left", va="bottom",
                fontsize=8.5, color=INK_2, arrowprops=dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8, shrinkA=0,
                                                           shrinkB=1))
-    a.annotate("expected 2.5", (2.5, 100 * pm[2]), xytext=(0, 14), textcoords="offset points", ha="center",
+    a.set_ylim(0, 31)
+    a.annotate("expected 2.5", (2.5, 100 * pm[2]), xytext=(0, 4), textcoords="offset points", ha="center",
                va="bottom", fontsize=8.3, color=INK_2)
     p7 = binom.sf(6, n, p)
     a.annotate(f"7 or more happens\n{100 * p7:.1f}% of the time:\nrejected at 5%\n(LR 5.50 > 3.84)", (12.5, 14.5),
@@ -394,8 +393,9 @@ def fig_backtest():
     b.set_xticks([0, 1])
     b.set_xticklabels(["after a quiet day\n(4 of 242)", "after an exception\n(3 of 7)"])
     b.set_ylabel("Chance of an exception today (%)")
-    b.annotate("1% claimed by the model", (1.57, 1.0), xytext=(0, 4), textcoords="offset points", ha="right",
-               va="bottom", fontsize=8.3, color=INK_2)
+    b.annotate("the model\nclaims 1%", (-0.08, 1.0), xytext=(0, 24), textcoords="offset points", ha="center",
+               va="bottom", fontsize=8.3, color=INK_2,
+               arrowprops=dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8, shrinkA=1, shrinkB=0))
     b.annotate(f"{100 * pi01:.1f}%", (0, 100 * pi01), xytext=(0, 3), textcoords="offset points", ha="center",
                va="bottom", fontsize=8.5, color=INK_2)
     b.annotate(f"{100 * pi11:.0f}%: 26 times as likely\nLR_ind 13.49 > 6.63", (1, 100 * pi11), xytext=(0, 4),
@@ -421,7 +421,7 @@ def fig_limit_sheet():
         ("Share of an issue", 6.2, 7.5, 10, "6.2%"),
         ("Backtest exceptions (250 d)", 3, 5, 10, "3"),
     ]
-    fig, (a, b) = new_figure((7.0, 4.3), ncols=2, gridspec_kw={"width_ratios": [1.9, 1]})
+    fig, (a, b) = new_figure((7.0, 4.3), ncols=2, gridspec_kw={"width_ratios": [1.5, 1]})
     n = len(lines)
     ypos = np.arange(n)[::-1]
     for (lab, val, soft, hard, txt), y in zip(lines, ypos):
@@ -453,7 +453,7 @@ def fig_limit_sheet():
     a.annotate("black tick = soft", (0, n - 0.35), xytext=(0, 1), textcoords="offset points", ha="left", va="bottom",
                fontsize=8, color=INK_2)
     # ---- right: the forty-bond migration, nothing traded
-    cells = ["B Industrials", "CCC Industrials"]
+    cells = ["B\nIndustrials", "CCC\nIndustrials"]
     fri, mon = [1.08, 0.22], [0.60, 0.70]
     xs = np.arange(2)
     w = 0.34
@@ -471,14 +471,14 @@ def fig_limit_sheet():
     b.set_xlim(-0.6, 1.6)
     b.set_ylim(0, 1.75)
     b.set_xticks(xs)
-    b.set_xticklabels(cells)
+    b.set_xticklabels(cells, fontsize=8.2)
     b.set_ylabel("DTS cell exposure ($mm)")
     b.grid(axis="x", visible=False)
     b.legend(handles=[Rectangle((0, 0), 1, 1, color=NEUTRAL), Rectangle((0, 0), 1, 1, color=C_SHORT)],
-             labels=["Friday", "Monday"], loc="upper left", bbox_to_anchor=(0.0, 0.93), frameon=False,
+             labels=["Friday", "Monday"], loc="upper left", bbox_to_anchor=(0.0, 1.0), frameon=False,
              fontsize=8.3, handlelength=1.1, handleheight=0.9)
-    b.annotate("40 bonds, 12 issuers\nmoved, nothing traded;\n10-day ES 7.8 → 8.7 (+11%)",
-               (0.42, 0.88), ha="left", va="center", fontsize=8.0, color=INK_2)
+    b.annotate("40 bonds, 12 issuers\nmoved, nothing traded;\n10-day ES +11%",
+               (0.36, 0.98), ha="left", va="center", fontsize=8.3, color=INK_2)
     return finish(fig, "ch08b_limit_sheet")
 
 
