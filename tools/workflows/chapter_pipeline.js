@@ -10,11 +10,12 @@ export const meta = {
     { title: 'Revise', detail: 'Opus: narrative revision per the brief (U2)' },
     { title: 'Verify', detail: 'Sonnet: nothing removed, new facts checked, hygiene', model: 'sonnet' },
     { title: 'Lessons', detail: 'Opus: apply u2_lessons to chapters revised before the lessons existed' },
+    { title: 'RV thread', detail: 'Opus: weave the chapter\'s relative-value beat into revised chapters' },
   ],
 }
 const ROOT = '/home/user/quant-credit-book'
 const MARK = '<!-- STATUS: COMPLETE -->'
-const VOICE = `VOICE (Edition 2 user directives; these outrank older guidance and the reviews): read "## 8. Edition 2 Voice Amendments" in state/style_bible.md and state/user_directives_ed2.md, and follow them. Teach the way an engaging novel teaches: lead with scenes and real credit events, build intuition before formulas, and be less prescriptive (fewer bare statements and imperatives; more "here is what happened, and here is the idea that would have helped"; more judgment about when a tool applies and when it breaks). Put a "> **Math, Gently.**" box at the first use of each mathematical concept, building blocks included. Add "> **View From Another Seat.**" boxes where another kind of investor or dealer would see the situation differently (name real firms only for publicly stated views, with a citation). Include a labeled fictional quant-shop-life vignette, and the boring parts are welcome. The user's own verdict on Edition 1 is "a lot of prescriptiveness and not narrative": turn rules, imperatives, "should/must/always/never" sentences, and bullet lists into scenes, worked stories, and reasoning the reader watches unfold; let a character discover the rule the hard way instead of stating it. Keep modal and imperative density low (python3 tools/prescriptiveness.py measures it). Remove no topics.
+const VOICE = `VOICE (Edition 2 user directives; these outrank older guidance and the reviews): read "## 8. Edition 2 Voice Amendments" in state/style_bible.md and state/user_directives_ed2.md, and follow them. Teach the way an engaging novel teaches: lead with scenes and real credit events, build intuition before formulas, and be less prescriptive (fewer bare statements and imperatives; more "here is what happened, and here is the idea that would have helped"; more judgment about when a tool applies and when it breaks). Put a "> **Math, Gently.**" box at the first use of each mathematical concept, building blocks included. Add "> **View From Another Seat.**" boxes where another kind of investor or dealer would see the situation differently (name real firms only for publicly stated views, with a citation). Include a labeled fictional quant-shop-life vignette, and the boring parts are welcome. The user's own verdict on Edition 1 is "a lot of prescriptiveness and not narrative": turn rules, imperatives, "should/must/always/never" sentences, and bullet lists into scenes, worked stories, and reasoning the reader watches unfold; let a character discover the rule the hard way instead of stating it. Keep modal and imperative density low (python3 tools/prescriptiveness.py measures it). RELATIVE-VALUE THREAD (user directive 13): the pod-shop trade, long one credit and short another, hedged so that what remains is the idiosyncratic view, runs through every chapter. If state/rv_thread.md exists, read this chapter's entry: it assigns the chapter its RV beat (a scene, or a "> **The Pair.**" box) and its place in the running Pair Book (state/rv_pair_book.md). Make the isolation logic explicit: what the hedge removes, what idio remains, what leaks, and what it costs to carry and to short. Remove no topics.
 CODE: chapters carry no code. Where a listing belongs, first build up to it: explain in prose what problem it solves at this point in the story, what it computes, why it is built that way, its inputs and outputs, when to use it and when not, and the edge case that bites. Then put a line containing exactly <!-- EXPLAINED --> and the fenced python listing immediately after. The orchestrator moves listings to Appendix F mechanically and leaves a link.`
 
 const u1 = stem => `You are a CODE EXPLAINER (Edition 2, task U1) for the book in ${ROOT} ("Systematic & Quantitative Credit: From PJT RSSG to the Automated Desk"; reader: a restructuring banker moving to a systematic credit desk). Work from ${ROOT}. File: book_src/${stem}.md.
@@ -48,6 +49,7 @@ Write 1,500–2,500 words:
    - a "When to reach for it, and when it breaks" judgment passage for each major tool;
    - the list-heavy passages to rewrite as narrative (by heading);
    - the dense derivations to move into "The Full Derivation" subsections after the intuition.
+   - its RELATIVE-VALUE beat (user directive 13): if state/rv_thread.md exists, take this chapter's assigned beat from it; otherwise design one. It is a scene or a "> **The Pair.**" box in which the pod trade (long one credit, short another, hedged so the residual is the idiosyncratic view) is built or stress-tested with THIS chapter's tool. Name the pair, the hedge construction, what the hedge removes, what idio remains, what leaks, and what it costs to carry and to short.
 3. Three or more FIGURE ideas: file name chNN_slug.png, type (payoff diagram, waterfall, timeline, flow graph, distribution, data series), the data or formula to plot, and the caption. These go to a later figures pass, not to the writer.
 4. Must not change: the derivations, cases, and boxes the writer must keep intact.
 DURABILITY: write the file in two passes. Your FINAL action is appending a line containing exactly ${MARK}. Return a 60-word summary.`
@@ -132,10 +134,21 @@ AUDIT first, and write it into the log as "- [ ] ..." items before any edit:
 (d) boxes: Math, Gently count and adjacency against the lesson-6 budget (merge or demote extras to one-sentence glosses with pointers; first load-bearing use only), and runs of more than two boxed elements;
 (e) research-note leaks ("CHECK", "search summary", "secondary") and fiction-label gaps;
 (f) the Finder table at the top of the Desk Debrief (lesson 11), and promotion of long scenes to #### headings;
-(g) cast-bible contradictions.
+(g) cast-bible contradictions;
+(h) the chapter's RELATIVE-VALUE beat: if state/rv_thread.md exists and this chapter lacks its assigned beat, add an item to write it (scene or "> **The Pair.**" box) and update state/rv_pair_book.md.
 Then FIX the items in order. Each item is one or more Edits; re-grep before editing, and tick each item with a 10-word note.
 Rules: remove no topic, numbered equation, Source Extraction with its page number, fact-checked Trend Watch wording, exercise, figure, Appendix F link, or verified URL. Duplicate paragraphs MAY be retired by merging them into the surviving telling. Keep the last line as ${MARK}. Pandoc math: $...$ inline and $$...$$ display on their own lines. Escape currency as \\$. Add no code blocks. Do not run builds.
 Finish by running the metric again and recording "after". Your FINAL action is appending a line containing exactly ${MARK} to the log. Return a 60-word summary with the before and after metrics and the word count.`
+
+const rv = stem => `You are an RV WEAVER (Edition 2, user directive 13) for the book in ${ROOT} ("Systematic & Quantitative Credit: From PJT RSSG to the Automated Desk"). Work from ${ROOT}.
+The user: "deeply explore the relative value side of quantitative credit, particularly the pod shop long a credit short a credit so that we can isolate the idio as the alpha. That weaves through every chapter. Be intentional about how you work it in."
+Chapter: book_src/${stem}.md. Log: state/revisions/ed2/${stem}.rv.md.
+FIRST: if state/rv_thread.md is missing or lacks ${MARK}, stop and return "no thread". If the log ends with ${MARK}, stop and return "done". If another agent is mid-revision on this chapter (state/revisions/ed2/${stem}.log.md exists without ${MARK}), stop and return "busy".
+Read: state/rv_thread.md (the spine, canonical homes, and THIS chapter's entry); state/rv_pair_book.md (the running ledger of the fictional pod's pairs); state/cast_bible.md; state/reviews/ed2/u2_lessons.md; "## 8. Edition 2 Voice Amendments" in state/style_bible.md; and state/research/rv_*.md dossiers that the thread names (grep and sed only what you need).
+Then grep the chapter for what it already says about pairs, hedges, idiosyncratic return, and relative value, and read the sections where the beat belongs.
+Write the chapter's RV beat exactly as the thread specifies it: a scene (800–2,000 words, built on a real dated event where the thread names one, with fictional positions labeled) or a "> **The Pair.**" box (250–600 words). It must build or stress-test the pair with THIS chapter's tool, and make the isolation explicit: the two legs, the hedge construction (spread duration, DTS, empirical beta, or factor-model residual), what the hedge removes, what idio remains, what leaks, and the carry, funding, and borrow cost (cash bonds are hard to short, so name the real short leg). Retire any older paragraph that the beat now tells better (one telling per fact); never remove a topic, equation, Source Extraction, Trend Watch, exercise, figure, Appendix F link, or URL. Add one cross-reference to the canonical home. Then append the pair's entry or update to state/rv_pair_book.md (pair, legs, hedge ratio and method, chapter, status, idio share, what leaked).
+Rules: real firms and people only through their sourced public record; no invented quotes; fictional pod numbers marked illustrative. Pandoc math: $...$ inline and $$...$$ display on their own lines. Escape currency as \\$. Add no code blocks. Keep the chapter's last line as ${MARK}.
+Log what you wrote and where. Your FINAL action is appending a line containing exactly ${MARK} to the log. Return a 60-word summary.`
 
 const STAGES = {
   u1: { make: u1, phase: 'Explain code', model: 'sonnet' },
@@ -146,6 +159,7 @@ const STAGES = {
   revise: { make: revise, phase: 'Revise' },
   verify: { make: verify, phase: 'Verify', model: 'sonnet' },
   lessons: { make: lessons, phase: 'Lessons' },
+  rv: { make: rv, phase: 'RV thread' },
 }
 const order = (args.stages || ['u1', 'figures', 'figcheck', 'brief', 'revise', 'verify']).filter(s => STAGES[s])
 log(`stages: ${order.join(' -> ')} for ${args.stems.length} chapters`)

@@ -212,3 +212,7 @@ State on disk:
 4. U2 (figures already done) for Ch 18–23, 26–28 and primers 4-B, 6-B, 7-B, 12-B: stages brief → revise → verify.
 5. Figures and Resource Graphs for Ch 1–7 and for the new files once their revisions settle.
 6. Build, send the PDF, commit.
+
+## 06:45 UTC: user directive 13, the relative-value thread (pod long-one/short-another to isolate idio, woven through every chapter)
+
+Measured coverage: idio isolation is concentrated in Ch 1, 7, 8, 8-B, 8-C, 19 and 28; the explicit pod pair trade is thin almost everywhere. Plan: `state/rv_thread_plan.md`. Prompts updated: every writer's VOICE, every brief's required list, and the lessons audit now carry the RV beat. New stage `rv` (Opus RV weaver) is for chapters already revised. New workflow `tools/workflows/rv_thread.js`: Sonnet research ×2 (pods and risk; pairs literature and mechanics) → Fable RV architect (`state/rv_thread.md`, `state/rv_pair_book.md`, optional new chapter 08_ch08d) → Opus writer. **Launch FIRST at 09:33**, before resuming the revisers, so the revisions pick up the thread.
