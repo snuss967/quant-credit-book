@@ -9,54 +9,6 @@
    "args": null
   },
   {
-   "name": "research-A",
-   "task": "wpt43g1bx",
-   "runId": "wf_6e44a234-b6e",
-   "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/research-resilient-wf_bd451f4f-5fb.js",
-   "args": {
-    "today": "2026-10-18",
-    "model": "sonnet",
-    "no_map": true,
-    "items": [
-     {
-      "kind": "case",
-      "slug": "lmt_private_and_european_2024_2026",
-      "status": "PARTIAL",
-      "title": "Private-credit and European LMEs, 2024-2026",
-      "scope": "See state/research_queue_ed2.json entry for case_lmt_private_and_european_2024_2026 (read it first) and any existing PARTIAL dossier; finish it."
-     },
-     {
-      "kind": "case",
-      "slug": "courts_as_regime_variables",
-      "status": "PARTIAL",
-      "title": "Courts as regime variables",
-      "scope": "See state/research_queue_ed2.json entry for case_courts_as_regime_variables (read it first) and any existing PARTIAL dossier; finish it."
-     },
-     {
-      "kind": "trend",
-      "slug": "re_default_and_recovery_dataset",
-      "status": "PARTIAL",
-      "title": "Re-default and recovery dataset",
-      "scope": "See state/research_queue_ed2.json entry for trend_re_default_and_recovery_dataset (read it first) and any existing PARTIAL dossier; finish it."
-     },
-     {
-      "kind": "trend",
-      "slug": "private_credit_marks_and_redemptions_2025_2026",
-      "status": "PARTIAL",
-      "title": "Private-credit marks and redemptions, 2025-2026",
-      "scope": "See state/research_queue_ed2.json entry for trend_private_credit_marks_and_redemptions_2025_2026 (read it first) and any existing PARTIAL dossier; finish it."
-     },
-     {
-      "kind": "trend",
-      "slug": "listed_credit_futures_and_index_microstructure",
-      "status": "PARTIAL",
-      "title": "Listed credit futures and index microstructure",
-      "scope": "See state/research_queue_ed2.json entry for trend_listed_credit_futures_and_index_microstructure (read it first) and any existing PARTIAL dossier; finish it."
-     }
-    ]
-   }
-  },
-  {
    "name": "research-B",
    "task": "wjvc6tmzo",
    "runId": "wf_e08bbe4b-b57",
@@ -258,26 +210,6 @@
     "stages": [
      "figures",
      "figcheck"
-    ]
-   }
-  },
-  {
-   "name": "resgraph-V-a",
-   "task": "wg1sjulmh",
-   "runId": "wf_456cef70-a68",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "18_ch18_otc_microstructure_and_avellaneda_stoikov",
-     "19_ch19_portfolio_trading_pricing_engines",
-     "20_ch20_credit_etf_creation_redemption_arb",
-     "21_ch21_leveraged_loans_and_clo_microstructure",
-     "22_ch22_market_structure_regulation_trends",
-     "23_ch23_cross_asset_convexity_and_vol_surface"
-    ],
-    "stages": [
-     "resgraph"
     ]
    }
   },

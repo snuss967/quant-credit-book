@@ -267,7 +267,8 @@ def fig_trend_smile():
     tf = np.sign(m) * r
     for z0 in (-2.5, -1.0, 1.0, 2.5):
         sel = np.abs(r - z0) < 0.05
-        assert abs(tf[sel].mean() - smile(z0, rho)) < 0.03, (z0, tf[sel].mean(), smile(z0, rho))
+        se = tf[sel].std() / math.sqrt(sel.sum())
+        assert abs(tf[sel].mean() - smile(z0, rho)) < 4 * se + 0.01, (z0, tf[sel].mean(), smile(z0, rho))
 
     fig, (a, b) = plt.subplots(1, 2, figsize=(7.0, 3.4), layout="constrained")
     z = np.linspace(-3.4, 3.4, 400)

@@ -10,3 +10,4 @@ Code and consistency fixes found along the way. Lowest priority: run only when n
 - Ch 7-B §7-B.8 and exercise 5 quote 17.1% for the monthly grid (continuity-correction approximation), while the simulation, the acceptance test and Figure 7-B.5 give 17.6–17.7%. Reconcile them, or say why they differ. (Figure check, 2026-10-18.)
 - Ch 7-B §7-B.6: the Bohn–Stein claim "about half of the time ... 20 bps vs 200 bps" does not follow from the stated one-factor parameters. Re-derive or re-parameterize. (Figure check, 2026-10-18.)
 - Ch 4-B Table 4B.1 shows 679 where the listing gives 678.5 (rounding; optional). (Figure check, 2026-10-18.)
+- Ch 22 Resource Graph: the Uyeda speech figures must be checked against the SEC page before print (sec.gov returned 403 to scripted fetch). (resgraph, 2026-10-18)

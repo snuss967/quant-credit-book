@@ -123,3 +123,111 @@ Picture the stress the rates hedge was bought for: a flight to quality in which 
 > **View From Another Seat.** *The CLO manager and the insurer.* A CLO manager's daily explain barely mentions market value. Its overcollateralization tests count most loans at par, so buying a loan at 92 adds 100 of par for 92 of cash, and the line the manager watches is *par built*. Par building stops at a few exceptions: loans bought below the deal's discount threshold, the excess of CCC holdings above the limit, and defaulted loans, which are carried at lower values (§21.4). A ten-point mark loss on a B2 loan that stays B2 can be invisible in the tests. The same loss after a downgrade to CCC, inside a bucket already at its limit, hits the OC numerator directly. A life insurer's explain is about book yield. Most of its corporate bonds are held at amortized cost against long liabilities, so a spread move changes unrealized gains that do not flow through capital unless the bond is impaired or sold, while the risk-based capital charge moves with ratings (Chapter 17; Chapter 4-C's insurer seat). The systematic desk is the seat for which the daily mark is everything. Each of the other seats has a rule that makes the mark matter less on most days and far more on a few, and the explain is how the desk sees those days approaching for the people on the other side of its trades.
 
 *Builds on:* §8.6 (the hedge matrix), §24.2–§24.3 (CDS legs and $N^{\text{JTD}}$), §20.2 (NAV and the premium), Appendix D §D.2 (variation margin) and §D.5 (the auction). *Used in:* §8C.6 (the stale-series morning), §8C.8 (the default day), Chapter 10-B (index rolls).
+
+## 8C.3 Financing, Fees, FX and Day One
+
+"In a restructuring," Theo says, "interest expense lives below EBITDA. Nobody looks at it until the covenant test."
+
+"Here it's above the line every morning," Ines says, "because it's a cost of holding the position, and holding the position is the business."
+
+The **financing** line is the repo interest on bonds funded in repo and the borrow fee on bonds the desk is short (Appendix D §D.3, the funding leg of §24.1). Monday's book paid \$15,000 for three days on about \$40mm of financing. A short in a bond that goes *special*, where the borrow fee jumps because everybody wants the same bond, shows up as a financing line that grows while the bond's price line looks quiet. Folding the borrow fee into the spread line would make a squeeze look like a slow, unexplained bleed in the idiosyncratic return. **Fees and commissions** (platform, clearing and exchange fees, and any commission on voice trades) come from the blotter and the clearing statements, and they are facts. **FX** matters for every line not in dollars, and it brings the chapter's first cross-term.
+
+> **Math, Gently.** *Two prices, one cross-term.* Hold €10mm face of a euro bond at 95 when EURUSD is 1.0800. The next day the bond is at 95.50 and the euro is at 1.0750. In dollars, the position went from \$10,260,000 to \$10,266,250, up \$6,250. Split it. The bond's own move is half a point on €10mm, €50,000, worth \$54,000 at yesterday's rate. The currency's move on yesterday's €9.5mm of value is −\$47,500. Those two add to \$6,500, not \$6,250. The missing −\$250 is the cross-term: today's €50,000 gain, converted at today's slightly worse rate. It belongs to neither the bond nor the currency, so the explain prints it on its own line with a stated convention (here: local move at yesterday's rate, FX on yesterday's value, cross-term separately). The cross-term is small on quiet days and large on violent ones, and it is the first sign of the problem §8C.5 runs into with signals.
+
+**Day-one P&L** is the line the market-making half of the desk watches most. When the desk buys \$5mm of a bond at 97.25 at a minute when the composite mid is 97.32, it has made $(97.32 - 97.25) \times 5{,}000{,}000/100 = \$3{,}500$ against the composite before anything else has happened:
+
+$$
+\Pi^{\text{day-one}} = \eta\,\big(P^{\text{comp}}_{t_{\text{trade}}} - P^{\text{fill}}\big)\,\frac{N}{100},
+$$
+
+with $\eta = +1$ for a buy and $-1$ for a sell. It has its own line for two reasons. It is a markout at horizon zero (§3.3), so it belongs to the trading decision and not to the positions' market moves. And the composite is itself a prior, a model's estimate of where the bond would trade, not a price anyone paid (§20.2, Law 9). A desk that folds day-one P&L into the spread line will find, a month later, that its "spread" P&L is mostly the gap between its fills and a vendor's model, and that the gap tends to reverse at the five-day markout when the composite was wrong.
+
+> **[SOURCE EXTRACTION]** *Paleologo_Advanced_Portfolio_Management p.159:* "the attribution is computed based on daily returns, based on market close prices and positions. Orders, however, happen intraday. As an extreme case, take the scenario where you open and close a position intraday. Attribution will attribute zero PnL to this stock. This discrepancy is usually categorized as a 'trading PnL'."
+>
+> **Annotation.** Paleologo is writing about equities, where the close is a single print and the intraday trade is the exception. A credit desk inverts both. The close is several photographs taken at different times by different vendors, and almost every position was traded intraday at a price that differs from any of them. The trading P&L Paleologo describes as a discrepancy is, on a credit desk, the day-one line and the timing line, and the composite at the minute of the trade carries the weight that the closing print carries in equities. Store it, with its own timestamp, on the trade ticket. An explain that keeps only end-of-day marks attributes the edge of every intraday trade to "market".
+
+The last line in this group is the one Chapter 3-B introduced in a Math, Gently box: **timing**. If a bond is marked at 4:00 p.m. and its futures hedge at the 3:00 settlement, the book reports a P&L of
+
+$$
+\Pi^{\text{phantom}} = -\text{DV01}_B\,\big(\Delta y_{t_2} - \Delta y_{t_1}\big),
+$$
+
+where $\Delta y_t$ is the yield change from yesterday's snap to time $t$ today, in basis points. It reverses the next day, when the hedge's next photograph catches up. Nothing was traded. Its daily standard deviation is about $\text{DV01}_B\,\sigma_y\sqrt{(t_2 - t_1)/\text{(one trading day)}}$, which for \$22,000 of DV01 and an hour between snaps comes to roughly \$52,000 a day (§3B.1). Product control and risk agree on one time and take every mark at it or adjust it to it, which is Chapter 8-B's 3 p.m. snap (§8B.3). The explain shares that snap with the risk model. Where a vendor's mark arrives late or early, a *timing* line computed from the hedge's intraday price at the snap time names the difference, so that it never sits in the residual.
+
+*Builds on:* §3.3 (markouts), §3B.1 (the snap), §24.1 and Appendix D §D.3 (funding). *Used in:* §8C.5 (cross-terms), Chapter 2-B (implementation shortfall against the composite), Chapter 18-B (dealer day-one P&L).
+
+## 8C.4 The Foot
+
+At the end of Theo's first week, Ines writes one equation on the whiteboard and underlines it twice:
+
+$$
+\Pi^{\text{official}} = \sum_{\text{lines}} \Pi_\ell + U .
+$$
+
+"That's not a model," she says. "It's a definition. $U$ is whatever is left. You can't be wrong about a definition. You can only be wrong about the lines, or about the official number."
+
+The foot is an identity, and the explain foots every day by construction. What makes it useful is the claim attached to $U$. The lines were built from facts and forecasts, the official number was built from product control's marks, and $U$ measures how far the two disagree. A small $U$ says the desk understands its own book. A large one says something on the book was booked, marked or modeled wrong, and the explain does not yet know which.
+
+How small counts as small is a policy decision, not a statistical estimate. The policy this desk uses *(illustrative)* is
+
+$$
+|U| \le \text{tol} = \min\big(1\ \text{bp of NAV},\ 5\%\ \text{of the 1-day expected shortfall}\big).
+$$
+
+> **Math, Gently.** *Expected shortfall, the average of the bad days.* Line up a thousand simulated or historical days of the book's P&L from worst to best. The 97.5% expected shortfall is the average loss across the worst 25 of them, 2.5% of the days. It answers "on a genuinely bad day, how much do we lose on average?", where value-at-risk answers only "where does a bad day start?" For this desk the 1-day ES is about \$1.5mm *(illustrative)*, so 5% of it is \$75,000. The full version, with the jump-to-default layer that makes the worst days worse, is Chapter 8-B.
+
+For a \$100mm book, 1 bp of NAV is \$10,000 and 5% of ES is \$75,000, so the tolerance is \$10,000. Two terms appear because each protects against a different failure. The ES term stops a low-risk book from treating a residual comparable to its daily risk as noise: an unexplained larger than a twentieth of a bad day means the desk does not know what its risk is. The NAV term stops a high-risk book from hiding behind its own volatility. A trader who runs a lot of risk does not earn a larger allowance for not knowing what happened. Monday's corrected residual was −\$9,000, inside. Monday's first residual, −\$119,000, was nearly twelve times the tolerance.
+
+Escalation on this desk is the part of the policy people remember, because it costs them something. Theo watched it happen in his second week. At 7:18 the explain showed −\$64,000 unexplained, and within two minutes product control and Ines both had the alert, because the policy names them and a deadline (8:00). By 8:00 the residual had been traced to three issuers, and new risk in those three names was frozen. The rest of the book traded normally, since one bad line is not a reason to stop the desk. The freeze lifts when the residual has a name. If it has none by the 3 p.m. snap, the case goes to the risk committee and the marks involved are downgraded in provenance, from "composite" to "under review", which shrinks their weight in the risk model until somebody proves them. This one had a name by 10:30: a block sold on Friday had been booked to the wrong account, so one book showed a position it no longer owned and another showed P&L on a bond it had never held. Nobody adjusted anything. The ticket was rebooked, both explains re-ran, and the residual went to −\$3,000.
+
+Month-end adds a second official number. The fund administrator, or the bank's independent price verification group, replaces the desk's daily composite marks $\bar P$ with month-end evaluated prices $\hat P$. Each difference becomes a line of its own,
+
+$$
+\Pi^{\text{true-up}}_i = \big(\hat P_i - \bar P_i\big)\frac{N_i}{100},
+$$
+
+labeled *mark change, evaluated vs composite*. It is never booked to spread or idiosyncratic, because it is a change in who is forecasting the price, not a change in the price (Law 9). Any true-up line beyond tolerance either gets accepted, with a note, or disputed. The dispute process is a short procedure with a long tail. Product control files the challenge, not the trader, and it files evidence rather than opinion: TRACE prints, dealer runs, the composite's history, and the prices of comparable bonds. The vendor's challenge window is short (two business days after month-end on this desk, *illustrative*), and its answer goes into the explain's own ledger next to the challenge. Section 8C.6 walks one through.
+
+That ledger is the last piece. Every breach, every true-up beyond tolerance and every dispute gets a row: date, size, cause, owner, hours to close, and the date the line reversed, if it did. Over a quarter the ledger becomes a hand history of the explain itself, and §8C.9 reads it.
+
+![Figure 8C.1: Monday's explain as a waterfall, from zero to the official −\$399,000: accrual and pull-to-par first (custodian, then model), rates for bonds and futures, factor spread, the CDX hedge's factor and coupon lines, idiosyncratic, financing, fees and day-one, then the stale-mark line of −\$110,000 and the unexplained of −\$9,000 last, against a shaded tolerance band of ±\$10,000. Illustrative.](assets/figures/ch08c_explain_waterfall.png)
+
+*Builds on:* Chapter 8-B (ES, the limit sheet, escalation thresholds), §12.5 (desmoothing stale marks), Appendix B §B.8 (composites as model outputs). *Used in:* §8C.6, §8C.9, §28.6 (the mark is the stop you don't know you have), Chapter 17-B (the mark gap).
+
+## 8C.5 Which Signal Made the Money?
+
+On the last Friday of September the risk meeting runs long, because Ines asks the question every PM eventually asks. "The book made \$2.4mm this month. Which signal made it?"
+
+"Momentum," Kaz says. "Obviously."
+
+Theo has two numbers on his screen, and they disagree. The momentum sleeve, simulated by itself on September's data, would have made \$3.0mm. The value sleeve, by itself, \$2.0mm. The book that held both made \$2.4mm, less than momentum would have made alone.
+
+The first half of the answer is easy, and it is linear. Write the book's positions as a sum of signal sleeves, $w = \sum_s w_s$, measured in DTS-weighted dollars per *issuer*, not per bond. With the issuer-level IDO returns $r^{\text{IDO}}_j$ of §8.8, the book's IDO P&L splits without remainder:
+
+$$
+\Pi^{\text{IDO}} = \sum_j w_j\,r^{\text{IDO}}_j = \sum_s \sum_j w_{s,j}\,r^{\text{IDO}}_j .
+$$
+
+Measuring by issuer matters because signals collide inside capital structures. On 14 September the value sleeve wanted \$10mm of Halvorsen's 6s and the momentum sleeve wanted to be short \$6mm of Halvorsen's 7.25s. The book held a net issuer exposure, and the issuer's news hit both bonds. Measured bond by bond, each sleeve would claim the full issuer move on its own bond, and the two claims would not add up to what the book earned. Measured by issuer, the common move is counted once, which is Law 2 (bonds are not bets; issuers are) applied to attribution.
+
+The second half is where Kaz's "obviously" falls apart. The sleeves were never held separately. The optimizer saw the sum of the two signals, netted them, skipped the trades that would not pay for themselves, and scaled the result down to fit one risk budget. The "momentum alone" book that made \$3.0mm never existed, and neither did the "value alone" book. Each is a counterfactual. Daily returns are linear in positions. Portfolio construction is not linear in signals.
+
+> **Math, Gently.** *Why two signals that both made money can add to less than either.* Suppose each signal, run alone, earns its \$3.0mm or \$2.0mm at full risk. Run together, they share one risk budget, so each runs at roughly two-thirds of its standalone size, and on the issuers where they disagree they cancel. The combined book makes \$2.4mm. The interaction, $2.4 - 3.0 - 2.0 = -2.6$, is real money that belongs to neither signal alone, the same kind of leftover as the FX cross-term in §8C.3, only larger. There is no single correct way to divide it. There are conventions, and an honest report prints which one it used.
+
+Call $v(S)$ the P&L of the book the optimizer would have built from the signals in the set $S$, rebuilt each day on that day's inputs. Three conventions are in common use. *Sequential* attribution gives the first signal its standalone value and each later signal its increment. Momentum first gives momentum 3.0 and value −0.6. Value first gives value 2.0 and momentum 0.4. The answer depends on which signal you list first, which is a strange property for a number that will decide somebody's bonus. *Equal split* gives each signal its standalone value minus half the interaction: momentum $3.0 - 1.3 = 1.7$, value $2.0 - 1.3 = 0.7$. The *Shapley value*, from cooperative game theory (Shapley, 1953), averages each signal's increment over every order in which the signals could have been added:
+
+$$
+\phi_s = \sum_{S \subseteq \mathcal{S}\setminus\{s\}} \frac{|S|!\,(n - |S| - 1)!}{n!}\,\big[v(S \cup \{s\}) - v(S)\big].
+$$
+
+For two signals it averages the two sequential answers, momentum $\tfrac12(3.0 + 0.4) = 1.7$ and value $\tfrac12(2.0 - 0.6) = 0.7$, and for two signals it coincides with the equal split. For three signals it averages over six orderings and the two conventions part company. Shapley needs $2^n - 1$ counterfactual books every day, which is cheap for two or three signals and expensive past four. Beyond that, desks use the optimizer's gradient, a marginal attribution that linearizes the construction around today's book. Every one of these is a defensible convention, and choosing one is not where reports go wrong. They go wrong when the header leaves the choice out. This desk's report says, in its first line, "signal attribution: issuer-netted IDO; cross-term by Shapley over rebuilt books."
+
+> **[SOURCE EXTRACTION]** *Paleologo_Advanced_Portfolio_Management p.136:* "Total returns – and a portfolio's total PnL – live in the Sun's frame of reference. It is easy to fool ourselves with the belief that we beat birds, airplanes and supermen at their own game. Idiosyncratic returns and PnL live in the Earth's frame of reference."
+>
+> **Annotation.** The passage opens with Paleologo's own jogging speed measured relative to the Sun, and it is the best one-paragraph defense of IDO accounting in print. Signal attribution needs a third frame. After the factors are stripped, each signal's IDO P&L lives in the frame of the *book*: the netting, the shared risk budget and the costs the book paid. A signal's research ledger (§8.8: monthly information coefficient on the whole universe) measures it in the Earth's frame. The production ledger measures it in the book's frame. When the two disagree, both can be right. The research ledger says whether the signal knows something. The production ledger says whether this book got paid for it.
+
+One more check stands between a signal's P&L and its reputation, and it is the markout (§3.3). September's momentum P&L came heavily from three issuers that gapped on news nine days after the signal had entered them. The 1-, 5- and 20-day markouts on momentum's entries that month were flat. Momentum held the right bonds when the news came, but it did not cause the news, and its entries did not predict it. A signal's P&L becomes its edge only when the markouts agree, and in September they did not. Kaz conceded "obviously" on the following Tuesday.
+
+> **View From Another Seat.** *The multi-strategy platform.* On a pod platform the attribution question is a compensation question, and the platform answers it in advance. Portfolio managers are typically paid a share of their own P&L, with factor exposure hedged or charged centrally, so the platform's explain strips factors first and pays on what is left. Cross-terms between pods are mostly invisible to the pods themselves, because each pod sees only its own book. The platform sees the sum, nets the overlaps and keeps the interaction as its own P&L or cost. (Public accounts of this structure include the *Odd Lots* episodes listed in this chapter's Resource Graph; we describe the seat generically.) A single systematic desk running several signals faces the same question with one difference: the person dividing the interaction also runs the signals, which is a reason to fix the convention before the month starts rather than after it ends.
+
+*Builds on:* §8.8 (the IDO ledger), §8.9 (`ido_engine`), §3.3 (markouts), §3.5 (the Edge Ledger), Law 2. *Used in:* §28.3 (allocation across signal horizons), §28.9 (net alpha by signal), Chapter 9 (the factor sleeves).
