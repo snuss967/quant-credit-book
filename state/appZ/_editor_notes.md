@@ -4,19 +4,6 @@
 
 NOTE (for the editor): The "right-skewed survival leg" comes from §5.9.1's Gaussian $\Delta s$, not from the bond. §5.2.4 says a lognormal spread (skew $+1.1$ at $\kappa = 0.35$) gives a survival-world return skew of "about $-1.1$," which positive convexity pushes back on only "a little." I simulated the same leg with lognormal relative spread changes, $\Delta s = s\,(e^{-\kappa^2/2 + \kappa Z} - 1)$, and four million draws. The skew is $-0.93$ at $C^{\text{spr}} = +8$, $-1.13$ at 0 and $-1.35$ at $-8$. The exercise's "show that the survival leg of a non-call bond is right-skewed" therefore holds only under the Gaussian-$\Delta s$ assumption. I suggest "under §5.9.1's Gaussian spread change, show that…", perhaps with a closing clause noting that with §5.2.3's lognormal spreads the leg stays left-skewed.
 
-### 06_ch06_merton_and_intensity_models
-
-NOTE (for the editor): The gap arithmetic agrees with the check (70.6%). The inputs, though, are not consistent with the levels. Fit both prices with $p=12/17$ and the implied liquidation value is $L=(69-0.706\times97)/0.294\approx1.8$ cents for *both* bonds. That contradicts part (a)'s 53% no-cash coverage and the 30s–40s trading levels of March. At $L=40$ the two levels imply $p=51\%$ (2025s) and $p=43\%$ (2031s), not one common $p$. A reader who checks the levels will be confused. One option is to add "use only the gap; the two-state model is not meant to fit the levels." Another is to adjust the reinstatement values.
-
-### 06_ch06_merton_and_intensity_models
-
-NOTE (for the editor): The exercise says "with zero drift, compute … with `black_cox_pd`" and checks "about 70%." Called with `mu=0`, `black_cox_pd` returns 73.6%. Its `mu` is the drift of $V$, so `mu=0` gives a log drift of $-\tfrac12\sigma_V^2$. The 70.3% needs `mu=0.5*sigma_V**2=0.03125` (zero log drift, as in §6.5.3's $2N(-0.38)$). I suggest "zero log drift ($\mu=\tfrac12\sigma_V^2$ in `black_cox_pd`)."
-
-### 06_ch06_merton_and_intensity_models
-
-NOTE (for the editor): The computation agrees with the check (13.75% vs 13.8%). A separate point: in §6.10.2 Theo says the June 2020 buyers at \$5.50 "lost money on a stock that survived bankruptcy," and the line is set against "\$1.53 a share in cash." The \$1.53 is only the cash component. Contemporaneous reports valued the whole package at roughly \$7–8 per old share: Hertz's court-paper estimate as reported by Business Insider (https://businessinsider.nl/hertzs-chapter-11-restructuring-plan-has-been-confirmed-by-a-bankruptcy-court-paving-the-way-for-a-1-billion-shareholder-payout/), and Bloomberg, "Hertz equity to recover \$8 a share with Knighthead plan win" (https://www.bnnbloomberg.ca/hertz-equity-to-recover-8-a-share-with-knighthead-plan-win-1.1602745.amp.html). On those valuations a \$5.50 buyer came out ahead before time value. These are estimates, not cash received, and I did not verify them against the filings this pass. The exercise's lesson survives either way, but the "lost money" line needs a source or a softer wording.
-
-
 ### 07_ch07_ml_on_small_sample_credit_data
 
 NOTE (for the editor): The check's "about 19" ($11 \times 1{,}197/693$) gives every label the interior uniqueness. The labels near the two ends of the sample share their windows with fewer neighbours, and the exact sum is 19.98, which is the $\approx 20$ the exercise asks the reader to show. Suggested wording: "about 19 from the interior approximation, and exactly 20 once the less crowded edge labels are counted."
@@ -132,6 +119,14 @@ NOTE (for the editor): §25.7.3 says, below the Rule 2019 table, that "only thre
 ### 26_ch26_ai_agents_and_llms_on_the_credit_desk
 
 NOTE (for the editor): The Full Derivation in §26.6 says "Let the harness retry a rejected step up to $m$ times". Its formula $a_R(1 - r^m)/(1 - r)$, and every number after it, treat $m$ as the total number of attempts: $m = 1$ gives coverage 0.83, the first-try acceptance rate, and §26.12 says "going from one try to three". Read literally, "retry up to $m$ times" means $m + 1$ attempts, and Exercise 2's $m = 2$ would then give 0.948 and 0.974 instead of the stated 0.953 and 0.944. Suggest "Let the harness make up to $m$ attempts at a step, retrying after each rejection."
+
+### 27_ch27_system_architecture_and_asics
+
+NOTE (for the editor): The exercise says "rerun block 3 with $c_s^2 = 1$." Block 3 (Listing 27.3) hard-codes the $c_s^2 = 4$ answers, so with `CS2 = 1.0` it stops at its first assert, `abs(ew - 233.33) < 0.01`, because the mean wait is now 93.3 ms; the p99-sojourn assert (1,000 to 2,400 ms) would fail as well, at about 610 ms. Suggest adding "and update the asserts," or readers will think they broke the listing.
+
+### 27_ch27_system_architecture_and_asics
+
+NOTE (for the editor): §27.7.2 says that to first order $\text{ARL}_1 \approx \ln(\text{ARL}_0)/\mathcal{K}$. As an asymptote that is right, but at the chapter's own example ($\delta = 1$, $c = 5$, $\text{ARL}_0 = 938$) it gives 13.7 fills against the 10.3 quoted in the same paragraph, and at this exercise's $\delta = 0.75$ it gives 29.7 against Siegmund's 21.6. The next-order form $\big(\ln(\mathcal{K}\,\text{ARL}_0) - 1\big)/\mathcal{K}$ gives 10.3 and 21.6. Suggest using it, or adding "overstates the delay by about a third at these settings."
 
 ### 28_ch28_pm_playbook
 

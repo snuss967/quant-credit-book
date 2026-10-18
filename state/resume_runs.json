@@ -43,23 +43,6 @@
    }
   },
   {
-   "name": "appZ-22-28",
-   "task": "wj2bo3zel",
-   "runId": "wf_203f44f2-023",
-   "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/ed2-appz-solutions-wf_dd657811-90b.js",
-   "args": {
-    "stems": [
-     "22_ch22_market_structure_regulation_trends",
-     "23_ch23_cross_asset_convexity_and_vol_surface",
-     "24_ch24_bond_cds_basis_and_deliverables",
-     "25_ch25_nlp_pacer_and_covenant_scraping",
-     "26_ch26_ai_agents_and_llms_on_the_credit_desk",
-     "27_ch27_system_architecture_and_asics",
-     "28_ch28_pm_playbook"
-    ]
-   }
-  },
-  {
    "name": "figs-4d-2b-0002",
    "task": "wl3spbmbr",
    "runId": "wf_e9852c77-c8a",

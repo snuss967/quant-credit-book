@@ -12,13 +12,11 @@ $$
 P_{25}=97p+L(1-p),\qquad P_{31}=80p+L(1-p)\;\Longrightarrow\;P_{25}-P_{31}=17p=12,\quad p=0.706 .
 $$
 
-The unknown $L$ cancels, and that is the whole trick: the *gap* identifies the probability without your knowing the recovery. I checked the reinstatement values. Priced at a 5% yield from 25 April 2023, a 3.50% note maturing January 2025 is worth 97.5 clean and a 1.800% note maturing February 2031 is worth 79.6, so 97 and 80 are fair. A low coupon kept to a long maturity is worth less when the market yields 5%.
+The unknown $L$ cancels, and that is the whole trick: the *gap* identifies the probability without your knowing the recovery. Use only the gap. Put $p=0.706$ back into either price and the implied $L$ is under 2 cents, far below the 53% no-cash coverage, so the two-state model reads a probability from the spread but is not meant to fit the two price levels. I checked the reinstatement values. Priced at a 5% yield from 25 April 2023, a 3.50% note maturing January 2025 is worth 97.5 clean and a 1.800% note maturing February 2031 is worth 79.6, so 97 and 80 are fair. A low coupon kept to a long maturity is worth less when the market yields 5%.
 
 **The trap:** In (a), the trap is the 115%: you read "par is in there" and buy at 40. That is Theo's first answer, before Mags asks where a bank holdco keeps its cash. In (b), the trap is to read the gap as an arbitrage between two identical claims. They are identical only in liquidation. The market was pricing a second state in which they are not.
 
 **If you got this wrong, read:** §6.4.4, Beat 4 and "Decision point: the holdco at 40" (with Figure 6.4), then Beat 5, "the same claim at two prices."
-
-NOTE (for the editor): The gap arithmetic agrees with the check (70.6%). The inputs, though, are not consistent with the levels. Fit both prices with $p=12/17$ and the implied liquidation value is $L=(69-0.706\times97)/0.294\approx1.8$ cents for *both* bonds. That contradicts part (a)'s 53% no-cash coverage and the 30s–40s trading levels of March. At $L=40$ the two levels imply $p=51\%$ (2025s) and $p=43\%$ (2031s), not one common $p$. A reader who checks the levels will be confused. One option is to add "use only the gap; the two-state model is not meant to fit the levels." Another is to adjust the reinstatement values.
 
 **Z.06.B: Warm-up B, secured at 76.8 or stripped at par**
 
@@ -108,7 +106,7 @@ The numerator is positive for *any* positive equity, so $d_2\to\infty$ as $\sigm
 
 **Z.06.4: Covenants and uptiers as barrier mechanics**
 
-**Answer:** **Covenant.** $V_0=8\times110=880$, the barrier is $K=(8/6)\times600=800$, and $x_0=\ln1.1=0.0953$. With zero *log* drift, the one-year breach probability is $2N(-0.381)=$ **70.3%**, matching §6.5.3. If you pass `mu=0` to `black_cox_pd` (zero drift in $V$), you get 73.6% instead; see the NOTE.
+**Answer:** **Covenant.** $V_0=8\times110=880$, the barrier is $K=(8/6)\times600=800$, and $x_0=\ln1.1=0.0953$. With zero log drift ($\mu=\tfrac12\sigma_V^2$ in `black_cox_pd`), the one-year breach probability is $2N(-0.381)=$ **70.3%**, matching §6.5.3. If you pass `mu=0` to `black_cox_pd` (zero drift in $V$), you get 73.6% instead.
 
 **Uptier.** Under Merton with $T=3$, $r=4\%$, $\sigma_V=25\%$ and $V_0=880$ held fixed, the left-behind lenders' \$600mm falls from **\$514.5mm** to **\$465.0mm**. That is a loss of **\$49.5mm**, and with it their $\mathbb{Q}$-PD rises from 17.2% to 38.9% and their spread from 113 bp to 450 bp. The new \$200mm super-priority layer is worth \$177.4mm, almost riskless ($200e^{-0.12}=177.4$). With $V_0$ fixed, everyone beneath it pays for it: \$49.5mm comes from the left-behind lenders and \$127.9mm from the equity. So about \$49mm of the old lenders' value moved to the group that now ranks ahead.
 
@@ -131,8 +129,6 @@ Value is conserved: $49.5+127.9=177.4=V_0-C(200)$. One extension worth knowing: 
 **The trap:** For the covenant, there are two traps. One is the `mu=0` mistake above (73.6%). The other is using the Merton *terminal* probability, 35.2%, and forgetting that a monitored barrier roughly doubles it. For the uptier, the common wrong answer is pro-rata thinking: treat \$800mm as one class and give the old lenders three-quarters of it, $0.75\times(880-C(800))=\$481.8$mm, a loss of only \$32.7mm. That prices the new debt as pari passu. The whole point of the exercise is that it ranks ahead.
 
 **If you got this wrong, read:** §6.5.2, the Math, Gently box and the three checks in the Full Derivation; §6.5.3, the loan's life from covenant to uptier, and the Docket Diary; Listing 6.4.
-
-NOTE (for the editor): The exercise says "with zero drift, compute … with `black_cox_pd`" and checks "about 70%." Called with `mu=0`, `black_cox_pd` returns 73.6%. Its `mu` is the drift of $V$, so `mu=0` gives a log drift of $-\tfrac12\sigma_V^2$. The 70.3% needs `mu=0.5*sigma_V**2=0.03125` (zero log drift, as in §6.5.3's $2N(-0.38)$). I suggest "zero log drift ($\mu=\tfrac12\sigma_V^2$ in `black_cox_pd`)."
 
 **Z.06.5: Mags's recovery**
 
@@ -173,7 +169,5 @@ The rule of thumb is the zero-rate, at-the-money expansion: $E_0=V_0\big[N(\tfra
 **The trap:** One wrong answer is zero, the RSSG instinct that a filing means the strike has already been evaluated. Another is 12%, the rule of thumb without rates, which is Theo's number before Kaz corrects it. The deeper trap is concluding that because the model valued the claim correctly, buying it was correct. That mixes up a valuation with a price, and an outcome with a decision.
 
 **If you got this wrong, read:** §6.2.1, "Payoff diagrams"; §6.2.3, the closed forms; §6.10.2, "Hertz: the hand that hit," and Ines's Poker Table box.
-
-NOTE (for the editor): The computation agrees with the check (13.75% vs 13.8%). A separate point: in §6.10.2 Theo says the June 2020 buyers at \$5.50 "lost money on a stock that survived bankruptcy," and the line is set against "\$1.53 a share in cash." The \$1.53 is only the cash component. Contemporaneous reports valued the whole package at roughly \$7–8 per old share: Hertz's court-paper estimate as reported by Business Insider (https://businessinsider.nl/hertzs-chapter-11-restructuring-plan-has-been-confirmed-by-a-bankruptcy-court-paving-the-way-for-a-1-billion-shareholder-payout/), and Bloomberg, "Hertz equity to recover \$8 a share with Knighthead plan win" (https://www.bnnbloomberg.ca/hertz-equity-to-recover-8-a-share-with-knighthead-plan-win-1.1602745.amp.html). On those valuations a \$5.50 buyer came out ahead before time value. These are estimates, not cash received, and I did not verify them against the filings this pass. The exercise's lesson survives either way, but the "lost money" line needs a source or a softer wording.
 
 <!-- STATUS: COMPLETE -->

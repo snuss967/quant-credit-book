@@ -611,7 +611,7 @@ $$
 P_{25}=97p+L(1-p),\qquad P_{31}=80p+L(1-p)\;\Longrightarrow\;P_{25}-P_{31}=17p=12,\quad p=0.706 .
 $$
 
-The unknown $L$ cancels, and that is the whole trick: the *gap* identifies the probability without your knowing the recovery. I checked the reinstatement values. Priced at a 5% yield from 25 April 2023, a 3.50% note maturing January 2025 is worth 97.5 clean and a 1.800% note maturing February 2031 is worth 79.6, so 97 and 80 are fair. A low coupon kept to a long maturity is worth less when the market yields 5%.
+The unknown $L$ cancels, and that is the whole trick: the *gap* identifies the probability without your knowing the recovery. Use only the gap. Put $p=0.706$ back into either price and the implied $L$ is under 2 cents, far below the 53% no-cash coverage, so the two-state model reads a probability from the spread but is not meant to fit the two price levels. I checked the reinstatement values. Priced at a 5% yield from 25 April 2023, a 3.50% note maturing January 2025 is worth 97.5 clean and a 1.800% note maturing February 2031 is worth 79.6, so 97 and 80 are fair. A low coupon kept to a long maturity is worth less when the market yields 5%.
 
 **The trap:** In (a), the trap is the 115%: you read "par is in there" and buy at 40. That is Theo's first answer, before Mags asks where a bank holdco keeps its cash. In (b), the trap is to read the gap as an arbitrage between two identical claims. They are identical only in liquidation. The market was pricing a second state in which they are not.
 
@@ -705,7 +705,7 @@ The numerator is positive for *any* positive equity, so $d_2\to\infty$ as $\sigm
 
 **Z.06.4: Covenants and uptiers as barrier mechanics**
 
-**Answer:** **Covenant.** $V_0=8\times110=880$, the barrier is $K=(8/6)\times600=800$, and $x_0=\ln1.1=0.0953$. With zero *log* drift, the one-year breach probability is $2N(-0.381)=$ **70.3%**, matching §6.5.3. If you pass `mu=0` to `black_cox_pd` (zero drift in $V$), you get 73.6% instead; see the NOTE.
+**Answer:** **Covenant.** $V_0=8\times110=880$, the barrier is $K=(8/6)\times600=800$, and $x_0=\ln1.1=0.0953$. With zero log drift ($\mu=\tfrac12\sigma_V^2$ in `black_cox_pd`), the one-year breach probability is $2N(-0.381)=$ **70.3%**, matching §6.5.3. If you pass `mu=0` to `black_cox_pd` (zero drift in $V$), you get 73.6% instead.
 
 **Uptier.** Under Merton with $T=3$, $r=4\%$, $\sigma_V=25\%$ and $V_0=880$ held fixed, the left-behind lenders' \$600mm falls from **\$514.5mm** to **\$465.0mm**. That is a loss of **\$49.5mm**, and with it their $\mathbb{Q}$-PD rises from 17.2% to 38.9% and their spread from 113 bp to 450 bp. The new \$200mm super-priority layer is worth \$177.4mm, almost riskless ($200e^{-0.12}=177.4$). With $V_0$ fixed, everyone beneath it pays for it: \$49.5mm comes from the left-behind lenders and \$127.9mm from the equity. So about \$49mm of the old lenders' value moved to the group that now ranks ahead.
 

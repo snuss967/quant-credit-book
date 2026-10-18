@@ -316,7 +316,7 @@ $$
 \min_{w,\,z}\; k^\top w + \frac{\theta}{2}(w - h)^\top \Sigma (w - h) + \chi\,\mathbf{1}^\top z \quad \text{s.t.} \quad \mathbf{1}^\top w = 1,\quad 0 \le w_i \le z_i,\quad z_i \in \{0, 1\}.
 $$
 
-The objective is a convex quadratic in $w$ plus a linear term in $z$, and the constraints are linear, but $z$ is binary. That makes it a mixed-integer QP. A good heuristic is greedy backward elimination. Solve (20.6) with $w \ge 0$, score every line by the exact rise in $J$ from forcing it out, drop the cheapest line while its score is below $\chi$, re-solve, and repeat. On 12-bond instances the greedy matched exhaustive search at every $\chi$ we tried. Coverage ends up in the 10–35% range because the value of keeping a line grows with the *square* of its weight, while $\chi$ is charged per line. In a 1,300-bond fund, the long tail of small lines fails the test, and the basket becomes the heavy index lines plus the lines with large tilts.
+The objective is a convex quadratic in $w$ plus a linear term in $z$, and the constraints are linear, but $z$ is binary. That makes it a mixed-integer QP. A good heuristic is greedy backward elimination. Solve (20.6) with $w \ge 0$, score every line by the exact rise in $J$ from forcing it out, drop the cheapest line while its score is below $\chi$, re-solve, and repeat. We tested it against exhaustive search on eleven random 12-bond instances at three values of $\chi$ each, and it found the optimum all 33 times. Coverage ends up in the 10–35% range because the value of keeping a line grows with the *square* of its weight, while $\chi$ is charged per line. In a 1,300-bond fund, the long tail of small lines fails the test, and the basket becomes the heavy index lines plus the lines with large tilts.
 
 **How:** The cost $\chi\,\#\{i : w_i > 0\}$ is an $\ell_0$ penalty: it is discontinuous at zero and nonconvex, and the binaries $z_i$ (with $w_i \le z_i$ as the big-M link, since $w_i \le 1$) are the standard way to write it. Adding the constraint $w_i = 0$ to the equality-constrained QP on the current set $S$ raises the optimum by
 
@@ -329,6 +329,44 @@ which matches a brute-force re-solve to $10^{-17}$. Drop $\arg\min_i \Delta J_i$
 **The trap:** Relaxing $\ell_0$ to $\ell_1$, as in a lasso. On the budget simplex, $\sum_i |w_i| = \mathbf{1}^\top w = 1$ for every feasible basket, so the $\ell_1$ penalty is a constant and selects nothing. The other trap is dropping lines by smallest *weight* rather than by $\Delta J_i$: a small, idiosyncratic line can cost more to drop than a larger one with close substitutes.
 
 **If you got this wrong, read:** §20.4.3 (the Math, Gently box "Pegs on springs inside a rubber band", (20.6)–(20.7) and the derivation's remark on $w \ge 0$), §20.4.2 for the coverage ratios, and Block 4 of Listing 20.1 (`basket_qp`), which this exercise extends.
+
+**Z.20.5: The Fed's clause**
+
+**Answer:** Above the upper door, creation is profitable: $\Pi^C = \pi - \pi^{\text{hi}} > 0$ per \$1 of NAV. So APs buy the creation basket, create shares and sell them to the Fed. The transfer to the APs per dollar the Fed spends is
+
+$$
+\frac{\pi - \pi^{\text{hi}}}{1 + \pi} \;\approx\; \pi - \pi^{\text{hi}} .
+$$
+
+On the chapter's illustrative IG band ($\pi^{\text{hi}} = 20$ bp), a purchase at a 1% premium hands the APs 79.2 bp per dollar. On a position the size of the SMCCF's \$2.47bn of LQD, that would be about \$19.6mm, if all of it had been bought that way (a hypothetical; it was not). The Fed's full overpayment against the bonds' mid value is about 91 bp per dollar. Of that, about 12 bp goes to people who did real work: dealers' half-spread $c^C$, the fund's fee $f^C$ and the AP's costs $k^C$. The remaining 79 bp is the APs' rent.
+
+**How:** From the creation leg of §20.3.1, $\Pi^C_t = (1 + \pi) - \frac{1 + c^C}{1 - \bar c} - f^C - k^C \approx \pi - (\bar c + c^C + f^C + k^C) = \pi - \pi^{\text{hi}}$. This is positive whenever $\pi > \pi^{\text{hi}}$, and it carries no risk, because the buyer is standing there. With $\bar c = c^C = 8$ bp, $f^C = 1$ bp and $k^C = 3$ bp, the exact profit at $\pi = 1\%$ is 79.99 bp per \$1 of NAV. Each dollar of purchases buys $1/(1+\pi)$ dollars of NAV, so the rent is 79.2 bp per dollar. Measured against mid, the overpayment splits as
+
+$$
+\pi - \bar c = \underbrace{(\pi - \pi^{\text{hi}})}_{\text{AP rent}} + \underbrace{c^C + f^C + k^C}_{\text{paid for real services}} .
+$$
+
+The paragraph: *A bid-side NAV puts a calm IG ETF at a small premium, and a NAV that lags a rally adds a staleness premium on top, so a facility forbidden to buy "above NAV" could not have bought on most ordinary days (JNK closed at a premium on 206 of 250 days in 2025), even though neither the accounting constant $\bar c$ nor the staleness $s_t$ is a transfer to anyone. "Materially exceed" lets the Fed pay those two harmless terms and promises it will not pay above $\pi^{\text{hi}}$, the line beyond which every basis point is a riskless gift to whoever can create shares. The phrase turns "NAV" into "the band": the Fed could bid the discount closed, up to the creation door, and no further. Its mirror, "materially below" on the exit, kept it from selling into the redemption door that it had been brought in to shut.*
+
+**The trap:** Calling the whole premium, $\pi$, the transfer. Part of it is the bid-side constant $\bar c$: the Fed receives bonds worth mid, not bid, so that part is not an overpayment at all. Another $c^C + f^C + k^C$ pays dealers, the fund and the AP's balance sheet for real services. Only $\pi - \pi^{\text{hi}}$ is rent to the APs.
+
+**If you got this wrong, read:** §20.3.1 (the derivation of the creation edge in (20.4)) and §20.5.2, "The Fed buys a seat at the table".
+
+**Z.20.6: The sleeve and the line**
+
+**Answer:** $B$ must exceed **2% of NAV**, and the infimum is exactly 2%. The outflow is 9%, both weeks fall inside the three-week lag, and the sleeve covers 7%, so the gap is $9\% - 7\% = 2\%$. How the 9% splits between the two weeks does not matter (4.5/4.5, 6/3 and 3/6 all trough at $-2\%$). The undrawn fee is $0.5\% \times 2\% = 1$ bp of NAV a year, or \$100k a year per \$1bn of fund, which is cheap next to a 0.65% expense ratio. For Theo: *"Same company as any 13-week borrower with lumpy payables and slow receivables. Beginning cash 7, disbursements of 4.5 in each of the first two weeks, receipts of 4.5 arriving three weeks after each disbursement. Ending cash runs 2.5, −2.0, −2.0, 2.5, 7.0. It's solvent, because the receivables cover every dollar. It's illiquid for two weeks. Size the revolver to the trough plus your minimum-cash cushion, draw it in week 2 and repay it from the first receipt. Then stress the receipts: a longer lag lengthens the draw, and if the outflows keep coming, the trough deepens."*
+
+**How:** This extends Listing 20.1's Block 5. Treat the line as cash that is in the sleeve from week 0, and run `sleeve_path(0.07 + B, [0.045, 0.045, 0, ...], lag_weeks=3)`. The recursion $\phi_{t+1} = \phi_t - R_t + R_{t-3}$ gives
+
+$$
+\phi = 0.07 + B,\ \ 0.025 + B,\ \ -0.02 + B,\ \ -0.02 + B,\ \ 0.025 + B,\ \ 0.07 + B, \dots
+$$
+
+so survival needs $B > 0.02$. In general, the line has to cover the largest cumulative outflow that falls inside any one lag window, minus the sleeve. When the whole outflow fits inside the lag ($L \ge 2$ weeks here), the depth of the trough is fixed at 2% and the lag sets only its length: one week at $L = 2$, two at $L = 3$, three at $L = 4$. At $L = 1$ the sleeve alone survives. That is Theo's warning from §20.6.1 in numbers. A longer lag lengthens the draw, and a longer lag combined with a longer burn deepens it.
+
+**The trap:** Plugging the burst into (20.8) as if it were a steady rate: $\bar R L_w = 4.5\% \times 3 = 13.5\%$, so $B = 6.5\%$. (20.8) assumes the outflow continues for the whole lag, so for a burst that stops after two weeks it overstates the need by more than three times. A smaller trap is in the code. At $B = 2.00\%$ exactly, `sleeve_path` reports survival only by floating-point luck: its minimum prints as $1.4 \times 10^{-17}$ against a `phi <= 0` test. Mathematically the sleeve touches zero, so quote "just above 2%".
+
+**If you got this wrong, read:** §20.6.1 ("The Full Derivation: the settlement gap" and "The runway in March 2020's weather", including Theo's remark that the lag lengthens in a bad week) and Block 5 of Listing 20.1 (`sleeve_path`).
 
 ### Z.22 Chapter 22: Market-Structure Regulation & the Forces Reshaping Liquidity
 
@@ -893,6 +931,135 @@ and the cutoff that matters is the cutoff *of the model that produced each value
 
 **If you got this wrong, read:** §26.10, the *Ways This Blows Up* box and Theo's Thursday; §26.4 for what $V$ and $S$ do and do not prove; and Chapter 25's definition graph for the transitive closure.
 
+### Z.27 Chapter 27: System Construction, Low-Latency Infrastructure & ASICs/FPGAs
+
+Seven exercises: a queue, a trigger row, a drop-down written as rows, a stopping rule, a spec, a memo and a pair with one leg missing. Every number below was recomputed from the chapter's inputs, and from Listings 27.3 to 27.5 (Appendix F) where an exercise extends them, with simulations run fresh. Where an exercise asks you to choose an input, ours is stated and marked illustrative. Write your own answer before you read ours. In this chapter the trap is usually the number the system would have reported: the mean, the per-leg view, the field that reads "OK."
+
+**Z.27.1: Kaz's engine on a CPI morning**
+
+**Answer:** The approximate p99 *wait* reaches 500 ms at $\rho \approx 0.31$. To stay inside a 500 ms budget the engine must run at or below that, so the desk has to shed or batch $1 - 0.31/0.5 \approx 38\%$ of quote refreshes at $\rho = 0.5$, and $1 - 0.31/0.9 \approx 65\%$ at $\rho = 0.9$. A Lindley simulation puts the ceiling a little lower, near $\rho = 0.27$ (46% and 70%), because the exponential tail is slightly optimistic at light load when $c_s^2 = 4$. With $c_s^2 = 1$ at $\rho = 0.7$, the mean wait falls from 233 ms to 93 ms, the p99 wait from 1.42 s to 0.57 s, and the p99 sojourn from about 1.5 s to about 0.61 s. The ceiling rises to $\rho \approx 0.66$: nothing needs shedding at 0.5, and 26% at 0.9. The sentence for the risk meeting: *every refresh waits behind whatever the engine is already working on, so the queue is set by the rare slow jobs, not the typical one; halving the lattice jobs cuts the p99 wait from 1.4 s to 0.33 s, while halving the trivial refreshes, which makes the average 25% faster, only gets it to 1.06 s.*
+
+**How:** With $\mathbb{E}[S] = 40$ ms and $(1 + c_s^2)/2 = 2.5$, Pollaczek–Khinchine gives $\mathbb{E}[W_q] = 100\rho/(1-\rho)$ ms, and the tail quantile of §27.5.1 becomes
+
+$$
+t_{0.99} \approx \frac{\mathbb{E}[W_q]}{\rho}\,\ln\frac{\rho}{0.01} = \frac{100}{1-\rho}\,\ln(100\rho)\ \text{ms}.
+$$
+
+Set it equal to 500 and solve $\ln(100\rho) = 5(1-\rho)$ numerically: $\rho^\star = 0.312$. Check the ends against the chapter: 782 ms at $\rho = 0.5$ and 4.5 s at 0.9. Shedding a refresh, or coalescing several refreshes of one quote into one, removes an arrival, and utilisation is proportional to the arrival rate, so the share to remove is $1 - \rho^\star/\rho$. With $c_s^2 = 1$ the same steps give $t_{0.99} = \frac{40}{1-\rho}\ln(100\rho)$, which is exact for M/M/1. For the sentence, write the mean wait as $\mathbb{E}[W_q] = \Lambda^{\text{q}}\,\mathbb{E}[S^2]/\big(2(1-\rho)\big)$ and model Kaz's 40 ms as 95% trivial refreshes of 21.6 ms and 5% lattices of 389 ms (an illustrative mixture with $c_s^2 = 4$). The lattices supply 94% of $\mathbb{E}[S^2]$. Halving either kind brings the mean to about 30 ms, but halving the lattices cuts $\mathbb{E}[S^2]$ by 71% and halving the trivial refreshes cuts it by 4%.
+
+**The trap:** Two of them. The first is to read the mean: at $\rho = 0.5$ the mean wait is 100 ms, comfortably inside 500, so "no shedding needed." The p99 is 782 ms. The second is to subtract utilisations: going from 0.9 to 0.31 is 59 points of utilisation, but the share of refreshes you have to remove is $0.59/0.9 = 65\%$.
+
+**If you got this wrong, read:** §27.5.1 (both parts of the queues box, then the Full Derivation and the tail quantile); the usage note under Listing 27.3 on feeding the stress hour's load rather than the day's; §27.1.1's grading of the cold-open card.
+
+**Z.27.2: Add LQD and CDX IG to the table**
+
+**Answer:** By the method of §27.6.1, with LQD as the bond's only credit hedge, $\beta_{i,\text{LQD}} = P_i D^{\text{spr}}_i \kappa^{\text{IG}}_i/(H_{\text{LQD}} D_{\text{LQD}}) \approx 1.30$ bond points per LQD dollar; CDX IG on the same footing gives $-0.180$ points per bp. In one row with TY the three must share the work. Split the credit exposure evenly between LQD and CDX IG and take LQD's rate content out of the TY beta, and the row is $\boldsymbol\beta_i = (0.158,\ 0.648,\ -0.0898)$, in bond points per TY point, per LQD dollar and per CDX IG basis point. With $\theta_i = 0.14$ points and the stress-window volatilities below, the budget splits as $\theta_{ij} = (0.014,\ 0.086,\ 0.040)$ points, so the thresholds are 0.089 TY points, \$0.133 of LQD and 0.44 bp of CDX IG. A flight to quality (TY up 6/32, LQD up \$0.09, CDX IG 1.25 bp wider) moves fair value by $-0.024$ points: the joint rule stays quiet, and the per-instrument rule pulls on TY and on CDX. In 200,000 fat-tailed simulated moves the joint rule pulls in 33% of windows and the per-instrument rule in 70%. False pulls are 37% of all windows (53% of the cheap rule's pulls), and the cheap rule misses no joint pull: zero in each of three seeds.
+
+**How:** Inputs, all illustrative: the cold-open bond ($P_i = 95$, $D^{\text{spr}}_i = 8$, 130 bp, $\text{DV01}_i = 0.076$ points per bp, $\kappa^{\text{rate}} = 0.9$); LQD at \$108 with a duration of 8.3, so \$0.0896 per bp; the IG cash index at 85 bp; CDX IG at 55 bp. The DTS betas are $\kappa^{\text{IG}} = 130/85 = 1.53$ and $\kappa^{\text{CDX}} = 130/55 = 2.36$, so
+
+$$
+\beta_{i,\text{LQD}} = \frac{95 \times 8 \times 1.53}{108 \times 8.3} = 1.30, \qquad \beta_{i,\text{CDX}} = -\frac{95 \times 8 \times 2.36}{10^{4}} = -0.180 .
+$$
+
+Each formula assumes its instrument is the only credit hedge, and LQD's price also carries eight years of rate duration. In a shared row, give each credit hedge half the credit exposure, and read the IG spread change from LQD as $-\Delta H_{\text{LQD}}/0.0896 + \Delta H_{\text{TY}}/0.065$; the second term comes off the TY beta, $1.052 - \tfrac12 (1.53)(0.076/0.065) = 0.158$. Check the row on pure moves: a 1 bp rally gives $0.158(0.065) + 0.648(0.0896) = 0.0684 = 0.9 \times 0.076$, and a 1 bp IG widening gives $-0.116 = -0.076 \times 1.53$. Then allocate as in §27.6.1: $\theta_{ij} = c\,|\beta_{ij}|\,\sigma_j$ with $c = \theta_i/\sum_j |\beta_{ij}|\sigma_j = 0.886$, and $\tau_{ij} = \theta_{ij}/|\beta_{ij}| = c\,\sigma_j$. Our covariance for one stress window: volatilities of 0.10 TY points, \$0.15 of LQD and 0.5 bp of CDX IG; correlations TY–LQD $+0.75$, TY–CDX $+0.35$ (TY rallies when CDX widens) and LQD–CDX $-0.25$. Fat tails come from Listing 27.4's chi-squared(4) scale mixture, with moves rounded to grids of 1/64, \$0.01 and 0.05 bp. This extends Listing 27.4 from two hedges to three. The zero-miss count is the triangle inequality at work, not luck: it holds draw by draw, whatever the covariance.
+
+**The trap:** Pasting the three one-hedge betas into one row (1.05, 1.30, $-0.180$). That counts rates twice (TY and LQD) and credit twice (LQD and CDX): a 1 bp rally reads as 0.185 points instead of 0.068, and a 1 bp IG widening as $-0.232$ instead of $-0.116$. The cheap rule built on that row pulls in 95% of stress windows, and its joint rule still misses about one true pull in a thousand windows, because it weighs offsetting moves wrongly. The safety theorem protects you relative to the $\boldsymbol\beta$ you wrote down, not relative to the bond.
+
+**If you got this wrong, read:** §27.6.1 (the trigger table, the "two detours" box, the theorem and the paragraph on allocating the budget); Listing 27.4 in Appendix F, which this exercise extends; Chapter 8 for the empirical rate beta and the DV01 ratios.
+
+**Z.27.3: The J.Crew drop-down as rows**
+
+**Answer:** The rows are below. A backtest of Chapter 25's covenant-flag signal must use the knowledge-time snapshot at its decision time, $Q(k, a;\ t^{v} \le t,\ t^{k} = t)$, and must read the parser's output the same way. If the vendor's "point-in-time" file is valid-time only, it answers $Q(\cdot;\ t^{v} = t,\ t^{k} = \text{now})$. The IP then leaves the collateral on the transfer's effective date rather than when anyone outside the company knew, the signal fires before the 5 December 2016 disclosure, and the backtest trades the term loan at prices from before the market had read the filing. Every later correction leaks backwards too: a 2019 re-parse, or a `jcrew_blocker` field back-filled onto agreements signed before the move that named it, reads as if it had been known all along.
+
+Notation: $t_0$ is the date the desk onboarded the loan, $t_x$ the transfer's effective date as the filing states it (on or before 2016-12-05), and $k_1$ = 2016-12-05 18:00, when the desk's event feed confirmed it *($t_0$ and the 18:00 are illustrative; keys are internal surrogates)*. ASSET-JC-USIP is the interest in the US marks that the 2017 notes were later secured on (72.04%, per Chapter 13).
+
+| Key | Attribute | Value | Valid from | Valid to | Known from | Known to |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| ASSET-JC-USIP | owner | ENT-JC-LOANPARTY | $t_0$ | ∞ | $t_0$ | $k_1$ |
+| ASSET-JC-USIP | owner | ENT-JC-LOANPARTY | $t_0$ | $t_x$ | $k_1$ | ∞ |
+| ASSET-JC-USIP | owner | ENT-JC-DOMBRAND | $t_x$ | ∞ | $k_1$ | ∞ |
+| INS-JC-TL | collateral | all assets incl. ASSET-JC-USIP | $t_0$ | ∞ | $t_0$ | $k_1$ |
+| INS-JC-TL | collateral | all assets incl. ASSET-JC-USIP | $t_0$ | $t_x$ | $k_1$ | ∞ |
+| INS-JC-TL | collateral | all assets excl. ASSET-JC-USIP | $t_x$ | ∞ | $k_1$ | ∞ |
+| ENT-JC-DOMBRAND | parent | ENT-JC-NGRS (non-guarantor restricted sub) | $t_x$ | ∞ | $k_1$ | ∞ |
+| ENT-JC-DOMBRAND | obligor_role | unrestricted; not a guarantor or grantor of INS-JC-TL | $t_x$ | ∞ | $k_1$ | ∞ |
+| EVT-JC-2016-12 | event | drop_down: ASSET-JC-USIP to ENT-JC-DOMBRAND; INS-JC-TL collateral reduced; source: company filing, 2016-12-05 | $t_x$ | n/a | $k_1$ | ∞ |
+
+**How:** Follow the Serta pattern of §27.3.3. Rows the desk believed before $k_1$ are closed in knowledge time at $k_1$, never edited, which is invariant (I2); the corrected history and the new facts all open at $k_1$, whatever their valid dates. The guarantor map is the dated graph of §27.3.1: the new box ENT-JC-DOMBRAND gets a dated arrow to its parent and a role outside the obligor group, so the question "is the IP inside the term lenders' collateral?" has two dated answers. If the filing dates the two hops separately (loan party to the non-guarantor restricted subsidiary, then on to the unrestricted one), each hop gets its own owner row and its own event row. The July 2017 exchange is a second event: it creates the 13% notes of J.Crew Brand, LLC and J.Crew Brand Corp. with their own collateral row, and retires part of the PIK notes. For the backtest, a decision at noon on 5 December sees the IP still with the loan party, even though $t^{v} \ge t_x$; a decision on the morning of 6 December sees it gone. Chapter 25's signal is built from the parsed capacity vector and the obligor map, so it inherits both knowledge times: the master's, and that of the parse it read.
+
+**The trap:** Stamping the new rows "known from $t_x$" because that is when the transfer happened. That one choice turns the archive into the wiki: the drop-down looks known before it was disclosed, and the signal looks prescient for the same reason Theo's Serta backtest did. The other slip is to edit the old owner row's valid-to in place, which erases what the desk believed on 4 December.
+
+**If you got this wrong, read:** §27.3.2 (the two invariants, the theorem and the corollary on valid-time-only "point-in-time" files); §27.3.3 (Serta as rows, and Mags's three questions); §27.3.1 for the dated obligor graph; Chapter 13's J.Crew Docket Diary for the facts; §25.9 on when a text signal is executable.
+
+**Z.27.4: Your PM says "never false-alarm"**
+
+**Answer:** As $c \to \infty$ the detection delay goes to infinity, linearly in $c$: $\text{ARL}_1 \approx 2(c + 1.166)/\delta - 2/\delta^2$. A switch that never false-alarms never alarms. Measured against the quiet time, though, the delay grows only with its log, $\text{ARL}_1 \approx \big(\ln(\mathcal{K}\,\text{ARL}_0) - 1\big)/\mathcal{K}$ with $\mathcal{K} = \delta^2/2$. For one false alarm a month at 200 fills a day, $\text{ARL}_0 = 21 \times 200 = 4{,}200$ fills. With $\delta = 0.75$ (allowance $\delta/2 = 0.375$) that needs $c = 8.28$; round to 8.3, which gives $\text{ARL}_0 \approx 4{,}280$ fills (21.4 trading days) and $\text{ARL}_1 \approx 21.7$ bad fills, about a tenth of a day's flow. A 4,000-run simulation at $c = 8.28$ gives $\text{ARL}_0 \approx 4{,}260$ and $\text{ARL}_1 \approx 21.8$.
+
+For the PM, in poker: "Never fold a hand that might have won" has exactly one strategy that obeys it, which is never to fold. You call every bet to the river, every hand, all night. At an honest table that costs nothing. At a table with a cheat you pay him off on every hand and find out when your stack is gone. Any rule that ever gets you up from the table will sometimes fold the best hand. Folding the best hand about once a month is the price of getting up after about twenty-two hands against a cheat, and setting the line higher buys very little: to fold a winner only once a year, you would sit through about thirty.
+
+**How:** Siegmund's approximation from §27.7.2, with drift $\mp\delta/2$ and $b = c + 1.166$:
+
+$$
+\text{ARL}_0 = \frac{e^{\delta b} - \delta b - 1}{\delta^2/2}, \qquad \text{ARL}_1 = \frac{e^{-\delta b} + \delta b - 1}{\delta^2/2}.
+$$
+
+As $b \to \infty$, $e^{-\delta b} \to 0$ and $\text{ARL}_1$ is linear in $b$, while $\text{ARL}_0 \approx e^{\delta b}/\mathcal{K}$ grows exponentially; take logs and substitute to get the log form. For the calibration, solve $e^{0.75 b} - 0.75 b - 1 = 4{,}200 \times 0.28125 = 1{,}181$: $b = 9.44$, so $c = 8.28$, and put $b$ back into $\text{ARL}_1$. `siegmund_arl` in Listing 27.5 does both with drifts $\pm 0.375$. One reading note for the PM: $\text{ARL}_0$ is an average. The wait for the first false alarm is roughly exponential, so a calm month passes with no false alarm only about 38% of the time (the simulation agrees); "one a month on average" is not "at most one in any month."
+
+**The trap:** Leaving out the 1.166 shift and setting the line at $c = 9.44$. That doubles the quiet time (about 10,100 fills, fifty trading days) and costs three more bad fills ($\text{ARL}_1 \approx 24.7$), a different trade-off from the one the PM signed. The other slip is to keep the $\delta = 1$ allowance of 0.5: healthy fills then drift at $-0.5$ and bad ones at only $+0.25$, the line comes out at 6.5, and the delay is 22.8 fills from a test tuned for the wrong deterioration.
+
+**If you got this wrong, read:** §27.7.2 (the box, then the Full Derivation and "tripling the quiet time costs two fills of delay"); the end of the Knight replay in §27.7.3, where Ines explains why the line is not set at two; Tomasz's eleven percent in §27.8.
+
+**Z.27.5: ROBO and the zero-pick-off mandate**
+
+**Answer:** ROBO builds a desk that never shows a firm price, or shows one so wide or for so short a time that nothing ever fills. It meets the spec exactly, because the expected pick-off loss of a quote that is never live is zero. Every term of §27.6.2 vanishes: the diffusion loss at zero exposure, and the jump loss with $\pi = 0$. A spec that makes "quote nothing" a failure, with every number illustrative and owned by the desk head:
+
+- *Objective.* Maximise expected net capture per day, in dollars: over all fills, the half-spread earned minus the 60-second adverse markout, times face over 100.
+- *Definition.* A pick-off is a fill whose 60-second markout against hedge-implied fair value is worse than $-h_i$ points; its loss is $(|\text{markout}| - h_i) \times \text{face}/100$.
+- *Loss budget.* Pick-off losses no more than \$25,000 per trading day, with Tier 1's CUSUM on markouts ($\delta$ and $c$ in config, $\text{ARL}_0$ and $\text{ARL}_1$ logged) as the intraday early warning.
+- *Presence floor.* Two-way quotes of at least \$1mm a side, live on at least 90% of the streaming list for at least 80% of the *eligible* seconds of the session, with each half-spread no wider than the desk's stated cap for its liquidity bucket.
+- *Boundary conditions.* A second is excused from the floor only if (a) a trigger row has pulled the quote and the slow path has not yet re-armed it; (b) a Tier-2 condition holds (hedge heartbeat gap over 400 ms, clock fault, version skew, venue down); (c) realised hedge volatility over the last $N$ seconds is above the re-arm gate; or (d) it falls inside a declared event window (FOMC, CPI). Any other second without a quote counts against the floor, and five minutes below it while healthy pages the owner.
+- *Eligibility.* Stream only bonds whose half-spread is at least twice the typical hedge-implied jump over one refresh, $h_i \ge 2\,\mathbb{E}|J_i|$; the rest are RFQ-only.
+
+Now "quote nothing" breaks the floor and "quote everything, always" breaks the budget, so the optimum is interior: show the quote when a second of exposure earns more expected capture than the budget's shadow price times its expected pick-off loss.
+
+**How:** §27.6.2 prices the two ways a live quote loses: the diffusion loss $\sigma\sqrt{\Delta}\,[\varphi(x) - x\,\Phi(-x)]$ with $x = h/(\sigma\sqrt{\Delta})$, and the jump loss $\pi\,(|J_i| - h_i)^{+}$. Both go to zero as $\Delta \to 0$ (never shown), as $h \to \infty$ (never hit) or as $\pi \to 0$ (always pulled first). A spec that is only a loss constraint has all of these as optima, and the cheapest one to build is the one that never shows a price: ROBO's eleven seconds of quoting in §27.6, taken to its limit. Units are what make a spec checkable: dollars per day for the budget, points and seconds for the definition of a pick-off, and a list of excused silences for the floor. For scale, with the cold-open numbers a jump pick-off on \$3mm costs about \$5,500, so a \$25,000 day is four or five cold-open hands, and the CUSUM should trip on a sustained problem well before the budget is gone.
+
+**The trap:** Adding the loss budget but no floor or objective. "Expected pick-off loss at most \$25,000 a day" is still met by quoting nothing, so ROBO still quotes nothing. A budget limits the downside. Only the objective or the presence floor makes the desk turn up.
+
+**If you got this wrong, read:** §27.6.2 (both regimes and the Full Derivation); the ROBO paragraph that opens the trigger-table spec at the end of §27.6.3; §27.7.1 for the tiers that own the boundary conditions; §27.5.3 for why a silent hedge feed is an excused second, not a quiet one.
+
+**Z.27.6: Kaz wants the callable-bond OAS model on the FPGA**
+
+**Answer:** One paragraph, for example:
+
+> *To Kaz, cc Ines. Re: callable OAS on the FPGA. Declined, with an alternative.* The FPGA earns its place by doing one fixed thing in nanoseconds: it compares hedge moves with numbers the slow path wrote into a row. The table is data and the logic is fixed. An OAS model is logic, not data: a rate lattice whose size depends on each bond's call schedule, calibrated every day to a volatility surface. Every change to it would mean re-synthesising the design, hours of build and a change-control meeting, for a comparator we synthesise once a quarter and test like a bridge. We would either re-synthesise weekly or run a model weeks out of calibration, and both are worse than the slow path we have. Nor can the linear row stand in for the model on these bonds. Our 0.01-point guard band covers Veronesi's second-order term $\tfrac12 C P (\Delta r)^2$ for a bullet (about 0.004 points at $C = 80$, $P = 95$ and 10 bp), but a callable near its call price has negative convexity that swings as the call moves in and out of the money: at $C = -300$ and $P = 101$ *(illustrative)*, the same 10 bp move gives 0.015 points, more than the whole band, and our own trigger-table spec already says not to use the rule for callables. So callables stay on the slow path. Where the flow justifies streaming them, we quote from the slow path at a wider $h$, one that covers that convexity error plus the typical hedge jump over a refresh, and the FPGA keeps a conservative row that pulls them on a small TY move, because saying no needs no model. The rest stay RFQ-only. If that flow is worth more, the case is for a faster slow path, not a cleverer fast one.
+
+**How:** Each of the three citations rules out a different version of the request. The *convexity term* says the linear row the FPGA can hold is wrong by more than its guard band on exactly these bonds, $\tfrac12 \times 300 \times 101 \times (0.001)^2 = 0.015 > 0.01$, against $\tfrac12 \times 80 \times 95 \times (0.001)^2 = 0.004$ for a bullet. The *re-synthesis cycle* says the model cannot live in the fabric either, because its logic and calibration change faster than fixed logic can follow. And *"the table is data, the logic is fixed"* says what the fast path is for: pull-only comparisons against numbers the slow path computed. A pull is always safe, so the FPGA can still say no to a callable; what it cannot do is price one.
+
+**The trap:** Arguing from speed ("the FPGA can't run a lattice fast enough"). With enough engineering it might, and Kaz will say so. The reasons that hold are change and error: the model changes too often to live in fixed logic, and the cheap linear substitute is wrong by more than the guard band. The second slip is to offer callables at the bullet's $h$ "because the slow path prices them correctly": it priced them correctly when it wrote the row, and nothing on the fast path can correct the price as rates move.
+
+**If you got this wrong, read:** the opening of §27.6 (what an FPGA is good and bad at, and "the table is data and the logic is fixed"); the guard-band paragraph and the Veronesi extraction in §27.6.1; the usage note under Listing 27.4 ("Do not use them for callables or distressed paper").
+
+**Z.27.7: PB-01 with one leg missing**
+
+**Answer:** The pod now carries a net market-value DTS of $+72{,}576$ (about $+72{,}600$), all of it the Kestrel long, where the matched pair carried $+972$. Its CS01 is \$20,736 per basis point of Kestrel spread. An overnight 10% proportional widening takes Kestrel from 350 to 385 bp and costs about \$726,000 (\$725,760), against about \$9,700 had both legs filled. The tier that should have caught it is **Tier 0**, a hard limit applied at the parent's scope, not Tier 1. The hedge, assuming a CDX HY spread duration of 3.9 and an index spread of 350 bp *(illustrative)*, is to buy about \$53mm of protection, whose CS01 is also about \$20,700 per bp. What the hedge leaves is Kestrel against the whole high-yield index: Kestrel's own default and documents, and the building-products factor that the Halvorsen short used to offset, plus the single-name-against-index basis and the roll. That is a hedged outright long, not a pair.
+
+The residual-risk event the parent should emit, field by field:
+
+- `event_type` RESIDUAL_RISK; `parent_id` the PB-01 parent order; `parent_state` PARTIAL.
+- `children`: the Kestrel buy, \$60mm at 96, FILLED; the Halvorsen borrow-and-sell, \$39mm at 90, EXPIRED, filled 0, `reason` LOCATE_EMPTY.
+- `event_time` 16:58:00 from the prime broker's locate response, and `known_at` when the desk's store committed it.
+- `residual`: Kestrel's surrogate key, long \$60mm face, \$57.6mm market value, DTS $+72{,}576$ against a target of $+972$, CS01 \$20,736/bp, a 10%-wider stress loss of \$725,760, and the long's rate DV01, which a CDX hedge does not touch.
+- `per_account`: the residual split by the allocation rule written before the order left.
+- `strategy`, `trader`, `desk`: Dov's pod, PB-01; `owner` and `deadline`: an alert within 5 seconds, a hedge or unwind decision inside one quote-clock cycle.
+- `action`: re-invoke the optimiser with the Halvorsen fill probability marked down, `proposed_hedge` buy \$53mm CDX HY protection, and `thesis_flag` PAIR_BROKEN.
+
+**How:** DTS is face × price/100 × spread duration × spread in bp. Kestrel: $60 \times 0.96 \times 3.6 \times 350 = 72{,}576$. Halvorsen: $39 \times 0.90 \times 3.4 \times 600 = 71{,}604$, now zero. CS01 is market value × spread duration × 1 bp, $57.6\text{mm} \times 3.6 \times 10^{-4} = \$20{,}736$. Under DTS's rule one unit of market-value DTS is worth \$1 per 1% proportional move in spreads, so a 10% widening costs $10 \times 72{,}576 = \$725{,}760$, the same as 35 bp times the CS01. *The tier:* the EXPIRED report is one message that moves the pod's net DTS from about $+1{,}000$ to about $+72{,}600$ through a pre-set bound (the pod's net-beta limit). One message, one bound, no statistics: that is Tier 0. Better still, the same check runs before routing, on the parent's worst case (one child filled, the other not), so no long child leaves ahead of a confirmed locate. *Not Tier 1,* because Tier 1 accumulates noisy evidence over many fills and pays for its quiet with a delay of ten to twenty bad fills; here there is no noise to average, since the state machine knew at 4:58 with certainty, and Kestrel's fill has a perfectly good markout, so a markout CUSUM would never fire at all. *The hedge:* match DTS, $N \times 3.9 \times 350 = 72{,}576$, so $N = \$53.2$mm. Because the assumed index spread equals Kestrel's 350 bp, the DTS match is also a CS01 match: $53.2\text{mm} \times 3.9 \times 10^{-4} = \$20{,}736$. The assumption is consistent with Chapter 8-C, where the pod sold about \$13mm of CDX HY protection against 17,700 of DTS, about 1,360 per \$mm.
+
+**The trap:** Reporting the pod as roughly flat (net DTS about $+1{,}000$) because the parent order is a matched pair. That is the OMS's view of intent, not of position, and it is exactly the quiet failure that the residual-risk event exists to prevent. Two smaller slips: naming Tier 1 because the tier table lists "child-to-parent ratio tests" there (those catch too many children, as at Knight, not one that never filled), and *selling* CDX HY protection. The surviving leg is long credit, so the hedge buys protection.
+
+**If you got this wrong, read:** §27.4.2 (the state table, "every non-`FILLED` terminal emits a residual-risk event", and The Pair, PB-01); §27.7.1 (the tiers, and authority); Chapter 1-B's DTS box for the ruler; Chapter 8-C for how the pod sized its last CDX HY trade.
+
 ## Part VIII: The Portfolio Manager's Playbook
 
 ### Z.28 Chapter 28: What a Desk Head / Senior PM Must Know to Extract Maximum Alpha
@@ -940,3 +1107,41 @@ and the condition holds exactly at the cliff. The shape decides the answer. A me
 **The trap:** Dividing by redemptions alone, $538/25 = 21.5$ weeks, and calling the fund comfortable. The margin calls are this borrower's debt service, and they are the part of the burn that doubles in stress. Smaller slips: leaving out the haircut ($550/35 = 15.7$), or applying the 5.8 to the margin calls as well as the sleeve, which counts one stress twice.
 
 **If you got this wrong, read:** §28.5, the Third Avenue case study (folder one, then Ines's four clocks after the card); `runway_weeks` and `days_to_liquidate` in Listing 28.4 (Appendix F); and the Runway row of the §28.9 dashboard.
+
+**Z.28.4: Mags's adjusted number**
+
+**Answer:** The three estimates are $\text{SR}$, $\kappa z_p$ and $N_{\text{eff}}$. Everything else in (28.22) is either policy ($\text{DD}_{\max}$, $r_{\min}$), read off quotes ($\overline{\text{LCS}}$), or a named scenario ($m$).
+
+- $\text{SR} = 2 \pm 0.58$: three years under §28.9's $1/\sqrt{Y}$ rule. Lo's correction at a Sharpe of 2 widens this to $\pm 1.0$.
+- $\kappa z_p = 4 \pm 1$: nobody has measured $\kappa$, and Paleologo's own range for $-\kappa F^{-1}$ runs from 4 to 6.
+- $N_{\text{eff}} = 40 \pm 8$: a residual correlation of $\rho_a = 0.010 \pm 0.005$ maps to 33–49, and Marcus's dashboard went from 41 to 27 to 33 in one night.
+
+Take Theo's reopened band ($\overline{\text{LCS}} = 0.4\%$, $r_{\min} = 4\%$), which runs from 2.53 to 2.95. The ceiling's standard error in logs is 0.36. One standard error each way gives 2.1 to 4.3, and a simulation gives a 90% interval of 1.8 to 5.7. In 4% of the draws $\kappa z_p \le \text{SR}$, and then there is no ceiling at all. The floor's 90% interval is 1.65 to 4.9. The band is 0.42 turns wide, and its uncertainty is about ten times that. The probability that it is empty is about 41%. With SR one standard error lower it is certainly empty: the floor is 3.56 and the ceiling 2.50. So it is not a band. It is a probability, and the dashboard's Skill row is right to show it again at one standard error lower.
+
+**How:** Write the ceiling as $G_{\max} = \text{DD}_{\max}/\big(c_1 + (\kappa z_p - \text{SR})\,\sigma_{\text{DTS}}/\sqrt{N_{\text{eff}}}\big)$ and apply the delta method to its log:
+
+$$
+\text{se}(\ln G_{\max}) = \frac{\sigma_{\text{DTS}}/\sqrt{N_{\text{eff}}}}{c_1 + (\kappa z_p - \text{SR})\,\sigma_{\text{DTS}}/\sqrt{N_{\text{eff}}}}\sqrt{\text{se}_{\text{SR}}^2 + \text{se}_{\kappa z}^2 + \left(\frac{(\kappa z_p - \text{SR})\,\text{se}_{N}}{2N_{\text{eff}}}\right)^2} = 0.311 \times 1.17 = 0.365 .
+$$
+
+Taken one at a time, $\kappa z_p$ contributes 0.31 of that, SR 0.18 and $N_{\text{eff}}$ 0.06. The input nobody has measured carries most of the error. For the floor, $\text{se}(\ln F) = \sqrt{(\text{se}_N/2N_{\text{eff}})^2 + (\text{se}_{\text{SR}}/\text{SR})^2} = 0.31$. The floor and the ceiling share SR with opposite signs, so their intervals are not independent. That is why the empty-band probability comes from a joint simulation: two million independent normal draws of the three inputs, keeping only the draws with $\kappa z_p > \text{SR}$. The right tail of the ceiling is bounded by the speed limit, 7.8.
+
+**The trap:** Naming $\text{DD}_{\max}$, $r_{\min}$ or the LCS. The first two are decisions the desk makes, so an "error" in them is a choice, and the LCS is read off the screen. The subtler trap is to put error bars on the floor and the ceiling separately and report that "the intervals overlap but the point estimates don't". The number that matters is $\Pr(\text{floor} > \text{ceiling})$. A lower SR raises the floor and lowers the ceiling at the same time, so the band empties faster than either interval suggests.
+
+**If you got this wrong, read:** §28.7, Kaz on $\kappa$ and the Paleologo extraction that follows; §28.9's Skill row and the paragraph after the dashboard on SR as a pair; *The Map, Not the Territory* in §28.2 for $N_{\text{eff}}$ as a model output; and §7.8 for the standard error of a Sharpe ratio.
+
+**Z.28.5: ROBO and the stop-loss**
+
+**Answer:** Over a one-year allocation, the book with no rule earns 6.00%. Paleologo's two-threshold rule earns 5.53% (expected capital-time 0.922). ROBO earns 5.08% (expected capital-time 0.846). ROBO's rule costs **46 bp a year**, or 40 bp in Listing 28.5's daily-monitored Student-t(6) setup, and it doubles the price of safety from 7.8% to 15.4% of expected P&L. What it buys is small: the chance of a 7.5% loss within the year falls from 0.65% to zero. Over a career the gap is larger, because ROBO never restarts. It ends the PM's capital with probability $e^{-1.25} = 29\%$, against $e^{-3.75} = 2.4\%$ under the two-threshold rule. The spec sentence: *"The stop-loss is the platform's survival constraint, not the book's objective. Implement the two-threshold rule exactly: halve allocated capital at a loss of $x/2$ and liquidate at $x$, both measured on initial allocated capital. Never cut earlier, deeper or for longer than the rule says, and submit any proposed change with its price of safety, $\mu$ times the expected capital-time it removes."*
+
+**How:** Capital $c_t$ is set from past P&L, and $\mathbb{E}[dX_t \mid \text{past}] = \mu\,dt$, so $\mathbb{E}[\text{P\&L}] = \mu\,\mathbb{E}\big[\int_0^T c_t\,dt\big]$. The two rules are identical until the first touch of $-3.75\%$, which happens in 23.7% of years by (28.19). After that, Paleologo's rule keeps half the capital until the underlying return falls a further 7.5%, because at half capital that is the next 3.75% of P&L. ROBO keeps none. So the whole difference is
+
+$$
+\Delta\,\mathbb{E}[\text{P\&L}] = \mu \cdot \tfrac12\,\mathbb{E}\big[(\tau_2 \wedge T) - (\tau_1 \wedge T)\big] = 0.06 \times 0.076 = 0.46\%,
+$$
+
+which you get by integrating the first-passage density of $\tau_1$ against $\int_0^{T-s}\big(1 - \Pr(\text{hit } 7.5\% \text{ by } u)\big)\,du$, with $\Pr(\text{hit})$ taken from (28.19). The lifetime figures use the limit of (28.19): ROBO is switched off for good the first time its line is touched, $e^{-2\mu(0.0375)/\sigma^2} = e^{-1.25}$. The two-threshold rule liquidates only if both legs are hit, $e^{-1.25}\,e^{-2.5} = e^{-3.75}$.
+
+**The trap:** "ROBO's rule is safer and costs nothing, because it acts at the same 3.75% line." The first touch is where the two rules *start* to differ, and the whole cost lies in the capital-time after it. The deeper error is counting the "losses avoided" as a gain. Under the identity, a stop never changes the return earned per unit of capital-time. All it can do is remove capital-time, so for a PM with $\mu > 0$ it can only cost. As Paleologo puts it, stops exist for the firm's survival, not to improve performance.
+
+**If you got this wrong, read:** §28.6, the Paleologo p.167 extraction and its annotation (the identity), "Setting the stop with drift" for (28.19) and (28.20), and `simulate_two_threshold` in Listing 28.5 (Appendix F), which this exercise reruns with ROBO's rule beside the platform's.
