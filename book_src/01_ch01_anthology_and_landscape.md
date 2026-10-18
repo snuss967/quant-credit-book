@@ -48,7 +48,7 @@ Where:
 - $\gamma$ is the desk's risk-aversion parameter, $\sigma^2_{\text{IDO}}$ is the unhedged idiosyncratic variance of the bond over the holding horizon after stripping Treasury duration and CDX beta, and $q$ is current desk inventory.
 - $\Lambda_{\text{tox}}(\mathcal{O}_t)$ is the **Adverse Selection Penalty**: the probability that the seller has just left a lender call or analyzed a covenant trapdoor and knows an LMT or earnings miss is imminent, times the size of the move they know about.
 
-Read the equation as three bets stacked on top of each other, because that is how the rest of this book is organized:
+Each of the three terms has an owner on the desk and a home in the book:
 
 | Term | What it asks | Who on the desk owns it | Where the book builds it |
 | :--- | :--- | :--- | :--- |
@@ -88,7 +88,7 @@ The first number is about money. Barclays QPS estimates that funds using quantit
 
 ## 1.2 Evaluating the Market Set in Quantitative Credit
 
-On the Monday afternoon after Halvorsen, with the 78 still on the screen, Ines took the marker back to the whiteboard and drew six chairs around an oval. "This is the table," she said. "Before you play a hand, you learn who is sitting at it, what each of them has to do, and when. Nobody here is stupid. Most of them are just not free." She labelled the chairs, and then, instead of explaining all six, she wrote *Halvorsen, Fri 2:58, \$15mm* in the middle of the oval. "The table below is the map. Three of these chairs could have sent you that RFQ. Tell me what Friday looked like from each of their screens."
+On the Monday afternoon after Halvorsen, with the 78 still on the screen, Ines took the marker back to the whiteboard and drew six chairs around an oval. "This is the table," she said. "Before you play a hand, you learn who is sitting at it, what each of them has to do, and when. Nobody here is stupid. Most of them are just not free." She labelled the chairs, and then, instead of explaining all six, she wrote *Halvorsen, Fri 2:58, \$15mm* in the middle of the oval. "Three of these chairs could have sent you that RFQ; the other three can wait for the map. Tell me what Friday looked like from each of their screens."
 
 She tapped the first chair, which was the desk's own kind: another dealer or portfolio-trading desk. "Say it came from a desk like ours. They picked up \$40mm of Halvorsen in a portfolio trade on Tuesday *(illustrative)*, the name's volatility jumped on Thursday, and at 2:30 on Friday their single-B limit went red. They know nothing about any lender call. They're flattening because a number on a risk screen changed colour, and they want it gone before the close, because that's when limits are measured. From that chair, Friday was a limit breach. If that was the seller, Kaz's 91.40 was a fine bid." She paused. "Our own weakness, while we're here, is the one you watched: we're the person a well-informed seller wants to find."
 
@@ -104,7 +104,7 @@ Then she drew an arrow from every chair to the desk's chair. "Three sellers, thr
 
 "Isn't on the board," Ines said. "That chair never sits in the same place twice."
 
-The whiteboard became the table below, and it is the chapter's map. Its job is to let the desk isolate pure Idiosyncratic Return (**IDO**) by first understanding each player's mechanical constraints. The last column is the one that matters most: it says what each player is *contractually or regulatorily forced* to do, and on what clock. The "Representative Firms" column names a firm or fund only where this chapter cites it (Man's and BlackRock's own papers, Apollo's earnings call, the ETFs in the March 2020 data); elsewhere it describes the seat generically, because a table of employers deserves sources (Chapter 4 maps the industry properly).
+The whiteboard became the table below, the chapter's map. Its job is to let the desk isolate pure Idiosyncratic Return (**IDO**) by first understanding each player's mechanical constraints. The "Representative Firms" column names a firm or fund only where this chapter cites it (Man's and BlackRock's own papers, Apollo's earnings call, the ETFs in the March 2020 data); elsewhere it describes the seat generically, because a table of employers deserves sources (Chapter 4 maps the industry properly).
 
 | Strategy / Desk Archetype | Representative Firms | Holding Horizon | Primary Edge | Structural Vulnerability (How You Arb Them) | Forced to Do What, and When |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -115,7 +115,7 @@ The whiteboard became the table below, and it is the chapter's map. Its job is t
 | **Insurers & Annuity Writers (Ratings- and Capital-Constrained)** | Athene (Apollo's annuity affiliate; Apollo Q4 2025 call, 9 Feb 2026); other life and annuity writers | Hold to maturity (liability-matched, 5 to 30 years) | Liability-matched spread capture; illiquidity premium from private placements | Capital charges jump at the IG/HY line, so downgrades produce slow, concentrated selling of the same bonds by many holders | Sell, or hold more capital, after a downgrade to speculative grade. Clock: quarters, not days. |
 | **Open-End HY Funds & Bond ETFs (NAV-Redemption Sellers)** | iShares (HYG, LQD; §1.8); other HY mutual fund and ETF complexes | Daily liquidity to end-investors | Cheap beta delivery; daily liquidity on illiquid assets | Liquidity mismatch: they sell what is liquid, not what is expensive; ETF prices gap below NAV when authorized participants stop arbitraging | IG index funds sell fallen angels at the month-end rebalance and HY index funds buy them at inclusion; open-end funds meet redemptions within days. Clock: a known calendar date, or the day after a bad headline. |
 
-Everyone in that table is smart. Most of them are not the problem. The problem is the last column: every row has a trigger that converts a rating, a test, or a redemption into a sale, at a time you can often predict and in a size you can often estimate. A forced sale is **information-free about the bond and information-rich about the seller**. The rest of this chapter is about telling those two kinds of information apart, at speed, for money.
+The last column is what Ines meant by *not free*: it says what each player is contractually or regulatorily forced to do, and on what clock, and every row has a trigger that converts a rating, a test, or a redemption into a sale, at a time you can often predict and in a size you can often estimate. A forced sale is **information-free about the bond and information-rich about the seller**. The rest of this chapter is about telling those two kinds of information apart, at speed, for money.
 
 > **View From Another Seat.** *The CLO manager (a generic seat; no manager is named).* Imagine the same Friday from the fourth chair, and suppose the RFQ is not for Halvorsen's unsecured notes but for its term loan, which a CLO is far likelier to own, and which the agencies have just cut one notch, from B3 into Caa1 territory. The CLO is the marginal buyer of new leveraged loans: CLO managers buy "nearly three-quarters of all leveraged loans issued" (Deutsche Bank Flow, 7 Oct 2025), so their rulebook shapes loan prices in a way no single fundamental view can. The rulebook says that CCC and Caa1 loans above the typical 7.5% limit are marked, in the over-collateralization numerator, at the *lowest* market value in the CCC bucket, not at their own price (Kundu, ESRB Working Paper No. 141, Mar 2023, pp. 7–8). Kundu finds that the average CCC loan in the sample was priced at 85 while the cheapest CCC loan in each CLO averaged 58, which means the haircut can reward selling a *higher*-priced CCC to shrink the excess. The bucket is a soft wall, not a cliff: S&P Global Ratings reported in September 2023 that about 42% of the 554 reinvesting US BSL CLOs in its index had CCC exposure above 7.5%, yet just over 1% were failing a junior OC test (S&P, CLO Insights, 29 Sep 2023). So the manager is not panicking. She is optimizing, against a test date. Her view of the RFQ, if she could type it into the box: "I am not selling because I think it's cheap or rich. I am selling because my CCC bucket is 7.9% and the test date is Thursday." From the desk's chair that is close to the best sentence a seller can say. It means $\pi$ is low, the size is predictable, and the price pressure will fade once Thursday passes. The danger is assuming every CLO sale sounds like that one. A manager who sells *before* the downgrade, a week ahead of the agencies, is a different kind of seller, and Chapter 21 shows how to tell them apart in the flow.
 
@@ -192,29 +192,26 @@ $$
 
 If the log-likelihood ratio is (approximately) additive across features, $\ln(a_I/a_U) = \theta^\top\mathbf{x}$, the posterior is exactly a logistic regression, $\pi(\mathbf{x}) = (1+e^{-\theta_0-\theta^\top\mathbf{x}})^{-1}$ with $\theta_0 = \operatorname{logit}\mu$. That is why every RFQ toxicity model on the Street is, under the hood, a logistic regression or a tree ensemble pretending not to be one.
 
-Which features? Ines did not give Theo a list. On the Monday after Halvorsen she gave him the Friday RFQ again, on paper, and asked one question at a time: "What would you have wanted to know?"
+Which features? Ines did not give Theo a list. On the Monday after Halvorsen she gave him the Friday RFQ again, on paper, and asked one question at a time: "What would you have wanted to know?" The timing came first and easily: when the call ended, when the amendment request went out. The two answers that took him longest were about the sender.
 
-"When the lender call ended," Theo said. "Or when the amendment request went out. The closer the RFQ is to the call, the likelier the seller heard something on it." Minutes since a lender call or an amendment request: the first feature.
+"Who is selling?" Ines asked.
 
-"What else?"
+"Whether the account is in the group." Theo thought about it. "You can know that, sometimes. When an ad hoc group appears in court, its counsel files a Rule 2019 statement listing the members."
 
-"Whether earnings are next week." Days to earnings: the second.
+"And how did they ask?"
 
-"Who is selling?"
+Theo hesitated, then saw it. "Five dealers at once. Someone who wants a quiet exit shows it to one dealer at a time. Someone who wants out *before Monday* blasts it."
 
-"Whether the account is in the group." Theo thought about it. "You can know that, sometimes. When an ad hoc group appears in court, its counsel files a Rule 2019 statement listing the members." Whether the account sits in a known ad hoc group, from Rule 2019 statements scraped off the docket (Chapter 25): the third, and usually the one with the largest likelihood ratio.
+By the time Ines capped the pen the whiteboard held six rows:
 
-"And if you don't know the account at all?"
-
-"Then I'd want to know how its last hundred trades went for whoever bought from it." The account's own past markouts: the fourth. Ines nodded; that one is the hand history.
-
-"How big?"
-
-"Relative to the issue, not in dollars. Fifteen million of a 300 million issue is a different statement from fifteen million of three billion." Size relative to the issue: the fifth.
-
-"Last one. How did they ask?"
-
-Theo hesitated, then saw it. "Five dealers at once. Someone who wants a quiet exit shows it to one dealer at a time. Someone who wants out *before Monday* blasts it." How many dealers were put in competition: the sixth. A seller who shows the bond to one dealer at a time and a seller who blasts it to twenty are telling you different things.
+| Feature | What it says about the sender |
+| :-- | :-- |
+| Minutes since a lender call or amendment request | The closer the RFQ is to the call, the likelier the seller heard something on it |
+| Days to earnings | A seller who leaves just before a print may have seen the print |
+| Membership of a known ad hoc group, from Rule 2019 statements scraped off the docket (Chapter 25) | Usually the largest likelihood ratio on the board |
+| The account's own past markouts with the desk | The hand history: how its last hundred trades went for whoever bought from it |
+| Size relative to the issue | Fifteen million of a 300 million issue is a different statement from fifteen million of three billion |
+| Number of dealers put in competition | One dealer at a time is a quiet exit; twenty at once is a deadline |
 
 "Good," Ines said. "Every one of those is a likelihood ratio. Your job is to know which ones are big. Kaz's job is to estimate them. And the markouts' job is to tell both of you when you're wrong."
 

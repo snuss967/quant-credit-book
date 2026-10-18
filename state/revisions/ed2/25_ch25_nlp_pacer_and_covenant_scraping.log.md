@@ -17,8 +17,8 @@
 - [x] 15. [25.5.2 Windstream] BRIDGE + EXPAND-SCENE: parser binding vs economic binding; docket clock bridge. — Cards graded vs Furman; Additional Notes label; docket clock bridge.
 - [x] 16. [25.6 and 25.6.1 The plumbing] LIST-TO-NARRATIVE + new Trend Watch (public vs private side). — Monday-to-Friday feed week; every limit kept; public-side Trend Watch added.
 - [x] 17. [25.6.2 Rate limits as a token bucket] MATH-GENTLY + SHOP-LIFE vignette. — Tap-and-bucket box; Femi 03:07 page; day-181 silence; two-sentence spec.
-- [ ] 18. [25.7.1 From statements to a panel] MATH-GENTLY (shares, intervals, HHI, blocking); Ines opener.
-- [ ] 19. [25.7.2 The docket as a state machine] MATH-GENTLY (Poisson, exponential, MLE); Full Derivation.
+- [x] 18. [25.7.1 From statements to a panel] MATH-GENTLY (shares, intervals, HHI, blocking); Ines opener. — Ines hand opener; fuzzy-pie box 21% at 60/70; knife-edge fixed.
+- [x] 19. [25.7.2 The docket as a state machine] MATH-GENTLY (Poisson, exponential, MLE); Full Derivation. — Hughes-31-days question; Poisson/exponential box 3/120; censored-spell derivation.
 - [ ] 20. [25.7.3 Serta] EXPAND-SCENE -> Long Scene 2.
 - [ ] 21. [25.8 Claims Registers] BRIDGE: Mags on transferee concentration.
 - [ ] 22. [25.9.1 Classifier error is an IC tax] MATH-GENTLY (base rates, Youden) + ANOTHER-SEAT (dealer).

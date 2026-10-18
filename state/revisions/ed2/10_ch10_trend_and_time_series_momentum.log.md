@@ -6,11 +6,11 @@
 - [x] 4. [10.1.2] MATH-GENTLY #1: excess return and carry hurdle (landlord). NOTE: box placed before first equation; duplicate 60 bp sentence trimmed.
 - [x] 5. [10.1.2 after Fig 10.1] WHEN-TO-APPLY in Ines dialogue; move Trend Watch to end of §10.1. NOTE: whiteboard bars; two consequences retired; Trend Watch already ends §10.1.
 - [x] 6. [10.2.1] MATH-GENTLY #2: EWMA volatility; tanh gloss in §10.2.2. NOTE: leaky bucket, 0.37/0.05, half-life 42 days; dimmer gloss added.
-- [ ] 7. [10.2.3] LIST-TO-NARRATIVE: rules as the associate's ticket; cross-link Ch 10-B.
-- [ ] 8. [10.3/10.3.1] MATH-GENTLY #3: heteroskedasticity; retire "Three consequences" lead-ins.
-- [ ] 9. [10.3.2] ANOTHER-SEAT: insurer capital desk and CLO CCC bucket.
-- [ ] 10. [10.4.1] MATH-GENTLY #4: kappa and phi (fire door); P-measure gloss.
-- [ ] 11. [10.4.1] FULL-DERIVATION-MOVE: blended weight under its own heading.
+- [x] 7. [10.2.3] LIST-TO-NARRATIVE: rules as the associate's ticket; cross-link Ch 10-B. NOTE: three ticket paragraphs; box trimmed to IG cousin; formulas kept.
+- [x] 8. [10.3/10.3.1] MATH-GENTLY #3: heteroskedasticity; retire "Three consequences" lead-ins. NOTE: thermometer box with 0.74; lead-ins now prose; equations untouched.
+- [x] 9. [10.3.2] ANOTHER-SEAT: insurer capital desk and CLO CCC bucket. NOTE: NAIC 2.C/3.A/3.C factors, Kundu 85/58; narration threads boxes.
+- [x] 10. [10.4.1] MATH-GENTLY #4: kappa and phi (fire door); P-measure gloss. NOTE: +12/-50 bp door box; P gloss points to Ch 6-B.
+- [x] 11. [10.4.1] FULL-DERIVATION-MOVE: blended weight under its own heading. NOTE: one-line statement then heading; equation and reading paragraph unchanged.
 - [ ] 12. [10.4.2] MATH-GENTLY #5: small-sample bias; Kaz at model review.
 - [ ] 13. [10.5.1-10.5.2] LIST-TO-NARRATIVE + ANOTHER-SEAT (Man 2022, Robeco 2012).
 - [ ] 14. [10.5.3] MATH-GENTLY #6: lead-lag and stale clock; Theo's line.

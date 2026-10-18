@@ -9,7 +9,7 @@
 - [x] 7. 17.2.4 Unsmoothing · MATH-GENTLY (box D) + LIST-TO-NARRATIVE — cassette-hiss box; Geltner algebra moved; n=28 interval scene; Ines's two sentences.
 - [x] 8. 17.3.1–17.3.2 BDC P/NAV · MATH-GENTLY (box E) — house-and-mortgage thin slice; Numbers paragraph points to box; tender misread kept.
 - [x] 9. 17.3.3 Non-accrual gap · MATH-GENTLY (box F) + NEW-SCENE (Medallia) — bruised-apples ratio box; Medallia ledger scene; PIMCO base rate, title written around.
-- [ ] 10. Case Study OBDC and OBDC II · EXPAND-SCENE → Long Scene 1 + Another Seat box 2
+- [x] 10. Case Study OBDC and OBDC II · EXPAND-SCENE → Long Scene 1 + Another Seat box 2 — four-beat replay, cards graded, Saba seat, PB-16 Pair box.
 - [ ] 11. 17.4.1–17.4.2 Two-way takeouts · MATH-GENTLY (box G) + Full Derivation
 - [ ] 12. Case Study Finastra 2023 · NEW-SCENE (Pluralsight)
 - [ ] 13. 17.5 Banks and insurers · LIST-TO-NARRATIVE + ANOTHER-SEAT (box 3: insurer)
@@ -20,3 +20,18 @@
 - [ ] 18. 17.8.2 Features worth computing · LIST-TO-NARRATIVE + dealer seat
 - [ ] 19. 17.8.3 Pending mark · MATH-GENTLY (box I) + FULL-DERIVATION-MOVE
 - [ ] 20. 17.9 and 17.10 · BRIDGE + Finder table
+
+## Notes for state files (cast bible, CHECK log, pair book)
+- Cast: Ch 17 Kaz misread "tender offer" = an offer made gently (§17.3.1, first appearance).
+- Cast: Theo sticky note "whose number is it?" (cold open), moved to whiteboard in Long Scene 1.
+- Cast: Mags keeps wrong cards in the same folder as right ones (Long Scene 1).
+- Cast: Kaz's first Dimson run (36 quarters, valuer change at q22) and first unsmoothing (n=28, theta 0.71) are illustrative composites.
+- Replays: cold open cut 23 Jun 2026 2:40-4:41 p.m.; Long Scene 1 cut 5 Nov 2025, 19 Nov 2025, Feb 2026, 6 Mar 2026; run on Friday afternoons in October 2026.
+- CHECK: OBDC merger termination date 19 Nov (chapter) vs 18 Nov (dossier); kept 19 Nov.
+- CHECK: \$1.4B sale at 99.7% (release) vs 99.8% (dossier rounding); used 99.7.
+- CHECK: Cox/Saba \$3.80 bid NAV basis; wrote "more than 30% below NAV" and "about two-thirds".
+- CHECK: OBDC ~0.71 of book mid-Oct 2026 is an aggregator quote; hedged in text.
+- CHECK: software-week intraday moves (trade press) hedged as "trade press reported".
+- Verified (web): PIMCO, Karoui, "Daily Pricing Is Not Daily Liquidity," 11 May 2026: "about five points apart", "83% of loans held by at least two BDCs are priced within a two-point range", "Daily pricing is not price discovery."
+- Verified (web): Money Stuff "Boaz Weinstein" episode description opening sentence.
+- Pair book: PB-16 opened in Ch 17 (6 Nov 2025 replay entry), ratio 1.3 x long by estimated daily beta to HYG (illustrative).

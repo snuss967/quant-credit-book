@@ -2,21 +2,6 @@
  "note": "Restarted 09:34 UTC (window 09:30-14:30). Stopped at the user's ~88% rule at 06:11 UTC. To resume: Workflow({scriptPath, resumeFromRunId: runId, args}). All agents are durable, so finished items are skipped.",
  "runs": [
   {
-   "name": "u2-A",
-   "task": "wr692j1iy",
-   "runId": "wf_2e88049d-039",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/u2_chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "01_ch01_anthology_and_landscape",
-     "03_ch03_pjt_rssg_cognitive_bridge",
-     "02_ch02_revolutions_in_credit_trading",
-     "04_ch04_inside_the_systematic_credit_industry"
-    ]
-   }
-  },
-  {
    "name": "part-III-a",
    "task": "wfbnk1w8c",
    "runId": "wf_b92bbb19-5ce",
@@ -246,6 +231,21 @@
     "stages": [
      "lessons",
      "rv"
+    ]
+   }
+  },
+  {
+   "name": "lessons-4",
+   "task": "w4d5ja0o2",
+   "runId": "wf_a057e3f8-944",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "04_ch04_inside_the_systematic_credit_industry"
+    ],
+    "stages": [
+     "lessons"
     ]
    }
   }

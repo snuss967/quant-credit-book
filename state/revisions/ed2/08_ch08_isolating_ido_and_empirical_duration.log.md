@@ -10,8 +10,8 @@
 - [x] 8. [8.3 Trend Watch: CCC Decompression] BRIDGE: one Kaz line before it. — Done: Kaz line bridges Alltel extraction to CCC Trend Watch.
 - [x] 9. [8.4 DTS] MATH-GENTLY (percent/lognormal) + FULL-DERIVATION-MOVE + ANOTHER-SEAT (pod risk x-ray). — Done: percent box, derivation moved, pod x-ray seat, PB-03 Pair opened.
 - [x] 10. [8.5 Betas When Nothing Trades] MATH-GENTLY (envelopes) + FULL-DERIVATION-MOVE + WHEN-TO-APPLY (Kaz vs Ines on equity lags). — Done: envelopes box, derivation moved, Kaz vs Ines equity-lag scene.
-- [ ] 11. [8.6 The Hedge Matrix] ANOTHER-SEAT (market maker's basket) + MATH-GENTLY (rulers) + FULL-DERIVATION-MOVE; instruments as continuous passage; snap fix.
-- [ ] 12. [8.7 Case Studies] LIST-TO-NARRATIVE (frame): delete template sentence and italic sub-labels.
+- [x] 11. [8.6 The Hedge Matrix] ANOTHER-SEAT (market maker's basket) + MATH-GENTLY (rulers) + FULL-DERIVATION-MOVE; instruments as continuous passage; snap fix. — Done: four-window passage, basket seat, snap fix, rulers box (eta 0.1→19), Mags thesis.
+- [x] 12. [8.7 Case Studies] LIST-TO-NARRATIVE (frame): delete template sentence and italic sub-labels. — Done: template sentence cut; sub-labels go with each rewritten case.
 - [ ] 13. [8.7 Case Study A: 2022] NEW-SCENE, long: "The Year a PDF Said Zero (2022, replayed)".
 - [ ] 14. [8.7 Case Study B: March 2023] NEW-SCENE, long: "The Hedge That Hedged Both Ways (8–13 March 2023, replayed)".
 - [ ] 15. [8.7 Case Study C: April 2025] EXPAND-SCENE (~1,400 words): card before table; Jersey resource.

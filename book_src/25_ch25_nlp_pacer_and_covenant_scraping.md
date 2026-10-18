@@ -569,6 +569,10 @@ The rule got this shape through a fight. In *In re Northwest Airlines* (Bankr. S
 
 ### 25.7.1 From statements to a panel
 
+The first time Theo showed Ines a Rule 2019 statement, she skipped the names and went straight to the columns of numbers. "Their cost basis is their hand," she said. "Rule 2019 makes them show you half of it." The half it shows is quantities and dates. Turning those into a share, a concentration and a vote takes very little mathematics, and the other half of the hand, the price they paid, comes at the end of this subsection.
+
+> **Math, Gently.** *Fuzzy slices, lumpy pies, and the one-third line.* Picture a pie chart of a \$1bn loan class in which every slice is labeled "approximately." A group's *share* is its slice: four members disclosing \$82mm, \$61mm, \$39mm and \$28mm hold \$210mm, or 21% of the class. Each figure was rounded to the nearest million, so each could be off by half a million and the total by up to \$2mm, and the honest statement is "between 20.8% and 21.2%." That is an *interval*, and it is the right object to carry. *Concentration* asks a different question: how lumpy is the whole pie? Square each holder's share and add the squares. Three holders at 50%, 30% and 20% give $0.25 + 0.09 + 0.04 = 0.38$; ten holders at 10% each give $0.10$. The sum is the Herfindahl–Hirschman index, HHI, and it has a friendly reading: it is the chance that two dollars drawn at random from the class belong to the same holder. Then the vote. A plan needs two-thirds of the dollars *that vote*, so a block holding more than a third of the voted dollars can stop it. If 60% of the class votes, the 21% group holds $21/60 = 35\%$ of the vote and blocks. If turnout rises to 70%, the same group holds $21/70 = 30\%$ and does not. Nothing about the group changed; the room got fuller. The formulas follow.
+
 For group $g$, statement $k$ filed at $t_k$, and class $c$ with face $F_c$, let $h_{i,c,k}$ be member $i$'s disclosed face. Then the group's class share, net flow and holder concentration are
 
 $$
@@ -583,25 +587,41 @@ $$
 \frac{\theta}{\varphi} > \frac13 \quad\Longleftrightarrow\quad \theta > \frac{\varphi}{3}.
 $$
 
-So low turnout lowers the blocking bar. With 60% turnout *(illustrative)*, 20% of the class blocks. Out of court, the analogous threshold is the agreement's "Required Lenders" (typically more than 50%), which is the $\theta_{\text{required}}$ of Chapter 13.
+So low turnout lowers the blocking bar. With 60% turnout *(illustrative)* the bar is 20% of the class: a group above it blocks on amount, while a group at exactly 20% holds exactly a third of the vote, and a third is not more than a third. That knife-edge is why the rounding interval above is carried into the blocking flag rather than thrown away. Out of court, the analogous threshold is the agreement's "Required Lenders" (typically more than 50%), which is the $\theta_{\text{required}}$ of Chapter 13.
 
-**Imputed cost basis.** With disclosed acquisition quarters $q$ and a quarterly average price $\bar P_q$ from TRACE or loan marks, the imputed basis is $\hat c_i = \sum_q h_{i,q}\bar P_q / \sum_q h_{i,q}$. A group with a basis of 40 will take a plan at 55 that a basis-90 group will fight to the end. "Their cost basis is their hand," said Ines. "Rule 2019 makes them show you half of it."
+**Imputed cost basis.** This is the other half of Ines's hand. With disclosed acquisition quarters $q$ and a quarterly average price $\bar P_q$ from TRACE or loan marks, the imputed basis is $\hat c_i = \sum_q h_{i,q}\bar P_q / \sum_q h_{i,q}$. A group with a basis of 40 will take a plan at 55 that a basis-90 group will fight to the end, so two groups with the same share can be playing entirely different hands.
 
 **Endogenous sampling.** Supplements are filed when holdings change *and* the group takes a position. So the timing of a filing is informative in its own right: a statement appears because something is about to happen.
 
 ### 25.7.2 The docket as a state machine
 
-Classify entries into marks and map them to states: Quiet → Organized (first 2019 statement) → Contested (exclusivity, standing or lien-challenge motions) → Standstill (stipulated stays, mediation) → Plan → Confirmed. Treat the path as a continuous-time Markov chain with transition intensities $q_{ab}$. (These are $q_{ab}$ with two subscripts, distinct from inventory $q$.) With $N_{ab}$ observed $a \to b$ transitions and total time $T_a$ spent in state $a$ across a panel of cases, the log-likelihood is
+Classify entries into marks and map them to states: Quiet → Organized (first 2019 statement) → Contested (exclusivity, standing or lien-challenge motions) → Standstill (stipulated stays, mediation) → Plan → Confirmed. Figure 25.5 draws the chain with the Hughes case below it.
+
+![Figure 25.5: The docket state machine runs from Quiet to Confirmed, and the Hughes Satellite Systems case of the Docket Diary below walked Organized to Contested in 31 days and Contested to Standstill in 10, each step marked by a docketed entry. Source: Hughes Satellite Systems Corp., Bankr. S.D. Tex. No. 26-90739, Docs. 154 (2026-08-10), 320 (2026-09-10) and 369 (2026-09-20), as cited in §25.7.2.](assets/figures/ch25_docket_state_machine.png)
+
+> **Docket Diary. Hughes Satellite Systems Corporation, Bankr. S.D. Tex. No. 26-90739 (2026).** Doc. 154 (2026-08-10): "Verified Statement of Noteholders Pursuant to Bankruptcy Rule 2019... Exhibit A." Doc. 320 (2026-09-10, 40 pp.): "The Noteholder Group's Emergency Motion to Terminate the Debtors' Exclusive Periods Pursuant to 11 U.S.C. § 1121(d)(1)," hearing set for 9/28/2026, exhibits filed under seal. Doc. 369 (2026-09-20, 36 pp.): "Stipulated Order Staying Litigation and Investigations in the Chapter 11 Cases." That is Organized → Contested in 31 days and Contested → Standstill in 10. *The Ad Hoc Group, through counsel, in unison:* "We reserve all rights. Including the right to have reserved them earlier." Ines read the sequence aloud: "A bet, a raise, and both players agreeing to check it down." (Facts beyond the docket entry text are not stated here.)
+
+Thirty-one days from organizing to attacking exclusivity. Kaz wanted to know whether that was fast, which is a question about a rate, and rates on a docket have a simple model.
+
+> **Math, Gently.** *Events on a clock: Poisson counts, exponential waits, and rate as count over time at risk.* A docket is a clock with labeled ticks: at each tick an entry arrives carrying a label (a 2019 statement, an exclusivity motion, a stipulated stay). That is a *marked point process*, and the simplest model of its ticks asks only how often they come. Suppose that while a group is Organized, an attack on exclusivity is equally likely on any day it has not yet happened, at a rate of $q$ per day. Two distributions then describe the same process from two sides. The *Poisson* distribution counts: how many attacks in a 30-day window? On average $30q$. The *exponential* distribution waits: how long until the first? On average $1/q$ days, and the chance of waiting longer than $t$ days is $e^{-qt}$. The exponential's defining quirk is that it has no memory, so a group that has sat Organized for fifty quiet days is no more "due" than one that organized yesterday. If you accept that, estimating $q$ is division. Across four cases, three groups moved from Organized to Contested and one is still Organized today, and together they spent 120 days in the Organized state. Three moves in 120 days at risk gives $\hat q = 1/40$ per day, a mean wait of 40 days. The still-quiet case adds its days to the denominator and nothing to the numerator, which is how the estimate stays honest about stories that have not finished. Hughes took 31 days, and under the model $1 - e^{-31/40} \approx 54\%$ of groups would have attacked by then: ordinary, not fast. Where the wait does have a memory (a statutory exclusivity deadline approaching, a hearing already on the calendar) the exponential is the wrong picture and the rate has to depend on time. The general estimator is next.
+
+Treat the path as a continuous-time Markov chain with transition intensities $q_{ab}$. (These are $q_{ab}$ with two subscripts, distinct from inventory $q$.) With $N_{ab}$ observed $a \to b$ transitions and total time $T_a$ spent in state $a$ across a panel of cases, the maximum-likelihood estimate of each intensity is the box's division,
+
+$$
+\hat q_{ab} = \frac{N_{ab}}{T_a}.
+$$
+
+This is the right estimator for "how long after a group organizes does it attack exclusivity," and it stays honest about cases still in progress, because their time in state counts in $T_a$ even if no transition has happened yet.
+
+#### The Full Derivation: the intensity MLE with censored spells
+
+In a continuous-time Markov chain the time spent in state $a$ before leaving is exponential with total rate $\sum_{b \ne a} q_{ab}$, and the exit goes to $b$ with probability proportional to $q_{ab}$. A completed spell of length $\tau$ that ends in $b$ therefore contributes the density $q_{ab}\,e^{-\tau\sum_{b'} q_{ab'}}$ to the likelihood; a spell still running when the data stop (a *censored* spell) contributes only the survival term $e^{-\tau\sum_{b'} q_{ab'}}$, because all we know is that nothing happened yet. Multiplying across spells and cases and taking logs, the exponents add up to $-q_{ab}T_a$ for every pair, with $T_a$ the total time at risk in $a$, completed and censored alike, and each observed $a \to b$ move adds a $\log q_{ab}$. So
 
 $$
 \log \mathcal{L} = \sum_{a}\sum_{b \ne a}\big(N_{ab}\log q_{ab} - q_{ab}\,T_a\big),
 $$
 
-and setting $\partial \log \mathcal{L}/\partial q_{ab} = N_{ab}/q_{ab} - T_a = 0$ gives $\hat q_{ab} = N_{ab}/T_a$. This is the right estimator for "how long after a group organizes does it attack exclusivity," and it stays honest about cases still in progress, because their time in state counts in $T_a$ even if no transition has happened yet. Figure 25.5 draws the chain with the Hughes case below it.
-
-![Figure 25.5: The docket state machine runs from Quiet to Confirmed, and the Hughes Satellite Systems case of the Docket Diary below walked Organized to Contested in 31 days and Contested to Standstill in 10, each step marked by a docketed entry. Source: Hughes Satellite Systems Corp., Bankr. S.D. Tex. No. 26-90739, Docs. 154 (2026-08-10), 320 (2026-09-10) and 369 (2026-09-20), as cited in §25.7.2.](assets/figures/ch25_docket_state_machine.png)
-
-> **Docket Diary. Hughes Satellite Systems Corporation, Bankr. S.D. Tex. No. 26-90739 (2026).** Doc. 154 (2026-08-10): "Verified Statement of Noteholders Pursuant to Bankruptcy Rule 2019... Exhibit A." Doc. 320 (2026-09-10, 40 pp.): "The Noteholder Group's Emergency Motion to Terminate the Debtors' Exclusive Periods Pursuant to 11 U.S.C. § 1121(d)(1)," hearing set for 9/28/2026, exhibits filed under seal. Doc. 369 (2026-09-20, 36 pp.): "Stipulated Order Staying Litigation and Investigations in the Chapter 11 Cases." That is Organized → Contested in 31 days and Contested → Standstill in 10. *The Ad Hoc Group, through counsel, in unison:* "We reserve all rights. Including the right to have reserved them earlier." Ines read the sequence aloud: "A bet, a raise, and both players agreeing to check it down." (Facts beyond the docket entry text are not stated here.)
+and setting $\partial \log \mathcal{L}/\partial q_{ab} = N_{ab}/q_{ab} - T_a = 0$ gives $\hat q_{ab} = N_{ab}/T_a$. The second derivative, $-N_{ab}/q_{ab}^2$, is negative, so this is a maximum. Dropping the censored spells instead would shrink $T_a$ and bias every rate upward, which on a docket means believing that fights start sooner than they do.
 
 ### 25.7.3 Case Study: Serta Simmons, Read From the Docket (2023)
 

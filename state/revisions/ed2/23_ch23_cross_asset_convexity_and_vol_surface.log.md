@@ -4,11 +4,11 @@
 - [x] 2. [§23.1, before "The Merton identity"] MATH-GENTLY: risk-neutral pricing and the lognormal — bookmaker box, 58.25 and 0.91, placed before Merton heading.
 - [x] 3. [§23.1 "The Merton identity"] MATH-GENTLY + FULL-DERIVATION-MOVE: Itô's ½σ² — Itô box, (23.1) one line, Full Derivation subsection added.
 - [x] 4. [§23.1 "Consequence 1"] LIST-TO-NARRATIVE — Kaz slides rows, Ines overlay, Exercise 1 left unsolved.
-- [ ] 5. [§23.2 opening] BRIDGE + SHOP-LIFE seed
-- [ ] 6. [§23.2 "The model"] MATH-GENTLY + FULL-DERIVATION-MOVE: first passage and the reflection principle
-- [ ] 7. [§23.2 "Parameters and empirics"] WHEN-TO-APPLY inside dialogue
-- [ ] 8. [§23.3 opening] EXPAND-SCENE (300 words)
-- [ ] 9. [§23.3, before "The result"] MATH-GENTLY: dominance bounds
+- [x] 5. [§23.2 opening] BRIDGE + SHOP-LIFE seed — 900-name nightly column paragraph; points to spec and vignette.
+- [x] 6. [§23.2 "The model"] MATH-GENTLY + FULL-DERIVATION-MOVE: first passage and the reflection principle — drunk-and-gutter box; Steps 1–6 moved; Trend Watch to end.
+- [x] 7. [§23.2 "Parameters and empirics"] WHEN-TO-APPLY inside dialogue — Kaz, Ines horizon, Theo ADESA designation; barrier from indenture.
+- [x] 8. [§23.3 opening] EXPAND-SCENE (300 words) — Ines hand history: 7.50/2.50 spread at 45c, 9% default.
+- [x] 9. [§23.3, before "The result"] MATH-GENTLY: dominance bounds — two-tickets box, 0.48 to 4.8%, proof sign-off.
 - [ ] 10. [§23.4 opening] MATH-GENTLY: the Poisson jump and the compensating drift; readings to narrative; Full Derivation of (23.8)
 - [ ] 11. [§23.4, before the put-surface Spec] SHOP-LIFE vignette (Dana)
 - [ ] 12. [§23.5 opening] MATH-GENTLY: slope and curvature

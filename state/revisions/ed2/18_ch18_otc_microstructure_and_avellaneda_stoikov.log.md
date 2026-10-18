@@ -2,11 +2,11 @@
 
 - [x] 1. Cold open: EXPAND-SCENE to 1,100-1,400 words; three beats; decision card; "You priced one." — Cold open expanded: PRS beat, card, 12:00-12:12 clock, canon unsecured terms.
 - [x] 2. §18.1 Harris's Zoo: LIST-TO-NARRATIVE; Ines walks the table with real sellers; move Man p.19 SE to end. — Ines walks the table: LDI, CLO CCC sellers, Altice evening; dimensions mapped.
-- [ ] 3. §18.2 Roll: MATH-GENTLY Box 1 (covariance and the bounce); Trend Watch to end of §18.2.
-- [ ] 4. §18.2.1: WHEN-TO-APPLY scene, Roll NaN on Altice secured (replay).
-- [ ] 5. §18.3.1 Glosten-Milgrom: BRIDGE gloss and pointer to Ch 3.
-- [ ] 6. §18.3.2 Kyle: MATH-GENTLY Box 2 (best guess is a straight line).
-- [ ] 7. §18.3.3 Kyle to RFQ: LIST-TO-NARRATIVE in Ines's napkin scene.
+- [x] 3. §18.2 Roll: MATH-GENTLY Box 1 (covariance and the bounce); Trend Watch to end of §18.2. — Box 1 two-walls covariance, margin number; Trend Watch moved to end.
+- [x] 4. §18.2.1: WHEN-TO-APPLY scene, Roll NaN on Altice secured (replay). — Altice Roll NaN replay scene before WTBU; §18.6.3 sentence retires later.
+- [x] 5. §18.3.1 Glosten-Milgrom: BRIDGE gloss and pointer to Ch 3. — GM one-sentence gloss, 0.8-point number, pointer to §3.2.1; no box.
+- [x] 6. §18.3.2 Kyle: MATH-GENTLY Box 2 (best guess is a straight line). — Box 2 straight-line best guess, 0.2 pts/$mm, $10mm moves 2.
+- [x] 7. §18.3.3 Kyle to RFQ: LIST-TO-NARRATIVE in Ines's napkin scene. — Napkin scene carries three changes and regression; Kyle explanation reopened.
 - [ ] 8. §18.4 opening: FULL-DERIVATION-MOVE + MATH-GENTLY Boxes 3 and 4.
 - [ ] 9. §18.4.3 Step 1: MATH-GENTLY Box 5 (exponential of a wobble, Jensen); skew line.
 - [ ] 10. §18.4.5 Step 3: MATH-GENTLY Box 6 (ln(1+x) ~ x; monopoly markup).

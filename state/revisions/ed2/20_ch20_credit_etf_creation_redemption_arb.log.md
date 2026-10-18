@@ -4,9 +4,9 @@
 - [x] 2. [§20.1] LIST-TO-NARRATIVE + ANOTHER-SEAT. — Kaz whiteboard walks both trades; Flow Traders seat box added.
 - [x] 3. [§20.2 opening] LIST-TO-NARRATIVE. — Mags two 4:15 calls; thumb on scale; clock; speed.
 - [x] 4. [§20.2.1, before the first equation] MATH-GENTLY, two parts. — Log premium and relay box; three readings now one paragraph.
-- [ ] 5. [§20.2.1, partial adjustment] MATH-GENTLY + FULL-DERIVATION-MOVE.
-- [ ] 6. [§20.2.2] MATH-GENTLY: attenuation.
-- [ ] 7. [§20.2.3] BRIDGE.
+- [x] 5. [§20.2.1, partial adjustment] MATH-GENTLY + FULL-DERIVATION-MOVE. — Thermostat box absorbs villain line; geometric-series Full Derivation added.
+- [x] 6. [§20.2.2] MATH-GENTLY: attenuation. — Wobbling-ruler box, Ch 1 pointer; caveats as narration, new numbers.
+- [x] 7. [§20.2.3] BRIDGE. — Kaz staleness, Ines flow, Mags range lines; pointer to §20.5.
 - [ ] 8. [§20.3 opening, §20.3.1] MATH-GENTLY + FULL-DERIVATION-MOVE + LIST-TO-NARRATIVE.
 - [ ] 9. [§20.3.2] MATH-GENTLY, two parts + FULL-DERIVATION-MOVE.
 - [ ] 10. [§20.3.2 after Poker Table] NEW: The Pair (RV beat, PB-13 stressed).

@@ -1,7 +1,7 @@
 # U2 Progress Log: Chapter 19 (Portfolio Trading & Basket Pricing Engines)
 
-- [ ] 1. [Title / cold open] EXPAND-SCENE (to 1,200-1,400 words), card ending, objectives list becomes narration.
-- [ ] 2. [§19.1] LIST-TO-NARRATIVE; Ines walks the ticket; View From Another Seat (insurer/pension); Trend Watch to end of §19.1.
+- [x] 1. [Title / cold open] EXPAND-SCENE (to 1,200-1,400 words), card ending, objectives list becomes narration. — Note: dated Fri 23 Oct (cast bible C10), Wexcombe issuer, card added.
+- [x] 2. [§19.1] LIST-TO-NARRATIVE; Ines walks the ticket; View From Another Seat (insurer/pension); Trend Watch to end of §19.1. — Note: Ines walks ticket; FIMSAC, Goldman added; pension seat box.
 - [ ] 3. [§19.2 opening] BRIDGE + MATH-GENTLY (B1 certainty equivalent).
 - [ ] 4. [§19.2.1] FULL-DERIVATION-MOVE + MATH-GENTLY (B2 distributions/third moment, B3 physical vs risk-neutral).
 - [ ] 5. [§19.3] MATH-GENTLY (B4 size exponent) + junior-quant duration-twice story + Full Derivation move.

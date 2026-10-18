@@ -2,9 +2,9 @@
 
 - [x] 1. [Cold open] EXPAND-SCENE (to 1,100-1,400 words) — Cold open now 1,150 words: RFQ log, memo, nickel-versus-three-eighths card.
 - [x] 2. [§22.1 opening list and table] LIST-TO-NARRATIVE — List became Ines grading the card; three-eighths decomposed into time and rent.
-- [ ] 3. [§22.1.1] MATH-GENTLY + FULL-DERIVATION-MOVE
-- [ ] 4. [§22.1, after Desk Myth] ANOTHER-SEAT (dealer desk)
-- [ ] 5. [§22.2 opening] SHOP-LIFE vignette (bank credit-trading desk, operations seat)
+- [x] 3. [§22.1.1] MATH-GENTLY + FULL-DERIVATION-MOVE — Rent and indifference boxes added; algebra moved to Full Derivation; extractions relocated.
+- [x] 4. [§22.1, after Desk Myth] ANOTHER-SEAT (dealer desk) — BofA versus Jefferies seat box; quoted, sourced, inference labeled.
+- [x] 5. [§22.2 opening] SHOP-LIFE vignette (bank credit-trading desk, operations seat) — Tamsin ops vignette: exceptions, volume pack, affiliate-indicator break, definitions tab.
 - [ ] 6. [§22.2.1] MATH-GENTLY + FULL-DERIVATION-MOVE
 - [ ] 7. [§22.2.2] MATH-GENTLY (building block: distributions)
 - [ ] 8. [§22.2.3] EXPAND-SCENE -> Long Scene B: "The rule that was approved and never happened"

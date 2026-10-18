@@ -12,8 +12,8 @@
 - [x] 10. 11.4.2 Static logit to dynamic hazard, MATH-GENTLY #7 + LIST-TO-NARRATIVE + FULL-DERIVATION-MOVE. — Done: life-table box 3.5%, covariate call-and-response, odds gloss, derivation heading.
 - [x] 11. 11.4.4 and §11.4 Spec, SHOP-LIFE vignette (vendor restatement). — Done: Marisol, 7 Jul 2026, point-in-time columns, Saks row; Spec reopened.
 - [x] 12. 11.5.1 CAP, ROC, MATH-GENTLY #8 "AUC is a bet" + FULL-DERIVATION-MOVE. — Done: 34-of-40 pairs box, statement with EHT credit, derivation heading.
-- [ ] 13. 11.5.2 Hit rate to return, MATH-GENTLY #9 "Base rates" + vendor due-diligence scene.
-- [ ] 14. 11.6/11.6.1 Tier exclusion wrong tool, LIST-TO-NARRATIVE + ANOTHER-SEAT #1 CLO manager + risk-committee exchange.
+- [x] 13. 11.5.2 Hit rate to return, MATH-GENTLY #9 "Base rates" + vendor due-diligence scene. — Done: 1,000-issuer counts box, vendor call with silence, casino close.
+- [x] 14. 11.6/11.6.1 Tier exclusion wrong tool, LIST-TO-NARRATIVE + ANOTHER-SEAT #1 CLO manager + risk-committee exchange. — Done: Mags reads CCC row, committee exchange, CLO seat verified S&P.
 - [ ] 15. 11.6.2 2026 CCC Decompression, EXPAND-SCENE + ANOTHER-SEAT #2 large active manager.
 - [ ] 16. 11.7/11.7.1 Why low risk wins, BRIDGE DTS gloss and pointer.
 - [ ] 17. 11.7.2 Long-only contradiction, LIST-TO-NARRATIVE + ANOTHER-SEAT #3 insurer.

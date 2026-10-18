@@ -61,6 +61,13 @@ def main():
                 while j < len(lines) and lines[j].strip() != "```":
                     j += 1
                 code = "\n".join(lines[i + 1:j])
+                # Guard: an unclosed or mismatched fence would swallow prose (it happened once: Ch 1 §1.5 ended up
+                # inside Listing 1.2). If the captured block contains a numbered section heading, leave it in place.
+                if re.search(r"^#{2,4} +(\d+|[A-Z])[\.\-]", code, re.M) or j >= len(lines):
+                    print(f"  WARNING {os.path.basename(path)} line {i + 1}: fence looks unclosed or swallows a heading; left in place")
+                    out.append(lines[i])
+                    i += 1
+                    continue
                 k += 1
                 anchor = f"code-{lab.lower().replace('-', '')}-{k}"
                 desc = describe(code)

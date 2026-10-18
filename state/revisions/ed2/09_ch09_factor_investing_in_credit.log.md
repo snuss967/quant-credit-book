@@ -12,8 +12,8 @@
 - [x] 10. [§9.4.2] MATH-GENTLY (turnover and break-even cost) + BRIDGE; move "elaborate way to tip". Note: taxi-meter box, bridge from coffee, threads between three boxes.
 - [x] 11. [§9.5.3] NEW-SCENE Long Scene B: 2022, the Year Low-Risk Looked Like Genius. Note: cut moved to 30 Dec 2022 (full-year sourced numbers; Ch 11 owns 30 Jun 2022 cut); sleeve long-only DTS-matched, bills residual; old paragraph retired.
 - [x] 12. [§9.6.3] EXPAND-SCENE (Sal, 1998) to 150 words. Note: favour, week, recall; spreadsheet limits; Kaz pronoun fixed at 9.6.1.
-- [ ] 13. [§9.7.1] MATH-GENTLY (correlation, rowers) + FULL-DERIVATION-MOVE; breadth gloss.
-- [ ] 14. [Case Study: One Telecom] keep intact; BRIDGE into §9.8.
+- [x] 13. [§9.7.1] MATH-GENTLY (correlation, rowers) + FULL-DERIVATION-MOVE; breadth gloss. Note: rowers box, FOC added; RV beat (Marcus x-ray, value 0.7) in §9.7.2.
+- [x] 14. [Case Study: One Telecom] keep intact; BRIDGE into §9.8. Note: case untouched; bridge sentence opens §9.8 on execution.
 - [ ] 15. [§9.8.1] LIST-TO-NARRATIVE + desk-head constraints; hinge Math, Gently.
 - [ ] 16. [§9.8.2] SHOP-LIFE opener + ANOTHER-SEAT (dealer desk via Man).
 - [ ] 17. [§9.8.3] keep; move cost-curve Trend Watch to end of §9.8.

@@ -10,7 +10,8 @@
 | §4.1 Ares box; §4.10 Coda bullet; §4.10 story | Ares/BlueCove completion "early February 2026" | Resolved: Business Wire, "Ares Completes Acquisition of BlueCove to Launch Systematic Credit Strategy" (release ID 20260202) | resolved |
 | §4.2 annotation on the fundamental law (CDS vs cash breadth) | Cboe IBIG and IBHY block trades topped \$1bn a month in July and August 2026, "according to exchange data reported by The DESK, 16 October 2026" | Primary Cboe volume data not opened | open |
 | §4.3 map, Capacity column, BlackRock / Robeco / Acadian rows | "Silent (none found)" | Confirm no capacity statement in these firms' public material | open |
-| §4.7 dealer View From Another Seat | Jefferies and Bank of America: no public view reported | U3 perspectives search for a citable statement by either desk | open |
+| §4.7 dealer View From Another Seat | Jefferies and Bank of America named only as examples of the bank-desk seat; the box now attributes no view to either (verifier, 2026-10-18, corrected an earlier line saying no public statement existed) | `perspectives_dealers_and_systematic_shops.md` holds Jefferies heads-of-credit-trading statements (Orlan, Jallot, Parrenin); none found for Bank of America. A later pass may add a cited Jefferies line | open |
+| §4.1 pod scene, closing sentence | "the pay, netting and capacity arithmetic in Chapter 28, which proves what Ines has just asserted" | Ch 28 as of this date has no fee-waterfall or netting section (`rv_thread.md` row T12 assigns it); the Ch 28 reviser must supply it or this sentence must be softened | open |
 
 ## 24_ch24_bond_cds_basis_and_deliverables (U2, 2026-10-18)
 

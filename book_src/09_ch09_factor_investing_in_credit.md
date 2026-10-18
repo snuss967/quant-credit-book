@@ -571,15 +571,23 @@ There is a human version of the informed investor, too. Barclays' QPS and credit
 
 ### 9.7.1 The combination formula
 
-Scale each factor's return series $f_{k,t}$ to unit volatility, so its mean is its information ratio $\text{IR}_k$. A combination with weights $w$ has mean $w^\top \text{IR}$ and variance $w^\top \rho\, w$, where $\rho$ is the factor correlation matrix. Hence
+Kaz's instinct, the morning after the cold open, was to throw every row of the factor menu into one score and let diversification do the rest. Ines asked how many rowers the boat could take before it slowed down, which Kaz assumed was a metaphor and which turned out to be arithmetic.
+
+> **Math, Gently.** *Correlation, and two rowers.* Correlation is a number between −1 and +1 that says how much two things move together: +1 is lockstep, 0 is no relation, −1 is one zigging whenever the other zags. In a blend of factors it decides how much of their wobble cancels. Picture two rowers in one boat, each pulling with the same average strength (an IR of 1.0 each), with strokes that wobble at random. If their wobbles are unrelated they partly cancel: the boat gets twice the pull but only $\sqrt{2}$ times the wobble, so the pair's IR is $2/\sqrt{2} = \sqrt{2} \approx 1.41$. If their wobbles are correlated 0.5 they cancel less, the wobble grows to $\sqrt{1 + 1 + 2 \times 0.5} = \sqrt{3}$, and the IR falls to $2/\sqrt{3} \approx 1.15$. Now go back to the uncorrelated pair and add a third, weaker rower, IR 0.2, unrelated to the other two, with an oar the same size as theirs. The pull rises to 2.2, the wobble rises to $\sqrt{3}$, and the boat's IR falls from 1.41 to $2.2/\sqrt{3} \approx 1.27$. He is pulling forward and still slowing the boat down, because at equal weight his wobble costs more than his pull adds. Give him a smaller oar and he helps; the formula next says how small. Chapter 8-B's box on variance adding in quadrature has the long version of the wobble arithmetic.
+
+The whole result, with the optimal oar sizes, is
 
 $$
 \text{IR}_{\text{combo}}(w) \;=\; \frac{w^\top \text{IR}}{\sqrt{w^\top \rho\, w}}, \qquad
 w^{\ast} \;\propto\; \rho^{-1}\,\text{IR}, \qquad
-\text{IR}_{\text{combo}}(w^{\ast}) \;=\; \sqrt{\text{IR}^\top \rho^{-1}\,\text{IR}} \;\ge\; \max_k |\text{IR}_k| . \tag{9.5}
+\text{IR}_{\text{combo}}(w^{\ast}) \;=\; \sqrt{\text{IR}^\top \rho^{-1}\,\text{IR}} \;\ge\; \max_k |\text{IR}_k| , \tag{9.5}
 $$
 
-The inequality follows from Cauchy–Schwarz and holds in-sample for the optimal weights. It does *not* hold for equal-risk weights $w = \mathbf{1}/K$. With three uncorrelated factors of IR 3.0, 0.5, and 0.5, the equal-risk combination has IR $4/\sqrt3 = 2.31$, which loses to the best single factor. Equal-risk combination wins when the component IRs are similar and the correlations are low. Otherwise, weight by $\rho^{-1}\text{IR}$, shrunk toward equal weights because both inputs are estimated with error.
+where $\rho$ is the factor correlation matrix. The optimal blend never loses to its best single factor in-sample. Equal-risk weights $w = \mathbf{1}/K$ carry no such promise: with three uncorrelated factors of IR 3.0, 0.5, and 0.5, the equal-risk combination has IR $4/\sqrt3 = 2.31$ and loses to the best single factor, which is the box's third rower at a larger scale. Equal weights earn their place when the component IRs are similar and the correlations low, because then the estimation error in $\rho^{-1}\text{IR}$ would cost more than its precision buys. When one factor is much stronger than the rest, the optimal weights pay for themselves, and the desk shrinks them toward equal weights because both inputs are estimated with error.
+
+#### The Full Derivation
+
+Scale each factor's return series $f_{k,t}$ to unit volatility, so its mean is its information ratio $\text{IR}_k$. A combination with weights $w$ has mean $w^\top \text{IR}$ and variance $w^\top \rho\, w$, so its information ratio is $\text{IR}_{\text{combo}}(w) = w^\top \text{IR} / \sqrt{w^\top \rho\, w}$. The ratio does not change when $w$ is scaled, so maximize $w^\top \text{IR}$ subject to $w^\top \rho\, w = 1$. The Lagrangian's first-order condition, $\text{IR} = 2\nu\,\rho\, w$ for a multiplier $\nu$, gives $w^\ast \propto \rho^{-1}\text{IR}$, and substituting back gives $\text{IR}_{\text{combo}}(w^\ast) = \sqrt{\text{IR}^\top \rho^{-1}\,\text{IR}}$. The inequality in (9.5) follows from Cauchy–Schwarz and holds in-sample for the optimal weights; the plain-language version is that putting all the weight on the best factor is one of the choices the optimizer could have made, so its optimum can do no worse. It does *not* hold for equal-risk weights.
 
 Run the formula backward on published numbers. Israel, Palhares, and Richardson's quintile-spread Sharpe ratios are carry 0.35, defensive 1.11, momentum 0.85, and value 1.75, and their equal-risk combination is 2.19. With four equal weights, $2.19 = 4.06/\sqrt{4 + 12\bar\rho}$ implies an average pairwise correlation $\bar\rho \approx -0.05$. Man's simulated IRs (Value 2.15, Momentum 1.69, Quality 1.55, Informed Investor 0.79, Final 2.35; Man p.28) imply $\bar\rho \approx 0.24$ under the same equal-risk assumption. Treat both as back-of-the-envelope figures, since neither firm necessarily combines at the return level with equal weights. The direction still teaches something: diversification across credit factors is real but not free, and the correlations that matter are the ones *after* DTS neutralization. The pairwise matrix from Henke et al. that Man reproduces for investment grade (Man p.27) shows the expected structure: Value–Carry +0.52 (two spread-adjacent sorts), Value–Momentum 0.00, Value–Quality −0.04, Value–Size −0.10, Momentum–Quality −0.07, Momentum–Carry +0.02, Quality–Carry −0.21. Figure 9.4 plots equation (9.5) for both sets of published numbers.
 
@@ -591,13 +599,29 @@ Run the formula backward on published numbers. Israel, Palhares, and Richardson'
 
 ### 9.7.2 Effective breadth: forty-seven hats again
 
-By the fundamental law, $\text{IR} \approx \text{IC}\sqrt{\text{BR}}$. In credit, breadth is not the bond count. With $N$ bonds from issuers holding $\bar n$ bonds each, and within-issuer return correlation $\bar\rho_w$,
+By the fundamental law, $\text{IR} \approx \text{IC}\sqrt{\text{BR}}$: skill per bet times the square root of the number of independent bets, which Chapter 4 derives with issuer clustering and Chapter 7 dresses in hats. In credit, breadth is not the bond count. With $N$ bonds from issuers holding $\bar n$ bonds each, and within-issuer return correlation $\bar\rho_w$,
 
 $$
 \text{BR}_{\text{eff}} \;\approx\; \frac{N}{1 + (\bar n - 1)\,\bar\rho_w}.
 $$
 
 Man's universe of more than 10,000 bonds from about 2,000 issuers (Man p.10–11) has $\bar n \approx 5$. At $\bar\rho_w = 0.8$, effective breadth is $10{,}000/4.2 \approx 2{,}400$ per cross-section, not 10,000: forty-seven bonds from one issuer are one data point wearing forty-seven hats (Chapter 7). That is still an enormous advantage over CDS, where only around 100 US single names trade regularly (Man p.10–11), and it is the reason serious credit factor investing is done in cash bonds. Bond-level value (§9.3.4) is the one signal that recovers some of the lost breadth, because it is the one that differs across an issuer's bonds.
+
+Hats are not only a bond-level problem. They can be sewn into a book of trades that each look independent.
+
+*Dov Adler's pod and the Vantress platform are fictional composites, and the loadings and shares below are illustrative; the factor definitions are this chapter's.*
+
+On the last Tuesday of September, Marcus Oyelaran, the platform's risk manager for the credit pods, ran the overnight x-ray on Dov Adler's Pair Book a second way. The usual way regresses the pod's P&L on CDX HY and the rate curve and asks what the book is long that it did not mean to be. On that test Dov's dozen pairs passed, as they always did: each was matched on market-value DTS leg by leg, so the hedge had removed the market. The second way regressed the same P&L on five of this chapter's factors, each built DTS-neutral: value, momentum, carry, low-risk and quality.
+
+The value loading came back at 0.7. Marcus walked the sheet over himself, which on a platform is how you know a number is serious.
+
+"Twelve pairs," he said. "Twelve theses, each a sentence with a date in it. In every one of them the long leg is the cheaper name in its cell on spread per turn of leverage." He let Dov read it. "You don't have twelve views. You have one view, twelve times. It's a value factor with extra steps."
+
+Nobody had noticed because cheaper is not the same as wider. In Kestrel against Halvorsen, the book's anchor pair, the long leg is the *tighter* bond; it is cheaper per turn of leverage, which is exactly what a value sort would have bought. Dov read his thesis sentences down the page. Every one was a reason the cheaper credit deserved a better price, and none of them said so.
+
+The arithmetic of isolation was now explicit. The DTS hedge had removed the market. It had not removed the factor, so on any month the value factor lost, all twelve residuals would lose together, and the book's effective breadth on that axis was one hat. What idio remained once the value loading was taken out was about a third of the book's P&L variance on Marcus's sheet. What leaked was the rest, and it leaked through the one door the pod could not lock with a CDX trade, because nobody sells a short position in a credit value factor for a few basis points. Neutralising it meant resizing pairs against the value score, which gives up expected P&L while the financing on the longs and the borrow fees on the shorts keep running on whatever gross remains; admitting it meant the platform would charge the loading as factor risk, at the price of something it could buy elsewhere for less.
+
+Dov did both. He kept full size on the four pairs whose thesis really was cheapness and said so in their ledger lines, and he cut the other eight until the book's value loading read 0.2. The platform, as Chapter 8 §8.8 and Chapter 28 argue at length, pays for the residual. It is not in the market for its own factors sold back to it.
 
 ### Case Study: One Telecom, Four Factors (Man Numeric, 2016–2017)
 
@@ -607,7 +631,7 @@ Read it as an RSSG reader would. Each signal is a witness who saw a different pa
 
 ## 9.8 Portfolio Construction Under Costs
 
-The signal tells you what you would like to own. Construction tells you what you can afford to own. In credit the second question is the larger one.
+Four witnesses agreed on the telecom, and the position was still a trade somebody had to execute at 1,200bp, in size, through a dealer who could see it coming. The signal tells you what you would like to own. Construction tells you what you can afford to own. In credit the second question is the larger one.
 
 ### 9.8.1 The optimizer
 

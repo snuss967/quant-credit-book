@@ -255,6 +255,12 @@ The life cycle runs warehouse → pricing → ramp → effective date → reinve
 
 ### 21.3.1 Derivation: the arbitrage and its 11× gearing
 
+> **Math, Gently.** *Why 50 bp becomes 5.6 points.* Take Mags's bank literally. On one side of its balance sheet sits a dollar of loans. On the other sit 91 cents of notes, owed to the AAA-through-BB investors at spreads fixed in the indenture, and 9 cents of equity that gets whatever is left over. Now let the loans' spread fall by 10 bp. The noteholders do not notice, because their spreads do not move. So the whole loss, 10 bp a year on a full dollar, which is a tenth of a cent, lands on 9 cents of equity. A tenth of a cent out of 9 cents is about 1.1% of the equity's money a year. That ratio of a dollar of exposure to 9 cents of capital is the gearing, $1/0.09 \approx 11$, and every basis point of collateral spread reaches the equity multiplied by it. Scale the repricing up to 50 bp, a busy January's worth, and the equity loses about $11 \times 0.50 \approx 5.6$ points of yield a year. The lever works upward too, which is why managers fight for every cheap point of par. The general version, with fees and losses in it, is next.
+
+Formally, the equity's yield is the base rate plus the pool's excess spread divided by the equity's thickness, equation (21.3), and the gearing is that equation's derivative.
+
+#### The Full Derivation
+
 Work per unit of collateral par. Let liability class $k = 1,\dots,K$ have size $w_k$ (as a fraction of collateral par) and spread $s_k$ over the base rate $b$. The equity is $w_E = 1 - \sum_k w_k$. The assets earn $b + \text{WAS}$, where WAS is the weighted-average spread. Annual fees are $f$ (senior and subordinated management fees plus administration), and expected annual credit loss is $\text{EL} = \text{PD} \cdot L$, with $L = 1 - R$. The equity's annual cash yield is what is left after paying the notes, divided by the equity's size:
 
 $$
@@ -280,6 +286,12 @@ Compare two vintages. Moyer's 2004 worked example uses collateral at 535 bp and 
 
 ### 21.3.2 Derivation: why every CLO owns the same 200 names
 
+> **Math, Gently.** *Two hundred and fifty coins that like to agree.* A distribution is a list of what could happen and how likely each outcome is, and two numbers summarize most of what a rating agency wants from one: the mean, the average outcome, and the variance, the average squared miss from that mean (its square root, the standard deviation, is the typical miss in dollars). Here is the building block. A fair coin that pays \$1 on heads has a mean of 50 cents and a variance of 0.25. Flip 250 independent coins and both add up: the mean is \$125 and the variance is $250 \times 0.25 = 62.5$, so the typical miss is about \$7.90, around 6% of the mean. Independence lets the misses cancel. Now make the coins slightly sticky, so that any two land the same way a little more often than chance: a correlation of 3%. Each pair adds a sliver of extra variance, and there are $250 \times 249$, about 62,000, ordered pairs. The variance becomes $62.5 \times (1 + 249 \times 0.03) \approx 62.5 \times 8.47 \approx 529$, and the typical miss is \$23. How many independent coins, each made bigger so the stake still totals \$250, would wobble by that same \$23? About $250 / 8.47 \approx 29.5$. That is the diversity score: 250 sticky coins carry the risk of about 30 honest ones. Add another thousand coins at the same stickiness and the score creeps toward $1/0.03 \approx 33$ and stops. Correlation puts a ceiling on diversification, because it makes the variance of a sum bigger than the sum of the variances. (Chapter 5 is where distributions in general live; this chapter needs only the mean, the variance and that one fact.)
+
+The derivation runs the same arithmetic for loans, with par, default probability and loss given default in place of the coin's dollar, and arrives at equation (21.4).
+
+#### The Full Derivation
+
 Rating agencies require diversity, and Moody's measures it with the binomial expansion technique (BET). BET replaces a pool of correlated credits with a smaller number of *independent* credits that match the first two moments of the loss distribution. `Schmid_Credit_Risk_Pricing_Models p.183–184` gives the general formulas. Here is the homogeneous case, which is all the intuition needs. Take $J$ obligors, each with par $n_0$, default probability $P$ over the horizon, loss given default $L$, and pairwise default correlation $\rho$. The pool loss has mean and variance
 
 $$
@@ -293,7 +305,7 @@ $$
 \text{DS} \;=\; \frac{J}{1 + (J-1)\rho}. \tag{21.4}
 $$
 
-(Schmid calls this number the "diversity score of the collateral pool." We write it DS to keep $n$ free for par and $D$ free for duration.) With $J = 250$ and $\rho = 0.03$, $\text{DS} \approx 29.5$. As $J \to \infty$, $\text{DS} \to 1/\rho$. Adding names beyond about a hundred buys almost nothing, so managers meet the diversity test and then compete for the same large, liquid, B2/B-rated names that also satisfy the WARF (weighted-average rating factor) and WAS tests and can be sold if needed. The result is heavy overlap. Elkamhi and Nozawa's working-paper title said it plainly: "Too Big to Diversify." The test that makes each CLO diversified makes the CLO *sector* concentrated. When one large borrower is downgraded, it hits many CLO tests at once. §21.4 turns that correlation into a price.
+(Schmid calls this number the "diversity score of the collateral pool." We write it DS to keep $n$ free for par and $D$ free for duration.) The coins carry over exactly: with $J = 250$ and $\rho = 0.03$, $\text{DS} \approx 29.5$, and as $J \to \infty$, $\text{DS} \to 1/\rho$. Adding names beyond about a hundred buys almost nothing, so managers meet the diversity test and then compete for the same large, liquid, B2/B-rated names that also satisfy the WARF (weighted-average rating factor) and WAS tests and can be sold if needed. The result is heavy overlap. Elkamhi and Nozawa's working-paper title said it plainly: "Too Big to Diversify." The test that makes each CLO diversified makes the CLO *sector* concentrated. When one large borrower is downgraded, it hits many CLO tests at once. §21.4 turns that correlation into a price.
 
 ## 21.4 The Tests as an Option Book
 

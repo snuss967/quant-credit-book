@@ -125,25 +125,31 @@ $$
 
 Equation (20.1) is an identity. It needs no assumptions, which is why it is useful: every argument about bond ETF premiums is an argument about which of the three terms is large, and each term has its own villain. In the **flow term** $\ell_t$, the ETF price differs from the true value of what it holds; this is the only term an AP can arbitrage, and only outside the band of §20.3. In the **staleness term** $s_t$, the true value differs from the pricing service's opinion. Nobody can arbitrage that, because nobody can trade at the evaluated price, but it is a *forecast*: the NAV will move toward the ETF. And the **accounting term** $\bar c_t$ is a near-constant positive premium created by marking at the bid, about 10 bp for an IG fund with a value-weighted half-spread of 10 bp and about 30 bp for an HY fund at 30 bp *(illustrative magnitudes)*. Mags's thumb on the scale, in other words, has a size.
 
-Now give staleness a model. The simplest one that matches how evaluators behave is **partial adjustment**: each day the evaluated level closes a fraction $\eta \in (0, 1]$ of the gap to the truth,
+Now give staleness a model, one that matches how Mags's evaluators actually behaved.
 
-$$
-\ln \tilde M_t = \ln \tilde M_{t-1} + \eta\,\left(\ln M_t - \ln \tilde M_{t-1}\right).
-$$
+> **Math, Gently.** *The evaluator who closes half the gap.* Picture a thermostat that, at every tick, moves the room halfway to the setting. Throw the setting five degrees down and the room is 2.5 degrees too warm after the first tick, 1.25 after the second, 0.625 after the third, and it never quite arrives. A pricing service that sees evidence slowly behaves the same way: each day it closes a fraction $\eta$ of the gap between its mark and the level at which the bonds would really clear. Take $\eta = 0.5$ and one bad day on which the bonds' true value falls 5%. That evening the NAV overstates value by 2.5%, so an ETF priced *exactly* at fair value prints a 2.5% discount *(illustrative)*. The ETF isn't at a discount. The NAV is at a premium. It's the same number with a different villain. The next evening the staleness is $-1.25\%$, then $-0.625\%$, halving each day. Square each day's staleness and add: $6.25 + 1.56 + 0.39 + \dots = 8.33$, exactly one third of the shock squared ($25$). That one third is $(1-\eta)^2 / \big(\eta(2-\eta)\big) = 0.25/0.75$, and when shocks arrive every day at random it becomes the ratio of the staleness variance to the daily return variance. A fresher evaluator ($\eta = 0.8$) shrinks it to $0.04/0.96$, about 4%; a sleepier one ($\eta = 0.2$) inflates it to $0.64/0.36$, nearly 1.8, so the staleness is noisier than the market it is late about. The geometric series that makes this exact is next.
 
-Subtract both sides from $\ln M_t$, and write $r_t = \ln M_t - \ln M_{t-1}$ for the true log return:
-
-$$
-s_t = \ln M_t - \ln \tilde M_t = (1 - \eta)\left(\ln M_t - \ln \tilde M_{t-1}\right) = (1 - \eta)\left(s_{t-1} + r_t\right).
-$$
-
-Iterating backwards,
+In symbols, **partial adjustment** makes staleness an exponentially weighted sum of recent true log returns $r_t = \ln M_t - \ln M_{t-1}$:
 
 $$
 s_t = \sum_{j=0}^{\infty} (1 - \eta)^{j+1}\, r_{t-j}. \tag{20.2}
 $$
 
-Staleness is an exponentially weighted sum of recent true returns. If true returns are i.i.d. with mean zero and variance $\sigma_r^2$ under $\mathbb{P}$, then $\mathbb{E}^{\mathbb{P}}[s_t] = 0$ and
+#### The Full Derivation: staleness as a geometric series
+
+Each day the evaluated level closes a fraction $\eta \in (0, 1]$ of the gap to the truth,
+
+$$
+\ln \tilde M_t = \ln \tilde M_{t-1} + \eta\,\left(\ln M_t - \ln \tilde M_{t-1}\right).
+$$
+
+Subtract both sides from $\ln M_t$ and use the true log return $r_t$:
+
+$$
+s_t = \ln M_t - \ln \tilde M_t = (1 - \eta)\left(\ln M_t - \ln \tilde M_{t-1}\right) = (1 - \eta)\left(s_{t-1} + r_t\right).
+$$
+
+Iterating backwards gives (20.2). If true returns are i.i.d. with mean zero and variance $\sigma_r^2$ under $\mathbb{P}$, then $\mathbb{E}^{\mathbb{P}}[s_t] = 0$ and
 
 $$
 \operatorname{Var}^{\mathbb{P}}(s_t) = \sigma_r^2 \sum_{j=0}^{\infty} (1-\eta)^{2(j+1)} = \frac{(1-\eta)^2}{1 - (1-\eta)^2}\,\sigma_r^2 = \frac{(1-\eta)^2}{\eta\,(2 - \eta)}\,\sigma_r^2.
@@ -151,7 +157,10 @@ $$
 
 The boundary cases check out. At $\eta = 1$ the evaluator is perfectly fresh and $s_t \equiv 0$. As $\eta \to 0$ the variance explodes: a NAV that never updates eventually differs from the truth by the entire cumulative return.
 
-The stress case is a single large move. If the portfolio's true value falls 5% in one day and the evaluator closes half the gap ($\eta = 0.5$), then $s_t = 0.5 \times (-5\%) = -2.5\%$. The NAV overstates value by 2.5%, so an ETF priced *exactly* at fair value prints a 2.5% discount *(illustrative)*. The ETF isn't at a discount. The NAV is at a premium. It's the same number with a different villain.
+<!-- FIGURE: ch20_staleness_variance.png (curve: Var(s)/sigma_r^2 = (1-eta)^2/(eta(2-eta)) over eta in (0,1], eta = 0.5 -> 1/3 marked) -->
+
+<!-- FIGURE: ch20_premium_decomposition.png (stacked: simulated 60-day path with one -5% day, eta = 0.5, c-bar = 30 bp, 2 bp price noise; l_t, s_t, c-bar stacked to p_t per (20.1)). Caption: "The same discount, three villains: after a 5% drop the staleness term is most of the printed discount for a week while the flow term is noise." -->
+
 
 ### 20.2.2 Measuring staleness: does the NAV catch up?
 
@@ -169,25 +178,31 @@ $$
 
 Regress the NAV's daily log return on yesterday's log premium. The slope estimates $\eta$, the speed at which the NAV catches up to the ETF, and the intercept estimates $-\eta \bar c$. Under i.i.d. true returns, $r_t$ is uncorrelated with $p_{t-1}$, so ordinary least squares is consistent. This is the regression version of a finding that Shim and Todorov (BIS WP 975, 2021) report for ETFs with fractional baskets: persistent premiums and discounts, linked to NAV returns that adjust slowly to ETF returns.
 
-Two caveats keep the regression honest. First, if the flow term is not negligible and is independent of staleness, then $p_{t-1} - \bar c = s_{t-1} + \ell_{t-1}$, and the slope is attenuated to
+Theo asked what a small slope would mean, and Kaz, who likes a regression best when it can embarrass somebody, said it depends on what else is hiding in the premium. If the flow term is not negligible and is independent of staleness, then $p_{t-1} - \bar c = s_{t-1} + \ell_{t-1}$, and the premium on the right-hand side is staleness read through a noisy instrument.
+
+> **Math, Gently.** *A ruler with a wobbling zero.* Chapter 1's box on regression slopes says what a slope is; this is what happens when the variable on the horizontal axis is measured badly. Suppose you want to know how much a plant grows per hour of sunlight, but your light meter's zero wobbles at random every time you read it. Some of the days that look sunny are days on which the meter read high by accident, and on those days the plant grows only as much as the real sunlight allows. The line through the points comes out flatter than the truth, never steeper, and how much flatter depends on how much of the meter's variation is wobble. The premium is that meter: it reads staleness plus flow, and only the staleness predicts tomorrow's NAV. Tiny number: staleness variance 4 and flow variance 12 (both in squared basis points). The staleness share of the premium's variance is $4/(4+12) = 1/4$, so the slope reads $\eta/4$. An evaluator that closes 40% of the gap each day ($\eta = 0.4$) shows up as a slope of 0.10, and looks like one that closes a tenth. The same scatter tells two stories, a slow NAV beside a quiet ETF or a quick NAV beside a noisy one. The formula follows.
+
+Formally, the slope is attenuated to
 
 $$
-\hat\eta \;\to\; \eta \cdot \frac{\operatorname{Var}(s)}{\operatorname{Var}(s) + \operatorname{Var}(\ell)}.
+\hat\eta \;\to\; \eta \cdot \frac{\operatorname{Var}(s)}{\operatorname{Var}(s) + \operatorname{Var}(\ell)},
 $$
 
-The slope is therefore $\eta$ times the staleness share of premium variance. A small slope can mean a fresh NAV or a noisy ETF, and you need a second instrument (the ETF's own lagged returns, or a matched fund) to tell which. Second, $\bar c_t$ is not constant in stress: spreads widen, so $-\Delta \ln(1 - \bar c_t)$ becomes a negative drag on NAV returns exactly when you are running the regression. Estimate on calm windows, then test whether $\eta$ falls in stress.
+$\eta$ times the staleness share of premium variance. A small slope can mean a fresh NAV or a noisy ETF, and only a second instrument (the ETF's own lagged returns, or a matched fund) can tell which.
+
+The spread itself is the other thing hiding in the regression. $\bar c_t$ is not constant in stress: spreads widen, so $-\Delta \ln(1 - \bar c_t)$ becomes a negative drag on NAV returns in exactly the weeks when everyone most wants the estimate. That is why the desk estimates $\eta$ on calm windows and then asks, as a separate question, whether it falls in stress.
 
 ### 20.2.3 The three readings of a discount
 
 In March 2020, three serious readings of the same discount appeared, and each one is a claim about which term of (20.1) dominated.
 
-**Reading one: the ETF was the price, and the NAV was late ($s_t$ dominates).** BlackRock's ViewPoint argued that the largest US floating-rate bond ETF, which closed at an 8% discount on March 12, was "acting as a price discovery vehicle" because many of its underlying bonds "had not traded over the period." The SEC staff's October 2020 credit-markets report noted that "ETF market prices are viewed by some market participants as a more reliable indicator of actionable value than the ETF's NAV."
+**Reading one: the ETF was the price, and the NAV was late ($s_t$ dominates).** BlackRock's ViewPoint argued that the largest US floating-rate bond ETF, which closed at an 8% discount on March 12, was "acting as a price discovery vehicle" because many of its underlying bonds "had not traded over the period." The SEC staff's October 2020 credit-markets report noted that "ETF market prices are viewed by some market participants as a more reliable indicator of actionable value than the ETF's NAV." This is Kaz's reading, and Kaz holds it the way a physicist holds a conservation law: "Before I believe any discount, I want to know how much of it is the NAV still catching up. That part isn't a trade. It's a weather forecast for the marks."
 
-**Reading two: the ETF was what people could sell ($\ell_t$ dominates).** Haddad, Moreira and Muir ("When Selling Becomes Viral," NBER w27168, 2020; *RFS* 2021) found the largest discounts in Treasury, municipal and IG ETFs, not in high yield, and wrote: "there was no discount in high yield in mid March when there was a large discount for the other categories ... This is evidence against a pure price staleness story." Staleness should be worst in the least liquid bonds, so if staleness were the whole story, HY should have shown the deepest discount. Instead, investors sold the safest liquid wrappers to raise cash, pushing $\ell_t$ deeply negative where the selling was concentrated.
+**Reading two: the ETF was what people could sell ($\ell_t$ dominates).** Haddad, Moreira and Muir ("When Selling Becomes Viral," NBER w27168, 2020; *RFS* 2021) found the largest discounts in Treasury, municipal and IG ETFs, not in high yield, and wrote: "there was no discount in high yield in mid March when there was a large discount for the other categories ... This is evidence against a pure price staleness story." Staleness should be worst in the least liquid bonds, so if staleness were the whole story, HY should have shown the deepest discount. Instead, investors sold the safest liquid wrappers to raise cash, pushing $\ell_t$ deeply negative where the selling was concentrated. Ines reads it as a poker player reads a table where everyone is short of chips: "When everybody needs cash at once, the safest wrapper is the one people can sell, so it's the one they sell first. Quality doesn't protect you from that. Quality is why you get picked."
 
-**Reading three: there was no single "true" value ($M_t$ is an interval).** MSCI (Bohák & Janosik, 2020-04-08) documented that same-day traded-price dispersion in IG bonds peaked on March 19, the day LQD closed at a 5.08% discount. If identical bonds trade at prices several points apart on the same afternoon, $M_t$ is a band of width $2u_t$, not a number. A premium with $|p_t - \bar c| < u_t$ is not statistically distinguishable from zero.
+**Reading three: there was no single "true" value ($M_t$ is an interval).** MSCI (Bohák & Janosik, 2020-04-08) documented that same-day traded-price dispersion in IG bonds peaked on March 19, the day LQD closed at a 5.08% discount. If identical bonds trade at prices several points apart on the same afternoon, $M_t$ is a band of width $2u_t$, not a number. A premium with $|p_t - \bar c| < u_t$ is not statistically distinguishable from zero. Mags, who marked bonds through that week from the other side of a dealer's desk, puts it more shortly: "There was no true price. There was a range, and it depended on who you called."
 
-All three readings are right about something, and the desk does not have to choose among them. Equation (20.1) is the bookkeeping that lets you hold all three at once. Staleness is estimated with (20.3), measurement width with same-day TRACE dispersion, and whatever is left is flow. Only the flow term is a trade.
+All three readings are right about something, and the desk does not have to choose among them. Equation (20.1) is the bookkeeping that lets it hold all three at once. Staleness is estimated with (20.3), measurement width with same-day TRACE dispersion, and whatever is left is flow. Only the flow term is a trade. Section 20.5 gives each reader a card on 19 March 2020 and grades it against these three papers.
 
 > **[SOURCE EXTRACTION]** *Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.9:* "The rise of passive bond ETFs has potentially created further distortions that will drive pricing away from fundamentals and produce opportunities for active investment strategies."
 >

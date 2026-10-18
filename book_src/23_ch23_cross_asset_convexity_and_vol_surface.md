@@ -22,7 +22,7 @@ Nobody points out that the somebody is Ines. That is the ritual working: she lif
 
 ROBO's overnight batch, asked to "compute the equity-implied CDS spread for every bank in the book," has helpfully populated a column. SVB Financial Group: 12bp. Nobody has the heart to tell it.
 
-Kaz, who does have the heart, opens the inputs, expecting a bug. There isn't one. The stock is Wednesday's close, the volatility is Wednesday's at-the-money level, the recovery is the house default, and the debt per share is the holding company's senior notes, about \$3.3 billion over 59 million shares, call it \$56 a share against a \$268 stock (computed from the 10-K; the run is illustrative). Feed those to the model Section 23.2 builds and 12bp is what comes out. ROBO did exactly what it was asked, about exactly the entity it was given. Kaz writes *which F?* on a sticky note and presses it onto the monitor bezel, where it will stay until Section 23.8.
+Kaz, who does have the heart, opens the inputs, expecting a bug, and finds none in the arithmetic. The stock is Wednesday's close. The debt per share counts the holding company's own notes, about \$3.3 billion over 59 million shares, call it \$56 a share against a \$268 stock; the \$173 billion of deposits at the bank are not in the column at all (computed from the 10-K; the run is illustrative). Feed choices like those to the model Section 23.2 builds and 12bp is what comes out. ROBO did exactly what it was asked, about exactly the entity it was given. Kaz writes *which F?* on a sticky note and presses it onto the monitor bezel, where it will stay until Section 23.8.
 
 Mags watches the fills stack up on the board and says what she thinks the trouble is, which is not a model. "When it's assets wobbling, the stock and the bonds are arguing about the same thing, and one of them is just slow. When it's a run, or a contract, or a regulator with a pen, they aren't arguing about the same thing at all. Then your arbitrage is a bet on who wrote the document."
 
@@ -118,6 +118,8 @@ Theo has been sketching the rows as a curve. "So if I plot equity vol against th
 
 Merton is the right picture and the wrong production model. It needs a single debt maturity, it puts default only at $T$, and short-dated spreads in it go to zero for any firm not already insolvent, which is not what the CDS market says. In May 2002 RiskMetrics Group, working with Goldman Sachs, JPMorgan, and Deutsche Bank, published the *CreditGrades Technical Document* (Finger, Finkelstein, Lardy, Pan, Ta and Tierney, 2002): a first-passage barrier model whose inputs are the stock price, an equity volatility, debt per share, and three constants. You can calibrate it before the coffee is ready, and two decades later it is still the default equity-to-credit bridge on many desks.
 
+The coffee line matters more than it sounds. The desk runs an equity-implied spread on about 900 names every night *(illustrative)*, and nobody reads 900 rows. People read the dozen rows that moved, and the morning question is never whether the model is elegant. It is whether the column is wrong in a way somebody can see before they trade on it: a stock that split and kept its old strikes, a debt-per-share figure that still counts a bond redeemed last month, a bank that slipped into a list built for industrials. A model with four auditable inputs and three published constants fails loudly when an input is wrong, and loud failures are the kind a data team catches. ROBO's 12bp for SVB Financial Group was a failure of the quiet kind. The spec at the end of this section takes it apart, and Section 23.4 spends a week with a data team catching the loud kind.
+
 **Notation, renamed.** CreditGrades writes $S$ for the stock (we use $S_t$, as in the market-making chapters), $D$ for debt per share (we use $F^{\text{ps}}$, since $D$ is duration in this book), $\bar L$ for the mean global recovery (we use $\bar\ell$, since $L = 1-R$ is loss given default), and $\lambda$ for the dispersion of the barrier (we use $\nu$, since $\lambda$ is reserved for the hazard rate). Survival is written $\mathcal{S}(t) = \mathbb{Q}(\tau > t)$ in calligraphic type in this chapter, because the stock price $S_t$ is on every line.
 
 ### The model
@@ -129,6 +131,36 @@ $$
 $$
 
 The barrier uncertainty is the whole trick. A known barrier with continuous asset paths gives zero short-dated spreads; an uncertain barrier means you might already be closer to it than you think.
+
+> **Math, Gently.** *The drunk, the lamppost and the gutter: first passage and the reflection principle.* A drunk leaves a lamppost at ten o'clock with no plan; every step is a coin flip, left or right. How likely is he to touch the gutter, a fixed distance to his left, before midnight? Counting where he ends up is not enough, because a man who touched the gutter at eleven may be back on the pavement by twelve. The trick is a mirror. Take any path that touched the gutter and reflect every step after the first touch, so that left becomes right. The mirrored path is just as likely, and it ends on the far side of the gutter. So every touched path that ends on the pavement has an equally likely twin that ends in the gutter, and every path that ends in the gutter must have touched it, which makes $\mathbb{P}(\text{touched by midnight}) = 2 \times \mathbb{P}(\text{ends in the gutter})$. A tiny number: a standard Brownian motion over one year with a floor at −1. The chance of *ending* below −1 is $N(-1) = 0.159$, so the chance of touching the floor at some point in the year is $2 \times 0.159 = 0.318$, twice the answer you get by looking only at the end. That doubling is why barrier models default so much more often than terminal-value models with the same inputs; a drift, such as the $-\tfrac12\sigma^2$ that rode along in Section 23.1, tilts the mirror, and the tilt is the factor $d$ in the second term of (23.3). The second part of the trick is CreditGrades's own. Nobody knows exactly where the gutter is, because the recovery that sets the barrier is uncertain. Not knowing where the gutter is turns out to be, to a very good approximation, the same as not knowing exactly where the drunk started, and that is the same as having started the clock earlier. So the model starts the walk before time zero. A few of those early walks have already reached the gutter by ten o'clock, which is why survival at time zero comes out below one. The three equations it produces come next, and the algebra after them.
+
+Fold the floor's uncertainty into the starting point, apply the mirror, and survival to $t$ is the document's equation (2.11) in our notation, with $d = V_0 e^{\nu^2}/(\bar\ell F^{\text{ps}})$ measuring how far the assets sit above the expected barrier:
+
+$$
+\mathcal{S}(t) = N\!\Big(-\frac{\Sigma_t}{2} + \frac{\ln d}{\Sigma_t}\Big) - d\, N\!\Big(-\frac{\Sigma_t}{2} - \frac{\ln d}{\Sigma_t}\Big), \qquad \Sigma_t^2 = \sigma_V^2 t + \nu^2 . \tag{23.3}
+$$
+
+Boundary check: as $\nu \to 0$ it collapses to the standard first-passage survival of a driftless lognormal against a known barrier; as $t \to \infty$ it goes to zero; and at $t = 0$, $\Sigma_0 = \nu > 0$ and $\mathcal{S}(0) < 1$. That last fact is not a typo. The time shift puts probability mass on "already defaulted at inception," and the document itself flags the "counterintuitive result that there is a non-zero probability of default at t = 0."
+
+Calibration ties the unobservable asset state to the two things a screen does show, the stock and its volatility:
+
+$$
+V_0 = S_0 + \bar\ell F^{\text{ps}}, \qquad \sigma_V = \sigma_E\,\frac{S_0}{S_0 + \bar\ell F^{\text{ps}}} \tag{23.4}
+$$
+
+Read (23.4) backwards and you have Section 23.1's leverage skew in one line: for fixed $\sigma_V$, $\sigma_E = \sigma_V (S_0 + \bar\ell F^{\text{ps}})/S_0$ rises as $S_0$ falls. The document says it plainly: "This dependence of equity volatility on the stock price is evident in a pronounced volatility skew in equity option markets, especially for high yield names" (Finger et al., 2002, p.11).
+
+The par CDS spread then sets the premium leg, an annuity paid while the name is alive, equal to the protection leg, which pays the time-zero mass on day one and the rest as defaults arrive. With constant $r$ and instrument recovery $R$:
+
+$$
+s^{\text{CG}}(T) = \frac{(1-R)\Big[1 - \mathcal{S}(0) + \int_0^T e^{-ru}\,\big(-d\mathcal{S}(u)\big)\Big]}{\int_0^T e^{-ru}\,\mathcal{S}(u)\,du} . \tag{23.5}
+$$
+
+The document gives a closed form for (23.5) built on Rubinstein and Reiner's barrier integrals. We integrate (23.5) numerically on a monthly grid instead, for a reason the Ways This Blows Up box below gives. Figure 23.3 shows the survival curve and the spread curves it produces.
+
+![Figure 23.3: CreditGrades books a 25% default probability for a \$5 stock at time zero, before any time has passed (left), and turns the upward-sloping spread curve of a \$30 stock into an inverted one for a \$5 stock (right). Illustrative: (23.3) and (23.5) at equity volatility 40%, debt per share \$30, mean barrier 0.5, barrier dispersion 0.3, recovery 40%, r = 3%.](assets/figures/ch23_creditgrades_ghost.png)
+
+#### The Full Derivation of (23.3)–(23.5)
 
 **Step 1 (rewrite the default event).** Default by $t$ means $V_0 e^{\sigma_V W_s - \sigma_V^2 s/2} \le \bar\ell F^{\text{ps}} e^{\nu Z - \nu^2/2}$ for some $s \le t$. Take logs and move everything random to the left:
 
@@ -144,37 +176,23 @@ $$
 \mathbb{Q}\Big\{\min_{v \le u} Y_v > y\Big\} = N\!\Big(\frac{a u - y}{b\sqrt{u}}\Big) - e^{2 a y / b^2}\, N\!\Big(\frac{a u + y}{b\sqrt{u}}\Big).
 $$
 
-**Step 4 (substitute).** Set $u = t + \xi$, so $b\sqrt{u} = \sqrt{\sigma_V^2 t + \nu^2} =: \Sigma_t$ and $a u = -\Sigma_t^2/2$. Define $d = V_0 e^{\nu^2}/(\bar\ell F^{\text{ps}})$, so $y = -\ln d$ and $e^{2ay/b^2} = e^{-y} = d$. Then
+**Step 4 (substitute).** Set $u = t + \xi$, so $b\sqrt{u} = \sqrt{\sigma_V^2 t + \nu^2} =: \Sigma_t$ and $a u = -\Sigma_t^2/2$. Define $d = V_0 e^{\nu^2}/(\bar\ell F^{\text{ps}})$, so $y = -\ln d$ and $e^{2ay/b^2} = e^{-y} = d$. Substituting into Step 3 gives (23.3).
 
-$$
-\mathcal{S}(t) = N\!\Big(-\frac{\Sigma_t}{2} + \frac{\ln d}{\Sigma_t}\Big) - d\, N\!\Big(-\frac{\Sigma_t}{2} - \frac{\ln d}{\Sigma_t}\Big), \qquad \Sigma_t^2 = \sigma_V^2 t + \nu^2 . \tag{23.3}
-$$
+**Step 5 (calibration).** CreditGrades links the unobservable $(V_0, \sigma_V)$ to the stock through $\sigma_E = \sigma_V \frac{V}{S}\frac{\partial S}{\partial V}$, the same identity as (23.1). Far from default, $S \approx V - \bar\ell F^{\text{ps}}$ and $\partial S/\partial V \approx 1$; the document shows (pp.10–11) that the choice (23.4) satisfies both the near-default and far-from-default boundary conditions.
 
-This is the document's equation (2.11) in our notation. Boundary check: as $\nu \to 0$ it collapses to the standard first-passage survival of a driftless lognormal against a known barrier; as $t \to \infty$ it goes to zero; and at $t = 0$, $\Sigma_0 = \nu > 0$ and $\mathcal{S}(0) < 1$. That last fact is not a typo. The time shift puts probability mass on "already defaulted at inception," and the document itself flags the "counterintuitive result that there is a non-zero probability of default at t = 0."
+**Step 6 (the CDS spread).** Per unit notional, the premium leg is worth $s \int_0^T e^{-ru}\mathcal{S}(u)\,du$ and the protection leg $(1-R)\big[1 - \mathcal{S}(0) + \int_0^T e^{-ru}(-d\mathcal{S}(u))\big]$, the bracket's first term being the loss paid at once on the mass already in default at inception. Setting the two equal and solving for $s$ gives (23.5).
 
-**Step 5 (calibration).** CreditGrades links the unobservable $(V_0, \sigma_V)$ to the stock through $\sigma_E = \sigma_V \frac{V}{S}\frac{\partial S}{\partial V}$, the same identity as (23.1). Far from default, $S \approx V - \bar\ell F^{\text{ps}}$ and $\partial S/\partial V \approx 1$; the document shows (pp.10–11) that the choice
+#### Parameters and empirics: which vol, which horizon, which debt
 
-$$
-V_0 = S_0 + \bar\ell F^{\text{ps}}, \qquad \sigma_V = \sigma_E\,\frac{S_0}{S_0 + \bar\ell F^{\text{ps}}} \tag{23.4}
-$$
+The document's defaults are $\bar\ell = 0.5$ and $\nu = 0.3$, the latter estimated from roughly 300 U.S. non-financial defaults over 1987–1997, with the note that "a lower λ is expected for the financial sector" (their $\lambda$ is our $\nu$). Debt per share includes financial debt, capital leases, under-funded pensions, and preferreds, and excludes payables and deferred taxes. On 6,194 CDS quotes for 122 U.S. firms through August 2001, the implied asset volatility was "quite stable," and "a simple measure of volatility based on the last 1000 days of equity returns produces good estimates of the volatility implied by the 5-year CDS quotes," with 88% within 10%. The document also tests at-the-money implied vol of the longest listed tenor. Kaz's instinct is to use one-month implied vol, and they defend it at the whiteboard. "It's the market's view. The thousand-day number is a history lesson."
 
-satisfies both the near-default and far-from-default boundary conditions. Read (23.4) backwards and you have Section 23.1's leverage skew in one line: for fixed $\sigma_V$, $\sigma_E = \sigma_V (S_0 + \bar\ell F^{\text{ps}})/S_0$ rises as $S_0$ falls. The document says it plainly: "This dependence of equity volatility on the stock price is evident in a pronounced volatility skew in equity option markets, especially for high yield names" (Finger et al., 2002, p.11).
+"Which market's view of what?" Ines asks. "The one-month option is the market's view of the next month, and you're pricing a five-year claim. Ask the five-year question of the longest option that trades, or of a thousand days that at least contain a bad year."
 
-**Step 6 (the CDS spread).** With constant $r$ and instrument recovery $R$, the par spread equates the premium leg (an annuity paid while alive) and the protection leg (loss paid at default, including the time-zero mass):
+Theo is still on the other input. "And which debt goes in debt per share? In March 2023 Carvana designated ADESA US Auction, LLC an unrestricted subsidiary under its unsecured indentures, which released its guarantees, before launching an exchange offer (Carvana 8-K, March 22, 2023). The consolidated debt per share didn't move a cent. What the unsecured notes could reach did. The barrier moved by board resolution, and the column never noticed."
 
-$$
-s^{\text{CG}}(T) = \frac{(1-R)\Big[1 - \mathcal{S}(0) + \int_0^T e^{-ru}\,\big(-d\mathcal{S}(u)\big)\Big]}{\int_0^T e^{-ru}\,\mathcal{S}(u)\,du} . \tag{23.5}
-$$
-
-The document gives a closed form for (23.5) built on Rubinstein and Reiner's barrier integrals. We integrate (23.5) numerically on a monthly grid instead, for a reason in the next box. Figure 23.3 shows the survival curve and the spread curves it produces.
-
-![Figure 23.3: CreditGrades books a 25% default probability for a \$5 stock at time zero, before any time has passed (left), and turns the upward-sloping spread curve of a \$30 stock into an inverted one for a \$5 stock (right). Illustrative: (23.3) and (23.5) at equity volatility 40%, debt per share \$30, mean barrier 0.5, barrier dispersion 0.3, recovery 40%, r = 3%.](assets/figures/ch23_creditgrades_ghost.png)
-
-**Parameters and empirics.** The document's defaults are $\bar\ell = 0.5$ and $\nu = 0.3$, the latter estimated from roughly 300 U.S. non-financial defaults over 1987–1997, with the note that "a lower λ is expected for the financial sector" (their $\lambda$ is our $\nu$). Debt per share includes financial debt, capital leases, under-funded pensions, and preferreds, and excludes payables and deferred taxes. On 6,194 CDS quotes for 122 U.S. firms through August 2001, the implied asset volatility was "quite stable," and "a simple measure of volatility based on the last 1000 days of equity returns produces good estimates of the volatility implied by the 5-year CDS quotes," with 88% within 10%. The document also tests at-the-money implied vol of the longest listed tenor. Kaz's instinct is to use one-month implied vol because it is "the market's view." It is the market's view of the next month, and you are pricing a five-year claim.
+Kaz reaches for a sticky note to write *which F?*, sees the one already on the bezel from the replay, and puts the pad down. "Debt per share comes from the balance sheet," they say slowly. "The barrier comes from the indenture."
 
 > **Ways This Blows Up.** *The time-zero ghost.* For a healthy name the mass $1 - \mathcal{S}(0)$ is negligible (about $10^{-4}$ for $S_0 = 30$, $\sigma_E = 40\%$, $F^{\text{ps}} = 30$). For a stressed name with $S_0 = 5$ and the same debt, it is about 25%: the model says a quarter of the default probability happened before you finished reading the screen, which inflates short-tenor spreads and inverts the curve (Figure 23.3). *The published closed form.* A later paper in the *Journal of Credit Risk* by Kiesel and Veraart has been reported to identify an error in the document's closed-form spread; we have not verified the details, so the reference engine integrates (23.5) directly and checks (23.3) against Monte Carlo. *Financials.* $\nu = 0.3$ was fitted on non-financials, and debt per share for a bank is mostly deposits, at which point the model is pricing a run with a diffusion (Section 23.8). *Two recoveries.* $\bar\ell$ is the global recovery that sets the barrier; $R$ is the recovery on the CDS reference obligation. Setting them equal by habit is a silent error. *The inversion floor.* Implied asset vol from a CDS quote is well posed only if the quote sits above the spread the model produces at near-zero vol; below that floor there is no answer, and the solver should say so rather than return its bracket endpoint.
-
-> **Trend Watch.** *The equity-implied PD moved onto the systematic desk.* In 2002 CreditGrades was a dealer-consortium product sold as a screen. The academic evidence then hardened: Cremers, Driessen, Maenhout and Weinbaum (2008, *Journal of Banking & Finance*) found that option-implied volatility beats historical volatility in explaining both the cross-section and the time series of corporate spreads, with the level mattering most and the skew "to a lesser extent"; Zhang, Zhou and Zhu (2009, *Review of Financial Studies*) found that high-frequency equity volatility alone explains 48% of the variation in CDS levels, jump risk alone 19%, and 73% with ratings, macro and balance-sheet controls. By the 2020s, equity-market inputs were ordinary features in systematic credit engines: a summary of Blackstone's platform (an unsigned file, not a Blackstone publication) describes a default-probability model that uses "real-time equity market signals" (Blackstone_Systematic_Credit p.1), and BlackRock's PD model uses "market data of equity and bond instruments" (BlackRock_Systematic_High_Yield_Credit p.6). *What it means:* the equity-implied spread is no longer an edge by itself; it is a baseline feature, and the edge is knowing when it is wrong (Sections 23.6 and 23.8).
 
 ### Specification for AI Implementation
 
@@ -203,9 +221,19 @@ The edge case that bites is the inverter's floor. Barrier uncertainty $\nu$ keep
 
 The Monte Carlo check is deliberately honest about what it verifies: it simulates the time-shifted Brownian motion for which (23.3) is exact, so agreement tests the algebra and the code, not the approximation. If you simulate the "true" model instead, a lognormal against a barrier drawn once at time zero, you get a different time-zero mass, and the difference is the price of a closed form. Exercise 2 asks you to measure it.
 
+> **Trend Watch.** *The equity-implied PD moved onto the systematic desk.* In 2002 CreditGrades was a dealer-consortium product sold as a screen. The academic evidence then hardened: Cremers, Driessen, Maenhout and Weinbaum (2008, *Journal of Banking & Finance*) found that option-implied volatility beats historical volatility in explaining both the cross-section and the time series of corporate spreads, with the level mattering most and the skew "to a lesser extent"; Zhang, Zhou and Zhu (2009, *Review of Financial Studies*) found that high-frequency equity volatility alone explains 48% of the variation in CDS levels, jump risk alone 19%, and 73% with ratings, macro and balance-sheet controls. By the 2020s, equity-market inputs were ordinary features in systematic credit engines: a summary of Blackstone's platform (an unsigned file, not a Blackstone publication) describes a default-probability model that uses "real-time equity market signals" (Blackstone_Systematic_Credit p.1), and BlackRock's PD model uses "market data of equity and bond instruments" (BlackRock_Systematic_High_Yield_Credit p.6). *What it means:* the equity-implied spread is no longer an edge by itself; it is a baseline feature, and the edge is knowing when it is wrong (Sections 23.6 and 23.8).
+
 ## 23.3 Puts vs. CDS: Carr–Wu and the Default Corridor
 
-Ines has a line she uses on every new hire who arrives from a restructuring shop: "The put is the CDS that forgot to tell anyone." She means it literally. For most of the names an ex-RSSG analyst knows best, the single-name CDS is either untraded or traded by four people who all know each other; by one 2025 count of cleared volumes, single names were on the order of 6% of index notional *(approx.)*. The listed put chain, meanwhile, is on OPRA, prints all day, and quotes strikes down to a few dollars. If you can turn a put spread into a default claim, you have a tradable single-name credit instrument for names where none exists.
+Ines has a line she uses on every new hire who arrives from a restructuring shop: "The put is the CDS that forgot to tell anyone." Theo gets it on a Tuesday, when he asks how the desk would get short a name he knows from his old life, a listed specialty retailer with a bond stack and no single-name CDS that anyone can find *(a fictional composite; all numbers illustrative)*. Ines answers with a hand history instead of a theory.
+
+"Years ago, a client started buying put spreads from me on a name like yours. Seven-fifty strike long, two-fifty short, one-year expiry, stock at fourteen. A thousand contracts a day, every day, never haggling." She had thought it was somebody being clever about the skew, and she sold the spreads at what her vol surface said, forty-five cents. "Three weeks later the company skipped a coupon, and the stock opened at ninety cents. Every spread paid five dollars, the maximum. The markouts were the worst page I printed that year." What the client had been buying was not volatility. A \$7.50/\$2.50 put spread on a stock that will sit above \$7.50 until the filing and below \$2.50 after it pays exactly \$5 if the company defaults before expiry and nothing if it does not. At forty-five cents, that is a 9% discounted chance of default, about 575bp of the CDS that did not exist (at 40% recovery and a 3% rate).
+
+Theo, who has watched stocks of filing companies open at pennies on more first-day mornings than he can count, sees it at once: the assumption that makes the spread a default claim is a statement about how companies file, and that is his old job. "So the stock never trades between the strikes."
+
+"That's the bet," Ines says. "The put is the CDS that forgot to tell anyone."
+
+She means it literally. For most of the names an ex-RSSG analyst knows best, the single-name CDS is either untraded or traded by four people who all know each other; by one 2025 count of cleared volumes, single names were on the order of 6% of index notional *(approx.)*. The listed put chain, meanwhile, is on OPRA, prints all day, and quotes strikes down to a few dollars. If you can turn a put spread into a default claim, you have a tradable single-name credit instrument for names where none exists.
 
 Carr and Wu (2011, *Review of Financial Studies* 24(2), 473–505) showed that you can, under one assumption and no model.
 
@@ -216,6 +244,8 @@ U(t,T) = \mathbb{E}^{\mathbb{Q}}_t\Big[e^{-r(\tau - t)}\,\mathbf{1}_{\{\tau \le 
 $$
 
 **The assumption (the default corridor).** There are levels $0 \le A < B$ such that the stock stays above $B$ before default and below $A$ from default onward. The stock never trades inside $[A, B]$. That is the whole assumption; nothing is said about volatility, jumps above $B$, or dynamics after default.
+
+> **Math, Gently.** *Two tickets and no model: dominance bounds.* Picture two lottery tickets. Whatever world turns up, ticket A pays at least what ticket B pays, and in some worlds more. Then A cannot sell for less than B: if it did, you would buy A, sell B, and pocket the difference today with nothing to lose later. That argument needs no probabilities, no volatility and no view, which is why it survives when every model on the desk is wrong. Squeeze the same argument from both sides, a ticket worth at least X and at most X in every world, and its price is pinned. A tiny number: under the corridor, a 10-strike put spread with its lower strike at zero pays exactly 10 if the firm defaults before expiry and nothing if it does not. It is ten tickets that each pay \$1 at default. If the spread trades at 0.48, each ticket is worth 0.048, and the market's discounted default probability is 4.8%. The proof below is this paragraph with a square at the end.
 
 **The result.** For co-terminal American puts $P^{\text{Am}}(K)$ with expiry $T$,
 

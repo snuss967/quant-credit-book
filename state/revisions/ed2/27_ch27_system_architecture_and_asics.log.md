@@ -3,9 +3,9 @@
 - [x] 1. [27.0 Cold Open] EXPAND-SCENE (to 1,200–1,500 words). — Dated 28 Oct; Monday review, Hana queue, card, timestamps added.
 - [x] 2. [27.1 Two Clocks] LIST-TO-NARRATIVE + ANOTHER-SEAT. — Kaz-Mags whiteboard argument; non-bank market maker seat box added.
 - [x] 3. [27.1.1 The price of a microsecond] MATH-GENTLY (box 1: e-folding time). — Coffee box, Theo reads table aloud, card graded, Trend Watch moved.
-- [ ] 4. [27.2.1–27.2.3 Ingestion] SHOP-LIFE (second, short vignette, 400–600 words) + MATH-GENTLY (box 2: the lateness quantile).
-- [ ] 5. [27.3 Security Master] EXPAND-SCENE (Theo's third Tuesday, +300 words).
-- [ ] 6. [27.3.2 The bitemporal model] MATH-GENTLY (box 3: two time axes) + FULL-DERIVATION-MOVE.
+- [x] 4. [27.2.1–27.2.3 Ingestion] SHOP-LIFE (second, short vignette, 400–600 words) + MATH-GENTLY (box 2: the lateness quantile). — Ilse three-row DQ vignette; mail-bag watermark box; Trend Watch to end.
+- [x] 5. [27.3 Security Master] EXPAND-SCENE (Theo's third Tuesday, +300 words). — Prescient backtest beat; whiteboard dated graph; drop-down misread ends it.
+- [x] 6. [27.3.2 The bitemporal model] MATH-GENTLY (box 3: two time axes) + FULL-DERIVATION-MOVE. — Archive-vs-wiki box; tuple and query stated; Full Derivation subsection.
 - [ ] 7. [27.3.3 Serta rows] WHEN-TO-APPLY inside the scene.
 - [ ] 8. [27.4 Pricing, Risk, OMS/EMS] LIST-TO-NARRATIVE + THE PAIR (RV beat).
 - [ ] 9. [27.5.1 Little, Pollaczek–Khinchine] MATH-GENTLY (box 4, in two parts) + FULL-DERIVATION-MOVE.

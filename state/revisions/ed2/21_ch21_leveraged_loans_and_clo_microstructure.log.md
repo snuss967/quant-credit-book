@@ -7,8 +7,8 @@
 - [x] 5. [§21.2.1] Done: nine-stop whiteboard scene, 2016 hand, judgment to Theo; CHECK hedged.
 - [x] 6. [§21.2.2] Done: box 3 two ledgers on the ticket; Full Derivation kept intact.
 - [x] 7. [§21.2.3] Done: Ines bridge on hand history and Versana API; Trend Watch last.
-- [ ] 8. [§21.3 CLO Anatomy] MATH-GENTLY box 4 (50 bp becomes 5.6 points); (21.3) statement; Full Derivation.
-- [ ] 9. [§21.3.2 Diversity] MATH-GENTLY box 5 (variance of a correlated sum); (21.4) and BET as Full Derivation.
+- [x] 8. [§21.3.1] Done: box 4 nine-cent bank gearing; (21.3) statement; Full Derivation.
+- [x] 9. [§21.3.2] Done: box 5 sticky coins, variance of sums; (21.4) Full Derivation.
 - [ ] 10. [§21.4 Long Scene A: The Cliff, March-April 2020] NEW-SCENE 2,000-2,600 words; card; ZAIS6 coda.
 - [ ] 11. [§21.4.1 Adjusted numerator] MATH-GENTLY box 6 (test as option book); (21.5) statement; Full Derivation.
 - [ ] 12. [§21.4.2 Cure-trade theorem] WHEN-TO-APPLY to Mags; thread narration between boxes.
