@@ -957,7 +957,7 @@ The Finder below maps each idea to where the chapter builds it: the equation, th
 | Concept | Equation | Intuition (box) | Judgment (scene) | Code |
 | :-- | :-- | :-- | :-- | :-- |
 | Floater short a par call, repriced by a hazard | (21.1), (21.2), (21.7), (21.8) | Math, Gently: *Why a floater sits at par…*, *A bond with a lid* (§21.1.1) and *A hazard is a clock…* (§21.5.1) | Long Scene B, *The Window*, and its graded cards (§21.5); Hana's logit (§21.5.1) | [Listing 21.3](#code-21-3) |
-| Delayed comp as forced repo | $	ext{DC}_u$ (§21.2.2) | Math, Gently: *Delayed compensation is a repo you did not agree to* | Dealer seat (§21.2); the nine stops (§21.2.1) | — |
+| Delayed comp as forced repo | $\text{DC}_u$ (§21.2.2) | Math, Gently: *Delayed compensation is a repo you did not agree to* | Dealer seat (§21.2); the nine stops (§21.2.1) | — |
 | CLO equity gearing | (21.3) | Math, Gently: *Why 50 bp becomes 5.6 points* (§21.3.1) | CLO-manager seat (§21.5) | — |
 | Diversity and overlap | (21.4) | Math, Gently: *Two hundred and fifty coins…* (§21.3.2) | Long Scene A, *The Cliff* (§21.4) | — |
 | OC test as option book | (21.5) | Math, Gently: *The test as an option book* (§21.4.1) | Long Scene A, *The Cliff* (§21.4) | [Listing 21.1](#code-21-1) |
