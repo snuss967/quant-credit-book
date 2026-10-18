@@ -12,7 +12,7 @@
 
 Kaz is already at the whiteboard, writing $V_0N(d_1)-Fe^{-rT}N(d_2)$ with the speed of someone who has written it four thousand times and been asked what it means twice. "It's just Black–Scholes on the firm," they say. "Assume the assets are lognormal and tradeable."
 
-"You cannot short a factory," Mags says from the next desk. "In 1994 we measured vega by calling the guy who sold us the bonds and asking whether he sounded nervous. It was a very good model. It had one parameter and he answered the phone."
+"You cannot short a factory," Mags says. "In 1994 we measured vega by calling the guy who sold us the bonds and asking whether he sounded nervous. One parameter, and he answered the phone."
 
 ROBO, asked on Friday to "remove the vega from Theo's book," had produced a one-line execution plan: sell all forty-one bonds. Vega: zero. Carry: zero. Theo: horrified. ROBO, as always, did exactly what was asked.
 
@@ -107,7 +107,7 @@ Used in: §6.2.1 (Merton's two-tranche case), §8.3, §13.3, §13.7, §15.3, §1
 
 ### 6-B.2.1 Desk framing: the price of an option is the cost of the factory that makes it
 
-Ines puts it in poker terms: "You don't price a hand by guessing what the river will be. You price it by what it costs to make the same hand from the cards on the table." An option dealer who sells a call does not need a view on the stock. They need a recipe that turns shares and cash into the call's payoff in every state, and the recipe's cost *is* the price. If someone pays more, the dealer sells the call, runs the recipe and keeps the difference. The drift, the dealer's beliefs and Theo's thirteen-week model play no part. Replication does not care what you think. It only cares what you can trade.
+Ines: "You don't price a hand by guessing the river. You price it by what it costs to make the same hand from the cards on the table." A dealer who sells a call needs no view on the stock, only a recipe that turns shares and cash into the call's payoff in every state; the recipe's cost *is* the price. Theo's thirteen-week model plays no part. Replication does not care what you think, only what you can trade.
 
 ### 6-B.2.2 One period, two states, and the probability that is a ratio of prices
 
@@ -312,7 +312,7 @@ If Black–Scholes were the truth, $\sigma_{\text{imp}}$ would be flat in $K$. I
 
 The fingerprints differ in prices, not vols: if the stock cannot reach zero, $\text{Put}(K)/K\to0$ as $K\to0$; under jump-to-default it flattens to a positive floor (the `floor_ratio` test of §23.4).
 
-> **Desk Myth vs. Desk Reality.** *Myth:* "Implied vol is the market's forecast of realized volatility." *Reality:* it is the break-even volatility of the gamma-rent equation, priced under $\mathbb{Q}$. It contains a variance risk premium (sellers of insurance want paying) and, in a high-yield name, a default premium. The gamma-rent equation tells you what a forecast is worth: you profit from a long hedged option when $\sigma_r>\sigma_i$, *weighted by where the dollar gamma happened to be*. A correct forecast of the average volatility that happens while you are far from the strike earns nothing. Ines calls this "being right in a room nobody was in."
+> **Desk Myth vs. Desk Reality.** *Myth:* "Implied vol is the market's forecast of realized volatility." *Reality:* it is the break-even volatility of the gamma-rent equation, priced under $\mathbb{Q}$. It contains a variance risk premium (sellers of insurance want paying) and, in a high-yield name, a default premium. The gamma-rent equation tells you what a forecast is worth: you profit from a long hedged option when $\sigma_r>\sigma_i$, *weighted by where the dollar gamma happened to be*. Volatility that happens far from the strike earns nothing; Ines calls it "being right in a room nobody was in."
 
 Used in: Ch 10-B (index option skew, payer versus receiver), §16.4 (warrant vol on an unlisted reorganized equity), §23.1–23.4 (the surface engine), §23.6 (cap-structure signals).
 
@@ -336,7 +336,7 @@ $$
 S_t=\tilde S_t\,\mathbf 1_{\{\tau>t\}},\qquad \tilde S_t=S_0\exp\!\Big\{\big(r+\lambda-\tfrac12\sigma^2\big)t+\sigma W^{\mathbb{Q}}_t\Big\},\qquad \mathbb{Q}(\tau>t)=S^{\mathbb{Q}}(t)=e^{-\lambda t}.
 $$
 
-This is Merton (1976) with one possible jump size, minus 100%. In structural language it is a firm whose equity is a call on assets until a surprise arrives (fraud, a lost lawsuit, a liability-management transaction that leaves equity nothing), at which point it is worth nothing whatever the diffusion was doing.
+This is Merton (1976) with one jump size, minus 100%: equity is a call on assets until a surprise (fraud, a lost lawsuit, an LMT that leaves equity nothing) makes it worthless whatever the diffusion was doing.
 
 ### 6-B.5.3 Calls and puts: one formula and one decomposition
 
@@ -441,7 +441,7 @@ $$
 \lambda^{\mathbb{Q}}=\xi\,\lambda^{\mathbb{P}},\qquad S^{\mathbb{Q}}(T)=e^{-\xi\lambda^{\mathbb{P}}T}=\big(S^{\mathbb{P}}(T)\big)^{\xi}. \tag{6B.4}
 $$
 
-**Risk-neutral survival is physical survival raised to the power $\xi$.** With time-varying, even stochastic, multipliers the same construction gives $\lambda^{\mathbb{Q}}_t=\xi_t\lambda^{\mathbb{P}}_t$ (Brémaud's theorem for point processes is the general statement). The diffusion Girsanov could only tilt the drift. The jump Girsanov changes the *rate*, and any $\xi>0$ gives an equivalent measure. No-arbitrage alone does not pin $\xi$ down: a stock and a riskless bond cannot span a jump, so the market is incomplete and many $\mathbb{Q}$'s are consistent with the same share price. Only the price of something that pays at default, such as a CDS, a bond or a low-strike put, pins $\lambda^{\mathbb{Q}}$. And only a $\mathbb{P}$ model, such as a default study, a PD model or Theo's waterfall, supplies $\lambda^{\mathbb{P}}$. The multiplier is their ratio, and nothing else.
+**Risk-neutral survival is physical survival raised to the power $\xi$.** With time-varying, even stochastic, multipliers the same construction gives $\lambda^{\mathbb{Q}}_t=\xi_t\lambda^{\mathbb{P}}_t$ (Brémaud's theorem for point processes is the general statement). The diffusion Girsanov could only tilt the drift. The jump Girsanov changes the *rate*, and any $\xi>0$ gives an equivalent measure. No-arbitrage alone does not pin $\xi$: a stock and a riskless bond cannot span a jump, so many $\mathbb{Q}$'s fit the same share price. Only something that pays at default (a CDS, a bond, a low-strike put) pins $\lambda^{\mathbb{Q}}$, only a $\mathbb{P}$ model (a default study, Theo's waterfall) supplies $\lambda^{\mathbb{P}}$, and the multiplier is their ratio.
 
 ### 6-B.6.4 Two premia and a recovery premium
 
@@ -453,7 +453,7 @@ $$
 
 (Expand the right side and the cross terms cancel.) The credit triangle (§6.8) sits on the left; the desk's job is the right. Two further distinctions matter in practice.
 
-*The event premium versus the premium on the intensity's motion.* If $\lambda_t$ is itself stochastic (CIR in §6.7), Girsanov applies twice: once to the Brownian motion driving $\lambda_t$, which changes its $\mathbb{Q}$-dynamics (different mean reversion and long-run level under $\mathbb{Q}$, so the CDS curve's slope carries a premium for spread *risk*), and once to the default jump itself, which is $\xi$. Jarrow, Lando and Yu (2005) show that if default events are conditionally diversifiable, meaning that given the path of the common factors, defaults across a large portfolio are independent, then $\xi=1$: the jump itself is not priced, and every premium lives in the intensity's dynamics. The empirical answer is that $\xi$ is above one and moves around. Driessen (2005) estimates a ratio of risk-neutral to physical default intensity of about 2.3 for ten-year BBB bonds (as summarized in Federal Reserve Bank of New York Staff Report 577).
+*The event premium versus the premium on the intensity's motion.* If $\lambda_t$ is stochastic (CIR, §6.7), Girsanov applies twice: to the Brownian motion driving $\lambda_t$, which changes its $\mathbb{Q}$-dynamics and puts a premium for spread *risk* into the curve's slope, and to the default jump itself, which is $\xi$. Jarrow, Lando and Yu (2005) show that if defaults are conditionally diversifiable (independent given the common factors), then $\xi=1$ and every premium lives in the intensity's dynamics. The empirical answer is that $\xi$ is above one and moves around. Driessen (2005) estimates a ratio of risk-neutral to physical default intensity of about 2.3 for ten-year BBB bonds (as summarized in Federal Reserve Bank of New York Staff Report 577).
 
 *Liquidity and tax.* A bond spread also pays for illiquidity and state taxes, both material in Driessen's decomposition; strip them before trusting (6B.5) (§24.3).
 
@@ -558,9 +558,9 @@ $$
 
 All of it arrives in the default state: plus 19 points if Theo's 40 is right, nothing at 21, and a loss below 21. If Theo's recovery were certain, the Sharpe ratio would be $\lambda^{\mathbb{P}}\Delta R/(\Delta R\sqrt{\lambda^{\mathbb{P}}})=\sqrt{\lambda^{\mathbb{P}}}\approx0.25$, the same shape as (6B.6). Uncertainty about recovery only lowers it. This is a recovery bet with the default probability hedged out. It is the RSSG trade, finally isolated, and it is small, honest and slow.
 
-**What kills it.** *Which default?* If Halvorsen does a distressed exchange that leaves the equity alive, the puts pay nothing and the notes take the haircut: the worst state, and exactly the $\lambda_D$ that the put chain cannot see (§14.1–14.2). *The corridor.* At 80% vol the leak is 3% of the claim, and in a slow bleed it is all of it (§6-B.5.4). *The recovery is a mixture.* Theo's 40 is a $\mathbb{P}$ recovery conditioned on who joins the coalition (§14.4); it has to come out of the LMT state machine of Chapter 12-B, not out of a pre-LMT waterfall.
+**What kills it.** *Which default?* A distressed exchange that leaves the equity alive pays the puts nothing while the notes take the haircut: the worst state, and the $\lambda_D$ the put chain cannot see (§14.1–14.2). *The corridor.* The leak is 3% here and all of it in a slow bleed. *The recovery is a mixture.* Theo's 40 must be conditioned on coalition membership (§14.4) and come out of the Chapter 12-B state machine, not a pre-LMT waterfall.
 
-> **Poker Table.** Ines replays the hand twenty days later. The notes are 80 and the puts are \$0.12, and the position is flat to within a quarter of a point *(illustrative)*. Theo is disappointed. "That's what a hedged recovery bet is supposed to do before the river," Ines says. "Nothing. You didn't buy a bond. You bought the right to be paid for being right about one number, on one day, and the day hasn't come. If it ever starts making money before the event, check which risk you forgot to hedge."
+> **Poker Table.** Ines replays the hand twenty days later: notes 80, puts \$0.12, position flat within a quarter point *(illustrative)*. Theo is disappointed. "That's what a hedged recovery bet does before the river," Ines says. "Nothing. You bought the right to be paid for being right about one number on one day. If it makes money before that day, find the risk you forgot to hedge."
 
 Used in: Ch 1 cold open (Halvorsen), §13.8 (PRS as the $\mathbb{P}$ input), §14.1–14.4 (which default, which recovery), §23.3–23.6 (the put-surface engine and cap-structure trades), §24.3 (stripping basis effects before using the bond's spread), Ch 12-B.
 

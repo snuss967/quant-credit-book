@@ -283,3 +283,163 @@ The fallen angel makes the difference vivid. Per \$10mm face, DV01 (equal to CS0
 
 *Used in:* §1.3 (the inventory term in the bid equation), §8.4 and §9.2 (DTS as beta), §8.6 (the hedge matrix in DV01 terms), §10.3 (volatility scaling is DTS scaling), §12.5 (DTS-structured covariance), §19.2–§19.4 (basket risk and the lump hedge), §24.4 (basis carry per DV01), App A §A.5 and §A.8.
 
+## 4B.6 One Curve, Eight Spreads
+
+Desk framing. Every spread is the answer to one question, *how much more than the reference curve does this bond pay?*, asked with a different reference curve, a different idea of "pay," and a different compounding. Build the curve once and the eight answers are short.
+
+### The curve
+
+A zero curve is a function $z(t)$ with discount factors $d(t) = e^{-z(t)\,t}$. Markets quote *par* yields, so the curve is bootstrapped. On a grid $t_n = n/f$ with par yields $c_n$ (interpolated from quoted tenors), a par bond maturing at $t_n$ prices to one, $\sum_{k \le n} (c_n/f)\,d(t_k) + d(t_n) = 1$, which solves forward:
+
+$$
+d(t_n) = \frac{1 - (c_n/f)\sum_{k<n} d(t_k)}{1 + c_n/f}, \qquad z(t_n) = -\frac{\ln d(t_n)}{t_n}.
+$$
+
+The desk keeps two curves and always names which: Treasury (for G, Z and excess returns) and SOFR swaps (for I, asset swaps and anything a funded investor hedges).
+
+### The eight
+
+**G-spread.** $G = y - y^{\text{TSY}}_{\text{par}}(T)$, the bond's yield minus the Treasury par yield interpolated at its maturity. One subtraction, which is its appeal and its flaw: it compares a 4.50% coupon's yield with a different-coupon par bond's yield and ignores the curve's shape between today and $T$.
+
+**I-spread.** The same subtraction against the par swap rate $y^{\text{SOFR}}_{\text{par}}(T)$. The difference $I - G$ is minus the swap spread at $T$; it is a fact about the curves, not the bond.
+
+**Z-spread.** The constant $Z$ added to every zero rate that reprices the bond:
+
+$$
+P^{\text{dirty}} = \sum_k \text{CF}_k\, e^{-(z(t_k) + Z)\,t_k}.
+$$
+
+Linearize around the yield: $y^{\text{cc}} - Z \approx \sum_k \omega_k\,z(t_k)$ with duration weights $\omega_k \propto t_k\,\text{CF}_k e^{-y^{\text{cc}} t_k}$. The yield is the Z-spread plus a duration-weighted average zero rate. So $Z - G$ is (to first order) the par Treasury's weighted average zero minus the bond's. On an upward-sloping curve a high-coupon, high-yield bond puts its weight earlier than the low-coupon Treasury, its average zero is lower, and $Z > G$. Invert the curve, as it was for most of mid-2022 to mid-2024, and the sign flips. On a flat curve, Z in the bond's own compounding equals G exactly, and Z in continuous compounding differs only by the compounding.
+
+**Asset-swap spread (par-par).** Schmid's definition is the cleanest on the shelf.
+
+> **[SOURCE EXTRACTION]** *Schmid_Credit_Risk_Pricing_Models p.159:* "Basically, an asset swap is a synthetic structure that allows an investor to buy a fixed rate bond and then hedge out the interest rate risk by swapping the fixed payments to floating. The investor keeps the credit exposure to the fixed rate bond."
+>
+> **Annotation.** The package has a price, and the price is the spread. In the par-par version the investor pays 100 for a bond worth $P$ and swaps its coupons for SOFR plus $A$. Setting the package's value to zero gives the formula below, and makes visible what the definition leaves out: when $P$ is far from par, the investor has also made (or received) an upfront payment of $100 - P$ to the swap counterparty. That loan carries counterparty and funding risk, which is why ASW and Z diverge for discount bonds and why the March 2020 basis trades of §24.4 cared which one they used.
+
+Value the package per 100 at inception. The investor pays 100 and receives the bond ($P$). The swap's floating leg is worth $100\,(1 - d(T)) + 100\,A\,\mathcal{A}$ on the swap curve, where $\mathcal{A} = \sum_k \alpha_k d(t_k)$ is the annuity on the bond's coupon dates; the fixed leg paid away is $100\,c\,\mathcal{A}$. Let $P^{\text{sw}} = \sum_k \text{CF}_k d(t_k)$ be the bond's value on the swap curve. Then $P - 100 + 100 - 100\,d(T) + 100A\mathcal{A} - 100c\mathcal{A} = P - P^{\text{sw}} + 100\,A\,\mathcal{A} = 0$, so
+
+$$
+A^{\text{par}} = \frac{P^{\text{sw}} - P^{\text{dirty}}}{100\,\mathcal{A}}, \qquad A^{\text{mkt}} = A^{\text{par}}\,\frac{100}{P^{\text{dirty}}} .
+$$
+
+The market-value variant puts the floating leg on the dirty price instead of par. For a bond at 70 the two differ by a factor of 1.4.
+
+**Discount margin.** For a floater or loan paying $b + m$ (base rate plus contractual margin), DM is the spread over the base rate that reprices it, under the convention that the base rate stays at today's level. On a reset date, a floater paying $b + m$ and discounted at $b + m$ is worth par by backward induction (each period's coupon is exactly the period's discount), so $\text{DM} = m$ at a price of 100, and to first order
+
+$$
+\text{DM} \approx m + \frac{100 - P}{100\,a(T)},
+$$
+
+with $a(T)$ the annuity at $b + \text{DM}$: the loan form of the premium identity, and (21.2) of §21.1 solved for $s$. The Larkspur Foam 2029 first-lien term loan of Chapter 13 pays SOFR + 375bp. At 97, with a flat 4.00% base rate and the common three-year-life convention *(illustrative)*, its DM is about 490bp. At the 84 mark of the morning of the headline it is about 1,040bp, at which point the desk stops quoting DM and starts quoting recovery. State whether the floor is priced: a floor is an option the lender owns, and the flat-forward convention values it at intrinsic only.
+
+**Yield-to-worst.** The lowest yield over maturity and every call date, each at its call price: §4B.7, because it needs a call schedule.
+
+**OAS.** The spread over the curve that reprices the bond *after* valuing its options on a rate model: §4B.7, because it needs a lattice.
+
+**Par CDS equivalent (PECS).** Find the flat hazard $\lambda$ that reprices the bond with recovery of face $R$ (the formula of §4B.2, from §6.6.3), then read the par CDS spread off the same $(\lambda, R)$ with the legs of §6.8 and §24.2:
+
+$$
+P^{\text{dirty}} = \sum_k \text{CF}_k d(t_k)e^{-\lambda t_k} + 100R\!\int_0^{T}\!\lambda e^{-\lambda u}d(u)\,du, \qquad s^{\text{PECS}} = \frac{(1-R)\int_0^T \lambda e^{-\lambda u}d(u)\,du}{\text{RPV01}(\lambda)} \approx \lambda(1 - R).
+$$
+
+PECS is the bond spread that a CDS basis should use (App A §A.5), and it exceeds Z for a discount bond for a reason worth one line: Z is a loss rate per unit of *price*, a CDS spread is a loss rate per unit of *par*, and a bond at 70 with recovery 40 loses 30 of its 70 at default, not 60 of 100. Schmid makes the same point from the hedge's side.
+
+> **[SOURCE EXTRACTION]** *Schmid_Credit_Risk_Pricing_Models p.159:* "A default swap is a par product: it does not completely hedge the loss on an asset that is currently trading away from par. If the asset is trading at a discount, a default swap overhedges the credit risk and vice-versa."
+>
+> **Annotation.** Two consequences on a 2026 desk. For *valuation*, compare a discount bond with CDS only through PECS, or the convention masquerades as a basis. For *hedging*, the jump-to-default-neutral notional is $(P - R)/(1 - R)$ per unit of face (derived in §24.3), so \$10mm of the fallen angel at 70.73 with $R = 40\%$ needs about \$5.1mm of protection, not \$10mm. The departure from Schmid: $R$ is itself random and is now a property of the transaction (§5.5, §5.6), so PECS has a recovery delta that the desk must report next to it (Law 7).
+
+| Spread | Reference | Solves for | State with it |
+| :--- | :--- | :--- | :--- |
+| G | Treasury par yield at $T$ | a subtraction | interpolation, on-the-run or fitted |
+| I | swap par rate at $T$ | a subtraction | SOFR or LIBOR (pre-2023 data) |
+| Z | Treasury or swap zero curve | constant shift that reprices | curve, compounding |
+| ASW par / market | swap curve | package value zero | par or market value |
+| DM | base rate, flat forward | constant margin that reprices | floor, assumed life |
+| YTW | none (a yield) | minimum yield over workout dates | call schedule |
+| OAS | zero curve plus rate model | shift that reprices the option-adjusted price | model, volatility |
+| PECS | zero curve plus hazard | par CDS spread at the implied hazard | recovery $R$ |
+
+*Used in:* §1.3 and §1.8.2 (spread in the bid equation and the fallen-angel case), §6.8 (the credit triangle), §8.4 and §9.2 (OAS as the DTS input), §12.3 (spread per unit of what), §19.2 (`oas`), §21.1 (DM), §24.2–§24.3 (Z, PECS and the basis), App A §A.5.
+
+## 4B.7 The Callable Bond: Yield-to-Worst, a Lattice, OAS and the Make-Whole
+
+Desk framing. Most high-yield bonds can be redeemed by the issuer at a schedule of prices after a non-call period. The issuer exercises when refinancing is cheaper, which is exactly when the bond has done well. The holder is short a call, so the bond's upside is sold in advance (§5.2.2). There are two ways to price what was sold: assume the worst and skip the model (yield-to-worst), or model rates and average over paths (OAS).
+
+### Yield-to-worst
+
+Brambleworth Packaging's 9.25% senior secured notes (Chapter 3's B3 credit, before the lender call) have five years to run, are non-call for two, then callable at 104.625, at 102.3125 from year three and at par from year four *(terms illustrative; a standard half-coupon, quarter-coupon, par schedule)*. At a price of 103, with semi-annual compounding:
+
+| Workout | Redemption | Yield |
+| :--- | ---: | ---: |
+| first call, year 2 | 104.625 | 9.71% |
+| second call, year 3 | 102.3125 | 8.78% |
+| par call, year 4 | 100 | **8.35%** |
+| maturity, year 5 | 100 | 8.50% |
+
+The yield-to-worst is 8.35%, to the par call. Within a window, if the call price exceeds the market price the latest date in the window is worst, and if it is below, the earliest; so only the window boundaries need checking, though the code checks every coupon date anyway. YTW is the yield you get if the issuer plays perfectly against you *and* the future has no uncertainty.
+
+> **Poker Table.** "Yield-to-worst," says Ines, "is putting the other player on the nuts every hand. It's a fine way to never lose more than you expected, and a terrible way to price, because he doesn't have the nuts every hand. Sometimes rates go up and the call is worthless. OAS is playing against his whole range." Her hand history: on bonds bought at YTW and later called, the markout at the call date is the difference between the YTW you were quoted and the OAS you were really earning. On bonds where rates rose instead, the call expired and you were paid the full coupon. Price the range.
+
+### A lattice small enough to do by hand
+
+Take a three-year annual-pay 9% bond, callable at 101 (ex-coupon) at years one and two, on a binomial short-rate tree with risk-neutral probability $\tfrac12$ and spread $s$ added to every node's rate. To keep the hand arithmetic honest, discount with simple annual rates, $1/(1 + r + s)$, on a tree that is not fitted to any curve: $r = 4\%$ today; 5% or 3% at year one; 6%, 4% or 2% at year two. Work backward at $s = 5\%$.
+
+At year two each node has one payment left, 109: values $109/1.11 = 98.20$, $109/1.09 = 100.00$ and $109/1.07 = 101.87$, which the issuer calls at 101.00. At year one, the up node is worth $\tfrac12(98.20 + 9) + \tfrac12(100.00 + 9)$ discounted at 10%, or 98.27, and is not called; the down node is worth $\tfrac12(109) + \tfrac12(110)$ at 8%, or 101.39, and is called at 101.00. Today: $\tfrac12(107.27) + \tfrac12(110.00)$ at 9% gives **99.67**. The same tree with no call gives 100.03. The call is worth 0.36 points.
+
+Now invert. If the market price is 99.67, the OAS is 500bp *by construction*: it is the $s$ at which the callable tree matches the price. The Z-spread is the $s$ at which the *non-callable* tree matches the same price, about 514bp. The call costs the holder 14bp a year, and $\text{OAS} = Z - (\text{option cost in bp})$, which is App A's "$\text{OAS} \le Z$ for callables" with the gap computed instead of asserted.
+
+### The production lattice
+
+Replace the toy with Ho–Lee: short rates $r_{i,j} = \theta_i + \sigma\sqrt{\Delta t}\,(2j - i)$ at step $i$, node $j = 0, \dots, i$, with normal volatility $\sigma$ (decimal per root-year) and continuous discounting $e^{-(r_{i,j} + s)\Delta t}$. Fit $\theta_i$ so that the tree reprices every zero-coupon bond. With Arrow–Debreu prices $Q_{i,j}$ (the value today of \$1 paid at node $(i,j)$, starting from $Q_{0,0} = 1$) and $x_{i,j} = \sigma\sqrt{\Delta t}(2j-i)$,
+
+$$
+\sum_j Q_{i,j}\,e^{-(\theta_i + x_{i,j})\Delta t} = d\big((i+1)\Delta t\big) \;\Longrightarrow\; \theta_i = -\frac{1}{\Delta t}\ln\frac{d\big((i+1)\Delta t\big)}{\sum_j Q_{i,j}\,e^{-x_{i,j}\Delta t}},
+$$
+
+then propagate $Q_{i+1,k} = \tfrac12 Q_{i,k}e^{-r_{i,k}\Delta t} + \tfrac12 Q_{i,k-1}e^{-r_{i,k-1}\Delta t}$. No root-finding is needed. Price backward from maturity: at each node the continuation value is $e^{-(r_{i,j}+s)\Delta t}\,\tfrac12(V_{i+1,j} + V_{i+1,j+1})$; on an exercise date the issuer replaces it with $\min(\text{continuation}, K(t_i))$; then add the coupon paid at $t_i$. The OAS is the root in $s$ of $V_{0,0}(s) = P^{\text{dirty}}$, unique because $V_{0,0}$ is decreasing in $s$.
+
+Four identities make this lattice testable, and each is an assertion in §4B.9:
+
+1. **No option, no adjustment.** Without a call, the value of a cash flow at $t_n$ is $e^{-s t_n}\sum_j Q_{n,j} = e^{-s t_n}d(t_n)$, so the OAS of a bullet equals its continuous Z-spread exactly.
+2. **Zero volatility is yield-to-worst.** As $\sigma \to 0$ the path is deterministic, backward induction picks the issuer's best date, and the OAS equals the spread to worst. YTW is the zero-volatility OAS written as a yield.
+3. **Curve shift equals spread shift (in Ho–Lee, with fixed strikes).** A parallel shift $h$ of the zero curve shifts every $\theta_i$ by exactly $h$ (substitute $d(t)e^{-ht}$ above and induct), so it is the same perturbation as $s \to s + h$, and $D^{\text{eff}} = D^{\text{OAS}}$. In a lognormal tree (Black–Derman–Toy, Black–Karasinski) the identity fails, and the desk stores both numbers (the `oasd` of §19.2 is the second).
+4. **Volatility lowers OAS.** With any exercise and $\sigma > 0$ the callable is worth less than the bullet at the same spread, so $\text{OAS} < Z$, and more volatility makes the gap wider.
+
+> **[SOURCE EXTRACTION]** *Veronesi_Fixed_Income_Securities p.467:* "It is also important to realize that the size of the OAS depends on the model used to compute it: It is possible that different term structure models may generate different OAS, in the same way they generate different values of options even when using the same inputs."
+>
+> **Annotation.** OAS is a residual, not an observation, and on a credit desk the residual contains three things Veronesi's Treasury callable does not: default risk (the lattice is a riskless tree with a spread on top), liquidity, and whatever the model gets wrong about the issuer's call behaviour (issuers call for covenant relief and M&A, not only for rates). So an OAS series is model output, and a backtest on it has a model inside it (Law 11). When Chapters 8–12 regress on OAS, they are using the index provider's model; when this desk computes OAS, it states $\sigma$ and the tree.
+
+### Negative convexity
+
+Near the call price the issuer's option binds and the callable's price flattens toward the strike as rates fall; Veronesi's Treasury callable shows the same thing, where "the bond price has to converge to the call price ($100) as interest rates decline" (Veronesi_Fixed_Income_Securities p.464). Effective convexity turns negative there, and far from the call, where the option is worthless, the two curves merge and convexity is positive again.
+
+```text
+Figure 4B.1 (schematic). Price against the level of rates (or spreads) at fixed OAS.
+
+ price
+   | .                                          .  straight bond: convex everywhere
+   |   .                                        o  callable: same cash flows, short a call
+   |     .
+   | o o o o.o o                                <- pinned near the call price at low rates:
+   |            o.                                 concave here, C_eff < 0
+   |              o.
+   |                o .
+   |                   o .
+   |                      o o . .               <- far from the call the option is worthless:
+   |                             o o o . . .       the curves merge and convexity returns
+   +---------------------------------------------- rate level / spread
+```
+
+### The make-whole
+
+A make-whole call lets the issuer redeem at $K^{\text{MW}} = \max\!\big(100,\ \text{PV of remaining flows at the Treasury curve} + m_w\big)$, with a make-whole spread $m_w$ such as 50bp. On the lattice, compute $W_{i,j}$, the remaining flows valued at $r + m_w$ by a parallel backward induction, and set $K^{\text{MW}}_{i,j} = \max(100, W_{i,j})$.
+
+*Proposition.* If $s \ge m_w$, the make-whole is never exercised. *Proof.* At every node the callable's continuation value is at most the non-callable value at spread $s$, which is at most the non-callable value at spread $m_w$ (positive cash flows, higher discount), which is $W_{i,j} \le K^{\text{MW}}_{i,j}$. So $\min(\text{continuation}, K^{\text{MW}}) = \text{continuation}$ everywhere. $\square$
+
+A make-whole is a call struck at the issuer's own credit spread equal to $m_w$, so it is out of the money for every issuer that trades wider than T+50, which is every high-yield issuer and every fallen angel. It is worth nothing to price and a great deal in three places: a merger refinancing (entry 3 of the table in §15.1), a covenant defeasance, and a bankruptcy claim, where whether the make-whole is allowed was the Hertz fight (§16.6).
+
+> **Trend Watch: The reference curve moved under every spread, 2018–2026.** *What changed:* the New York Fed began publishing SOFR on 3 April 2018; CME and LCH switched discounting of cleared US dollar swaps to SOFR in October 2020; the ARRC recommended CME Term SOFR on 29 July 2021, and it became the base rate of new leveraged loans; the USD LIBOR panel ended after 30 June 2023; US corporate settlement moved from T+2 to T+1 on 28 May 2024. The Treasury curve did its own work: the ten-year constant-maturity yield was 1.52% on 20 February 2020, 0.76% on 23 March and 0.66% on 30 June (FRED, DGS10), and the 2s10s curve was inverted for most of July 2022 to August 2024 (approx.; FRED, T10Y2Y), which flipped the sign of $Z - G$ for high-coupon bonds. *What it means for the desk:* an I-spread, ASW or DM series that spans 2019–2024 changes its reference curve in the middle; that is a structural break made of convention, and a factor or trend signal (Chapters 9, 10) will read it as a market move unless the panel is rebuilt on one curve. Accrued interest shrank by one business day on every trade in May 2024, and DM's "flat forward" assumption now runs on term SOFR, not three-month LIBOR.
+
+*Used in:* §5.2.2 (the price cap and negative convexity), §5.9 (the convexity tax), §12.2 (YTW as the yield input), §13.2 and §15.1 (make-whole and call economics in LMTs and mergers), §16.6 (the Hertz make-whole), §19.2 (`oasd`, `oas`), §21.5 (the loan's call as a repricing hazard), App A §A.5.
+
