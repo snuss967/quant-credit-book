@@ -20,15 +20,37 @@ Mags Dunleavy doesn't look up. "You're both wrong. It's a calendar. Thirty days 
 
 On Friday afternoon someone asked ROBO to "model the Halvorsen bankruptcy." It returned one number, 40, with a note: *Recovery assumed per market convention. Bankruptcy modeled.*
 
+The desk's own risk system did only a little better. Its status field for a bond takes two values, `PERFORMING` and `DEFAULTED`, and at 7:40 this morning it showed the 6s as performing, because a coupon inside its grace period has not, as a matter of contract, been missed. The CDS screen agreed: a failure to pay counts as a credit event only once the grace period has run out (§24.6). Mags read the field aloud at the 7:45 meeting, the way other people read horoscopes. "Performing. At nine."
+
 Ines Okafor turns her chair a quarter turn. "What's the pot, what are the odds, and who at this table knows more than you?"
 
 "The term loan is 63, the secured notes are 61, the 6s are 9 and the 2045s are 7," Theo says. "The odds depend on which document wins each argument. And the people who know more than me are the ones who have already hired counsel."
 
-Offstage, a Rule 2019 statement is being drafted. The Ad Hoc Group, represented by counsel, speaks in unison: *"We have organized. We hold 58% of the first lien. We have signed nothing."* (Cooperation agreements signed in this book so far: still 1. Chapter 13 has the pens.)
+He reads the four prices again, slower, the way he used to read a cap table to a client who had not opened the deck. The term loan and the secured notes share the same collateral under the same intercreditor agreement, and they are two points apart. "Same lien, same paper, two points," he says. "The market thinks the loan holders will be in the room and the noteholders will be in the hallway."
+
+"Say you own the secured notes at 61," Ines says. She does not pick the bond idly. Owen Achterberg, whom Theo has known since business school, bought \$10mm of them at 79 on day 3 and shorted the 6s against them (§4C.3). "Which of the next twelve months' events can move your 61, and who holds the pen for each one?"
+
+She takes three index cards from her drawer, the kind she uses for hand histories, and deals one to each of them, face down, as if it mattered which way up they landed. "By Friday, list the five events between now and a plan that can move the 61, who signs each, and which way it moves you."
+
+"Friday is the day after Thanksgiving," Kaz says.
+
+"The bond market closes at two. You have until two."
+
+Offstage, a Rule 2019 statement is being drafted. The Ad Hoc Group, represented by counsel, speaks in unison: *"We have organized. We hold 58% of the first lien. We have signed nothing."* (Cooperation agreements signed in this book so far: still 0. Chapter 13 has the pens.)
+
+Kaz's card is back on Ines's desk before lunch. It has one word on it, *default*, and Kaz defends it to anyone who passes: every other event anyone could write is conditional on that one, and a conditional is a parameter. "Five events is one event and four parameters."
+
+Mags takes until Wednesday and two phone calls she does not explain. Her card says *the DIP*, underlined twice, and nothing else. "Whoever lends the money after the petition writes the plan," she says when Theo asks. "The rest is typing."
+
+Theo fills all five lines on Thursday, on a train to his sister's, with a turkey sandwich on the tray table. The board signs the petition. The lender group signs the DIP, then the judge signs the order. The classes sign ballots. The judge signs the confirmation order. And, circled, *the intercreditor*, with a note in the margin: *pen already used, in 2021; decides whether the notes sit in the term loan's class or behind it.* He is proud of the circle. It is the PJT answer, the document nobody else on the desk has opened.
+
+At 2:05 on Friday Ines collects the three cards, slides them into an envelope and writes *open at the effective date* on the flap. She does this with hands she expects to have misread; a poker player who grades her calls only after she sees the river learns nothing from the river.
+
+Nobody wrote "the challenge period." Hold that thought. §12B.9 opens the envelope and puts a price on what all three cards missed. Before you turn the page, write your own card: five events, who signs each, and which way each one moves a holder at 61.
 
 **The question this chapter answers: which document decides each move, which clock is running, and what is each claim worth in each state?**
 
-By the end of this chapter you will be able to: name the document that governs any right in a leveraged capital structure and the vote it takes to change that right; run recoveries through collateral silos and tell lien subordination from payment subordination to the dollar; compute blocking positions in and out of court, including the turnout effect; write the out-of-court menu and Chapter 11 as one timed state machine with statutory clocks; define the fulcrum and the plan value once, and price the value transfer that a plan value, a roll-up or a cramdown rate creates; turn the docket's clocks into a discounted recovery with one matrix inverse; follow a claim from proof to Rule 3001(e) transfer to distribution; and hand ROBO `restructuring_state_machine.py`, the module Part IV builds on.
+By the end you will be able to price each signature on those cards and the wait between them; the Finder table at the head of §12B.11 lists every tool and where it lives.
 
 **How to read this chapter.** Former bankers can skim §12B.1–12B.5 for the formal objects (the min–max threshold, the silo algorithm, the clock table) and slow down for §12B.6–12B.7, where intuition becomes a price. Quants should read it in order.
 

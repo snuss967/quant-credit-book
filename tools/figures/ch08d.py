@@ -180,7 +180,7 @@ def fig_ben_dor():
         xs = [0, 1, 2, 3.6, 4.6, 5.6]
         ax.bar(xs, list(calm) + list(crisis), width=0.82, color=cols + cols)
         for x, v in zip(xs, list(calm) + list(crisis)):
-            ax.text(x, v + ymax * 0.02, fmt.format(v), ha="center", va="bottom", fontsize=7.8, color=INK_2)
+            ax.text(x, v + ymax * 0.02, fmt.format(v), ha="center", va="bottom", fontsize=7.2, color=INK_2)
         ax.set_xticks(xs)
         ax.set_xticklabels(["PV01", "DTS", "Beta"] * 2, fontsize=7.2)
         ax.set_title(ttl, fontsize=9.2)
@@ -334,7 +334,7 @@ def fig_stop_out_odds():
     ia = int(np.argmax(x))
     a1.annotate("equity", (ia, 100 * x[ia]), xytext=(0, 8), textcoords="offset points", fontsize=8.5, color=INK_2,
                 ha="center", va="bottom")
-    a1.text(214, 1.6, "stop = peak " + MINUS + " 5%", fontsize=7.8, color=INK_2, ha="right", va="top")
+    a1.text(212, 2.3, "stop = peak " + MINUS + " 5%", fontsize=7.8, color=INK_2, ha="right", va="bottom")
     a1.set_xlim(0, n)
     a1.set_ylim(-6.5, 9.5)
     a1.set_xlabel("Trading day")

@@ -129,14 +129,15 @@ def fig_gauss_vs_jump():
     axl.set_yticks([1e-12, 1e-9, 1e-6, 1e-3, 1])
     axl.set_yticklabels(["10⁻¹²", "10⁻⁹", "10⁻⁶", "10⁻³", "1"])
     axl.minorticks_off()
-    axl.annotate("", (L, norm.sf((L - mean_loss) / 7.0)), xytext=(18, 3e-11), textcoords="data",
+    axl.annotate("", (L, norm.sf((L - mean_loss) / 7.0)), xytext=(37.5, 6e-12), textcoords="data",
                  arrowprops=dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8))
-    axl.plot([1.6], [3e-11], "o", color=GAUSS, markersize=4)
-    axl.text(3.3, 3e-11, "Gaussian bag: mean loss 1, sd 7;\nlosing 50 is a 7-sd event,\nabout 1 in 800 billion",
+    axl.plot([1.6], [2e-11], "o", color=GAUSS, markersize=4)
+    axl.text(3.3, 2e-11, "Gaussian bag: losing 50\nis a 7-sd event, about\n1 in 800 billion",
              va="center", ha="left", fontsize=8.2, color=INK_2)
-    axl.plot([22.6], [0.1], "o", color=TOXIC, markersize=4)
-    axl.text(24.3, 0.1, "Jump bag: mean loss 1, sd 7;\nnothing, nothing, then 50:\n1 in 50", va="center", ha="left",
+    axl.plot([19.6], [0.62], "o", color=TOXIC, markersize=4)
+    axl.text(21.3, 0.05, "Jump bag: nothing, nothing,\nthen a loss of 50: 1 in 50", va="bottom", ha="left",
              fontsize=8.2, color=INK_2)
+    note(axl, "both bags: mean loss 1, sd 7", loc="lower left")
 
     # right: exact CARA jump charge divided by the quadratic charge
     xs = np.linspace(0.02, 4.0, 400)
@@ -200,10 +201,10 @@ def fig_price_pressure_decay():
     ax.text(2.5, -5.6, f"day 0: dent of {dent:.2f}", fontsize=8.2, color=INK_2, ha="left", va="center")
     ax.plot([0], [-perm - dent], "o", color=TOXIC, markersize=5.5, zorder=5)
     ax.text(2.5, -8.9, f"day 0: {perm + dent:.2f} below fair value", fontsize=8.2, color=INK_2, ha="left", va="center")
-    ax.plot([89], [0.55], "o", color=FORCED, markersize=4, clip_on=False)
-    ax.text(87.2, 0.55, "Forced seller (\u03c0 = 0): the dent heals", ha="right", va="center", fontsize=8.5, color=INK_2)
-    ax.plot([89], [-4.4], "o", color=TOXIC, markersize=4, clip_on=False)
-    ax.text(87.2, -4.4, f"A quarter informed (\u03c0 = 0.25):\n\u2212{perm:.2f} never comes back", ha="right",
+    ax.plot([63.3], [0.5], "o", color=FORCED, markersize=4)
+    ax.text(65.0, 0.5, "Forced seller (\u03c0 = 0):\nthe dent heals", ha="left", va="center", fontsize=8.5, color=INK_2)
+    ax.plot([57.6], [-4.45], "o", color=TOXIC, markersize=4)
+    ax.text(59.3, -4.45, f"A quarter informed (\u03c0 = 0.25):\n\u2212{perm:.2f} never comes back", ha="left",
             va="center", fontsize=8.5, color=INK_2)
     note(ax, "\u03ba = 0.4, I/ADV = 12.8, \u03b8 = 1/20 per day, J = 13", loc="lower right")
     return finish(fig, "ch01_price_pressure_decay")

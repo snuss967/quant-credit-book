@@ -1,7 +1,7 @@
 # U2 Progress Log: Ch 7-B
 
 - [x] 1. [7-B.0 Cold Open] EXPAND-SCENE. Note: dateline, DRR/Menkveld printouts, Theo's RSSG realization, notation re-headed.
-- [ ] 2. [7-B.1 Desk framing] BRIDGE + MATH-GENTLY (box 1 of 10, two parts).
+- [x] 2. [7-B.1 Desk framing] BRIDGE + MATH-GENTLY box 1. Note: re-deal wobble, Moulton 2.5, two-way wedding-guest inclusion-exclusion.
 - [ ] 3. [7-B.1 The estimator … through Errors in variables] FULL-DERIVATION-MOVE.
 - [ ] 4. [new `#### Long Scene: One March, Counted Once` after Errors in variables, before Ways This Blows Up] NEW-SCENE (2,200–2,800 words), the chapter's first long scene and its RV beat.
 - [ ] 5. [7-B.1 Ways This Blows Up] LIST-TO-NARRATIVE.

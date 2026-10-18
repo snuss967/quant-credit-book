@@ -90,3 +90,16 @@ Growth 35,365 / 12,571 = **2.81×** against the 1.6–1.9× target (20,114–23,
 ## (h) Relative-value beat
 
 - [x] H1. `state/rv_thread.md` assigns Ch 4 a scene in §4.1 (fee waterfall, T12). Present at L105–123 (Dov's PB-01 at Ch 1-B sizes, Mercer's 20-gross-for-10-net, pay per pod and risk per fund, the corner, figure placeholder). Ch 4 opens, stresses and closes no pair, so `state/rv_pair_book.md` needs no row change. Verify only; nothing to write. **Verified:** §4.1 scene carries T12 waterfall, hires, figure; no pair row needed.
+
+## Metric, after
+
+`python3 tools/prescriptiveness.py --pre 9ac1c379053d9d0254e9d524d9a40efdec4a2c71 book_src/04_ch04_inside_the_systematic_credit_industry.md`
+
+| ver | words | bullets% | modal | imper | rule | dialog | mathgently | seat |
+| :-- | --: | --: | --: | --: | --: | --: | --: | --: |
+| pre (Ed 1) | 12,571 | 18.1 | 2.4 | 2.0 | 1.1 | 8.0 | 0 | 0 |
+| before this pass | 35,365 | 4.6 | 2.1 | 1.0 | 1.2 | 7.9 | 20 | 4 |
+| after this pass | 31,870 | 4.2 | 1.9 | 0.8 | 1.3 | 9.0 | 8 | 4 |
+
+Growth 31,870 / 12,571 = **2.54×** (from 2.81×; `wc -w` 34,253 on 1,050 lines). Every second, third and fourth telling in (b) is retired and every box beyond the budget is a gloss (8 Math, Gently, about one per 4,000 words, none adjacent, no run above two boxed elements). What remains above the 1.9× band is single-telling scenes (the cold open, the retailer's five creditors, the pod waterfall, three CUSIPs, the factor-zoo week, the June 2022 replay, the EDF fax) and sourced cases, which the orchestrator ruling on lesson 1 keeps. The small rise in "rule" is the Finder table, where lesson 3 says each rule is stated once. No topic, numbered equation (4.1–4.7 unchanged; (4.3) moved out of a blockquote, not edited), Source Extraction or page number, Trend Watch wording (one IFR date hedge per lesson 13 aside, logged in `state/open_items_ed2.md`), exercise, figure placeholder, Appendix F link or URL was removed.
+<!-- STATUS: COMPLETE -->

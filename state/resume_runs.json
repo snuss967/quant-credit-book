@@ -2,27 +2,6 @@
  "note": "Restarted 14:35 UTC (window 14:30-19:30). Resume with Workflow({scriptPath, resumeFromRunId, args}).",
  "runs": [
   {
-   "name": "part-III-c",
-   "task": "wra0xl4y8",
-   "runId": "wf_5b507d53-841",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "12_ch12_multi_asset_credit_allocation",
-     "17_ch17_private_credit_public_private_convergence"
-    ],
-    "stages": [
-     "figures",
-     "figcheck",
-     "resgraph",
-     "brief",
-     "revise",
-     "verify"
-    ]
-   }
-  },
-  {
    "name": "lessons-rv-3-2-7",
    "task": "wlidanyfd",
    "runId": "wf_6ac67a00-da1",
@@ -68,24 +47,6 @@
     "stems": [
      "18_ch18_otc_microstructure_and_avellaneda_stoikov",
      "19_ch19_portfolio_trading_pricing_engines"
-    ],
-    "stages": [
-     "brief",
-     "revise",
-     "verify"
-    ]
-   }
-  },
-  {
-   "name": "u2-V-b",
-   "task": "wkrmp0n42",
-   "runId": "wf_6a0bfcb4-22d",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "20_ch20_credit_etf_creation_redemption_arb",
-     "21_ch21_leveraged_loans_and_clo_microstructure"
     ],
     "stages": [
      "brief",
@@ -260,6 +221,13 @@
      "rv"
     ]
    }
+  },
+  {
+   "name": "cleanup-batch-1",
+   "task": "wlx5ktyer",
+   "runId": "wf_26de4e7f-ed8",
+   "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/ed2-cleanup-batch-1-wf_26de4e7f-ed8.js",
+   "args": null
   }
  ]
 }

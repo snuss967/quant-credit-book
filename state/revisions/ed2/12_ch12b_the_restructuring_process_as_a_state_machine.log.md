@@ -1,6 +1,6 @@
 # Progress Log, Edition 2 U2: Chapter 12-B
 
-- [ ] 1. [Cold Open] EXPAND-SCENE (1,200-1,500 words), the Friday card
+- [x] 1. [Cold Open] EXPAND-SCENE (1,200-1,500 words), the Friday card — dated day 31 (Mon 23 Nov 2026, per 4-C canon); cards sealed in envelope.
 - [ ] 2. [§12B.1] LIST-TO-NARRATIVE + MATH-GENTLY #1 (min-max threshold)
 - [ ] 3. [§12B.2] MATH-GENTLY #2 + LIST-TO-NARRATIVE + FULL-DERIVATION-MOVE (turnover)
 - [ ] 4. [§12B.3] MATH-GENTLY #3 + LIST-TO-NARRATIVE + ANOTHER-SEAT (CLO)

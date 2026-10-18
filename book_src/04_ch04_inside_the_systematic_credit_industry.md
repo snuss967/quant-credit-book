@@ -182,7 +182,7 @@ Theo has five answers by the end of the afternoon, and he ranks them by how much
 
 | Rank | Why the money went to the analysts | Evidence |
 | :-- | :-- | :-- |
-| 1 | Clients came for yield, not alpha | BlackRock: in 2022 and 2023 "all in yields looked attractive in corporate credit" (`p.3`) |
+| 1 | Clients came for yield, not alpha | BlackRock's note: in 2022 and 2023 "all in yields looked attractive in corporate credit" (`BlackRock_Systematic_High_Yield_Credit p.3`) |
 | 2 | The growth sits in the middle, in hybrids | Barclays' \$90–140bn of quant-screened money dwarfs the dedicated pool |
 | 3 | The factors became contested | The replication audit of §4.5 |
 | 4 | Capacity | Much of high yield still trades by voice, and in stress the algorithms are among the first to step back (§4.7–§4.8) |

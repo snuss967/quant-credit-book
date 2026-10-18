@@ -19,7 +19,7 @@
 - [x] 17. [Scene B, beat 4] The Pair box, PB-16; mark stressed (Ch 26) in ledger. — Done: PB-16 box in beat four; ledger marked stressed (Ch 26).
 - [x] 18. [26.7] MATH-GENTLY #7, "The best of N coin-flippers," before beat 3. — Done: coin-flipper box before 9:20 beat; owner Ch 7 cited.
 - [x] 19. [26.8] ANOTHER-SEAT #2, dealer's CIO and market maker's budget. — Done: Goldman, HRT, Man seat box; Doros pointed, not requoted.
-- [ ] 20. [26.9, items 1-8] LIST-TO-NARRATIVE, one Thursday afternoon; keep pairs, METR, extractions.
+- [x] 20. [26.9, items 1-8] LIST-TO-NARRATIVE, one Thursday afternoon; keep pairs, METR, extractions. — Done: Thursday 8 Oct afternoon, eight ROBO misfires; METR verbatim.
 - [ ] 21. [26.9, determinism formally] MATH-GENTLY #8 in two parts.
 - [ ] 22. [26.10, controls (i)-(v)] LIST-TO-NARRATIVE; white-text amendment as the day.
 - [ ] 23. [26.11, Case Study A, Knight] EXPAND-SCENE to 900-1,200 words, #### heading.
