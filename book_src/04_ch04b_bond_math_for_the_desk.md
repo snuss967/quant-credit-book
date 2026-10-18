@@ -611,6 +611,8 @@ Sketch 4B.1 (schematic, not a numbered figure). Price against the level of rates
    +---------------------------------------------- rate level / spread
 ```
 
+That flattening is what a call costs when its strike is a fixed price on a schedule. A make-whole call is struck somewhere else entirely, at a price that moves with the curve, and the difference decides whether the option is worth anything at all.
+
 ### The make-whole
 
 A make-whole call lets the issuer redeem at $K^{\text{MW}} = \max\!\big(100,\ \text{PV of remaining flows at the Treasury curve} + m_w\big)$, with a make-whole spread $m_w$ such as 50bp. On the lattice, compute $W_{i,j}$, the remaining flows valued at $r + m_w$ by a parallel backward induction, and set $K^{\text{MW}}_{i,j} = \max(100, W_{i,j})$.

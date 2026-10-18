@@ -13,8 +13,8 @@
 - [x] 11. **[§28.4 Case Study: CCC decompression] · EXPAND-SCENE (to 1,200–1,600 words, live, Sept–Oct 2026).** Rafe's HY book has leaned into CCC car — DONE: Rafe CCC scene; Sunita docs L_max=1; card; TW moved to end.
 - [x] 12. **[§28.4 case, after the decision] · ANOTHER-SEAT (box): the CLO manager.** Same decompression from the seat that must keep a 7.5% CCC bucke — DONE: CLO seat box: Kundu 7.5% bucket, sells higher-priced CCCs first.
 - [x] 13. **[§28.5 head] · MATH-GENTLY (box 8): VaR, the lognormal, and √T.** A 1% daily σ gives a 99% one-day VaR of 1 − e^{−2.33×0.01} ≈ 2.3%; ten d — DONE: Box 8 VaR 2.3%, √10; FRTB Full Derivation subsection; 22e-4 kept.
-- [ ] 14. **[§28.5 Case Study: Third Avenue] · NEW-SCENE, Long Scene (2,000–2,800 words), promoted to `####`.** *Ines's replay ritual (before 22 Sep 2
-- [ ] 15. **[§28.5 after the scene] · WHEN-TO-APPLY inside the scene.** Give (28.16)–(28.17) to Ines at the card's answer: COL is a pre-trade number f
+- [x] 14. **[§28.5 Case Study: Third Avenue] · NEW-SCENE, Long Scene (2,000–2,800 words), promoted to `####`.** *Ines's replay ritual (before 22 Sep 2 — DONE: Third Avenue four-folder replay; card 10 Dec; NY Fed grading; SE annotation endline adjusted.
+- [x] 15. **[§28.5 after the scene] · WHEN-TO-APPLY inside the scene.** Give (28.16)–(28.17) to Ines at the card's answer: COL is a pre-trade number f — DONE: Ines's four clocks at card answer; Block 4 opens from beat (i).
 - [ ] 16. **[§28.6 head] · MATH-GENTLY (box 9, two parts): a random walk with drift, and the PM's call.** *Part one:* the reflection trick in one pict
 - [ ] 17. **[§28.6 Case Study: March 2020 and March 2026] · NEW-SCENE, Long Scene (2,000–3,000 words), promoted to `####`.** *Replay for March 2020, l
 - [ ] 18. **[§28.6 scene, beat (ii)] · ANOTHER-SEAT (box): the dealer desk.** JPMorgan Q1 2020 call, 14 Apr 2020: "our bridge book commitments were ma

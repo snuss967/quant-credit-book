@@ -1,0 +1,10 @@
+# Open Items, Chapter 12-B (Edition 2, U2 revision, 2026-10-18)
+
+Facts the chapter writes around rather than states. Each needs a primary-source check before it can be stated plainly.
+
+1. **Saks Global DIP composition.** \$1.75bn DIP with \$1bn new-money first-out (SOFR+11% PIK; final order 20 Feb 2026, The Fashion Law). The other \$750mm is unexplained in the dossier (roll-up of prepetition notes vs refinanced ABL/other). Chapter text: Ines's whiteboard "read the DIP order"; no roll-up ratio asserted. Source needed: the final DIP order, S.D. Tex. No. 26-90103.
+2. **Saks Global plan classes.** Trade press (FW 9 Jun 2026; TFL) report a rejecting old-notes class crammed down and a \$20mm litigation trust for about \$1.5bn of junior claims. Which class the ~\$51mm stub of old 11% notes sat in, and whether it shared in the trust, is not established. Chapter grades the Beat 4 cards against Mags's ceiling (1.3 cents) "on the generous reading". The voting result by class ((a)(10)) is inferred, not sourced.
+3. **Saks Global notes' grace period.** Chapter says "if the indenture had the customary grace" (30 days); the indenture's actual interest grace period is not checked.
+4. **Saks Global ABL covenant mechanics.** Minimum-availability steps (\$200mm; \$375mm from 1 Dec 2025; \$500mm from 16 Dec) are sourced; the consequence of breach ("stop funding and take control of the cash") is written as "the usual form of these facilities", not as Saks's document.
+5. **\$51mm stub.** From ElevenSaks (AI-assisted case summary); hedged as "by one case summary".
+6. **Story clock.** The brief placed the Halvorsen petition in Theo's week six and the Saks replay in week five. Ch 4-C canon puts the missed 6% coupon on day 30 (Fri 20 Nov 2026), so the cold open is Mon 23 Nov 2026 (day 31, Theo's tenth week), the cards are due and the Saks replay runs Fri 27 Nov 2026 (day after Thanksgiving, SIFMA early close), and the petition falls on day 28 of the grace period (about Fri 18 Dec 2026). The §12B.9 grading happens when the envelope is opened at the effective date (no calendar date given).

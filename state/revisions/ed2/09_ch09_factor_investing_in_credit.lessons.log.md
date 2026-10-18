@@ -33,10 +33,10 @@
 Grep for "It breaks in", "seasoned", "the first question", "Use it for", "do not mistake", "edge case that bites", "When to reach for it": no "When to reach for it" paragraphs and no "breaks in three places"; seven "edge case that bites" listing closers. Remaining templates:
 
 - [x] C1. The seven §9.11 listing paragraphs (L898, 906, 914, 922, 930, 938, 946) close on the U1 template "Use this block... Do not use it... The edge case that bites is". Recast each in plain narrative; open from the scene moment (Hana's red build, ROBO's second run, the negative-EBITDA floor, Theo's first run) and point to the scene where it already shows the edge case. Also L904 and L920 ("should... should... should"; "must... must... must") read as manual voice: recast as what the tests found. *Done: seven closers recast; manual-voice should/must lines now report results.*
-- [ ] C2. L203, the Ben Dor annotation: "Two caveats... First, ... Second, ..." inside a paragraph. Recast without enumerators (with B5).
-- [ ] C3. L409, the p.610 annotation: "One number fixes three design choices. It fixes... It fixes... And it fixes...": a list in costume. Recast (with B8).
-- [ ] C4. L687, the dealer seat box: "knows three things the manager would rather the dealer did not": recast as the dealer's view without the count.
-- [ ] C5. L693, the LCS annotation: "Two features of the 2026 desk go beyond the definition. First, ... Second, ...": recast without enumerators; the unfilled-RFQ point points to the 8:10 vignette (L683), which already shows it.
+- [x] C2. L203, the Ben Dor annotation: "Two caveats... First, ... Second, ..." inside a paragraph. Recast without enumerators (with B5). *Done: done with B5; caveats now Mags's bond and the capital structure.*
+- [x] C3. L409, the p.610 annotation: "One number fixes three design choices. It fixes... It fixes... And it fixes...": a list in costume. Recast (with B8). *Done: done with B8; three-fixes list replaced by one quieter point.*
+- [x] C4. L687, the dealer seat box: "knows three things the manager would rather the dealer did not": recast as the dealer's view without the count. *Done: count dropped; dealer's knowledge told as one reading of the RFQ.*
+- [x] C5. L693, the LCS annotation: "Two features of the 2026 desk go beyond the definition. First, ... Second, ...": recast without enumerators; the unfilled-RFQ point points to the 8:10 vignette (L683), which already shows it. *Done: enumerators gone; unfilled pieces now point to the 8:10 vignette.*
 
 ### (d) Boxes (lessons 6–8, 10)
 

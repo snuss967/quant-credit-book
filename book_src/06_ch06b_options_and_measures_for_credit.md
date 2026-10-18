@@ -121,13 +121,9 @@ payoff
                         ^ plan value lands here: the [a3,a4] tranche is the fulcrum
 ```
 
-Three things fall out of the ladder that RSSG teaches by experience and the desk needs as formulas.
-
-1. **The fulcrum is the at-the-money call spread.** The tranche whose interval $[a_j,a_{j+1}]$ contains the plan value is the one most sensitive to the valuation fight. Tranches above it are deep in the money and tranches below it far out of it, and both have delta near zero. Kaz, who once asked whether the fulcrum was "the tranche that does the most leverage," was accidentally half right.
-2. **Seniority is moneyness.** Every liability-management transaction moves strikes: an uptier inserts a tranche at $a=0$ and pushes everyone else's attachment points up by its face (§13.3); a drop-down removes assets from $V_T$ for some tranches but not others (§13.6).
-3. **Each tranche is long volatility below its midpoint and short volatility above it.** A call spread is convex near its lower strike and concave near its upper one. The senior secured tranche, with lower strike zero, is all concavity: it is short volatility everywhere. Equity is all convexity. Mezzanine tranches flip sign as the firm deteriorates, which is the structural reason the CCC bond of §8.3 starts behaving like stock.
-
 Price each call with any model you like and the tranche values follow: $\text{value}_j=C(a_j)-C(a_{j+1})$, with $C(0)=V_0$. In Merton's lognormal model this is the §6.2.3 formula applied tranche by tranche. Chapter 23 calls the same picture "one distribution, many strikes" (§23.1).
+
+RSSG teaches what falls out of the ladder by experience: where the fulcrum sits, why seniority is moneyness, which tranches are long volatility and which are short it. Those three readings are easier to watch on a real stack, on the evening a document moved its strikes, than to memorize as a list, so §6-B.1.5 deals them one at a time on Wolfspeed. Kaz, who once asked whether the fulcrum was "the tranche that does the most leverage," turns out there to have been accidentally half right.
 
 Used in: §6.2.1 (Merton's two-tranche case), §8.3, §13.3, §13.7, §15.3, §16.3, §21.4, §23.1.
 
