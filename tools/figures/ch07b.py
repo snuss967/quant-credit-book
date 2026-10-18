@@ -351,7 +351,7 @@ def fig_first_passage():
     naive, bridge = [], []
     for g, s in zip(grids, ss):
         rng = np.random.default_rng(s)
-        a_, b_ = first_passage_mc(rng, g, 200_000)
+        a_, b_ = first_passage_mc(rng, g, 2_000_000)
         naive.append(a_)
         bridge.append(b_)
     naive, bridge = np.array(naive), np.array(bridge)
@@ -377,7 +377,7 @@ def fig_first_passage():
     ax.annotate(f"exact, continuous monitoring: {100 * exact:.1f}%", (0.9, 100 * exact), xytext=(0, 6),
                 textcoords="offset points", ha="left", va="bottom", fontsize=8.5, color=INK_2)
     i12 = grids.index(12)
-    gap = 100 * (exact - naive[i12])
+    gap = round(100 * exact, 1) - round(100 * naive[i12], 1)      # the difference of the two printed numbers
     ax.annotate("", xy=(12, 100 * exact - 0.25), xytext=(12, 100 * naive[i12] + 0.25),
                 arrowprops=dict(arrowstyle="<->", color=INK_2, linewidth=1.0, shrinkA=0, shrinkB=0))
     ax.annotate(f"monthly grid: {100 * naive[i12]:.1f}% vs {100 * exact:.1f}%\nmisses {gap:.1f} points, about a quarter\nof the defaults",
@@ -385,7 +385,7 @@ def fig_first_passage():
                 va="center", fontsize=8.5, color=INK_2)
     label_end(ax, 252, 100 * bridge[-1], "bridge, any grid", C_FIX, dx=6, dy=2)
     label_end(ax, 252, 100 * naive[-1], "grid only", C_NAIVE, dx=6, dy=-2)
-    note(ax, "σ = 0.25, barrier 0.30 below the start in logs, zero drift; 200,000 paths per point",
+    note(ax, "σ = 0.25, barrier 0.30 below the start in logs, zero drift; 2,000,000 paths per point",
          loc="lower left")
     return finish(fig, "ch07b_first_passage_bridge")
 

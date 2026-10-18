@@ -187,7 +187,7 @@ One row per event, deduplicated across chapters; when several chapters cite the 
 | 2025 Q4 | Institutional leveraged loans | \$1,549bn (+9.2%) | Fed FSR (2026-05-08) | 12, 21 |
 | 2026-01 | Record trading month | ADNV \$61bn (+22%) | Coalition Greenwich (2026-02-17) | 1 |
 | 2026-02-24 | Coercive LME outcomes | 22% clean after two years (89 deals) | Roe & Rotaru, HLS Bankruptcy Roundtable | 14 |
-| 2026-03 | Middle East energy shock | EUR IG bid–ask +64%; recovery 4 to 14+ weeks; TRACE ADV \$70.2bn | The DESK (2026-10-01; 2026-04-09) | 4, 18 |
+| 2026-03 | Middle East energy shock | EUR IG bid–ask +64%; recovery 4 to 14+ weeks; TRACE ADV \$70.2bn (The DESK's figure; not tied to FINRA's file) | The DESK (2026-10-01; 2026-04-09) | 4, 18 |
 | 2026-03-26 | BDC Q1 redemption requests | ~\$13bn; >\$4.6bn trapped | Bloomberg Law | 17 |
 | 2026-03-30 | HY OAS peaks in energy shock | 3.46% | FRED | 10 |
 | 2026 Q1 | Semi-liquid private credit redemptions exceed inflows | First time; \$425bn gross / \$241bn net | Fed FSR (2026-05-08) | 12, 17 |

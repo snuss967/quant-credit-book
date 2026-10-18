@@ -413,13 +413,13 @@ def fig_stop_size():
 def ledger_rows():
     """Twelve rows, $ thousands.  Statuses follow state/rv_pair_book.md: PB-01, PB-02 and PB-19 are open on 8 October;
     the rest are replays or a refusal.  Drawn at the figure's scale: PB-19 (8D.6's September), PB-01 (kappa 0.41),
-    PB-03 (kappa 0.67, idio $0.75mm), and, from the Pair Book's recorded capture ratios, PB-09 (0.8: idio +0.80mm,
+    PB-03 (kappa 0.60, idio $0.75mm, net $0.45mm after financing), and, from the Pair Book's recorded capture ratios, PB-09 (0.8: idio +0.80mm,
     net +0.65mm) and PB-10 (0.2: idio about 0.9mm, net about 0.17mm).  Text rows (no bars): PB-02 (idio about 0, capture
     not defined), PB-07 (capture about 5, off the scale), PB-11 (idio flat, the P&L was the jump overhang), PB-12
     (refused).  Generated, seed 80: PB-08, PB-14, PB-16."""
     rng = np.random.default_rng(80)
     fixed = {
-        "PB-01": (210.0, -66.0, -58.0), "PB-03": (750.0, -150.0, -100.0),
+        "PB-01": (210.0, -66.0, -58.0), "PB-03": (750.0, -150.0, -150.0),
         "PB-09": (800.0, -100.0, -50.0), "PB-10": (900.0, -430.0, -300.0),
         "PB-19": (162.0, -(51.8 + 6.0), -(12.5 + 13.3 + 20.0)),
     }
@@ -461,7 +461,7 @@ def fig_ledger():
     rows = ledger_rows()
     by = {r["id"]: r for r in rows}
     assert abs(by["PB-19"]["kappa"] - 0.36) < 0.005 and abs(by["PB-01"]["kappa"] - 0.41) < 0.005
-    assert abs(by["PB-03"]["kappa"] - 0.67) < 0.005
+    assert abs(by["PB-03"]["kappa"] - 0.60) < 0.005
     assert abs(by["PB-09"]["kappa"] - 0.8) < 0.02 and abs(by["PB-10"]["kappa"] - 0.2) < 0.02   # the Pair Book's values
     assert abs(by["PB-19"]["idio"] + by["PB-19"]["leak"] + by["PB-19"]["fric"] - 58.4) < 0.05
     assert [r["status"] for r in rows].count("live") == 3 and [r["status"] for r in rows].count("refused") == 1

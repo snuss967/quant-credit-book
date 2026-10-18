@@ -49,22 +49,6 @@
    "runId": "wf_b4c8ff84-ee9",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/cleanup_queue.js",
    "args": "see state/cleanup_args.json (re-typed from the launch; pass its contents as args)"
-  },
-  {
-   "name": "appz-notes-fix-13-14",
-   "task": "wa872pwhb",
-   "runId": "wf_394d08f5-3ff",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/appz_notes_fix.js",
-   "args": {
-    "lanes": [
-     [
-      "13_ch13_codifying_lmt_game_theory"
-     ],
-     [
-      "14_ch14_default_and_recovery_cycle_lmt_era"
-     ]
-    ]
-   }
   }
  ]
 }

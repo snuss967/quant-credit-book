@@ -63,7 +63,7 @@ Status: fixed.
 
 Found. `defensive_portfolio` hands SLSQP ~440-550 free weights per cross-section (`bounds` on every name, `maxiter=500`, `ftol=1e-14`), five dates in a row. SLSQP is cubic in the number of variables and treats the bounds as constraints. Measured:
 
-- full grid, month 24 alone (553 issuers, 442 kept): still not finished after 4.5 minutes (killed); the full five-date run was killed after more than 13 CPU-minutes. A run of the whole grid with `FULL_GRID = True` is recorded below.
+- full grid, month 24 alone (553 issuers, 442 kept): still not finished after 4.5 minutes (killed); a first full five-date run was killed after more than 13 CPU-minutes. The complete run is recorded below (about 7 minutes).
 - 100 issuers: about 2-3 s a date; 120 issuers: 22-38 s a date (CPU shared); 150: up to 40 s. SLSQP stops on a line-search failure after 60-120 iterations or, when it does not, runs to `maxiter`, so the time is erratic above ~100.
 
 Fix (smallest that meets the brief: smaller default grid, full grid behind a flag). In Listing 11.5's demo, before the loop and inside it:
@@ -86,7 +86,7 @@ Choice of 100, and why not smaller or randomly sampled (all checked with an exac
 - A random sample was the first thing tried (`cs.sample(100, random_state=t0)`); with only 2-7 defaulters per cross-section the in-sample comparison is noise (held 2.21% vs bench 2.11%, assertion fails). The systematic sample is deterministic and keeps the cross-section's id structure; across N = 100-150 it gives held default exposure 0.6-1.2% against 3.7-4.5% for the benchmark. I did not tune the sampling rule beyond comparing "first N ids", "random" and "every k-th": "first N ids" also passes at 100, 120, 130, 150 but is infeasible at 110; "random" is unreliable below ~150.
 - The full-grid answer from the exact projection (so the flag is known to land in the same place): held 0.659% vs benchmark 3.042% average 12-month default exposure, last market-value-tilt DTS ratio 0.43, largest weight 2.57% (cap not binding). The default grid prints held 0.731% vs bench 3.889%, last ratio 0.43.
 
-Timing after the fix (Ch 11 section of App F, Listings 11.1-11.6 cumulatively, exit 0, every assertion passes): 12.6 s in all (11.1-11.4 together 1.5 s, 11.5 about 11 s, 11.6 instant), against several minutes before. Printouts:
+Timing after the fix (Ch 11 section of App F, Listings 11.1-11.6 cumulatively, exit 0, every assertion passes), against several minutes before (the full grid took 414 s, below). It depends mostly on BLAS threading, because SLSQP works on small dense matrices and oversubscribed threads dominate: 2.7 s (twice) with `OMP_NUM_THREADS=1`, 2.8 s on an idle box with default threads; 12.6-19.5 s with default threads while other jobs shared this 4-core box; 34-44 s with 4 threads at load average ~10 (other editors' jobs). So it is comfortably under 30 s on an idle machine and with one thread, and not guaranteed under heavy load. Setting `OMP_NUM_THREADS=1` in the subprocess environment of `tools/check_book.py` would make the runtime independent of load; I did not touch check_book.py (not one of this group's files). Printouts:
 
 ```
 avg 12m default exposure: held=0.731% bench=3.889%; last MV-tilt DTS ratio=0.43
@@ -95,9 +95,9 @@ DTS multiplier calm=1.00 shock=1.20 fundamental=1.00 guarded=1.05; capacity core
 
 Ch 11 prose check. Nothing in Ch 11 or Appendix Z quotes a number from Listing 11.5's printout. Listing 11.6's numbers, which the chapter does quote, are unchanged: multipliers 1.00 / 1.20 cap / 1.00 / 1.05, core about \$49bn, satellite about \$1.2bn. The 11.5 paragraph (§11.7 Specification, after "The part to notice ...") said "The demo runs five cross-sections from the Listing 11.3 panel and asserts ..." which stays true; one sentence added after the asserts:
 
-- Added: "By default each cross-section is a systematic sample of 100 issuers (every fourth or fifth, by id), so the whole block runs in well under half a minute; the full cross-sections hold 480 to 550 issuers, and SLSQP then takes minutes per date, which is what `FULL_GRID = True` buys. A sample cannot shrink much further: at 80 issuers the 3% cap and the DTS target conflict, and the assertions fail, which is the feasibility failure described below."
+- Added: "By default each cross-section is a systematic sample of 100 issuers (every fourth or fifth, by id), so the whole block runs in seconds, not minutes; the full cross-sections hold 480 to 550 issuers, and SLSQP then takes several minutes in all; set `FULL_GRID = True` to run them. A sample cannot shrink much further: at 80 issuers the 3% cap and the DTS target conflict, and the assertions fail, which is the feasibility failure described below."
 
-FULL_GRID result: FULLGRID_PLACEHOLDER
+FULL_GRID result (the flag was run, not just written): with `FULL_GRID = True` the Ch 11 section ran to completion in 414 s on a shared 4-core box (11.5 alone 413 s; CPU also loaded by other jobs), every assertion passed, and the printout was `avg 12m default exposure: held=0.659% bench=3.042%; last MV-tilt DTS ratio=0.43`, identical to the exact-projection figures above, and 11.6 printed the same line as the default grid. So the default grid changes the numbers printed by 11.5 (held 0.731% vs bench 3.889% instead of 0.659% vs 3.042%) and nothing else; the full-grid values are reproducible behind the flag.
 
 Option not taken, for the owner: the same QP has an exact solution in two multipliers (`w = clip(w0 + a + b*dts, 0, cap)`, solved with a 2-D root finder), which does the full grid in 0.0 s. It would replace SLSQP in `defensive_portfolio`, and with it the chapter's teaching about reading the solver status and the silent feasibility failure, so I did not do it under a "smaller grid" brief.
 
@@ -314,3 +314,6 @@ Status: fixed.
 
 - `tools/check_book.py --file book_src/95_appF_code_companion.md --run-code` cannot pass as it stands: it concatenates all 174 blocks into one script and stops at a `from __future__ import annotations` in a Part VIII / appendix listing (six such imports in App F, already present before this pass). Per-chapter runs, which is how the appendix preamble says to run listings, all pass for the chapters this group touched (1, 11, 25, 28).
 - `check_book.py` reports three missing anatomy items for Ch 4-D (ai_spec, source_extraction, case_study); unrelated to listings, not touched.
+- Web calls used: 0 of 6 (no real-world fact was involved; every number above was recomputed in python3).
+
+<!-- STATUS: COMPLETE -->
