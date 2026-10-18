@@ -597,3 +597,155 @@ assert np.all(np.diff(path_noas) < 0)
 ```
 
 Hold on to that last assert. The engine, run without an AS model, evicts the stale \$18mm line and is satisfied: the basket is now below its 45bp target, and line 117 stays in. Line 117 looks like a model citizen. Its realized volatility is ordinary, its LCS is unremarkable, and it diversifies nicely. Everything the covariance matrix can see about it is fine. That is the point.
+
+## 19.7 Stress Liquidity Commonality: When Every $c_i$ Moves Together
+
+In calm markets the four terms of (19.2) are small and nearly independent. In stress they collapse into one term. "In October 2008," Mags says, "we priced baskets by phone and by grudge, and the grudge was the only thing with a bid." Grudging respect follows: "Your matrix at least knows which bonds it can't sell. We had to find out one call at a time."
+
+### 19.7.1 Derivation: a common multiplier in costs, a rank-one spike in risk
+
+Let each line's cost carry a common liquidity multiplier: $c_{i,t}=\bar c_i\,m_t+\varepsilon_{i,t}$, with $m_t>0$, $m\approx1$ in calm markets, and $\log m_{t+1}=\varphi\log m_t+\xi_{t+1}$. The basket's liquidation cost is $L=m\sum_i\lvert x_i\rvert\bar c_i+\sum_i\lvert x_i\rvert\varepsilon_i$, with independent $\varepsilon_i$, so
+
+$$
+\operatorname{Var}(L)=\Big(\sum_i\lvert x_i\rvert\,\bar c_i\Big)^2\sigma_m^2+\sum_i x_i^2\,\sigma^2_{\varepsilon,i}.
+\tag{19.9}
+$$
+
+The first term grows like $N^2$ and the second like $N$. **The liquidity factor does not diversify.** Adding lines to a basket dilutes idiosyncratic cost noise and leaves the common multiplier exactly where it was. The same shock moves prices: illiquid bonds fall more when $m$ jumps, by about $g_i=-\theta\,\text{LCS}_i\widehat P_i$ per unit of $m$. Nothing in the hedge menu spans $m$ (§19.4), so it survives into the residual as a rank-one spike:
+
+$$
+\Sigma^{\text{res}}_{\text{stress}}=\Sigma^{\text{res}}_{\text{calm}}+\sigma_m^2\,\mathbf{g}\mathbf{g}^\top .
+\tag{19.10}
+$$
+
+Because $\mathbf{x}^\top\mathbf{g}\mathbf{g}^\top\mathbf{x}=(\mathbf{g}^\top\mathbf{x})^2$, a one-sided basket of illiquid bonds has the spike at full strength. A mixed buy/sell basket nets it, which is one more reason dealers love two-way baskets. The persistence parameter comes from recovery half-lives $h$ in weeks, $\varphi=2^{-1/h}$. The March 2026 episode's 4–14-week half-lives (below) give weekly $\varphi\in[0.84,0.95]$. So stress lasts longer than any PT unwind horizon, and the dealer cannot simply wait it out.
+
+> **[SOURCE EXTRACTION]** *Ben_Dor_Quantitative_Credit_Portfolio_Management p.112:* "Over this time period, the LCS for the IG Index ranged from 0.59% to 3.40%. Although the spike in illiquidity that occurred in October 2008 is painfully clear, the index's LCS values had already doubled between June 2007 and September 2007, in the very early stages of the credit crisis."
+>
+> **Annotation.** Here are two calibration targets and one warning. The range $3.40/0.59\approx5.8$ is the empirical ceiling for $m$ at the *index* level, and the regime map below hits exactly 5.8 at its cap. With the LCS–VIX correlation of 0.90 (p.166), it licenses a one-factor liquidity model keyed to observable stress. The warning is the second sentence: LCS doubled *months before* the obvious crisis. A regime trigger keyed only to headline volatility arrives late. Key it to the cost data itself (bid–ask percentiles, ETF discounts) and expect $m$ to drift up before it jumps. Cotelioglu (2024, *Journal of Empirical Finance* 78) adds the mechanism a 2026 desk must respect: ETF ownership raises liquidity *commonality* in IG bonds. The plumbing that makes the lump cheap to hedge in calm markets also makes the residue's costs move together in stress.
+
+> **Trend Watch: PT in four stresses.** *March 2020:* Meli & Todorova's initial results show PTs "did not have lower transaction costs during March 2020, when volatility spiked due to the Covid-19 outbreak, and flows were one-sided." Bond ETF tracking error exceeded 200bp against a 0.7bp average (Todorov, BIS, 2021). *H1 2022:* PT costs rose as dealers committed less balance sheet and custom creation baskets disappeared (Man_Revolutions_in_Credit_Trading_2023 p.3; §19.6.2). *April 2025:* the tariff shock produced record volume days with 12% of 2025-04-08 volume via PT, and \$99bn of fixed income ETFs traded on 2025-04-07. On net, only one-fifth of active PT dealers said their willingness to do PT (relative to single-name market making) "decreased somewhat" (SCOOS, June 2025). *March 2026:* EUR IG bid–ask spiked 64% above its January average. Recovery took about 4 weeks in EUR IG, 6 in US HY, 8 in US IG, 13 in EUR HY and 14 or more in EM (MarketAxess data via The DESK, 2026-10-01). *What it means:* each episode is a jump in $m$ and $\gamma$, and the protocol's resilience has improved. In 2020 PT lost its cost edge outright. In 2025 most dealers kept quoting, with wider parameters.
+
+### 19.7.2 Case Study: March 2020 and the April 2025 Tariff Week
+
+In **March 2020** all three stress channels fired at once. Flows were one-sided, so the spike in (19.10) hit at full strength, with no two-way netting. The ETF basis that the hedge relied on became the largest residual ($\sigma_u$ in §19.4 went from negligible to dominant). Dealer $\gamma$ jumped with balance-sheet constraints. The result is the Meli–Todorova finding above: the protocol's cost advantage vanished in exactly the weeks clients most wanted certainty. A desk running this engine would have watched its regime score hit the cap, its eviction loop exhaust the $\alpha$ budget on every HY basket, and its quotes widen until they stopped winning. That is the correct outcome. A PT engine that keeps winning in March 2020 at calm-market prices is subsidizing its clients' exits with its own capital.
+
+**April 2025** was the first stress the mature PT infrastructure came through. Volume set records, PT kept a double-digit share of the record day, and ETFs absorbed the price-discovery role on 2025-04-07. In SCOOS terms, a *net* one-fifth of dealers pulled back somewhat: a dent, not a collapse. Two differences from 2020 show up in the engine's inputs. First, the hedge stack was deeper (CDX, TRS and, soon after, listed credit futures), so the basis variance did not have to sit in a single ETF. Second, buy-side automation stayed on with "stress parameters" rather than switching off, so baskets kept arriving two-way enough to net part of the spike. The upstream lesson for the engine is that $m$, $\gamma$ and the basis multiplier must move *together* from one regime score. Calibrating them separately produces an engine that is calm about costs and panicked about risk, or the reverse, and either one is wrong.
+
+### Specification for AI Implementation (regime and stress covariance)
+
+```python
+def regime(etf_disc_z=0.0, bidask_pct=0.5):
+    """Stress score s in [0, 2] from ETF discount z-score (negative = discount) and bid-ask
+    percentile in [0, 1]; one score drives m, gamma and basis together. At s = 2, m = 5.8,
+    Ben Dor's 0.59% -> 3.40% IG LCS range (illustrative calibration)."""
+    s = max(0.0, -etf_disc_z - 1.0) / 3.0 + max(0.0, bidask_pct - 0.8) / 0.2
+    s = min(s, 2.0)
+    return dict(s=s, m=1.0 + 2.4 * s, gamma_mult=1.0 + 1.5 * s, basis_mult=1.0 + 2.0 * s)
+
+THETA_LIQ = 0.8   # price change per unit of m per unit of LCS (illustrative)
+
+def stress_cov(b, Sres_calm, s):
+    """Eq. 19.10: calm residual covariance plus a rank-one liquidity spike."""
+    g = -THETA_LIQ * b.lcs * b.mid
+    return Sres_calm + (0.25 * s) ** 2 * np.outer(g, g)
+
+reg = regime(etf_disc_z=-2.5, bidask_pct=0.9)
+assert np.isclose(reg["s"], 1.0) and np.isclose(regime(-10.0, 1.0)["m"], 5.8)
+S_st = stress_cov(b0, Sres, reg["s"])
+spike = S_st - Sres
+assert np.linalg.matrix_rank(spike, tol=1e-8 * np.linalg.norm(spike, 2)) == 1
+# the spike does not diversify: its share of basket variance dwarfs its share of line variance
+share_basket = (b0.x @ spike @ b0.x) / (b0.x @ S_st @ b0.x)
+share_lines = np.sum(b0.x**2 * np.diag(spike)) / np.sum(b0.x**2 * np.diag(S_st))
+assert share_basket > 3.0 * share_lines
+```
+
+## 19.8 Adverse Selection in Baskets: The Mystery Box
+
+> **Poker Table.** "In a single-name RFQ," Ines says, "the player chose to bet. In a basket the player also chose *which cards to put face down among 150 face up*. You can't see the face-down cards. You can count how often this player has shown you a hand like this, and where it cost you." A PT is a bundle of 148 face-up cards that pay for the privilege of hiding two. The client is not cheating. That is the game. The dealer's edge is knowing which seats at the table hide cards, and what the cards usually are.
+
+Glosten–Milgrom (Chapter 18) says the dealer's bid for one bond is $\mathbb{E}[V_i\mid\text{client sells }i]$. In a basket, the conditioning event is richer: the client sold *this bundle*, and chose to include line $i$. The good news is in the evidence. Li (2022) finds that PT-versus-voice cost differentials in IG do not respond to private-information proxies, so in IG baskets the inclusion signal is weak and a small AS charge suffices. The bad news is HY, where a line with an ad hoc group forming and a lender call on Monday is exactly the kind of card a well-informed seller hides in a stack of 149 others. For the ex-RSSG reader this is home turf. The toxicity features are Chapter 13's Priming Risk Score, the docket and the credit agreement.
+
+### 19.8.1 Derivation: the inclusion model and the AS charge
+
+Let $I_i$ indicate that line $i$ was included *because* the client holds adverse information. Model $\Pr(I_i\mid\mathbf{z}_i)=\sigma(\mathbf{w}^\top\mathbf{z}_i)$, logistic in observable toxicity features $\mathbf{z}_i$: PRS, proximity to a lender call, a live ad hoc group or Rule 2019 statement, log size relative to the basket median, and (in production) the client's own markout history in the name. Conditional on $I_i$, the expected informed move is $J_i$ (fraction of par), and otherwise zero. Then
+
+$$
+\mathbb{E}^{\mathbb{P}}\big[\widetilde P_{i,T}\mid i\in\mathcal{B},\mathbf{z}_i\big]=\widehat P_i-\Pr(I_i\mid\mathbf{z}_i)\,J_i\,\widehat P_i ,
+\qquad
+\text{AS}(\mathcal{B})=\sum_{i\in\mathcal{B}}\text{MV}_i\,\Pr(I_i\mid\mathbf{z}_i)\,J_i .
+\tag{19.11}
+$$
+
+This is the first moment of the jump that Step 2 of §19.2 warned mean–variance would miss. Put the jump in the mean and the skew stops hiding. For a dealer *sell* (the client buys), the informed move is up, and the same charge applies with the sign of $J_i$ flipped. Two cautions. Charge AS to the *flagged tail*, not uniformly: a uniform AS charge kills the quote and still under-charges the one line that matters. And winner's-curse shading in $\pi$ is a separate, basket-level adverse-selection term (other dealers' information about the *whole* basket). Do not fold one into the other.
+
+*The hand history.* The diagnostic is the by-line markout, net of the hedge:
+
+$$
+\text{MO}_i(\tau)=x_i\big(\widehat P_{i,t+\tau}-p_i\big),\qquad \tau\in\{1,5,20\}\ \text{business days},
+$$
+
+measured on the residual after the factor and hedge P&L are stripped out. IDO or it didn't happen: a basket-level markout averages away the two lines that matter, and an unhedged markout is mostly the market. The "two cards face-down" signature is realized AS concentrated in one or two lines, at a scale far outside their idiosyncratic volatility.
+
+### 19.8.2 Case Study: The Mystery Box at Line 117 (illustrative)
+
+Every number in this case is *illustrative*. The mechanics are anchored in the real liability-management transactions of Chapter 13, such as the Serta Simmons 2020 uptier, in which a majority group exchanged into new super-priority debt under the agreement's "open market purchase" language (the most expensive three words in finance) and excluded lenders' first-lien paper repriced sharply. Chapter 13 has the sourced price path. Our line 117 is a fictional issuer with the same fact pattern: PRS 0.85, an ad hoc group with a live 2019 statement, and a lender call in three business days. Theo's 13-week model, now a liquidity-runway input to PRS, puts the cash cliff about a quarter out.
+
+The engine's inclusion model puts $\Pr(I_{117})\approx0.75$, against a median line's 1%. With $J_{117}=1\%+15\%\times0.85\approx13.75$ points, the AS charge is about $3.28\text{mm}\times0.75\times0.1375\approx\$0.34$mm. That is roughly 16bp of the whole basket's market value, from a line with 1.6% of it. Add the stale line 42 and two lines with about 10% of the market value carry, by hand arithmetic, more than half of the basket's total cost: roughly 74bp all in, falling to about 35bp once both are evicted. (These are hand estimates on the synthetic basket. Your run will differ in the second digit.) These are the two lines paying for the whole trade.
+
+The counter-proposal writes itself: *we bid the 148 at a 35bp concession; lines 42 and 117 we will work separately, or not at all.* The client's response is itself information. A client who says "fine, keep the rest" was rebalancing. A client who says "all or none, final" may be telling you which card is face down. Five business days later, the hand history settles it.
+
+### Specification for AI Implementation (adverse selection and hand history)
+
+```python
+W_AS = dict(const=-5.0, prs=4.0, call_soon=1.5, ad_hoc=1.5, log_size=0.3)  # HY (illustrative)
+J_FLOOR, J_LMT = 0.01, 0.15        # informed move, fraction of par (illustrative)
+
+def as_charge(b, w=W_AS, j_floor=J_FLOOR, j_lmt=J_LMT):
+    """Eq. 19.11: AS_i = MV_i * Pr(informed | z_i) * J_i, $. Returns (AS_i, Pr_i)."""
+    call_soon = np.exp(-b.days_to_call / 5.0)        # 0 if no call (inf); -> 1 if imminent
+    log_size = np.log(np.abs(b.x) / np.median(np.abs(b.x)))
+    logit = (w["const"] + w["prs"] * b.prs + w["call_soon"] * call_soon
+             + w["ad_hoc"] * b.ad_hoc + w["log_size"] * log_size)
+    p = 1.0 / (1.0 + np.exp(-logit))
+    return b.mv() * p * (j_floor + j_lmt * b.prs), p
+
+as0, p0 = as_charge(b0)
+assert p0[116] > 0.5 and np.median(p0) < 0.05
+assert as0[116] > 0.5 * as0.sum()             # one line carries most of the basket's AS
+ev_as, path_as = evict_greedy(b0, Sres, as0)
+assert ev_as == [116, 41]                     # line 117 goes first now, then line 42
+
+def markouts(x, p_trade, mid_path):
+    """Hand history: per-line $ markout x_i * (mid_{t+tau} - p_i); mid_path is (N, 3),
+    already net of factor and hedge P&L (IDO or it didn't happen)."""
+    return x[:, None] * (mid_path - p_trade[:, None])
+
+rng_mo = np.random.default_rng(117)
+tau = np.array([1.0, 5.0, 20.0])
+p_trade = b0.mid.copy()
+mid_path = b0.mid[:, None] + rng_mo.normal(size=(b0.n, 3)) * b0.sig_idio[:, None] * np.sqrt(tau)
+mid_path[116] = b0.mid[116] - np.array([0.01, 0.05, 0.14])   # the uptier lands (illustrative)
+mo = markouts(b0.x, p_trade, mid_path)
+assert int(np.argmin(mo[:, 2] / b0.mv())) == 116              # the face-down card, found
+```
+
+Replayed through the markouts, Ines's hand history reads the way she expected: 149 lines of noise and one line with a 17% per-dollar loss at 20 days. The basket-level markout, averaged over \$200mm, would have called it a mildly unlucky week.
+
+### Deep-Dive Resource Graph
+
+**Practitioner Writing**
+
+- IFR (2021), Christopher Whittall, "US banks reap boom in bond portfolio and algo trading": https://www.ifre.com/bonds/1968608/us-banks-reap-boom-in-bond-portfolio-and-algo-trading
+
+**Academic Papers**
+
+- Li, O'Hara, Rapp & Zhou (2023), "Bond Market Illiquidity: Is Portfolio Trading the Solution?" (SMU Scholar record): https://scholar.smu.edu/business_finance_research/251
+- Koont, Ma, Pástor & Zeng, "Steering a Ship in Illiquid Waters: Active Management of Passive Funds," NBER WP 30039; *Review of Financial Studies* (2025): https://www.nber.org/papers/w30039
+- Cotelioglu (2024), "Do mutual funds and ETFs affect the commonality in liquidity of corporate bonds?" *Journal of Empirical Finance* 78: https://ideas.repec.org/a/eee/empfin/v78y2024ics0927539824000550.html
+- Glosten & Milgrom (1985), "Bid, Ask and Transaction Prices in a Specialist Market with Heterogeneously Informed Traders," *Journal of Financial Economics*.
+
+**Data & Code**
+
+- scikit-learn `LedoitWolf` reference: https://scikit-learn.org/stable/modules/generated/sklearn.covariance.LedoitWolf.html

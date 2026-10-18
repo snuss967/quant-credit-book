@@ -436,3 +436,289 @@ assert basis_package_roe(-30.0, 40.0, 0.15) < 0.0                     # inside t
 ```
 
 > **Ways This Blows Up.** (1) *ROE without the haircut process.* A backtest at a constant 15% haircut overstates the Sharpe ratio, because the haircut rises exactly when the basis widens. Model $h_t$ as a function of a funding-stress index, or at least backtest at the stressed haircut. (2) *JTD drift.* $N^{\text{JTD}} = (P-R)/(1-R)$ changes as the bond price moves. A package set up flat at 95 is materially over-hedged at 70. Rebalance the CDS notional on a price band, and charge the rebalancing to the trade. (3) *Maturity mismatch.* A 4.3-year bond hedged with the 5-year standard swap leaves a curve position. Interpolate the CDS curve to the bond's maturity for the basis, and hedge with the two adjacent standard maturities. (4) *Treating the clearinghouse as free.* Initial margin on the CDS leg is funded. Put it in $\phi$, or the cleared package looks better than the bilateral one by exactly the amount you forgot.
+
+## 24.5 The Cheapest-to-Deliver Option
+
+Assumption A5 said the swap pays $1-R$ on *this* bond. It doesn't. It pays par minus the price of whatever the market can deliver most cheaply, and the gap between those two is an option that someone owns and someone else has sold.
+
+> **[SOURCE EXTRACTION]** *Schmid_Credit_Risk_Pricing_Models p.159:* "Note that the contract usually specifies a basket of obligations that are ranked pari passu that may be delivered in place of the reference asset. Actually, the protection buyer who has chosen physical delivery is effectively long a 'cheapest to deliver' option."
+>
+> **Annotation.** Our analysis: one sentence that contains the whole deliverables problem. Since 2009 almost every standard trade has settled in cash at the auction price, so it might seem that physical delivery, and the option, went away. They did not. In the auction, the participants who sell bonds deliver the cheapest one they can, so the final price is set on the cheapest deliverable, and the option now sits inside the auction price. Every famous fight in §24.8 is a fight about what belongs in Schmid's "basket": Hovnanian's new 5% 2040 notes, Sears's consent-required loans, and, in August 2026, whether the registered forms of two DISH DBS note series belonged on the Final List.
+
+Mags remembers the old system. "Back in my day you had to find the bond. On some names there was more protection outstanding than bonds to deliver, and settling meant everybody chasing the same paper up in price. Delphi in 2005 was the famous one. They invented the auction so we'd stop doing that to each other." A pause. "It's better now. Now we do it to each other on a published timetable."
+
+### 24.5.1 Derivation: when the option is worth nothing and when it is worth half of par
+
+Let $\mathcal{D}$ be the set of deliverable obligations at the event, with post-event prices $P_j(\tau)$ per unit of outstanding principal. Under physical settlement the buyer delivers face 1 of any $j \in \mathcal{D}$ and receives par, so the payoff is $1 - \min_{j\in\mathcal{D}} P_j(\tau)$. Under auction settlement it is $1 - \text{FP}$, and FP tracks $\min_j P_j$ up to the auction effects of §24.6. Against a hypothetical swap that paid $1 - P_k$ on one reference bond $k$, the cheapest-to-deliver option is worth
+
+$$
+\Omega^{\text{CTD}} = \mathbb{E}^{\mathbb{Q}}\Big[B(\tau)\,\mathbf{1}\{\tau \le T\}\,\Big(P_k(\tau) - \min_{j\in\mathcal{D}} P_j(\tau)\Big)\Big] \;\ge\; 0 .
+$$
+
+Its value depends entirely on how dispersed the deliverables' prices are *after* the event, and that depends on the kind of event.
+
+**Regime 1: bankruptcy, with acceleration.** A filing accelerates the debt. Every senior unsecured obligation becomes a claim for principal plus accrued interest, ranked pari passu, and recovers the same amount per dollar of claim. So $P_j(\tau) \approx \tilde{R}\,(1 + \text{AI}_j)$ for a common recovery $\tilde{R}$. The only dispersion is accrued interest, and $\Omega^{\text{CTD}}$ is a fraction of a point. This is the regime in which "recovery" means what Theo's training says it means.
+
+**Regime 2: failure to pay without acceleration.** One obligation is in default; the others are performing and trade on their remaining cash flows at the issuer's yield $y$:
+
+$$
+P_j(y) = \sum_{m=1}^{2T_j}\frac{c_j/2}{(1+y/2)^m} + \frac{1}{(1+y/2)^{2T_j}} .
+$$
+
+When $y > c_j$, $P_j$ falls as maturity lengthens and as the coupon falls. So the cheapest deliverable is the longest, lowest-coupon one, and both of those are features an issuer chooses when it issues a bond. At $y = 11\%$ *(illustrative)*, an 8% bond due in 1.5 years is worth 95.95 and a 5% bond due in 22 years is worth 50.63. The swap pays $100 - 50.63 \approx 49.4$ points if the 22-year bond is deliverable, and about 4 points if only the short bond is. The issuer is solvent, nobody has lost half their money, and the protection buyer collects half of par. That is the Hovnanian blueprint (§24.8.2), written as a bond-math identity.
+
+The contract has fences against this, and they are worth knowing by name. For the Standard North American Corporate contract the deliverable obligation characteristics are, roughly: Bond or Loan; Not Subordinated; Specified Currency; Not Contingent; Assignable Loan; Consent Required Loan; Transferable; Maximum Maturity of 30 years; Not Bearer. Check them against the confirmation and the Physical Settlement Matrix of the trade date before trusting this list. The 30-year limit is why nobody manufactures a 99-year 1% deliverable. It does not stop anyone manufacturing a 22-year 5% one. The Modified and Modified-Modified Restructuring variants used outside North America limit the maturity of deliverables after a Restructuring for the same reason. And the 2019 NTCE amendments added an Outstanding Principal Balance provision aimed at deliverables engineered to trade at a deep discount (Quinn Emanuel, May 2019; secondary).
+
+> **[SOURCE EXTRACTION]** *Bohn_Stein_Active_Credit_Portfolio_Management p.578:* "These valuations depend critically on the nature of the contract terms with respect to what is delivered in the event of default. For some contracts, a fixed amount is promised. For other contracts, an actual security—sometimes the cheapest to deliver—is promised."
+>
+> **Annotation.** Our analysis: Bohn and Stein were classifying contracts for portfolio valuation; the systematic desk reads the passage as a data-model requirement. The deliverable set $\mathcal{D}$ is a time-varying attribute of each reference entity and belongs in the security master, with each obligation's seniority, maturity, coupon, currency, transferability flags and current price. From it, compute $\Omega^{\text{CTD}}$ daily under both regimes. A jump in the regime-2 value, for example when an issuer prints a long, low-coupon bond, is a signal that the swap has become more valuable to protection buyers, whatever its spread says.
+
+### Specification for AI Implementation (CTD under the two default regimes)
+
+**The precise spec.** Inputs: deliverables as a mapping from name to post-event price per unit face; for regime 2, coupon, remaining maturity and an event yield; for regime 1, a common recovery per unit of claim and each bond's accrued interest. Outputs: the cheapest deliverable and the swap payout $1 - \min_j P_j$. Guards: raise an error for an empty deliverable set rather than returning a payout of zero, and price on coupon dates only in this sketch (accrued handling is a separate function in production). Sanity: the 95.95 and 50.63 prices, the long bond as CTD, and a regime-1 CTD option below one point.
+
+```python
+def price_at_yield(c, T, y, freq=2):
+    """Price per 1.0 face at a semiannual-compounded yield y, on a coupon date."""
+    t, cf = bond_cashflows(c, T, freq)
+    return float(np.sum(cf / (1.0 + y / freq) ** (freq * t)))
+
+
+def ctd(deliverables):
+    """deliverables: dict name -> post-event price per 1.0 face. Returns (name, payout)."""
+    if not deliverables:
+        raise ValueError("empty deliverable set: the swap may be orphaned (Section 24.8)")
+    name = min(deliverables, key=deliverables.get)
+    return name, 1.0 - deliverables[name]
+
+
+y_event = 0.11                                    # regime 2: no acceleration (illustrative)
+no_accel = {"8% due in 1.5y": price_at_yield(0.08, 1.5, y_event),
+            "5% due in 22y": price_at_yield(0.05, 22.0, y_event)}
+assert abs(no_accel["8% due in 1.5y"] - 0.9595) < 2e-3
+assert abs(no_accel["5% due in 22y"] - 0.5063) < 2e-3
+name, pay = ctd(no_accel)
+assert name == "5% due in 22y" and pay > 0.45     # half of par from a solvent issuer
+
+R_claim = 0.30                                    # regime 1: bankruptcy, claims = par + accrued
+accel = {"8% due in 1.5y": R_claim * (1.0 + 0.08 * 0.25),
+         "5% due in 22y": R_claim * (1.0 + 0.05 * 0.25)}
+_, pay_accel = ctd(accel)
+ctd_option_accel = pay_accel - (1.0 - accel["8% due in 1.5y"])
+assert 0.0 <= ctd_option_accel < 0.01             # under a point
+```
+
+## 24.6 The Two-Stage Auction
+
+When a credit event is declared, the regional Determinations Committee, made up of dealers and buy-side firms, resolves that the event occurred, publishes a list of deliverable obligations, and sets the auction terms. ISDA's description of the process sets out the steps. The DC decides by simple majority whether to hold an auction (Restructuring is handled differently). An initial deliverables list follows within days, members have two days to add obligations and three to challenge them, and a challenged obligation needs an 80% supermajority to be included or excluded, failing which the question goes to External Review. Then the auction runs in two stages on a published timetable.
+
+The Windstream Services auction is a good worked set of parameters, all from the DC's 6 March 2019 decision, which was approved 15–0: Bankruptcy Credit Event; auction on 18 March 2019; at least eight valid initial market submissions; Initial Market Quotation Amount of \$2mm; maximum bid–offer spread of 3 points; Cap Amount of 1 point; pricing increment of 1/8; initial bidding from 9:45 to 10:00 a.m., with the Inside Market Midpoint published at 10:30; subsequent bidding from 12:45 to 1:00 p.m., with the final price published at 2:00; and settlement on the later of T+3 and 21 March 2019.
+
+### 24.6.1 Derivation: the inside market midpoint and the final price
+
+**Stage 1.** Each of $K$ dealers submits a two-way market $(b_k, o_k)$ with $o_k - b_k \le M$ (3 points for Windstream) in the quotation amount, together with any physical settlement request. A request must be in the same direction as the submitter's net CDS position and no larger than it. Sort bids in descending order, $b_{(1)} \ge b_{(2)} \ge \dots$, and offers in ascending order, $o_{(1)} \le o_{(2)} \le \dots$. The first $\kappa^{\text{tr}}$ pairs with $b_{(i)} \ge o_{(i)}$ are *tradeable* (touching or crossing) and are discarded. From the remaining $K - \kappa^{\text{tr}}$ pairs keep the best half, $h = \lceil (K-\kappa^{\text{tr}})/2 \rceil$, and average:
+
+$$
+\text{IMM} = \operatorname{round}_{1/8}\!\left(\frac{1}{2h}\sum_{i=\kappa^{\text{tr}}+1}^{\kappa^{\text{tr}}+h}\big(b_{(i)} + o_{(i)}\big)\right).
+$$
+
+A dealer whose tradeable quote sits on the wrong side of the IMM pays an Adjustment Amount, $(b - \text{IMM})^{+}$ or $(\text{IMM} - o)^{+}$ times the quotation amount. That is the price of a quote that crosses the market. The open interest is the net of all physical settlement requests, $\text{OI} = \sum_k \text{PSR}_k$, positive for a net demand to buy bonds.
+
+**Stage 2.** Participants submit limit orders on the side opposite the open interest, and the stage-1 quotes carry over as limit orders. If OI is to sell, fill it against bids from the highest down; if to buy, against offers from the lowest up. With $p^{*}$ the last price matched,
+
+$$
+\text{FP} =
+\begin{cases}
+\min\big(p^{*},\ \text{IMM} + \text{Cap}\big) & \text{OI} < 0 \text{ (net sellers)},\\[2pt]
+\max\big(p^{*},\ \text{IMM} - \text{Cap}\big) & \text{OI} > 0 \text{ (net buyers)},\\[2pt]
+\text{IMM} & \text{OI} = 0,
+\end{cases}
+$$
+
+with FP $= 0$ if selling open interest exhausts the bids, and par if buying open interest exhausts the offers (for auction-formed trades the fallback is the highest offer). The cap limits how far a final price can sit on the wrong side of the IMM relative to the open interest. Without it, a large protection seller facing net selling could post a few very high bids, buy a small amount of bonds expensively, and lift the price at which its much larger swap book settles. ISDA's own description notes that the "value of Limit Orders is far below aggregate notional of CDS," and that asymmetry is the reason the auction is a game rather than a price discovery mechanism.
+
+> **Poker Table.** "Stage one is everybody posting a blind and then turning one card face up," Ines says. "The physical settlement requests are public. The open interest tells the whole table who has to sell bonds and how many. Stage two is the only real betting round, and the players who aren't in the open interest know exactly how desperate the ones who are can be. Replay the hand history and you'll see it: when open interest is a large sell, the final price comes in low, and the bonds bounce once the forced sellers are gone."
+
+The hand history exists. Chernov, Gorbenko and Makarov (2013, "CDS Auctions," *Review of Financial Studies* 26(3)) show that strategic bidding by CDS holders can push the final price above or below the bonds' fair value, and they find that on average auctions undervalue the bonds by about 6% on auction day. Du and Zhu (2017, "Are CDS Auctions Biased and Inefficient?", *Journal of Finance* 72(6)) show that the two-stage design produces biased prices and inefficient allocations, and propose a double auction in its place. For the desk this is an event strategy. Before the auction, estimate the direction and size of the open interest from positioning and deliverable supply. After it, price the bounce.
+
+Windstream ran the other way. Creditflux reported that the March 2019 auction settled at 29.5, higher than bond levels had implied, amid big physical settlement orders (secondary). Buying open interest walks up the offer book, and the final price ends above the IMM. In January 2025 Intrum's auction settled at 76, a 24-point payout reported as largely in line with secondary bond prices (Risk.net and Bloomberg Law; secondary). So the game can also produce a dull result.
+
+### Specification for AI Implementation (two-stage auction simulator)
+
+**What ROBO built from the vague version.** Asked to "round the midpoint to an eighth," ROBO called `round()`, which in Python and numpy rounds halves to the even neighbor. On a midpoint of exactly 26.8125 it published 26.75 instead of 26.875. That is one-eighth of a point on every swap in the auction, and the test below exists to catch it.
+
+**The precise spec.** Inputs: matched dealer bid and offer lists in points; the quotation amount; open interest in \$mm (positive = buy bonds); limit orders as (price, size) pairs; Cap Amount in points. Outputs: IMM, the tradeable quotes, Adjustment Amounts in dollars, and the final price. Guards: matched pairs only; raise an error if every market is tradeable; rounding with halves going up; a book-exhaustion fallback to 0 or par. Sanity: the hand-computed IMM of 26.875 with one crossing pair, a \$22,500 adjustment, a final price of 23.0 for \$50mm of selling, 0 when the bids run out, the cap binding against a rogue high bid, 30.0 for \$30mm of buying, and final prices that fall as selling open interest rises.
+
+```python
+def round_half_up(x, inc=0.125):
+    """Round to the auction increment with halves going UP (round() goes to even)."""
+    return float(np.floor(x / inc + 0.5) * inc)
+
+
+def inside_market(bids, offers, inc=0.125):
+    """Stage 1: drop tradeable (touching/crossing) markets, average the best half."""
+    b = np.sort(np.asarray(bids, dtype=float))[::-1]
+    o = np.sort(np.asarray(offers, dtype=float))
+    if b.size != o.size or b.size == 0:
+        raise ValueError("need matched bid/offer pairs")
+    k = 0
+    while k < b.size and b[k] >= o[k]:
+        k += 1
+    if k == b.size:
+        raise ValueError("every market is tradeable; no IMM")
+    b_keep, o_keep = b[k:], o[k:]
+    h = int(np.ceil(b_keep.size / 2.0))
+    imm = round_half_up(np.mean(np.concatenate((b_keep[:h], o_keep[:h]))), inc)
+    return imm, b[:k], o[:k]
+
+
+def adjustment_amounts(tradeable_bids, tradeable_offers, imm, quotation_amount):
+    """Dollar penalty for tradeable quotes on the wrong side of the IMM."""
+    pb = np.maximum(np.asarray(tradeable_bids, dtype=float) - imm, 0.0) / 100.0 * quotation_amount
+    po = np.maximum(imm - np.asarray(tradeable_offers, dtype=float), 0.0) / 100.0 * quotation_amount
+    return pb, po
+
+
+def final_price(imm, open_interest, limit_bids, limit_offers, cap=1.0):
+    """Stage 2. open_interest > 0: net requests to BUY bonds, filled against offers from the
+    lowest up; < 0: net requests to SELL, filled against bids from the highest down."""
+    if open_interest == 0:
+        return float(imm)
+    selling = open_interest < 0
+    if selling:
+        book = sorted(limit_bids, key=lambda order: -order[0])
+    else:
+        book = sorted(limit_offers, key=lambda order: order[0])
+    need, last = abs(open_interest), None
+    for px, size in book:
+        last = px
+        need -= size
+        if need <= 0:
+            break
+    if need > 0:                                   # book exhausted
+        return 0.0 if selling else 100.0
+    return float(min(last, imm + cap) if selling else max(last, imm - cap))
+
+
+bids = [25.0, 25.25, 25.5, 25.75, 26.0, 26.0, 26.25, 28.0]      # 8 dealers (illustrative)
+offers = [b + 2.0 for b in bids]                                 # 2 points wide; max is 3
+imm, tb, to = inside_market(bids, offers)
+assert imm == 26.875 and tb.size == 1                            # the 28.0 bid crossed 27.0
+assert round(26.8125 / 0.125) * 0.125 == 26.75                   # ROBO's banker's rounding
+pb, po = adjustment_amounts(tb, to, imm, 2_000_000)
+assert abs(pb.sum() - 22_500.0) < 1e-6 and po.sum() == 0.0
+
+QA = 2.0                                                         # $mm per stage-1 quote
+lim_bids = [(b, QA) for b in bids] + [(26.5, 10.0), (25.0, 15.0), (23.0, 20.0), (20.0, 30.0)]
+lim_offers = [(o, QA) for o in offers] + [(27.0, 5.0), (29.0, 10.0), (32.0, 20.0)]
+assert final_price(imm, 0.0, lim_bids, lim_offers) == 26.875
+assert final_price(imm, -50.0, lim_bids, lim_offers) == 23.0     # sellers walk the bids down
+assert final_price(imm, -200.0, lim_bids, lim_offers) == 0.0     # bids exhausted
+assert final_price(imm, -5.0, [(30.0, 10.0)] + lim_bids, lim_offers) == imm + 1.0   # cap binds
+assert final_price(imm, 30.0, lim_bids, lim_offers) == 30.0      # buyers walk the offers up
+fps = [final_price(imm, -oi, lim_bids, lim_offers) for oi in (5.0, 20.0, 50.0, 80.0, 120.0)]
+assert all(a >= b for a, b in zip(fps, fps[1:]))                 # more selling, lower price
+```
+
+## 24.7 Trading the Basis Systematically
+
+With the frictions priced, the basis becomes something a systematic desk can trade. There are three uses: as a mean-reverting spread, as a feature that predicts bond returns, and as a lead–lag signal between two markets that see the same issuer at different speeds. The cleanest evidence for the first comes from forced sellers.
+
+> **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.213:* "The forced selling of fallen angels' bonds is not accompanied by a similar dynamic in the CDS referencing these issuers. As a result, CDS spreads generally widen after the downgrade but to a lesser extent than those of bonds, and the basis exhibits mean reversion"
+>
+> **Annotation.** Our analysis: this is the cleanest flow-driven basis signal in the literature, because the cause is a rule rather than a view. Investment-grade mandates must sell a bond downgraded to high yield, and nobody is required to sell the swap. So the bond cheapens relative to the CDS, the basis goes negative, and it reverts as the bonds find high-yield owners. Dynkin et al. report the size on their 2004–2010 sample: the basis "widened consistently from about 40bp to more than 100bp in the rating-event month and rose even further, to almost 225bp, three months after the downgrade" (p.161), magnitudes of a negative basis. The 2026 departure is that the event is now forecastable. Rating-migration models (Chapter 9) give a downgrade probability before the event, so the desk can pre-position, or, more usefully, avoid being the forced seller's only bid in the first week.
+
+Whether the reversion is worth trading is a question of costs, and the same study answers it plainly.
+
+> **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.224:* "The shorter holding period compared with the 'Buy All' strategy (14 vs. 24 months, respectively) resulted in an almost quadrupling of the net Sharpe ratio to 0.97, although transaction costs were unchanged."
+>
+> **Annotation.** Our analysis: read it with the base case on p.223, where "Buy All" earned 0.5% a month with a gross Sharpe ratio of 1.05 and a "net Sharpe Ratio of 0.26 (based on an average bid‐ask estimate of 4.9%)." Costs took three-quarters of the Sharpe. Across the four formulations in their Table 3.13 (pp.224–225), gross Sharpe ratios of 1.05, 2.04, 2.38 and 3.30 become 0.26, 0.97, 1.30 and 1.74 net. Exit rules account for the difference, not entry rules. The signal is the same in every formulation. What changes is how long capital stays tied up after most of the reversion has happened. For a 2026 desk the lesson is to specify the exit as carefully as the entry, and to model costs per name and per regime, since a 4.9% average conceals both the bonds that trade at a point and those that trade at five.
+
+### 24.7.1 Derivation: a mean-reverting basis and the cost threshold
+
+Model the market-adjusted basis of name $i$ as an Ornstein–Uhlenbeck process under the physical measure $\mathbb{P}$. This is a forecasting model, not a pricing model, so $\mathbb{Q}$ plays no part:
+
+$$
+db_t = \kappa\,(\theta - b_t)\,dt + \sigma\,dW_t .
+$$
+
+Here $\kappa$ is the speed of reversion (per year), $\theta$ the long-run level (bp), and $\sigma$ the volatility (bp per $\sqrt{\text{yr}}$). The exact solution over a step $\Delta$ is
+
+$$
+b_{t+\Delta} = \theta + (b_t-\theta)\,e^{-\kappa\Delta} + \sigma\sqrt{\frac{1-e^{-2\kappa\Delta}}{2\kappa}}\;\varepsilon_{t+\Delta}, \qquad \varepsilon \sim N(0,1),
+$$
+
+so the basis is an AR(1) with coefficient $\phi^{\text{AR}} = e^{-\kappa\Delta}$, half-life $\ln 2/\kappa$, and stationary standard deviation $\sigma/\sqrt{2\kappa}$. Estimation is a regression of $b_{t+\Delta}$ on $b_t$, with $\hat\kappa = -\ln\hat\phi^{\text{AR}}/\Delta$. If $\hat\phi^{\text{AR}} \ge 1$ there is no reversion to trade, and the code must say so rather than return a negative half-life. "Market-adjusted" means $\tilde{b}_{i,t} = b_{i,t} - \beta_i\,\bar{b}_t$, with $\bar{b}_t$ the index-level basis. The common component is funding (§24.4), and IDO or it didn't happen.
+
+Enter the negative-basis package at $b_0 < \theta$ and hold for $H$. The expected mark-to-market gain is $D^{\text{spr}}(\theta - b_0)(1-e^{-\kappa H})$, carry adds about $\int_0^H(-\mathbb{E}^{\mathbb{P}}[b_t] - \phi)\,dt$, and the round-trip cost $c^{\text{rt}}$ comes off the top. Ignoring carry, the trade is worth entering only if
+
+$$
+\theta - b_0 \;>\; \frac{c^{\text{rt}}}{D^{\text{spr}}\,\big(1 - e^{-\kappa H}\big)} .
+$$
+
+If Dynkin's 4.9% is read as a round-trip cost in price terms, at $D^{\text{spr}} = 5$ it equals 98 bp of basis at full convergence. If the half-life equals the holding period, so that only half the gap closes, the threshold doubles to 196 bp, close to the full fallen-angel dislocation. That is why "Buy All" barely clears its costs, and why an exit rule that sells once most of the reversion is in, then redeploys the capital, multiplies the net Sharpe.
+
+The other two uses need only a pointer here. Kim, Li and Zhang (2016, *Journal of Empirical Finance* 38) find that the *residual* basis, net of counterparty, funding and liquidity frictions, strongly predicts bond excess returns with a negative sign: a more negative residual basis means higher subsequent bond returns. Their 2017 paper in the *Journal of Futures Markets* (37(8)) finds that a low-minus-high basis factor carries a premium of about 3% a year in investment-grade bonds. Lee, Naranjo and Sirmans (2021, "CDS Momentum: Slow-Moving Credit Ratings and Cross-Market Spillovers," *Review of Asset Pricing Studies* 11(2)) report CDS return momentum of 7.1% a year and cross-market spillovers, with past CDS performance producing alphas of 10.3% a year in stocks and 7.3% in bonds, concentrated in liquid names whose spreads move ahead of slow rating changes. In the names where the swap trades, it is the faster of the two doctors.
+
+### Specification for AI Implementation (OU basis signal, net of costs)
+
+**The precise spec.** Inputs: a weekly market-adjusted basis series in bp; entry and exit z-scores; spread duration; repo spread in bp; one-way cost in bp of notional. Outputs: fitted $(\kappa, \theta, \sigma)$, the half-life, and weekly gross and net P&L in bp of notional, with the number of entries. Guards: an error if the AR coefficient is not in $(0,1)$; decisions at $t$ use only data up to $t$, and P&L runs from $t$ to $t+\Delta$; costs charged on every change of position. Sanity: recovery of known parameters from a seeded simulation (5,200 weeks: either a century of one name or, more honestly, a hundred names for a year each, if you pretend they are independent), and a net Sharpe below the gross.
+
+```python
+def simulate_ou(n, dt, kappa, theta, sigma, b0, rng):
+    """Exact OU discretization of the basis (bp)."""
+    phi = np.exp(-kappa * dt)
+    sd = sigma * np.sqrt((1.0 - phi ** 2) / (2.0 * kappa))
+    eps = rng.standard_normal(n - 1)
+    b = np.empty(n)
+    b[0] = b0
+    for i in range(1, n):
+        b[i] = theta + (b[i - 1] - theta) * phi + sd * eps[i - 1]
+    return b
+
+
+def fit_ou(b, dt):
+    """AR(1) regression -> (kappa, theta, sigma). Fails loudly if there is no reversion."""
+    phi, a = np.polyfit(b[:-1], b[1:], 1)
+    if not 0.0 < phi < 1.0:
+        raise ValueError(f"AR(1) coefficient {phi:.4f}: no mean reversion to trade")
+    kappa = -np.log(phi) / dt
+    resid = b[1:] - (a + phi * b[:-1])
+    sigma = np.std(resid, ddof=2) * np.sqrt(2.0 * kappa / (1.0 - phi ** 2))
+    return kappa, a / (1.0 - phi), sigma
+
+
+def basis_strategy(b, dt, theta, sd_stat, z_in, z_out, dur, repo_bp, cost_bp):
+    """Long the negative-basis package when b < theta - z_in*sd; flat when b > theta - z_out*sd.
+    Weekly P&L in bp of notional: duration MTM plus carry, minus one-way costs."""
+    n = b.size
+    x = np.zeros(n)
+    for i in range(1, n):
+        if x[i - 1] == 0.0 and b[i] < theta - z_in * sd_stat:
+            x[i] = 1.0
+        elif x[i - 1] == 1.0 and b[i] > theta - z_out * sd_stat:
+            x[i] = 0.0
+        else:
+            x[i] = x[i - 1]
+    gross = x[:-1] * (dur * np.diff(b) + (-b[:-1] - repo_bp) * dt)
+    turnover = np.abs(np.diff(x, prepend=0.0))[:-1]
+    net = gross - cost_bp * turnover
+    return gross, net, int(np.sum(np.diff(x) > 0))
+
+
+def sharpe(pnl, dt):
+    return float(np.mean(pnl) / np.std(pnl, ddof=1) * np.sqrt(1.0 / dt))
+
+
+dt_w, kap, th, sig = 1.0 / 52.0, 3.0, -40.0, 60.0          # per year, bp (illustrative)
+b_sim = simulate_ou(5200, dt_w, kap, th, sig, th, RNG)
+k_hat, th_hat, sig_hat = fit_ou(b_sim, dt_w)
+assert abs(k_hat / kap - 1.0) < 0.35
+assert abs(th_hat - th) < 10.0
+assert abs(sig_hat / sig - 1.0) < 0.10
+half_life_weeks = np.log(2.0) / k_hat * 52.0                # true value is about 12 weeks
+sd_stat = sig_hat / np.sqrt(2.0 * k_hat)
+gross, net, n_entries = basis_strategy(b_sim, dt_w, th_hat, sd_stat, 1.0, 0.0, 4.5, 30.0, 60.0)
+assert n_entries > 20
+assert sharpe(gross, dt_w) > sharpe(net, dt_w)              # costs are not optional
+```

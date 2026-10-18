@@ -982,3 +982,87 @@ assert "calculated after giving effect to such adjustments" in rrcs_body
 print(f"IC retained: predicted {ratio_pred:.3f}, simulated {ratio_sim:.3f}; flag precision {ppv:.3f}")
 ```
 
+
+## 25.11 Desk Debrief
+
+- **A basket is a function, not a sentence.** It maps the state of the company to \$mm and carries a scope, a netting flag and a source span. Without units, it didn't happen.
+- **Parse definitions into a graph.** Evaluate it in Tarjan order and solve cycles as contractions. The EBITDA node has the largest blast radius in the document, so read it first and diff it every time.
+- **"After giving effect to" turns a 25% cap into 33.3%.** Each add-back dollar buys $m + \sum p_j$ dollars of debt capacity, 4.85 at Halyard. Mags is right to distrust "adjusted."
+- **Leakage is max-flow; the binding baskets are the min cut.** J.Crew's trapdoor created no capacity of its own. It moved the cut upstream onto \$250mm of "small" baskets.
+- **Diff the capacity vector, not the tokens.** One ratio edit moves cosine similarity by less than $10^{-6}$ and capacity by \$200mm.
+- **The docket is an append-only event log.** Use one global token bucket with $b + \rho h_0 \le L$. CourtListener's 125 requests a day means search and webhooks, not polling. Alert on silence.
+- **Rule 2019 gives you quantities and dates, never prices.** Impute basis from the acquisition quarter, carry rounding as an interval, and remember that with turnout $\varphi$ a group blocks at $\theta > \varphi/3$.
+- **Classifier error is an IC tax.** The tax rate is Youden's $J$ times a variance ratio, and at a 5% base rate half your flags are wrong. Span-cite everything.
+
+**The Spec You Hand the Robot.**
+
+```text
+TASK: Covenant capacity + docket monitor for universe U (loans/bonds with EDGAR exhibits or open bankruptcy cases).
+INPUTS: EDGAR exhibits EX-4.*, EX-10.* (versioned by accession, sha256); CourtListener v4 search/webhooks; RECAP Fetch
+        (our PACER account); Rule 2019 statements; claims-transfer notices. All money in $mm, ratios in x, dates UTC.
+STEP 1  Definitions -> graph. Case-sensitive, word-bounded, longest-match-first, span-consuming matcher; plurals.
+        Tarjan SCCs; evaluate condensation in emission order; solve each cycle by fixed-point iteration; if the
+        estimated Lipschitz constant >= 1, STOP and route to a human. Never guess a missing definition.
+STEP 2  Baskets -> typed nodes {fixed, grower, ratio, builder, maintenance} with scope, netting flag, usage.
+        Ratio with proceeds netting -> return inf and raise a red flag. Builder uses cumulative CNI (50% / -100%).
+STEP 3  Entity graph -> max-flow Phi by commodity (IP, cash, other); report min-cut arcs and Phi/EV.
+STEP 4  On each new version: dollar-weighted blast radius sum_u |K_u(v_k) - K_u(v_k-1)| / EV, signed per node.
+STEP 5  Docket: classify entries (entry text + first page); state machine Quiet->Organized->Contested->Standstill->
+        Plan->Confirmed; MLE q_ab = N_ab / T_a with censored spells. Rule 2019 -> panel of (holder, class, face,
+        acq_quarter) with share intervals, flows, imputed basis, HHI lower bound, blocking flag theta > turnout/3.
+RATE LIMITS: one shared bucket; EDGAR b + rho <= 10 per second with real-mailbox User-Agent; CourtListener <= 5/min,
+        50/h, 125/day; backoff on 403/429/503; PACER password expiry alert at day 170.
+OUTPUT CONTRACT: every number carries (doc_id, version, char_start, char_end); assert span text exists in source.
+TESTS: the asserts in Blocks 1-8 of Section 25.10 must pass before any signal is published.
+DO NOT: count phrases without dedupe; trust a zero from an untested search operator; enter backtests at prices
+        stamped before the event; mine n-grams outside the pre-registered feature list.
+```
+
+### Exercises
+
+1. **The four most expensive words, again.** Halyard's lawyers propose a 30% run-rate cap "calculated after giving effect to such adjustments." Compute the effective cap as a fraction of $\mathcal{E}_0$ and the gap versus the "before" reading. Show that the gap is $c^2/(1-c)$, and find the $c$ at which the "after" reading exactly doubles the "before" reading. (Answers: 42.9% vs. 30%; $c = 1/2$.)
+2. **Break Kaz's regex.** Write five unit tests that defeat a naive term matcher: "Affiliated Lender," the possessive "Restricted Subsidiaries'," a term defined inline in parentheses, a redefinition "for purposes of this Article VII," and a PDF line-break hyphenation ("Unre-" / "stricted Subsidiary"). Which of these does Block 1 fail as written? Patch it without breaking the existing asserts.
+3. **Move the cut.** Add a direct Loan Parties → Unrestricted investment basket of \$40mm to the J.Crew graph and cap the trapdoor at \$60mm. Compute $\Phi$ and name the min-cut arcs. Then add a J.Crew blocker and recompute $\Phi^{\text{IP}}$. (Answer to the first part: $\Phi = 100$, with cut {trapdoor, direct basket}.)
+4. **How loud must a covenant shout?** Show that if "4.50" appears $k$ times and every instance is amended, $1 - \cos(x, x') = k^2/\|x\|^2$. With $\|x\|^2 \approx 2.4 \times 10^6$, how many times would the ratio have to appear for cosine similarity to move by 1%? (About 155. No agreement states its leverage ratio 155 times, although a few seem to be trying.)
+5. **Is the group a blocker?** Block 6's group holds 33% of the class, with a ±0.2% rounding interval. Find the turnouts $\varphi$ for which "blocks" is robust, the turnouts for which "does not block" is robust, and the ambiguous band in between. Ines wants to know the most you would pay in PACER fees to resolve it. (Hint: \$3 per statement, so less than the coffee.)
+6. **Spec ROBO into sleeping through the utilities.** ROBO is told to "page Theo on any new Rule 2019 statement." Write a three-line spec that stops it from paging him at 2 a.m. over the Serta utility creditors' statements but still pages for a second amended statement from the priority-lender group. State which fields of the entry it should key on.
+
+### Deep-Dive Resource Graph
+
+**Podcasts**
+- Bloomberg *Odd Lots* (Joe Weisenthal and Tracy Alloway). Search the archive for episodes on liability management, J.Crew, Serta and private credit. No specific episode is cited here.
+- Bloomberg *Credit Edge*. Interviews on leveraged finance and restructuring. No specific episode is cited here.
+
+**Practitioner Writing**
+- Torys LLP (May 2019), "The J.Crew 'trap door' and its implications for the future of leveraged finance": https://www.torys.com/our-latest-thinking/publications/2019/05/the-j-crew-trap-door-and-its-implications-for-the-future-of-leveraged-finance
+- King & Spalding, "How did they do it: J. Crew": https://www.kslaw.com/attachments/000/008/521/original/How_did_they_do_it_J._Crew.pdf
+- Locke Lord (October 2017), "J.Crew Group, Inc.": https://www.lockelord.com/newsandevents/publications/2017/10/jcrew-group-inc
+- Cleary Gottlieb (March 13, 2007), *Bankruptcy Court Requires Ad Hoc Equity Committee Members to Submit Detailed Information on Holdings Under Bankruptcy Rule 2019(a)*.
+- Paul Weiss / Practical Law (2025), *Covenant-Lite Loans: Overview* (PitchBook|LCD figures).
+- Griffin, Nini & Smith, Harvard Law School Forum on Corporate Governance post (November 4, 2022).
+- Huang, Lewellen & Wang, Harvard Law School Bankruptcy Roundtable post (February 11, 2025).
+- Matt Levine, *Money Stuff* (Bloomberg Opinion), on J.Crew, Serta and "open market purchase."
+
+**Academic Papers**
+- Smith & Warner (1979), *On Financial Contracting: An Analysis of Bond Covenants*, Journal of Financial Economics.
+- Ford & Fulkerson (1956), *Maximal Flow Through a Network*, Canadian Journal of Mathematics.
+- Ivashina & Vallee, *Weak Credit Covenants*, NBER WP 27316 (2020); *Management Science* (2025): https://www.nber.org/papers/w27316
+- Cohen, Malloy & Nguyen, *Lazy Prices*, NBER WP 25084; *Journal of Finance* (2020): https://www.nber.org/papers/w25084
+- Badawi, Dyreng, de Fontenay & Hills (draft 2021), *Contractual Complexity in Debt Agreements: The Case of EBITDA*.
+- Griffin, Nini & Smith, *Losing Control? The 20-Year Decline in Loan Covenant Violations*.
+- Huang, Lewellen & Wang, *Creditor Coalitions in Bankruptcy*, SSRN 4854111.
+- Hendrycks, Burns, Chen & Ball (2021), *CUAD: An Expert-Annotated NLP Dataset for Legal Contract Review*: https://arxiv.org/abs/2103.06268
+- Tuggener, von Däniken, Peetz & Cieliebak (2020), *LEDGAR: A Large-Scale Multi-label Corpus for Text Classification of Legal Provisions in Contracts*, LREC 2020.
+- Guha et al. (2023), *LegalBench*: https://arxiv.org/abs/2308.11462
+- Dahl, Magesh, Suzgun & Ho (2024), *Large Legal Fictions*: https://arxiv.org/abs/2401.01301
+- Magesh, Surani, Dahl, Suzgun, Manning & Ho (2024), *Hallucination-Free? Assessing the Reliability of Leading AI Legal Research Tools*: https://arxiv.org/abs/2405.20362
+
+**Data & Code**
+- SEC EDGAR: https://www.sec.gov/edgar. Full-text search UI: https://www.sec.gov/edgar/search/. API endpoint: `https://efts.sec.gov/LATEST/search-index`. Submissions API: `https://data.sec.gov/submissions/CIK##########.json` (CIK zero-padded to ten digits).
+- CourtListener REST API (v4 documentation on wiki.free.law): https://www.courtlistener.com/help/api/
+- RECAP Archive (Free Law Project): https://free.law/recap
+- PACER: https://pacer.uscourts.gov/
+- *U.S. Bank N.A. v. Windstream Services, LLC*, Findings of Fact and Conclusions of Law (Doc. 245, Feb 15, 2019): https://www.courtlistener.com/docket/6169562/245/us-bank-national-association-v-windstream-services-llc/
+- CUAD code and fine-tuned checkpoints: https://github.com/TheAtticusProject/cuad
+- Stretto case portal: https://cases.stretto.com/
+- Federal Rules of Bankruptcy Procedure 2019 and 3001(e), and Regulation S-K Item 601 (Cornell LII text).
