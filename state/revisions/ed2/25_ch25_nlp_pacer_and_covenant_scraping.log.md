@@ -19,7 +19,7 @@
 - [x] 17. [25.6.2 Rate limits as a token bucket] MATH-GENTLY + SHOP-LIFE vignette. — Tap-and-bucket box; Femi 03:07 page; day-181 silence; two-sentence spec.
 - [x] 18. [25.7.1 From statements to a panel] MATH-GENTLY (shares, intervals, HHI, blocking); Ines opener. — Ines hand opener; fuzzy-pie box 21% at 60/70; knife-edge fixed.
 - [x] 19. [25.7.2 The docket as a state machine] MATH-GENTLY (Poisson, exponential, MLE); Full Derivation. — Hughes-31-days question; Poisson/exponential box 3/120; censored-spell derivation.
-- [ ] 20. [25.7.3 Serta] EXPAND-SCENE -> Long Scene 2.
-- [ ] 21. [25.8 Claims Registers] BRIDGE: Mags on transferee concentration.
-- [ ] 22. [25.9.1 Classifier error is an IC tax] MATH-GENTLY (base rates, Youden) + ANOTHER-SEAT (dealer).
+- [x] 20. [25.7.3 Serta] EXPAND-SCENE -> Long Scene 2. — Four beats, cards, 2 a.m. page, Skadden recoveries; Dynkin points back.
+- [x] 21. [25.8 Claims Registers] BRIDGE: Mags on transferee concentration. — Mags reads transferee line; back-in-my-day; HHI and blocking rule.
+- [x] 22. [25.9.1 Classifier error is an IC tax] MATH-GENTLY (base rates, Youden) + ANOTHER-SEAT (dealer). — Youden box, dealer width seat, PB-08 Pair box, derivation moved.
 - [ ] 23. [25.10 and 25.11] BRIDGE + Finder table.

@@ -20,3 +20,9 @@
 | App D Table D.8 (cross-chapter change made in U2 item 13) | Windstream auction "held 3 Apr 2019 (DC decision of 6 Mar 2019 set 18 Mar; a dealer vote on 11 Mar moved it, 9 to 1)"; settlement "later of T+3 and 8 Apr 2019" | Applied from `case_manufactured_credit_events.md` §0 item 1 [S13, S14, S17]; Ch 24 §24.6 and §24.8.3 now match | resolved (App D edited) |
 | §24.5, Delphi paragraph | "Press reports at the time put the protection written on Delphi at many times the roughly \$2bn of bonds ... by one count \$27.5bn against \$2.2bn"; final price 63.375 for index and tranche trades | GlobalCapital gives \$27.5bn vs \$2.2bn; an NYU paper gives \$20bn vs \$2bn; no DTCC/ISDA primary figure opened | open (hedged) |
 | §24.4 Scene A | BlackRock Q1 2020 call: LQD "almost 90,000" trades on 12 Mar vs 37 for top five holdings, printed as a paraphrase without quotation marks | Machine transcript only (`perspectives_dealers_and_systematic_shops.md` §5B.7); re-listen before quoting | open (paraphrased) |
+
+## 10_ch10_trend_and_time_series_momentum (U2, 2026-10-18)
+
+| Where | Claim as now printed | Open question | Status |
+| :-- | :-- | :-- | :-- |
+| §10.4.2 Math, Gently (small-sample bias) | Kendall bias on the AR(1) persistence: E[rho-hat] - rho ~ -(1+3 rho)/T; with rho = 1 - kappa = 0.97 and T = 300 the kappa bias is ~0.013, SE ~0.014 | The brief's (1+3 kappa)/T ~ 0.004 plugged kappa into a formula for rho; printed text uses rho. Confirm the approximation and wording against Kendall (1954) or a textbook (e.g., Hamilton) | open |

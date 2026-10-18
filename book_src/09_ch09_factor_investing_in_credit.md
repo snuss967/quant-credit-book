@@ -641,18 +641,52 @@ $$
 \max_{w}\;\; \alpha^\top w \;-\; \frac{\gamma}{2}\, w^\top \Sigma\, w \;-\; \sum_i c_i\,\lvert w_i - w_{0,i}\rvert
 $$
 
-subject to:
+subject to constraints that, on a real desk, arrive one person at a time. Collected in one place, with who owned each on the morning described below:
 
-- **DTS cell matching:** $\sum_{i \in g} w_i\,\text{DTS}_i = \text{DTS}^{\text{bm}}_g$ for every rating × sector cell $g$, so active bets are expressed as DTS contributions (Ben Dor p.33–34);
-- **key-rate durations** matched to the benchmark, so that rates do not leak into an excess-return mandate (Man p.10);
-- **issuer caps in DTS:** $w_j D^{\text{spr}}_j s_j \le \kappa$. Ben Dor's example: under such a cap, a position in an issuer with a 100bp spread and five-year duration "could be up to 1% of portfolio market value," while one with a 150bp spread and ten-year duration "would be limited to 0.33%" (Ben Dor p.61);
-- **liquidity:** a filter on Barclays' Trade Efficiency Score (TES ≤ 3, the more liquid end of its scale; Dynkin p.710);
-- **turnover:** $\tfrac12\sum_i |w_i - w_{0,i}| \le \text{TO}^{\max}$, for example 10% a month as in Israel, Palhares, and Richardson;
-- **long-only** $w \ge 0$ where the mandate requires it.
+| Constraint | Form | Who owned it | Source |
+| :--- | :--- | :--- | :--- |
+| DTS cell matching | $\sum_{i \in g} w_i\,\text{DTS}_i = \text{DTS}^{\text{bm}}_g$ for every rating × sector cell $g$, so active bets are expressed as DTS contributions; in practice a band around the target | The risk manager | Ben Dor p.33–34 |
+| Key-rate durations | Matched to the benchmark, so that rates do not leak into an excess-return mandate | The rates desk | Man p.10 |
+| Issuer cap in DTS | $w_j D^{\text{spr}}_j s_j \le \kappa$ | Theo, reading Ben Dor aloud | Ben Dor p.61 |
+| Share of issue outstanding | No more than a few percent of any one tranche | Theo | Desk rule *(illustrative)* |
+| Liquidity | Barclays' Trade Efficiency Score TES ≤ 3, the more liquid end of its scale | The trader | Dynkin p.710 |
+| Minimum ticket and lots | No ticket below the desk's minimum; trades rounded to tradeable lots | The trader | Desk rule |
+| Turnover | $\tfrac12\sum_i \lvert w_i - w_{0,i}\rvert \le \text{TO}^{\max}$, for example 10% a month as in Israel, Palhares, and Richardson | The client's investment agreement | Israel, Palhares, and Richardson (2018) |
+| Long-only | $w \ge 0$ where the mandate requires it | Compliance | Mandate |
+| Borrow (long–short books) | Short only what the prime broker shows as available, at a fee the alpha clears | The borrow sheet | Man p.11 |
+| Cash and financing | A cash buffer for client flows; financing for any levered long leg | Operations | Desk rule |
+
+*The desk's fictional paper rebalance; the numbers are illustrative.*
+
+Kaz ran the optimizer on the rebuilt value book with nothing but the objective and a budget, the way a cook tastes a sauce before seasoning it. The first answer was what first answers always are. It put 9% of the book in one BB chemicals issuer whose residual was the widest in the universe, spread most of the rest across fourteen CCCs, ran two years short of the benchmark's rate duration, and turned over 64% of the book in a month.
+
+The risk manager vetoed it in a one-line email: active bets are DTS contributions, cell by cell. Kaz pinned every cell to its benchmark DTS exactly, and the problem went infeasible on the spot, because a long-only book cannot hit an exact DTS target in a cell of six bonds, two of which fail the liquidity screen. So the cells became bands, and the order in which bands widen and thin cells pool when the problem is infeasible went into the spec in writing, so that the optimizer would never again decide it alone and in silence.
+
+Theo read the issuer cap out of Ben Dor aloud, because it was the first optimizer constraint he had met that a restructuring banker might have written himself. Under a cap on DTS contribution, an issuer with a 100bp spread and five-year duration "could be up to 1% of portfolio market value," while one with a 150bp spread and ten-year duration "would be limited to 0.33%" (Ben Dor p.61). A cap measured in risk, not in dollars. Then he added one of his own, on the share of any single tranche the desk could own. "Hold more than a third of a class and you can block a plan," he said. "Then everybody wants to have lunch with you, and you can't sell anything until they've finished eating."
+
+Ines, reading the trade list as the trader who would have to execute it, found a \$340,000 ticket in a bond that trades in millions. An odd lot prices off nothing on the screen, and the optimizer had computed its cost as if it were a round lot. Two lines further down, the optimizer wanted 4% of the book in a new issue. "You'll be allocated a fifth of what you ask for," she said, "and the syndicate desk will remember that you asked." The optimizer's cost term, she added, had been told that $c_i$ was a number. It is a function of the ticket's size and the month's regime, and §9.10 shows what it does in a bad month.
+
+The client's agreement capped turnover at 10% a month, and here Kaz asked the most useful question of the morning: what is that cap costing us? The way to answer it is to soften the constraint into a penalty with a price per unit of turnover and read off its shadow price, the gain in expected return from one more point of allowed turnover. A small shadow price means the cap is cheap insurance against the desk's own enthusiasm. A large one is a conversation to have with the client, with a number in hand. Chapter 12 uses the same vocabulary for the shadow price of an illiquid-asset cap (§12.7), and the two numbers belong on the same page of a committee pack.
+
+The final answer looked like a portfolio a person would own, and it kept about a third of the first answer's expected alpha. That is the price of being able to trade it.
+
+One piece of the objective still needs a trick before a solver will touch it.
+
+> **Math, Gently.** *The hinge.* The absolute value $\lvert x\rvert$ has a kink at zero, like a door hinge, and solvers that slide smoothly downhill catch on kinks. Write every trade as a buy part and a sell part, both non-negative: a sale of 3 is $u^{+} = 0$, $u^{-} = 3$, and then $\lvert x \rvert = u^{+} + u^{-}$ is a straight line in each piece, so the hinge disappears and an ordinary quadratic-programming solver takes over.
 
 The absolute-value cost term makes the objective non-smooth. The standard fix is to split each trade into a buy and a sell, $w = w_0 + u^{+} - u^{-}$ with $u^{\pm} \ge 0$, so that the cost becomes the linear term $\sum_i c_i(u^{+}_i + u^{-}_i)$ and the problem is a quadratic program. For $\Sigma$, Man's approach normalizes bond returns by DTS, extracts statistical factors, fills new issues from issuer-level loadings, and rescales by current DTS (Man p.15). For ten thousand bonds and two thousand issuers, shrink it (Chapter 8) or the optimizer will find the eigenvector with the smallest estimated variance and put the whole book in it.
 
 ### 9.8.2 What a trade costs
+
+*A fictional morning at a systematic asset manager across town, a composite; the bond, the sizes and the fills are invented.*
+
+At 8:10 on a Wednesday the rebalance file lands in the execution trader's queue, and its largest line is a sale: \$20mm of a seven-year BBB industrial the model no longer likes. She has three ways to do it and about twenty minutes to choose. She can call one dealer and offer the block, which is quick and private and priced by someone who knows she has to sell. She can slice it into pieces and send each to a different venue and protocol, which is cheaper on average and tells everyone watching the prints what she is doing. Or she can tuck it into the afternoon's portfolio trade, where it vanishes among two hundred other lines and is priced as part of a basket. The pre-trade cost model gives her three numbers. She slices, and spends the rest of the morning reconciling fills against the estimate, because two of the five pieces went out "if filled" and came back unfilled, leaving the fund still long \$7mm of a bond its own model had sold.
+
+That routine is most of the job now. Man Numeric's credit co-heads reported moving from roughly 30% of their order flow in high yield and 60% in investment grade through electronic venues to over 90% (Man_Revolutions_in_Credit_Trading_2023 p.3, as of 1 May 2023), with "the vast majority of our trades" sent as RFQs (p.5); in a 2024 talk they described the daily decision as one of venue, protocol and touch, high or low, with some days on which voice still wins. Their firm's earlier paper had already named the unfilled piece for what it is: "it is something of an indictment of the market that there exists the notion of 'if filled' trades" (Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.19).
+
+> **View From Another Seat.** *The dealer who receives the RFQ.* From the other side of the screen, the 8:10 sale looks different. A dealer answering a systematic manager's RFQ knows three things the manager would rather the dealer did not. The order is one of hundreds the manager will send this month, so it is small relative to the dealer's day. It is in competition with several other dealers, so winning it is a mild warning in itself. And it is predictable: a momentum or value book that sold this name today will very likely sell its cousins tomorrow, which is Ines's cold-open point seen from the chair that profits from it. Man describes the buy side's frustration in its own words: bid and ask prices "are indicated by dealer runs that are not firm and actionable" (Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.19). To the dealer, a run that is not firm is not a defect. It is an advertisement, and the RFQ is the moment the advertisement gets priced against the dealer's inventory and whatever the dealer has learned about who else is selling. "If filled" is, from that seat, an option the dealer keeps: the right not to trade when the inventory or the information says no. The cost model on the manager's screen is an estimate of how that option will be exercised.
+
+Barclays' cost measure, which every factor desk in this chapter borrows, starts from the dealer's quote and stops before the dealer's option.
 
 > **[SOURCE EXTRACTION]** *Ben_Dor_Quantitative_Credit_Portfolio_Management p.118:* "A bond's LCS, therefore, represents the roundtrip cost, as a percent of the bond's value, of immediately executing a standard institutional transaction."
 >
@@ -666,6 +700,8 @@ A turnover buffer is hysteresis. Buy a bond when its score rises above $\theta_B
 >
 > **Annotation.** This is a liquid ESP-plus-EMC strategy portfolio, and the arithmetic is the chapter in miniature: about a third of the gross outperformance goes to the dealers, and the risk is unchanged, so the IR falls by a third too. The more striking number sits on the same page: the cost drag was about 1.15% a year in 2007–2012 and about 0.64% a year in 2013–2019. The cost of running the same strategy fell by nearly half in a decade, which is why systematic credit grew when it did. For the long-only case, Israel, Palhares, and Richardson's optimized portfolio with turnover capped at 10% a month earned 5.72% a year gross and 5.26% net, with an active net return of 2.20% a year, tracking error of 2.56%, and an IR of 0.86. It had a net Sharpe ratio of 1.03 against the benchmark's 0.69. These numbers are achievable, and none of them looks like the cold open's 1.9.
 
+Put Barclays' two decades of cost numbers next to Robeco's live one and the curve is worth seeing whole, including the year it went the wrong way.
+
 > **Trend Watch.** *The cost curve, 2007–2026.*
 >
 > - **2007 (the academic baseline).** Chen, Lesmond, and Wei (2007) estimated bid–ask spreads of about 25bp for AAA bonds and 180bp for CCC. Man notes that "Both of these figures would be markedly tighter in the current market," yet academic papers still use them (Man p.20).
@@ -678,12 +714,24 @@ A turnover buffer is hysteresis. Buy a bond when its score rises above $\theta_B
 
 ## 9.9 The Replication Debate, Read as a Desk
 
-Chapter 7 told the 2019–2026 story in full: the Bai–Bali–Wen (2019) factor model, its retraction after Dickerson, Mueller, and Robotti found a timing misalignment in the data, Dick-Nielsen, Feldhütter, Pedersen, and Stolborg's finding that only 23% of significant literature factors keep significant alphas in a clean framework, and Dickerson, Robotti, and Rossetti's April 2026 audit of 108 signals, most of which have no bond-CAPM alpha after correction. When Kaz learned that the benchmark paper behind half his reading list had been retracted, he asked whether a journal could file under Chapter 11. Mags said, "It did an out-of-court restructuring. The creditors were Dickerson, Mueller, and Robotti." (No cooperation agreement was signed, so the counter does not move.) Here we need only the mechanics that matter for constructing factors.
+Chapter 7 told the 2019–2026 story in full: the Bai–Bali–Wen (2019) factor model, its retraction after Dickerson, Mueller, and Robotti found a timing misalignment in the data, Dick-Nielsen, Feldhütter, Pedersen, and Stolborg's finding that only 23% of significant literature factors keep significant alphas in a clean framework, and Dickerson, Robotti, and Rossetti's April 2026 audit of 108 signals, most of which have no bond-CAPM alpha after correction. When Kaz learned that the benchmark paper behind half their reading list had been retracted, they asked whether a journal could file under Chapter 11. Mags said, "It did an out-of-court restructuring. The creditors were Dickerson, Mueller, and Robotti." (No cooperation agreement was signed, so the counter does not move.) Here we need only the mechanics that matter for constructing factors.
+
+> **Math, Gently.** *Two ways a backtest flatters itself.* **Part one: Jensen, for a bad mark.** Suppose a bond's true price is 100 and its month-end mark is wrong by 10% at random, half the time 110 and half the time 90. The average mark is 100, exactly right. But a return is the next price divided by this one, so what the calculation really averages is one over the mark, and the average of $1/1.1$ and $1/0.9$ is $(0.9091 + 1.1111)/2 = 1.0101$, not 1. The error averages to zero; its reciprocal averages to about $1 + \sigma^2$, here $1 + 0.1^2$. The average of the reciprocals is bigger than the reciprocal of the average (Jensen's inequality, for any curve that bends upward the way $1/x$ does), and the backtest pockets the difference as return that nobody earned. **Part two: false discovery.** Test 100 signals that are all useless at the usual 5% threshold and about five of them will pass by luck. Report only those five and you have a factor zoo. Dickerson, Robotti, and Rossetti tested 432 specifications of 108 bond signals; after a false-discovery cut that keeps the expected share of lucky winners small, 26 survived, and 25 of the 26 were within-firm sorts, which compare bonds of the same issuer with each other (their Internet Appendix IA.3). Chapter 7's lottery box walks through the procedure; the formula for the first trap is next.
+
+In symbols, the first trap is
+
+$$
+\mathbb{E}\big[\tilde r_{t+1}\big] \;\approx\; \mathbb{E}\big[r_{t+1}\big] \;+\; \sigma_u^2 , \tag{9.6}
+$$
+
+where $\tilde r$ is the return computed from noisy prices and $\sigma_u$ is the size of the pricing error. The second trap comes from the same error appearing twice, in the signal with a plus sign and in the next return with a minus sign, so that a sort on a noisy price buys the error and then collects its correction. Both are derived next.
+
+#### The Full Derivation
 
 **Mechanism 1: noisy prices raise average returns.** Let the observed price be $\tilde P_t = P_t(1 + u_t)$ with $u_t$ independent over time, $\mathbb{E}[u_t] = 0$, and $\operatorname{Var}(u_t) = \sigma_u^2$. The computed return is $\tilde r_{t+1} = (1 + r_{t+1})\,(1+u_{t+1})/(1+u_t) - 1$. Because $\mathbb{E}[1/(1+u_t)] \approx 1 + \sigma_u^2$ by a second-order expansion,
 
 $$
-\mathbb{E}\big[\tilde r_{t+1}\big] \;\approx\; \mathbb{E}\big[r_{t+1}\big] \;+\; \sigma_u^2 , \tag{9.6}
+\mathbb{E}\big[\tilde r_{t+1}\big] \;\approx\; \mathbb{E}\big[r_{t+1}\big] \;+\; \sigma_u^2 ,
 $$
 
 which is the bias identified by Blume and Stambaugh (1983, *Biases in Computed Returns*). At $\sigma_u = 3\%$, a plausible pricing error for a small, rarely traded high-yield bond, the bias is 9bp a month, about 1.1% a year, earned by whoever sorts toward noisy bonds. That is the size factor of §9.6.2 explained without any economics.
@@ -698,17 +746,35 @@ The same error $u_t$ appears in the signal (with a plus sign) and in the next re
 
 ![Figure 9.5: Independent pricing errors alone lift the average computed return by σ_u² a month (left), and a reversal sort on last month's computed return then earns about 1.1% a month on returns that have no reversal in them, while a sort that skips a month earns nothing (right). Illustrative: the §9.9 price-noise model, with true monthly returns i.i.d. with mean 0.4% and standard deviation 3%, pricing error σ_u = 1% in the right panel, 1,000 bonds, about 240 months and decile long–short sorts; error bars are ±2 standard errors.](assets/figures/ch09_noisy_price_premium.png)
 
+#### Filters, survivors, and the build that went red
+
 **Mechanism 3: filters that peek, and defaults that vanish.** Dropping returns above some threshold, or dropping "bounce-backs" that reverse within days, is conditioning on the future when the filter is applied after seeing the return. Dropping defaulted bonds removes the left tail of exactly the high-carry, high-value portfolios. Both make factors look better than any portfolio could have done.
 
 What survived the cull is small but not zero, and it matches what practitioners actually run: equity-derived signals (momentum spillover, profitability and quality), value built on clean prices with DTS control, and low-risk or short duration. What died was mostly built on noisy price levels: short-term reversal, naive illiquidity, and "downside risk" measured from bond return histories. The academic retreat and the desk's practice turn out to be the same conclusion, reached from opposite ends. Dickerson, Julliard, and Mueller (2026, *The Co-Pricing Factor Zoo*) add the deeper point: once Treasury term-structure risk is priced, equity and nontradable factors explain bond premia, which makes much of the separate bond-factor literature redundant for pricing, although a model-averaged stochastic discount factor over dozens of factors still reaches an out-of-sample Sharpe ratio of 1.5–1.8.
 
-The desk turns this into five rules for its own factor library:
+*A fictional week at a systematic asset manager: the desk's own week, with its people, the signal and the timings invented. Open Bond Asset Pricing's pipeline details and the SEC's Two Sigma order are public facts.*
 
-1. **Signal and return never share a price.** Use a different source (for example, a composite mid for the signal and executable levels for the return) or skip a month between them.
-2. **No ex-post filters.** Clean data with rules written before the returns are seen, and review extreme outliers individually rather than dropping them automatically.
+The continuous-integration job that guards the desk's factor library has a name nobody chose, `obap_repro`, and a schedule nobody remembers agreeing to. Every night, and every time anyone proposes a new signal, it rebuilds the four corrected Bai–Bali–Wen factors that Open Bond Asset Pricing publishes and compares the desk's numbers with the public ones to the fourth decimal. Kaz wrote it the week the project launched and has maintained it since the way people maintain a smoke alarm, which is mostly by being annoyed at it.
+
+Monday was the boring part, and Theo, who had asked to "see how the factor library works," got all of it. The public pipeline has five stages. Stages 0 and 1 run on WRDS, because they need the licensed TRACE, FISD and ratings files; stages 2 to 4 run locally. The public Stage 1 download leaves the rating columns out, so the job pulls ratings from the desk's own WRDS subscription and joins them back on, and most of Monday morning went into a join that had silently dropped every bond whose issuer had changed its name since 2019. End to end the run takes about five hours and about five gigabytes. The job pins the pipeline at v4.2.1, the September 2026 release, because the code is still changing and the paper behind it is still under review; an unpinned run would have upgraded itself overnight and failed for a reason that had nothing to do with anybody's signal. Theo asked why anyone would sit through five hours to reproduce numbers somebody else had already published. Kaz said that was the point: if the desk's plumbing could not reproduce a public, corrected factor, nothing it said about a private one was worth reading.
+
+On Tuesday the job went red.
+
+The proposal was Hana's, a short-term reversal signal on high-yield bonds sorted on last month's return, with a backtest that made a quiet room of people lean toward a screen. It earned about 1.1% a month. The job runs every candidate through two gates before it gets near the library. The first is the replication check, which passed. The second is a placebo: the same signal run on the lab's simulated universe of §9.11, where true returns are drawn independently each month with no reversal in them and month-end prices carry 1% of random marking error. A real reversal signal has nothing to find there. Hana's found about 1.1% a month, the right-hand panel of Figure 9.5. The build log said, in red, that the signal's alpha in a world with no alpha was indistinguishable from its alpha in the real one.
+
+It took her twenty minutes to find the cause, which is fast. The signal had been computed from the month-end price, and the return it was graded on had been computed from the same month-end price. A bond marked too low on the last day of the month looked like a loser, got bought, and "earned" its correction the next month. Mags's question from the cold open, who made the marks, had just been answered by a build server. With a month skipped between the signal's price and the return's price, the alpha fell to nothing.
+
+Theo had been reading over her shoulder. "Why wasn't the test written before the signal?" he asked. "At PJT nobody built the model first and decided afterwards what a covenant breach looked like."
+
+Kaz answered with a public document instead. On 16 January 2025 the SEC announced settled charges against Two Sigma. According to the SEC, employees had identified model vulnerabilities in or before March 2019, the firm waited until August 2023 to address them, and it had failed to supervise an employee who made unauthorized changes to more than a dozen models; the firm agreed to a \$90 million penalty and had repaid \$165 million to affected funds and accounts. "Read it as a story about a ticket," Kaz said. "Something known, sitting in a backlog for four years. The test exists so that the ticket doesn't."
+
+On Wednesday Hana rebuilt the signal with a skip month. It earned nothing, and she logged it next to the original, because the desk keeps its failures in the library too. On Thursday nobody touched the job and it ran green: five hours, five gigabytes, four factors to four decimals. On Friday Kaz wiped the whiteboard beside the build monitor and wrote five lines on it, and nobody has erased them since:
+
+1. **Signal and return never share a price.** A different source for each (a composite mid for the signal, executable levels for the return), or a month skipped between them.
+2. **No ex-post filters.** Cleaning rules are written before the returns are seen, and extreme outliers are reviewed one at a time, never dropped automatically.
 3. **Defaults stay in.** The default-month return is recovery minus the last price, and the bond leaves the panel the following month, never retroactively.
 4. **Double-sort on DTS or rating.** Every factor is reported within DTS buckets or rating groups, so beta cannot pose as alpha.
-5. **Replicate in continuous integration.** Open Bond Asset Pricing (launched November 2025) publishes cleaned TRACE panels, the 108-signal set, and corrected Bai–Bali–Wen factors. The in-house library should reproduce those public series as an automated test before anyone trusts it with a new signal.
+5. **Replicate in continuous integration.** Open Bond Asset Pricing (launched November 2025) publishes cleaned TRACE panels, the 108-signal set, and corrected Bai–Bali–Wen factors, and the library reproduces those public series as an automated test before anyone trusts it with a new signal.
 
 ## 9.10 Crowding, Capacity, and the Drawdowns That Matter
 
@@ -716,15 +782,79 @@ The desk turns this into five rules for its own factor library:
 >
 > **Annotation.** Paleologo is describing an equity factor built from hedge-fund holdings, and the next lines on his page describe the deleveraging cycle: consensus positions are bid up in calm markets, and when an adverse shock forces some holders to sell, prices fall, others' risk limits are hit, and the selling feeds on itself. Credit adds two accelerants. Long–short credit books run leverage that, in Man's words, "starts at 4-5x" (Man p.11), so a modest loss forces a large sale. And the exit is narrower: a crowded equity factor sells into an exchange, while a crowded credit factor sells into dealer balance sheets that shrink in exactly the same stress. The 2026 desk measures crowding directly rather than waiting to find out. Useful measures (all ours, numbers illustrative): holdings overlap with known factor ETFs and published model portfolios; a *factor valuation spread*, the ratio of the average spread of the cheap leg to the rich leg within DTS-matched cells, which compresses as a value trade gets crowded; short interest in the bonds and stocks of the short leg; and the share of TRACE volume concentrated in top-decile names. Robeco's credit team put the intuition plainly in its *Guide to Credits* (c. 2017): it is "wary of crowded trades where investors stretch the models."
 
+Ines, who had played enough tournaments to know what a crowded exit looks like, put it more simply.
+
 > **Poker Table.** Ines drew it on a napkin. "Four players. Same hand history, same model, same stack, same rule: if you're down two percent, you fold. One of them gets a bad card. He folds. His fold moves the pot against everyone else, and now they're all down two percent." She pushed the napkin across. "Everyone at this table has the same exit. That isn't an edge, it's a fire drill. Your edge is knowing where the door is before they do, or not being at the table."
 
 ### Case Study: March 2020 Through the Factor Lens
 
-The cleanest test of everything in this chapter came in four weeks. From late February to late March 2020, US investment-grade spreads roughly tripled to nearly 400bp and high-yield spreads passed 1,000bp, then retraced most of the move by year-end after the Federal Reserve announced corporate-bond purchases *(levels approximate)*. Man's chart of investment-grade spreads from February 2020 to February 2021 shows the shape a systematic credit fund launched in January 2020 lived through: a large mark-to-market loss in March, recovered by year-end (Man p.12). Liquidity broke at the same time. Man's 20-day average high-yield bid–ask spread spiked in February–March and normalized within months (Man p.20).
+Ines's napkin describes a fire drill in the abstract. The desk ran a real one.
 
-Through the factor lens, Barclays' drawdown analysis (January 1993 to March 2020) tells the story. Without DTS matching, ESP value was *pro-cyclical*: its long leg was wider and higher-DTS, so it lost money in the drawdown. Raw EMC was *contra-cyclical*, because in a flight to quality the issuers with the strongest equity momentum are the safe ones, so the long leg's DTS fell below the short leg's and the factor profited from the selloff. With DTS matching, both "delivered strong performance during all drawdown episodes," and their market correlations collapsed (Dynkin p.739–741). The investors themselves split. A 2020 survey of credit factor investors by PGGM, reported by IPE under the title *Will corona be a watershed moment for credit factor investing?*, divided them into keep-it-simple and sophisticated camps (Man p.30).
+#### Long Scene: March 2020, the Factor Book in a Fire Drill
 
-How would a systematic desk have read March 2020 in real time? First, the P&L of a factor book that month was mostly its *net DTS*, not its signals. A book that was DTS-neutral lost on liquidity and cost, not on direction. Second, the cost curve matters more than the signal in a stress month. Signals fire hardest when spreads are dispersed, which is exactly when trading is most expensive, so a turnover budget set for average conditions is breached on the first day. The right response in March 2020 was usually to trade *less*, let the buffer widen, and let the drifting portfolio decay toward the new signal. Third, the electronification of the previous decade (the cost drag halved between 2007–2012 and 2013–2019; Dynkin p.711) is why a liquidity shock that size was survivable for credit factor books. In 2008, with the average investment-grade LCS at 2.8% (Dynkin p.703), the same shock cost several times as much to trade through.
+*A replay, Ines's ritual. The desk's factor book, its positions and P&L, and the cast's cards are fictional and illustrative. The tape is cut at the close of Thursday 19 March 2020; dated market facts are real and cited where they appear. Chapter 1's quarterly replay of the same month (§1.8.2) followed the forced sellers and Chapter 20 (§20.5) owns the ETF-discount timeline, so this one follows only the factor book.*
+
+"We did March," Mags said, when Ines wrote the date on the whiteboard.
+
+"We did the sellers," Ines said. "Today we do the factor book. Same month, different seat. Close of business, Thursday the nineteenth of March, 2020. The tape stops there."
+
+**The book.** She dealt it out on one sheet. The desk was running the strategy the cold open had turned into: a composite of ESP value and equity momentum, long the top of the score and short the bottom, DTS-neutral inside every rating × sector cell, rebalanced monthly with a buffer. The legs had been sized on the first business day of March from start-of-month DTS, exactly as ROBO's spec now insisted. The turnover budget had been set the previous autumn for a world in which an investment-grade round trip cost about 0.6%, the index average Barclays reported for 2018–2019 (Dynkin p.703), and a high-yield one about 0.94%.
+
+**The tape to the nineteenth.** Spreads had been widening for three weeks at a pace nobody at the table had seen outside 2008, and in the second week of March the oil-price collapse had turned every energy credit into a question. Ines put up one fact she was not strictly entitled to on the nineteenth, because BlackRock only reported it on its first-quarter call in April: on 12 March the iShares investment-grade ETF, LQD, traded almost 90,000 times, while its five largest bond holdings traded an average of 37 times (Salim Ramji, BlackRock Q1 2020 call, 16 April 2020). By the middle of the month the Bank of England was recording some of the largest investment-grade and high-yield ETFs at more than 5% below the value of the bonds inside them; Chapter 20 tells that part. The bid–ask spread on high-yield bonds had spiked along with everything else (Man's 20-day average shows the shape, Man p.20).
+
+"Your P&L," Ines said, and turned the sheet over.
+
+The book was flat on direction. Its long and short legs had moved almost exactly against each other, which is what DTS-neutral is for. It was down a little under 2% for the month *(illustrative)*, and almost all of that was two lines: the cost of the first rebalance, which had gone through on 2 March at nearly twice the modeled cost, and the marks on the short leg's high-yield bonds, which had been marked down less than they would have traded.
+
+"Flat on direction, down on cost," Kaz said. "That's the right answer."
+
+"It's the right answer so far," Ines said. "Now look at what your model wants to do tomorrow."
+
+**What the signals wanted.** Kaz put up the score. It had never looked better. The cross-sectional dispersion of ESP was the widest in the desk's sample, and Barclays' own finding is that value's outperformance "is larger when there is a high dispersion in ESP" (Dynkin p.545). Momentum was even louder. In a flight to quality, the issuers with the worst equity momentum were the energy names and anything with a leveraged balance sheet, and EMC wanted to sell every one of them it held and buy more of what had held up. The optimizer's proposal for the next morning was to turn over about 40% of the book *(illustrative)*.
+
+Theo did the arithmetic from §9.4.2 on the back of the sheet, because it was the only arithmetic he trusted that week. Call the composite's gross edge 4% a year *(illustrative)*, a third of a percent a month. At 40% turnover the break-even round trip is $(4\%/12)/0.40 \approx 0.83\%$. That was below the July 2019 high-yield average of 0.94% (Dynkin p.703) before a single basis point of March's widening had been priced into it. "It's under water at last summer's prices," he said. "And it isn't last summer."
+
+It was worse than that, and the evidence would arrive three months later. Kargar, Lester, Lindsay, Liu, Weill and Zuniga (NBER Working Paper 27355, June 2020) found that in March "the cost of trading immediately via risky-principal trades increased dramatically," which pushed customers into slower agency trades. Immediacy, the thing a monthly rebalance buys, had become the most expensive thing in the market. The signals fire hardest exactly when the spreads are most dispersed, and the spreads are most dispersed exactly when trading costs the most. A turnover budget set for an average month had been breached on the first day of this one.
+
+There was a second problem, and Mags found it. "Your hedge is three weeks old," she said. The short leg had been scaled to match the long leg's DTS on 2 March. Since then spreads in the long leg, which held the wider, cheaper names, had risen proportionally more than in the short leg, so the long leg's DTS had grown faster. The book that was DTS-neutral on the second was, by the nineteenth, long a slice of the market it had been built not to own. "You're flat on direction because the first two weeks happened to wash. You won't be flat next week."
+
+**What the screen meant.** Mags had spent that month on a dealer's distressed loan-and-bond desk (Chapter 1), and Theo asked her what the screen prices had meant. "They meant somebody had typed a number," she said. "In a normal week a run is an advertisement with some size behind it. That week it was an advertisement with nothing behind it. You'd call on a bid you saw on the screen and get a different number, smaller size, and a pause while somebody asked risk whether they were allowed to buy anything at all. The only price you could trust was the ETF's, because it was the only thing actually trading." Chapter 20 calls that week the one in which the ETF was the only price in town.
+
+Theo was looking at a different part of the sheet: the cells above 1,000bp, where §9.2 says DTS stops being a ruler. "What does the credit agreement say?" he asked, and for once nobody laughed. Many of the issuers in those cells had drawn their revolvers to the limit or were about to, because treasurers everywhere were hoarding cash that month. A drawn revolver ranks ahead of the bonds in most of those structures, and nothing in a DTS ratio knows that. "Those aren't factor names any more," he said. "They're recovery names. The risk is where the bonds sit after the bank lines are full, not how far the spread moves."
+
+**The card.** Ines handed them out. *Write three things. How much turnover you allow this month. Whether you trade toward the new signal or let the buffer widen. And what you do with the cells whose DTS has stopped meaning anything.*
+
+Write yours before you read theirs.
+
+Kaz wrote: *Turnover: the optimizer's 40%. Trade toward the signal: dispersion is at a record and value pays most when dispersion is high. Cells above 1,000bp: keep them in DTS scaling, cap each name at half its normal weight.*
+
+Theo wrote: *Turnover: 5%. Let the buffer widen as far as it needs to. Above 1,000bp: out of DTS, sized on price and recovery, revolver draws read name by name.*
+
+Mags wrote: *Turnover: whatever the bid side allows, which is about nothing. Don't chase the signal; let it come to you. Above a thousand: give them to me.*
+
+**What happened.** Ines turned the tape forward.
+
+On Monday 23 March the Federal Reserve announced its corporate credit facilities. Four days later, on 27 March, the New York Fed signed Terms of Assignment with BlackRock's Financial Markets Advisory unit to run the secondary-market facility, with conflict rules for a manager that sells the ETFs the facility could buy. On 9 April the programs were expanded to support up to \$850 billion of credit, and Kargar and coauthors would later find that the facilities "had a positive effect on market liquidity." From late February to late March US investment-grade spreads had roughly tripled to nearly 400bp and high-yield spreads had passed 1,000bp; by the end of the year most of the move had retraced *(levels approximate)*. Man's chart of the same months shows what a systematic credit fund launched in January 2020 lived through: a large mark-to-market loss in March, recovered by year-end (Man p.12). Its 20-day high-yield bid–ask spread was back to normal within months (Man p.20).
+
+Then the factor record. Barclays ran its own drawdown analysis from January 1993 through March 2020, and it reads like a grade sheet for the cards (Dynkin p.739–741). Without DTS matching, ESP value was *pro-cyclical*: its long leg was wider and higher-DTS, so it lost money in the drawdown. Raw equity momentum was *contra-cyclical*, because in a flight to quality the issuers with the strongest equity momentum are the safe ones, so the long leg's DTS fell below the short leg's and the factor profited from the selloff. With DTS matching, both "delivered strong performance during all drawdown episodes," and their market correlations collapsed. So the desk's book was built right. In a month like March 2020 the P&L of a factor book is mostly its *net DTS*, not its signals, and a book that was DTS-neutral lost on liquidity and cost, not on direction.
+
+"Kaz," Ines said. "Your signal was right and your card was wrong. Trading 40% into a market where immediacy had become the most expensive thing on the screen would have paid March's prices for a signal whose edge you'd already shown was under water at last summer's. And you kept the 1,000bp cells on a ruler that had stopped measuring anything.
+
+"Theo. Five percent and a wide buffer is the right size: trade *less*, let the buffer widen, and let the drifting portfolio decay toward the new signal instead of buying it at the worst prices of the decade. Your third line is the best line on the table. But you didn't say what the five percent was *for*, and Mags just told you. Your hedge was three weeks stale.
+
+"Mags. You get the third line, and I'll give you the names. But 'about nothing' leaves the stale hedge stale. The one trade worth paying March's prices for was the one that put the book back to DTS-neutral. That's a risk trade, not an alpha trade, and in a fire drill they are not the same thing."
+
+She turned to the reader's side of the table. If your turnover number came from the optimizer, you wrote Kaz's card. If it came from a budget and you spent the budget on the signal, you were half right. If you spent it on re-neutralizing DTS with start-of-month numbers recomputed that week, and let the buffer absorb the signal, you wrote the card the desk wishes it had written. And if your third line moved the cells above 1,000bp out of DTS and onto price and recovery, you read §9.2 and Chapter 5 the way they were meant to be read.
+
+Two other seats saw the same month from opposite sides, and both are useful. AQR's published credit work finds "only limited evidence of a liquidity premium in the cross section of corporate bonds" (Palhares and Richardson, *Journal of Fixed Income*, Winter 2019), and its white paper on systematic credit simulated a book traded through standardized CDS and CDS indices rather than cash bonds; read from those papers, not from any account of its March, that is the price taker's seat, which trades less and trades what still trades. D. E. Shaw's own note describes the opposite seat: over March and April it bought "in excess of \$400 million in CAS and STACR bonds at a significant discount to par" from holders "put under stress by redemption requests and margin calls," having judged 2001 rather than 2008 the better analogue (Chapter 4-C tells the whole story). The price taker shrinks its turnover; the patient capital is the other side of the forced seller. A monthly factor book sits between them, and March 2020 is the month it learns which one it resembles.
+
+The plumbing decided how much all of this cost. The cost drag on Barclays' liquid ESP-plus-EMC strategy fell from about 1.15% a year in 2007–2012 to about 0.64% in 2013–2019 (Dynkin p.711), and that decade of electronification is why a liquidity shock of March's size was survivable for credit factor books. In 2008, with the average investment-grade liquidity cost score at 2.8% (Dynkin p.703), the same shock would have cost several times as much to trade through. The quants did trade through it, and mostly on screens: Man reports \$116.5 billion traded on MarketAxess's Open Trading platform by quant funds in the first three quarters of 2020, a 150% increase on the same period a year earlier (Man p.8). The investors who hired them split afterwards. A 2020 survey of credit factor managers by the Dutch pension fund PGGM, reported by IPE as *Will corona be a watershed moment for credit factor investing?*, divided them into a keep-it-simple camp and a sophisticated one (Man p.30).
+
+Ines collected the cards. "In a fire drill," she said, "you spend the turnover on the hedge, not on the signal."
+
+> **View From Another Seat.** *The insurer-backed credit platform, which is buying the engines.* A forced seller in March 2020 was somebody with a redemption queue or a margin call. An insurance balance sheet has neither in the same form: its liabilities run for decades, it holds most of its bonds to maturity, and it does not mark its book to the screen in order to survive the week, so a month like that one is a month in which it can choose to buy. That seat now owns factor engines too. Blackstone bought DCI, a quantitative credit manager, in 2020 and lists it among the acquisitions behind its goodwill (Blackstone FY2025 Form 10-K). Ares took a minority stake in BlueCove, a London systematic fixed-income manager founded in 2018, in 2023; on 29–30 October 2025 it agreed to buy the whole firm, by then about \$5.5bn of assets and about 60 people, and to run it as Ares Systematic Credit under BlueCove's chief executive, Alex Khein, citing insurance distribution and "increased interest in systematic credit" (The DESK and Alternative Credit Investor, 30 October 2025). Ares announced the completion in early February 2026 (Business Wire, 2 February 2026). Read against Ines's napkin, the point is who sits at the table. The four players who all fold at minus two percent were funds with the same model, the same stack and the same exit. A systematic book inside an insurer-backed platform can have the same model and a different exit, or no need of one. Whether that makes the next fire drill calmer, or only moves the crowding somewhere harder to see, is a question nobody yet has a live record to answer.
+
+Who sits at the table matters most when the table is crowded, and in 2025 and 2026 it was crowded at the tightest spreads in a generation.
 
 > **Trend Watch.** *The tight-spread regime and the first live track records, 2024–2026.*
 >
@@ -736,6 +866,8 @@ How would a systematic desk have read March 2020 in real time? First, the P&L of
 > *What it means for the desk.* The backtests in this chapter run from an IR of 0.5 to 2.4. A decade of live, net, multi-factor credit returns from a careful manager is close to the benchmark, with a defensive tilt that cost money in the latest period. A desk that budgets for a 2.0 IR is budgeting for a backtest. Budget for something like 0.5 net, demand the DTS-neutral decomposition every quarter, and treat any two-year live IR above 2 as a sample that has not yet met its first bad year.
 
 ## 9.11 The Credit Factor Lab: A Reference Implementation
+
+When Hana's reversal signal went red that Tuesday in §9.9, the world it failed in was this one: the synthetic universe below is the placebo the CI job runs before it lets any new signal near the library, so it is the first thing the lab builds and the first thing a new desk should be able to rebuild from the specification alone.
 
 ### Specification for AI Implementation
 

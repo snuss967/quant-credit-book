@@ -12,10 +12,10 @@
 - [x] 10. [8.5 Betas When Nothing Trades] MATH-GENTLY (envelopes) + FULL-DERIVATION-MOVE + WHEN-TO-APPLY (Kaz vs Ines on equity lags). — Done: envelopes box, derivation moved, Kaz vs Ines equity-lag scene.
 - [x] 11. [8.6 The Hedge Matrix] ANOTHER-SEAT (market maker's basket) + MATH-GENTLY (rulers) + FULL-DERIVATION-MOVE; instruments as continuous passage; snap fix. — Done: four-window passage, basket seat, snap fix, rulers box (eta 0.1→19), Mags thesis.
 - [x] 12. [8.7 Case Studies] LIST-TO-NARRATIVE (frame): delete template sentence and italic sub-labels. — Done: template sentence cut; sub-labels go with each rewritten case.
-- [ ] 13. [8.7 Case Study A: 2022] NEW-SCENE, long: "The Year a PDF Said Zero (2022, replayed)".
-- [ ] 14. [8.7 Case Study B: March 2023] NEW-SCENE, long: "The Hedge That Hedged Both Ways (8–13 March 2023, replayed)".
-- [ ] 15. [8.7 Case Study C: April 2025] EXPAND-SCENE (~1,400 words): card before table; Jersey resource.
-- [ ] 16. [8.8 What's Left Is IDO] MATH-GENTLY (common whisper) + LIST-TO-NARRATIVE + WHEN-TO-APPLY; IDO ledger as month-end meeting.
+- [x] 13. [8.7 Case Study A: 2022] NEW-SCENE, long: "The Year a PDF Said Zero (2022, replayed)". — Done: ~2,000-word replay, four cards graded, July pause, Slok coda.
+- [x] 14. [8.7 Case Study B: March 2023] NEW-SCENE, long: "The Hedge That Hedged Both Ways (8–13 March 2023, replayed)". — Done: ~1,800-word SVB replay, three cards graded, explain beat, coda.
+- [x] 15. [8.7 Case Study C: April 2025] EXPAND-SCENE (~1,400 words): card before table; Jersey resource. — Done: Friday card, ex-post H −4/+2/0 grading, Jersey, labels cut.
+- [x] 16. [8.8 What's Left Is IDO] MATH-GENTLY (common whisper) + LIST-TO-NARRATIVE + WHEN-TO-APPLY; IDO ledger as month-end meeting. — Done: whisper box, Theo walk-through, pod RV scene, month-end ledger meeting.
 - [ ] 17. [8.9 The IDO Engine] SHOP-LIFE vignette (500–700 words) before the Spec.
 - [ ] 18. [8.10 Desk Debrief] BRIDGE (Finder table) + protect; add seven resources to Resource Graphs.
 - [ ] 19. [whole chapter] ANOTHER-SEAT: the insurer, at end of §8.2 before the Trend Watch.

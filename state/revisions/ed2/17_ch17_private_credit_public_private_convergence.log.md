@@ -10,12 +10,12 @@
 - [x] 8. 17.3.1–17.3.2 BDC P/NAV · MATH-GENTLY (box E) — house-and-mortgage thin slice; Numbers paragraph points to box; tender misread kept.
 - [x] 9. 17.3.3 Non-accrual gap · MATH-GENTLY (box F) + NEW-SCENE (Medallia) — bruised-apples ratio box; Medallia ledger scene; PIMCO base rate, title written around.
 - [x] 10. Case Study OBDC and OBDC II · EXPAND-SCENE → Long Scene 1 + Another Seat box 2 — four-beat replay, cards graded, Saba seat, PB-16 Pair box.
-- [ ] 11. 17.4.1–17.4.2 Two-way takeouts · MATH-GENTLY (box G) + Full Derivation
-- [ ] 12. Case Study Finastra 2023 · NEW-SCENE (Pluralsight)
-- [ ] 13. 17.5 Banks and insurers · LIST-TO-NARRATIVE + ANOTHER-SEAT (box 3: insurer)
-- [ ] 14. 17.6.1–17.6.2 Redemption game · MATH-GENTLY (box H, two parts)
-- [ ] 15. Case Study Redemption Quarters 2026 · EXPAND-SCENE → Long Scene 2
-- [ ] 16. 17.7.2 Five price sources · LIST-TO-NARRATIVE
+- [x] 11. 17.4.1–17.4.2 Two-way takeouts · MATH-GENTLY (box G) + Full Derivation — three-doors box, algebra moved, four pitfalls as Theo's dual track.
+- [x] 12. Case Study Finastra 2023 · NEW-SCENE (Pluralsight) — 3 Jun 2024 replay card, no short leg, dispersion flag earned.
+- [x] 13. 17.5 Banks and insurers · LIST-TO-NARRATIVE + ANOTHER-SEAT (box 3: insurer) — Theo's margin notes frame section; Trend Watch last; Rowan/Athene seat.
+- [x] 14. 17.6.1–17.6.2 Redemption game · MATH-GENTLY (box H, two parts) — pizza transfer and queue box; transfer and runway algebra moved.
+- [x] 15. Case Study Redemption Quarters 2026 · EXPAND-SCENE → Long Scene 2 — four beats, resubmission discovery, 23 June arithmetic card graded; Trend Watch last.
+- [x] 16. 17.7.2 Five price sources · LIST-TO-NARRATIVE — Theo wires atlas with Mags; PIMCO and SEC staff as sceptics.
 - [ ] 17. 17.8.1 · SHOP-LIFE vignette
 - [ ] 18. 17.8.2 Features worth computing · LIST-TO-NARRATIVE + dealer seat
 - [ ] 19. 17.8.3 Pending mark · MATH-GENTLY (box I) + FULL-DERIVATION-MOVE
@@ -35,3 +35,9 @@
 - Verified (web): PIMCO, Karoui, "Daily Pricing Is Not Daily Liquidity," 11 May 2026: "about five points apart", "83% of loans held by at least two BDCs are priced within a two-point range", "Daily pricing is not price discovery."
 - Verified (web): Money Stuff "Boaz Weinstein" episode description opening sentence.
 - Pair book: PB-16 opened in Ch 17 (6 Nov 2025 replay entry), ratio 1.3 x long by estimated daily beta to HYG (illustrative).
+- Replay: Pluralsight cut 3 Jun 2024 (Bloomberg talks report); Mags on desk then, Kaz/Theo cold.
+- CHECK: Ares/Oaktree Pluralsight equity to zero Feb 2026 is press/snippet only; hedged "by press accounts".
+- Long Scene 2 is labeled a review (not blind replay) so beats can end on the 23 Jun card after Q3 facts.
+- CHECK: OTIC/Golub/Goldman/Fidelity tracker figures hedged as "a widely circulated tracker"; BCRED Q1 7.9% and \$400mm feeder hedged as press reports; Arougheti 10 Jun remark hedged as reported/paraphrased.
+- CHECK: FSK ~0.56, OBDC ~0.71, median ~0.76 of book are aggregator quotes (16 Oct 2026).
+- CHECK: SEC staff PRIV letters (PRIV-SEC1/2, Feb 2025) quoted from dossier; fetch tool caps quotes; re-verify wording.

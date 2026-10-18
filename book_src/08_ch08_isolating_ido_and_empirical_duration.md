@@ -222,7 +222,7 @@ Read the table like a credit agreement: the interesting clauses are the ones tha
 
 > **[SOURCE EXTRACTION]** *Ben_Dor p.191:* "If this correlation is negative, the empirical duration would be lower than the analytical one and may even end up being negative."
 >
-> **Annotation.** The sentence is conditional, and the condition is the whole game. In Ben Dor's 1998–2009 sample the correlation was reliably negative, because rates mostly moved on growth news and Fed easing, and spreads moved against them. The book treats the sign as a fact about the sample. A 2026 desk must treat it as a state variable. In 2022 the condition failed: rates rose on inflation and spreads widened with them, so $\rho > 0$ and $H > 1$. The formula held. The parameter moved. Any production system that hard-codes $H$ from a pre-2020 table is a 2022 loss waiting for a calendar.
+> **Annotation.** The sentence is conditional, and the condition is the whole game. In Ben Dor's 1998–2009 sample the correlation was reliably negative, because rates mostly moved on growth news and Fed easing, and spreads moved against them. The book treats the sign as a fact about the sample. A 2026 desk must treat it as a state variable. In 2022 the condition failed, $\rho > 0$ and $H > 1$, and the replay in §8.7 sits the desk down at that table. The formula held. The parameter moved. Any production system that hard-codes $H$ from a pre-2020 table is a 2022 loss waiting for a calendar.
 
 > **[SOURCE EXTRACTION]** *Dynkin p.437:* "When rates fall, bond prices increase. Due to this negative correlation, however, spreads tend to widen, and thus the bond prices do not increase by as much as would have been expected based on analytical duration alone."
 >
@@ -709,25 +709,157 @@ The three episodes below cover all three regimes of §8.2, in four years. The fi
 
 ### Case Study A: 2022, the Year "Negative Duration" Was Positive
 
-*The levels.* The 10-year Treasury yield rose from 1.52% at the end of 2021 to 3.88% at the end of 2022, with a high of 4.25% on October 24. The 2-year rose from 0.73% to 4.41% (FRED). The Bloomberg US Corporate High Yield index returned about −11.2% for the year, the IG Corporate index about −15.8%, and the US Treasury index about −12.5% *(approx.; secondary data summaries)*. The ICE BofA HY OAS went from roughly 310 bp to a peak near 600 bp in early July and ended the year in the high 400s *(approx.; FRED no longer serves 2022 OAS history, see §8.2)*. Apollo's chief economist summarized it on December 3, 2022: the HY total-return index was "down 10% so far in 2022," and his note's title attributed the year's returns mainly to moves in duration.
+#### Long Scene: The Year a PDF Said Zero (2022, replayed)
 
-*The mechanism.* Rates rose because of inflation, and inflation is bad for credit, so spreads widened as yields rose: $\rho_{y,s} > 0$, regime three, $H > 1$. High yield had *more* rate sensitivity than its analytical duration, not less. Consider a desk that had carried a Treasury hedge at $H \approx 0.3$ on the strength of a 1998–2009 table, or no hedge at all because "high yield has negative empirical duration." It ran an unhedged rates position into the worst bond year in decades. With intermediate Treasury yields up roughly 250–370 bp (the 10-year and 2-year moves above), a 4-year-duration book's rate leg alone cost on the order of 10–14 points before carry *(illustrative arithmetic)*. A hedge at 0.3 covered under a third of it.
+*A replay, cut off at the close of Friday 31 December 2021. The desk, its book and all dialogue are invented; the dates, yields, index returns and the Apollo note are sourced, and the spread path is approximate.*
 
-"In 1994 we hedged B paper by buying the long bond," Mags said. "Lost on both. In 2022 the kids hedged B paper with nothing, because a PDF said empirical duration was negative. Lost on rates and spreads. Progress is losing the same money faster." She looked at Theo's rolling-correlation monitor for a long moment. "That's good, though. I'd have killed for that. I'd have killed for a *screen*."
+The Friday after the thirty-seven cents, Ines turned the big screen at the end of the desk to face the room, which is how everyone knew it was a replay. She had frozen the tape at the close of the last trading day of 2021. The 10-year Treasury yield read 1.52%. The 2-year read 0.73% (FRED). Nothing else on the screen moved, because nothing after that evening was allowed to exist yet.
 
-*The systematic flag.* A rolling 60-day $\rho_{y,s}$ crossing zero from below is a regime alarm, and in 2022 it fired in the first quarter *(the exact date depends on the window; illustrative)*. The response is not "re-estimate $H$ more carefully," because a trailing window lags the regime by construction. The response is a rule: when the rolling $\rho$ is above zero, hedge at least the full analytical duration. Better, hedge rates with futures at $H = 1$ and hedge spread beta separately with CDX, so the hedge stops depending on the correlation at all (§8.8). Theo's lesson for the sticky note: *the empirical hedge ratio is a bet on why rates move.*
+"House rules," she said. "You know what everyone knew that night and nothing they learned after. You write a card. I run the tape. The tape grades the card."
+
+Theo's packet was two pages. The first described a book *(illustrative)*: \$200mm of single-B bonds, duration 4, analytical DV01 of \$80,000 a basis point. At the chapter's illustrative \$70.8 of DV01 per TY contract (§8.6), a full analytical hedge was 1,130 contracts short. The second page was Table 8.1, Ben Dor's 1998–2009 hedge ratios by rating, with the B row circled in Ines's pen. The card asked for three things.
+
+> *Your card, before the tape runs: write your $H$, your TY count, and one sentence on why rates will move in 2022.*
+
+Kaz finished first, which surprised no one. "B bonds at the average spread, $H = -0.04$. Rounded, zero futures. Strictly, a long of about forty-five contracts, which I decline to buy on grounds of dignity." They wrote *0* on the card and, underneath, *rates move for the reasons they have always moved; the table is eleven years of data.*
+
+Mags wrote for a long time and then crossed most of it out. What survived was *Full hedge. 1,130. And sell some spread: buy CDX HY protection on half the book. Because the Fed said the word.*
+
+"Which word?" Kaz asked.
+
+"Doesn't matter which. When a central bank starts choosing its words, it's about to start choosing numbers. I have watched that happen more than once, and the bonds never enjoyed it."
+
+Ines did not write a card. The dealer never does. She walked behind the three of them, reading over shoulders, and stopped behind Theo. "What's the pot?" she said, to the room. "Two hundred million of B paper and a year of rates. What are the odds? Ask yourselves who's dealing. For eleven years of that table, the Fed dealt: rates fell when the economy got scared, and spreads widened when it got scared, so the two legs pulled against each other and Kaz's zero was the right hedge. This year, inflation is the dealer. If inflation deals, it hurts both hands at once."
+
+Theo had been staring at his card for five minutes. He was thinking, as he usually did when the numbers ran out, about documents. A bond indenture says what the issuer owes and when. It does not say why the Treasury market moves, and it does not care. The bond had no opinion about inflation. Every hedge ratio on Table 8.1 was a statement about how the *market* had behaved when rates moved, which was a statement about why rates had moved, which was exactly the thing he did not know.
+
+He wrote: *1,130 TY, full duration, because the bond doesn't know why rates move and I don't either, so I won't bet the hedge on it. Then hedge the spread separately, with something that is spread.*
+
+Ines read it twice, which on this desk means something. "Not bad. What's the something?"
+
+"Something that moves with the high-yield market and not with Treasuries."
+
+"That's a description, not a ticker. You can't sell a description." She took his card and put it face down on the desk. "I'm not grading this one until you can tell me what the second instrument is. Run the tape."
+
+The tape ran, as it always does, faster than the cards had imagined. Ines moved it in chunks and said the numbers she was allowed to say. In the first quarter the rolling 60-day correlation between yield changes and relative spread changes, the $\rho$ of §8.2, climbed from below zero to above it *(the date depends on the window; illustrative)*. Nobody on the desk in the replay had a screen that showed it; Kaz's model, re-estimated on a trailing window, would notice months later. By early July the ICE BofA high-yield OAS had gone from roughly 310 bp to near 600 *(approx.)*.
+
+That number had taken Kaz most of Thursday to find. FRED's free ICE BofA history now starts in October 2023 (§8.2), so the replay's 2022 spreads came out of the desk's own archive, a folder of CSVs saved by someone who had left the firm, with a column named `oas_final_v2` that turned out to be in percent on some days and basis points on others. Kaz had fixed it with an assertion and a sigh. Nobody in a replay ever sees that part, and every replay depends on it.
+
+Ines stopped the tape in early July. "One change allowed. It costs you a point of the book to make it."
+
+Kaz looked at their model, which re-estimated $H$ every month on a trailing 60-day window. It had finally noticed. The window now held a spring of days in which yields and spreads had risen together, and the estimate for single-B had climbed through one. "My window has caught up," they said. "$H$ is above one now. I'd like to put the hedge on."
+
+"You'd be hedging the half of the year that's already happened," Ines said. "The window just told you what inflation did in March, April and May. It knows nothing about the next six months. Does the reason rates are moving still hold?"
+
+"The model doesn't have a field for reason."
+
+"Then it's going to keep finding out three months late, every time the reason changes." She let Kaz make the change, and took the point. "Let's see whether it was worth one."
+
+It was, as it happened, worth something: the second half of 2022 still had a rate shock in it. But Kaz had paid half a year of losses for the privilege of buying the hedge after the window agreed, and the window would be just as late in the other direction the next March. Mags and Theo kept their cards.
+
+On 24 October the 10-year touched 4.25%. By the last trading day of 2022 it had settled at 3.88%, and the 2-year was at 4.41% (FRED). Over the year the Bloomberg US Corporate High Yield index returned about −11.2%, the investment-grade Corporate index about −15.8%, and the US Treasury index about −12.5% *(approx.; secondary data summaries)*. The high-yield OAS ended the year in the high 400s *(approx.)*.
+
+"Inflation dealt," Ines said. "Both hands. Grade yourselves."
+
+The arithmetic was not subtle. Intermediate Treasury yields had risen by roughly 250 to 370 bp, the range between the 10-year's move and the 2-year's. On a duration-4 book the rate leg alone cost on the order of 10 to 14 points before carry, \$20mm to \$28mm on \$200mm *(illustrative arithmetic)*. An unhedged book ate every point of it, and with the spread leg widening and the carry partly offsetting it, did roughly what the index did, a loss of about a ninth of its value. Kaz's card had been that book until July. The hedge put on after the window agreed covered only the part of the rate shock that came later, and the change had cost a point on top. "High yield has negative empirical duration," Kaz said quietly, reading their own card back. "It said so in the table."
+
+"The table was right about its eleven years," Ines said. "It was wrong about the twelfth."
+
+Mags's card won the replay, and Ines graded it down anyway. The 1,130 contracts paid back most of the rate leg; a 10-year contract does not perfectly hedge a book whose duration sits at four years in a year when the 2-year rose half again as much as the 10-year, so some of the curve leaked *(illustrative)*. The CDX leg was where the card bled. Buying high-yield protection on \$100mm costs its spread every day it is held, about 3% a year at January's level, and it pays only on the days spreads widen. Marked at the July peak, the protection was up about ten points on the year. Marked at December, it had given more than half of that back *(approx.; illustrative sizing on the secondary spread path)*. Net, Mags's book was down a little, and the best number on any card.
+
+"Right answer," Ines said. "Now tell me why."
+
+"Because the Fed was going to hike into inflation and inflation is bad for credit."
+
+"Exactly. You bet on why rates would move, and you were right about why. That's a macro trade. A good one. It's not a hedge." Ines tapped the card. "In a year when the reason is different, the same card is a short-rates position with protection attached, and it loses on both. We'll play that year next."
+
+The reader's card is graded the same way. If it put $H$ near zero because Table 8.1 said so, it lost what Kaz lost. If it said full hedge because the Fed was about to fight inflation, it won Mags's money for Mags's reason, and it was a bet on the source of the rate move that happened to come in. If it said, in some form, *I don't know why rates will move, so I won't let the hedge depend on it*, it is Theo's card, and it is owed a grade the moment it can name a ticker.
+
+Theo, it turned out, could not name one that afternoon. He thought about it on the train. The answer was in the hedge matrix of §8.6, which he had read and not yet used, and he worked it out properly the next week (§8.8).
+
+The coda was not a card. It was a note. On 3 December 2022, with the year nearly done, Apollo's chief economist Torsten Slok wrote that the high-yield total-return index was "down 10% so far in 2022," and the note's title attributed the year's returns mainly to moves in duration. Ines put it on the screen without comment. The asset class that a generation of hedge-ratio tables had taught to have negative empirical duration had lost most of its money on rates.
+
+Mags read it from her chair. "In 2022 the kids hedged B paper with nothing, because a PDF said empirical duration was negative. Lost on rates and spreads. Progress is losing the same money faster." She looked at Theo's rolling-correlation monitor, the one Kaz had built that week, for a long moment. "That's good, though. I'd have killed for that. I'd have killed for a *screen*."
+
+What the screen would have shown in 2022 is the regime alarm: a rolling 60-day $\rho_{y,s}$ crossing zero from below, which fired in the first quarter, months before Kaz's trailing $H$ agreed with it. The desk's working rule is blunter than any re-estimate: when the rolling $\rho$ is above zero, hedge at least the full analytical duration (§8.8 has the better answer, which stops depending on $\rho$ at all). Theo added a line under the question on his sticky note: *Rates with rates. Spread with spread. Name the second instrument.* Chapter 10 (§10.7, Case Study C) tells 2022 again from the trend sleeve's side, where the same duration losses were somebody else's best year.
 
 ### Case Study B: March 2023, SVB, and the Hedge That Hedged Both Ways
 
-*The levels.* The 2-year Treasury yield fell from 5.05% on March 8, 2023 to 4.03% on March 13, a 102 bp drop in three sessions. The 10-year fell from 3.98% to 3.55% (FRED). Credit went the other way. The ICE BofA HY OAS widened 42 bp in a single day, from 461 bp on Friday, March 10 to 503 bp on Monday, March 13, the largest daily widening since June 2020 (Reuters, via Kitco, March 14, 2023).
+#### Long Scene: The Hedge That Hedged Both Ways (8–13 March 2023, replayed)
 
-*The mechanism.* A flight to quality: $\rho_{y,s}$ sharply negative for a week, regime one, the world Ben Dor's sample was built on, arriving exactly one year after the regime that broke it. Take a B book with duration 4 *(illustrative)*, intermediate yields down about 70 bp, and spreads out about 60 bp over the window. The bond gains roughly $4 \times 0.70\% = 2.8\%$ on rates and loses $4 \times 0.60\% = 2.4\%$ on spread, for a net of about +0.4%. A full analytical futures short loses 2.8%, so the "hedged" book is down about 2.4%. Hedged at $H = 0.3$, the futures lose only 0.84%, and the book is down about 0.4%. The full hedge was not a hedge. It was a short-rates position with a credit position attached, entered the week a bank failure became the only macro variable that mattered.
+*A replay, cut off at the close of Wednesday 8 March 2023. The desk trades a generic single-B book, not SVB paper, and nobody on it is restricted; the desk, its book and all dialogue are invented. Dates, yields, spreads, the 8-K figures and the April note prices are sourced.*
 
-*The systematic flag.* The week's realized $\rho$ was strongly negative while the trailing 60-day $\rho$ still carried 2022's positive memory, so the two estimates disagreed sharply. That disagreement is the signal. It says the *source* of rate moves has changed: from inflation, which hurts both legs, to flight to quality, which helps the rates leg and hurts the spread leg. Conditioning the hedge ratio on the source of the rate move is a classification problem, not a regression problem, and Chapter 10 (trend) and Chapter 12 (regimes) supply the classifiers.
+"We'll play that year next," Ines had said, and she meant it literally. The following Friday the big screen showed the close of Wednesday 8 March 2023, and the room went quiet in the way it does when everyone already knows the ending and is trying to pretend they don't.
+
+The tape that evening was busy but not frightening. After the close, SVB Financial Group had filed an 8-K. Its bank had sold available-for-sale securities with a book value of \$23.97bn for proceeds of \$21.45bn, and the company was raising \$2.25bn of capital. The 2-year Treasury closed at 5.05% and the 10-year at 3.98% (FRED). If you had lived through 2022, those yields were the point: the Fed was still hiking into inflation, and the market had spent a year learning that rates and spreads rose together.
+
+The book on Theo's packet was the same \$200mm of single-B bonds, duration 4 *(illustrative)*. This time it came pre-hedged. The desk in the replay had sized its Treasury futures on a trailing 60-day window, the way Kaz's model did, and the window was full of 2022's lesson: rates and spreads moving together, $\rho$ positive, and an estimated $H$ of 1.1 *(illustrative)*. The book was short about 1,240 TY contracts against \$80,000 of DV01, a little more than the full analytical hedge.
+
+"It's 7 a.m. Thursday," Ines said. "You've read the 8-K. You haven't read anything else, because nothing else exists yet."
+
+> *Your card, Thursday 7 a.m.: keep the hedge at 1.1, cut it to Ben Dor's number for single-B (about zero), or keep the futures at one and add CDX HY protection for the spread beta. Write the number and the reason.*
+
+Kaz kept the hedge. "The model says 1.1. A window is a window. Three months ago everyone wanted me to trust the window, and the window was right."
+
+Mags had a different view and, unusually, no war story to go with it. She had been at a fund that was winding down for most of 2022, and she had her own memories of that particular week's bank paper (Chapter 6), which she did not offer. What she offered was a year. "This is '98 again. Something breaks, everyone runs to Treasuries, Treasuries rally, and the rally is the fear. In a fear rally your futures short loses money on exactly the day your bonds do. Take the futures off." Her card said *0*.
+
+Theo had spent the week since the 2022 replay doing what Ines told him: naming the second instrument. His card said *Futures at $H = 1$, about 1,130 contracts, for the rates. CDX HY protection, sized to the book's DTS over the index's DTS, for the spread beta. I don't know which way the week goes and I don't need to.* He showed it to Ines before she asked.
+
+"You named it," she said. "Good. Now we find out what it costs to be agnostic."
+
+Thursday, 9 March, ran first. SVB's stock fell 60.4% to \$106.04, and more than \$40bn of deposits left the bank in a day. Ines read the numbers slowly, the way a dealer turns cards. The 2-year was falling; the high-yield index was widening. Kaz watched the book's P&L line on the replay screen go red on the futures and redder on the bonds, and said nothing for a while.
+
+"The futures short is losing because Treasuries are rallying," Theo said. "And the bonds are losing because spreads are widening. The hedge is losing on the same day as the thing it hedges."
+
+"Both ways," Ines said. "That's what a hedge ratio above one does in a flight to quality. In 2022 the two legs moved together, so a big futures short protected you. This week they're moving apart, so the same short is a second position. Same contracts. Opposite job."
+
+Kaz asked for the replay's P&L explain for Thursday, because a replay runs the same risk system as the live book, and the explain came back in the familiar committee-designed format. For Kaz's book it had two red lines, *Rates hedge* and *Spread*, and one black one, *Rates (bonds)*, which the futures had more than cancelled. For Mags's book it had one black line and one red one, and a total close to flat. For Theo's it had four lines, two red and two black, sized almost exactly against each other, and a total near zero.
+
+"Yours is boring," Kaz said.
+
+"Boring is the point," Ines said. "Read the four lines. The bonds made money on rates and the futures gave it back. The bonds lost money on spread and the protection gave it back. What's left is the bonds against the index, which is the only thing Theo claims to know anything about. His explain tells you what he is paid for. Yours tells you what the Treasury market did."
+
+On Friday, 10 March, the California Department of Financial Protection and Innovation closed the bank and appointed the FDIC as receiver. The ICE BofA high-yield OAS closed at 461 bp. Over the weekend, on 12 March, the Treasury, the Federal Reserve and the FDIC issued a joint statement on the failure. Kaz used the weekend, as replays allow, to re-estimate the model on the new data. Two days of observations in a sixty-day window moved the estimate a little. It still said $H$ was above one.
+
+"The model hasn't noticed," Kaz admitted on Monday morning, which in replay time was ten minutes later.
+
+"The model can't notice," Ines said. "Look at it. Your sixty-day window says $\rho$ is positive, because it remembers January. This week's realized $\rho$ is sharply negative. This week's hand and the sixty-day hand disagree. When they disagree, you are not holding what you think you are holding. That disagreement is the most important number on the screen, and you don't have a field for it."
+
+Monday, 13 March, closed the scene. The 2-year Treasury yield ended at 4.03%, down 102 bp in three sessions, and the 10-year at 3.55% (FRED). High yield went the other way: the ICE BofA HY OAS widened 42 bp in a single day, from 461 bp on Friday to 503 bp on Monday, the largest daily widening since June 2020 (Reuters, via Kitco, March 14, 2023). It was the flight table of §8.2, $\rho$ sharply negative, the world Ben Dor's sample was built on, arriving exactly one year after the regime that broke it.
+
+Ines graded with the chapter's own arithmetic. Over the window, take intermediate yields down about 70 bp and the book's spreads out about 60 bp *(illustrative)*. The bonds gain roughly $4 \times 0.70\% = 2.8\%$ on rates and lose $4 \times 0.60\% = 2.4\%$ on spread, for a net of about +0.4% unhedged. Mags's zero hedge was that book: up about 0.4%, in the week a large American bank failed. A full analytical futures short loses 2.8%, so a book hedged at one is down about 2.4%; Kaz's 1.1 lost a little more, about 3.1% on the futures, down about 2.7% in all. A card cut to a compromise of $H = 0.3$ loses 0.84% on the futures and finishes down about 0.4%. Theo's card did what the arithmetic says a two-instrument hedge does: the futures took the rate leg to roughly zero, the CDX protection took the market part of the spread leg to roughly zero, and what was left was whatever the book's own bonds did against the index, less whatever the CDX–cash basis did that week, which the replay did not have.
+
+"So Mags won again," Theo said.
+
+"Mags won twice," Ines said. "In 2022 she said inflation and was right. This week she said fear and was right. That's not a hedge ratio. That's a read on why rates are moving, made fresh each time, by somebody who has seen enough tables to know which one she's sitting at. It's a real skill. It's also a different job from yours." She turned to Kaz. "Your card was the only one that lost on both legs. Not because the model was bad. Because a trailing window is always fighting the last war."
+
+"And mine?" Theo asked.
+
+"Yours made nothing. In the week a bank failed and spreads had their worst day in nearly three years, your hedge made nothing and lost nothing. That's the grade." She pushed his card back across the desk, face up this time. "Keep it. You'll need it when you answer your own sticky note."
+
+The reader's card gets the same three grades. If it kept 1.1, it lost on both legs. If it cut to zero, it won by reading the week's source of rate moves correctly, which is a forecast. If it put the rates hedge at one and the spread hedge in CDX, it gave up the chance to be right in return for not needing to be.
+
+There was a coda, because Ines always has one. She moved the tape forward six weeks, to 25 April 2023. SVB Financial Group, the holding company, had filed for Chapter 11 on 17 March. The FDIC had frozen the holdco's \$2bn deposit at the failed bank. Two of the holdco's senior notes, from the same indenture and the same class of claim, were quoted that day at 69 for the 3.5% notes due 2025 and 57 for the 1.8% notes due 2031 (Debtwire, citing MarketAxess). Two notes six years apart in maturity, twelve points apart in price, and neither one cared what the 2-year Treasury had done in March. This was the recovery route of §8.3 made real: a price pinned to a claim on an estate, where the discount rate had stopped mattering. Whatever the twelve points between them were a bet on, it was not the yield curve.
+
+Theo wrote the dates of both replays on the back of his sticky note, one above the other: 2022, $\rho > 0$; March 2023, $\rho < 0$; twelve months apart. Then the sentence Ines had left him with. Conditioning a hedge ratio on the source of the rate move is a classification problem, not a regression problem, and Chapter 10 (trend) and Chapter 12 (regimes) supply the classifiers.
 
 ### Case Study C: April 2025, Three Regimes in Seven Sessions
 
-*The levels* (FRED, closing OAS and yields; CCMG for the monthly path):
+*The card is a desk exercise and the dialogue is invented; yields, spreads and index returns are sourced, and the grading arithmetic is illustrative.*
+
+The third card was not a replay in the usual sense. Everyone on the desk except Theo had traded April 2025 live. Theo had watched it from a conference room at his old job, between drafts, with the vague sense that something in the Treasury market had broken and that it was somebody else's problem. Ines handed him the card on the Monday after the SVB replay, with a pencil.
+
+The setup was one week of screen. On Wednesday 2 April 2025, after the close, came the tariff announcement. By the close of Friday 4 April the 10-year yield had fallen from 4.20% to 4.01%, and the ICE BofA high-yield OAS had gapped from 342 bp to 445 (FRED). Yields down, spreads out: the flight table.
+
+> *Your card, Friday 4 April 2025, at the close: the 10-year is 4.01% and the HY OAS is 445 bp. Choose the hedge ratio you will carry into Monday, and write one sentence on why rates will move next week.*
+
+Theo looked at it for a long time. "Two days ago this was the flight table. Rates rallied and spreads blew out, so the right hedge was small, maybe zero. If it's still the flight table on Monday, I want a low $H$. If it isn't..."
+
+"If it isn't?"
+
+"Then I'm Kaz in March 2023." He wrote the same card he had written for SVB: futures at one, CDX for the spread beta, no sentence about why rates would move. Ines took it without comment, which he had learned was a grade of its own.
+
+Here is what the screen did next (FRED, closing OAS and yields; CCMG for the monthly path):
 
 | Date (2025) | 10-year | HY OAS | BB | B | CCC | IG | What the hedge did |
 | :--- | ---: | ---: | ---: | ---: | ---: | ---: | :--- |
@@ -741,13 +873,15 @@ The three episodes below cover all three regimes of §8.2, in four years. The fi
 
 The month's summary statistics hide the week. For April as a whole, CCMG reports Bloomberg index returns of +0.63% for Treasuries, +0.06% for US Credit, −0.02% for High Yield, and −0.68% for the S&P 500. Victory Capital reports month-over-month widening of 13 bp in IG and 39 bp in HY. GW&K noted that the range in the 10-year yield that month was the widest since March 2023, "when Silicon Valley Bank folded." Inside that range, the sign of the rate–spread comovement flipped twice in seven sessions. A book hedged at a trailing-window $H$ was wrong on the first two days, right on the next one, and wrong again by the end of the week, in different directions.
 
+Grading the card makes the point in one line of arithmetic. Take a duration-4 book that moves with the index spread, and ask what hedge ratio would have left it flat over each stretch *(illustrative arithmetic on Table 8.3)*. From Wednesday to Friday, with yields down 19 bp and spreads out 103, the answer is about −4: the flat book needed to be *long* Treasury futures, because the rally was the fear. From Friday to Monday, with yields up 14 bp and spreads out 16, it is about +2: inflation's table, where the futures short has to cover more than the bond's own duration. From Monday to Friday 11 April, with yields up 33 bp and spreads in 35, it is about zero: the spread tightening paid for the rate sell-off by itself. A card that read Friday's flight table and carried a low $H$ into Monday lost on both legs on Monday. A card that carried a high one was right on Monday, and by the next Friday it was holding a profitable short-rates bet it had never meant to make. Theo's card, the same two-instrument hedge as the week before, had nothing to say about which table the market was at and did not need to: the futures took the rates, the CDX took the market's spread move, and what was left was the book against the index, plus a basis the exercise does not price. For the market-side story of who sold Treasuries that week and why the safe-haven leg failed so abruptly, Ira Jersey's account on *Odd Lots* ("What We Learned About Treasuries on the Night of April 8," 28 April 2025) is the one to hear.
+
 Ines replayed it as a hand history. "April 2 to 4, you had the nuts. Rates rallied, spreads gapped, and your under-hedge paid because you weren't short futures into the rally. April 7, the board paired: Treasuries sold off *with* credit, and you were still betting day-one odds. By April 11 the board changed again. Your hedge ratio is your read on the table. Update it when the board changes, not when the month ends."
 
-*The indictment of trailing windows.* The rolling 60-day CCC hedge ratio computed on FRED data was close to zero in the window ending April 30 and reached −0.67 by the window ending May 30 (and −0.78 for the window ending May 23). The *estimate* swung hard negative *after* the event, which is exactly when it was least useful. Rudin (2025), using the Bloomberg US Corporate High Yield index, makes the general point: hedging high yield with Treasury futures based on duration "often leads to increased portfolio volatility." Figure 8.4 draws the whole three-year window of the rolling estimate.
+Then Ines showed him what the desk's own estimator had done with the week, which was the part she minded most. The rolling 60-day CCC hedge ratio computed on FRED data was close to zero in the window ending April 30 and reached −0.67 by the window ending May 30 (and −0.78 for the window ending May 23). The *estimate* swung hard negative *after* the event, which is exactly when it was least useful. Rudin (2025), using the Bloomberg US Corporate High Yield index, makes the general point: hedging high yield with Treasury futures based on duration "often leads to increased portfolio volatility." Figure 8.4 draws the whole three-year window of the rolling estimate.
 
 ![Figure 8.4: The rolling 60-day hedge ratio on FRED data, January 2024 to October 2026. The CCC estimate was near zero at the end of April 2025, fell to −0.78 on May 23, weeks after the tariff shock, and rose above 1.8 by June 2026; high yield follows it at smaller amplitude, and investment grade stays between 0.79 and 1.04. Source: FRED BAMLH0A3HYC, BAMLH0A0HYM2, BAMLC0A0CM and DGS10, computed 2026-10-18 as H = 1 + s̄ρσ_s/σ_y on daily relative OAS changes (the free ICE BofA history starts in October 2023).](assets/figures/ch08_rolling_hedge_ratio.png)
 
-*The systematic flag.* When the realized one-week $\rho$ changes sign within the week, the right response is to cut confidence in the hedge ratio, not to re-estimate harder. Operationally, raise the ridge penalty $\eta$ (shrinking the hedge toward a robust prior), widen the band within which the hedge is left alone, and lean on the instrument that hedges the spread factor directly (CDX HY) rather than the instrument that hedges it through a correlation (futures at $H < 1$).
+Kaz, who had traded that week live with a trailing window and remembered it, took the lesson in their own vocabulary. When the realized one-week $\rho$ changes sign inside the week, the estimate has not become less accurate so much as less meaningful, and the desk's response since then has been to lower its confidence in the hedge ratio rather than re-estimate it harder: raise the ridge penalty $\eta$ of §8.6, shrinking the hedge toward a robust prior; widen the band within which the hedge is left alone; and lean on the instrument that hedges the spread factor directly (CDX HY) rather than the one that hedges it through a correlation (futures at $H < 1$). "It is the same answer as Theo's card," Kaz said, "arrived at by a longer road."
 
 ## 8.8 What's Left Is IDO (and How to Prove It)
 
@@ -755,18 +889,25 @@ After the Treasury leg, the empirical rate beta, and the DTS-scaled market sprea
 
 ### The definition, in four subtractions
 
-Let $\text{DTS}_{i,t-1}$ be bond $i$'s DTS at the previous close, known before the return occurs, so the definition cannot look ahead. The pure-IDO return is defined by four subtractions:
+Let $\text{DTS}_{i,t-1}$ be bond $i$'s DTS at the previous close, known before the return occurs, so the definition cannot look ahead. The pure-IDO return is defined by four subtractions, and Theo, who had now been told twice to name his second instrument, walked the cold-open bond through each one with a pencil.
 
-1. **Rates.** Excess return over KRD-matched Treasuries, $R^{\text{xs}}_{i,t} = R^{\text{tot}}_{i,t} - \sum_k w_{i,k}R^{\text{TSY}}_{k,t}$ (§8.1). This removes the full analytical rate exposure. The part of the spread move that is correlated with rates stays in $R^{\text{xs}}$, and the market spread factor in the next step removes it, whatever $\rho$ happens to be.
+1. **Rates.** Excess return over KRD-matched Treasuries, $R^{\text{xs}}_{i,t} = R^{\text{tot}}_{i,t} - \sum_k w_{i,k}R^{\text{TSY}}_{k,t}$ (§8.1). This removes the full analytical rate exposure. The part of the spread move that is correlated with rates stays in $R^{\text{xs}}$, and the market spread factor in the next step removes it, whatever $\rho$ happens to be. On Theo's bond this step takes away the seventy cents the 10-year cost at the full 4.1, without asking the correlation's opinion, and leaves the three cents of carry where §8.1 put them.
 2. **Market, sector and rating spread factors, DTS-scaled.** Regress $R^{\text{xs}}_{i,t}/\text{DTS}_{i,t-1}$ on factor returns $F_{k,t}$ with Dimson-summed loadings for stale marks (§8.5):
 $$
 \frac{R^{\text{xs}}_{i,t}}{\text{DTS}_{i,t-1}} = \sum_{k} \beta^{\text{D}}_{i,k}\,F_{k,t} + \tilde\epsilon_{i,t} .
 $$
-3. **The common residual factor.** Take the panel of scaled residuals $\tilde\epsilon$ (time by bonds), extract its leading principal component $g_t$ with loadings $v_i$, and remove it: $\tilde\epsilon^{\perp}_{i,t} = \tilde\epsilon_{i,t} - v_i\,g_t$. This is the Collin-Dufresne–Goldstein–Martin factor, estimated rather than named.
+On Theo's bond this is the single-B index's relative move that afternoon, −1.2%, times the bond's DTS of 0.248: the twenty-eight cents Kaz had called alpha.
+
+Step two leaves a residual for every bond, and Collin-Dufresne, Goldstein and Martin say those residuals are not yet independent of one another. The next step needs one more idea.
+
+> **Math, Gently.** *The common whisper: what a first principal component is.* Take three bonds' residuals after every named factor has been removed, and draw them as three noisy lines over a month. If they were truly idiosyncratic, their wiggles would be unrelated. Often they are not. On some days all three dip together, as if the market had whispered something none of the named factors heard. The first principal component is the single line that, scaled up or down separately for each bond, explains as much of that shared movement as one line can. Its value on a given day, $g_t$, is how loud the whisper was; each bond's scaling, its loading $v_i$, is how closely that bond listens. Removing it is subtraction. In the margin: on a day when the three residuals are $(+2, +1, -3)$ and the whisper is $g = +1$ with loadings $(1, 0.5, -0.5)$, the whisper accounts for $(+1, +0.5, -0.5)$ and leaves $(+1, +0.5, -2.5)$. The third bond's move was mostly its own; half of the first bond's was not. Chapter 7-B (§7-B.5) owns the full treatment, including how to tell a real component from noise. Here it is a subtraction.
+
+3. **The common residual factor.** Take the panel of scaled residuals $\tilde\epsilon$ (time by bonds), extract its leading principal component $g_t$ with loadings $v_i$, and remove it: $\tilde\epsilon^{\perp}_{i,t} = \tilde\epsilon_{i,t} - v_i\,g_t$. This is the Collin-Dufresne–Goldstein–Martin factor, estimated rather than named. On the cold-open day the desk's estimate of the whisper was close to zero *(illustrative)*, so this step took nothing off Theo's bond. On other days, and in other books, it takes a great deal, as the next subsection but one shows.
 4. **Scale back to returns.**
 $$
 \text{IDO}_{i,t} \equiv \text{DTS}_{i,t-1}\,\tilde\epsilon^{\perp}_{i,t} .
 $$
+On Theo's bond, what was left of the relative spread move, −1.45% against the index's −1.2%, times 0.248, is six cents.
 
 What remains is small, noisy, and yours. That is not a disappointment. That is the definition.
 
@@ -787,21 +928,69 @@ Of the thirty-seven cents, about six were the bond. Four were the pricing servic
 
 ![Figure 8.5: The thirty-seven cents, itemized as in the table above: carry +3, analytical rates −70, market spread beta +28, bond-specific spread (IDO) +6 and a −4 decomposition residual sum to −37. Kaz's "alpha" of 34 cents is 28 cents of beta and 6 of IDO. Illustrative: the cold-open B3 bond (price 95, modified duration 4.1, OAS 620 bp) on the chapter's illustrative day (10-year +18 bp, B-index relative OAS change −1.2%, the bond's own −1.45%).](assets/figures/ch08_thirty_seven_cents.png)
 
-The table also shows the cleanest version of the hedge. The empirical-duration approach hedges the 28 cents of market spread beta *indirectly*: it shorts fewer futures because, on average, spreads tighten when yields rise. That works while $\rho$ holds and fails when it flips (§8.7). The two-instrument approach hedges each factor with its own instrument: futures at $H = 1$ for the 70 cents of rates, and CDX HY sized at $\text{DTS}_i/\text{DTS}_{\text{CDX}}$ for the 28 cents of spread beta. It does not depend on $\rho$ at all. It pays for that robustness with the CDX–cash basis and the index roll, and it hedges away spread beta you might have wanted to keep, which is Ines's poker hand from §8.2. Which hedge is right depends on what Theo is paid for. If his mandate is IDO, the answer is the two-instrument hedge, because a view on $\rho$ is not his job.
+The table also shows the cleanest version of the hedge. The empirical-duration approach hedges the 28 cents of market spread beta *indirectly*: it shorts fewer futures because, on average, spreads tighten when yields rise. That works while $\rho$ holds and fails when it flips (§8.7). The two-instrument approach hedges each factor with its own instrument: futures at $H = 1$ for the 70 cents of rates, and CDX HY sized at $\text{DTS}_i/\text{DTS}_{\text{CDX}}$ for the 28 cents of spread beta. It does not depend on $\rho$ at all. It pays for that robustness with the CDX–cash basis and the index roll, and it hedges away spread beta you might have wanted to keep, which is Ines's poker hand from §8.2. Which hedge is right depends on what Theo is paid for, and when he asked, Ines answered before he had finished the sentence. "Your mandate is IDO. So it's the two-instrument hedge. A view on $\rho$ is not your job. If it were, we'd pay you for it."
 
 > **[SOURCE EXTRACTION]** *Ben_Dor p.220:* "the low explanatory power (R2 = 8%) suggests that there are other factors that influence the performance of the strategy."
 >
 > **Annotation.** Ben Dor tests a DTS-neutral "short empirical duration" strategy (long Ba, short Baa) and finds a significant loading on rates (0.39, $t = 3.86$) that explains only 8% of its return variance. That is a pattern to recognize. A strategy can have a real, statistically significant factor exposure that is economically small next to its residual. The IDO ledger reports both: the loading's $t$-statistic (is the exposure real?) and the factor's share of variance (does it matter?). A residual that is 92% of variance is either a great deal of alpha or a great deal of factor you have not named yet. The ledger's job is to tell those apart.
 
+### The common whisper, at book scale
+
+#### Long Scene: Twelve Residuals (Dov Adler's pod, the last week of October 2026)
+
+*Dov Adler's pod and Vantress Capital Management are fictional composites. The pod's twelve pairs, their sizes, limits and P&L, and every line of dialogue are illustrative; the Sharpe-ratio arithmetic is public.*
+
+The orange line appeared on a Tuesday, which Wen Zhao said was the worst day for it, because Monday's orange lines could be blamed on the weekend.
+
+Dov Adler was running twelve pairs that week, each built the way the Pair Book's PB-03 had been built in its replay (§8.4): long one credit, short another, matched on market-value DTS, the leftover beta trimmed in CDX, the leftover duration sold in Treasury futures. Every morning the platform's factor model x-rayed each pair and reported what was left after everything it could name: the market spread factor, sectors, rating buckets, rates by key rate. What was left was supposed to be Dov's. On his monitor, above a dated thesis for every pair, was a sticky note in his own handwriting: *IDO or it didn't happen.*
+
+The x-ray was clean. Net DTS sat inside ±5% of gross, the beta to CDX HY inside ±0.05, and no sector cell was over its cap. The orange line was about none of that. It was a ratio on the risk summary that nobody reads until it changes colour: realized idiosyncratic volatility over the last sixty days, divided by the risk model's forecast. It read 1.9.
+
+Marcus Oyelaran called at 8:10. He never asks what the view is. "What are you long that you didn't mean to be?"
+
+"Nothing," Dov said. "Every pair is flat to the model. Look at the factor screen."
+
+"I am looking at it. The factor screen shows me what the model can name. It says your idio is twice as volatile as twelve independent residuals should be, and twelve independent anythings don't do that. Correlate your residuals with each other and call me back."
+
+Wen did it, and it took most of the morning, because nothing on a desk is as simple as "correlate your residuals." The pairs had been opened on different dates, so the twelve series started in different places. Three of the short legs had gone a day without a mark in the week a lender recalled bonds, and the explain had filled those days with zeros, which is a smoothing model nobody chose (§8.5). She cut the panel to the sixty days on which all twelve pairs had real marks, scaled every residual by its pair's DTS so that a wide pair could not shout over a tight one, and computed the sixty-six pairwise correlations. Their average was 0.3.
+
+"Point three," she said. "Every pair against every other pair. It isn't one bad apple. It's the crate."
+
+Dov did the next part in his head and did not enjoy it. If twelve equally sized residuals with volatility $\sigma$ are independent, the book's idio volatility is $\sigma/\sqrt{12}$, about $0.29\sigma$. With an average correlation of 0.3 it is $\sigma\sqrt{(1 + 11 \times 0.3)/12} = \sigma\sqrt{4.3/12}$, about $0.60\sigma$. The risk model had forecast the first number and the book had delivered roughly the second. The orange 1.9 was not noise. It was the book saying that a large part of what Dov called idiosyncratic was common to all twelve pairs.
+
+Wen ran step three of the definition above on the panel: the first principal component of the twelve residuals. Every loading had the same sign, and the component explained about a third of the residual variance, which squared with the 0.3. Sorted by loading, the heaviest pairs were the ones whose long leg was the wider, less traded name and whose short leg was the tighter, more liquid one, which described most of the book. "It's the same whisper in every pair," Wen said. "Whatever the market does to the bonds dealers least want to hold, we're long it twelve times."
+
+"It's not in the factor model."
+
+"It's not in *the vendor's* factor model. It's in ours now." She saved the loadings. Chapter 9 will put a name on what she found; for the pod that morning it was enough that it had a number.
+
+When Dov called back, Marcus did not ask for the trades to come off. He explained why the platform cared, which on a platform is the same request in a politer voice. A multi-manager firm buys residuals from dozens of pods and pays each pod on its own. If the residuals are independent, adding pods adds Sharpe under a square root. If they share even a little, the arithmetic caps it: the platform's Sharpe ratio is the pod Sharpe times $\sqrt{N/(1 + (N-1)\rho)}$, and it can never exceed the pod Sharpe divided by $\sqrt{\rho}$. At a pod Sharpe of 0.75 and a cross-pod correlation of 0.10, forty-five pods reach 2.17 against a ceiling of 2.37 (the arithmetic Dan Morillo walked through on *Odd Lots*, 7 October 2024). "Your twelve residuals have a common part," Marcus said. "So does the next pod's. If it's the same common part, and in credit it usually is, every pod that's long the illiquid name raises $\rho$ for everybody. The platform can buy that factor for a few basis points in an index. It can't afford to buy it from you at a residual's price."
+
+"So what do you want?"
+
+"I want the ledger to say what it is. Hedge it if you can find an instrument that's mostly that factor. Shrink the pairs that load on it hardest if you can't. Or keep it, report it as its own line in the explain, and get paid for it like a factor. What I don't want is to meet it for the first time in a drawdown."
+
+Dov wrote a sentence with a date in it, as he does: *By 30 November 2026, mean residual correlation across the book below 0.15, or the common component reported as its own line in the explain.* Then he opened the Pair Book's ledger and filled in a cell that had been blank since the book began. Residual correlation: 0.3, measured 27 October 2026.
+
+Ask the three questions of the whole book and the answers are uncomfortable in a useful way. The hedges removed everything the factor model could name. What remained was supposed to be twelve independent views, one per pair. What leaked was a common part the model could not name, and it leaked into every pair at once. That is why step three exists, and why a pod's PM, its risk manager and its platform agree on one thing when they agree on nothing else: idio is whatever the hedge leaves, so the hedge had better leave only the issuer.
+
 ### The IDO ledger: proving it
 
-A residual is a claim until a signal predicts it. The ledger keeps three numbers per strategy, per month:
+A residual is a claim until a signal predicts it. On Theo's desk the proof is a month-end meeting in the small room with the blind that does not close, at which a strategy may describe itself only in three numbers.
 
-- **Residual volatility**, $\sigma(\text{IDO})$ for the portfolio. This is the risk budget the strategy actually consumes after the hedges, and the number to compare with the risk model's forecast.
-- **Information coefficient.** The cross-sectional Spearman rank correlation between the signal at $t-1$ and $\text{IDO}_{i,t}$, $\text{IC}_t$, averaged over months. Rank correlation, because credit residuals have fat tails and one defaulting CCC should not decide the month.
-- **Its $t$-statistic**, $t = \overline{\text{IC}}\,\sqrt{T}/\mathrm{sd}(\text{IC}_t)$ over $T$ months. Chapter 7's warning applies: a $t$ of 2 after forty specification searches is not a $t$ of 2.
+October's meeting was Kaz's. They had a relative-value signal that ranked single-B bonds once a month *(illustrative)*, and the first slide said it had an information coefficient of 0.06 with a $t$-statistic of 2.4 over three years. Mags, who attends these meetings because she is suspicious of anything called adjusted and had heard there would be adjustments, asked the only question she ever asks of a slide.
 
-The fundamental law, $\text{IR} \approx \text{IC}\sqrt{\text{BR}}$ (Chapter 9), connects the ledger to the PM's question. If the IC is measured on raw excess returns, the IR it implies is partly a beta IR, and it disappears in the first regime change. If it is measured on IDO, it is the desk's. IDO or it didn't happen.
+"On what?"
+
+"Monthly excess returns."
+
+"Then some of that is the market. Show me it on IDO."
+
+Kaz had run it on IDO and had not led with it. On IDO the coefficient was 0.03 and the $t$-statistic 1.3.
+
+The three numbers on the ledger are the ones that slide should have opened with. The first is the residual volatility of the strategy's portfolio, $\sigma(\text{IDO})$: the risk budget the strategy actually consumes after its hedges, and the number to set beside the risk model's forecast, since a residual more volatile than forecast has a common part in it (the scene above). The second is the information coefficient: the cross-sectional Spearman rank correlation between the signal at $t-1$ and $\text{IDO}_{i,t}$, $\text{IC}_t$, averaged over months. (Spearman's correlation is the ordinary correlation computed on ranks: sort the bonds by signal and by IDO, number them, and correlate the numbers.) Ranks are used because credit residuals have fat tails, and one defaulting CCC should not decide the month. The third is its $t$-statistic over $T$ months, $t = \overline{\text{IC}}\,\sqrt{T}/\mathrm{sd}(\text{IC}_t)$, and Chapter 7's warning comes attached: a $t$ of 2 after forty specification searches is not a $t$ of 2. Mags asked how many specifications Kaz had tried before the one on the slide. Kaz said "several." Mags said that "several" is a number in the same way that "adjusted" is a number.
+
+The fundamental law, $\text{IR} \approx \text{IC}\sqrt{\text{BR}}$ (Chapter 9), connects the ledger to the question the PM is actually asking. With a breadth of 200 independent bets a year *(illustrative)*, Kaz's excess-return IC of 0.06 implies an information ratio of about 0.85, and the IDO coefficient of 0.03 implies about 0.42. If the IC is measured on raw excess returns, the IR it implies is partly a beta IR, and it disappears in the first regime change. If it is measured on IDO, it is the desk's. "Half your IR was the market," Mags said, gathering her folders. "Bring me the other half next month, with more months under it." IDO or it didn't happen.
 
 ## 8.9 The IDO Engine: A Reference Implementation
 

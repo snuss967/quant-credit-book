@@ -315,7 +315,81 @@ Theo, on day one: "At RSSG, CLOs were the lenders who couldn't fund the new mone
 >
 > **Annotation.** On p.176 Schmid gives the textbook OC ratio: collateral par divided by the par of the tranche and everything senior to it. He adds that the OC test "is done for every single tranche but the equity tranche." The 2026 indenture keeps the structure and changes the numerator. Par becomes *adjusted* par, with haircuts that depend on prices and ratings. Post-crisis US deals test a combined AAA/AA class and each class down to BB, usually with no test for a single-B tranche *(Creditflux CLO Guide, ch. 6)*. The modern departure is that the haircuts make a par test price-sensitive in exactly the tail of the portfolio where prices are least reliable.
 
+#### Long Scene A: The Cliff, March–April 2020
+
+*Replay, run on Friday 16 October 2026 after the close. Ines cuts the tape at Friday 20 March 2020, then again at the end of April. The desk, its synthetic CLO, the cast's cards and the desk's model runs are fictional; the index levels, the LSTA's reports and the S&P figures are real and cited.*
+
+Ines ran her replays the same way every time, which was part of the point. She printed the tape up to the cut date, blacked out everything after it with a marker that she guarded like a chip stack, and handed each player the documents they would have had on the morning of the cut and nothing else. For this one the documents were a loan index history, two weeks of LSTA market commentary, and a stack of CLO trustee reports with February determination dates. Hana had pulled them from the vendor that morning and stapled them by deal, because the vendor's PDF export put the CCC schedule of one deal behind the cover page of the next.
+
+"Friday, 20 March 2020," Ines said. "Markets close in an hour. You run a loan book. Go."
+
+Mags pushed her chair back from the table. "I was there. I'm not allowed to play." In March 2020 she had been on a bank's distressed desk, and she remembered the month mostly as noise. "I'll keep score."
+
+**Beat one: the tape.** The first page was easy to read and hard to believe. On 29 February the S&P/LSTA index's weighted-average bid had been 95.18. Three weeks later it was in free fall. On 19 March the LSTA reported record volumes and bid-ask spreads that had "widened beyond 300 basis points" *(S&P Global LCD 1Q20 review; LSTA)*. Three hundred basis points of bid-ask on a loan is three points of price between what a dealer would pay and what it would charge, on paper that a month earlier had traded inside half a point. The share of the index priced below 80, the distress ratio, had gone from a rounding error to a large fraction of the market. Theo knew it was a large fraction because he could see the marker strokes where the end-of-month number should be.
+
+In March 2020 Theo had been in his first spring at PJT, and he remembered it as the month the phones never stopped. Every client wanted to know how long its revolver draw would last. Nobody had asked him who was selling the term loan.
+
+"Volume at a record," he said, reading. "So somebody is selling a lot of loans to somebody. Who's selling?"
+
+"That's the right first question," said Ines. "Hold it."
+
+**Beat two: Theo's instinct.** He did what six years of restructuring work had trained him to do in a crash, which was to look for the cheapest paper of a decent business. He went down the trustee reports' CCC schedules with a pencil and circled every loan marked in the forties and low fifties. Retailers, a cinema chain, two energy services names, an airline caterer. Some of them would file. Some would not. All of them were, in his language, fulcrum candidates: the tranche whose recovery would decide who owned the company afterwards.
+
+"These," he said. "If you think the business survives, the cheapest secured paper is where the restructuring value lives. The CLOs hold a lot of it, the CLOs are panicking, so the CLOs sell it to me at forty."
+
+"Are the CLOs panicking?" Ines asked.
+
+"The index is down twenty points."
+
+"I didn't ask about the index."
+
+**Beat three: Kaz's run.** Kaz had stopped listening some time before and was typing. They had the OC engine open, the reference implementation the desk keeps as an answer key (its specification closes this section), loaded with the desk's synthetic deal: \$500mm of par in 250 loans of \$2mm each, 21 CCCs priced evenly from 50 to 92 cents, a CCC bucket of \$42mm against a \$37.2mm limit, so already a little past its 7.5%, and a junior class sitting at 107.41% against a 104% trigger *(the desk's fictional deal; illustrative)*. They marked the whole book to March: every performing loan down about eighteen points, every CCC down twelve.
+
+"Theo's premise is wrong," Kaz said. "Look." The pool had lost about \$85mm of market value. The adjusted collateral numerator had lost about \$0.6mm. "The test can't see the crash. Performing loans are carried at par no matter where they trade. The only prices it reads are the cheapest CCCs, the ones already in the excess, and they got a bit cheaper. The junior cushion went from 3.4 points to 3.3. Nobody is forced to sell anything. The CLOs are fine."
+
+Theo frowned at the screen. "Then why the record volume?"
+
+"Mutual funds, probably. Redemptions." Kaz shrugged. "Not CLOs."
+
+"And when the rating agencies catch up with the prices?" Ines asked.
+
+Kaz had not modeled that, so they did it on the spot, half to prove the point. They moved fifteen of the deal's performing loans, \$30mm of par priced between 80 and 90, into the CCC bucket, the way a wave of downgrades would. Then they reran the numerator and stopped talking.
+
+CCC par went from \$42mm to \$72mm against an unchanged limit, so the excess jumped from \$4.8mm to \$34.8mm. The engine charged that excess cheapest-first, at one minus price, to the loans already sitting at the bottom of the bucket, the ones in the high thirties and forties. The numerator fell by about \$12.7mm. The junior OC ratio fell from 107.3% to about 104.5%, and the cushion from 3.3 points to about half a point *(the desk's fictional run; illustrative)*. None of the \$12.7mm was charged to the fifteen loans that had been downgraded. Every cent of it landed on loans that had done nothing new.
+
+"Huh," said Kaz, which from Kaz was a paragraph.
+
+They had set out to prove that the CLOs would not be forced to sell, and they had proved, by accident, the thing that mattered: the test is blind to prices across almost the whole book and hypersensitive to two things, the cheapest few CCCs and the rating calendar. In a crash, prices fall first. The downgrades come later, in batches, and they arrive at a bucket that is already full.
+
+"So the CLOs weren't selling in March," Theo said slowly. "They'll be selling in April."
+
+Mags, keeping score, said nothing, which Theo had learned meant yes.
+
+**Beat four: the downgrades.** Ines uncapped her marker, crossed out the black bar over the rest of March and handed round the second cut. The index's average bid had bottomed at 76.23 on Monday 23 March, the next trading day after the first cut. March's return was −12.4%, second only to October 2008's −13.2%, and the distress ratio peaked at 57%. Then came the bounce, to 82.9 by 31 March, which a fund that had sold the lows would remember for the rest of its career *(S&P Global LCD 1Q20 review)*.
+
+And then, through April, the downgrades arrived. The rating agencies moved on borrower after borrower whose revenue had just fallen off a cliff for reasons no model had in it. BSL CLO exposure to CCC-range companies climbed toward the peak S&P later measured at 12.31%, against a bucket of 7.5% in most deals, and the average junior OC cushion fell to 1.13% *(S&P Global Ratings, 28 Apr 2023)*. Kaz's half-point synthetic deal was thinner than the average, but not by much, and a meaningful number of real deals were thinner still.
+
+Ines put an exhibit on the table, a trustee-report page she had built for the replay with the deal's name cut out *(illustrative)*, and tapped one line: junior OC cushion 1.1%. Below it, the CCC schedule. At the top of the price column sat a loan that had been rated B− the week before and was now CCC+. It was marked at 88. Below it, in a long tail, were loans in the fifties and forties, the ones Theo had circled.
+
+"Card," she said, and slid one to each of them. "Which loan does a CLO with a 1.1% cushion sell on Monday, at what discount, and who is on the other side? Write the trade, the size and the exit."
+
+Theo wrote fast, because he had been writing the same answer for an hour. *Buy the cheapest CCC from the forced sellers, around 45. Five million. Hold through the restructuring; exit at plan value.* He underlined "forced sellers".
+
+Kaz wrote more slowly. *The deal is charged on its cheapest loans, so it dumps the cheapest loans to get rid of the charge. Buy those. Size small. Exit when the cushion recovers.* Then, after a moment, they added a second line: *Unless selling the cheapest does nothing. Check.*
+
+Mags, who was not playing, wrote something on a napkin, folded it and put it under her coffee cup.
+
+"The reader gets a card too," Ines said to nobody in particular, which was what she said when she wanted Theo to imagine someone watching. "Same three things. The trade, the size, the exit." She collected the cards and put them face down. "We grade them when we've done the arithmetic. Kaz's second line is the arithmetic."
+
+Back at his desk, Theo looked at the loan at 88 for a long time. At RSSG it would have been the least interesting line on the page: a decent business with a bad quarter, a fresh downgrade, a capital structure nowhere near a restructuring. Nobody hires a restructuring banker for that loan. He had a feeling that was exactly why it mattered here.
+
 ### 21.4.1 Derivation: the adjusted numerator
+
+> **Math, Gently.** *The test as an option book.* Picture the OC numerator as a landscape drawn over the deal's loans, sorted from richest to cheapest. For the first nine-tenths of the walk it is perfectly flat: a performing loan counts at par whether it trades at 99 or 79, which is why Kaz's March run barely moved. Then, at the bottom of the CCC list, the ground turns into a staircase. Each of the cheapest few CCCs takes away one minus its price, and only as many of them as the bucket overflows. An option trader reads that landscape as a book of short options: a short put on each defaulted loan, struck at the agency's assumed recovery; a digital on each discount obligation, which snaps back to par if its price stays above a threshold for long enough; and a short position in the cheapest tail of the deal's own CCC book. Now a tiny number. A \$100 deal with a 7.5% bucket holds exactly \$7.50 of CCCs, so the bucket is full. One more \$1 loan is downgraded, and it trades at 88. Nothing is charged to that loan. The \$1 of excess goes to the cheapest CCC already in the book, and if that one trades at 58, the numerator loses 42 cents. A slope of zero before the cliff and of minus 0.42 after it, and the price of the loan that actually fell off never appears. The derivation, next, writes the landscape out.
+
+Formally, the adjusted collateral principal amount is total par plus principal cash less three haircuts, equation (21.5), and each class's OC ratio divides it by the notes at and above that class.
+
+#### The Full Derivation
 
 Index the pool's loans by $j$, with par $n_j$ and price $p_j$ as a fraction of par. Define four disjoint sets: defaulted loans $\mathcal{D}$; discount obligations $\mathcal{O}$ (bought below a threshold, often 80–85, and carried at purchase price $p^0_j$ until the loan trades above about 90 for 30 days, per Kundu 2023); non-defaulted, non-discount CCC loans $\mathcal{C}$ (Caa1/CCC+ or below, deal-specific); and everything else. Let $n^{\text{nd}} = \sum_{j \notin \mathcal{D}} n_j$ be non-defaulted par and $\bar c$ the CCC limit (typically 7.5%; some deals use 5%). The CCC excess is
 
@@ -340,11 +414,7 @@ $$
 
 When $\kappa_k < 0$, interest that would have gone to classes junior to $k$, to the subordinated fees and to the equity is diverted to pay down the most senior notes until the test is cured. The interest diversion (reinvestment OC) test triggers earlier and diverts interest into *buying collateral*. That raises the numerator instead of shrinking the denominator. The IC test (interest proceeds after senior fees divided by interest due on the class and those senior to it) is computed similarly and "historically rarely failed" (Creditflux). Once a test fails, "maintain or improve" rules forbid trades that make it worse.
 
-**Why it is an option book.** Write each haircut as a payoff on prices:
-
-- *Defaulted:* $\min(p_j, R^{\text{ag}}_j) = R^{\text{ag}}_j - (R^{\text{ag}}_j - p_j)^{+}$. The CLO is short a put on each defaulted loan, struck at the agency recovery.
-- *Discount:* the carrying value jumps from $p^0_j$ to 1 when the price stays above the threshold long enough. That is a barrier digital on par.
-- *CCC excess:* minus the sum of $(1 - p)$ over the *lowest order statistics* of the CCC price vector. The CLO is short the cheapest tail of its own CCC book.
+**Why it is an option book.** Write each haircut as a payoff on prices. A defaulted loan is carried at $\min(p_j, R^{\text{ag}}_j) = R^{\text{ag}}_j - (R^{\text{ag}}_j - p_j)^{+}$, so the CLO is short a put on each defaulted loan, struck at the agency recovery. A discount obligation's carrying value jumps from $p^0_j$ to 1 when the price stays above the threshold long enough, which is a barrier digital on par. The CCC excess subtracts $(1 - p)$ summed over the *lowest order statistics* of the CCC price vector, so the CLO is short the cheapest tail of its own CCC book.
 
 The price sensitivities follow directly from (21.5):
 
@@ -386,15 +456,41 @@ Ignoring the small $\bar c$ term, the OC-optimal cure is to **sell the highest-p
 
 The magnitudes are large enough to trade. Elkamhi and Nozawa find that loans widely held by constrained CLOs earn 3.4% lower cumulative abnormal returns over the 20 weeks leading to the downgrade, and that the fire-sale price impact of CCC-downgraded loans is −3.35%. Over three months the unconditional probability that a CLO sells a downgraded loan is 13.27%. A one-standard-deviation (3.26%) drop in junior OC slack raises that probability by 1.56 pp. Average downgrade-week price impact was 17.31% in 2008–09, 1.26% in 2010–19 and 4.41% in 2020. Kundu (2023) finds that the median CLO operates within 4% of its most stringent covenant. After the 2014 oil-and-gas shock, she finds, each extra percentage point of a firm's CLO-routed oil-and-gas exposure lowered the secondary price of that firm's *unrelated* loan by 61 bp (IV estimates 81–254 bp). Selling \$1mm moved prices 180–404 bp on an Amihud measure. Loumioti and Vasvari (2019) add the manager's other lever: discretionary fair values and strategic trading around monthly tests. Strategic trading, but not fair-value discretion, predicts worse future CLO performance.
 
+On Monday morning Ines turned the three cards from Long Scene A face up next to (21.6), which by then Kaz had written on the whiteboard where the stochastic integral used to be.
+
+Theo's card went first. *Buy the cheapest CCC from the forced sellers, around 45.* By the theorem's second case, a CLO that sells a loan inside its excess set gains nothing on the test: it realizes in cash exactly the haircut the numerator was already charging. A deal with a 1.1% cushion is therefore under no pressure at all to sell its forties, and any CLO that sold them to Theo did so for its own reasons, at a price with no fire-sale discount in it. "You realized someone else's haircut," Ines said. "They had already paid it on the test. You paid it in cash." Some of Theo's names did recover, and his restructuring instincts about which ones were real. But as a trade against the CLO rulebook his card had no edge, because there was no forced seller on the other side of it.
+
+Kaz's first line made the same mistake for a different reason, and their second line, *unless selling the cheapest does nothing; check*, was the theorem. Half marks, which Kaz accepted with visible relief.
+
+Mags took the napkin out of her notebook, where it had spent the weekend, and unfolded it. *The B− that was 92 last week. Buy it in downgrade week from every thin deal at once. Size to what they have to sell, not to what you like. Out in two months.*
+
+That is the answer, and the theorem says why. The richest CCC in a thin deal is almost always the freshly downgraded one, yesterday a B− at 92 and today a CCC+ at 88, and selling it is the only trade that both shrinks the excess and frees the cheapest loans from their haircut. Every thin-cushion CLO that holds it faces the same arithmetic in the same week, and the diversity rules of §21.3.2 have made sure that many of them hold it. So the other side of the trade is not another CLO; it is a buyer with no rulebook. A systematic desk running FSPI in April 2020 would have seen pressure concentrated in recently downgraded, CLO-heavy names. By (21.6), those were exactly the highest-priced CCCs. The trade was to buy them from the forced sellers and hold through the reversal, sized against the risk that the downgrades kept coming. The discount on offer was the 4.41% downgrade-week impact of 2020 measured above, more than three times the 2010–19 average, and the exit was the reversal, which the Poker Table below times at about eight weeks. If your own card said "the richest CCC, in downgrade week, out by midsummer," give yourself Mags's marks. If it said "the cheapest," you have Theo's.
+
+"So the theorem tells us exactly what they'll sell," Theo said. "We can be there before every test date."
+
+"On paper it's deterministic," Mags said. "In practice it's discretionary." She ticked it off on the napkin. Managers are not robots: Loumioti and Vasvari's managers moved marks and traded strategically around test dates, so a deal can sit on a breach for a month or cure it with a trade nobody expected. Every indenture defines "market value" its own way, as a pricing-service bid, an average of dealer bids, or failing both the manager's own estimate, so the test the trustee runs is not quite the one the desk computes. And a downgrade can land the week after a determination date, which buys the manager a month. "The theorem tells you the direction of the forced sale," she said. "The trustee report tells you whether it's this month. Back in my day we had neither, and we found out from the dealer, who found out first." She refolded the napkin. "This is better."
+
+Moyer's 2004 book, which sat on Mags's shelf with a broken spine, had made the same point in two words:
+
 > **[SOURCE EXTRACTION]** *Moyer_Distressed_Debt_Analysis p.55:* "CDO-ORs typically limit the percentage of the CDO's portfolio that can be rated in the lowest rating categories. When an investment in the portfolio is downgraded to B– or CCC, the manager may be forced to sell something (again without regard to the portfolio manager's view of fair value) to remain in compliance with the CDO-ORs."
 >
 > **Annotation.** "Sell something" is the entire chapter in two words. Moyer's 2004 insight was qualitative: rating-based rules create involuntary selling, which a distressed investor should expect and exploit. Equation (21.6) makes it specific. The "something" is the highest-priced CCC, the timing is the next test date, and the size depends on the bucket's overshoot and the junior cushion. Two departures from 2004 matter. First, the rulebook is now haircut-based rather than a hard ban, so the pressure is graded, not binary. Second, the CLO share of the market went from about 20% to about 65%, so the forced seller is no longer a corner of the market. It is the market.
 
+The sentence new arrivals to loans say most often is the one Moyer's page was already arguing against.
+
 > **Desk Myth vs. Desk Reality.** *Myth:* "CLOs are buy-and-hold investors, so they stabilize the loan market." *Reality:* CLO *liabilities* are held by buy-and-hold investors. CLO *assets* are traded by a rulebook that turns a downgrade of one borrower into sales of that borrower and, through the cliff, of others. In 2020 BSL CLO exposure to CCC-range companies peaked at 12.31% (S&P, Apr 2023), against a 7.5% bucket. A stabilizer would not have needed a cure trade.
+
+Ines, as always, finished with the hand.
 
 > **Poker Table.** "Most of poker is reading people," Ines said. "This isn't. When a CCC hits the board, the CLO with a 0.9% junior cushion must fold its best CCC hand before the next payment date. I don't need to read its face. I need its trustee report, and I need to know what it holds that is priced highest. The pot is the temporary discount, three points or so. The odds are the reversal rate. Who knows more than you? Nobody: the seller *told* you it was selling, in its indenture, years ago." Then the hand history, as always, through markouts. Buy on the downgrade week at the fire-sale discount. The markout is negative at day 1 because the other constrained CLOs are still selling, flat at week 2, and positive by week 8 if the reversal Elkamhi and Nozawa document arrives. *IDO or it didn't happen*: strip the loan's carry and its beta to the loan index before you call the week-8 markout alpha.
 
 ### 21.4.3 The CLO Forced-Sale Pressure Index
+
+The napkin answers the question for one loan in one deal. A desk needs it for every loan in the index, every morning the trustee files land, which means turning "how likely is this deal to sell?" into a number.
+
+> **Math, Gently.** *The logistic as a probability dial.* A probability has to live between 0 and 1, but the things that drive it, such as a cushion or an overshoot, can be any size. The logistic function $\sigma(z) = 1/(1 + e^{-z})$ is the dial that connects them: feed it any number $z$ and it returns something strictly between 0 and 1. At $z = 0$ the dial reads 50%. Turn $z$ far negative and it creeps toward 0; far positive and it creeps toward 1. It is steepest in the middle and nearly flat at the ends, and its slope at any reading $\sigma$ is simply $\sigma(1 - \sigma)$. Here is a tiny number. At a reading of 50%, a nudge of 0.1 in $z$ moves the dial by $0.25 \times 0.1 = 2.5$ points. At a reading of 13%, the same nudge moves it by about $0.13 \times 0.87 \times 0.1 \approx 1.1$ points. At 99% it moves it by a tenth of a point. So a deal that is already very likely to sell, or very unlikely, barely notices a small change in its cushion, and the deals that react most are the ones in the middle. The FSPI writes $z$ as a straight line in the cushion and the CCC excess, and the calibration, next, chooses that line's slope so the dial matches what Elkamhi and Nozawa measured.
+
+#### The Full Derivation
 
 Let CLO $c$ hold par $n_{i,c}$ of loan $i$, whose outstanding amount is $O_i$. Let $\pi_{c,t}$ be the probability that CLO $c$ sells a downgraded holding within three months, given its junior cushion $\kappa^{\text{jr}}_{c,t}$ and its CCC excess $X_{c,t}$ as a fraction of par:
 
@@ -406,13 +502,13 @@ $$
 \text{FSPI}_{i,t} = \frac{1}{O_i}\sum_c n_{i,c}\,\pi_{c,t} \;\in\; [0,\ \text{CLO share of } i].
 $$
 
-FSPI is the expected fraction of loan $i$ that constrained CLOs will sell. It is Kundu's Bartik-style exposure (holder weights times holder constraints) turned into a live signal. Calibrate $a$ and $b_{\kappa}$ so that $\pi = 13.27\%$ at a 4% cushion and a one-SD (3.26%) drop in cushion adds 1.56 pp, matching Elkamhi and Nozawa. Because $\sigma'(z) = \sigma(1-\sigma)$, that requires $b_{\kappa} = (0.0156/0.0326)/[0.1327 \times 0.8673] \approx 4.16$ per unit of cushion. The CCC-excess loading $d$ is illustrative until you fit it on trustee data. The trade is liquidity provision: buy high-FSPI loans after CCC downgrades or LME rating events, conditional on a fundamental view, sized by the expected reversal, and exit as the reversal completes. Before month-end test dates, fade the relative price of the highest-priced CCCs in CLO-heavy names, because those are what constrained managers will sell.
+FSPI is the expected fraction of loan $i$ that constrained CLOs will sell. It is Kundu's Bartik-style exposure (holder weights times holder constraints) turned into a live signal. Calibrate $a$ and $b_{\kappa}$ so that $\pi = 13.27\%$ at a 4% cushion and a one-SD (3.26%) drop in cushion adds 1.56 pp, matching Elkamhi and Nozawa. Because $\sigma'(z) = \sigma(1-\sigma)$, that requires $b_{\kappa} = (0.0156/0.0326)/[0.1327 \times 0.8673] \approx 4.16$ per unit of cushion. The CCC-excess loading $d$ is illustrative until you fit it on trustee data. The trade itself is Mags's napkin, scaled up by the index: liquidity provision, bought from the forced sellers and sized by the expected reversal. FSPI adds two refinements. It fires on LME rating events as well as CCC downgrades, always conditional on a fundamental view of the borrower, and ahead of month-end test dates it points at the relative price of the highest-priced CCCs in CLO-heavy names, which is what constrained managers will sell and therefore what to fade.
 
 > **Ways This Blows Up.** (1) *Stale trustee data.* Trustee reports are monthly and lag by weeks, so your cushion is last month's cushion. Nowcast it with the prices of the deal's CCC tail, which (21.5) says is all the numerator can see. (2) *Wrong "market value."* Each indenture defines market value: pricing-service bid, average of dealer bids, or, failing those, the manager's own estimate. If you use a composite mid, you are computing a different test from the one the trustee runs. (3) *Rating mapping.* The CCC classification may use the lower of two agencies' ratings, include B3/B− on negative watch, or treat a selective default differently. Parse the indenture. Do not guess. (4) *Discretion.* Loumioti and Vasvari show that managers move marks and trade strategically around tests. Your model of a deal can be right on the documents and wrong on the manager. (5) *Crowding.* If every desk runs the same FSPI, the reversal is bought before the forced sale completes, and the signal becomes a timing bet against other quants.
 
 ### Case Study: COVID-19 2020 and the 2022–2023 Junior-OC Failures
 
-**March 2020.** The S&P/LSTA index's weighted-average bid fell from 95.18 on 29 February to 76.23 on 23 March. March's return was −12.4%, second only to October 2008's −13.2%. The distress ratio peaked at 57%. On 19 March the LSTA reported record volumes and bid-ask spreads that had "widened beyond 300 basis points" *(S&P Global LCD 1Q20 review; LSTA)*. The index rebounded to 82.9 by 31 March. Then the downgrades arrived, and the cliff did the rest. BSL CLO exposure to CCC-range companies peaked at 12.31% and the average junior OC cushion fell to 1.13% *(S&P Global Ratings, 28 Apr 2023)*. Elkamhi and Nozawa's 2020 downgrade-week price impact was 4.41%, more than three times the 2010–19 average. A systematic desk running FSPI in April 2020 would have seen pressure concentrated in recently downgraded, CLO-heavy names. By (21.6), those were exactly the highest-priced CCCs. The trade was to buy them from the forced sellers and hold through the reversal, sized against the risk that the downgrades kept coming.
+**March 2020** is Long Scene A at the top of this section: the tape, the cliff, the downgrades and the card, graded in §21.4.2. What follows is its coda, three years later, when the same cliff ran in slow motion and one deal's trustee report shows exactly how much of a failure the haircuts can manufacture.
 
 **2022–2023: one deal, autopsied.** An April 2023 Academy Securities note counted 42 CLO deals failing their junior OC test, based on trustee reports. Cushions ranged from −3 bp (SRANC 2014-2A, just failing class E) to −104.7 bp (HLA 2012-1A, failing class C since August 2022) *(Academy Securities, "OC Triggers," 4 Apr 2023)*. Take ZAIS6 2017-1A. Its required OC ratios ran from 122.6% (class A/B) to 103.7% (class E). The class E ratio was 103.56%, a failure by 14 bp. The haircuts were: defaulted −\$13.5mm, deferring −\$0.12mm, discount zero, and excess CCC −\$5.0mm, for a total of 5.72% of aggregate principal. The notes were A-1-R \$146.6mm, A-2 \$25mm, B-R \$45mm, C-R \$30mm, D \$25mm and E \$25mm, so \$296.6mm in total. Now do the arithmetic the note invites (ours). A class E ratio of 103.56% implies an ACPA of about \$307.2mm. Total haircuts of about \$18.6mm at 5.72% imply aggregate principal of about \$325.5mm. Without haircuts the class E ratio would be about 109.7%, a six-point cushion. **The par was there. The option book failed the test.** The CCC excess alone was worth about 1.7 points of class E OC, and without it the deal would have passed at about 105.2%. ZCCP 2019-1A, another deal in the note, breached class E in February 2023 and cured the following month through cash diversion: the waterfall working exactly as Schmid's p.175 describes it.
 
@@ -460,9 +556,83 @@ Use it conditionally. The probability describes a CLO that holds a *downgraded* 
 
 ## 21.5 Repricing Waves: The Borrower Exercises
 
-"Upside in a loan," Ines said, "is a chip the borrower can take back whenever it likes, as long as it waits six months." A repricing is an amendment, not new money. The arranger proposes a lower margin, and often the removal of the legacy CSA. Lenders who consent keep the loan at the new coupon. Lenders who object are taken out at par, or at 101 inside the soft call. For a CLO the loan simply starts paying less, and by (21.3) the equity pays for it at 11×. In January 2025 banks were pitching repricings timed to soft-call expiries and offering to run them for free *(Bloomberg, 30 Jan 2025)*. The fee was not in the arranger fee. It was in the next deal.
+"Upside in a loan," Ines said, "is a chip the borrower can take back whenever it likes, as long as it waits six months." A repricing is an amendment, not new money. The arranger proposes a lower margin, and often the removal of the legacy CSA. Lenders who consent keep the loan at the new coupon. Lenders who object are taken out at par, or at 101 inside the soft call. For a CLO the loan simply starts paying less, and by (21.3) the equity pays for it at 11×. Ines's replay of the 2025 window, below, shows the machine running at full speed and then stopping.
+
+#### Long Scene B: The Window, January–April 2025
+
+*Replay, run on Friday 23 October 2026. Ines cuts the tape at the close on Monday 7 April 2025. The desk, the loan, the chat log and every desk number are fictional, as is Dov Adler's pod at Vantress Capital Management, a composite client the desk quotes most weeks; the market figures are real and cited.*
+
+"Last week the forced seller was a CLO," Ines said, handing out the folders. "This week it's the borrower. Same table, other side of the felt."
+
+The folders were thinner than the trustee reports had been. A loan index history from December 2024 to the cut. PitchBook LCD's headlines, cut with scissors. Octaura's monthly blotters through March. And two pages Theo had not expected: a printout of the desk's own chat log with Dov Adler's pod, from the third week of January 2025.
+
+**Beat one: the open window.** The tape began at a party. At the end of December 2024 about 62% of the loan market was bid above par. January 2025 then set a monthly record, \$215bn of volume, and about half of it was repricings. Octaura's secondary volume rose 83% on the month. Behind the headline numbers was the sales pitch: banks were calling sponsors with repricings timed to the day each loan's soft call expired, and offering to run them for free *(Bloomberg, 30 Jan 2025)*.
+
+"Free," said Mags, "the way a casino's drinks are free."
+
+"The fee wasn't in the arranger fee," Ines agreed. "It was in the next deal."
+
+The chat log was short. Dov's pod had asked the desk for an offer on \$10mm of a B2 term loan, margin 350 over SOFR, soft call expired in December, and the desk had offered it at 100.4 *(illustrative)*. Dov's last line, sent at 4:12 p.m., was the kind of thing every desk receives fifty times a week: *350 over on a par loan, floating, B2. Carry is beautiful. Done.*
+
+Theo read it twice. "How much of that carry is real?"
+
+"Say more."
+
+"He's quoting the margin. Three-fifty. But the loan's at 100.4 in a month when the banks are offering to reprice everything for free. If the borrower cuts the margin by fifty in March, he doesn't earn three-fifty for a year. He earns three-fifty for six weeks and three hundred after that. And he paid the 0.4 for the privilege."
+
+"So what's the carry?" asked Kaz.
+
+"Something less than three-fifty," Theo said. "I don't know how much less."
+
+"Good," said Ines. "Hold it. That's the question the borrower is asking, too, and it has better information than Dov does."
+
+Kaz had already started writing on a sticky note, which was a sign of interest. *Excess margin times the probability nobody has repriced yet, integrated.* They stuck it on the edge of Theo's screen and said nothing else, which Theo took to mean the integral was coming whether he wanted it or not.
+
+**Beat two: the window shuts.** February looked like January with less noise. Then the headlines changed tone. Repricing activity, in the phrase the quarter's market reviews used, "came to a halt in March." Octaura's March blotter showed 70% of customer inquiry on the sell side. The loans that had sat at 100.25 and 100.5 all winter drifted down through par, slowly at first, the way a party empties: nobody leaves, and then everyone has.
+
+"Who's selling?" Theo asked, because last week that had been the right first question.
+
+"Read the blotter," said Ines.
+
+He did. It did not say. The venue reported a side, buy or sell, not a reason, so Theo reasoned it through out loud. The CLOs had no reason to sell performing B2 loans that were still B2; nothing had been downgraded yet. The sellers in March, he guessed, were the holders with a reason that was not a rating: loan mutual funds and ETFs meeting redemptions, and anyone who had bought above par for carry and now saw the carry and the price going the same way.
+
+Kaz looked at the index line, which had fallen through par and kept going. "So the call expired."
+
+"The call didn't expire," Theo said. "It went out of the money. The borrower still has it. It's just not worth exercising when the loan's below par, because nobody refinances at a wider spread to pay off a loan that's cheap."
+
+"Which means the lender has its upside back," Kaz said. Then, frowning: "On a loan nobody wants."
+
+**Beat three: tariff week.** On Wednesday 2 April 2025 the United States announced its tariff schedule, and the second folder began. Ines read the first week off Octaura's blotter: loan prices down 1.85 points in the first week, with the VIX in the mid-40s. Loan funds were reporting outflows. The ETF wrappers, which settle in one day, were trading loans that settle in twenty.
+
+Mags put her pen down. "This is where I'd want to know which funds have cash and which ones have credit lines."
+
+"You'll get that after the card," said Ines. She crossed out the rest of April with her marker. "Close on Monday the seventh. Dov's loan is at 97." She slid the cards across. "Write what you bid, what duration you think you now own, and what you'll do when the window reopens."
+
+Theo thought about the January chat. Dov had paid 100.4 for a loan that the borrower could take back at 100, which meant, in the language of §21.1, that Dov had bought the bond with the lid on. Now the loan was at 97. Below the lid. He tried to see the bent line Kaz had drawn on the whiteboard a week ago and found that he could: the loan was on the left side of the bend now, where the line was steep.
+
+He wrote: *Bid 96.75 for 5mm. Duration: the full 2.7 on spread, because the call is out of the money and the borrower won't touch a loan below par. Carry: the full 350, because nobody reprices a loan at 97. When the window reopens: the duration gets taken away again above par, so sell into it or stop counting the upside.*
+
+Kaz wrote: *97. Duration 0.25: it's a loan; we computed the one-sided duration in January. Carry 350.* They looked at it, crossed out nothing, and handed it in.
+
+Mags wrote: *95, and more lower down if the funds keep selling. Duration is whatever the redemptions say it is. Exit: when the ETF flows turn.*
+
+Ines collected the three cards without comment and put them under her coffee cup, face down. "And the reader's," she said. "Bid, duration, exit."
+
+"You keep doing that," said Theo.
+
+"Someone's always watching the hand," said Ines.
+
+On the way out, Kaz peeled the sticky note off Theo's screen, looked at it, and put it back. The integral was still coming.
 
 ### 21.5.1 Derivation: the price of a loan under a repricing hazard
+
+Kaz's sticky note was still on Theo's screen on Monday: *excess margin times the probability nobody has repriced yet, integrated.* It needs one idea from Part II to become a price.
+
+> **Math, Gently.** *A hazard is a clock that can ring at any moment.* Chapters 5 and 6 drew a survival curve for a borrower that might default: a line that starts at 100% and slopes down, where the steepness at each moment is the hazard, the chance per unit of time that the event happens now given that it has not happened yet. Here the roles flip. The event is the borrower repricing, and the one who loses is the lender, who loses the excess margin. Picture an alarm clock with no hands. It can ring at any moment, and at a constant hazard it has no memory: if it has not rung by June, it is no more likely to ring in July than it was in January. With a hazard of $h$ per year, the chance it has not rung after $t$ years is $e^{-ht}$, and the average wait is $1/h$ years. Now the tiny numbers. At $h = 1$ the chance of still collecting the extra margin after six months is $e^{-0.5} \approx 61\%$, after a year 37%, and the average wait is a year. At $h = 4$, the rate of a wide-open window, the average wait is three months and the chance of still collecting after a year is under 2%. The extra margin is an annuity that stops when the clock rings, so it is worth roughly the margin times the expected time before the ring, discounted. (Chapter 5 owns the exponential distribution and intensities in general; this box borrows them.) The derivation is next, and it turns these clocks into prices.
+
+Formally, the hazard simply adds to the discount rate inside the annuity of (21.2), which gives equation (21.7), and its expected cost to quoted carry is equation (21.8).
+
+#### The Full Derivation
 
 Keep (21.2), but let the borrower reprice at a random time with intensity $h_t$ (per year) whenever the call is in the money ($m > s$). We use $h$ rather than $\lambda$ because $\lambda$ is reserved for default intensity in this book. At repricing the lender either receives par or keeps a loan paying the market margin $s$. Both are worth par, so after repricing nothing is left above par. Before repricing the lender earns the excess margin $m - s$. At time $u$ that excess is received with probability $e^{-hu}$ (no repricing yet) and is discounted by $e^{-yu}$. So, with constant $h$:
 
@@ -492,25 +662,23 @@ $$
 
 With $h = 4$ and $H = 1$, about 75% of the 50 bp excess margin, roughly 38 bp, is expected to disappear within the year. Quoted carry on an above-par loan in an open window is mostly fiction.
 
-**The hazard itself.** Model repricing as a discrete-time hazard on loan-months. Fit a logit on PitchBook LCD repricing records with these features: price minus par (points); a soft-call-expired indicator and months since expiry; the market's share of loans bid above par, which is the window state; rating (BBs reprice first: 11 of 15 deals in May 2026 month to date were BB, per PitchBook LCD); sponsor ownership; and arranger activity. Treat margin $m$ and CSA as *separate* state variables, because a repricing can cut both: $\Delta c = \Delta m + \text{CSA}$. The CLO equity's exposure follows from (21.3). If a fraction $\varphi$ of the pool reprices by $\delta$, then $\Delta y_E = -\varphi\,\delta / w_E$. In 2025 roughly half the market repriced, but the average nominal coupon fell only about 20 bp *(Loomis Sayles, Q4 2025)*, so the equity lost about $0.20\%/0.09 \approx 2.2$ points of yield a year. Guggenheim estimated that the 2024 repricings cut contractual spreads by 53 bp each, and CreditSights put the typical cut at 40–50 bp.
-
-> **Trend Watch: the repricing machine, 2024–2026.**
-> *2024.* Repricing volume **\$756.8bn**. US institutional loan volume including repricings and extensions was "almost \$1.4 trillion," a record by far (William Blair, *Leveraged Finance Newsletter*, citing PitchBook LCD). About 62% of loans traded above par at year-end (Guggenheim, citing LCD/BofA).
-> *Jan 2025.* A record \$215bn month, with repricings 52% of year-to-date volume (Matrix CMG, citing LCD). At its peak the cycle averaged \$52.5bn a month and touched 632 borrowers, 57% of index borrowers (PitchBook LCD, May 2026).
-> *Q2 2025.* Repricing fell to a multiyear low of \$28.5bn after the tariff shock. The share of trading activity priced above par was 8% in April and 37% in June (LSTA).
-> *FY2025.* Repricing **\$503.6bn**, second only to 2024, and refinancing \$191.8bn. B− new-issue spreads fell to 354 bp in Q4, "the lowest level since the Global Financial Crisis" (William Blair Q4-2025). 58% of loans were bid above par at year-end (Loomis Sayles).
-> *2026.* \$108bn of repricings in January. Then February–April produced only \$11.8bn as a software sell-off froze the window. The share of BB− loans at or above par went 13% (end-March) → 59% (end-April) → 76% (11 May) (PitchBook LCD via Yahoo Finance, 15 May 2026).
-> *What it means.* Repricing is a regime with two states, window open and window shut, and the share of the index above par is a good proxy for which state you are in. A carry model that ignores the state is wrong by up to 75% of the excess margin, per (21.8).
+**The hazard itself.** *(A fictional desk task; the LCD, Loomis Sayles, Guggenheim and CreditSights figures are real.)* Hana had fitted the desk's version in May 2026, as the window was reopening, and the fit is mostly a story about what she had to throw away. She set it up as a discrete-time hazard on loan-months: one row per loan per month, a 1 in the month it repriced, a logit on PitchBook LCD repricing records. The features were the ones the replay had just walked through: price minus par in points; a soft-call-expired indicator and months since expiry; the market's share of loans bid above par, which is the window state; the rating; sponsor ownership; and arranger activity. The window state did most of the work, as the replay suggests it should. The surprise was how much the rating did after it: BBs reprice first, and the fit kept saying so. The tape agreed: in May 2026, month to date, 11 of 15 repricings were BB *(PitchBook LCD)*. Her first run had one column for the coupon, and it could not tell a repricing that cut the margin from one that stripped a legacy CSA, so she split them into *separate* state variables, because a repricing can cut both: $\Delta c = \Delta m + \text{CSA}$. The CLO equity's exposure then follows from (21.3). If a fraction $\varphi$ of the pool reprices by $\delta$, then $\Delta y_E = -\varphi\,\delta / w_E$. In 2025 roughly half the market repriced, but the average nominal coupon fell only about 20 bp *(Loomis Sayles, Q4 2025)*, so the equity lost about $0.20\%/0.09 \approx 2.2$ points of yield a year. Guggenheim estimated that the 2024 repricings cut contractual spreads by 53 bp each, and CreditSights put the typical cut at 40–50 bp.
 
 ### Case Study: The January–April 2025 Round Trip, and the 2026 Replay
 
-**The open window.** In December 2024 about 62% of loans were above par. January 2025 set a monthly volume record of \$215bn, about half of it repricings, and Octaura's secondary volume rose 83% month on month. In the model's terms, the window share was high, $h$ was large for every loan past its soft call, and (21.7) pinned above-par loans to roughly 100.1–100.5. Quoted carry overstated realized carry by most of the excess margin.
+*The cards from Long Scene B, turned over on Monday 26 October 2026.*
 
-**The window shuts.** Activity "came to a halt in March." Octaura's March inquiry was 70% customer selling. April's tariff shock produced \$109.2bn of secondary volume, the second-busiest month on record after March 2020's \$119.3bn. Octaura saw loan prices fall 1.85 points in the first week with the VIX in the mid-40s, and the index's daily average bid "fluctuated 3.5% from crest to trough" *(LSTA; Octaura)*. The above-par share of trading fell to 8%. Now look at (21.7) from the other side. Once prices fall below par the call goes out of the money, the loan gets its full 2.7 years of spread duration back, and the excess-carry give-up (21.8) drops to zero. A buyer in mid-April bought a floater that was temporarily *long* convexity relative to its January self. It earned the recovery at full duration and kept its coupon until the window reopened.
+Ines lifted the coffee cup off the three cards and, before turning them, uncapped her marker and read out the rest of April. The month produced \$109.2bn of secondary volume, the second-busiest on record after March 2020's \$119.3bn, and the index's daily average bid "fluctuated 3.5% from crest to trough" *(LSTA; Octaura)*. The share of trading done above par fell to 8%. Underneath, the loan funds were doing what Mags had wanted to know about: in the second week of April they lost several percent of their assets to outflows, against a median cash-like buffer of about 4.5% (§21.6.1 has the Fed's numbers). A week of redemptions had eaten most of a typical fund's cushion, and §21.6 is about what that does to a fund whose loans take twenty days to turn into cash. Then the recovery. By June the above-par share was back to 37%, refinancing and repricing activity hit a four-month high of \$45bn, and the index average bid recovered to 97.6 by 24 July, a "V-shaped recovery" *(LSTA 2Q25 summary)*.
 
-**The window reopens.** By June the above-par share was back to 37%, refinancing and repricing activity was a four-month high of \$45bn, and the index average bid recovered to 97.6 by 24 July, a "V-shaped recovery" *(LSTA 2Q25 summary)*. A desk running the hazard model would have cut its expected carry loss sharply in April, added duration to performing B2/B loans that forced sellers were dumping (FSPI was also elevated), and handed the convexity back in June as the window state turned.
+Now the grade, with (21.7) and (21.8) on the board. In January the window share was high, $h$ was large for every loan past its soft call, and (21.7) pinned above-par loans to roughly 100.1–100.5. Quoted carry overstated realized carry by most of the excess margin. That answers Theo's January question about Dov's chat: the base rate and the market spread were real, and the margin above the market spread, the part Dov called beautiful, was the part the borrower was about to take back; at $h = 4$, (21.8) expects three-quarters of it gone within the year. In April the arithmetic ran the other way. Once prices fall below par the call goes out of the money, the loan gets its full 2.7 years of spread duration back, and the excess-carry give-up of (21.8) drops to zero. A buyer in mid-April bought a floater that was temporarily *long* convexity relative to its January self. It earned the recovery at full duration and kept its coupon until the window reopened.
 
-**The 2026 replay.** January 2026 repriced \$108bn. Then the "SaaS-pocalypse" arrived: AI-disruption fears hit the software sector, which is more than 5% of the loan index *(Loomis Sayles)* and more than 30% of many middle-market CLOs *(Octus; CHECK)*. February–April repricing was only \$11.8bn, the index average bid hit a low of 94.17 in early March, and new-issue spreads were about 50 bp wider than in January. By 11 May, 76% of BB− loans were back at or above par and \$47.2bn of repricings were lined up *(PitchBook LCD via Yahoo Finance)*. The Fed's May 2026 *Financial Stability Report* noted secondary spreads that "increased moderately, reflecting a high concentration of leveraged loan borrowers in the software industry." It was the same machine with a sector-shaped shock, and the same two signals mattered: the window state for repricing, and FSPI for forced sales of downgraded software names.
+Theo's card said exactly that, and Ines gave it full marks without ceremony, which Theo later realized was the ceremony. Kaz's card had carried January's 0.25 into April. "The one-sided duration isn't a property of loans," Ines said. "It's a property of the window." Kaz wrote *(21.7) is state-dependent* on the whiteboard, underlined it, and did not erase it for a month. Mags's card had the best bid and the right seller: the March and April selling came from wrappers and funds with redemptions, not from rating rules, and her "more lower down if the funds keep selling" is the queue logic of §21.6 in one line. A desk running the hazard model would have cut its expected carry loss sharply in April, added duration to performing B2/B loans that forced sellers were dumping (FSPI was also elevated), and handed the convexity back in June as the window state turned. If your card bid below par, claimed the full spread duration and planned to give the upside back when the loan crossed 100 again, you played Theo's hand. Dov's pod, as it happens, played the wrapper version of it that same week, long a loan ETF against a high-yield ETF, and §21.6 opens that page of his book.
+
+**The 2026 replay.** January 2026 repriced \$108bn. Then the "SaaS-pocalypse" arrived: AI-disruption fears hit the software sector, which is more than 5% of the loan index *(Loomis Sayles)* and, by press reports, more than 30% of many middle-market CLOs *(Octus)*. February–April repricing was only \$11.8bn, the index average bid hit a low of 94.17 in early March, and new-issue spreads were about 50 bp wider than in January. By 11 May, 76% of BB− loans were back at or above par and \$47.2bn of repricings were lined up *(PitchBook LCD via Yahoo Finance)*. The Fed's May 2026 *Financial Stability Report* noted secondary spreads that "increased moderately, reflecting a high concentration of leveraged loan borrowers in the software industry." It was the same machine with a sector-shaped shock, and the same two signals mattered: the window state for repricing, and FSPI for forced sales of downgraded software names.
+
+The replay is told from the lender's chair. The same window looks different from the desk of the manager whose deal holds Dov's loan.
+
+> **View From Another Seat.** *A CLO manager (a generic seat, with one public voice).* To a CLO manager the repricing window is not a ceiling on a price; it is a tax on its equity. Every borrower that reprices 50 bp lower takes, by (21.3), about 5.6 points a year off the yield of the 9-cent slice its equity investors bought, and the manager cannot refuse: a lender that objects is taken out at par and then has to reinvest the cash at the new, lower spread. Its answer is to exercise its own call. Once a deal is past its non-call period, the manager refinances the notes or resets the whole structure (§21.3), cutting the liability spreads the equity pays so that the arbitrage survives the asset spreads the borrowers have just cut. That is why record resets followed record repricings, and why the CLO ETFs became a natural home for the paper: in July 2026, 62.1% of JAAA's collateral by deal vintage was reset deals, 9.0% refinanced-not-reset and 28.9% new issue *(Octus, 7 Jul 2026)*, so the largest ETF's inflows were in good part a bid for exactly the paper that repricing waves create. The manager's own worry sits at the other end of the window. When it shuts, the borrowers that could not reprice are often the ones that cannot refinance either. Loomis Sayles, a large loan manager, wrote in its Q4 2025 loan letter that "we do believe the risk of liability management exercises will remain elevated as not all these maturities are refinanceable." From this seat the borrower's call has two prices: the one it exercises in an open window, and the one it cannot exercise in a shut one, which reaches the CLO as a liability-management exercise and, through §21.8, as a vote.
 
 ### Specification for AI Implementation (repricing engine)
 
@@ -526,6 +694,14 @@ Use the chain to price above-par loans, to net expected repricing out of quoted 
 
 *The full listing is [Listing 21.3 in Appendix F](#code-21-3).*
 
+> **Trend Watch: the repricing machine, 2024–2026.**
+> *2024.* Repricing volume **\$756.8bn**. US institutional loan volume including repricings and extensions was "almost \$1.4 trillion," a record by far (William Blair, *Leveraged Finance Newsletter*, citing PitchBook LCD). About 62% of loans traded above par at year-end (Guggenheim, citing LCD/BofA).
+> *Jan 2025.* A record \$215bn month, with repricings 52% of year-to-date volume (Matrix CMG, citing LCD). At its peak the cycle averaged \$52.5bn a month and touched 632 borrowers, 57% of index borrowers (PitchBook LCD, May 2026).
+> *Q2 2025.* Repricing fell to a multiyear low of \$28.5bn after the tariff shock. The share of trading activity priced above par was 8% in April and 37% in June (LSTA).
+> *FY2025.* Repricing **\$503.6bn**, second only to 2024, and refinancing \$191.8bn. B− new-issue spreads fell to 354 bp in Q4, "the lowest level since the Global Financial Crisis" (William Blair Q4-2025). 58% of loans were bid above par at year-end (Loomis Sayles).
+> *2026.* \$108bn of repricings in January. Then February–April produced only \$11.8bn as a software sell-off froze the window. The share of BB− loans at or above par went 13% (end-March) → 59% (end-April) → 76% (11 May) (PitchBook LCD via Yahoo Finance, 15 May 2026).
+> *What it means.* Repricing is a regime with two states, window open and window shut, and the share of the index above par is a good proxy for which state you are in. A carry model that ignores the state is wrong by up to 75% of the excess margin, per (21.8).
+
 ## 21.6 Loan ETFs vs CLO ETFs: Where Liquidity Transformation Lives
 
 Chapter 20 owns the authorized-participant (AP) mechanics and March 2020. This section owns the loan-side *cause*. Theo's 13-week cash flow model makes its comeback here, reborn as a 20-business-day cash queue. A loan fund is a company whose receivables (sale proceeds) arrive in about twenty days and whose payables (redemptions) are due tomorrow. Theo has seen that company before. It hired PJT.
@@ -533,6 +709,12 @@ Chapter 20 owns the authorized-participant (AP) mechanics and March 2020. This s
 The wrappers, as of 2026: SRLN (State Street Blackstone Senior Loan ETF) had \$5.38bn of net assets on 15 October 2026, 731 holdings and a 0.70% gross expense ratio. Its holdings are reported on a trade-date basis *including unsettled positions*, which is an ETF wrapper's way of admitting what is inside it *(SSGA fund page)*. BKLN was about \$6.7–6.8bn in mid-2026 *(aggregators; approx.)*. Bank-loan mutual funds held \$71bn at end-2025. Meanwhile US CLO ETFs passed **\$50bn** around the start of July 2026 *(BofA via Octus)*, and JAAA alone passed **\$30bn** on 13 August 2026 *(Janus Henderson)*. Retail money did not leave loans. It left the *loan* and bought the *tranche*, and the reason is settlement.
 
 ### 21.6.1 Derivation: the buffer is a queue
+
+> **Math, Gently.** *Twenty coin flips against twenty days of the same bad news.* A random walk is the running total of steps that do not remember each other. Flip a coin twenty times, adding a dollar for heads and losing one for tails. The total wanders, but heads and tails keep cancelling, and its typical distance from zero after twenty flips is not twenty dollars but $\sqrt{20} \approx 4.5$. That square root is the signature of independence: the spread of a sum of $\ell$ independent steps grows like $\sqrt{\ell}$. Now replace the coin with a fund's daily redemptions in a sell-off. Bad news on Monday does not cancel on Tuesday; it repeats, because the same investors read the same headlines and redeem again. If every one of the twenty days brings the same dollar out, the total is twenty dollars and nothing cancels: the spread grows like $\ell$ itself. Real flows sit between the two, and the persistence of the bad news decides where. One more building block, Little's law, gives the average part for free: cash in transit equals the rate at which it leaves times the time it takes to come back. Redemptions of 0.5% of NAV a day *(illustrative)* with a twenty-day settlement cycle mean about 10% of NAV is always on its way back to the fund and unavailable to pay anyone. The fund's buffer has to cover that average plus the wobble, and the wobble is somewhere between $\sqrt{20}$ and 20 times a single day's. The full version is next.
+
+Formally, a fund's cash on any day is its starting buffer minus the outflows of the last $\ell$ days, so the buffer it needs is set by the variance of an $\ell$-day window sum, equation (21.9).
+
+#### The Full Derivation
 
 Normalize NAV to 1. Let $f_t$ be day $t$'s net redemption as a fraction of NAV (positive means outflow). Redemptions are paid in about a day. To raise cash, the fund sells loans on day $t$, and the proceeds arrive $\ell$ business days later. Starting from a cash buffer $b_0$, cash on day $t$ is the buffer, minus everything paid out, plus the proceeds that have arrived:
 
@@ -552,11 +734,11 @@ $$
 b^{\ast}_\alpha(\ell) \;=\; \ell\mu + z_\alpha\sqrt{\operatorname{Var}\big(S^{(\ell)}\big)} .
 $$
 
-(The running maximum over many windows is larger; simulate it.) The scaling is the point. With i.i.d. flows ($\phi = 0$) the buffer grows like $\sqrt{\ell}$. With persistent flows ($\phi \to 1$), which is what you get in a sell-off, it grows like $\ell$. A T+20 loan fund therefore needs between $\sqrt{20} \approx 4.5$ and 20 times the buffer of a T+1 bond fund facing the same flows. The Fed's August 2026 note puts the median bank-loan fund liquidity ratio at about 4.5% since 2024, down from about 10% in 2021. In 2–9 April 2025, bank-loan funds with above-median liquidity lost 4.2% of assets and those below median lost 2.7%. That difference is not significant, and it contrasts with March 2020's −6.7% vs −14.2%, which was significant at 1% *(Fed FEDS Note, 19 Aug 2026)*. A week of April 2025 outflows was roughly the size of the median buffer. The rest was covered by credit lines, by dealers willing to settle quickly, and by a quiet trick: unsettled *purchases* leave cash in the fund until they settle, so a loan fund's real cash is larger than its trade-date books show. Figure 21.5 plots the buffer against the settlement lag.
+(The running maximum over many windows is larger; simulate it.) The scaling is the point. With i.i.d. flows ($\phi = 0$) the buffer grows like $\sqrt{\ell}$. With persistent flows ($\phi \to 1$), which is what you get in a sell-off, it grows like $\ell$. Applied to a fund, the box's range says a T+20 loan fund needs between $\sqrt{20} \approx 4.5$ and 20 times the buffer of a T+1 bond fund facing the same flows. The Fed's August 2026 note puts the median bank-loan fund liquidity ratio at about 4.5% since 2024, down from about 10% in 2021. In 2–9 April 2025, bank-loan funds with above-median liquidity lost 4.2% of assets and those below median lost 2.7%. That difference is not significant, and it contrasts with March 2020's −6.7% vs −14.2%, which was significant at 1% *(Fed FEDS Note, 19 Aug 2026)*. A week of April 2025 outflows was roughly the size of the median buffer. The rest was covered by credit lines, by dealers willing to settle quickly, and by a quiet trick: unsettled *purchases* leave cash in the fund until they settle, so a loan fund's real cash is larger than its trade-date books show (the Quant-Shop Life vignette later in this section watches an operations team rediscover it). Figure 21.5 plots the buffer against the settlement lag.
 
 ![Figure 21.5: With daily flow volatility held fixed, the cash buffer a fund needs grows with the settlement lag, faster the more persistent the outflows, and at the observed lag of about T+20 every curve exceeds the 4.5% median liquidity ratio of bank-loan funds. Illustrative: equation (21.9) with 5 bp of NAV mean daily outflow, 0.40% innovation volatility at φ = 0.4 and a 99% one-sided cut; the 4.5% median is from the Fed FEDS Note of 19 Aug 2026.](assets/figures/ch21_buffer_queue.png)
 
-This is the queue behind the SEC's November 2022 proposal (File S7-26-22). The proposal would have removed the "less liquid" category, where most loans sit, so that loans would likely become "illiquid investments" capped at 15% of an open-end fund. The LSTA said this "effectively shuts down open-end loan funds" and proposed a standardized expedited settlement arrangement (ESA) that would give dealer-to-fund trades settlement certainty by T+3. The ICI noted that in roughly 25 years no bank-loan fund had suspended redemptions. Whether the proposal was formally withdrawn in the SEC's 2025 clean-out of pending rules is not confirmed here; check before you rely on either outcome.
+This is the queue behind the SEC's November 2022 proposal (File S7-26-22). The proposal would have removed the "less liquid" category, where most loans sit, so that loans would likely become "illiquid investments" capped at 15% of an open-end fund. The LSTA said this "effectively shuts down open-end loan funds" and proposed a standardized expedited settlement arrangement (ESA) that would give dealer-to-fund trades settlement certainty by T+3. The ICI noted that in roughly 25 years no bank-loan fund had suspended redemptions. The proposal's fate in the SEC's 2025 withdrawal of pending rulemakings is outside what this chapter verified, and the queue is the same either way.
 
 **The ETF arbitrage band.** An AP that buys ETF shares at a discount $d$ to NAV and redeems them in kind receives loans. It can sell them at once, paying half the bid-ask spread $c/2$ and funding the position until settlement. Or it can warehouse them and bear price risk with annualized volatility $\sigma_L$. The discount it needs before it will act is roughly
 

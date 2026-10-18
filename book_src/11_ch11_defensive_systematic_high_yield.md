@@ -484,6 +484,8 @@ Kaz read the last sentence twice. "Unrestricted," Kaz said, before Theo could op
 
 Mags had stopped pretending to read her own screen. "A secured bond at 47 and a half, five months after it was issued. Back in my day we didn't have a word for that. We had a look."
 
+#### Decision point: the card at 47.5, 16 May 2025
+
 Ines dealt the cards. "Three things. The date this issuer becomes a 1 in your training set. The feature you wish you'd had on 16 May. And what you do with the bond at 47.5."
 
 They wrote in silence, which on this desk took about four minutes.
@@ -706,13 +708,27 @@ Not every soft default ends in a forced sale, and the ones that do not have a lo
 
 ### 11.6.2 Case Study: The 2026 CCC Decompression
 
-On 15 October 2026 the ICE BofA US High Yield OAS closed at 323bp, BB at 197bp, single-B at 326bp, and CCC & lower at 1,278bp, one day after a three-year high of 1,282bp (FRED series BAMLH0A0HYM2, BAMLH0A1HYBB, BAMLH0A2HYB, BAMLH0A3HYC). The ratio of CCC OAS to index OAS, using month-end values, went from 2.61 in January 2025 to 2.54 in April 2025 (the tariff shock widened everything, so the ratio briefly *compressed*), then 3.15 in December 2025, 3.53 in June 2026, and 3.96 in August and October 2026 *(our computation from FRED)*. The index is calm because it is mostly double-B and short: State Street's global high yield universe was 62% BB-rated with a 3.1-year duration at year-end 2025, and Nuveen puts the BB share of the US index at 51% at year-end 2024, against 37% in 2004 (Nuveen p.4). The tier is not calm. Figure 11.5 shows the tiers and the ratio.
+Friday, 16 October 2026, 8:15 a.m., before the replay. Theo had the Post-it on his bezel and three years of FRED on his screen, which is all FRED now serves, and he was trying to answer the first question on the Post-it with the second monitor instead of the first.
+
+On 15 October 2026 the ICE BofA US High Yield OAS closed at 323bp, BB at 197bp, single-B at 326bp, and CCC & lower at 1,278bp, one day after a three-year high of 1,282bp (FRED series BAMLH0A0HYM2, BAMLH0A1HYBB, BAMLH0A2HYB, BAMLH0A3HYC). On 17 October 2023, the first day of the window, the CCC spread had been 2.28 times the index's. The ratio of CCC OAS to index OAS, using month-end values, went from 2.61 in January 2025 to 2.54 in April 2025 (the tariff shock widened everything, so the ratio briefly *compressed*), then 3.15 in December 2025, 3.53 in June 2026, and 3.96 in August and October 2026 *(our computation from FRED)*. The index is calm because it is mostly double-B and short: State Street's global high yield universe was 62% BB-rated with a 3.1-year duration at year-end 2025, and Nuveen puts the BB share of the US index at 51% at year-end 2024, against 37% in 2004 (Nuveen p.4). The tier is not calm. Figure 11.5 shows the tiers and the ratio.
+
+Theo then did the thing the Post-it was really asking for, which was to separate a calmer market from a different one. Regressing the index's daily total return on its three rating buckets' returns over a rolling 126 days gives the weights the index is behaving as if it holds: BB/B/CCC of 53.4/34.0/12.6% in December 2024 and 60.1/31.8/8.1% on 15 October 2026 *(our regression estimate, not an ICE weight; reported CCC shares depend on the index definition, from Wellington's 13% in §11.6's opening to 7.35% in the iBoxx index behind HYG on 15 October 2026, per iShares)*. Hold the December 2024 weights fixed and the index's 15 October spread would have been about 377bp instead of 323bp *(our computation)*. Roughly 54bp of the headline calm was not calm at all. It was the CCCs leaving the room, by default, by exchange and by downgrade out of the index, and the BBs taking their seats.
 
 ![Figure 11.5: The index and the single-B tier sit near 325bp while CCC & lower has decoupled to 1,278bp, so the ratio of CCC spread to index spread has climbed from 2.61 in January 2025 to 3.96 in October 2026, after compressing briefly in the April 2025 tariff shock. Source: FRED series BAMLH0A0HYM2 (index), BAMLH0A1HYBB (BB), BAMLH0A2HYB (B) and BAMLH0A3HYC (CCC & lower), ICE BofA US High Yield indices, daily, 17 October 2023 to 15 October 2026 (the three-year window FRED serves); the ratio uses month-end values, with October 2026 the 15 October close (our computation).](assets/figures/ch11_tier_oas.png)
 
 The backdrop is a private credit default rate at a Fitch record of 6% in April 2026, distressed exchanges at 94% of downgrades to default or selective default in the twelve months to February 2026 by a rating-agency count reported in The DESK (27 May 2026), and Morgan Stanley forecasting high yield defaults of 3.5%. Any story about *why* the tier decompressed (software issuers facing AI disruption, private-credit stress spilling into public CCC capital structures) is interpretation, and we label it so.
 
 How three desks would have traded it *(illustrative)*. The tier excluder sold its CCCs in 2025 and looks brilliant in October 2026; its exposure to a 2003-style rebound is zero, and if the rebound comes, it will look exactly as brilliant as Mags's friends who sat out 2003. The beta-tilter held 90% of everything, including the 10% of CCC names that will default, and earned 90% of a bad year. The PD-ranked selector excluded the CCC names whose model PD exceeded their spread-implied break-even (§11.1.2), kept the CCCs whose spread overpaid their PD (often the sticky, newly issued, sponsor-supported ones), sized the bucket by expected loss, and used the 2026 widening to *add* to survivors as their spreads crossed the break-even line. Only the third desk has a plan for the rebound.
+
+Mags read the three-desks note over Theo's shoulder and said the first desk was not the only one selling. "Somebody big said on a podcast yesterday they're the most defensive they've been in thirty years. They're not wrong. They're just answering a different question."
+
+> **View From Another Seat. The large active fixed-income manager.** *A real firm's publicly stated view, quoted from the published episode description; nothing beyond those words is attributed to it.* On the day of the bow tie, Bloomberg Intelligence's *The Credit Edge* released an episode with Bryan Whalen, chief investment officer of TCW's \$160 billion fixed-income group, which, the description says, "has slashed credit risk to the lowest in three decades amid valuation and contagion concerns." Whalen's reasoning runs down the ratings ladder: CCCs are "the weakest borrower, and they cry uncle first," and "your single B borrower is going to feel it next, and then your double B borrowers" (*The Credit Edge*, 15 October 2026). That is the top-down seat. It holds a view on valuation and on contagion, expresses it by cutting the whole risk budget, and is judged on whether the contagion arrives and how far up the ladder it climbs. The systematic seat of this chapter starts from the other end. It needs no view on whether contagion arrives, because it sizes each CCC by expected loss against its own spread and lets the bucket shrink or grow name by name; its bet is that the tier is a crowd whose members will not all cry uncle on the same day. The two seats can both be right. If the ladder runs the way Whalen describes, the top-down seat is out early and the expected-loss budget does the same shrinking later and more slowly. If the tier stays decoupled from the index, as it has for a year, the systematic seat keeps the survivors' carry and the top-down seat keeps its powder dry for the 2003 jaw.
+
+One floor up and one fiction over, a pod met the decompression from the short side, because the bond it was short had just started trading like a member of the crowd.
+
+> **The Pair.** *Pair Book entry PB-01, Dov Adler's Kestrel/Halvorsen pair (Chapter 1-B, box 1B-1), stressed by the CCC problem on Friday 16 October 2026. Dov's pod and its platform are fictional composites, Kestrel Roofing is invented and Halvorsen is the book's fictional issuer; positions, prices, scenario and P&L are illustrative. The tier spreads are FRED's.* **Thesis.** Unchanged since April: two single-B building-products credits on one housing cycle, one with covenant room, one with a 2027 revolver and an aggressive sponsor. **Legs.** Long \$60mm Kestrel 6% 2030 at 96 (350bp, spread duration 3.6); short Halvorsen 7.25% 2029, cut to \$35mm face in Tuesday's trim and paired with a small CDX HY sale (Chapter 1-B). Halvorsen is still rated B3, but at about 1,400bp it trades wider than the whole CCC tier's 1,278: the market moved it into the necktie before the agencies did. **What the hedge removes.** The market, measured in DTS. The platform's risk manager asked Dov for the pair after the agencies catch up, so he ran the bonds to 74 and about 1,650bp at a spread duration of 2.3. Halvorsen's DTS per dollar of market value becomes $2.3 \times 1{,}650 = 3{,}795$, three times Kestrel's $3.6 \times 350 = 1{,}260$, so matching the long's $60 \times 0.96 \times 3.6 \times 350 \approx 72{,}600$ needs a short of about \$19mm of market value, \$26mm of face: a third of the long's \$57.6mm. **What idio remains.** Quality within one cycle: Kestrel's documents against Halvorsen's. **What leaks.** Everything a DTS ruler cannot see across buckets. At a recovery of 40, a Kestrel default still costs \$33.6mm, while a Halvorsen default now pays only $26 \times (0.74 - 0.40) \approx \$8.8$mm. The pair is a long with a hat on: matched in beta, unmatched in jump, and the short is too small to earn enough on the very default the thesis predicts. The short leg also now carries the CCC tier's own factor, the ratio that went from 2.28 to 3.96 in three years; a 2003-style CCC rally hits it and not the B-rated long. And an exchange offered at a premium would gap the short *up* (Chapter 14). **What it costs** *(illustrative)*. Carry: \$3.6mm a year of Kestrel coupon against \$1.9mm owed on a \$26mm Halvorsen short, and a pair that pays to hold is the first tell that it is a long. Borrow: the fee on the short is starting to climb as other pods find the same CCC short (Chapter 22 follows it). Financing the long net of the short's cash rebate: about \$0.3mm a year. Half-spreads: re-trimming pays three-quarters of a point on Halvorsen in a lender-call week, about \$70,000 on \$9mm of face, and the eventual exit adds a quarter-point on Kestrel's \$60mm, \$150,000, which over a six-month horizon annualizes to about \$0.44mm of friction on the two legs together. **Dov's note on the ledger.** "DTS-neutral is not jump-neutral across buckets. Keep the default leg sized by recovery, accept the beta residue in CDX, and say so." Chapter 8-D (§8D.3) compares the rulers; the default-matched sizing is Chapter 3-B's jump-to-default hedge.
+
+Theo, who saw the pair only as two RFQs from a pod on the other side of his screen, would have recognized the shape. It was §11.2's dimmer switch with the knob on the short leg instead of the long: a position that looked hedged on the slide and was a bet on the crowd underneath.
 
 ## 11.7 Quality and Low-Risk Tilts
 
@@ -728,7 +744,7 @@ Both are right. Frazzini and Pedersen (2014) find alphas declining in beta acros
 
 ### 11.7.1 Why low risk wins, in one line of DTS
 
-Ben Dor's DTS framework rests on a Merton result: spread volatility is nearly proportional to spread (Ben Dor p.104), $\sigma(\Delta s_i) \approx k\,s_i$. A bond's excess-return volatility is then $D^{\text{spr}}_i\,k\,s_i = k\,\text{DTS}_i$. Divide the credit triangle by it:
+Theo's line about lawyers can be made exact with one tool the book has already built. DTS, duration times spread, is a bond's spread duration multiplied by its spread, the right ruler for credit risk because spreads tend to move in percent of their level rather than in basis points (Chapter 8, §8.4, builds it and has the Math, Gently box). Ben Dor's DTS framework rests on a Merton result: spread volatility is nearly proportional to spread (Ben Dor p.104), $\sigma(\Delta s_i) \approx k\,s_i$. A bond's excess-return volatility is then $D^{\text{spr}}_i\,k\,s_i = k\,\text{DTS}_i$. Divide the credit triangle by it:
 
 $$
 \frac{\mathbb{E}^{\mathbb{P}}[r^{xs}_i]}{\sigma(r^{xs}_i)} \approx \frac{s_i - \lambda_i L_i}{k\,D^{\text{spr}}_i\,s_i} = \frac{1}{k\,D^{\text{spr}}_i}\left(1 - \frac{\lambda_i L_i}{s_i}\right).
@@ -746,7 +762,21 @@ $$
 
 A long-only HY fund cannot short and is usually forbidden to lever. Tilt it toward short, high-rated bonds on a market-value basis and its DTS falls below the benchmark's, which means its beta falls, which means you have rebuilt the dimmer switch and called it a factor. "IDO or it didn't happen," Ines said, looking at a market-value-neutral backtest with a beta of 0.85 and a beautiful Sharpe ratio. Run DTS-neutral, the alpha halved. "And half of it didn't."
 
-There are three honest exits. Overlay: hold the low-risk book and buy back the missing DTS with CDX HY or a total-return swap on the index (Chapter 8), so the active book is pure selection. Re-spend: keep the DTS budget equal to the benchmark's but spend it on the spread of *low-PD* issuers, in longer maturities of good BB and B credits, which gives up some of the maturity effect to avoid the default tail. Or accept the beta and say so in the factsheet. Paleologo's warning applies to all three: "If we make a mistake of 5% in the expected return forecast on a low-volatility stock, we pay a much higher cost than if we make the same mistake on the high-volatility one" (Paleologo p.99), because risk-based sizing puts the most weight where a forecast error costs the most. Cap issuer weights.
+Nobody wanted to be the one who had built the dimmer switch, so everyone at the screen proposed a way out of it.
+
+Kaz went first. "Overlay. Keep the low-risk book and buy back the missing DTS with CDX HY or a total-return swap on the index" (Chapter 8). "Beta goes back to one, the fifteen points of missing beta cost a few basis points a year, and what's left in the active book is pure selection."
+
+"The mandate says no derivatives," Theo said. "So don't buy the beta back. Re-spend it. Keep the DTS budget equal to the benchmark's, but spend it on the spread of *low-PD* issuers: longer maturities of good BB and B credits. You give up some of the maturity effect, and in exchange you stay away from the default tail."
+
+Mags had a third answer, the one nobody in a pitch meeting ever gives. "Or accept the beta and say so in the factsheet. In type a client can read without glasses. People who want 0.85 exist. They should know that's what they're paying for."
+
+Ines let all three sit there for a moment. "All honest. All with the same hole in them." She quoted it from memory, the way she quoted pot odds: "If we make a mistake of 5% in the expected return forecast on a low-volatility stock, we pay a much higher cost than if we make the same mistake on the high-volatility one" (Paleologo p.99). Risk-based sizing puts the most weight where a forecast error costs the most. Kaz's overlay levers up the safest names, Theo's re-spend crowds into the BBs that look safest, and even Mags's honest factsheet portfolio is heaviest in the names the model is surest about. "Cap issuer weights," Ines said. "Then pick whichever exit your client can read."
+
+Part of the reason the safe end is crowded is that some of the people standing in it are not there for the low-risk premium at all.
+
+> **View From Another Seat. The life insurer.** *A generic seat; the rules are cited, and no firm's view is implied.* A life insurer writing annuities holds bonds to maturity against fixed liabilities, and the constraint that binds it is risk-based capital. Every bond carries a capital charge set by its NAIC designation, and the charge steps up as the rating falls, so the question at the investment committee is spread per unit of capital charge, not spread per unit of DTS. On that ruler a bond near the investment-grade line can beat a single-B with more spread, and a BBB− private placement at T+250 with a clean designation can beat a BB public bond at T+300 *(illustrative)*. The seat is patient in a way a mutual fund is not: it does not sell because a bond moved five points. It sells when a downgrade, a designation change or a rule change raises the charge, and the rules move. In June 2026 the NAIC adopted new C-1 capital factors for CLO tranches, based on rating plus tranche thickness and effective with year-end 2026 capital, including an 11.77% pretax surcharge on below-investment-grade broadly syndicated CLO tranches 4% thick or thinner (Sidley, 9 July 2026). For a defensive high yield desk the seat matters twice. Its demand is part of what makes the safest high yield bonds expensive, so the low-risk premium is thinnest where the capital-driven buyers shop. And its selling is discontinuous: a fallen angel or a designation change produces flow that has nothing to do with PD, which is the chapter's forced-seller opportunity seen from the seller's chair.
+
+The insurer's ruler and the desk's ruler disagree most about one family of signals, the ones that look defensive because of what they quietly hold.
 
 Equity momentum belongs here too, because it is a default-avoidance signal in disguise. Dynkin reports a top-minus-bottom quintile return of 15.9% a year with an information ratio of 1.74 for equity momentum in HY credit over January 1993 to May 2017, and calls it "a highly informative signal for lower quality names" (Dynkin p.609).
 
@@ -788,21 +818,73 @@ $$
 
 where $\text{DTS}^{\max}_t$ is the largest DTS a long-only, capped portfolio can hold: the no-leverage guard. If spreads and PDs widen together, $z_i$ is unchanged and the budget stays at one. If spreads gap while PDs sit still, $\bar z$ jumps and the budget rises.
 
+### 11.8.1 Case Study: The April 2025 Tariff Shock, a Ten-Week V
+
+#### Long Scene: Ten weeks in 2025, replayed blind
+
+*A replay, Ines's ritual, run on Friday 16 October 2026 with the tape cut at the close of Monday 7 April 2025. The cast, their cards, the desk's books and every word they say are invented, and the desk's DTS multipliers and P&L are illustrative. The spreads are ICE BofA closes from FRED, the index returns are our computations from the FRED total-return series, the ETF premiums are iShares's published history and the trading volumes are FINRA's monthly TRACE reports, each cited where it appears.*
+
+At 4:30, with the Saks folder closed and Mags's photocopy back in its drawer, Ines produced a second folder. It was thinner. "The Post-it has three questions," she said. "Saks was the first. This is the third: what you do when they rally. The trouble with the third question is that you never know you're being asked it until afterward."
+
+**Beat 1: the floor.** She started in January. On Wednesday 22 January 2025 the high yield index OAS closed at 259bp, and the next day the CCC tier closed at 690bp, both the tightest levels in the three-year window FRED still serves (FRED BAMLH0A0HYM2, BAMLH0A3HYC). Theo looked at the two numbers and saw a market priced for nothing in particular going wrong. "At 259 and a sixty percent loss," he said, doing the §11.1.2 arithmetic on the back of the folder, "the index breaks even at a 4.3% default rate. It's paid, but not by much."
+
+"Remember that number," Ines said. "You'll want it in a minute."
+
+**Beat 2: the gap.** She turned the page to the end of March. The index was at 355bp on Monday 31 March, already a hundred basis points wider on a quarter of growth worries. On Wednesday 2 April, after the close, the United States announced its tariff schedule. By Friday 4 April the index was at 445bp. Nobody at the table needed to be told what that weekend had felt like; all four of them had spent it somewhere, watching futures.
+
+Kaz said that on that weekend the model builder's question had been whether to switch the model off. Theo said the RSSG question had been whose 13-week model had just changed. He had once spent a Saturday at PJT on a company whose single largest input came from one country, and a tariff on that country would have gone straight through its cost line into its liquidity runway. No spread index would have told him which of two thousand issuers that company was. "That's the PD's job," Ines said. "It's slower than the spread. Some weekends that's its virtue." Mags, who had spent March 2020 on a dealer's distressed desk, said that the second weekend of a selloff is always quieter than the first and more expensive, because by the second weekend the people who have to sell have found out that they have to.
+
+#### Decision point: the card at the 7 April 2025 close
+
+**Beat 3: the card.** "Monday, 7 April 2025. The close." The page had five spreads on it: high yield 461bp, BB 306bp, single-B 486bp, CCC 1,137bp, investment grade 120bp (FRED). The VIX had closed at 46.98 (FRED VIXCLS). In ten weeks the index spread had risen 78% and the CCC tier's by about two-thirds. The total return index was down 3.83% from its 28 February level *(our computation from FRED BAMLHYH0A0HYM2TRIV)*, which on a ten-week chart looked like a cliff and on a ten-year chart would look like a pothole, and nobody on 7 April knew which chart they were in.
+
+"Three things," Ines said. "Tomorrow's DTS multiplier, from the rule in §11.8. The names you add, if any. And what would make you wrong."
+
+Kaz had the z-signal open before the sentence ended, and the arithmetic took less time than the writing. *Spreads up from 259 to 461 while balance-sheet PDs, which move with quarterly filings and equity-implied leverage, have barely had time to move. Against the January reference, $\bar z$ jumps by about $\ln(461/259) = 0.58$. With $\kappa = 0.5$ the rule wants $1 + 0.29 = 1.29$; the cap binds. Multiplier: 1.2. Names: the rule's, by default-adjusted carry per unit of DTS. Wrong if: the PDs catch up with the spreads.*
+
+Theo wrote slowly, and he knew as he wrote it which replay his card would be compared with. *Multiplier: 0.9.* Then, because he did not want to be the nervous committee of §11.2.3 without a reason, he wrote the reason. *This is not June 2022. A tariff is a cost shock to earnings, and the PDs haven't moved because the filings that move them come out in May and August. The spread is ahead of the PD, not wrong about it. Names: none until the first-quarter numbers. Wrong if: the policy reverses before the filings arrive.*
+
+Mags did not write a multiplier at all. *Multiplier: whatever my names add up to. Names: the ones whose PD did not move and whose documents I have read. Not the cheapest; the cheapest are cheap because someone has read their documents too. Wrong if: I've read the documents wrong.* She had drawn a small gate next to the second line, which on her cards meant the Priming Risk Score of Chapter 13.
+
+Ines priced the pot out loud, on the whiteboard, under the 4.3% from January. "At 461 and a sixty percent loss the index breaks even at a 7.7% default rate over the next year. Theo, what default rate do you need to believe to sell here?"
+
+Theo thought about it honestly. "More than seven and a half. I believe in maybe four or five, if the tariffs stick."
+
+"Then you're still paid at your own number. You're not selling because the bet is bad. You're selling because the pot got big." She did not put a number on what each card would make, because the honest answer on 7 April was that nobody knew whether the next ten weeks ran to 350 or to a thousand. She put up the asymmetry instead: the 1.2 card was long more of a spread that paid for a default rate nearly twice the one Theo himself believed, and the 0.9 card had given up that spread to avoid a default rate he did not believe. "Kaz is betting on the price of fear. Theo is betting against his own forecast. Mags is betting on her reading. Only one of those is a bet I'd make with my own chips, and it isn't Theo's."
+
+"It's mine," said Mags, who did not need to be told.
+
+**Beat 4: the ten weeks.** Ines moved the tape one day at a time for the first three days, because the first three days were where the cards were decided.
+
+Tuesday 8 April: spreads stayed near the wides. The VIX closed at 52.33, its high, one day *after* the high yield spread had peaked (FRED VIXCLS). HYG, one of the largest high yield ETFs, closed at a 0.66% discount to its net asset value: sellers were paying two-thirds of a point to get out through the wrapper rather than wait for the bonds (iShares premium/discount history). "That's somebody's committee," Mags said.
+
+Wednesday 9 April: a 90-day pause on the higher country-specific tariffs, China excepted, was announced in the early afternoon, and HYG closed at a 1.49% *premium* to NAV. The two closes were the year's extremes of each sign, on consecutive days (iShares). The wrapper that had been dumped at a discount on Tuesday was bought at a premium on Wednesday, by buyers who could not get the bonds fast enough. Ines circled the two numbers. On an ordinary day HYG's premium is close to a rounding error, +0.135% on average over the 448 days of history iShares publishes. "Two days. More than two points from the bottom of the discount to the top of the premium, on the instrument everyone uses as their hedge."
+
+The rest of the ten weeks went quickly. April's TRACE volume described a market in which fewer people were willing to stand in front of anything: average daily corporate par fell to \$62.1bn from \$77.2bn in March, and the share executed on alternative trading systems fell to 5.8% from 7.4% (FINRA monthly TRACE reports, our computation). The venue share fell exactly when a systematic book would have wanted it most, a fact Chapter 2 and Chapter 19 both have opinions about. The index's total return regained its 28 February peak on 12 May 2025 *(our computation)*. Calendar 2025 finished at +8.50%, and State Street put the trailing global high yield default rate at 1.6% at year-end.
+
+**Grading the cards.** *(Illustrative; the PD stability is our inference, since no vendor's aggregate PD series is sourced here.)* Theo's 0.9 sold at 461bp and, by the logic of its own reason, waited for the first-quarter filings before buying anything back. The filings came, they did not move the PDs nearly as far as 461 had implied, and by then the index had regained its peak. The price-based de-risker sold on 7 April and bought back in May above where it sold. It is the nervous committee of §11.2.3, the same card in a different year, and its reason, which was a good reason, did not change the arithmetic.
+
+Kaz's 1.2 added DTS into the low and was right. The PD-based desk earned the rebound on a fifth more spread exposure than the benchmark, and it did so by rule, at the close, without anyone having to feel brave.
+
+Mags's card graded best on what did not happen. Her names were the subset of Kaz's whose PDs had not moved and whose documents had no priming capacity worth worrying about. Over ten weeks that cost her a little of the rebound in the cheapest names, which is the price of the gate, and the box at the end of this section says why the gate stays on.
+
+Ines read the hand history back through the markouts, the way she always did. "Same cards, same flop. One player folded because the pot got big. The other called because the odds got good."
+
+Theo turned his card over. "Kaz was right."
+
+"Kaz was right and also lucky," Ines said, "and the difference matters, because next time the pause doesn't come." Kaz's card had said it would be wrong if the PDs caught up with the spreads. It never asked whether the PDs *should* already have moved by the time Kaz computed $\bar z$. Dynkin's answer is that they should.
+
 > **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.384:* "we set our downgrade scalar to 2 (and upgrade scalar to 0.5) and adjust probabilities of unchanged ratings (along the diagonal) such that each row sums to 100%."
 >
 > **Annotation.** Dynkin conditions the rating transition matrix on the spread environment: in a wide-spread regime downgrades are scaled up and upgrades down, and the diagonal absorbs the difference so each row remains a probability distribution. That is the honest version of "spreads are wide, so buy": wide spreads *do* forecast more downgrades, and a model that ignores that will overbuy. The z-signal above should therefore be computed with spread-conditioned PDs, not PDs frozen at their calm-market values. The residual that survives the conditioning is the overpayment worth buying.
 
-### 11.8.1 Case Study: The April 2025 Tariff Shock, a Ten-Week V
-
-The ICE BofA US High Yield OAS went from 259bp on 22 January 2025 to 461bp on 7 April 2025; the CCC tier went from 690bp to 1,137bp over the same window (FRED). The total return index fell 3.83% from 28 February to 7 April and regained its prior peak on 12 May 2025 *(our computation from FRED BAMLHYH0A0HYM2TRIV)*. Calendar 2025 finished at +8.50%, and State Street put the trailing global high yield default rate at 1.6% at year-end.
-
-Read through the z-signal *(illustrative; the PD stability is our inference, since no vendor's aggregate PD series is sourced here)*: index spreads rose 78% in ten weeks while balance-sheet PDs, which move with quarterly filings and equity-implied leverage, moved far less, so $\bar z$ jumped by roughly $\ln(461/259) \approx 0.58$ and a budget with $\kappa = 0.5$ hit its 1.2 cap. The price-based de-risker sold on 7 April and bought back in May above where it sold. The PD-based desk added DTS into the low. Ines replayed the hand through markouts: "Same cards, same flop. One player folded because the pot got big. The other called because the odds got good."
+On 7 April 2025 the conditioned PDs would have been higher than the frozen ones, $\bar z$ smaller than 0.58, and the multiplier somewhere below the cap. Kaz's card would still have added risk, only less of it, and the part of Kaz's 1.2 that the conditioning removes is the part that was luck. Mags's gate catches the other way the residual lies.
 
 > **Ways This Blows Up.** *Cheap because it is about to be primed.* A bond whose spread exceeds its PD-implied spread may be pricing something the PD cannot see: a drop-down basket, an uptier-permissive amendment provision, a sponsor that has hired restructuring counsel. The z-signal flags it as overcompensated; the credit agreement flags it as next. Gate every z-driven purchase on the Priming Risk Score of Chapter 13, and treat a high PRS with a high z as a short, not a long.
 
 ## 11.9 Capacity of Systematic HY
 
-"If this works," Theo asked, "why isn't it a trillion dollars?" Blackstone's answer is that systematic strategies run about 20% of global equities but less than 2% of the fixed income universe (Blackstone p.2). Part of the gap is data and history; part is capacity, which is a cost curve.
+"If this works," Theo asked, "why isn't it a trillion dollars?" Blackstone's answer is that systematic strategies run about 20% of global equities but less than 2% of the fixed income universe (Blackstone p.2). Part of the gap is data and history; part is capacity, which is a cost curve. The curve rests on one empirical regularity, that the price impact of a trade grows with the square root of its size rather than in proportion to it, so doubling the money costs about $\sqrt2$, or 41% more, per dollar traded (Chapter 4, §4.8, has the Math, Gently box).
 
 Let $\alpha_0$ be gross annual alpha, $\text{TO}$ annual turnover, $V_{\text{ADV}}$ the relevant average daily volume, $H$ the days over which the strategy trades, and $\kappa$ a square-root impact coefficient. Net alpha at capital $C$ and the capacity $C^\ast$ at which it falls to a hurdle $\alpha_{\min}$ are
 
@@ -810,7 +892,19 @@ $$
 \alpha_{\text{net}}(C) = \alpha_0 - \kappa\,\text{TO}\sqrt{\frac{C}{V_{\text{ADV}}\,H}}, \qquad C^\ast = V_{\text{ADV}}\,H\left(\frac{\alpha_0 - \alpha_{\min}}{\kappa\,\text{TO}}\right)^{2}.
 $$
 
-The square means capacity is brutally sensitive to turnover: halve $\text{TO}$ and capacity quadruples. That ranks the defensive toolkit. Default avoidance is an *exclusion* rule with low turnover, so it scales. The low-risk tilt sits in the most liquid part of HY, so it scales. CCC reversal and fallen-angel buying need high turnover in the least liquid bonds at the worst moments, so they do not. Liquidity is also state-dependent: Ben Dor finds that liquidity costs show up in HY spreads mainly in stress (p.177), which is when the defensive signal fires.
+The square means capacity is brutally sensitive to turnover: halve $\text{TO}$ and capacity quadruples.
+
+Theo did not let go of his question. "So which parts of this chapter are the trillion-dollar parts?"
+
+Kaz answered by turnover, because the formula said turnover was the lever. "Default avoidance is an *exclusion* rule. You decide once a month whom not to own, and most months the list barely changes. Low turnover, so it scales. The low-risk tilt lives in the most liquid part of high yield, the short BBs, so it scales too."
+
+"And the parts that made money in the replays?"
+
+"Those are the problem," Ines said. "CCC reversal and fallen-angel buying need high turnover in the least liquid bonds at the worst moments. April 2025 was the trade, and April 2025 was also the month corporate TRACE volume fell by a fifth." Mags added the part nobody puts in a capacity model: liquidity is state-dependent, and Ben Dor finds that liquidity costs show up in HY spreads mainly in stress (p.177), which is when the defensive signal fires. "The day the model says buy is the day the bid-ask says please don't."
+
+"So the trillion-dollar version," Theo said, "is the boring half."
+
+"The boring half is the core," Ines said. "The interesting half is a satellite. You size it from the curve, not from the replay." Dynkin published one of the few curves there are.
 
 > **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.209:* "the Sharpe ratio decreases to 0.95 (from 1.14) for a portfolio size of \$2bn, well above that of the High Yield Index (0.65)."
 >
@@ -828,7 +922,7 @@ The listing answers all three. `model_spread` is the market's expected price of 
 
 The regime test reuses the last cross-section from Listing 11.5 and replays April 2025 by scaling spreads and DTS by 461/259. With the reference set to the calm cross-section, the multiplier is 1.00. When spreads gap and the model spread stays put, it hits the 1.20 cap. When spreads and model spreads widen together, because the fundamentals deteriorated, the residual does not move and the multiplier stays at 1.00. With a no-leverage guard of 1.05, it returns 1.05. The capacity test confirms that the closed form and the root search agree to eight digits, and puts a high-turnover satellite at about \$1.2bn against about \$49bn for the low-turnover core, with every input illustrative.
 
-Use the multiplier as a budget, not a trigger, and size the satellite from the capacity curve rather than from enthusiasm. The edge case that bites is the reference level `z_ref`. The demonstration sets it to the calm cross-section's own $\bar z$, which makes the multiplier equal to one by construction; in production it must come from history, computed with the same `m` and `s0`, because the level of $\bar z$ depends on those constants and a reference built with other ones is silently stale. A close second is a hurdle above gross alpha. The root search raises an error, while the closed form squares a negative number and returns a small positive capacity, so use the numeric version as the check.
+The multiplier is a budget, not a trigger, and the satellite is sized from the capacity curve rather than from enthusiasm. Where the function goes quietly wrong is the reference level `z_ref`. The demonstration sets it to the calm cross-section's own $\bar z$, which makes the multiplier equal to one by construction; in production it must come from history, computed with the same `m` and `s0`, because the level of $\bar z$ depends on those constants and a reference built with other ones is silently stale. A close second is a hurdle above gross alpha. The root search raises an error, while the closed form squares a negative number and returns a small positive capacity, which is why the numeric version is the check.
 
 *The full listing is [Listing 11.6 in Appendix F](#code-11-6).*
 
@@ -836,7 +930,23 @@ Use the multiplier as a budget, not a trigger, and size the satellite from the c
 
 ## 11.10 Desk Debrief
 
+The chapter, findable. Each row is one idea, where its equation lives, the box that builds the intuition, the scene where somebody had to use it, and the listing that runs it.
+
+| Concept | Equation | Intuition (box) | Judgment (scene) | Code (listing) |
+| :--- | :--- | :--- | :--- | :--- |
+| The mixture return and its skew | $\operatorname{Skew}[-L_P J] = -(1-2p)/\sqrt{p(1-p)}$ (§11.1.1) | "A bell with a lonely spike" (§11.1.1) | Mags waves away the CCC volatility (§11.1.1) | — |
+| The credit triangle, with the measure stated | $\mathbb{E}^{\mathbb{P}}[r^{xs}] \approx s - \lambda^{\mathbb{P}} L$ (§11.1.2) | "Bookmaker's odds versus true odds" (§11.1.2) | Kaz finds zero expected return, three times (§11.1.2) | — |
+| The capture identity | $U - D = \alpha\,(1/\bar r_b^{\,\mathcal{U}} + 1/\lvert \bar r_b^{\,\mathcal{D}} \rvert)$ (§11.2.1) | "The gap is alpha, the level is beta" (§11.2.1) | The 30 June 2022 replay (§11.2.3) | [Listing 11.1](#code-11-1) |
+| Asymmetric beta | $r_{p} = \alpha + \beta^{+}\max(r_b, 0) + \beta^{-}\min(r_b, 0) + \epsilon$ (§11.2.2) | "A line with a kink" (§11.2.2) | Three tabs, three managers, 10:40 (§11.2.2) | [Listing 11.1](#code-11-1) |
+| Distance-to-default and the empirical map | $\sigma_E E = N(d_1)\sigma_V V$; $\text{DD}_T$; $\text{PD} = g(\text{DD})$ (§11.3) | "Random walk ... equity is the call, read backward" (§11.3.1); "Four sigmas in two worlds" (§11.3.2) | Saks, beat 1: nothing to invert (§11.4.3) | [Listing 11.2](#code-11-2) |
+| The hazard and the label | $h_i(t \mid x) = 1/(1+e^{-(\alpha_0 + \beta^\top x)})$; the intercept shift (§11.4.2) | "A hazard is the chance of failing this month" (§11.4.2) | Saks Global, a default in four dates (§11.4.3); Marisol's Tuesday (§11.4) | [Listing 11.3](#code-11-3) |
+| Power: AR and AUC | $\text{AR} = 2\,\text{AUC} - 1$ (§11.5.1) | "AUC is a bet" (§11.5.1) | 0.912 against 0.904, and why (§11.4) | [Listing 11.4](#code-11-4) |
+| Exclusion arithmetic | $\mathbb{E}^{\mathbb{P}}[r_{\text{active}}] \approx q[(\pi_X - \pi_K)L - (s_X - s_K)]$ (§11.5.2) | "Base rates" (§11.5.2) | The vendor's missing $q$ (§11.5.2) | [Listing 11.4](#code-11-4) |
+| Expected-loss sizing, low risk and the z-budget | the EL constraint (§11.6.1); the DTS Sharpe line (§11.7.1); $z_i$ and $\text{DTS}^{\text{target}}_t$ (§11.8) | DTS: Chapter 8, §8.4; square-root impact: Chapter 4, §4.8 | The risk committee and the issuer cap (§11.6.1); three exits (§11.7.2); ten weeks in 2025 (§11.8.1); PB-01, a long with a hat on (§11.6.2) | [Listing 11.5](#code-11-5), [Listing 11.6](#code-11-6) |
+
 Theo unplugged the USB stick at 7:40 p.m. The 13-week model had become a covariate, capped at 13, and was now one of three features in a hazard function that covered 2,000 issuers. It seemed to be taking the demotion well.
+
+Across the desk Kaz was still reading the Saks docket, which Ines had left on the table as homework, and got up to cross out *selective = ?* on the whiteboard. "So *selective*," Kaz said, "meant they selected January."
 
 - **High yield is a short put that pays a coupon.** The default jump carries skew of $-(1-2p)/\sqrt{p(1-p)}$: about $-6.9$ at a 2% PD, $-1.5$ at 20%. BB defense is tail avoidance; CCC defense is pricing.
 - **$U = D = \beta$ is a dimmer switch.** A pure beta tilt gives equal capture ratios, and only alpha opens the gap. The average manager's 92.24%/89.56% reads as roughly a 0.91 beta with a small net alpha. Real defense is $\beta^{-} < \beta^{+}$, tested on pairs of regimes.

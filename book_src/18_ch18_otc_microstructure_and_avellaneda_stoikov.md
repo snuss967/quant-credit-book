@@ -254,6 +254,8 @@ The simulation passed, and Theo's 4.1 still did not survive the afternoon. The l
 
 Kaz's auto-quoter was an Avellaneda–Stoikov engine. Avellaneda & Stoikov (2008), "High-frequency trading in a limit order book" (*Quantitative Finance* 8(3): 217–224), built on the dealer-inventory model of Ho & Stoll (1981). It is the most-cited model on the desk and the least-read. We read it now, one step at a time.
 
+> **Math, Gently.** *A wobble measured in points, and a phone that rings less the farther away you stand.* Two distributions run every quote in this section, and they answer different questions. *How far will the bond go?* is a question about a level, and the model's answer is the normal distribution of a random walk (Chapter 1's normal and Poisson bags, Chapter 6's random-walk box, §6.1.1). If the mid wobbles with $\sigma = 8$ points per $\sqrt{\text{yr}}$, the typical move over a horizon $\tau$ is $\sigma\sqrt{\tau}$, and over one trading week that is $8\sqrt{5/252} = 1.13$ points: the bond's weekly shiver. The walk here is *arithmetic*, adding points, rather than the lognormal that multiplies percentages, because a bond is quoted in points and lives between its recovery value and a little above par, where a percentage wobble buys nothing but algebra. *How many clients will hit me?* is a question about a count, and its answer is the Poisson distribution: events that arrive one at a time, independently, at some average rate. Here the rate depends on how far from the mid you quote, $\Lambda(\delta) = Ae^{-k\delta}$, and the exponential makes business fall off a cliff as you back away. With $A = 500$ RFQs a year at zero distance and $k = 3$ per point, quote a third of a point away and you keep $500e^{-1} \approx 184$ of them. Normal is for *how far*, Poisson is for *how many*, and every quote is a bet on both at once. The setup writes them down.
+
 ### 18.4.1 Setup
 
 Work under $\mathbb{P}$, with time in years.
@@ -268,7 +270,43 @@ $$
 u(t,x,s,q) = \sup_{\delta^b,\delta^a}\; \mathbb{E}^{\mathbb{P}}_t\!\left[-\exp\!\big(-\gamma(X_T + q_T S_T)\big)\right].
 $$
 
-### 18.4.2 The HJB equation
+Theo read the objective twice. "So the bond shivers about a point a week, the phone rings less the farther away I stand, and the fear is hiding in that exponential."
+
+"The fear is the exponential," Kaz said. "Everything else is bookkeeping."
+
+> **Math, Gently.** *Fear as a number, and planning backwards from the bell.* Exponential utility, $-e^{-\gamma W}$, is a way of writing down how much a dealer minds a loss. The one number to carry around is $1/\gamma$, roughly the size of position at which you start to care: with $\gamma = 0.005$ per point-lot, $1/\gamma = 200$ point-lots, which with \$1mm lots is \$2mm of one-point moves. Its gift is that a normal wobble has a *certainty equivalent*. A dealer holding $q$ lots for $\tau$ years is exactly as happy as if the position were swapped for its expected value minus $\tfrac12\gamma q^2\sigma^2\tau$. With $q = 3$ and $\sigma^2\tau = 1.27$ point$^2$ (the weekly shiver, squared), the penalty is $\tfrac12 \times 0.005 \times 9 \times 1.27 = 0.029$ points on the whole position: pennies. Hold on to that word; it is the punch line of the worked example. The other idea is *dynamic programming*. You cannot choose today's quote without knowing what the position will be worth tomorrow, so you start at the end, where the value is simply what you hold, and work backwards one instant at a time. The equation that does the working backwards is the HJB of §18.4.3. Its $\tfrac12\sigma^2\partial_{ss}$ term is the curvature tax that any curved function of a wobble pays, the same $\tfrac12\sigma^2$ that Itô charges in Chapter 6 (§6.1.1). The answer comes next; the working backwards follows it.
+
+### 18.4.2 The answer first: fear, greed, and Kaz's quote
+
+Here is where the derivation lands, before the algebra that gets it there. Avellaneda and Stoikov set the bid and the ask around a centre that slides away from the mid as inventory builds:
+
+$$
+p^{b} = s - \big(q + \tfrac12\big)\gamma\sigma^2\tau - \frac{1}{\gamma}\ln\!\Big(1+\frac{\gamma}{k}\Big),
+\qquad
+p^{a} = s - \big(q - \tfrac12\big)\gamma\sigma^2\tau + \frac{1}{\gamma}\ln\!\Big(1+\frac{\gamma}{k}\Big),
+$$
+
+so the spread is two charges and nothing else:
+
+$$
+p^{a} - p^{b} = \underbrace{\gamma\sigma^2\tau}_{\text{fear}} + \underbrace{\frac{2}{\gamma}\ln\!\Big(1+\frac{\gamma}{k}\Big)}_{\text{greed}}. \tag{18.4}
+$$
+
+The centre of the two quotes is the reservation price (18.1), $r^{\text{res}} = s - q\gamma\sigma^2\tau$, and its slide with $q$ is the skew. These are the AS quotes, which use the frozen-inventory reservation prices of Step 1 in place of exact ones; the exact versions need the full value function, which GLFT solve in §18.5.
+
+*Limit 1: $\gamma \to 0$.* A Taylor expansion gives $\tfrac{1}{\gamma}\ln(1+\gamma/k) = \tfrac1k - \tfrac{\gamma}{2k^2} + O(\gamma^2) \to \tfrac1k$. A risk-neutral dealer facing demand $Ae^{-k\delta}$ maximizes $\delta A e^{-k\delta}$, whose maximizer is $\delta^{*} = 1/k$. So the second half of the spread is the monopoly markup. It is pure market power, and $k$ is the price elasticity of your RFQ wins. A more competitive market (larger $k$) means a smaller markup, and a dealer with no risk aversion still charges it.
+
+*Limit 2: $t \to T$.* The fear term and the skew both vanish. The AS dealer becomes fearless at the bell.
+
+**Worked example (the cold open).** Take $\sigma = 8$ points$/\sqrt{\text{yr}}$, which is roughly what a B2 bond with spread duration near 4 and spread volatility near 200 bp a year implies *(illustrative)*. Take $\tau = 5/252$ years, a one-week expected holding period rather than the time to the close. Take $\gamma = 0.005$ per point-lot, with a lot of \$1mm, so the dealer's risk tolerance $1/\gamma$ is 200 point-lots, or \$2mm. Take $k = 3$ per point and $q = +3$. Then $\sigma^2\tau = 1.270$ point$^2$, so the fear per lot is $\gamma\sigma^2\tau = 0.0063$ points and the inventory part of the bid distance is $(q+\tfrac12)\gamma\sigma^2\tau = 0.022$ points. The greed per side is $200\ln(1.001667) = 0.333$ points. The bid is $91.25 - 0.022 - 0.333 = 90.895$, which rounds to 90.875 on the eighths grid. That is Kaz's quote.
+
+Notice the proportions: Kaz's quote was 94% greed and 6% fear. In a bond, the diffusive inventory term is usually pennies. The AS dealer is a monopolist with a nervous tic. The real fear lives in jumps (§18.6) and in the client (§18.7), neither of which the formula was given.
+
+### 18.4.3 The Full Derivation
+
+The rest of this subsection is the algebra behind (18.1) to (18.4), one step at a time, with nothing skipped. The setup of §18.4.1 is the starting point; the payoff is Step 4, which turns (18.3) into the quotes of §18.4.2.
+
+#### The HJB equation
 
 Dynamic programming gives the diffusion term from $S$ and one jump term per counting process. When the bid is hit, cash falls by $s - \delta^b$ and inventory rises by one; when the ask is lifted, cash rises by $s + \delta^a$ and inventory falls by one:
 
@@ -280,7 +318,9 @@ $$
 
 with terminal condition $u(T,x,s,q) = -\exp(-\gamma(x + qs))$.
 
-### 18.4.3 Step 1: the frozen-inventory value and the reservation prices
+#### Step 1: the frozen-inventory value and the reservation prices
+
+> **Math, Gently.** *The exponential of a wobble, and Jensen's inequality.* Step 1 rests on one identity: if $Z$ is a standard normal draw, $\mathbb{E}[e^{aZ}] = e^{a^2/2}$. In words, the average of an exponential of a wobble is bigger than the exponential of the average wobble. With $a = 1$ the average wobble is zero and $e^0 = 1$, but the average of $e^{Z}$ is $e^{0.5} \approx 1.65$, because the curve bends upward: a draw of +1 lifts $e^Z$ by $e - 1 = 1.72$, a draw of −1 lowers it by only $1 - e^{-1} = 0.63$, and the good draws outweigh the bad. That is Jensen's inequality, $\mathbb{E}[f(Z)] \ge f(\mathbb{E}[Z])$ for any function $f$ that curves upward, and the identity is its exact price for a normal wobble. For a dealer whose disutility is $e^{-\gamma q S_T}$, the bend is the fear: uncertainty about $S_T$ costs more than its average suggests, and the extra cost is the $\tfrac12\gamma^2q^2\sigma^2\tau$ in the exponent below. The same inequality returns in §18.6, where *uncertain* recovery costs inventory more than recovery fixed at its average (the Beta distribution that models recovery belongs to Chapter 5, §5.5.2).
 
 Suppose first that the dealer cannot trade. Using $\mathbb{E}[e^{aZ}] = e^{a^2/2}$ for standard normal $Z$, with $\tau = T - t$,
 
@@ -304,7 +344,9 @@ $$
 
 A long dealer ($q>0$) values the bond below the mid, and by an amount proportional to inventory, risk aversion, variance, and time left. This is the skew.
 
-### 18.4.4 Step 2: the exponential ansatz
+Ines, reading over Kaz's shoulder, put it in desk language. "The skew is the dealer's tell. A run that keeps offering one bond lower is a dealer telling you what it owns."
+
+#### Step 2: the exponential ansatz
 
 Try $u = -\exp(-\gamma(x + \theta(t,s,q)))$ with $\theta(T,s,q) = qs$. Then $\partial_t u = -\gamma u\,\theta_t$ and $\partial_{ss}u = u(\gamma^2\theta_s^2 - \gamma\theta_{ss})$. The jump terms factor as
 
@@ -322,7 +364,7 @@ $$
 
 Read the bracket on the bid: $\delta^b - (s - r^b) = r^b - p^b$ is the profit from buying at $p^b$, measured at the dealer's own reservation value, passed through the utility.
 
-### 18.4.5 Step 3: the first-order condition
+#### Step 3: the first-order condition
 
 Write $y = \delta - \Delta$, with $\Delta = s - r^b$ on the bid. Maximize $f(\delta) = \Lambda(\delta)(1 - e^{-\gamma y})$. Setting $f'(\delta) = 0$:
 
@@ -341,39 +383,31 @@ $$
 
 The parameter $A$ has cancelled: how *often* you are asked does not enter the markup. Hold that thought.
 
-### 18.4.6 Step 4: the AS approximation, and the two halves of the spread
+> **Math, Gently.** *Why $\ln(1+x)$ is almost $x$, and why a fearless dealer still has a spread.* For a small number $x$, $\ln(1+x)$ is very nearly $x$, because the logarithm's curve is almost straight near 1. With Kaz's numbers, $x = \gamma/k = 0.005/3 = 0.001667$ and $\ln(1.001667) = 0.001665$. Multiply by $1/\gamma = 200$ and the markup per side in (18.3) is 0.333 points, almost exactly $1/k = 1/3$. So Kaz's greed barely depends on Kaz's fear. It depends on $k$, how quickly clients go elsewhere when you quote away. A dealer with no fear at all still charges $1/k$: the monopoly markup, the price of being the only shop open when somebody needs to trade. Why the fearless limit is exactly $1/k$ is Exercise 1.
 
-The exact $r^b, r^a$ require solving for $\theta$ (GLFT do this in §18.5). Avellaneda and Stoikov approximate them by the frozen-inventory values of Step 1, which is accurate when $\gamma$ or the fill intensity is small. Substituting:
+#### Step 4: the AS approximation
 
-$$
-p^{b} = s - \big(q + \tfrac12\big)\gamma\sigma^2\tau - \frac{1}{\gamma}\ln\!\Big(1+\frac{\gamma}{k}\Big),
-\qquad
-p^{a} = s - \big(q - \tfrac12\big)\gamma\sigma^2\tau + \frac{1}{\gamma}\ln\!\Big(1+\frac{\gamma}{k}\Big),
-$$
+The exact $r^b, r^a$ require solving for $\theta$ (GLFT do this in §18.5). Avellaneda and Stoikov approximate them by the frozen-inventory values of Step 1, which is accurate when $\gamma$ or the fill intensity is small. Substituting $r^b = s - (1+2q)\gamma\sigma^2\tau/2$ and $r^a = s + (1-2q)\gamma\sigma^2\tau/2$ into (18.3) gives the two quotes displayed in §18.4.2, and subtracting them gives the spread (18.4): the $q$ terms cancel, the two half-fears add to one $\gamma\sigma^2\tau$, and the two markups add to $\tfrac{2}{\gamma}\ln(1+\gamma/k)$.
 
-$$
-p^{a} - p^{b} = \underbrace{\gamma\sigma^2\tau}_{\text{fear}} + \underbrace{\frac{2}{\gamma}\ln\!\Big(1+\frac{\gamma}{k}\Big)}_{\text{greed}}. \tag{18.4}
-$$
+### 18.4.4 What the formula was not told
 
-*Limit 1: $\gamma \to 0$.* A Taylor expansion gives $\tfrac{1}{\gamma}\ln(1+\gamma/k) = \tfrac1k - \tfrac{\gamma}{2k^2} + O(\gamma^2) \to \tfrac1k$. A risk-neutral dealer facing demand $Ae^{-k\delta}$ maximizes $\delta A e^{-k\delta}$, whose maximizer is $\delta^{*} = 1/k$. So the second half of the spread is the monopoly markup. It is pure market power, and $k$ is the price elasticity of your RFQ wins. A more competitive market (larger $k$) means a smaller markup, and a dealer with no risk aversion still charges it.
-
-*Limit 2: $t \to T$.* The fear term and the skew both vanish. The AS dealer becomes fearless at the bell.
-
-**Worked example (the cold open).** Take $\sigma = 8$ points$/\sqrt{\text{yr}}$, which is roughly what a B2 bond with spread duration near 4 and spread volatility near 200 bp a year implies *(illustrative)*. Take $\tau = 5/252$ years, a one-week expected holding period rather than the time to the close. Take $\gamma = 0.005$ per point-lot, with a lot of \$1mm, so the dealer's risk tolerance $1/\gamma$ is 200 point-lots, or \$2mm. Take $k = 3$ per point and $q = +3$. Then $\sigma^2\tau = 1.270$ point$^2$, so the fear per lot is $\gamma\sigma^2\tau = 0.0063$ points and the inventory part of the bid distance is $(q+\tfrac12)\gamma\sigma^2\tau = 0.022$ points. The greed per side is $200\ln(1.001667) = 0.333$ points. The bid is $91.25 - 0.022 - 0.333 = 90.895$, which rounds to 90.875 on the eighths grid. That is Kaz's quote.
-
-Notice the proportions: Kaz's quote was 94% greed and 6% fear. In a bond, the diffusive inventory term is usually pennies. The AS dealer is a monopolist with a nervous tic. The real fear lives in jumps (§18.6) and in the client (§18.7), neither of which the formula was given.
+Kaz's quote was correct for the world it was given, and the world it was given left out units, clocks, and clients. Each omission turns, sooner or later, into a bad afternoon, and the boxes below are those afternoons written down in advance.
 
 > **Units box: what ROBO did with the volatility.** $\sigma$ is the price volatility of the mid in **points per $\sqrt{\text{yr}}$**; $\tau$ is in **years**; $\gamma$ is per **point × lot**; $k$ is per **point**; $q$ is in **lots** (state the lot size); $A$ is in **RFQs per year per side**. Convert spread volatility to price volatility with $\sigma_P \approx D^{\text{spr}}\,P\,\sigma_s$, where $\sigma_s$ is the decimal spread volatility; for $D^{\text{spr}} = 4$, $P = 91.25$ and $\sigma_s = 0.02$, that gives $\sigma_P \approx 7.3$ points. ROBO was told "use the bond's volatility" and fed 200, the spread vol in bp. The fear term rose by a factor of 625, and the bid came out at 77.03 on a bond at 91.25. ROBO was, technically, being prudent.
 
 > **Ways This Blows Up.** (1) *Terminal time is a calendar artifact.* With $T$ set to 4 p.m., the skew collapses into the close, so the dealer gets brave at 3:55 p.m., the least liquid minutes of the HY day. Set $\tau$ to the expected holding period or use the stationary GLFT quotes (§18.5). (2) *The skew can cross the market.* The spread in (18.4) is positive, but the center $r^{\text{res}}$ moves by $q\gamma\sigma^2\tau$. A desk short 50 lots can produce a bid above the composite offer. Clip quotes to a band around the composite and route breaches to a human. (3) *$A$ does not enter.* AS quotes the same in a bond asked about once a month as in one asked about a hundred times a day. For illiquid bonds this is plainly wrong, and §18.5 fixes it. (4) *$\sigma$ must be a $\mathbb{P}$ forecast of mid price volatility* over the holding period, not CDS implied vol and not spread vol in bp. (5) *The exponential intensity is local.* A real RFQ win curve saturates at one when you bid through the composite. Use (18.2) with the fitted curve (§18.7). (6) *One lot is not a block.* AS prices the marginal lot. The client is selling eight (§18.7).
 
+The skew in (18.1) is not only a theorem. Ben Dor's team saw it in the wild, in dealer indications, and treated it as dirt to be washed out.
+
 > **[SOURCE EXTRACTION]** *Ben_Dor_Quantitative_Credit_Portfolio_Management p.120:* "If a trader were temporarily long inventory of a particular bond, then the trader might quote the bond with a tighter spread (i.e., a higher offered spread) to entice a bid, and vice versa."
 >
-> **Annotation.** Our analysis: this is the AS skew observed in the wild, written down by people who wanted to remove it. A long trader moves the offer toward the bid to attract buyers, which in spread terms means raising the offered spread. That is (18.1) acting on one side of the market. To Ben Dor's team the skew is contamination in a liquidity measure, and they average a month of indications to wash it out. To a market maker it is the optimal policy, and it carries information: a dealer whose runs skew persistently toward selling a bond is telling you its inventory. The 2026 desk can turn the observation around and estimate street inventory from the skew of composite contributors, then use it as a feature (§18.8). One caveat about the quotation's world: these were indications, not firm quotes. A dealer can skew a run for free; a firm streaming quote has to pay for the skew when it is hit.
+> **Annotation.** Our analysis: this is the AS skew observed in the wild, written down by people who wanted to remove it. A long trader moves the offer toward the bid to attract buyers, which in spread terms means raising the offered spread. That is (18.1) acting on one side of the market. To Ben Dor's team the skew is contamination in a liquidity measure, and they average a month of indications to wash it out. To a market maker it is the optimal policy, and, as Ines says after (18.1), it carries information. The 2026 desk can turn the observation around and estimate street inventory from the skew of composite contributors, then use it as a feature (§18.8). One caveat about the quotation's world: these were indications, not firm quotes. A dealer can skew a run for free; a firm streaming quote has to pay for the skew when it is hit.
+
+*A fictional first morning, and a boring one.* The auto-quoter's first live day began with a page at 9:31 a.m. The quote monitor had fired on a pattern no human trader could have produced: at 9:30:00, with no trade and no move in any composite, every streaming quote on the desk had widened at once *(illustrative)*. Kaz found the cause in four minutes and spent forty explaining it to the risk manager, who wanted to know why the number was different from yesterday's. The engine's horizon was $\tau = T - t$ with $T$ set to 4 p.m. New York, so the model believed the world ended every afternoon. At the previous close $\tau$ had shrunk to zero, taking the fear term with it, and at the open it snapped back to a full day. "Whose four o'clock?" Ines asked. By lunch $\tau$ was the expected holding period, and the page had become a line in the Spec.
 
 ### Specification for AI Implementation (AS quoting core)
 
-**The Spec You Hand the Robot.** *Vague version:* "quote bonds using Avellaneda–Stoikov." *What ROBO built:* $T$ = 4 p.m. New York, so its quotes widened at 9:30 a.m. and tightened all afternoon, and its σ came from the CDS ladder. *Precise version:* inputs are the composite mid $s$ (points), inventory $q$ (lots of \$1mm), price volatility $\sigma$ (points/$\sqrt{\text{yr}}$, 20-day $\mathbb{P}$ forecast), $\gamma$ (per point-lot), $k$ (per point, from the fitted win curve), and holding-period horizon $\tau$ (years, never the time to the close). Outputs are bid, ask, $r^{\text{res}}$, and the fear and greed split, all in points, plus prices rounded to the instrument's tick. Guards: reject negative inputs; use the $1/k$ limit when $\gamma < 10^{-12}$; never let unit conversion happen inside the function.
+**The Spec You Hand the Robot.** *Vague version:* "quote bonds using Avellaneda–Stoikov." *What ROBO built:* the 9:31 page above, with a σ taken from the CDS ladder for good measure. *Precise version:* inputs are the composite mid $s$ (points), inventory $q$ (lots of \$1mm), price volatility $\sigma$ (points/$\sqrt{\text{yr}}$, 20-day $\mathbb{P}$ forecast), $\gamma$ (per point-lot), $k$ (per point, from the fitted win curve), and holding-period horizon $\tau$ (years, never the time to the close). Outputs are bid, ask, $r^{\text{res}}$, and the fear and greed split, all in points, plus prices rounded to the instrument's tick. Guards: reject negative inputs; use the $1/k$ limit when $\gamma < 10^{-12}$; never let unit conversion happen inside the function.
 
 Kaz's quote took a page of arithmetic, and it was a quote for one bond, one inventory, one afternoon. A desk streaming prices on a few hundred bonds needs that arithmetic redone every time a fill changes $q$ or the volatility forecast ticks, with nobody around to notice that the 200 should have been a 7. The formulas are short, which is the dangerous part: short formulas get typed into spreadsheets, and spreadsheets do not have units. So the quoting core lives in a function with a narrow contract and a few tests, which makes the arithmetic boring and turns every bad input into somebody's explicit decision.
 
@@ -381,13 +415,35 @@ Listing 18.3 is that function. `as_greed` computes the per-side markup $\tfrac{1
 
 The tests reproduce Kaz's bid of 90.8947, which rounds to 90.875. They confirm that the spread is fear plus greed, that greed is over 90 percent of it, that greed approaches $1/k$ as $\gamma \to 0$, and that the center collapses to the mid when $\tau = 0$. A brute-force check then maximizes the general first-order objective numerically for the exponential intensity and finds that the optimum sits at the reservation offset plus `as_greed`, whatever the value of $A$. The last assertion feeds in 200 as volatility and confirms the bid drops below 78.
 
-Use it for the marginal lot in a liquid-enough bond, with $\tau$ set to the holding period. Do not use it where $A$ matters (§18.5) or for blocks (§18.7). The edge case that bites is the last assertion: it records the unit mistake but does not prevent it. The function checks only that $\sigma$, $\gamma$, and $\tau$ are non-negative, so a volatility in basis points is a perfectly legal input. It also does not clip to the composite or round to the tick, so a large inventory can return a bid above the market. Both guards belong in the caller.
+The function prices the marginal lot in a bond liquid enough that $A$ does not matter, with $\tau$ set to the holding period; bonds where $A$ matters belong to §18.5, and blocks to §18.7. Its last assertion records the unit mistake without preventing it. The function checks only that $\sigma$, $\gamma$, and $\tau$ are non-negative, so a volatility in basis points is a perfectly legal input, exactly as ROBO found in the Units box. Nor does it clip to the composite or round to the tick, so a large inventory can return a bid above the market. Those guards live in the caller, which is also where the 9:31 page was fixed.
 
 *The full listing is [Listing 18.3 in Appendix F](#code-18-3).*
 
 ## 18.5 GLFT: Inventory Bounds, Linear ODEs, and the Stationary Dealer
 
-Every desk has a risk limit, and AS does not know it exists. Guéant, Lehalle & Fernandez-Tapia (2013), "Dealing with the inventory risk: a solution to the market making problem" (*Mathematics and Financial Economics*; arXiv 1105.3115), solve the exact problem with $|q| \le Q$. The surprise is that the nonlinear HJB collapses into *linear* ODEs.
+Two things about Kaz's engine bothered Ines from the first week, and neither was in the formula. The desk has a risk limit, a number of lots past which the risk manager calls, and AS does not know it exists. And the desk has no close. A bond book is not flattened at 4 p.m.; it is carried overnight, over weekends, sometimes for months, so the horizon $\tau$ that AS needs is a guess wearing a parameter's clothes. The model she wanted would know the wall, would have no bell, and would quote a bond that clients ask about twice a week differently from one they ask about twice an hour.
+
+> **Math, Gently.** *A marble in a bowl, and how fast the street forgets.* Picture the desk's inventory as a marble sitting in a bowl. The bowl is the fear: its sides rise like $\alpha q^2$, so every extra lot in either direction costs more than the last. Client flow knocks the marble one step left or right at a rate set by $\eta$, which grows with how often the bond is asked about. GLFT write the dealer's value at each inventory level as one entry in a list running from $-Q$ to $+Q$, and the list evolves by a *tridiagonal* matrix: each level talks only to itself and its two neighbours, because a trade moves inventory one lot at a time. Any pattern on that list can be broken into *modes*, shapes that keep their form and simply fade, each at its own rate; those rates are the matrix's eigenvalues. Wait long enough and every mode but the slowest has faded, and the survivor is the stationary dealer's valuation. The distance between the slowest rate and the next one, the *spectral gap*, is how fast the street forgets your position, and its inverse is a horizon. With this section's inputs (per trading day: $\sigma^2 = 64/252 = 0.254$, $\gamma = 0.005$, $k = 3$, $A = 2$), the bowl's steepness is $\alpha = \tfrac12 k\gamma\sigma^2 = 0.0019$ and the knocking rate is $\eta = 0.735$, so the gap is $2\sqrt{\alpha\eta} = 2\sqrt{0.0014} = 0.075$ per day and the horizon is $1/0.075 \approx 13$ trading days. Quadruple $A$ and $\eta$ quadruples, the gap doubles, and the horizon halves: a bond asked about four times as often forgets your position twice as fast. The derivation that turns this picture into (18.5) is below.
+
+Guéant, Lehalle & Fernandez-Tapia (2013), "Dealing with the inventory risk: a solution to the market making problem" (*Mathematics and Financial Economics*; arXiv 1105.3115), solve exactly that problem, with $|q| \le Q$. The surprise is that the nonlinear HJB collapses into *linear* ODEs, (18.5) in the derivation below. Let the horizon run to infinity, so the bell disappears, and the quotes of the stationary dealer are
+
+$$
+\delta^{b}_\infty(q) \approx \frac1\gamma\ln\!\Big(1+\frac\gamma k\Big) + \frac{2q+1}{2}\,\omega, \quad
+\delta^{a}_\infty(q) \approx \frac1\gamma\ln\!\Big(1+\frac\gamma k\Big) - \frac{2q-1}{2}\,\omega, \quad
+\omega = \sqrt{\frac{\sigma^2\gamma}{2kA}\Big(1+\frac\gamma k\Big)^{1+\frac k\gamma}}. \tag{18.6}
+$$
+
+The skew per lot is $\omega$, and **$A$ is back**. Set the AS skew $\gamma\sigma^2\tau$ equal to $\omega$ and solve for the horizon:
+
+$$
+\tau_{\text{eff}} = \frac{\omega}{\gamma\sigma^2} = \frac{1}{\sqrt{2k\gamma\sigma^2\eta}} = \frac{1}{2\sqrt{\alpha\eta}},
+$$
+
+the inverse spectral gap of $M$, the tridiagonal matrix of the box (written out in the derivation below, with $\alpha = \tfrac12 k\gamma\sigma^2$ and $\eta = A(1+\gamma/k)^{-(1+k/\gamma)}$). The effective horizon is how long the street takes to forget your position, and it shrinks like $A^{-1/2}$: a bond asked about four times as often needs half the skew. With $\sigma = 8/\sqrt{252}$ points per $\sqrt{\text{day}}$, $\gamma = 0.005$, $k = 3$, and $A = 2$ fills per day per side at zero distance *(illustrative)*, we get $\eta \approx 0.735$, $\omega \approx 0.017$ points per lot, and $\tau_{\text{eff}} \approx 13$ trading days. That is longer than the one-week guess Kaz plugged into AS. On a Friday afternoon $A$ drops to zero for 60 hours, $\tau_{\text{eff}}$ blows up, and the stationary dealer widens on its own. Credit Suisse's AT1 holders learned why one weekend in 2023 (§18.6). Figure 18.2 shows the tilt and the horizon side by side.
+
+![Figure 18.2: The stationary GLFT dealer tilts its whole quote ribbon about 2.7 times harder per lot than the one-week AS dealer (left), because its effective horizon is the inverse spectral gap, about 13 trading days at A = 2, and that horizon shrinks like A^(−1/2) as the bond gets busier (right). Illustrative: quotes computed from the models of §18.4 and §18.5 with σ = 8 points per √yr, γ = 0.005, k = 3, and A = 2 fills per day per side at zero distance in the left panel.](assets/figures/ch18_quote_ladder_glft_horizon.png)
+
+#### The Full Derivation
 
 **Derivation.** Guess $u(t,x,s,q) = -\exp(-\gamma(x+qs))\,v_q(t)^{-\gamma/k}$, which is the §18.4 ansatz with $\theta = qs + \tfrac1k\ln v_q(t)$. Then $\theta_s = q$, $\theta_{ss} = 0$, $\theta_t = \dot v_q/(k v_q)$, and the reservation prices are $r^b = s + \tfrac1k\ln(v_{q+1}/v_q)$ and $r^a = s - \tfrac1k\ln(v_{q-1}/v_q)$. Equation (18.3) gives the quotes:
 
@@ -404,25 +460,13 @@ $$
 
 for $q \in \{-Q,\dots,Q\}$. At $q = Q$ there is no bid, so the $v_{Q+1}$ term is dropped, and symmetrically at $-Q$. In matrix form, $\dot{\mathbf v} = M\mathbf v$ with $M$ symmetric tridiagonal ($\alpha q^2$ on the diagonal, $-\eta$ off it), so $\mathbf v(t) = e^{-M(T-t)}\mathbf 1$. Inventory risk has become a linear algebra problem.
 
-**The stationary dealer.** A bond desk has no close: $T$ is an artifact, and the right object is the limit $T - t \to \infty$. There $\mathbf v \propto \mathbf f_0$, the ground state of $M$ (positive, by Perron–Frobenius), and the quotes stop depending on time. For a closed form, treat $q$ as continuous: $f_{q+1} + f_{q-1} \approx 2f + f''$, so $-\eta f'' + \alpha q^2 f = (\kappa + 2\eta) f$ for an eigenvalue $\kappa$ of $M$. That is the quantum harmonic oscillator, with ground state $f_0 \propto \exp(-\tfrac12\sqrt{\alpha/\eta}\,q^2)$ and eigenvalue spacing $2\sqrt{\alpha\eta}$. Then $\ln(f_q/f_{q+1}) = \tfrac12\sqrt{\alpha/\eta}\,(2q+1)$, which gives
-
-$$
-\delta^{b}_\infty(q) \approx \frac1\gamma\ln\!\Big(1+\frac\gamma k\Big) + \frac{2q+1}{2}\,\omega, \quad
-\delta^{a}_\infty(q) \approx \frac1\gamma\ln\!\Big(1+\frac\gamma k\Big) - \frac{2q-1}{2}\,\omega, \quad
-\omega = \sqrt{\frac{\sigma^2\gamma}{2kA}\Big(1+\frac\gamma k\Big)^{1+\frac k\gamma}}. \tag{18.6}
-$$
-
-The skew per lot is $\omega$, and **$A$ is back**. Set the AS skew $\gamma\sigma^2\tau$ equal to $\omega$ and solve for the horizon:
-
-$$
-\tau_{\text{eff}} = \frac{\omega}{\gamma\sigma^2} = \frac{1}{\sqrt{2k\gamma\sigma^2\eta}} = \frac{1}{2\sqrt{\alpha\eta}},
-$$
-
-the inverse spectral gap of $M$. The effective horizon is how long the street takes to forget your position, and it shrinks like $A^{-1/2}$: a bond asked about four times as often needs half the skew. With $\sigma = 8/\sqrt{252}$ points per $\sqrt{\text{day}}$, $\gamma = 0.005$, $k = 3$, and $A = 2$ fills per day per side at zero distance *(illustrative)*, we get $\eta \approx 0.735$, $\omega \approx 0.017$ points per lot, and $\tau_{\text{eff}} \approx 13$ trading days. That is longer than the one-week guess Kaz plugged into AS. On a Friday afternoon $A$ drops to zero for 60 hours, $\tau_{\text{eff}}$ blows up, and the stationary dealer widens on its own. Credit Suisse's AT1 holders learned why one weekend in 2023 (§18.6). Figure 18.2 shows the tilt and the horizon side by side.
-
-![Figure 18.2: The stationary GLFT dealer tilts its whole quote ribbon about 2.7 times harder per lot than the one-week AS dealer (left), because its effective horizon is the inverse spectral gap, about 13 trading days at A = 2, and that horizon shrinks like A^(−1/2) as the bond gets busier (right). Illustrative: quotes computed from the models of §18.4 and §18.5 with σ = 8 points per √yr, γ = 0.005, k = 3, and A = 2 fills per day per side at zero distance in the left panel.](assets/figures/ch18_quote_ladder_glft_horizon.png)
+**The stationary dealer.** A bond desk has no close: $T$ is an artifact, and the right object is the limit $T - t \to \infty$. There $\mathbf v \propto \mathbf f_0$, the ground state of $M$ (positive, by Perron–Frobenius), and the quotes stop depending on time. For a closed form, treat $q$ as continuous: $f_{q+1} + f_{q-1} \approx 2f + f''$, so $-\eta f'' + \alpha q^2 f = (\kappa + 2\eta) f$ for an eigenvalue $\kappa$ of $M$. That is the quantum harmonic oscillator, with ground state $f_0 \propto \exp(-\tfrac12\sqrt{\alpha/\eta}\,q^2)$ and eigenvalue spacing $2\sqrt{\alpha\eta}$. Then $\ln(f_q/f_{q+1}) = \tfrac12\sqrt{\alpha/\eta}\,(2q+1)$, which, with the markup of (18.3) added on each side, gives the stationary quotes (18.6) stated above.
 
 Guéant (2017), "Optimal market making" (*Applied Mathematical Finance*; arXiv 1605.01862), extends the result to general intensity functions and many assets, and applies it to two credit indices. Guéant & Manziuk (2019, arXiv 1910.13205) note that for a large bond universe "classical finite difference methods … cannot be used" and switch to model-based deep actor–critic methods. Chapter 19 inherits that curse of dimensionality.
+
+> **View From Another Seat.** *A mid-sized dealer desk, in its own published words.* Ines prices fear as if she had a balance sheet to be afraid with. A mid-sized dealer reads the same equations with a smaller $Q$. Jefferies' global head of fixed income, Fred Orlan, put the economics plainly in a 2023 profile: "It's hard for investment banks to run large balance sheets in this environment because it isn't making a lot of money," and "You're really making your money trading with and helping clients, which requires good ideas and good execution" (The DESK, 26 Oct 2023). From the top of the league table, Jamie Dimon wrote in JPMorgan Chase's 2025 shareholder letter that "brokerage inventories are far smaller as a percentage of investments than ever before and, as a result, market makers are less able to intermediate in extremely volatile markets" (6 Apr 2026). In this section's language, and this reading is ours rather than theirs, both sentences are about two parameters. A small inventory bound $Q$ puts the wall close to the bottom of the bowl, so the dealer lives on turnover, which is $A$: a desk that cannot hold risk is paid by how often it is asked, and its skew per lot shrinks only as fast as $\sqrt{A}$ grows. Dimon's "less able to intermediate" is the Friday afternoon generalized: when $A$ falls in a volatile market, $\tau_{\text{eff}}$ lengthens, the skew per lot widens, and a dealer with a small $Q$ steps back. Figure 18.3, below, is the whole street's $Q$ going negative at the long end.
+
+The street has been moving toward Orlan's model since the crisis, and the Fed's weekly dealer statistics show how far.
 
 > **Trend Watch: the vanishing, then negative, dealer inventory (2007–2026).** *What changed:* post-crisis capital rules pushed bank dealers from warehousing risk toward matching it. Bessembinder, Spatt & Venkataraman (2020, *JFQA* 55(1)) report that non-bank dealers' share of customer–dealer volume rose several-fold after the crisis (as summarized in our industry dossier). *Stress test:* in March 2020, Kargar et al. (2021) find risky-principal costs "increased dramatically" and flow shifted to agency trades. *How big, now:* The DESK (2024-11-20) reported primary dealers net short US\$3.8bn of IG bonds over five years, and quoted Crisil Coalition Greenwich's Kevin McPartland: "Our research continues to point to a corporate bond market that is agency (or at most, riskless principal)." Hedgeweek (2026-07-13), on Crisil Coalition Greenwich analysis of Fed data, reported primary dealers net short US corporates on average in 2026, about \$4bn, for the first time in at least 25 years, against an average net long of about \$16bn in 2017: roughly \$13.7bn short over five years and \$9.7bn long in shorter paper. *What it means:* the market's average fear term, $q\gamma\sigma^2\tau$ summed over dealers, is near zero and in the long end negative, so a typical dealer is *eager to buy* long paper. The spreads that remain are suspicion, greed, and franchise. Agency trading is the $\tau_{\text{eff}} \to 0$ limit of GLFT, where only the constant $\tfrac2\gamma\ln(1+\gamma/k)$ survives. A net-short street also creates squeeze risk if spreads tighten, because pensions and insurers rarely sell long paper. That point was raised in the Hedgeweek piece, and the inventory model prices it as a short-side $\omega$ that nobody budgeted for.
 
@@ -438,7 +482,17 @@ $$
 
 where $J > 0$ is the gap in points (default to recovery, or an LMT repricing), and $\mu$ is a drift we come back to. The jump does not change the *structure* of AS. It changes the variance and adds a drift.
 
-### 18.6.1 Exact reservation prices
+> **Math, Gently.** *The jump's exponential, and whose odds you are using.* **Part one: a count inside an exponential.** Box 5's trick priced a normal wobble inside an exponential. A jump is a count instead: $N_\tau$, the number of defaults or LMT-style gaps over the horizon, is Poisson, and with $\lambda^{\mathbb{P}}\tau = 0.10$ it is 0 about 90.5% of the time ($e^{-0.10}$) and almost never more than 1. The count has its own version of the trick, $\mathbb{E}[e^{cN_\tau}] = \exp\!\big(\lambda\tau(e^{c}-1)\big)$, and for a dealer the $c$ that matters is $\gamma qJ$, risk aversion times inventory times the size of the gap. With $\gamma = 0.005$, $q = 5$ lots and $J = 21$ points, $c = 0.525$ and $e^{0.525} = 1.69$. That 1.69 multiplies the jump charge on the next lot, so a long dealer's fear of the next lot is 69% larger than a flat dealer's. Nothing like it happens in the Gaussian world, where the next lot costs a little more per lot already held; here it costs more *multiplicatively*, because the gap hits everything you own at once. **Part two: the forecast and the bookmaker.** A weather forecast says what will happen; a bookmaker's odds say what the bet costs, fear and margin included (Chapter 5's two kinds of probability, §5.1.1; Chapter 6's risk-neutral pricing, §6.2.2). The composite mid is the bookmaker: it already prices a jump intensity under $\mathbb{Q}$, say $\lambda^{\mathbb{Q}}\tau = 0.03$. Your forecast, built from the documents and the calendar, says $\lambda^{\mathbb{P}}\tau = 0.10$. Only the difference is news, and $(0.10 - 0.03) \times 21 = 1.47$ points is your *credit view*. Feed the bookmaker's odds in as your forecast and you charge the market's fear on top of the market's price, which is a reliable way never to win an RFQ in a name everyone is already worried about.
+
+For a dealer who is not very risk-averse, everything the jump does to the reservation price fits on one line:
+
+$$
+r^{\text{res}} \approx s + \mu\tau - \lambda^{\mathbb{P}}J\tau - q\gamma\big(\sigma^2 + \lambda^{\mathbb{P}}J^2\big)\tau .
+$$
+
+Expected loss moves the centre; jump variance adds to the fear. The term $\lambda^{\mathbb{P}}J\tau$ shifts the price for every dealer, long or flat. Jump *variance* $\lambda^{\mathbb{P}}J^2$ adds to $\sigma^2$ in the inventory penalty, even for a dealer whose view is neutral. This is the $q\lambda J$ term promised in the Part V opener, multiplied by the $\gamma J$ that converts a loss into a fear. The exact version, (18.7), keeps the multiplicative $e^{\gamma qJ}$ of the box, and the GLFT version, (18.8), puts it on the diagonal of the matrix.
+
+### 18.6.1 The Full Derivation: exact reservation prices
 
 Freeze inventory and use the Poisson moment generating function $\mathbb{E}[e^{cN_\tau}] = \exp(\lambda\tau(e^c - 1))$:
 
@@ -462,13 +516,7 @@ $$
 
 The factor $e^{\gamma qJ}$ makes the reservation price *asymmetric* in inventory. Comparing $q$ with $-q$, the long dealer's discount exceeds the short dealer's premium by $\tfrac{2\lambda^{\mathbb{P}}\tau}{\gamma}\sinh(\gamma J)\cosh(\gamma qJ)$. A long dealer fears the next bond more than a short dealer wants it.
 
-**Small $\gamma$.** Expanding $\tfrac1\gamma e^{\gamma qJ}(e^{\gamma J}-1) = J + \gamma J^2(q + \tfrac12) + O(\gamma^2)$:
-
-$$
-r^{\text{res}} \approx s + \mu\tau - \lambda^{\mathbb{P}}J\tau - q\gamma\big(\sigma^2 + \lambda^{\mathbb{P}}J^2\big)\tau .
-$$
-
-Expected loss moves the center. Jump *variance* $\lambda^{\mathbb{P}}J^2$ adds to $\sigma^2$ in the inventory penalty, even for a dealer whose view is neutral. This is the $q\lambda J$ term promised in the Part V opener, multiplied by the $\gamma J$ that converts a loss into a fear.
+**Small $\gamma$.** Expanding $\tfrac1\gamma e^{\gamma qJ}(e^{\gamma J}-1) = J + \gamma J^2(q + \tfrac12) + O(\gamma^2)$, and the same for the ask, then averaging the two, gives the one-line approximation stated at the top of this section.
 
 **The measure question.** If the composite $s$ is already the $\mathbb{Q}$-fair mid, then $s$ is a $\mathbb{Q}$-martingale and its compensator drift is $\mu = \lambda^{\mathbb{Q}}J$. The expected-loss term becomes
 
@@ -478,7 +526,7 @@ $$
 
 This is the dollar value of a private read of the credit documents. If you plug CDS-implied intensities in as $\lambda^{\mathbb{P}}$, you charge the jump twice, once in the composite and once in your skew, and you never win an RFQ in a name the market is already worried about. The variance term, by contrast, needs $\lambda^{\mathbb{P}}$, because risk is borne under the physical measure.
 
-**Random jump sizes.** For default, $J = s - 100R$ with recovery $R \sim \text{Beta}(a,b)$ (Chapter 5). Replace $e^{\gamma qJ}$ with the moment generating function $M_J(\gamma q) = \mathbb{E}[e^{\gamma q J}]$, computed by quadrature. By Jensen's inequality $M_J(\gamma q) \ge e^{\gamma q\,\mathbb{E}[J]}$, so recovery *uncertainty* costs inventory on top of expected recovery. Mags: "Price is what you pay. Recovery is what you get, eventually, after the lawyers." The MGF is how the lawyers enter the HJB.
+**Random jump sizes.** For default, $J = s - 100R$ with recovery $R \sim \text{Beta}(a,b)$ (Chapter 5, §5.5.2). Replace $e^{\gamma qJ}$ with the moment generating function $M_J(\gamma q) = \mathbb{E}[e^{\gamma q J}]$, computed by quadrature. By Jensen's inequality $M_J(\gamma q) \ge e^{\gamma q\,\mathbb{E}[J]}$, so recovery *uncertainty* costs inventory on top of expected recovery. Mags: "Price is what you pay. Recovery is what you get, eventually, after the lawyers." The MGF is how the lawyers enter the HJB.
 
 **Inside GLFT.** The jump adds $\lambda^{\mathbb{P}}[u(s-J) - u] = \lambda^{\mathbb{P}}u(e^{\gamma qJ} - 1)$ to the HJB, and the drift adds $\mu\,\partial_s u$. Repeating §18.5 gives
 
@@ -691,7 +739,7 @@ The shading constant $e_n$ and the leakage bill are the two numbers a BWIC desk 
 
 **Practitioner Writing**
 - **"How Does Information Affect Liquidity in Over-the-Counter Markets?"** (NY Fed *Liberty Street Economics*, Michael Lee and Antoine Martin, 2020-01-13). A short read on dealers facing two impediments, informed traders and the balance-sheet cost of holding inventory: the Glosten–Milgrom half is §18.3, the inventory-cost half is the $\gamma$ term of §18.4. https://libertystreeteconomics.newyorkfed.org/2020/01/how-does-information-affect-liquidity-in-over-the-counter-markets/
-- **"Guide to the Avellaneda & Stoikov Strategy"** (Hummingbot, 2021-04-13). Walks the reservation-price and optimal-spread formulas with risk aversion $\gamma$ and order-book liquidity $\kappa$ as an open-source bot implements them (limit-order-book setting, not RFQ, the book's own point in §18.4.6); shows what an implementer must parameterize before the AI-specification box. https://hummingbot.org/blog/guide-to-the-avellaneda--stoikov-strategy/
+- **"Guide to the Avellaneda & Stoikov Strategy"** (Hummingbot, 2021-04-13). Walks the reservation-price and optimal-spread formulas with risk aversion $\gamma$ and order-book liquidity $\kappa$ as an open-source bot implements them (limit-order-book setting, not RFQ, the book's own point in §18.4.4); shows what an implementer must parameterize before the AI-specification box. https://hummingbot.org/blog/guide-to-the-avellaneda--stoikov-strategy/
 - **"Electronic trading in fixed income markets"** (BIS Markets Committee Papers No. 7, Study Group chaired by Joachim Nagel, 2016-01-21). The central-bank baseline for the RFQ-versus-CLOB framing of §18.1 and §18.7: electronic trading tends to improve market quality "with exceptions," and liquidity may have become less robust (50 pages; read the executive summary). https://www.bis.org/publications/electronic-trading-fixed-income-markets
 - **"Overnight Corporate Bond Trading"** (The Microstructure Exchange webinar, Farshid Abdi with Marco Rossi and Botao Wu, 2026-09-15). Trades between 6:30 p.m. and 8:00 a.m. are not disseminated on TRACE until the next morning, are larger, move prices more persistently and predict returns on the issuer's other bonds: a new latency-and-information fact for §18.8 and §18.3; the season page links the recording and the paper. https://microstructure.exchange/season
 - The DESK: "Dealers struggle to unpick impact of runs sent to rivals" (2023-12-07); "Measuring implicit costs and market impact in credit trading" (2024-10-23); "IG credit dealers go short before Fed cuts" (2024-11-20); Citadel Securities LP-metrics coverage (2026-10-08); Vanguard automation (https://www.fi-desk.com/fils-europe-vanguard-automates-70-of-trades-others-urge-caution/).

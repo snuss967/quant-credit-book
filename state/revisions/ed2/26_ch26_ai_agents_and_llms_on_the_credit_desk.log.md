@@ -1,10 +1,10 @@
 # Progress Log, Edition 2 U2: Ch 26, AI Agents & LLMs on the Credit Desk
 
-- [ ] 1. [26.0 Cold Open] EXPAND-SCENE to 1,100-1,400 words; second movement, three failures, Mata/Park, decision card.
-- [ ] 2. [26.0, "By the end of this chapter"] LIST-TO-NARRATIVE.
-- [ ] 3. [26.1, after the temperature equation] MATH-GENTLY #1, "A distribution over the next word."
-- [ ] 4. [26.1, P/Q convention] BRIDGE: one-sentence risk-neutral gloss, pointer to Ch 6.
-- [ ] 5. [26.2 Trend Watch] BRIDGE + move to end of 26.2; correlated-error paragraph dies (reborn in Scene A beat 3).
+- [x] 1. [26.0 Cold Open] EXPAND-SCENE to 1,100-1,400 words; second movement, three failures, Mata/Park, decision card. — Done: second movement, three failures, Mags cases, card added.
+- [x] 2. [26.0, "By the end of this chapter"] LIST-TO-NARRATIVE. — Done: six bullets became Theo's evening paragraph with § pointers.
+- [x] 3. [26.1, after the temperature equation] MATH-GENTLY #1, "A distribution over the next word." — Done: categorical box with 0.6/0.3/0.1 temperature arithmetic added.
+- [x] 4. [26.1, P/Q convention] BRIDGE: one-sentence risk-neutral gloss, pointer to Ch 6. — Done: one-sentence Q gloss added, pointer to Chapter 6.
+- [x] 5. [26.2 Trend Watch] BRIDGE + move to end of 26.2; correlated-error paragraph dies (reborn in Scene A beat 3). — Done: TW moved last; correlated-error paragraph retired to pointer.
 - [ ] 6. [26.3] NEW-SCENE, Long Scene A: "Thirty-One Days in February".
 - [ ] 7. [Scene A, between beats 2 and 3] ANOTHER-SEAT #1, direct lender and buyer of its loans.
 - [ ] 8. [26.3, "Where does the reader earn money" items 1-5] LIST-TO-NARRATIVE.

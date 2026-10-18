@@ -5,14 +5,14 @@
 - [x] 3. [§22.1.1] MATH-GENTLY + FULL-DERIVATION-MOVE — Rent and indifference boxes added; algebra moved to Full Derivation; extractions relocated.
 - [x] 4. [§22.1, after Desk Myth] ANOTHER-SEAT (dealer desk) — BofA versus Jefferies seat box; quoted, sourced, inference labeled.
 - [x] 5. [§22.2 opening] SHOP-LIFE vignette (bank credit-trading desk, operations seat) — Tamsin ops vignette: exceptions, volume pack, affiliate-indicator break, definitions tab.
-- [ ] 6. [§22.2.1] MATH-GENTLY + FULL-DERIVATION-MOVE
-- [ ] 7. [§22.2.2] MATH-GENTLY (building block: distributions)
-- [ ] 8. [§22.2.3] EXPAND-SCENE -> Long Scene B: "The rule that was approved and never happened"
-- [ ] 9. [§22.3 opening] BRIDGE
-- [ ] 10. [§22.3.1] MATH-GENTLY (random walk and sqrt time)
-- [ ] 11. [§22.3.3] EXPAND-SCENE (to 900-1,200 words)
-- [ ] 12. [§22.4.1] MATH-GENTLY (two-part) + FULL-DERIVATION-MOVE
-- [ ] 13. [§22.4.2] MATH-GENTLY (hinge regression)
+- [x] 6. [§22.2.1] MATH-GENTLY + FULL-DERIVATION-MOVE — Kyle gloss, triangle-variance box, readings narrated, leak algebra moved below.
+- [x] 7. [§22.2.2] MATH-GENTLY (building block: distributions) — Normal, lognormal, Pareto shelf box; toy numbers avoid annotation duplication.
+- [x] 8. [§22.2.3] EXPAND-SCENE -> Long Scene B: "The rule that was approved and never happened" — Replay scene, four envelopes, card graded; SEC 2024-09-20 date verified.
+- [x] 9. [§22.3 opening] BRIDGE — Two-sentence bridge leads; T+1 facts paragraph follows unchanged.
+- [x] 10. [§22.3.1] MATH-GENTLY (random walk and sqrt time) — Drunk-and-lamppost box; 1.41% and 0.707 numbers; trend caveat.
+- [x] 11. [§22.3.3] EXPAND-SCENE (to 900-1,200 words) — Ops-log scene: Mags, affirmations, Kaz checks bracket, carry offset bug.
+- [x] 12. [§22.4.1] MATH-GENTLY (two-part) + FULL-DERIVATION-MOVE — Two-part netting box; folded-normal derivation added below; equations intact.
+- [x] 13. [§22.4.2] MATH-GENTLY (hinge regression) — Motorway hockey-stick box with own toy numbers; caveat clause kept.
 - [ ] 14. [§22.4.3] EXPAND-SCENE -> Long Scene A: "The fortnight the invoice was the market"
 - [ ] 15. [§22.5] LIST-TO-NARRATIVE + WHEN-TO-APPLY inside the scene
 - [ ] 16. [§22.5, after the Poker Table] ANOTHER-SEAT (non-bank market maker)

@@ -9,14 +9,14 @@
 - [x] 7. [§21.2.3] Done: Ines bridge on hand history and Versana API; Trend Watch last.
 - [x] 8. [§21.3.1] Done: box 4 nine-cent bank gearing; (21.3) statement; Full Derivation.
 - [x] 9. [§21.3.2] Done: box 5 sticky coins, variance of sums; (21.4) Full Derivation.
-- [ ] 10. [§21.4 Long Scene A: The Cliff, March-April 2020] NEW-SCENE 2,000-2,600 words; card; ZAIS6 coda.
-- [ ] 11. [§21.4.1 Adjusted numerator] MATH-GENTLY box 6 (test as option book); (21.5) statement; Full Derivation.
-- [ ] 12. [§21.4.2 Cure-trade theorem] WHEN-TO-APPLY to Mags; thread narration between boxes.
-- [ ] 13. [§21.4.3 FSPI] MATH-GENTLY box 7 (logistic as probability dial); Full Derivation; one telling.
-- [ ] 14. [§21.5 Long Scene B: The Window, January-April 2025] NEW-SCENE 2,000-2,400 words; card; 2026 replay coda.
-- [ ] 15. [§21.5.1 Hazard] MATH-GENTLY box 8 (hazard as clock); Full Derivation; Hana fits the logit.
-- [ ] 16. [§21.5 end] ANOTHER-SEAT box B (CLO manager; Loomis Sayles quote); Trend Watch to section end.
-- [ ] 17. [§21.6 Loan ETFs vs CLO ETFs] MATH-GENTLY box 9 (sqrt-l vs l; Little's law); Full Derivation.
+- [x] 10. [§21.4 Scene A] Done: 2,300-word replay, four beats, card; Case Study pointer, ZAIS6 coda.
+- [x] 11. [§21.4.1] Done: box 6 landscape and staircase; (21.5) statement; Full Derivation.
+- [x] 12. [§21.4.2] Done: cards graded, Mags judgment at decision point; boxes threaded.
+- [x] 13. [§21.4.3] Done: box 7 probability dial; Full Derivation; trade sentence compressed.
+- [x] 14. [§21.5 Scene B] Done: replay cut 7 Apr 2025; card; graded in Case Study; 2026 coda hedged.
+- [x] 15. [§21.5.1] Done: box 8 clock with no hands; Full Derivation; Hana fits logit.
+- [x] 16. [§21.5 end] Done: CLO-manager seat box B with Loomis quote; Trend Watch last.
+- [x] 17. [§21.6] Done: box 9 coins vs bad news, Little's law; Full Derivation; one telling.
 - [ ] 18. [§21.6, before the Spec] SHOP-LIFE vignette (systematic asset manager reconciliation, 8 Oct 2026).
 - [ ] 19. [§21.6 after JAAA Case Study] RV BEAT, The Pair box PB-17 BKLN / HYG; update pair book.
 - [ ] 20. [§21.7 Trend and momentum] MATH-GENTLY box 10 (smoothing); Full Derivation; Ines judgment; hedge CHECK.

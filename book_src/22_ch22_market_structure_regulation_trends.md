@@ -244,15 +244,11 @@ The ledger since then, as a quant needs it, is a list of dates on which the info
 
 ### 22.2.1 Derivation: the reporting delay is an option the block dealer holds
 
-Work under $\mathbb{P}$ with Kyle-style linear impact (§18.3): once the market learns of a signed block of size $Q$, the mid moves against the dealer by $\lambda Q$, where $\lambda$ is impact per unit of size the market *infers*. A dealer buys a block of $Q$ (\$mm) at $t = 0$, earning a concession of $\tfrac{s_B}{2}$ (bp of price) per unit, and works it out linearly over an unwind time $T_u$, so its remaining inventory at $t$ is $Q(1 - t/T_u)$. The print becomes public after a delay $\Delta$: fifteen minutes today, one minute under the rule that died, end of day for on-the-run Treasuries.
+Work under $\mathbb{P}$ with Kyle-style linear impact. Kyle's $\lambda$ is the price impact per unit of order flow the market sees: because some of the flow might be informed, the price moves against a known seller by an amount proportional to what was sold, and §18.3 builds it from the market maker's side. Here, once the market learns of a signed block of size $Q$, the mid moves against the dealer by $\lambda Q$, where $\lambda$ is impact per unit of size the market *infers*. A dealer buys a block of $Q$ (\$mm) at $t = 0$, earning a concession of $\tfrac{s_B}{2}$ (bp of price) per unit, and works it out linearly over an unwind time $T_u$, so its remaining inventory at $t$ is $Q(1 - t/T_u)$. The print becomes public after a delay $\Delta$: fifteen minutes today, one minute under the rule that died, end of day for on-the-run Treasuries.
 
-The leak cost is the impact times the inventory still held at publication:
+> **Math, Gently.** *The variance of a triangle.* Draw the dealer's inventory against time: it starts at $Q$ and falls in a straight line to zero at $T_u$, a triangle. The risk of holding it is not the area of the triangle, because a price move hurts in proportion to how much you hold *and* variance grows with the square of the holding. So the right picture is the *squared* line, a curve that starts at $Q^2$ and sags toward zero. Its area is exactly a third of the rectangle $Q^2 \times T_u$ (the area under $x^2$ from 0 to 1 is $\tfrac13$), which is why a steady unwind carries a third of the variance of holding the whole block until the end. Tiny number: $Q = 15$, $T_u = 120$ minutes and $\sigma = 2.5$bp per square-root minute give $\sigma^2 Q^2 T_u/3 = 6.25 \times 225 \times 40 = 56{,}250$ in (bp$\cdot$\$mm)$^2$, against $168{,}750$ for sitting on all fifteen for two hours. Selling as you go buys back two-thirds of the variance. The integral is in the Full Derivation below.
 
-$$
-\text{Leak}(\Delta) = \lambda Q \cdot Q\Big(1 - \frac{\Delta}{T_u}\Big)^+ .
-$$
-
-The inventory-risk cost is the mean-variance penalty on the unwind. With mid volatility $\sigma$ (bp per $\sqrt{\text{minute}}$), the P&L variance of a linear unwind is $\int_0^{T_u}\sigma^2 Q^2 (1 - t/T_u)^2\,dt = \sigma^2 Q^2 T_u/3$, so the penalty is $\tfrac12\gamma\sigma^2Q^2T_u/3$. Expected utility-adjusted P&L is
+The dealer's utility-adjusted P&L is the concession, less the *leak*, which is the impact $\lambda Q$ times the inventory still held when the print goes public, $Q(1 - \Delta/T_u)^+$, less the mean-variance penalty $\tfrac12\gamma$ times the triangle's variance:
 
 $$
 \Pi(\Delta) = \frac{s_B}{2}\,Q - \lambda Q^2\Big(1-\frac{\Delta}{T_u}\Big)^+ - \frac{\gamma\sigma^2 Q^2 T_u}{6}.
@@ -268,13 +264,25 @@ $$
 \tag{22.6}
 $$
 
-Three readings fall out. **Shorter delay, wider block spread**, with the effect proportional to block size $Q$. **The effect is concentrated where $\Delta$ and $T_u$ are comparable.** A riskless-principal trade, matched before it prints ($T_u \le \Delta$), pays no leak at fifteen minutes or at one; a block worked over three days barely notices the difference between one minute and fifteen. The trades that care are the risk-transfer blocks worked out in an hour or two through ETFs, CDS, and portfolio trades. **To protect a multi-day unwind, the delay must be measured in days**, which is why the 2019 block proposal paired higher caps with a 48-hour delay.
+The derivative says that a shorter delay means a wider block spread, and that the effect grows with the block. The positive part says where it lives. A riskless-principal trade, matched before it prints ($T_u \le \Delta$), pays no leak at fifteen minutes or at one. A block worked over three days barely notices the difference between one minute and fifteen, because almost all of it is still on the books either way. The trades that care are the ones where $\Delta$ and $T_u$ are comparable: the risk-transfer blocks worked out in an hour or two through ETFs, CDS and portfolio trades. And if the aim were to protect a multi-day unwind, the delay would have to be measured in days, which is why the 2019 block proposal paired higher caps with a 48-hour delay.
 
 *Worked example (illustrative):* $\lambda = 0.5$bp per \$mm, $Q = 15$, $T_u = 120$ minutes, $\sigma = 2.5$bp$/\sqrt{\text{min}}$ (about 50bp of price a day, a 10-year BBB), $\gamma = 0.001$ per bp·\$mm. The inventory term is $0.001 \times 6.25 \times 15 \times 120/6 = 1.875$bp. At $\Delta = 15$ the leak term is $7.5 \times 0.875 = 6.56$bp, for a half-spread of 8.44bp; at $\Delta = 1$ it is $7.5 \times 0.992 = 7.44$bp, for 9.31bp. The one-minute rule would have widened this block by about 0.9bp, roughly 10%, which on a desk printing a few thousand such blocks a year is a line item someone would write a comment letter about. Figure 22.4 shows how the sensitivity to the delay depends on the unwind time.
 
 ![Figure 22.4: A shorter reporting delay widens the block spread only when the unwind time is comparable to the delay: moving from 15 minutes to 1 minute costs a 2-hour unwind about 0.9bp and a 15-minute unwind about 7bp, but a 10-hour unwind only about 0.2bp. Illustrative: eq. (22.6) with impact 0.5bp per \$mm, block size \$15mm, volatility 2.5bp per square-root minute, and risk aversion 0.001.](assets/figures/ch22_block_spread_delay.png)
 
+#### The Full Derivation: the delay as an option
+
+The leak is the impact times the inventory still held at publication:
+
+$$
+\text{Leak}(\Delta) = \lambda Q \cdot Q\Big(1 - \frac{\Delta}{T_u}\Big)^+ .
+$$
+
+The inventory-risk cost is the mean-variance penalty on the unwind. With mid volatility $\sigma$ (bp per $\sqrt{\text{minute}}$), the P&L variance of a linear unwind is $\int_0^{T_u}\sigma^2 Q^2 (1 - t/T_u)^2\,dt = \sigma^2 Q^2 T_u/3$ (substitute $u = 1 - t/T_u$ and the integral becomes $T_u\int_0^1 u^2\,du$), so the penalty is $\tfrac12\gamma\sigma^2Q^2T_u/3$. Concession minus leak minus penalty is (22.5); dividing $\Pi = 0$ by $Q$ gives the half-spread in (22.6), and differentiating the positive part in $\Delta$ gives its slope. The delay is an option in the plain sense: it is a right the block dealer holds, worth $2\lambda Q/T_u$ of spread per unit of delay while it is in the money ($\Delta < T_u$) and nothing once the unwind is done before the print.
+
 ### 22.2.2 Derivation: what hides behind "5MM+"
+
+> **Math, Gently.** *Tails that have no variance.* A distribution is a rule for how likely each size is. Ask one a desk question: of the trades that print as "5MM+," how big is a typical one? Picture a month of those blocks laid along a shelf in order of size, and find the point where the shelf balances, its center of mass, which is the mean. Three shapes give three very different shelves. A *normal*, the bell, puts the blocks symmetrically around the middle, so the balance point and the middle block, the median, coincide, and its tail is so thin that a block five standard deviations out essentially never turns up. A *lognormal* is a bell drawn on the logarithm of size: it cannot go below zero and it leans right, so the mean sits above the median, but the far end of the shelf is still sparse enough that the spread of sizes, the variance, is a finite number. A *Pareto* is a power law: the chance of a block bigger than $x$ falls like $x^{-\alpha}$, so doubling the size divides the odds only by $2^{\alpha}$. Tiny number: ten blocks above the cap, nine between \$5mm and \$10mm averaging \$7mm, and one at \$60mm. The median is about \$7mm, the mean is $(63 + 60)/10 = \$12.3$mm, and one block carries half the volume. Move the giant and the balance point jumps, which is what it means in practice for the variance not to exist. For a Pareto the mean is finite only when $\alpha > 1$ and the variance only when $\alpha > 2$, because the far end of the shelf is weighted by size squared and that sum never settles when $\alpha \le 2$. On a desk the normal is a fair first guess for daily spread changes in a calm week, the lognormal for prices and spread levels, which cannot go negative and compound, and the Pareto for trade sizes and portfolio losses. Chapter 5 builds the family (§5.7.2 and §5.8); the next paragraph needs only the Pareto.
 
 Printed size is $\tilde Q = \min(Q, C)$ plus a flag, with $C = 5$ (\$mm, IG) or $C = 1$ (HY). The market cannot see $Q$ above the cap, so it updates on $\mathbb{E}[Q \mid Q > C]$. Suppose sizes above the cap are Pareto with tail index $\alpha > 1$: $\mathbb{P}(Q > x \mid Q > C) = (C/x)^{\alpha}$ for $x \ge C$. Then
 
@@ -295,15 +303,89 @@ The shelf gives us $m$ directly, which is a pleasing accident.
 
 ### 22.2.3 Case Study: The One-Minute Rule That Died (2022–2025), and the Block Pilot That Never Lived (2019)
 
-*The approach from transparency.* FINRA proposed cutting the TRACE reporting outer limit from fifteen minutes to one in 2022 (Regulatory Notice 22-17). The formal filing, SR-FINRA-2024-004, followed in January 2024 and would "reduce the 15-minute TRACE reporting timeframe to one minute," with "exceptions for member firms with de minimis reporting activity and for manual trades." After an amendment, the SEC approved it in 2024 *(the approval order is dated in the autumn; check the exact date on the filing page)*. Then, on 2025-12-04, Regulatory Notice 25-17: "FINRA is not moving forward with its proposal to reduce the 15-minute TRACE reporting outer limit to one minute." The stated reason was that "firms raised additional concerns and questions in connection with aspects of the approved reduced reporting time regime," and the notice added the line every quant should frame: "While the Securities and Exchange Commission approved these amendments, they have not taken effect."
+Two attempts were made to change TRACE's parameters in the last seven years, one from each direction, and both failed. The desk learned the episode the way it learns most things, by replaying it blind.
 
-*The approach from size.* In 2019, FINRA Regulatory Notice 19-12 sought comment on a pilot, recommended by the SEC's Fixed Income Market Structure Advisory Committee, that would have raised the caps to \$10mm (IG) and \$5mm (HY) while delaying dissemination of trades above the caps by 48 hours. Some commenters warned that more size transparency would make dealers "even more reluctant to position bonds." The pilot was not adopted; the caps in Notice 25-17 are still \$5mm and \$1mm.
+#### Long Scene: the rule that was approved and never happened
 
-*What the model says happened.* Equation (22.6) says the one-minute rule taxed exactly one population: blocks unwound in an hour or two. The auto-ex RFQ engines that answer most tickets are riskless or near-riskless ($T_u \le \Delta$) and were indifferent. The block desks were not, and the manual-trade exception showed that FINRA knew it. The 2019 pilot attacked from the other side: more size information (a tax on the dealer) bought with a 48-hour delay (a subsidy sized to multi-day unwinds). Each proposal moved one parameter in the transparency advocates' favor and needed a compensating move in the block dealers' favor. Neither got one, and fifteen minutes and \$5mm/\$1mm survived.
+*A replay, run on Friday 2 October 2026 at 3:30 p.m., with Ines's folder cut at each date shown: nothing after a cut date is on the table until she opens the next envelope. The desk's cards, flags and illustrative numbers are invented; the FINRA notices, the SEC order, the dates and every quotation are real.*
 
-*How a systematic desk would have handled it.* Carry a regime flag for every rule from the day it is *proposed*, not just the day it takes effect, because quoting behavior can move on the approval. Price blocks with (22.6) under both regimes and keep the switch ready. And when the rule died, record the non-event: 2025-12-04 is the best placebo date in this book, a rule that was approved and never took effect. If your event study (§22.8) finds a liquidity effect on that date, your event study is broken.
+Friday replays are Ines's ritual: a real episode, cut off at a date and traded blind (Ch 1 §1.8.2). This one had no bond in it. The folder on the conference-room table said *FINRA, 2019–2025* in her handwriting and held four envelopes, and Theo, at the end of his second week, had already learned that the number of envelopes is the number of times somebody will be wrong.
+
+**Beat 1: Thursday 11 January 2024.** The first envelope held two documents. FINRA Regulatory Notice 22-17, dated 2 August 2022, asked for comment on cutting TRACE's outer reporting limit from fifteen minutes to one. The second was what came of it seventeen months later: rule filing SR-FINRA-2024-004, filed with the SEC that Thursday, which would "reduce the 15-minute TRACE reporting timeframe to one minute," with "exceptions for member firms with de minimis reporting activity and for manual trades."
+
+Kaz read the first page and opened a laptop. "Easy. A flag. `one_minute_rule`, False until the SEC approves it, True after. Every spread model gets an interaction term, and we're done before the coffee's cold."
+
+"True from when?" Ines asked.
+
+"From approval. Approval is the event. That's when quoting changes."
+
+Theo was on the page where restructuring bankers live, the one with the exceptions. "Manual trades are exempt." He read it again. "Who books manual trades?"
+
+"Voice desks," Mags said. "Blocks. Anything too big or too strange to go through a pipe."
+
+"So it's a carve-out." Theo had drafted dozens. "When a credit agreement has a basket that applies to everyone except one kind of transaction, somebody in the room did that kind of transaction for a living."
+
+"Or somebody in the room was going to lose money on it," Ines said. "Let me show you which." She took the Calloway ticket from the Monday before quarter-end, the one the desk had lost by a quarter of a cent, and played it as if they had won it.
 
 > **Poker Table.** Ines replays the cold open as a hand history. "We buy fifteen million. The print shows at minute fifteen as '5MM+ sell,' and the table assumes twelve and a half, not fifteen, so the cap just hid two and a half million of our size, worth about a basis point and a quarter of impact *(illustrative, at $\lambda = 0.5$bp per \$mm)*. By minute fifteen we've worked out an eighth of it. Markouts: flat at five minutes, down 4bp at thirty, down 6 at the close *(illustrative)*. Under a one-minute rule the thirty-minute markout comes at minute one, before we've sold anything. Same hand, worse position at the table. That's why the block desks folded the one-minute rule, and why nobody at this table will ever vote to lower the cap."
+
+Kaz looked up from the laptop. "You said 'folded.' Past tense."
+
+"I'm the dealer," Ines said. "I'm allowed to know how the hand ended. You're not allowed to know when."
+
+**Beat 2: the same afternoon, pricing it.** Kaz built the pricing first, because pricing is the part Kaz trusts. Equation (22.6) needs only the worked example's parameters, impact of half a basis point per \$mm, a \$15mm block, 2.5bp of volatility per square-root minute and the desk's risk aversion, and one more number: how long the block takes to work out. Kaz ran three unwind times and put them on the screen, which is how Figure 22.4 was born. For a block worked out over two hours, cutting the delay from fifteen minutes to one widens the competitive half-spread from 8.44bp to 9.31bp, about 0.9bp. For a block worked out in fifteen minutes, it costs about 7bp, because at fifteen minutes the dealer is already flat when the print appears, and at one minute it is still holding almost all of it. For a block worked over ten hours, it costs about 0.2bp, because the dealer is holding nearly everything at minute one *and* at minute fifteen, and the extra fourteen minutes of secrecy were never protecting much.
+
+"So for most of the book it costs nothing," Kaz said.
+
+"For most of the *tickets* it costs nothing," Theo said. He had the desk's RFQ log open, sorted by size. The auto-quoter answers most of the desk's tickets, and most of those it answers riskless or nearly so: it has the other side lined up before the print, so $T_u \le \Delta$ and the positive part in (22.6) is zero at fifteen minutes or at one. Those engines were indifferent to the rule. The blocks were not, and the blocks that minded most were the risk-transfer trades worked out in an hour or two through ETFs, CDS and portfolio trades, which is where the desk earns the spread it can actually see. "And the manual-trade exception lands on exactly those," Theo said. "Whoever wrote it had read (22.6), or had a client who had."
+
+"Nobody reads my equations," Kaz said.
+
+"FINRA read the comment letters," said Mags. "Same thing, with more lawyers."
+
+**Beat 3: 2019, from the other end.** Mags had brought her own envelope, which is against the rules of the replay and which Ines allowed because it was older than the cut. It held FINRA Regulatory Notice 19-12. In 2019 FINRA had sought comment on a pilot, recommended by the SEC's Fixed Income Market Structure Advisory Committee, that would have raised the dissemination caps to \$10mm for investment grade and \$5mm for high yield, and delayed dissemination of trades above the new caps by 48 hours. Some commenters warned that more size transparency would make dealers "even more reluctant to position bonds." The pilot was not adopted.
+
+"Same fight," Mags said. "Turned round. In 2019 they wanted to show the size and offered the block desks two days of quiet to pay for it. Now they want to show the print faster and they're offering nothing." She tapped the two notices. "They tried it from both ends and the middle held."
+
+Kaz put the 2019 version through (22.6) out of curiosity. A 48-hour delay pushes $\Delta$ past any unwind shorter than two days, so the positive part goes to zero and the leak disappears for every block a dealer could reasonably work out. That was the subsidy, sized to multi-day unwinds. The tax was the size: under higher caps the market would see \$10mm where it used to see "5MM+," a more precise signal about exactly the trades a block dealer would rather keep vague (§22.2.2 prices that). One proposal bought more size information with more delay; the other wanted less delay and offered no compensation. Each moved one parameter in the transparency advocates' favor and needed a compensating move in the block dealers' favor.
+
+"So which is it in February?" Theo asked. "Does this one get its compensation or not?"
+
+"That," Ines said, "is the card."
+
+#### Decision point: February 2024
+
+*It is February 2024. The filing is public, the SEC has not yet ruled, and the 2019 pilot is five years dead. Write three things: which population of your trades you reprice, from which date you flag the regime, and what you will record if the rule dies.*
+
+Kaz's card was the fastest and the most confident. *Reprice every trade by the one-minute leak. Flag from the approval date. If it dies, delete the flag.* Theo's was narrower. *Reprice blocks with unwind times between fifteen minutes and a few hours; leave the auto-quoter alone. Flag from the effective date, not the approval.* On the third line he had written, and crossed out, "nothing to record," and left the line blank. Mags's card said: *Reprice nothing until there is an effective date. If it dies, I buy lunch.* Ines's own card went into the fourth envelope, sealed, the way she always did it, and Theo noticed for the first time that she wrote her card before the replay started.
+
+Write yours before reading on.
+
+**Beat 4: the envelope, 20 September 2024 to 4 December 2025.** The fourth envelope was thicker than the others. On top was the SEC's order of 20 September 2024 (Release 34-101121), approving the one-minute rule as modified by a partial amendment. Kaz's flag would have switched on that day.
+
+Underneath, there was very little. No effective date was set; FINRA signalled in early 2025 that it would not set one (Chapter 2 has the trade-press account). On 2025-09-16 the SEC approved the rescission. And on 2025-12-04, Regulatory Notice 25-17: "FINRA is not moving forward with its proposal to reduce the 15-minute TRACE reporting outer limit to one minute." The stated reason was that "firms raised additional concerns and questions in connection with aspects of the approved reduced reporting time regime," and the notice added the line Ines had printed in large type and taped to the inside of the envelope: "While the Securities and Exchange Commission approved these amendments, they have not taken effect." The same notice restated the caps at \$5mm and \$1mm. Fifteen minutes and \$5mm/\$1mm had survived both attacks.
+
+The grading took ten minutes, which at Ines's table is mercy.
+
+Kaz's flag switched on in September 2024 and never switched off. A model trained across it would have learned that "the one-minute regime" coincided with everything else that happened afterwards, the April 2025 tariff week included, and would have credited a rule that never took effect with the widest block spreads of the year. It is the same mistake as ROBO's in the Spec below, made by a human with a PhD, which Kaz took well. "A dummy that's on during a stress," they said, "is a stress dummy with a regulatory name."
+
+Theo had the right population. Equation (22.6) says the rule taxed exactly one kind of trade, the block unwound in an hour or two, and his card repriced exactly that kind. His instinct to wait for the effective date was right too, as far as the flag went. What he had missed was the second flag. Quoting behavior can move on an approval, because dealers price the rule they expect, so the approval date deserves its own column, separate from the effective date, even if nothing moves on it. And his blank third line was the most expensive blank on the table.
+
+Mags's card was the cheapest and very nearly right about prices, since nothing changed in the quotes. It recorded nothing, so it taught the model nothing.
+
+Ines opened her own. *Flag proposal (2022-08-02), filing (2024-01-11), approval and effective date as separate columns. Price blocks under both regimes and keep the switch ready. If it dies, record the death as a date.*
+
+"Why the death?" Theo asked. "Nothing happened."
+
+"That's why," Ines said. "Kaz, what's the hardest thing to find when you want to know whether a rule moved your data?"
+
+Kaz did not need long. "A date where everything else happened and the rule didn't." They looked at the card again. "Approved, announced, priced by everybody in the market, and never in force. If my event study finds a liquidity effect on 4 December 2025, my event study is broken."
+
+"So the best control date in the book," Ines said, "is the one on which nothing happened."
+
+Mags bought lunch anyway, on the grounds that she had been right about the prices and wanted it on the record. Kaz added a row to `REGIME_DATES` with `one_minute_rule = False` for every date there has ever been, and a separate column called `approved_never_effective`. Theo filled in his blank third line, in ink, after the fact, which Ines allowed, since that is what a hand history is for. Section 22.8 builds the event study that uses the date.
+
+Kaz's flag is item (5) of the Ways This Blows Up box below, and Table 22.1, in the Trend Watch, is the regime table the replay ended with.
 
 > **Trend Watch: TRACE and adjacent reporting regimes as a table of structural breaks (Table 22.1).** *What changed:* the information set, about once a year. *Sources:* FINRA TRACE FactBook 2025; FINRA Regulatory Notices 22-12, 25-17, 26-16; SEC releases as noted; dates marked *approx.* rest on secondary sources.
 >
@@ -344,11 +426,13 @@ Use it for scenario work on block pricing and as the first cleaning pass on any 
 
 ## 22.3 T+1 and the Settlement Clock
 
-Time is the second thing a dealer sells, and the settlement cycle is the most literal clock in the business: the number of days between the handshake and the money. The SEC adopted T+1 on 2023-02-15, moving most broker-dealer securities transactions from two business days to one, and the industry switched on 2024-05-28, the Tuesday after Memorial Day. The rule also required same-day affirmation "as soon as technologically practicable and no later than the end of trade date," made investment advisers keep records of allocations, confirmations and affirmations, and required central matching service providers to adopt straight-through-processing policies. The SEC chair at the time said it "will reduce latency, lower risk, and promote efficiency." Treasuries were never part of this: as exempt securities they already settled T+1 by market convention.
+Time is the second thing a dealer sells, and the settlement cycle is the most literal clock in the business: the number of days between the handshake and the money. To a restructuring banker a settlement cycle looks like plumbing; to a risk manager it is a horizon, and horizons are where square roots live.
 
-To a restructuring banker, a settlement cycle looks like plumbing. To a risk manager it is a horizon, and horizons are where square roots live.
+The SEC adopted T+1 on 2023-02-15, moving most broker-dealer securities transactions from two business days to one, and the industry switched on 2024-05-28, the Tuesday after Memorial Day. The rule also required same-day affirmation "as soon as technologically practicable and no later than the end of trade date," made investment advisers keep records of allocations, confirmations and affirmations, and required central matching service providers to adopt straight-through-processing policies. The SEC chair at the time said it "will reduce latency, lower risk, and promote efficiency." Treasuries were never part of this: as exempt securities they already settled T+1 by market convention.
 
 ### 22.3.1 Derivation: why T+1 cut margin by about a quarter
+
+> **Math, Gently.** *Why risk grows with the square root of time.* A drunk leaves a lamppost and takes steps of one metre, each one left or right at random. After one step he is a metre away. After a hundred steps he is not a hundred metres away, because half his steps undo the other half; on average he is about ten metres away, the square root of a hundred. The steps cancel, and what survives the cancelling grows like $\sqrt{n}$. A price that moves by independent daily shocks is the same walk, a *random walk*. Tiny number: if a bond moves 1% a day, two days of moves give a typical move of $\sqrt2 \times 1\% \approx 1.41\%$, not 2%, because the second day is as likely to undo the first as to repeat it. Run it backwards and a clearing house that used to cover two days and now covers one needs $\sqrt{1/2} \approx 0.707$ of the margin, not half of it. That is the whole of (22.8) below, plus the close-out days. The cancelling is also the weakness: in a trending market today's move predicts tomorrow's, the steps stop undoing each other, and risk grows closer to linearly with time. Chapter 5 builds the random walk properly (§5.2.3).
 
 A clearing agency's margin covers the loss on a member's open positions between trade and close-out. If the member defaults, the clearing agency is exposed from the trade until settlement, and then for however long it takes to liquidate, so the horizon is $H = T_{\text{settle}} + T_{\text{co}}$ days. Under $\mathbb{P}$, with daily price changes independent and of volatility $\sigma$, the loss over $H$ days has standard deviation $\sigma\sqrt{H}$. A value-at-risk-style margin at a fixed confidence level scales the same way, $\text{IM} = z_{\alpha}\,\sigma\sqrt{H}\cdot|\text{position}|$. The confidence multiplier, the volatility, and the position all cancel in the ratio:
 
@@ -358,7 +442,7 @@ $$
 \tag{22.8}
 $$
 
-The two brackets correspond to whether liquidation is instantaneous or takes a day. Now the published numbers. According to the DTCC/SIFMA/ICI after-action reporting, NSCC's clearing fund fell from \$12.8bn under T+2 to \$9.1bn in an early snapshot (−29%) and to \$9.8bn on a three-month average basis (−23%) *(approx.; DTCC, 2024)*. Both land inside the bracket, with the more durable average close to the middle. A one-line derivation, a published number, and an honest fit rather than a cherry-pick: the empirical ratio is in the range the theory allows, and it would have been embarrassing if it weren't.
+The two brackets correspond to whether liquidation is instantaneous or takes a day, so the theory says T+1 should have cut the volatility part of clearing margin by between 18% and 29%. The case study below holds that bracket up against DTCC's published numbers.
 
 *Error-prone spots.* NSCC margin has a volatility component plus add-ons (mark-to-market, liquidity, concentration, backtesting) that do not scale with $\sqrt{H}$, so apply (22.8) to the volatility component only. The square root also assumes independent daily changes. In a trending, autocorrelated market the horizon effect is closer to linear, so a T+1 saving computed in calm data overstates the saving in a crisis. The clock helps least when you need it most, a theme that will recur.
 
@@ -377,15 +461,31 @@ The charge is a floor on the cost of failing. Above 3% it is zero and the market
 >
 > **Annotation.** Our analysis: Veronesi's textbook records the moment a fails penalty changed the sign of an interest rate. With the policy rate near zero, a bond on special could not trade below a 0% repo rate as long as failing was free; once failing cost 3%, lenders of cash would accept a negative repo rate to get the bond rather than fail. (The Fed's own penalty in the quotation was set relative to the fed funds rate; the industry fails charge in (22.9) is stated as 3% *minus* a reference rate. Both put a floor under the cost of failing.) The 2026 desk departs from 2009 in the regime: with reference rates above 3% for most of 2023–2025 *(approx.)*, the charge has been near zero and fails have been disciplined by carry, not by penalty. The day rates fall back toward zero, the charge wakes up, specials can again go negative, and any short-financing model calibrated on 2023–2025 will be wrong in exactly that direction.
 
-The 2024 fail data matched the identity's prediction of "not much changes": the continuous net settlement (CNS) fail rate was 1.90% on the first T+1 day against a May 2024 T+2 average of 2.01%, and averaged 2.12% in July 2024 *(approx.; DTCC after-action reporting)*. The cost moved to the operations desk, which now affirms on trade date, and to the people whose other legs did not move: a non-US buyer funding in FX that settles on a T+2 spot convention must pre-fund or trade FX for same-day settlement; an ETF authorized participant matching creation baskets against bonds settling T+1 runs a funding gap whenever the fund's own cycle differs (Chapter 20); and a loan trade still settles in days to weeks, so a CLO that sells bonds to buy loans is short cash for the gap (Chapter 21). The EU and UK plan their move to T+1 for 2027-10-11 *(ESMA and FCA announcements; approx.)*, which will move the FX-mismatch problem from New York to London.
+The 2024 fail data matched the identity's prediction of "not much changes": the continuous net settlement (CNS) fail rate on the switch is in the case study below, and it averaged 2.12% in July 2024 *(approx.; DTCC after-action reporting)*. The cost moved to the operations desk, which now affirms on trade date, and to the people whose other legs did not move: a non-US buyer funding in FX that settles on a T+2 spot convention must pre-fund or trade FX for same-day settlement; an ETF authorized participant matching creation baskets against bonds settling T+1 runs a funding gap whenever the fund's own cycle differs (Chapter 20); and a loan trade still settles in days to weeks, so a CLO that sells bonds to buy loans is short cash for the gap (Chapter 21). The EU and UK plan their move to T+1 for 2027-10-11 *(ESMA and FCA announcements; approx.)*, which will move the FX-mismatch problem from New York to London.
 
 ### 22.3.3 Case Study: May 28–29, 2024, the Weekend the Clock Moved
 
-*Setup.* Monday 2024-05-27 was Memorial Day, so T+2 trades from Friday 2024-05-24 settled on Wednesday 2024-05-29 under the old cycle, and so did the first T+1 trades from Tuesday the 28th. Wednesday was therefore a "double settlement" day, with two days of trades settling together. Affirmation had been the industry's worry: only about 73% of transactions were affirmed by the DTC cutoff at end-January 2024.
+*A day on this desk retold from its own operations log. Wednesday 29 May 2024 happened, and Mags was here for it; Theo and Kaz were not, and they hear it on Wednesday 14 October 2026. The desk's internal counts are illustrative; DTCC's figures are approximate, from the DTCC/SIFMA/ICI after-action reporting of 2024.*
 
-*What happened.* On 2024-05-29, 94.55% of transactions were affirmed by the 9:00 p.m. ET DTC cutoff. The CNS fail rate was 1.90% on the first T+1 day, against a May 2024 T+2 average of 2.01%. NSCC's clearing fund fell by \$3.0bn (23%) on a three-month average basis *(all approx.; DTCC/SIFMA/ICI after-action reporting, 2024)*. Nothing broke, and the most interesting number on the day was a rise of more than 20 points in affirmation rates in four months, achieved because there was a date. Theo recognized the mechanism at once: nothing gets a borrower's reporting package delivered on time like a covenant with a hard test date.
+Theo found the log by accident, looking for something else: a shared folder called *T1 cutover*, last modified in June 2024, with a checklist, a spreadsheet of trade counts and a file named `wednesday.txt` that turned out to be a minute-by-minute diary kept by the desk's operations lead. He asked Mags about it, because Mags had been on the desk then and because she was the only person in the room who would admit to remembering an operations cutover with affection.
 
-*How a systematic desk would have handled it.* Flag `t_plus_1` from 2024-05-28 (Table 22.1) and shift every settlement-date field in the training data; a carry or accrual calculation that uses a settlement offset of two days after that date is off by one day of accrual on every trade. Expect lower clearing-fund calls for broker-dealer affiliates and slightly higher fail *probabilities* for hard-to-borrow shorts. And, most usefully, treat the double-settlement day as a known liquidity-supply shock in the event-study calendar (§22.8), not as noise.
+"The Wednesday," she said. "Double settlement." Monday 27 May 2024 was Memorial Day. Trades done on Friday the 24th still settled T+2 under the old cycle, which put them on Wednesday the 29th. Trades done on Tuesday the 28th, the first day of T+1, settled one business day later, which was also Wednesday the 29th. Two days of trades, one settlement day. "Everybody's nightmare was the affirmations. In January only about 73% of trades got affirmed by DTC's cutoff. Affirmation is the buyer and seller both saying yes, that's the trade, before it settles. Under T+2 you had a day of slack to chase the stragglers. Under T+1 you had the evening."
+
+The diary agreed with her. The operations team was in at six. By noon the desk had two days' worth of trades in the settlement queue, about 1.8 times a normal Wednesday's count *(illustrative)*, and a single unaffirmed client allocation from Friday that sat at the top of the exceptions list until 4:15 p.m., when the client's back office, which had also been in at six, sent the confirmation with an apology that the diary records in full. "Back in my day," Mags said, "which in this case is September 2017, when we went from T+3 to T+2, the exceptions list had forty lines on it by lunch and we finished at eleven at night. This was better. It was boring. Boring is what an operations cutover is for."
+
+What happened, market-wide, is in DTCC's numbers. On 29 May 2024, 94.55% of transactions were affirmed by the 9:00 p.m. ET DTC cutoff, a rise of more than twenty points in four months. The continuous net settlement fail rate was 1.90% on the first T+1 day, against a May 2024 T+2 average of 2.01%. Nothing broke.
+
+Theo read the affirmation number twice. "Twenty points in four months," he said. "Because there was a date." He had seen the mechanism at PJT more times than he could count: nothing gets a borrower's reporting package delivered on time like a covenant with a hard test date. Nobody had made the back offices of the buy side faster by asking nicely for seven years. A Tuesday in May did it.
+
+Kaz cared about a different line in the after-action report, the one about margin, and went quiet in the way that means they are checking something they would rather not be wrong about. Equation (22.8) had been on the whiteboard since the morning: if clearing margin covers the settlement window plus the close-out, and risk grows like the square root of the window, then going from two days to one should cut the volatility part of the margin to between 0.707 and 0.816 of its old size, depending on whether liquidation takes no time or a day. According to the DTCC/SIFMA/ICI after-action reporting, NSCC's clearing fund fell from \$12.8bn under T+2 to \$9.1bn in an early snapshot (−29%) and to \$9.8bn on a three-month average basis (−23%) *(approx.; DTCC, 2024)*. That is a fall of \$3.0bn, or 23%, on the average.
+
+"Twenty-nine percent is the bottom of the bracket," Kaz said, "and twenty-three is close to the middle." They exhaled. "A one-line derivation, a published number, and an honest fit, not a cherry-pick. The empirical ratio is in the range the theory allows. It would have been embarrassing if it weren't." The more durable number, the three-month average, is the one near the middle. Kaz's reading was that the early snapshot had caught a quiet week, and that by the average the add-ons that do not scale with $\sqrt{H}$ had settled back in; the after-action report does not say.
+
+Then Kaz did the boring thing, which was the useful thing. They searched the desk's carry code for the settlement offset and found it, hard-coded as `2`, in a function last touched in 2023 *(illustrative)*. Every accrual on every trade after 28 May 2024 had been computed with a settlement date one business day late, which on a 5% bond is about 1.4 cents per hundred of accrued interest, per trade, all of it in the same direction. "One day of accrual," Kaz said. "On every trade since the switch. That's not a bug, that's a regime."
+
+"It's both," Ines said, from the next desk. "Put it in the table." The `t_plus_1` row went into the regime table with 2024-05-28 as its date (Table 22.1), and every settlement-date field in the training data shifted with it. Ines added two expectations of her own, both of which the data had borne out: lower clearing-fund calls for broker-dealer affiliates, and slightly higher fail *probabilities* for hard-to-borrow shorts, because a shorter cycle leaves less time to find the bond. And she made Kaz put the double-settlement Wednesday itself into the event-study calendar of §22.8 as a known liquidity-supply shock, a day when two days of settlements competed for the same cash and the same operations staff, so that no future model would find it in the residuals and call it noise.
+
+*Money Stuff*'s podcast led with the switch three days later ("T+Lunchtime," 31 May 2024, in the Resource Graph), which is about the level of excitement the day deserved, and is the highest compliment an operations team ever receives.
 
 ### Specification for AI Implementation (settlement clock)
 
@@ -425,7 +525,9 @@ $$
 \phi(N) = \frac{\mathbb{E}\,\big|\sum_{j\ne i} x_{ij}\big|}{\mathbb{E}\,\sum_{j\ne i} |x_{ij}|}.
 $$
 
-*No direction ($m = 0$).* The sum of $N-1$ independent $N(0, \sigma_x^2)$ is $N(0, (N-1)\sigma_x^2)$, and $\mathbb{E}|Z| = \sqrt{2/\pi}$ for a standard normal, so
+> **Math, Gently.** *Netting, in two parts.* **Part 1: why netting shrinks like one over a square root.** Picture a dealer that has done one trade with each of its counterparties, and each trade leaves it owed or owing a random amount, as likely to be one as the other. Bilaterally it must hold capital and collateral against every one of those amounts, the gross. Put a central counterparty in the middle and only the sum is left, and the sum cancels the way the drunk's steps did in §22.3.1: the gross grows with the number of counterparties, the sum only with its square root. Tiny number: with four counterparties the netted exposure is about half the gross ($1/\sqrt4$); with twenty-four it is about a fifth. **Part 2: why it stops.** Cancelling needs both signs. Four counterparties owing +2, −1, +1 and −2 have a gross of 6 and a net of zero; four owing +2, +1, +1 and 0 have a gross of 4 and a net of 4, and clearing them saves nothing. A real market sits between the two pictures, and the more one way it leans, the higher the floor under the netting factor. The closed forms come next, and their derivation closes the subsection.
+
+Under the normal model both parts of the box have closed forms. With no common direction ($m = 0$), the netted exposure grows with $\sqrt{N-1}$ and the gross with $N-1$:
 
 $$
 \phi(N) = \frac{\sqrt{N-1}\,\sigma_x\sqrt{2/\pi}}{(N-1)\,\sigma_x\sqrt{2/\pi}} = \frac{1}{\sqrt{N-1}}, \qquad \phi(25) = 0.204 .
@@ -434,7 +536,7 @@ $$
 
 With 25 symmetric counterparties, clearing shrinks the exposure to a fifth of its gross.
 
-*With direction ($m \ne 0$).* The numerator is now $\mathbb{E}|(N-1)m + \sqrt{N-1}\,\sigma_x Z| \approx (N-1)|m|$ for large $N$, while the denominator is $(N-1)\,\mathbb{E}|m + \sigma_x Z|$. The netting factor converges to a floor:
+With a common direction ($m \ne 0$), the net grows like $(N-1)|m|$ and the gross like $(N-1)$ times the average size of one exposure, so the netting factor converges to a floor:
 
 $$
 \phi(N) \xrightarrow[N\to\infty]{} \phi_\infty = \frac{|m|}{\mathbb{E}|m + \sigma_x Z|},
@@ -458,9 +560,31 @@ $$
 
 The left side shrinks as the market turns directional; the right side grows, because IM is procyclical. Clearing converts counterparty risk into liquidity risk, and buys back balance sheet with netting, at a price that is lowest in calm markets and highest in stress. *Error-prone spots:* done-with and done-away trades may land in different netting sets; cross-margining between FICC and CME changes IM, not $\phi$; and sponsored repo already nets at the sponsor, which is why DTCC says it clears "nearly half" of the repo the mandate covers, and why the marginal gain from the mandate is smaller than the gross numbers suggest.
 
+#### The Full Derivation: the netting factor with a common direction
+
+*No direction.* The sum of $N-1$ independent $N(0, \sigma_x^2)$ is $N(0, (N-1)\sigma_x^2)$, and $\mathbb{E}|Z| = \sqrt{2/\pi}$ for a standard normal, so the numerator of $\phi$ is $\sqrt{N-1}\,\sigma_x\sqrt{2/\pi}$ and the denominator is $N-1$ copies of $\sigma_x\sqrt{2/\pi}$, which is (22.10).
+
+*With direction.* The numerator is now $\mathbb{E}|(N-1)m + \sqrt{N-1}\,\sigma_x Z|$. Divide by $N-1$: the term $\sigma_x Z/\sqrt{N-1}$ vanishes as $N$ grows, so the numerator is $\approx (N-1)|m|$ for large $N$, while the denominator is exactly $(N-1)\,\mathbb{E}|m + \sigma_x Z|$. Their ratio is the floor in (22.11). The closed form for the denominator is the mean of a folded normal. Write $a = m/\sigma_x$, $\varphi$ for the standard normal density and $\Phi$ for its distribution function. Split the expectation where $m + \sigma_x Z$ changes sign, at $Z = -a$:
+
+$$
+\mathbb{E}|m + \sigma_x Z| = \mathbb{E}\big[(m + \sigma_x Z)\mathbf{1}\{Z > -a\}\big] - \mathbb{E}\big[(m + \sigma_x Z)\mathbf{1}\{Z < -a\}\big].
+$$
+
+Using $\mathbb{E}[Z\,\mathbf{1}\{Z > -a\}] = \varphi(a)$ and $\mathbb{E}[Z\,\mathbf{1}\{Z < -a\}] = -\varphi(a)$, the two pieces are $m\Phi(a) + \sigma_x\varphi(a)$ and $m\Phi(-a) - \sigma_x\varphi(a)$, so
+
+$$
+\mathbb{E}|m + \sigma_x Z| = m\big(2\Phi(a) - 1\big) + 2\sigma_x\varphi(a) = m\,\operatorname{erf}\!\Big(\frac{m}{\sigma_x\sqrt 2}\Big) + \sigma_x\sqrt{\tfrac{2}{\pi}}\,e^{-m^2/2\sigma_x^2},
+$$
+
+which is the second half of (22.11). At $m = \sigma_x$ it equals $\sigma_x(0.484 + 0.683) = 1.167\,\sigma_x$, and $\phi_\infty = 1/1.167 = 0.857$.
+
 ### 22.4.2 Derivation: dealer capacity as a convex state variable
 
-Duffie, Fleming, Keane, Nelson, Shachar and Van Tassel (2023), *Dealer Capacity and U.S. Treasury Market Functionality* (NY Fed Staff Report 1070), measure dealer balance-sheet utilization $U_t \in [0,1]$ from weekly FR 2004 dealer-level positions (risk-adjusted gross fixed-income positions relative to a sample-record scale). They find that yield volatility explains most of the time variation in Treasury illiquidity, but that when utilization is high, "liquidity is much worse than predicted by yield volatility alone." A stylized hinge captures the shape *(our representation, not the paper's specification)*:
+Duffie, Fleming, Keane, Nelson, Shachar and Van Tassel (2023), *Dealer Capacity and U.S. Treasury Market Functionality* (NY Fed Staff Report 1070), measure dealer balance-sheet utilization $U_t \in [0,1]$ from weekly FR 2004 dealer-level positions (risk-adjusted gross fixed-income positions relative to a sample-record scale). They find that yield volatility explains most of the time variation in Treasury illiquidity, but that when utilization is high, "liquidity is much worse than predicted by yield volatility alone." A stylized hinge, the hockey stick of the box below, captures the shape *(our representation, not the paper's specification)*:
+
+> **Math, Gently.** *A hockey stick.* An ordinary regression draws one straight line through a cloud of points: every extra unit of $x$ adds the same amount of $y$. Some relationships refuse to behave that way. A motorway's travel time barely changes as traffic grows from light to moderate, then climbs once the road nears capacity. Drawn, it is a hockey stick: a flat blade, a rising handle, and a bend at a threshold. A *hinge* writes that shape with one extra term, $(x - x^\ast)^+$, which is zero below the threshold $x^\ast$ and grows one for one above it, so its coefficient is the slope of the handle. Each piece is straight; the bend is what makes the whole curve convex. Tiny number: put the bend at 50% full and let the handle rise by 2 units per 10 points. At 40% the hinge adds nothing, at 60% it adds 2, at 90% it adds 8. One straight line fitted through the 40% and 90% points would say 1.6 units per 10 points everywhere, and be wrong at both ends: too pessimistic in the calm, too optimistic at the edge. Next, dealer balance sheets take the motorway's place.
+
+In symbols, with utilization $U_t$ as the traffic and volatility as the weather:
 
 $$
 \text{Illiq}_t = a + b\,\sigma^{y}_t + c\,\big(U_t - U^\ast\big)^+ + \epsilon_t .

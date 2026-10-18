@@ -336,7 +336,17 @@ The carry term in the bracket decays like $1/s_t$, so mean-variance carry *also*
 
 ### 10.4.2 Why you cannot estimate your way out of the argument
 
-Estimate the model by regressing $\Delta s_{t+1}$ on a constant, $s_t$, and $\Delta s_t$. Then $\hat\kappa = -\hat b_{s}$, $\hat\phi = \hat b_{\Delta s}$, and $\hat{\bar s} = \hat a/\hat\kappa$. Now count the data. Twenty-five years of monthly OAS is 300 observations of a persistent series. The least-squares estimate of $\kappa$ is biased upward in small samples (the Kendall–Stambaugh bias of persistent regressors), and its standard error is of the same order as the coefficient. The estimate of $\phi$ is better behaved but swings by regime. The honest output is a *confidence region* for $(\kappa, \phi)$, not a point, and the honest strategy is a blend whose weights do not move much as you move around that region. Section 10.10's code estimates both on an expanding window, so the backtest never uses a coefficient it could not have known.
+Estimating the model looks like one line of work. Regress $\Delta s_{t+1}$ on a constant, $s_t$ and $\Delta s_t$; then $\hat\kappa = -\hat b_{s}$, $\hat\phi = \hat b_{\Delta s}$, and $\hat{\bar s} = \hat a/\hat\kappa$. Twenty-five years of monthly OAS gives 300 observations, which sounds like plenty until you remember what kind of series it is.
+
+> **Math, Gently.** *Why a short film overstates a slow spring.* Try to measure how hard a door closer pulls from a twenty-second video of a door that takes a minute to shut. The door has barely moved, and whatever drift it showed in those twenty seconds gets read as the spring: slow springs filmed briefly look stronger than they are. A regression on a persistent series has the same problem, and Kendall worked out its size in 1954. If a series' level carries over from month to month with persistence $\rho$, the least-squares estimate of $\rho$ from $T$ observations comes out too low by roughly $(1+3\rho)/T$, so the estimated pull $\hat\kappa = 1-\hat\rho$ comes out too high by about the same amount. Put in numbers: a monthly spread with a true $\kappa = 0.03$ has $\rho = 0.97$, and 300 months give a bias of about $(1 + 2.91)/300 \approx 0.013$. The estimate centres near 0.043 when the truth is 0.03, and its standard error, roughly $\sqrt{(1-\rho^2)/T} \approx 0.014$, is as large as the bias. (Stambaugh later showed the same bias leaks into any coefficient whose regressor is persistent, which is why the desk says "Kendall–Stambaugh".) Twenty-five years of data, and the spring is still a guess.
+
+*The model review is fictional; the coefficients are the desk's fictional run.* Kaz presented the fit at the Monday model review on 12 October, Theo's third Monday, with the confidence of someone whose regression had converged: $\hat\kappa = 0.041$, $\hat\phi = 0.22$, both "significant." Theo raised his hand, which nobody at the review did, and asked for the range. At PJT nobody had ever given a fairness committee a point estimate of enterprise value. They gave a range, and the range was the opinion.
+
+"The standard error on kappa is 0.014," Kaz said, and then, because Kaz is honest, "and the estimate is biased up by about the same amount. Phi is better behaved. It also moves by regime: it was higher in the 2008 window and lower in the 2010s."
+
+"So the true kappa is somewhere between nearly nothing and twice what's on the slide," Ines said.
+
+That was the review's conclusion, and it became the desk's rule for the blend. The honest output is a *confidence region* for $(\kappa, \phi)$, not a point, and the honest strategy is a blend whose weights do not move much as you walk around that region. Kaz reran the weights at the region's corners that afternoon: the trend weight barely moved, and the value weight moved by a factor of three, so the value sleeve got the smaller allocation. Section 10.10's code estimates both coefficients on an expanding window, so the backtest never uses a coefficient it could not have known.
 
 > **[SOURCE EXTRACTION]** *Nuveen_Multi_Asset_Credit_Quant_Framework p.4:* "Typically, the process begins with the assumption that spreads tend to mean revert over time, usually fluctuating within a historical range rather than continually widening or tightening."
 >
@@ -360,11 +370,19 @@ Ines summarized it in her own language. "Carry is the blinds. You collect them e
 
 The lead–lag literature points one way with a few well-defined exceptions. Hilscher, Pollet, and Wilson (2015), *Are Credit Default Swaps a Sideshow?*, find that equity returns lead CDS spread changes at daily and weekly horizons and not the reverse, although CDS reacts faster on salient news days. Norden and Weber (2009) find stocks leading both CDS and bond spreads over 2000–2002, with CDS leading bonds, more strongly for lower-rated and US firms. The exceptions matter for the single-name chapters. Acharya and Johnson (2007) find incremental information in CDS for bad news, rising with the number of bank relationships (the insider-trading channel), and Lee, Naranjo, and Velioglu (2018) find a one-way flow from CDS to bonds around rating events, strongest for private firms. At the index level the conclusion is simple: equities move first, then CDX, then cash. That ordering is the basis for using equity trend to trade credit.
 
-Momentum in cash bonds themselves is a weaker and more contested object. Jostova, Nikolova, Philipov, and Stahel (2013) report a momentum spread of 59 bp a month across all bonds over 1991–2011, 192 bp a month in non-investment-grade bonds, and almost nothing in IG, where Gebhardt, Hvidkjaer, and Swaminathan (2005) find reversal rather than continuation. Then came the audits. Dickerson, Robotti, and Rossetti (2026), *The Corporate Bond Factor Replication Crisis*, re-run the 6-month momentum factor on TRACE for August 2002–December 2024 and find that its 0.30% monthly premium is "entirely attributable to asymmetric ex-post winsorization": the base premium is 0.00%, and the 12-month version is −0.13% a month. Chapter 7 covers how a filter can manufacture a factor. Here the lesson is narrower: **trend in credit should be traded in instruments whose returns you can trust (indices, CDS) and signaled from markets that price information first (equity).** Bond-price momentum in the cross-section is the least trustworthy of the three.
+Momentum in cash bonds themselves is a weaker and more contested object. Jostova, Nikolova, Philipov, and Stahel (2013) report a momentum spread of 59 bp a month across all bonds over 1991–2011, 192 bp a month in non-investment-grade bonds, and almost nothing in IG, where Gebhardt, Hvidkjaer, and Swaminathan (2005) find reversal rather than continuation. Then came the audits. Dickerson, Robotti, and Rossetti (2026), *The Corporate Bond Factor Replication Crisis*, re-run the 6-month momentum factor on TRACE for August 2002–December 2024 and find that its 0.30% monthly premium is "entirely attributable to asymmetric ex-post winsorization": the base premium is 0.00%, and the 12-month version is −0.13% a month. Chapter 7 covers how a filter can manufacture a factor. The lesson this desk took from the audits is narrower. It trades credit trend in instruments whose returns it can trust (indices, CDS), and it takes the signal from the market that prices information first (equity). Bond-price momentum in the cross-section is the least trustworthy of the three.
 
 ### 10.5.2 Equity Momentum in Credit, from the shelf
 
-The most complete practitioner implementation is the Barclays QPS "Equity Momentum in Credit" (EMC) signal in Dynkin and coauthors' *Systematic Investing in Credit*. Bonds of index constituents are sorted monthly by their issuer's trailing equity return. Over December 1992 to May 2017 the quintile long-short earns 6.34% a year with an information ratio of 1.56 in US IG, positive in both halves of the sample, and the effect is far stronger in high yield (about 15.9% a year before costs, Dynkin_Systematic_Investing_in_Credit pp.608–609). Sector elasticity is clean: each additional 1% a month of equity momentum adds "an extra 5 to 8bp of bond excess returns" (Dynkin_Systematic_Investing_in_Credit p.644). The construction uses several horizons at once, for the reason §10.2.2 gave. The signal is built to confirm itself: "combining momentum signals at different horizons helps to validate (confirm) trends in stock prices" (Dynkin_Systematic_Investing_in_Credit p.607). In our notation, with equity total returns $r^{\text{eq}}$,
+*The desk is fictional; the numbers are the shelf's.* Kaz brought the equity idea to Ines on the Wednesday, the day before the fast sleeve flipped, with the most complete practitioner implementation open on the desk and a pink tab on the page: the Barclays QPS "Equity Momentum in Credit" (EMC) signal in Dynkin and coauthors' *Systematic Investing in Credit*.
+
+"They sort every bond in the index by its issuer's trailing stock return, every month," Kaz said. "December 1992 to May 2017. The top-minus-bottom quintile earns 6.34% a year in US IG with an information ratio of 1.56, positive in both halves of the sample, and in high yield it's about 15.9% a year before—" (Dynkin_Systematic_Investing_in_Credit pp.608–609)
+
+"Before costs," Ines said. "How long does an issuer stay in the top bucket?"
+
+Kaz had been about to get to that. A stock's momentum rank is a mood, and a portfolio that holds only the top of it spends its life trading cash bonds at cash-bond bid–offer; the page Kaz turned to next put a number on how short the mood is, and it is the extraction below. Kaz fought back with the cleanest result on the page, which is that the effect is smooth at sector level: each additional 1% a month of equity momentum adds "an extra 5 to 8bp of bond excess returns" (Dynkin_Systematic_Investing_in_Credit p.644). "Then that's where we trade it," Ines said, and the argument was over before anyone had said "turnover" out loud.
+
+The construction uses several horizons at once, for the reason §10.2.2 gave. The signal is built to confirm itself: "combining momentum signals at different horizons helps to validate (confirm) trends in stock prices" (Dynkin_Systematic_Investing_in_Credit p.607). In our notation, with equity total returns $r^{\text{eq}}$,
 
 $$
 \text{EMC}_{i,t} = \frac{1}{3}\sum_{h\in\{1,3,6\}} \frac{M^{\text{eq},(h)}_{i,t}}{\sqrt{h}},
@@ -376,7 +394,13 @@ where dividing by $\sqrt h$ is our default way to put the horizons on a common v
 >
 > **Annotation.** An equity momentum signal has the half-life of an ad hoc group: by the time counsel is retained, the top decile has left the building. The sentence continues with the complement, an 83% chance of leaving the top decile within three months. For a trend desk this is a cost statement before it is a signal statement. A cross-sectional EMC portfolio that holds only the top decile turns over constantly; the same book reports top-decile long-only turnover of about 73% a month and returns that turn negative after transaction costs (Dynkin_Systematic_Investing_in_Credit p.692). The modern desk uses three responses. It applies the signal at index or sector level, where turnover is cheap and sector timing earned 2.38% a year in US IG, 4.04% in US HY, and 1.77% in Euro IG over 2007–2017 before costs (p.647). It uses buffered entry and exit thresholds, buying at the 80th percentile and selling below the 50th instead of trading every rank change. And it treats a single-name EMC signal as a *veto or tilt* on a position held for other reasons, not as a reason to trade on its own.
 
+Barclays is a dealer's research group writing about a signal. Two systematic managers have said in public what the same evidence looks like from the seat that has to own the bonds.
+
+> **View From Another Seat.** *The systematic manager.* Man Group's 2022 paper on quantitative credit surveys what happens when equity factors are carried across to corporate bonds: they "generate positive alphas and Sharpe ratios higher than those of the corporate bond indices, but the only spill-over to achieve meaningful statistical significance is equity Momentum, which generates a higher alpha than corporate bond Momentum itself" (Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.31, citing Houweling and coauthors; it attributes the effect, after Bektić and coauthors (2016), to fundamentals showing up "more swiftly in equities than in bonds"). Read from a long-only manager's chair, that is a reason to take the momentum signal from the stock and leave the bond's own price history alone. Robeco's researchers went a step further in a note of 17 August 2012 on Haesen and Houweling's work: a plain equity-momentum sort quietly carries time-varying equity and bond-market exposure, and stripping it down to the firm-specific, *residual* part of the stock's return cut the strategy's volatility "with about 50%" and raised its Sharpe ratio. For a manager who has to hold the bonds rather than trade an index, the residual is the version worth owning, which is also where §10.5.4 ends up.
+
 ### 10.5.3 The lead–lag regression, and the stale-mark artifact
+
+> **Math, Gently.** *A lead–lag regression, and a clock that is wound every other week.* A lead–lag regression asks one question of two time series: does knowing what A did today help predict what B does tomorrow, once you already know what B did today? If it does, A "leads" B, which econometricians call Granger causality, a name that promises more than it delivers, since it is about forecasting and not about cause. Now picture a wall clock that someone resets to the right time only every other week. Set it beside your phone and the clock "follows" the phone with a lag: whenever the phone has moved on and the clock has not, the next reset makes the clock jump the way the phone already went. A regression would say the phone leads the clock, though nothing causes anything; the clock is merely stale. A bond mark that updates only when the bond prints is that clock, and the stock price is the phone. The size of the fake lead turns out to be $p(1-p)\beta^{\text{ce}}$, where $p$ is the chance the bond prints in a period and $\beta^{\text{ce}}$ is how much the bond truly moves with the stock on the same day. With $\beta^{\text{ce}} = 0.3$, a bond that prints half the time shows a fake lead of $0.5 \times 0.5 \times 0.3 = 0.075$, and one that prints 90% of the time shows $0.9 \times 0.1 \times 0.3 = 0.027$. The four lines that produce the formula are below.
 
 The test is a two-equation VAR with Granger restrictions:
 
@@ -384,7 +408,7 @@ $$
 r^{\text{cr}}_{t+1} = \pi_0 + \pi_{\text{eq}}\, r^{\text{eq}}_{t} + \pi_{\text{cr}}\, r^{\text{cr}}_{t} + \varepsilon_{t+1},
 $$
 
-and "equity Granger-causes credit" means rejecting $\pi_{\text{eq}} = 0$. Before you celebrate a rejection, derive what staleness alone produces.
+and "equity Granger-causes credit" means rejecting $\pi_{\text{eq}} = 0$. Before anyone celebrates a rejection, it is worth deriving what staleness alone produces.
 
 Let the true credit price respond to equity only contemporaneously, $\Delta P_t = \beta^{\text{ce}} r^{\text{eq}}_t + e_t$, with no true lead. The observed mark $m_t$ updates to the true price only when the bond prints, which happens each period with probability $p$, independently. Write $U_t \in \{0,1\}$ for "printed at $t$." Then
 
@@ -401,6 +425,8 @@ $$
 $$
 
 Equity "leads" the bond mark with a coefficient of about $p(1-p)\beta^{\text{ce}}$ even though nothing leads anything. The artifact disappears at $p=1$ (always fresh) and at $p=0$ (never prints, no returns at all), and it peaks at $p = \tfrac12$: a bond that prints every other week. That is not an unusual bond. Section 10.10 simulates exactly this case and asserts that the fake lead is statistically significant on the marks and absent on the true prices.
+
+*The desk is fictional.* Kaz's first run of the regression, on evaluated marks for the HY index's constituents, came back with a lead coefficient they were proud of and a t-statistic they were prouder of. Theo looked at it, then at the column of monthly print counts beside it, and sorted by the second column. The largest "leads" sat on the bonds that printed least. "Your lead is the bond's print schedule," he said. Kaz looked at the sorted column for a long moment and said, "Then we measure it where the clock is always wound." 
 
 Dynkin's team runs the right defenses, testing the signal with one- to three-day lags and conditioning on measures of how efficiently each bond trades (Dynkin_Systematic_Investing_in_Credit pp.621, 630). At index level the artifact is much smaller, because CDX prints hundreds of times a day. That is one more reason the cross-asset trend sleeve uses equity signals to trade *indices*.
 
@@ -423,6 +449,14 @@ Pitkäjärvi, Suominen, and Vaittinen (2020), *Cross-asset signals and time seri
 Mags has heard the phrase "crisis alpha" from every trend manager who ever visited the desk. "They say it the way bankers say 'synergies.' It's real about a third of the time, and they'd like to be paid for all of it." The useful question is *which* crises, and the answer comes from the shape of the payoff.
 
 ### 10.6.1 Trend is a straddle, and the smile is the receipt for momentum
+
+> **Math, Gently.** *Part one: a bell, and a tilted cloud.* Take every daily excess return CDX HY has posted and stack them in a histogram, one bar for each tenth of a percent. You get a bell: most days near zero, fewer days further out, close enough to symmetric to fool you. That bell is what a *normal distribution* describes, and it needs only two numbers, a centre and a width (the standard deviation). Look at the edges, though. The real histogram has more days far out on the left than the bell allows, which is what "fat-tailed" means and why Chapter 5 spends a chapter on it. Now draw a different picture. For each month, put the trailing twelve-month return (the signal) on the horizontal axis and the next month's return on the vertical. If both are normal and related, the dots form a cloud shaped like an ellipse, and "jointly normal with correlation $\rho$" is a description of that ellipse: at $\rho = 0$ it is a round blob, and as $\rho$ rises it tilts and narrows along the diagonal. Momentum is a tilt.
+>
+> *Part two: what the tilt buys.* Fix next month's move and ask how often the signal was on the right side of it. For a move of one standard deviation with $\rho = 0.25$, the signal points the right way with probability $\Phi(0.258) \approx 0.60$ and the wrong way with probability 0.40, where $\Phi$ is the area under the bell to the left of a point. On average the strategy keeps $0.60 - 0.40 = 2\Phi(0.258) - 1 \approx 0.20$ of the move, about a fifth. For a three-standard-deviation move the same tilt gives $2\Phi(0.77) - 1 \approx 0.56$, more than half, because big moves are where a tilt shows. At $\rho = 0$ the signal is a coin and the strategy keeps nothing of any move. A growing share of a growing move is a smile.
+
+That smile has a closed form, which comes from conditioning the tilted cloud on the move; the full derivation is next.
+
+#### The Full Derivation: the smile
 
 Take the sign strategy on one instrument, $r^{\text{TF}}_{t+1} = \operatorname{sign}(M_t)\, r_{t+1}$, and suppose $(M_t, r_{t+1})$ are jointly Gaussian with zero means and correlation $\rho$, so $\rho>0$ means momentum. Condition on the next-period market return:
 
@@ -447,19 +481,25 @@ a parabola. For large moves, $2\Phi(\cdot)-1 \to \operatorname{sign}(r_{t+1})$ a
 
 ![Figure 10.3: Every round of a sign strategy pays +|r| or −|r|, and momentum only tilts the odds toward the right call when the move is large, so the expected payoff is a smile whose depth grows with ρ and which vanishes at ρ = 0. Illustrative: the bivariate-normal model of §10.6.1, with the right panel showing 400 simulated rounds at ρ = 0.25 (fixed seed) against the closed form.](assets/figures/ch10_trend_smile.png)
 
+#### Testing for the smile
+
 The empirical test is the regression
 
 $$
 r^{\text{TF}}_{t} = b_0 + b_1\, r^{\text{HY}}_{t} + b_2\, \big(r^{\text{HY}}_{t}\big)^2 + u_t, \qquad b_2 > 0 \ \text{is the smile},
 $$
 
-with Newey–West standard errors. Run it at the horizon where $\rho$ lives: quarterly or semiannual non-overlapping returns for a 12-month signal. A daily fit finds nothing, because day-to-day the correlation between a 12-month trailing return and tomorrow's return is close to zero. Kaz ran it daily first and announced that trend was not convex. Ines asked him to run it on quarters. He did, and has not mentioned it since.
+with Newey–West standard errors. Run it at the horizon where $\rho$ lives: quarterly or semiannual non-overlapping returns for a 12-month signal. A daily fit finds nothing, because day-to-day the correlation between a 12-month trailing return and tomorrow's return is close to zero. Kaz ran it daily first and announced that trend was not convex. Ines asked them to run it on quarters. They did, and have not mentioned it since.
 
 **The credit twist.** Long credit is short a put on firm assets (Chapter 5's Merton model). The market return $r^{\text{HY}}$ has a positive drift (carry) and a fat left tail (defaults, gaps). A straddle on a negatively skewed asset earns most of its payoff on the left: the short-credit leg of trend is long that put, and it pays in the slow sell-offs where the put goes deep into the money over several months. The same asymmetry explains the losses. The rebound after a credit crash is a short-covering of that put, steep and fast, and a trend follower who is short is short the steepest part of the recovery. Daniel and Moskowitz (2016), *Momentum Crashes*, document the equity version: momentum crashes in panic states, after declines and at high volatility, when the losers rebound. Barroso and Santa-Clara (2015), *Momentum Has Its Moments*, show that managing momentum's own risk "virtually eliminates crashes and nearly doubles" its Sharpe ratio. In credit both effects show up most strongly in high yield, where the put is closest to the money.
 
 ### 10.6.2 Whipsaw arithmetic: why trend cannot trade a V
 
-The straddle needs the move to last long enough for the signal to notice. Make that precise with a stylized V. The credit excess-return index falls linearly by $d$ over $T/2$ months, then recovers linearly by $d$ over the next $T/2$. A trend follower reacts with effective lag $L < T/2$: it is long until $L$, short from $L$ to $T/2 + L$, and long again afterward. It enters long, as it would after a quiet tightening (February 2020 and February 2025 both qualify). Add up the four legs, with slope $d/(T/2)$ on each:
+The straddle needs the move to last long enough for the signal to notice.
+
+> **Math, Gently.** *The hiker in the valley.* Picture a hiker who cannot see the trail ahead and decides which way is downhill by looking back at the stretch she has just walked. Drop her at the lip of a valley, facing the wrong way. On the way down she spends a while walking the wrong way before she notices, then walks the rest of the slope the right way; at the bottom she overshoots by the same while before she notices the ground now rises, and then walks the rest of the climb the right way. Each slope costs her one lag of wrong-way walking and pays her whatever is left of the slope. If her lag is a quarter of the whole valley, half of each slope is wrong and half is right, and she breaks even. Put numbers on a credit V that lasts two months, one down and one up, against a signal that lags three weeks (0.75 of a month). On each slope she is wrong for 0.75 months and right for 0.25, so of the two months of available move she nets $(0.25 - 0.75) \times 2 = -1$ month's worth, a capture of $(2 - 4 \times 0.75)/2 = -50\%$. Same rule, same market, longer valley, and the sign flips; the equation below is the valley in symbols.
+
+Make that precise with a stylized V. The credit excess-return index falls linearly by $d$ over $T/2$ months, then recovers linearly by $d$ over the next $T/2$. A trend follower reacts with effective lag $L < T/2$: it is long until $L$, short from $L$ to $T/2 + L$, and long again afterward. It enters long, as it would after a quiet tightening (February 2020 and February 2025 both qualify). Add up the four legs, with slope $d/(T/2)$ on each:
 
 $$
 \text{P\&L} = \frac{d}{T/2}\Big[\underbrace{-L}_{\text{long, falling}} + \underbrace{(T/2 - L)}_{\text{short, falling}} \underbrace{-\,L}_{\text{short, rising}} + \underbrace{(T/2 - L)}_{\text{long, rising}}\Big]
@@ -482,33 +522,91 @@ Hurst, Ooi, and Pedersen (2017), *A Century of Evidence on Trend-Following Inves
 
 ## 10.7 Case Studies: 2008, 2020, 2022, and the April 2025 Coda
 
-All four episodes are told the same way: what trend did, what it should have been measured against, and what a 2026 systematic desk would have flagged. Spread levels before October 2023 come from secondary sources or Dynkin's tables, are marked approximate, and should be checked against the full ICE BofA history, which the §10.10 code reads from a local CSV. Figure 10.5 puts the four episodes on one axis and one time scale, using a public daily series that does reach back that far.
+The four episodes are told in two ways. The first and the last are scenes, because they are two of Mags's three futures and the desk learned them as hands. The middle two are short, because other chapters own their timelines; each says what trend did, what it ought to have been measured against, and what a 2026 systematic desk would have flagged. Spread levels before October 2023 come from secondary sources or Dynkin's tables and are marked approximate; the full ICE BofA history, which the §10.10 code reads from a local CSV, is the place to check them. Figure 10.5 puts the four episodes on one axis and one time scale, using a public daily series that does reach back that far.
 
 ![Figure 10.5: Four episodes, four shapes: a two-year ramp that a 12-month signal could follow (A), a two-month needle in 2020 (B), a grind to a July peak in 2022 (C) and a six-week gap in 2025 (D) that is shorter than even the 3-month lookback bar. Source: FRED BAA10Y (Moody's seasoned Baa yield less the 10-year Treasury), daily, used as a long-history proxy because ICE BofA history before October 2023 is no longer on FRED; SG Trend returns as cited in §10.7 (Cambridge Associates for 2008 and 2022, Hedgeweek for 2020, SG Prime Services for April 2025).](assets/figures/ch10_episodes_baa_spread.png)
 
 ### Case Study A: 2007–2009, the trend that paid and the rebound that charged
 
-*What trend did.* The SG Trend Index returned +20.9% in 2008 while MSCI ACWI fell 42.2% (Cambridge Associates, August 2025). Man's Robertson (2023) puts the BTOP50 at +17% from July 2007 to February 2009. Man AHL's Evolution programme got its credit exposure by selling protection on CDX and iTraxx, was short credit during 2008, and states that it had "no hard-wired long credit bias" (*The Hedge Fund Journal*, 2013). The equity-to-credit signal did what §10.5 predicts.
+#### The replay: July 2007 to June 2009
 
-> **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.617:* "While the corporate index has average returns of –8.07%/yr in drawdown episodes and 4.12%/yr in recovery times, the EMC strategy performed well in both regimes: 11.53%/yr in credit drawdowns and 4.30%/yr in recoveries."
->
-> **Annotation.** This is the strongest shelf evidence that an equity-signaled credit strategy is a crisis hedge rather than a crisis amplifier, and it explains why the systematic desk prefers to get its credit trend from the equity market. Two caveats keep it honest. First, these are averages over several down-cycles in IG, gross of costs, for a long-short issuer-selection strategy. They are not the return of a short-index trend sleeve, and they do not survive the top-decile turnover of §10.5.2 without buffering. Second, the recovery number (4.30% against 4.12%) is the interesting one: the strategy did not give back its drawdown gains in recoveries *on average*. The averages hide the specific turning point that hurts, 2009, when the losers rebounded fastest. The 2026 desk reads this page as a case for equity-signaled credit trend with residualized beta (§10.5.4), not as a promise that every recovery is free.
+*A replay, Ines's ritual: the desk cuts a real episode off at a date and trades it blind. The cast, their cards and the sleeve's positions are fictional (the desk's fictional run on the historical tape); every market number is sourced where it appears.*
 
-*The venue.* Trend in CDX was a very different trade from trend in cash. Dynkin's tables put the 2008 average CDX HY spread at 788 bp against 899 bp for the HY cash index, and 950 bp against 991 bp in 2009 (Dynkin_Systematic_Investing_in_Credit pp.215–216). The cash–CDS basis went deeply negative, then "reverted back toward zero as the crisis abated" (Ben_Dor_Quantitative_Credit_Portfolio_Management p.390).
+Ines did not wait for Friday. At twenty past five on that Thursday, with the sticky note still on Kaz's monitor and Theo's index card still blank, she wheeled the spare screen to the end of the row and opened a folder called `2007`. Replays usually happen on Friday afternoons, when the market is closed enough to ignore. This one was happening because Mags had said "the summer of 2007" an hour earlier, and Ines wanted Theo to know what that future felt like from the inside, one cut at a time.
+
+"Four cuts," she said. "At each one you see everything up to that date and nothing after it. You tell me what the trend book holds, how much, and why. Kaz runs the sleeve. Mags plays herself. Theo plays the new guy, which requires no preparation."
+
+**Cut one: Friday, 10 August 2007.** The screen stopped on the day after a large French bank froze three of its funds because it could no longer put a value on what was in them. High yield had been widening since June. Kaz read the sleeve: the fast signal had turned short in the last days of July, and the slow one, the twelve-month return, was still long.
+
+"Being paid to sit through it," Theo said, before he could stop himself.
+
+"Same arithmetic as this afternoon," Kaz said. "Different year."
+
+Mags had not looked at the screen. "This is when Sal stopped picking up the phone," she said. "Not all at once. First he was in a meeting. Then the meeting ran long. By the end of the month you could buy index protection from anybody with a pulse, and you could not sell a single bond to Sal. The index told you the truth every day. The bonds told you the truth in November." She wrote her card in four words, *sell what still trades*, and slid it across.
+
+Theo's card said to keep the fast short and keep it small, because the slow sleeve disagreed and he did not know which sleeve was the summer and which was the year. Kaz's card said "per spec," which is what Kaz's cards always say.
+
+**Cut two: Thursday, 4 December 2008.** Ines skipped sixteen months, and the room felt them go. Both signals had been short CDX HY since late 2007, and the equity-to-credit sleeve had got there first, which is what §10.5 says it should do. Nobody at the table knew that this Thursday would turn out to be the widest close of the whole episode on the long-history proxy the desk uses for it: Moody's Baa bonds at 6.16% over the ten-year Treasury (FRED, `BAA10Y`).
+
+Kaz put the sleeve's notional on the screen, and Theo frowned at it. The short had been getting smaller for a year. "We were right the whole way," he said, "and the model kept buying back the short?"
+
+"We were right the whole way and the risk kept rising," Kaz said. "Same budget, more volatility per unit, fewer units." High yield had gone from about 600 bp to about 1,800 bp *(approx.)*, and under the proportional law of §10.3 a constant-risk position at three times the spread holds a third of the notional. The forced-seller mechanics that make a long credit book sell after a widening also make a short one cover after a widening. Vol scaling has no opinion about which side of the trade is winning.
+
+"So which short is it?" Ines asked. "The one in the index or the one in the bonds?"
+
+That was Mags's question too, and she answered it with numbers she had not had in 2008. Dynkin's tables would later put the average CDX HY spread for 2008 at 788 bp against 899 bp for the cash HY index, and 950 bp against 991 bp for 2009 (Dynkin_Systematic_Investing_in_Credit pp.215–216). The cash–CDS basis had gone deeply negative and would, in Ben Dor's phrase, revert "back toward zero as the crisis abated" (Ben_Dor_Quantitative_Credit_Portfolio_Management p.390). Two pages earlier Ben Dor's group gives the reason in a single sentence.
 
 > **[SOURCE EXTRACTION]** *Ben_Dor_Quantitative_Credit_Portfolio_Management p.388:* "However, during the crisis, spreads of cash bonds widened by much more than CDS due to liquidity effects."
 >
 > **Annotation.** For a trend follower this sentence decides which instrument to trade. A cash-bond trend sleeve in 2008 got short late, because its marks were stale, and then covered into a market where the bid had vanished, so it paid the liquidity widening twice, once in the mark and once in the exit. An index sleeve was short the cleaner instrument, and its liquidity improved relative to cash as the crisis deepened. The modern lesson generalizes: in credit, the trend signal and the trend vehicle should be chosen separately. You can signal from cash excess returns, equity, or both, but you execute in the instrument whose liquidity survives the move you are betting on. The basis is also its own signal. A cash–CDS basis that is very negative and starting to close is a $\kappa$-flag for §10.4: the forced selling is ending, and the trend sleeve's short is about to meet the patient buyers of §10.3.2.
 
-*The rebound.* Then came 2009. AlphaSimplex dates a "GFC Recovery" drawdown in the SG Trend Index of −11.3% starting 9 March 2009, the day of the equity market low.
+Ines let that sit and then told them what the real trend followers had done with this tape, from the public record rather than from anyone's memory. Man AHL's Evolution programme, in its own account, took its credit exposure by selling protection on CDX and iTraxx, was short credit during 2008, and had "no hard-wired long credit bias" (*The Hedge Fund Journal*, 2013), so it could flip to buying protection when its signals said so. The SG Trend Index returned +20.9% in 2008 while MSCI ACWI fell 42.2% (Cambridge Associates, August 2025), and Man's Robertson (2023) puts the BTOP50 at +17% from July 2007 to February 2009. Trend, measured the way its managers measure it, had the year of its life.
+
+Everyone's card at cut two said hold. Mags's added a line: *start a list of what you'd buy, and from whom.*
+
+#### The card: Monday, 9 March 2009
+
+**Cut three.** The screen stopped on a Monday. The US equity market had fallen by more than half from its 2007 peak. The cash–CDS basis, still negative, had begun to close. Ines wrote the card on the whiteboard, and the reader gets the same one.
+
+*You are short CDX HY on a 12-month signal, DTS-scaled. The equity index has fallen by more than half from its peak. The cash–CDS basis has begun to close. Write three things: what you do, in what size, and what print makes you cover.*
+
+Write yours before reading theirs.
+
+Kaz's card was the spec, as ever. "Hold. The twelve-month signal is short, and the signal decides. Size is whatever the DTS forecast says, about a third of the 2007 notional. Cover when the twelve-month return turns positive."
+
+Mags's card was not a card so much as a verdict. "Cover all of it. Then buy the bonds that are going to come back at par, at forty, from people whose models are telling them what yours is telling you." She tapped Kaz's monitor. "Back in my day we called that being the patient buyer. It sounds nobler than it is. It mostly means you had cash on the one day nobody else did."
+
+Theo did not write anything for a while. Then he asked the question that would, it turned out, have been worth the most. "What does the equity signal say?"
+
+Kaz checked. On that Monday the stock market's own trend was still down on every horizon the sleeve used. Nobody can see a low from inside it. Theo wrote his card anyway: *cut the short to half today, because the basis is closing and spreads are further from any long-run level than they have ever been; cover the other half on the first day the equity three-month return turns positive, whatever credit's own signal says.*
+
+Ines advanced the tape. That Monday was the low. AlphaSimplex dates a "GFC Recovery" drawdown in the SG Trend Index of −11.3% starting the same day, 9 March 2009. Paleologo's account of the equity version reads like a description of the next three months on Ines's screen.
 
 > **[SOURCE EXTRACTION]** *Paleologo_Advanced_Portfolio_Management p.77:* "During 2008, Momentum experienced higher volatility but did not lose money (see Figure 5.9). However, in 2009 the stocks that had experienced large losses in the previous year rallied as the market rebounded."
 >
 > **Annotation.** Paleologo's account is about cross-sectional equity momentum, but the mechanism transfers exactly to credit trend, and it is worse in credit. The 2008 losers were the highest-spread, highest-beta credits, the ones closest to Merton's default boundary. When the market turned, their equity rallied like deep out-of-the-money calls coming back to life, and their bonds and CDS followed. A trend book short the index was short that convexity at the moment it exploded. The systematic desk's defense is not to predict the turn. It is to let the faster information source turn first: the equity market bottomed on 9 March 2009, so an equity-to-credit signal flipped weeks before credit's own 12-month signal did. A second defense is the $\kappa$ term of §10.4, which by early 2009 was telling every blended book that spreads were extremely wide of any long-run level. The restructuring reader knows the rest of the story from the other side: early 2009 was when par-recovery bonds were bought at 40 from sellers whose models said "trend."
 
-*What the 2026 desk would have flagged.* Three-month and 12-month credit signals short CDX HY by late 2007, with notional falling as DTS rose: a widening from about 600 bp to about 1,800 bp *(approx.)* cuts notional by two-thirds at constant risk. Equity-to-credit signal leading both into the trough and out of it. Basis and $\kappa$ flags arguing for a smaller short from late 2008. Lesson: trend was right for twenty months and wrong for the two that cost the most. The exit rule is the strategy.
+#### Grading the cards
+
+**Cut four: June 2009.** The last screen showed the spring. High yield had rallied hard, and the losers of 2008 had led it.
+
+Ines graded Kaz's card first, because it was the easiest. "Right for twenty months and wrong for the two that cost the most." Credit's own twelve-month signal held the short into the rebound, exactly as the whipsaw arithmetic of §10.6.2 says a long lookback must when the bottom is a V. The DTS scaling had already made the short a third of its old size, which is why the damage was survivable; the card's mistake was its cover rule, which waited for the slowest signal in the building. The exit rule was the strategy, and the card had borrowed it from the entry.
+
+Mags's card got full marks on direction and a deduction she accepted with good grace. "You covered on a feeling," Ines said. "The feeling was right. The desk can't run a feeling at 4 p.m. on a Thursday without you." Mags said she had been marked down by better people, and named none of them.
+
+Theo's card got the best grade at the table, and not because he was clever. He had asked which market knew more than the bond, and the answer on every horizon was the stock. The equity-to-credit signal flipped weeks before credit's own; a book that covered on the equity turn kept most of what 2008 had paid it. His first half, cut on the basis and on the distance from any long-run level, was the $\kappa$ term of §10.4 doing its job, and those two flags had been arguing for a smaller short since late 2008. The shelf evidence for that grade is Dynkin's.
+
+> **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.617:* "While the corporate index has average returns of –8.07%/yr in drawdown episodes and 4.12%/yr in recovery times, the EMC strategy performed well in both regimes: 11.53%/yr in credit drawdowns and 4.30%/yr in recoveries."
+>
+> **Annotation.** This is the strongest shelf evidence that an equity-signaled credit strategy is a crisis hedge rather than a crisis amplifier, and it explains why the systematic desk prefers to get its credit trend from the equity market. Two caveats keep it honest. First, these are averages over several down-cycles in IG, gross of costs, for a long-short issuer-selection strategy. They are not the return of a short-index trend sleeve, and they do not survive the top-decile turnover of §10.5.2 without buffering. Second, the recovery number (4.30% against 4.12%) is the interesting one: the strategy did not give back its drawdown gains in recoveries *on average*. The averages hide the specific turning point that hurts, 2009, when the losers rebounded fastest. The 2026 desk reads this page as a case for equity-signaled credit trend with residualized beta (§10.5.4), not as a promise that every recovery is free.
+
+The reader's card is graded the same way. If it held the short because the twelve-month signal said so, it is Kaz's card and gets Kaz's grade. If it covered everything and bought bonds, it is Mags's, and it needs a rule someone other than Mags can run. If it cut on the basis and the distance from fair value and covered on the equity turn, it gets Theo's grade, and it also gets his question, which is the one Ines asked him next: whether he would have had the nerve to write it in March 2009, with the screen showing what it showed.
+
+Theo looked at the blank card on his desk, the one for Monday, and did not answer. It was a quarter to seven. Mags had already gone home.
 
 ### Case Study B: February–June 2020, the V that trend could not trade
+
+Chapter 20 owns the day-by-day March 2020 tape (§20.5, where the ETF was the only price in town); this case keeps only what the episode says about trend.
 
 *What happened.* Spreads went from post-crisis tights to a late-March peak (ICE BofA HY OAS roughly 1,100 bp around 23 March 2020, *approx.; check against the full series*) and most of the way back by June. On 23 March the Federal Reserve announced its corporate credit facilities, which is the cleanest $\kappa$ shock in the history of the index. Index CDS activity in Q1 2020 ran 78.1% above its trailing average (ISDA). HY bid–ask spreads gapped wider in February–March and then normalized (Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.20). The BTOP50 lost 2% over February–March 2020 (Robertson 2023), SG Trend "did not contribute positively" during COVID (Fidelity), and SG Trend ended 2020 up 6.24% (Hedgeweek, January 2021). SG notes that faster models did best that year.
 
@@ -519,6 +617,8 @@ All four episodes are told the same way: what trend did, what it should have bee
 *What the 2026 desk would have flagged.* A fast sleeve (20/120-day crossover on CDX, cheap to trade) flipping short in late February. A slow sleeve flipping short near the wides, which is the expensive moment. A blended forecast (§10.4) whose value term by late March outweighed the trend term, so the blend was cutting the short as the slow signal was adding to it. An index-versus-cash execution rule that kept the whole sleeve out of cash bonds. Lesson: in a $\kappa$-week, the trend sleeve's job is to be small, and the blend makes it small without anyone having to forecast the Fed.
 
 ### Case Study C: 2022, trend's best year was mostly duration
+
+Chapter 8 owns the duration lens on 2022 (§8.7, the year "negative duration" was positive); this case keeps only the trend accounting.
 
 *What happened.* The SG Trend Index returned +27.4% in 2022 while MSCI ACWI fell 18.4% (Cambridge Associates). The gains came mainly from short bond and rate trends, long US dollar, and energy (Hedgeweek, January 2023). Credit was not a named driver. HY OAS widened to roughly 600 bp in early July 2022 *(approx.; check against the full series)* and then partly recovered. Inside the record year, AlphaSimplex dates a "Fed Inflation Fight Reversal" drawdown of −10.1% from 14 June to 10 August 2022. Index CDS trading set a then-record \$36.4tn (ISDA).
 

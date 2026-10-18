@@ -2,14 +2,14 @@
 
 - [x] 1. [Title / cold open] EXPAND-SCENE (to 1,200-1,400 words), card ending, objectives list becomes narration. — Note: dated Fri 23 Oct (cast bible C10), Wexcombe issuer, card added.
 - [x] 2. [§19.1] LIST-TO-NARRATIVE; Ines walks the ticket; View From Another Seat (insurer/pension); Trend Watch to end of §19.1. — Note: Ines walks ticket; FIMSAC, Goldman added; pension seat box.
-- [ ] 3. [§19.2 opening] BRIDGE + MATH-GENTLY (B1 certainty equivalent).
-- [ ] 4. [§19.2.1] FULL-DERIVATION-MOVE + MATH-GENTLY (B2 distributions/third moment, B3 physical vs risk-neutral).
-- [ ] 5. [§19.3] MATH-GENTLY (B4 size exponent) + junior-quant duration-twice story + Full Derivation move.
-- [ ] 6. [§19.4] LIST-TO-NARRATIVE + MATH-GENTLY (B5 hedge ratio/residual) + ANOTHER-SEAT (ETF/non-bank MM).
-- [ ] 7. [§19.4.1] FULL-DERIVATION-MOVE.
-- [ ] 8. [§19.5] MATH-GENTLY (B6 rank/factor count, B7 staleness random walk) + Kaz springing-lien scene + Full Derivation.
-- [ ] 9. [§19.6 opening] BRIDGE to 2022 tape.
-- [ ] 10. [§19.6.1] MATH-GENTLY (B8 marginal vs exact removal) + FULL-DERIVATION-MOVE.
+- [x] 3. [§19.2 opening] BRIDGE + MATH-GENTLY (B1 certainty equivalent). — Note: bridge moves Ines ETF line; coin-flip CE box.
+- [x] 4. [§19.2.1] FULL-DERIVATION-MOVE + MATH-GENTLY (B2 distributions/third moment, B3 physical vs risk-neutral). — Note: trapdoor box; P/Q as Ines dialogue (box budget); edges subsection.
+- [x] 5. [§19.3] MATH-GENTLY (B4 size exponent) + junior-quant duration-twice story + Full Derivation move. — Note: Hana Jan 2026 story; door box; derivation moved.
+- [x] 6. [§19.4] LIST-TO-NARRATIVE + MATH-GENTLY (B5 hedge ratio/residual) + ANOTHER-SEAT (ETF/non-bank MM). — Note: menu sorted by term; slope box; 0.55 reconciled; ETF-MM seat.
+- [x] 7. [§19.4.1] FULL-DERIVATION-MOVE. — Note: statement of (19.4) then Full Derivation; Todorov kept inside.
+- [x] 8. [§19.5] MATH-GENTLY (B6 rank/factor count, B7 staleness random walk) + Kaz springing-lien scene + Full Derivation. — Note: Kaz stopping-time callback; photos box; drunk box after derivation.
+- [x] 9. [§19.6 opening] BRIDGE to 2022 tape. — Note: bridge paragraph hands section to Ines 2022 tape.
+- [x] 10. [§19.6.1] MATH-GENTLY (B8 marginal vs exact removal) + FULL-DERIVATION-MOVE. — Note: hill-and-car box; (19.6)-(19.7) stated; derivation moved.
 - [ ] 11. [§19.6.2] NEW-SCENE Long Scene H1 2022 + The Pair box (RV beat).
 - [ ] 12. [§19.6] ANOTHER-SEAT (dealer desk: Jefferies, Trumid, JPMorgan quotes).
 - [ ] 13. [§19.7 opening] MATH-GENTLY (B9 common multiplier, half-life) + Full Derivation; Trend Watch to end of §19.7.

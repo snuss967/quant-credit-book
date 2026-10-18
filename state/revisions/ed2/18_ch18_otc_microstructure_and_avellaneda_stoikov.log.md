@@ -7,12 +7,12 @@
 - [x] 5. §18.3.1 Glosten-Milgrom: BRIDGE gloss and pointer to Ch 3. — GM one-sentence gloss, 0.8-point number, pointer to §3.2.1; no box.
 - [x] 6. §18.3.2 Kyle: MATH-GENTLY Box 2 (best guess is a straight line). — Box 2 straight-line best guess, 0.2 pts/$mm, $10mm moves 2.
 - [x] 7. §18.3.3 Kyle to RFQ: LIST-TO-NARRATIVE in Ines's napkin scene. — Napkin scene carries three changes and regression; Kyle explanation reopened.
-- [ ] 8. §18.4 opening: FULL-DERIVATION-MOVE + MATH-GENTLY Boxes 3 and 4.
-- [ ] 9. §18.4.3 Step 1: MATH-GENTLY Box 5 (exponential of a wobble, Jensen); skew line.
-- [ ] 10. §18.4.5 Step 3: MATH-GENTLY Box 6 (ln(1+x) ~ x; monopoly markup).
-- [ ] 11. §18.4.6: SHOP-LIFE vignette (9:31 page, T=4pm) before AS Spec.
-- [ ] 12. §18.5 GLFT: FULL-DERIVATION-MOVE + Box 7 + View From Another Seat (Jefferies, Dimon).
-- [ ] 13. §18.6 JTD: Box 8 (two parts) + FULL-DERIVATION-MOVE.
+- [x] 8. §18.4 opening: FULL-DERIVATION-MOVE + MATH-GENTLY Boxes 3 and 4. — Boxes 3-4, result-first §18.4.2, Full Derivation §18.4.3, new §18.4.4.
+- [x] 9. §18.4.3 Step 1: MATH-GENTLY Box 5 (exponential of a wobble, Jensen); skew line. — Box 5 Jensen at Step 1; Ines skew line; annotation pointer.
+- [x] 10. §18.4.5 Step 3: MATH-GENTLY Box 6 (ln(1+x) ~ x; monopoly markup). — Box 6 ln(1+x) after (18.3); monopoly markup; Exercise 1 pointer.
+- [x] 11. §18.4.6: SHOP-LIFE vignette (9:31 page, T=4pm) before AS Spec. — 9:31 page vignette before Spec; ROBO duplicate cut; explanation reworded.
+- [x] 12. §18.5 GLFT: FULL-DERIVATION-MOVE + Box 7 + View From Another Seat (Jefferies, Dimon). — Problem, Box 7 marble, (18.6) first, Full Derivation, Jefferies/Dimon seat.
+- [x] 13. §18.6 JTD: Box 8 (two parts) + FULL-DERIVATION-MOVE. — Box 8 MGF and P/Q; small-gamma line first; §18.6.1 Full Derivation.
 - [ ] 14. §18.6.3 Long Scene: Altice France, 20 March 2024 (replay), PB-14 Pair box.
 - [ ] 15. §18.6.3 Credit Suisse AT1: EXPAND-SCENE 600-900 words.
 - [ ] 16. §18.7 hit rates: Box 9 + Another Seat (Jane Street) + Niang scene beat; AiEX hedge.

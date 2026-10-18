@@ -3,9 +3,11 @@
 
 ## 26.0 Cold Open: Section 6.08(b)(xiv)
 
+*Halyard Holdings, its credit agreement and amendments, the drill and the desk are fictional; the two court cases Mags cites are real and are sourced in §26.5's Trend Watch. Tuesday 6 October 2026, Theo's third week.*
+
 The summary came back in eleven seconds. That was the first warning sign: nothing true about a restricted payments covenant has ever taken eleven seconds.
 
-Theo had given ROBO the credit agreement for Halyard Holdings, a fictional sponsor-backed widget maker the desk uses as its practice dummy (312 pages, two amendments, and one "technical" amendment that was not), and typed: *Summarize the restricted payments covenant.* ROBO returned four clean paragraphs: a builder basket, a ratio-based unlimited basket at 5.25x, a general basket at "the greater of \$40mm and 30% of Consolidated EBITDA," and a management-equity basket. Every paragraph had a citation. The general basket cited §6.08(b)(xiv).
+Theo had given ROBO the credit agreement for Halyard Holdings, a sponsor-backed widget maker the desk uses as its practice dummy (312 pages, two amendments, and one "technical" amendment that was not), and typed: *Summarize the restricted payments covenant.* ROBO did what ROBO always does, which is exactly what it is told. It handed the 312 pages and the sentence to the desk's reading model and passed back the model's answer without adding a word of its own: four clean paragraphs, covering a builder basket, a ratio-based unlimited basket at 5.25x, a general basket at "the greater of \$40mm and 30% of Consolidated EBITDA," and a management-equity basket. Every paragraph had a citation. The general basket cited §6.08(b)(xiv).
 
 Theo opened the PDF. Section 6.08(b) ran from (i) to (xii) and then stopped, with the calm of a document that has said everything it means to say.
 
@@ -27,16 +29,41 @@ Theo checked the other three paragraphs. They were right: the right numbers, the
 
 Ines finally turned around. "What's the pot, what are the odds, and who at this table knows more than you? Right now, the document does. The robot is just the one talking loudest."
 
+"The other three are fine," Theo said. "It's one bad cite."
+
+"Are they? How did you check them?"
+
+He told her. He had clicked each citation, found a real clause where the citation said one would be, and seen the right number inside it. It had taken four minutes.
+
+"And at PJT," she said, "the night before a signing, with the sponsor's counsel on the other side of the table. How would you have checked them then?"
+
+He knew the answer before she finished the question, because he had spent six years being paid to know it. At PJT nobody checked that a clause *existed*. You checked that it said what your summary said it said, word by word, with Section 1.01 open in a second window so that every capitalized term got read as the thing it was defined to be. And you checked against the conformed copy, the version with every amendment folded in, never the signing version, because the signing version was a historical document and the amendments were the law. It took about an hour per covenant. It was the hour the fee paid for.
+
+So he did it that way, and it took fifty minutes.
+
+The builder basket survived, every word of it, down to the share of retained Excess Cash Flow that fed the Available Amount.
+
+The ratio basket cited §6.08(b)(xi). The clause existed, and it did permit unlimited restricted payments at 5.25x. But the summary said 5.25x *Total* Net Leverage, and (xi) said 5.25x *First Lien* Net Leverage. Halyard had junior debt, which a first-lien test does not count, so the clause the summary described was a much tighter covenant than the one Halyard had actually signed. The page was real and so was the number. What the page did not do was say what the paragraph said it said. A spot-checker clicks, sees 5.25x, and moves on, which is exactly what Theo had done forty minutes earlier.
+
+The management-equity basket cited §6.08(b)(ix), and (ix) said exactly what the summary said: \$10mm per fiscal year, unused amounts carried forward one year. Every word matched. But the reading model had been handed the agreement as signed in 2021, and so, at first, had Theo. Amendment No. 2, the "technical" one, had replaced the figure with \$25mm in 2024 and let unused amounts carry forward without limit; the conformed copy on the deal site showed the change in blue. The span was real, it said exactly what the claim said, and it was wrong, because the sentence had been amended out of existence two years earlier.
+
+The general basket, for the record, lived at (xii), and it said \$75mm and 35%, not \$40mm and 30%. Kaz had been right that the citation was within two of the right answer. The numbers were not within anything.
+
+Theo laid the four paragraphs out on one page with a note in the margin beside each. One cited a clause that did not exist. One cited a real clause for something the clause did not say. One quoted a real clause that had stopped being true. One was right. He had no names for the three failures yet. What he did notice was that only the first would have been caught by anyone who did not have an hour.
+
+"That's the hand," said Ines.
+
+Mags came over with her coffee and read the page upside down, a skill she claims to have learned from thirty years of other people's term sheets. "There were lawyers in New York in 2023," she said, "who filed a brief full of cases a chatbot made up, and the judge sanctioned them. *Mata v. Avianca*. The next January a federal appeals court referred another lawyer for discipline over the same thing, *Park v. Kim*. Those were the easy ones. The case didn't exist, so somebody looked it up and couldn't find it." She tapped the first note. "Your fourteen is a *Mata*." She tapped the second. "Your first-lien ratio is the one nobody looks up." She tapped the third. "And this one is just a lawyer who didn't read the amendment. I've met hundreds of those. They all had malpractice insurance."
+
+It was 1:20. The exercise was a drill, but Ines runs drills the way casinos run fire alarms. "Harlan's committee meets at four," she said. "He wants to know whether Halyard can pay a dividend before the refinancing. The summary is already in his inbox, because Kaz forwarded it at 9:05 with the subject line 'faster than us.'"
+
+"In my defense," said Kaz, "it was."
+
+*Card. 1:20 p.m. The committee meets at four. Write down three things: what you send Harlan in place of the summary, or next to it; which of the four paragraphs you check first; and how long the checking takes. §26.4 grades the card.*
+
 So here is the question this chapter answers: **how do you put a machine that is sometimes wrong, and confident when it is, into a process that may never be wrong silently?**
 
-By the end of this chapter you will be able to:
-
-- treat a language model as a *stochastic reader* with measurable power, calibration, and failure modes, and validate it the way Bohn and Stein validate a PD model;
-- write a **citation contract** that makes every machine claim checkable by code, and measure the three rates (accuracy, validity, support) together with the one that hurts, the "footnoted hallucination";
-- set an **abstention threshold** from the desk's own costs instead of from vibes, and see why benchmark scoring trains models to guess;
-- compute the reliability of an agent chain with an imperfect verifier, and explain why "workflows first, agents last" is arithmetic and not taste;
-- govern an LLM like a vendor model (SR 11-7 lineage, FINRA Notice 24-09, FINRA's 2026 oversight report) and wire it into the desk like an untrusted data feed;
-- hand ROBO a specification it cannot misread, which turns out to be a skill you already have: you used to call it reading a credit agreement.
+By the end of this chapter you will be able to do what Theo did that evening on the back of the drill sheet: write down what would be true of a reading machine before he let its summary anywhere near a position. The machine would be treated as a *stochastic reader*, with a measurable power, a measurable calibration and a catalogue of failure modes, and validated the way Bohn and Stein validate a PD model (§26.1). Every claim it made would arrive under a **citation contract** that code can check, and the desk would measure accuracy, validity and support together, with special attention to the rate that hurts, the "footnoted hallucination" (§26.4). It would be allowed to say "I don't know," at an **abstention threshold** set from the desk's own costs rather than from vibes, and Theo would understand why benchmark scoring trains models to guess instead (§26.5). Any chain of agent steps would come with its reliability computed, imperfect verifier included, so that "workflows first, agents last" became arithmetic rather than taste (§26.6), and every trial an agent ran would be counted, the discarded ones too (§26.7). The whole apparatus would be governed like a vendor model, in the line of SR 11-7, FINRA Notice 24-09 and FINRA's 2026 oversight report (§26.8), handed specifications it cannot misread (§26.9), and wired into the desk like an untrusted data feed (§26.10). Writing the last clause, he noticed that the skill it asked for was one he already had. At PJT it was called reading a credit agreement.
 
 ## 26.1 What a Language Model Is, for a Specifier
 
@@ -52,13 +79,17 @@ $$
 p_T(v \mid x_{1:t}) = \frac{p_\theta(v \mid x_{1:t})^{1/T}}{\sum_{u \in \mathcal{V}} p_\theta(u \mid x_{1:t})^{1/T}},
 $$
 
-so $T \to 0$ concentrates all mass on the most likely token (greedy decoding) and $T = 1$ samples from the model as trained. Three consequences matter for anyone who will specify work to one of these.
+so $T \to 0$ concentrates all mass on the most likely token (greedy decoding) and $T = 1$ samples from the model as trained.
 
-**First, the model produces text that is probable given the text, and "probable" equals "true" only under conditions.** When the answer is stated in the context, is salient, and is determinate, the most probable continuation is usually the correct one. When any of those fails, the model still produces the most probable continuation, and the most probable continuation of "the general basket appears in Section 6.08(b)(" is a plausible roman numeral. That is why fabricated citations look right: they are draws from the distribution of real citations. §6.08(b)(xiv) is not a random error. It is a *typical* one, and that is the bad news.
+> **Math, Gently.** *A distribution over the next word.* Ask a trader where a bond that last printed at 92 will print next. Around 92 is the best guess, 91¾ would surprise nobody, and 93 is possible if something happened overnight: the honest answer is a menu of numbers, each with a weight. A language model holds exactly that kind of menu at every step, over its whole vocabulary. Shrink the vocabulary to three candidates for the token after "the general basket appears in Section 6.08(b)(": "xii" with weight 0.6, "xi" with 0.3, "xiv" with 0.1 *(illustrative)*. Turn the temperature toward zero and the top of the menu wins every time. At $T = 1$ the model writes "xiv" one time in ten, with a straight face, because a straight face is all it has. At $T = 2$ each weight is raised to the power $1/T = 1/2$, a square root, and the menu is rescaled to sum to one: $\sqrt{0.6}, \sqrt{0.3}, \sqrt{0.1}$ are 0.77, 0.55 and 0.32, which add up to 1.64, so the new weights are 0.47, 0.33 and 0.19, and the clause that does not exist now turns up almost one time in five. A finite menu of outcomes, each with its own probability and no other structure, is a *categorical* distribution. It is a different animal from the normal distribution of Chapter 5. There is no mean and no spread to summarise it, no bell, and no tails, because "xiii" is not "near" "xii" in any sense the model uses; it is just another item on the list. The formula you just passed is this arithmetic, run over a menu of about $10^5$ items instead of three.
 
-**Second, the model is a reader, not a calculator.** Arithmetic done "in its head" is next-token prediction over digits. On a credit desk this rule has no exceptions: the model may *locate* the "greater of \$40mm and 30% of Consolidated EBITDA" clause and *extract* its parameters into a typed record, but the capacity is computed by deterministic code (§26.12), and so are the waterfall, the leverage ratio, and the make-whole. The model calls tools; it does not impersonate them.
+Everything else in this chapter follows from that one object, and three of its consequences matter most to anyone who will specify work to a model.
 
-**Third, a token is both the unit of cost and the unit of attention.** Vendors price per million input and output tokens, and a model's context window, its working memory, is measured in tokens too. A 300-page credit agreement is roughly 150,000 words, or 200,000 to 260,000 tokens depending on the tokenizer *(approx.; one vendor's pricing page notes that its newer tokenizer produces about 30% more tokens for the same text)*. "It fits in the context window" is now true of most single documents. Whether the model *used* what was in the window is a different question.
+**The model produces text that is probable given the text, and "probable" equals "true" only under conditions.** When the answer is stated in the context, is salient, and is determinate, the most probable continuation is usually the correct one. When any of those fails, the model still produces the most probable continuation, and the most probable continuation of "the general basket appears in Section 6.08(b)(" is a plausible roman numeral. That is why fabricated citations look right: they are draws from the distribution of real citations. §6.08(b)(xiv) is not a random error. It is a *typical* one, and that is the bad news.
+
+**The model is a reader, not a calculator.** Arithmetic done "in its head" is next-token prediction over digits. On a credit desk this rule has no exceptions: the model may *locate* the "greater of \$75mm and 35% of Consolidated EBITDA" clause and *extract* its parameters into a typed record, but the capacity is computed by deterministic code (§26.12), and so are the waterfall, the leverage ratio, and the make-whole. The model calls tools; it does not impersonate them.
+
+**A token is both the unit of cost and the unit of attention.** Vendors price per million input and output tokens, and a model's context window, its working memory, is measured in tokens too. A 300-page credit agreement is roughly 150,000 words, or 200,000 to 260,000 tokens depending on the tokenizer *(approx.; one vendor's pricing page notes that its newer tokenizer produces about 30% more tokens for the same text)*. "It fits in the context window" is now true of most single documents. Whether the model *used* what was in the window is a different question.
 
 ### Reading is not using
 
@@ -74,7 +105,7 @@ $$
 \mathcal{R}_\theta : (q, \mathcal{D}, \xi) \mapsto y,
 $$
 
-from a question $q$, a document store $\mathcal{D}$, and the sampling randomness $\xi$ (temperature, seed, and, as §26.9 shows, the inference server's batch composition) to an output $y$. The desk cares about the physical-measure probability $\Pr^{\mathbb{P}}\big(A(y) = 1 \mid q, \mathcal{D}\big)$ that the output is correct, about how that probability varies with the question type, the position of the evidence, and the document length, and about whether the reader *knows* it. One convention, stated once: every probability in this chapter is a $\mathbb{P}$ quantity, an error rate, an agreement rate, or a cost. No LLM output is ever a $\mathbb{Q}$ object. Spreads, hazard rates, and implied vols enter the chapter only as inputs to, or outputs of, the deterministic pricers that the reader feeds.
+from a question $q$, a document store $\mathcal{D}$, and the sampling randomness $\xi$ (temperature, seed, and, as §26.9 shows, the inference server's batch composition) to an output $y$. The desk cares about the physical-measure probability $\Pr^{\mathbb{P}}\big(A(y) = 1 \mid q, \mathcal{D}\big)$ that the output is correct, about how that probability varies with the question type, the position of the evidence, and the document length, and about whether the reader *knows* it. One convention, stated once: every probability in this chapter is a $\mathbb{P}$ quantity, an error rate, an agreement rate, or a cost. No LLM output is ever a $\mathbb{Q}$ object. ($\mathbb{Q}$, the risk-neutral measure, is the set of probabilities that prices imply once the market has been paid for bearing risk: a price written in the language of odds, not a forecast of what will happen. Chapter 6 owns it.) Spreads, hazard rates, and implied vols enter the chapter only as inputs to, or outputs of, the deterministic pricers that the reader feeds.
 
 This framing has a payoff that the rest of the chapter collects. A reader with a measurable hit rate, a measurable calibration curve, and measurable failure modes is a *model*, and credit has a mature discipline for validating models of exactly this type: binary outcomes, rare costly errors, and a regulator who wants documentation.
 
@@ -83,6 +114,10 @@ This framing has a payoff that the rest of the chapter collects. A reader with a
 > **Annotation.** Bohn and Stein list five validation dimensions for PD models on the same page: robustness, power, calibration, transparency, and diagnosability. A large language model scores worst on the fifth. Its weights are not inspectable in any useful sense, its reasoning trace (when it shows one) is itself generated text with no guaranteed causal link to the answer, and its behavior shifts with the vendor's version. You cannot drill into the reader. So the desk makes every *output* diagnosable: each claim carries a document id, page, and character span that code can resolve and check (§26.4). Diagnosability moves from the model to the claim, and that is the central engineering move of this chapter. The other four dimensions map over almost unchanged: power is the reader's ability to separate right answers from wrong ones by its stated confidence, calibration is whether "90% sure" is right 90% of the time, robustness is behavior under a bad scan or an adversarial PDF (§26.10), and transparency is whether a human can trace a claim back to the page.
 
 ## 26.2 Trend Watch: The Reading Machine Arrives on the Desk, 2022–2026
+
+Before any reading machine arrived, the desk already ran on automation, and two numbers from its own plumbing put the newcomer in perspective. Tradeweb's FY2025 10-K reports that over 40% of its institutional credit trades went through AiEX, its rules-based automated execution tool, and in October 2026 Vanguard described about 70% of its fixed-income desk volume as low- or no-touch (Chapter 2). None of that automation is a language model. The rules-based kind arrived first, and it is held to deterministic standards: every AiEX ticket follows a rule a human wrote and can replay. The question for 2026 is whether the reading machine can be held to the same standard. Most of this chapter argues that it can, *for its outputs*, if you build the harness, but not for its internals.
+
+The dated record of how the reading machine arrived, from chatbot to connector to agent, is the Trend Watch that closes this section. One line in it deserves a flag before it goes by: three providers behind 44% of reported model providers in the UK survey. That is a concentration statistic of the kind Chapter 22 tracks for dealers and venues, and §26.3 shows what it does to a desk, on a Thursday morning in February 2026, when two vendors' readers misread the same clause in the same words.
 
 > **Trend Watch.** *From chatbot to connector to agent, with the regulators one step behind and then, briefly, one step back.*
 >
@@ -101,10 +136,6 @@ This framing has a payoff that the rest of the chapter collects. A reader with a
 > - **2026.** Stanford's AI Index 2026 reports 88% organizational adoption and SWE-bench Verified rising from about 60% to near 100% in one year, with agents still failing about one in three structured-benchmark tasks. **Jun 4, 2026:** the Vals AI Finance Agent benchmark (537 questions, built with Stanford researchers and a G-SIB) has a top score of 64.37%. **Oct 2026:** Evident AI's October 2026 index again put JPMorganChase first *(50 banks ranked; edition number not independently verified)*.
 >
 > *What it means for the desk.* Reading got cheap (two orders of magnitude in two years) and checking did not. The binding constraint moved from "can we read every 8-K and every docket entry?" to "can we prove what the machine said about them?" The firms that pulled ahead were the ones that treated the model as a component behind contracts, logs, and tests. In July 2026 Acadian's systematic credit PM Michael Doros said, in an FI Desk interview, that "AI itself is unlikely to be the competitive advantage." On a desk where everyone rents the same three models, the edge is in the spec, the eval, and the data. *(Sources: the primary documents named in each line; URLs in §26.14.)*
-
-Two numbers from the desk's own plumbing put this in perspective. Tradeweb's FY2025 10-K reports that over 40% of its institutional credit trades went through AiEX, its rules-based automated execution tool, and in October 2026 Vanguard described about 70% of its fixed-income desk volume as low- or no-touch (Chapter 2). None of that automation is a language model. The rules-based kind arrived first, and it is held to deterministic standards: every AiEX ticket follows a rule a human wrote and can replay. The question for 2026 is whether the reading machine can be held to the same standard. Most of this chapter argues that it can, *for its outputs*, if you build the harness, but not for its internals.
-
-There is a market-structure point too, and it belongs on the risk committee's agenda next to the bid-ask. The BoE/FCA figure, three providers behind 44% of reported model providers in the UK survey, is a concentration statistic of the kind Chapter 22 tracks for dealers and venues. If every desk's covenant reader runs on one of three models, then every desk's covenant reader misreads the same unusual clause in the same way on the same morning. That is correlated model error, which is what the FSB report means by "market correlation." For a credit desk the concrete version is a novel LMT structure that every model classifies as "permitted" because the training data is full of sponsor-side memos saying so. The market then learns the reading is wrong all at once, the way markets learn everything important.
 
 ## 26.3 The Tool Stack: What Is Sold vs. What It Is
 

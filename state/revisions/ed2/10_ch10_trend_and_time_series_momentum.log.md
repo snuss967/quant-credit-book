@@ -11,13 +11,13 @@
 - [x] 9. [10.3.2] ANOTHER-SEAT: insurer capital desk and CLO CCC bucket. NOTE: NAIC 2.C/3.A/3.C factors, Kundu 85/58; narration threads boxes.
 - [x] 10. [10.4.1] MATH-GENTLY #4: kappa and phi (fire door); P-measure gloss. NOTE: +12/-50 bp door box; P gloss points to Ch 6-B.
 - [x] 11. [10.4.1] FULL-DERIVATION-MOVE: blended weight under its own heading. NOTE: one-line statement then heading; equation and reading paragraph unchanged.
-- [ ] 12. [10.4.2] MATH-GENTLY #5: small-sample bias; Kaz at model review.
-- [ ] 13. [10.5.1-10.5.2] LIST-TO-NARRATIVE + ANOTHER-SEAT (Man 2022, Robeco 2012).
-- [ ] 14. [10.5.3] MATH-GENTLY #6: lead-lag and stale clock; Theo's line.
-- [ ] 15. [10.6.1] MATH-GENTLY #7 two parts: normal/joint normal; conditional expectation; Full Derivation heading.
-- [ ] 16. [10.6.2] MATH-GENTLY #8: capture ratio of a V.
-- [ ] 17. [10.7 Case A] NEW-SCENE: GFC replay July 2007 to June 2009, card graded.
-- [ ] 18. [10.7 Case B and C] BRIDGE only: pointers to Ch 20 and Ch 8.
+- [x] 12. [10.4.2] MATH-GENTLY #5: small-sample bias; Kaz at model review. NOTE: Kendall with rho, bias 0.013; brief's formula corrected, logged.
+- [x] 13. [10.5.1-10.5.2] LIST-TO-NARRATIVE + ANOTHER-SEAT (Man 2022, Robeco 2012). NOTE: Kaz/Ines EMC scene; Man p.31 verified on page text.
+- [x] 14. [10.5.3] MATH-GENTLY #6: lead-lag and stale clock; Theo's line. NOTE: wall clock box 0.075/0.027; Theo sorts by print counts.
+- [x] 15. [10.6.1] MATH-GENTLY #7 two parts: normal/joint normal; conditional expectation; Full Derivation heading. NOTE: bell, tilted ellipse, 0.20/0.56; Kaz pronouns fixed.
+- [x] 16. [10.6.2] MATH-GENTLY #8: capture ratio of a V. NOTE: hiker-in-valley box, two-month V, three-week lag, -50%.
+- [x] 17. [10.7 Case A] NEW-SCENE: GFC replay July 2007 to June 2009, card graded. NOTE: four cuts, three extractions placed, lead-ins and Lesson retired.
+- [x] 18. [10.7 Case B and C] BRIDGE only: pointers to Ch 20 and Ch 8. NOTE: one pointer each; B's whipsaw sentence kept, fact needed there.
 - [ ] 19. [10.7 Coda] NEW-SCENE: Liberation Day and the Pair Book.
 - [ ] 20. [inside 19] The Pair box: PB-01 with carry-hurdle algebra and ledger line.
 - [ ] 21. [10.8.1] MATH-GENTLY #9: random walk null and arccos; dealer ANOTHER-SEAT in §10.8.2.

@@ -13,10 +13,10 @@
 - [x] 11. [§12.4 "What goes wrong"] LIST-TO-NARRATIVE + SHOP-LIFE vignette. — Hana month-end refresh vignette: NAV, eigenvalue, relabel, smoothed backtest.
 - [x] 12. [§12.5 Steps 1–3] MATH-GENTLY box 6 + FULL-DERIVATION-MOVE. — Seating-chart memory plus shrinkage box; ρ regime sentence; Full Derivation.
 - [x] 13. [§12.5 Step 4] MATH-GENTLY box 7 + FULL-DERIVATION-MOVE + WHEN-TO-APPLY. — Thermometer box; GLM Full Derivation; Theo listed-twin 0.76 judgment.
-- [ ] 14. [§12.6] MATH-GENTLY box 8 + FULL-DERIVATION-MOVE.
-- [ ] 15. [§12.7 Rule 22e-4 paragraph] LIST-TO-NARRATIVE.
-- [ ] 16. [§12.7 KKT] MATH-GENTLY box 9 + FULL-DERIVATION-MOVE.
-- [ ] 17. [§12.7] NEW-SCENE Long Scene B, "The Queue".
+- [x] 14. [§12.6] MATH-GENTLY box 8 + FULL-DERIVATION-MOVE. — Lemonade mediant box; two Full Derivations; Kaz concedes region not point.
+- [x] 15. [§12.7 Rule 22e-4 paragraph] LIST-TO-NARRATIVE. — Theo margin notes on four buckets; basket covenant; dates kept.
+- [x] 16. [§12.7 KKT] MATH-GENTLY box 9 + FULL-DERIVATION-MOVE. — Shadow-price box, 40bp on $10mm; KKT Full Derivation.
+- [x] 17. [§12.7] NEW-SCENE Long Scene B, "The Queue". — Queue replay 2,550 words, card, four beats, two seats; Case B stub.
 - [ ] 18. [§12.8 opening] MATH-GENTLY box 10: turnover.
 - [ ] 19. [§12.8–12.9, Case Study A] NEW-SCENE Long Scene A, "Twenty-Five Days".
 - [ ] 20. [Case Study C] EXPAND-SCENE + ANOTHER-SEAT (CLO manager).

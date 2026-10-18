@@ -6,17 +6,17 @@
 - [x] 4. [27.2.1–27.2.3 Ingestion] SHOP-LIFE (second, short vignette, 400–600 words) + MATH-GENTLY (box 2: the lateness quantile). — Ilse three-row DQ vignette; mail-bag watermark box; Trend Watch to end.
 - [x] 5. [27.3 Security Master] EXPAND-SCENE (Theo's third Tuesday, +300 words). — Prescient backtest beat; whiteboard dated graph; drop-down misread ends it.
 - [x] 6. [27.3.2 The bitemporal model] MATH-GENTLY (box 3: two time axes) + FULL-DERIVATION-MOVE. — Archive-vs-wiki box; tuple and query stated; Full Derivation subsection.
-- [ ] 7. [27.3.3 Serta rows] WHEN-TO-APPLY inside the scene.
-- [ ] 8. [27.4 Pricing, Risk, OMS/EMS] LIST-TO-NARRATIVE + THE PAIR (RV beat).
-- [ ] 9. [27.5.1 Little, Pollaczek–Khinchine] MATH-GENTLY (box 4, in two parts) + FULL-DERIVATION-MOVE.
-- [ ] 10. [27.5.1 Fan-out] MATH-GENTLY (box 5, short).
-- [ ] 11. [27.5.3 CME Globex halts] EXPAND-SCENE (600–900 words).
-- [ ] 12. [27.6.1 Trigger table] MATH-GENTLY (box 6: the triangle inequality as safety) + BRIDGE.
-- [ ] 13. [27.6.2 Diffusion versus tournament] MATH-GENTLY (box 7: random walk and σ√Δ) + FULL-DERIVATION-MOVE.
-- [ ] 14. [27.6.3 Flash rally] EXPAND-SCENE (1,000–1,400 words).
-- [ ] 15. [27.7 Kill Switches] ANOTHER-SEAT (the bank dealer desk).
-- [ ] 16. [27.7.1 The hierarchy] LIST-TO-NARRATIVE.
-- [ ] 17. [27.7.2 CUSUM] MATH-GENTLY (box 8: evidence that adds up and forgets) + FULL-DERIVATION-MOVE.
+- [x] 7. [27.3.3 Serta rows] WHEN-TO-APPLY inside the scene. — Mags asks which query her P&L used; reconciliation added.
+- [x] 8. [27.4 Pricing, Risk, OMS/EMS] LIST-TO-NARRATIVE + THE PAIR (RV beat). — PriceType incident scene (Hana); PB-01 Pair box; pair book updated.
+- [x] 9. [27.5.1 Little, Pollaczek–Khinchine] MATH-GENTLY (box 4, in two parts) + FULL-DERIVATION-MOVE. — Supermarket and bus-gap box; P-K statement; Full Derivation moved.
+- [x] 10. [27.5.1 Fan-out] MATH-GENTLY (box 5, short). — Relay-team box after derivation; Ines reads model row aloud.
+- [x] 11. [27.5.3 CME Globex halts] EXPAND-SCENE (600–900 words). — Halt drill; quiet table as deafness; card graded; Tier-2 answer.
+- [x] 12. [27.6.1 Trigger table] MATH-GENTLY (box 6: the triangle inequality as safety) + BRIDGE. — Straight-road box before rules; Q.16 gloss paragraph; DV01 bridge sentence.
+- [x] 13. [27.6.2 Diffusion versus tournament] MATH-GENTLY (box 7: random walk and σ√Δ) + FULL-DERIVATION-MOVE. — Drunk-walk box, Bachelier vs lognormal note; diffusion derivation moved below.
+- [x] 14. [27.6.3 Flash rally] EXPAND-SCENE (1,000–1,400 words). — Flash-rally replay, three branches graded; Trend Watch to section end.
+- [x] 15. [27.7 Kill Switches] ANOTHER-SEAT (the bank dealer desk). — Bank auto-quoter seat box, March 2020, sourced lines only.
+- [x] 16. [27.7.1 The hierarchy] LIST-TO-NARRATIVE. — Checksum refusal scene, Tier 2; Kaz consent line threaded into Authority.
+- [x] 17. [27.7.2 CUSUM] MATH-GENTLY (box 8: evidence that adds up and forgets) + FULL-DERIVATION-MOVE. — Bluff-count box; G_k statement; LLR, optimality, Siegmund in Full Derivation.
 - [ ] 18. [27.7.3 Knight] NEW-SCENE, Long Scene 1 (2,000–2,800 words), promoted to `#### Long Scene: Forty-five minutes, 1 August 2012` with a `#### Decision point` subheading.
 - [ ] 19. [27.7.3 Citigroup → the Citi/Revlon wire] NEW-SCENE, Long Scene 2 (2,000–2,800 words), `#### Long Scene: The default field, 11 August 2020`.
 - [ ] 20. [Spec for AI Implementation (kill switch)] WHEN-TO-APPLY inside the scene.

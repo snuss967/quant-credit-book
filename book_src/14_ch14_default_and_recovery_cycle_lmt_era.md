@@ -1029,6 +1029,65 @@ Three weeks later the trade press reports that a new ad hoc group of Quillfeathe
 
 "IDO or it didn't happen," says Ines, closing the hand. "Knowing that distressed exchanges are 65% of defaults is beta. Everyone has the Moody's report. Knowing which 52.6% of the class you're in is alpha."
 
+#### The Pair Book: Carvana, and the short leg that gapped up
+
+*Vantress Capital Management, Owen Achterberg's pod, Dov Adler's pod next door, Wen Zhao and Marcus Oyelaran are fictional composites; the positions, share counts, the pod's probabilities and every P&L figure are illustrative. Carvana, its notes, its exchange, its fair-value marks and its stock closes are real and sourced in Chapters 5 and 6. Pair Book entry PB-05 is a replay, run the way Ines runs them at the desk across town: Chapter 5 cut it off at the close on Friday, 2 June 2023, and this folder runs to the September 2023 quarter-end, the first mark after the exchange settled.*
+
+Owen Achterberg's capital-structure pod closes its replays on Friday afternoons, and this Friday it is closing PB-05: long Carvana's 5.875% senior notes due 2028, short Carvana's common stock. The folder holds nothing that was not public by its date, with one declared exception: the models are allowed to be today's. Dov Adler has come over from the next pod because short legs are what keep him awake. Wen Zhao, who keeps Dov's borrow sheet and reads Owen's when asked, has brought both. Marcus Oyelaran, who runs the overnight x-ray for the credit pods, is there because the replays that lose money are the only ones he is invited to.
+
+Owen puts up the card he wrote at the cut-off, the card of Chapter 5's cold open seen from a pod. Long \$10mm face of the 2028s at 55; short 128,000 shares, 0.30 of the bonds' \$5.5mm market value at the May close of \$12.92, sized by the structural model's equity delta *(illustrative)*. The card does not ask whether Carvana will default. It asks which door, writes each leg's one-year P&L behind each door, and weights the doors by Owen's own cumulative incidences:
+
+| Door | Owen's CIF | Long \$10mm 2028s at 55 | Short 128,000 shares at \$12.92 | Pair |
+| :--- | :--- | :--- | :--- | :--- |
+| Hard default (filing), $F_H$ | 0.25 | to 40: −\$1.50mm | to \$0.25: +\$1.62mm | +\$0.12mm |
+| Distressed exchange, $F_D$ | 0.60 | to 62 in new paper: +\$0.70mm | "up a bit," to \$16: −\$0.39mm | +\$0.31mm |
+| No event in the year, $S$ | 0.15 | to 75: +\$2.00mm | to \$25: −\$1.55mm | +\$0.45mm |
+
+$$
+\mathbb{E}[\Pi] = F_H\,\Pi_H + F_D\,\Pi_D + S\,\Pi_S \approx +\$0.28\text{mm},
+\qquad
+F_H + F_D + S = 1 .
+$$
+
+The second equation is the identity of §14.2.1, and the card passes it. The 62 is Owen's guess at a deal better than the March offer the holders had just refused. "Hedged behind the door I feared," he says, "and long the door I believed in. That was the trade."
+
+Marcus reads the middle row twice. "Who wrote 'up a bit'?"
+
+"I did. It's the only number on the card I didn't derive."
+
+Chapters 5 and 6 tell what came through door D, so the replay needs only the marks. The 2028s received 66.6 cents of new secured par per dollar, near the bottom of the allocation table (§5.6.2), and the company marked its note stack, by then mostly the new secured paper, at 77.7 at the September quarter-end. Owen's long finished near 51.7, down 3.3 points: −\$0.33mm, against the card's +\$0.70mm *(the stack ratio stands in for any single bond)*. The door was right and the coupon was wrong. Then the short. The stock did not go up a bit. It closed June at \$25.92 and September at \$41.98 (vendor closes, approximate). At the June month-end Owen resized to the model's new delta, 0.25 of the long's value at the company's June mark, which came to about 71,000 shares: fewer shares, more dollars. On 19 July the support agreement was announced and the stock went from about \$39.80 to \$55.80, the 40.2% session of §6.10.1, and 71,000 shares lost \$1.14mm before the close. Marcus called at 4:10. The pod's practice is that a line under a risk call does not resize until the call is closed, and this one stayed open until the exchange settled, so the July and August resizes never happened. The short lost \$1.66mm in June and \$1.14mm from the June mark to the September one, nearly all of it in that one session: \$2.80mm in four months.
+
+Wen has the frictions. The folder has no borrow tape for the stock, so the replay assumes a fee of 15% a year on the short's market value *(illustrative; with close to half the float short, on the S3 Partners count Chapter 6 cites, she calls the assumption polite)*: about \$0.14mm, less about \$0.05mm earned on the short's cash collateral. Carvana paid no dividend, so the short owed nothing else. Financing the long at 7% all-in cost about \$0.12mm, and half-spreads on two legs, one resize and the close about \$0.10mm. The long's coupon, accrued from the cut-off and paid in cash at settlement, brought in \$0.15mm. Owen writes the explain the way Chapter 8-C would, with the card's middle row standing in for start-of-day betas:
+
+| Line | \$mm | What it is |
+| :--- | :--- | :--- |
+| Idio | −0.33 | the exchange path: the door, and where the 2028s landed in it |
+| Hedge cost the card budgeted behind door D | −0.39 | "up a bit" |
+| Leak | −2.41 | the restrike: the short's real cost behind door D, less the budget |
+| Carry | +0.15 | the 5.875% coupon, cut-off to settlement |
+| Friction | −0.31 | borrow fee net of rebate, financing, half-spreads |
+| **Net** | **−3.29** | no capture ratio: the idio itself was negative |
+
+"Right about the door, wrong about the coupon," says Owen, "and the hedge lost seven times what the thesis did."
+
+"Then say what the hedge removed," says Marcus, who says it to everyone.
+
+Owen answers in the Pair Book's order. *What the hedge removed:* direction, as it is felt behind door H, where at the opening ratio a filing would have left the pair \$0.12mm up while the long lost \$1.50mm. *What idio remained:* the exchange path, which door and where in it the 2028s landed, 66.6 against 89.3 for the 2030s. *What leaked:* the short leg itself. Behind door D the stock was not the residual claim on a firm drifting toward a barrier. It was the security the exchange restrikes. A support agreement that cuts face, pushes out maturities and is conditioned on new equity lifts the stock by more than it lifts the bonds, so behind the door Owen believed in, his hedge was a second position against his own thesis.
+
+Dov has been reading his own card while Owen talks. PB-01's short is a bond, not a stock: Halvorsen's 7.25% 2029s, borrowed. "Same table, different instrument," he says. "Behind door H my short makes 78 less the recovery. Behind door D, if the unsecured are offered an exchange at a premium, it loses ten points: the \$3.9mm on my card in 1-B." DTS sized PB-01 on spread, and a spread is one number for both taps. Behind door H the short's price falls to recovery; behind a premium door D it rises to the exchange value. The arithmetic that makes a DTS-neutral pair jump-neutral in expectation holds door by door only when both doors move the short's price the same way; that arithmetic, and the menu of short legs with what each costs, are Chapter 8-D's (§8D.4 and §8D.2). At the market's average soft hazard from §14.2.1, $\lambda_D \approx 0.038$, the one-year $F_D$ is about 3.7%, so $0.037 \times \$3.9$mm is about \$0.14mm a year of expected cost the DTS ratio never sees, on an issuer whose lender call makes it anything but average. Carvana ran the same sum on anyone short its bonds: a pod short the 10.25% 2030s from the 2022 year-end mark paid their climb from the mid-40s to an exchange worth about 69, 89.3 cents of new par at 77.7 *(illustrative)*, and its lender, owning a bond with a consent attached, would have wanted it back before the deadline.
+
+Wen adds a column while he says it: recalls in the days before a consent record date. The soft tap announces itself first to the one person in the pod who talks to lenders every morning. She does not call it a signal yet. She calls it weather. Single-name CDS, the usual answer when a bond cannot be borrowed, does not rescue the short either: the standard North American contract has no Restructuring credit event (Chapter 24), so protection pays through door H and not through door D. Every short on the menu hedges one tap.
+
+#### Decision point: the parole long, 29 September 2023
+
+*The exchange has settled. Owen holds about \$6.66mm face of new senior secured notes, paying in kind in their first year and marked near 78, and 71,000 shares short. In this chapter's terms the issuer is on parole. Write down three things: keep the long or sell it; if you keep it, the short leg and the ratio; and the hazard you would ask the risk manager to charge.*
+
+The clock of §14.3.2 answers the third question first. The lightbulb box's 0.175 is the base-rate chance of a hard default within two years of a soft event, and among the issuers that are going to fail the hazard rises at first, because a PIK coupon buys runway out of recovery. Marcus has a different number. "My x-ray reads the rating and the new capital structure. It has no state called parole. Keep it, and I charge you the hazard of whatever the agencies say it is now, not the hazard of a name four weeks out of an exchange."
+
+The second question goes down the menu, and every answer is a refusal. The stock is short the cure, and the cure is three-quarters of the mass, $1 - p = 0.75$: the same mistake behind a different door. CDS pays on one tap, if a contract on the name can be traded at all; only about a hundred US names trade regularly, on one quantitative manager's own count (Man Group, *Quantitative Credit: Alpha Opportunities for Early Movers*, 2022). The \$205mm of old notes left outside the exchange, stripped of their covenants (§6.10.1), are a different claim with no lender worth calling. CDX HY takes out the cycle and none of Carvana. "Nothing on the menu isolates the parole," Owen says. "Without a short, that long isn't a pair. It's a position in $1 - p$, and I don't run positions." He closes both legs at the September mark. The ledger records PB-05 as closed and adds a line underneath it: post-exchange long, no short leg, declined.
+
+Grade the cards. Keeping the long against the stock would have lost again: the stock closed 2023 at \$52.94 and 2024 at \$203.36 (§6.10.1). Keeping the long naked would have paid, because Carvana turned out to be one of the three-quarters: the stack was marked at 84.7 by December, the new 2028s were bought back above par, and the 2030s were refinanced in August 2026 (§5.6.2). It would also have meant carrying a hazard the risk model could not see through a cohort that ran hot: about 46% of 2023's distressed exchanges had re-defaulted by April 2025, reportedly counting repeat exchanges (the re-default ledger, §14.3.2), and in September 2023 nobody could know which side of that line Carvana would land on. Closing earned nothing more and kept the mandate. Owen's card is graded on the explain, not the outcome, and the explain says the door was right, the coupon was wrong, and the hedge was the bigger trade. He writes one sentence at the bottom, the one the Pair Book now carries on every name inside a liability-management window: *in an exchange, the short leg gets the premium.*
+
 ## 14.10 Desk Debrief
 
 **Finder.** Each idea once, with where its intuition, its judgment and its code live.
@@ -1045,6 +1104,7 @@ Three weeks later the trade press reports that a new ad hoc group of Quillfeathe
 | Rulings as jumps | $\operatorname{logit}\theta_w(t)$ (§14.6.1) | Betting line (§14.3.2) | Words, not conduct; remedy before merits; measure from the announcement: Robertshaw, Lions Gate (§14.6) | None (elicited priors) |
 | Regime filter | Hamilton update and prediction (§14.7.1) | Umbrellas at the door (§14.7.1) | Publish filtered, not smoothed; refit on a schedule; check the switch date by dropping a source: risk committee (§14.7.1), Ines (§14.7.2) | Listing 14.4 |
 | $\mathbb{P}$ versus $\mathbb{Q}$ | $s \approx \lambda^{\mathbb{Q}}(1-R^{\mathbb{Q}})$ (§14.7.2) | Stewards' room (§14.7.2; boxes in §1.5, §5.1.1) | Take out $\lambda_D$ and the 40% before comparing: the 7:10 note (§14.7.2) | Listing 14.5 (P-vs-Q tripwire) |
+| A pair across competing risks | $\mathbb{E}[\Pi] = F_H\Pi_H + F_D\Pi_D + S\,\Pi_S$ (§14.9) | Three doors (§5.6.1); bucket with two taps (§14.2) | Write each leg behind each door; in an exchange the short leg gets the premium: Owen's Carvana replay, PB-05 (§14.9) | Listing 14.2 (the CIFs) |
 
 - **"The default rate" is two numbers.** Headline and ex-DE rates differed by a factor of almost three in June 2025 (5.8% vs. 2.1%). Carry $\lambda_H$ and $\lambda_D$ separately, and name the definition in the column.
 - **Use cumulative incidence, not 1 − Kaplan–Meier.** Censoring the competing cause overstates the probability of the cause you care about, and the bias grows with horizon.
@@ -1053,6 +1113,7 @@ Three weeks later the trade press reports that a new ad hoc group of Quillfeathe
 - **Co-ops move risk; they don't remove it.** Coverage above the blocking line crushes the uptier hazard and raises the drop-down and deal-away hazard. The co-op's own legality is a dated scenario.
 - **Rulings are regime switches with timestamps.** Encode them as documented log-odds jumps by wording class. Serta and Mitel, decided the same day, are the proof that tokens beat economics.
 - **Never compare a CDS hazard with an agency default rate** without removing $\lambda_D$ and replacing the 40% convention. Most "the market is underpricing default" notes are units errors.
+- **In an exchange, the short leg gets the premium.** A hedge sized on one hazard, by spread, DTS or equity delta, hedges the sum of the taps, and the LMT era makes the taps pay the short leg with opposite signs. After the exchange, a long with no short leg that isolates the parole is a position in $1-p$, not a pair.
 
 **The Spec You Hand the Robot.** "Build `lme_cycle_engine.py` per §14.7. Inputs: an event table with the schema given, or `LMEParams` for simulation. Hazards are per year under $\mathbb{P}$, recoveries are fractions of par, and the DE recovery is the value held immediately after the exchange. Estimate cause-specific Nelson–Aalen and Aalen–Johansen CIFs on first events only, and assert $S + \sum_k F_k = 1$ to 1e-10. Fit the post-DE clock as a mixture-cure Weibull with right-censoring. Never fit an exponential or set the hazard to zero after the last observed event. Report EL by coalition side (`in`, `out`, `blend`) by quadrature, and check it against Monte Carlo within 0.005. Fit the two-state binomial Markov-switching model on DE *counts*, with ordered shares and a log-space filter, and accept time-varying $P$ as a $(T,2,2)$ array. Never delete DE rows to 'exclude' them: report the ex-DE rate as a second output. Seed every generator. Raise on a horizon beyond `T_max`. Print PASS/FAIL for every check in block 5."
 

@@ -14,12 +14,12 @@
 - [x] 12. [§9.6.3] EXPAND-SCENE (Sal, 1998) to 150 words. Note: favour, week, recall; spreadsheet limits; Kaz pronoun fixed at 9.6.1.
 - [x] 13. [§9.7.1] MATH-GENTLY (correlation, rowers) + FULL-DERIVATION-MOVE; breadth gloss. Note: rowers box, FOC added; RV beat (Marcus x-ray, value 0.7) in §9.7.2.
 - [x] 14. [Case Study: One Telecom] keep intact; BRIDGE into §9.8. Note: case untouched; bridge sentence opens §9.8 on execution.
-- [ ] 15. [§9.8.1] LIST-TO-NARRATIVE + desk-head constraints; hinge Math, Gently.
-- [ ] 16. [§9.8.2] SHOP-LIFE opener + ANOTHER-SEAT (dealer desk via Man).
-- [ ] 17. [§9.8.3] keep; move cost-curve Trend Watch to end of §9.8.
-- [ ] 18. [§9.9] MATH-GENTLY (Jensen; false discovery) + FULL-DERIVATION-MOVE + LIST-TO-NARRATIVE.
-- [ ] 19. [§9.9, before the whiteboard] SHOP-LIFE vignette: Kaz's CI job, Two Sigma order.
-- [ ] 20. [§9.10] NEW-SCENE Long Scene A: March 2020, the Factor Book in a Fire Drill.
-- [ ] 21. [§9.10, after the scene] ANOTHER-SEAT (Ares/BlueCove, Blackstone/DCI).
-- [ ] 22. [§9.11] BRIDGE: open lab with the CI job sentence.
+- [x] 15. [§9.8.1] LIST-TO-NARRATIVE + desk-head constraints; hinge Math, Gently. Note: owner table, paper-rebalance scene, bands, shadow price, hinge box.
+- [x] 16. [§9.8.2] SHOP-LIFE opener + ANOTHER-SEAT (dealer desk via Man). Note: $20mm sale vignette; Man PDF quotes; recording paraphrased; generic dealer box.
+- [x] 17. [§9.8.3] keep; move cost-curve Trend Watch to end of §9.8. Note: already last in §9.8; thread line added before it.
+- [x] 18. [§9.9] MATH-GENTLY (Jensen; false discovery) + FULL-DERIVATION-MOVE + LIST-TO-NARRATIVE. Note: two-part box, (9.6) one line, Mechanisms 1-2 derived; rules→whiteboard in 19.
+- [x] 19. [§9.9, before the whiteboard] SHOP-LIFE vignette: Kaz's CI job, Two Sigma order. Note: obap_repro week, Hana's red build, SEC facts, five-line whiteboard.
+- [x] 20. [§9.10] NEW-SCENE Long Scene A: March 2020, the Factor Book in a Fire Drill. Note: cut 19 Mar; stale-DTS hedge twist; old three paragraphs absorbed; Ramji paraphrased.
+- [x] 21. [§9.10, after the scene] ANOTHER-SEAT (Ares/BlueCove, Blackstone/DCI). Note: insurer-seat box; Feb 2026 close verified (Business Wire); TW last.
+- [x] 22. [§9.11] BRIDGE: open lab with the CI job sentence. Note: lab framed as the CI placebo universe; listings untouched.
 - [ ] 23. [§9.12 Desk Debrief] add the Finder table.

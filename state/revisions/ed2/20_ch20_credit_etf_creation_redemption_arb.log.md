@@ -7,12 +7,12 @@
 - [x] 5. [§20.2.1, partial adjustment] MATH-GENTLY + FULL-DERIVATION-MOVE. — Thermostat box absorbs villain line; geometric-series Full Derivation added.
 - [x] 6. [§20.2.2] MATH-GENTLY: attenuation. — Wobbling-ruler box, Ch 1 pointer; caveats as narration, new numbers.
 - [x] 7. [§20.2.3] BRIDGE. — Kaz staleness, Ines flow, Mags range lines; pointer to §20.5.
-- [ ] 8. [§20.3 opening, §20.3.1] MATH-GENTLY + FULL-DERIVATION-MOVE + LIST-TO-NARRATIVE.
-- [ ] 9. [§20.3.2] MATH-GENTLY, two parts + FULL-DERIVATION-MOVE.
-- [ ] 10. [§20.3.2 after Poker Table] NEW: The Pair (RV beat, PB-13 stressed).
-- [ ] 11. [§20.4.1–20.4.2] LIST-TO-NARRATIVE.
-- [ ] 12. [§20.4.3] MATH-GENTLY + FULL-DERIVATION-MOVE.
-- [ ] 13. [new #### after §20.4.3] NEW-SCENE, Long Scene 1: Eight April 2025.
+- [x] 8. [§20.3 opening, §20.3.1] MATH-GENTLY + FULL-DERIVATION-MOVE + LIST-TO-NARRATIVE. — Two-doors box; static-band derivation; Theo census, Ines doors.
+- [x] 9. [§20.3.2] MATH-GENTLY, two parts + FULL-DERIVATION-MOVE. — Hill and resistors box; derivation moved; corollaries narrated, 288 once.
+- [x] 10. [§20.3.2 after Poker Table] NEW: The Pair (RV beat, PB-13 stressed). — PB-13 box: legs, idio long ell, leaks, carry, mirror, sizing.
+- [x] 11. [§20.4.1–20.4.2] LIST-TO-NARRATIVE. — Ines reads basket against holdings; Mags sources client bond; CHECK hedged.
+- [x] 12. [§20.4.3] MATH-GENTLY + FULL-DERIVATION-MOVE. — Pegs-springs-band box; (20.6),(20.7) up front; derivation below; PT pointer.
+- [x] 13. [new #### after §20.4.3] NEW-SCENE, Long Scene 1: Eight April 2025. — Replay: PT, refused basket, card graded, Virtu coda.
 - [ ] 14. [§20.5] NEW-SCENE, Long Scene 2: Nineteen March 2020.
 - [ ] 15. [§20.6] EXPAND-SCENE + MATH-GENTLY + arithmetic fix.
 - [ ] 16. [§20.6.2] BRIDGE + ANOTHER-SEAT line.

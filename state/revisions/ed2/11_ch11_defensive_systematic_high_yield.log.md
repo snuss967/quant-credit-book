@@ -14,11 +14,11 @@
 - [x] 12. 11.5.1 CAP, ROC, MATH-GENTLY #8 "AUC is a bet" + FULL-DERIVATION-MOVE. — Done: 34-of-40 pairs box, statement with EHT credit, derivation heading.
 - [x] 13. 11.5.2 Hit rate to return, MATH-GENTLY #9 "Base rates" + vendor due-diligence scene. — Done: 1,000-issuer counts box, vendor call with silence, casino close.
 - [x] 14. 11.6/11.6.1 Tier exclusion wrong tool, LIST-TO-NARRATIVE + ANOTHER-SEAT #1 CLO manager + risk-committee exchange. — Done: Mags reads CCC row, committee exchange, CLO seat verified S&P.
-- [ ] 15. 11.6.2 2026 CCC Decompression, EXPAND-SCENE + ANOTHER-SEAT #2 large active manager.
-- [ ] 16. 11.7/11.7.1 Why low risk wins, BRIDGE DTS gloss and pointer.
-- [ ] 17. 11.7.2 Long-only contradiction, LIST-TO-NARRATIVE + ANOTHER-SEAT #3 insurer.
-- [ ] 18. 11.8/11.8.1 April 2025 Tariff Shock, NEW-SCENE Long Scene B: Ten weeks in 2025, replayed blind.
-- [ ] 19. 11.9 Capacity, MATH-GENTLY #10 (short or gloss) + LIST-TO-NARRATIVE trillion-dollar exchange.
-- [ ] 20. 11.10 Desk Debrief, Finder table + promotions + Kaz Saks closing line.
+- [x] 15. 11.6.2 2026 CCC Decompression, EXPAND-SCENE + ANOTHER-SEAT #2 large active manager. — Done: Friday scene, implied weights, TCW seat verified, PB-01 Pair box.
+- [x] 16. 11.7/11.7.1 Why low risk wins, BRIDGE DTS gloss and pointer. — Done: one-sentence DTS gloss, pointer to Ch 8 §8.4 box.
+- [x] 17. 11.7.2 Long-only contradiction, LIST-TO-NARRATIVE + ANOTHER-SEAT #3 insurer. — Done: three exits as cast proposals, Ines caps; insurer seat with NAIC.
+- [x] 18. 11.8/11.8.1 April 2025 Tariff Shock, NEW-SCENE Long Scene B: Ten weeks in 2025, replayed blind. — Done: 7 Apr card, three cards graded, Dynkin moved inside.
+- [x] 19. 11.9 Capacity, MATH-GENTLY #10 (short or gloss) + LIST-TO-NARRATIVE trillion-dollar exchange. — Done: §4.8 box exists, so gloss; ranking became cast exchange.
+- [x] 20. 11.10 Desk Debrief, Finder table + promotions + Kaz Saks closing line. — Done: nine-row Finder, two decision-point headings, Kaz January line.
 - [ ] 21. Whole chapter, box discipline check.
 - [ ] 22. Whole chapter, BRIDGE lines.

@@ -17,9 +17,9 @@
 - [x] 15. [§24.7] LIST-TO-NARRATIVE + MATH-GENTLY #6, OU and half-life — Kaz spring scene; KLZ, LNS folded in; Itô pointer §6.1.
 - [x] 16. [§24.7.1] MATH-GENTLY #7, costs vs Sharpe + FULL-DERIVATION-MOVE + WHEN-TO-APPLY — toll box; drifting name, Mags names refinancing; spec rewritten.
 - [x] 17. [§24.7] ANOTHER-SEAT #2, insurer / IG real-money mandate — forced seller vs general account vs renter; Dynkin p.213.
-- [ ] 18. [§24.8.1] LIST-TO-NARRATIVE + MATH-GENTLY #8, thresholds and cliffs
-- [ ] 19. [§24.8.2] EXPAND-SCENE, Long Scene B: The Risk Meeting, 2 January 2018
-- [ ] 20. [§24.8.3 Windstream] EXPAND-SCENE + fact fix
+- [x] 18. [§24.8.1] LIST-TO-NARRATIVE + MATH-GENTLY #8, thresholds and cliffs — staircase box; four-row table; Theo reads 24.9% sizing.
+- [x] 19. [§24.8.2] EXPAND-SCENE, Long Scene B: The Risk Meeting, 2 January 2018 — replay meeting; $1.04mm discovered; cards graded; Diary corrected.
+- [x] 20. [§24.8.3 Windstream] EXPAND-SCENE + fact fix — 3 April fixed; DC calendar; Ines tenor-gap spread; PB-11 box.
 - [ ] 21. [§24.8.4] ANOTHER-SEAT #3 + BRIDGE to 2026
 - [ ] 22. [§24.9 Desk Debrief] Finder table
 - [ ] 23. [Everywhere] Template ban

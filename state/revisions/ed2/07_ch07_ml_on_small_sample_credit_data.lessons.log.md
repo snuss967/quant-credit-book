@@ -1,0 +1,92 @@
+# Lessons Pass (Edition 2): Chapter 7
+
+*Editor: lessons editor, Edition 2. File: `book_src/07_ch07_ml_on_small_sample_credit_data.md` (1,020 lines at start). Inputs read: `state/user_directives_ed2.md` (item 12), `state/reviews/ed2/u2_lessons.md` (lessons 1–16 and the orchestrator ruling on lesson 1), `state/reviews/ed2/u2_quality_read.md` §§(b)–(d), the Ch 1 table in `state/reviews/ed2/u2_fixes_ch01_05_06.md`, `state/cast_bible.md`, `state/style_bible.md` §8, `state/rv_thread.md`, `state/rv_pair_book.md`. Verify report carries `STATUS: COMPLETE`. Line numbers below refer to the file at the start of this pass; every paragraph is one line, so re-grep the quoted phrase before editing.*
+
+## (a) Metric, before
+
+`python3 tools/prescriptiveness.py --pre 9ac1c379053d9d0254e9d524d9a40efdec4a2c71 book_src/07_ch07_ml_on_small_sample_credit_data.md`
+
+| ver | words | bullets% | modal | imper | rule | dialog | mathgently | seat |
+| :-- | --: | --: | --: | --: | --: | --: | --: | --: |
+| pre (Ed 1) | 14,523 | 14.0 | 3.6 | 1.2 | 1.0 | 9.0 | 0 | 0 |
+| before this pass | 34,543 | 6.3 | 2.9 | 0.9 | 0.7 | 7.6 | 17 | 4 |
+
+Growth 34,543 / 14,523 = **2.38×** against the 1.6–1.9× target (23,237–27,594 words). `wc -w` 35,431. Heaviest sections (awk count): §7.13 Debrief 4,438 (Spec, exercises, Resource Graph); §7.2 4,089; §7.12 4,009; §7.9 2,796; §7.3 2,720; §7.7 2,402. Per the orchestrator ruling, the merges below retire duplicate tellings only; no single-telling scene, sourced case or protected item is cut to reach the number.
+
+## (b) Duplication: a new scene retelling what an older paragraph still states
+
+- [x] B1. §7.1: FRED numbers (3.23%, 12.78%, 11.37%, 4.61%) told in the Defect 5 paragraph (L100) and again in the regime scene (L102). Survives: the scene, which takes the series IDs, fetch date and the 2.59% January 2025 point; L100 keeps the regime count and "one hat on nineteen hundred heads". **Done:** FRED values told once, in the scene, with series and date.
+- [ ] B2. Cold open L56 ends by retelling §7.7 L521's payoff ("grouping key for the entire test", a mapping "nobody had audited in years"). Survives: §7.7; L56 ends on a pointer. **Done:** Cold open now points to §7.7; payoff told there once.
+- [x] B3. Long Scene 1's ending (L196) restates the protected Trend Watch (L210): JFE volume and article numbers, the retraction-notice citation, "This is the first time this has happened." Survives: the Trend Watch for the bibliography; Mags's ending keeps the quotes the box lacks (traded liquidity, lead/lag error, capping losses, 400 citations, "no investment advantage at all"). **Done:** Scene keeps the quotes; bibliography and "first time" left to the Trend Watch.
+- [x] B4. The card is posed by Ines at L190 and re-posed in italics at L202 after the ending. Survives: Ines's card (lesson 9); L202 keeps the two forward pointers. **Done:** Second card cut; reader's card points to §7.7 and Case A.
+- [x] B5. §7.2 L222 retells Kaz's three objections and Ines's test (fourth telling). Survives: the scene; the one new idea (a factor file is a hypothesis list, not a benchmark) moves into Theo's reflection at L200. **Done:** Hypothesis-list idea now Theo's note on the card's back.
+- [x] B6. §7.2 L226 restates Ines's shift test and §7.9's two blind spots. Survives: L224's placebo; L226 cut to one bridging sentence. **Done:** Shift test reading kept in one sentence; blind spots point to §7.9.
+- [x] B7. §7.3 L299 "breaks in three places" retells the Ways box (L303: jumps, stale marks, look-ahead in d*), the warm-up paragraph (L266: new issues, issuer curve) and the ADF box (d* is noisy). Survives: L266 and the Ways box; L299 deleted. **Done:** Three-places paragraph deleted; warm-up paragraph and Ways box carry it.
+- [x] B8. §7.4 DTS numbers (five-year bond at 400 bp, DTS 0.20, σ_rel 10%, 2% a month) told in the DTS box (L309), the corridor (L311) and the Full Derivation (L363). Survives: corridor and derivation; box demoted (D1). **Done:** DTS box retired to a gloss with its own numbers.
+- [ ] B9. §7.4 the trapdoor (92 to 55 between two marks) told in the corridor (L311) and again at L329. Survives: the corridor; L329 keeps its two new consequences.
+- [ ] B10. §7.5 L367 retells Theo's cold-open question (thesis right, how sure, how much). Survives: the cold open; L367 points to it.
+- [ ] B11. §7.5 bet-size numbers (p = 0.75 → z 0.58 → 0.44; p = 0.9 → 0.82) in L387 and the Φ box (L389). Survives: L387; box demoted (D1).
+- [ ] B12. §7.6 the one-issuer toy (B bonds, T/h, "eleven bonds, one hat") in the hats box (L427) and L443. Survives: L443; the box keeps the shareholder picture and its own Kish number. L461 restates Kish's formula; points to the box.
+- [ ] B13. §7.6 "When to reach" (L469–473) repeats the 79 windows (L449), retells Model Review Tuesday (L471) and the first-slide N_eff check (L88, L449). Survives: L449 and the vignette; the overlap factor (190) and the 2015 energy point move into the Wednesday scene as dialogue; L473 deleted.
+- [ ] B14. §7.7 L501 re-narrates the fold scene just played. Survives: the scene; L501 keeps "fatal in credit" and "how well the model could remember".
+- [ ] B15. §7.7 walk-forward told twice, near verbatim: Bohn–Stein p.467 annotation (L527) and L539. Survives: the annotation; L539 keeps only the new idea (purged K-fold is for model selection).
+- [ ] B16. §7.7 L541 restates the Ways box (280-day embargo, tuning outside the loop). Survives: the Ways box; L541 keeps the upstream-leak payoff promised in §7.2.
+- [ ] B17. §7.8 expected maximum of noise told three times: box (L551: 0.065 × 3.56 ≈ 0.23, 0.8), L553, derivation (L577–583, the same sentence as L553). Survives: the derivation; L553 deleted; box gets its own number (D2).
+- [ ] B18. §7.8 L557 restates the derivation's numbers and the MinTRL/PBO definitions (L593, L599). Survives: the derivation; L557 keeps the idea and the coin-flip punchline.
+- [ ] B19. §7.9 coda (L651) and L685 state the momentum 0.30% → 0, the 57–78% ex-post-filter share and the "deletes exactly the outcomes ... knowledge of the future" sentence twice. Survives: L685; the coda keeps Kaz's discovery and the 9:40 p.m. email.
+- [ ] B20. §7.9 reversal numbers (−0.99%, −0.09%, −0.17%) in the Trend Watch (protected), the scene (L637), L683 and Case C (L746); placebo shares (43–67% vs 10–18%) at L224, L683, L691. Survives: Trend Watch, scene, L224; L683 keeps the fingerprint sentence; Case C's "What happened" becomes a pointer.
+- [ ] B21. §7.9 L691–693: price versus non-price restates L683/L224, and L693 answers Exercise 5(b) (anchored composite; executable entry price). Survives: L691's new fact (the ex-ante filter matters for non-price signals too) merged into L687; L693 becomes a pointer to Exercise 5.
+- [ ] B22. §7.11 Case A's "What happened" (L724) is the third telling of the retraction, and "How the desk would have caught it" (L726) restates Ines's test and §7.7's upstream-leak point. Survives: the scene and §7.7; Case A keeps the covenant line and the Monday changes.
+- [ ] B23. §7.11 Case C (L748): Ines's hand-history quote restates Mags's Round three. Survives: Mags; Case C keeps the RFQ-desk sentence and the Chapter 9/10 pointers.
+- [ ] B24. §7.10 Seat box (L718) restates the Blackstone extraction just above (2% vs 20%) and the Trend Watch's Robeco 2023 line. Survives: extraction and Trend Watch; the seat keeps its reading and Ralph Smith.
+- [ ] B25. Duplicate Specs: §7.12 "Edge cases ROBO must handle" (L772) repeats the Debrief Spec line for line. Survives: the Debrief Spec, gaining the one missing line (single-bond parents); L772 deleted; the lab's schema table stays.
+- [ ] B26. §7.12 the refuse-to-print rule told a fifth time at L828; L826 re-narrates the §7.7 scene; L840 recaps blocks 2, 4, 5, 6 (L790, L810, L820, L834). Survives: L756's joke, the Spec, the block paragraphs; L828 points back; L826 and L840 trimmed to their new sentences.
+
+## (c) Templates and detached judgment paragraphs
+
+- [ ] C1. Cold open L62–64: the syllabus in costume ("He will be able to explain ... He will know ... He will be able to specify ... And he will be able to deflate ... That is the order of the chapter"). Replace with one short paragraph naming the four layers once; the Debrief's USB-stick line already lands the outcomes.
+- [ ] C2. Enumerators inside paragraphs: L80 annotation ("Two consequences ... First ... Second"), L170 Kaz ("One: ... Two: ... Three:"), L216 ("Two observations ... First ... Second"), L307 ("wrong ... in three ways"), L329 ("Two consequences. First ... Second"). Recast without enumerators; keep every point.
+- [ ] C3. §7.2 "#### When to lean on a published factor file, and when it breaks" (L220–226): detached after the scene (B5, B6). Heading becomes the placebo; L222 retired into L200; L226 cut.
+- [ ] C4. §7.3 "#### When to reach for fractional differentiation" (L295–301): "breaks in three places", "What a seasoned practitioner checks first". Becomes a refit beat: Kaz's d* = 0.35 inside each fold, Ines asking for the picture rather than the statistic, the memory-retained correlation and the 0.3 threshold.
+- [ ] C5. §7.6 "#### When to reach for uniqueness weights" (L467–473): "two situations ... The first is ... The second is", "The check a seasoned reviewer runs first". Folded into the Wednesday scene (B13).
+- [ ] C6. §7.7 "#### When to reach for which split" (L537–543): "What a seasoned practitioner looks at first". Becomes "What no split can catch" (B15, B16) with Kaz's shuffled-versus-purged gap as one beat pointing to the Debrief.
+- [ ] C7. §7.9 "#### When to reach for the gap and the ex-ante filter" (L689–695): "What a seasoned practitioner checks first is a construction". Becomes Theo's beat on the within-firm survivors (25 of 26), read as long one bond, short a sibling (B21).
+- [ ] C8. §7.12 listing explanations: "Use it on/as ..." (L782, L792, L812, L822), "The edge that bites" ×5 (L792, L802, L812, L822, L836), "Two things bite", "Two limits". Recast each without the U1 template; keep every fact.
+- [ ] C9. Manual voice in annotations and asides: L242 ("Cap the log transform's domain ... and say so in the spec"), L387 ("worth memorizing"), L421 ("It belongs in a section about meta-labeling ... for one reason"), L563 ("Report them differently"), L567 seat box ("two other things. The first is ... The second is"). Recast in desk voice.
+
+## (d) Boxes
+
+Count at start: 17 Math, Gently (L68 risk-neutral, L110 standard error, L218 false discovery, L234 random walk, L238 normal/lognormal, L246 the dial, L262 ADF, L309 DTS, L389 normal CDF and z, L395 precision/recall, L427 hats, L463 bootstrap, L503 K-fold, L551 expected maximum, L555 skew/kurtosis, L601 logit, L655 covariance) against a cap of ten. Density 1 per 2,030 words; L234/L238 separated by one bold line only. Runs of more than two boxed elements: five.
+
+- [ ] D1. Demote seven survey or owned-elsewhere boxes to one-sentence glosses with pointers: L68 risk-neutral (Ch 5 §5.1.1, Ch 6 §6.2; verify's doubtful item 1), L234 random walk (Ch 3-B §3B.1, Ch 6 §6.1.1; stationarity defined in the gloss; ADF box's "walker from the box above" fixed), L238 lognormal (Ch 5 §5.2, Ch 6 §6.1), L309 DTS (Ch 1-B §1B.2, Ch 4 §4.6, Ch 8), L389 normal CDF and z (Ch 4 §4.6), L555 skew/kurtosis (Ch 5 §5.1), L601 logit (Ch 5 §5.5).
+- [ ] D2. Boxes that solve an exercise or reuse the text's numbers (lesson 7): the dial box (L246) prints Exercise 2(a)'s answer (d = 0.4 weights) → switch to d = 0.5; the expected-maximum box (L551) repeats the derivation's 3,000/3.56/0.23 → best of 100; the hats box toy (B12).
+- [ ] D3. Kept boxes that retell another chapter's box: standard error (L110) re-defines Ch 4 §4.6's wobbling scale; false discovery (L218) re-tells Ch 4 §4.5's 432 lottery tickets; covariance (L655) re-defines Ch 2 §2.6's covariance and repeats L671's Chapter 18 pointer. Each keeps its new load (sampling frequency; the step-up thresholds; the mis-zeroed scale) and points back.
+- [ ] D4. Thread one line of narration into each run of three boxed elements: L110–116 (Math, Gently; Paleologo p.49; Desk Myth), L339–345 (Ben Dor p.338; Ways; CLO Seat), L395–401 (Math, Gently; BlackRock p.6; Ways), L561–567 (Paleologo p.159; Ways; pod Seat), L703–718 (Trend Watch; Blackstone p.2; systematic Seat).
+- [ ] D5. After D1–D4: ten Math, Gently, none adjacent, no run above two. Re-check.
+
+## (e) Research-note leaks and fiction labels
+
+- [ ] E1. L567 Seat box "paraphrased here because the only transcript available to us is an unverified machine one" and L962 "(paraphrased; transcript unverified)": research-note voice. Recast as "paraphrased, not quoted"; log the open item.
+- [ ] E2. L964 Odd Lots entry is channel-level with "No episode ... was verified for this edition" and no URL. Cut; log for U3. L1012 PyBondLab "its page was not verified for this edition": hedge the sentence; log.
+- [ ] E3. No "CHECK", "search summary" or "secondary" strings found. Fiction labels missing at the top of the cold open, §7.1's week of data archaeology (mixes desk fiction with real FRED and SMU numbers), §7.7's fold scene and the Debrief scene. Add one italic label to each.
+
+## (f) Reference layer
+
+- [ ] F1. Finder table (ten rows: concept · equation · intuition box · judgment scene · listing) at the top of §7.13, carrying the one-line rules retired by C3–C7.
+- [ ] F2. Promote "Long Scene 1", "Long Scene 2" and "Quant-shop life: Model Review Tuesday" (bold paragraphs) to `####` headings; add `####` decision-point headings for 6 p.m. Friday 14 October 2022 and the morning after the coda.
+
+## (g) Cast-bible contradictions
+
+- [ ] G1. Mags "had been on the desk in October 2022" (L130) and "Mags's objection had been a two-line email" in October 2022 (L728) contradict C5's canon (bank to Jan 2021, a fund Feb 2021–2022, this desk by 2023). L130 → "knew how the story ended"; the unanswered 2022 email becomes Ines's.
+- [ ] G2. L122 "Once a quarter, on a Saturday ... This quarter she did not pick a crisis" collides with Ch 1's quarterly Saturday ("This quarter it was March 2020") and C14's canon (ordinary replays are Friday afternoons). Make it a Friday-afternoon replay; adjust Mags's "six hours" and the lunch.
+- [ ] G3. Exercise 4 "on his new report" (Kaz) → "Kaz's" (C8).
+- [ ] G4. L854 "the Serta pattern Theo had spent two years of his life inside" attaches Theo to Serta (cast rule 4); L90 "the Serta-style transactions he had spent two years of his life on". Make both generic uptier work.
+- [ ] G5. Record in `state/cast_bible.md`: Ana (Model Review Tuesday analyst, fictional systematic manager); Ch 7 facts for Ines (the 14 Oct 2022 file replay; her unanswered 2022 email), Kaz (the reversal sleeve, paper-traded from July, re-formed flat, moved to inventory skew), Theo ("Four" as a defined term; the drop-down flag he got most wrong), Mags (1998 page-140 definition, already canon), and the Wen/Marcus beat (H1).
+
+## (h) Relative-value beat
+
+- [ ] H1. `state/rv_thread.md` assigns Ch 7 a scene in §7.4–7.5 on the Pair Book panel: the label is on the residual differential, not the spread; what the model is allowed to predict; a missing factor becomes a feature with a great backtest (T3; R9 Collin-Dufresne, Goldstein and Martin 2001: residuals "highly cross-correlated"); homes Ch 7-B and Ch 8 §8.8. Ch 7 has no Pair Book beat. Write a 200–250-word scene after "Strip the carry" (L327), fiction label at top, Dov, Wen and Marcus only, then update `state/rv_pair_book.md` and the cast bible.
+
+## Fix log
+
+(Items are ticked above as they are fixed, each with a ten-word note.)
