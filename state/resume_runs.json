@@ -1,16 +1,16 @@
 {
- "note": "Stopped at the user's ~88% rule at 06:11 UTC. To resume: Workflow({scriptPath, resumeFromRunId: runId, args}). All agents are durable, so finished items are skipped.",
+ "note": "Restarted 09:34 UTC (window 09:30-14:30). Stopped at the user's ~88% rule at 06:11 UTC. To resume: Workflow({scriptPath, resumeFromRunId: runId, args}). All agents are durable, so finished items are skipped.",
  "runs": [
   {
    "name": "reader-lens",
-   "task": "wd7imdb8c",
+   "task": "w0vm8d6o1",
    "runId": "wf_aa7ed3ed-60e",
    "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/ed2-reader-lens-reviews-wf_aa7ed3ed-60e.js",
    "args": null
   },
   {
    "name": "research-B",
-   "task": "wjvc6tmzo",
+   "task": "wjge66z49",
    "runId": "wf_e08bbe4b-b57",
    "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/research-resilient-wf_bd451f4f-5fb.js",
    "args": {
@@ -58,7 +58,7 @@
   },
   {
    "name": "u3-perspectives-life",
-   "task": "wd8z4yj3u",
+   "task": "wt0odrxzq",
    "runId": "wf_1508b41d-803",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/u3_research_and_new_chapters.js",
    "args": "items: life quant_shop_daily_life, perspectives buyside_credit_managers, perspectives dealers_and_systematic_shops; chapters: 04_ch04c_other_seats_at_the_table, 01_ch01b_a_week_in_five_quant_shops"
@@ -76,7 +76,8 @@
      "02_ch02_revolutions_in_credit_trading",
      "04_ch04_inside_the_systematic_credit_industry"
     ]
-   }
+   },
+   "status": "HELD until state/rv_thread.md is COMPLETE"
   },
   {
    "name": "u2-B",
@@ -90,7 +91,8 @@
      "06_ch06_merton_and_intensity_models",
      "07_ch07_ml_on_small_sample_credit_data"
     ]
-   }
+   },
+   "status": "HELD until state/rv_thread.md is COMPLETE"
   },
   {
    "name": "part-III-a",
@@ -111,7 +113,8 @@
      "revise",
      "verify"
     ]
-   }
+   },
+   "status": "HELD until state/rv_thread.md is COMPLETE"
   },
   {
    "name": "part-III-b",
@@ -132,7 +135,8 @@
      "revise",
      "verify"
     ]
-   }
+   },
+   "status": "HELD until state/rv_thread.md is COMPLETE"
   },
   {
    "name": "part-III-c",
@@ -153,11 +157,12 @@
      "revise",
      "verify"
     ]
-   }
+   },
+   "status": "HELD until state/rv_thread.md is COMPLETE"
   },
   {
    "name": "figs-misc",
-   "task": "wyz2ysvwc",
+   "task": "woka093x1",
    "runId": "wf_e4574d02-36e",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
    "args": {
@@ -175,12 +180,14 @@
   },
   {
    "name": "fixes-and-cast",
-   "task": "wwluacbli",
+   "task": "wjaxjrny2",
    "runId": "wf_c8095cb4-bb7",
    "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/ed2-u2-fixes-and-cast-bible-wf_c8095cb4-bb7.js",
    "args": {
     "stems": [
-     "06_ch06_merton_and_intensity_models"
+     "06_ch06_merton_and_intensity_models",
+     "01_ch01_anthology_and_landscape",
+     "05_ch05_credit_probability_distributions"
     ]
    },
    "todo": "Relaunch the same script with stems [01_ch01_anthology_and_landscape, 05_ch05_credit_probability_distributions] once their .verify.md files are COMPLETE. Then run a lessons pass on Ch 3, 7, 13-16 (revised before the lessons existed)."
@@ -200,6 +207,68 @@
      "brief",
      "revise",
      "verify"
+    ]
+   },
+   "status": "HELD until state/rv_thread.md is COMPLETE"
+  },
+  {
+   "name": "rv-thread",
+   "task": "wnoycfspo",
+   "runId": "wf_45fc31f8-4c2",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/rv_thread.js",
+   "args": {
+    "today": "2026-10-18"
+   }
+  },
+  {
+   "name": "verify-1-3-2-7",
+   "task": "w3oiwl78i",
+   "runId": "wf_55f7ff56-759",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "01_ch01_anthology_and_landscape",
+     "03_ch03_pjt_rssg_cognitive_bridge",
+     "02_ch02_revolutions_in_credit_trading",
+     "07_ch07_ml_on_small_sample_credit_data"
+    ],
+    "stages": [
+     "verify"
+    ]
+   }
+  },
+  {
+   "name": "lessons-rv-13-14",
+   "task": "wh7jk9av4",
+   "runId": "wf_b378f1d7-e91",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "13_ch13_codifying_lmt_game_theory",
+     "14_ch14_default_and_recovery_cycle_lmt_era"
+    ],
+    "stages": [
+     "lessons",
+     "rv"
+    ]
+   }
+  },
+  {
+   "name": "lessons-rv-15-16",
+   "task": "wmcxw8m61",
+   "runId": "wf_da0f3c2b-711",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "15_ch15_event_driven_mna_and_coc",
+     "16_ch16_post_reorg_equities_and_claims"
+    ],
+    "stages": [
+     "lessons",
+     "rv"
     ]
    }
   }

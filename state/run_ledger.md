@@ -216,3 +216,7 @@ State on disk:
 ## 06:45 UTC: user directive 13, the relative-value thread (pod long-one/short-another to isolate idio, woven through every chapter)
 
 Measured coverage: idio isolation is concentrated in Ch 1, 7, 8, 8-B, 8-C, 19 and 28; the explicit pod pair trade is thin almost everywhere. Plan: `state/rv_thread_plan.md`. Prompts updated: every writer's VOICE, every brief's required list, and the lessons audit now carry the RV beat. New stage `rv` (Opus RV weaver) is for chapters already revised. New workflow `tools/workflows/rv_thread.js`: Sonnet research ×2 (pods and risk; pairs literature and mechanics) → Fable RV architect (`state/rv_thread.md`, `state/rv_pair_book.md`, optional new chapter 08_ch08d) → Opus writer. **Launch FIRST at 09:33**, before resuming the revisers, so the revisions pick up the thread.
+
+## Restart 09:34 UTC (window 09:30–14:30)
+
+Launched: **rv-thread** (wnoycfspo), reader-lens (w0vm8d6o1), research-B (wjge66z49), u3-perspectives-life (wt0odrxzq), figs-misc (woka093x1), fixes-and-cast with Ch 6/1/5 (wjaxjrny2), verify for Ch 1, 3, 2, 7 (w3oiwl78i), and lessons→rv for Ch 13–14 (wh7jk9av4) and Ch 15–16 (wmcxw8m61); the rv stage waits for the thread. **Held until state/rv_thread.md is COMPLETE:** u2-A, u2-B, part-III-a/b/c, part-VII-u2. Pace guard b5dam393p (`--target 94`, alarm 88% actual). Autosnap bihya4qw7.
