@@ -308,6 +308,11 @@ Use it for loans and secured bonds held in CLOs, where the inputs are monthly an
 - *The Credit Edge*, "Acadian Sees Quants Moving to Loans, CLOs," with Scott Richardson (19 Feb 2026), https://omny.fm/shows/the-credit-edge-by-bloomberg-intelligence/acadian-sees-quants-moving-to-loans-clos. The systematic seat moving onto the CLO's ground.
 - *The Octus Download*, "EP 28 | BDC Trust Gap, Carl's Jr. Collapse & The Pitt" (22 Apr 2026), https://share.transistor.fm/s/b845e0e3. BDC marks on one asset far apart by holder (§4C.6).
 - *Cloud 9fin*, "Co-op agreements through the eye of American Needle" (25 Sep 2024), https://share.transistor.fm/s/44a5c9af. The antitrust risk to the coalitions of §4C.7 and §4C.8.
+- **"Ralph Smith: Scientific Investing in Fixed Income" (S5E7)** (*Flirting with Models*, 11 Jul 2022). A BlueCove quant on the breadth and liquidity limits of credit and on how a bond's assumed availability can change a backtest: the systematic seat's view of why a composite is not a fill (§4C.2). https://www.flirtingwithmodels.com/episodes/kAEkSoYuRwd
+- **"Inside the Blood Sport of Creditor-on-Creditor Violence"** (*Odd Lots*, with Sujeet Indap of the *Financial Times*, 25 Nov 2024). How cov-lite paper led creditors to fight one another over recoveries: the general-audience lead-in to the Serta uptier of §4C.4 and the coalitions of §4C.8. https://omny.fm/shows/odd-lots/inside-the-blood-sport-of-creditor-on-creditor-vio
+- **"What David Barse Learned From Watching A Credit Fund Blow Up"** (*Odd Lots*, with the former CEO of Third Avenue Management, 1 Oct 2018). The liquidity-mismatch forced seller told by the man who ran it, and the other side of the trade the opportunistic fund of §4C.7 takes. https://omny.fm/shows/odd-lots/what-david-barse-learned-from-watching-a-credit-fu
+- **"Josh Friedman: Master Class in Credit Investing at Canyon" (EP.263)** (*Capital Allocators*, 25 Jul 2022). A Canyon co-founder on investing across distressed, securitizations and risk arbitrage: a dedicated dislocation shop to set beside Celeste Varga's platform-funded one (§4C.7). https://www.capitalallocators.com/podcast/master-class-in-credit-investing-at-canyon/
+- **"Max Frumes and Sujeet Indap: Inside the Sausage Factory of the Caesar's Restructuring" (EP.209)** (*Capital Allocators*, 16 Aug 2021). The Caesars bankruptcy as a game among Apollo, TPG, GSO, Elliott, Silver Point, Oaktree and Appaloosa: a real coalition map to read against Figure 4-C.5 (§4C.8). https://www.capitalallocators.com/podcast/inside-the-sausage-factory-of-the-caesars-restructuring/
 
 **Practitioner Writing**
 
@@ -315,6 +320,7 @@ Use it for loans and secured bonds held in CLOs, where the inputs are monthly an
 - D. E. Shaw group, "Assessing U.S. Mortgage-Backed Credit Stress in 2020," https://www.deshaw.com/library/assessing-us-mortgage-2020. Patient capital buying from forced sellers (§4C.3).
 - Sidley, "Regulatory Update: NAIC Adopts New RBC Charges for Collateral Loans and CLOs" (Jul 2026), https://www.sidley.com/en/insights/newsupdates/2026/07/regulatory-update-naic-adopts-new-rbc-charges-for-collateral-loans-and-clos.
 - Loomis Sayles, "Loomis on Loans, Q4 2025" (Jan 2026), https://loomissayles.com/wp-content/uploads/2026/01/Loomis-on-Loans-Q4-2025-Final.pdf.
+- **"Dealer Balance Sheets and Corporate Bond Liquidity Provision"** (Adrian, Boyarchenko and Shachar, *Liberty Street Economics*, 24 May 2017). TRACE matched to dealer balance sheets: post-crisis regulation reduced bond-level liquidity, the evidence behind the dealer's rented balance sheet in §4C.1. https://libertystreeteconomics.newyorkfed.org/2017/05/dealer-balance-sheets-and-corporate-bond-liquidity-provision/
 
 **Academic Papers**
 

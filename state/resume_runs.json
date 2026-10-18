@@ -176,25 +176,6 @@
    "status": "lessons DONE; rv returned 'no thread' -> rerun stage rv once thread exists"
   },
   {
-   "name": "newch-1b-4c",
-   "task": "wzxviedcs",
-   "runId": "wf_f1dec755-d63",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "01_ch01b_a_week_in_five_quant_shops",
-     "04_ch04c_other_seats_at_the_table"
-    ],
-    "stages": [
-     "u1",
-     "figures",
-     "figcheck",
-     "resgraph"
-    ]
-   }
-  },
-  {
    "name": "lessons-rv-3-2-7",
    "task": "w0qspn5hq",
    "runId": "wf_6ac67a00-da1",

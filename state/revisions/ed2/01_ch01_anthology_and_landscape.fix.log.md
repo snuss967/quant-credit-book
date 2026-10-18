@@ -23,17 +23,17 @@
 - [x] P2 · §1.6, lines 468–470 · Man Numeric 30/60→90 and Blackstone quote only in seat box; annotation keeps aphorism; §1.8 intro says "the Blackstone sentence from §1.6". — *Man 30/60→90 and Blackstone quote only in seat box; pointers elsewhere.*
 - [x] P2 · §1.6, lines 470–476 · Move both Trend Watches to the end of §1.6; add one line of narration before Paleologo extraction ("Kaz's reply arrived at 11:40."). — *Trend Watches moved to section end; 11:40 line and two narration threads added.*
 - [x] P2 · §1.3.3, line 179, Bayes box · Change to prior 5%, LRs 6 and 2 (odds 0.0526 × 12 = 0.63, π ≈ 0.39). Leave Exercise 2 and Serta arithmetic. — *Box now 5% prior, LRs 6 and 2, π≈0.39; exercise intact.*
-- [ ] P2 · §1.3 Specification, lines 257–287 · Move vignette to open the Specification section; delete Listing 1.1 "edge case that bites" sentence.
-- [ ] P2 · Reading Listing 1.2, 1.3, 1.4 · Open each with the chapter moment; drop template phrases.
-- [ ] P2 · §1.8.1, line 533, "Where this blows up" · Cut to Moyer quote + state-dependent-capacity sentence + "Act 3 shows the first two happening on a Saturday."
+- [x] P2 · §1.3 Specification, lines 257–287 · Move vignette to open the Specification section; delete Listing 1.1 "edge case that bites" sentence. — *Vignette opens section; edge-case sentence cut, double-counting folded into bridge.*
+- [x] P2 · Reading Listing 1.2, 1.3, 1.4 · Open each with the chapter moment; drop template phrases. — *1.2 opens on Mags's lines, 1.3 on Act 3, 1.4 on Kaz's 12 bp.*
+- [x] P2 · §1.8.1, line 533, "Where this blows up" · Cut to Moyer quote + state-dependent-capacity sentence + "Act 3 shows the first two happening on a Saturday." — *Cut to Act 3 pointer, state-dependent capacity (with kappa), Moyer quote.*
 - [x] P2 · §1.10 Desk Debrief · Add Finder table before the bullets (concept · eq · box · scene · listing). — *Ten-row Finder table added above train scene, carrying four judgments.*
-- [ ] P2 · Lines 555 and 680, Long Scene bold paragraphs · Make them `####` headings; add `####` for each decision point.
-- [ ] P2 · §1.4, line 352 · Replace manual-voice bridge with Theo's spreadsheet DTS-in-percent slip, Kaz catching it, then the function.
-- [ ] P3 · 17 of 18 Math, Gently sign-offs · Vary; "next" where the derivation follows immediately.
-- [ ] P3 · §1.4, line 338, regression-slope box · Add worked number (yields +100 bp, HY price +1 point → slope +1, "negative duration").
-- [ ] P3 · §1.3.2 box vs cold open in numbers · Link 0.19 and 0.317 in one sentence.
-- [ ] P3 · Ford scene, lines 559, 651 · Trim ~150 words of framing padding.
-- [ ] P3 · Serta scene, lines 680–686 · Trim opening 300 words to ~150; keep "I have. Twice in one afternoon. Only one of them was."
+- [x] P2 · Lines 555 and 680, Long Scene bold paragraphs · Make them `####` headings; add `####` for each decision point. — *Both scenes, two decision points, Serta coda now #### headings; reader card.*
+- [x] P2 · §1.4, line 352 · Replace manual-voice bridge with Theo's spreadsheet DTS-in-percent slip, Kaz catching it, then the function. — *Bridge replaced by Theo's percent-column slip, Kaz's catch, row 3,112.*
+- [x] P3 · 17 of 18 Math, Gently sign-offs · Vary; "next" where the derivation follows immediately. — *No 'full version' left; 'next' where derivations follow; others varied.*
+- [x] P3 · §1.4, line 338, regression-slope box · Add worked number (yields +100 bp, HY price +1 point → slope +1, "negative duration"). — *Two-dot example added: slope +1, empirical duration −1, negative duration.*
+- [x] P3 · §1.3.2 box vs cold open in numbers · Link 0.19 and 0.317 in one sentence. — *Box now adds 5 × 0.025 to reach the desk's 0.317.*
+- [x] P3 · Ford scene, lines 559, 651 · Trim ~150 words of framing padding. — *Pastries, USB, door pause and Kaz's dated notebook cut; content kept.*
+- [x] P3 · Serta scene, lines 680–686 · Trim opening 300 words to ~150; keep "I have. Twice in one afternoon. Only one of them was." — *Opening cut from 231 to 129 words; key line and analyst kept.*
 - [ ] P3 · §1.4, line 346, Veronesi annotation · Lead with the phantom position (Tuesday's markout residual), then the rule.
 - [ ] P3 · Appendix F · Title Listing 1.4 properly; trim 1.2's stray prose and duplicate block.
 - [ ] P3 · Resource Graphs (289, 661, 798) · U3 item; do not invent episodes.
