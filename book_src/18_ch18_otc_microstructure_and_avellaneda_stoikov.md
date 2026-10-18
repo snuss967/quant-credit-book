@@ -105,8 +105,15 @@ Order splitting makes Roll *underestimate* the spread by the factor $(1-\rho)$. 
 
 **The Spec You Hand the Robot.** *What ROBO built from the vague version ("estimate the bid–ask spread from TRACE"):* it averaged (ask print − bid print) over all prints on the same day, on a bond that traded twice a week, and reported a spread of zero for every day with one print. The precise spec: input a time-ordered vector of cleaned prices (points per 100 par) for one bond and one size bucket. Output `(spread, autocov)` in points. Require at least `min_obs` price changes. Return `NaN` when the autocovariance is non-negative, and never take an absolute value. Sanity checks: recover a known spread on simulated Roll data, recover $S(1-\rho)$ under order splitting, and return `NaN` under momentum.
 
-<!-- EXPLAIN: Listing 18.1 -->
-> **Code Companion: Listing 18.1.** Roll (1984) effective spread from consecutive trade prices (points per 100 par). The full python listing is in [Appendix F, Listing 18.1](#code-18-1).
+Somewhere in the book is a B3 bond that prints twice a week, and nobody will tell you what it costs to get out of it. The derivation says the answer is hiding in the way consecutive prices bounce, but a derivation is not a nightly job. A desk that holds a few thousand bonds needs a spread estimate for each one, in each size bucket, before the morning risk meeting, and it needs the estimate to say "I don't know" in the same way every time, not only when the analyst on call happens to notice. That is the case for putting Roll's trick into a function and surrounding the function with tests that can fail.
+
+Listing 18.1 has two working parts. `roll_spread` takes a time-ordered vector of prices in points per 100 par, discards anything that is not finite, and declines to answer unless at least `min_obs + 2` prices survive, which leaves `min_obs` pairs of consecutive price changes. It differences the prices, takes the sample covariance between each change and the one before it, and returns the pair `(spread, autocov)`. When the covariance is negative, the spread is twice the square root of its magnitude, which is the estimator derived above. When the covariance is zero or positive, the spread is `NaN` and the covariance comes back anyway, so the caller can log the sign. The function never takes an absolute value, because a positive covariance is the data reporting momentum, and a spread built from it would be fiction with a confident decimal point.
+
+The second part, `simulate_roll`, is the test bench. It builds prices as a random-walk mid plus half a spread times a trade sign. The signs come from a two-state Markov chain whose persistence `rho` stands for order splitting (`rho = 0` is Roll's original i.i.d. world), and the mid increments pass through an AR(1) filter with coefficient `phi_mid`, so a positive value plays the informed trader who keeps pushing the mid in the direction of the flow. Three assertions pin the estimator to the algebra. With i.i.d. signs, it recovers a 0.50-point spread to within 0.02. With `rho` of 0.6, it returns about 0.20, which is $S(1-\rho)$. With strong drift, it returns `NaN` and a positive covariance. The last line defines the Bao–Pan–Wang illiquidity measure as minus the autocovariance, in points squared.
+
+Use it on TRACE prints for one bond in one size bucket, as a cross-check and a stress indicator rather than as the spread you quote from. The edge case that bites is that the function sees prices and nothing else. It has no timestamps, so a print from Monday and a print from Thursday are treated as neighbours, and dropping a non-finite price silently glues the series across the hole. The mid has diffused in the meantime, the bounce is buried under $\sigma_\varepsilon^2$, and the function returns a number that is mostly noise. The caller must bucket by size and cap the gap before the vector arrives. Remember too that a sample covariance is noisy: a single `NaN` is not proof of informed flow, and a run of them across many bonds on the same day says more than any one.
+
+*The full listing is [Listing 18.1 in Appendix F](#code-18-1).*
 
 The third check is worth working by hand. With $S = 0.10$ and $\rho = 0.6$, the bounce contributes $-c^2(1-\rho)^2 = -0.0025 \times 0.16 = -0.0004$ to the autocovariance. The mid increments have stationary variance $0.01/(1-0.16) \approx 0.0119$ and lag-one autocovariance $0.4 \times 0.0119 \approx 0.0048$. Momentum wins by a factor of twelve, and a well-behaved estimator says so by refusing to answer.
 
@@ -178,8 +185,15 @@ Guo, Lehalle & Xu (2021), *Transaction Cost Analytics for Corporate Bonds* (arXi
 
 Input: arrays of markouts (points, IDO-adjusted, horizon $h$ stated in the column name) and signed flow (customer buy positive; USD mm or ADV-normalized; state which). Output: slope and $t$-statistic. In production, use heteroskedasticity-robust errors clustered by issuer and day. The simulation below checks the closed form, the absence of post-trade drift under efficient pricing, and the insider's profit $\tfrac12\sigma_v\sigma_u$.
 
-<!-- EXPLAIN: Listing 18.2 -->
-> **Code Companion: Listing 18.2.** One-period Kyle (1985). The full python listing is in [Appendix F, Listing 18.2](#code-18-2).
+A desk never gets to see how much the other side knows. It sees a signed size, a price, and, if it waits, where the bond went afterward. Kyle's model is the bridge between those observables and the thing you care about, and the bridge only holds if the regression used to cross it has been tested in a world where you know the answer. So the desk builds that world first: an insider, a crowd of noise, a market maker, and a planted $\lambda^{K}$. Then it asks whether its own estimator can find the number it just hid.
+
+Listing 18.2 does this with two small functions and one simulation. `kyle_equilibrium` returns the closed form from §18.3.2, $\lambda^{K} = \tfrac12\sigma_v/\sigma_u$ in points per unit of flow and $\beta = \sigma_u/\sigma_v$ in flow per point, and it raises an error on non-positive volatilities instead of returning a number that looks like depth. `estimate_kyle_lambda` is the tool the desk would actually reuse: ordinary least squares of a markout, in points, on signed flow, with an intercept, returning the slope and its t-statistic.
+
+The simulation sets the value volatility at 2 points and the noise volatility at USD 5mm, so the planted $\lambda^{K}$ is 0.2 points per USD mm. For 100,000 draws it generates a true value around a starting price of 90, an insider who trades $\beta$ times the surprise, noise traders who add their flow, and a market maker who prices at the starting price plus $\lambda^{K}$ times total flow. Four assertions follow. Regressing the move from the pre-trade mid on total flow recovers $\lambda^{K}$ within 3 percent, which is the information content of flow. Regressing the move from the trade price on the same flow gives no significant slope, which is the no-drift test for an efficient dealer. The insider's average profit lands on $\tfrac12\sigma_v\sigma_u$. And the variance of value left over after the trade is half the prior variance, the "half the information is revealed" result.
+
+Use the estimator on markouts at a stated horizon, one bond tier at a time, with the benchmark written into the column name. The edge case that bites is that the t-statistic is the textbook one. Real markouts are fat-tailed, heteroskedastic, and clustered by issuer and day, so the listing's number overstates significance, sometimes by a lot. It is a check on the simulation, not a licence to trade on a slope. Swap in clustered robust errors before any estimate moves a quote. The benchmark matters just as much: measure from the pre-trade mid and you recover information, measure from the trade price and a good dealer recovers zero, and a column that mixes the two means neither.
+
+*The full listing is [Listing 18.2 in Appendix F](#code-18-2).*
 
 ## 18.4 Avellaneda–Stoikov, Derived Without Skipping Steps
 
@@ -306,8 +320,15 @@ Notice the proportions: Kaz's quote was 94% greed and 6% fear. In a bond, the di
 
 **The Spec You Hand the Robot.** *Vague version:* "quote bonds using Avellaneda–Stoikov." *What ROBO built:* $T$ = 4 p.m. New York, so its quotes widened at 9:30 a.m. and tightened all afternoon, and its σ came from the CDS ladder. *Precise version:* inputs are the composite mid $s$ (points), inventory $q$ (lots of \$1mm), price volatility $\sigma$ (points/$\sqrt{\text{yr}}$, 20-day $\mathbb{P}$ forecast), $\gamma$ (per point-lot), $k$ (per point, from the fitted win curve), and holding-period horizon $\tau$ (years, never the time to the close). Outputs are bid, ask, $r^{\text{res}}$, and the fear and greed split, all in points, plus prices rounded to the instrument's tick. Guards: reject negative inputs; use the $1/k$ limit when $\gamma < 10^{-12}$; never let unit conversion happen inside the function.
 
-<!-- EXPLAIN: Listing 18.3 -->
-> **Code Companion: Listing 18.3.** Per-side markup (1/gamma) ln(1 + gamma/k), in points. The full python listing is in [Appendix F, Listing 18.3](#code-18-3).
+Kaz's quote took a page of arithmetic, and it was a quote for one bond, one inventory, one afternoon. A desk streaming prices on a few hundred bonds needs that arithmetic redone every time a fill changes $q$ or the volatility forecast ticks, with nobody around to notice that the 200 should have been a 7. The formulas are short, which is the dangerous part: short formulas get typed into spreadsheets, and spreadsheets do not have units. So the quoting core lives in a function with a narrow contract and a few tests, which makes the arithmetic boring and turns every bad input into somebody's explicit decision.
+
+Listing 18.3 is that function. `as_greed` computes the per-side markup $\tfrac{1}{\gamma}\ln(1+\gamma/k)$ using `log1p` for accuracy, raises an error if $k$ is not positive, and falls back to the limit $1/k$ when $\gamma$ is below $10^{-12}$, so a risk-neutral setting does not divide by zero. `as_quotes` then takes the composite mid, inventory in lots, price volatility, risk aversion, the win-curve decay $k$, and the horizon $\tau$ in years. It computes the fear term $\gamma\sigma^2\tau$, shifts the center to $r^{\text{res}} = s - q\cdot\text{fear}$, and sets the bid and ask half the fear plus one greed away from that center. It returns the reservation price, both quotes, and the spread split into fear and greed, where `greed` is the two-sided total. The helper `to_eighth` rounds to the grid.
+
+The tests reproduce Kaz's bid of 90.8947, which rounds to 90.875. They confirm that the spread is fear plus greed, that greed is over 90 percent of it, that greed approaches $1/k$ as $\gamma \to 0$, and that the center collapses to the mid when $\tau = 0$. A brute-force check then maximizes the general first-order objective numerically for the exponential intensity and finds that the optimum sits at the reservation offset plus `as_greed`, whatever the value of $A$. The last assertion feeds in 200 as volatility and confirms the bid drops below 78.
+
+Use it for the marginal lot in a liquid-enough bond, with $\tau$ set to the holding period. Do not use it where $A$ matters (§18.5) or for blocks (§18.7). The edge case that bites is the last assertion: it records the unit mistake but does not prevent it. The function checks only that $\sigma$, $\gamma$, and $\tau$ are non-negative, so a volatility in basis points is a perfectly legal input. It also does not clip to the composite or round to the tick, so a large inventory can return a bid above the market. Both guards belong in the caller.
+
+*The full listing is [Listing 18.3 in Appendix F](#code-18-3).*
 
 ## 18.5 GLFT: Inventory Bounds, Linear ODEs, and the Stationary Dealer
 
@@ -430,8 +451,17 @@ This is the chapter's core inventory engine: GLFT with jump-to-default, plus exa
 
 **The Spec You Hand the Robot.** *Vague:* "add default risk to the market maker." *What ROBO built:* it multiplied σ by 1.5. *Precise:* (a) `jtd_reservation(s, q, n, sigma, gamma, tau, lam_P, J, lam_Q)` returns the frozen-inventory reservation bid and ask for a block of `n` lots, from $\theta(q)$ in §18.6.1; $\mu = \lambda^{\mathbb{Q}}J$ when `s` is a $\mathbb{Q}$-fair composite. (b) `glft_quotes` and `glft_stationary` solve (18.8) by symmetric eigendecomposition, rescaled by the smallest eigenvalue to prevent overflow, and return bid and ask distances (points from mid) per inventory level, with NaN where $v$ is numerically untrustworthy or the inventory bound forbids a side. (c) Units must be consistent: per trading day throughout the GLFT block. (d) Sanity checks: short-horizon GLFT equals AS; long-horizon GLFT equals the ground state; the ground state matches (18.6) near $q = 0$; quotes are symmetric without jumps; jumps make the dealer less eager to buy and more eager to sell; the small-$\gamma$ expansion holds; inventory asymmetry holds; and Beta-recovery quadrature matches Monte Carlo and obeys Jensen.
 
-<!-- EXPLAIN: Listing 18.4 -->
-> **Code Companion: Listing 18.4.** Frozen-inventory reservation (bid, ask) for buying/selling a block of n lots. The full python listing is in [Appendix F, Listing 18.4](#code-18-4).
+Altice France showed what the diffusive model leaves out, and Credit Suisse showed what it leaves out when the answer is everything. Putting the jump into the quote is not hard on paper: one extra term in the reservation price, one extra term on the diagonal of a matrix. The trouble is that the desk needs two products from the same ingredients. A client has just asked for a bid on eight lots, and the platform timer is running. The streaming engine, meanwhile, needs a table of quotes for every inventory level from short twenty to long twenty, refreshed whenever volatility or the jump view moves. Both are linear algebra on the same parameters, and both fail quietly when the units disagree. So they share a listing.
+
+Listing 18.4 has two halves. The first is the block pricer. `jtd_reservation` evaluates $\theta(q)$ from §18.6.1, with drift, diffusion penalty, and the jump term computed by `expm1`, falling back to the linear limit when $\gamma$ is negligible. It returns the average price per lot for buying `n` more lots, $[\theta(q+n)-\theta(q)]/n$, and for selling `n`, $[\theta(q)-\theta(q-n)]/n$. That prices the block against current inventory, not the marginal lot. `jump_mgf_beta` handles uncertain recovery by integrating $e^{uJ}$ against a Beta density, with $J = s - 100R$.
+
+The second half is the streaming engine. `glft_matrix` builds the tridiagonal matrix of (18.8) on a grid from $-Q$ to $Q$. The diagonal carries the diffusive curvature, the drift tilt, and, if an intensity is supplied, the jump potential. The off-diagonals are $-\eta$. `glft_quotes` computes $e^{-M\tau}\mathbf 1$ by symmetric eigendecomposition, subtracting the smallest eigenvalue first so nothing overflows. `glft_stationary` takes the lowest eigenvector instead, the $\tau \to \infty$ limit. Both feed `_quotes_from_logv`, which turns log ratios of neighbouring inventories into bid and ask distances, adds the `as_greed` markup from Listing 18.3, and leaves `NaN` where the limit forbids a side or `_safe_log` finds $v$ below $10^{-12}$ of its maximum.
+
+The tests mirror the spec. Short horizons reproduce AS, long ones match the ground state, the effective horizon comes out near 13 trading days, quotes are symmetric without jumps, and jumps push the bid away and the ask in. The 8-lot bid of 90.5716 used in §18.7 is pinned, along with the small-$\gamma$ expansion, the long-versus-short asymmetry, and quadrature against Monte Carlo, with Jensen's inequality checked.
+
+Use the pricer for a block at one instant and the matrix for streaming quotes under a hard limit. Neither scales to thousands of bonds. The edge case that bites is `lam_Q`. Its default of zero does not mean "no credit view." It means no compensator drift, so with a $\mathbb{Q}$-fair composite you must pass $\lambda^{\mathbb{Q}}$ or the function charges the market's own expected loss a second time. Intensities must also be rates in the same time unit as $\tau$: the block test passes a horizon probability divided by the horizon, not the probability itself.
+
+*The full listing is [Listing 18.4 in Appendix F](#code-18-4).*
 
 ## 18.7 RFQ Hit Rates and the Price of Staying at the Table
 
@@ -493,8 +523,17 @@ Kaz's 90.875 priced 0.355 points of the 1.03 points. Ines priced all of it, roun
 
 ### Specification for AI Implementation (win curve, hit-ratio dual, quote assembly)
 
-<!-- EXPLAIN: Listing 18.5 -->
-> **Code Companion: Listing 18.5.** Logistic RFQ win probability; x = composite - bid (points); b1 > 0 per point. The full python listing is in [Appendix F, Listing 18.5](#code-18-5).
+The table above is one RFQ, solved by hand over a page. The desk gets thousands a day, each with its own size, client, and distance to the composite, and each needs an answer inside the platform's timer. Three pieces have to be automated, and they lean on each other. The win curve must be fitted from the desk's own log. The quote must be solved against that fitted curve, not the textbook exponential. And the hit-ratio target that sales keeps asking about must be enforced without handing free money to the clients who know the most.
+
+Listing 18.5 builds this in four steps. `win_prob` is the logistic curve of §18.7 in the distance `x`, composite minus bid in points. `fit_win_curve` estimates its two coefficients by maximum likelihood on the RFQ log, writing the negative log likelihood with `logaddexp` for numerical stability and handing it to BFGS. `markup` is equation (18.2) for this curve and a block of $n$ lots, with the $\gamma \to 0$ limit built in. Because the markup depends on the win probability, which depends on the distance, `optimal_distance` solves the fixed point $x = d - \nu + \text{markup}(x)$ by bisection, over arrays of RFQs at once. The markup falls as $x$ rises, so the root is unique.
+
+`rfq_bid` then assembles (18.9). It takes the block reservation bid from Listing 18.4, computes the credit view as $(\lambda^{\mathbb{P}}-\lambda^{\mathbb{Q}})J\tau$, calls the rest of the gap between mid and reservation price fear, adds the suspicion charge to the distance, solves for $x$, and returns the five terms, the bid, the tick-rounded bid, and the probability of winning.
+
+The tests make three claims. A fit on 20,000 simulated RFQs recovers the planted coefficients, 0.3 and 4.0. The cold open comes out at 90.219, rounds to 90.25, wins under 3 percent of the time, and its five terms sum exactly to mid minus bid. The last block is Niang's argument in miniature. In a 4,000-RFQ book with 30 percent toxic flow, one multiplier is tuned so that the raw hit ratio is exactly 25 percent. Then the subsidy is removed on the toxic flow only. Clean flow is priced identically, expected margin over the reservation price rises, and the toxic share of wins falls, though the overall hit ratio lands below 25 percent. That shortfall is the price of not paying for information.
+
+Use it per RFQ, with a curve fitted on the right segment: dealer count, size, client tier. The edge case that bites is the log itself. `fit_win_curve` assumes both outcomes appear. A log built from fills alone has `won` equal to one everywhere, the likelihood has no maximum, and BFGS marches the intercept off toward infinity without complaint. Perfect separation by distance does the same. Nothing in the listing checks that the fitted slope is positive, so the caller must.
+
+*The full listing is [Listing 18.5 in Appendix F](#code-18-5).*
 
 ## 18.8 Decoding TRACE
 
@@ -518,8 +557,17 @@ TRACE is not a tape. It is a censored, lagged, double-counted ledger with a rule
 
 Schema (one row per report): `msg_seq` int, `orig_msg_seq` int (−1 if none), `status` in {T, X, C}, `bond_id` str (internal id, never an invented CUSIP), `rating_class` in {IG, HY}, `minute` int, `price` float (points), `reported_qty` float (USD mm, capped), `side` in {B, S} (reporting dealer's view), `contra` in {C, D}, `ats` bool, `pt` bool.
 
-<!-- EXPLAIN: Listing 18.6 -->
-> **Code Companion: Listing 18.6.** Synthetic TRACE-like reports; bond ids are placeholders, not CUSIPs. The full python listing is in [Appendix F, Listing 18.6](#code-18-6).
+Every shop that uses TRACE has a version of the same week: someone builds a flow feature, the volume does not tie to the vendor, and four days later the cause turns out to be a correction applied to the wrong trade, or two dealers' reports of one trade counted as two. The rulebook above is easy to read and tedious to obey, and the cost of getting it wrong is silent, because a feature built on dirty prints still looks like a number. The way to stop relitigating it is to write the decoder once, feed it a file where the right answer is known, and make it prove it can recover that answer before it touches the real feed.
+
+Listing 18.6 does both jobs, and the test file comes first. `make_synthetic_trace` draws 400 trades across eight placeholder bonds, four IG and four HY, with lognormal sizes, a 70/30 customer-to-dealer mix, and small shares of ATS and portfolio-trade prints. It expands each trade into the reports a dealer would file: one for a customer trade, two for an interdealer trade. Sizes are capped at \$5mm for IG and \$1mm for HY. It then corrupts the file in the two ways the pipeline names. Twenty reports are duplicated by mistake, and each duplicate is followed by a cancel pointing at it. Twenty originals are mispriced by a point and followed by a correction carrying the right price.
+
+`clean_trace` is the pipeline in four lines. It collects every message sequence number that a cancel or correction refers to, drops the cancel records and everything they referenced, and keeps the corrections as the replacements. It then keeps only the sell-side leg of interdealer trades, flags prints at the cap, and sorts by bond, minute, and sequence. `trace_features` turns the clean file into one row per bond: customer imbalance from the dealer's side flag, the capped, portfolio-trade, and ATS shares, the print count, and minutes since the last print against a 390-minute session.
+
+The tests ask that one row survive per true trade, that prices equal the true prices, that no size exceeds its cap, and that imbalance stays between minus one and one.
+
+Use it as the skeleton of a daily decoder, not as the decoder. The edge case that bites is that it passes only the messes it was taught. Dropping the buy-side leg assumes the sell-side leg is also in the file. Where it is missing, the trade vanishes from volume entirely. The synthetic file has no riskless-principal pairs or affiliate duplicates either, so the equality of row counts proves the logic, not the feed. Imbalance is also computed on capped sizes, so it is blind to blocks, which is why `capped_share` travels beside it.
+
+*The full listing is [Listing 18.6 in Appendix F](#code-18-6).*
 
 ## 18.9 BWICs: First-Price Auctions With a Leaky List
 
@@ -543,8 +591,9 @@ with $e_3 \approx 0.85$, $e_5 \approx 1.16$, and $e_8 \approx 1.42$. With $\sigm
 
 ### Specification for AI Implementation (BWIC shading and leakage)
 
-<!-- EXPLAIN: Listing 18.7 -->
-> **Code Companion: Listing 18.7.** e_n = E[max of n iid N(0,1)] by quadrature. The full python listing is in [Appendix F, Listing 18.7](#code-18-7).
+The shading constant $e_n$ and the leakage bill are the two numbers a BWIC desk wants on screen before it bids, and neither deserves trust until it has been checked against something other than itself. Listing 18.7 integrates the expected maximum of $n$ standard normals numerically and tests it against the closed form $3/(2\sqrt{\pi})$ for three bidders and a Monte Carlo draw for eight, then computes the pre-auction drift and the seller's cost, reproducing the \$300mm example above to the decimal (0.405 points, \$1.215mm).
+
+*The full listing is [Listing 18.7 in Appendix F](#code-18-7).*
 
 ## 18.10 Desk Debrief
 

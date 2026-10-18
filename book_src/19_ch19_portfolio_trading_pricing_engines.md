@@ -128,8 +128,13 @@ With $n$ dealers in competition, the winner is the highest bidder in a first-pri
 
 Basket-level fields: response deadline (seconds), number of dealers in competition, spotting time, and the client's identity, which keys the markout history in §19.8. All costs are returned in dollars, with a bp-of-gross-MV view computed last. The python blocks in this chapter run in order in one interpreter.
 
-<!-- EXPLAIN: Listing 19.1 -->
-> **Code Companion: Listing 19.1.** Struct-of-arrays PT inquiry. The full python listing is in [Appendix F, Listing 19.1](#code-19-1).
+A table of guards is a promise, and a promise is worth what happens when somebody breaks it. At 2:58 p.m. the list arrives as a spreadsheet exported by a client whose operations team chose the units, and the engine has about ninety seconds to learn whether column D means 97.0 points or 0.97 of par before it multiplies a hundredfold error into a \$212mm bid. A human glances at the first few rows and decides they look right. A desk that wants the same answer at 3:02 p.m. next Friday, when the human is on a flight, writes the contract down once, as an object that refuses to exist if it is wrong, and makes every later calculation take that object as its only input.
+
+Listing 19.1 does three jobs. First, `Basket` holds the inquiry as thirteen parallel arrays, one per row of the table, with the units written beside each field. Its `__post_init__` is the gate. It rejects ragged lengths, non-finite values in the ten numeric fields (`days_to_call` is exempt, because `inf` is how the engine says "no lender call on the calendar"), zero-notional lines, a `mid` outside (0, 1.5], a `print_frac` outside (0, 1], a negative `lcs`, a `prs` outside [0, 1] and a non-positive `sig_idio`. The `mv()` method returns unsigned market value, and `drop()` returns a freshly built, freshly validated `Basket` without the named lines, which is what the eviction loop of §19.6 will lean on. Second, `make_basket` manufactures the cold-open inquiry: 150 lognormal tickets around \$1mm, seeded so the numbers repeat, with line 42 hard-wired at \$18mm, forty days stale and printing on 5% of days, and line 117 at \$4mm, marked at 0.82, with a Priming Risk Score of 0.85, a lender call three days out, a live ad hoc group and a daily idiosyncratic volatility of 0.003 that looks perfectly calm. The other lines are rescaled so the gross lands on \$212mm exactly. Third, the closing block confirms the sizes, checks that multiplying `mid` by 100 raises an error, and runs the Monte Carlo test of the certainty equivalent from §19.2.1: 400,000 Gaussian P&L draws with mean \$100k and standard deviation \$300k should give \$55k, which is the mean minus \$45k of risk charge.
+
+Use it as the single entry door to everything that follows, and do not mistake it for a security-master check. It tests ranges, not meaning. The edge case that bites is the gap between the table and the constructor: the table promises unique ids, non-negative `age`, sector codes in range and an ad hoc flag in {0, 1}, and the code enforces none of them. A sector code of -1 sails through and then, in Listing 19.3, points at the market column instead of a sector, so the line silently loses its sector exposure. Add the checks you need before the first live Friday.
+
+*The full listing is [Listing 19.1 in Appendix F](#code-19-1).*
 
 The Monte Carlo check is not decoration. If someone later swaps the Gaussian P&L for a jump-to-default mixture, the same check fails, and the size of the failure is the $\tfrac16\gamma^2\kappa_3$ term from Step 2: the skew that mean–variance ignores and that §19.8 charges for explicitly.
 
@@ -169,8 +174,13 @@ Composite fair values (dealer-composite and evaluated-pricing services) make the
 
 ### Specification for AI Implementation (handling cost)
 
-<!-- EXPLAIN: Listing 19.2 -->
-> **Code Companion: Listing 19.2.** Eq. The full python listing is in [Appendix F, Listing 19.2](#code-19-2).
+Equation (19.3) is one line of algebra, which is exactly why it ends up typed four different ways in four different notebooks, and why one of the four multiplies by duration a second time. A desk writes the line once, gives it a name and a set of refusals, and lets the rest of the engine call it. The point is not that the arithmetic is hard. The point is that line 42 is about to be priced, and nobody wants an argument at 3:01 p.m. over which notebook's rake is the real one.
+
+Listing 19.2 is `handling_cost`, equation (19.3) vectorized over the whole basket. It takes the `Basket`, the handling share `omega` (default 0.5), the size exponent `eta` (default 0.75, halfway between the square-root and linear impact laws), the standard size `X_STD` of \$4mm, and a liquidity multiplier `m` that sits at 1 in calm markets and is the dial §19.7 turns in stress. It refuses an `omega` outside (0, 1], an `eta` outside [0.5, 1] and a non-positive `m`, so a typo cannot quietly produce a free lunch. Step by step, it expresses each line's size in units of standard size, takes the larger of that and one, raises it to `eta`, and multiplies by half of `lcs`, the mid, the absolute notional, `omega` and `m`. The output is one non-negative dollar cost per line. The sign of `x` is ignored, because handling a bond costs the same whichever way the client trades it. The asserts then check the flat region below \$4mm, the \$18mm multiple of 4.5 to the power 0.75 (about 3.1), and a comparison with the 25 cheapest lines.
+
+Use it for the handling share only, and keep all variance in the covariance matrix of §19.5. The edge case that bites is `lcs` itself. The function trusts the field to be a fraction of price at standard size, and the `Basket` gate checks only that it is not negative. A spread-quoted score that someone already multiplied by duration, or a dealer-quote score carried over from an index bond to an off-index line, flows straight through and comes out the other end as a precise dollar figure.
+
+*The full listing is [Listing 19.2 in Appendix F](#code-19-2).*
 
 The last assert is the fat tail in one line. Line 42 has about 8% of the notional and, by hand arithmetic on this synthetic basket, roughly 40% of the handling cost *(illustrative)*. Section 19.6 will want to talk to it.
 
@@ -232,8 +242,13 @@ With no basis ($\sigma_u\to0$), $h^\star=\sum_i x_i\beta_i/\beta_h$, the DTS-mat
 
 Shapes: $B$ is $(N,K)$ with $K=1+8$ (market plus eight sectors), $\Omega_T$ is $(K,K)$, $A$ is $(H,K)$ with $H=2$ (an HY ETF and CDX HY, both in the long-risk convention, so a positive $h$ sells risk), and $U$ is $(H,H)$. All covariances are over the horizon $T$. Factor and basis volatilities are *illustrative*.
 
-<!-- EXPLAIN: Listing 19.3 -->
-> **Code Companion: Listing 19.3.** B (N, K): price change (fraction of par) per unit relative spread move. The full python listing is in [Appendix F, Listing 19.3](#code-19-3).
+Kaz's notebook failed because it tried to learn 11,325 covariances from fourteen observations. The cure in the derivation is to stop learning and start assuming: bonds move together because they share a few spread factors, and the hedge exists to remove exactly those. That leaves four matrices to build before the dealer can say how much of the \$212mm is one lump and how much is 150 small arguments: the loadings $B$, the factor covariance $\Omega_T$, the hedge loadings $A$ and the basis covariance $U$. The hedge ratio is also the number the trader will read aloud to the ETF desk, and it had better be the same number the risk term uses. So the desk builds the matrices, runs the solve and proves the two agree in one place, before anyone is allowed to type a price.
+
+Listing 19.3 does exactly that. `loadings` turns each bond into a row of `B` with the DTS rule: price change per unit relative spread move is minus the mid times OAS duration times OAS. A bond loads that amount on the market factor and the same amount on its own sector's factor, and on nothing else. `factor_cov` returns a diagonal $\Omega_T$, with illustrative daily volatilities of 1.5% for the market and 0.8% for each sector, scaled by the five-day horizon. `hedge_book` returns `A` for two instruments, an HY ETF with index DTS 0.16 and CDX HY with 0.14, each spread equally across the sectors, and `U`, the basis covariance, whose `basis_scale` argument is the stress dial. `joint_cov` assembles $\Sigma_{xx}=B\Omega_TB^\top+D$, $\Sigma_{xf}$ and $\Sigma_{ff}$, and stops if the hedge block's condition number passes $10^8$. `residual` forms the Schur complement of (19.4) with a linear solve rather than an inverse, and `min_var_hedge` returns the dollar hedge, positive meaning sell risk. The closing block runs the cold-open basket before any staleness is added: the hedge sells about \$80mm of the ETF and \$157mm of CDX, and the standard deviation of P&L falls from about \$1.37mm to about \$0.52mm *(illustrative)*. Two asserts follow. The residual quadratic form must equal the hedged variance computed by hand, and the hedge must remove more than half the variance.
+
+Use it when the hedge menu is a handful of linear instruments and the factors are stable. Do not use it for options-based hedges, or when the factor covariance was estimated in a calm window and you are about to trade in a loud one. The edge case that bites is in `hedge_book`. The two rows of `A` are exactly proportional, so the ETF and CDX are distinguished only by their basis noise, and `U` alone keeps $\Sigma_{ff}$ invertible. Let a calm-window estimate push `basis_scale` toward zero and the guard fires, which is the right outcome: the engine stops instead of handing the trader a hedge that rests on a basis variance of nothing.
+
+*The full listing is [Listing 19.3 in Appendix F](#code-19-3).*
 
 ### Deep-Dive Resource Graph
 
@@ -298,8 +313,15 @@ For line 42 ($a=40$, $\phi=0.05$, $\kappa=\xi=0.5$, $T=5$) the bracket and the i
 
 ### Specification for AI Implementation (residual covariance)
 
-<!-- EXPLAIN: Listing 19.4 -->
-> **Code Companion: Listing 19.4.** Eq. The full python listing is in [Appendix F, Listing 19.4](#code-19-4).
+The argument of §19.5 ends on a promise: nobody knows what line 42 is worth, and the engine should price that ignorance instead of hiding it. The usual hiding place is a haircut, a flat number a trader types into a spreadsheet at 3:00 p.m. that survives, unsourced, until the model review where the risk committee asks why one bond's price has a mystery in it. The alternative is to let staleness enter where uncertainty belongs, in the variance, through a formula a skeptic can read and challenge, and to build the result into a matrix that is guaranteed to be invertible. This is the matrix the hedge solve and the eviction loop will touch most often, so it is where the desk wants its guards.
+
+Listing 19.4 turns equation (19.5) and the factor model of Listing 19.3 into the covariance matrix the rest of the chapter uses. `idio_var` takes each line's daily idiosyncratic variance and multiplies it by the horizon plus half the line's staleness in business days (`kappa_stale`, 0.5), then by the inverse square root of its print frequency (`xi`, 0.5), then adds a ridge `tau2` that defaults to zero. `build_residual_cov` feeds that vector into `joint_cov`, forms the Schur complement, passes it through `psd_project`, and refuses to return a matrix whose condition number exceeds $10^6$. `psd_project` symmetrizes, takes an eigendecomposition, lifts any eigenvalue below $10^{-10}$ of the largest up to that floor, rebuilds, and symmetrizes again. The inputs are a `Basket` plus the horizon, basis scale and staleness parameters. The outputs are $\Sigma_{xx}$, $\Sigma_{xf}$, $\Sigma_{ff}$ and the guarded $\Sigma^{\text{res}}$.
+
+The asserts check four things. Every eigenvalue is positive. Line 42's residual variance is more than five times its naive value, which is the section's claim that staleness is variance and not a haircut. Every diagonal entry of $\Sigma^{\text{res}}$ is at least that line's own idiosyncratic variance. And Kaz's matrix, built from 14 observations on 150 bonds, has rank at most 13. On the synthetic basket, line 42 carries about three-fifths of the residual variance on 8.5% of the notional, and the risk charge at $\gamma=10^{-6}$ rises from about \$133k to about \$293k once staleness is priced *(illustrative)*.
+
+Use it whenever the history is shorter than the book, which in credit is always. Do not ask it for jumps: line 117's lender call is not in this matrix, and §19.8 is where it gets charged. The edge case that bites is the projection. On a clean build it is a no-op up to rounding, because a Schur complement of a valid matrix is already valid. It earns its keep after a human edits the matrix by hand. Once it clips anything, `Sres` is no longer exactly the Schur complement, and the promise that $\mathbf{x}^\top\Sigma^{\text{res}}\mathbf{x}$ is the optimally re-hedged variance holds only approximately. Edit the inputs and rebuild. Do not edit the output.
+
+*The full listing is [Listing 19.4 in Appendix F](#code-19-4).*
 
 ## 19.6 Eviction: Which Lines to Kick Out, and the Price of Keeping Them
 
@@ -357,8 +379,13 @@ How a systematic desk would have read it in real time: hit rates on HY PTs falli
 
 ### Specification for AI Implementation (greedy eviction)
 
-<!-- EXPLAIN: Listing 19.5 -->
-> **Code Companion: Listing 19.5.** Greedy eviction on exact removal savings (eq. The full python listing is in [Appendix F, Listing 19.5](#code-19-5).
+The counter-proposal has to be on Ines's screen before the response window closes, and it has to be right, because the client will take back exactly the lines the engine names. By feel, a trader can carve five lines out of a list of twenty. At 150 lines the cost of any one bond depends on all the others through the hedge residual, so the ranking changes after every removal. Sorting once and striking the top ten is wrong, and re-solving the whole hedge for each candidate is too slow for ninety seconds. The derivation gives an exact saving for each line and a cheap way to update the ranking after each eviction. What is left is a loop, which a desk automates precisely so that nobody argues about it while the clock runs.
+
+Listing 19.5 is `evict_greedy`. It takes the `Basket`, the residual covariance from Listing 19.4, a vector `as_vec` of per-line adverse-selection charges in dollars, and the policy knobs: risk aversion `gamma`, the handling parameters, the liquidity multiplier `m`, a tolerance `alpha` for evicted market value (15% of gross), a cap `k_max` of ten lines and a cost target of 45bp of market value. Zeros are a legal value for `as_vec`, which is the trap the paragraph after the listing walks into. The function computes handling costs once, caches the coupling vector `Sres @ x`, and then loops. Each pass evaluates equation (19.7) for every line, divides by market value, masks out lines already evicted and lines too large for the tolerance still unspent, and picks the largest ratio. It stops if nothing is eligible or if the best ratio no longer beats the basket's current cost per dollar. Otherwise it subtracts one scaled column of `Sres` from the coupling vector, an $O(N)$ update, zeroes the line and recomputes. An assert inside the loop demands that the realized fall in total cost equals the predicted saving, so a later edit that breaks the algebra fails loudly. The outputs are the evicted indices in order and the path of cost per dollar. On the cold-open basket with no adverse-selection model, one eviction is enough: line 42 goes, and cost per dollar falls from about 55bp to about 32bp, under target *(illustrative)*.
+
+Use it to build the counter-proposal before quoting, and on the buy side to see which lines you are paying the dealer to take. It is a greedy answer to a knapsack, which is fine at ten lines or fewer. The edge case that bites is the sign structure. The guarantee that the best eviction always helps assumes non-negative off-diagonal risk, a one-sided basket, and about a third of real baskets mix buys and sells. In a mixed basket, offsetting lines hedge each other, and a removal can raise the cost per dollar. The stop rule exists for that case. When it fires early, the engine is telling you the basket is cheaper whole than carved.
+
+*The full listing is [Listing 19.5 in Appendix F](#code-19-5).*
 
 Hold on to that last assert. The engine, run without an AS model, evicts the stale \$18mm line and is satisfied: the basket is now below its 45bp target, and line 117 stays in. Line 117 looks like a model citizen. Its realized volatility is ordinary, its LCS is unremarkable, and it diversifies nicely. Everything the covariance matrix can see about it is fine. That is the point.
 
@@ -398,8 +425,15 @@ In **March 2020** all three stress channels fired at once. Flows were one-sided,
 
 ### Specification for AI Implementation (regime and stress covariance)
 
-<!-- EXPLAIN: Listing 19.6 -->
-> **Code Companion: Listing 19.6.** Stress score s in [0, 2] from ETF discount z-score (negative = discount) and bid-ask percentile in [0, 1]; one score drives m, gamma and basis together. The full python listing is in [Appendix F, Listing 19.6](#code-19-6).
+The case studies end on a rule that sounds easy and is not: the cost multiplier, the dealer's risk aversion and the ETF basis must move together, from one regime score. The org chart works against it. The execution team owns the cost dial, the risk team owns the risk-aversion dial and the ETF desk owns the basis dial, each calibrated in a different quarter by a different person, and the quote that comes out is calm about costs and panicked about risk, or the reverse. A model review cannot tie three free dials to anything the committee can look at. So the desk builds one score from two things anybody can read off a screen at 3 p.m. without calling a counterparty: how deep the credit ETFs trade below their NAV, and where today's bid-ask sits in its own history. One score, three multipliers, no argument about whose dial it is.
+
+Listing 19.6 has two functions. `regime` maps the ETF discount z-score and the bid-ask percentile to a stress score $s\in[0,2]$. The ETF channel is zero until the z-score falls below $-1$ and then adds one third per standard deviation, reaching 1 at $-4$. The bid-ask channel is zero until the percentile passes 80% and then rises linearly to 1 at the 100th. The two add, capped at 2. The score drives three multipliers, each a straight line in $s$: liquidity `m = 1 + 2.4 s`, risk aversion `1 + 1.5 s` and basis `1 + 2 s`. At the cap, `m` is 5.8, the ratio of Ben Dor's 3.40% to 0.59% IG LCS range *(illustrative calibration)*. The example in the asserts, a discount of 2.5 standard deviations and a 90th-percentile spread, scores exactly 1, which means `m` of 3.4, risk aversion 2.5 times calm and basis 3 times calm.
+
+`stress_cov` implements (19.9). It builds the vector $g=-\theta\,\text{LCS}\times\text{mid}$ with $\theta=0.8$ *(illustrative)* and adds $(0.25s)^2\,gg^\top$ to the calm residual covariance, so the liquidity shock's volatility grows with the score. The result is the calm matrix plus exactly one rank. The asserts check that the spike is rank one and that it does not diversify. At $s=1$ on the cold-open basket it makes up about 28% of the basket's variance but only about 2% of the sum of the line variances, which is equation (19.8) in two numbers.
+
+Use it to widen the quote continuously instead of flipping a stress switch, and remember that it is a thermometer, not a forecast. The edge case that bites is the dead zone. Below a one-sigma discount and the 80th percentile, `regime` returns exactly 1.0 on every multiplier, and a premium never counts at all. Ben Dor's warning in §19.7.1 is that LCS doubled months before the obvious crisis, so a map with flat floors will sit calm while the cost data drifts up. Move the thresholds, or add a slow-moving cost input, before relying on it.
+
+*The full listing is [Listing 19.6 in Appendix F](#code-19-6).*
 
 ## 19.8 Adverse Selection in Baskets: The Mystery Box
 
@@ -438,8 +472,15 @@ The counter-proposal writes itself: *we bid the 148 at a 35bp concession; lines 
 
 ### Specification for AI Implementation (adverse selection and hand history)
 
-<!-- EXPLAIN: Listing 19.7 -->
-> **Code Companion: Listing 19.7.** Eq. The full python listing is in [Appendix F, Listing 19.7](#code-19-7).
+Everything the covariance matrix knows about line 117 is reassuring, and everything Theo knows about it is in his head, the credit agreement and a docket. That is a bad place to keep a number the desk charges for. When Theo is on vacation, the engine has to ask the same question he would ask, in dollars, in under a second. And afterward, when the basket has settled, the desk needs a record of whether the suspicion paid off, because a suspicion that is never scored cannot be calibrated. The charge before the trade and the markout after it are two halves of one control loop, and a desk that builds only the first has an opinion, not a model.
+
+Listing 19.7 has those two halves. `as_charge` implements equation (19.10) in three steps. It first turns the toxicity features into inputs: PRS, a `call_soon` term equal to $e^{-\text{days}/5}$ (zero when no call is on the calendar and approaching one as the call nears), the ad hoc flag, and the log of the line's size relative to the basket median. A logistic function with hand-set weights then gives the probability that the line is in the basket because the client knows something. The constant of $-5$ puts a quiet line below 1%. Finally the probability is multiplied by market value and by an informed move of one point plus fifteen points times PRS. It returns the dollar charge and the probability for every line. The weights are *illustrative*, and nothing in the listing fits them. On the cold-open basket line 117 comes out at a probability of 0.75 against a median of 1%, and a charge of about \$339k, which is 81% of the basket's total. Hand that vector to the loop in Listing 19.5 and the order flips: line 117 is evicted first, then line 42, and cost per dollar falls from about 76bp to 59bp to 36bp *(illustrative)*.
+
+`markouts` is the second half. For each line and each horizon of 1, 5 and 20 business days it returns signed notional times the later mid minus the traded price. The example draws 149 lines of noise scaled to their own idiosyncratic volatility, drops line 117 by 1, 5 and 14 points, and asserts that line 117 has the worst per-dollar markout at 20 days.
+
+Use the charge before quoting, the markout after settling, and the pile of markouts to refit the weights by client. The edge case that bites is in the docstring: `markouts` takes its mid path as given and strips nothing out. It assumes the factor and hedge P&L are already removed. Feed it raw mids and the market's own moves swamp the one line that matters, and you will conclude that the client is fine and the hedge is broken.
+
+*The full listing is [Listing 19.7 in Appendix F](#code-19-7).*
 
 Replayed through the markouts, Ines's hand history reads the way she expected: 149 lines of noise and one line with a 17% per-dollar loss at 20 days. The basket-level markout, averaged over \$200mm, would have called it a mildly unlucky week.
 
