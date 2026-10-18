@@ -1,16 +1,16 @@
 {
- "note": "Workflows running at 05:11 UTC. To resume one: Workflow({scriptPath, resumeFromRunId: runId, args}). For string args, copy the exact args from the run's original launch (journal or this conversation). Every agent is durable, so a fresh launch with the same args also works: finished files are skipped and partial ones resumed.",
+ "note": "Resumed 05:38 UTC after the user's 53% reading. Workflows running at 05:11 UTC. To resume one: Workflow({scriptPath, resumeFromRunId: runId, args}). For string args, copy the exact args from the run's original launch (journal or this conversation). Every agent is durable, so a fresh launch with the same args also works: finished files are skipped and partial ones resumed.",
  "runs": [
   {
    "name": "reader-lens",
-   "task": "wrt9kw1ej",
+   "task": "wd7imdb8c",
    "runId": "wf_aa7ed3ed-60e",
    "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/ed2-reader-lens-reviews-wf_aa7ed3ed-60e.js",
    "args": null
   },
   {
    "name": "research-A",
-   "task": "wc8sol35m",
+   "task": "wpt43g1bx",
    "runId": "wf_6e44a234-b6e",
    "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/research-resilient-wf_bd451f4f-5fb.js",
    "args": {
@@ -58,7 +58,7 @@
   },
   {
    "name": "research-B",
-   "task": "wpjuofa0m",
+   "task": "wjvc6tmzo",
    "runId": "wf_e08bbe4b-b57",
    "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/research-resilient-wf_bd451f4f-5fb.js",
    "args": {
@@ -106,21 +106,21 @@
   },
   {
    "name": "u3-media",
-   "task": "wgydgxc54",
+   "task": "wmgs3kr4j",
    "runId": "wf_435bbdd5-840",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/u3_research_and_new_chapters.js",
    "args": "3 media items: episodes_posts_parts_I_II, _III_IV, _V_VIII (same args as the 04:32 launch)"
   },
   {
    "name": "u3-perspectives-life",
-   "task": "w28pii0xt",
+   "task": "wd8z4yj3u",
    "runId": "wf_1508b41d-803",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/u3_research_and_new_chapters.js",
    "args": "items: life quant_shop_daily_life, perspectives buyside_credit_managers, perspectives dealers_and_systematic_shops; chapters: 04_ch04c_other_seats_at_the_table, 01_ch01b_a_week_in_five_quant_shops"
   },
   {
    "name": "u2-A",
-   "task": "wmllmn46e",
+   "task": "w8b9ar4yf",
    "runId": "wf_2e88049d-039",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/u2_chapter_pipeline.js",
    "args": {
@@ -135,7 +135,7 @@
   },
   {
    "name": "u2-B",
-   "task": "wt3057wkb",
+   "task": "wynhrqb36",
    "runId": "wf_5d92fc41-dcb",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/u2_chapter_pipeline.js",
    "args": {
@@ -149,7 +149,7 @@
   },
   {
    "name": "part-IV-a",
-   "task": "wgzz9zxzv",
+   "task": "w2qsjhh1h",
    "runId": "wf_83785e8e-e25",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
    "args": {
@@ -169,7 +169,7 @@
   },
   {
    "name": "part-IV-b",
-   "task": "w0wcd6yna",
+   "task": "wholtbqen",
    "runId": "wf_cc2956d9-745",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
    "args": {
@@ -189,7 +189,7 @@
   },
   {
    "name": "primers-pipeline",
-   "task": "w9ho5nhr0",
+   "task": "wz3qypd1a",
    "runId": "wf_a6d57981-bfe",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
    "args": {
@@ -205,6 +205,13 @@
      "figcheck"
     ]
    }
+  },
+  {
+   "name": "u2-quality-read",
+   "task": "w0dq9p9lo",
+   "runId": "wf_5c19ff92-0be",
+   "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/ed2-u2-quality-read-wf_5c19ff92-0be.js",
+   "args": null
   }
  ]
 }

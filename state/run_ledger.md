@@ -162,3 +162,9 @@ State on disk at the stop:
 - **U3.** COMPLETE: media parts I–II and III–IV, life_quant_shop_daily_life, perspectives_buyside. PARTIAL: media parts V–VIII, perspectives_dealers_and_systematic_shops. The briefs and chapters for 04_ch04c and 01_ch01b have not started.
 
 **Resume at 09:33:** resume each run in `state/resume_runs.json` (Workflow with scriptPath + resumeFromRunId + args). Then add a Fable quality read of revised Ch 1 (check for duplication, pacing, and bloat, since chapters grew 2–2.5×) BEFORE U2 scales to the rest of the book.
+
+## Resumed 05:38 UTC: user reading 53% (meter said 92.8%, so it was overestimating 1.75×)
+
+The meter is recalibrated to 53% at 05:35. The user's rule: "estimate 110% as the drop dead stopping" (on the old meter scale). 110% old ≈ **62.8% actual**, so the pace guard (b2xbmwx7r) runs `--target 68.8 --cap-only --check-every 60` and alarms at 62.8%. If the user meant 97% actual, raise the target to 103.
+The user completed the cut-off note: **"It seems like there is a lot of prescriptiveness and not narrative."** It is recorded as directive 12. `tools/prescriptiveness.py` now measures bullets, modal and imperative density, and dialogue per 1,000 words. Writer prompts (VOICE) now carry the verdict, and the brief and revise prompts read `state/reviews/ed2/u2_lessons.md` once it exists.
+All 10 stopped runs were resumed (new task IDs in `state/resume_runs.json`), plus **u2-quality-read** (w0dq9p9lo, a Fable read of the revised Ch 1/5/6, producing a review, `u2_lessons.md`, and a fix list).

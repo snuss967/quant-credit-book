@@ -14,7 +14,7 @@ These are additions. **Remove nothing: every existing topic stays in the book.**
 9. **More diagrams and photos.**
 10. **More credit events and real-world examples.** Make the stories longer so they build memory and intuition.
 11. **Move all code examples to the back**, with links, and put the description and explanation of the code in their place. *(Done mechanically on 2026-10-18: 157 listings moved to `95_appF_code_companion.md`. Each chapter keeps a linked stub marked `<!-- EXPLAIN: Listing N.k -->` that must become a real explanation.)*
-12. *(The user's message was cut off at "It just seems like there is a lot of…". Ask the user how it ends.)*
+12. **"It seems like there is a lot of prescriptiveness and not narrative."** (The user completed the cut-off note on 2026-10-18 05:35 UTC.) This is the headline verdict on Edition 1. Every revision pass should turn rules, imperatives, and bullet lists into scenes, worked stories, and reasoning the reader watches unfold. `tools/prescriptiveness.py` measures it.
 
 ## Implementation design
 - **U1, code explanations (Sonnet, M).** Replace every `<!-- EXPLAIN -->` stub and its stub line with 150–400 words of plain language. Cover what the listing computes, why it is built that way, when to use it and when not, the inputs and outputs, and the one edge case that bites. Read the listing in Appendix F, and keep the link to it.
