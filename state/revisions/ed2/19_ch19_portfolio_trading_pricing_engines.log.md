@@ -19,5 +19,5 @@
 - [x] 17. [§19.9] ANOTHER-SEAT (systematic AM) + Wen builds basket narrative + Full Derivation. — Note: Man seat box; Bernoulli prose; Wen two-way month-end list scene.
 - [x] 18. [§19.10] SHOP-LIFE vignette (bank systematic trading group, TRACE dedup). — Note: Yusuf's red Wednesday; affiliate dedup, PT print_frac, lunch coda.
 - [x] 19. [§19.10 table and Trend Watch] BRIDGE sentence between table and Trend Watch. — Note: human rows dwarf machine rows; Mags's fax half-hour line.
-- [ ] 20. [§19.11 Desk Debrief] Finder table; promote scenes to #### headings.
+- [x] 20. [§19.11 Desk Debrief] Finder table; promote scenes to #### headings. — Note: eight-row Finder added; four scenes already carry #### headings.
 - [ ] 21. [Whole file] one telling per fact; no CHECK; templates removed; open items logged.

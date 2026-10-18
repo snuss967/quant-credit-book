@@ -20,5 +20,5 @@
 - [x] 18. §18.9 BWICs: Box 10 (winner is the most wrong) + FULL-DERIVATION-MOVE. — Box 10 Galton ox, coin margin, statement, Full Derivation, leak subsection.
 - [x] 19. §18.9.1 Long Scene: LDI BWIC week (replay) + Another Seat (TwentyFour AM). — LDI replay, four beats, cards graded, Athene/TwentyFour seat, TW quote fixed.
 - [x] 20. §18.10 Desk Debrief: Finder table; promote Exercises with difficulty tags. — Nine-row Finder table; Exercises heading; Warm-up/Core/Stretch tags added.
-- [ ] 21. Whole chapter: ban the templates in code explanations.
+- [x] 21. Whole chapter: ban the templates in code explanations. — Roll, JTD, win-curve, TRACE, BWIC explanations open on scene moments.
 - [ ] 22. Whole chapter: one telling per fact (Altice 21 points, Trumid 88%, Gaussian epitaph).
