@@ -508,7 +508,7 @@ By 30 June the stylized note was back at 92.39 and 484bp over, and the rulers ha
 
 ### When to reach for which number
 
-The habit that separates a seasoned desk from a fast one is to start from the question and let the question choose the ruler.
+A seasoned desk starts from the question and lets it choose the ruler.
 
 | The question you are actually asking | The number | Where it breaks |
 | :--- | :--- | :--- |
@@ -872,7 +872,7 @@ print("Larkspur DM (bp) at 97 and 84:", [round(1e4 * discount_margin(p, 0.0375, 
 
 - **A bond is a list, and a yield is a price in another font.** Every spread is the one constant that makes the list reprice against some curve. Name the curve, the compounding and the dirty price, or the number means nothing. (Law 11)
 - **Duration answers two questions that share a number by coincidence.** For a callable, a floater or a bond at 60, reprice; in a crisis, hedge with §8.2's empirical duration, because the analytic one can have the wrong sign. (Law 1)
-- **"Convexity" is three words.** Ask with respect to what, over what horizon, and who is short it. The market charges for it in yield, and the bill is called theta.
+- **"Convexity" is three words.** Ask with respect to what, over what horizon, and who is short it. The bill for it is called theta.
 - **Per basis point the fallen angel got safer; per percent it got four times riskier.** Size, limit and scale in DTS; keep CS01 for the hedge. (Law 3)
 - **On a flat curve, every gap between spreads is a convention**: compounding ($\approx y^2/2f$), $100/P$, par versus price. Those conventions moved the measured spread change by 300bp in one month. (Law 11)
 - **OAS is model output.** State $\sigma$ and the tree. For a bond trading wider than its make-whole spread, OAS equals Z and the adjustment is zero. (Law 13)
@@ -886,7 +886,7 @@ print("Larkspur DM (bp) at 97 and 84:", [round(1e4 * discount_margin(p, 0.0375, 
 2. *(The real curve.)* Bootstrap the 23 March 2020 Treasury par curve from FRED (DGS1, DGS2, DGS5, DGS7, DGS10, DGS30) with `curve_from_par` and recompute Z. Does the shape term raise or lower it? *Solution.* By §4B.6, $Z - G$ is the par Treasury's duration-weighted zero minus the note's. The note's weight sits earlier (Macaulay 7.74 years against about 9.6), so where the curve slopes up between seven and ten years the shape term is positive and offsets part of the 19.5bp compounding gap; its size must come from that day's data.
 3. *(The hedge.)* Recompute the February-to-March P&L of \$10mm of the note with no hedge, with the analytic hedge, and with Ben Dor's Ba ratio at maximum spreads (−0.26 times the analytic notional). *Solution.* −\$3.76mm; −\$4.46mm; and (long \$2.5mm of Treasuries) about −\$3.58mm. The empirical hedge wins here and loses in 2022 (§8.7), so use a rolling estimate with a stated window, not a constant from a table.
 4. *(Kaz reads the redemption section.)* Show with `lattice_price` that the T+50 make-whole is worthless on all three dates of Table 4B.1, and find where it starts to bind. Why does an RSSG banker still read the clause? *Solution.* By the proposition of §4B.7 it cannot bind while $s \ge m_w$; with the bond worth well above par at $r + m_w$, it binds once the spread falls below about 50bp, which is high-grade territory. The clause still matters in a merger refinancing (§15.1), a defeasance and a bankruptcy claim (Hertz, §16.6), where it is a claim amount, not an option.
-5. *(ROBO's momentum signal.)* Theo asks for "twelve-month spread momentum on high yield, 2019–2025, using the spread column." Name three ways the output can measure conventions instead of markets. *Solution.* I-spread or ASW switching from LIBOR to SOFR in 2023 (rebuild on one curve); G across the 2022–24 inversion (use Z or OAS); YTW jumping when a bond's workout date changes (use OAS at a stated $\sigma$, labeled, Law 11).
+5. *(ROBO's momentum signal.)* Theo asks for "twelve-month spread momentum on high yield, 2019–2025, using the spread column." Name three ways the output can measure conventions instead of markets. *Solution.* I-spread or ASW switching from LIBOR to SOFR in 2023 (one curve); G across the 2022–24 inversion (Z or OAS); YTW jumping when the workout date changes (OAS at a stated $\sigma$; Law 11).
 
 ### Deep-Dive Resource Graph
 

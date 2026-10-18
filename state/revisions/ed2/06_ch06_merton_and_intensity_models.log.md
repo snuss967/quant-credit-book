@@ -10,7 +10,7 @@
 - [x] 8. [6.2.3-6.2.4 Closed forms; spread] MATH-GENTLY (N(d), DD) + ANOTHER-SEAT (insurer) + WHEN-TO-APPLY + Trend Watch to prose -- N(d) box, insurer seat, when-to-reach, Trend Watch prose.
 - [x] 9. [6.3.1-6.3.2 P to Q] MATH-GENTLY (Girsanov) + FULL-DERIVATION-MOVE + 6.3.3 story -- loaded-dice box, derivation subheaded, Kaz switches sides on puzzle.
 - [x] 10. [6.4.2 The solver] MATH-GENTLY (Newton, Jacobian) + FULL-DERIVATION-MOVE + SHOP-LIFE (main vignette) -- sqrt2 Newton box, Jacobian subheaded, 47-row explain vignette, SR11-7, JPM.
-- [ ] 11. [6.4.3 Default point, mapping] MATH-GENTLY (isotonic) + WHEN-TO-APPLY
+- [x] 11. [6.4.3 Default point, mapping] MATH-GENTLY (isotonic) + WHEN-TO-APPLY -- staircase box with bucket counts; trust-as-rank vs probability passage.
 - [ ] 12. [6.4.4 SVB case] EXPAND-SCENE A: "The week the strike came due"
 - [ ] 13. [6.4.4 end] ANOTHER-SEAT (distressed fund vs dealer)
 - [ ] 14. [6.5.1-6.5.2 Black-Cox] MATH-GENTLY (first passage, reflection) + FULL-DERIVATION-MOVE + WHEN-TO-APPLY
