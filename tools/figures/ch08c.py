@@ -115,7 +115,7 @@ def fig_waterfall():
     # tolerance band around the explained total (the official number must land inside it)
     explained = -390.0
     ax.add_patch(Rectangle((explained - TOL, n - 3 - 0.45), 2 * TOL, 3 * 1.0 - 0.1, color=C_TOL, zorder=1, lw=0))
-    ax.text(explained + TOL + 8, n - 2, "tolerance band " + "\u00b1" + "$10k around the explained total", va="center",
+    ax.text(explained + TOL + 8, n - 2, "tolerance " + "\u00b1" + "$10k around the explained total", va="center",
             ha="left", fontsize=8, color=MUTED)
 
     ax.set_yticks(range(n))
@@ -151,7 +151,7 @@ def fig_waterfall():
 
     from matplotlib.patches import Patch
     handles = [Patch(color=C_FACT, label="Fact (custodian, exchange, clearing, treasury, blotter)"),
-               Patch(color=C_MODEL, label="Model forecast (risk model x market moves)"),
+               Patch(color=C_MODEL, label="Model forecast (risk model \u00d7 market moves)"),
                Patch(color=C_PC, label="Product control correction"),
                Patch(color=C_U, label="Unexplained (no source)")]
     fig.legend(handles=handles, loc="outside lower center", ncol=2, fontsize=8, handlelength=1.2,
@@ -422,13 +422,15 @@ def fig_unexplained_by_day():
             else:
                 neg += v
     ax.axhline(0, color=INK_2, lw=0.8, zorder=2)
-    # month-end lines
-    for d, nm in zip([21, 42], ["Jul month-end", "Aug month-end"]):
-        mark_event(ax, d, nm, y_frac=0.99)
-    ax.axvline(63, color=NEUTRAL, lw=0.9, linestyle=(0, (3, 3)), zorder=1)
-    ax.annotate("Sep\nmonth-end", (63, 0.99), xycoords=("data", "axes fraction"), xytext=(-8, 0),
-                textcoords="offset points", fontsize=8, color=INK_2, va="top", ha="right", linespacing=1.15)
+    # month-end lines, labelled in a row above the plot so no dashed line runs through a label
+    for d in (21, 42, 63):
+        ax.axvline(d, color=NEUTRAL, lw=0.9, linestyle=(0, (3, 3)), zorder=1)
+    top = dict(xycoords=("data", "axes fraction"), textcoords="offset points", xytext=(0, 3), va="bottom",
+               fontsize=8, color=INK_2, annotation_clip=False)
+    ax.annotate("Jul month-end", (21, 1.0), ha="center", **top)
+    ax.annotate("Aug month-end", (42, 1.0), ha="center", **top)
     ax.text(55.0, 112, "roll week", ha="right", va="center", fontsize=8, color=INK_2)
+    ax.annotate("Sep\nmonth-end", (64, 1.0), ha="right", linespacing=1.1, **top)
     ax.annotate("Mon 21 Sep:\nstale CDX series,\n" + MINUS + "$119k as found", (55.6, -119), xytext=(-4, -2),
                 textcoords="offset points", fontsize=8, color=INK_2, va="center", ha="right", linespacing=1.15)
     ax.annotate("two true-ups\non one day", (41.6, -105), xytext=(-2, 0), textcoords="offset points",
