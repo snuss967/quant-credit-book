@@ -430,7 +430,41 @@ Somebody was paid to be the wrapper's balance sheet that week. Three months late
 
 "Back in 2008," Mags said, "there was no ETF to blame. The bonds just stopped trading, and we marked them wherever the auditors would let us. Nobody saw the discount, because there was nothing to be at a discount *to*." She paused. "In 2020 the ETF told everyone the truth at 4 p.m. every day, and they hated it. I'll give it that. It was honest."
 
-### 20.5.1 The tape
+*A replay, run as Ines's ritual: the clock is cut at each close and the cast trade it blind. The cast, their cards and the Pair Book's sizes are fictional and illustrative; every market fact is real, and is cited where it appears or in the tape at the end of §20.5.1. Mags spent the real March 2020 on a dealer's distressed desk, and Chapter 1 has her run sheets.*
+
+### 20.5.1 Nineteen March 2020: the only price in town
+
+#### Recalled: Thursday 12 March
+
+Ines started the clock a week early, for one paragraph, because the week before was what everyone in the room was carrying. On Thursday 12 March LQD "traded almost 90,000 times," while "its top five holdings traded an average of 37 times" (Salim Ramji, global head of iShares, BlackRock Q1 2020 earnings call, 16 Apr 2020). That evening a UCITS investment-grade ETF closed about 7.5% below NAV and the largest US floating-rate bond ETF about 8% below (the tape). Chapter 1 (§1.8.2) replays that Thursday and the Friday after it, when LQD's own 5.0% discount came in to 0.19% because, in Mags's telling, the bonds had caught down to the ETF. "That was the rehearsal," Ines said. "This is the show."
+
+#### Thursday 19 March: three readings, one discount
+
+"Close, Thursday 19 March," Ines said, and wrote two numbers on the whiteboard. LQD had closed at a 5.08% discount to NAV. HYG had closed at a 0.85% *premium*. On the same afternoon, MSCI found later, the dispersion of traded prices for identical IG bonds reached its peak (the tape). Then she sat back and let the three readings of §20.2.3 have their argument.
+
+Kaz went first and began where their own reading says to begin, with the staleness term, because it is the one piece of a discount that can be measured from public data before anyone has an opinion. They ran (20.3) on a calm window from the previous autumn, took the slope as $\eta$, and pushed the ETF's own returns for the past fortnight through (20.2) as a stand-in for the true returns. "After a fortnight like this, with an evaluator that closes a fraction of the gap each day, the model says a good part of the five points is the NAV being late. Two of them, maybe three *(the desk's fictional run)*. That part isn't a trade. It's tomorrow's marks." Ines pointed at the second number on the board. "And high yield?" Kaz looked at it for a long time. "Staleness should be worst where the bonds trade least. If staleness were the whole story, high yield would have the deeper discount." It had a premium.
+
+That was Ines's opening, and she took it. "Then something pushed investment grade's flow term far below high yield's. Who sells IG in a panic? People who need cash and can still sell something. They sold what they could sell." Put through (20.1), the high yield premium is the most informative number on the board: a staleness-only story predicts the deeper discount in high yield, the data show the opposite, and Haddad et al. name the force that did it, investors selling the most sellable risky asset they owned, which in March 2020 was a large, liquid, high-quality bond ETF. "Quality-flight usually means buying quality," Ines said. "When the problem is cash, it means selling it."
+
+Mags had her run sheets out again. "I was marking IG paper that week from the other side of a dealer's desk. Same CUSIP, three prints, three points apart, same afternoon. Ask me where the true price was and I'll tell you it was somewhere in a range, and on half those names the range was wider than your discount." MSCI's dispersion peak is her run sheet turned into a statistic, and a discount inside that range, $|p_t - \bar c| < u_t$, cannot be told apart from zero. Figure 20.4 puts the reported discounts on the same date axis as an investment-grade spread.
+
+![Figure 20.4: The Baa-Treasury spread peaked on March 23, the day the Fed announced the SMCCF, after ETFs had closed 5 to 8% below NAV on March 12 and March 19 while HYG closed at a premium on March 19. Source: FRED BAA10Y (Moody's Baa yield minus the 10-year Treasury yield, daily); premiums and discounts as reported by BlackRock ViewPoint (July 2020) and MSCI (Bohák & Janosik, 2020-04-08); SMCCF dates from the Federal Reserve and NY Fed.](assets/figures/ch20_march2020_tape.png)
+
+<!-- FIGURE: ch20_lqd_hyg_premium_mar2020.png (data series: LQD and HYG daily premium/discount, 2 Mar to 30 Apr 2020, from iShares premium/discount history; markers at 12, 19, 23 Mar and 9 Apr; CDX IG overlay if a source is available, else BAA10Y. Caption: "LQD at -5.08% and HYG at +0.85% on the same close: the discount lived in the wrapper people could sell." RV thread figure for PB-13) -->
+
+#### Decision point: 3:40 p.m., 19 March 2020
+
+Ines dealt three cards. "LQD is five under. Write one of three things, redeem, buy-and-hedge or pass. Then a size. Then what you need to be true." If you are reading along, write yours too.
+
+Kaz wrote: "Redeem, \$100mm. Need: the basket sells at NAV less the half-spread within a week." Take the staleness out, Kaz reasoned, and two-odd points of flow were left, far outside any band, and an AP's edge is an AP's edge.
+
+Theo wrote: "Buy \$50mm LQD. Buy CDX IG protection, DV01-matched; Treasury futures for the rates. Need: the discount is mostly flow, and something stops the selling before my stop does." It was PB-13, the pair in §20.3.2, and the size came from (20.5) rather than from the edge. Theo had read $\psi$ the way he used to read a revolver's springing covenant, for the condition under which it bites, and that week every factor in $\psi = \bar\gamma \sigma_b^2 T^{\text{h}}$ was blowing out together: dealer balance sheets were constrained, so $\bar\gamma$ rose; the basis between any redemption basket and any hedge turned violent, so $\sigma_b$ rose; and the time to work out a basket of short, wide IG paper stretched from days into weeks, so $T^{\text{h}}$ rose. Meanwhile $F$, the net selling, was peaking. A multiplicative price impact meeting a flow spike is the 288 of §20.3.2 in motion, and it can double before it halves. So he sized for a doubling: ten points on \$50mm is \$5mm, which the pod's stop could absorb, and on Kaz's \$100mm it would not have been *(illustrative)*. "The edge tells you whether to play," he said. "$\psi$ tells you how wrong you can afford to be about when."
+
+Mags wrote "Pass," and under it one line: "The basket is the bonds I can't sell." "On the nineteenth I was the one being offered those baskets," she said. "The bid side of my run sheet is what you'd be selling into, Kaz, and it wasn't there."
+
+Ines collected the cards and graded nothing. "Turn the tape over."
+
+#### The tape
 
 | Date (2020) | What happened | Source |
 | :--- | :--- | :--- |

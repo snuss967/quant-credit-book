@@ -89,3 +89,5 @@ Count: 16 Math, Gently (L37, 139, 145, 183, 251, 318, 344, 368, 390, 408, 422, 4
 - Ch 1-B §1B.2's "from 83 to 78" on the Friday contradicts Ch 1's 91.25 print and Monday open at 78; logged under C9 in `state/cast_bible.md` for the 1-B pass.
 - Ch 16's "Chapter 1's box in §1.8.1" and the Ch 1 *Odd Lots* entries (channel-level) are queued in `state/cleanup_queue.md`.
 
+
+<!-- STATUS: COMPLETE -->

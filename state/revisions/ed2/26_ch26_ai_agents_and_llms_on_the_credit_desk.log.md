@@ -9,7 +9,7 @@
 - [x] 7. [Scene A, between beats 2 and 3] ANOTHER-SEAT #1, direct lender and buyer of its loans. — Done: Marks, insurer buyers, Zito box between beats two and three.
 - [x] 8. [26.3, "Where does the reader earn money" items 1-5] LIST-TO-NARRATIVE. — Done: five-item list folded into one day-shaped paragraph; extractions kept.
 - [x] 9. [26.4, claim tuple] MATH-GENTLY #2, "Three lights on one claim." — Done: signature-page box with 10-claim counts; card graded after figure.
-- [ ] 10. [26.4, calibration and selective prediction] MATH-GENTLY #3 in two parts.
+- [x] 10. [26.4, calibration and selective prediction] MATH-GENTLY #3 in two parts. — Done: two-part forecaster and AURC box; equations unchanged below.
 - [ ] 11. [26.5, after Kalai's rule] MATH-GENTLY #4, "When to say I don't know."
 - [ ] 12. [26.5, controls 1-5] LIST-TO-NARRATIVE + SHOP-LIFE (Vantress applied-AI group).
 - [ ] 13. [26.6, arithmetic of chains] MATH-GENTLY #5 + FULL-DERIVATION-MOVE of pass^k proof.

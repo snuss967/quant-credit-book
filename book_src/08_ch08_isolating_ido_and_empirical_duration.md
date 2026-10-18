@@ -1106,6 +1106,19 @@ Run it after the factor regressions. Do not give `strip_common_factor` a panel w
 
 ## 8.10 Desk Debrief
 
+Theo's sticky note now had a question on the front, a number under it, and two replays on the back. The table below is the rest of the chapter folded to the same size: where each idea is derived, where it was first pictured, where somebody had to use it under pressure, and where the code lives.
+
+| Concept | Equation | Intuition (box) | Judgment (scene) | Code |
+| :--- | :--- | :--- | :--- | :--- |
+| Return decomposition | $R^{\text{xs}} \approx s\,\Delta t - \text{DTS}\cdot\Delta s/s$ (§8.1) | A curve, its tangent, and the bend (§8.1) | Cold open: the EXPLAIN button and the four cents | [Listing 8.2](#code-8-2) |
+| Empirical duration | $H = 1 + s\,\rho\,\sigma_s/\sigma_y$ (§8.2) | What a regression slope is (§8.2) | The Year a PDF Said Zero (§8.7) | [Listing 8.3](#code-8-3) |
+| Recovery route | $H^{\text{rec}} = c/(c + \lambda R)$ (§8.3) | The memoryless clock (§8.3) | Alltel's four hedge ratios (§8.3); the SVB holdco coda (§8.7) | — |
+| DTS beta | $\beta_i = \text{DTS}_i/\text{DTS}_M$ (§8.4) | Spreads move in percent (§8.4) | The pod's risk x-ray and PB-03 (§8.4) | [Listing 8.5](#code-8-5) |
+| Stale-mark betas | $\hat\beta_{\text{D}} = \sum_k \hat b_k$ (§8.5) | News in three envelopes (§8.5) | Kaz and Ines on the equity lag (§8.5) | [Listing 8.4](#code-8-4) |
+| Hedge matrix | $h_\eta = (\Sigma_{HH} + \eta\,\mathrm{diag}\,\Sigma_{HH})^{-1}\Sigma_{Hp}$ (§8.6) | Two hedges that are almost the same hedge (§8.6) | The four windows; Theo's hedge, four ways (§8.6) | [Listing 8.6](#code-8-6) |
+| Two-instrument hedge | Futures at $H = 1$; CDX at $\text{DTS}_i/\text{DTS}_{\text{CDX}}$ (§8.8) | (none) | The Hedge That Hedged Both Ways (§8.7); Ines on the mandate (§8.8) | Spec field `OBJECTIVE` (§8.10) |
+| IDO and the ledger | $\text{IDO}_{i,t} = \text{DTS}_{i,t-1}\,\tilde\epsilon^{\perp}_{i,t}$; $t = \overline{\text{IC}}\sqrt{T}/\mathrm{sd}(\text{IC}_t)$ (§8.8) | The common whisper (§8.8) | Twelve Residuals; the month-end meeting (§8.8) | [Listing 8.7](#code-8-7) |
+
 - **IDO or it didn't happen, in two subtractions.** First accounting (carry, KRD-matched Treasuries, convexity), then attribution (DTS-scaled factors, then the common residual factor). The P&L-explain residual is a bookkeeping error, not alpha.
 - **Analytical duration answers a question nobody asked.** $H = 1 + s\,\rho_{y,s}\,\sigma_s/\sigma_y$. The sign of $\rho$ decides everything, and it has changed sign twice since 2021.
 - **There are two roads to zero duration.** The correlation road is a regime. The recovery road, $H^{\text{rec}} = c/(c + \lambda R)$, is structural. CCC books travel both.
@@ -1157,9 +1170,12 @@ TESTS: every sanity check in Section 8.9 prints PASS. Do not "improve" the objec
 - **"How The Crisis Nearly Blew Up One Of The World's Safest Trades"** (*Odd Lots*, with Josh Younger of JPMorgan, March 26, 2020). The Treasury cash-futures arbitrage failing in March 2020: the rates-side twin of the credit-ETF dislocation, and the basis risk of the futures leg (§8.6, §8.7). https://omny.fm/shows/odd-lots/how-the-crisis-nearly-blew-up-one-of-the-world-s-s
 - **"Goldman Tells Credit Investors to Buy Cheap Hedges"** (*The Credit Edge*, with Lotfi Karoui of Goldman Sachs, February 13, 2025). A dated sell-side statement that hedge cost was "the lowest it's been in probably a very long time": the price side of the CDX and equity-put legs (§8.6). https://omny.fm/shows/the-credit-edge-by-bloomberg-intelligence/goldman-tells-credit-investors-to-buy-cheap-hedges
 - **"What the Actual ETF Is Going on Right Now"** (*Trillions*, March 19, 2020). Live commentary on ETFs in the 2020 crash, days after the LQD discount: the audio companion for the HYG/JNK leg (§8.6, §8.7). https://omny.fm/shows/trillions/what-the-actual-etf-is-going-on-right-now
-- **"Why the True Price of a Bond Can Still Be Hard To Know"** (*Odd Lots*, with Maciej Kowara and Eric Jacobson of Morningstar, April 5, 2021). Evaluated prices differ by firm on illiquid bonds: the stale-price mechanism behind non-synchronous betas (§8.5). https://omny.fm/shows/odd-lots/why-the-true-price-of-a-bond-can-still-be-hard-to
+- **"Why the True Price of a Bond Can Still Be Hard To Know"** (*Odd Lots*, with Maciej Kowara and Eric Jacobson of Morningstar, on their report "Bond Pricing: Agreeing To Disagree," April 5, 2021). Evaluated prices differ by firm on illiquid bonds: the stale-price mechanism behind non-synchronous betas (§8.5). https://omny.fm/shows/odd-lots/why-the-true-price-of-a-bond-can-still-be-hard-to
 - **"Boaz Weinstein"** (*Money Stuff: The Podcast*, with Matt Levine and Katie Greifeld, March 19, 2026). Private-credit NAVs, BDC discounts and "volatility laundering": the smoothing problem of §8.5 in a live market. https://omny.fm/shows/money-stuff-the-podcast/boaz-weinstein
 - **"Ralph Smith - Scientific Investing in Fixed Income (S5E7)"** (*Flirting with Models*, with Ralph Smith of BlueCove, July 11, 2022). Breadth and liquidity differ between credit and rates, and the assumption about a bond's availability materially moves a backtest: the practitioner's version of asking whether the price behind a backtest or a hedge ratio was one you could trade (§8.5, §8.6). https://www.flirtingwithmodels.com/episodes/kAEkSoYuRwd
+- **"How to Succeed at Multi-Strategy Hedge Funds"** (*Odd Lots*, with Giuseppe Paleologo, May 20, 2024). How a platform watches its PMs: market- and factor-neutral books and the factor model as a daily x-ray, the practice behind the pod seat in §8.4 (paraphrased in the text; the transcript is machine-made). https://omny.fm/shows/odd-lots/how-to-succeed-at-multi-strategy-hedge-funds
+- **"How the Hottest Hedge Funds on Wall Street Really Manage Risk"** (*Odd Lots*, with Rich Falk-Wallace, July 25, 2024). Leverage applied to the residual rather than the beta: why a pod's hidden spread beta is the platform's problem (§8.4, §8.8). https://omny.fm/shows/odd-lots/how-the-hottest-hedge-funds-on-wall-street-really
+- **"The Math That Explains How Multi-Strategy Hedge Funds Make Money"** (*Odd Lots*, with Dan Morillo, October 7, 2024). The correlation cap on a platform's Sharpe ratio, the arithmetic Marcus walks Dov through in the Twelve Residuals scene (§8.8). https://omny.fm/shows/odd-lots/100724-odd-lots-dan-morillo-master
 
 **Practitioner Writing**
 

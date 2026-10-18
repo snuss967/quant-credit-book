@@ -291,6 +291,10 @@ The published benchmarks agree on the shape of the problem, if not the level. Fi
 
 The stated confidence $\hat p$ is useful only if it means something. Two properties matter, and they are Bohn and Stein's power/calibration split exactly.
 
+> **Math, Gently.** *Calibration is honesty; power is eyesight.* Part one. A forecaster says "70% chance of rain" on ten days and it rains on seven of them: she is calibrated, because her 70% means 70%. A second forecaster says "90%" on ten days and it also rains on seven: the same hit rate, but his 90% overstates it by twenty points. Put their twenty days on one scorecard with two bins, the "70%" bin and the "90%" bin, ten days in each. The gap between what was said and what happened is 0 in the first bin and 0.20 in the second. Weight each gap by its bin's share of the days, one half each, and add: $\tfrac12 \times 0 + \tfrac12 \times 0.20 = 0.10$. That is the expected calibration error. Part two. Honesty says nothing about whether a forecaster can tell the wet days from the dry ones. To test that eyesight, sort a reader's claims from most to least confident, answer them one at a time, and watch the error rate on the claims answered so far. A reader with eyesight puts its five claims in the order right, right, right, wrong, wrong; the running error rates are 0, 0, 0, 1/4 and 2/5, and their average, 0.13, is the area under its risk–coverage curve. A reader with no eyesight produces the same confidences in a useless order, say wrong, right, right, wrong, right, with running error rates of 1, 1/2, 1/3, 1/2 and 2/5 that average 0.55. Both end at the same 40% error if they answer everything, but only the first can usefully be told to stop early. Figure 26.2, a little further on, shows the two properties coming apart: bending the stated confidences changes the honesty and leaves the eyesight alone, while shuffling them destroys the eyesight.
+
+The full version, in symbols, follows.
+
 **Calibration.** Partition claims into $B$ bins by $\hat p$, with $n_b$ claims in bin $b$, empirical accuracy $\text{acc}_b$, and mean stated confidence $\bar{\hat p}_b$. The expected calibration error is
 
 $$
