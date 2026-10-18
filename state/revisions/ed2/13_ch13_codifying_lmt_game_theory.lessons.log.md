@@ -35,6 +35,13 @@ Growth 32,426 / 12,505 = **2.59×** against the 1.6–1.9× target (20,008–23,
 - [x] B18. Two Specs: §13.8 "Specification for AI Implementation" schemas/edge cases/stability (L822) and the Debrief's "The Spec You Hand the Robot" (L971). Survives: the Debrief Spec, with L822's schemas, edge cases and stability merged in; §13.8 keeps the ROBO vignette and the listing prose with a pointer. **Done:** Schemas, edge cases, stability merged into Debrief Spec; body copy deleted.
 - [x] B19. Vintage break told at Trend Watch L379 (protected), Bohn–Stein annotation L784 and PRS judgment L796. Survives: both boxes; L796 points to the annotation (done with C8). **Done:** L796 rewritten as Ines's ranking-versus-level line; vintage points to annotation.
 
+Second sweep, found after the first fixes (growth still 2.34×):
+
+- [x] B20. Auction box opens by restating L426 ("In an ordinary auction a losing bidder gets zero. Here a losing bidder gets primed"). Survives: L426; the box keeps a one-line picture and its 20/30/10 number. **Done:** Box opens with one picture sentence; 20/30/10 number and equity line kept.
+- [x] B21. Global-games box sign-off ("organizing is itself a reading of the thermometer") repeats L450's italic sentence. Survives: L450; sign-off cut. **Done:** Duplicate thermometer sign-off cut; L450's italic sentence carries the point.
+- [x] B22. Robertshaw paragraph ends on three conclusions (tradable status; re-read the register; snapshot of a fight). Survives: the register rule and the snapshot line. **Done:** Two conclusions joined into one sentence; snapshot-of-a-fight line kept.
+- [x] B23. L135's parenthetical (six of eight filed, median 13.5 months) restates the §13.9 scoreboard note (L917). Survives: L917; L135 points to it. **Done:** Parenthetical now points to the §13.9 scoreboard for dates and median.
+
 ## (c) Templates and detached judgment paragraphs
 
 - [x] C1. L75 "By the end of this chapter you will be able to: ..." (a syllabus). Replace with two sentences that point to Theo's four-factor sheet at 4:50; pose the 7:41 decision as a card at L71 (lesson 9). **Done:** Syllabus replaced by four-factor foreshadowing; decision card added at 7:41.
@@ -75,18 +82,18 @@ Count: 14 Math, Gently (L101, 113, 254, 270, 400, 414, 436, 452, 516, 534, 671, 
 
 ## (f) Finder and headings
 
-- [ ] F1. Finder table at the top of §13.10 (10 rows: transfer function, uptier put, knapsack, auction, global games, co-op Nash/Shapley, drop-down forward, double-dip clearing, PRS/EPL, steps versus plans), absorbing the judgments retired in C5–C8.
-- [ ] F2. Promote scenes to headings: "## Cold Open" (Ch 5 and 6 precedent); `####` for the Serta decision (19 Jun 2020), the Lumen scene and its decision (10 Nov 2023), the Trinseo decision (24 Jun 2026), the Incora board (28 Mar 2022) and the 4:50 Debrief scene.
+- [x] F1. Finder table at the top of §13.10 (10 rows: transfer function, uptier put, knapsack, auction, global games, co-op Nash/Shapley, drop-down forward, double-dip clearing, PRS/EPL, steps versus plans), absorbing the judgments retired in C5–C8. **Done:** Ten-row Finder inserted at top of §13.10; absorbs retired judgments.
+- [x] F2. Promote scenes to headings: "## Cold Open" (Ch 5 and 6 precedent); `####` for the Serta decision (19 Jun 2020), the Lumen scene and its decision (10 Nov 2023), the Trinseo decision (24 Jun 2026), the Incora board (28 Mar 2022) and the 4:50 Debrief scene. **Done:** Cold Open heading added; six #### scene and decision headings.
 
 ## (g) Cast-bible contradictions
 
-- [ ] G1. Co-op counter (C6 canon for Ch 13 is 1, 2, 2): L464 says 2 → 1; L490 says 3 → 2; L964 says 3 → 2.
-- [ ] G2. Priya as a documents analyst (C11: rename the Ch 13 analyst): rename the vignette's analyst "Noor"; move the vignette (L629, parked in the drop-down section) to the end of §13.2.1 beside `holder_hhi` (lesson 12); update the pointers at L215, L759, L796.
-- [ ] G3. Kaz misreads (C7): the springing lien at L189–193 repeats Ch 3's misread → Kaz heads it off as a callback. The beta blocker at L195–203 is a second blocker misread in the chapter (the first is Ch 5's club bouncer; Ch 13 keeps the mattress protector) → cut.
-- [ ] G4. Mags "In 1991 this was a steering committee" (L466) contradicts C5 (she started in 1996) → "When I started".
-- [ ] G5. Story clock (C1, rule 3): Theo reads Trinseo's May 2026 disclosure statement "on Tuesday" as if live, four months before his 22 Sep 2026 Day One → label it a replay, docket cut off 24 Jun 2026.
-- [ ] G6. Larkspur runway: §13.2.1 says eleven months; the listing prose (L854) scores "7 months" → reconcile in L854.
-- [ ] G7. Update `state/cast_bible.md` (Noor; Ch 13 misread ledger; counter applied; Trinseo replay).
+- [x] G1. Co-op counter (C6 canon for Ch 13 is 1, 2, 2): L464 says 2 → 1; L490 says 3 → 2; L964 says 3 → 2. **Done:** Counter now 1, 2, 2 at L463, L495, L986.
+- [x] G2. Priya as a documents analyst (C11: rename the Ch 13 analyst): rename the vignette's analyst "Noor"; move the vignette (L629, parked in the drop-down section) to the end of §13.2.1 beside `holder_hhi` (lesson 12); update the pointers at L215, L759, L796. **Done:** Analyst renamed Noor; vignette moved to §13.2.1; three pointers updated.
+- [x] G3. Kaz misreads (C7): the springing lien at L189–193 repeats Ch 3's misread → Kaz heads it off as a callback. The beta blocker at L195–203 is a second blocker misread in the chapter (the first is Ch 5's club bouncer; Ch 13 keeps the mattress protector) → cut. **Done:** Springing lien pre-empted as callback; beta-blocker exchange cut; flower kept.
+- [x] G4. Mags "In 1991 this was a steering committee" (L466) contradicts C5 (she started in 1996) → "When I started". **Done:** Mags now says 'When I started', consistent with her 1996 start.
+- [x] G5. Story clock (C1, rule 3): Theo reads Trinseo's May 2026 disclosure statement "on Tuesday" as if live, four months before his 22 Sep 2026 Day One → label it a replay, docket cut off 24 Jun 2026. **Done:** Trinseo framed as replay binder; label gives 24 June 2026 cutoff.
+- [x] G6. Larkspur runway: §13.2.1 says eleven months; the listing prose (L854) scores "7 months" → reconcile in L854. **Done:** Listing prose notes 7 months is harsher than Theo's eleven.
+- [x] G7. Update `state/cast_bible.md` (Noor; Ch 13 misread ledger; counter applied; Trinseo replay). **Done:** Cast bible updated: Noor, misread ledger, C5/C6/C7/C11 notes, replays.
 
 ## (h) Relative-value beat
 

@@ -106,4 +106,19 @@ Growth 34641 / 15148 = **2.29×**, against the 1.6–1.9× target (24,237–28,7
 - [x] 19. §16.8.3: one dramatized pair row; narration between Poker Table and dealer Seat; trim the dealer seat; rewrite the Listing 16.5 sentence (b28, c, d). Note: Mags's 30-versus-38 row dramatized; table carries four others.
 - [x] 20. §16.9: Finder table at the top of the Desk Debrief (f). Note: ten rows, concept to listing; judgments point to scenes.
 - [x] 21. State: `state/research/open_items_ch16_ed2.md`; Dana in the cast bible (e, g). Note: six open items logged; Dana and fulcrum callback recorded.
-- [ ] 22. Metric after; final greps (templates, leaks, box count, `$$` balance, last line).
+- [x] 22. Metric after; final greps (templates, leaks, box count, `$$` balance, last line). Note: templates and leaks clean; no runs over two; status line intact.
+
+## After
+
+| ver | words | bullets% | modal | imper | rule | dialog | mathgently | seat |
+| :-- | --: | --: | --: | --: | --: | --: | --: | --: |
+| pre | 15148 | 19.1 | 3.0 | 0.4 | 2.1 | 5.2 | 0 | 0 |
+| before | 34641 | 7.2 | 3.6 | 0.8 | 1.6 | 8.3 | 16 | 4 |
+| after | 30115 | 8.2 | 2.8 | 0.5 | 1.6 | 9.5 | 3 | 4 |
+
+- Growth 30115 / 15148 = **1.99×** (was 2.29×); `wc -w` 31,642 (was 35,812). 4,526 tool words retired by merging, no topic lost. Modal density 3.6 → 2.8, now below Edition 1's 3.0.
+- Still about 1,330 words over the 1.9× ceiling. Roughly 9,000 words of what remains is protected or reference text (seven Resource Graphs, five Specs, four Trend Watches, nine Source Extractions with Annotations, the Docket Diary, Exercises, the Debrief's eight sentences), and the long scenes (six streets ~1,500, Spirit ~1,800) are inside lesson 9's 2,000–3,000. The next cut, if wanted, is an editorial call: drop one of the four seat boxes or shorten the Spirit scene, not more merging.
+- Protection check against the start-of-pass text: all URLs, Appendix F links, figures, display equations (38), Trend Watches, Source Extractions, Exercises, Poker Table, Desk Myth, Ways This Blows Up and the five Specs unchanged; the only Docket Diary change is the June 2026 hedge wording. Headings removed are only the four "When ... breaks" subsections added in the narrative pass; four `####` scene and decision headings added.
+- Math, Gently now 3 (Jensen, runway dial, Kelly), none adjacent; twelve demoted to glosses with pointers (Ch 1 §1.5 and §1.8.1, Ch 5 §5.1.1 and §5.2.3, Ch 6 §6.1.1, §6.1.4 and §6.2.2, Ch 13 §13.7), keeping each one's own tiny number where the chapter used it. The hazard gloss now uses h = 2 and h = 1 so it does not solve Exercise 5.
+- Open items: `state/research/open_items_ch16_ed2.md`. RV beat: not applicable (`state/rv_thread.md` absent).
+<!-- STATUS: COMPLETE -->

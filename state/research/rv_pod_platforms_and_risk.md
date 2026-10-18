@@ -12,7 +12,7 @@ Primary pages where they exist (firm sites, Mercer, Cambridge Associates, BIS, t
 ## 1. Findings in brief
 
 1. **A platform is a bank trading floor rebuilt as a fund.** Mercer (May 2023): the model "found significant traction following the GFC as many proprietary bank trading groups were shuttered or substantially constrained".
-2. **Pass-through is the keystone.** Cambridge Associates (10 Oct 2025): 0.87%-12.99% of assets, mean 5.93%; Barclays via *The Economist*: 6.2%. About 20% gross is needed for 10% net (section 3.2).
+2. **Pass-through is the keystone.** Cambridge Associates (10 Oct 2025): 0.87%-12.99% across its sample, mean 5.93%; Barclays via *The Economist*: 6.2%. About 20% gross is needed for 10% net (section 3.2).
 3. **The platform buys the residual.** Pods are "purely market neutral and factor neutral" (Paleologo, **CHECK**); "what you're levering is just that residual term" (Falk-Wallace, **CHECK**). The PM keeps 15-25% of own P&L.
 4. **Netting risk is the price:** pay is per pod, not per fund; Albourne's simulations say about 1% a year (**CHECK**).
 5. **The stop-loss is the risk model.** Reported for Millennium only: lose 5%, capital halved; lose 2.5% more, usually fired. Practitioners quote 3%/5-6% and 7-10%. No firm publishes a rule.
@@ -53,7 +53,7 @@ Inputs from Mercer: management fee 1.0%; operations, talent and retention 3.0%; 
 | 20% | 3.40% | 2.52% | 9.92% | 10.08% | 50.4% |
 | 25% | 4.40% | 3.32% | 11.72% | 13.28% | 53.1% |
 
-Mercer: "for an investor to achieve a 10% net return, a fund must generate a gross return of approximately 20% or more". So a credit RV pod that "makes 6% on allocated capital" returns the LP about 1.1% (PM incentive 0.60%, fund incentive 0.28%, fixed 4.0%).
+Mercer: "for an investor to achieve a 10% net return, a fund must generate a gross return of approximately 20% or more". So a platform whose pods average 6% gross at fund level returns the LP about 1.1% (PM incentive 0.60%, fund incentive 0.28%, fixed 4.0%). Return on a pod's allocated capital is a different number, because allocated capital is a multiple of LP equity (section 4.3).
 
 ### 3.3 Netting risk, worked
 
@@ -80,11 +80,17 @@ At rho 0.10, 45 risk-takers capture 91% of the cap (he says "about 95%"). "A lit
 
 ## 4. Pod risk regimes
 
-**Control stack.** Mercer: PM-level differences are "overall exposure ranges (i.e. long, short, gross, net), concentration, factor risk, and stop-loss implementation", and "many platforms dictate a factor-neutral positioning or very tight constraints". Paleologo names three jobs for risk: stop-losses (a "primitive tail insurance" for a PM who "is a little bit like somebody who's holding a call option"), true diversification, and keeping people "in scope". Scope bites in credit: Yelvington says a credit PM cannot ask for limits in an unrelated market, and risk reads the return stream for a disguised version of one.
+### 4.1 Control stack
 
-**Reported thresholds (none is a firm disclosure).** WSJ via eFinancialCareers (5 Dec 2025): Millennium PMs who lose 5% "typically have their capital halved. If they lose another 2.5%, they're usually fired"; Hedgeweek (10 Mar 2025) adds that "exceptions can be made". Yelvington: stops "usually somewhere between 7 and 10 percent for what's called a stopout", with capital reduced "well before that three and a half or five", measured peak to trough. Kumar (26 Feb 2024): lose more than 3% and capital "is going to kind of get cut in half"; lose "5, 6%" and "you're probably getting stopped out". Brevan Howard and Schonfeld were described as tolerant; Eisler's COO: "We sat them out for a bit, and then we reloaded." Print the 5%/7.5% as the best-reported Millennium rule, plus the range.
+Mercer: PM-level differences are "overall exposure ranges (i.e. long, short, gross, net), concentration, factor risk, and stop-loss implementation", and "many platforms dictate a factor-neutral positioning or very tight constraints". Paleologo names three jobs for risk: stop-losses (a "primitive tail insurance" for a PM who "is a little bit like somebody who's holding a call option"), true diversification, and keeping people "in scope". Scope bites in credit: Yelvington says a credit PM cannot ask for limits in an unrelated market, and risk reads the return stream for a disguised version of one.
 
-**Stop-out odds, worked.** Probability a PM touches the stop within one year, drawdown peak to trough from zero, 40,000 daily paths (illustrative):
+### 4.2 Reported thresholds (none is a firm disclosure)
+
+WSJ via eFinancialCareers (5 Dec 2025): Millennium PMs who lose 5% "typically have their capital halved. If they lose another 2.5%, they're usually fired"; Hedgeweek (10 Mar 2025) adds that "exceptions can be made". Yelvington: stops "usually somewhere between 7 and 10 percent for what's called a stopout", with capital reduced "well before that three and a half or five", measured peak to trough. Kumar (26 Feb 2024): lose more than 3% and capital "is going to kind of get cut in half"; lose "5, 6%" and "you're probably getting stopped out". Brevan Howard and Schonfeld were described as tolerant; Eisler's COO: "We sat them out for a bit, and then we reloaded." Print the 5%/7.5% as the best-reported Millennium rule, plus the range.
+
+### 4.3 Stop-out odds, worked
+
+Probability a PM touches the stop within one year, drawdown peak to trough from zero, 40,000 daily paths (illustrative):
 
 | Sharpe | Vol 4%, stop 5% | Vol 4%, 7.5% | Vol 6%, 5% | Vol 6%, 7.5% |
 | --: | --: | --: | --: | --: |
@@ -106,11 +112,15 @@ Illustrative: capital $200m, halving at 5% ($10m), firing at 7.5% ($15m).
 
 Ironshield (a long/short credit fund, not a pod) gives the same rule: "Maximum position size (% of NAV) = loss budget / downside in points"; 35 points against 50bp caps a position at 1.4% of NAV. For shorts at 3-4 points of capital risk "the loss budget no longer sets the size. How many bonds you can borrow does."
 
+### 4.5 Centre book and leverage
+
 **Centre book.** Mercer: "a central trading portfolio ('center-book') sometimes used in order to enhance or hedge certain exposures". Morillo (ex-Citadel) had "responsibility for the center book where a lot of that central stuff ... happens" (**CHECK**). A rival platform (Nickel, *Hedge Fund Journal*, 21 Apr 2026) says it has "no 'centre book', occasionally used by some funds to replicate pods' trades and/or reverse engineer their intellectual property": a competitor's claim, not a pod shop's admission.
 
 **Leverage.** *The Economist*: funds "can borrow upwards of ten times the capital they raise"; Mercer: under 1x to 6x on regulatory collateral, "plausible" 20-30x with derivatives and repo; JPMorgan's average platform leverage 645% (Hedgeweek, 15 Sep 2026, definition not given); the Fed (8 May 2026): hedge fund leverage "near all-time highs", concentrated in the largest funds.
 
 ## 5. How credit relative-value pods are described in public
+
+### 5.1 Taxonomy
 
 | Style | Public description | Gap |
 | :-- | :-- | :-- |
@@ -140,7 +150,7 @@ Illustrative inputs (mine): long $40.0m issuer A (spread 380bp, spread duration 
 | Idio: A tightens 15bp | +0.25 | +0.25 | +0.25 |
 | Idio: B widens 20bp | +0.34 | +0.25 | +0.20 |
 
-The alpha ($0.25m for 15bp) is the same size as the hedge-ratio error ($0.2-0.35m): idio is whatever the hedge model leaves. No ratio is right in every state. Carry matters: long A earns $1.52m a year, short $26.7m of B costs $1.39m, and at an assumed 75bp borrow the net is -$0.07m (about -17bp on the long). Add section 4.4: a $40m single-name long already breaches the firing line on $200m.
+The alpha ($0.25m for 15bp) is the same size as the hedge-ratio error ($0.2-0.35m): idio is whatever the hedge model leaves. No ratio is right in every state. Carry matters: long A earns $1.52m a year, short $26.7m of B costs $1.39m, and at an assumed 75bp borrow the net is -$0.07m (about -17bp on the long). Combine with section 4.4: a $40m single-name long already breaches the firing line on $200m of capital.
 
 ### 5.3 Shorts, capacity, private credit
 
@@ -152,7 +162,7 @@ Ironshield (E18, 4 Aug 2026): a short "has to clear three hurdles"; the book "en
 
 **Mechanism.** Kumar (**CHECK**): risk management "is almost algorithmic ... your P&L kind of drives risk management", so a position that moves against one pod is cut, which moves it against the next. Aviva: "shared stop-loss systems and reliance on short-dated financing can turn dozens of relative-value positions into one crowded trade". Mercer's hedge fund research head, on a *Capital Allocators* episode (he appears in EP.345, 23 Oct 2023; Bloomberg does not name it), as quoted by Bloomberg on 30 Nov 2023: "There's some overcrowding and concern about the amount of leverage ... we are worried about the potential snowball effect." Bailey (11 Feb 2025): pods "deleverage rapidly in stress conditions". IMF (Oct 2026, via coverage, **CHECK**): leverage, crowded positions and redemptions; in VIX spikes the most crowded stocks were 10 points more volatile and lost 4 points more.
 
-**Counter-view.** Morillo: "it's not obvious why they would be all in the same side ... just because they were organized as pods." A new-generation multi-strat CEO: "Everyone says 'We are going to be the one that is able to run out of the crowded theater' ... But it works less well as the theater gets more crowded." Magnetar built a strategy that "tends to make money after multistrats cut their crowded equity positions en-masse". Selling liquidity to a de-grossing platform is a business.
+**Counter-view.** Morillo: "it's not obvious why they would be all in the same side ... just because they were organized as [pods]." A new-generation multi-strat CEO: "Everyone says 'We are going to be the one that is able to run out of the crowded theater' ... But it works less well as the theater gets more crowded." Magnetar built a strategy that "tends to make money after multistrats cut their crowded equity positions en-masse". The industry body's reply to Bailey: hedge funds have "no government backstop, no liquidity mismatch, and losses are siloed to an individual fund and its sophisticated investors" (MFA, Hedgeweek 12 Feb 2025). Selling liquidity to a de-grossing platform is a business.
 
 **Credit: the honest gap.** I found no measurement of pod share of CDX, iTraxx, HYG or LQD flow, no credit unwind attributed to platforms by a source I could open, and no disclosed pod credit loss. Aviva says scale "has redefined liquidity and price formation in credit markets, influencing everything from index hedges to single-name credit default swaps". The documented analogue is Treasuries: the swap-spread trade was $281bn in Q1 2024, $707bn in March 2025, and 11% smaller at $631bn by June as "traders were caught wrong-footed" in the April turbulence (BIS, 8 Dec 2025). Proxies to build for the book (not verified here): DTCC swap-data-repository index volume, ETF short interest, TRACE block prints. The chronology is in the evidence table.
 
@@ -229,7 +239,7 @@ Each page returned HTTP 200 this session; dates are publisher metadata (Omny `Pu
 | P10 | "Loads of Vultures: Funds, Agents, Bets" (*Money Stuff: The Podcast*) | 2025-10-03 | https://omny.fm/shows/money-stuff-the-podcast/loads-of-vultures-funds-agents-bets | Multistrategy talent market |
 | P11 | "Bespokeness: AI, Passthrough, UST" (*Money Stuff: The Podcast*) | 2025-02-14 | https://omny.fm/shows/money-stuff-the-podcast/bespokeness-ai-passthrough-ust | Pass-through, "paying for hedge funds' photocopies" |
 | P12 | "Multi-Strategy Platform at BAM" (*Capital Allocators* EP.341, Dmitry Balyasny) | 2023-10-02 | https://www.capitalallocators.com/podcast/multi-strategy-platform-at-bam/ | Founder on pods, risk, talent |
-| P13 | "Inside Mercer Consulting" (*Capital Allocators* EP.345) | 2023-10-23 | https://www.capitalallocators.com/podcast/inside-mercer-consulting/ | Source of the overcrowding quote in Bloomberg, 30 Nov 2023 |
+| P13 | "Inside Mercer Consulting" (*Capital Allocators* EP.345) | 2023-10-23 | https://www.capitalallocators.com/podcast/inside-mercer-consulting/ | Mercer's hedge fund research head appears; Bloomberg (30 Nov 2023) quotes him on overcrowding from "a recent Capital Allocators podcast" (episode not named) |
 | P14 | "Multi-Strategy Hedge Fund First Principles at Jain Global" (*Capital Allocators* EP.487) | 2026-02-16 | https://www.capitalallocators.com/podcast/multi-strategy-hedge-fund-first-principles-at-jain-global/ | A new platform's design |
 | P15 | "Disintermediating Pod Shops" (*Capital Allocators* EP.501) | 2026-05-11 | https://www.capitalallocators.com/podcast/disintermediating-pod-shops/ | Pod access for asset owners; capacity |
 | P16 | "Credit Microcycles at Diameter" (*Capital Allocators* EP.484) | 2026-02-02 | https://www.capitalallocators.com/podcast/credit-microcycles-at-diameter/ | Credit-focused hedge fund and dislocation |
@@ -286,8 +296,8 @@ Figures worth drawing: fee waterfall (stacked bars), stop-out heat map, Sharpe-c
 
 **Firm sites (read 18 Oct 2026).** [S32] https://www.mlp.com/ ; https://www.bamfunds.com/ ; https://point72.com/ ; https://www.exoduspoint.com/ ; https://www.deshaw.com/ (home page, no AUM).
 
-**Podcasts [P#]:** URLs in section 9. Transcripts read: https://podscripts.co/podcasts/odd-lots/how-the-rise-of-pod-shops-is-reshaping-the-way-markets-trade ; .../how-to-succeed-at-multi-strategy-hedge-funds ; .../how-the-hottest-hedge-funds-on-wall-street-really-manage-risk ; .../the-math-that-explains-how-multi-strategy-hedge-funds-make-money ; .../why-asset-allocators-love-multi-strategy-hedge-funds ; .../how-you-get-and-actually-keep-a-job-at-a-multi-strat-hedge-fund . Feeds parsed: https://rss.libsyn.com/shows/94820/destinations/482814.xml (*Capital Allocators*) ; https://anchor.fm/s/10958cc44/podcast/rss (*Fixed + Floating*) ; https://feeds.captivate.fm/flirting-with-models/ ; https://feeds.captivate.fm/top-traders-unplugged/ ; the Omny feeds for *Odd Lots* and *Money Stuff* listed in `media_episodes_posts_parts_I_II`.
+**Podcasts [P#]:** URLs in section 9. Transcripts read: https://podscripts.co/podcasts/odd-lots/how-the-rise-of-pod-shops-is-reshaping-the-way-markets-trade ; https://podscripts.co/podcasts/odd-lots/how-to-succeed-at-multi-strategy-hedge-funds ; https://podscripts.co/podcasts/odd-lots/how-the-hottest-hedge-funds-on-wall-street-really-manage-risk ; https://podscripts.co/podcasts/odd-lots/the-math-that-explains-how-multi-strategy-hedge-funds-make-money ; https://podscripts.co/podcasts/odd-lots/why-asset-allocators-love-multi-strategy-hedge-funds ; https://podscripts.co/podcasts/odd-lots/how-you-get-and-actually-keep-a-job-at-a-multi-strat-hedge-fund . Feeds parsed: https://rss.libsyn.com/shows/94820/destinations/482814.xml (*Capital Allocators*) ; https://anchor.fm/s/10958cc44/podcast/rss (*Fixed + Floating*) ; https://feeds.captivate.fm/flirting-with-models/ ; https://feeds.captivate.fm/top-traders-unplugged/ ; the Omny feeds for *Odd Lots* and *Money Stuff* listed in `media_episodes_posts_parts_I_II`.
 
-**Reached but not usable (403/404/429/503):** the Bloomberg URL above (403), imf.org chapter and blog (403), nasdaq.com, advisorperspectives.com, hedgeco.net pages, selbyjennings.com. Not cited as sources.
+**Reached but not usable (403/404/429/503), not cited as sources:** https://www.bloomberg.com/news/articles/2026-03-10/balyasny-millennium-point72-hit-by-iran-conflict-in-wild-week (403; title known from a search result only), the imf.org chapter and blog (403), nasdaq.com, advisorperspectives.com, hedgeco.net pages, selbyjennings.com.
 
 <!-- STATUS: COMPLETE -->

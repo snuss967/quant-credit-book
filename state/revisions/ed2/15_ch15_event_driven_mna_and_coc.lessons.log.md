@@ -105,6 +105,22 @@ Adjacent pairs: l.669/671, l.685/687. Runs over two: l.281-291 (Math, Gently, Wa
 - [x] 20. §15.8 WBD: replay label (C1); D18, D19; leak at l.845; promote decision point; trim. Done: replay in three cuts; strip list once; hedge merged into Theo.
 - [x] 21. Quant-Shop Life: rename Priya (C11); remove the USB-stick VP (C1); trim. Done: Priya renamed Noor; USB-stick VP cut; shop marked separate.
 - [x] 22. Desk Debrief: Finder table; replay sticky note (C1). Done: ten-row Finder with rules stated once; sticky note from replay.
-- [ ] 23. Resource Graphs: remove placeholder notes; log open items in `state/research/ch15_open_items.md`.
-- [ ] 24. Cast bible: add the Ch 15 facts and mark C1, C5, C7, C8, C11 resolved for Ch 15.
-- [ ] 25. Hygiene: math delimiters, \$ escapes, no code fences, last line; metric "after".
+- [x] 23. Resource Graphs: remove placeholder notes; log open items in `state/research/ch15_open_items.md`. Done: placeholders cut, URLs kept; logged in open_items_ch15_ed2.md (not ch15_open_items.md).
+- [x] 24. Cast bible: add the Ch 15 facts and mark C1, C5, C7, C8, C11 resolved for Ch 15. Done: Theo rows, Hana, Noor added; C1, C5, C7, C8, C11 marked.
+- [x] 26. Extra growth trims beyond the duplicates (added mid-pass). Done: §15.1.2-15.1.3, §15.2.1, ICE, four seats, vignette timeline tightened.
+- [x] 25. Hygiene: math delimiters, \$ escapes, no code fences, last line; metric "after". Done: 24 display blocks, no fences, escapes clean; protected items verified intact.
+
+## Metric, after
+
+`python3 tools/prescriptiveness.py --pre 9ac1c379053d9d0254e9d524d9a40efdec4a2c71 book_src/15_ch15_event_driven_mna_and_coc.md`
+
+| ver | words | bullets% | modal | imper | rule | dialog | mathgently | seat |
+| :-- | --: | --: | --: | --: | --: | --: | --: | --: |
+| pre | 11,020 | 14.0 | 3.2 | 1.4 | 0.8 | 8.1 | 0 | 0 |
+| before | 33,525 | 3.9 | 3.0 | 1.1 | 0.9 | 7.9 | 19 | 6 |
+| after | 28,057 | 4.1 | 2.5 | 0.7 | 1.0 | 8.9 | 7 | 6 |
+
+Growth 3.04x to 2.55x (wc: 34,635 to 29,675). Still above the 1.6-1.9x target: the chapter now carries five dated scenes on an 11k base (cold open about 1,850 words, EA replay 2,200, ICE 2,450, WBD replay 2,150, Spirit 850) plus the vignette and the Finder, and reaching 20,900 would mean cutting a scene, which no item here does. The rule rate ticks up 0.9 to 1.0 because the Finder's judgment column now states each rule once, as lesson 11 intends.
+
+Protected-item check against the pre-pass copy: 4/4 Source Extractions and Annotations verbatim, 3/3 Trend Watches verbatim, 5/5 figures, exercises identical, 31/31 URLs, `#code-15-1` to `#code-15-4` present, 24/24 display-math blocks verbatim, all page citations present; no heading removed; five `####` headings added (four decision points and "Reading the gauge"). Boxes: 7 Math, Gently, none adjacent, no run of more than two boxed elements. Open fact items: `state/research/open_items_ch15_ed2.md`. Cast facts: `state/cast_bible.md` (Theo's Ch 15 rows, Hana, Noor; C1, C5, C7, C8, C11).
+<!-- STATUS: COMPLETE -->

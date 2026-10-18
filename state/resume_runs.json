@@ -171,7 +171,8 @@
      "lessons",
      "rv"
     ]
-   }
+   },
+   "status": "lessons DONE; rv returned 'no thread' -> rerun stage rv once thread exists"
   },
   {
    "name": "newfiles-figs",

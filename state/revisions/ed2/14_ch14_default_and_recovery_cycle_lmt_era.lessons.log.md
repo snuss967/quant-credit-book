@@ -63,18 +63,18 @@
 
 ### (f) Finder table and headings (lesson 11)
 
-- [ ] F1. §14.10 has bullets and the Spec but no Finder table. Add ten rows (concept · equation · intuition · judgment · code) before the bullets.
-- [ ] F2. Promote long scenes and decision points to `####`: Lumen (+ "Decision point: 10 November 2023"), the Optimum courts calendar, Robertshaw, Serta Acts I–III (with the three decision cards inside). Rename the two mislabeled "#### The Full Derivation" headings that hold models rather than derivations (§14.5.1 → "From the co-op to the hazard"; §14.6.1 heading removed so the model sits in its own subsection). Remove the double blank line under "Calibrating the jumps" (L697–698).
+- [x] F1. §14.10 has bullets and the Spec but no Finder table. Add ten rows (concept · equation · intuition · judgment · code) before the bullets. *Done: ten-row Finder table added before the Debrief bullets; judgments stated once.*
+- [x] F2. Promote long scenes and decision points to `####`: Lumen (+ "Decision point: 10 November 2023"), the Optimum courts calendar, Robertshaw, Serta Acts I–III (with the three decision cards inside). Rename the two mislabeled "#### The Full Derivation" headings that hold models rather than derivations (§14.5.1 → "From the co-op to the hazard"; §14.6.1 heading removed so the model sits in its own subsection). Remove the double blank line under "Calibrating the jumps" (L697–698). *Done: Lumen, decision point, Optimum, Robertshaw, Serta acts now ####; headings renamed.*
 
 ### (g) Cast-bible contradictions
 
-- [ ] G1. Serta (L859, L905): Mags "ran a distressed book at a fund that no longer exists", \$15mm "bought the previous autumn", "fund wound down in 2022". Canon C4/C5: a bank's book, \$5mm from autumn 2019 plus Ch 1's \$10mm bought from a CLO the week before 22 June; she left the bank after the January 2021 sale; a fund Feb 2021–2022. Decision card "It is 15 June 2020" becomes "the week of 15 June".
-- [ ] G2. Co-op counter (L591) "one in Chapter 3, plus forty-five in 2024 alone": canon C6 says "two, plus forty-five in 2024 alone".
-- [ ] G3. Story clock (C1): the Serta scene (8 July 2026), Mitel scene (2 January 2025), Del Monte refresh (June 2026) and Optimum rows "Theo adds" (Nov 2025 to Aug 2026) put Theo on the desk before Day One (22 Sep 2026). Label Serta and Mitel as replays; move the Del Monte refresh to October 2026; make the Optimum rows inherited history.
-- [ ] G4. L319 "Kaz, who has never read a credit agreement": canon C7 ("first time" belongs to Ch 4-B; elsewhere Kaz skims a page when Theo points).
-- [ ] G5. Hana vignette (L112) set at "A systematic asset manager" while Theo and Hana are on the one platform (C11): set it in the platform's data team.
-- [ ] G6. §14.9 (L999) "a Rule 2019 statement names a new ad hoc group" for an issuer that has not filed, while L434 and L933 say Rule 2019 applies only in court: make it a cleansing release and a counsel hire.
-- [ ] G7. Add Ch 14's new facts to `state/cast_bible.md` (Kaz's Nov 2023 postdoc; Theo's Monday courts calendar; the three Ch 14 replays; Mags's Serta canon applied; counter fixed).
+- [x] G1. Serta (L859, L905): Mags "ran a distressed book at a fund that no longer exists", \$15mm "bought the previous autumn", "fund wound down in 2022". Canon C4/C5: a bank's book, \$5mm from autumn 2019 plus Ch 1's \$10mm bought from a CLO the week before 22 June; she left the bank after the January 2021 sale; a fund Feb 2021–2022. Decision card "It is 15 June 2020" becomes "the week of 15 June". *Done: bank book, $5mm plus Ch 1's $10mm; left bank after January 2021.*
+- [x] G2. Co-op counter (L591) "one in Chapter 3, plus forty-five in 2024 alone": canon C6 says "two, plus forty-five in 2024 alone". *Done: counter now reads 'two, plus forty-five in 2024 alone'.*
+- [x] G3. Story clock (C1): the Serta scene (8 July 2026), Mitel scene (2 January 2025), Del Monte refresh (June 2026) and Optimum rows "Theo adds" (Nov 2025 to Aug 2026) put Theo on the desk before Day One (22 Sep 2026). Label Serta and Mitel as replays; move the Del Monte refresh to October 2026; make the Optimum rows inherited history. *Done: Serta and Mitel labelled replays; Del Monte October; Optimum rows inherited.*
+- [x] G4. L319 "Kaz, who has never read a credit agreement": canon C7 ("first time" belongs to Ch 4-B; elsewhere Kaz skims a page when Theo points). *Done: Kaz now reads agreements a page at a time, per C7.*
+- [x] G5. Hana vignette (L112) set at "A systematic asset manager" while Theo and Hana are on the one platform (C11): set it in the platform's data team. *Done: vignette set in the platform's risk-data team, per C11.*
+- [x] G6. §14.9 (L999) "a Rule 2019 statement names a new ad hoc group" for an issuer that has not filed, while L434 and L933 say Rule 2019 applies only in court: make it a cleansing release and a counsel hire. *Done: group revealed by press and cleansing materials, not Rule 2019.*
+- [x] G7. Add Ch 14's new facts to `state/cast_bible.md` (Kaz's Nov 2023 postdoc; Theo's Monday courts calendar; the three Ch 14 replays; Mags's Serta canon applied; counter fixed). *Done: cast bible: Kaz, Hana, Theo facts; C1, C4, C5, C6 applied.*
 
 ### (h) Relative-value beat
 
@@ -82,6 +82,7 @@
 
 ### Pacing
 
-- [ ] P1. Trims toward the growth budget without touching facts: Hana's naming meeting, the Lumen replay preamble, the Optimum calendar opener and its closing summary, the risk-committee fixes paragraph, the ARCC seat box, Act I's options paragraph, and Serta (3,180 words) back under 3,000.
+- [x] P1. Trims toward the growth budget without touching facts: Hana's naming meeting, the Lumen replay preamble, the Optimum calendar opener and its closing summary, the risk-committee fixes paragraph, the ARCC seat box, Act I's options paragraph, and Serta (3,180 words) back under 3,000. *Done: Lumen, Optimum, ARCC, Act I/II trims; others kept as boring-right.*
+- [x] P2. *Found during the fixes:* Ines's cold-open list ("I want... I want...", eight wants, ~230 words) is a syllabus in costume (quality read (b)1); and "counts, not shares" is told three times (umbrella box, §14.7.1 body after the binomial equation, `binom_logf` paragraph). Cut the list to three questions; the body and listing point to the umbrellas. *Done: Ines asks three questions; counts-vs-shares told once, in umbrellas.*
 
 ## Fixes
