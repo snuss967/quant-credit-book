@@ -325,7 +325,7 @@ Theo was on the page where restructuring bankers live, the one with the exceptio
 
 "So it's a carve-out." Theo had drafted dozens. "When a credit agreement has a basket that applies to everyone except one kind of transaction, somebody in the room did that kind of transaction for a living."
 
-"Or somebody in the room was going to lose money on it," Ines said. "Let me show you which." She took the Calloway ticket from the Monday before quarter-end, the one the desk had lost by a quarter of a cent, and played it as if they had won it.
+"Or somebody in the room was going to lose money on it," Ines said. "Let me show you which." She took the Calloway ticket from the Monday before quarter-end, the one the desk had lost by two and a half cents, and played it as if they had won it.
 
 > **Poker Table.** Ines replays the cold open as a hand history. "We buy fifteen million. The print shows at minute fifteen as '5MM+ sell,' and the table assumes twelve and a half, not fifteen, so the cap just hid two and a half million of our size, worth about a basis point and a quarter of impact *(illustrative, at $\lambda = 0.5$bp per \$mm)*. By minute fifteen we've worked out an eighth of it. Markouts: flat at five minutes, down 4bp at thirty, down 6 at the close *(illustrative)*. Under a one-minute rule the thirty-minute markout comes at minute one, before we've sold anything. Same hand, worse position at the table. That's why the block desks folded the one-minute rule, and why nobody at this table will ever vote to lower the cap."
 

@@ -7,10 +7,10 @@ Kept apart from tools/figures/ch08b.py so the chapter's five other figures can b
 What it draws. The probability that a pod touches a drawdown line, measured peak to trough on allocated capital,
 at least once within one year (252 trading days), starting at its high-water mark, as a heat map over the
 book's Sharpe ratio (rows) and its annual volatility on allocated capital (columns). Left panel: Dov Adler's
-first line, 6% of allocation (\$24mm on \$400mm, Ch 1-B canon), where capital is halved. Right panel: his second
-line, 9% (\$36mm), where the pod is closed; the 1.5x spacing is the press-reported 5% / 7.5% shape scaled to
+first line, 6% of allocation ($24mm on $400mm, Ch 1-B canon), where capital is halved. Right panel: his second
+line, 9% ($36mm), where the pod is closed; the 1.5x spacing is the press-reported 5% / 7.5% shape scaled to
 his first line (illustrative composite; no platform publishes its rule). The outlined column is Dov's book at
-6.3% (a typical daily swing of \$1.6mm, Ch 1-B, times the square root of 252, over \$400mm).
+6.3% (a typical daily swing of $1.6mm, Ch 1-B, times the square root of 252, over $400mm).
 
 Model: daily P&L normal with mean Sharpe x vol / 252 and s.d. vol / sqrt(252); the drawdown is measured from the
 running peak (the line ratchets up with every new high). The probability depends only on line / vol and the

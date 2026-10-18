@@ -329,35 +329,39 @@ def fig_cusum_detector():
     seed, y, S, a_lo, a_hi = chosen
     d_lo, d_hi = a_lo - T0 + 1, a_hi - T0 + 1
     print(f"  seed {seed}: alarms on day {a_lo + 1} (delay {d_lo}) at h={h_hi_prs:.2f} and day {a_hi + 1} (delay {d_hi}) at h={h_lo_prs:.2f}")
-    days = np.arange(1, N + 1)
+    NS = a_hi + 7                                          # show a few days past the second alarm, then stop
+    days = np.arange(1, NS + 1)
+    y, S = y[:NS], S[:NS]
+    top = float(np.ceil(S.max() + 0.8))
 
     fig, (ay, aS) = new_figure((7.0, 4.7), nrows=2, ncols=1, sharex=True, gridspec_kw={"height_ratios": [1.0, 2.1]})
     # top: the data
     cols = [NEUTRAL if d <= T0 else BLUE for d in days]
     ay.bar(days, y, width=0.72, color=cols, linewidth=0)
     ay.axhline(0, color=INK_2, linewidth=0.8)
-    ay.set_ylabel("Net buying\n(σ$_y$ units)")
+    ay.set_ylabel("Net buying\n(\u03c3$_y$ units)")
     ay.set_ylim(-3.6, 4.4)
     ay.set_yticks([-2, 0, 2, 4])
-    ay.set_yticklabels(["−2", "0", "2", "4"])
-    ay.text(2, 3.9, "no deal: buyers and sellers cancel", ha="left", va="center", fontsize=8, color=INK_2)
-    ay.text(T0 + 2, 3.9, "a group starts accumulating: mean +1σ$_y$", ha="left", va="center", fontsize=8, color=INK_2)
+    ay.set_yticklabels(["\u22122", "0", "2", "4"])
+    ay.text(1.5, 3.9, "no deal: buyers and sellers cancel", ha="left", va="center", fontsize=8, color=INK_2)
+    ay.text(T0 + 2, 3.9, "accumulation starts: mean +1\u03c3$_y$", ha="left", va="center", fontsize=8, color=INK_2)
     ay.axvline(T0 + 0.5, color=INK_2, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
     # bottom: the tally
-    aS.step(np.concatenate([[0], days]), np.concatenate([[0], S]), where="post", color=BLUE, linewidth=LW, zorder=4)
+    aS.step(days, S, where="mid", color=BLUE, linewidth=LW, zorder=4)
     aS.axvline(T0 + 0.5, color=INK_2, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
     for h, lab in [(h_hi_prs, "PRS 0.9 (built to be primed): h = 3.8"), (h_lo_prs, "PRS 0.1 (blockers in place): h = 8.2")]:
         aS.axhline(h, color=MUTED, linewidth=1.0, linestyle=(0, (5, 3)), zorder=2)
         aS.text(1.5, h + 0.18, lab, ha="left", va="bottom", fontsize=8.3, color=INK_2)
-    for a, h, d in [(a_lo, h_hi_prs, d_lo), (a_hi, h_lo_prs, d_hi)]:
+    for a, h, d, (tx, ty) in [(a_lo, h_hi_prs, d_lo, (a_lo + 2.6, 2.0)), (a_hi, h_lo_prs, d_hi, (a_hi + 1.1, 6.1))]:
         aS.plot([a + 1], [S[a]], "o", color=STATUS["critical"], markersize=7.5, zorder=6, markeredgecolor="white", markeredgewidth=1.0)
-        aS.annotate(f"alarm, day {a + 1}\n({d} days after the start)", (a + 1, S[a]), xytext=(-10, 6 if h < 5 else -4), textcoords="offset points",
-                    ha="right", va="bottom" if h < 5 else "top", fontsize=8.3, color=INK_2, linespacing=1.25)
-    aS.set_ylim(0, 10.5)
-    aS.set_xlim(0, N + 1)
+        aS.annotate(f"alarm, day {a + 1}:\n{d} days into\nthe accumulation", (a + 1, S[a]), xytext=(tx, ty), textcoords="data",
+                    ha="left", va="center", fontsize=8.3, color=INK_2, linespacing=1.25,
+                    arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.7, shrinkA=2, shrinkB=5))
+    aS.set_ylim(0, top)
+    aS.set_xlim(0, NS + 1)
     aS.set_ylabel("CUSUM tally $S_t$")
     aS.set_xlabel("Trading day")
-    aS.set_yticks([0, 2, 4, 6, 8, 10])
+    aS.set_yticks(list(range(0, int(top) + 1, 2)))
     return finish(fig, "ch03_cusum_detector"), (seed, a_lo + 1, d_lo, a_hi + 1, d_hi)
 
 

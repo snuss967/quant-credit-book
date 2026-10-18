@@ -2,27 +2,6 @@
  "note": "Restarted 14:35 UTC (window 14:30-19:30). Resume with Workflow({scriptPath, resumeFromRunId, args}).",
  "runs": [
   {
-   "name": "part-III-b",
-   "task": "whczu9vre",
-   "runId": "wf_bb2c1276-ba3",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "10_ch10_trend_and_time_series_momentum",
-     "11_ch11_defensive_systematic_high_yield"
-    ],
-    "stages": [
-     "figures",
-     "figcheck",
-     "resgraph",
-     "brief",
-     "revise",
-     "verify"
-    ]
-   }
-  },
-  {
    "name": "part-III-c",
    "task": "wra0xl4y8",
    "runId": "wf_5b507d53-841",

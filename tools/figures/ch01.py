@@ -90,7 +90,7 @@ def fig_bid_decomposition():
     ax.annotate("", xy=(1.5, 89.0), xytext=(1.5, 89.0))
     ax.text(1.5, 86.6, "two small steps that every\nengine on the Street computes",
             ha="center", va="center", fontsize=8.2, color=MUTED)
-    ax.text(4.0, 79.9, "one step more than ten times\nthe other two combined", ha="center", va="center",
+    ax.text(2.85, 82.4, "one step more than ten times\nthe other two combined", ha="center", va="center",
             fontsize=8.2, color=MUTED)
 
     # Monday's open
@@ -129,16 +129,14 @@ def fig_gauss_vs_jump():
     axl.set_yticks([1e-12, 1e-9, 1e-6, 1e-3, 1])
     axl.set_yticklabels(["10⁻¹²", "10⁻⁹", "10⁻⁶", "10⁻³", "1"])
     axl.minorticks_off()
-    axl.annotate("Gaussian bag: mean loss 1, sd 7\nlosing 50 is a 7-sd event,\nabout 1 in 800 billion", (L, norm.sf((L - 1) / 7)),
-                 xytext=(-8, 40), textcoords="offset points", ha="right", va="bottom", fontsize=8.2, color=INK_2,
+    axl.annotate("", (L, norm.sf((L - mean_loss) / 7.0)), xytext=(18, 3e-11), textcoords="data",
                  arrowprops=dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8))
-    axl.annotate("Jump bag: mean loss 1, sd 7\nnothing, nothing, then 50:\n1 in 50", (L, p), xytext=(-8, -2),
-                 textcoords="offset points", ha="right", va="top", fontsize=8.2, color=INK_2)
-    # identity dots near the labels
-    axl.plot([1.5], [2.2e-10], "o", color=GAUSS, markersize=4, clip_on=False)
-    axl.plot([1.5], [1.1e-4], "o", color=TOXIC, markersize=4, clip_on=False)
-    axl.text(3.0, 2.2e-10, "Gaussian", va="center", fontsize=8.5, color=INK_2)
-    axl.text(3.0, 1.1e-4, "Jump", va="center", fontsize=8.5, color=INK_2)
+    axl.plot([1.6], [3e-11], "o", color=GAUSS, markersize=4)
+    axl.text(3.3, 3e-11, "Gaussian bag: mean loss 1, sd 7;\nlosing 50 is a 7-sd event,\nabout 1 in 800 billion",
+             va="center", ha="left", fontsize=8.2, color=INK_2)
+    axl.plot([22.6], [0.1], "o", color=TOXIC, markersize=4)
+    axl.text(24.3, 0.1, "Jump bag: mean loss 1, sd 7;\nnothing, nothing, then 50:\n1 in 50", va="center", ha="left",
+             fontsize=8.2, color=INK_2)
 
     # right: exact CARA jump charge divided by the quadratic charge
     xs = np.linspace(0.02, 4.0, 400)
@@ -183,32 +181,31 @@ def fig_price_pressure_decay():
     ax.plot(t, informed, color=TOXIC, linewidth=LW, zorder=4)
     ax.axhline(-perm, color=TOXIC, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
     ax.set_xlim(0, 90)
-    ax.set_ylim(-9.9, 0.9)
+    ax.set_ylim(-10.0, 1.0)
     ax.set_xlabel("Days since the trigger date")
     ax.set_ylabel("Price minus fair value p* (points)")
+    leader = dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8)
 
     half = np.log(2) / theta
     ax.plot([half], [-dent / 2], "o", color=FORCED, markersize=5.5, zorder=5)
-    ax.annotate(f"half-life {half:.0f} days:\nhalf the dent is gone", (half, -dent / 2), xytext=(14, -22),
-                textcoords="offset points", fontsize=8.2, color=INK_2, ha="left", va="top",
-                arrowprops=dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8))
-    # absorber's gain over 60 days
+    ax.annotate(f"half-life {half:.0f} days:\nhalf the dent is gone", (half, -dent / 2), xytext=(2, -0.6),
+                textcoords="data", fontsize=8.2, color=INK_2, ha="left", va="center", arrowprops=leader)
     rec = dent * (1 - np.exp(-theta * 60))
-    ax.plot([60], [forced[np.searchsorted(t, 60)]], "o", color=FORCED, markersize=5.5, zorder=5)
-    ax.annotate(f"day 60: {rec:.2f} of the {dent:.2f} points\nhave come back; that is the\nabsorber's pay", (60, forced[np.searchsorted(t, 60)]),
-                xytext=(-4, 40), textcoords="offset points", fontsize=8.2, color=INK_2, ha="center", va="bottom",
-                arrowprops=dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8))
-    ax.annotate(f"day 0: dent of {dent:.2f} points", (0, -dent), xytext=(8, 10), textcoords="offset points",
-                fontsize=8.2, color=INK_2, ha="left", va="bottom")
+    y60 = forced[np.searchsorted(t, 60)]
+    ax.plot([60], [y60], "o", color=FORCED, markersize=5.5, zorder=5)
+    ax.annotate(f"day 60: {rec:.2f} of the {dent:.2f} points\nhave come back; that is\nthe absorber's pay", (60, y60),
+                xytext=(52, -1.75), textcoords="data", fontsize=8.2, color=INK_2, ha="center", va="center",
+                arrowprops=leader)
     ax.plot([0], [-dent], "o", color=FORCED, markersize=5.5, zorder=5)
-    label_end(ax, 90, forced[-1], "Forced seller (π = 0):\nthe dent heals", FORCED, dx=6)
-    label_end(ax, 90, informed[-1], f"A quarter informed (π = 0.25):\n−{perm:.2f} never comes back", TOXIC, dx=6)
+    ax.text(2.5, -5.6, f"day 0: dent of {dent:.2f}", fontsize=8.2, color=INK_2, ha="left", va="center")
     ax.plot([0], [-perm - dent], "o", color=TOXIC, markersize=5.5, zorder=5)
-    ax.annotate(f"day 0: {perm + dent:.2f}", (0, -perm - dent), xytext=(8, -12), textcoords="offset points",
-                fontsize=8.2, color=INK_2, ha="left", va="top")
-    ax.set_xlim(0, 90)
-    fig.get_layout_engine().set(rect=(0, 0, 0.78, 1))
-    note(ax, "κ = 0.4, I/ADV = 12.8, θ = 1/20 per day, J = 13", loc="lower left")
+    ax.text(2.5, -8.9, f"day 0: {perm + dent:.2f} below fair value", fontsize=8.2, color=INK_2, ha="left", va="center")
+    ax.plot([89], [0.55], "o", color=FORCED, markersize=4, clip_on=False)
+    ax.text(87.2, 0.55, "Forced seller (\u03c0 = 0): the dent heals", ha="right", va="center", fontsize=8.5, color=INK_2)
+    ax.plot([89], [-4.4], "o", color=TOXIC, markersize=4, clip_on=False)
+    ax.text(87.2, -4.4, f"A quarter informed (\u03c0 = 0.25):\n\u2212{perm:.2f} never comes back", ha="right",
+            va="center", fontsize=8.5, color=INK_2)
+    note(ax, "\u03ba = 0.4, I/ADV = 12.8, \u03b8 = 1/20 per day, J = 13", loc="lower right")
     return finish(fig, "ch01_price_pressure_decay")
 
 

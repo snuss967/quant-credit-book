@@ -40,6 +40,9 @@ import numpy as np  # noqa: E402
 from math import erf, sqrt  # noqa: E402
 from matplotlib.patches import Patch  # noqa: E402
 
+plt.rcParams["text.parse_math"] = False      # dollar signs in labels are literal
+plt.rcParams["axes.axisbelow"] = True        # grid lines sit behind the bars
+
 MINUS = "−"
 C_DV01, C_DTS, C_BETA = BLUE, ORANGE, AQUA
 C_THESIS, C_LEAK, C_FRIC = BLUE, ORANGE, AQUA
@@ -49,6 +52,8 @@ C_GAIN, C_LOSS = DIVERGING(0.0), DIVERGING(1.0)
 def sgn(v, d=0, plus=True):
     """Signed number with a true minus sign."""
     s = f"{abs(v):,.{d}f}"
+    if abs(v) < 0.5 * 10 ** (-d):
+        return s
     if v < 0:
         return MINUS + s
     return ("+" if plus else "") + s
@@ -80,7 +85,7 @@ def fig_fee_flip():
             ax.bar(i, hi - lo, bottom=lo, width=0.62, color=cols[i])
             cum += d
             level.append(cum)
-            lab_y = hi + 12 if d >= 0 else lo - 12
+            lab_y = hi + 12 if d >= 0 else lo - 20
             ax.text(i, lab_y, sgn(d), ha="center", va="bottom" if d >= 0 else "top", fontsize=8.5, color=INK_2)
         net = cum
         ax.bar(4, net, width=0.62, color=cols[4])
@@ -111,10 +116,8 @@ def fig_borrow_fee():
     fee = np.where(u <= 70, 30.0, 30.0 + 1.0 * (u - 70.0))      # 10 bp per further 10% of inventory
     assert abs(float(np.interp(85, u, fee)) - 45.0) < 1e-9       # "something like 45 bp" at 85%
     a1.plot(u, fee, color=BLUE, linewidth=LW)
-    a1.annotate("Asquith et al. slope:\nflat near 30 bp to 70% on loan,\nthen 10 bp per further 10%",
-                (30, 30), xytext=(2, 82), textcoords="data", fontsize=8, color=INK_2, va="top", ha="left",
-                arrowprops=dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8, shrinkA=2, shrinkB=2,
-                                connectionstyle="arc3,rad=0"))
+    a1.text(2, 26, "Asquith et al. slope: flat near 30 bp\nto 70% on loan, then 10 bp per\nfurther 10%", fontsize=8,
+            color=INK_2, va="top", ha="left")
     a1.plot([85], [70], "o", color=ORANGE, markersize=6.5, zorder=5)
     a1.plot([85], [45], "o", color=BLUE, markersize=5, zorder=5)
     a1.annotate("", (85, 47.5), xytext=(85, 67.5), arrowprops=dict(arrowstyle="<->", color=INK_2, linewidth=0.9))
@@ -184,9 +187,9 @@ def fig_ben_dor():
         ax.set_ylabel(ylab)
         ax.set_ylim(0, ymax)
         ax.tick_params(axis="x", length=0)
-        ax.text(1, -0.20, "2003–06", transform=ax.get_xaxis_transform(), ha="center", va="top", fontsize=8,
+        ax.text(1, -0.15, "2003–06", transform=ax.get_xaxis_transform(), ha="center", va="top", fontsize=8,
                 color=INK_2)
-        ax.text(4.6, -0.20, "2007–08", transform=ax.get_xaxis_transform(), ha="center", va="top", fontsize=8,
+        ax.text(4.6, -0.15, "2007–08", transform=ax.get_xaxis_transform(), ha="center", va="top", fontsize=8,
                 color=INK_2)
 
     single(axes[0], BEN_DOR["corr_calm"], "{:.2f}", "Correlation with the\nmarket, 2003–06", "Average |correlation|", 0.46)
@@ -245,7 +248,8 @@ def fig_ruler_scenarios():
         ax.set_ylim(-180, 480)
         ax.tick_params(axis="x", length=0)
     axes[0].set_ylabel("P&L on the $40mm long ($ thousands)")
-    axes[0].text(-0.45, 285, "alpha: 15 bp of Ford news = +270", fontsize=7.8, color=MUTED, ha="left", va="bottom")
+    axes[0].text(-0.45, 285, "alpha = +270\n(15 bp of Ford news)", fontsize=7.8, color=MUTED, ha="left", va="bottom",
+                 linespacing=1.15)
     return finish(fig, "ch08d_ruler_scenarios")
 
 
@@ -290,7 +294,7 @@ def fig_two_spikes():
     ax.set_yticks([0.1, 1, 10, 100])
     ax.set_yticklabels(["0.1", "1", "10", "100"])
     note(ax, f"Mean of the whole distribution: +${ev * 1000:.0f}k.  One year of the 30 bp thesis: +$540k.",
-         loc="lower right")
+         loc="upper right")
     return finish(fig, "ch08d_two_spikes")
 
 
@@ -323,14 +327,14 @@ def fig_stop_out_odds():
     a1.axhline(-5, color=NEUTRAL, linewidth=1.0, linestyle=(0, (3, 3)))
     a1.plot([hit], [100 * x[hit]], "o", color=INK, markersize=6, zorder=6)
     a1.annotate(f"day {hit}: down 5% from the peak,\nstill up {100 * x[hit]:.1f}% on the year", (hit, 100 * x[hit]),
-                xytext=(-8, -22), textcoords="offset points", fontsize=8, color=INK_2, ha="right", va="top")
+                xytext=(hit - 6, -1.2), textcoords="data", fontsize=8, color=INK_2, ha="right", va="top",
+                arrowprops=dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8, shrinkA=1, shrinkB=3))
     a1.annotate("fixed line, 5% below the start", (3, -5), xytext=(0, 4), textcoords="offset points", fontsize=8,
                 color=INK_2, ha="left", va="bottom")
     ia = int(np.argmax(x))
     a1.annotate("equity", (ia, 100 * x[ia]), xytext=(0, 8), textcoords="offset points", fontsize=8.5, color=INK_2,
                 ha="center", va="bottom")
-    a1.annotate("drawdown stop line (peak " + MINUS + " 5%)", (ia + 6, 100 * stop_line[ia] - 0.1), xytext=(0, -10),
-                textcoords="offset points", fontsize=8, color=INK_2, ha="left", va="top")
+    a1.text(214, 1.6, "stop = peak " + MINUS + " 5%", fontsize=7.8, color=INK_2, ha="right", va="top")
     a1.set_xlim(0, n)
     a1.set_ylim(-6.5, 9.5)
     a1.set_xlabel("Trading day")
@@ -340,15 +344,15 @@ def fig_stop_out_odds():
     fixed = 2 * norm_cdf(-dd / vol)                      # reflection principle: 2 x P(end below the line)
     probs = [fixed, drawdown_hit(0.06, 0.0), drawdown_hit(0.06, 1.0), drawdown_hit(0.04, 1.0)]
     print("stop-out odds:", [round(100 * p, 1) for p in probs])
-    labs = ["Fixed line\n(no drift,\n6% vol)", "Drawdown\n(no drift,\n6% vol)", "Drawdown\n(Sharpe 1,\n6% vol)",
-            "Drawdown\n(Sharpe 1,\n4% vol)"]
+    labs = ["Fixed line\nSharpe 0\n6% vol", "Drawdown\nSharpe 0\n6% vol", "Drawdown\nSharpe 1\n6% vol",
+            "Drawdown\nSharpe 1\n4% vol"]
     a2.bar(range(4), [100 * p for p in probs], width=0.68, color=[NEUTRAL, BLUE, BLUE, BLUE])
     for i, p in enumerate(probs):
         a2.text(i, 100 * p + 1.5, f"{100 * p:.0f}%", ha="center", va="bottom", fontsize=9, color=INK_2)
     a2.set_xticks(range(4))
     a2.set_xticklabels(labs, fontsize=7.6)
     a2.set_ylim(0, 90)
-    a2.set_ylabel("Chance the 5% stop fires within a year (%)")
+    a2.set_ylabel("Chance a 5% stop fires in a year (%)")
     a2.tick_params(axis="x", length=0)
     return finish(fig, "ch08d_stop_out_odds")
 
@@ -380,25 +384,23 @@ def fig_stop_size():
     ax.fill_between(100 * rec, p13, p15, color=AQUA, alpha=0.45, linewidth=0)
     ax.plot(100 * rec, s13, color=BLUE, linewidth=LW)
     ax.plot(100 * rec, s15, color=ORANGE, linewidth=LW)
-    ax.axvline(40, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
+    ax.axvline(40, ymax=0.62, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
     ax.plot([40], [single_cap(13, 0.4)], "o", color=BLUE, markersize=6, zorder=6)
     ax.plot([40], [single_cap(15, 0.4)], "o", color=ORANGE, markersize=6, zorder=6)
     ax.annotate("$22.5mm at a recovery of 40", (40, single_cap(13, 0.4)), xytext=(8, -9), textcoords="offset points",
                 fontsize=8.5, color=INK_2, va="top", ha="left")
     ax.annotate("$25.9mm", (40, single_cap(15, 0.4)), xytext=(-8, 6), textcoords="offset points", fontsize=8.5,
                 color=INK_2, va="bottom", ha="right")
-    ax.annotate("single long, $15mm firing budget", (62, single_cap(15, 0.62)), xytext=(-6, 8),
-                textcoords="offset points", fontsize=8.5, color=INK_2, ha="right", va="bottom")
-    ax.annotate("single long, $13mm to Dov's first line", (66, single_cap(13, 0.66)), xytext=(6, -10),
-                textcoords="offset points", fontsize=8.5, color=INK_2, ha="left", va="top")
-    ax.annotate("capital-structure pair, same two budgets", (18, 0.5 * (p13 + p15)[int(0.18 / 0.75 * 300)]),
-                xytext=(0, 20), textcoords="offset points", fontsize=8.5, color=INK_2, ha="center", va="bottom")
+    label_end(ax, 75, float(s15[-1]), "$15mm budget", ORANGE)
+    label_end(ax, 75, float(s13[-1]), "$13mm to Dov's line", BLUE)
+    ax.annotate("capital-structure pair, same two budgets", (2, float(p15[int(2 / 75 * 300)])), xytext=(0, 6),
+                textcoords="offset points", fontsize=8.5, color=INK_2, ha="left", va="bottom")
     ax.set_xlim(0, 75)
     ax.set_ylim(0, 112)
     ax.set_xlabel("Assumed recovery (points of par)")
     ax.set_ylabel("Largest position ($mm market value)")
     note(ax, "Pair: long the 95 claim, short a second lien at 70, jump-neutral at the assumed recoveries;\n"
-             "band = cap if both recoveries are 10 points off in opposite directions.", loc="lower right")
+             "band = cap if both recoveries are 10 points off in opposite directions.", loc="upper left")
     return finish(fig, "ch08d_stop_size_vs_recovery")
 
 
@@ -431,8 +433,8 @@ def ledger_rows():
             gen = False
         else:
             idio = float(5 * round(rng.uniform(70, 260) / 5))
-            leak = -round(idio * rng.uniform(0.12, 0.40), 1)
-            fric = -round(idio * rng.uniform(0.12, 0.30), 1)
+            leak = -round(idio * rng.uniform(0.15, 0.45), 1)
+            fric = -round(idio * rng.uniform(0.15, 0.35), 1)
             gen = True
         kappa = None if idio is None else (idio + leak + fric) / idio
         rows.append(dict(id=pid, name=name, status=status, idio=idio, leak=leak, fric=fric, kappa=kappa, gen=gen))
@@ -446,19 +448,17 @@ def fig_ledger():
     assert abs(by["PB-03"]["kappa"] - 0.67) < 0.005
     assert abs(by["PB-19"]["idio"] + by["PB-19"]["leak"] + by["PB-19"]["fric"] - 58.4) < 0.05
     n = len(rows)
-    fig = plt.figure(figsize=(7.2, 6.9), layout="constrained")
-    gs = fig.add_gridspec(2, 2, height_ratios=[13, 1.5], width_ratios=[4.3, 1])
+    fig = plt.figure(figsize=(7.2, 7.0), layout="constrained")
+    fig.get_layout_engine().set(rect=(0.0, 0.135, 1.0, 0.865))
+    gs = fig.add_gridspec(1, 2, width_ratios=[4.3, 1.1])
     ab = fig.add_subplot(gs[0, 0])
     ak = fig.add_subplot(gs[0, 1], sharey=ab)
-    af = fig.add_subplot(gs[1, :])
-    af.axis("off")
     ys = np.arange(n)[::-1].astype(float)      # first row at the top
-    bh = 0.24
+    bh = 0.26
     for y, r in zip(ys, rows):
         if r["idio"] is None:
-            ab.text(0.0, y, "Declined: no short leg exists once the credit event is manufactured (§24.8.2)",
-                    ha="left", va="center", fontsize=8, color=INK_2, style="italic",
-                    transform=ab.get_yaxis_transform() if False else ab.transData)
+            ab.text(-285, y, "Declined: no short leg exists once\nthe credit event is manufactured (\u00a724.8.2)",
+                    ha="left", va="center", fontsize=7.8, color=INK_2, style="italic", linespacing=1.2)
             continue
         ab.barh(y + bh, r["idio"], height=bh * 0.9, color=C_THESIS)
         ab.barh(y, r["leak"], height=bh * 0.9, color=C_LEAK)
@@ -466,28 +466,25 @@ def fig_ledger():
     ab.axvline(0, color=INK_2, linewidth=0.8, zorder=2)
     ab.set_yticks(ys)
     ab.set_yticklabels([f"{r['id']}  {r['name']}" for r in rows], fontsize=8)
-    for lab, r in zip(ab.get_yticklabels(), rows):
-        lab.set_color(INK_2)
     ab.set_xlim(-300, 820)
     ab.set_ylim(-0.7, n - 0.3)
     ab.grid(axis="y", visible=False)
     ab.grid(axis="x", visible=True)
     ab.set_xlabel("September P&L, $ thousands")
     ab.tick_params(axis="y", length=0)
-    # status tags on the right edge of the bar panel
+    # capture ratio panel, with the row status on its right edge
     for y, r in zip(ys, rows):
-        ab.text(1.0, y, r["status"], transform=ab.get_yaxis_transform(), ha="right", va="center", fontsize=7.3,
-                color=MUTED)
-    # capture ratio panel
-    for y, r in zip(ys, rows):
+        ak.text(1.1, y, r["status"], transform=ak.get_yaxis_transform(), ha="left", va="center", fontsize=7.4,
+                color=MUTED, clip_on=False)
         if r["kappa"] is None:
-            ak.text(0.5, y, "—", ha="center", va="center", fontsize=9, color=MUTED)
+            ak.text(0.5, y, "\u2014", ha="center", va="center", fontsize=9, color=MUTED)
             continue
-        ak.plot([0, r["kappa"]], [y, y], color=GRID, linewidth=1.2, zorder=1)
+        ak.plot([0, r["kappa"]], [y, y], color=NEUTRAL, linewidth=1.0, zorder=1)
         ak.plot([r["kappa"]], [y], "o", color=INK_2, markersize=6, zorder=3)
-        ak.text(r["kappa"] + 0.07, y, f"{r['kappa']:.2f}", ha="left", va="center", fontsize=8, color=INK_2)
-    ak.set_xlim(0, 1.15)
+        ak.text(r["kappa"] + 0.06, y, f"{r['kappa']:.2f}", ha="left", va="center", fontsize=8, color=INK_2)
+    ak.set_xlim(0, 1.0)
     ak.set_xticks([0, 0.5, 1.0])
+    ak.set_xticklabels(["0", "0.5", "1"])
     ak.set_xlabel("Capture ratio\n(net / idio)")
     ak.grid(axis="y", visible=False)
     ak.grid(axis="x", visible=True)
@@ -496,13 +493,12 @@ def fig_ledger():
     fig.legend(handles=[Patch(color=C_THESIS, label="idio"), Patch(color=C_LEAK, label="leak"),
                         Patch(color=C_FRIC, label="friction")], loc="outside upper center", ncol=3, fontsize=8.5,
                handlelength=1.2, columnspacing=1.8)
-    foot = ("Book lines, Thursday 8 October: mean pairwise idio correlation 0.28 (§8.8 test)  ·  beta to CDX HY +0.04 of gross  ·  "
-            "rating bucket 0.08 (0.11 on Tuesday)\n"
-            "Largest jump-to-default: long Kestrel (about $34mm), short GM Financial  ·  borrow fee on the book 64 bp  ·  "
-            "distance to the first line $13mm\n"
-            "Bars: September for live rows, the replay's own month for replay rows.  PB-01, PB-03, PB-12 and PB-19 follow the chapter;\n"
-            "the other eight rows are generated for this figure (seed 80).")
-    af.text(0.0, 1.0, foot, transform=af.transAxes, ha="left", va="top", fontsize=7.4, color=INK_2, linespacing=1.45)
+    foot = ("Book lines, Thursday 8 October: mean pairwise idio correlation 0.28 (\u00a78.8 test); beta to CDX HY +0.04 of gross;\n"
+            "rating bucket 0.08 (0.11 on Tuesday); largest jump-to-default long Kestrel (about $34mm), short GM Financial;\n"
+            "borrow fee on the book 64 bp; distance to the first line $13mm.\n"
+            "Bars: September for live rows, the replay's own month for replay rows. PB-01, PB-03, PB-12 and PB-19\n"
+            "follow the chapter; the other eight rows are generated for this figure (seed 80).")
+    fig.text(0.012, 0.118, foot, ha="left", va="top", fontsize=7.4, color=INK_2, linespacing=1.45)
     return finish(fig, "ch08d_pair_book_ledger")
 
 

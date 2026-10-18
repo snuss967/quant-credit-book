@@ -772,7 +772,7 @@ A long-only HY fund cannot short and is usually forbidden to lever. Tilt it towa
 
 Nobody wanted to be the one who had built the dimmer switch, so everyone at the screen proposed a way out of it.
 
-Kaz went first. "Overlay. Keep the low-risk book and buy back the missing DTS with CDX HY or a total-return swap on the index" (Chapter 8). "Beta goes back to one, the fifteen points of missing beta cost a few basis points a year, and what's left in the active book is pure selection."
+Kaz went first. "Overlay. Keep the low-risk book and buy back the missing DTS with CDX HY or a total-return swap on the index" (Chapter 8). "Beta goes back to one, the fifteen points of missing beta cost a few basis points a year *(illustrative)*, and what's left in the active book is pure selection."
 
 "The mandate says no derivatives," Theo said. "So don't buy the beta back. Re-spend it. Keep the DTS budget equal to the benchmark's, but spend it on the spread of *low-PD* issuers: longer maturities of good BB and B credits. You give up some of the maturity effect, and in exchange you stay away from the default tail."
 

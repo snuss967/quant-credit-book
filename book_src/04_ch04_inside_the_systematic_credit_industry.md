@@ -446,7 +446,7 @@ In equities a one-month timestamp error is a bug. In credit it was a four-factor
 
 Theo brings the April 2026 paper to the Monday meeting because he thinks Kaz will find it interesting. Kaz does find it interesting, in the way anyone finds it interesting that the bridge they are standing on has been condemned.
 
-**Monday.** The paper's authors publish what they used. The project's site, openbondassetpricing.com, hosts monthly and daily panels built from TRACE Enhanced and Rule 144A prints, a 108-signal factor zoo, and the four Bai–Bali–Wen factors rebuilt with the errors corrected. The pipeline that builds it is public as well: five stages, released as version 4.2.1 in September 2026, about five hours and five gigabytes end to end, and it needs the firm's own WRDS licences for TRACE, Mergent FISD and ratings. Kaz has all three. By ten the first stage is running on a spare server.
+**Monday.** The paper's authors publish what they used. The project's site, openbondassetpricing.com, hosts monthly and daily panels built from TRACE Enhanced and Rule 144A prints, a 108-signal factor zoo, and the four Bai–Bali–Wen factors rebuilt with the errors corrected. The pipeline that builds it is public as well: five stages, released as version 4.2.1 in September 2026, about five hours and five gigabytes end to end, and it needs the firm's own WRDS licences for TRACE, Mergent FISD and ratings. Kaz has all three, and has had, since the project went public, a nightly job that rebuilds its four corrected factors and checks the desk's library against them (Chapter 9 opens it up). What Kaz has never done is put the long-weekend framework, the one with the 3.1, through the same panel. By ten the first stage is running on a spare server.
 
 Theo asks the question he now asks of everything. "As of when?"
 
@@ -771,17 +771,17 @@ The formula is good for planning: it tells a manager roughly where the hill is a
 
 #### Barclays' discrete method: the ownership cap
 
-Barclays offers a discrete method you can audit, which is rarer than it should be.
+Barclays offers a discrete method you can audit, which is rarer than it should be. Written as weights, with $n$ eligible issuers, an issuer limit $w_{\max}$ and a cap of $c$ times issuer market value $MV_i$, the rule is
+
+$$
+w_i = \min\!\Big(\tfrac{1}{n},\; w_{\max},\; \tfrac{c\,MV_i}{A}\Big), \qquad f_{\text{cash}}(A) = 1 - \sum_i w_i . \tag{4.3}
+$$
+
+The $\min(\cdot)$ caps each issuer's weight with three ceilings at once (equal weight, the issuer limit, and 5% of the issuer's bonds), and the lowest one wins: with $n = 100$ issuers, $w_{\max} = 2\%$ and a \$400mm issuer in a \$2.5bn book, the ceilings are 1%, 2% and $0.05 \times 400/2{,}500 = 0.8\%$, so the cap binds at 0.8% and the missing 0.2% sits in cash.
 
 > **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.207:* "we assume that the dollar holding in any issuer is no more than 5% of its market value while the sizes of the fallen angels' portfolios vary from \$125mn to \$2bn."
 >
-> **Annotation.** Write the rule as weights. With $n$ eligible issuers, an issuer limit $w_{\max}$ and a cap of $c$ times issuer market value $MV_i$,
->
-> $$w_i = \min\!\Big(\tfrac{1}{n},\; w_{\max},\; \tfrac{c\,MV_i}{A}\Big), \qquad f_{\text{cash}}(A) = 1 - \sum_i w_i . \tag{4.3}$$
->
-> The portfolio depends on $c/A$ alone, so a \$500mn book at a 5% cap is the same book as a \$250mn one at 2.5%. As $A$ grows, the book drifts from equal weights toward market-value weights and the uninvested fraction rises. Barclays finds a \$1bn three-month-reversal fallen-angel book only 53% invested in August 2004, against 98% for a buy-all version (`p.207–208`). The modern desk departs from the passage in one respect. The 5% cap is a holdings constraint, and (4.2) is a trading-cost constraint, and a real book hits both. The cap also binds hardest in exactly the issuers where an RSSG reader would want to be large: small, stressed and mispriced.
-
-The $\min(\cdot)$ in (4.3) caps each issuer's weight with three ceilings at once (equal weight, the issuer limit, and 5% of the issuer's bonds), and the lowest one wins: with $n = 100$ issuers, $w_{\max} = 2\%$ and a \$400mm issuer in a \$2.5bn book, the ceilings are 1%, 2% and $0.05 \times 400/2{,}500 = 0.8\%$, so the cap binds at 0.8% and the missing 0.2% sits in cash.
+> **Annotation.** Written as weights, the rule is (4.3). The portfolio depends on $c/A$ alone, so a \$500mn book at a 5% cap is the same book as a \$250mn one at 2.5%. As $A$ grows, the book drifts from equal weights toward market-value weights and the uninvested fraction rises. Barclays finds a \$1bn three-month-reversal fallen-angel book only 53% invested in August 2004, against 98% for a buy-all version (`p.207–208`). The modern desk departs from the passage in one respect. The 5% cap is a holdings constraint, and (4.2) is a trading-cost constraint, and a real book hits both. The cap also binds hardest in exactly the issuers where an RSSG reader would want to be large: small, stressed and mispriced.
 
 ### Specification for AI Implementation
 
@@ -918,13 +918,11 @@ What does not move is the set of cells nobody fills. Start with the one Man name
 >
 > **Annotation.** This is the empty cell with a sign on it. The "further data capture" Man asks for is a docket, a cooperation agreement, a priming basket and a recovery waterfall turned into features, which is the program of Parts IV and VII of this book. Moyer makes the discretionary case: "As much as the quantitative approach of financial econometricians would suggest that investing is fundamentally a science, in distressed investing it is more of an art" (`Moyer_Distressed_Debt_Analysis p.275`). The modern desk departs from both by refusing the choice. It does not try to automate the art. It specifies the parts of the art that are repeatable, such as LMT exposure, fulcrum location and liquidity runway, so that the humans spend their time on the parts that are not.
 
-Kaz reads "fulcrum security" in Theo's notes and starts drawing a lever arm.
+Kaz reads "fulcrum security" in Theo's notes and gets there first. "Not the tranche with zero duration. I was told. The one that gets the equity and the lawsuits."
 
-"It's the class that gets the equity," Theo says.
+"The class where enterprise value runs out," Theo says, "which a model can find only if it knows the waterfall."
 
-"So it's a torque problem."
-
-It is, in a sense. The fulcrum is where enterprise value runs out in the waterfall, and a model that does not know the waterfall cannot find it. No framework paper on the map has a feature for it.
+No framework paper on the map has a feature for it.
 
 Three weeks later, after the factor audit and the June 2022 hand history, Theo goes back to the sheet of paper from that first morning. The six columns have headers now, and most of the cells have something in them: a page reference, a "silent," a question mark. He takes a pencil and, instead of filling the remaining blanks, labels them, one per line, with the chapter of this book that will have to fill each one.
 

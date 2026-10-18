@@ -3,8 +3,8 @@
 - [x] 1. **[§28.0 Cold Open] · EXPAND-SCENE (to 1,000–1,300 words).** Keep every existing beat (lanyard, "two billion", Kaz's 93%, Mags's CFO breathi
 - [x] 2. **[§28.1, before the identity] · MATH-GENTLY (box 1, two parts).** *Part one, risk is the budget:* poker bankroll analogy (Ines: a \$1m bank — DONE: Box 1 two parts: bankroll four-bets 5%, DTS 5.1% vs 0.5%.
 - [x] 3. **[§28.1 "three substitutions"] · LIST-TO-NARRATIVE.** Turn the numbered list into one paragraph in Theo's voice (he tries to hand out \$500 — DONE: Email scene; Ines's three finger-points replace list; bridges added.
-- [ ] 4. **[§28.2 head] · MATH-GENTLY (box 2): what a distribution is, via the hit rate.** A distribution is a list of outcomes with weights; the ±1 
-- [ ] 5. **[§28.2 "Two definitions of effective breadth"] · MATH-GENTLY (box 3): correlation as a ceiling.** Picture: 300 umbrellas from 40 factories
+- [x] 4. **[§28.2 head] · MATH-GENTLY (box 2): what a distribution is, via the hit rate.** A distribution is a list of outcomes with weights; the ±1  — DONE: Box 2 forty coins; (28.3) stated once; Full Derivation subsection added.
+- [x] 5. **[§28.2 "Two definitions of effective breadth"] · MATH-GENTLY (box 3): correlation as a ceiling.** Picture: 300 umbrellas from 40 factories — DONE: Box 3 umbrellas: rho 0.03 gives 16/30/33; ceiling 1/rho; Herfindahl kept.
 - [ ] 6. **[§28.2, before Block 1] · SHOP-LIFE vignette (400–600 words, labeled fictional).** *Shop type: a multi-manager platform's central risk tea
 - [ ] 7. **[§28.3 head] · MATH-GENTLY (box 4): exponential decay and half-life.** Coffee cooling; tiny number: α₀ = 3% and a 0.6% round trip give h* 
 - [ ] 8. **[§28.4 head] · MATH-GENTLY (box 5): Kelly and log growth.** Why log: a 50% loss needs a 100% gain; ruin is minus infinity. Tiny number: a 
