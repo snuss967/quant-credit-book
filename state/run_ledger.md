@@ -77,3 +77,16 @@ Usage reached 30% of the window in about 15 minutes, about 75% of it from Fable 
 | Sonnet research (targeted) | Only the case studies and gaps the reviews request | queued until the reviews land |
 | trend-watch-factcheck (×2) | Sonnet checks of all 74 Trend Watch boxes, Ch 1–28, report-only | running |
 | pace-guard | Cap-only, target 97 (alarms at 91) | running |
+
+## Edition 2 (started 2026-10-18 ~01:05 UTC, theme "One Author, One Floor, One Home")
+
+Edition 1 shipped at commit 8dffb93 (474k words, 1,212 pages). The Edition 2 plan is in state/continuation_prompt.md.
+
+| Run | Package | Model | Owns | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| ed2-wp1-apply-factchecks | WP1 | Sonnet ×4 | Apply 26 corrections and hedges across Ch 1–28; log in state/reviews/ed2/ | running |
+| ed2-research-A | research | Sonnet | factor replication; US LMT autopsies; private/EU LMEs; courts as regimes; re-default dataset; private-credit marks; credit futures | running |
+| ed2-research-B | research | Sonnet | foundations shelf pages; RFQ quoting frontier; Part V market structure 2026; cap-structure pain trades; manufactured credit events; insurance forced flow; figure data series | running |
+| ed2-wp2-primers-1 | WP2 | Opus | 04_ch04b bond math; 12_ch12b restructuring state machine | running |
+| ed2-wp2-primers-2 | WP2 | Opus | 06_ch06b options and measures; 07_ch07b statistics | running |
+| ed2-wp2-appendices | WP2 | Opus | 94_appE Laws of the Desk; 93_appD plumbing | running |
