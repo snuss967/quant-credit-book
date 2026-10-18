@@ -606,6 +606,19 @@ Notice which intensity went where: the *price* uses $\lambda^{\mathbb{Q}}$, the 
 
 Used in: §5.3 (jumps in continuous time), §8.3, §10.9 (trend when the underlying jumps), §16.4 (warrants), §18.6 (the HJB with jump-to-default, which inherits the $\mathbb{P}$-hedge/$\mathbb{Q}$-price split), §23.3–23.5, §28.4 (Kelly with a jump).
 
+
+#### Shop life: the column that was a hundred times too small
+
+*A fictional composite. The firm, the people and the numbers are invented; the rhythms are drawn from public accounts of trading-firm life, and the Jane Street details are from its* Signals and Threads *podcast, used here only as analogy.*
+
+The firm is a mid-sized systematic credit manager on two floors of an office building with good coffee and slow elevators. Rafael is a second-year quant there, and his Thursday is a reconciliation nobody wanted. On Wednesday afternoon the hedge desk had sent a one-line message to the quant channel: *why is this month's swaption ticket so small?* The high-yield book rebalances its volatility hedge monthly, buying payer swaptions on the CDX high-yield index against the bonds' short vega, and this month the system had asked for \$4mm of notional. The same book had needed something closer to \$50mm the year before *(illustrative)*.
+
+Rafael's morning is the boring part, and it is most of the job. The 8:30 standup, where he says "looking into the swaption sizing" and nobody asks a follow-up. A support ticket to the risk-data vendor, which promises a reply in two business days. Two CSV files of Greeks, one from the firm's own risk engine and one from the vendor's feed, opened side by side and differenced line by line, with lunch eaten over the keyboard. At 2:10 he finds it. The firm's engine reports bond vega per vol point, the way the cold open's report does. The vendor's feed, which supplies the swaptions' Greeks, reports vega per 1.00 of volatility, the way the closed form in §6-B.3.2 does. The netting script added the two columns as if they were the same unit. For three weeks the book's vega had shown about −\$180,000 per point on the bonds against about +\$180,000 on the swaptions, a net of nearly zero, and nearly zero looked right. The swaptions' real vega was about \$1,800 a point. The book had been short about \$178,000 of vega per point the whole time, and the monthly rebalance, seeing a hedged book, had asked for almost nothing.
+
+The harder part was finding out *when*. The vendor had switched the feed's unit in a release three weeks earlier, with a sentence in the release notes, and then, helpfully, restated its whole history in the new unit. Today's vendor archive therefore showed per-1.00 numbers for every date, including the dates when the firm's script had been reading per-point numbers correctly. To know which hedges had been sized on which unit, Rafael needed last Tuesday's file as it had arrived, not as the vendor later corrected it. Jane Street's engineers describe the same trap on their firm's podcast: vendors "tell you, whoops, made a mistake," which is why the firm saves "all the data ... along with the time we received it," so that nobody needs a time machine to replay a decision (*Signals and Threads*, episode with Eric Mannes, 2 Sep 2026, which also recalls a commodities risk system that was "a large Microsoft Excel spreadsheet"). Rafael's firm had an as-received archive for prices and not for Greeks. It has one now.
+
+The cost was one re-hedge at a worse volatility. While the book sat unhedged, implied volatility on the index swaptions rose by about three points, so buying \$178,000 of vega a point cost about \$530,000 more than it would have three weeks earlier *(illustrative)*. Nobody was fired. The schema now carries a unit field on every Greek, and the netting step refuses to add two columns whose units differ, which is the same idea as the measure tag of §6-B.6.6 applied to a different label. The sentence the shop says now, usually to new hires and occasionally to vendors, is four words long: *vega has a unit.* §6-B.9's Ways This Blows Up box keeps the one-line version.
+
 ## 6-B.6 The Two Measures: Girsanov for Intensities and the Premium Ratio
 
 ### 6-B.6.1 Desk framing: the eleventh column
@@ -793,7 +806,7 @@ The edge case that bites is quiet. `hazard_from_put` defaults to `american=True`
 
 *The full listing is [Listing 6-B.1 in Appendix F](#code-6b-1).*
 
-> **Ways This Blows Up.** `1 - norm_cdf(9)` is exactly 0.0 in double precision and `norm_cdf(-9)` is not, so every tail is computed on its small side. `bs_greeks` returns vega per 1.00 of vol and the risk report shows it per point: the factor of 100 is the commonest unit bug in vol code.
+> **Ways This Blows Up.** `1 - norm_cdf(9)` is exactly 0.0 in double precision and `norm_cdf(-9)` is not, so every tail is computed on its small side. `bs_greeks` returns vega per 1.00 of vol and the risk report shows it per point: the factor of 100 is the commonest unit bug in vol code, and Rafael's Thursday (before §6-B.6) is what it costs.
 
 Used in: §8.3 and §8.8 (bond-to-equity sensitivities), §11.3 (structural PDs, tagged $\mathbb{P}$), §15.2–15.3 (`Q_nominal` digitals), §16.3–16.4 (backstops and warrants), §21.4 (pool Greeks), §23.2–23.5 (the surface engine imports `jtd_price`, `hazard_from_put` and `implied_vol`), §28.4.
 
