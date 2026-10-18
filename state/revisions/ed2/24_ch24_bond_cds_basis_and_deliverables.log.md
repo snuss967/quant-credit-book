@@ -5,9 +5,9 @@
 - [x] 3. [§24.1 A1–A6 list] LIST-TO-NARRATIVE — six-row table; A5 dramatized via 2045s; list sentence deleted.
 - [x] 4. [§24.2] MATH-GENTLY #2, hazard rate, survival and the risky annuity — candle and stopping-coupon box; 5.1 points upfront hand-checked.
 - [x] 5. [§24.2.1] FULL-DERIVATION-MOVE — heading renamed; one-line par-spread statement added before derivation.
-- [ ] 6. [§24.3 opening] LIST-TO-NARRATIVE + SHOP-LIFE
-- [ ] 7. [§24.3.1] MATH-GENTLY #3, RFV vs RMV + FULL-DERIVATION-MOVE
-- [ ] 8. [§24.3 Bohn–Stein and Dynkin airline extractions] BRIDGE
+- [x] 6. [§24.3 opening] LIST-TO-NARRATIVE + SHOP-LIFE — four-seat scene; Ruth vendor vignette; ROBO gag one sentence.
+- [x] 7. [§24.3.1] MATH-GENTLY #3, RFV vs RMV + FULL-DERIVATION-MOVE — jacket box; Full Derivation subheading; lunch beat "hedge the loss".
+- [x] 8. [§24.3 Bohn–Stein and Dynkin airline extractions] BRIDGE — Mags equipment-trust line threads Bohn–Stein and Dynkin boxes.
 - [ ] 9. [§24.4] NEW-SCENE, Long Scene A: The Haircut Call, March 2020
 - [ ] 10. [§24.4.1] MATH-GENTLY #4, leverage as divisor + FULL-DERIVATION-MOVE
 - [ ] 11. [§24.4 counterparty] ANOTHER-SEAT #1, dealer desk

@@ -1,0 +1,24 @@
+# U2 Revision Log: Chapter 11, Defensive Systematic High Yield
+
+- [ ] 1. 11.0 Cold Open: The Bow Tie, EXPAND-SCENE (~1,200 words), Post-it card, selective-default plant, objectives as Ines's three sentences.
+- [ ] 2. 11.1.1 Mixture return, MATH-GENTLY #1 "A bell with a lonely spike".
+- [ ] 3. 11.1.2 Credit triangle, MATH-GENTLY #2 "Bookmaker's odds versus true odds" + LIST-TO-NARRATIVE three errors.
+- [ ] 4. 11.2.1 Capture identity, MATH-GENTLY #3 + FULL-DERIVATION-MOVE; move Whipsaw Trend Watch to end of 11.2.
+- [ ] 5. 11.2.2 Convexity, MATH-GENTLY #4 "A line with a kink" + LIST-TO-NARRATIVE traps/Spec scene.
+- [ ] 6. 11.2.3 Case Study 1 2022-2023 Round Trip, EXPAND-SCENE as replay.
+- [ ] 7. 11.3.1 Equity as a call, MATH-GENTLY #5 two parts + FULL-DERIVATION-MOVE.
+- [ ] 8. 11.3.2 Normal-distribution trap, MATH-GENTLY #6 "Four sigmas in two worlds"; closing paragraph dies.
+- [ ] 9. 11.4.3 Label is the model, NEW-SCENE Long Scene A: Saks Global, a default in four dates.
+- [ ] 10. 11.4.2 Static logit to dynamic hazard, MATH-GENTLY #7 + LIST-TO-NARRATIVE + FULL-DERIVATION-MOVE.
+- [ ] 11. 11.4.4 and §11.4 Spec, SHOP-LIFE vignette (vendor restatement).
+- [ ] 12. 11.5.1 CAP, ROC, MATH-GENTLY #8 "AUC is a bet" + FULL-DERIVATION-MOVE.
+- [ ] 13. 11.5.2 Hit rate to return, MATH-GENTLY #9 "Base rates" + vendor due-diligence scene.
+- [ ] 14. 11.6/11.6.1 Tier exclusion wrong tool, LIST-TO-NARRATIVE + ANOTHER-SEAT #1 CLO manager + risk-committee exchange.
+- [ ] 15. 11.6.2 2026 CCC Decompression, EXPAND-SCENE + ANOTHER-SEAT #2 large active manager.
+- [ ] 16. 11.7/11.7.1 Why low risk wins, BRIDGE DTS gloss and pointer.
+- [ ] 17. 11.7.2 Long-only contradiction, LIST-TO-NARRATIVE + ANOTHER-SEAT #3 insurer.
+- [ ] 18. 11.8/11.8.1 April 2025 Tariff Shock, NEW-SCENE Long Scene B: Ten weeks in 2025, replayed blind.
+- [ ] 19. 11.9 Capacity, MATH-GENTLY #10 (short or gloss) + LIST-TO-NARRATIVE trillion-dollar exchange.
+- [ ] 20. 11.10 Desk Debrief, Finder table + promotions + Kaz Saks closing line.
+- [ ] 21. Whole chapter, box discipline check.
+- [ ] 22. Whole chapter, BRIDGE lines.

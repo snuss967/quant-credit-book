@@ -19,6 +19,6 @@
 - [x] 17. [§4.8 Capacity] MATH-GENTLY x2 + FULL-DERIVATION + LIST-TO-NARRATIVE + WHEN-TO-APPLY — sqrt and hill boxes; Ines vs pitch book; own-fills measurement.
 - [x] 18. [§4.8 Dynkin cap weights] MATH-GENTLY (one line) — three ceilings; n=100 used so the cap binds (brief's n=200 did not).
 - [x] 19. [§4.9 Risk] MATH-GENTLY x2 + FULL-DERIVATION + WHEN-TO-APPLY — ruler and smoke-alarm boxes; capture algebra moved; judgment on windows.
-- [ ] 20. [§4.10 KMV to Blackstone] EXPAND-SCENE + MATH-GENTLY (Merton) + ANOTHER-SEAT (insurer)
-- [ ] 21. [§4.11 Genealogy and Empty Cells] LIST-TO-NARRATIVE + BRIDGE + figure hook
-- [ ] 22. [§4.12 Desk Debrief] BRIDGE end-of-day scene
+- [x] 20. [§4.10 KMV to Blackstone] EXPAND-SCENE + MATH-GENTLY (Merton) + ANOTHER-SEAT (insurer) — Mags's airline EDF fax; told timeline; insurer box with Fed note.
+- [x] 21. [§4.11 Genealogy and Empty Cells] LIST-TO-NARRATIVE + BRIDGE + figure hook — Theo labels blanks; two figure hooks; kitchen answered: bond-choice room.
+- [x] 22. [§4.12 Desk Debrief] BRIDGE end-of-day scene — Ines counts blanks; measurable-by-Friday triage; bullets kept verbatim.

@@ -491,7 +491,7 @@ def fig_day_timeline():
 
     # lane 2: intraday loops, BLUE tint bars
     loops = [(5.9, "fills loop: order, booking, risk, P&L"),
-             (5.1, "hedge loop: DV01 and DTS drift against this morning's hedges"),
+             (5.1, "hedge loop: DV01 and DTS drift vs. this morning's hedges"),
              (4.3, "RFQ loop: hit ratio, cover gaps, who we win too often")]
     band_label(5.1, "Intraday loops")
     for y, txt in loops:
@@ -526,7 +526,138 @@ def fig_day_timeline():
     return finish(fig, "ch03b_day_timeline")
 
 
-FIGURES = [fig_snap_phantom, fig_day_timeline, fig_event_windows, fig_saks_calendar, fig_wall_interval, fig_jtd_hedge,
+# --------------------------------------------------------------------------------------------------
+# Figure 3-B.3 (3B.3): the year as four nested clocks, with contract clocks cutting across them
+# --------------------------------------------------------------------------------------------------
+def fig_year_clocks():
+    from matplotlib.lines import Line2D
+    from matplotlib.patches import PathPatch
+    from matplotlib.path import Path
+    fig, ax = plt.subplots(figsize=(7.0, 5.9), layout="constrained")
+    ax.set_aspect("equal")
+    ax.axis("off")
+    ax.set_xlim(-6.4, 6.4)
+    ax.set_ylim(-5.6, 4.75)
+    RING = {"day": (0.95, 1.65), "week": (1.75, 2.45), "month": (2.55, 3.25), "year": (3.35, 4.05)}
+
+    def pol(r, th):                                   # th: degrees clockwise from 12 o'clock
+        t = math.radians(th)
+        return r * math.sin(t), r * math.cos(t)
+
+    def span(ring, a0, b0, **kw):                     # an arc of a ring between two clockwise angles
+        r0, r1 = RING[ring]
+        ax.add_patch(Wedge((0, 0), r1, 90 - b0, 90 - a0, width=r1 - r0, **kw))
+
+    def radial(ring, th, f0=0.0, f1=1.0, **kw):
+        r0, r1 = RING[ring]
+        x0, y0 = pol(r0 + f0 * (r1 - r0), th)
+        x1, y1 = pol(r0 + f1 * (r1 - r0), th)
+        ax.plot([x0, x1], [y0, y1], **kw)
+
+    def mid(ring, f=0.5):
+        r0, r1 = RING[ring]
+        return r0 + f * (r1 - r0)
+
+    # ring faces and unit ticks
+    for name, (r0, r1) in RING.items():
+        ax.add_patch(Wedge((0, 0), r1, 0, 360, width=r1 - r0, fc=TINT, ec=NEUTRAL, linewidth=0.9, zorder=1))
+    span("week", 5 * 360 / 7, 360, fc="#ecebe7", ec="none", zorder=1.5)          # the weekend
+    for h in range(24):
+        radial("day", h * 15, 0.8, 1.0, color=NEUTRAL, linewidth=0.7, zorder=2)
+    for d in range(7):
+        radial("week", d * 360 / 7, 0, 1, color=NEUTRAL, linewidth=0.7, zorder=2)
+    for d, lab in enumerate("MTWTFSS"):
+        x, y = pol(mid("week", 0.18), (d + 0.5) * 360 / 7)
+        ax.text(x, y, lab, ha="center", va="center", fontsize=7.2, color=MUTED, zorder=3)
+    for d in range(31):
+        radial("month", d * 360 / 31, 0.86, 1.0, color=NEUTRAL, linewidth=0.6, zorder=2)
+    for dom in (1, 8, 15, 22):
+        x, y = pol(mid("month", 0.2), (dom - 0.5) * 360 / 31)
+        ax.text(x, y, str(dom), ha="center", va="center", fontsize=7.0, color=MUTED, zorder=3)
+    for m in range(12):
+        radial("year", m * 30, 0, 1, color=NEUTRAL if m % 3 else MUTED, linewidth=0.7 if m % 3 else 1.4, zorder=2)
+    for m, lab in enumerate("JFMAMJJASOND"):
+        x, y = pol(mid("year", 0.16), (m + 0.5) * 30)
+        ax.text(x, y, lab, ha="center", va="center", fontsize=7.2, color=MUTED, zorder=3)
+
+    def dot(ring, th, f, color, marker="o", size=6.0, zorder=6, **kw):
+        x, y = pol(mid(ring, f), th)
+        ax.plot([x], [y], marker, color=color, markersize=size, zorder=zorder, **{"markeredgewidth": 0, **kw})
+        return x, y
+
+    # the desk's own clocks (BLUE)
+    span("day", 6.75 * 15, 8.5 * 15, fc=BLUE, ec="none", zorder=4)                           # 6:45 to 8:30
+    span("day", 16 * 15, 18 * 15, fc=BLUE, ec="none", zorder=4)                              # 4 to 6 p.m.
+    p_jobs = pol(mid("day", 0.5), 114)
+    p_marks = pol(mid("day", 0.5), 258)
+    p_snap = dot("day", 15 * 15, 0.5, BLUE, size=7.5)
+    p_mon = dot("week", 0.42 * 360 / 7, 0.62, BLUE, size=6.5)
+    p_fri = dot("week", (4 + 15.5 / 24) * 360 / 7, 0.62, BLUE, size=6.5)
+    # someone else's clocks (ORANGE)
+    span("month", 27 * 360 / 31, 360, fc=ORANGE, ec="none", zorder=4)                        # month-end
+    p_monthend = pol(mid("month", 0.5), (27 + 2) * 360 / 31)
+    p_roll_mar = dot("year", 79 / 365 * 360, 0.68, ORANGE, "D", 6.5)
+    p_roll_sep = dot("year", 263 / 365 * 360, 0.68, ORANGE, "D", 6.5)
+    for doy in (90, 181, 273, 365):                                                          # quarter-ends
+        dot("year", doy / 365 * 360, 0.68, SURFACE, "o", 6.5, markeredgecolor=ORANGE, markeredgewidth=1.6)
+    p_q = pol(mid("year", 0.68), 90 / 365 * 360)
+    fomc = [27.5, 76.5, 118.5, 167.5, 209.5, 255.5, 298.5, 342.5]                           # 2026 meetings' mid-dates, day of year
+    for dy in fomc:
+        radial("year", dy / 365 * 360, 0.32, 0.48, color=INK_2, linewidth=1.8, zorder=5, solid_capstyle="butt")
+    p_fomc = pol(mid("year", 0.40), 118.5 / 365 * 360)
+
+    # ring names, just right of 12 o'clock
+    for name in RING:
+        x, y = pol(mid(name, 0.66), 12)
+        ax.text(x, y, name, ha="center", va="center", fontsize=8.0, color=INK, fontweight="bold", zorder=8,
+                bbox=dict(boxstyle="square,pad=0.1", fc=TINT, ec="none"))
+
+    # callouts
+    def callout(point, text, xy, ha):
+        ax.annotate(text, point, xytext=xy, textcoords="data", ha=ha, va="center", fontsize=8.0, color=INK_2,
+                    linespacing=1.15, arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.6, shrinkA=1, shrinkB=2), zorder=11)
+
+    callout(p_mon, "Monday:\nresearch meeting", (4.5, 3.05), "left")
+    callout(p_roll_mar, "20 Mar index roll", (4.5, 1.15), "left")
+    callout(p_q, "quarter-ends: BDC marks,\nredemption prints", (4.5, 0.0), "left")
+    callout(p_jobs, "6:45 to 8:30: feed diff,\nexplain, risk pack,\ncalendar", (4.5, -1.15), "left")
+    callout(p_fomc, "8 FOMC meetings\n(2026)", (4.5, -2.35), "left")
+    callout(p_monthend, "month-end: index\nrebalance, true-up,\nfactor review", (-4.5, 2.45), "right")
+    callout(p_roll_sep, "20 Sep index roll", (-4.5, -0.15), "right")
+    callout(p_marks, "4 to 6 p.m.: marks,\ndisputes, EOD risk", (-4.5, -1.4), "right")
+    callout(p_fri, "Friday: markouts", (-4.5, -2.25), "right")
+    callout(p_snap, "3:00 snap", (-4.5, -3.0), "right")
+
+    # contract clocks: curved hands that cut across all four rings
+    def hand(th, label, side):
+        sx, sy = pol(4.7, th)
+        cx, cy = pol(2.9, th + 12)
+        ex, ey = pol(0.5, th + 80)
+        path = Path([(sx, sy), (cx, cy), (ex, ey)], [Path.MOVETO, Path.CURVE3, Path.CURVE3])
+        ax.add_patch(PathPatch(path, fc="none", ec=VIOLET, linewidth=2.2, zorder=9, capstyle="round"))
+        ax.plot([sx], [sy], "o", color=VIOLET, markersize=5.5, zorder=10, markeredgewidth=0)
+        ax.plot([ex], [ey], "D", color=VIOLET, markersize=6.5, zorder=10, markeredgewidth=0)
+        lx, ly = pol(5.05, th)
+        ax.text(lx, ly, label, ha="right" if side < 0 else "left", va="center", fontsize=8.3, color=INK, linespacing=1.15)
+
+    hand(322, "30-day grace\nperiod", -1)
+    hand(38, "consent\ndeadline", 1)
+    hand(142, "RSA\nmilestone", 1)
+    hand(218, "NDA outside\ndate", -1)
+
+    # key
+    ax.text(0, -4.72, "Each ring starts at 12 o'clock: midnight, Monday, the 1st, 1 January.\n"
+                      "The outer ring is the year: its quarter-ends and half-year rolls.", ha="center", va="center",
+            fontsize=8.0, color=MUTED, linespacing=1.3)
+    handles = [Line2D([], [], marker="o", color=BLUE, linestyle="", markersize=6, label="the desk's own clock"),
+               Line2D([], [], marker="D", color=ORANGE, linestyle="", markersize=6, label="someone else's clock"),
+               Line2D([], [], color=VIOLET, linewidth=2.2, label="clock with a contract attached")]
+    ax.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, -0.02), ncols=3, fontsize=8.0, handletextpad=0.4,
+              columnspacing=1.6, frameon=False)
+    return finish(fig, "ch03b_year_clocks")
+
+
+FIGURES = [fig_snap_phantom, fig_day_timeline, fig_year_clocks, fig_event_windows, fig_saks_calendar, fig_wall_interval, fig_jtd_hedge,
            fig_hit_rate_se]
 
 if __name__ == "__main__":

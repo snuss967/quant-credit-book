@@ -2,11 +2,11 @@
 
 - [x] 1. [25.0 Cold Open: Thirty Percent of What?] NEW-SCENE: Windstream 2019-02-15 cold open; fold Halyard to pivot; retire §25.5.2 Facts. — Windstream replay, card at 2017-10-12, Halyard pivot, bridge, Facts retired.
 - [x] 2. [25.1 and 25.1.1] LIST-TO-NARRATIVE: Reg S-K censoring as PJT memory; Desk Myth lead-in. — Missing-schedule night, Item 601 cites once, ROBO spanless lead-in, box threads.
-- [ ] 3. [25.2 The Definition Graph] MATH-GENTLY: graphs, adjacency, topological order, nilpotence; Full Derivation for Lemma 25.1.
-- [ ] 4. [25.2.3 Cycles are real] BRIDGE: one-sentence gloss of SCC and contraction.
-- [ ] 5. [25.2.4 Finding the vertices and edges] rule-to-scene: substring bug night; fix list to Finder.
-- [ ] 6. [25.3.1 Node types] LIST-TO-NARRATIVE: Mags reads general debt basket; Kaz on "greater of".
-- [ ] 7. [25.3.2 The ratio basket] MATH-GENTLY + ANOTHER-SEAT (direct lender, Ares).
+- [x] 3. [25.2 The Definition Graph] MATH-GENTLY: graphs, adjacency, topological order, nilpotence; Full Derivation for Lemma 25.1. — Spreadsheet box, L-E-N matrix, list to prose, proof moved below.
+- [x] 4. [25.2.3 Cycles are real] BRIDGE: one-sentence gloss of SCC and contraction. — Parenthetical gloss for SCC and contraction, pointer to 25.3.3 box.
+- [x] 5. [25.2.4 Finding the vertices and edges] rule-to-scene: substring bug night; fix list to Finder. — Lucía, 212 blockers lost, run held; fix goes to Finder later.
+- [x] 6. [25.3.1 Node types] LIST-TO-NARRATIVE: Mags reads general debt basket; Kaz on "greater of". — Mags reads grower aloud; Kaz finds sponsor-controlled max; (25.2) fix.
+- [x] 7. [25.3.2 The ratio basket] MATH-GENTLY + ANOTHER-SEAT (direct lender, Ares). — Bathtub box with 900/200 numbers; Ares Miller seat box added.
 - [ ] 8. [25.3.3 The add-back fixed point] MATH-GENTLY (fixed point, contraction); Full Derivation.
 - [ ] 9. [25.3.4 Capacity is levered to add-backs] MATH-GENTLY (convex PL, indicator derivative); Badawi via Kaz.
 - [ ] 10. [25.3.5 The builder basket] WHEN-TO-APPLY inside the gag: LTM window overstated capacity.

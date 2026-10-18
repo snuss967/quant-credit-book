@@ -58,7 +58,7 @@ With $n = 2{,}000$ and an average correlation of only 0.025, that is $2{,}000/(1
 
 The same arithmetic says where the risk lives, because volatility splits exactly into contributions from each position.
 
-> **Math, Gently.** *Who owns the risk? Marginal contribution, by Euler.* Ask how much the book's volatility would rise if one position grew by a dollar. That is the marginal contribution, $\partial\sigma_p/\partial w_i = (\Sigma w)_i/\sigma_p$, where $(\Sigma w)_i$ is position $i$'s covariance with the whole book. Multiply each marginal contribution by the position's size and the pieces add up exactly to $\sigma_p$, a theorem Euler proved two centuries before anyone owned a bond. In the two-bond book at $\rho = 0.6$, A contributes $(3{,}600 + 2{,}880)/125.5 \approx \$52$k and B contributes $(6{,}400 + 2{,}880)/125.5 \approx \$74$k, which sum to the \$126k total. B owns 59% of the risk with 50% of the capital, because it is the more volatile of two positions that move together. The full version, by factor and by issuer, is the first table of the risk pack and the input to §9.8's optimizer.
+> **Math, Gently.** *Who owns the risk? Marginal contribution, by Euler.* Ask how much the book's volatility would rise if one position grew by a dollar: $\partial\sigma_p/\partial w_i = (\Sigma w)_i/\sigma_p$, where $(\Sigma w)_i$ is position $i$'s covariance with the whole book. Multiply each by the position's size and the pieces add exactly to $\sigma_p$, a theorem Euler proved two centuries before anyone owned a bond. In the two-bond book at $\rho = 0.6$, A contributes $(3{,}600 + 2{,}880)/125.5 \approx \$52$k and B $(6{,}400 + 2{,}880)/125.5 \approx \$74$k, summing to \$126k: B owns 59% of the risk with half the capital. The full version, by factor and issuer, is the first table of the risk pack and the input to §9.8's optimizer.
 
 But a contribution table is only as good as the covariance behind it, and a covariance for 2,000 bonds is four million numbers, most of them unknowable from a credit desk's data. The way out is the one a restructuring banker takes with a forty-instrument capital structure: notice that most of them are claims on the same few things.
 
@@ -126,7 +126,7 @@ The last ingredient sounds like plumbing, and it has caused more misery than any
 
 Theo's desk snaps everything at 3:00 p.m.: futures settlement, CDX close and bond composites, the same minute the P&L explain of Chapter 8-C uses. Risk and P&L share one snap or they share nothing (App E, Law 9 again), a sentence nobody believes until they have spent a morning chasing a basis that turned out to be daylight saving time.
 
-*Builds on:* §8.5 (Dimson and de-smoothing), §9.8.1 (Man's fill), §27.2 (feeds and the four timestamps of a fill), §27.3 (the security master). *Used in:* Chapter 8-C (the explain imports the same loadings and the same snap).
+*Builds on:* §8.5, §9.8.1, §27.2 (feeds and timestamps), §27.3 (the security master). *Used in:* Chapter 8-C (same loadings, same snap).
 
 ## 8B.4 Idiosyncratic Variance by Rating and Price Bucket
 
@@ -162,7 +162,7 @@ Re-bucketed, with an equity-regime idiosyncratic volatility of about 2.2 points 
 
 The buckets are also where the market's own regime shows first. On Thursday, 15 October 2026, the ICE BofA US High Yield index closed at an option-adjusted spread of 323 bp, its CCC-and-lower subindex at 1,278 bp (a day after 1,282 bp, its widest in at least three years) and investment grade at 84 bp (FRED: BAMLH0A0HYM2, BAMLH0A3HYC, BAMLC0A0CM; §28.0). On 2 April 2025, before the tariff shock, the two high-yield numbers had been 342 and 925 bp, a ratio of 2.7. In October 2026 the ratio was about 4.0. The index looked bored; its basement was on fire. A model that scaled CCC risk off the high-yield index would have reported a quiet market, because the factor *was* quiet. The risk lived in the dispersion of the bottom buckets, in names moving on their own news, which is why idiosyncratic variance is estimated by rating and price bucket rather than as one multiple of the index.
 
-*Builds on:* §8.3 (the discontinuity and the recovery route), §6.2 (the structural elasticity), §11.6 (the CCC problem), §28.0 and §28.4 (the 2026 CCC decompression). *Used in:* §8B.6 (ES on the mixture), §8B.9 (the price-bucket rows of the limit sheet).
+*Builds on:* §8.3, §6.2, §11.6 (the CCC problem), §28.0 and §28.4 (the 2026 decompression). *Used in:* §8B.6, §8B.9.
 
 ## 8B.5 The Jump Layer
 
@@ -235,7 +235,7 @@ The ten-day VaR is not three times the one-day VaR but nearly eight times, becau
 
 The engine computes the layers by different methods because they are different objects. The Gaussian layer is historical simulation: today's exposures times the past few years of factor returns, summed in $h$-day blocks rather than scaled by $\sqrt{h}$ (which keeps whatever autocorrelation the factors really have), plus idiosyncratic draws from the buckets. The jump layer is Monte Carlo: on each path every issuer's coin is flipped with probability $1 - e^{-\lambda^{\mathbb{P}}_i h}$, defaulted issuers draw recoveries from their Beta legs, and the JTD losses are added to that path's Gaussian draw. A 99% ES from 100,000 paths rests on the worst 1,000, and an issuer with a 0.1% one-day default probability defaults on only about 100 paths, so its contribution is noisy. The engine prints the standard error beside the number (§7-B.8) and switches to importance sampling, raising default probabilities in the simulation and reweighting, when the tail rests on too few draws.
 
-*Builds on:* §5.1 and §5.10 (tails, ES beside VaR), §7-B.6 (block bootstrap), §7-B.8 (Monte Carlo standard errors). *Used in:* §8B.9 (the ES lines of the limit sheet), §28.5 (LVaR adds the liquidity cost on top).
+*Builds on:* §5.1, §5.10, §7-B.6 (block bootstrap), §7-B.8 (Monte Carlo errors). *Used in:* §8B.9, §28.5 (LVaR).
 
 ## 8B.7 The Stress Library
 
@@ -265,7 +265,7 @@ Each scenario runs on today's book and reports two columns, Gaussian and jump, w
 
 The Ad Hoc Group, by letter of counsel, asked to be added to the risk factor list "as a matter of record." Kaz read the letter twice and replied that the Group was already in the model, as the jump layer. The Group's counsel replied that it reserved all rights.
 
-*Builds on:* §8.6 and §8.7 (the hedge matrix and its three failures), §10.7, §18.9.1, §20.5, §28.0. *Used in:* §8B.9 (the stress-loss line), §12.9 (the MAC stress tests), Chapter 8-C (stress P&L explained by factor).
+*Builds on:* §8.6–§8.7, §10.7, §18.9.1, §20.5, §28.0. *Used in:* §8B.9, §12.9 (MAC stress tests), Chapter 8-C.
 
 ## 8B.8 The Backtest
 
@@ -295,7 +295,7 @@ The backtest also runs bucket by bucket, as realized residual volatility over pr
 
 A failing backtest licenses a change, through a procedure: a written finding, a challenger run in shadow beside the champion, a comparison on data the challenger was not tuned on, and promotion through the rings and canaries that §27.8 uses for code. It does not license retuning the model inside the drawdown that produced the exceptions. The desk still tells new hires about the week Larkspur Foam's term loan fell to 84 on its drop-down headline (Chapter 13), when a junior quant shortened the EWMA half-life from 60 days to 15 on the third day of losses, "to make it more responsive." The re-run backtest was immaculate, because it had been tuned on the exceptions it was graded on, which is look-ahead in a lab coat. The short half-life then spent a quiet quarter overstating risk by 40% and squeezing the desk out of positions it would have been paid to hold. Mags's review was the shortest in the desk's history: "You wrote the exam and then you graded it."
 
-*Builds on:* §7-B.2 (likelihood ratios), §7-B.5 (EWMA half-lives), §27.8 (deployment discipline). *Used in:* §8B.9 (the backtest line on the limit sheet), §28.9 (the dashboard's model-health panel).
+*Builds on:* §7-B.2, §7-B.5, §27.8 (deployment). *Used in:* §8B.9, §28.9 (model-health panel).
 
 ## 8B.9 The Limit Sheet
 
@@ -694,7 +694,7 @@ Mags initialled the list and added a line in pencil: *IDO or it didn't happen, a
 
 ### The Spec You Hand the Robot
 
-"Implement `risk_model.py` per §8B.11. Units: \$mm, decimals, years. One snap, 15:00 America/New_York, checked across every input. Loadings: −KRD on key rates; −DTS × cell sensitivity on spread cells; estimated loadings own, then issuer sibling rescaled by DTS, then cell per unit DTS, else raise. Equity regime below 80 with exit above 85. Factor covariance: EWMA, shrunk, with a condition-number alarm. Idiosyncratic variance by rating × price bucket. Jump layer: issuer JTD legs with Beta recoveries under $\mathbb{P}$, comonotone within issuer, simulated and added path by path, never added to a variance. VaR and ES at 1 and 10 days on the mixture with standard errors. Stress in two columns. Kupiec and Christoffersen. Limit sheet with soft and hard status. Every self-check in the listing passes."
+"Implement `risk_model.py` per §8B.11. Units: \$mm, decimals, years. One snap, 15:00 America/New_York, checked on every input. Loadings: −KRD on key rates, −DTS × cell sensitivity on spread cells, estimated loadings own → issuer (DTS-rescaled) → cell → raise. Equity regime below 80, exit above 85. EWMA covariance, shrunk, with a condition-number alarm. Idiosyncratic variance by rating × price bucket. Jump layer: issuer JTD legs, Beta recoveries under $\mathbb{P}$, comonotone within issuer, added path by path and never to a variance. VaR and ES at 1 and 10 days on the mixture, with standard errors. Two-column stress. Kupiec and Christoffersen. Limit sheet, soft and hard. All listed self-checks pass."
 
 ### Exercises
 
@@ -731,3 +731,5 @@ Mags initialled the list and added a line in pencil: *IDO or it didn't happen, a
 - FRED: ICE BofA US High Yield OAS (https://fred.stlouisfed.org/series/BAMLH0A0HYM2), CCC & Lower OAS (https://fred.stlouisfed.org/series/BAMLH0A3HYC), Moody's Baa minus 10-year (https://fred.stlouisfed.org/series/BAA10Y) and the 10-year Treasury (https://fred.stlouisfed.org/series/DGS10). The ICE series on FRED carry only the most recent three years of history, so pre-2023 scenario levels come from the canonical sections or from BAA10Y.
 - FINRA, SR-FINRA-2026-009 (Apr 2026), the affiliate-principal baseline. https://www.finra.org/sites/default/files/2026-04/SR-FINRA-2026-009.pdf.
 - `risk_model.py` (this chapter, Appendix F and `book_src/lib/`), with `creditstats.py` (§7-B.10) for the Ledoit–Wolf weight and Monte Carlo standard errors.
+
+<!-- STATUS: COMPLETE -->

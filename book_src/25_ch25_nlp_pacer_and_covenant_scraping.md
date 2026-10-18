@@ -109,14 +109,19 @@ Kaz read the first forty definitions of the Halyard agreement and announced a fi
 
 ### 25.2.1 Two structures, not one
 
-An agreement carries two structures, and parsers that conflate them break.
-
-1. **The section tree** $\mathcal{T}$: Article → Section → clause (a) → sub-clause (i) → item (A). This is the abstract syntax tree in the compiler sense. A cross-reference like "Section 6.08(b)(iv)" is a path in $\mathcal{T}$. ROBO's hallucinated "(xiv)" in Chapter 26 was a path that doesn't exist, and a tree lookup would have caught it.
-2. **The definition graph** $G = (V, \mathcal{E}^{\text{dep}})$: the vertices $V$ are defined terms plus operative provisions, and there is an edge $u \to v$ when the text of $u$ *uses* $v$. "Consolidated Total Net Leverage Ratio" points to "Consolidated Total Debt" and "Consolidated EBITDA," which points to "Consolidated Net Income," "Pro Forma Basis," and so on.
+An agreement carries two structures, and the parsers that conflate them break. The first is the **section tree** $\mathcal{T}$: Article → Section → clause (a) → sub-clause (i) → item (A). It is the abstract syntax tree in the compiler sense, and a cross-reference such as "Section 6.08(b)(iv)" is a path in it. When the model ROBO called invented a clause "(xiv)" in Chapter 26, it was naming a path that does not exist, and a tree lookup would have caught it before anyone priced it. The second is the **definition graph** $G = (V, \mathcal{E}^{\text{dep}})$. Its vertices $V$ are the defined terms plus the operative provisions, and there is an edge $u \to v$ when the text of $u$ *uses* $v$. "Consolidated Total Net Leverage Ratio" points to "Consolidated Total Debt" and to "Consolidated EBITDA," which points to "Consolidated Net Income," "Pro Forma Basis," and on down. Theo had always walked the second structure with a highlighter; he had simply never drawn it.
 
 (The edge set is written $\mathcal{E}^{\text{dep}}$ because $E_t$ is equity value in this book's notation. For the same reason, from §25.3 on, covenant EBITDA is $\mathcal{E}$, calligraphic.)
 
-To evaluate a covenant you must evaluate every term it reaches, and you must evaluate each term after its dependencies. Formally, you need a topological order of $G$.
+To evaluate a covenant, ROBO has to evaluate every term it reaches, each one after its own dependencies. That ordering has a name, a topological order of $G$, and it is older than any credit agreement.
+
+> **Math, Gently.** *Graphs, adjacency matrices and why loops never die.* Picture a spreadsheet. Cell B7 says `=B5/B6`, B5 adds up a column, B6 pulls a number from another tab. Excel cannot compute B7 until it has computed B5 and B6, so it quietly works out an order in which every cell comes after the cells it reads. That order is a *topological order*, and the web of "this cell reads that cell" is a *graph*: dots for cells (or defined terms), arrows for "uses." When you write `=B7` into B5, Excel throws its circular-reference warning, because now there is a loop and no order exists. A graph can be stored as a table, the *adjacency matrix* $A$, with a 1 in row $u$, column $v$ when $u$ uses $v$. Multiply the table by itself and the entries count two-step paths; cube it and they count three-step paths. Take three terms, the Leverage Ratio (L), Consolidated EBITDA (E) and Consolidated Net Income (N), with L using E and E using N:
+>
+> $$
+> A = \begin{pmatrix} 0 & 1 & 0 \\ 0 & 0 & 1 \\ 0 & 0 & 0 \end{pmatrix}, \qquad A^2 = \begin{pmatrix} 0 & 0 & 1 \\ 0 & 0 & 0 \\ 0 & 0 & 0 \end{pmatrix}, \qquad A^3 = 0.
+> $$
+>
+> $A^2$ has exactly one nonzero entry, the walk L → E → N, and $A^3$ is all zeros, because in a graph without loops every path eventually runs out of road. A matrix that some power turns into zero is called *nilpotent*. Now add one arrow, N → L, and the road never ends: you can go round the loop as often as you like, so every power has a nonzero entry. Loops, and only loops, keep the powers alive. The lemma that turns this into a unit test is next.
 
 ### 25.2.2 Reachability, nilpotence and blast radius
 
@@ -128,9 +133,7 @@ $$
 
 **Lemma 25.1.** $G$ is acyclic if and only if $A$ is nilpotent, with $A^n = 0$.
 
-*Proof.* Suppose $G$ is acyclic. A walk of length $n$ visits $n+1$ vertices, so by pigeonhole it visits some vertex twice. The segment between the two visits is a cycle, which is a contradiction. So there are no walks of length $n$, and $A^n = 0$. Conversely, if $G$ contains a cycle of length $\ell$, then for every $m \ge 1$ there is a closed walk of length $m\ell$, so $A^{k} \ne 0$ for infinitely many $k$ and $A$ is not nilpotent. $\square$
-
-The lemma becomes a unit test: compute $A^n$ (or, more cheaply, run a depth-first search) and if it is not zero, the agreement has a circular definition you must handle explicitly.
+The proof is at the end of this subsection. The lemma becomes a unit test: compute $A^n$ (or, more cheaply, run a depth-first search) and if it is not zero, the agreement has a circular definition that has to be handled on purpose rather than by accident.
 
 The **blast radius** of an amendment that rewrites term $v$ is the set of everything that depends on it:
 
@@ -140,15 +143,21 @@ $$
 
 Amend "Consolidated EBITDA" and you have touched every leverage ratio, every grower basket, the pricing grid, the excess-cash-flow sweep, and usually the definition of "Available Amount." Amend "Excluded Taxes" and you have touched very little. Section 25.5 weights $\mathcal{B}(v)$ by dollars of capacity, and that weighted blast radius is the most useful single number to compute on an amendment.
 
+#### The Full Derivation: nilpotence and reachability
+
+*Proof of Lemma 25.1.* Suppose $G$ is acyclic. A walk of length $n$ visits $n+1$ vertices, so by pigeonhole it visits some vertex twice. The segment between the two visits is a cycle, which is a contradiction. So there are no walks of length $n$, and $A^n = 0$. Conversely, if $G$ contains a cycle of length $\ell$, then for every $m \ge 1$ there is a closed walk of length $m\ell$, so $A^{k} \ne 0$ for infinitely many $k$ and $A$ is not nilpotent. $\square$
+
 ### 25.2.3 Cycles are real; condense them
 
-Real agreements have cycles. Halyard's Run-Rate Cost Savings cap refers to Consolidated EBITDA "after giving effect to" the cost savings, and Pro Forma Basis refers to Consolidated EBITDA, which is calculated on a Pro Forma Basis. The standard fix is to compute the **strongly connected components** (Tarjan's algorithm, $O(|V| + |\mathcal{E}^{\text{dep}}|)$), collapse each component into a single super-node, and evaluate the resulting condensation, which is a directed acyclic graph by construction. Inside each component you solve a fixed point. Section 25.3 shows the fixed point for the add-back cap is a contraction, so the iteration converges, and it also shows the cap ends up larger than it looks. Figure 25.1 draws the synthetic Section 1.01 of Listing 25.1 with both of its loops.
+Real agreements have cycles. Halyard's Run-Rate Cost Savings cap refers to Consolidated EBITDA "after giving effect to" the cost savings, and Pro Forma Basis refers to Consolidated EBITDA, which is calculated on a Pro Forma Basis. The standard fix is to compute the **strongly connected components** (Tarjan's algorithm, $O(|V| + |\mathcal{E}^{\text{dep}}|)$), collapse each component into a single super-node, and evaluate the resulting condensation, which is a directed acyclic graph by construction. Inside each component you solve a fixed point. (A strongly connected component is a largest set of terms in which every term can reach every other by following arrows: a loop, plus everything tangled into it. A contraction is a rule that pulls any two guesses closer together each time you apply it, so applying it over and over homes in on one answer; the box for it is in the next section, where the add-back cap needs it.) Section 25.3 shows the fixed point for the add-back cap is a contraction, so the iteration converges, and it also shows the cap ends up larger than it looks. Figure 25.1 draws the synthetic Section 1.01 of Listing 25.1 with both of its loops.
 
 ![Figure 25.1: In the synthetic Section 1.01 of Listing 25.1, two groups of terms define each other (dashed loops: the add-back cap through Consolidated EBITDA, and the J.Crew blocker), and amending Consolidated EBITDA reaches only three other terms (shaded, β = 3) while Excluded Taxes reaches none. Illustrative: edges produced by the Listing 25.1 term matcher on the book's synthetic agreement text; an arrow runs from a term to each term its definition uses.](assets/figures/ch25_definition_graph.png)
 
 ### 25.2.4 Finding the vertices and edges
 
-Vertices come from definition sentences: `"Term" means ...`, `"Term" has the meaning assigned to such term in Section 7.02`, and inline definitions buried in operative text (`(any such transaction, a "Specified Transaction")`). Edges come from matching the term dictionary against each definition body.
+Vertices come from definition sentences: `"Term" means ...`, `"Term" has the meaning assigned to such term in Section 7.02`, and inline definitions buried in operative text (`(any such transaction, a "Specified Transaction")`). Edges come from matching the term dictionary against each definition body. That sounds like the easy half, and it is the half that bites.
+
+*A fictional composite, set at a systematic asset manager before Theo's time; the count is illustrative.* Nothing crashed on the night the matcher reversed the documents. The nightly parser diff finished at 4:10 a.m. and reported that 212 agreements had lost their J.Crew blocker since the previous evening *(illustrative)*. No amendments had been filed. Lucía, the data engineer on the early shift, noticed because 212 is not a number the loan market produces between midnight and four. She opened one agreement, found the sentence that barred transfers of Material Intellectual Property to "any Unrestricted Subsidiary," and saw the edge the parser had drawn from it: to "Restricted Subsidiary." A pull request the afternoon before had made the matcher case-insensitive, to catch a few lower-case cross-references, and "restricted subsidiary" sits inside "Unrestricted Subsidiary" like a smaller doll. Every blocker now read as a limit on the wrong entities. The 6:30 signal run would have ranked 212 protected loans as high-leakage shorts. Lucía held it, which meant the portfolio manager arrived to an empty screen and a two-line note, and the team spent the day rebuilding three weeks of history to find out how far back the change reached. The sentence that desk says now, before any matcher change ships, is six words long: "Longest match first, case on, consume the span." The box below is the full list of ways this goes wrong.
 
 > **Ways This Blows Up.** *Substring matching.* Ignoring case, the term "Restricted Subsidiary" is a substring of "Unrestricted Subsidiary." A parser that matches case-insensitively, without word boundaries or longest-match-first, will draw an edge from every unrestricted-subsidiary provision to "Restricted Subsidiary," reversing the most important distinction in the document. The same trap catches "Lender" inside "Affiliated Lender" and "Debt" inside "Consolidated Total Debt." The fix: match case-sensitively, sort the dictionary by length descending, match with word boundaries, and consume each matched span before trying shorter terms. Other ways this goes wrong: plurals ("Restricted Payments" for "Restricted Payment"); terms defined by reference to *another* document (the Intercreditor Agreement, the Existing Indenture); a term defined in Section 1.01 and quietly redefined "for purposes of this Article X"; and exhibits filed as scanned images with no text layer. Every one of these fails silently.
 
@@ -164,7 +173,7 @@ Vertices come from definition sentences: `"Term" means ...`, `"Term" has the mea
 
 ## 25.3 Basket Arithmetic: From Clauses to Dollars
 
-Theo's first rule on the desk, written on a sticky note over the second monitor: *a basket is not a sentence; it is a function from the state of the company to a number of dollars.* Write the function down, give it units, and test it.
+The first sticky note Theo put up on the desk, over the second monitor, says: *a basket is not a sentence; it is a function from the state of the company to a number of dollars.* This section is that note written out, with units, and tested.
 
 > **[SOURCE EXTRACTION]** *Moyer_Distressed_Debt_Analysis p.220:* "Often, negative pledge provisions have fairly significant 'carve-outs' that will be stated in either absolute (e.g., \$100 million) or relative (e.g., 10% of net tangible assets) amounts. In the absence of other lending provisions that may be constraints, these carve-outs essentially define how much cash the firm can raise on a secured basis."
 >
@@ -179,8 +188,16 @@ Every basket becomes a typed node with explicit parameters. The template phrases
 | Fixed | "not to exceed \$50,000,000 at any time outstanding" | $X$ | $X$ |
 | Grower | "the greater of \$75,000,000 and 35% of Consolidated EBITDA" | $\max(X, p\,\mathcal{E})$ | $X$, $p$, base term |
 | Ratio | "so long as, on a Pro Forma Basis, the First Lien Net Leverage Ratio does not exceed 4.50:1.00" | $\max(0, m\,\mathcal{E} - F^{\text{sc}})$ | $m$, scope, netting rule |
-| Builder | "the Available Amount at such time" | path-dependent; see (25.4) | starter, CNI share, equity credit |
+| Builder | "the Available Amount at such time" | path-dependent; see (25.2) | starter, CNI share, equity credit |
 | Maintenance test | "shall not permit the Total Net Leverage Ratio as of the last day of any Test Period to exceed..." | none; a breach is a default | $m$, test dates, cure rights |
+
+Mags read the grower row aloud from Halyard's agreement, slowly, the way she reads anything she has decided not to trust. "'The greater of \$75,000,000 and 35% of Consolidated EBITDA.'"
+
+"So it's seventy-five million," Kaz said, "unless thirty-five percent of EBITDA is bigger. Which it is whenever EBITDA is above two hundred and fourteen million and change." A pause while Kaz followed the capitalized word back into Section 1.01, eleven pages of it, add-backs included. "Oh. The basket grows with a number the sponsor writes."
+
+"Now you're reading it like a lender," Mags said. "The seventy-five is the lender's. The thirty-five percent is the sponsor's. 'Greater of' means the sponsor always gets whichever is better that quarter."
+
+"A max function," Kaz said, "where the counterparty controls one of the arguments." Kaz wrote it on the board, $\max(X, p\,\mathcal{E})$, and drew an arrow from $\mathcal{E}$ to the word *sponsor*. Theo pointed at the table's last column, the one headed "base term." The base is not a number. It is a pointer back into the definition graph, which is why the graph had to come first.
 
 Each node also carries a usage $U_j$, and availability is $K_j - U_j$. Reclassification language ("may divide, classify and reclassify") lets the borrower move usage between baskets after the fact. In practice that means usage is a decision variable for the borrower, not a fact for you.
 
@@ -189,6 +206,10 @@ Each node also carries a usage $U_j$, and availability is $K_j - U_j$. Reclassif
 > **Annotation.** In schema terms, *scope is a field, not a footnote*. A ratio node without its scope (total, senior, secured, first-lien) is a number without units. Moyer's example is a senior test silent on total debt. The 2026 equivalent is a first-lien net leverage incurrence test that is silent on junior secured debt. It permits a second-lien or unsecured layer, sometimes at a different ratio, and that layer is how a "4.50x" agreement ends up with 7x of total debt. Kaz's first parser stored `ratio = 4.5` and nothing else. ROBO, given that schema, reported that Halyard could not borrow another dollar of junior debt. Halyard borrowed another \$250mm of junior debt the following quarter *(illustrative)*.
 
 ### 25.3.2 The ratio basket, and the four words that stop a perpetual-motion machine
+
+Halyard's first-lien test is the dialect that hides the most money in the fewest words, so it is worth slowing down on.
+
+> **Math, Gently.** *Solving a test for the amount it allows.* Picture a bathtub with a line painted on the side. The test says that after you pour in your bucket, the water must still be below the line. The line is $m$ times EBITDA; the water already in the tub is the existing debt, less any cash the definition lets you subtract. The biggest bucket you can pour is the gap between the line and the water. With $m = 4.50$x, $\mathcal{E} = 200$, existing debt of 900 and no cash, the line sits at $4.5 \times 200 = 900$ and the tub is already full, so the biggest bucket is $900 - 900 = 0$. Now change one rule: the cash you borrow can be subtracted from the debt while it sits in the bank. Pour in 100 and you also drain 100, so the level is $(900 + 100 - 100)/200 = 4.5$, which passes. Pour in a thousand and the level is still $(900 - 0)/200 = 4.5$. The bucket no longer changes the water, so the test cannot stop it. Solving an inequality for capacity means moving everything except the new amount to one side; when the new amount cancels out entirely, there is no limit at all. The algebra follows.
 
 Let $F^{\text{sc}}$ be existing debt within the test's scope, $C$ the unrestricted cash the definition lets you net, $m$ the permitted ratio, and $\Delta$ the new debt. The pro forma incurrence test is
 
@@ -207,6 +228,8 @@ $$
 *Case 2: proceeds are netted and held as cash* ($C' = C + \Delta$). The left-hand side becomes $(F^{\text{sc}} - C)/\mathcal{E}$, which does not depend on $\Delta$. If the test passes at all, it passes for every $\Delta$, so $\Delta^{*} = \infty$.
 
 This is why agreements say the ratio is computed "without netting the cash proceeds of the Indebtedness being incurred," and why many also cap netted cash at a fixed amount, $C' = \min(C, X^{\text{net}})$. A parser that misses those words reports infinite capacity, and in this case the parser is reading the document correctly; it is the document that has been drafted badly. Without the clause, the ratio test is a perpetual-motion machine: borrow a dollar, hold the dollar, net the dollar, repeat.
+
+> **View From Another Seat.** *A direct lender.* The lender that negotiated the netting clause does not parse it; it refuses it. A direct lender writes and holds its own loans, so its leverage over the document comes before the money moves rather than after. Jim Miller, President of Ares Capital, put that seat's position plainly on the company's fourth-quarter 2025 earnings call on 4 February 2026: "We will walk away from transactions based on documentation terms." He has also described a "heightened focus on documentation terms" after the liability-management headlines in the broadly syndicated market *(ARCC Q4 2025 call; this book's buy-side perspectives dossier)*. For that seat, a missing "without netting the cash proceeds" is a reason not to close. The systematic desk has no such door. The loan is already in its universe, quoted every day and held by people it trades with, and it cannot walk away from a clause it never negotiated. It can only price the clause, which is why the parser has to find the four words, or notice their absence, before the sponsor's lawyers remind everyone.
 
 ### 25.3.3 The add-back fixed point
 

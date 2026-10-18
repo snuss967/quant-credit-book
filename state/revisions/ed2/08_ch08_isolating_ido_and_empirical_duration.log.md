@@ -1,0 +1,23 @@
+# Progress Log, Edition 2 (U2): Chapter 8
+
+- [ ] 1. [8.0 Cold Open: Thirty-Seven Cents] EXPAND-SCENE (to 1,200–1,400 words): P&L explain email with "unexplained: −4 cents"; Ines's "why did rates sell off since lunch?"; cut closing paragraph to three clauses.
+- [ ] 2. [8.1 The Subtraction] MATH-GENTLY (tangent and bend) + FULL-DERIVATION-MOVE; P/Q one-sentence gloss.
+- [ ] 3. [8.1 The thirty-seven cents, itemized] BRIDGE + SHOP-LIFE SEED: carry split note.
+- [ ] 4. [8.2 Empirical vs. Analytical Duration] MATH-GENTLY (regression slope, two parts) + FULL-DERIVATION-MOVE.
+- [ ] 5. [8.2 The canonical numbers, rebuilt] LIST-TO-NARRATIVE: three regimes as paragraphs; move Trend Watch to end of §8.2.
+- [ ] 6. [8.3 The Discontinuity] MATH-GENTLY (memoryless clock) + FULL-DERIVATION-MOVE.
+- [ ] 7. [8.3 Case Study: Alltel] EXPAND-SCENE (~900 words) + WHEN-TO-APPLY inside it; promote heading.
+- [ ] 8. [8.3 Trend Watch: CCC Decompression] BRIDGE: one Kaz line before it.
+- [ ] 9. [8.4 DTS] MATH-GENTLY (percent/lognormal) + FULL-DERIVATION-MOVE + ANOTHER-SEAT (pod risk x-ray).
+- [ ] 10. [8.5 Betas When Nothing Trades] MATH-GENTLY (envelopes) + FULL-DERIVATION-MOVE + WHEN-TO-APPLY (Kaz vs Ines on equity lags).
+- [ ] 11. [8.6 The Hedge Matrix] ANOTHER-SEAT (market maker's basket) + MATH-GENTLY (rulers) + FULL-DERIVATION-MOVE; instruments as continuous passage; snap fix.
+- [ ] 12. [8.7 Case Studies] LIST-TO-NARRATIVE (frame): delete template sentence and italic sub-labels.
+- [ ] 13. [8.7 Case Study A: 2022] NEW-SCENE, long: "The Year a PDF Said Zero (2022, replayed)".
+- [ ] 14. [8.7 Case Study B: March 2023] NEW-SCENE, long: "The Hedge That Hedged Both Ways (8–13 March 2023, replayed)".
+- [ ] 15. [8.7 Case Study C: April 2025] EXPAND-SCENE (~1,400 words): card before table; Jersey resource.
+- [ ] 16. [8.8 What's Left Is IDO] MATH-GENTLY (common whisper) + LIST-TO-NARRATIVE + WHEN-TO-APPLY; IDO ledger as month-end meeting.
+- [ ] 17. [8.9 The IDO Engine] SHOP-LIFE vignette (500–700 words) before the Spec.
+- [ ] 18. [8.10 Desk Debrief] BRIDGE (Finder table) + protect; add seven resources to Resource Graphs.
+- [ ] 19. [whole chapter] ANOTHER-SEAT: the insurer, at end of §8.2 before the Trend Watch.
+- [ ] 20. [whole chapter] box budget and sign-offs check.
+- [ ] 21. [whole chapter] CHECK and approx. hygiene; log open items in state/open_items_ed2.md.

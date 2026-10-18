@@ -145,9 +145,9 @@ def fig_carry_hurdle():
     b.axhline(0, color=NEUTRAL, linewidth=0.9, zorder=1)
     # shade the days by regime, from zero up to the curve: a light tint where only the spread rule is short, a
     # darker one where both rules are short (a few days, so a thin sliver above the hurdle line would be invisible)
-    b.fill_between(x, 0, d12, where=(d12 > 0) & (d12 <= hur), color=TINT_ORANGE, linewidth=0, zorder=1,
+    b.fill_between(x, 0, d12, where=(d12 > 0) & (d12 <= hur), color=TINT_ORANGE, linewidth=0, zorder=1.7,
                    interpolate=True)
-    b.fill_between(x, 0, d12, where=d12 > hur, color=C_RETURN, alpha=0.55, linewidth=0, zorder=1, interpolate=True)
+    b.fill_between(x, 0, d12, where=d12 > hur, color=C_RETURN, alpha=0.55, linewidth=0, zorder=1.7, interpolate=True)
     b.plot(x, hur, color=C_RETURN, linewidth=1.3, linestyle=(0, (4, 2)), zorder=3)
     b.plot(x, d12, color=C_SPREAD, linewidth=LW, zorder=4)
     n = len(h)

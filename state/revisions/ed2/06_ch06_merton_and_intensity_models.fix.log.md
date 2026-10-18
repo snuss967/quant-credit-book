@@ -4,12 +4,12 @@ Fix list: `state/reviews/ed2/u2_fixes_ch01_05_06.md`, Chapter 6 section.
 
 ## Items
 
-- [ ] P1 · §6.4.4, Beats 1, 3, 4, 5 (~436, 448, 456, 470) · Resolve "(secondary, CHECK)" ×5 and "search summary" wording from dossier or hedge; log open items in state/research/.
-- [ ] P1 · §6.4.4, ~476, "The facts (approx.; secondary sources...)" · Delete the recap; keep the denominator note and the three "What the tools say" answers.
-- [ ] P1 · §6.1.3, line 125, Ways This Blows Up "The unannualized sigma" · Delete the box; move the reverse-error sentence (μ instead of μ − ½σ²) to the end of the vignette.
-- [ ] P2 · §6.1.1, lines 69–79 · Interleave the three Math, Gently boxes with one line of Theo reacting between boxes 1–2 and 2–3.
+- [x] P1 · §6.4.4, Beats 1, 3, 4, 5 (~436, 448, 456, 470) · Resolve "(secondary, CHECK)" ×5 and "search summary" wording from dossier or hedge; log open items in state/research/. — *Done: all SVB and Carvana CHECKs hedged; open items in state/research/open_items_ch06_ed2.md.*
+- [x] P1 · §6.4.4, ~476, "The facts (approx.; secondary sources...)" · Delete the recap; keep the denominator note and the three "What the tools say" answers. — *Done: recap cut; \$209bn (FDIC-verified) moved into Beat 4; denominator note rewritten.*
+- [x] P1 · §6.1.3, line 125, Ways This Blows Up "The unannualized sigma" · Delete the box; move the reverse-error sentence (μ instead of μ − ½σ²) to the end of the vignette. — *Done: box cut; reverse error now the quant's second ticket.*
+- [x] P2 · §6.1.1, lines 69–79 · Interleave the three Math, Gently boxes with one line of Theo reacting between boxes 1–2 and 2–3. — *Done: Theo/Kaz exchanges between boxes; three-ideas syllabus sentence cut.*
 - [ ] P2 · §6.1.3, line 133, "When to reach for GBM and Itô" · Recast the three breaks as Kaz's three Thursday-night whiteboard warnings, ~120 words; add a Finder row.
-- [ ] P2 · §6.4.4, Beat 1, "raw DD comes out at about 4 (illustrative)" · Attribute to the desk's fictional overnight run.
+- [x] P2 · §6.4.4, Beat 1, "raw DD comes out at about 4 (illustrative)" · Attribute to the desk's fictional overnight run. — *Done: "the desk's fictional overnight run puts SIVB's raw DD".*
 - [ ] P2 · §6.2.4 line 287; §6.4.3 lines 390, 412, 416 · Check modal clusters for templates; recast as scene or Finder rows.
 - [ ] P2 · §6.13 Desk Debrief · Add Finder table rows (Itô, GBM median, Merton closed forms, P→Q, KMV solver, DD mapping, Black–Cox, Cox/zero-recovery, three recoveries, CIR, bootstrap/triangle, log-linear intensity).
 - [ ] P2 · §6.4.4 "Scene A", §6.10.1 "Scene B", decision points · Promote bold paragraphs to `####` headings.
