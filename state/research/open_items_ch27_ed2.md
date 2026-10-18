@@ -10,3 +10,14 @@
 | 4 | §27.7.3 Knight scene: the position screen frozen at 9:34 "already in the hundreds of millions on her illustration" | The SEC order gives totals (about 45 minutes; ~\$3.5bn long, ~\$3.15bn short), not a minute-by-minute path | None needed; labelled as the cast's illustration. A sourced intraday path would let the figures pass draw `ch27_knight_45_minutes.png` with real points. |
 | 5 | §27.0 cold open: Wednesday 28 October 2026 as the FOMC decision day | Third-party calendars only | federalreserve.gov FOMC calendar page. |
 | 6 | §27.1 View From Another Seat (non-bank market maker): Cila, Marmoiton, Cifu and Virtu 10-K quotations | Taken from `perspectives_dealers_and_systematic_shops.md` §5B.1, §5B.3 and `life_quant_shop_daily_life.md` §4.3, not re-fetched | The DESK (19 Jul 2023; 23 Jan 2023) and Virtu FY2015 10-K. |
+
+## Verifier closure (Ed2 verify pass, 18 Oct 2026)
+
+| # | Result |
+| :-- | :-- |
+| 1 | Closed. FCA press release (fca.org.uk, 22 May 2024) confirms US\$58m intended, US\$444bn created, US\$255bn blocked, US\$189bn to the algorithm, US\$1.4bn sold, no hard block, pop-up overridable "without being required to scroll down", real-time monitoring "ineffective ... too slow to escalate", FCA fine GBP 27,766,200; PRA fine GBP 33.88mm in press coverage (total GBP 61.6mm). Coda text adjusted to the FCA wording. |
+| 2 | Closed. Revlon 10-K filings (via search summary) give rehearing denied 12 Oct 2022, funds returned, dismissal with prejudice 19 Jan 2023. The book still omits the dismissal line. |
+| 3 | Partly closed. FY2020 10-K language ("holders of about \$504 million" kept the money) confirmed through a search summary, not by opening the filing. |
+| 4 | Unchanged (labelled illustration). |
+| 5 | Closed. federalreserve.gov FOMC calendar: 27-28 October 2026. |
+| 6 | Closed. The DESK 19 Jul 2023 (Cila, Marmoiton, June 2023 start via MarketAxess and Tradeweb) and 23 Jan 2023 (Cifu, Q4 2021 and Q2 2022) fetched; Virtu FY2015 10-K control language confirmed by search. |

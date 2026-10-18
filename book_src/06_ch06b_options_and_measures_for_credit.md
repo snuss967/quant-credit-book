@@ -627,7 +627,23 @@ Section 6.3 gave Ines's napkin: $\mathbb{P}$ is what happens, $\mathbb{Q}$ is wh
 
 ### 6-B.6.2 Girsanov for a Brownian motion, with the density written down
 
-§6.3.2 stated the result; here is the object that does the work. Fix a horizon $T$ and a constant market price of asset risk $\eta=(\mu-r)/\sigma_V$. (Chapter 6 wrote this ratio out longhand; $\theta$ is taken by the CIR long-run level of §6.7.) Define
+Chapter 6's box loaded the dice: Girsanov's theorem for a Brownian motion reweights the paths so that the firm's assets drift at $r$ instead of $\mu$, and leaves the volatility alone (§6.3.2 states the result). The object that does the work is a density, $Z_T=d\mathbb{Q}/d\mathbb{P}$, built from the market price of asset risk $\eta=(\mu-r)/\sigma_V$. (Chapter 6 wrote this ratio out longhand; $\theta$ is taken by the CIR long-run level of §6.7.) Under the new measure $W^{\mathbb{Q}}_t=W_t+\eta t$ is a Brownian motion and $dV_t=rV_t\,dt+\sigma_VV_t\,dW^{\mathbb{Q}}_t$: the bad paths count for more, the good ones for less, by exactly enough that the asset is priced as if it earned $r$. The density itself, the check that it is one, and the reason the volatility survives the change are in the Full Derivation at the end of §6-B.6.3.
+
+### 6-B.6.3 Girsanov for an intensity: the hazard multiplier
+
+> **Math, Gently.** *Two parts: speeding up the clock, then splitting the bill.* **Part one.** Chapter 6's Girsanov box loaded the dice. It made the bad paths count more without changing how hard the dice are thrown. A default is not a die rolled on every tick; it is a bell that rings now and then, on the Poisson clock of Chapter 6's other box. Changing measure for a bell does something the dice trick cannot do: it changes how *often* the bell rings. If the market's clock runs 2.34 times as fast as yours, every year of survival in your world counts as 2.34 years of survival in the market's, and survival compounds. So risk-neutral survival is physical survival raised to the power 2.34: Theo's 94% one-year survival is $0.94^{2.34}=0.865$ in the market's eyes, which are the two curves of Figure 6-B.5 (§6-B.8 is where the 2.34 comes from). **Part two.** A spread is a bill with three lines on it. Suppose you think a name defaults at 3% a year and loses 50 when it does: expected loss, 150 bp a year. The market charges as though it defaulted at 6% and lost 70, a spread of $6\%\times0.70=420$ bp. Split the bill. Your expected loss is 150. The extra frequency, priced at your loss, is $(6\%-3\%)\times0.50=150$: the hazard premium. The extra loss, priced at the market's frequency, is $6\%\times(0.70-0.50)=120$: the recovery premium. And $150+150+120=420$, to the basis point. The exact statements are next: (6B.4) here, (6B.5) in §6-B.6.4.
+
+Change the measure on a Poisson default clock with physical intensity $\lambda^{\mathbb{P}}$ by a constant multiplier $\xi>0$ (here $\xi$ is the hazard multiplier; Chapters 5, 12 and 14 use $\xi$ locally for unrelated quantities), and the clock stays Poisson with its rate multiplied:
+
+$$
+\lambda^{\mathbb{Q}}=\xi\,\lambda^{\mathbb{P}},\qquad S^{\mathbb{Q}}(T)=e^{-\xi\lambda^{\mathbb{P}}T}=\big(S^{\mathbb{P}}(T)\big)^{\xi}. \tag{6B.4}
+$$
+
+**Risk-neutral survival is physical survival raised to the power $\xi$.** With time-varying, even stochastic, multipliers the same construction gives $\lambda^{\mathbb{Q}}_t=\xi_t\lambda^{\mathbb{P}}_t$ (Brémaud's theorem for point processes is the general statement). The diffusion Girsanov could only tilt the drift. The jump Girsanov changes the *rate*, and any $\xi>0$ gives an equivalent measure. No-arbitrage alone does not pin $\xi$: a stock and a riskless bond cannot span a jump, so many $\mathbb{Q}$'s fit the same share price. Only something that pays at default (a CDS, a bond, a low-strike put) pins $\lambda^{\mathbb{Q}}$, only a $\mathbb{P}$ model (a default study, Theo's waterfall) supplies $\lambda^{\mathbb{P}}$, and the multiplier is their ratio.
+
+#### The Full Derivation: the two densities
+
+*The Brownian density.* Fix a horizon $T$ and the constant $\eta$ above. Define
 
 $$
 Z_T=\frac{d\mathbb{Q}}{d\mathbb{P}}\bigg|_{\mathcal F_T}=\exp\!\Big(-\eta W_T-\tfrac12\eta^2T\Big).
@@ -635,27 +651,19 @@ $$
 
 $Z_T$ is positive with $\mathbb{E}^{\mathbb{P}}[Z_T]=1$, so it defines an equivalent measure: the same events are possible, with different weights. Under $\mathbb{Q}$ the moment generating function of $W_T$ is $\mathbb{E}^{\mathbb{P}}[Z_Te^{uW_T}]=\exp(\tfrac12u^2T-u\eta T)$, which says $W_T\sim\mathcal N(-\eta T,T)$. So $W^{\mathbb{Q}}_t=W_t+\eta t$ is a $\mathbb{Q}$-Brownian motion, and $dV_t=\mu V_t\,dt+\sigma_VV_t\,dW_t=rV_t\,dt+\sigma_VV_t\,dW^{\mathbb{Q}}_t$. The density reweights paths: it makes the bad paths (low $W_T$) heavier and the good paths lighter, by exactly enough that the asset is priced as if it earned $r$. The volatility does not change, because equivalent measures agree on which paths are possible, and quadratic variation is a property of the path.
 
-### 6-B.6.3 Girsanov for an intensity: the hazard multiplier
-
-Now let $N_t$ count defaults, with constant $\mathbb{P}$-intensity $\lambda^{\mathbb{P}}$. For any constant $\xi>0$ define
+*The Poisson density.* Now let $N_t$ count defaults, with constant $\mathbb{P}$-intensity $\lambda^{\mathbb{P}}$. For any constant $\xi>0$ define
 
 $$
 Z_T=\xi^{N_T}\,e^{-(\xi-1)\lambda^{\mathbb{P}}T}.
 $$
 
-(Here $\xi$ is the hazard multiplier; Chapters 5, 12 and 14 use $\xi$ locally for unrelated quantities.) The Poisson generating function $\mathbb{E}^{\mathbb{P}}[z^{N_T}]=e^{\lambda^{\mathbb{P}}T(z-1)}$ gives $\mathbb{E}^{\mathbb{P}}[Z_T]=1$, so $Z_T$ is a density. Under the new measure,
+The Poisson generating function $\mathbb{E}^{\mathbb{P}}[z^{N_T}]=e^{\lambda^{\mathbb{P}}T(z-1)}$ gives $\mathbb{E}^{\mathbb{P}}[Z_T]=1$, so $Z_T$ is a density. Under the new measure,
 
 $$
 \mathbb{Q}(N_T=n)=\mathbb{E}^{\mathbb{P}}\big[Z_T\mathbf 1_{\{N_T=n\}}\big]=\xi^ne^{-(\xi-1)\lambda^{\mathbb{P}}T}\,e^{-\lambda^{\mathbb{P}}T}\frac{(\lambda^{\mathbb{P}}T)^n}{n!}=e^{-\xi\lambda^{\mathbb{P}}T}\frac{(\xi\lambda^{\mathbb{P}}T)^n}{n!},
 $$
 
-which is Poisson with intensity $\xi\lambda^{\mathbb{P}}$. So
-
-$$
-\lambda^{\mathbb{Q}}=\xi\,\lambda^{\mathbb{P}},\qquad S^{\mathbb{Q}}(T)=e^{-\xi\lambda^{\mathbb{P}}T}=\big(S^{\mathbb{P}}(T)\big)^{\xi}. \tag{6B.4}
-$$
-
-**Risk-neutral survival is physical survival raised to the power $\xi$.** With time-varying, even stochastic, multipliers the same construction gives $\lambda^{\mathbb{Q}}_t=\xi_t\lambda^{\mathbb{P}}_t$ (Brémaud's theorem for point processes is the general statement). The diffusion Girsanov could only tilt the drift. The jump Girsanov changes the *rate*, and any $\xi>0$ gives an equivalent measure. No-arbitrage alone does not pin $\xi$: a stock and a riskless bond cannot span a jump, so many $\mathbb{Q}$'s fit the same share price. Only something that pays at default (a CDS, a bond, a low-strike put) pins $\lambda^{\mathbb{Q}}$, only a $\mathbb{P}$ model (a default study, Theo's waterfall) supplies $\lambda^{\mathbb{P}}$, and the multiplier is their ratio.
+which is Poisson with intensity $\xi\lambda^{\mathbb{P}}$: that is (6B.4).
 
 ### 6-B.6.4 Two premia and a recovery premium
 
@@ -675,8 +683,6 @@ $$
 >
 > **Annotation.** This is the identification problem in one clause: a spread identifies the product $\lambda^{\mathbb{Q}}L^{\mathbb{Q}}$, never the factors, so every "CDS-implied default probability" on a screen has a recovery assumption hidden inside it, usually the 40% convention that Law 7 (App E) calls a quoting convention rather than a forecast. Bohn and Stein's answer is a model. The 2026 desk has a second answer that their 2009 book could not count on: a liquid listed put chain. By (6B.1) the low-strike put floor measures $\lambda^{\mathbb{Q}}$ of equity wipe-out *without* any recovery input, so put floor plus bond spread together identify the market's recovery, subject to the "which default?" caveat of §6-B.5. §6-B.8 does it on Halvorsen.
 
-> **Trend Watch.** *The premium moves, and the instruments that read it moved too (2002–2026).* **The ratio is not a constant.** Berndt, Douglas, Duffie and Ferguson (NBER Working Paper 24213, 2018), using Markit CDS against Moody's Analytics EDFs, find premia peaking in 2002, 2008–09 and the second half of 2011; normalized by expected loss, median premia move by more than a factor of ten, and the premium per unit of expected loss rises in distress, more so for investment grade. **The single-name market thinned.** By one 2025 count of cleared volumes, single-name CDS was on the order of 6% of index notional *(approx.; see §23.3)*, so for most high-yield issuers $\lambda^{\mathbb{Q}}$ must now be read from bonds (with a recovery assumption) or from listed puts (with a corridor assumption). **What it means for the desk:** a $\xi$ fitted in 2021 is not a parameter in 2026. It is a state variable, countercyclical, and largest exactly where expected loss looks smallest. Store it as a time series per issuer, not as a constant in a config file.
-
 ### 6-B.6.5 The premium ratio as a traded quantity
 
 Define the **premium ratio** of issuer $i$ as spread over physical expected loss:
@@ -695,20 +701,29 @@ Recovery drops out, and two numbers are left. A high-yield name with $\lambda^{\
 
 Ranked cross-sectionally, $\text{PR}_i$ is a signal: a DTS-neutral book selling protection on high-PR names and buying it on low-PR names is long the premium and short the error in the desk's $\mathbb{P}$ model, and its returns are not alpha until the premium it was *supposed* to earn is stripped out (Law 1). The same structure links the Priming Risk Score, a $\mathbb{P}$ object (§13.8), to the SMR break probability, a $\mathbb{Q}$ gauge (§15.4): their gap is a premium ratio for an event that is not default.
 
+> **View From Another Seat.** *The equity-derivatives market maker who sold the wing.* Picture the day of a listed-options market maker, which its own recruiting copy describes plainly: a quarter of an hour on the news before the open, a morning standup on how the market is expected to behave, the afternoon on tools and research, and at four o'clock close to an hour going through the day's trades, including "what we didn't do" (Optiver's intern and trader profiles; recruiting copy, used here for the rhythm only). In that seat a high-yield issuer's low-strike puts are not a credit view. They are inventory that customers keep buying, and the desk's risk system treats them as volatility. Run the premium-ratio arithmetic of this section from that chair and the puts turn out to be credit protection the desk never meant to write: by (6B.1) most of a deep put's value is a default claim, and the desk is short $\lambda^{\mathbb{Q}}$ on every one it sells. It hedges the diffusion with stock, which §6-B.5.6 says leaves the jump on the table, and it hedges the jump where it can, in CDS if a single-name market exists, which for most high-yield issuers it no longer does. The cleanest real example of the stock leg written into a credit document is Hertz's June 2026 financing: \$300mm, upsized to \$350mm, of 6.75% exchangeable first-lien secured PIK notes due 2030, paired with about \$100mm of shares made available to borrow, which is how buyers of exchangeable paper usually get the short they need to hedge (Chapter 16's Docket Diary, §16.6, from press reports in Bloomberg Law and IFR; figures approximate). Read in this chapter's language, that borrow facility is a delta hedge written into a credit document, and its fee is the hedger's cost of carry. The seat's view of Theo's desk is simple: the credit desk is long the recovery it understands, and the options desk is short the default it priced as volatility.
+
 ### 6-B.6.6 The rule: say which measure you are in
 
-Law 4 (App E) is the rule, and here is its implementation.
+*Monday 12 October, 3:20 p.m., the afternoon of §6-B.8 (fictional).* Theo is halfway through the Halvorsen decomposition and wants one more input. He types to ROBO: "convert the vendor PD to risk-neutral for the Halvorsen decomposition." ROBO calls `MeasuredPD.to_q` on the vendor's 17.4% and the call raises. The error message is two lines long. The first says the input is tagged `Q`: the vendor's "PD" was backed out of Halvorsen's bond spread at a 40% recovery, so it is already a risk-neutral number. The second says that applying a $\mathbb{P}\to\mathbb{Q}$ multiplier to it would charge the premium twice, which is the commonest error in this whole subject.
 
-1. **Every expectation carries a superscript.** $\mathbb{E}^{\mathbb{P}}$ or $\mathbb{E}^{\mathbb{Q}}$, in the text and in the code. An unlabelled $\mathbb{E}$ is a bug report waiting for an owner.
-2. **Every probability field in a schema carries a measure tag**: `P`, `Q`, or `Q_nominal`. Conversions happen only through an explicit, sourced multiplier ($\xi$, or the structural shift of §6.3.2), never by reuse. Double-counting the premium, by applying a $\mathbb{P}\to\mathbb{Q}$ shift to a PD that was already backed out of a spread, is the commonest error in this whole subject.
-3. **`Q_nominal` is a confession, labelled as one.** When nothing traded spans the risk (a backstop on unlisted equity, §16.3; a warrant before listing, §16.4; a CoC put on a deal that may not close, §15.2), the "risk-neutral" price is a $\mathbb{P}$ model with drift set to $r$. Report it as a range over $\xi$ or drift.
-4. **Prices, hedges and sizes use different measures.** Prices and implied quantities (spreads, put floors, implied vols) are $\mathbb{Q}$. Default forecasts, loss budgets, hedge ratios that minimize realized variance (§6-B.5.6) and position sizes (§28.4) are $\mathbb{P}$. A CDS hazard is not an agency default rate, and an agency default rate is not a hazard until the distressed-exchange intensity has been separated out (§14.1).
+Theo reads it three times. At his old firm a probability was a probability. Here it has a passport.
+
+"Every probability on this desk carries a measure tag," Kaz says, without turning round. "`P`, `Q`, or `Q_nominal`. Every expectation in the code has its superscript, and an unlabelled $\mathbb{E}$ is a bug report waiting for an owner. Conversions go through an explicit, sourced multiplier, the $\xi$ of (6B.4) or the structural shift of §6.3.2, never by reusing a number that happens to be lying around."
+
+"And `Q_nominal`?"
+
+"A confession, labelled as one," Ines says. "When nothing that trades spans the risk, a backstop on unlisted equity (§16.3), a warrant before listing (§16.4), a change-of-control put on a deal that may not close (§15.2), the 'risk-neutral' price is a $\mathbb{P}$ model with the drift set to $r$. You report it as a range over $\xi$ or the drift, not as a number." She looks at Theo's screen. "And you use the right measure for the job. Prices and anything implied from them, spreads, put floors, implied vols, are $\mathbb{Q}$. Default forecasts, loss budgets, the hedge ratio that minimizes realized variance in §6-B.5.6 and the size of the position (§28.4) are $\mathbb{P}$. A CDS hazard is not an agency default rate, and an agency default rate is not a hazard until somebody has taken the distressed exchanges out of it (§14.1)."
+
+Theo deletes the request and types a different one: the desk's own structural PD, tagged `P`, 6.0%. ROBO accepts it without comment. That is Law 4 (App E), learned the way most of this desk's laws were learned, by a machine refusing to do what it was told; the Finder table of §6-B.10 keeps its one-line form.
 
 > **[SOURCE EXTRACTION]** *Bohn_Stein_Active_Credit_Portfolio_Management p.181:* "If our objective is valuation of other securities, then we can in fact use the PDs directly estimated from this approach, as risk-neutral PDs are what we require. However, if our objective is to build a portfolio risk model, we need physical PDs, so some transformation will be necessary based upon an estimate and functional form for the market price of risk."
 >
-> **Annotation.** That is rule 4, written in 2009 about PDs backed out of debt prices. The modern desk adds two things. First, the "transformation" is a premium ratio that moves by a factor of ten over a cycle (Trend Watch above), so a fixed functional form is a regime bet. Second, Bohn and Stein note on the same page that risk-neutral PDs may be acceptable for *ranking* obligors, because the transformation rarely reorders them, except among firms with similar risk-neutral PDs and very different systematic risk. That exception is where a premium-ratio book makes its money: two names at one spread, one cyclical and one not, share $\lambda^{\mathbb{Q}}$ but not $\lambda^{\mathbb{P}}$, and only $\text{PR}$ tells them apart.
+> **Annotation.** That is Ines's last clause, prices in $\mathbb{Q}$ and risk models in $\mathbb{P}$, written in 2009 about PDs backed out of debt prices. The modern desk adds two things. First, the "transformation" is a premium ratio that moves by a factor of ten over a cycle (the Trend Watch at the end of this section), so a fixed functional form is a regime bet. Second, Bohn and Stein note on the same page that risk-neutral PDs may be acceptable for *ranking* obligors, because the transformation rarely reorders them, except among firms with similar risk-neutral PDs and very different systematic risk. That exception is where a premium-ratio book makes its money: two names at one spread, one cyclical and one not, share $\lambda^{\mathbb{Q}}$ but not $\lambda^{\mathbb{P}}$, and only $\text{PR}$ tells them apart.
 
 Used in: §1.3.1 (the bid equation's measure), §3.1, §6.3 (extended here), §11.3–11.4 (PD models are $\mathbb{P}$), §13.8 (PRS), §14.1 and §14.9 (two default rates), §15.4 (the SMR gauge), §16.3 (`Q_nominal`), §24.3 (stripping liquidity before decomposing), §28.4.
+
+> **Trend Watch.** *The premium moves, and the instruments that read it moved too (2002–2026).* **The ratio is not a constant.** Berndt, Douglas, Duffie and Ferguson (NBER Working Paper 24213, 2018), using Markit CDS against Moody's Analytics EDFs, find premia peaking in 2002, 2008–09 and the second half of 2011; normalized by expected loss, median premia move by more than a factor of ten, and the premium per unit of expected loss rises in distress, more so for investment grade. **The single-name market thinned.** By one 2025 count of cleared volumes, single-name CDS was on the order of 6% of index notional *(approx.; see §23.3)*, so for most high-yield issuers $\lambda^{\mathbb{Q}}$ must now be read from bonds (with a recovery assumption) or from listed puts (with a corridor assumption). **What it means for the desk:** a $\xi$ fitted in 2021 is not a parameter in 2026. It is a state variable, countercyclical, and largest exactly where expected loss looks smallest. Store it as a time series per issuer, not as a constant in a config file.
 
 ## 6-B.7 The Desk's Option Book: Eight Instruments You Already Own
 

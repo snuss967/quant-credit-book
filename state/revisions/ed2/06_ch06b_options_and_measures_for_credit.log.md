@@ -17,9 +17,9 @@ Started 2026-10-18 by revision writer.
 - [x] 13. [§6-B.5.4–§6-B.5.5 Corollaries] · FULL-DERIVATION-MOVE + MATH-GENTLY #8 (the wing must blow up). — Note: ridge box (0.785); proofs moved verbatim under one Full Derivation.
 - [x] 14. [§6-B.5.6 Hedging a jump] · MATH-GENTLY #9 (the compromise delta) + WHEN-TO-APPLY inside the SVB grade. — Note: compromise-delta box (-0.72); when-it-breaks line given to Ines in SVB.
 - [x] 15. [NEW, before §6-B.6: `#### Shop life: the column that was a hundred times too small`] · SHOP-LIFE (450–650 words), labeled *(fictional composite; the firm, the people and the numbers are invented; the rhythms are from public accounts in LIFE §4)*. — Note: Rafael vega-unit reconciliation vignette; Jane Street archive analogy; WTBU pointer.
-- [ ] 16. [§6-B.6.2–§6-B.6.3 Girsanov for an intensity] · FULL-DERIVATION-MOVE + MATH-GENTLY #10, two parts ("loading the dice versus speeding the clock"; then the decomposition).
-- [ ] 17. [§6-B.6.5 The premium ratio as a traded quantity] · ANOTHER-SEAT #2, the dealer options desk.
-- [ ] 18. [§6-B.6.6 The rule: say which measure you are in] · LIST-TO-NARRATIVE.
+- [x] 16. [§6-B.6.2–§6-B.6.3 Girsanov for an intensity] · FULL-DERIVATION-MOVE + MATH-GENTLY #10, two parts ("loading the dice versus speeding the clock"; then the decomposition). — Note: clock-and-bill box (0.865; 420=150+150+120); densities moved; Trend Watch to section end.
+- [x] 17. [§6-B.6.5 The premium ratio as a traded quantity] · ANOTHER-SEAT #2, the dealer options desk. — Note: options market-maker seat; Optiver rhythm; Hertz 2026 borrow-as-delta-hedge.
+- [x] 18. [§6-B.6.6 The rule: say which measure you are in] · LIST-TO-NARRATIVE. — Note: four rules become ROBO to_q refusal scene; annotation reference repointed.
 - [ ] 19. [§6-B.6, after 6.6.6: `> **The Pair.** PB-07`] · RV BEAT (box, 400–600 words), per RV row for 6-B.
 - [ ] 20. [§6-B.7 The Desk's Option Book] · BRIDGE, then trim.
 - [ ] 21. [§6-B.8 Worked Case: Halvorsen] · EXPAND-SCENE to 2,000–2,400 words, same five steps, same numbers.

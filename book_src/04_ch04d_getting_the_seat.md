@@ -76,10 +76,10 @@ The bank's credit-trading floor had the hum of a place that had been electronic 
 
 "A bond pays 100 in a year or 40 if the company defaults. Nothing in between. The market says 85. What default probability is the market quoting?"
 
-Theo did it in his head, the way he had done recovery math across a hundred boardroom tables. If $q$ is the default probability, the bond is worth $100(1-q) + 40q$, and setting that to 85 gives
+Theo did it in his head, the way he had done recovery math across a hundred boardroom tables. If $q_D$ is the default probability (the subscript keeps plain $q$ free for a market maker's inventory, as in §4D.4; Chapter 28 writes plain $q$), the bond is worth $100(1-q_D) + 40\,q_D$, and setting that to 85 gives
 
 $$
-85 = 100 - 60\,q \quad\Longrightarrow\quad q = \frac{15}{60} = 25\%.
+85 = 100 - 60\,q_D \quad\Longrightarrow\quad q_D = \frac{15}{60} = 25\%.
 $$
 
 "Twenty-five percent."
@@ -90,7 +90,7 @@ There was a pause long enough for the squawk box to say something about a new is
 
 What the interviewer wanted was a single sentence, and Theo found it on the way home. The 25% is the probability that makes the price fair to someone who does not care about risk. It is a *risk-neutral*, or $\mathbb{Q}$, number: the weight that balances the bond's two outcomes at the market price, with rates set to zero and one period to run. The physical, $\mathbb{P}$, probability that the company actually defaults is lower, by whatever amount the market pays people for holding a bond that can lose 60 points overnight. If the historical default rate for bonds like this one were 10% *(illustrative)*, the expected payoff in the real world would be $0.9 \times 100 + 0.1 \times 40 = 94$, and a buyer at 85 would expect to make about 10.6% for carrying the jump. The gap between 25% and 10% is not a forecasting error. It is the price of the risk.
 
-The interviewer added two follow-ups, and each one moved the number. "Rates are 4%." Then the 85 is a discounted value, and the undiscounted expectation is $85\,e^{0.04} = 88.47$, so $q = 11.53/60 = 19.2\%$: six points of "default probability" had been rates all along. "Now there's a third outcome. The company can do an exchange at 70." With three doors the price no longer pins down a default probability at all. Weights of 60% on par, 30% on the exchange and 10% on default also average to 85, and so do many other combinations. The two-point world called the bond a 25% default risk with a standard deviation of 26 points; this three-point world calls it a 10% default risk, a 40% chance of not being paid in full, and a standard deviation of 20 points (§3.1.1 and §3.1.2 do the variance bookkeeping). The price told Theo one number, the mean. Everything else was a model, and the model's most important input was whether an exchange door existed, which is a question about the credit agreement.
+The interviewer added two follow-ups, and each one moved the number. "Rates are 4%." Then the 85 is a discounted value, and the undiscounted expectation is $85\,e^{0.04} = 88.47$, so $q_D = 11.53/60 = 19.2\%$: six points of "default probability" had been rates all along. "Now there's a third outcome. The company can do an exchange at 70." With three doors the price no longer pins down a default probability at all. Weights of 60% on par, 30% on the exchange and 10% on default also average to 85, and so do many other combinations. The two-point world called the bond a 25% default risk with a standard deviation of 26 points; this three-point world calls it a 10% default risk, a 40% chance of not being paid in full, and a standard deviation of 20 points (§3.1.1 and §3.1.2 do the variance bookkeeping). The price told Theo one number, the mean. Everything else was a model, and the model's most important input was whether an exchange door existed, which is a question about the credit agreement.
 
 "That last part," said the interviewer, "is why we interview bankers." Then he moved on to portfolio trading, and Theo spent the next twenty minutes being polite about it.
 
@@ -162,7 +162,7 @@ Owen Achterberg had passed Theo's name along with a one-line email that Theo was
 
 "B3 bond. Carry 4.5% a year over financing. One-year default probability 3.1%, recovery 40. How much of your book do you put in it?"
 
-Theo knew this one too, or knew its formula, which is not the same thing. For a bet that earns $c$ with probability $p$ and loses $L$ with probability $q_D = 1-p$, the fraction of wealth that maximizes long-run growth is the Kelly fraction (§28.4; we write $q_D$ for the default probability so that $q$ stays free for inventory, as in §4D.4),
+Theo knew this one too, or knew its formula, which is not the same thing. For a bet that earns $c$ with probability $p$ and loses $L$ with probability $q_D = 1-p$, the fraction of wealth that maximizes long-run growth is the Kelly fraction (§28.4),
 
 $$
 f^\ast = \frac{p}{L} - \frac{q_D}{c} = \frac{0.969}{0.6} - \frac{0.031}{0.045} = 1.615 - 0.689 = 0.926 .
@@ -283,10 +283,10 @@ def measure_drill(rng):
     hi, lo = 100.0, rng.choice([20.0, 30.0, 40.0, 50.0])
     price = rng.choice([80.0, 85.0, 88.0, 92.0])
     r = rng.choice([0.0, 0.02, 0.04])
-    q = (hi - price * math.exp(r)) / (hi - lo)   # undiscounted mean under Q
+    q_d = (hi - price * math.exp(r)) / (hi - lo)  # undiscounted mean under Q
     text = (f"Pays {hi:.0f} or {lo:.0f} in one year; price {price:.0f}; "
             f"rate {r:.0%} continuous. Q-default probability?")
-    return text, q, _check(q, 0.005)
+    return text, q_d, _check(q_d, 0.005)
 
 
 def gm_drill(rng):
@@ -551,7 +551,7 @@ He looked at the column and saw it was one test in six costumes: how do you lose
 
 ### Exercises
 
-1. **Two measures before breakfast.** A bond pays 100 or 30 in a year; the price is 80 and the continuous rate is 3%. Find the $\mathbb{Q}$-default probability. If the physical default probability is 8%, what one-year return does a buyer at 80 expect, and what is it paying for? *Check:* $q = (100 - 80e^{0.03})/70 = 17.56/70 \approx 25.1\%$. Expected payoff under $\mathbb{P}$ is $0.92(100) + 0.08(30) = 94.4$, about 18% over 80: the premium for holding a 70-point jump, not a forecast error.
+1. **Two measures before breakfast.** A bond pays 100 or 30 in a year; the price is 80 and the continuous rate is 3%. Find the $\mathbb{Q}$-default probability. If the physical default probability is 8%, what one-year return does a buyer at 80 expect, and what is it paying for? *Check:* $q_D = (100 - 80e^{0.03})/70 = 17.56/70 \approx 25.1\%$. Expected payoff under $\mathbb{P}$ is $0.92(100) + 0.08(30) = 94.4$, about 18% over 80: the premium for holding a 70-point jump, not a forecast error.
 2. **The trapdoor opens.** Take Theo's B3 bond (carry 4.5%, PD 3.1%) but suppose the agreement allows a non-pro-rata uptier, so a holder left outside recovers nothing. Recompute full Kelly and the largest long under a 2.5% single-default line on \$200mm with the bond at 98. *Check:* $f^\ast = 0.969/1 - 0.031/0.045 = 0.28$, with the ruin boundary at 100% of the fund; the stop gives $\$5\text{mm}/0.98 = \$5.1$mm, against \$8.6mm when recovery was 40.
 3. **The same seller twice.** In §4D.3, a single counterparty sells twice; each time an uninformed seller sells with probability one-half, independently. Find the posterior on the bad state and the value, and compare with two sales from new sellers. *Check:* $P(\text{two sells} \mid 40) = 0.2 + 0.8 \times 0.25 = 0.4$ and $P(\text{two sells} \mid 100) = 0.2$, so the posterior is $2/3$ and the value 60, against 69% and 58.5 for two strangers. An informed seller would have sold twice anyway, so the repeat carries less fresh news.
 4. **When the downside case is the bull case.** Hold the ratio of the refinance and exchange weights in §4D.10 at 45 : 35. What weight on the filing door makes the expected gain at 62 exactly zero? *Check:* the two good doors average $(45 \times 85 + 35 \times 70)/80 = 78.44$, so $78.44 - 43.44\,w = 62$ gives $w \approx 0.38$. A 38% filing probability is where the trade stops paying, which is the number the pitch has to defend.
@@ -592,3 +592,5 @@ He looked at the column and saw it was one test in six costumes: how do you lose
 - FINRA Rule 6730, TRACE reporting: <https://www.finra.org/rules-guidance/rulebooks/finra-rules/6730>. The fifteen-minute clock and as/of prints.
 - `interview_drills.py`: [Listing 4-D.1 in Appendix F](#code-4D-1).
 
+
+<!-- STATUS: COMPLETE -->

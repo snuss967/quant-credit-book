@@ -20,7 +20,7 @@
 - [x] 18. **[§28.6 scene, beat (ii)] · ANOTHER-SEAT (box): the dealer desk.** JPMorgan Q1 2020 call, 14 Apr 2020: "our bridge book commitments were ma — DONE: Dealer seat: JPM $820mm bridge, Dimon, BofA $450mm; two opposite-sign businesses.
 - [x] 19. **[§28.7] · MATH-GENTLY (box 10): a ceiling that moves when you lean on it.** The fixed point in two iterations the reader can redo: with A  — DONE: Box 10 fixed point 4.74→1.86→3.61→2.95; band Full Derivation; levers crossed out.
 - [x] 20. **[§28.8 after the hybrid-shop case] · NEW-SCENE, Long Scene (2,500–3,000 words), promoted to `####`: "Dov Adler's Year-End Review: the Pair — DONE: Dov's review packet; Pair box 31/-6/-12.5/+12.5, 0.40; four beats; Marcus card.
-- [ ] 21. **[§28.8] · LIST-TO-NARRATIVE and keep the reviewer fixes.** D7 (calibration, ρ, hit rate with SE) and the covariates-vs-estimator softening
-- [ ] 22. **[§28.9–28.10] · BRIDGE and the Finder table.** The dashboard table is the payoff and stays; the desk-head reviewer's C9 asks (P&L panel, m
+- [x] 21. **[§28.8] · LIST-TO-NARRATIVE and keep the reviewer fixes.** D7 (calibration, ρ, hit rate with SE) and the covariates-vs-estimator softening — DONE: Barclays inside Sunita-Kaz exchange; thermometer gloss; Sunita's first-month story; D7 kept.
+- [x] 22. **[§28.9–28.10] · BRIDGE and the Finder table.** The dashboard table is the payoff and stays; the desk-head reviewer's C9 asks (P&L panel, m — DONE: Mags line verbatim; 10-row Finder; co-op signed; OMP retired; templates fixed.
 - [ ] 23. **[whole chapter] · BRIDGE.** Thread one line of narration between every two boxed elements; never three boxes in a row (§28.1 currently sta
   - note 1: cold open ~1,150w; drill label; four PMs; Bram renamed; spine bold. (Plan: swap roles in §28.3, Rafe=HY cash value/carry/quality, Bram=ETF/PT arb; Dov→Rafe in Poker Table and Block 2 text.)

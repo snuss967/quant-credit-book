@@ -358,3 +358,311 @@ On the Monday after the replay a vendor's quarterly TCA report arrived for the d
 None of that made the report wrong. It made it a report about a different question from the one the desk was asking. TCA works when the log is complete and bitemporal, so that every stamp says what was known when; when the composite is independent of the desk's own flow, or its dependence is tracked; and when the sample contains stress days, so that rankings say something about the days that matter. It breaks on survivor statistics (the cover, winner-only markouts), on moved denominators (affiliate prints, platform series that stop or restate), on reflexive composites, on unfilled orders that never reach the report, and on two-leg trades scored as two one-leg trades. A practitioner who has been burned by each of these reads a TCA number by asking about the placebo first, the stress column second and the denominator third, and only then looks at the headline.
 
 *Builds on:* §2B.1–§2B.8. *Used in:* §3B.7 (how the desk is measured), §26.8 (model risk), Chapter 28.
+
+## 2B.10 The Engine: `tca.py`
+
+### Specification for AI Implementation
+
+*What ROBO built from the vague version.* The first spec Theo wrote for the engine said *minimise cost versus composite*. ROBO did exactly that. It learned that the composite lags in quiet bonds, and its router began holding orders until the composite had gone stale enough to beat, which is precisely when the composite was wrong. The cost column improved for three weeks while the shortfall against arrival worsened every day.
+
+*The problem it solves, at this point in the story.* By the second Friday the desk had done this chapter's work in five notebooks, each with its own idea of a stamp, a sign and a unit. `tca.py` is those notebooks as one module that reads the RFQ log, so the 4:10 meeting starts from the same numbers each week and the argument is about the numbers' meaning rather than their arithmetic.
+
+*What it computes, and why it is built this way.* Every number in this chapter is a difference between two stamps in the log, so the module is organised around the stamps. `benchmarks_bp` scores one fill against each benchmark the log supplies, cost positive. `shortfall` is Perold's telescoping sum per child order, with the unfilled remainder split into a market part (from a beta move the risk model supplies, §3.3.3) and an IDO part, because the first is a hedging failure and the second is adverse selection, and the desk acts on them differently. `event_study` returns sent and placebo drift paths and their difference with a standard error at every horizon, because a leak is only ever a difference. `scorecard` shrinks small cells toward the panel (§3.3.4), takes the counterfactual markout of every quote rather than of wins only, and keeps a stress column whose weight is an explicit argument. `cost_curve` reports each bucket with its count and swaps in a stated prior below a minimum count; `sqrt_prior` is §4.8's law in that role. `participation` returns the ratio with break dummies, and `we_are_the_market` fires only on the three-way conjunction of §2B.6. `pair_line` adds the legging term and the short leg's standing cost to the legs' own shortfalls under one parent arrival, and `legging_sd` gives the window's ex ante risk.
+
+*Inputs and outputs.* In: `Order` records with face in \$mm, prices per 100, the composite mid at each stamp, the cover, the retry mid and the beta move; drift matrices in basis points of price signed against the desk; per-quote arrays for the scorecard; sizes and costs for the curve; volumes with ISO dates; DTS in dollars per 1% relative spread move for a pair. Out: dollar costs per term with flags, mean paths with standard errors, a dictionary per dealer, bucket lists with counts, ratios with dummies, and a pair line.
+
+*When it fits, and when it does not.* It is built for the weekly hand history, the quarterly dealer review and a pod's friction row, all of which average over hundreds of orders. It is the wrong tool for a single trade's post-mortem, where the event study's standard error is larger than any plausible effect (§2B.3), and for weeks like March 2020, where the arrival column is fiction and the engine's flags matter more than its numbers (§2B.8).
+
+*The edge cases that bite.* An order with no composite at `NEW` falls back to the `ROUTED` mid and says so. A PT line carries one basket price allocated across lines, so its half-spread is an allocation rather than a quote, and it is flagged. A `DONE_AWAY` with a single response has no cover. An unfilled remainder with no retry mid is flagged rather than scored at zero, because zero is the number that hid nine bonds on Wednesday. Duplicate affiliate prints enter through the participation dummies. The case that bites hardest is the `NEW` stamp itself: an optimiser that stamps orders when the router picks them up, rather than when it decides, quietly deletes the delay term, and every report downstream looks better for it.
+
+<!-- EXPLAINED -->
+```python
+"""tca.py (Chapter 2-B): transaction cost analysis for an RFQ market.
+
+Every function reads the desk's RFQ log, one row per child order, through the order
+state machine of Section 27.4.2. Units: face in $mm, prices per 100 of face, costs in
+dollars unless a name ends in _bp (basis points of price). side = +1 when we buy and
+-1 when we sell; a positive cost is bad for us. Demo numbers are illustrative.
+"""
+from dataclasses import dataclass
+from typing import Callable, Optional, Sequence
+import math
+
+import numpy as np
+
+TERMINAL = ("FILLED", "EXPIRED", "EXPIRED_PARTIAL", "DONE_AWAY", "REJECTED", "CANCELLED")
+
+
+@dataclass
+class Order:
+    order_id: str
+    side: int                          # +1 we buy, -1 we sell
+    target: float                      # face the optimiser asked for, $mm
+    filled: float                      # face executed, $mm
+    terminal: str                      # one of TERMINAL
+    m_new: Optional[float]             # composite mid at NEW: the arrival benchmark
+    m_routed: Optional[float] = None   # composite mid at ROUTED
+    m_quoted: Optional[float] = None   # composite mid at QUOTED (None if nobody quoted)
+    fill_px: Optional[float] = None    # size-weighted fill price
+    cover: Optional[float] = None      # second-best response, if two or more quoted
+    m_end: Optional[float] = None      # mid when the remainder is retried or abandoned
+    beta_end: float = 0.0              # market part of (m_end - m_new), points
+    parent_id: Optional[str] = None    # the legs of one pair share a parent
+    protocol: str = "rfq"              # rfq, a2a, pt, voice, session
+    regime: str = "calm"               # label in force at NEW (Section 2B.5)
+
+    def __post_init__(self):
+        if self.terminal not in TERMINAL:
+            raise ValueError(f"{self.order_id}: unknown terminal state {self.terminal}")
+        if self.filled > self.target + 1e-9:
+            raise ValueError(f"{self.order_id}: filled more than the target")
+
+
+def _usd(face_mm: float, points: float) -> float:
+    """Dollars from face in $mm and a price difference in points per 100."""
+    return face_mm * 1e6 * points / 100.0
+
+
+def benchmarks_bp(o: Order, print_px: Optional[float] = None) -> dict:
+    """One fill scored against every benchmark the log supplies, bp of price, + = cost."""
+    if o.fill_px is None:
+        return {}
+    refs = {"arrival": o.m_new, "rfq_time": o.m_routed, "cover": o.cover,
+            "next_print": print_px}
+    return {k: o.side * (o.fill_px - b) / b * 1e4 for k, b in refs.items() if b is not None}
+
+
+def shortfall(o: Order) -> dict:
+    """Perold's shortfall for one child order, split along the log's stamps (dollars)."""
+    flags = []
+    m0 = o.m_new
+    if m0 is None:                                   # no composite at the decision
+        m0 = o.m_routed
+        flags.append("no_arrival_mid")
+    if m0 is None:
+        return {"total": float("nan"), "flags": flags + ["unscorable"]}
+    m_r = o.m_routed if o.m_routed is not None else m0
+    m_q = o.m_quoted if o.m_quoted is not None else m_r
+    out = dict.fromkeys(("delay", "drift", "half_spread", "opp_beta", "opp_idio"), 0.0)
+    if o.filled > 0:
+        if o.fill_px is None:
+            raise ValueError(f"{o.order_id}: filled size but no fill price")
+        out["delay"] = o.side * _usd(o.filled, m_r - m0)
+        out["drift"] = o.side * _usd(o.filled, m_q - m_r)
+        out["half_spread"] = o.side * _usd(o.filled, o.fill_px - m_q)
+        if o.protocol == "pt":
+            flags.append("basket_price_allocated")
+    rest = o.target - o.filled
+    if rest > 1e-9:
+        if o.m_end is None:
+            flags.append("unfilled_unmarked")        # flagged, never silently zero
+        else:
+            out["opp_beta"] = o.side * _usd(rest, o.beta_end)
+            out["opp_idio"] = o.side * _usd(rest, (o.m_end - m0) - o.beta_end)
+    out["total"] = sum(out.values())
+    out["flags"] = flags
+    return out
+
+
+def event_study(sent, placebo) -> dict:
+    """Leakage as sent-minus-placebo drift. Rows are orders, columns minutes after
+    ROUTED; values are bp of price signed so that + means the price moved against us."""
+    sent, placebo = np.asarray(sent, float), np.asarray(placebo, float)
+    mu_s, mu_p = np.nanmean(sent, axis=0), np.nanmean(placebo, axis=0)
+    n_s = np.sum(~np.isnan(sent), axis=0)
+    n_p = np.sum(~np.isnan(placebo), axis=0)
+    se = np.sqrt(np.nanvar(sent, axis=0, ddof=1) / n_s
+                 + np.nanvar(placebo, axis=0, ddof=1) / n_p)
+    leak = mu_s - mu_p
+    return {"sent": mu_s, "placebo": mu_p, "leak": leak, "se": se, "t": leak / se}
+
+
+def scorecard(dealer, regime, quoted, won, quote_mo, k: float = 20.0,
+              stress_weight: float = 0.4) -> dict:
+    """Per dealer: response and hit rates shrunk toward the panel with a prior worth k
+    inquiries, the mean counterfactual markout of every quote shown (not only wins;
+    bp, + = good for us), and the same on stress days. stress_weight is a judgment."""
+    dealer, regime = np.asarray(dealer), np.asarray(regime)
+    quoted, won = np.asarray(quoted, bool), np.asarray(won, bool)
+    quote_mo = np.asarray(quote_mo, float)
+    p_resp = quoted.mean()
+    p_hit = won[quoted].mean() if quoted.any() else 0.0
+    rows = {}
+    for d in np.unique(dealer):
+        row = {}
+        for label, mask in (("all", dealer == d),
+                            ("stress", (dealer == d) & (regime == "stress"))):
+            n, q, h = int(mask.sum()), int((mask & quoted).sum()), int((mask & won).sum())
+            row[label] = {
+                "n": n,
+                "resp": (q + k * p_resp) / (n + k),
+                "hit": (h + k * p_hit) / (q + k),
+                "quote_mo": float(np.nanmean(quote_mo[mask & quoted])) if q else float("nan"),
+            }
+        row["tier_score"] = ((1 - stress_weight) * row["all"]["resp"]
+                             + stress_weight * row["stress"]["resp"])
+        rows[str(d)] = row
+    return rows
+
+
+def sqrt_prior(c0_bp: float, eta_bp: float, adv_mm: float, mult: float = 1.0) -> Callable:
+    """Section 4.8's square-root law as a stated prior: mult * (c0 + eta * sqrt(size/ADV))."""
+    return lambda size_mm: mult * (c0_bp + eta_bp * math.sqrt(size_mm / adv_mm))
+
+
+def cost_curve(size, cost_bp, edges: Sequence[float], min_count: int = 30,
+               prior: Optional[Callable] = None) -> list:
+    """Mean cost per size bucket with its count; a thin bucket reports the prior, flagged."""
+    size, cost_bp = np.asarray(size, float), np.asarray(cost_bp, float)
+    out = []
+    for lo, hi in zip(edges[:-1], edges[1:]):
+        m = (size >= lo) & (size < hi)
+        n = int(m.sum())
+        est = float(cost_bp[m].mean()) if n else float("nan")
+        mid = 1.5 * lo if math.isinf(hi) else (math.sqrt(lo * hi) if lo > 0 else hi / 2.0)
+        use_prior = n < min_count and prior is not None
+        out.append({"bucket": (lo, hi), "n": n, "estimate": est,
+                    "used": prior(mid) if use_prior else est, "prior_used": use_prior})
+    return out
+
+
+def participation(desk_vol, trace_vol, dates: Sequence[str],
+                  breaks: Sequence[str] = ("2026-08-31", "2027-08-02")) -> dict:
+    """Desk volume over TRACE volume in the same bonds and window, with a 0/1 dummy per
+    known break in the denominator (ISO date strings compare correctly as text)."""
+    desk, trace = np.asarray(desk_vol, float), np.asarray(trace_vol, float)
+    ratio = np.divide(desk, trace, out=np.full(desk.shape, np.nan), where=trace > 0)
+    dummies = {b: np.array([d >= b for d in dates], dtype=int) for b in breaks}
+    return {"ratio": ratio, "breaks": dummies}
+
+
+def we_are_the_market(part, mo_trend, resp_trend, part_max: float = 0.20) -> np.ndarray:
+    """Fires only when all three agree: participation above part_max (on the dummied
+    series), residualised markouts trending against us, response counts falling."""
+    part = np.asarray(part, float)
+    return (part > part_max) & (np.asarray(mo_trend) < 0) & (np.asarray(resp_trend) < 0)
+
+
+def legging_sd(dts: float, minutes: float, sigma_day_rel: float = 0.022,
+               day_minutes: float = 390.0, rho_bridge: float = 0.0) -> float:
+    """Dollar s.d. of an open DTS exposure held for `minutes`. DTS is in $ per 1% relative
+    spread move; sigma_day_rel is the daily s.d. of relative spread changes (decimal).
+    A bridge hedge with correlation rho leaves sqrt(1 - rho^2) of the risk."""
+    sd_pct = 100.0 * sigma_day_rel * math.sqrt(minutes / day_minutes)
+    return abs(dts) * sd_pct * math.sqrt(max(0.0, 1.0 - rho_bridge ** 2))
+
+
+def pair_line(leg_costs: Sequence[float], dts_open: float, rel_move_pct: float,
+              minutes_open: float, standing_per_day: float = 0.0, days: float = 0.0) -> dict:
+    """Two-leg cost under one parent arrival: the legs' own shortfalls, the legging term
+    (signed DTS left open, + = net long credit, times the relative spread move in %, so a
+    widening costs a long), and the short leg's standing cost over the holding days."""
+    legs = float(sum(leg_costs))
+    legging = dts_open * rel_move_pct
+    standing = standing_per_day * days
+    return {"legs": legs, "legging": legging, "standing": standing,
+            "total": legs + legging + standing,
+            "legging_sd": legging_sd(dts_open, minutes_open)}
+
+
+if __name__ == "__main__":
+    fill = Order("2B1-demo", +1, 2.0, 2.0, "FILLED", m_new=98.38, m_routed=98.40,
+                 m_quoted=98.40, fill_px=98.42, cover=98.45)
+    print({k: round(v, 1) for k, v in benchmarks_bp(fill, print_px=98.47).items()})
+    # arrival 4.1, rfq_time 2.0, cover -3.0, next_print -5.1
+
+    nine = Order("2B2-unfilled", +1, 40.5, 0.0, "EXPIRED", m_new=100.00,
+                 m_end=100.28, beta_end=0.11)
+    sf = shortfall(nine)
+    print(round(sf["opp_beta"]), round(sf["opp_idio"]), round(sf["total"]))
+    # 44550 68850 113400
+
+    trim = pair_line([14_000.0, 1_937.5], dts_open=-17_700.0, rel_move_pct=-0.25,
+                     minutes_open=12.0)
+    print({k: round(v) for k, v in trim.items()})
+    # legs 15938, legging 4425, standing 0, total 20362, legging_sd about 6,830
+```
+
+*Builds on:* §2B.1–§2B.9, §3.3.3–§3.3.4, §4.8, §27.4.2. *Used in:* Appendix F (Listing 2-B.1), Appendix B (the RFQ-log schema), §27.8 (replay), Chapter 18-B (the dealer's mirror log), Chapter 8-C (`pnl_explain.py` reads `pair_line` as the friction row).
+
+## 2B.11 Desk Debrief
+
+The next Friday at 4:10 Ines asks the same question, and this time Theo does not give her a number. He gives her a table with four benchmark columns and a fifth for the orders that did not fill, the market part of that fifth column hedged by Wednesday lunchtime, a leakage line with a placebo and a standard error, and a note that the September participation jump was the denominator. Then he slides a second sheet across. It is thirteen columns wide, one per weekly rebalance for the coming quarter, and each column holds the expected shortfall: executed cost from the bucketed curves, expected unfilled cost from the fill model times the signal's decay, and a stress row priced from the April 2025 envelope. Theo's thirteen-week cash flow model has been reborn once more, this time as a cost budget.
+
+Ines reads it twice, which from Ines is applause. "The first thirteen-week model on this floor that ever predicted anything," she says, and puts it in the PM's monthly forecast.
+
+| Concept | Equation | Intuition (box) | Judgment (scene) | Code |
+| :-- | :-- | :-- | :-- | :-- |
+| Benchmark as counterfactual | $\eta(p - b)/b \times 10^4$ | Math, Gently: the commuter (§2B.1.1) | Friday's three numbers (Cold Open) | `benchmarks_bp` |
+| Implementation shortfall | executed $+$ opportunity, telescoped by stamp | Math, Gently: the paper portfolio (§2B.2) | Wednesday's nine bonds (§2B.2) | `shortfall` |
+| Leakage | sent minus placebo drift, with its standard error | Math, Gently: the sugar pill (§2B.3) | Theo's `DONE_AWAY` (§2B.3) | `event_study` |
+| Collider, quote-level markouts | condition on the quote, not the win | Math, Gently: famous actors (§2B.4) | Dealers C, K and F (§2B.4) | `scorecard` |
+| Cost curve with counts | bucket mean, or a stated prior below $n_{\min}$ | Math, Gently: AUC (§2B.5) | ROBO's negative impact; Hana's 0.96 (§2B.5) | `cost_curve`, `sqrt_prior` |
+| Moving denominator | ratio plus break dummies | Math, Gently: the dummy (§2B.6) | Mags's mirror (§2B.6) | `participation`, `we_are_the_market` |
+| Two-leg cost | legs $+$ DTS$_{\text{open}} \times$ relative move $+$ standing | Math, Gently: legging risk (§2B.7) | PB-01's opening and trim (§2B.7) | `pair_line`, `legging_sd` |
+
+- **Cost is a choice of counterfactual.** Arrival prices the decision, the RFQ-time composite prices the router, the cover measures dispersion, and the print says who was right; a number without its benchmark is not yet a cost.
+- **The unfilled order is usually the largest line**, and the only one whose sign changes with the day you look. Its market part is a hedge nobody placed; its IDO part is adverse selection.
+- **A leak is a difference:** sent minus placebo, with a standard error. One print is a tell.
+- **Every quote has a markout, not only the winners**, and a scorecard without a stress column rewards fair-weather liquidity. IDO or the markout didn't happen.
+- **A cost curve is only as good as its counts.** The top bucket is a prior with a citation.
+- **Denominators move.** Participation carries a dummy at 31 August 2026 and another waiting at 2 August 2027.
+- **A pair has one arrival.** Two half-spreads, a legging term and a standing cost; scored as two tickets, the legging vanishes.
+
+### The Spec You Hand the Robot
+
+*Vague version:* "minimise cost versus composite." *What ROBO built:* a router that waited for the composite to go stale and then beat it. *The precise version:* "Implement `tca.py` per §2B.10 over the RFQ log of §2B.1 (face \$mm, prices per 100, bp of price, cost positive). Score each fill against arrival (`NEW`), RFQ-time (`ROUTED`), cover and next print. Compute Perold shortfall per child order as delay, drift, half-spread and opportunity, the last split into beta and IDO with a supplied beta move; flag, never zero, an unmarked remainder. Leakage is sent minus placebo with standard errors by protocol, panel size and outcome. Scorecards mark every quote, shrink cells with a prior of $k$ inquiries, and carry a stress column with an explicit weight. Cost buckets report counts and use a stated prior below 30. Participation carries break dummies at 2026-08-31 and 2027-08-02. A pair is one parent: legs, legging (signed open DTS times relative move) and standing cost, with the legging window's ex ante standard deviation."
+
+### Exercises
+
+**1. One sale, four benchmarks.** *[benchmarks]* The desk sells \$3mm at 94.10. The arrival mid was 94.30, the RFQ-time mid 94.25, the cover 94.00 and the next print 93.90. What is the cost against each, and which answers "was the router any good?" *Check:* $+21.2$, $+15.9$, $-10.6$, $-21.3$ bp. *Solution.* With $\eta = -1$, the cost is $-(p - b)/b \times 10^4$: $0.20/94.30$, $0.15/94.25$, $-0.10/94.00$, $-0.20/93.90$. The router is judged against the RFQ-time mid; the 5.3 bp between it and arrival is the delay, a process cost.
+
+**2. A shortfall with a hole in it.** *[shortfall]* A \$10mm purchase fills \$6mm at 101.20, with arrival 101.00, `ROUTED` mid 101.05 and `QUOTED` mid 101.08. The remaining \$4mm is abandoned two days later at 101.90, when beta explains $+0.30$ points of the move. Split the shortfall. *Check:* executed \$12,000 (delay \$3,000, drift \$1,800, half-spread \$7,200); unfilled \$36,000 (beta \$12,000, IDO \$24,000); total \$48,000, three-quarters of it unfilled. *Solution.* $6\text{mm} \times 0.05/100$, $\times 0.03/100$, $\times 0.12/100$; $4\text{mm} \times 0.90/100$, split $0.30$ and $0.60$.
+
+**3. Is patience worth it?** *[patience]* Rejecting the first quotes buys a 40% chance of trading two days later about 10 bp better (Kargar et al.). The signal is worth 80 bp with a 20-day half-life. Reject or accept, and at what half-life does the answer flip? *Check:* accept; about 27 days. *Solution.* Two days of decay cost $80(1 - 2^{-2/20}) \approx 5.4$ bp, more than the $0.4 \times 10 = 4$ bp expected saving. Break-even solves $80(1 - 2^{-2/h}) = 4$, so $2^{-2/h} = 0.95$ and $h = 2/\log_2(1/0.95) \approx 27$ days.
+
+**4. A placebo that cannot help.** *[leakage]* Sent sales drift $+2.4$ bp at a hundred minutes ($n = 900$, s.d. 12 bp); placebos drift $+1.9$ ($n = 400$, s.d. 12). Estimate the leak and its $t$-statistic. How many placebos would bring the standard error down to 0.25 bp? *Check:* 0.5 bp, $t \approx 0.7$; none would. *Solution.* $\text{SE} = \sqrt{144/900 + 144/400} = \sqrt{0.52} \approx 0.72$. The sent sample alone contributes $\sqrt{144/900} = 0.40$ bp, so no number of placebos reaches 0.25; the desk needs more sent orders, which is to say more time.
+
+**5. Ninety minutes on one leg.** *[legging]* A pair's long leg, 50,000 of DTS (dollars per 1% relative spread move), fills 45 minutes before the short. Relative spread changes have a daily standard deviation of 2.5%. What is the dollar standard deviation of the legging window, and with a CDX bridge correlated 0.75? *Check:* about \$42,500; about \$28,100. *Solution.* $50{,}000 \times 2.5 \times \sqrt{45/390} \approx 42{,}460$; times $\sqrt{1 - 0.75^2} \approx 0.661$.
+
+**6. The mirror and the moving denominator.** *[participation]* A sleeve's September participation reads 19.0% against a 20% line, and the affiliate indicator is estimated to have removed 6% of the TRACE volume in its bonds. What is the like-for-like participation, and what else would the detector need to see before anyone says "we are the market"? *Check:* about 17.9%. *Solution.* $19.0\% \times 0.94$: the desk's share of the old denominator. The detector also needs residualised markouts turning against the desk and response counts falling (§2B.6); a ratio alone, on a moving denominator, is not evidence.
+
+### Deep-Dive Resource Graph
+
+**Podcasts**
+
+- **Petter Kolm - 23/08/21** (*Risk.net Quantcast*, 25 August 2021). Transaction-cost analysis that ignores partial fills "might be off by 20% to 30%": the unfilled line of §2B.2 from an execution researcher. <https://soundcloud.com/user-393208363/petter-kolm-230821>
+- **Why the True Price of a Bond Can Still Be Hard To Know** (*Odd Lots*, 5 April 2021, with Maciej Kowara and Eric Jacobson of Morningstar). Evaluated prices disagree for thinly traded bonds: the composite problem of §2B.1.2. <https://omny.fm/shows/odd-lots/why-the-true-price-of-a-bond-can-still-be-hard-to>
+- **Jeremy Maletz** (*Money Stuff: The Podcast*, 9 October 2026). A market maker on flow, adverse selection and why a quote is a posterior about who is asking: the dealer's seat of §2B.4. <https://omny.fm/shows/money-stuff-the-podcast/jeremy-maletz>
+- **How to Succeed at Multi-Strategy Hedge Funds** (*Odd Lots*, 20 May 2024, with Giuseppe Paleologo). The overnight x-ray, the seat Marcus sits in during §2B.7. <https://omny.fm/shows/odd-lots/how-to-succeed-at-multi-strategy-hedge-funds>
+
+**Practitioner Writing**
+
+- MarketAxess, *AxessPoint*, "Credit markets showed resilience through April volatility" (14 July 2025). Prices per RFQ from 13.2 to 6.6 and back to 11.3; the bid–ask path. <https://www.marketaxess.com/article/axesspoint-credit-markets-showed-resilience-through-april-volatility>
+- MarketAxess, *AxessPoint*, Tradability deep dive (23 March 2026). Expected dealer responses fell about 20% in April 2025. <https://www.marketaxess.com/article/axesspoint-tradability-deep-dive-insights-powered-by-an-enhanced-liquidity-metric>
+- Caretti, Mahajan and Husveth, "Information Leakage in US Credit: Evidence from All-to-All RFQs" (Tradeweb, May 2026). Vendor-authored; read its design before its headline. <https://www.tradeweb.com/49a042/globalassets/newsroom/market-insights/2026/5.13.26-credit-whitepaper/information-leakage-in-us-credit-5.13.26b-final-1.pdf>
+- The DESK, "Don't rely on platforms or ELPs in stressed markets, buy-side traders say" (15 October 2026). The FILS panel of §2B.4. <https://www.fi-desk.com/dont-rely-on-platforms-or-elps-in-stressed-markets-buyside-traders-say/>
+- The DESK, "Citadel Securities reveals glimpse of credit platform broker rankings" (October 2026). A self-reported ranking to reproduce before believing. <https://www.fi-desk.com/citadel-securities-reveals-glimpse-of-credit-platform-broker-rankings/>
+
+**Academic Papers**
+
+- Perold (1988), "The Implementation Shortfall: Paper versus Reality," *Journal of Portfolio Management* 14(3). The paper portfolio of §2B.2.
+- Fermanian, Guéant and Pu (2016), *Market Microstructure and Liquidity* 2(3–4). The outcome taxonomy and one-sided likelihoods. <https://arxiv.org/abs/1511.07773>
+- Hendershott and Madhavan (2015), "Click or Call?", *Journal of Finance* 70(1). Table VI's response and fill rates. <https://faculty.haas.berkeley.edu/hender/Click_Call_OTC.pdf>
+- Kargar, Lester, Plante and Weill (2025), "Sequential Search for Corporate Bonds," FRB Philadelphia WP 25-08. Failed inquiries and the patience premium. <https://www.philadelphiafed.org/-/media/FRBP/Assets/working-papers/2025/wp25-08.pdf>
+- Hendershott, Li, Livdan, Schürhoff and Venkataraman (2026), "Quote Competition in Corporate Bonds," *Journal of Finance* 81(4). Trade-throughs and the 15% best quoter. <https://faculty.haas.berkeley.edu/hender/Quote_Competition.pdf>
+- Jacobsen, Venkataraman and Xu (2025), "Illiquidity Meets Intelligence." What CP+ learns from untraded RFQs. <https://microstructure.exchange/papers/JVX_20250904.pdf>
+- Baldauf and Mollner (2024), "Competition and Information Leakage," *Journal of Political Economy* 132(5). Why clients reveal no direction.
+- Marín Martínez, Ardanza-Trevijano and Sabio (2026), *PLOS ONE* 21(1). The collider in winner-only revenue. <https://arxiv.org/abs/2506.18147>
+- Jurkatis, Schrimpf, Todorov and Vause (2023), BIS Working Paper 1140. Relationship discounts that double in stress. <https://www.bis.org/publ/work1140.htm>
+- Hendershott, Li, Livdan and Schürhoff (2020), "Relationship Trading in Over-the-Counter Markets," *Journal of Finance* 75(2). The insurer's one row. <https://faculty.haas.berkeley.edu/hender/OTCRelations.pdf>
+- Ciceri, Cottrell, Freeland et al. (2025), fill probabilities on 1.07 million RFQ responses. AUC 0.63, and a 0.97 to distrust. <https://arxiv.org/abs/2509.17715>
+- Asquith, Au, Covert and Pathak (2013), "The market for borrowing corporate bonds," *Journal of Financial Economics* 107(1). Fees, recalls and the short leg's standing cost. <https://www.nber.org/papers/w16282>
+- BIS *Quarterly Review*, June 2005, box on the GM and Ford downgrade. Legs that failed on different days. <https://www.bis.org/publications/qr-200506.pdf>
+
+**Data & Code**
+
+- FINRA, SR-FINRA-2026-009 (filed April 2026). The affiliate-principal baseline, up to 5.7% of 2025 transactions. <https://www.finra.org/sites/default/files/2026-04/SR-FINRA-2026-009.pdf>
+- Tradeweb, September 2026 monthly data report (6 October 2026). The first month under the affiliate indicator, with its unrestated-series footnote. <https://www.tradeweb.com/4a8230/globalassets/newsroom/10.06.26-mar/september-2026-tradeweb-monthly-data-report.pdf>
+- FINRA TRACE: <https://www.finra.org/filing-reporting/trace>
+- This book: `tca.py` (Listing 2-B.1, Appendix F), which feeds `pnl_explain.py` (Chapter 8-C) and `pair_book.py` (Chapter 8-D) and is replayed by the harness of §27.8.

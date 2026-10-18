@@ -352,7 +352,7 @@ Look at the shape before the numbers. The first lien's distribution has a hump a
 
 ![Figure 12-C.3: Under the plan-value mixture the first lien's recovery has a hump near 60 and a spike at par (17.2% of paths), while the unsecured pool's has a hump near 3 and a long right tail that comes almost entirely from the committee's expert; the means are 70.3% and 8.3%. Illustrative: the mixture and class formulas of §12C.10, with each bar split by which expert the judge adopts (dark: the debtor's; light: the committee's).](assets/figures/ch12c_recovery_distributions.png)
 
-**What the market said.** On the night of the cold open the 6s traded at 14. The table's two conditional recoveries, 3.5 and 19.4, imply that 14 is priced as if the committee's expert wins about two times in three. The first lien at 66 is within a risk premium and nine months of carry of the model's 70.3. The desk's view is about $w$, and it is a view about a judge (Law 16).
+**What the market said.** On the night of the cold open the 6s traded at 14 and the first lien at 66. Read through the table's conditional recoveries, the two prices disagree about the judge, and the Pair Book scene at the end of this section trades the disagreement. The desk's view is about $w$, and it is a view about a judge (Law 16).
 
 **The DIP moves the fulcrum; the roll-up does not.** Generalize the DIP to new money $M$ with roll-up ratio $\kappa$. The first lien is whole when term collateral covers the DIP, its remaining claims and the settlement, which happens at $\tfrac{32}{35}(V - 250) = 1{,}320 + M$. The roll-up ratio cancels: rolled claims are paid either way, only earlier. New money that is spent inside the estate raises the strike, so every \$100mm of new money moves $V^\star$ up by about \$109mm. Figure 12-C.4 plots the result. The unsecured class's fulcrum probability falls from about 25% with no new money to 17% at \$150mm and to 10% at about \$280mm. The roll-up decides who inside the first lien gets paid; the new money decides whether the first lien gets paid at all.
 
@@ -361,6 +361,61 @@ Look at the shape before the numbers. The first lien's distribution has a hump a
 **The take-back, priced.** The \$350mm of five-year notes at 8% against a 10% market transfers \$26.5mm from note electors to equity electors (§12C.5). The CLOs that elect notes are, almost to the dollar, the first-lien holders outside the ad hoc group. They lose 4.2 points to the roll-up at the start of the case and 4.5 points to the coupon at the end, for being the holders who could not fund new money or hold equity. Figure 12-C.5 draws the transfer against the coupon gap.
 
 ![Figure 12-C.5: The take-back transfer as a function of the coupon gap $\Delta s$, for Halvorsen's \$350mm five-year note: the first-order line $F^{\text{tb}} D^{\text{mod}} \Delta s$ (grey, dashed; about \$13.3mm per 100bp) and the exact annuity price of §12B.6 (blue), which agree closely below 300bp. The plan coupon is held at 8.0%, so the market yield is 8.0% plus the gap, and the marked point is the plan's 200bp gap, \$26.5mm. Illustrative.](assets/figures/ch12c_takeback_transfer.png)
+
+#### The Pair Book: one judge, two prices
+
+*Pair Book entries PB-02 and PB-07, Owen Achterberg's capital-structure pod at Vantress Capital Management. Owen's pod, Vantress, Wen Zhao and Marcus Oyelaran are fictional composites, Halvorsen is fictional, and every position, price, fee, model output and P&L below is illustrative. PB-02 runs on the Halvorsen Files' clock. PB-07 is a replay cut at the close of Wednesday 17 June 2020; its Hertz dates and plan terms are from the filings and press reports cited in §16.6.*
+
+*Friday, 7:20 a.m., the morning after Docket No. 412.* Marcus Oyelaran's overnight x-ray has a line for every factor the platform's risk model knows, and none of them is a judge. That is why he walks to Owen's desk instead of sending the email. PB-02 is the quietest line on his sheet: no jump to default, because Halvorsen has already defaulted, and no spread line, because both bonds trade flat on price and have no spread left to move. "Tell me what it's long," he says, "that it did not mean to be."
+
+The legs are on the wall where Owen wrote them on day 3 (§4C.3): long \$10mm face of the 7.25% secured notes, bought at 79, which sit in the first-lien class outside the ad hoc group; short \$3.8mm face of the 6% 2031s, sold at 55 and borrowed from an asset manager's lending desk through the platform's prime broker. The ratio, 0.38 by face, made the pair flat on default at recoveries of 60 and 5. The default came, and the hedge did what it was built to do: at last night's marks, 66 and 14, the long is down \$1.30mm and the short up \$1.56mm.
+
+"It removed the default," Owen says. "Which is over." He loads a plan-value engine of the kind §12C.12 specifies with the disclosure statement's waterfall and the mixture of §12C.1. Near default the ruler flipped once, from spread to jump. After default it flips again, from jump to plan value: what matters now is how far each leg moves when the judge's number moves, and the engine's answer is each class's fulcrum probability over its claim (§12C.2), scaled by the share of value the class can reach:
+
+$$
+h_V \;=\; \frac{\partial\,\mathbb{E}[R_{1\text{L}}]/\partial V}{\partial\,\mathbb{E}[R_{\text{U}}]/\partial V}
+\;=\; \frac{\tfrac{32}{35}\,\pi_{1\text{L}}/1{,}250}{\big(\tfrac{3}{35} + \tfrac{32}{35}\,\pi_{\text{U}}\big)/1{,}020}
+\;\approx\; \frac{6.1}{2.4} \;\approx\; 2.5 .
+$$
+
+The first lien moves about 6.1 points for each \$100mm of plan value, because it is the fulcrum 83% of the time. The 6s move about 2.4: less than a point from their thin slice of unencumbered value, the rest from the 17% of paths where the first lien is whole and the surplus spills down to them. A pair that is flat on plan value needs two and a half dollars of 6s for each dollar of 7.25s. Owen has 0.38. His long gains \$605,000 when the judge's number rises \$100mm, his short gives back \$90,000, and the pair is long \$515,000 for every \$100mm. "Eighty-five percent of the long is still a long," he says. "I'm holding a position in the judge with a default hedge stapled to it."
+
+"And at two and a half, what's left?"
+
+Owen prices both ratios under each expert, per 100 of long:
+
+| Face of 6s per face of 7.25s | Short | Exposure to plan value, per \$100mm | Worth if the debtor's expert wins / if the committee's wins | Cost at 66 and 14 |
+| :--- | ---: | ---: | ---: | ---: |
+| 0.38, flat on default (day 3) | \$3.8mm | +\$515,000 | 58.4 / 87.8 | 60.7 |
+| 2.5, flat on plan value | \$25mm | about zero | 51.0 / 46.7 | 31.0 |
+
+*(Illustrative. Conditional recoveries from the table above: 59.7 and 95.2 for the first lien, 3.5 and 19.4 for the unsecured pool.)*
+
+The second row is what a plan-value hedge leaves, and it is not nothing. Both legs are call spreads on one $V$ with a kink at the same place, the \$1,858mm at which the first lien is whole. Above the kink the 7.25s stop and the 6s start collecting, so a pair that is flat on direction is still short that corner, about four points worse if the committee wins. That is the class's call spread, and it is the one thing a delta cannot hedge.
+
+The rest of the row is the trade. Read the two prices through the same conditional recoveries and they disagree about the judge. The 7.25s at 66 say the committee's expert wins about one time in six, $(66 - 59.7)/(95.2 - 59.7) \approx 0.18$. The 6s at 14 say two times in three, $(14 - 3.5)/(19.4 - 3.5) \approx 0.66$. One judge, two prices. At its own three in ten the engine finds the first lien cheap and the 6s rich, which is the way PB-02 already faces, and at the plan-value ratio it values a pair that costs 31 at between 47 and 51, depending on the courtroom.
+
+"Nineteen points with no direction in them," Marcus says. "Nobody leaves nineteen points on a table. What's in the 6s that isn't in your engine?"
+
+"The warrant," Owen says. The plan gives the unsecured class deathtrap warrants for 7.5% of the new equity if, and only if, the class votes yes (§12B.9). The engine's $R_{\text{U}}$ is the cash pool and nothing else; at plan value, recovery is not recovery, and some of the 14 is a call the engine values at zero. "How much, I don't know. Some of the nineteen is the warrant, some is the premium for sitting in front of a judge, and what's left is the idio."
+
+Marcus asks the question he always asks last. "What leaked?"
+
+Owen pulls the explain since day 3. One line on the long sits apart from the market: 4.2 points, \$420,000, booked across the DIP motion and its final order, on days when the 6s did not move. It is §12C.4's roll-up, $\kappa M(F-W)/\big(F(F-\kappa M)\big)$, paid by every first-lien holder left behind to the group that rolled \$150mm of its own loans to par. No unsecured short could see it, because the value moved inside the first-lien class, not between classes. "My pair had a third leg," Owen says, "and I didn't choose it. The group was long it. I was the short."
+
+"You're always the short," Marcus says. "The platform keeps you out of groups so you can trade. That's what it costs, on every roll-up on this floor." He taps the formula's guard, because who pays a roll-up is decided by one inequality. While the class's value covers the rolled claims, $W \ge \kappa M$, the bill stays inside the class and lands on the holders outside the group: Owen's long. Below it the roll-up reaches past the class into unencumbered value, and part of the bill lands on the unsecured pool: Owen's short, where the same DIP would have paid the pair. At Halvorsen, $W = 910$ against $\kappa M = 150$, it was never close.
+
+Then the card, which Marcus deals to every pod that carries a pair into a plan. *Keep 0.38, or go to the plan-value ratio of 2.5? Write the face of 6s you would need, who lends it, and what the pair is long afterwards.*
+
+Wen Zhao, who keeps the borrow weather for Dov's pod and lends it to Owen's when asked, has already called the prime broker's lending desk. Her report is short. The asset manager that lent the 6s has about \$30mm of them in its lending program, and the platform caps a borrow from one lender at a fifth of its inventory: \$6mm, against Owen's \$3.8mm. The fee has gone from 2% on day 3 to 6%, above even the bankruptcy-window averages in §8D.2, which is what a borrow costs when the owners may want the bond back. The ratio of 2.5 needs another \$21mm of face from four or five other lenders, in a class that is about to vote on a plan whose warrants exist only if it votes yes, and a lender who wants its ballot recalls the bond before the voting record date. There is no other short of the class. Halvorsen's swaps settled at the auction the petition triggered (§24.6), and old equity, with a fulcrum probability that rounds to zero, hedges nothing. "The borrowed 6s are the only short of that class that exists," Wen says, "and every one of them is somebody's vote."
+
+The costs to the valuation opinion, about ten weeks away, are small either way and do not decide the card. Neither leg carries: an undersecured first lien accrues no post-petition interest (§506(b) gives it only to an oversecured claim), and the 6s owe nothing after the coupon Halvorsen missed on day 30. Financing the long's \$6.6mm at 5.5% costs about \$70,000 over ten weeks. At 0.38 the borrow, a rebate of 4.00% cash less the 6% fee on 102% collateral, costs about \$2,000; at 2.5 it costs about \$14,000, plus half a point each way on the extra \$21mm of face, about \$210,000 for the round trip.
+
+Before he answers, Owen looks at the replay wall, and Marcus follows his eyes. "Hertz had a judge too," Marcus says.
+
+"Hertz had an auction," Owen says. PB-07 hangs there with its sentence and its date: long the 6% 2028s at 27, short 540,000 old shares at \$2.00, 40 cents of stock per dollar of notes from a Merton read of the plan. Read through this section, that ratio was $h_V$ on the day it was set, and Hertz's mixture never reached a judge. By the spring of 2021, with the fleet worth more and two sponsor groups bidding against each other for the right to fund the plan, the notes were a claim the market expected to be paid in full: their fulcrum probability had gone to zero and the stock's to one. The ratio of their deltas was zero, so none of the 540,000 shares was a hedge any longer; each was a position in the auction, short every raise. When it closed on 11 May 2021 the winning bid repaid the debt in full (§16.6). "In Halvorsen my pair is long a judge," Owen says. "In Hertz it was short an auctioneer." What that cost, and what it paid, is the close in §16.8.3, which ends both pairs.
+
+Owen keeps 0.38. He does not borrow the \$2.2mm the lender would allow, because a quarter of a hedge is still mostly a position. He writes the pair's new sentence under the old one, with a date: *PB-02 is long the first lien's call spread, 85% unhedged on plan value until the opinion; the only short is a ballot.* Marcus copies it onto his sheet, under the heading he keeps for exposures a PM has decided to own.
 
 ### When to apply it, and when it breaks
 
@@ -426,6 +481,8 @@ Mags reads the opinion twice. "Before anyone takes a bow for the first lien, hal
 
 Kaz is staring at Figure 12-C.1. "So the judge is the measure change," they say. They are not wrong: the confirmation order maps a mixture onto a point, and every claim in the case is repriced at once.
 
+On the Vantress floor the same Monday open grades Owen's card from §12C.10. At 0.38 the move from 66 and 14 to the 7.25s at 60 and the 6s at 4 cost PB-02 about \$0.22mm: a long position in the judge, marked to the judge. At the plan-value ratio, had \$25mm of 6s been there to borrow, it would have made about \$1.9mm, nearly all of it the 6s' two-in-three coming down to nothing. The gap is the price of a short that was somebody's vote, and §16.8.3 is where Owen pays it.
+
 - **Plan value is a negotiated random variable. Trade the distribution, not the midpoint.** The mean sits in the valley between the experts, the median is not the midpoint, and the price tells you the market's weight on each expert. (Laws 4, 16)
 - **The fulcrum is a probability, and its strikes move.** DIP priming, adequate protection, the burn, post-petition interest and rulings all shift attachment points while the case runs. (Law 7)
 - **The DIP is an uptier with a judge's signature.** New money moves the fulcrum; the roll-up moves recovery inside the class; the coupon is the least interesting line. (Law 8)
@@ -433,6 +490,7 @@ Kaz is staring at Figure 12-C.1. "So the judge is the measure change," they say.
 - **Admin burn is the theta of bankruptcy equity, and the fulcrum pays for both experts.**
 - **Nobody gets crammed down who could have been crammed up.** Reinstatement is the cheapest exit financing ever invented, and a take-back coupon is a transfer you can price before the hearing.
 - **Do the attribute reduction before you do the §382.**
+- **After default the ruler flips again.** A first-lien-against-unsecured pair sized flat on default is long the judge; flat on plan value it needs $h_V$, the ratio of the two classes' value deltas (about 2.5 for Halvorsen), and the only short of a bankrupt junior class is a borrowed bond with a ballot attached. A roll-up's bill lands on your long or your short according to $W \ge \kappa M$.
 
 **The Spec You Hand the Robot.** "Implement `plan_value_engine.py` per §12C.12: draw confirmed plan values from a seeded lognormal mixture (medians, log-vols, weights summing to one); run a silo waterfall per draw with the DIP priming at $M(1+\kappa)$, administrative claims paid before the pool, and settlement gifts that stop once the source is whole; report fulcrum probabilities with a strict whole test, recovery mean, median, 5th and 95th percentiles and best-interests breaches per class; return `None`, never `True`, for any flag whose input is missing; price the DIP package with a conservation assertion and refuse the roll-up formula when $W < \kappa M$; price take-back transfers exactly and to first order; value NOLs after §108(b) attribute reduction. \$mm, annual decimals, fractions of allowed claim, measure $\mathbb{P}$. Self-test against §12B.9 (60.8%, 1.5%), §12C.10 (59.2%, 3.4%; 83/17) and Chapter 13's `waterfall_clearing`."
 
@@ -444,6 +502,7 @@ Kaz is staring at Figure 12-C.1. "So the judge is the measure change," they say.
 4. *(Crammed up.)* Show that reinstating legacy debt beats a crammed note for the residual owner whenever the legacy coupon is below the court's rate, and price \$800mm of 5% debt with four years left when the market yields 9%. *Solution:* each transfers $F(y - c)\,a_n(y)$ with its own $c$, so the lower coupon transfers more, and reinstatement needs no vote. Here $800 \times 0.04 \times a_4(9\%) = 800 \times 0.04 \times 3.240 \approx$ \$104mm moves from the lender to the equity.
 5. *(Theta.)* A solvent-looking debtor burns \$120mm a year of fees, and old equity finishes in the money with probability 0.6. What does a three-month delay cost the equity through the burn alone? *Solution:* $\phi\,\mathbb{P}(V > K) = 120 \times 0.6 = $ \$72mm a year, so about \$18mm for three months.
 6. *(ROBO's plan, marked to market.)* Under ROBO's \$4,075mm plan, what does the first lien actually recover if the market values the company at \$1,300mm, and which test does the plan fail? *Solution:* equity at plan is \$3,200mm, of which the first lien holds 900/3,200 = 28.1%. At market the equity is worth $1{,}300 - 800 - 75 = 425$, so the first lien gets $350 + 0.281 \times 425 \approx 470$, or 37.6%. That clears its 21.6% liquidation floor and fails the absolute priority rule, since old equity receives about \$170mm while the first lien is short. It passes best interests and fails fairness.
+7. *(The pair's ratio moves with the DIP.)* Suppose Halvorsen's DIP had brought \$280mm of new money instead of \$150mm, with the extra \$130mm carrying no roll-up, so 1,250 of first-lien claims are still left behind. Using §12C.10's mixture, recompute PB-02's plan-value ratio $h_V$. *Solution:* $V^\star$ moves to $250 + (1{,}320 + 280)\times 35/32 = 2{,}000$, so $\pi_{1\text{L}} \approx 0.90$ and $\pi_{\text{U}} \approx 0.10$ (Figure 12-C.4). The first lien moves $7.31 \times 0.90 \approx 6.6$ points per \$100mm of plan value and the 6s $0.84 + 8.96 \times 0.10 \approx 1.7$, so $h_V \approx 3.8$, half as much again as the 2.5 of the scene. More new money pushes the 6s' kink further into the committee's tail, so each dollar of short hedges less and the pair needs more borrowed face from the same few lenders.
 
 ### Deep-Dive Resource Graph
 

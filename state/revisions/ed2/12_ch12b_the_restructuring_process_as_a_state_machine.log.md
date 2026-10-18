@@ -15,7 +15,7 @@
 - [x] 13. [§12B.6 absolute priority] BRIDGE to Saks — two sentences: cancelled equity, rejecting class, trust as 'something'.
 - [x] 14. [§12B.6 cramdown] NEW-SCENE Long Scene B: Momentive + MATH-GENTLY #9 — four beats, web-checked remand facts; annuity box; law paragraphs retired.
 - [x] 15. [§12B.7] MATH-GENTLY #10 two parts + FULL-DERIVATION-MOVE + WHEN-TO-APPLY — clock/meter box; Mags on Timbers; ten dockets line.
-- [ ] 16. [§12B.8] SHOP-LIFE vignette: the transfer notice + LIST-TO-NARRATIVE
+- [x] 16. [§12B.8] SHOP-LIFE vignette: the transfer notice + LIST-TO-NARRATIVE — Hollis, Tallowmere; bar date, confi, big-boy letter; 503(b)(9) last.
 - [ ] 17. [§12B.9] EXPAND-SCENE Halvorsen, grade the Friday cards
 - [ ] 18. [§12B.9 after settlement] WHEN-TO-APPLY inside the scene
 - [ ] 19. [§12B.9 end] RV beat, The Pair box, PB-02
