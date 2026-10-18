@@ -909,6 +909,21 @@ The months are our own arithmetic on the deal and petition dates. The six filers
 
 ## 13.10 Desk Debrief
 
+The finder first. Theo keeps it on the back of the legal pad, so that the next time a headline lands he can find any idea in this chapter by the box that first explained it, the scene that tested it, and the listing that runs it.
+
+| Concept | Equation (where) | Intuition (box) | Judgment (scene) | Code |
+| :-- | :-- | :-- | :-- | :-- |
+| Transfer function and conservation | $\Delta_j(V)=[\mathcal{W}_{\mathcal{D}'}(V)]_j-[\mathcal{W}_{\mathcal{D}}(V)]_j$; $\mathbf{F}^{\top}\mathcal{W}_{\mathcal{D}}(V)=\min(V,\mathbf{1}^{\top}\mathbf{F})$ (§13.1) | "Waterfalls and transfer functions" (§13.1) | Boardriders' Holder A and Holder B, then par in 2023 (§13.1) | [Listing 13.1](#code-13-1) |
+| Uptier priming loss | $\Delta R^{\text{excl}}(V)\approx R_0(V)\,\mathbf{1}[V<K_1]$; $\mathbb{E}[V\mathbf{1}[V<K]]=e^{\mu+s^2/2}\Phi(\cdot)$ (§13.3) | "Three payoff shapes" (§13.3) | Serta's Friday, 19 June 2020 (§13.3.1). The cliff softens when the minority is large (the three regions), and the put dies when a sale pays everyone (Boardriders, Lumen) or a court restores liens (Incora, §13.9) | [Listing 13.2](#code-13-2); Exercise 1 |
+| Sponsor's knapsack | $\min_S \sum_{i\in S} c_i w_i$ s.t. $\sum_{i\in S} w_i \ge \theta+\varepsilon$ (§13.4) | The 80/60/25 payoff matrix and the 4,096 bags (§13.4, in the text) | Robertshaw's Required-Lender seat, bought in a month (§13.4); "the bag is already full" (§13.10) | `min_cost_coalition`, [Listing 13.2](#code-13-2) |
+| Auction with externalities | $b \le T^{\text{win}}+T^{\text{lose}}-\pi^{\text{lit}}$; $\pi^{\text{lit}}=q\,\mathbb{E}[\text{damages}\mid\text{win}]-\text{cost}$ (§13.4) | "Auctions where the loser gets hurt" (§13.4) | Serta's losing group was the other bidder (§13.3.1, beat II) | None |
+| Organizing as a signal | Join iff $s_i<s^*$, so the group forms iff $V<V^*$ (§13.4) | "Global games in one picture" (§13.4) | Wesco's 2026s bid toward par for the blocking seat (§13.4) | None |
+| Co-op bargaining and carve-outs | $s_C>1-\theta$; $\Pi_C=d_C+\eta(\Pi-d_C-d_{\text{sp}})$; Shapley $\phi_i$ (§13.5) | "Nash bargaining"; "The Shapley value" (§13.5) | Lumen's ten-point seat and the joinder card of 10 Nov 2023; the Optimum suit (§13.5) | `shapley`, [Listing 13.2](#code-13-2); Exercise 2 |
+| Drop-down leakage | $\Delta R(V)\le T/F\le C^{\text{unsub}}/F$ (§13.6) | Figure 13.4 (no box) | Read the valuation clause first, then the guarantor release (PetSmart), then ask whether the steps are one plan (STG) (§13.6) | Exercise 3 |
+| Double-dip and clearing | $R^{\text{DD}}=2V/(F_1+2F_2)$; $\rho=(V-F_2)/F_1$; the Eisenberg–Noe map (§13.7) | "Fixed points, and why iteration converges" (§13.7) | Kaz's halving column (§13.7); Trinseo's whiteboard and the lawsuit priced count by count (§13.7.1). A single-obligor company needs only a priority chart | [Listing 13.1](#code-13-1); Exercise 4 |
+| Priming Risk Score and EPL | $\lambda^{\text{LMT}}_i=\lambda_0 e^{\beta^{\top}x_i}$; $\text{PRS}_i=\sigma(\beta_0+\beta^{\top}z_i)$; EPL as four factors (§13.8) | Glosses only: hazard (§6.1.4), logit (§5.5.3), Beta and shrinkage (§5.5.2, §3.3.4) | The Monday printout: a mirror, not a forecast, and a ranking, not a measurement (§13.8); Theo's 4:50 sheet (§13.10) | [Listing 13.3](#code-13-3); Exercise 5 |
+| Steps versus plans | $g=\max_k\theta_k-v(\mathcal{D}_0)$ (§13.9) | None | The Incora board, 28 March 2022 (§13.9) | None |
+
 *Tuesday, 4:50 p.m. The same Tuesday.*
 
 At 7:51 that morning Ines made the call Theo could not yet make. "Tell them 75, for five." The client did not hit it. At 7:58 sales reported, in the voice sales reserves for a lost trade, that the client had done all fifteen million away at 78. Loans do not print on TRACE, so the desk learned the level the way it learns most things about loans: from a salesperson who heard it from a client who wanted them to know.
