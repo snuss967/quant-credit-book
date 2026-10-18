@@ -113,12 +113,12 @@ def fig_same_bet_ownership():
     ax.axis("off")
     ax.grid(False)
 
-    xb, xc, xw = 1.35, 5.0, 8.65
-    bw, cw, ww, bh = 2.35, 2.75, 2.7, 1.12
+    xb, xc, xw = 1.35, 4.95, 8.5
+    bw, cw, ww, bh = 2.35, 2.75, 2.75, 1.12
     yh, yt, yd = 3.95, 2.60, 1.20     # HY bond, term loan, direct loan rows
     yb1, yb2 = (yh + yt) / 2, yd
 
-    for x, t in ((xb, "BORROWER"), (xc, "CLAIM ON THE BORROWER"), (xw, "WRAPPER THAT OWNS THE CLAIM")):
+    for x, t in ((xb, "BORROWER"), (xc, "CLAIM ON THE BORROWER"), (xw, "WRAPPER THAT HOLDS IT")):
         ax.text(x, 4.95, t, ha="center", va="center", fontsize=7.6, color=MUTED, fontweight="bold")
 
     _box(ax, xb, yb1, bw, bh + 0.1, "Sponsor-backed\nsingle-B company")
@@ -269,7 +269,7 @@ def fig_constraints_decide():
     y = np.arange(N)[::-1]
     for ax, W, col, ttl in ((axs[0], free, BLUE, "Budget and long-only"),
                             (axs[1], tiered, ORANGE, "Plus bounds and liquidity tiers")):
-        ax.set_title(f"{ttl}\n{mean_move(W):.1f}% of NAV moves on average".replace(".0%", "%"), fontsize=9,
+        ax.set_title(f"{ttl}\n{mean_move(W):.2g}% of NAV moves on average", fontsize=9,
                      loc="left", linespacing=1.3)
         ax.grid(False)
         ax.grid(axis="x")
@@ -370,16 +370,15 @@ def fig_april_2025(dates, d):
     ax.grid(False)
     ax.grid(axis="x")
     for yi, (lab, v, col) in zip(yy, rows):
-        ax.barh(yi, v, height=0.62, color=col, zorder=2)
-        ax.text(v - 0.2, yi, f"{MINUS}{abs(v):.2f}%", ha="right", va="center", fontsize=8.5, color=INK_2)
+        ax.barh(yi, -v, height=0.62, color=col, zorder=2)
+        ax.text(-v + 0.2, yi, f"{abs(v):.2f}%", ha="left", va="center", fontsize=8.5, color=INK_2)
     ax.set_yticks(yy)
     ax.set_yticklabels([r[0] for r in rows])
     ax.tick_params(axis="y", length=0)
     ax.spines["left"].set_visible(False)
-    ax.spines["bottom"].set_visible(False)
-    ax.set_xlim(-9.6, 0)
-    ax.xaxis.set_major_formatter(lambda x, _: f"{MINUS}{abs(x):.0f}" if x else "0")
-    ax.set_xlabel("Peak-to-trough total return (%)")
+    ax.set_xlim(0, 10.2)
+    ax.set_xticks([0, 2, 4, 6, 8])
+    ax.set_xlabel("Peak-to-trough loss (%)")
     return finish(fig, "ch12_april_2025_daily_vs_month_end")
 
 
@@ -425,14 +424,16 @@ def fig_ccc_bb_split(dates, d):
     for yi, (lab, v, col) in zip(yy, rows):
         ax.barh(yi, v, height=0.62, color=col, zorder=2)
         txt = f"{MINUS if v < 0 else '+'}{abs(v):.2f}%"
-        ax.text(v + (0.25 if v >= 0 else -0.25), yi, txt, ha="left" if v >= 0 else "right", va="center",
-                fontsize=8.5, color=INK_2)
+        if v < -3:      # long negative bar: label inside it, in ink
+            ax.text(v / 2, yi, txt, ha="center", va="center", fontsize=8.5, color=INK, fontweight="bold")
+        else:
+            ax.text(v + 0.25, yi, txt, ha="left", va="center", fontsize=8.5, color=INK_2)
     ax.set_yticks(yy)
     ax.set_yticklabels([r[0] for r in rows])
     ax.tick_params(axis="y", length=0)
     ax.spines["left"].set_visible(False)
     ax.spines["bottom"].set_visible(False)
-    ax.set_xlim(-8.2, 3.6)
+    ax.set_xlim(-6.4, 3.4)
     ax.set_xticks([-6, -4, -2, 0, 2])
     ax.xaxis.set_major_formatter(lambda x, _: f"{MINUS}{abs(x):.0f}" if x < 0 else f"{x:.0f}")
     ax.set_xlabel("Total return, 2026 to date (%)")

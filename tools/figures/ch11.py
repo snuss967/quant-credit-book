@@ -328,7 +328,7 @@ def fig_tier_oas():
 
     # right: month-end ratio of the CCC tier to the index
     b.plot(ratio.index, ratio.values, color=ORANGE, linewidth=LW)
-    pts = [("2025-01", "2.61", (-11, 10)), ("2025-04", "2.54", (4, -12)), ("2025-12", "3.15", (-4, 10)),
+    pts = [("2025-01", "2.61", (2, 16)), ("2025-04", "2.54", (4, -12)), ("2025-12", "3.15", (-4, 10)),
            ("2026-06", "3.53", (-12, 6)), ("2026-10", "3.96", (-4, 11))]
     for key, lab, off in pts:
         t = ratio[key].index[0]
