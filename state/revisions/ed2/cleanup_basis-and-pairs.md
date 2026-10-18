@@ -80,4 +80,25 @@ Listing 19.8 is `price_pt`, the listing Figure 19.5's caption names.
 
 Item statuses: date-clash-24 fixed; PB-03-financing fixed; SVB-8K-ch8 fixed; ch19-74bp fixed.
 
+## Review
+
+Reviewer pass (2026-10-18). All four fixes are on disk (committed in the autosnap c6b9046 or earlier, so `git diff` shows nothing; read from the files and `git log -p`). Three confirmed as written, one confirmed with stragglers fixed.
+
+**[date-clash-24] confirmed; stragglers fixed.**
+- (a) Ch 24 lines 306-308 now read "this replay", "Thursday 22 October 2026, 3:05 p.m.", "Ines's replays", "This Thursday". 22 Oct 2026 is a Thursday (python3). No other "Friday" in Ch 24 refers to Scene A (lines 198, 326, 332, 420, 591 are generic or March 2020; line 696 "Not every replay waits for a Friday" is still true). (b) Italics, math and escapes untouched. (c) Straggler: `state/cast_bible.md` line 148 still said "Scene A replay ... Fri 23 Oct 2026 3:05 p.m."; changed to "Thu 22 Oct 2026". No other book_src or state file dates Scene A.
+- Residual, not changed: Ch 3's debrief (Thu 22 Oct, 4:40 p.m., same four people: Ines, Theo, Kaz, Mags) follows Scene A by 95 minutes, and Scene A closes with "before anyone went home". Tight but workable; the Ch 21 Thursday memo scene ("late afternoon", Theo and Mags only) also sits on that Thursday. Ch 19 H1-2022 and Ch 21 Scene B still share Fri 23 Oct evening (both pinned), as the fixer said.
+
+**[PB-03-financing] confirmed; stragglers fixed.**
+- (a) Recomputed in python3: financing 22 x 0.0040 / 2 = $0.044mm; running lines 0.045 + 0.065 + 0.044 = $0.155mm (Ch 8's $0.15mm); all-in 0.45 + 0.2 + 0.1 + 0.05 = $0.80mm; net 1.25 - 0.80 = $0.45mm; capture 0.45 / 0.75 = 0.60 (0.595 unrounded). Ch 24 line 639 text is correct, escapes intact, cross-reference to Ch 8 §8.4 valid; `state/rv_pair_book.md` PB-03 row matches.
+- (c) Stragglers fixed, one edit each: `book_src/08_ch08d_...pair_book...md` line 220 ledger capture `≈0.67` to `≈0.60`; `state/cast_bible.md` line 154 `capture ≈ 0.67` to `≈ 0.6, net $0.45mm / idio $0.75mm with financing`; `state/open_items_ed2.md` line 49 status `open` to `resolved`. Figure 8-D.8: `tools/figures/ch08d.py` PB-03 friction bar -100 to -150 (net 750 - 150 - 150 = 450, kappa 0.60), docstring and assert updated to 0.60, and `assets/figures/ch08d_pair_book_ledger.png` re-rendered (the script is deterministic: an unmodified run reproduced the old PNG byte for byte; the new PNG shows 0.60 for PB-03 and is otherwise unchanged). No other "0.67", "two-thirds" or "$0.75mm" tied to PB-03 survives in book_src, state or App Z.
+
+**[SVB-8K-ch8] confirmed.**
+- (a) Ch 8 line 812 now says "sold substantially all of its available-for-sale securities, at an after-tax loss of about $1.8bn, and was raising $2.25bn of capital. (A filing the following week put the sale at $23.97bn of book value for $21.45bn of proceeds.)", the same as Ch 4-B line 270; both 13 and 14 March are "the following week" of Wed 8 March, so the wording holds either way. (b) Dollar escapes intact; "the 8-K figures" in the fiction label and Ines's "You've read the 8-K" still true; the narrator's hindsight aside fits the scene's own "everyone already knows the ending". (c) $23.97bn / $21.45bn appear only in Ch 3 line 418 (14 March 8-K, Item 2.01), Ch 4-B, Ch 6 line 466 (later 8-K) and Ch 8, all attributed to a later filing. Ch 6 line 466 says the 8 March 8-K gave "about $21 billion" sold; Ch 8 does not use that figure, so no change, but the dossier owner may want to check it against the 8 March exhibit when settling 13 vs 14 March.
+
+**[ch19-74bp] confirmed.**
+- (a) Executed Listings 19.1-19.8 from App F (same method as `tools/figures/ch19.py`): full list, calm, $1,558k = $829k handling + $420k adverse selection + $293k risk + $16k hedge on $204.3mm = 76.3bp; lines 117 and 42 out $672k on $183.9mm = 36.6bp, i.e. 37bp. The new parenthetical in line 683 is correct and Listing 19.8 is `price_pt`. (b) Nothing else in the paragraph changed. (c) No other "74bp" or hand-estimate "35bp" survives (lines 687 and 703 use 35bp for the concession bid, a different quantity; App Z has no Ch 19 74/35).
+- The fixer's side note on line 709 (36bp vs 37bp) is not an error: the Listing 19.5 loop (`evict_greedy`) excludes the hedge half-spread and returns 75.5, 58.9, 35.8bp, which round to the printed "76bp to 59bp to 36bp"; `price_pt` adds about 0.8bp of hedge cost to reach 76.3 and 36.6. No edit needed.
+
+Reviewer edits: `state/cast_bible.md` (lines 148, 154), `book_src/08_ch08d_the_pair_book_long_one_credit_short_another.md` (line 220), `state/open_items_ed2.md` (line 49), `tools/figures/ch08d.py`, `assets/figures/ch08d_pair_book_ledger.png`.
+
 <!-- STATUS: COMPLETE -->
