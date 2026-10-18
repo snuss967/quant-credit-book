@@ -550,8 +550,15 @@ Here is the third aha. **"Ninety seconds" is a data-architecture statement, not 
 
 ### Specification for AI Implementation (the full engine)
 
-<!-- EXPLAIN: Listing 19.8 -->
-> **Code Companion: Listing 19.8.** Live path. The full python listing is in [Appendix F, Listing 19.8](#code-19-8).
+Seven listings in, the engine is still a parts bin. The product the desk sells is one call: the inquiry and two readings off the tape go in, and a price, a list of lines to hand back, a hedge and a reason come out, all inside the budget in the table above while Theo and Ines review the flagged lines. That call also has to leave a record. The quotes the desk loses are the only data it will ever get on $\gamma$ and $\pi$, so every quote, won or lost, gets its four-term decomposition logged. The last listing is therefore deliberately dull. It calls everything above in order, and the interesting part is what it hands back.
+
+Listing 19.8 is `price_pt`, which runs the chain in the order the chapter built it. It reads the regime from the ETF discount and the bid-ask percentile, and scales risk aversion and the liquidity multiplier by it. It builds the residual covariance with the regime's basis multiplier (Listing 19.4), adds the liquidity spike if the score is above zero (19.6), computes the adverse-selection charges (19.7) and runs the greedy loop unless told not to (19.5). It then drops the evicted lines, re-solves the hedge on the survivors, and assembles the four terms of (19.2) in dollars: handling, risk, adverse selection and hedge half-spread. The output is a dictionary with the cash for the kept basket (fair value less cost), each term, the cost in basis points of kept gross market value, the hedge, the evicted ids, a `hit_target` flag, the regime and the elapsed milliseconds.
+
+The asserts walk the whole chapter. The bid sits below fair value, and the four terms sum to the cost. The calm run evicts L117 and then L042 and meets the target, and the counter-proposal costs less per dollar than the full basket. The same basket at a regime score of 1 costs more than twice as much. The client-buys mirror image has an identical cost and an ask above fair value. On the cold-open basket, the full list costs about \$1.56mm, or 76bp: \$829k of handling, \$420k of adverse selection, \$293k of risk and \$16k of hedge. Without lines 117 and 42 it costs about \$0.67mm, or 37bp *(illustrative)*.
+
+Use it as the core of the live path and as the replay engine for lost quotes. The edge case that bites is that the listing ends at the number. Of the kill switches in the spec above, only the condition guard is coded, and it raises. Nothing refuses a quote on stale composites, a PRS above 0.7 or a regime score of 1. The function reports them through `hit_target` and `regime`, then returns a confident cash figure anyway. In stress, ten evictions are not enough, `hit_target` goes false, and the number still arrives with a straight face. Adverse selection and the hedge half-spreads are also not scaled by the regime. A wrapper must read those flags and decline or escalate.
+
+*The full listing is [Listing 19.8 in Appendix F](#code-19-8).*
 
 ### Deep-Dive Resource Graph
 

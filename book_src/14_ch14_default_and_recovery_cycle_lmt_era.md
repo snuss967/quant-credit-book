@@ -529,8 +529,15 @@ Use it on monthly or pooled counts with harmonized definitions, since 45 annual 
 
 *The full listing is [Listing 14.4 in Appendix F](#code-14-4).*
 
-<!-- EXPLAIN: Listing 14.5 -->
-> **Code Companion: Listing 14.5.** block 5 of 5: sanity checks (each prints PASS/FAIL and asserts). The full python listing is in [Appendix F, Listing 14.5](#code-14-5).
+Every model review ends in the same two questions. How do you know it is right, and why did the answer move overnight? Theo's 13-week model had a check cell at the bottom of the cash waterfall that turned red when the balance did not foot, and he credits it with saving him from more embarrassing calls than any senior colleague. The engine needs the same instrument, with more cells and a stricter idea of what counts as footing. The cheapest honest test is a world whose answer you wrote down in advance.
+
+Listing 14.5 is that instrument. `check` is the whole framework: it prints PASS or FAIL and asserts, so a failing run stops at the offending line instead of scrolling past. The checks climb through the engine in order. First, the Weibull scale must put 70% of susceptible defaults inside two years, to 1e-12. Then a single-regime world (`P` the identity, a fixed regime path, 50,000 issuers) lets closed forms apply. The Aalen–Johansen pieces must sum to one at every jump within 1e-10, and `F_H` and `F_D` at one, three and five years must land within four standard errors of $\tfrac{\lambda_k}{\lambda}(1-e^{-\lambda t})$. One minus Kaplan–Meier must exceed the right answer at five years, and the exchange share of first defaults must match $\lambda_D/(\lambda_H+\lambda_D)$.
+
+Next the mixture moments are compared with 400,000 draws, and the Serta between-group standard deviation of 0.245 is recomputed from Beta(74, 26) and Beta(25, 75). The cure fit runs on 20,000 simulated issuers with censoring spread between half a year and ten, and must recover `p` to 0.03, shape to 0.15 and scale to 15%. The same clock truncated at fourteen months feeds ROBO's exponential, whose ten-year default probability is printed beside the truth (65% against 25% in our run) and asserted to exceed 50%. Exact and Monte Carlo expected loss must agree within half a point for each side, and the excluded holder must lose more than the included one. The Markov-switching fit must return valid probabilities that sum to one and call the regime correctly in more than 85% of 80 simulated years. Last come arithmetic tripwires: the P-versus-Q ratio, three co-op cases, and two Serta dollar identities, such as \$484.88mm less \$895mm of face at 25 cents equaling \$261.13mm.
+
+Run it after every edit and before any refactor merges. It proves that the code implements the stated math. It says nothing about whether the math describes the market, since no real data touch it. The edge case that bites is that every closed-form comparison runs with regime switching turned off. The cohort simulator's regime transitions are never checked against a closed form, and the Markov-switching test uses a separate generator, so a green run is silent about how the two interact.
+
+*The full listing is [Listing 14.5 in Appendix F](#code-14-5).*
 
 The tests double as documentation. If a later contributor "simplifies" `aalen_johansen` into one minus Kaplan–Meier, the trap test fails. If someone replaces the cure model with an exponential, the fourteen-month test prints ROBO's answer next to the truth.
 
