@@ -499,3 +499,290 @@ Two rules make this table safe. First, every transition is an event with `known_
 **FIX for bonds, the fields that bite** *(general knowledge; confirm against each venue's rules of engagement)*. `SecurityIDSource` (tag 22) says which identifier `SecurityID` (48) is, so the gateway must translate surrogate keys through the crosswalk of §27.3 on every message. `SecurityType` (167) = `CORP`. `PriceType` (423) distinguishes percentage of par (1), spread (6) and yield (9), and a spread quote also needs its benchmark (`BenchmarkSecurityID`, 699). `SettlDate` (64) must reflect T+1 for US corporates since May 2024 (Chapter 22). The classic credit gateway bug is a spread quote interpreted as a price. A bid of "105" meant as a spread of 105 bp over the 10-year, read as a price of 105 points, is a 10-point gift on a bond trading near 95. That is a fat finger made by a parser.
 
 **Pre-trade checks live in the gateway.** The first tier of the kill-switch hierarchy (§27.7) sits here, before any message leaves the building. SEC Rule 15c3-5 (Release No. 34-63241, 2010-11-03) requires controls "reasonably designed to prevent the entry of orders that exceed appropriate pre-set credit or capital thresholds, or that appear to be erroneous," and requires that they be "under the direct and exclusive control of the broker or dealer with market access." In credit terms: price collars against composite *and* against the desk's own last fill, notional and DV01 caps per order and per minute, a `PriceType` sanity check (a "price" below 10 or above 200 is probably a spread), and a duplicate-order detector. Mags notes that in 1997 the pre-trade check was a senior trader saying "you want to do *what*?" loud enough for the floor to hear. It had excellent recall and terrible uptime.
+
+## 27.5 Latency Budgets Are Queues, Not Numbers
+
+Kaz's "forty milliseconds" was true and useless. It is the time the pricing engine spends *working* on a request. The counterparty experiences the time the request spends *in the building*, and on an FOMC afternoon most of that is spent waiting. Ines puts it in her terms: "The average is the hand you expect. The p99 is the hand you get when someone at the table knows something."
+
+### 27.5.1 Little, Pollaczek–Khinchine, and the p99, derived
+
+Notation: requests (RFQs, quote refreshes, PT lines) arrive at rate $\Lambda^{\text{q}}$ per second. The superscript separates it from the order-arrival intensity $\Lambda(\delta)$ of Chapter 18, and $\lambda$ stays reserved for default. Service times $S$ have mean $\mathbb{E}[S]$ and squared coefficient of variation $c_s^2 = \operatorname{Var}(S)/\mathbb{E}[S]^2$. Utilisation is $\rho = \Lambda^{\text{q}}\mathbb{E}[S] < 1$.
+
+**Little's law.** Over a long window $[0, \mathcal{T}]$, the area under the number-in-system curve $N(t)$ can be counted two ways: by time, $\int_0^{\mathcal{T}} N(t)\,dt = \mathcal{T}\bar N$; or by request, as the sum of the requests' sojourn times $\approx \Lambda^{\text{q}}\mathcal{T}\,\bar W$. Hence
+
+$$
+\bar N = \Lambda^{\text{q}}\,\bar W,
+$$
+
+for any queue discipline and any distributions, as long as averages exist.
+
+**Mean waiting time (Pollaczek–Khinchine).** With Poisson arrivals, an arriving request sees the time-average state (PASTA). It waits for (i) the residual service of whoever is being served, which has mean $\rho\,\mathbb{E}[S^2]/(2\mathbb{E}[S])$ (the server is busy with probability $\rho$, and the inspection paradox makes the residual of a length-biased service $\mathbb{E}[S^2]/(2\mathbb{E}[S])$), plus (ii) the full service of the $\mathbb{E}[N_q]$ requests already queued. By Little, $\mathbb{E}[N_q] = \Lambda^{\text{q}}\mathbb{E}[W_q]$. So
+
+$$
+\mathbb{E}[W_q] = \frac{\rho\,\mathbb{E}[S^2]}{2\mathbb{E}[S]} + \Lambda^{\text{q}}\mathbb{E}[W_q]\,\mathbb{E}[S]
+\quad\Longrightarrow\quad
+\mathbb{E}[W_q] = \frac{\rho}{1-\rho}\cdot\frac{1 + c_s^2}{2}\cdot\mathbb{E}[S].
+$$
+
+Kingman's heavy-traffic approximation for general arrivals replaces $1 + c_s^2$ with $c_a^2 + c_s^2$, where $c_a^2$ measures arrival burstiness. **The tail.** For M/M/1, $\mathbb{P}(W_q > t) = \rho\, e^{-\rho t/\mathbb{E}[W_q]}$ exactly, and the same form is a serviceable approximation for M/G/1. The waiting-time quantile at level $q$ is then
+
+$$
+t_q \approx \frac{\mathbb{E}[W_q]}{\rho}\,\ln\!\frac{\rho}{1-q}.
+$$
+
+**Kaz's engine.** With $\mathbb{E}[S] = 40$ ms, $c_s^2 = 4$ (most refreshes are trivial, a few hit a callable bond's lattice) and $\rho = 0.7$: $\mathbb{E}[W_q] = \tfrac{0.7}{0.3}\cdot\tfrac{5}{2}\cdot 40 \approx 233$ ms, and $t_{0.99} \approx \tfrac{233}{0.7}\ln 70 \approx 1{,}420$ ms. Add the service itself and the p99 sojourn is about a second and a half, the cold open's number. At $\rho = 0.5$ the same engine has a p99 wait near 0.8 s; at $\rho = 0.9$, about 4.5 s. Now notice when $\rho$ goes to 0.9: when TY moves, every exposed quote needs repricing at once. **Load and danger are positively correlated**, so the engine is slowest exactly when slowness is expensive. That is why the fast path exists. It does not reprice anything, so it has no queue to fill up.
+
+**Fan-out.** A portfolio trade of $n$ lines that waits for all $n$ pricing calls is slow if any one is. If each is slow with probability $p$,
+
+$$
+\mathbb{P}(\text{request slow}) = 1 - (1-p)^n .
+$$
+
+Dean and Barroso's "The Tail at Scale" (*Communications of the ACM*, 2013) made this famous with a server that is slow one time in a hundred: at 100-way fan-out, 63% of requests are slow. A 150-line PT inside Chapter 19's 90-second budget is slow 78% of the time. Inverting the formula, the end-to-end p99 of the PT requires each line's latency at the $0.99^{1/150} \approx 0.99993$ quantile. **A 150-line PT's p99 is each pricing call's p99.993.** Remedies from the same literature: hedged requests (send a backup after the p95), bounded fan-out (price lines in correlated clusters and interpolate), and a hard deadline after which a line is quoted from the cluster proxy and flagged.
+
+### 27.5.2 Two budgets on one desk
+
+| Hop | RFQ path (quote clock) | Hedge path (hedge clock) |
+| :--- | :--- | :--- |
+| Market data in | FIX parse, ~1 ms | L1 switch port-to-port, as low as 4 ns per hop (Arista 7130 vendor specification) |
+| Lookup | security master, ~0.1 ms | trigger-table row in on-chip memory, a few ns |
+| Fair value | composite fetch, ~5 ms | none: reference prices are already in the row |
+| Model | quote model, 40 ms mean, ~1.5 s p99 at $\rho = 0.7$ | fixed-point compare or multiply-accumulate, ~100 ns |
+| Risk | pre-trade check, ~10 ms | hard limits in the gateway, sub-µs |
+| Decision | auto-responder, or a human in ~20 s | none: the row already decided |
+| Out | venue session, ms | order entry to the venue; vendor STAC-T0 tick-to-trade claims are in the tens of nanoseconds (AMD/Exegy, 2024; vendor-reported) |
+| **Budget against** | **venue timer: minutes** | **race length: 5–80 µs (OP50)** |
+
+*(Times are illustrative except where sourced.)* Both columns are correct, and they differ by about five orders of magnitude. The RFQ column has slack everywhere except the human, which is why automation took the quote clock first (Trend Watch, §27.1). The hedge column has no slack anywhere, which is why it contains no model.
+
+### 27.5.3 Case Study: CME Globex halts, 2019 and 2025, a budget with an infinite term
+
+On the evening of 2019-02-26, a technical error halted CME Globex for about three hours, from 6:39 p.m. to 9:45 p.m. CT, covering Treasury and S&P 500 futures, before iLink gateways restarted. In Thanksgiving week of 2025 (2025-11-27/28), a cooling failure at a CyrusOne data centre near Chicago stopped Globex for a reported ten hours or so, halting Treasury and SOFR futures (Hedgeweek; duration per press reports). For a credit desk, the danger is not that the hedge is unavailable. The danger is that the fast path goes *quiet*. A trigger table compares hedge ticks with reference prices; with no ticks, nothing ever crosses a threshold, and every streaming bond quote stays live with no hedge and no guard. An FPGA watching a dead feed is a smoke detector in a building with no air. The fix is a Tier-2 rule (§27.7): if the hedge feed's heartbeat or sequence numbers stop for longer than a set gap, pull or widen every quote whose trigger row references that venue, and re-arm only when the slow path re-prices against a live hedge or an explicit substitute (CDX in place of credit futures, cash Treasuries in place of TY).
+
+### Specification for AI Implementation (latency as a queue)
+
+**What ROBO built from the vague version.** Asked to "report latency," ROBO reported the mean of the service time, measured inside the pricing function. It was 40 ms on the day the desk was picked off. The spec: measure sojourn (arrival to response), report p50/p99/p99.9 per utilisation band, and check the queueing model against simulation before trusting it.
+
+```python
+# block 3 of 5: latency as a queue. Pollaczek-Khinchine, Lindley simulation, fan-out tails.
+def pk_mean_wait(rho, mean_s, cs2, ca2=1.0):
+    """Kingman / Pollaczek-Khinchine mean queueing delay (exact for M/G/1, i.e. ca2 == 1)."""
+    if not 0.0 <= rho < 1.0:
+        raise ValueError("utilisation must be in [0, 1); at rho >= 1 there is no steady state")
+    return rho / (1.0 - rho) * (ca2 + cs2) / 2.0 * mean_s
+
+
+def wait_quantile_approx(rho, mean_wait, q):
+    """t with P(Wq > t) = 1 - q under P(Wq > t) ~ rho * exp(-rho t / E[Wq])."""
+    tail = 1.0 - q
+    return 0.0 if tail >= rho else mean_wait / rho * math.log(rho / tail)
+
+
+def simulate_mg1(n, rho, mean_s, cs2, rng):
+    """Lindley recursion W_{k+1} = max(0, W_k + S_k - A_{k+1}), vectorised as X_k - min_{j<=k} X_j."""
+    shape = 1.0 / cs2
+    s = rng.gamma(shape, mean_s / shape, size=n)       # mean mean_s, squared CV cs2
+    a = rng.exponential(mean_s / rho, size=n)           # Poisson arrivals at rate rho / mean_s
+    x = np.concatenate([[0.0], np.cumsum(s[:-1] - a[1:])])
+    w = x - np.minimum.accumulate(x)
+    return w, s
+
+
+def fanout_slow_prob(p_slow, n):
+    return 1.0 - (1.0 - p_slow) ** n
+
+
+MEAN_S, CS2, RHO = 40.0, 4.0, 0.7                       # ms; the cold-open pricing engine
+ew = pk_mean_wait(RHO, MEAN_S, CS2)
+assert abs(ew - 233.33) < 0.01
+w, s = simulate_mg1(1_000_000, RHO, MEAN_S, CS2, RNG)
+w, s = w[20_000:], s[20_000:]                           # burn-in
+assert abs(w.mean() / ew - 1.0) < 0.10                  # simulation agrees with P-K
+p99_wait_sim = float(np.quantile(w, 0.99))
+p99_wait_approx = wait_quantile_approx(RHO, ew, 0.99)
+assert 0.75 < p99_wait_approx / p99_wait_sim < 1.33     # exponential-tail approximation is serviceable
+p99_sojourn = float(np.quantile(w + s, 0.99))
+assert 1_000.0 < p99_sojourn < 2_400.0                  # "about a second and a half"
+assert pk_mean_wait(0.9, MEAN_S, CS2) > 3.5 * ew        # load and danger arrive together
+
+# Fan-out: Dean-Barroso's 63% at n = 100, and the 150-line PT at 78%.
+assert abs(fanout_slow_prob(0.01, 100) - 0.634) < 0.001
+assert abs(fanout_slow_prob(0.01, 150) - 0.779) < 0.001
+slow = (RNG.random((20_000, 150)) < 0.01).any(axis=1).mean()
+assert abs(slow - fanout_slow_prob(0.01, 150)) < 0.015
+q_line = 0.99 ** (1 / 150)
+assert 0.99993 < q_line < 0.99994                       # each line's p99.993
+```
+
+## 27.6 FPGA Trigger Tables for Quote-Pulling
+
+An FPGA is a chip whose logic you configure: a grid of lookup tables, registers, small memories and multiply-accumulate blocks that you wire into a pipeline. It is very good at fixed-point arithmetic, comparisons, and doing the same thing every few nanoseconds with no operating system, no garbage collector and no jitter. It is very bad at pricing a callable bond, running a loop of unknown length, or anything whose logic changes every day; changing the logic means re-synthesising the design, which takes hours and a change-control meeting nobody enjoys. An ASIC is the same idea cast permanently in silicon, which is why desks buy ASIC-based switches and build almost nothing in ASICs themselves. The design principle follows from both lists: **the table is data and the logic is fixed.** The slow path rewrites rows as often as it likes. The comparator that reads them is synthesised quarterly and tested like a bridge.
+
+### 27.6.1 The trigger table, derived
+
+Let exposed quotes be indexed by $i$ (streaming bids and offers, live firm RFQ responses) and hedge instruments by $j = 1, \dots, J$ (TY, HYG, LQD, CDX, credit futures). When the slow path prices quote $i$, it records the bond's fair value $\hat P_i$, the half-spread $h_i$, and the hedge reference prices $H_j^{\text{ref}}$. For small moves $\Delta H_j = H_j - H_j^{\text{ref}}$, fair value moves by
+
+$$
+\Delta \hat P_i \approx \sum_{j=1}^{J} \beta_{ij}\,\Delta H_j = \boldsymbol\beta_i^{\top}\Delta\mathbf H,
+$$
+
+where $\beta_{ij}$ is in bond points per hedge-instrument point. Hedge ratios are ratios of dollar durations (Veronesi defines dollar duration as $D^{\$}_P = -dP/dr$ and relates it to duration by $D^{\$}_P = P \times D_P$; Veronesi_Fixed_Income_Securities p.120). For a rate hedge, with $\kappa_i^{\text{rate}}$ the empirical rate beta of Chapter 8 (empirical over model duration),
+
+$$
+\beta_{i,\text{TY}} = \frac{\text{DV01}_i}{\text{DV01}_{\text{TY}}}\,\kappa_i^{\text{rate}} .
+$$
+
+For a credit-ETF hedge, write $\Delta P_i \approx -P_i D^{\text{spr}}_i \Delta s_i$, $\Delta s_i = \kappa^{\text{cr}}_i\,\Delta s_{\text{HY}}$ (the DTS beta of Chapter 9, $\kappa^{\text{cr}}_i \approx s_i/s_{\text{HY}}$), and $\Delta H \approx -H D_H \Delta s_{\text{HY}}$; eliminating $\Delta s_{\text{HY}}$,
+
+$$
+\beta_{i,\text{HYG}} = \frac{P_i\,D^{\text{spr}}_i\,\kappa^{\text{cr}}_i}{H\,D_H}.
+$$
+
+**The cold open, as numbers** *(all inputs illustrative)*. A bond at $P_i = 95$ with $D^{\text{spr}}_i = 8$ has $\text{DV01}_i = 0.076$ points per bp. With a TY futures DV01 of 0.065 points per bp and $\kappa^{\text{rate}} = 0.9$, $\beta_{\text{TY}} \approx 1.05$. With the bond at 130 bp, the HY index at 325 bp ($\kappa^{\text{cr}} = 0.4$), HYG at \$80 and $D_H = 3$, $\beta_{\text{HYG}} \approx 1.27$. TY down six 32nds and HYG down 14 cents give $\Delta\hat P \approx 1.05(-0.1875) + 1.27(-0.14) \approx -0.375$: three-eighths.
+
+**The joint rule.** The bid $b_i = \hat P_i - h_i$ becomes a gift when fair value falls more than the edge we insist on keeping. With a minimum margin $m_i \ge 0$ and a guard band $\varepsilon$ (derived below), define $\theta_i = h_i - m_i - \varepsilon$ and
+
+$$
+\text{pull bid } i \iff \boldsymbol\beta_i^{\top}\Delta\mathbf H < -\theta_i, \qquad \text{pull offer } i \iff \boldsymbol\beta_i^{\top}\Delta\mathbf H > \theta_i .
+$$
+
+**The per-instrument rule.** The joint rule needs a multiply-accumulate per quote per tick. The cheaper rule needs only compares. Split the budget $\theta_i = \sum_j \theta_{ij}$ with $\theta_{ij} \ge 0$, and set thresholds in each hedge instrument's own price units, $\tau_{ij} = \theta_{ij}/|\beta_{ij}|$. Pull if any $|\Delta H_j| > \tau_{ij}$.
+
+**Theorem (the cheap rule is safe).** If no per-instrument trigger fires, the joint rule does not fire either.
+
+*Proof.* If $|\Delta H_j| \le \tau_{ij}$ for all $j$, then by the triangle inequality
+
+$$
+\big|\boldsymbol\beta_i^{\top}\Delta\mathbf H\big| \le \sum_j |\beta_{ij}|\,|\Delta H_j| \le \sum_j |\beta_{ij}|\,\tau_{ij} = \sum_j \theta_{ij} = \theta_i . \qquad\blacksquare
+$$
+
+The price of safety is false pulls, and they come exactly when moves offset. In a flight to quality TY rallies and HYG falls, and an IG bond's fair value barely moves, so the cheap rule panics at the one moment the bond is calm. It is a smoke detector that goes off when you open a window. **Allocating the budget.** Under diffusion over a short horizon, instrument $j$ alone fires with probability $2\Phi(-\tau_{ij}/\sigma_j)$, where $\sigma_j$ is its volatility over that horizon. Equalising the standardised distances $\tau_{ij}/\sigma_j = c$ gives $\theta_{ij} = c\,|\beta_{ij}|\,\sigma_j$ with $c = \theta_i/\sum_j |\beta_{ij}|\sigma_j$, which stops one noisy hedge from owning the whole budget.
+
+**The guard band $\varepsilon$.** Two errors separate the hardware's number from the truth. *Fixed point:* with $\beta$ stored as integers with $f$ fractional bits (bond points per hedge tick) and moves as integer ticks $n_j$, rounding error is at most $2^{-f-1}\sum_j |n_j|$; at $f = 16$ and a few hundred ticks this is about $10^{-3}$ points or less. *Convexity:* Veronesi's second-order term (S14 below) is $\tfrac12 C P (\Delta r)^2$; for $C = 80$, $P = 95$ and a 10 bp move it is $\tfrac12\cdot 80\cdot 95\cdot 10^{-6} \approx 0.004$ points *(illustrative)*. Set $\varepsilon$ above the sum, say 0.01 points, and the linear rule can never be fooled into keeping a quote that the exact rule would pull.
+
+**Re-arming.** The fast path may only pull. A pulled quote comes back only when the slow path reprices it and writes a new row with new reference prices. This kills flapping (pull, re-quote, pull) for free and preserves the chapter's invariant: the fast path says no, and only the slow path says yes.
+
+> **[SOURCE EXTRACTION]** *Veronesi_Fixed_Income_Securities p.152:* "Fact 4.1 An approximation of the percentage impact of interest rates on the price of a security is given by dP/P = −D × dr + ½ × C × dr²"
+>
+> **Annotation.** Our analysis: the FPGA implements the first term and ignores the second, and Veronesi's own footnote ("stems directly from the application of a second-order Taylor expansion") tells you how large the neglected term can be. That makes convexity a *threshold-error budget*, not a pricing input. The desk departs from the textbook use in two ways. The relevant "duration" is empirical and spread-adjusted (Chapter 8), not the analytic one, because IG spreads partly offset rate moves. And for callable or distressed bonds the second-order term is neither small nor stable, which is the honest reason such bonds should not be streamed from a linear table at all.
+
+### 27.6.2 What a stale quote costs: diffusion versus tournament
+
+Let fair value over the exposure window $\Delta$ (seconds) follow Bachelier dynamics under $\mathbb{P}$, $\hat P_{t+\Delta} = \hat P_t + \sigma\sqrt{\Delta}\,Z$ with $Z \sim N(0,1)$ and $\sigma$ in points per $\sqrt{\text{s}}$. An informed taker sells to the bid iff $\hat P_{t+\Delta} < b = \hat P_t - h$. The expected loss per exposure, against new fair value, is
+
+$$
+\mathbb{E}\big[(b - \hat P_{t+\Delta})^{+}\big] = \mathbb{E}\big[(-h - \sigma\sqrt{\Delta}\,Z)^{+}\big] = \sigma\sqrt{\Delta}\,\big[\varphi(x) - x\,\Phi(-x)\big], \qquad x = \frac{h}{\sigma\sqrt{\Delta}},
+$$
+
+the Bachelier put with the strike $h$ out of the money. Using $\Phi(-x) = \varphi(x)\big(x^{-1} - x^{-3} + O(x^{-5})\big)$, the bracket is $\approx \varphi(x)/x^2$ for large $x$, which is smaller than exponential. Take a fair-value volatility of 0.5 points a day over a 23,400-second session *(illustrative)*, so $\sigma \approx 0.0033$, and $h = 0.19$. At $\Delta = 1.5$ s, $x \approx 47$ and the loss is zero to machine precision. Even over a two-minute RFQ timer, $x \approx 5.3$ and the loss is about $10^{-9}$ points. **Against diffusion, the half-spread is an impregnable wall.**
+
+Now a *jump*: a public, discrete move of fair value $J_i = \boldsymbol\beta_i^{\top}\Delta\mathbf H$, seen by everyone at once. If the quote is still live, the taker wins with probability $\pi$, the probability that their order reaches the venue before your cancel, and the loss is
+
+$$
+\pi\,\big(|J_i| - h_i\big)^{+}.
+$$
+
+In the cold open, $\pi \approx 1$ (a 1.5-second reaction against takers measured in microseconds to milliseconds), and the loss is $(0.375 - 0.19) \times \$3\text{mm}/100 \approx \$5{,}500$. Latency enters the two regimes in completely different ways. Under diffusion it enters smoothly through $\sqrt{\Delta}$, and a wider $h$ compensates. Under jumps it enters only through $\pi$, which depends on your *rank* among responders and not on your level of speed: being second is the same as being last. This is the sniping mechanism of Budish, Cramton and Shim (2015, *Quarterly Journal of Economics*), and the FCA study puts numbers on it for equities: modal race 5–10 µs, median 46 µs, mean 79 µs, 90th percentile about 200 µs; races are about 20% of volume, and the latency-arbitrage "tax" is 0.42 bp of total volume against an average effective spread just over 3 bp (Aquilina, Budish and O'Neill 2020). A credit desk's half-spread is far wider, but so is the jump in a hedge instrument during a quote's life. The trigger table exists to turn $\pi$ from 1 into something near 0 by pulling while the race is still being run.
+
+> **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.702:* "LCS measures the cost of an immediate round-trip transaction of a typical institutional size and is expressed as a percentage of a bond price. ... For bonds quoted on spread, LCS is calculated as a product of bid–offer spread and spread duration."
+>
+> **Annotation.** Our analysis: this pins down $h_i$ with units. LCS is a round trip as a percentage of price, so the half-spread in points is $h_i = \tfrac12\,\text{LCS}_i \times P_i/100$: an LCS of 0.4% on a 95 bond gives $h = 0.19$, the number used throughout this section. LCS also decides *which bonds get streamed*. A bond whose $h_i$ is small relative to the typical hedge-implied jump $|J_i|$ is a bond whose streaming quote is a donation, and it should stay RFQ-only. Ben Dor makes the complementary point that a trader who must "commit to making a market in a bond for a time going forward" should prefer the higher-volume bond at similar LCS (Ben_Dor_Quantitative_Credit_Portfolio_Management p.160). Volume shortens the time inventory waits; it does not shrink the jump.
+
+### 27.6.3 Case Study: The 15 October 2014 Treasury flash rally, replayed against a trigger table
+
+Between 9:33 and 9:45 a.m. ET on 2014-10-15, the 10-year Treasury yield fell 16 bp and then rebounded, "without a clear cause," on a day when it traded in a 37 bp range and closed 6 bp below its open. Principal trading firms accounted for more than half of traded volume in the electronic interdealer market (Fleming, Johansson, Keane and Meyer, *Liberty Street Economics*, 2019-10-15, looking back at the Joint Staff Report released 2015-07-13). For a credit desk this is the canonical hedge-clock event, and it happened in the instrument the desk hedges with.
+
+Replay the cold-open bond's row with $\theta = 0.14$ and the budget split as above. A 16 bp rally moves TY by roughly a point (at 0.065 points per bp), so the bond's rate-implied fair value rises by about a point, and every streaming *offer* becomes a gift within the first bp or two of the move. The TY threshold $\tau_{\text{TY}} \approx 0.07$ TY points is about 1 bp of yield, so the per-instrument rule pulls the offer within microseconds of the first meaningful ticks. The interesting question is the next twelve minutes. The slow path wants to re-arm at a new fair value, but its composite is stale, TRACE is up to 15 minutes behind, and the hedge itself is about to reverse. The right re-arm rule is therefore **volatility-gated**: re-quote only when realised hedge volatility over the last $N$ seconds is below a threshold, and then at a wider $h$. A desk that pulled and waited lost nothing but opportunity. A desk that kept streaming was picked off on the way up and again on the way down. The market itself behaved like a giant trigger table that day, with liquidity providers pulling and re-quoting in waves. That is not a bug in the market; it is what rational quote-pulling looks like when everyone has the same table.
+
+> **Trend Watch. Credit gets a listed hedge (2018–2026).** *What changed:* for most of its history the credit desk's fast hedge was rates (TY) plus an ETF; credit beta itself had no exchange-traded future. Cboe listed iBoxx iShares futures on HY (IBHY, 2018) and later IG (IBIG). CME launched Bloomberg US corporate index futures (IG and HY, including duration-hedged variants) in June 2024. *How big:* record open interest of 3,200 contracts (about \$320mm notional) in March 2025. A CME factsheet reported more than 580,000 contracts traded since launch as of 2025-10-10, open interest above 6,800 contracts (more than \$730mm notional), and Q3-2025 ADV above 2,900 contracts (CME press releases 2025-03-17 and 2025-09-08). Cboe's IBHY/IBIG block trades topped \$1bn a month for two consecutive months in July–August 2026, with IBIG block volume passing IBHY for the first time (The DESK, 2026-10-16, Cboe-sponsored content). *What it means for the desk:* a credit-beta hedge now executes on a matching engine with microsecond order entry and a public book. That gives the trigger table a credit column that is not an ETF with its own premium/discount dynamics. It also means credit-index futures can jump on their own, so they belong in $\Delta\mathbf H$, with their own $\beta_{ij}$ and their own heartbeat rule (§27.5.3).
+
+### Specification for AI Implementation (trigger tables)
+
+**What ROBO built from the vague version.** Asked to "pull quotes when the market moves," ROBO pulled every quote whenever any instrument ticked. It was perfectly safe and quoted for a total of eleven seconds on its first day. The spec: sensitivities in bond points per hedge point, a joint rule and a provably safe per-instrument rule, fixed-point arithmetic with a stated error bound, pull-only semantics, and the cold open as a regression test.
+
+```python
+# block 4 of 5: trigger tables. Sensitivities, joint vs per-instrument rules, fixed point, pick-off cost.
+def beta_rate(dv01_bond, dv01_hedge, rate_beta):
+    """Bond points per hedge point for a rate hedge: dollar-duration ratio times empirical rate beta."""
+    return dv01_bond / dv01_hedge * rate_beta
+
+
+def beta_credit(price, d_spr, dts_beta, etf_price, etf_d_spr):
+    """Bond points per ETF point: dP = -P D dS_i, dS_i = dts_beta dS_HY, dH = -H D_H dS_HY."""
+    return price * d_spr * dts_beta / (etf_price * etf_d_spr)
+
+
+def allocate_tau(beta, sigma_h, theta):
+    """Per-instrument thresholds in hedge units: theta_j = c |beta_j| sigma_j, sum theta_j = theta."""
+    w = np.abs(beta) * sigma_h
+    theta_j = theta * w / w.sum()
+    return theta_j / np.abs(beta)
+
+
+def joint_pull(beta, dH, theta, side):
+    """side = +1 for a live bid, -1 for a live offer."""
+    return side * float(beta @ dH) < -theta
+
+
+def box_pull(tau, dH):
+    return bool(np.any(np.abs(dH) > tau))
+
+
+def bachelier_pickoff(h, sigma, dt):
+    """E[(b - P_{t+dt})^+] with b = P_t - h; P diffuses with vol sigma in points per sqrt(second)."""
+    sd = sigma * math.sqrt(dt)
+    x = h / sd
+    return sd * (stats.norm.pdf(x) - x * stats.norm.sf(x))
+
+
+# The cold-open row (inputs illustrative).
+beta = np.array([beta_rate(95 * 8.0 / 1e4, 0.065, 0.9),
+                 beta_credit(95.0, 8.0, 130 / 325, 80.0, 3.0)])        # [TY, HYG]
+H_HALF, MIN_MARGIN, GUARD = 0.19, 0.04, 0.01
+THETA = H_HALF - MIN_MARGIN - GUARD
+SIGMA_H = np.array([0.10, 0.08])                                       # 1-second hedge vols, points
+tau = allocate_tau(beta, SIGMA_H, THETA)
+move = np.array([-6 / 32, -0.14])                                      # TY -6/32, HYG -14 cents
+assert abs(float(beta @ move) + 0.375) < 0.005                         # three-eighths
+assert joint_pull(beta, move, THETA, side=+1) and box_pull(tau, move)  # both rules pull the bid
+
+# Flight to quality: TY up, HYG down, fair value flat. The cheap rule panics; the joint rule does not.
+offset = np.array([6 / 32, -0.15])
+assert abs(float(beta @ offset)) < 0.02
+assert box_pull(tau, offset) and not joint_pull(beta, offset, THETA, +1) and not joint_pull(beta, offset, THETA, -1)
+
+# Safety theorem on 200,000 simulated moves (negatively correlated, fat-tailed via a scale mixture).
+n = 200_000
+cov = np.array([[1.0, -0.4], [-0.4, 1.0]]) * np.outer(SIGMA_H, SIGMA_H)
+dH = RNG.multivariate_normal(np.zeros(2), cov, size=n) * np.sqrt(RNG.chisquare(4, size=(n, 1)) / 4) ** -1
+TICK = np.array([1 / 64, 0.01])                                        # hedge price grids (illustrative)
+ticks = np.round(dH / TICK).astype(np.int64)
+dH = ticks * TICK                                                      # both rules see on-grid moves
+jp = np.array([joint_pull(beta, d, THETA, +1) or joint_pull(beta, d, THETA, -1) for d in dH])
+bp = np.abs(dH) > tau
+bp = bp.any(axis=1)
+assert not np.any(jp & ~bp)                                            # never misses a joint pull
+false_pull_rate = float((bp & ~jp).mean())
+assert 0.0 < false_pull_rate < 0.5
+
+# Fixed point: beta in Q.16 bond points per tick; integer multiply-accumulate; error bound holds.
+FRAC = 16
+beta_q = np.round(beta * TICK * (1 << FRAC)).astype(np.int64)
+theta_q = int(math.floor(THETA * (1 << FRAC)))
+acc = ticks @ beta_q                                                   # int64, as on DSP slices
+fixed_pull = (acc < -theta_q) | (acc > theta_q)
+exact = ticks @ (beta * TICK)
+bound = 2.0 ** (-FRAC - 1) * np.abs(ticks).sum(axis=1) + 2.0 ** -FRAC
+mismatch = fixed_pull != jp
+assert np.all(np.abs(np.abs(exact[mismatch]) - THETA) <= bound[mismatch])
+assert bound.max() < GUARD                                             # guard band covers rounding
+
+# Pick-off: closed form vs Monte Carlo at 15 minutes; zero at 1.5 s; the jump loss is the cold open.
+SIGMA_S = 0.5 / math.sqrt(23_400)
+z = RNG.standard_normal(2_000_000)
+mc = np.maximum(-H_HALF - SIGMA_S * math.sqrt(900.0) * z, 0.0).mean()
+assert abs(mc - bachelier_pickoff(H_HALF, SIGMA_S, 900.0)) < 5e-5
+assert bachelier_pickoff(H_HALF, SIGMA_S, 1.5) < 1e-12
+jump_loss_usd = max(abs(float(beta @ move)) - H_HALF, 0.0) * 3_000_000 / 100
+assert 5_000 < jump_loss_usd < 6_000
+```

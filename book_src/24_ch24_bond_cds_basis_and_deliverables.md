@@ -722,3 +722,164 @@ gross, net, n_entries = basis_strategy(b_sim, dt_w, th_hat, sd_stat, 1.0, 0.0, 4
 assert n_entries > 20
 assert sharpe(gross, dt_w) > sharpe(net, dt_w)              # costs are not optional
 ```
+
+## 24.8 When the Legal Layer Breaks: Successors, Orphans and Manufactured Credit Events
+
+Assumption A6 was that "default" means the same thing to the bond and the swap. The bond defaults under its indenture. The swap triggers under the ISDA Definitions, as decided by a committee. Most of the time the two coincide. This section is about the times they don't.
+
+> **[SOURCE EXTRACTION]** *Schmid_Credit_Risk_Pricing_Models p.158:* "The credit event triggers the payment. It can either be bankruptcy, failure to pay, obligation acceleration, repudiation, restructuring and others."
+>
+> **Annotation.** Our analysis: that list describes the menu of the late 1990s. The standard North American corporate contract has since cut it to two items, Bankruptcy and Failure to Pay, with no Restructuring. The 2014 Definitions added Governmental Intervention and asset-package delivery for financials, after the 2013 expropriation of SNS Reaal's subordinated debt showed that a bail-in could wipe out deliverables. A short menu is easier to administer and easier to game. If Failure to Pay is the only non-bankruptcy trigger, then whoever controls whether a coupon is paid controls whether the swap pays, and §24.5 showed how much it can pay when the issuer is solvent. The modern desk treats the credit event definition as a contract with counterparties who read it closely, not as a fact of nature.
+
+Three kinds of engineering exploit the gap. A *manufactured default* triggers Failure to Pay at a solvent issuer, ideally after creating a cheap deliverable. A *manufactured non-default* arranges rescue financing so that a swap expires untriggered (RadioShack's CDS expiring on 20 December 2014, which a rescue financing kept from triggering, is the standard example; Quinn Emanuel, May 2019; secondary). *Orphaning* moves the debt so that the reference entity has nothing left to default on or to deliver. Kaz, on hearing the last term, asked whether an orphaned swap is assigned a guardian ad litem. "It gets a hedge fund," Mags said, "and it's always the one that sold the protection."
+
+### 24.8.1 Derivation: the successor arithmetic
+
+When debt moves to new entities through a spin-off, merger, exchange or drop-down, the swap follows according to thresholds in the Definitions. Let $w_e$ be the fraction of the reference entity's Relevant Obligations that entity $e$ succeeds to, and $w_0 = 1 - \sum_e w_e$ the fraction retained. In simplified form:
+
+1. If some $w_e \ge 75\%$, entity $e$ is the sole Successor.
+2. If one or more entities have $w_e > 25\%$ and $w_0 \le 25\%$, each of them is a Successor.
+3. If one or more entities have $w_e > 25\%$ and $w_0 > 25\%$, each of them *and* the original entity are Successors.
+4. If no $w_e$ exceeds 25% and the original survives, nothing changes. If it does not survive, the entity with the largest share is the Successor.
+
+With $m$ Successors the swap splits into $m$ new swaps, each with notional $1/m$. The thresholds are discontinuous, and discontinuities are where engineering happens: moving 25.0% of the debt does nothing, moving 25.1% halves your swap. Orphaning is the limiting case that the rules do not cover. If debt is *repaid* rather than assumed, nothing succeeds to it, and the swap keeps referencing an entity whose deliverable set is shrinking toward empty. As $\mathcal{D} \to \varnothing$ the protection leg goes to zero, since the auction has nothing to price and there is nothing left to fail to pay. The protection seller keeps collecting premium on a contract that no longer protects anything. In 2018 Chatham's planned refinancing of McClatchy would have placed \$418.5mm of new secured term loans at a *new* entity, using the proceeds to repurchase bonds, so that swaps referencing McClatchy would be left on a hollow shell (Sidley Austin, December 2019; secondary). Octus noted in May 2025 that in liability management exercises the form matters: a clean par refinancing can orphan a swap, while an exchange, an amend-and-extend, or a discounted exchange tends to let it "travel" to a continuing obligation (secondary).
+
+### 24.8.2 Case Study: Hovnanian, Sunrise Trails and the Coupon Nobody Wanted Paid (2017–2018)
+
+> **Docket Diary.** *Early 2017:* GSO Capital Partners (Blackstone) reportedly built about \$333mm of CDS protection on Hovnanian, the homebuilder, ahead of roughly \$700mm of 2017 maturities (K&L Gates, 31 May 2018, citing press reports). *28 Dec 2017:* Hovnanian launched an exchange offer in which K. Hovnanian's 8% notes due 2019 could be exchanged for cash, new 13.5% notes due 2026, and new **5% notes due 2040**: a 22-year bond with a below-market coupon that some expected to trade around 50. GSO tendered up to \$170mm of its \$236mm of 8% 2019s, and provided a 5% unsecured facility to refinance all \$132.5mm of the 7% 2019 notes and up to \$80mm of untendered 8% notes. A Hovnanian subsidiary, Sunrise Trails, bought \$26mm of the tendered 8% 2019s. The 5% 2040 indenture *committed Hovnanian to default* on the interest owed to Sunrise Trails, starting 1 May 2018. *Early 2018:* Solus Alternative Asset Management, a protection seller, went to court in the Southern District of New York. The DC's archive indexes a district court opinion of 29 January 2018, and K&L Gates describes claims of securities fraud, tortious interference, breach of the 8% 2019 indenture, and a declaratory judgment that Sunrise Trails had waived the default. *13–15 Mar 2018:* a general-interest question put to the Americas DC, with the litigation papers attached, was rejected within two days. *20 Apr 2018:* the DC declined a request to use discretionary authority to exclude a deliverable that would produce an artificially low auction price (K&L Gates). *24 Apr 2018:* CFTC staff issued their statement (below). *30 May 2018:* settlement. GSO agreed to amend the 5% 2040 indenture so that Hovnanian could cure the default, which it did the same day, and agreed not to support future failure-to-pay events at Hovnanian. A stipulation of dismissal followed on 31 May. **No credit event ever occurred.** *(The Ad Hoc Group, represented by counsel, notes for the record that this was the rare restructuring in which every party's lawyers were busier than the company's.)*
+
+Put §24.5's machinery on it. The transaction did three things. It created a long, low-coupon deliverable (regime 2: the 5% 2040s near 50). It arranged a failure to pay *without acceleration*, owed to an affiliate who would not enforce it. And it paid the issuer for its cooperation through below-market financing. If the 2040s had been the cheapest deliverable at about 50, protection of the reported size would have paid on the order of \$165mm *(illustrative arithmetic on reported figures)* from an issuer that was not in distress. Every term of that sentence is a feature the desk can compute in advance: deliverable dispersion, the identity of the payee, and the issuer's liquidity runway.
+
+The last of those is Theo's. His 13-week cash flow model has already become a survival curve, a state-space feature and a liquidity runway variable earlier in this book. Here it becomes evidence. The 2019 fix (below) asks whether a failure to pay resulted from a deterioration in creditworthiness, and a 13-week model showing 80 weeks of runway answers that question more directly than anything else the desk owns. Theo was very pleased. Kaz asked whether this meant the USB stick was now a regulatory document.
+
+> **[SOURCE EXTRACTION]** *Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.11:* "CDS has run into trouble with the legal definition of default, such that several hedge funds have manufactured credit events that create distortions between the fundamentals of the companies and the traded credit spreads."
+>
+> **Annotation.** Our analysis: an industry research framework saying plainly that the legal layer broke the synthetic market's usefulness for quants, and this is one reason Man's authors conclude that cash bonds are the better instrument (§24.1). "Distortions between the fundamentals ... and the traded credit spreads" is a precise statement of the problem: a spread model built on $s = \lambda(1-R)$ assumes the payoff depends on fundamentals, and an engineered event breaks that. The departure is that a 2026 desk can price the distortion rather than avoid it. Estimate a manufactured-event probability from the observable flags, multiply by the regime-2 CTD payout, and subtract the result from the fundamental spread to get a fair spread. Names where that term is large, typically stressed but liquid issuers with concentrated CDS positions and flexible documents, are names where the swap is a position on lawyers.
+
+### 24.8.3 Case Study: Windstream (2015–2019): One Sale-Leaseback, Two Successor Answers, One Auction
+
+On 24 April 2015 Windstream spun off Communications Sales & Leasing (later Uniti) and leased its network back. On 20 May 2015 the Americas DC resolved that under the **2014 Definitions** both CS&L and Windstream Services LLC were Successors, while under the **2003 Definitions** there was no Successor. The same transaction gave two different answers, depending on which version of the contract a trade was written on. In the threshold rules this is case 3: a new entity takes more than 25% and the original keeps more than 25%.
+
+The second act came from bond land. Aurelius, a holder of Windstream's 2023 notes, argued that the sale-leaseback violated the indenture. On 15 February 2019 Judge Jesse Furman of the Southern District of New York agreed and entered a judgment of roughly \$310.5mm plus interest (press reports; secondary). Windstream filed for Chapter 11 on 25 February. On 26 February the DC resolved that *no* Failure to Pay Credit Event had occurred, so the swap triggered on the Bankruptcy instead. The auction was held on 18 March 2019 on the terms in §24.6 and settled at 29.5 with heavy physical settlement buying (Creditflux; secondary). Theo can now answer his own question about what the credit agreement says: in the wake of cases like this, loan documents began adding "net short lender" provisions that strip voting rights from lenders whose CDS protection outweighs their loans. That is the empty-creditor problem of Bolton and Oehmke (2011, *Review of Financial Studies* 24(8)) written into a contract. Creditors who can insure their claims over-insure, and they push for default more often than is efficient.
+
+Sears in 2018 completed the set. The estate auctioned notes in a way that "effectively allowed it to set the price of credit default swap contracts on Sears." The winner, a hedge fund described as "widely believed to have sold considerable CDS protection," paid \$82.5mm for the notes on condition that Sears sell no more (Sidley Austin, December 2019). A question about Consent Required Loans went to External Review, which answered "Yes" on 19 December 2018. The Sears Roebuck Acceptance Corp auction then ran on 17 January 2019. In each of these cases, the fight was about the deliverable set.
+
+### 24.8.4 The patch, and what it does not reach
+
+Regulators spoke first. On 24 April 2018, three CFTC divisions stated: "Manufactured credit events may constitute market manipulation and may severely damage the integrity of the CDS markets." A joint SEC–CFTC–FCA statement on "opportunistic strategies" followed on 24 June 2019 (Sidley; secondary). ISDA's fix was the 2019 Narrowly Tailored Credit Event Supplement to the 2014 Definitions (15 July 2019). It adds a Credit Deterioration Requirement, under which a failure to pay is not a credit event if it "does not directly or indirectly result from, or result in, a deterioration in the creditworthiness or financial condition" of the Reference Entity (as summarized by Simmons & Simmons and Macfarlanes; secondary), and it adds Outstanding Principal Balance provisions aimed at engineered deliverables. The protocol was published on 27 August 2019, adherence opened on 16 September, and the changes took effect in early 2020. Quinn Emanuel's critique is the right one for a model builder. The amendments work through Failure to Pay, so they do not reach manufactured non-defaults or orphaning. The engineering moved to successor and refinancing structures, and so did the DC's docket.
+
+> **Trend Watch: the legal layer, patched and then busy (2018–2026).** *Governance:* ISDA commissioned Linklaters in December 2023 to review the Determinations Committees because "the number of firms willing to serve on the DCs has declined steadily." The review (13 May 2024) proposed up to three independent members, a separate governance body and fewer dealer seats, and the BCG-run consultation (results 19 September 2024) found "broad market support" for a governance body, transparency measures and independent members. *The docket:* the EMEA DC found a Failure to Pay at Altice France Holding (decided 25 June 2025, event date 14 June 2025, 11 votes to 0), then announced *no auction*, because "the Relevant Transaction 300/5 Criteria were not satisfied," meaning too few outstanding trades and dealers. Intrum's auction (16 January 2025) was set after the holidays on purpose. A November 2024 exchange in which NFE Financing LLC assumed more than 25% of New Fortress Energy's debt went to the DC as a Successor question (decided February 2025). In 2026, Liberty Interactive (QVC's parent, a high-yield index constituent) went to auction on 13 May, and DISH DBS, after a prepackaged restructuring, went to auction on 4 August, with the DC adding the registered forms of its 7.375% 2028 and 5.125% 2029 notes to the Final List on auction day. As of 17 October 2026, Successor questions for Discovery Global Holdings (arising from the Warner Bros. Discovery and Paramount Skydance transactions) and Picard Bondco were both scheduled for DC meetings on 19 October 2026 (all from cdsdeterminationscommittees.org). *What it means:* the questions that move single-name P&L are now mostly successor and deliverable questions arising from M&A and LMEs, not "did they default?" The desk needs a successor engine and a deliverables tracker that run before the DC does.
+
+### Specification for AI Implementation (successor map and manufactured-event flags)
+
+**The precise spec.** Inputs: the fractions of Relevant Obligations succeeded to, by entity; whether the original entity survives; for event screening, a dictionary of observable features (event type, whether the payee is an affiliate, liquidity runway in weeks from the 13-week model, financing conditioned on the default, a newly issued long low-coupon deliverable). Outputs: a map from Successor to notional fraction, and a list of flags. Guards: shares must be non-negative and sum to at most 1; "more than 25%" is strict and "75% or more" is not; the screen is a desk heuristic, not a legal determination, and must be labeled as one. Steps Plans, the Successor Backstop Date and the "assumption" tests are out of scope and must be routed to counsel.
+
+```python
+def successors(shares, original="REFERENCE ENTITY", original_survives=True):
+    """Simplified successor thresholds: entity -> fraction of each CDS it inherits.
+    shares: entity -> fraction of Relevant Obligations it succeeded to."""
+    total = sum(shares.values())
+    if total > 1.0 + 1e-12 or min(shares.values(), default=0.0) < 0.0:
+        raise ValueError("shares must be non-negative and sum to at most 1")
+    retained = 1.0 - total
+    for e, x in shares.items():
+        if x >= 0.75:
+            return {e: 1.0}
+    big = [e for e, x in shares.items() if x > 0.25]
+    if big and retained <= 0.25:
+        return {e: 1.0 / len(big) for e in big}
+    if big:
+        heirs = big + [original]
+        return {e: 1.0 / len(heirs) for e in heirs}
+    if original_survives or not shares:
+        return {original: 1.0}
+    return {max(shares, key=shares.get): 1.0}
+
+
+def manufactured_event_flags(event):
+    """Desk heuristic for the NTCE Credit Deterioration Requirement. Not a legal test."""
+    flags = []
+    ftp = event["type"] == "failure_to_pay"
+    if ftp and event.get("payee_is_affiliate", False):
+        flags.append("payment withheld from an affiliate")
+    if ftp and event.get("liquidity_runway_weeks", 0) > 52:
+        flags.append("ample liquidity: the 13-week model says they could pay")
+    if event.get("financing_conditioned_on_default", False):
+        flags.append("financing conditioned on the default")
+    if event.get("new_long_low_coupon_deliverable", False):
+        flags.append("fresh cheap deliverable created")
+    return flags
+
+
+assert successors({"SPINCO": 0.40}) == {"SPINCO": 0.5, "REFERENCE ENTITY": 0.5}   # Windstream shape
+assert successors({"NEWCO": 0.80}) == {"NEWCO": 1.0}
+assert successors({"A": 0.40, "B": 0.40}) == {"A": 0.5, "B": 0.5}
+assert successors({"DROPCO": 0.25}) == {"REFERENCE ENTITY": 1.0}       # 25.0% is not "more than"
+assert successors({"A": 0.20, "B": 0.15}, original_survives=False) == {"A": 1.0}
+hov_like = {"type": "failure_to_pay", "payee_is_affiliate": True, "liquidity_runway_weeks": 80,
+            "financing_conditioned_on_default": True, "new_long_low_coupon_deliverable": True}
+assert len(manufactured_event_flags(hov_like)) == 4
+assert manufactured_event_flags({"type": "failure_to_pay", "liquidity_runway_weeks": 6}) == []
+```
+
+## 24.9 Desk Debrief
+
+- **A CDS is a par instrument; your bond is not.** Compare them with PECS, or expect a Z-spread basis of ±15 bp on bonds priced perfectly, plus a few bp of day-count noise.
+- **Hedge to jump-to-default, not to face.** $N^{\text{JTD}} = (P-R)/(1-R)$. At 88 and 40% recovery, \$10mm of bonds needs \$8mm of protection.
+- **A negative basis is a funding trade with a default option.** Its ROE is divided by the haircut, and the haircut rises when the basis widens. Price the haircut process, not today's haircut.
+- **The swap doesn't pay recovery. It pays par minus the auction price of the cheapest deliverable.** In bankruptcy that is close to recovery. In a failure to pay without acceleration it can be half of par from a solvent company.
+- **The auction is a poker hand with the cards face up.** Read the open interest, respect the cap, and expect bonds to bounce after a large sell imbalance.
+- **Exits make the Sharpe.** On the fallen-angel basis, transaction costs took three-quarters of the gross Sharpe until the exit rule cut the holding period.
+- **Successors are arithmetic with cliffs.** At 25.0% nothing happens and at 25.1% your swap splits. Run the thresholds before the DC does.
+- **The definition of default is a risk factor.** Flag affiliate payees, conditional financing, new long low-coupon deliverables and refinancings that orphan the swap, and use the 13-week model as evidence.
+
+### The Spec You Hand the Robot
+
+> Build `basis_engine` for one reference entity and its deliverable bonds. **Inputs:** an OIS curve (named and dated); CDS quotes by tenor with coupon and quoting recovery; a contract-terms table (day count, accrual on default, credit events, deliverable characteristics, Definitions vintage); bonds with coupon, maturity, seniority, price and timestamp; repo spread, haircut and borrow fee per bond. **Steps:** (1) bootstrap a piecewise-flat $\mathbb{Q}$-hazard curve and reproduce the standard upfront to the cent; (2) per bond, compute $Z$, ASW, PECS and the JTD hedge ratio, reporting $b^{Z}$ and $b^{\text{PE}}$ in bp; (3) compute the arbitrage band and ROE at current and doubled haircuts; (4) compute the regime-1 and regime-2 CTD payout over the deliverable set; (5) fit an OU model to the market-adjusted basis and emit entry and exit signals net of per-name costs; (6) run the successor map on any announced transaction and the manufactured-event flags on any missed payment. **Guards:** refuse a basis if the CDS mark is older than the bond print; raise an error on an empty deliverable set ("possible orphan"); round auction prices with halves going up; label every flag a heuristic. **Tests:** every assert in this chapter, in order. **Never:** use the bond's yield as its spread, use $R = 40\%$ for quoting and a different $R$ for valuation, or report an ROE without its haircut.
+
+## 24.10 Exercises
+
+1. **The over-hedge.** A bond at 72 with a 35% expected recovery. Compute the JTD-neutral CDS notional per \$10mm face. Then compute the P&L at default if the auction instead recovers 25%, and explain why the recovery delta of the package does not vanish.
+2. **Vintage alpha that isn't.** Using the §24.3 code, build a bond universe with coupons from 2% to 10%, all priced exactly off one CDS hazard. Regress the Z basis on price and show that a "cheap-bond" signal appears with a perfect $t$-statistic and zero economic content.
+3. **The band in March 2020.** With $\phi$ moving from 30 to 150 bp and $h$ from 10% to 35%, compute the negative edge of the arbitrage band before and after. Did a −186 bp IG basis lie inside or outside it?
+4. **ROBO rounds the IMM.** Construct an auction in which banker's rounding moves the IMM and the cap binds, so that the final price differs by a full eighth. Compute the total payout difference on \$5bn of CDS outstanding *(illustrative)*.
+5. **Design a drop-down (on paper).** A reference entity has \$4bn of Relevant Obligations. Design a transaction that moves as much debt as possible to a new subsidiary without making it a Successor, then one that leaves the original entity as one of two Successors. Explain which of these is the more dangerous for a protection buyer, and why the "assumption" test, which our code ignores, decides the real case.
+6. **Kaz writes a credit event.** Kaz proposes a contract in which the credit event is "the 13-week model shows less than four weeks of liquidity." List three ways an issuer could manufacture or avoid that event, and say whether this is better or worse than Failure to Pay.
+
+### Deep-Dive Resource Graph
+
+**Podcasts**
+- Bloomberg *Odd Lots* (Joe Weisenthal and Tracy Alloway): search the archive for episodes on CDS, manufactured defaults and liability management. No specific episode is cited because none was verified for this chapter.
+- *Petition* on restructuring (newsletter and podcast) for the indenture side of cases like Windstream.
+
+**Practitioner Writing**
+- K&L Gates (31 May 2018), "By Indirections Find Directions Out: CDS and the Hovnanian Exchange Offer."
+- Sidley Austin (December 2019), "Regulatory Scrutiny of Manufactured Credit Events," Bloomberg Law.
+- Quinn Emanuel (May 2019), "ISDA's Proposed Rules Aimed at Manufactured Defaults."
+- Kramer Levin, "Nonconventional CDS Credit Events Part 1: the iHeart case," and "Opportunistic CDS Strategies Available to CDS Protection Sellers Part II: McClatchy and Sears."
+- Macfarlanes, "The ISDA 2019 NTCE Protocol: what you need to know."
+- Matt Levine, *Money Stuff* (Bloomberg Opinion), columns on Hovnanian, GSO and manufactured defaults, 2018.
+- ISDA (29 Jul 2026), "CDS Market Dynamics: Five Years of Activity and a Record 2025": https://www.isda.org/a/Pa0iE/CDS-Market-Dynamics-Five-Years-of-Activity-and-a-Record-2025.pdf
+- ISDA, "The Credit Event Process" (auction mechanics): https://www.isda.org/a/cKwEE/TheCreditEventProcess.pdf
+- ISDA SwapsInfo, "Full Year 2025 and the Fourth Quarter of 2025 Review": https://www.isda.org/a/mpdgE/SwapsInfo-Full-Year-2025-and-the-Fourth-Quarter-of-2025-Review.pdf
+- CFTC Divisions, "Statement on Manufactured Credit Events" (24 Apr 2018): https://www.cftc.gov/PressRoom/SpeechesTestimony/divisionsstatement042418
+- Clarus Financial Technology, "Volumes and most active names in credit derivatives" (July 2025).
+
+**Academic Papers**
+- Bai, J. and Collin-Dufresne, P. (2019), "The CDS-Bond Basis," *Financial Management* 48(2), 417–439: https://ideas.repec.org/a/bla/finmgt/v48y2019i2p417-439.html
+- Kim, G. H., Li, H. and Zhang, W. (2017), "The CDS-Bond Basis Arbitrage and the Cross Section of Corporate Bond Returns," *Journal of Futures Markets* 37(8), 836–861: https://ideas.repec.org/a/wly/jfutmk/v37y2017i8p836-861.html
+- Kim, G. H., Li, H. and Zhang, W. (2016), "CDS-Bond Basis and Bond Return Predictability," *Journal of Empirical Finance* 38, 307–337.
+- Choi, J., Shachar, O. and Shin, S. S. (2019), "Dealer Liquidity Provision and the Breakdown of the Law of One Price: Evidence from the CDS-Bond Basis," *Management Science*.
+- Oehmke, M. and Zawadowski, A. (2015), "Synthetic or Real? The Equilibrium Effects of Credit Default Swaps on Bond Markets," *Review of Financial Studies* 28(12); and (2017), "The Anatomy of the CDS Market," *Review of Financial Studies*.
+- Chernov, M., Gorbenko, A. and Makarov, I. (2013), "CDS Auctions," *Review of Financial Studies* 26(3), 768–805: https://discovery.ucl.ac.uk/id/eprint/10104960
+- Du, S. and Zhu, H. (2017), "Are CDS Auctions Biased and Inefficient?", *Journal of Finance* 72(6).
+- Bolton, P. and Oehmke, M. (2011), "Credit Default Swaps and the Empty Creditor Problem," *Review of Financial Studies* 24(8), 2617–2655 (NBER Working Paper 15999).
+- Lee, J., Naranjo, A. and Sirmans, S. (2021), "CDS Momentum: Slow-Moving Credit Ratings and Cross-Market Spillovers," *Review of Asset Pricing Studies* 11(2), 352–401: https://ideas.repec.org/a/oup/rasset/v11y2021i2p352-401..html
+
+**Data & Code**
+- Credit Derivatives Determinations Committees (decisions, deliverable lists, auction terms; the Windstream, Hovnanian, Sears, Altice France Holding, Intrum, DISH DBS and Liberty Interactive pages cited above): https://www.cdsdeterminationscommittees.org/cds/
+- BIS OTC derivatives statistics (semiannual; CDS outstanding): https://data.bis.org/topics/OTC_DER
+- SEC EDGAR (8-Ks for exchange offers, spin-offs and supplemental indentures that drive Successor questions): https://www.sec.gov/edgar
+- CourtListener REST API (dockets such as *U.S. Bank N.A. v. Windstream Services, LLC*, SDNY): https://www.courtlistener.com/help/api/
+
+<!-- STATUS: COMPLETE -->

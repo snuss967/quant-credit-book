@@ -461,7 +461,7 @@ For line 42 ($a=40$, $\phi=0.05$, $\kappa=\xi=0.5$, $T=5$) the bracket and the i
 >
 > **Annotation.** Paleologo's point is that several roads (linear shrinkage, a ridge penalty, a Bayesian prior on idiosyncratic variance) lead to the same regularized matrix. For a PT engine that is a licence to choose the road that can be *audited*. A ridge $\tau^2$ that rises with a line's staleness is something a trader can read and challenge ("why is line 42's $\tau$ so big?"), while a global $\delta^\star$ is not. The equity setting has daily closes for every name. Credit has 150 lines and a dozen prints, so the factor target carries most of the weight, and the shrinkage intensity for the median HY line is close to one.
 
-> **[SOURCE EXTRACTION]** *Bohn_Stein p.48:* "Developing these strategies in the context of portfolio trades helps reduce the idiosyncratic impact of inexplicable behaviors of particular securities. A portfolio perspective complemented with quantitative systems sets the stage for generating high Sharpe… and Vasicek (return per unit of tail-risk contribution or return per unit of capital) ratios."
+> **[SOURCE EXTRACTION]** *Bohn_Stein_Active_Credit_Portfolio_Management p.48:* "Developing these strategies in the context of portfolio trades helps reduce the idiosyncratic impact of inexplicable behaviors of particular securities. A portfolio perspective complemented with quantitative systems sets the stage for generating high Sharpe… and Vasicek (return per unit of tail-risk contribution or return per unit of capital) ratios."
 >
 > **Annotation.** Two ideas for the risk term. First, diversification: the idiosyncratic block of $\mathbf{x}^\top\Sigma^{\text{res}}\mathbf{x}$ grows like $N$ while the notional grows like $N$, which is why the basket's per-dollar risk charge is far below the average line's standalone charge. Second, the Vasicek ratio names the right denominator for $\gamma$: capital, or tail-risk contribution. If the desk's capital is $z\,\sigma_W$ at a hurdle $\rho$ per year, matching $\tfrac12\gamma\sigma_W^2$ to the capital cost $\rho z\sigma_W T/252$ gives $\gamma=2\rho zT/(252\,\sigma_W)$. On illustrative numbers ($\rho=15\%$, $z=2.33$, $T=5$, $\sigma_W=\$500$k) that is about $3\times10^{-8}$ per dollar, roughly thirty times smaller than the $10^{-6}$ this chapter uses. The gap is what desks mean by "balance-sheet appetite." It is why $\gamma$ is backed out of won and lost PTs (the revealed-preference bid), not out of the capital plan. It is also why $\gamma$ jumps in stress, when SCOOS dealers cite balance-sheet availability as a very important decline reason.
 
@@ -608,14 +608,14 @@ Let each line's cost carry a common liquidity multiplier: $c_{i,t}=\bar c_i\,m_t
 
 $$
 \operatorname{Var}(L)=\Big(\sum_i\lvert x_i\rvert\,\bar c_i\Big)^2\sigma_m^2+\sum_i x_i^2\,\sigma^2_{\varepsilon,i}.
-\tag{19.9}
+\tag{19.8}
 $$
 
 The first term grows like $N^2$ and the second like $N$. **The liquidity factor does not diversify.** Adding lines to a basket dilutes idiosyncratic cost noise and leaves the common multiplier exactly where it was. The same shock moves prices: illiquid bonds fall more when $m$ jumps, by about $g_i=-\theta\,\text{LCS}_i\widehat P_i$ per unit of $m$. Nothing in the hedge menu spans $m$ (§19.4), so it survives into the residual as a rank-one spike:
 
 $$
 \Sigma^{\text{res}}_{\text{stress}}=\Sigma^{\text{res}}_{\text{calm}}+\sigma_m^2\,\mathbf{g}\mathbf{g}^\top .
-\tag{19.10}
+\tag{19.9}
 $$
 
 Because $\mathbf{x}^\top\mathbf{g}\mathbf{g}^\top\mathbf{x}=(\mathbf{g}^\top\mathbf{x})^2$, a one-sided basket of illiquid bonds has the spike at full strength. A mixed buy/sell basket nets it, which is one more reason dealers love two-way baskets. The persistence parameter comes from recovery half-lives $h$ in weeks, $\varphi=2^{-1/h}$. The March 2026 episode's 4–14-week half-lives (below) give weekly $\varphi\in[0.84,0.95]$. So stress lasts longer than any PT unwind horizon, and the dealer cannot simply wait it out.
@@ -628,7 +628,7 @@ Because $\mathbf{x}^\top\mathbf{g}\mathbf{g}^\top\mathbf{x}=(\mathbf{g}^\top\mat
 
 ### 19.7.2 Case Study: March 2020 and the April 2025 Tariff Week
 
-In **March 2020** all three stress channels fired at once. Flows were one-sided, so the spike in (19.10) hit at full strength, with no two-way netting. The ETF basis that the hedge relied on became the largest residual ($\sigma_u$ in §19.4 went from negligible to dominant). Dealer $\gamma$ jumped with balance-sheet constraints. The result is the Meli–Todorova finding above: the protocol's cost advantage vanished in exactly the weeks clients most wanted certainty. A desk running this engine would have watched its regime score hit the cap, its eviction loop exhaust the $\alpha$ budget on every HY basket, and its quotes widen until they stopped winning. That is the correct outcome. A PT engine that keeps winning in March 2020 at calm-market prices is subsidizing its clients' exits with its own capital.
+In **March 2020** all three stress channels fired at once. Flows were one-sided, so the spike in (19.9) hit at full strength, with no two-way netting. The ETF basis that the hedge relied on became the largest residual ($\sigma_u$ in §19.4 went from negligible to dominant). Dealer $\gamma$ jumped with balance-sheet constraints. The result is the Meli–Todorova finding above: the protocol's cost advantage vanished in exactly the weeks clients most wanted certainty. A desk running this engine would have watched its regime score hit the cap, its eviction loop exhaust the $\alpha$ budget on every HY basket, and its quotes widen until they stopped winning. That is the correct outcome. A PT engine that keeps winning in March 2020 at calm-market prices is subsidizing its clients' exits with its own capital.
 
 **April 2025** was the first stress the mature PT infrastructure came through. Volume set records, PT kept a double-digit share of the record day, and ETFs absorbed the price-discovery role on 2025-04-07. In SCOOS terms, a *net* one-fifth of dealers pulled back somewhat: a dent, not a collapse. Two differences from 2020 show up in the engine's inputs. First, the hedge stack was deeper (CDX, TRS and, soon after, listed credit futures), so the basis variance did not have to sit in a single ETF. Second, buy-side automation stayed on with "stress parameters" rather than switching off, so baskets kept arriving two-way enough to net part of the spike. The upstream lesson for the engine is that $m$, $\gamma$ and the basis multiplier must move *together* from one regime score. Calibrating them separately produces an engine that is calm about costs and panicked about risk, or the reverse, and either one is wrong.
 
@@ -646,7 +646,7 @@ def regime(etf_disc_z=0.0, bidask_pct=0.5):
 THETA_LIQ = 0.8   # price change per unit of m per unit of LCS (illustrative)
 
 def stress_cov(b, Sres_calm, s):
-    """Eq. 19.10: calm residual covariance plus a rank-one liquidity spike."""
+    """Eq. 19.9: calm residual covariance plus a rank-one liquidity spike."""
     g = -THETA_LIQ * b.lcs * b.mid
     return Sres_calm + (0.25 * s) ** 2 * np.outer(g, g)
 
@@ -675,7 +675,7 @@ $$
 \mathbb{E}^{\mathbb{P}}\big[\widetilde P_{i,T}\mid i\in\mathcal{B},\mathbf{z}_i\big]=\widehat P_i-\Pr(I_i\mid\mathbf{z}_i)\,J_i\,\widehat P_i ,
 \qquad
 \text{AS}(\mathcal{B})=\sum_{i\in\mathcal{B}}\text{MV}_i\,\Pr(I_i\mid\mathbf{z}_i)\,J_i .
-\tag{19.11}
+\tag{19.10}
 $$
 
 This is the first moment of the jump that Step 2 of §19.2 warned mean–variance would miss. Put the jump in the mean and the skew stops hiding. For a dealer *sell* (the client buys), the informed move is up, and the same charge applies with the sign of $J_i$ flipped. Two cautions. Charge AS to the *flagged tail*, not uniformly: a uniform AS charge kills the quote and still under-charges the one line that matters. And winner's-curse shading in $\pi$ is a separate, basket-level adverse-selection term (other dealers' information about the *whole* basket). Do not fold one into the other.
@@ -703,7 +703,7 @@ W_AS = dict(const=-5.0, prs=4.0, call_soon=1.5, ad_hoc=1.5, log_size=0.3)  # HY 
 J_FLOOR, J_LMT = 0.01, 0.15        # informed move, fraction of par (illustrative)
 
 def as_charge(b, w=W_AS, j_floor=J_FLOOR, j_lmt=J_LMT):
-    """Eq. 19.11: AS_i = MV_i * Pr(informed | z_i) * J_i, $. Returns (AS_i, Pr_i)."""
+    """Eq. 19.10: AS_i = MV_i * Pr(informed | z_i) * J_i, $. Returns (AS_i, Pr_i)."""
     call_soon = np.exp(-b.days_to_call / 5.0)        # 0 if no call (inf); -> 1 if imminent
     log_size = np.log(np.abs(b.x) / np.median(np.abs(b.x)))
     logit = (w["const"] + w["prs"] * b.prs + w["call_soon"] * call_soon
@@ -749,3 +749,167 @@ Replayed through the markouts, Ines's hand history reads the way she expected: 1
 **Data & Code**
 
 - scikit-learn `LedoitWolf` reference: https://scikit-learn.org/stable/modules/generated/sklearn.covariance.LedoitWolf.html
+
+## 19.9 The Buy Side: When to Use a PT, and How to Build One the Dealer Will Love
+
+Here is the second aha. **The PT premium is the shadow price of all-or-none certainty.** Man moved its flow *into* PTs in 2021 and *back out* to RFQs in 2022–23, and both decisions were right.
+
+> **[SOURCE EXTRACTION]** *Man_Revolutions_in_Credit_Trading_2023 p.4:* "Two of the key challenges for such systematic techniques are having a high certainty of execution and having a relatively good sense of the likely transaction costs, as quantitative approaches depend on being able to model accurately which securities can be traded and at what cost. Furthermore, unfilled orders may create unintended and potentially unmodelled risk exposures in the portfolio."
+>
+> **Annotation.** The second sentence is the whole buy-side case for PT, and it can be priced. A partially filled rebalance leaves a random residual portfolio that the optimizer never chose. Its risk is real, and its cost is measured in tracking error, not bid–ask. The modern quant buy side therefore runs *both* routes through the same transaction-cost model and lets an inequality pick, rather than a relationship or a habit. Man's own p.5 verdict ("The vast majority of our trades are now sent as RFQs") is that inequality evaluated on a book whose electronic fill rates had risen.
+
+### 19.9.1 Derivation: the all-or-none inequality
+
+Take a target program $\mathbf{x}$. The RFQ route fills line $i$ with probability $\phi_i$ at cost $c^{\text{RFQ}}_i$, leaving a random unfilled residual $u_i=(1-\mathbb{1}_i)x_i$, with $\mathbb{1}_i\sim\text{Bernoulli}(\phi_i)$ independent. The PT route fills everything at $\sum_i c^{\text{RFQ}}_i+\Pi$. With the buy side's own risk aversion $\gamma_B$ and covariance $\Sigma$ over the time to re-trade, $\mathbb{E}[u_iu_j]=x_ix_j(1-\phi_i)(1-\phi_j)$ for $i\neq j$ and $x_i^2(1-\phi_i)$ for $i=j$. So
+
+$$
+\mathbb{E}[\mathbf{u}^\top\Sigma\mathbf{u}]=\sum_{i\ne j}x_ix_j(1-\phi_i)(1-\phi_j)\Sigma_{ij}+\sum_i x_i^2(1-\phi_i)\Sigma_{ii},
+$$
+
+and the PT is worth it if and only if
+
+$$
+\Pi\;\le\;\tfrac12\gamma_B\,\mathbb{E}[\mathbf{u}^\top\Sigma\mathbf{u}]\;+\;\sum_i(1-\phi_i)\,c^{\text{retry}}_i\;+\;\text{Leak}(N),
+\tag{19.11}
+$$
+
+where $c^{\text{retry}}_i$ is the expected extra cost of re-trading an unfilled line and $\text{Leak}(N)$ is the information cost of showing $N$ separate RFQs to the street (Chapter 18). As $\phi_i\to1$ the right-hand side goes to zero and no premium is worth paying. That is 2022–23, when electronic RFQ fill rates and no-touch execution rose (Trumid reports 88% of eligible RFQ line items executed fully no-touch, The DESK, 2025-10-08). In 2021, $\Pi$ was competed toward zero (§19.1), and the inequality held almost everywhere. Man's switch is (19.11) flipping sign, a calculation and not a mood.
+
+*Build the basket the dealer will love.* Every lever moves a term of (19.2). Hedgeability: an interquartile increase in a portfolio's correlation with LQD improves PT execution by 12%, and an interquartile increase in ETF ownership by 15% (Meli & Todorova). Sweeteners: liquid lines lower $\mathcal{C}/M$ (§19.6). Timing: month-end and index-rebalance flow is standardized basket demand. On MarketAxess in 2022 year-to-date, PT share was 7% higher in the last three days of the month, and 67% higher in 2021 (The DESK, 2022-11-08). Competition: send to enough dealers to compress $\pi$, but not so many that the basket leaks. BlueBay's Campbell put the cost of a lost PT bluntly: "one house now knows my intentions" (The DESK, 2019-10-06). And keep the best-execution file per line. Amundi's Minieri, in the same piece: "every line needs to be justified." The engine's per-line $\Delta_j$ is that justification, already computed.
+
+## 19.10 Engineering for 90 Seconds
+
+Here is the third aha. **"Ninety seconds" is a data-architecture statement, not a compute statement.** The product $\mathbf{x}^\top\Sigma\mathbf{x}$ for $N=150$ is 22,500 multiply-adds, which a phone does in microseconds. The ninety seconds go to *staleness*: whether line 83's composite is from today, whether its LCS applies at this size, whether its loading still reflects last week's downgrade, whether the hedge basis is quoted *now*. Everything $O(N^2)$ over the universe, or $O(\text{universe})$, is precomputed overnight and refreshed on events. The live path is lookups, one Schur complement, one quadratic form, a $2\times2$ to $5\times5$ hedge solve and a greedy loop. Pricing a PT in 90 seconds is 89 seconds of precomputation and human judgment, and one second of linear algebra. (The 90-second figure is this book's design target, not a sourced market statistic.)
+
+| Step | Where it lives | Cost | Budget |
+| :--- | :--- | :--- | :--- |
+| Resolve 150 ids against the security master | precomputed index | $O(N)$ lookups | < 50 ms |
+| Composite mid, `age`, `print_frac` | intraday cache, event-refreshed | $O(N)$ | < 50 ms |
+| LCS at size, loadings $B$, $d_i$, PRS features | overnight + rating/docket events | $O(NK)$ | < 10 ms |
+| $\Sigma^{\text{res}}$: Schur complement, PSD projection, condition guard | live | $O(N^2K+N^3)$ | < 50 ms |
+| Hedge solve, AS model, greedy eviction ($k\le10$) | live | $O(H^3+kN^2)$ | < 30 ms |
+| Human review: the flagged lines only | Theo and Ines | – | about 60 s |
+| Slack for re-pulling stale composites and re-quoting | desk | – | about 25 s |
+
+> **Trend Watch: from 30 minutes to 90 seconds.** *2019:* a dealer could return a live, executable basket quote in about 30 minutes, and about eight to ten dealers could price baskets at all (The DESK, 2019-10-06). *2021:* "A client can sell hundreds of securities, sometimes over US\$2bn in an hour." Morgan Stanley's algorithmic pricing engine, live since 2017, had grown from about 500 bonds to more than 10,000 (IFR, 2021). *2024:* investors "expect near-instant liquidity, so dealers must price and quote faster than a human can by point-and-click" (Coalition Greenwich, 2024-06-11). *2025–26:* Trumid executed 88% of eligible RFQ line items fully no-touch (September 2025). Buy-side desks such as Vanguard automate about 70% of traded volume but switch the robots to "stress parameters" when markets gap (The DESK, October 2026). *What it means:* about a 20× compression in six years, delivered almost entirely by precomputation and cached fair values, not by faster arithmetic. The binding constraint now is data freshness and the kill switch.
+
+**What ROBO built from the vague version.** Theo asked ROBO to "price the basket fast." ROBO cached yesterday's composites, skipped the staleness fields because they slowed the parse, and returned a confident bid in four milliseconds. Eleven lines had not printed in a month. It was fast. It was also an answer to a question nobody had asked.
+
+**The precise spec** adds kill switches. Refuse to auto-quote if more than 20% of gross MV has `age > 10`. Require human sign-off if regime score $s\ge1$, if any line has $\text{PRS}>0.7$, or if any line carries more than 25% of total cost. Refuse outright if the condition guard fails. Log the four-term decomposition for every quote, won or lost, because losing quotes are how $\gamma$ and $\pi$ get calibrated.
+
+### Specification for AI Implementation (the full engine)
+
+```python
+def price_pt(b, gamma=1e-6, omega=0.5, eta=0.75, etf_disc_z=0.0, bidask_pct=0.5,
+             target=0.0045, alpha=0.15, k_max=10, evict=True):
+    """Live path. Returns dealer cash for the kept basket (eq. 19.2; negative = dealer
+    receives) and the four-term decomposition, all in $; cost_bp is on gross MV."""
+    t0 = time.perf_counter()
+    reg = regime(etf_disc_z, bidask_pct)
+    gam, m = gamma * reg["gamma_mult"], reg["m"]
+    _, Sxf, Sff, S = build_residual_cov(b, basis_scale=reg["basis_mult"])
+    if reg["s"] > 0:
+        S = stress_cov(b, S, reg["s"])
+    as_vec, _ = as_charge(b)
+    ev = []
+    if evict:
+        ev, _ = evict_greedy(b, S, as_vec, gamma=gam, omega=omega, eta=eta, m=m,
+                             alpha=alpha, k_max=k_max, target=target)
+    keep = np.setdiff1d(np.arange(b.n), ev)
+    bk = b.drop(ev)
+    h = min_var_hedge(bk.x, Sxf[keep], Sff)
+    handling = handling_cost(bk, omega, eta, m=m).sum()
+    risk = 0.5 * gam * bk.x @ S[np.ix_(keep, keep)] @ bk.x
+    adv = as_vec[keep].sum()
+    hedge_cost = np.abs(h) @ HEDGE_HALF_SPREAD
+    cost = handling + risk + adv + hedge_cost
+    gross = bk.mv().sum()
+    return dict(cash=bk.x @ bk.mid - cost, cost=cost, cost_bp=1e4 * cost / gross,
+                handling=handling, risk=risk, adv=adv, hedge_cost=hedge_cost, hedge=h,
+                evicted=[str(b.ids[i]) for i in ev], hit_target=cost / gross <= target,
+                regime=reg, ms=1e3 * (time.perf_counter() - t0))
+
+fair = b0.x @ b0.mid
+full = price_pt(b0, evict=False)
+calm = price_pt(b0)
+assert full["cash"] < fair                                   # a bid sits below fair value
+assert np.isclose(full["cost"], full["handling"] + full["risk"] + full["adv"]
+                  + full["hedge_cost"])
+assert calm["evicted"] == ["L117", "L042"] and calm["hit_target"]
+assert calm["cost_bp"] < full["cost_bp"]                     # the counter-proposal pays
+stress = price_pt(b0, etf_disc_z=-2.5, bidask_pct=0.9, evict=False)
+assert stress["cost"] > 2.0 * full["cost"]                   # same basket, one regime later
+buy = price_pt(replace(b0, x=-b0.x), evict=False)           # client buys the same lines
+assert np.isclose(buy["cost"], full["cost"], rtol=1e-9)      # costs are side-symmetric
+assert np.isclose(buy["cash"], -fair - full["cost"])         # the ask sits above fair value
+assert calm["ms"] < 1000.0                                   # the linear algebra is the easy second
+```
+
+### Deep-Dive Resource Graph
+
+**Practitioner Writing**
+
+- Coalition Greenwich (2024-06-11), Kevin McPartland, "Corporate Bond Dealers Focus on Trade Automation": https://www.greenwich.com/node/150811
+- Coalition Greenwich (2026-02-17), Kevin McPartland, "Dealer net short in corporate bonds sets record": https://www.greenwich.com/node/158326
+
+**Data & Code**
+
+- MarketAxess monthly volume release, May 2026, with the estimated share of US credit portfolio trading: https://s201.q4cdn.com/767283836/files/doc_news/2026/06/05_2026_Volume_Release-Final.pdf
+
+## 19.11 Desk Debrief
+
+- **A PT bid is four terms plus a margin:** fair value, minus liquidation cost, minus residual risk *after the hedge*, minus adverse selection, minus $\pi$. Every term is in dollars until the very last line.
+- **You are pricing one lump and a residual.** The hedge turns $\Sigma$ into $\Sigma^{\text{res}}$, and $\Sigma^{\text{res}}$ is the re-hedged covariance for *any* basket, so eviction re-hedges for free.
+- **LCS is a standalone price.** Use only its handling share inside a basket, scale it for size, and never multiply it by duration again.
+- **Staleness is variance, not a haircut.** Line 42 is not a bad bond; nobody knows what it is worth, and that ignorance is what the engine prices.
+- **Evict on exact removal savings, and recompute after every eviction.** Liquidity scores evict line 42. Only the AS term evicts line 117.
+- **The liquidity factor does not diversify.** In stress, one regime score must move $m$, $\gamma$ and the basis together.
+- **The hand history is by line and net of the hedge.** A basket-level markout averages away the two cards that were face down. IDO or it didn't happen.
+- **Ninety seconds is 89 seconds of precomputation and judgment, and one second of linear algebra.**
+
+### The Spec You Hand the Robot
+
+> Build `price_pt(inquiry, model_state, market_state) -> Quote`. **Inputs:** a struct-of-arrays inquiry ($N\le500$ lines: id, signed par \$, composite mid as a fraction of par, age in business days, print fraction, LCS at \$4mm, OASD, OAS, sector, daily idiosyncratic vol, PRS, days to lender call, ad hoc flag). Also: overnight loadings $B$ $(N,K)$, factor covariance $\Omega$ $(K,K)$, hedge loadings $A$ $(H,K)$ and basis covariance $U$ $(H,H)$, plus live ETF discount z-score and bid–ask percentile. **Compute (all under $\mathbb{P}$, all in dollars):** handling cost (19.3); idiosyncratic variance with staleness, print-frequency inflation and ridge (19.5); $\Sigma^{\text{res}}$ by Schur complement (19.4), PSD-projected, with $\operatorname{cond}\le10^6$; the stress spike (19.9) from one regime score that also scales $\gamma$ and the basis; the AS charge (19.10) from a logistic inclusion model; greedy eviction on exact removal savings (19.7), stopping at the target cost per dollar, $\alpha$ of MV, or $k_{\max}$ lines; and the minimum-variance hedge of the kept basket. **Return:** cash, cost in \$ and in bp of gross MV, the four-term decomposition, hedge notionals, evicted ids, a `hit_target` flag and latency. **Refuse** if mids look like points, if more than 20% of MV has age $>10$, or if a guard fails. **Escalate to a human** if $s\ge1$, if any $\text{PRS}>0.7$, or if one line carries more than 25% of cost. **Tests:** CE matches Monte Carlo under Gaussian P&L; hedged variance equals the Schur form; costs are side-symmetric; eviction strictly lowers cost per dollar; stress cost is at least 2× calm on the reference basket; the live path runs in under 1 s.
+
+### Exercises
+
+1. **Find the two lines.** Using `price_pt(b0, evict=False)`, attribute total cost to lines with the exact removal savings (19.7). Show that their sum exceeds $\mathcal{C}$, and explain the excess using the off-diagonal term in §19.6. Then find the two lines with the largest $\Delta_j/\text{MV}_j$ without reading the cold open.
+2. **The ETF goes to a 5% discount.** Suppose HYG trades at a 5% discount to NAV with a z-score of $-4$. Run the engine with `etf_disc_z=-4.0, bidask_pct=0.97`. Which term of (19.2) grows most? Does eviction still reach the 45bp target within $\alpha=15\%$? If not, what should the desk tell the client, and is "decline" a valid quote?
+3. **ROBO and the stale universe.** Set every line's `age` to 30 and `print_frac` to 0.05, and price the basket. ROBO returns a number. Write the kill-switch test that should have stopped it, and decide whether it belongs in `Basket.__post_init__` or in `price_pt`.
+4. **Kaz's springing lien.** Kaz proposes modelling line 117's priming risk by multiplying its `sig_idio` by 10 instead of using the AS term. Compare the two quotes and the two hedges. Explain, with Step 2 of §19.2, why the variance version both under-charges the jump and distorts $\mathbf{h}^\star$.
+5. **Flip the inequality.** For a 150-line IG program with RFQ fill probabilities $\phi_i=0.9$, $\gamma_B=5\times10^{-7}$ per dollar, and $\Sigma$ from §19.5 over a one-day re-trade horizon, compute the maximum PT premium $\Pi$ the buy side should pay under (19.11), ignoring leakage. Then lower $\phi_i$ to 0.6 and recompute. Which year, 2021 or 2023, does each number describe?
+6. **The mixed basket.** Make 50 of the 150 lines client *buys*. Show that the stress spike $(\mathbf{g}^\top\mathbf{x})^2$ shrinks, and explain why a dealer should bid tighter for a two-way basket even when every line's LCS is unchanged.
+
+### Deep-Dive Resource Graph
+
+**Podcasts**
+
+- Bloomberg Professional, *Market Dialogues* (2025-07-07), "How is portfolio trading changing the fixed income landscape?" with David Krein, Anna Han and Shahaan Kazi: https://professional.content.cirrus.bloomberg.com/professional2023/insights/markets/how-is-portfolio-trading-changing-the-fixed-income-landscape/
+
+**Practitioner Writing**
+
+- Man Group (2023), *Revolutions in Credit Trading* (shelf: `Man_Revolutions_in_Credit_Trading_2023`).
+- The DESK (2019-10-06), "The burgeoning portfolio trading business": https://www.fi-desk.com/trading-protocols-portfolio-trading-lynn-strongin-dodds/
+- The DESK (2022-06-01), "Barclays: Portfolio trading 8% of US credit market volume": https://www.fi-desk.com/barclays-portfolio-trading-8-of-us-credit-market-volume/
+- IFR (2021), "US banks reap boom in bond portfolio and algo trading": https://www.ifre.com/bonds/1968608/us-banks-reap-boom-in-bond-portfolio-and-algo-trading
+- Meli & Todorova (2022), "Portfolio Trading: Part III — In Crisis and Calm," Barclays Research (title only).
+
+**Academic Papers**
+
+- Meli & Todorova (2023), "Portfolio Trading in Corporate Bond Markets": https://www.aeaweb.org/conference/2024/program/paper/a7z3SGGN
+- Li, J. S. (2022), "Frictional Intermediation, Inventory Hedging, and the Rise of Portfolio Trading in the Corporate Bond Market": http://www.aeaweb.org/conference/2023/program/paper/9TfsndSa
+- Li, O'Hara, Rapp & Zhou (2023), "Bond Market Illiquidity: Is Portfolio Trading the Solution?": https://scholar.smu.edu/business_finance_research/251
+- Koont, Ma, Pástor & Zeng, "Steering a Ship in Illiquid Waters: Active Management of Passive Funds": https://www.nber.org/papers/w30039
+- Cotelioglu (2024), "Do mutual funds and ETFs affect the commonality in liquidity of corporate bonds?": https://ideas.repec.org/a/eee/empfin/v78y2024ics0927539824000550.html
+- Ledoit & Wolf (2004), "A Well-Conditioned Estimator for Large-Dimensional Covariance Matrices," *Journal of Multivariate Analysis* 88(2), 365–411.
+- Almgren & Chriss (2000), "Optimal Execution of Portfolio Transactions," *Journal of Risk* 3(2).
+- Dick-Nielsen, Feldhütter & Lando (2012), "Corporate Bond Liquidity Before and After the Onset of the Subprime Crisis," *Journal of Financial Economics* 103(3).
+
+**Data & Code**
+
+- Federal Reserve SCOOS, June 2025 (special questions on credit portfolio trading): https://www.federalreserve.gov/data/scoos/files/scoos_202506.pdf
+- FINRA TRACE: Regulatory Notice 22-12 (portfolio-trade modifier, effective 2023-05-15) and Regulatory Notice 26-16 (affiliate indicator), via https://www.finra.org/
+- scikit-learn `LedoitWolf`: https://scikit-learn.org/stable/modules/generated/sklearn.covariance.LedoitWolf.html
+- MarketAxess monthly volume releases (estimated share of US credit portfolio trading): https://s201.q4cdn.com/767283836/files/doc_news/2026/06/05_2026_Volume_Release-Final.pdf
+
+<!-- STATUS: COMPLETE -->
