@@ -134,3 +134,89 @@ The ISDA research note and the SG Prime Services CTA update were downloaded by t
 | Man AHL $39.4bn of trend-following AUM across "900+ traditional and alternative markets" at 30 June 2026 | UNVERIFIABLE (not fetched) | man.com/trend-following not fetched within the call budget. Hedge: "about $39bn (Man AHL, mid-2026)". | https://www.man.com/trend-following |
 | HY OAS in a tight band 2.59-4.61% over 2024-2026 | CONFIRMED | FRED: low 2.59% (2025-01-22), high 4.61% (2025-04-07) within 2024-2026. | FRED BAMLH0A0HYM2 |
 
+## Chapter 11 (11_ch11_defensive_systematic_high_yield.md): three boxes
+
+### Box 11.1: The Whipsaw Years, 2022-2026
+
+| claim | verdict | evidence / correct figure | source |
+| :--- | :--- | :--- | :--- |
+| 2022 US HY "down over 11%"; 2023 "up over 13%" (BlackRock p.3, Bloomberg data as of 31 Mar 2024) | CONFIRMED | p.3: "U.S. high yield was down over 11%" (2022) and "up over 13%" (2023); footnote "Source: Bloomberg, as of March 31, 2024". | source_pdfs/BlackRock_Systematic_High_Yield_Credit.pdf p.3 |
+| Average manager beat benchmark by 0.47% in 2022, lagged by 0.68% in 2023 | CONFIRMED | p.4: "outperformed their benchmark by 0.47%"; "underperformed their benchmark by -0.68%". | BlackRock p.4 |
+| 2024: +0.35% vs benchmark in Q1, -0.37% over the rest of the year | CONFIRMED | p.5: "+0.35% in the first quarter of 2024, but underperformed by -0.37% for the remainder of 2024". | BlackRock p.5 |
+| ICE BofA US HY total return +8.20% in 2024 and +8.50% in 2025 | CONFIRMED | Recomputed from BAMLHYH0A0HYM2TRIV: +8.20% and +8.50%. | FRED BAMLHYH0A0HYM2TRIV |
+| Fell 3.83% from 28 Feb to 7 Apr 2025; regained prior peak on 12 May 2025 ("ten-week V") | CONFIRMED | -3.83% (2025-02-28 to 2025-04-07); first close at or above the 28 Feb level is 2025-05-12 (10.4 weeks after the peak). | FRED BAMLHYH0A0HYM2TRIV |
+| 2026: fell 2.87% from 27 Aug to 1 Oct; +0.15% YTD on 15 Oct | CONFIRMED | -2.87% (2026-08-27 to 2026-10-01, the 2026 maximum drawdown); YTD +0.15% to 2026-10-15. | FRED BAMLHYH0A0HYM2TRIV |
+
+### Box 11.2: The Soft-Default Regime, 2024-2026
+
+| claim | verdict | evidence / correct figure | source |
+| :--- | :--- | :--- | :--- |
+| S&P: US trailing-12-month speculative-grade default rate 5.1% in Dec 2024 | UNVERIFIABLE | S&P pages were not retrieved (the box itself flags this). Hedge: "S&P put the US trailing-12-month speculative-grade default rate near 5% at the end of 2024". | n/a |
+| S&P: distressed exchanges about 68% of 2025 defaults through April, highest YTD share since 2008 | UNVERIFIABLE | Not confirmed. A search summary of S&P's April 2025 default outlook reports distressed exchanges at 62% of defaults in Q1 2025. Hedge: "S&P put distressed exchanges at well over 60% of defaults in early 2025". | https://www.spglobal.com/ratings/en/research/articles/250416-default-transition-and-recovery-trade-tensions-could-reverse-decline-in-corporate-defaults-13473883 |
+| Moody's: distressed exchanges 65% of all corporate defaults in 2025 | CONFIRMED | "in 2025, roughly 65% of all corporate defaults were distressed restructurings" (Moody's Analytics, 18 May 2026); "approximately 65% of all defaults in 2025" (28 Apr 2026). Note The DESK paraphrases the same number as "65% of private credit defaults", which is a misreading. | https://www.moodys.com/web/en/us/insights/credit-risk/private-credit/lend-extend-and-then.html ; https://www.moodys.com/web/en/us/insights/credit-risk/private-credit/us-corporate-default-risk-in-2026.html |
+| Average forward one-year PD for US HY companies 3.2% in Q1 2026 (Moody's Analytics, 18 May 2026) | CONFIRMED | "As of Q1 2026, the average forward-looking one-year probability of default for U.S. high-yield companies has eased to 3.2%." Page dated May 18, 2026. | Moody's "Lend, extend, and then..." (above) |
+| Fitch forecast 2026 default rates of 2.5-3.0% (US HY) and 4.5-5.0% (US leveraged loans) (Investment Executive, 3 Dec 2025) | CONFIRMED | "high yield issuers will be between 2.5% and 3%"; "leveraged loans will be in the range of 4.5% to 5% by the end of 2026". Article dated December 3, 2025. | https://www.investmentexecutive.com/news/u-s-leveraged-loan-defaults-to-ease-in-2026-fitch/ |
+| Fitch US private credit default rate hit a record 6% in April 2026 (The DESK, 27 May 2026) | CONFIRMED | "Fitch Ratings reported in May 2026 that the US private credit default rate reached a record 6% in April". Article by Dan Barnes dated May 27, 2026. | https://www.fi-desk.com/defaults-creep-higher-in-leveraged-credit-markets/ |
+| UBS: 2025 USD HY default expectation 4.8%, 3.1% excluding two large distressed capital structures (UBS AM, 17 Jan 2025) | CONFIRMED | "USD high yield defaults expected to be 4.8%"; "Excluding these special situations, the default forecast comes in at 3.1%". Dated 17 Jan 2025. | https://www.ubs.com/us/en/assetmanagement/insights/asset-class-perspectives/fixed-income/articles/2025-fixed-income-default-study.html |
+| "any PD model trained on hard defaults alone is calibrated to a world in which two-thirds of today's defaults would have counted as survival" | CONFIRMED (consistent) | Consistent with Moody's 65% share. | Moody's, above |
+
+### Box 11.3: Electronic HY and the Systematic Share, 2019-2026
+
+| claim | verdict | evidence / correct figure | source |
+| :--- | :--- | :--- | :--- |
+| Man Numeric moved from roughly 30% of HY and 60% of IG order flow on electronic venues to over 90% of order flow by May 2023 | CONFIRMED | p.3: "from having roughly 30% of our order flow in high yield and 60% in investment grade going through electronic venues, to over 90% of our order flow going through electronic trading venues"; footnote "Source: Man Numeric; as of 1 May 2023". | source_pdfs/Man_Revolutions_in_Credit_Trading_2023.pdf p.3 |
+| Total US corporate bond ADV $66.7bn through Sept 2026, +13.4% y/y | CONFIRMED | SIFMA: "Trading (through September) $66.7 billion ADV, +13.4% Y/Y". | https://www.sifma.org/resources/research/statistics/us-corporate-bonds-statistics/ |
+| $12.1tn outstanding at 2Q26 (SIFMA page dated 14 Oct 2026) | CONFIRMED | "Outstanding (as of 2Q26) $12.1 trillion, +4.2% Y/Y"; page published October 14, 2026. | same |
+| Blackstone systematic credit platform manages more than $40bn across IG, HY and EM | CONFIRMED | Blackstone p.1: "over $40 billion in assets under management ... liquid investment-grade, high-yield, and emerging market portfolios". | source_pdfs/Blackstone_Systematic_Credit.pdf p.1 |
+| HYDB launched July 2017 | CONFIRMED | Inception July 11, 2017. | https://stockanalysis.com/etf/hydb/ |
+| HYDB held $1.52bn at a 0.35% expense ratio (checked 17 Oct 2026) | CONFIRMED | AUM $1.52B, expense ratio 0.35%, last checked Oct 17, 2026 (aggregator). | same |
+| HYDB "selected and weighted by default probability, default-adjusted spread, and volatility" | UNVERIFIABLE (not fetched) | Index methodology not retrieved. Hedge: "selected and weighted by a systematic default-risk model". | n/a |
+
+## Chapter 12 (12_ch12_multi_asset_credit_allocation.md): four boxes
+
+Federal Reserve Financial Stability Reports (May 2026 and November 2025) were downloaded as PDFs and searched as text.
+
+### Box 12.1: The HY Index That Stopped Growing (2004-2026)
+
+| claim | verdict | evidence / correct figure | source |
+| :--- | :--- | :--- | :--- |
+| Fridson: HY index face value about $1.4tn in April 2025, essentially unchanged over ten years | CONFIRMED | "On our April 17, 2025 observation date, the ICE BofA US High Yield Index's total face amount was $1.4 trillion, unchanged from 10 years earlier." | https://rpc.cfainstitute.org/blogs/enterprising-investor/2025/think-weve-seen-the-last-1000-bps-high-yield-spread-think-again |
+| BB share 53.55% against a 1996-2024 average of 44.53% (CFA Institute Enterprising Investor, June 2025) | CONFIRMED | 53.55% on April 17, 2025; 44.53% average, 31 Dec 1996 to 31 Dec 2024. Post dated 2 June 2025. | same |
+| Nuveen: 51% BB at year-end 2024 against 37% in 2004 | CONFIRMED | Nuveen p.4: "At year-end 2024, 51% of the index was rated BB, compared to 37% in 2004". | source_pdfs/Nuveen_Multi_Asset_Credit_Quant_Framework.pdf p.4 |
+| Institutional leveraged loans $1,549bn at 2025Q4 (9.2% growth over the year) | CONFIRMED | Fed FSR May 2026 table: leveraged loans 1,549, growth 9.2%; "data extend through 2025:Q4"; note says the figure is institutional leveraged loans. | https://www.federalreserve.gov/publications/files/financial-stability-report-20260508.pdf |
+| HY and unrated bonds $1,772bn | CONFIRMED | Same table: 1,772 (growth 4.7%). | same |
+| Private credit about $1.4tn, "about one-third of total below-investment-grade debt, excluding bank loans" | CONFIRMED | Box 4.1: "about $1.4 trillion, or 10 percent, of the total debt of U.S. nonfinancial corporations, or about one-third of total below-investment-grade debt, excluding bank loans" (latest data, second half of 2025). | same |
+
+### Box 12.2: The 2026 CCC Decompression
+
+| claim | verdict | evidence / correct figure | source |
+| :--- | :--- | :--- | :--- |
+| CCC OAS 7.46% (YE 2024), 8.85% (YE 2025), 12.78% on 15 Oct 2026, a post-2023 high | CONFIRMED | FRED: 7.46, 8.85, 12.78; the window maximum is 12.82% on 14 Oct 2026, so 12.78% is the second-highest print, "post-2023 high" holds. | FRED BAMLH0A3HYC |
+| BB OAS 1.86%, 1.69%, 1.97%; overall HY OAS 3.23% | CONFIRMED | 1.86 (2024-12-31), 1.69 (2025-12-31), 1.97 (2026-10-15); HY 3.23 (2026-10-15). | FRED BAMLH0A1HYBB, BAMLH0A0HYM2 |
+| CCC/BB ratio 4.0, 5.2, 6.5; CCC-BB gap 560, 716, 1,081 bp | CONFIRMED | 4.01, 5.24, 6.49; gaps 560, 716, 1,081 bp. | FRED |
+| YTD total returns to 15 Oct 2026: CCC -5.21%, BB +0.33%, HY +0.15% | CONFIRMED | -5.21%, +0.33%, +0.15%. | FRED BAMLHYH0A3CMTRIV, BAMLHYH0A1BBTRIV, BAMLHYH0A0HYM2TRIV |
+| 10-year Treasury yield 5.10% | CONFIRMED | DGS10 = 5.10 on 2026-10-15. | FRED DGS10 |
+| Effective fed funds from 3.62% (May 19) to 3.88% (Sept 17) | CONFIRMED | DFF 3.62 (2026-05-19), 3.88 (2026-09-17). | FRED DFF |
+| Fed May 2026 FSR: software the largest sector in private-credit portfolios; secondary leveraged-loan spreads rose, "reflecting a high concentration of leveraged loan borrowers in the software industry" | CONFIRMED | Box 4.1: "The software sector had become the largest sector in private credit portfolios"; ch.1: spread "increased moderately, reflecting a high concentration of leveraged loan borrowers in the software industry". The report says "increased moderately". | Fed FSR May 2026 |
+
+### Box 12.3: Private Credit's First Redemption Cycle
+
+| claim | verdict | evidence / correct figure | source |
+| :--- | :--- | :--- | :--- |
+| Semi-liquid vehicles $425bn gross ($241bn net), about 20% of private-credit vehicle net assets | CONFIRMED | "semi-liquid funds account for $425 billion in gross assets and $241 billion in net assets, or about 20 percent of net assets under management in private credit vehicles". | Fed FSR May 2026, Box 4.1 |
+| Perpetual-life BDCs $306bn gross ($161bn net); interval funds $119bn gross ($80bn net) | CONFIRMED | Verbatim; the parts sum to the totals (306+119, 161+80). | same |
+| Redemption requests "accelerated further in the first quarter of 2026, when a number of funds received requests that were much larger than 5 percent of NAV"; most managers capped at 5% | CONFIRMED | Verbatim ("5 percent of NAV"; "Most managers chose to cap redemptions at 5 percent of NAV"). | same |
+| "accepted redemption requests somewhat exceeded new inflows in the first quarter of 2026, the first time this has occurred since these vehicles were created" | CONFIRMED | Verbatim. | same |
+| Nov 2025 report judged the First Brands and Tricolor bankruptcies to "so far appear to be isolated events" while noting "unexpected losses could arise from opaque off-balance-sheet funding arrangements" | CONFIRMED (naming note) | Quotes are verbatim, but the report does not name the firms: it says "two privately held firms, an auto parts supplier and a subprime auto lender". Naming them is the book's inference. Report dated November 2025 (file 20251107). | https://www.federalreserve.gov/publications/files/financial-stability-report-20251107.pdf |
+| "a 1.9% volatility" for a BDC sleeve | OUT OF SCOPE | Model parameter internal to the chapter, not a sourced fact. | n/a |
+
+### Box 12.4: April 2025 as a Transition Test
+
+| claim | verdict | evidence / correct figure | source |
+| :--- | :--- | :--- | :--- |
+| "a regime transition in about 25 trading days" | CORRECTED (imprecise) | 26 trading days fits the HY total-return peak-to-trough (28 Feb to 7 Apr 2025). The OAS move quoted in the next sentence (22 Jan to 7 Apr) spans 52 trading days, and OAS first crossed 3.0% on 10 March. Replacement wording below. | FRED BAMLH0A0HYM2 |
+| HY OAS from 259 bp (22 Jan) to 461 bp (7 Apr) | CONFIRMED | 2.59% and 4.61%. | FRED BAMLH0A0HYM2 |
+| Peak-to-trough total returns: HY -3.83% (28 Feb to 7 Apr), CCC -7.80%, B -4.21%, BB -2.83%, IG -3.03% (3 Mar to 11 Apr), EM corporate -2.37%, EM HY corporate -3.79% | CONFIRMED | Series maximum drawdowns in H1 2025: HY -3.83%, CCC -7.80%, B -4.21%, BB -2.83%, IG -3.03% (3 Mar to 11 Apr), EM -2.37%, EM HY -3.79%. Each series has its own peak and trough dates; only HY and IG dates are given in the box. | FRED BAMLHYH0A0HYM2TRIV, ...3CMTRIV, ...2BTRIV, ...1BBTRIV, BAMLCC0A0CMTRIV, BAMLEMCBPITRIV, BAMLEMHBHYCRPITRIV |
+| HY mutual funds and ETFs: -$10.9bn flows in April, +$18.5bn May to September | CONFIRMED | MacKay: "in April, retail investors pulled $10.9 billion from U.S. high yield mutual funds and ETFs, according to J.P. Morgan ... from May through September ... $18.5 billion". | https://www.nylim.com/mackay-shields/insights/specialty-fixed-income-outlooks-4q25/high-yield-4q-2025-outlook |
+| End-Sept 2025 HY spread-to-worst 299 bp, "22 bps wider than the post-2008 tights earlier in 2025", after 12 straight quarterly gains, longest since 1997 | CORRECTED (quote wording) | Facts match: 299 bps; 12 consecutive quarters, longest since 1997. The source wording is "only 22 bps wider than the post-2008 tights reached earlier in 2025"; the box's quotation drops "reached". Replacement below. | MacKay Shields 4Q 2025 HY Outlook (above) |
+

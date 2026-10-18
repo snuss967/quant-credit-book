@@ -194,9 +194,11 @@ Note: the Trumid 88% and Tradeweb AiEX >40% claims are repeated in the chapter 1
 | Duplicate affiliate trade reports inflated US high-grade TRACE volume by up to 8% in June 2026 (MarketAxess volume release) | CONFIRMED (attribution) | MarketAxess June 2026 volume release: "The Company estimates that duplicate trade reports inflated U.S. high-grade TRACE volumes by up to 8% in June 2026". It is MarketAxess's estimate, stated as fact in the box. Suggest "MarketAxess estimated that duplicate ... reports inflated ...". | https://s201.q4cdn.com/767283836/files/doc_news/2026/07/07/MKTX-Volume-Release-June-2026-Final.pdf |
 | SEC approved extending the TRACE affiliate-principal indicator on 2026-07-24; voluntary from 2026-08-31, mandatory from 2027-08-02 (FINRA Notice 26-16) | CONFIRMED | RN 26-16: SEC Release 105991 (24 Jul 2026), 91 FR 47909 (29 Jul 2026); voluntary from 31 Aug 2026; mandatory "August 2, 2027". | https://www.finra.org/rules-guidance/notices/26-16 |
 
-## Chapter 28: The PM playbook (1 box; read from book_src line 90 because the digest omits it)
+## Chapter 28: The PM playbook (3 boxes, read from book_src because the digest omits them)
 
-Note for the digest owner: state/digests/trend_watch_boxes.md ends at chapter 27. Chapter 28's box ("The platform becomes the operating system, 2024-2026") is missing from it; the outline lines for 28.3 and 28.4 mention two further Trend Watch items ("liquid overlay layer", "2026 CCC decompression") that do not exist as boxes in 28_ch28_pm_playbook.md (only one "Trend Watch:" box is present).
+Note for the digest owner: state/digests/trend_watch_boxes.md ends at chapter 27, so chapter 28's boxes are not in it. 28_ch28_pm_playbook.md was still being written while this check ran (it grew from 266 to 1,212 lines and was last modified 2026-10-18 00:54 UTC), and three "Trend Watch:" boxes were present at the final read: line 90 (platform operating system), line 322 (liquid overlay layer) and line 515 (CCC decompression). Re-run the check if the writer revises any box after that time.
+
+### Box 28-A: the platform becomes the operating system, 2024-2026 (line 90)
 
 | claim | verdict | evidence / correct figure | source |
 | :--- | :--- | :--- | :--- |
@@ -208,4 +210,28 @@ Note for the digest owner: state/digests/trend_watch_boxes.md ends at chapter 27
 | Fed May 2026 Financial Stability Report: hedge-fund leverage "stable at record-high levels", concentrated in a small number of large funds | UNVERIFIABLE (not checked) | Check the May 2026 FSR hedge-fund section for the quoted phrase. | https://www.federalreserve.gov/publications/financial-stability-report.htm |
 | September 2026: Goldman prime-insights head said multi-strategy managers attracted about $500bn extra assets in a year (about 25% growth) vs sector headcount up 10-11%; JPMorgan estimate of 645% average multi-strategy leverage (Hedgeweek, 15 September 2026) | UNVERIFIABLE (not found) | One targeted search returned only general multi-strat flow coverage (Citco: about $32bn of inflows so far in 2026; BofA allocator survey). The "quarter more capital chasing a tenth more PMs" conclusion rests on these figures. Hedge: "industry estimates put multi-strategy asset growth well ahead of headcount growth". | n/a |
 | Millennium PMs who lose 5% of allocated capital "typically" have it halved; another 2.5% and they are "usually" let go (WSJ via eFinancialCareers, 5 December 2025; firm declined to comment) | UNVERIFIABLE (not checked) | Already hedged in the box ("commonly reported rather than disclosed"). Keep as is. | n/a |
+
+### Box 28-B: the liquid overlay layer arrives, 2021-2026 (line 322)
+
+| claim | verdict | evidence / correct figure | source |
+| :--- | :--- | :--- | :--- |
+| ISDA research note of 29 July 2026: total CDS trading $41.8tn in 2025; index a record $39.0tn (93.3% of total; $28.1tn in 2023); single-name from a $3.3tn 2023 peak to $2.8tn | CONFIRMED | All five figures match the ISDA note ("Index CDS ... dipped to $28.1 trillion in 2023"). See the chapter 24 table for the full set. | https://www.isda.org/a/Pa0iE/CDS-Market-Dynamics-Five-Years-of-Activity-and-a-Record-2025.pdf |
+| H1 2026 CDS activity $27.4tn, up 27.8% year on year | CONFIRMED | "Total trading reached $27.4 trillion, up by 27.8% from $21.5 trillion a year earlier" (index +28.3% to $25.7tn; single-name +19.8% to $1.7tn). | same, p.2 |
+| Clarus: cleared USD CDX of $3.94tn in March 2026, up 46% year on year | UNVERIFIABLE (not checked) | Check the Clarus Financial Technology blog for March 2026 CDX cleared volume. | https://www.clarusft.com |
+| Cboe iBoxx futures block trades topped $1bn a month for a second straight month in August 2026; IBIG block activity overtook IBHY's for the first time (The DESK, 16 October 2026) | UNVERIFIABLE (not checked) | The DESK article of 16 Oct 2026 not located. | n/a |
+| March 2026 combined US IG and HY TRACE volume averaged $70.2bn a day, up 14.7% year on year; record PT ADV $2.3bn at MarketAxess and record $10.3bn ADV at Trumid (The DESK, 9 April 2026) | UNVERIFIABLE (not checked) | The MarketAxess figure can be checked in its March 2026 volume release (same series as the June 2026 release already used above); the others need The DESK article. Note the TRACE-volume duplicate-print issue in chapter 22: up to 8% of HG volume may be double-counted, so a 14.7% YoY change is not clean. | https://s201.q4cdn.com/767283836/files/doc_news/2026/07/07/MKTX-Volume-Release-June-2026-Final.pdf (series) |
+| In 2022 Man's protocol mix was 42% disclosed RFQ, 16% anonymous RFQ, 13% session-based, 10% CLOB, 10% portfolio trading, 9% streams (Man_Revolutions_in_Credit_Trading_2023 p.4) | CONFIRMED | Figure 4 on p.4, source Greenwich MarketView as of 31 Dec 2022: 2022 values 42/16/13/10/10/9, summing to 100%; 2021 values were 48/18/10/9/7/7. Reading the chart from the extracted text relies on pair order, but the 2022 set sums to exactly 100% and matches the surrounding text (session-based and streaming expanding). | /home/user/quant-credit-book/source_pdfs/Man_Revolutions_in_Credit_Trading_2023.pdf (p.4) |
+
+### Box 28-C: the CCC decompression, January-October 2026 (line 515)
+
+FRED series BAMLH0A0HYM2, BAMLC0A0CM and BAMLH0A3HYC were fetched as a single CSV (observations to 2026-10-15) and every figure in the box was recomputed from the file.
+
+| claim | verdict | evidence / correct figure | source |
+| :--- | :--- | :--- | :--- |
+| US HY OAS 2.83% on 2 Jan, low of 2.64% on 22 Jan, peak 3.46% on 30 Mar, 3.23% on 15 Oct | CONFIRMED | All four match the CSV. Caution: 2.64% is the January low; the 2026 low is 2.60% on 28 Aug, so "a low of 2.64% on 22 January" should say "a January low". | https://fred.stlouisfed.org/series/BAMLH0A0HYM2 |
+| US IG OAS 0.79%, then 0.73%, 0.94% (16 March), 0.84% | CONFIRMED | 0.79 (2 Jan), 0.73 (22 Jan, also the 2026 low), 0.94 (16 Mar, the 2026 high), 0.84 (15 Oct). | https://fred.stlouisfed.org/series/BAMLC0A0CM |
+| CCC-and-lower 8.88%, low 8.38% (28 Jan), 10.20% (30 Mar), 12.78% on 15 Oct, 12.82% on 14 Oct | CONFIRMED | All five match the CSV. | https://fred.stlouisfed.org/series/BAMLH0A3HYC |
+| ...widest since at least October 2023 | CONFIRMED | The 12.82% print on 14 Oct 2026 is the highest in the whole file, which starts 2023-10-17 (FRED's three-year window), so "at least October 2023" is the right hedge. | same |
+| CCC-to-HY ratio about 3.1x in January, about 4.0x in October | CONFIRMED | 8.88/2.83 = 3.14; 12.78/3.23 = 3.96. | (computed) |
+| Moody's September 2026 *Corporate Defaults and Recoveries* projected first-lien loan recoveries "declining to 55%" (via American Banker, 28 September 2026) | UNVERIFIABLE (not checked) | Check the American Banker article and the Moody's report. | n/a |
 
