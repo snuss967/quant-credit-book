@@ -58,7 +58,7 @@ def arrow(ax, p0, p1, color, lw=1.0, ls="-", z=4, ms=6, alpha=1.0, style="-|>"):
                                  zorder=z, shrinkA=0, shrinkB=0, alpha=alpha))
 
 
-def badge(ax, x, y, text, color=ORANGE, r=1.55, fs=6.8, z=6):
+def badge(ax, x, y, text, color=ORANGE, r=1.55, fs=7.0, z=6):
     ax.add_patch(Circle((x, y), r, fc=color, ec="white", lw=0.8, zorder=z))
     ax.text(x, y - 0.1, text, ha="center", va="center", fontsize=fs, color=INK, fontweight="bold", zorder=z + 1)
 
@@ -83,7 +83,7 @@ def fig_dependency_map():
     for k, (yc, name, mod) in primers.items():
         rbox(ax, PX, yc - PH / 2, PW, PH, fc=BLUE_TINT, ec=BLUE, lw=1.2)
         ax.text(PX + 1.6, yc + 2.4, name, fontsize=7.8, fontweight="bold", color=INK, va="center")
-        ax.text(PX + 1.6, yc - 2.3, mod, fontsize=6.6, family=MONO, color=INK_2, va="center")
+        ax.text(PX + 1.6, yc - 2.3, mod, fontsize=7.0, family=MONO, color=INK_2, va="center")
 
     # Chapter 1-B: the first station of the RV path, above 4-B
     ybx = 94.6
@@ -118,8 +118,8 @@ def fig_dependency_map():
         rbox(ax, CX, yc - CH / 2, CW, CH, fc="white", ec=INK_2 if heavy else NEUTRAL, lw=1.4 if heavy else 0.9)
         ax.text(CX + 1.3, yc, lab, fontsize=7.8, fontweight="bold" if heavy else "normal", color=INK, va="center")
         if mod:
-            ax.text(CX + 10.4, yc - 0.1, mod, fontsize=6.9, family=MONO, color=INK_2, va="center")
-        ax.text(CX + CW - 1.0, yc, part, fontsize=6.8, color=MUTED, va="center", ha="right")
+            ax.text(CX + 10.4, yc - 0.1, mod, fontsize=7.0, family=MONO, color=INK_2, va="center")
+        ax.text(CX + CW - 1.0, yc, part, fontsize=7.0, color=MUTED, va="center", ha="right")
 
     # --- first-generation imports: primer -> chapters (table of section 0.2) ---------------------
     imports = {
@@ -156,7 +156,7 @@ def fig_dependency_map():
     badge(ax, PX + PW, primers["4B"][0] + 4.3, "2")
     ax.text(RX + 3.0, Y["c5"], "RV path\n(section 0.9)", fontsize=7.4, color=INK_2, va="center",
             linespacing=1.15)
-    ax.text(CX + CW + 2.0, Y["c1317"], "every chapter of\nPart IV sits behind 12-B", fontsize=7.0, color=MUTED,
+    ax.text(CX + CW + 2.0, Y["c1317"], "every chapter of\nPart IV sits behind 12-B", fontsize=7.2, color=MUTED,
             va="center", linespacing=1.15)
 
     # --- second generation: module sits on a module (violet dashed, in the gaps) ------------------
@@ -166,8 +166,6 @@ def fig_dependency_map():
         ya = Y[a] - CH / 2 - 0.15 if down else Y[a] + CH / 2 + 0.15
         yb = Y[b] + CH / 2 + 0.15 if down else Y[b] - CH / 2 - 0.15
         arrow(ax, (gx, ya), (gx, yb), VIOLET, lw=1.3, ls=(0, (2, 1.4)), ms=5.5, z=5)
-    ax.text(CX + CW + 1.8, (Y["c8"] + Y["c8D"]) / 2, "§8.4 rulers", fontsize=6.6, color=VIOLET, va="center",
-            alpha=0)  # (kept off: the legend carries the meaning)
     # 3-B <- section 3B.4
     rbox(ax, 24.0, Y["c3B"] - 2.7, 20.0, 5.4, fc=GREY_TINT, ec=NEUTRAL, lw=0.8)
     ax.text(25.2, Y["c3B"], "§3B.4 contract clocks", fontsize=7.0, color=INK_2, va="center")
@@ -177,7 +175,7 @@ def fig_dependency_map():
     lx = CX + CW + 2.0
     items = [
         (BLUE, "-", 1.5, "a chapter imports\na primer's module"),
-        (VIOLET, (0, (2, 1.4)), 1.5, "a module imports\nanother chapter's\nmodule"),
+        (VIOLET, (0, (2, 1.4)), 1.5, "a module builds on\nother work in the book\n(second generation)"),
         (ORANGE, "-", 1.0, "the RV path, in order\n(thinner)"),
     ]
     yy = 43.0
@@ -218,7 +216,7 @@ def fig_volatility_tax():
             linespacing=1.15)
     ax.text(exact_mean + 0.07, 12.15, "mean\n1.05", fontsize=8.5, color=INK_2, ha="left", va="bottom",
             linespacing=1.15)
-    ax.text(3.1, 8.6, f"{below:.0%} of paths end below\n1.00 (darker bars), though\nthe average is +5%", fontsize=8.3,
+    ax.text(3.15, 9.2, f"{below:.0%} of paths end\nbelow 1.00 (darker\nbars), though the\naverage is +5%", fontsize=8.3,
             color=INK_2, va="top", ha="right", linespacing=1.2)
     ax.set_xlim(0.0, 3.2)
     ax.set_ylim(0, 14.0)
@@ -328,7 +326,7 @@ def fig_seat_paths():
     def head(col_key, level_y, name, mod, ha="center", dx=0.0):
         x = cx(IX[col_key])
         ax.text(x + dx, level_y + 0.15, name, ha=ha, va="bottom", fontsize=7.6, fontweight="bold", color=INK)
-        ax.text(x + dx, level_y + 0.15, mod, ha=ha, va="top", fontsize=6.4, family=MONO, color=INK_2)
+        ax.text(x + dx, level_y + 0.15, mod, ha=ha, va="top", fontsize=7.0, family=MONO, color=INK_2)
 
     head("4B", 4.62 + YO, "4-B  Bond math", "bondmath.py")
     head("7B", 4.62 + YO, "7-B  Statistics", "creditstats.py")
@@ -344,11 +342,11 @@ def fig_seat_paths():
     ax.plot([cx(IX["12B"])] * 2, [Ys[3] + 0.09, 2.57 + YO + 0.04], color=NEUTRAL, lw=0.9, zorder=1)
 
     # 4-D feeder
-    rbox(ax, 0.05, 4.78 + YO, 1.32, 0.62, fc=GREY_TINT, ec=NEUTRAL, lw=0.8, r=0.06)
+    rbox(ax, 0.05, 4.78 + YO, 1.42, 0.62, fc=GREY_TINT, ec=NEUTRAL, lw=0.8, r=0.06)
     ax.text(0.14, 5.22 + YO, "4-D  Getting the seat", fontsize=7.4, fontweight="bold", color=INK, va="center")
-    ax.text(0.14, 4.97 + YO, "feeder line: first, if you\nhave no offer yet", fontsize=6.9, color=INK_2, va="center",
+    ax.text(0.14, 4.97 + YO, "feeder line: first, if you\nhave no offer yet", fontsize=7.0, color=INK_2, va="center",
             linespacing=1.1)
-    ax.plot([1.37, 1.55], [5.0 + YO, 5.0 + YO], color=MUTED, lw=1.0, zorder=1)
+    ax.plot([1.47, 1.55], [5.0 + YO, 5.0 + YO], color=MUTED, lw=1.0, zorder=1)
     ax.plot([1.55, 1.55], [5.0 + YO, Ys[2]], color=MUTED, lw=1.0, zorder=1)
 
     # MM: the return to 7-B, drawn as a dashed arc under the line
@@ -359,12 +357,12 @@ def fig_seat_paths():
     ax.add_patch(FancyArrowPatch(path=path, arrowstyle="-|>", mutation_scale=6, color=INK_2, lw=1.0,
                                  linestyle=(0, (3, 2)), zorder=4, shrinkA=0, shrinkB=0))
     ax.text(cx(12) + 0.1, y1 - 0.43, "last, back to 7-B,\nwhen Chapter 18 calls on it", ha="center", va="top",
-            fontsize=6.9, color=INK_2, linespacing=1.1)
+            fontsize=7.0, color=INK_2, linespacing=1.1)
     # DQ: Chapter 25 read back to back with 13
     y3 = Ys[3]
     ax.plot([cx(17), cx(17)], [y3 - 0.06, y3 - 0.33], color=AQUA, lw=2.2, ls=(0, (2, 1.4)), zorder=2)
     ax.add_patch(Circle((cx(17), y3 - 0.36), 0.06, fc="white", ec=INK, lw=1.2, zorder=5))
-    ax.text(cx(17) - 0.11, y3 - 0.36, "25, read back to back with 13", ha="right", va="center", fontsize=6.9,
+    ax.text(cx(17) - 0.11, y3 - 0.36, "25, read back to back with 13", ha="right", va="center", fontsize=7.0,
             color=INK_2)
 
     # key
@@ -436,13 +434,13 @@ def fig_ninety_days():
         else:
             ax.add_patch(Rectangle((a + 0.004, yspine - sh / 2), b - a - 0.008, sh, fc="white", ec=MUTED, lw=0.6,
                                    hatch="/////", zorder=2))
-    ax.text(X(0), yspine - 0.15, "day 0: Sun 28 Jun", fontsize=6.9, color=INK_2, va="top", ha="left")
-    ax.text(X(86) - 0.04, yspine - 0.15, "day 86: Tue 22 Sep,\nfirst day on the desk", fontsize=6.9, color=INK_2, va="top",
+    ax.text(X(0), yspine - 0.15, "day 0: Sun 28 Jun", fontsize=7.0, color=INK_2, va="top", ha="left")
+    ax.text(X(86) - 0.04, yspine - 0.15, "day 86: Tue 22 Sep,\nfirst day on the desk", fontsize=7.0, color=INK_2, va="top",
             ha="right", linespacing=1.1)
-    ax.text(X(86) + 0.06, yspine - 0.15, "days 87\u201390:\nfunded by sleep", fontsize=6.9, color=INK_2, va="top",
+    ax.text(X(86) + 0.06, yspine - 0.15, "days 87\u201390:\nfunded by sleep", fontsize=7.0, color=INK_2, va="top",
             ha="left", linespacing=1.1)
     arrow(ax, (X(90) + 0.07, yspine), (X(90) + 0.62, yspine), INK_2, lw=1.2, ms=8, z=3)
-    ax.text(X(90) + 0.08, yspine + 0.1, "\u00a73B.8:\nthe ninety\ndays after", fontsize=6.9, color=INK_2,
+    ax.text(X(90) + 0.08, yspine + 0.1, "\u00a73B.8:\nthe ninety\ndays after", fontsize=7.0, color=INK_2,
             va="bottom", ha="left", linespacing=1.1)
 
     # checkpoints on the spine
@@ -460,13 +458,13 @@ def fig_ninety_days():
     ax.plot([sx], [yspine], marker="*", markersize=11, color=INK, markeredgecolor="white", markeredgewidth=0.6,
             zorder=6)
     ax.plot([sx, sx], [yspine + 0.1, yspine + 0.52], color=INK_2, lw=0.8, zorder=5)
-    ax.text(sx + 0.02, yspine + 0.55, "day 86: mock interview,\nor a mock morning\nif you have the seat", fontsize=6.9,
+    ax.text(sx + 0.02, yspine + 0.55, "ends the last stretch:\nmock interview, or a\nmock morning if you\nhave the seat", fontsize=7.0,
             color=INK, ha="right", va="bottom", linespacing=1.1, fontweight="bold")
 
     # projects and checkpoints below the line
     low_top = 1.70
     l1 = ["Edge Ledger rows drafted (\u00a73.5)"]
-    l2 = ["Project 1: TRACE panel, Roll spread", "Project 6: DD-to-PD map"]
+    l2 = ["Project 1: TRACE, Roll spread", "Project 6: DD-to-PD map"]
     l3 = ["Project 2: Priming Risk Score", "Project 4: RFQ quoting game", "4-D's sixty tagged problems"]
     for (d0, d1, _, _), items in zip(wins, (l1, l2, l3)):
         for r, txt in enumerate(items):
@@ -494,7 +492,7 @@ def fig_hand_history():
     # left: Theo's July, from the rows of the chapter's hand_history listing (checked rows only)
     buckets = [(0.5, 7, 10), (0.7, 2, 3), (0.9, 9, 12)]       # stated confidence, right, checked
     ax.plot([0.4, 1.0], [0.4, 1.0], color=NEUTRAL, lw=1.2, ls=(0, (4, 3)), zorder=1)
-    ax.text(0.405, 0.46, "right as often\nas he said", fontsize=8, color=MUTED, rotation=0, va="bottom", ha="left",
+    ax.text(0.405, 0.37, "dashed: right as often\nas he said", fontsize=8, color=MUTED, rotation=0, va="top", ha="left",
             linespacing=1.1)
     for conf, k, n in buckets:
         p = k / n
@@ -529,6 +527,7 @@ def fig_hand_history():
     bx.axhline(p, color=BLUE, lw=0.9, ls=(0, (1.5, 2.5)), zorder=2)
     bx.axhline(0.60, color=INK_2, lw=0.9, ls=(0, (4, 3)), zorder=2)
     bx.text(158, 0.60 - 0.012, "0.60", fontsize=8, color=INK_2, ha="right", va="top")
+    bx.text(158, p + 0.012, "hit rate 0.72", fontsize=8, color=INK_2, ha="right", va="bottom")
     for nn, tag in ((25, "a month"), (100, "a quarter")):
         h = 2 * np.sqrt(p * (1 - p) / nn)
         bx.plot([nn, nn], [p - h, p + h], color=INK, lw=1.2, zorder=4)
