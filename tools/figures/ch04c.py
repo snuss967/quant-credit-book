@@ -60,8 +60,8 @@ def fig_seven_clocks():
     ax.set_xlabel("Horizon (log scale).  Bar = how long the seat expects to hold;  ◆ = how often its rule is checked")
 
     yt = ax.get_yaxis_transform()
-    ax.text(-0.02, 8.95, "Seat and its binding rule", transform=yt, ha="right", va="center", fontsize=7.6, color=MUTED)
-    ax.text(1.02, 8.95, "What moves it", transform=yt, ha="left", va="center", fontsize=7.6, color=MUTED)
+    ax.text(-0.02, 8.95, "Seat and its binding rule", transform=yt, ha="right", va="center", fontsize=8, color=MUTED)
+    ax.text(1.02, 8.95, "What moves it", transform=yt, ha="left", va="center", fontsize=8, color=MUTED)
     ax.axhline(7.25, color=GRID, linewidth=1.0, zorder=1)
     for (key, name, rule, lo, hi, chk, trig), y in zip(rows, ys):
         c = SEAT[key]
@@ -70,12 +70,10 @@ def fig_seven_clocks():
             ax.plot([chk], [y], "D", color=INK, markersize=5.2, zorder=5, markeredgewidth=0)
         ax.text(-0.02, y + 0.17, name, transform=yt, ha="right", va="center", fontsize=8.6, color=INK,
                 fontweight="bold" if key == "desk" else "normal")
-        ax.text(-0.02, y - 0.22, rule, transform=yt, ha="right", va="center", fontsize=7.4, color=MUTED)
+        ax.text(-0.02, y - 0.22, rule, transform=yt, ha="right", va="center", fontsize=7.8, color=MUTED)
         ax.text(1.02, y, trig, transform=yt, ha="left", va="center", fontsize=8.2,
                 color=INK if key == "desk" else INK_2, fontweight="bold" if key == "desk" else "normal")
-    # the one trigger that is a price
-    ax.annotate("", xy=(1.0, 8.1), xycoords=yt, xytext=(1.0, 8.1), textcoords=yt)
-    ax.text(0.85 * year, 0.9, "no ◆: it checks deal by deal", ha="right", va="center", fontsize=7.6, color=MUTED)
+    ax.text(0.85 * year, 0.9, "no ◆: it checks deal by deal", ha="right", va="center", fontsize=8, color=MUTED)
     return finish(fig, "ch04c_seven_clocks")
 
 
@@ -120,7 +118,7 @@ def fig_horizon_flips_sign():
         a1.plot([x, x], [MU * x, SIG * np.sqrt(x)], "o", color=SEAT[key], markersize=6, zorder=5, clip_on=False)
     a1.text(25, 3.8, "Dana, 20 days\ngain 0.7, swing 6.7", fontsize=8, color=INK_2, va="center", ha="left")
     a1.text(247, 15.5, "Pod, 1 year\ngain 9, swing 24", fontsize=8, color=INK_2, va="center", ha="right")
-    a1.text(26, 26.6, "Gain catches one swing only\nafter about 1,760 days (7 years)", fontsize=7.8, color=MUTED, va="top", ha="left")
+    a1.text(26, 26.6, "Gain catches one swing only\nafter about 1,740 days (7 years)", fontsize=7.8, color=MUTED, va="top", ha="left")
 
     # right: expected value of holding, by seat (the stop and the clock differ)
     seats = [("dealer", "Dana\n5-point stop,\n20 days", 5, 20), ("pod", "Pod\n15-point stop,\n1 year", 15, 252)]
@@ -235,12 +233,12 @@ def fig_one_path_seven_ledgers():
 
     # 1. desk, mark to market on 12mm face
     ax = axes[1]
-    base(ax, "Desk: mark-to-market P&L (\\$mm)")
+    base(ax, "Desk: mark-to-market P&L, if held (\\$mm)")
     pl = 12 * (px - 92) / 100.0
     ax.plot(d, pl, color=SEAT["desk"], linewidth=LW, zorder=3)
     ax.plot(d, pl, "o", color=SEAT["desk"], markersize=4, zorder=4)
     ax.axhline(0, color=NEUTRAL, linewidth=0.8)
-    ax.text(2.4, -2.55, "12mm face: −1.68 on day 2", fontsize=7.6, color=INK_2, va="center")
+    ax.text(2.4, -2.78, "12mm face: −1.68 on day 2", fontsize=7.6, color=INK_2, va="center")
     ax.set_ylim(-3.1, 0.35)
 
     # 2. dealer inventory
@@ -264,8 +262,8 @@ def fig_one_path_seven_ledgers():
     base(ax, "RV pod: P&L on 10mm long from 79 (\\$mm)")
     pd_days = np.array([3, 4, 12, 16, 23, 30])
     pod_pl = 10 * (np.array([79, 81, 74, 72, 76, 70]) - 79) / 100.0
-    xs, ys = step_xy(pd_days, pod_pl)
-    ax.plot(xs, ys, color=SEAT["pod"], linewidth=LW + 0.4, zorder=3)
+    ax.plot(pd_days, pod_pl, color=SEAT["pod"], linewidth=LW + 0.4, zorder=3)
+    ax.plot(pd_days, pod_pl, "o", color=SEAT["pod"], markersize=4, zorder=4)
     ax.axhline(0, color=NEUTRAL, linewidth=0.8)
     ax.text(3.0, -0.93, "−0.5 on day 12: booked,\nnot acted on", fontsize=7.6, color=INK_2, va="center")
     ax.set_ylim(-1.15, 0.45)
@@ -286,7 +284,7 @@ def fig_one_path_seven_ledgers():
     ax.plot(d, px, color=NEUTRAL, linewidth=1.0, zorder=2)
     ax.plot([0, xe], [99, 99], color=SEAT["insurer"], linewidth=LW + 0.4, zorder=3)
     ax.text(3.5, 95.6, "book stays 99 until impairment", fontsize=7.6, color=INK_2, va="top")
-    ax.text(30.6, 71.4, "market", fontsize=7.6, color=MUTED, ha="right", va="top")
+    ax.text(16, 67.2, "market", fontsize=7.6, color=MUTED, ha="center", va="center")
     ax.set_ylim(64, 101)
     ax.set_xlabel("Trading day", fontsize=8.5)
 
@@ -297,7 +295,7 @@ def fig_one_path_seven_ledgers():
     xs, ys = step_xy(np.array([0, 30]), np.array([92.0, 81.0]), x_end=xe)
     ax.plot(xs, ys, color=SEAT["direct"], linewidth=LW + 0.4, zorder=3)
     ax.text(5.0, 88.5, "92 until the quarter-end mark\n(assumed day 30): half the move, 81", fontsize=7.6, color=INK_2, va="top")
-    ax.text(30.6, 71.4, "market", fontsize=7.6, color=MUTED, ha="right", va="top")
+    ax.text(16, 67.2, "market", fontsize=7.6, color=MUTED, ha="center", va="center")
     ax.set_ylim(64, 101)
     ax.set_xlabel("Trading day", fontsize=8.5)
     return finish(fig, "ch04c_one_path_seven_ledgers")
@@ -327,8 +325,8 @@ def fig_coalition_map():
     # background bands for the two classes
     ax.add_patch(Rectangle((0, ry[2] - 2.8), W, 11.2, fc="#ecebe7", ec="none", zorder=0))
     ax.add_patch(Rectangle((0, ry[6] - 2.8), W, 22.4, fc=TINT, ec="none", zorder=0))
-    ax.text(1.0, (ry[1] + ry[2]) / 2, "FIRST LIEN", rotation=90, ha="center", va="center", fontsize=6.6, color=MUTED)
-    ax.text(1.0, (ry[3] + ry[6]) / 2, "UNSECURED", rotation=90, ha="center", va="center", fontsize=6.6, color=MUTED)
+    ax.text(1.0, (ry[1] + ry[2]) / 2, "FIRST LIEN", rotation=90, ha="center", va="center", fontsize=7.4, color=MUTED)
+    ax.text(1.0, (ry[3] + ry[6]) / 2, "UNSECURED", rotation=90, ha="center", va="center", fontsize=7.4, color=MUTED)
 
     # headers in two tiers so the names do not collide; the colour dot under each name is the seat's key
     for i, (k, lab) in enumerate(cols):
@@ -340,27 +338,27 @@ def fig_coalition_map():
         ax.plot([cx[k], cx[k]], [ip_y - 2.8, y_dot - 1.4], color=GRID, linewidth=0.9, zorder=1)
 
     # flow ladder (chronological, top to bottom)
-    lanes = [(70.2, "systematic", "dealer", "8", "Day 2: the guard sells 8 into dealers' bids (best 77)"),
-             (67.0, "dealer", "pod", "10", "Day 3: Dana sells 10 to the pod at 79 (5 more elsewhere)"),
-             (63.8, "clo", "dealer", "40", "Day 16: a CLO and a separate account send Dana a 40 block"),
-             (60.6, "dealer", "opp", "40", "Day 16: Dana sells all 40 at 72")]
-    ax.text(1.0, 74.8, "The month's flows (\\$mm face)", ha="left", va="center", fontsize=7.6, color=MUTED)
+    lanes = [(69.6, "systematic", "dealer", "8", "Day 2: the guard sells 8 into dealers' bids (best 77)"),
+             (66.4, "dealer", "pod", "10", "Day 3: Dana sells 10 to the pod at 79 (5 more elsewhere)"),
+             (63.2, "clo", "dealer", "40", "Day 16: a CLO and a separate account send Dana a 40 block"),
+             (60.0, "dealer", "opp", "40", "Day 16: Dana sells all 40 at 72")]
+    ax.text(1.0, 74.8, "The month's flows (\\$mm face)", ha="left", va="center", fontsize=8, color=MUTED)
     for y, a_, b_, sz, txt in lanes:
         fwd = cx[b_] > cx[a_]
         ax.add_patch(Circle((cx[a_], y), 0.95, fc=SEAT[a_], ec="none", zorder=5))
         ax.add_patch(FancyArrowPatch((cx[a_] + (1.0 if fwd else -1.0), y), (cx[b_] - (0.8 if fwd else -0.8), y),
                                      arrowstyle="-|>", mutation_scale=9, color=INK_2, linewidth=1.2, zorder=4))
         ax.text((cx[a_] + cx[b_]) / 2, y + 1.0, sz, ha="center", va="bottom", fontsize=7.8, color=INK_2, zorder=6)
-        ax.text(1.0, y, txt, ha="left", va="center", fontsize=6.9, color=INK_2)
+        ax.text(1.0, y, txt, ha="left", va="center", fontsize=7.6, color=INK_2)
     ax.plot([0, W], [57.4, 57.4], color=GRID, linewidth=1.0, zorder=1)
 
     # cap table
-    ax.text(1.0, 55.0, "Capital structure (\\$mm; bar = face) and who holds it on day 30", ha="left", va="center", fontsize=7.6, color=MUTED)
+    ax.text(1.0, 55.0, "Capital structure (\\$mm; bar = face) and who holds it on day 30", ha="left", va="center", fontsize=8, color=MUTED)
     for i, (name, face, grp) in enumerate(rows):
         y = ry[i]
         ax.text(3.4, y, name, ha="left", va="center", fontsize=7.7, color=INK)
         ax.add_patch(Rectangle((bar_x0, y - 1.5), face * scale, 3.0, fc=fill[grp], ec="none", zorder=3))
-        ax.text(bar_x0 + face * scale + 0.9, y, f"{face:,}", ha="left", va="center", fontsize=7.4, color=INK_2)
+        ax.text(bar_x0 + face * scale + 0.9, y, f"{face:,}", ha="left", va="center", fontsize=7.6, color=INK_2)
 
     def dot(k, i, kind="held", label=None, above=False):
         x, y = cx[k], ry[i]
@@ -372,7 +370,7 @@ def fig_coalition_map():
         elif kind == "via":
             ax.add_patch(Circle((x, y), 1.45, fc=SURFACE, ec=c, linewidth=1.6, linestyle=(0, (1.6, 1.2)), zorder=5))
         if label:
-            ax.text(x, y + (2.2 if above else -2.2), label, ha="center", va="bottom" if above else "top", fontsize=6.9,
+            ax.text(x, y + (2.2 if above else -2.2), label, ha="center", va="bottom" if above else "top", fontsize=7.6,
                     color=INK_2, zorder=6, linespacing=1.1)
 
     dot("systematic", 2, "out", "out at 77")
@@ -387,23 +385,23 @@ def fig_coalition_map():
     # the IP subsidiary row and the declined arrow
     ax.plot([0, W], [12.4, 12.4], color=GRID, linewidth=1.0, zorder=1)
     ax.text(3.4, ip_y + 0.3, "IP subsidiary: the patents", ha="left", va="center", fontsize=7.7, color=INK)
-    ax.text(3.4, ip_y - 2.6, "new money asked for: \\$200mm", ha="left", va="center", fontsize=6.9, color=MUTED)
+    ax.text(3.4, ip_y - 2.6, "new money asked for: \\$200mm", ha="left", va="center", fontsize=7.4, color=MUTED)
     ax.add_patch(Rectangle((bar_x0, ip_y - 1.5 + 0.3), 200 * scale, 3.0, fc=SURFACE, ec=NEUTRAL, linewidth=1.2,
                            linestyle=(0, (3, 2)), zorder=3))
-    ax.text(bar_x0 + 200 * scale + 0.9, ip_y + 0.3, "200", ha="left", va="center", fontsize=7.4, color=INK_2)
+    ax.text(bar_x0 + 200 * scale + 0.9, ip_y + 0.3, "200", ha="left", va="center", fontsize=7.6, color=INK_2)
     ax.add_patch(FancyArrowPatch((cx["direct"], ry[1] - 2.0), (cx["direct"], ip_y + 2.6), arrowstyle="-|>", mutation_scale=9,
                                  color=SEAT["direct"], linewidth=1.4, linestyle=(0, (3, 2)), zorder=4))
     ax.text(cx["direct"], ip_y + 0.3, "✕", ha="center", va="center", fontsize=10, color=INK, fontweight="bold", zorder=7)
-    ax.text(cx["direct"] - 2.0, ip_y + 0.3, "declined on day 16", ha="right", va="center", fontsize=7.2, color=INK_2)
+    ax.text(cx["direct"] - 2.0, ip_y + 0.3, "declined at the day-14 committee", ha="right", va="center", fontsize=7.6, color=INK_2)
 
     # key
     kx, ky = 1.0, 1.6
     ax.add_patch(Circle((kx + 1.2, ky), 0.95, fc=INK_2, ec="none"))
-    ax.text(kx + 3.0, ky, "holds on day 30", fontsize=6.9, color=MUTED, va="center")
+    ax.text(kx + 3.0, ky, "holds on day 30", fontsize=7.4, color=MUTED, va="center")
     ax.add_patch(Circle((kx + 24.0, ky), 0.95, fc=SURFACE, ec=INK_2, linewidth=1.3))
-    ax.text(kx + 25.8, ky, "sold out or flat", fontsize=6.9, color=MUTED, va="center")
+    ax.text(kx + 25.8, ky, "sold out or flat", fontsize=7.4, color=MUTED, va="center")
     ax.add_patch(Circle((kx + 45.0, ky), 0.95, fc=SURFACE, ec=INK_2, linewidth=1.3, linestyle=(0, (1.6, 1.2))))
-    ax.text(kx + 46.8, ky, "holds through a vehicle", fontsize=6.9, color=MUTED, va="center")
+    ax.text(kx + 46.8, ky, "holds through a vehicle", fontsize=7.4, color=MUTED, va="center")
     return finish(fig, "ch04c_coalition_map")
 
 

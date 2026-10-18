@@ -17,16 +17,16 @@
 - [x] P1 · §1.9.1, line 764, co-op counter note · Reword: "no cooperation agreement before the deal; the excluded lenders organized afterwards, as plaintiffs, which is why the counter stays at 0." — *Verifier already reworded; kept, no unverified pre-deal claim added.*
 - [x] P1 · §1.9.1, Serta scene, 11:45 a.m. RFQ (~698) · Second account explicitly "a fund I later learned had been pitched and passed". — *Verifier already made it pitched-and-passed; wording confirmed, unchanged.*
 - [x] P1 · Docket Diary, line 676 · Add the \$734mm / \$875mm reconciliation clause. — *Reconciliation clause added, pointing to Ch 5 §5.6.2 wording.*
-- [ ] P2 · §1.3.2 l.169; §1.4 l.350; §1.5 l.398; §1.6 l.480 · Four "When to reach for it" paragraphs: inventory → 150-word "Whose five days?" beat; DTS delete; DD → Mags's "lottery ticket on the plan"; fallen angel delete; add four judgments as Finder rows.
-- [ ] P2 · §1.5, lines 376–380 · Keep "Equity is a call option" box; reduce random walk and Itô boxes to one sentence each in Kaz's dialogue with pointers to §6.1.1.
-- [ ] P2 · §1.5, lines 402, 406, 442 · P/Q told thrice: add 80-word beat (Kaz feeds vendor EDF, gets 12 bp at 100; Mags: "Which number is lying?"); annotation and listing point to "Kaz's 12 bp".
-- [ ] P2 · §1.6, lines 468–470 · Man Numeric 30/60→90 and Blackstone quote only in seat box; annotation keeps aphorism; §1.8 intro says "the Blackstone sentence from §1.6".
-- [ ] P2 · §1.6, lines 470–476 · Move both Trend Watches to the end of §1.6; add one line of narration before Paleologo extraction ("Kaz's reply arrived at 11:40.").
+- [x] P2 · §1.3.2 l.169; §1.4 l.350; §1.5 l.398; §1.6 l.480 · Four "When to reach for it" paragraphs: inventory → 150-word "Whose five days?" beat; DTS delete; DD → Mags's "lottery ticket on the plan"; fallen angel delete; add four judgments as Finder rows. — *Inventory now 'Whose five days?' beat; DTS, fallen-angel cut; DD to Mags.*
+- [x] P2 · §1.5, lines 376–380 · Keep "Equity is a call option" box; reduce random walk and Itô boxes to one sentence each in Kaz's dialogue with pointers to §6.1.1. — *Two boxes became Kaz's dialogue: square-root horizon, half-variance drag, §6.1.1.*
+- [x] P2 · §1.5, lines 402, 406, 442 · P/Q told thrice: add 80-word beat (Kaz feeds vendor EDF, gets 12 bp at 100; Mags: "Which number is lying?"); annotation and listing point to "Kaz's 12 bp". — *Beat added; Schmid annotation, risk-neutral box, Listing 1.4 cite Kaz's 12 bp.*
+- [x] P2 · §1.6, lines 468–470 · Man Numeric 30/60→90 and Blackstone quote only in seat box; annotation keeps aphorism; §1.8 intro says "the Blackstone sentence from §1.6". — *Man 30/60→90 and Blackstone quote only in seat box; pointers elsewhere.*
+- [x] P2 · §1.6, lines 470–476 · Move both Trend Watches to the end of §1.6; add one line of narration before Paleologo extraction ("Kaz's reply arrived at 11:40."). — *Trend Watches moved to section end; 11:40 line and two narration threads added.*
 - [ ] P2 · §1.3.3, line 179, Bayes box · Change to prior 5%, LRs 6 and 2 (odds 0.0526 × 12 = 0.63, π ≈ 0.39). Leave Exercise 2 and Serta arithmetic.
 - [ ] P2 · §1.3 Specification, lines 257–287 · Move vignette to open the Specification section; delete Listing 1.1 "edge case that bites" sentence.
 - [ ] P2 · Reading Listing 1.2, 1.3, 1.4 · Open each with the chapter moment; drop template phrases.
 - [ ] P2 · §1.8.1, line 533, "Where this blows up" · Cut to Moyer quote + state-dependent-capacity sentence + "Act 3 shows the first two happening on a Saturday."
-- [ ] P2 · §1.10 Desk Debrief · Add Finder table before the bullets (concept · eq · box · scene · listing).
+- [x] P2 · §1.10 Desk Debrief · Add Finder table before the bullets (concept · eq · box · scene · listing). — *Ten-row Finder table added above train scene, carrying four judgments.*
 - [ ] P2 · Lines 555 and 680, Long Scene bold paragraphs · Make them `####` headings; add `####` for each decision point.
 - [ ] P2 · §1.4, line 352 · Replace manual-voice bridge with Theo's spreadsheet DTS-in-percent slip, Kaz catching it, then the function.
 - [ ] P3 · 17 of 18 Math, Gently sign-offs · Vary; "next" where the derivation follows immediately.
