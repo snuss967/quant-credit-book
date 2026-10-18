@@ -137,3 +137,149 @@ Theo's thirteen-week cash flow model, it turns out, was a bond all along: a date
 
 *Used in:* §5.2.2 (price as a bounded interval), §6.6 (the survival-weighted price), §8.1 (the return decomposition), §12.2 (yield as the carry term), §24.3 and §24.5 (`bond_cashflows`, `price_at_yield`), App A §A.5.
 
+## 4B.3 Duration: Macaulay, Modified, Effective, Spread and Key-Rate
+
+Desk framing. "Duration" answers two questions that share a number only because of a coincidence in calculus. One is *when, on average, do I get my money back?* The other is *how much do I lose per basis point?* A risk manager needs the second, a liability matcher needs the first, and a callable bond, a floater and a distressed bond each break the coincidence in a different way. So the book keeps five durations and never lets one stand in for another.
+
+### Macaulay: the balance point
+
+Define the present-value weights at yield $y$,
+
+$$
+w_k = \frac{\text{CF}_k\,(1 + y/f)^{-e_k}}{P^{\text{dirty}}}, \qquad \sum_k w_k = 1, \qquad D^{\text{Mac}} = \sum_k w_k\,\frac{e_k}{f}\ \text{(years)}.
+$$
+
+$D^{\text{Mac}}$ is the PV-weighted average time to payment. Put each cash flow's present value on a beam at its date; the Macaulay duration is where the beam balances. A zero-coupon bond has all its weight at one date, so $D^{\text{Mac}} = T$. A coupon bond's balance point sits before its maturity, and moves earlier as the yield rises, because distant weights are discounted harder.
+
+"So the duration is the fulcrum," said Kaz.
+
+"The fulcrum," said Mags, "is the security that gets the equity."
+
+"Then it's the point where the claims balance." Kaz considered this. "Same physics."
+
+Theo opened his mouth to object and found that he could not. The fulcrum security is the tranche where enterprise value runs out; the Macaulay duration is the date where present value balances. Both are centres of mass. Kaz's legal vocabulary remains a liability, but this once it was hedged.
+
+### Modified: the derivative
+
+From §4B.2, $dP/dy = -\frac{1}{f(1+y/f)}\sum_k e_k\,\text{CF}_k\,(1+y/f)^{-e_k}$. Divide by $-P$:
+
+$$
+D^{\text{mod}} \equiv -\frac{1}{P}\frac{dP}{dy} = \frac{D^{\text{Mac}}}{1 + y/f} .
+$$
+
+Under continuous compounding the denominator disappears and $D^{\text{mod}} = D^{\text{Mac}}$ exactly, which is one more reason the book's formulas use it. The par-bond case has a closed form worth memorizing. Differentiate the premium identity $P - 100 = 100(c - y)\,a_N(y)$:
+
+$$
+\frac{dP}{dy} = -100\,a_N(y) + 100\,(c - y)\,a_N'(y) \quad\Longrightarrow\quad D^{\text{mod}}_{\text{par}} = a_N(y) = \frac{1 - (1+y/f)^{-N}}{y}.
+$$
+
+The modified duration of a par bond *is* its annuity factor. That is why the DV01 of a par swap is its annuity times a basis point, and why the CDS risky annuity of §6.8 (RPV01) is the credit market's duration: it is the same object with survival probabilities inside the discount factors.
+
+The fallen angel at constant ten-year maturity, 4.50% coupon: at a 3.50% yield (20 February 2020) $D^{\text{Mac}} = 8.25$ and $D^{\text{mod}} = 8.11$; at 9.00% (23 March) $7.74$ and $7.40$; at 5.50% (30 June) $8.07$ and $7.86$. The balance point moved earlier by half a year in one month because the market discounted the principal harder, not because anything in the indenture changed.
+
+### Effective: reprice, don't differentiate
+
+When cash flows depend on rates (a call, a floater's reset, a prepayment), the yield formula is the wrong function to differentiate. Bump the *curve*, reprice the *instrument* with all its options, and difference:
+
+$$
+D^{\text{eff}} = \frac{P(z - h) - P(z + h)}{2\,h\,P(z)}, \qquad C^{\text{eff}} = \frac{P(z + h) + P(z - h) - 2P(z)}{h^2\,P(z)},
+$$
+
+where $z \pm h$ is the zero curve shifted in parallel by $\pm h$ and every option is re-evaluated at the shifted curve with the spread held fixed. For a bullet on a flat curve, $D^{\text{eff}}$ equals the continuous-compounding $D^{\text{mod}}$ to $O(h^2)$. For a callable it is the only duration that is not a lie (§4B.7).
+
+### Spread duration, and the two routes to zero
+
+$D^{\text{spr}} = -\frac{1}{P}\,\partial P/\partial s$ for whichever spread $s$ the desk uses (Z, OAS, or a hazard-based spread). For a fixed-rate bullet priced at $\sum_k \text{CF}_k e^{-(z(t_k)+Z)t_k}$, the curve and the spread enter only through $z + Z$, so a parallel curve bump and a Z bump are the same bump and $D^{\text{spr}} = D^{\text{eff}}$. Three instruments break the equality:
+
+- **Floaters and loans.** The coupon resets with the curve, so rate duration is the time to the next reset and spread duration is roughly the remaining life (built in §21.1).
+- **Callables.** OAS duration, the `oasd` field of §19.2, is $-\frac1P\,\partial P/\partial\,\text{OAS}$ on the lattice; whether it equals $D^{\text{eff}}$ depends on the rate model (§4B.7).
+- **Distressed bonds.** Under recovery of face, as $\lambda \to \infty$ the survival leg vanishes and the price tends to $100R\,\lambda/(\lambda + r)$, whose derivative in $r$ is $-100R\,\lambda/(\lambda + r)^2 \to 0$. The bond's rate duration goes to zero because the recovery is paid at default whatever the maturity. A modified duration computed from the 31% yield of §4B.2's bond at 40 still says about 3.3. This is the first of the two routes to zero duration in §8.3; the second, the negative rate–spread correlation, is the empirical duration of §8.2, which this chapter does not rebuild.
+
+### Key-rate durations
+
+A parallel bump hedges a parallel move. Curves twist. Key-rate durations (Ho 1992) split the parallel duration across tenors. Let the zero curve be linear between key tenors $T_1 < \dots < T_J$ and flat outside. Bumping node $j$ alone by $h$ shifts the curve by $h\,\phi_j(t)$, where $\phi_j$ is a tent: one at $T_j$, falling linearly to zero at the neighbouring nodes (and flat beyond the end nodes). Under continuous compounding,
+
+$$
+\text{KRD}_j = -\frac{1}{P}\frac{\partial P}{\partial z_j} = \frac{1}{P}\sum_k t_k\,\text{CF}_k\,d(t_k)\,\phi_j(t_k), \qquad \sum_{j=1}^{J}\phi_j(t) = 1 \ \ \forall t \ \Longrightarrow\ \sum_j \text{KRD}_j = D^{\text{eff}} .
+$$
+
+The tents are a partition of unity, so the key rates add up to the parallel duration, and the sum is a unit test. KRDs are what "duration-matched Treasury return" means when an index computes excess returns (§8.1; Man's KRD-matched convention in §9.8), and what a desk hedges with 5-year and 10-year futures instead of one.
+
+> **Ways This Blows Up.** Replace linear interpolation with a cubic spline and the tents stop being local: a bump at the 5-year node moves the 30-year zero. The KRDs still sum to the parallel duration, so the unit test passes, but a 10-year bond acquires a nonzero 2-year key rate and the hedger finds itself short 2-year notes for no economic reason. Use local interpolation for risk, or bump par rates and re-bootstrap, and say which.
+
+*Used in:* §5.2 (the spread-return expansion), §8.1 (KRD-matched excess returns), §8.2 (analytical versus empirical duration), §8.3 (the two routes to zero), §9.8 (benchmark-matched KRDs), §19.2 (`oasd`), §21.1 (the loan's two durations), §23.5 (spread Greeks), App A §A.5.
+
+## 4B.4 Convexity, and the Three Things the Word Means
+
+### The curvature
+
+Work in continuous compounding, where the algebra is cleanest. With $P(y) = \sum_k \text{CF}_k e^{-y t_k}$ and weights $w_k = \text{CF}_k e^{-y t_k}/P$,
+
+$$
+D = \sum_k w_k\,t_k, \qquad C \equiv \frac{1}{P}\frac{d^2 P}{dy^2} = \sum_k w_k\,t_k^2 = D^2 + \sum_k w_k\,(t_k - D)^2 .
+$$
+
+The last equality is the variance decomposition $\mathbb{E}[t^2] = \mathbb{E}[t]^2 + \mathrm{Var}(t)$ under the PV weights. Convexity is duration squared plus the *dispersion* of the payment dates. A zero has no dispersion and $C = T^2$. A barbell (a 2-year and a 20-year) has the same duration as a 10-year bullet and far more dispersion, so more convexity. Differentiating $D$ itself gives the companion identity
+
+$$
+\frac{dD}{dy} = D^2 - C = -\sum_k w_k\,(t_k - D)^2 \le 0,
+$$
+
+so duration falls as yields rise at a rate equal to the dispersion, and a zero's duration does not move at all. With periodic compounding the exact counterpart, from the second derivative in §4B.2, is $C^{\text{mod}} = \frac{1}{P f^2 (1+y/f)^2}\sum_k e_k(e_k+1)\,\text{CF}_k(1+y/f)^{-e_k}$.
+
+> **[SOURCE EXTRACTION]** *Veronesi_Fixed_Income_Securities p.158:* "The interviewer would then say 'Ah! I caught you! You see, the duration of the zero coupon bond is independent of interest rates, therefore the convexity of the zero coupon bond is zero'. Unfortunately, the interviewer was plainly wrong, as the discussion in this section demonstrates."
+>
+> **Annotation.** The identity $dD/dy = D^2 - C$ diagnoses the interviewer exactly. For a zero, $dD/dy = 0$ because the dispersion is zero, and the interviewer read "duration does not change" as "no curvature." But $C = T^2 = 400$ for a 20-year zero, and the price–yield curve bends; what vanishes is the *difference* between curvature and duration squared. For a credit desk the interviewer's error has a modern form: a risk report that carries only $D^{\text{spr}}$ and recomputes it daily looks as if it "captures" convexity because the duration moves. It captures the dispersion term only, and only after the move. The second-order P&L of a large spread move must come from $C^{\text{spr}}$ or from repricing.
+
+### How big is the second term?
+
+The Taylor expansion is $\Delta P/P \approx -D^{\text{mod}}\,\Delta y + \tfrac12 C^{\text{mod}}(\Delta y)^2$. The fallen angel on 20 February 2020 had $D^{\text{mod}} = 8.11$ and $C^{\text{mod}} = 78.0$ at a price of 108.38. Its yield then rose 550bp to 23 March. Duration alone predicts a loss of $8.11 \times 0.055 \times 108.38 = 48.3$ points. The convexity term gives back $\tfrac12 \times 78.0 \times 0.055^2 \times 108.38 = 12.8$, for a predicted $-35.5$. The bond actually lost 37.6. Convexity was worth thirteen points and overshot by two, because at 550bp the third-order term is not small. Use the expansion for risk reports and attribution. For stress and P&L, reprice.
+
+### Convexity is paid for
+
+Under either measure (a volatility is the same under $\mathbb{P}$ and $\mathbb{Q}$), the expected instantaneous return from convexity is $\tfrac12 C\,\sigma_y^2$ per year if yields have volatility $\sigma_y$ (in decimal per root-year). For the fallen angel at $\sigma_y = 100$bp a year that is $\tfrac12 \times 78 \times 0.0001 = 39$bp a year. Long-convexity positions look like free money, and are not: the market charges for convexity through a lower yield, so the barbell yields less than the bullet of the same duration. Veronesi's statement of the trade-off (Veronesi_Fixed_Income_Securities p.162) is that "the gain in value from higher convexity is offset by a lower gain due to the passage of time." Convexity is the one free lunch in fixed income that arrives with a bill, and the bill is called theta. Chapter 6-B derives the same bill for options, where it is the theta–gamma relation.
+
+### The three meanings
+
+The word appears more than fifty times in this book, in three senses that share a name and a sign convention and nothing else.
+
+| Meaning | Object | Variable | Who pays for it, and how | Built or used in |
+| :--- | :--- | :--- | :--- | :--- |
+| 1. Price–yield curvature | $C = \frac1P\,\partial^2 P/\partial y^2$ (or $\partial s^2$) of a bond | yield or spread | the holder, through a lower yield | this section; §5.2.2, §8.3, §23.5 |
+| 2. Option gamma | $\Gamma = \partial^2 V/\partial S^2$ of an option | the underlying | the long side, through time decay $\Theta$ | Chapter 6-B; §23.5 |
+| 3. Payoff-shape convexity | curvature of $\mathbb{E}[\text{strategy return} \mid \text{market return}]$ over a horizon | the market's horizon return | the strategy, through whipsaw losses in reversals | §10.6.1 |
+
+Meaning 1 is meaning 2 with the yield as the underlying: a bullet is long gamma in its own yield, a callable near its call price is short it (§4B.7), and a CDS protection buyer is short spread convexity (§23.5). Meaning 3 is not a derivative of any price function. It is a property of a dynamic strategy's conditional expected return, and "trend is a straddle" (§10.6.1) is an analogy to meaning 2 that holds because a trend rule approximately replicates one. When someone says "convexity," ask: *with respect to what, over what horizon, and who is short it?* The collision joins App A §A.3.
+
+Spread convexity, finally, is meaning 1 with $s$ in place of $y$. For a bullet priced off $z + Z$ it equals the curve convexity. The spread-return expansion of §5.2, $X \approx s\,h + \text{roll} - D^{\text{spr}}\Delta s + \tfrac12 C^{\text{spr}}(\Delta s)^2$, now has every term built; its $C^{\text{spr}}$ turns negative for the callable high-yield bonds that dominate the index, which is the convexity tax of §5.9.
+
+*Used in:* §5.2 and §5.9 (spread convexity and the third moment), §6.2 and Chapter 6-B (gamma), §8.3 (the discount-bond asymmetry), §10.6.1 (trend as a straddle), §21.5 (the loan's negative convexity under repricing), §23.5 (spread Greeks), App A §A.3 and §A.7.
+
+## 4B.5 The Risk Report: DV01, CS01, DTS and the Hedge Ratio
+
+Desk framing. A risk report turns derivatives into dollars, because a PM cannot add a modified duration to a key-rate duration to a CDS risky annuity, and can add dollars.
+
+**DV01** is the dollar change in value for a one-basis-point *fall* in yield (positive for a long bond):
+
+$$
+\text{DV01} = -\frac{\partial P^{\text{dirty}}}{\partial y}\times 10^{-4} \times \frac{\text{Face}}{100} = D^{\text{mod}} \times P^{\text{dirty}} \times \text{Face} \times 10^{-6}.
+$$
+
+Per \$1mm of face, DV01 in dollars is simply $D^{\text{mod}} \times P^{\text{dirty}}$. Use the dirty price; App A's shortcut with the quoted price is close unless accrued is large. **CS01** is the same with $D^{\text{spr}}$ and a spread bump. For a fixed bullet the two coincide; for a loan CS01 dwarfs DV01; for a CDS, CS01 is the risky annuity times notional times a basis point (§6.8, §24.2). Signs follow App A §A.8: long credit is long CS01, and the rate term in a return is $-D\,\Delta y$.
+
+**DTS** rescales CS01 by the spread level. With $s$ in basis points, $\text{DTS} = D^{\text{spr}}\,s$, and if spreads move *proportionally*, $\Delta s = s\,x$ with relative change $x$, then
+
+$$
+\frac{\Delta P}{P} \approx -D^{\text{spr}}\,s\,x \times 10^{-4} = -\text{DTS} \times x \times 10^{-4}.
+$$
+
+When relative spread changes have similar volatility across bonds, which is the empirical finding behind §8.4, DTS is the unit of credit risk and CS01 is not (Law 3).
+
+The fallen angel makes the difference vivid. Per \$10mm face, DV01 (equal to CS01 here) was \$8,785 on 20 February and \$5,236 on 23 March: down 40%. DTS, using $D^{\text{mod}}$ and the 198bp and 824bp G-spreads, went from 1,605 to 6,100: up 3.8 times. The CS01 report said the position had become safer. The DTS report said it had become almost four times riskier. Both were arithmetically right. Only one described a market in which spreads were moving in percent, which is what the cold open's "per basis point it got less risky" was missing.
+
+**The hedge ratio.** To neutralize rate risk with an instrument $H$, hold $-\text{DV01}_{\text{bond}}/\text{DV01}_{H}$ of it per unit of bond. A par ten-year Treasury has $D^{\text{mod}} = a_{20}(y)$ by §4B.3, so its DV01 per \$1mm is $100\,a_{20}(y)$ dollars: \$924 at the 1.52% ten-year yield of 20 February 2020 and \$961 at 0.76% on 23 March (FRED, DGS10). The bond's DV01 per \$1mm was \$878 and then \$524. The hedge ratio went from 0.95 to 0.545: \$9.50mm of Treasuries per \$10mm of bonds in February, \$5.45mm a month later. A static hedge set in February was 74% too large in March by its own analytic measure, before anyone asked §8.2 what the empirical hedge ratio of a bond at 824bp is (smaller still, and possibly negative).
+
+> **Ways This Blows Up.** Finite-difference risk is only as good as the price under it. A price produced by a yield solver with a tolerance of $10^{-6}$ and bumped by one basis point gives a DV01 with about 1% noise, and a convexity that is pure noise. Use the analytic derivatives of §4B.2 for bullets, solve to $10^{-12}$ when you must solve, use a 10bp bump for second differences on a lattice, and check that the key rates sum to the parallel number before the report goes out.
+
+*Used in:* §1.3 (the inventory term in the bid equation), §8.4 and §9.2 (DTS as beta), §8.6 (the hedge matrix in DV01 terms), §10.3 (volatility scaling is DTS scaling), §12.5 (DTS-structured covariance), §19.2–§19.4 (basket risk and the lump hedge), §24.4 (basis carry per DV01), App A §A.5 and §A.8.
+

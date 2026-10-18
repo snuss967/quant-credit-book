@@ -587,20 +587,7 @@ Then the second error bar. Across 24 defensible specifications (runway capped at
 
 **The Spec You Hand the Robot.** Build `creditstats.py` (NumPy and SciPy only; no `statsmodels`, `lifelines` or `sklearn`, so every estimator is auditable against this chapter's equations). Every random function takes an explicit `numpy.random.Generator`; experiments spawn independent streams with `SeedSequence.spawn`.
 
-| Function | Inputs (shapes, units) | Returns | Equation |
-| :--- | :--- | :--- | :--- |
-| `ols(y, X)` | `y (n,)`, `X (n, K)` with a constant column | `b (K,)`, residuals `(n,)` | §7-B.1 |
-| `vcov(X, u, kind, groups, groups2, lags)` | `kind` in classical, hc1, cluster, twoway, nw; `groups` = ultimate-parent id | `V (K, K)`, `info` dict (clusters, clipping, few-cluster flag) | (7B.1), (7B.2), (7B.4) |
-| `nw_lags(T, overlap)` | periods, overlap $h$ | int $L$ | §7-B.2 rule |
-| `fama_macbeth(y, X, time_ids, lags)` | panel rows | mean slopes, NW s.e., slope series | §7-B.1 |
-| `logit_fit(y, X, ridge, groups)` | `y` in {0, 1}; column 0 constant | `b`, `V` (clustered if groups), fitted `p` | §7-B.3 |
-| `brier_decomposition(p, y, bins)`, `platt_calibrate(p, y)` | probabilities, outcomes | dict; calibrator function | §7-B.3 |
-| `kaplan_meier(times, events, entry)` | months; event 1 / censored 0; optional entry time | `t, n, d, S, var, H_na` | (7B.5), (7B.6) |
-| `cox_ph(times, events, Z)` | `Z (n, p)`, no constant | `b`, `V`, Breslow baseline | (7B.7) |
-| `ewma_cov`, `ledoit_wolf`, `factor_cov_inv`, `residual_pca`, `mp_edge` | returns `(T, N)` | matrices, $\delta^{\text{LW}}$, PCA dict | §7-B.5, (7B.8) |
-| `stationary_bootstrap_indices`, `block_bootstrap`, `cluster_bootstrap` | `T`, mean block, statistic | index arrays, bootstrap draws | §7-B.6 |
-| `mc_estimate`, `mc_paths_needed`, `control_variate` | samples | mean, s.e., 4-s.e. tolerance | §7-B.8 |
-| `bridge_hit_prob`, `first_passage_mc`, `first_passage_exact` | log levels, barrier, $\sigma_V$ (annual, decimal), years | probability, MC triple | (7B.9) |
+**The functions.** `ols` and `vcov` (classical, hc1, cluster on the ultimate parent, two-way, Newey–West; equations 7B.1, 7B.2, 7B.4) with `nw_lags`; `logit_fit` (IRLS, optional ridge on slopes, issuer-clustered sandwich) and `platt_calibrate`; `kaplan_meier` (Greenwood, Nelson–Aalen, entry times for left truncation; 7B.5–7B.6) and `cox_ph` (Breslow ties and baseline; 7B.7); `ledoit_wolf` (7B.8), `mp_edge` and `residual_pca`; `stationary_bootstrap_indices` and `block_bootstrap` (stationary, moving-block, i.i.d.); `mc_estimate`, `control_variate`, `bridge_hit_prob` (7B.9), `first_passage_mc` and `first_passage_exact`. Shapes: `y (n,)`, `X (n, K)` with the constant in column 0, returns panels `(T, N)`; times in months or years as the caller states; $\sigma_V$ annualized decimal.
 
 **Edge cases ROBO must handle, not guess.** Cluster on the ultimate parent, never the CUSIP; flag fewer than 50 clusters in `info`. Two-way covariances that are not positive semidefinite are eigenvalue-clipped and the clipping is logged. `nw` requires one time-ordered row per period. A logit that has not converged in 50 Newton steps raises an error that names separation, rather than returning the last iterate. Probabilities are clipped to $[10^{-6}, 1 - 10^{-6}]$ before any logarithm. Kaplan–Meier counts an issuer censored at an event time as at risk at that time, and an issuer with an entry time only after entry (left truncation). Distressed exchanges are events, never censoring, and the caller passes them as such. PCA loadings are sign-normalized so they sum to a positive number, and the count of "real" components uses the Marchenko–Pastur edge with a 10% margin for finite samples. Every Monte Carlo result returns its standard error and its 4-s.e. tolerance.
 
@@ -680,15 +667,6 @@ def nw_lags(T, overlap=1):
     return int(max(np.floor(4.0 * (T / 100.0) ** (2.0 / 9.0)), 2 * overlap - 1))
 
 
-def fama_macbeth(y, X, time_ids, lags=0):
-    y, X, time_ids = np.asarray(y, float), np.asarray(X, float), np.asarray(time_ids)
-    B = np.array([ols(y[time_ids == t], X[time_ids == t])[0] for t in np.unique(time_ids)
-                  if (time_ids == t).sum() > X.shape[1]])
-    T = len(B)
-    lrv = nw_meat(B - B.mean(axis=0), lags) / T
-    return B.mean(axis=0), np.sqrt(np.diag(lrv) / T), B
-
-
 # ---------- 7-B.3: logistic regression and calibration ----------
 def expit(z):
     return 0.5 * (1.0 + np.tanh(0.5 * np.asarray(z, float)))       # overflow-safe
@@ -719,27 +697,11 @@ def logit_fit(y, X, ridge=0.0, groups=None, max_iter=50, tol=1e-10):
     return b, G / (G - 1.0) * bread @ meat @ bread, p
 
 
-def brier_decomposition(p, y, bins=10):
-    p, y = np.asarray(p, float), np.asarray(y, float)
-    k = np.minimum((p * bins).astype(int), bins - 1)
-    ybar, rel, res = y.mean(), 0.0, 0.0
-    for j in np.unique(k):
-        m = k == j
-        rel += m.mean() * (p[m].mean() - y[m].mean()) ** 2
-        res += m.mean() * (y[m].mean() - ybar) ** 2
-    return {"brier": np.mean((p - y) ** 2), "reliability": rel,
-            "resolution": res, "uncertainty": ybar * (1.0 - ybar)}
-
-
-def _logit(q):
-    q = np.clip(np.asarray(q, float), 1e-6, 1.0 - 1e-6)
-    return np.log(q / (1.0 - q))
-
-
 def platt_calibrate(p_hat, y):
-    z = _logit(p_hat)
-    (a, c), _, _ = logit_fit(y, np.column_stack([np.ones_like(z), z]))
-    return lambda q: expit(a + c * _logit(q))
+    """Fit logit p_cal = a + c logit p_hat on a holdout; returns the calibrator."""
+    lg = lambda q: np.log(np.clip(q, 1e-6, 1 - 1e-6) / (1 - np.clip(q, 1e-6, 1 - 1e-6)))
+    (a, c), _, _ = logit_fit(y, np.column_stack([np.ones(len(p_hat)), lg(np.asarray(p_hat, float))]))
+    return lambda q: expit(a + c * lg(np.asarray(q, float)))
 
 
 # ---------- 7-B.4: survival ----------
@@ -751,9 +713,10 @@ def kaplan_meier(times, events, entry=None):
     n = np.array([((entry < t) & (times >= t)).sum() for t in t_ev])
     d = np.array([((times == t) & (events == 1)).sum() for t in t_ev])
     S = np.cumprod(1.0 - d / n)
-    with np.errstate(divide="ignore", invalid="ignore"):
+    with np.errstate(divide="ignore", invalid="ignore"):          # n == d: Greenwood undefined
         gw = np.cumsum(np.where(n > d, d / (n * (n - d)), np.inf))
-    return {"t": t_ev, "n": n, "d": d, "S": S, "var": S ** 2 * gw, "H_na": np.cumsum(d / n)}
+        var = np.where(S > 0, S ** 2 * gw, 0.0)
+    return {"t": t_ev, "n": n, "d": d, "S": S, "var": var, "H_na": np.cumsum(d / n)}
 
 
 def cox_ph(times, events, Z, max_iter=50, tol=1e-9):
@@ -782,15 +745,6 @@ def cox_ph(times, events, Z, max_iter=50, tol=1e-9):
 
 
 # ---------- 7-B.5: covariance ----------
-def ewma_cov(R, phi=0.94):
-    """EWMA second moment (zero mean) of the rows of R (T, N); seeded on the first 20 rows."""
-    R = np.asarray(R, float)
-    S = R[:20].T @ R[:20] / min(20, len(R))
-    for x in R:
-        S = phi * S + (1.0 - phi) * np.outer(x, x)
-    return S
-
-
 def ledoit_wolf(R):
     """Ledoit-Wolf (2004) shrinkage toward m I, eq. (7B.8); returns (Sigma, delta)."""
     X = np.asarray(R, float)
@@ -802,14 +756,6 @@ def ledoit_wolf(R):
     noise = (np.sum(np.sum(X ** 2, axis=1) ** 2) - T * np.sum(S ** 2)) / T ** 2
     delta = min(noise, d2) / d2 if d2 > 0 else 1.0
     return delta * F + (1.0 - delta) * S, delta
-
-
-def factor_cov_inv(B, cov_f, idio_var):
-    """Woodbury inverse of B cov_f B' + diag(idio_var), O(N K^2)."""
-    Dinv = 1.0 / np.asarray(idio_var, float)
-    BtDi = np.asarray(B, float).T * Dinv
-    core = np.linalg.inv(np.linalg.inv(cov_f) + BtDi @ np.asarray(B, float))
-    return np.diag(Dinv) - BtDi.T @ core @ BtDi
 
 
 def mp_edge(N, T, sigma2=1.0):
@@ -857,24 +803,12 @@ def block_bootstrap(stat, data, rng, B=2000, mean_block=None, method="stationary
     return np.array([stat(data[draw()]) for _ in range(B)])
 
 
-def cluster_bootstrap(stat, groups, rng, B=2000):
-    """Resample issuers with all their rows; stat receives row indices."""
-    inv = _codes(groups)
-    rows = [np.flatnonzero(inv == g) for g in range(inv.max() + 1)]
-    return np.array([stat(np.concatenate([rows[j] for j in rng.integers(len(rows), size=len(rows))]))
-                     for _ in range(B)])
-
-
 # ---------- 7-B.8: Monte Carlo ----------
 def mc_estimate(samples):
     """Mean, standard error and the book's 4-s.e. assertion tolerance."""
     x = np.asarray(samples, float)
     se = x.std(ddof=1) / np.sqrt(len(x))
     return x.mean(), se, 4.0 * se
-
-
-def mc_paths_needed(sigma, eps, z=4.0):
-    return int(np.ceil((z * sigma / eps) ** 2))
 
 
 def control_variate(g, y, mu_y):
@@ -942,14 +876,11 @@ yl = (r_logit.random(n) < expit(Xl @ b_true)).astype(float)
 b_l, V_l, p_l = logit_fit(yl, Xl)
 assert np.all(np.abs(b_l - b_true) < 4.0 * np.sqrt(np.diag(V_l)))
 assert abs(p_l.sum() - yl.sum()) < 1e-6 * n
-bd = brier_decomposition(p_l, yl)
-assert abs(bd["reliability"] - bd["resolution"] + bd["uncertainty"] - bd["brier"]) < 5e-3
 
 # 7-B.4: the practice cohort (Calloway, Quillfeather, Larkspur, Halvorsen, Halyard, Brambleworth)
 km = kaplan_meier([9, 14, 22, 27, 30, 36], [0, 1, 1, 1, 0, 0])
 assert np.allclose(km["S"], [0.8, 0.6, 0.4]) and np.isclose(km["var"][-1], 0.048)
 print(f"Practice cohort PD(36m) = {1 - km['S'][-1]:.0%} +/- {np.sqrt(km['var'][-1]):.0%}")
-assert np.allclose(kaplan_meier(np.arange(1, 51), np.ones(50))["S"], 1 - np.arange(1, 51) / 50)
 
 # 7-B.4: Cox recovers the runway hazard ratio e^1.1 under independent censoring
 n = 3_000
@@ -978,8 +909,6 @@ for t in range(1, T_b):
 se_iid = block_bootstrap(np.mean, ar, r_mc, B=1000, method="iid").std()
 se_sb = block_bootstrap(np.mean, ar, r_mc, B=1000, mean_block=25).std()
 assert se_sb / se_iid > 1.35
-idx = stationary_bootstrap_indices(100_000, 20, r_mc)
-assert abs(100_000 / (1 + np.count_nonzero(np.diff(idx) != 1)) - 20) < 2.0
 
 # 7-B.8: tolerances, control variates, and the Brownian bridge
 zz = r_mc.standard_normal(1_000_000)

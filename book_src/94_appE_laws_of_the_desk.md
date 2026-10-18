@@ -72,7 +72,7 @@ By the end of this appendix you will be able to state each law in a sentence sho
 | 15 | Forced selling is a supply schedule | $dQ = -\theta Q\,dt$, $p = v - \kappa Q/M$ | §16.2, §21.4, §1.8 | 1, 11, 16, 20, 21, 24 |
 | 16 | The court is a random variable with timestamps | $\operatorname{logit}\theta_w(t) = \alpha_w + \sum_r J_{r,w}\mathbf{1}\{t\ge t_r\}$ | §14.6, §13.9, §16.1 | 3, 13, 14, 16, 22, 25, 27 |
 
-Two patterns in the table are worth a sentence each. First, the laws with the longest debrief lists (1, 8, 9) are the ones about what a number *is*, not what it predicts. The desk loses more money to mislabeled quantities than to wrong forecasts. Second, almost every expensive mistake in the book breaks two laws at once: the excluded Serta lender broke 8 and 16, the private-credit Sharpe ratio breaks 9 and 11, the 3,000-configuration backtest breaks 10 and 12, and the "market is underpricing default" note breaks 4 and 7. When you find one violation, look for its partner.
+Two patterns in the table are worth a sentence each. First, the laws with the longest debrief lists (1, 8, 9) are the ones about what a number *is*, not what it predicts. The desk loses more money to mislabeled quantities than to wrong forecasts. Second, almost every expensive mistake in the book breaks two laws at once: the excluded Serta lender broke 8 and 16, the private-credit Sharpe ratio breaks 9 and 11, the published bond-momentum factor (real gross, perishable net, found among many tries; §9.4, §9.9) breaks 10 and 12, and the "market is underpricing default" note breaks 4 and 7. When you find one violation, look for its partner.
 
 *Used in:* the Preface (the Laws list and the tag legend); every Desk Debrief; `00_01_tape_to_your_monitor.md`, which groups its forty bullets by Part and tags each with its law.
 
@@ -440,3 +440,611 @@ A few candidates came close. They are listed so that Edition 3 can promote, merg
 - **The 13-week model** appears in six debriefs and will never be a law. It is not a sentence but a character, and it refuses to stay one thing for long enough to be promoted: a hazard curve in Chapter 6, a runway covariate in Chapter 13, a jump term in Chapter 16 and a dashboard in Chapter 28.
 
 *Used in:* Edition 3 planning (`state/exploratory_space.md`), and the law linter's list of probationary patterns in §E.8.
+
+## E.8 The Law Linter and the Sixteen Checkers
+
+The laws are only useful if every Debrief cites them the same way and every number on the desk can be checked against them. This section specifies one module that does both: a registry of the sixteen laws, a linter that reads every Desk Debrief and suggests tags, a `LabeledNumber` type that enforces Law 11 in arithmetic, and one small checker per law, so that each equation in §E.2–E.5 exists once as code.
+
+### Specification for AI Implementation
+
+**The Spec You Hand the Robot.** *What ROBO built from the vague version ("list the rules of the desk"):* 228 rules, one per Debrief bullet, plus a 229th telling the desk to deflate the other 228. *The precise version:*
+
+> Build `laws_of_the_desk.py` (numpy and the Python standard library only; seed 94). (1) `LAWS`: an immutable tuple of 16 `Law` records with `number`, `name`, `family` (Ruler, Table, Tape or Clock), `statement`, `equation` (LaTeX), `earned_in` and `bites_in` (tuples of section strings such as `"14.6.1"`), and `patterns` (case-insensitive regexes). Numbers are permanent and never reused. (2) A Debrief linter: find every `## <id> Desk Debrief` section in `book_src/*.md` except this appendix, read bullets until the next `##`/`###` heading or a bold `The Spec`/`Exercises` line, parse explicit tags of the form `[L4]` or `[L4, L7]`, and suggest tags from the patterns. Explicit tags override suggestions. An explicit tag naming a law that does not exist raises `ValueError` with `file:line`. The linter reads files and never writes them. (3) `coverage()` maps each law to the set of chapter ids whose Debriefs carry it; `admission_failures()` lists laws with fewer than three. (4) `LabeledNumber` (frozen): `value`, `unit`, `measure` in {P, Q, none}, `costs` in {gross, net, n/a}, `provenance` in {live, model, simulated}, `denominator`, `known_at` (ISO-8601 string), `source` (a citation or "illustrative"). Addition and subtraction raise unless unit, measure, costs and denominator all match; the result takes the latest `known_at` and the least-live provenance. (5) One pure function per law equation, with input validation, returning floats or numpy arrays. Units: prices in points per 100 par unless a name ends in `_frac`; spreads and rates as decimals; time in years. DTS inside the code is decimal-years ($D^{\text{spr}} \times s$ with $s$ in decimals), so 18.7 in the prose of §E.6 is 0.187 here. (6) `audit_halvorsen()` reproduces the numbers in the §E.6 table. (7) A `__main__` demo: a Law 12 Monte Carlo of 100 null strategies, a Law 9 smoothing experiment, the Halvorsen audit, and a linter run if `book_src/` exists.
+
+**Edge cases and guards.** `effective_breadth` requires $0 \le \rho_a \le \rho_w \le 1$ and at least one bond per issuer. `expected_max_sharpe` requires $K \ge 2$, because with one trial there is nothing to deflate. `jtd_hedge_ratio` requires auction recovery strictly below 1. `smoothing_stats` requires non-negative weights summing to one within $10^{-9}$. `overhang_peak` handles $\theta = \alpha$ by its limit $1/\theta$. `ruling_probability` uses a numerically stable logistic. The linter's suggestions are suggestions: patterns over-match (the word "recovery" alone suggests Law 7), so a writer confirms each tag by hand.
+
+```python
+"""laws_of_the_desk.py: the Laws of the Desk as data, a Debrief linter, and one checker per law.
+
+numpy plus the standard library only. Seed 94.
+Units: prices in points per 100 par unless a name ends in _frac; spreads, rates
+and hazards are decimals per year; time is in years; DTS is decimal-years.
+"""
+from __future__ import annotations
+
+import math
+import re
+from dataclasses import dataclass, replace
+from pathlib import Path
+from statistics import NormalDist
+
+import numpy as np
+
+RNG = np.random.default_rng(94)
+EULER_GAMMA = 0.5772156649015329  # gamma_E in Law 12; gamma stays risk aversion
+
+
+# ---------------------------------------------------------------- the registry
+@dataclass(frozen=True)
+class Law:
+    number: int
+    name: str
+    family: str
+    statement: str
+    equation: str
+    earned_in: tuple
+    bites_in: tuple
+    patterns: tuple
+
+
+LAWS = (
+    Law(1, "IDO or it didn't happen", "Ruler",
+        "Strip carry, Treasuries and DTS-scaled credit beta before you call anything alpha.",
+        r"\epsilon_{i,t} = r^{ex}_{i,t} - s_i\Delta t - \sum_k \beta_{i,k}F_{k,t}",
+        ("8.1", "8.8", "3.3.3"), ("10.6.3", "11.7.2", "18.7", "19.8", "22.8.1"),
+        (r"\bIDO\b", r"\bstrip\b.*\b(beta|carry)\b", r"beta wearing", r"\bnot alpha\b")),
+    Law(2, "Bonds are not bets; issuers are", "Ruler",
+        "Effective breadth counts issuers, not CUSIPs.",
+        r"BR_{eff} = N/(1+(m-1)\rho)",
+        ("4.3", "7.6", "28.2"), ("7.7", "9.7", "11.6", "28.8"),
+        (r"\bissuers?\b", r"\bhats?\b", r"\bbreadth\b", r"\bCUSIPs?\b")),
+    Law(3, "DTS is the unit of credit beta", "Ruler",
+        "Spread volatility scales with spread; size, hedge and vol-target in DTS.",
+        r"\beta_i = DTS_i/DTS_m",
+        ("8.4", "9.2"), ("1.4", "7.4", "9.5", "10.3", "12.5", "19.4", "28.7"),
+        (r"\bDTS\b", r"risk scales with spread")),
+    Law(4, "Say which measure you are in", "Ruler",
+        "Prices live in Q, forecasts in P; the gap is the premium.",
+        r"s - \lambda^P L \approx (\lambda^Q - \lambda^P) L",
+        ("6.3", "6.8"), ("1.5", "3.1", "4.4", "12.2", "13.8", "14.1", "15.4", "18.6", "28.4"),
+        (r"\\mathbb\{[PQ]\}", r"\bmeasures?\b", r"agency default rate", r"risk premium")),
+    Law(5, "A bid is a posterior, and winning is information", "Table",
+        "Condition on who is selling and on having won.",
+        r"b = E^P[V | sell] = m - \pi\sigma_V",
+        ("3.2", "1.3", "18.3"), ("1.9", "2.3.2", "3.3", "18.7", "18.9", "19.8"),
+        (r"posterior", r"winner'?s curse", r"winning is information", r"adverse selection",
+         r"hit ratios?", r"who is on the call", r"anchored dealers")),
+    Law(6, "Charge the jump once", "Table",
+        "Price the jump-to-default in one place only.",
+        r"-(\lambda^P - \lambda^Q) J \tau;\ \lambda^P J^2 \tau",
+        ("5.1", "5.3", "18.6"), ("10.9", "11.1", "16.4", "23.4", "24.3.1", "28.4"),
+        (r"\bjumps?\b", r"funeral", r"\bJTD\b", r"short put")),
+    Law(7, "Default is a menu, and recovery is a U", "Table",
+        "Two default rates, two recovery humps; 40% is a convention.",
+        r"\lambda = \lambda_H + \lambda_D;\ f_R = w f_{in} + (1-w) f_{out}",
+        ("5.5", "5.6", "14.1", "14.4"), ("6.8", "12.2", "13.3", "16.5", "24.2"),
+        (r"\brecover(y|ies)\b", r"distressed exchange", r"default rate", r"\b40%", r"parole",
+         r"\bauction\b")),
+    Law(8, "Every clause is a payoff function", "Table",
+        "Read the document as a program before you model it as a distribution.",
+        r"\Delta_j(V) = W^{post}_j(V) - W^{pre}_j(V)",
+        ("13.2", "13.3", "15.1", "21.4", "25.3"), ("6.5", "13.6", "16.3", "16.5", "24.8", "27.3"),
+        (r"\bclauses?\b", r"payoff", r"credit agreement", r"indenture", r"\bdocuments?\b",
+         r"\bbaskets?\b", r"covenant", r"option book", r"one word")),
+    Law(9, "A mark is a moving average of the truth", "Tape",
+        "Stale marks shrink betas, fake lead-lag and flatter Sharpe ratios.",
+        r"\sigma_o = \sigma\sqrt{\sum_k\theta_k^2};\ \beta^o_0 = \theta_0\beta",
+        ("8.5", "17.2", "12.5"), ("7.1", "10.5", "19.5", "20.2", "21.7", "28.6"),
+        (r"\bmarks?\b", r"\bstale", r"desmooth|unsmooth", r"dimson|sum the lags", r"smooth")),
+    Law(10, "Costs decide, and capacity is a square", "Tape",
+        "Turnover beyond alpha/2c is charity; liquidity tiers bind first.",
+        r"T_{max} = \alpha/(2\bar c);\ \alpha(A^*) = g/3",
+        ("2.9", "4.7", "4.8", "11.9", "28.3"), ("9.4", "9.8", "10.8", "12.7", "24.7", "28.5"),
+        (r"\bcosts?\b", r"capacity", r"turnover", r"liquidity tiers?", r"\brake\b", r"break-even")),
+    Law(11, "Label every number", "Tape",
+        "Gross or net, simulated or live, P or Q, denominator, knowledge time, source.",
+        r"x = (v, u, M, g, l, num/den, t^{known}, src)",
+        ("4.5", "27.2", "27.3"), ("2.6", "7.9", "14.1", "25.3", "26.4"),
+        (r"label every", r"gross or net", r"denominator", r"known_at|knowledge[_ ]t",
+         r"\bunits?\b", r"price_kind", r"timestamps?", r"\bclocks?\b")),
+    Law(12, "Count your trials", "Tape",
+        "Deflate every Sharpe ratio by the number of things you tried.",
+        r"E[\max_k \widehat{SR}_k] \approx \sqrt{V} z_K",
+        ("7.8", "7.9", "26.7"), ("4.5", "7.12", "9.9"),
+        (r"\btrials?\b", r"deflat", r"\bDSR\b|\bPBO\b", r"replicat", r"\bzoo\b", r"folded hands")),
+    Law(13, "The label is the model", "Clock",
+        "Label the trade you would make; cumulative incidence, not 1 - KM.",
+        r"F_k(t) \le 1 - \widehat{KM}_k(t)",
+        ("7.4", "11.4", "11.5", "14.2"), ("7.5", "14.3", "15.5"),
+        (r"label is the model", r"label the trade", r"triple barrier", r"cumulative incidence",
+         r"kaplan", r"exclusion rate", r"competing risks?")),
+    Law(14, "Censoring is the signal", "Clock",
+        "Truncated samples: model the truncation before the data.",
+        r"L = \prod f(Q_i) \prod [1 - F(\bar q)]",
+        ("2.2", "18.8", "22.2"), ("3.2", "5.7", "7.9", "14.2", "17.3"),
+        (r"censor", r"5MM\+|1MM\+", r"truncat", r"survivor", r"pareto")),
+    Law(15, "Forced selling is a supply schedule", "Clock",
+        "Forced sellers sell on rules you can read in advance.",
+        r"dQ = -\theta Q dt;\ p = v - \kappa Q/M",
+        ("16.2", "21.4", "1.8"), ("11.6", "20.3", "20.5", "21.7", "24.6"),
+        (r"forced sell", r"supply", r"overhang", r"\bcure\b", r"\bFSPI\b", r"redemption")),
+    Law(16, "The court is a random variable with timestamps", "Clock",
+        "Rulings are regime switches; the plan value is negotiated.",
+        r"logit \theta_w(t) = \alpha_w + \sum_r J_{r,w} 1\{t \ge t_r\}",
+        ("14.6", "13.9", "16.1"), ("3.7", "13.8", "25.6", "27.3"),
+        (r"\bcourts?\b", r"rulings?", r"\bdocket", r"plan value", r"negotiat", r"serta|mitel",
+         r"regime switch")),
+)
+
+LAW_BY_NUMBER = {law.number: law for law in LAWS}
+COMPILED = {law.number: [re.compile(p, re.IGNORECASE) for p in law.patterns] for law in LAWS}
+PROBATION = {
+    "silence is data": re.compile(r"\bsilen(ce|t)\b", re.IGNORECASE),
+    "hedge less than naive": re.compile(r"hedge less", re.IGNORECASE),
+    "regimes size the tilt": re.compile(r"regimes? size", re.IGNORECASE),
+}
+
+assert len(LAWS) == 16 and sorted(LAW_BY_NUMBER) == list(range(1, 17))
+
+
+# ---------------------------------------------------------------- the linter
+DEBRIEF_HEAD = re.compile(r"^##\s+\S+\s+Desk Debrief\b")
+STOP = re.compile(r"^(##\s|###\s|\*\*The Spec|\*\*Exercises)")
+BULLET = re.compile(r"^(?:[-*]|\d+\.)\s+(.*)")
+TAG_BLOCK = re.compile(r"\[L\d+(?:\s*,\s*L?\d+)*\]")
+
+
+def chapter_id(path):
+    """'01_ch01_x.md' -> '1'; '04_ch04b_x.md' -> '4-B'; '91_appB_x.md' -> 'B'."""
+    name = Path(path).name
+    m = re.match(r"\d+_ch(\d+)(b?)_", name)
+    if m:
+        return f"{int(m.group(1))}{'-B' if m.group(2) else ''}"
+    m = re.match(r"\d+_app([A-Z])_", name)
+    if m:
+        return m.group(1)
+    return Path(path).stem
+
+
+def iter_debrief_bullets(path):
+    """Yield (line_no, text) for every bullet inside a Desk Debrief section."""
+    inside = False
+    with Path(path).open(encoding="utf-8") as fh:
+        for line_no, line in enumerate(fh, start=1):
+            if DEBRIEF_HEAD.match(line):
+                inside = True
+                continue
+            if inside and STOP.match(line):
+                inside = False
+                continue
+            if inside:
+                m = BULLET.match(line)
+                if m:
+                    yield line_no, m.group(1).strip()
+
+
+def explicit_tags(text):
+    found = set()
+    for block in TAG_BLOCK.findall(text):
+        found.update(int(x) for x in re.findall(r"\d+", block))
+    return sorted(found)
+
+
+def suggest_tags(text):
+    return [n for n, pats in COMPILED.items() if any(p.search(text) for p in pats)]
+
+
+def lint_book(book_dir):
+    """Read every Desk Debrief in book_dir (never writes). One row per bullet."""
+    rows = []
+    for path in sorted(Path(book_dir).glob("*.md")):
+        if path.name.startswith("94_appE"):
+            continue
+        for line_no, text in iter_debrief_bullets(path):
+            tags = explicit_tags(text)
+            unknown = [n for n in tags if n not in LAW_BY_NUMBER]
+            if unknown:
+                raise ValueError(f"{path.name}:{line_no}: unknown law tag(s) {unknown}")
+            rows.append({
+                "file": path.name,
+                "chapter": chapter_id(path),
+                "line": line_no,
+                "explicit": tags,
+                "suggested": suggest_tags(text),
+                "probation": [k for k, p in PROBATION.items() if p.search(text)],
+                "untagged": not tags,
+                "text": text[:120],
+            })
+    return rows
+
+
+def coverage(rows, explicit_only=False):
+    """Law number -> set of chapter ids whose Debriefs carry it."""
+    cov = {law.number: set() for law in LAWS}
+    for row in rows:
+        tags = row["explicit"] if explicit_only else (row["explicit"] or row["suggested"])
+        for n in tags:
+            cov[n].add(row["chapter"])
+    return cov
+
+
+def admission_failures(cov, min_debriefs=3):
+    return [n for n, chapters in cov.items() if len(chapters) < min_debriefs]
+
+
+def format_tags(numbers):
+    return "[" + ", ".join(f"L{n}" for n in sorted(set(numbers))) + "]"
+
+
+# ---------------------------------------------------------------- Law 11 as a type
+_MEASURES = ("P", "Q", "none")
+_COSTS = ("gross", "net", "n/a")
+_PROVENANCE_RANK = {"live": 0, "model": 1, "simulated": 2}
+_MUST_MATCH = ("unit", "measure", "costs", "denominator")
+
+
+@dataclass(frozen=True)
+class LabeledNumber:
+    value: float
+    unit: str
+    measure: str = "none"
+    costs: str = "n/a"
+    provenance: str = "live"
+    denominator: str = "n/a"
+    known_at: str = ""
+    source: str = "illustrative"
+
+    def __post_init__(self):
+        if not math.isfinite(float(self.value)):
+            raise ValueError(f"Law 11: non-finite value {self.value!r}")
+        if not self.unit:
+            raise ValueError("Law 11: a number needs a unit")
+        if self.measure not in _MEASURES:
+            raise ValueError(f"Law 11: measure must be one of {_MEASURES}")
+        if self.costs not in _COSTS:
+            raise ValueError(f"Law 11: costs must be one of {_COSTS}")
+        if self.provenance not in _PROVENANCE_RANK:
+            raise ValueError(f"Law 11: provenance must be one of {tuple(_PROVENANCE_RANK)}")
+        if not self.source:
+            raise ValueError("Law 11: cite a source or write 'illustrative'")
+
+    def _check(self, other):
+        if not isinstance(other, LabeledNumber):
+            raise TypeError("Law 11: cannot combine a labeled number with a bare one")
+        diffs = [k for k in _MUST_MATCH if getattr(self, k) != getattr(other, k)]
+        if diffs:
+            detail = ", ".join(f"{k} ({getattr(self, k)!r} vs {getattr(other, k)!r})" for k in diffs)
+            raise ValueError("Law 11: label mismatch on " + detail)
+
+    def _combine(self, other, value):
+        prov = max(self.provenance, other.provenance, key=_PROVENANCE_RANK.get)
+        src = self.source if self.source == other.source else f"{self.source}; {other.source}"
+        return replace(self, value=value, provenance=prov,
+                       known_at=max(self.known_at, other.known_at), source=src)
+
+    def __add__(self, other):
+        self._check(other)
+        return self._combine(other, self.value + other.value)
+
+    def __sub__(self, other):
+        self._check(other)
+        return self._combine(other, self.value - other.value)
+
+    def scaled(self, k, unit=None):
+        return replace(self, value=self.value * float(k), unit=unit or self.unit)
+
+
+# ---------------------------------------------------------------- one checker per law
+def ido_residual(r_total, r_tsy, spread, dt, dts, loadings, factor_rel):
+    """Law 1. Arrays (T,N) except loadings (N,K) and factor_rel (T,K). Returns epsilon (T,N)."""
+    r_total, r_tsy, spread, dts = (np.asarray(a, dtype=float) for a in (r_total, r_tsy, spread, dts))
+    loadings, factor_rel = np.asarray(loadings, dtype=float), np.asarray(factor_rel, dtype=float)
+    shape = r_total.shape
+    if r_tsy.shape != shape or spread.shape != shape or dts.shape != shape:
+        raise ValueError("Law 1: r_total, r_tsy, spread and dts must share shape (T, N)")
+    if loadings.shape[0] != shape[1] or factor_rel.shape != (shape[0], loadings.shape[1]):
+        raise ValueError("Law 1: loadings must be (N, K) and factor_rel (T, K)")
+    systematic = -dts * (factor_rel @ loadings.T)
+    return (r_total - r_tsy) - spread * dt - systematic
+
+
+def effective_breadth(n_bonds, n_issuers, rho_within, rho_across=0.0):
+    """Law 2, equations (4.1) and (28.5)."""
+    if n_issuers <= 0 or n_bonds < n_issuers:
+        raise ValueError("Law 2: need at least one bond per issuer")
+    if not (0.0 <= rho_across <= rho_within <= 1.0):
+        raise ValueError("Law 2: need 0 <= rho_across <= rho_within <= 1")
+    m = n_bonds / n_issuers
+    return n_bonds / (1.0 + (m - 1.0) * rho_within + (n_bonds - m) * rho_across)
+
+
+def dts_beta(dts_i, dts_m):
+    """Law 3."""
+    if dts_m <= 0:
+        raise ValueError("Law 3: market DTS must be positive")
+    return dts_i / dts_m
+
+
+def credit_premium(spread, lgd_q, lambda_p, lgd_p=None):
+    """Law 4. Credit triangle in Q, expected loss in P, premium = s - lambda_P * L_P."""
+    if not (0.0 < lgd_q <= 1.0):
+        raise ValueError("Law 4: lgd_q must be in (0, 1]")
+    lgd_p = lgd_q if lgd_p is None else lgd_p
+    lambda_q = spread / lgd_q
+    return {"lambda_q": lambda_q, "premium": spread - lambda_p * lgd_p,
+            "q_over_p": lambda_q / lambda_p if lambda_p > 0 else math.inf}
+
+
+def gm_bid(mid, sigma_v, pi):
+    """Law 5, equation (3.1)."""
+    if not (0.0 <= pi <= 1.0) or sigma_v < 0:
+        raise ValueError("Law 5: need 0 <= pi <= 1 and sigma_v >= 0")
+    return mid - pi * sigma_v
+
+
+def effective_dealers(n, phi):
+    """Law 5, the anchored-dealer count of section 2.3.2."""
+    if n < 1 or not (0.0 < phi <= 1.0):
+        raise ValueError("Law 5: need n >= 1 and 0 < phi <= 1")
+    return n / (1.0 + (n - 1.0) * phi)
+
+
+def jump_terms(lambda_p, lambda_q, jump, horizon):
+    """Law 6. Returns (credit-view drift term, jump standard deviation), in the units of jump."""
+    credit_view = -(lambda_p - lambda_q) * jump * horizon
+    jump_sd = math.sqrt(max(lambda_p, 0.0) * jump ** 2 * horizon)
+    return credit_view, jump_sd
+
+
+def mixture_variance(q, var_x, var_y, jump):
+    """Law 6, section 5.1: within-world terms plus q(1-q)J^2."""
+    if not (0.0 <= q <= 1.0):
+        raise ValueError("Law 6: q must be a probability")
+    return (1.0 - q) * var_x + q * var_y + q * (1.0 - q) * jump ** 2
+
+
+def jtd_hedge_ratio(price_frac, r_bond, r_auction=None):
+    """Laws 6-8. CDS notional per unit of bond face: (P - R_bond) / (1 - R_auction)."""
+    r_auction = r_bond if r_auction is None else r_auction
+    if not (0.0 <= r_auction < 1.0):
+        raise ValueError("Law 7: auction recovery must be in [0, 1)")
+    return (price_frac - r_bond) / (1.0 - r_auction)
+
+
+def recovery_mixture(w_in, mu_in, mu_out, sd_in=0.0, sd_out=0.0):
+    """Law 7, section 14.4. Returns (mean, total sd, sd from membership alone)."""
+    if not (0.0 <= w_in <= 1.0):
+        raise ValueError("Law 7: w_in must be a probability")
+    mean = w_in * mu_in + (1.0 - w_in) * mu_out
+    between = w_in * (1.0 - w_in) * (mu_in - mu_out) ** 2
+    within = w_in * sd_in ** 2 + (1.0 - w_in) * sd_out ** 2
+    return mean, math.sqrt(within + between), math.sqrt(between)
+
+
+def ar1_theta(phi, k_max=240):
+    """Law 9. Smoothing weights (1 - phi) phi^k, renormalised after truncation."""
+    if not (0.0 <= phi < 1.0):
+        raise ValueError("Law 9: need 0 <= phi < 1")
+    theta = (1.0 - phi) * phi ** np.arange(k_max + 1)
+    return theta / theta.sum()
+
+
+def smoothing_stats(theta):
+    """Law 9. Volatility ratio, contemporaneous-beta ratio and Sharpe inflation."""
+    theta = np.asarray(theta, dtype=float)
+    if np.any(theta < 0) or abs(theta.sum() - 1.0) > 1e-9:
+        raise ValueError("Law 9: weights must be non-negative and sum to one")
+    s2 = float(np.sum(theta ** 2))
+    return {"vol_ratio": math.sqrt(s2), "beta0_ratio": float(theta[0]),
+            "sharpe_inflation": 1.0 / math.sqrt(s2)}
+
+
+def breakeven_turnover(alpha_gross, cbar):
+    """Law 10, equation (4.6)."""
+    if cbar <= 0:
+        raise ValueError("Law 10: cost must be positive")
+    return alpha_gross / (2.0 * cbar)
+
+
+def capacity_star(liquidity, g, turnover, eta):
+    """Law 10, equation (4.2). Returns (A*, the AUM at which net alpha is zero)."""
+    if min(liquidity, g, turnover, eta) <= 0:
+        raise ValueError("Law 10: inputs must be positive")
+    a_star = liquidity * g ** 2 / (18.0 * turnover ** 3 * eta ** 2)
+    return a_star, 2.25 * a_star
+
+
+def net_alpha(aum, liquidity, g, turnover, eta):
+    """Law 10, section 4.8: g minus square-root impact."""
+    return g - 2.0 * turnover * eta * math.sqrt(2.0 * turnover * aum / liquidity)
+
+
+def expected_max_sharpe(k_trials, var_sr):
+    """Law 12, section 7.8 (Bailey and Lopez de Prado)."""
+    if k_trials < 2:
+        raise ValueError("Law 12: with one trial there is nothing to deflate; need K >= 2")
+    if var_sr < 0:
+        raise ValueError("Law 12: variance must be non-negative")
+    nd = NormalDist()
+    z = ((1.0 - EULER_GAMMA) * nd.inv_cdf(1.0 - 1.0 / k_trials)
+         + EULER_GAMMA * nd.inv_cdf(1.0 - 1.0 / (k_trials * math.e)))
+    return math.sqrt(var_sr) * z
+
+
+def cif_constant_hazards(h_k, h_other, t):
+    """Law 13. Cumulative incidence vs the naive 1 - KM that censors the other cause."""
+    total = h_k + h_other
+    cif = 0.0 if total == 0 else h_k / total * (1.0 - math.exp(-total * t))
+    naive = 1.0 - math.exp(-h_k * t)
+    return cif, naive
+
+
+def pareto_mean_excess(alpha, cap):
+    """Law 14. Mean size of a print disseminated as 'cap+' under a Pareto tail."""
+    if alpha <= 1.0:
+        raise ValueError("Law 14: the mean above the cap exists only for alpha > 1")
+    return alpha / (alpha - 1.0) * cap
+
+
+def half_life(theta):
+    """Law 15."""
+    if theta <= 0:
+        raise ValueError("Law 15: execution rate must be positive")
+    return math.log(2.0) / theta
+
+
+def overhang_peak(theta, alpha):
+    """Law 15, section 16.2.2: time of peak overhang after the event."""
+    if theta <= 0 or alpha <= 0:
+        raise ValueError("Law 15: rates must be positive")
+    if math.isclose(theta, alpha, rel_tol=1e-12):
+        return 1.0 / theta
+    return math.log(theta / alpha) / (theta - alpha)
+
+
+def ruling_probability(alpha_w, jumps, t):
+    """Law 16, section 14.6.1. jumps: iterable of (t_r, J_rw) in years and log-odds."""
+    x = alpha_w + sum(j for t_r, j in jumps if t >= t_r)
+    if x >= 0:
+        return 1.0 / (1.0 + math.exp(-x))
+    ex = math.exp(x)
+    return ex / (1.0 + ex)
+
+
+# ---------------------------------------------------------------- the section E.6 audit
+def audit_halvorsen():
+    """Reproduce the illustrative numbers of section E.6."""
+    mid, face_mm, d_spr, z = 88.0, 15.0, 3.9, 0.048
+    dts_bond, dts_index = d_spr * z, 3.2 * 0.031
+    beta = dts_beta(dts_bond, dts_index)
+    prem = credit_premium(spread=0.037, lgd_q=0.60, lambda_p=0.030)
+    shade = mid - gm_bid(mid, sigma_v=4.0, pi=0.10)
+    credit_view, jump_sd = jump_terms(0.030, prem["lambda_q"], jump=48.0, horizon=5 / 252)
+    r_mean, _, _ = recovery_mixture(0.30, 0.65, 0.20)
+    hedge_bankruptcy = jtd_hedge_ratio(mid / 100, r_mean)
+    hedge_no_accel = (mid - 70.0) / 100 / (1.0 - 0.52)
+    reversal_month = 0.070 * (1.0 - math.exp(-3.42 / 12))
+    bid = mid - shade - 0.25 - 0.10
+    quote = LabeledNumber(mid, "points", measure="Q", provenance="model",
+                          known_at="2026-10-16T14:55", source="composite (illustrative)")
+    return {
+        "L3 beta": beta,
+        "L3 index-equivalent MV ($mm)": beta * face_mm * mid / 100,
+        "L4 lambda_Q": prem["lambda_q"],
+        "L4 premium (decimal/yr)": prem["premium"],
+        "L5 shade (points)": shade,
+        "L6 credit view (points)": credit_view,
+        "L6 jump sd (points)": jump_sd,
+        "L7 E[R]": r_mean,
+        "L7 JTD hedge, bankruptcy": hedge_bankruptcy,
+        "L8 JTD hedge, no acceleration": hedge_no_accel,
+        "L10 reversal in a month": reversal_month,
+        "L14 mean HY block ($mm)": pareto_mean_excess(4 / 3, 1.0),
+        "L15 half-life (months)": 12 * half_life(3.42),
+        "bid (points)": bid,
+        "label": f"{quote.value:.2f} {quote.unit}, measure {quote.measure}, known {quote.known_at}",
+    }
+
+
+# ---------------------------------------------------------------- demos
+def demo_law12(k_trials=100, months=120):
+    """Best of K null strategies vs the expected maximum (expect about 0.8 for K=100, 10 years)."""
+    rets = RNG.normal(0.0, 0.02, size=(k_trials, months))
+    sr = rets.mean(axis=1) / rets.std(axis=1, ddof=1) * math.sqrt(12)
+    return float(sr.max()), expected_max_sharpe(k_trials, var_sr=12.0 / months)
+
+
+def demo_law9(phi=0.8, months=600, beta=1.0, lags=12):
+    """AR(1) smoothing: vol ratio about 1/3; contemporaneous beta about (1 - phi) beta; lag sum near beta."""
+    f = RNG.normal(0.0, 0.03, size=months)
+    r = beta * f + RNG.normal(0.0, 0.01, size=months)
+    obs = np.empty(months)
+    obs[0] = r[0]
+    for t in range(1, months):
+        obs[t] = (1.0 - phi) * r[t] + phi * obs[t - 1]
+    x = np.column_stack([f[lags - k: months - k] for k in range(lags + 1)])
+    y = obs[lags:]
+    coef, *_ = np.linalg.lstsq(np.column_stack([np.ones(len(y)), x]), y, rcond=None)
+    return {
+        "vol_ratio_sim": float(obs[lags:].std() / r[lags:].std()),
+        "vol_ratio_theory": smoothing_stats(ar1_theta(phi))["vol_ratio"],
+        "beta0_sim": float(coef[1]),
+        "beta_lag_sum_sim": float(coef[1:].sum()),  # theory: 1 - phi**(lags + 1), about 0.945
+    }
+
+
+if __name__ == "__main__":
+    best, theory = demo_law12()
+    print(f"Law 12: best of 100 null Sharpes {best:.2f}; expected max {theory:.2f}")
+    print("Law 9:", {k: round(v, 3) for k, v in demo_law9().items()})
+    print("Law 2: 47 CUSIPs, one issuer, rho 0.9 ->", round(effective_breadth(47, 1, 0.9), 2), "bets")
+    for key, value in audit_halvorsen().items():
+        print(f"  {key}: {value if isinstance(value, str) else round(value, 4)}")
+    book = Path("book_src")
+    if book.is_dir():
+        rows = lint_book(book)
+        cov = coverage(rows)
+        print(f"Linter: {len(rows)} Debrief bullets, {sum(r['untagged'] for r in rows)} without explicit tags")
+        print("Laws below three Debriefs:", admission_failures(cov) or "none")
+```
+
+**Tests a reviewer should run first.** `effective_breadth(47, 1, 0.9)` returns about 1.11. `gm_bid(88, 4, 0.1)` returns 87.6. `jtd_hedge_ratio(0.88, 0.40)` returns 0.80. `smoothing_stats(ar1_theta(0.8))["vol_ratio"]` is about 0.333. `expected_max_sharpe(100, 0.1)` is about 0.80. `pareto_mean_excess(5/3, 5.0)` is 12.5. `overhang_peak(3.42, 3.42)` equals `1/3.42`. Adding a `LabeledNumber` in $\mathbb{P}$ to one in $\mathbb{Q}$ raises `ValueError`, and that test is the whole of Law 11 in one line.
+
+**Ways This Blows Up.** (1) *Pattern drift.* A chapter rewrites its Debrief, and the suggested tags change silently. Commit the explicit tags; the suggestions exist only to propose them. (2) *Section renumbering.* Edition 2 splits files (4-B, 6-B, 7-B, 12-B), so `earned_in` strings go stale. Regenerate them from `state/foundations_map.md` rather than by hand. (3) *Law inflation.* Every edition will want a seventeenth law. The admission rule in §E.1 is enforced in code (`admission_failures`), and the probation list is where new candidates wait.
+
+*Used in:* §E.6; Chapter 18-B (the RFQ engine imports `gm_bid`, `effective_dealers` and `jump_terms`); Chapter 7-B (once `creditstats.py` exists, `expected_max_sharpe` should import its version rather than keep a copy); and, proposed for Edition 2, a lint step in `tools/check_book.py` that warns on untagged Debrief bullets.
+
+## E.9 Desk Debrief
+
+- **A law is a Debrief bullet that has been paid for three times.** Once is an anecdote, twice a coincidence; three chapters and an equation make a law. [L12]
+- **Four questions cover all sixteen.** What is the number measured against (the Ruler), what must the price survive (the Table), what is the data hiding (the Tape), and when, and by whose decision, does the outcome arrive (the Clock)?
+- **Expensive mistakes break laws in pairs.** The excluded Serta lender broke the document and the court; the private-credit Sharpe broke the mark and the label; the published momentum factor broke costs and trials. Find one violation, then look for its partner. [L8, L16, L9, L11, L10, L12]
+- **On a single ticket the seller matters more than the default.** In the Halvorsen audit the posterior shade was more than ten times the credit view over a five-day hold. [L5, L6]
+- **The hedge depends on the state, and the state is in the Definitions.** $N^{\text{JTD}}$ is 0.82 in bankruptcy and about 0.38 in a failure to pay without acceleration. [L6, L7, L8]
+- **Tag, don't restate.** A later chapter cites `[L6]` and a section; it does not re-derive the jump. That is how a 475,000-word book stays one book.
+- **A law without an equation is a horoscope; a law without a section is a rumor.** Every entry here carries both, and the linter checks the count. [L11]
+- **IDO or it didn't happen.** [L1]
+
+**The Spec You Hand the Robot.** *Build `laws_of_the_desk.py` as specified in §E.8: a registry of sixteen permanently numbered laws with statements, LaTeX equations, earned-in and bites-in sections and linter patterns; a read-only Debrief linter that honors explicit `[Ln]` tags, suggests missing ones, raises on unknown law numbers and reports any law carried by fewer than three Debriefs; a frozen `LabeledNumber` whose arithmetic refuses to mix units, measures, cost bases or denominators; one validated pure function per law equation; and an `audit_halvorsen()` that reproduces §E.6. numpy and the standard library only, seed 94, prices in points, spreads as decimals, time in years, DTS in decimal-years.*
+
+### Exercises
+
+1. **Tag a Debrief.** Tag every bullet of the Chapter 21 Desk Debrief with law numbers by hand, then run the linter. Which bullet carries no law? Should "settlement is a risk factor" become a candidate for probation, or is it already Law 10 with a calendar?
+2. **Square or cube.** Let impact per dollar traded be $\eta\,(\mathrm{TO}^{a}A/\mathcal{L})^{1/2}$. Show that capacity at the dollar-alpha optimum scales as $\mathrm{TO}^{-(2+a)}$, and recover Chapter 11's square ($a = 0$) and Chapter 4's cube ($a = 1$) as special cases.
+3. **The units-error note.** A junior writes: "Halvorsen CDS implies a 6.2% default rate; Moody's says 3%; the market is overpricing default by half." List every law the sentence breaks, in order, and rewrite it in one line that obeys all of them.
+4. **Re-audit the ticket.** Repeat the §E.6 audit for the same \$15mm, but with the RFQ coming from an unrestricted hedge fund that has signed a cooperation agreement on Halvorsen's term loan, with PRS at 0.41. Which rows change status, and what happens to $\pi$, to the bid and to Law 16? (The cooperation-agreement counter overflowed in Chapter 14. This one is hypothetical and does not count, which the Ad Hoc Group notes is how they all start.)
+5. **ROBO obeys the law.** ROBO is told to "maximize the number of laws obeyed" and buys Treasury bills. Show that the bill portfolio satisfies all sixteen laws, vacuously. Then write the objective that turns the laws into constraints on a strategy, rather than a score to maximize.
+
+### Deep-Dive Resource Graph
+
+**Podcasts.**
+- *Bloomberg Odd Lots* (Joe Weisenthal and Tracy Alloway): its credit episodes on liability management, portfolio trading and private credit are the audio companion to Laws 7, 8, 15 and 16.
+- *Flirting with Models* (Corey Hoffstein), https://www.flirtingwithmodels.com/: systematic managers on costs, capacity and overfitting (Laws 10 and 12).
+
+**Practitioner Writing.**
+- Matt Levine, *Money Stuff* (Bloomberg): the running commentary on "open market purchase," uptiers and cooperation agreements (Laws 8 and 16).
+- *Petition*: restructuring commentary on dockets, plan values and LMEs (Law 16).
+- AQR, *Corporate Bond Factors: Replication Failures and a New Framework*, https://www.aqr.com/Insights/Research/Working-Paper/Corporate-Bond-Factors-Replication-Failures-and-a-New-Framework (Law 12).
+
+**Academic Papers.**
+- Grinold (1989), *The Fundamental Law of Active Management*, Journal of Portfolio Management (Law 2).
+- Ben Dor, Dynkin, Hyman, Houweling, van Leeuwen and Penninga (2007), *DTS (Duration Times Spread)*, Journal of Portfolio Management (Law 3).
+- Glosten and Milgrom (1985), *Bid, ask and transaction prices in a specialist market with heterogeneously informed traders*, Journal of Financial Economics 14(1), https://doi.org/10.1016/0304-405X(85)90044-3 (Law 5).
+- Avellaneda and Stoikov (2008), *High-frequency trading in a limit order book*, Quantitative Finance (Law 6, via §18.6).
+- Getmansky, Lo and Makarov (2004), *An econometric model of serial correlation and illiquidity in hedge fund returns*, Journal of Financial Economics, https://ideas.repec.org/a/eee/jfinec/v74y2004i3p529-609.html (Law 9).
+- Dimson (1979), *Risk measurement when shares are subject to infrequent trading*, Journal of Financial Economics, https://ideas.repec.org/a/eee/jfinec/v7y1979i2p197-226.html (Law 9).
+- Bailey and López de Prado (2014), *The Deflated Sharpe Ratio: Correcting for Selection Bias, Backtest Overfitting, and Non-Normality*, Journal of Portfolio Management (Law 12).
+- Harvey, Liu and Zhu (2016), *… and the Cross-Section of Expected Returns*, Review of Financial Studies (Law 12).
+- Fine and Gray (1999), *A Proportional Hazards Model for the Subdistribution of a Competing Risk*, Journal of the American Statistical Association (Law 13).
+- Dickerson, Mueller and Robotti (2023), *Priced Risk in Corporate Bonds*, Journal of Financial Economics (Laws 12 and 14).
+
+**Data & Code.**
+- FINRA TRACE, https://www.finra.org/filing-reporting/trace, and the historic academic file, https://www.finra.org/filing-reporting/trace/historic-academic-data (Law 14: the capped and uncapped tapes).
+- Open Source Bond Asset Pricing, https://openbondassetpricing.com/ (Laws 12 and 14: the clean panel the factor library replicates).
+- SEC EDGAR, https://www.sec.gov/edgar (Law 8: the documents).
+- CourtListener REST API, https://www.courtlistener.com/help/api/ (Law 16: rulings with timestamps).
+- ICE BofA US High Yield OAS on FRED, https://fred.stlouisfed.org/series/BAMLH0A0HYM2 (Laws 3 and 9: the index whose DTS sets the beta, and whose composite marks are Law 9's subject).
+
+*Used in:* the Preface, `00_01_tape_to_your_monitor.md`, every Desk Debrief (law tags), Chapter 7-B and Chapter 18-B (the checkers they import), and a proposed Debrief tag lint in `tools/check_book.py`.
+
+<!-- STATUS: COMPLETE -->
