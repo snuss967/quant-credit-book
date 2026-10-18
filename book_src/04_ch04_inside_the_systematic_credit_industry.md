@@ -712,3 +712,5 @@ The last empty cell lives *inside* the full ones.
 - MarketAxess FY2025 results: https://investor.marketaxess.com/news/news-details/2026/MarketAxess-Reports-Fourth-Quarter-and-Full-Year-2025-Financial-Results/default.aspx
 - MarketAxess 8-K on the ICE agreement (Exhibit 99.1): https://www.sec.gov/Archives/edgar/data/1278021/000119312526324933/d159148dex991.htm
 
+
+<!-- STATUS: COMPLETE -->
