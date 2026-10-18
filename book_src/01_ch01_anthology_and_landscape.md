@@ -736,7 +736,7 @@ Kaz answered first, carefully. "From the loan's price history, nothing. The two 
 
 "Which features?" Ines asked.
 
-Theo had them before she finished, and he gave them the way she had taught him to, one likelihood ratio at a time. "Whether the account is in the group, or has been in groups like it. Whether it called or used the platform, and whether it showed the loan to one dealer or to everyone. How close the request is to any lender meeting we know about. The account's own markout history with us: what happened to the last twenty things we bought from it. And the document itself, because the document tells you how big $J$ can be. If the agreement lets the company do a non-pro-rata deal with a bare majority, then the left-behind lenders can lose a great deal, and anyone who knows a deal is coming knows which side of it they don't want to be on."
+Theo had them before she finished: the six rows from the Halvorsen whiteboard, with a phone call standing in for five dealers, and one row the Friday had not needed. "And the document itself, because the document tells you how big $J$ can be. If the agreement lets the company do a non-pro-rata deal with a bare majority, then the left-behind lenders can lose a great deal, and anyone who knows a deal is coming knows which side of it they don't want to be on."
 
 "Then pass on both," Theo said. "If I can't tell them apart with confidence, I don't play."
 

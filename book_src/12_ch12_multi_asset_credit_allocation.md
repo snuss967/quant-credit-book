@@ -423,7 +423,7 @@ That sentence is about why the regimes exist. The market in October 2026 supplie
 
 ## 12.5 Covariance You Can Trust: DTS Structure, EWMA, Shrinkage and Desmoothing
 
-The covariance matrix is where MAC models fail quietly. Expected returns are argued about in investment committee; covariances are taken from the risk system and nobody asks. They should, because the covariance of eleven credit sectors is mostly one number (the common spread factor's variance) multiplied by things that change: spread levels, durations and the marking practices of the people who report the returns.
+The covariance matrix is where MAC models fail quietly. Expected returns are argued about in investment committee; covariances are taken from the risk system and nobody asks. They deserve the same argument, because the covariance of eleven credit sectors is mostly one number (the common spread factor's variance) multiplied by things that change: spread levels, durations and the marking practices of the people who report the returns.
 
 **Step 1: structure it with DTS.** From §12.3, a sector's excess return is $r^x_i \approx -D^{\text{spr}}_i\,\Delta s_i = -\text{DTS}_i\,u_i$ with $u_i = \Delta s_i/s_i$ the relative spread change. Stack the sectors, let $\Omega = \operatorname{Cov}(u)$, and
 
@@ -437,9 +437,7 @@ $$
 \Sigma = \Sigma^x + \sigma_{y}^2\,D^{\text{mod}}D^{\text{mod}\top} + \rho_{y,s}\,\sigma_y\,\big(a\,D^{\text{mod}\top} + D^{\text{mod}}a^{\top}\big), \qquad a_i = \text{DTS}_i\sqrt{\Omega_{ii}},
 $$
 
-where $\sigma_y$ is the volatility of yield changes. Setting $\rho_{y,s}=0$ gives the shortcut of treating the Treasury factor as independent of the spread factor, and the shortcut is an approximation that hides a bet on a sign. When rates move on growth news and spreads move against them, $\rho_{y,s}$ is negative, the cross term subtracts, and the result flatters long-duration IG while doing little for floating-rate loans, which carry almost no rate duration for the term to act on. When rates move on inflation, as in 2022, $\rho_{y,s}$ is positive and the same term adds to the variance of the long-duration book. Chapter 8 shows the sign changing twice since 2021 (§8.2, §8.7), so a covariance with $\rho_{y,s}$ hard-coded at zero contradicts the chapter that taught the desk to hedge with it.
-
-*Make the correlation a regime input.* The chain of §12.4 already supplies the states, so estimate a $\rho_k$ for each state beside $\mu_k$ and $\Sigma_k$. The chain itself stays fitted on sector excess returns, which contain no yield changes, so $\hat\rho_k$ is a weighted statistic and not a fitted parameter: the correlation of $\Delta y_t$ with the common spread factor's relative change, weighted by the smoothed probabilities $\gamma_t(k)$ in the same form as the M-step moments. Put each $\rho_k$ inside that state's total-return covariance $\Sigma_k$ and let (12.2) do the mixing with today's filtered probabilities. Do not average $\rho$ across states and drop the average into one covariance, because the mixture term in (12.2) is what carries the uncertainty about which state you are in, and the cross term belongs inside it. Three cautions apply. A common $\rho_{y,s}$ applied to every sector can break positive semidefiniteness when sector correlations are low and $|\rho_{y,s}|$ is large, so check the smallest eigenvalue after substitution and shrink $|\rho_{y,s}|$ or estimate it sector by sector if it fails. The stress state has few months behind it, so shrink $\hat\rho_k$ toward its full-sample value and carry an interval. And a calm/stress chain built on spreads may not separate a growth-scare stress from an inflation stress; if it cannot, $\hat\rho_k$ averages the two signs and shrinks toward zero without announcing it, and the fallback is the rolling-correlation flag of §8.7. Estimating on smoothed probabilities is an in-sample act; acting on the result uses the filtered ones, with the delay of §12.4.
+where $\sigma_y$ is the volatility of yield changes. Setting $\rho_{y,s}=0$ gives the shortcut of treating the Treasury factor as independent of the spread factor, and the shortcut is an approximation that hides a bet on a sign. When rates move on growth news and spreads move against them, $\rho_{y,s}$ is negative, the cross term subtracts, and the result flatters long-duration IG while doing little for floating-rate loans, which carry almost no rate duration for the term to act on. When rates move on inflation, as in 2022, $\rho_{y,s}$ is positive and the same term adds to the variance of the long-duration book. Chapter 8 shows the sign changing twice since 2021 (§8.2, §8.7), so a covariance with $\rho_{y,s}$ hard-coded at zero contradicts the chapter that taught the desk to hedge with it. In this engine $\rho_{y,s}$ is a regime input from §12.4, one value per state of the chain, not a hard-coded zero; how it is estimated is in the Full Derivation below.
 
 The reason to estimate $\Omega$ instead of $\Sigma$ directly is stability: relative spread changes have far more stable volatility across spread levels than absolute changes do, which is the empirical finding behind DTS. When spreads double, (12.3) doubles every sector's volatility automatically through $\text{DTS}$, rather than waiting three years for the sample covariance to notice.
 
@@ -453,23 +451,35 @@ The reason to estimate $\Omega$ instead of $\Sigma$ directly is stability: relat
 >
 > **Annotation.** The standard implementation is the exponentially weighted moving average below. The paper does not give its decay parameter, which is the parameter that matters: it sets how fast the matrix forgets 2020 and how fast it learns April 2025. The modern desk chooses the decay by out-of-sample likelihood rather than taste, applies it to relative spread changes rather than returns, and shrinks the result (step 3), because a fast-decaying estimator has a small effective sample.
 
+"More importance to more recent observations," Theo read aloud. "How much more?"
+
+"That," said Kaz, "is the only question."
+
+> **Math, Gently.** *Part (a): a covariance matrix is a seating chart with a memory.* Write the eleven sectors along the top of a table and down its side. Each cell answers one question: when the row sector has a bad month, how bad, on average, is the column sector's month? The diagonal cells are each sector's own wobble, its variance; the others say who moves with whom. That table is the covariance matrix, and it is how the optimizer decides which bets cancel and which pile up. Every cell is estimated from history, so the real question is how much history to believe. An exponentially weighted average answers with a memory that fades: with $\lambda = 0.97$, each observation keeps 97% of its weight for every month that passes, losing 3% a month, compounded. After 22.8 months an observation carries half its original weight, which is the half-life, and the whole memory is worth about 66 months of equally weighted data, the effective sample. Now count the cells: eleven variances and 55 distinct pairs, 66 numbers to estimate from 66 months' worth of memory. One observation per number. An estimate built that way is mostly noise, and an optimizer reads noise as opportunity. *Part (b): shrinkage is averaging your estimate with a simpler one you trust.* Suppose the sample says HY and loans had a correlation of 0.9, and a one-factor model, in which every sector moves only through one common credit factor, says 0.6. Neither is the truth. Shrinkage takes a weighted average, $\delta$ of the simple answer and $1 - \delta$ of the sample: with $\delta = 0.3$, $0.3 \times 0.6 + 0.7 \times 0.9 = 0.81$. The noisy estimate keeps most of its say, but every cell is pulled a little toward a structure that cannot invent a free lunch. The clever part, which Ledoit and Wolf worked out, is choosing $\delta$ from the data itself: more shrinkage when the sample is noisy, less when the target is badly wrong. The recursion and the shrinkage come next, and the formula for $\delta$ waits in the Full Derivation.
+
 The EWMA recursion on monthly relative spread changes $u_t$ is
 
 $$
 \Omega_t = \lambda\,\Omega_{t-1} + (1-\lambda)\,u_t u_t^{\top}, \qquad 0 < \lambda < 1 ,
 $$
 
-with weights $(1-\lambda)\lambda^j$ on the observation $j$ months back. The weights sum to one; the effective number of observations is about $(1+\lambda)/(1-\lambda)$ and the half-life is $\ln 2 / \ln(1/\lambda)$. At $\lambda = 0.97$ monthly, the half-life is about 23 months and the effective sample about 66 months.
+with weights $(1-\lambda)\lambda^j$ on the observation $j$ months back. The weights sum to one; the effective number of observations is about $(1+\lambda)/(1-\lambda)$ and the half-life is $\ln 2 / \ln(1/\lambda)$. At $\lambda = 0.97$ monthly, the half-life is about 23 months and the effective sample about 66 months, the box's numbers.
 
 Mags watched Kaz tune the decay. "Back in my day we did multi-asset credit too. It was called 'whatever the dealer had left on Friday.' The covariance matrix was me remembering which dealers stopped answering the phone in 1998." She paused. "Your thing does that automatically. With a half-life. Fine."
 
-**Step 3: shrink it.** Eleven sectors have $11 \times 12/2 = 66$ distinct covariance entries. A 66-month effective window gives you roughly one effective observation per parameter, which is the regime in which sample covariance matrices produce optimizers that bet heavily on noise. Shrink toward a structured target (Ledoit and Wolf 2004):
+**Step 3: shrink it.** Eleven sectors have $11 \times 12/2 = 66$ distinct covariance entries, so a 66-month effective window leaves the box's one observation per parameter, the regime in which sample covariance matrices produce optimizers that bet heavily on noise. The repair is to shrink toward a structured target (Ledoit and Wolf 2004):
 
 $$
 \hat\Omega = \delta\,F + (1 - \delta)\,S, \qquad 0 \le \delta \le 1 ,
 $$
 
-where $S$ is the sample (or EWMA) matrix and $F$ is a one-factor target: with market factor $m$ (the equal-weighted average of the $u_i$), $F_{ij} = \beta_i\beta_j\sigma_m^2$ off the diagonal and $F_{ii} = S_{ii}$. The target is positive semidefinite because each residual variance $S_{ii} - \beta_i^2\sigma_m^2$ is nonnegative by Cauchy–Schwarz, and a convex combination of PSD matrices is PSD. The Ledoit–Wolf intensity is
+where $S$ is the sample (or EWMA) matrix and $F$ is a one-factor target: with market factor $m$ (the equal-weighted average of the $u_i$), $F_{ij} = \beta_i\beta_j\sigma_m^2$ off the diagonal and $F_{ii} = S_{ii}$. Why the mixture stays a valid covariance matrix, how the intensity $\delta$ is chosen, and how the rate–spread correlation of Step 1 is estimated state by state are the next subsection.
+
+#### The Full Derivation
+
+*The target is positive semidefinite.* The target is positive semidefinite because each residual variance $S_{ii} - \beta_i^2\sigma_m^2$ is nonnegative by Cauchy–Schwarz, and a convex combination of PSD matrices is PSD.
+
+*The shrinkage intensity.* The Ledoit–Wolf intensity is
 
 $$
 \delta^{\star} = \max\!\Big(0,\; \min\!\Big(1,\; \frac{\hat\pi - \hat\rho}{\hat\gamma\,T}\Big)\Big),
@@ -477,11 +487,21 @@ $$
 
 with $\hat\pi = \sum_{ij}\widehat{\operatorname{AVar}}(\sqrt{T}s_{ij})$ the estimation noise in $S$, $\hat\gamma = \|F - S\|_F^2$ the misspecification of the target, and $\hat\rho$ the covariance between target and sample errors. The reference code uses the diagonal part of $\hat\rho$ only (the target's diagonal equals the sample's, so those terms carry no shrinkage benefit) and drops the off-diagonal $\hat\rho$ terms. That is a documented simplification which errs toward slightly more shrinkage, the safe direction for an optimizer.
 
+*The rate–spread correlation as a regime input.* The chain of §12.4 already supplies the states, so the engine estimates a $\rho_k$ for each state beside $\mu_k$ and $\Sigma_k$. The chain itself stays fitted on sector excess returns, which contain no yield changes, so $\hat\rho_k$ is a weighted statistic and not a fitted parameter: the correlation of $\Delta y_t$ with the common spread factor's relative change, weighted by the smoothed probabilities $\gamma_t(k)$ in the same form as the M-step moments. Each $\rho_k$ goes inside that state's total-return covariance $\Sigma_k$, and (12.2) does the mixing with today's filtered probabilities. Averaging $\rho$ across states and dropping the average into one covariance would lose something real, because the mixture term in (12.2) is what carries the uncertainty about which state you are in, and the cross term belongs inside it. Three cautions apply. A common $\rho_{y,s}$ applied to every sector can break positive semidefiniteness when sector correlations are low and $|\rho_{y,s}|$ is large, so the engine checks the smallest eigenvalue after substitution and shrinks $|\rho_{y,s}|$, or estimates it sector by sector, if the check fails. The stress state has few months behind it, so $\hat\rho_k$ is shrunk toward its full-sample value and carries an interval. And a calm/stress chain built on spreads may not separate a growth-scare stress from an inflation stress; if it cannot, $\hat\rho_k$ averages the two signs and shrinks toward zero without announcing it, and the fallback is the rolling-correlation flag of §8.7. Estimating on smoothed probabilities is an in-sample act; acting on the result uses the filtered ones, with the delay of §12.4.
+
 **Step 4: desmooth the private sleeve.** Nuveen confronts the absence of an honest return series for direct lending directly:
 
 > **[SOURCE EXTRACTION]** *Nuveen p.9:* "Middle market direct lending (Private Credit): Proxy Index using S&P UBS Leveraged Loan B Index."
 >
 > **Annotation.** This is the right instinct: when the asset's own return series is a sequence of appraisals, import the risk from the closest traded thing. The modern desk treats the proxy as a *floor* rather than an estimate. Middle-market borrowers are smaller than single-B syndicated borrowers, with a mean interest coverage of about 2.0x against 2.7x for leveraged-loan borrowers and a post-default value of about 33% against 52% (Cai and Haque, FEDS Notes, 2024). The same spread move costs a direct-lending book more. When the sleeve's own NAV series must be used (for a BDC, say), desmooth it.
+
+Kaz still had the BDC's 1.9% on the screen from Monday. "Measured by the fund," Mags asked, "or by the fund's lawyer?"
+
+> **Math, Gently.** *A thermometer with a lag.* Picture a thermometer that, each hour, reports half of the true change and half of what it said last hour. Feed it a true series of $+3, -3, +3, -3$ and it reports $1.5, -0.75, 1.1, -0.9$: the wiggles come out about a third of their true size, and anyone estimating volatility from the report concludes the room is calm. Nothing is lost, only delayed. A single true move of $-6$ followed by quiet comes out as $-3, -1.5, -0.75, -0.4$ and so on, which adds up to $-6$ in the end: the same loss, spread so thin that no single reading looks alarming. Appraisal-based marks behave the same way, because a valuation committee anchors on last quarter's mark and moves only part of the way toward the new evidence. The persistence parameter $\phi$ is how much weight the old mark keeps; the thermometer has $\phi = 0.5$. At this chapter's $\phi = 0.8$, the measured variance shrinks to $\xi = (1-\phi)/(1+\phi) = 1/9$ of the true one, so the true volatility is $\sqrt 9 = 3$ times the reported one, and Kaz's 1.9% is about 5.7%, close to the traded loan proxy. The year's sum is not where the lie is; the annualization is, because it treats a delay as calm. The algebra follows.
+
+In words: if the reported return is a moving average of true returns, the reported volatility, beta and correlation are each understated by a different factor, the long-horizon variance is not understated at all, and in the common AR(1) case each factor has a closed form, along with the one-line recursion that recovers the true returns.
+
+#### The Full Derivation
 
 Getmansky, Lo and Makarov (2004) model the reported return as a moving average of true returns:
 
@@ -505,7 +525,19 @@ $$
 \xi = \frac{(1-\phi)^2}{1 - \phi^2} = \frac{1-\phi}{1+\phi}, \qquad \theta_0 = 1 - \phi, \qquad \frac{\theta_0}{\sqrt{\xi}} = \sqrt{1 - \phi^2}, \qquad \hat r_t = \frac{r^o_t - \phi\,r^o_{t-1}}{1 - \phi} .
 $$
 
-At $\phi = 0.8$, which is not an exotic level of persistence for appraisal-based marks, $\xi = 1/9$: true volatility is three times reported, true beta five times reported contemporaneous beta, and the correlation is understated by 40%. Kaz's 1.9% becomes about 5.7%, close to the loan proxy. Mags's verdict on the original number: "Measured by the fund or by the fund's lawyer?" The formula's verdict: $\sigma_{\text{true}} = \sigma_{\text{reported}}/\sqrt{\sum_j \theta_j^2}$, whoever measured it.
+At $\phi = 0.8$, which is not an exotic level of persistence for appraisal-based marks, $\xi = 1/9$: true volatility is three times reported, true beta five times reported contemporaneous beta, and the correlation is understated by 40%. That is the thermometer's 5.7% in matrix form. Mags's question has an answer, and it is the formula's: $\sigma_{\text{true}} = \sigma_{\text{reported}}/\sqrt{\sum_j \theta_j^2}$, whoever measured it.
+
+#### The listed twin
+
+On Friday morning, 16 October, Theo arrived with the objection that a banker raises against any expensive analysis: somebody else had already done it, and for free. He had the listed BDCs on one screen. By one market-data aggregator's count, the externally managed ones traded that day at a median of about 0.76 times book value, a basket of the same kind of sponsor loans, with a share price that prints every second the market is open.
+
+"That's the market's own desmoothing," he said. "The NAV says a dollar. The people who can sell tomorrow say seventy-six cents."
+
+"Then why desmooth anything?" Kaz asked.
+
+"Because the client owns the non-traded one, and the NAV is what's in the spreadsheet. Desmooth the NAV to get its risk into the covariance. Read the listed discount as a separate number, about what the marks will do next." He tapped the screen. "And the listed price stays out of the recursion entirely."
+
+"Back in my day," said Mags, "the discount was the only honest number in the sector, and nobody put it in a covariance matrix either." She considered it. "This is better."
 
 > **Ways This Blows Up.** *Desmoothing the wrong series.* A listed BDC's share price is marked by the market every day; desmoothing it inflates a volatility that was never smoothed. Desmooth the NAV series and treat the price-to-NAV discount as a separate liquidity signal (Chapter 20). *Mixing frequencies.* Desmoothing a quarterly NAV series and dropping it into a monthly covariance matrix aligns nothing; aggregate the public series to quarterly first. *Non-invertible fits.* The moving-average weights are identified only up to reversal ($\theta$ and its mirror image give the same autocorrelations); the recursion that recovers true returns explodes for the non-invertible one. The code checks the roots and refuses rather than guesses.
 

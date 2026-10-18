@@ -11,8 +11,8 @@
 - [x] 9. [§12.4 opening] MATH-GENTLY box 4 (two parts): regimes and mixtures. — Weather coin plus mixture box; 13x tail, 0.96 of 4.35.
 - [x] 10. [§12.4 "The model."] MATH-GENTLY box 5 + FULL-DERIVATION-MOVE. — Odds-form filter box, 47% then 25%; Full Derivation subsection.
 - [x] 11. [§12.4 "What goes wrong"] LIST-TO-NARRATIVE + SHOP-LIFE vignette. — Hana month-end refresh vignette: NAV, eigenvalue, relabel, smoothed backtest.
-- [ ] 12. [§12.5 Steps 1–3] MATH-GENTLY box 6 + FULL-DERIVATION-MOVE.
-- [ ] 13. [§12.5 Step 4] MATH-GENTLY box 7 + FULL-DERIVATION-MOVE + WHEN-TO-APPLY.
+- [x] 12. [§12.5 Steps 1–3] MATH-GENTLY box 6 + FULL-DERIVATION-MOVE. — Seating-chart memory plus shrinkage box; ρ regime sentence; Full Derivation.
+- [x] 13. [§12.5 Step 4] MATH-GENTLY box 7 + FULL-DERIVATION-MOVE + WHEN-TO-APPLY. — Thermometer box; GLM Full Derivation; Theo listed-twin 0.76 judgment.
 - [ ] 14. [§12.6] MATH-GENTLY box 8 + FULL-DERIVATION-MOVE.
 - [ ] 15. [§12.7 Rule 22e-4 paragraph] LIST-TO-NARRATIVE.
 - [ ] 16. [§12.7 KKT] MATH-GENTLY box 9 + FULL-DERIVATION-MOVE.

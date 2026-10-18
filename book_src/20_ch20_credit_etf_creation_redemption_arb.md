@@ -210,17 +210,15 @@ All three readings are right about something, and the desk does not have to choo
 
 ## 20.3 The Arbitrage Band, Derived
 
-An options market maker would describe the AP's position in one sentence: it owns a call and a put on the ETF's premium, and the strikes are the costs of creation and redemption. Inside the strikes the ETF price can wander wherever secondary-market supply and demand push it. Outside them, someone exercises, and the exercise pushes the price back toward the band. The band is the most important object in this chapter, so we derive it twice: once with costs as constants, and once with a balance sheet that charges for risk.
+An options market maker would describe the AP's position in one sentence: it owns a call and a put on the ETF's premium, struck at the costs of creation and redemption. The band between those strikes is the most important object in this chapter, and Ines's "not yet" in the cold open was a statement about where its lower edge sat, so we derive it twice: once with costs as constants, and once with a balance sheet that charges for risk.
 
 ### 20.3.1 The static band
 
-Work per \$1 of NAV and per creation unit, and write every cost as a fraction of NAV:
+> **Math, Gently.** *The band as two strikes, or a room with two doors.* Picture the premium as someone wandering about a room. Inside the room nobody cares where it goes: buyers and sellers of shares push it around and no AP lifts a finger. The room has two doors. The upper door is creation: when the premium reaches it, an AP buys bonds, makes new shares and sells them, and the selling pushes the premium back inside. The lower door is redemption, the same trip in reverse. Each door has a toll keeper, and the toll is the cost of exercising: the half-spread on the bonds bought or sold, the fund's fee, and everything else. A door sits exactly where the premium just pays its toll. One oddity: because the NAV is struck at the bid, the room is not centred on zero, and its floor is already lifted by the bid-side constant. Tiny number, for the upper door of a calm high yield fund with $\bar c = 30$ bp and a pro rata creation basket ($c^C = 30$ bp): buying the basket at the offer costs $1.003$ of mid, and dividing by a bid-side NAV of $0.997$ of mid gives $1.003/0.997 = 1.006018$ per dollar of NAV. The shortcut of simply adding the two half-spreads, $1 + 0.0030 + 0.0030 = 1.0060$, is off by 0.2 bp, which is why the band can be written as a plain sum of costs. The derivation follows.
 
-- $f^C, f^R$: the fund's fixed creation and redemption transaction fees, divided by the creation unit's value;
-- $c^C, c^R$: the value-weighted half-spreads of the *creation* and *redemption* baskets (which need not equal the portfolio's $\bar c$);
-- $k^C, k^R$: everything else, meaning market impact beyond the half-spread, financing over the settlement gap, and the risk premium of §20.3.2.
+Work per \$1 of NAV and per creation unit, with every cost written as a fraction of NAV. The fund's fixed creation and redemption fees, divided by the creation unit's value, are $f^C$ and $f^R$. The value-weighted half-spreads of the *creation* and *redemption* baskets, which need not equal the portfolio's $\bar c$, are $c^C$ and $c^R$. Everything else (market impact beyond the half-spread, financing over the settlement gap, and the risk premium of §20.3.2) goes into $k^C$ and $k^R$. In a calm market, where the evaluated mid is the true mid ($s_t = 0$ in (20.1)), no arbitrage confines the premium to the band (20.4) derived below.
 
-Assume a calm market, so the evaluated mid is the true mid ($s_t = 0$ in (20.1)).
+#### The Full Derivation: the static band
 
 **Creation.** The AP buys the creation basket at the offer, $\tilde M_t(1 + c^C)$ per share, delivers it, and sells the new shares at $P_t$. Its profit per \$1 of NAV is
 
