@@ -12,8 +12,8 @@
 - [x] 10. [14.3 Trend Watch] BRIDGE (five p's; LME Doomscrolling; Incora dates) -- done: five-p lead-in, Doomscrolling episode, Incora dates and sourcing fixed.
 - [x] 11. [14.4.1] MATH-GENTLY (Beta, mixtures, total variance) -- done: school-hall mixture box, Beta vs normal/lognormal; derivation moved.
 - [x] 12. [14.4.2] LIST-TO-NARRATIVE + ANOTHER-SEAT (direct lender, ARCC Pluralsight) -- done: Mags reads Rule 2019 for Kaz; ARCC Pluralsight direct-lender seat.
-- [ ] 13. [14.5] NEW-SCENE (Lumen, 2,500-3,500 words)
-- [ ] 14. [14.5.1] MATH-GENTLY (binomial tail) + Full Derivation
+- [x] 13. [14.5] NEW-SCENE (Lumen, 2,500-3,500 words) -- done: Replays-folder Lumen scene, 2,560 words, decision on 10 Nov.
+- [x] 14. [14.5.1] MATH-GENTLY (binomial tail) + Full Derivation -- done: jury binomial box; Lumen answer via mirrored tail; Full Derivation.
 - [ ] 15. [14.5 Trend Watch] EXPAND-SCENE (Optimum) + ANOTHER-SEAT (CLO; opportunistic)
 - [ ] 16. [14.6 Docket Diary] EXPAND-SCENE (Robertshaw) + WHEN-TO-APPLY
 - [ ] 17. [14.6.1] BRIDGE + FULL-DERIVATION-MOVE (Lions Gate caution)

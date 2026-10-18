@@ -556,7 +556,7 @@ Use it to size capacity before a trigger date, not to forecast the price: capaci
 
 Once a quarter, on a Saturday, Ines runs what the desk calls a replay. The rules are simple and strictly enforced. Pick a historical episode. Put the calendar back to the first day of it. Then trade it, out loud, using only what was known on each day, and anyone who mentions the ending pays for lunch. "It's how you practise a hand you can never play again," Ines says. "Poker players do it with hand histories. Pilots do it in simulators. Credit people mostly do it at the bar, badly."
 
-This quarter it was March 2020, and the reason was Mags. She had traded it, from a distressed book at a fund she describes only as "a place with good coffee and bad risk limits," and she arrived at 9:00 a.m. with a cardboard box of printed run sheets she had kept for six years, in the way some people keep letters. Kaz had the flow-graph code from §1.8.1 on the projector. Theo had the USB stick in his pocket and a notebook on the table. The pastries were from the place by the station, which is to say they were technically pastries.
+This quarter it was March 2020, and the reason was Mags. She had traded it, from the distressed loan-and-bond desk of a dealer she describes only as "a bank with good coffee and bad risk limits," and she arrived at 9:00 a.m. with a cardboard box of printed run sheets she had kept for six years, in the way some people keep letters. Kaz had the flow-graph code from §1.8.1 on the projector. Theo had the USB stick in his pocket and a notebook on the table. The pastries were from the place by the station, which is to say they were technically pastries.
 
 "Back in my day," Mags said, sitting down, and for once nobody groaned, because for once her day was the subject. "Back in my day, which is this month, the problem wasn't that nobody had a model. Everybody had a model. The problem was that every model assumed somebody would be on the other side."
 
@@ -675,9 +675,83 @@ The forced-seller graph is the good news: flows you can see coming, from sellers
 
 > **Docket Diary.** *November 2016:* Serta Simmons Bedding borrows under a \$1.95bn first-lien term loan. *June 2020:* a majority group holding about 52.6% of the roughly \$1.887bn first-lien loans exchanges about \$992mm of them into about \$734mm of new super-priority "first lien second out" debt, alongside \$200mm of new money; the excluded lenders, about 47.4% (roughly \$895mm), are primed. *31 December 2024:* the Fifth Circuit holds that the exchange was not an "open market purchase" and that the excluded lenders' sacred right to pro rata sharing was breached. *7 July 2026:* on remand, the participating lenders are held liable for \$261.13mm of damages as of 22 June 2020, plus 9% New York prejudgment interest, with the cashless exchange treated as a "payment" (Mayer Brown, July 2026). The Ad Hoc Group, in unison: "We were represented by counsel. We were not, the Fifth Circuit has now clarified, represented in an open market."
 
-The same day the Fifth Circuit ruled on Serta, New York's Appellate Division upheld Mitel's uptier, because Mitel's agreement let it "purchase" loans with no "open market" qualifier at all (Mayer Brown, May 2025); and in December 2025 a federal district court reversed the bankruptcy court and blessed the multi-step Wesco/Incora uptier (Mayer Brown, January 2026). Three courts, three documents, three outcomes. "Open market purchase" has become the most expensive three words in finance: on the Serta remand they were priced at \$261.13mm plus nine percent a year since June 2020, for a phrase nobody had defined.
+**Long Scene 2: The Counterparty Who Knew.** *Mags's story is fictional: the dealer, both accounts, every RFQ, every bid and every conversation are invented, and no real lender is depicted sending or answering any of them. The Serta facts around the story are from the court record and the sources cited in the Docket Diary above and the coda below.*
+
+It came up because Kaz asked the wrong question at the right time. The desk was three hours into the quarterly review of the toxicity model, the meeting at which Risk asks why the model's $\pi$ for one account bucket moved from 0.04 to 0.11 in a quarter and everyone in the room tries to remember whether that was a good thing. Kaz, defending the model, said something that sounded reasonable. "The informed seller is a theoretical construct. We estimate a probability. We have never actually *met* one."
+
+Mags put her pen down. "I have," she said. "Twice in one afternoon. Only one of them was."
+
+The Risk analyst, who had a train to catch, looked at the clock. Ines looked at the Risk analyst, and the Risk analyst stayed.
+
+"June 2020," Mags said. "The week before the 22nd. I was running the distressed loan book at the bank I told you about in March, the one with the coffee. Serta Simmons Bedding. Mattresses. Everyone had been sleeping on the company's first-lien term loan for years, which is a joke I made at the time and nobody laughed then either." She leaned back. "You heard things that spring. I'm not going to tell you what I heard, because I can't prove any of it and half of it turned out to be wrong. What I can tell you is what the documents said, because the documents were public, and nobody read them."
+
+"What did they say?" Theo asked, because somebody had to.
+
+"The 2016 credit agreement had a pro rata sharing clause, a sacred right that needed every affected lender's consent to change. It also let the company buy back its own loans on a non-pro-rata basis, two ways: through a Dutch auction open to all lenders, which it defined, or through 'open market purchases,' which it didn't." She drew two boxes on the whiteboard and wrote *defined* in one and *undefined* in the other. "One defined term next to one undefined phrase. If you'd been on my old team at an advisory firm, you'd have circled the undefined one in the first hour. On a trading desk in June 2020, I don't think anyone circled anything. We were still recovering from March."
+
+Theo, who had been on exactly that kind of team, said nothing, but he wrote *open market purchase* in his notebook and underlined it twice.
+
+**10:40 a.m.** "First RFQ," Mags said. "An account sells ten million of the first-lien term loan. I knew the account, or I thought I did: a CLO manager's trading desk, a steady seller of names that had slid toward the bottom of the rating scale, always polite, always the same size, always at the same time of the month. I assumed it was trimming a CCC bucket. Everything about it looked like the CLO seat Ines drew for you: a rulebook selling, not a person." She shrugged. "Loans settle slowly; you agree a price on the phone or the platform and the paperwork takes a week or more. So you're not just buying the loan. You're buying a week of not being able to change your mind."
+
+**11:45 a.m.** "Second RFQ. A different account. Same facility, same size, ten million. Same screen price, because the screen hadn't moved in two days." Mags tapped the whiteboard. "This one I knew less well. A fund that had been in lender groups before, on other names. Quiet on Serta for weeks. And then a call, not a platform request: 'need it done today,' and a tone I'd heard before."
+
+"What tone?" Kaz asked.
+
+"The tone of someone who wants out before something, rather than out of something." She paused. "Here's what you need to understand about the inside of these deals. A lender who has been brought over the wall, who has signed a confidentiality agreement and heard the terms, is usually restricted from trading. That's the rule, and most people follow it. So the dangerous seller is rarely the one in the room. It's the one who was pitched and passed. Or the one who has just found out that the room is full and the door is closed. Or the one who simply read the agreement more carefully than you did and drew the obvious conclusion. None of them has to have done anything wrong. All of them know more than you."
+
+(The Ad Hoc Group, the book's Greek chorus, offers its customary comment at this point, in unison and through counsel: "We do not comment on market rumours. We are, however, available for a call at 2 p.m.")
+
+Ines did the thing she does at every decision point. She turned to the room. "Same facility. Same size. Same screen price. Two sellers, an hour apart. Bid both, bid one, or pass? And what would you need to know to tell them apart?"
+
+Kaz answered first, carefully. "From the loan's price history, nothing. The two trades are identical. Same instrument, same size, same price, same day. Any model that only looks at the loan gives them the same bid. So the information has to be in the features of the *sender*, not the loan."
+
+"Which features?" Ines asked.
+
+Theo had them before she finished, and he gave them the way she had taught him to, one likelihood ratio at a time. "Whether the account is in the group, or has been in groups like it. Whether it called or used the platform, and whether it showed the loan to one dealer or to everyone. How close the request is to any lender meeting we know about. The account's own markout history with us: what happened to the last twenty things we bought from it. And the document itself, because the document tells you how big $J$ can be. If the agreement lets the company do a non-pro-rata deal with a bare majority, then the left-behind lenders can lose a great deal, and anyone who knows a deal is coming knows which side of it they don't want to be on."
+
+"Good," said Ines. "Now put numbers on it."
+
+Kaz did, on the whiteboard, labelled *(illustrative)* in large letters because the Risk analyst was watching. Prior share of informed sellers in a stressed loan in a quiet week: 3%. The first account: a known CLO seller, platform request, the usual size and day of the month, no lender meeting on the calendar that the desk knew of. Each of those features has a likelihood ratio near or below one. Call the product 0.5. Posterior odds about 0.015; $\pi \approx 1.5\%$. The second account: a lender-group regular, a phone call rather than a platform request, urgency, weeks of silence. Kaz assigned 4 for group history, 2 for the urgency and channel, 1.5 for the silence. Posterior odds about $0.031 \times 12 \approx 0.37$; $\pi \approx 27\%$.
+
+"And $J$?" Ines asked.
+
+"That's the hard part," Mags said. "Back in my day, which is still this story, I didn't know $J$. I knew it could be large, because the document allowed a majority to prime the minority. In the end the remand court valued what the left-behind lenders kept at about 25 cents on the dollar as of 22 June 2020: \$223.75mm on \$895mm of loans (Mayer Brown, July 2026). You don't need to know that number to know that $J$ was not a two-point move."
+
+Kaz finished the arithmetic. With any $J$ in the tens of points, the first account's toxicity charge was a fraction of a point and the second's was several points. Same facility, same screen, two bids several points apart.
+
+"So what did you do?" Theo asked.
+
+"I bid the first one at my normal concession and bought it. I showed the second one a bid well below the screen, the bid my gut said, which was about what Kaz's board says now. They didn't hit it. Somebody else bought it at the screen price an hour later; I saw it go."
+
+"So you were right," Kaz said.
+
+"I was half right, which on a loan desk is the same as being wrong with better manners." Mags looked at the board. "On 22 June the transaction closed. The majority group, about 52.6% of the first-lien class, exchanged its loans into new super-priority debt and put in \$200mm of new money. The rest of us, about 47.4%, were primed. *Including* the ten million I bought from the CLO."
+
+There was a silence in the room. Theo broke it, because he had worked it out and could not help himself. "The CLO wasn't informed. It just sold you a loan that was about to be primed."
+
+"Right. And that's the lesson I took the longest to learn." Mags drew the coin from §1.1 on the board, the one that pays 100 or 78. "The CLO sold me a fair coin that came up tails. The second account offered me a coin it had already looked at. On the day, I lost money on the fair coin, and I would have lost more on the other. But the fair coin is a coin you can flip a thousand times and come out even, because across a thousand CLO sales the screen price is right on average. The coin someone has looked at is a coin you lose on *every time you play*. My markout on the first trade was bad luck. My markout on the second, if I'd done it, would have been bad selection. The hand history can tell those apart, but only over many hands, and only if you bucket the trades by who sent them."
+
+Ines nodded slowly. "Which is the whole of the toxicity term."
+
+"Which is the whole of the toxicity term," Mags agreed. "I just paid for it by the trade instead of by the model."
+
+The Risk analyst missed the train. In the minutes, under *Action items*, someone wrote: "Bucket markouts by sender, not by name. (Mags, June 2020.)"
 
 **The market maker's version.** Forget the litigation and replay the RFQs. In the weeks before 22 June 2020, a sell RFQ on Serta first-lien paper could come from two kinds of account: a lender outside the negotiating group (uninformed, perhaps a CLO trimming a CCC name), or a lender *inside* it, offloading exposure it was about to prime, or that it knew would be left behind. The second is the purest toxic flow in credit: the jump $J$ is the priming loss, and the seller knows its sign and roughly its size. Equation (1.2) says the right bid depends on $\pi(\mathbf{x})$, and the Bayes step of §1.3.3 says $\pi$ is a function of *who is on the call*: membership in the group, Rule 2019 disclosures once a case is filed, the timing relative to lender meetings, the account's markout history. None of that is in the bond's price history. All of it is in the documents and the docket, which is where Theo comes in. Ines's hand history closes the loop: bucket every RFQ by those features, compute five-day markouts, and the average markout per bucket is your estimate of $-\pi J$. Chapter 3 builds the toxicity model; Chapter 13 builds the Priming Risk Score that feeds it.
+
+**Coda, 2023–2026: what the words cost.** The story did not end on 22 June 2020. Serta filed for Chapter 11 in the Southern District of Texas on 23 January 2023, about 31 months after the uptier. The bankruptcy court in Houston upheld the transaction in 2023; on 31 December 2024 the Fifth Circuit reversed, holding that an open market purchase "occurs on the secondary market for syndicated loans" and that the 2020 uptier did not qualify (Fifth Circuit opinion, 31 Dec 2024); rehearing was denied on 18 February 2025, and the Supreme Court denied certiorari on 10 November 2025. The coalition arithmetic was brutal while it lasted: non-participating lenders' recoveries were about 0.6–2.4%, against 100% and about 75% for the participants' tranches (Skadden). Then the July 2026 remand put a price on the phrase.
+
+The same day the Fifth Circuit ruled on Serta, New York's Appellate Division upheld Mitel's uptier, because Mitel's agreement let it "purchase" loans with no "open market" qualifier at all (Mayer Brown, May 2025); and in December 2025 a federal district court reversed the bankruptcy court and blessed the multi-step Wesco/Incora uptier (Mayer Brown, January 2026). Three courts, three documents, three outcomes. "Open market purchase" has become the most expensive three words in finance: on the Serta remand they were priced at \$261.13mm plus nine percent a year since June 2020, for a phrase nobody had defined.
+
+Kaz read the Fifth Circuit's sentence twice and asked the question every quant asks once. "So the 'open market' is a place. Is there an address? Did they try to find it and fail?"
+
+"Nobody could find it," Mags said. "That's more or less what the court said."
+
+"Then why didn't the agreement just say where it was?"
+
+"Because in 2016 nobody imagined they'd need to." Mags put the run sheets away. "That's what you're paying for when you read a credit agreement, Kaz. Not what the words say. What nobody imagined they'd need them to say."
+
+(Cooperation agreements signed in this book so far: 0. Serta's lender base was fragmented and CLO-heavy, with no co-op among the lenders who were left behind, which is part of why the majority could move first; Chapter 13 builds that into the Priming Risk Score.)
 
 > **Trend Watch: Liability management takes over the default statistics, 2024–2026.** *What changed:* most "defaults" are now negotiated. Distressed exchanges were more than 60% of default volume in 2024 through mid-December, the highest share since at least 2000; the 2024 HY default rate was 1.4% including distressed exchanges against 0.3% excluding them, and for loans 4.0% against 1.5% (Marquette Associates, 18 Dec 2024). Moody's (18 May 2026) put distressed restructurings at about 65% of 2025 corporate defaults, and in its sample of 1,173 borrowers with soft credit events since 1979, about one in four ended in a hard default, with more than 70% of eventual hard defaults after a distressed restructuring arriving within two years. *What it means for the desk:* the jump $J$ in the bid equation is increasingly a *negotiated* jump, timed by lender calls and documents rather than by a missed coupon, which makes counterparty state the dominant feature in $\pi(\mathbf{x})$ and makes "default" a poor label for anything you train on. Chapter 14 models the regime shift.
 

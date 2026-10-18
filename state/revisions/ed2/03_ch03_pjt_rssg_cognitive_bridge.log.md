@@ -22,7 +22,7 @@
 - [x] 20. [§3.5] LIST-TO-NARRATIVE + MATH-GENTLY + fix: Ledger SVB row, half-life, Ch 26. — Note: SVB Ledger row narrative; coffee half-life box; Chapter 26 fixed.
 - [x] 21. [§3.6.1] LIST-TO-NARRATIVE + NEW-SCENE: Saks Global. — Note: Saks told as four dated events; May 2025 decision point.
 - [x] 22. [§3.6.2] MATH-GENTLY + FULL-DERIVATION-MOVE + WHEN-TO-APPLY: CUSUM. — Note: two-bells tally box; algebra, Lorden, KL moved; three breaks.
-- [ ] 23. [§3.6.3] EXPAND-SCENE: restricted list, wall-crossing, cleansing, Wolfspeed.
+- [x] 23. [§3.6.3] EXPAND-SCENE: restricted list, wall-crossing, cleansing, Wolfspeed. — Note: wall-crossing, public/private side, big-boy letter, Wolfspeed cleansing calendar.
 - [ ] 24. [§3.7 Serta] EXPAND-SCENE: blotter in June 2020.
 - [ ] 25. [§3.7, end] ANOTHER-SEAT: the CLO manager.
 - [ ] 26. [§3.8 Engine, §3.9 Debrief] BRIDGE.

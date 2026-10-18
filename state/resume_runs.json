@@ -188,23 +188,6 @@
    }
   },
   {
-   "name": "figs-VI-a",
-   "task": "w24ff95yk",
-   "runId": "wf_115eb20e-e9c",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "21_ch21_leveraged_loans_and_clo_microstructure",
-     "23_ch23_cross_asset_convexity_and_vol_surface"
-    ],
-    "stages": [
-     "figures",
-     "figcheck"
-    ]
-   }
-  },
-  {
    "name": "primers-pipeline",
    "task": "w9ho5nhr0",
    "runId": "wf_a6d57981-bfe",

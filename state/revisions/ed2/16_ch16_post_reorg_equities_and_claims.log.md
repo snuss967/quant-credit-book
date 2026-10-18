@@ -12,8 +12,8 @@
 - [x] 10. [§16.3.2] Note: put and risk-neutral box (37%, 0.20 corrected); d1/d2 moved.
 - [x] 11. [§16.3.4] Note: Harlan scene, Hertz yardstick, sponsor seat box, table kept.
 - [x] 12. [§16.4.2] Note: fixed-point (8.66, 8.58, 8.56) and Poisson boxes; derivations moved.
-- [ ] 13. [§16.4.3 Hertz warrants] EXPAND-SCENE part two.
-- [ ] 14. [§16.5.2 Statute block] LIST-TO-NARRATIVE (two vendors at the courthouse).
+- [x] 13. [§16.4.3] Note: Kaz reprices at 29, spot-not-vol, Mags forecast, $3 coda.
+- [x] 14. [§16.5.2] Note: two vendors walked through statutes, Exercise 5 set up, citations kept.
 - [ ] 15. [§16.5.3 Derivation] MATH-GENTLY x3 + FULL-DERIVATION-MOVE + ANOTHER-SEAT (claims buyer).
 - [ ] 16. [§16.5.3, after "The pair"] WHEN-TO-APPLY.
 - [ ] 17. [§16.6 Hertz, the Whole Circuit] EXPAND-SCENE part three (desk replay; admin burn; make-whole split; Oct 2026 decision).

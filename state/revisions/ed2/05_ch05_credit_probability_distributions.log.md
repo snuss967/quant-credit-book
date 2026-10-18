@@ -24,3 +24,5 @@
 - [x] 22. [5.7.4 Diversification eats skew] MATH-GENTLY -- cumulants-add box and drown-together tail-dependence box added.
 - [x] 23. [5.8 Choosing the Shape] WHEN-TO-APPLY -- week of desk questions earns the router table rows.
 - [x] 24. [5.10 Desk Debrief] LIST-TO-NARRATIVE -- eight takeaways rewritten as Theo Monday walk-through; Ines closes.
+
+<!-- STATUS: COMPLETE -->

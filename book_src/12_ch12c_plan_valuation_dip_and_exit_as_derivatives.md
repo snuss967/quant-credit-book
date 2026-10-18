@@ -454,7 +454,8 @@ class PlanCase:
     fixed_carve: float                         # value carved out before shares (e.g. ABL collateral)
     pool_classes: list[str]                    # classes sharing the unsecured pool
     admin: float                               # administrative and priority claims, paid first in cash
-    gift: tuple[str, str, float] | None = None # (from class, to pool, amount) settlement transfer
+    gift: tuple[str, str, float] | None = None # (from class, to pool, amount): a top-up the senior
+                                               # funds, net of collateral surplus it already lets through
     floors: dict[str, float | None] = field(default_factory=dict)  # best-interests floors
 
 
@@ -462,7 +463,8 @@ def _class_recoveries(V: float, case: PlanCase) -> dict[str, float]:
     """One waterfall at plan value V: silos, cash wall, pool, settlement gift."""
     rem = max(V - case.fixed_carve, 0.0)
     got = dict.fromkeys(case.classes, 0.0)
-    unencumbered = 0.0
+    unencumbered, surplus = 0.0, 0.0
+    src = case.gift[0] if case.gift is not None else None
     for fixed, share, tiers in case.silos:
         left = fixed + share * rem
         if not tiers:                          # an unencumbered silo
@@ -476,9 +478,11 @@ def _class_recoveries(V: float, case: PlanCase) -> dict[str, float]:
                 got[k] += paid * o / tot if tot > 0 else 0.0
             left -= paid
         unencumbered += max(left, 0.0)         # equity in collateral returns to the estate
-    if case.gift is not None:                  # settlement: senior hands cash to the pool
-        src, _, amt = case.gift
-        moved = min(amt, got[src])
+        if src is not None and any(src in t for t in tiers):
+            surplus += max(left, 0.0)          # value the gift's source is already releasing
+    if case.gift is not None:                  # settlement: senior tops up the pool
+        amt = case.gift[2]
+        moved = min(max(amt - surplus, 0.0), got[src])   # no gift once the senior is whole
         got[src] -= moved
         unencumbered += moved
     pool = max(unencumbered - case.admin, 0.0) # section 1129(a)(9): admin is paid first
@@ -497,7 +501,7 @@ def draw_plan_values(medians, sigmas, weights, n=200_000, rng=rng) -> np.ndarray
     pick = rng.choice(len(w), size=n, p=w)
     mu = np.log(np.asarray(medians, float))[pick]
     sd = np.asarray(sigmas, float)[pick]
-    return np.maximum(np.exp(mu + sd * rng.standard_normal(n)), 0.0)  # truncate at zero
+    return np.maximum(np.exp(mu + sd * rng.standard_normal(n)), 0.0)  # guard for swapped-in normals
 
 
 def recovery_paths(V: np.ndarray, case: PlanCase) -> dict[str, np.ndarray]:

@@ -165,7 +165,7 @@ def kaplan_meier(cohort):
 
 def fig_km_cohort():
     km = kaplan_meier(COHORT)
-    fig, (a, b) = new_figure("panel2", ncols=2, gridspec_kw={"width_ratios": [1.0, 1.0]})
+    fig, (a, b) = new_figure((7.0, 3.75), ncols=2)
     # left: swimlanes
     n = len(COHORT)
     for i, (name, t, ev, why) in enumerate(COHORT):
@@ -219,18 +219,20 @@ def fig_km_cohort():
     na_end = float(np.exp(-km[-1][3]))
     b.axhline(0.5, color=C_NAIVE, linewidth=1.2, linestyle=(0, (4, 3)), zorder=2)
     b.axhline(0.25, color=C_NAIVE, linewidth=1.2, linestyle=(0, (4, 3)), zorder=2)
-    b.text(0.8, 0.5 + 0.015, "censored counted as survivors: 0.50", fontsize=8, color=INK_2, ha="left", va="bottom")
+    b.text(0.8, 0.5 + 0.015, "censored as survivors: 0.50", fontsize=8, color=INK_2, ha="left", va="bottom")
     b.text(0.8, 0.25 - 0.015, "censored dropped: 0.25", fontsize=8, color=INK_2, ha="left", va="top")
     b.plot([T], [s_end], "o", color=C_FIX, markersize=6, zorder=7, clip_on=False)
     b.plot([T], [na_end], "D", color=VIOLET, markersize=5.5, zorder=7, clip_on=False)
-    b.annotate(f"Nelson–Aalen {na_end:.2f}", (T, na_end), xytext=(7, 6), textcoords="offset points",
-               ha="left", va="center", fontsize=8, color=INK_2)
-    b.annotate(f"Kaplan–Meier {s_end:.2f}", (T, s_end), xytext=(7, -6), textcoords="offset points",
-               ha="left", va="center", fontsize=8.5, color=INK_2)
-    b.annotate(f"95% band\n{lo[-1]:.2f}–{hi[-1]:.2f}", (T, 0.5 * (lo[-1] + hi[-1])), xytext=(7, 0),
-               textcoords="offset points", ha="left", va="center", fontsize=8, color=MUTED)
-    note(b, "ticks mark censoring times", loc="upper right")
-    b.set_xlim(0, 52)
+    from matplotlib.lines import Line2D
+    from matplotlib.patches import Patch
+    handles = [
+        Line2D([], [], color=C_FIX, linewidth=2.2, marker="|", markersize=10, markeredgewidth=1.8,
+               label=f"Kaplan–Meier, S(36) = {s_end:.2f} (ticks: censoring)"),
+        Patch(facecolor=BLUE, alpha=0.16, label=f"95% Greenwood band at 36: {lo[-1]:.2f}–{hi[-1]:.2f}"),
+        Line2D([], [], color=VIOLET, marker="D", linestyle="", markersize=5.5, label=f"Nelson–Aalen: {na_end:.2f}"),
+    ]
+    b.legend(handles=handles, loc="upper center", bbox_to_anchor=(0.5, -0.17), fontsize=8, ncol=1, handletextpad=0.5)
+    b.set_xlim(0, T)
     b.set_ylim(0, 1.04)
     b.set_xticks([0, 12, 24, 36])
     b.set_xlabel("Months in the window")
@@ -296,8 +298,11 @@ def fig_mp_edge():
         for j, v in enumerate(out):
             ax.vlines(v, 0, ymax * 0.20, color=C_FIX, linewidth=1.6, zorder=5)
             ax.plot([v], [ymax * 0.20], "o", color=C_FIX, markersize=6, zorder=6)
-            ax.annotate(f"{v:.1f}", (v, ymax * 0.20), xytext=(0, 5), textcoords="offset points", ha="center",
-                        va="bottom", fontsize=8.5, color=INK_2)
+            name = "market factor" if v > 10 else "sector factor"
+            left = v < 10
+            ax.annotate(f"{v:.1f}\n{name}", (v, ymax * 0.20), xytext=(4 if left else 0, 6),
+                        textcoords="offset points", ha="left" if left else "center", va="bottom",
+                        fontsize=8.5, color=INK_2)
         ax.set_xlim(0, 24)
         ax.set_ylim(0, ymax)
         ax.set_xlabel("Eigenvalue of the correlation matrix")
@@ -306,7 +311,9 @@ def fig_mp_edge():
         print(f"  T={T}: edge {edge:.2f}, eigenvalues above edge: {np.round(out, 2)}, "
               f"largest in bulk {bulk.max():.2f}")
     axes[0].set_ylabel("Number of eigenvalues")
-    axes[0].text(0.985, 0.55, "line: Marchenko–Pastur\nbars: simulated eigenvalues", transform=axes[0].transAxes,
+    axes[0].text(0.985, 0.80, "line: Marchenko–Pastur\nbars: simulated eigenvalues", transform=axes[0].transAxes,
+                 ha="right", va="top", fontsize=8, color=MUTED)
+    axes[1].text(0.985, 0.50, "the planted sector factor\nis lost somewhere in the bulk", transform=axes[1].transAxes,
                  ha="right", va="top", fontsize=8, color=MUTED)
     return finish(fig, "ch07b_mp_edge")
 
@@ -353,31 +360,31 @@ def fig_first_passage():
           "bgk", np.round(bgk, 4))
 
     fig, ax = new_figure("wide")
-    ax.axhline(100 * exact, color=INK_2, linewidth=1.1, linestyle=(0, (4, 3)), zorder=1)
+    xmax = 252 * 3.4
+    ax.hlines(100 * exact, 0.8, 252, color=INK_2, linewidth=1.1, linestyle=(0, (4, 3)), zorder=1)
     ax.plot(grids, 100 * naive, "-o", color=C_NAIVE, linewidth=LW, markersize=6, zorder=4)
     ax.plot(grids, 100 * bridge, "-o", color=C_FIX, linewidth=LW, markersize=6, zorder=5)
     ax.set_xscale("log")
     ax.set_xticks(grids)
     ax.set_xticklabels([str(g) for g in grids])
     ax.minorticks_off()
-    ax.set_xlim(0.8, 252 * 1.0)
+    ax.set_xlim(0.8, xmax)
     ax.set_ylim(0, 27)
     ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:.0f}%"))
     ax.set_xlabel("Monitoring dates in the year (1 = annual, 12 = monthly, 252 = daily)")
     ax.set_ylabel("Probability the barrier is hit in one year")
     ax.grid(axis="x", visible=False)
-    ax.text(252, 100 * exact + 0.5, f"exact (continuous): {100 * exact:.1f}%", ha="right", va="bottom",
-            fontsize=8.5, color=INK_2)
+    ax.annotate(f"exact, continuous monitoring: {100 * exact:.1f}%", (0.9, 100 * exact), xytext=(0, 6),
+                textcoords="offset points", ha="left", va="bottom", fontsize=8.5, color=INK_2)
     i12 = grids.index(12)
-    ax.annotate(f"bridge: {100 * bridge[i12]:.1f}%", (12, 100 * bridge[i12]), xytext=(0, 9),
-                textcoords="offset points", ha="center", va="bottom", fontsize=8.5, color=INK_2)
-    ax.annotate(f"grid only, monthly: {100 * naive[i12]:.1f}%\nmisses {100 * (exact - naive[i12]):.1f} points",
-                (12, 100 * naive[i12]), xytext=(0, -12), textcoords="offset points", ha="center", va="top",
-                fontsize=8.5, color=INK_2)
-    label_end(ax, 252, 100 * naive[-1], "grid only", C_NAIVE, dx=-4, dy=-14, ha="right")
-    ax.annotate("bridge", (252, 100 * bridge[-1]), xytext=(-4, -13), textcoords="offset points", ha="right",
+    gap = 100 * (exact - naive[i12])
+    ax.annotate("", xy=(12, 100 * exact - 0.25), xytext=(12, 100 * naive[i12] + 0.25),
+                arrowprops=dict(arrowstyle="<->", color=INK_2, linewidth=1.0, shrinkA=0, shrinkB=0))
+    ax.annotate(f"monthly grid: {100 * naive[i12]:.1f}% vs {100 * exact:.1f}%\nmisses {gap:.1f} points, about a quarter\nof the defaults",
+                (12, 100 * (exact + naive[i12]) / 2), xytext=(-8, 0), textcoords="offset points", ha="right",
                 va="center", fontsize=8.5, color=INK_2)
-    ax.plot([252], [100 * bridge[-1]], "o", color=C_FIX, markersize=4, zorder=6, clip_on=False)
+    label_end(ax, 252, 100 * bridge[-1], "bridge, any grid", C_FIX, dx=6, dy=2)
+    label_end(ax, 252, 100 * naive[-1], "grid only", C_NAIVE, dx=6, dy=-2)
     note(ax, "σ = 0.25, barrier 0.30 below the start in logs, zero drift; 200,000 paths per point",
          loc="lower left")
     return finish(fig, "ch07b_first_passage_bridge")

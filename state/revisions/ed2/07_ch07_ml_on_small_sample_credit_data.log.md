@@ -1,0 +1,26 @@
+# Progress Log, Edition 2 (U2): Chapter 7
+
+- [ ] 1. [§7.0 Cold Open: Forty-Seven Hats] · EXPAND-SCENE.
+- [ ] 2. [§7.0, measure convention paragraph] · MATH-GENTLY (P vs Q).
+- [ ] 3. [§7.1 Why Credit Is the Worst ML Dataset] · LIST-TO-NARRATIVE + BRIDGE.
+- [ ] 4. [§7.1, "sampling faster does not buy you a better mean"] · MATH-GENTLY.
+- [ ] 5. [§7.2 Trend Watch] · NEW-SCENE (Scene 1, The Four-Factor File).
+- [ ] 6. [§7.2, after the box] · WHEN-TO-APPLY.
+- [ ] 7. [§7.3 Fractional Differentiation] · MATH-GENTLY x3, then FULL-DERIVATION-MOVE.
+- [ ] 8. [§7.3, before Ways This Blows Up] · WHEN-TO-APPLY.
+- [ ] 9. [§7.4 Triple Barrier in DTS Space] · MATH-GENTLY + reorder.
+- [ ] 10. [§7.4] · ANOTHER-SEAT (box 1 of 3, CLO manager).
+- [ ] 11. [§7.5 Meta-Labeling] · MATH-GENTLY x2 + SHOP-LIFE.
+- [ ] 12. [§7.6 Sample Weights] · MATH-GENTLY + LIST-TO-NARRATIVE.
+- [ ] 13. [§7.6] · WHEN-TO-APPLY.
+- [ ] 14. [§7.7 Purged, Embargoed, Issuer-Grouped CV] · MATH-GENTLY + EXPAND-SCENE.
+- [ ] 15. [§7.7] · WHEN-TO-APPLY.
+- [ ] 16. [§7.8 Deflated Sharpe] · MATH-GENTLY x2, then FULL-DERIVATION-MOVE.
+- [ ] 17. [§7.8] · ANOTHER-SEAT (box 2 of 3, multi-strategy pod risk desk).
+- [ ] 18. [§7.9 The Two Biases] · NEW-SCENE (Scene 2) + MATH-GENTLY.
+- [ ] 19. [§7.9] · WHEN-TO-APPLY.
+- [ ] 20. [§7.10 Trend Watch] · ANOTHER-SEAT (box 3 of 3) + BRIDGE.
+- [ ] 21. [§7.11 Case Studies A–C] · EXPAND-SCENE (light).
+- [ ] 22. [§7.12 The Credit ML Lab] · BRIDGE.
+- [ ] 23. [§7.13 Desk Debrief] · EXPAND-SCENE.
+- [ ] 24. [Exercises, Resource Graph] · BRIDGE only.

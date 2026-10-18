@@ -226,9 +226,59 @@ Paraphrase: Q1 2026 Adjusted Net Trading Income was $786.5M, up 58.2% from $497.
 
 ### 3.1 D. E. Shaw
 
+**Seat.** Multi-strategy, partly systematic, partly discretionary manager with more than $115 billion of "investment and committed capital" at 1 Sep 2026 (deshaw.com/what-we-do/investment-management, fetched 18 Oct 2026). Its credit exposure is mostly structured, asset-backed and private credit rather than flow corporate bonds: the firm lists "private credit, venture and growth equity, and capital solutions for financial institutions and corporates" among its privates, and its public credit papers are about mortgage credit-risk-transfer bonds (2020) and the cash-synthetic basis (2009). The seat buys dislocated paper from forced sellers, holds it for months to years, and is funded by investor capital that it allocated "across different pools of capital" by expected horizon.
+
+**Stated views (verbatim, D. E. Shaw research library).**
+
+| Date | Speaker | Quote | Source |
+| --- | --- | --- | --- |
+| originally Nov 2020 (web version 2021) | D. E. Shaw group | "we purchased in excess of $400 million in CAS and STACR bonds at a significant discount to par." (over March and April 2020) | "Assessing U.S. Mortgage-Backed Credit Stress in 2020" |
+| same | D. E. Shaw group | "These investors were put under stress by redemption requests and margin calls." (asset managers and REITs that had bought M-2 and B-1 CRT bonds) | same |
+| same | D. E. Shaw group | "investment opportunities in structured credit often arise from the intersection of top-down thematic concepts and bottom-up individual asset mispricings." | same |
+| fetched 18 Oct 2026 | D. E. Shaw group | "We use a combination of quantitative tools and human-driven insights to uncover independent, hard-to-find sources of return across global public and private markets." | deshaw.com/what-we-do |
+
+Paraphrase: the paper says Fannie and Freddie CRT B-1 and M-2 indices fell to the mid-60s by 25 Mar 2020 and the B-1 index to just below 50 on 7 Apr; D. E. Shaw judged the 2001 recession a better analogue than the 2008 crisis, simulated losses off a database of 67 million agency loans, and judged that market participants "were over-relying on experiences from the GFC."
+
+**Roles in named events.** *March 2020:* buyer of more than $400 million of GSE CRT bonds from stressed holders (primary source above), the cleanest public example of a quant-fundamental shop acting as a liquidity provider of last resort for a fee. *2022 and 2025:* no public credit statement found. *LMTs:* no verified role.
+
+**How D. E. Shaw looks at our bond.** The bond is a claim to a distribution of recoveries, and the firm asks whether a stressed price is below the loss-model value. It would buy the bond after an LMT-driven drop if the loan-level or document analysis says the market is over-extrapolating a bad analogue (as in 2020 with 2008). Its edge is a proprietary database plus patience; its constraint is that bespoke credit needs a team, not a screen.
+
 ### 3.2 AQR
 
+**Seat.** Systematic factor manager that treats credit as a set of premia (value, momentum, carry, defensive, quality), held long-only or long-short, for months, funded by client mandates and mutual funds. Reported hedge-fund AUM rose from $57.7B to $77.6B in H1 2025 (Within Intelligence, carried from trend_systematic_credit_industry.md). Public credit work is academic: Israel, Palhares and Richardson, "Common Factors in Corporate Bond Returns" (J. Investment Management 16, 2018, pp. 17-46, carried from papers_factor_replication_crisis_and_bond_data.md), and the Brooks, Palhares and Richardson paper below. The AQR research page (fetched this session) listed no credit title in its current front page.
+
+**Stated views (verbatim).**
+
+| Date | Speaker | Quote | Source |
+| --- | --- | --- | --- |
+| 31 Mar 2018 | Jordan Brooks, Diogo Palhares, Scott Richardson | "these style based excess returns are highly diversifying with respect to the classic risk premia in fixed income markets (i.e., term premium and credit risk premium) and exhibit low macroeconomic sensitivities." | "Style Investing in Fixed Income," J. Portfolio Management (abstract on aqr.com) |
+| 15 May 2019 | Roni Israelov | "Corporate bonds may be more appropriate in many instances, including for those who want to express a view on individual bonds or desire steady cash flows." | Bloomberg via WealthManagement.com |
+
+Paraphrase: Bloomberg (15 May 2019) reported Israelov's paper showing four exposures (government bonds, equities, equity volatility and bond volatility) explain up to 76% of corporate-debt returns, a Merton-style replication through futures and options "for those who desire enhanced liquidity and cash efficiency"; AQR's first fixed-income mutual fund, launched in 2018, had about $100M. The same article says Israelov would not say whether AQR would use the strategy in its funds.
+
+**Roles in named events.** No public AQR role was found in March 2020, 2022 or 2025 credit events, in any LMT or in any Chapter 11; this dossier does not guess. The relevant observation is structural: a factor manager is a price taker whose cost is the dealer spread (Man 2022 below).
+
+**How AQR looks at our bond.** As a row in a cross-section: spread residual from a fair-value regression, momentum, quality and a defensive score. The bond is either in the cheap-and-improving quintile or not, and the document risk is a noise term. The LMT-prone B-rated name is the very bond a defensive or quality screen will exclude. AQR would never read the credit agreement; it would notice that the name's spread residual and equity volatility signals disagree.
+
 ### 3.3 Man Group
+
+**Seat.** Listed alternatives manager. Man Numeric runs systematic long-only credit; other Man teams run discretionary credit and, through Man Varagon, direct lending. From Man's LSE trading statements (carried from trend_systematic_credit_industry.md): systematic long-only credit AUM was flat at about $2.8-3.1B between Mar 2025 and Sep 2026 while discretionary long-only credit almost doubled from $19.8B to $37.5B; firm-wide credit AUM was $42.7B (22% of the firm) at Jun 2025; "active credit strategies" were $59.6B at 30 Jun 2026 (man.com/capabilities/credit, carried). The systematic book is therefore a rounding error inside a firm whose credit growth is discretionary.
+
+**Stated views (verbatim, shelf PDFs).**
+
+| Date | Speaker | Quote | Source |
+| --- | --- | --- | --- |
+| Jun 2023 | Robert Lam and Paul Kamenski, Co-Heads of Credit, Man Numeric | "In our view, these are clear signs that the future of credit investing is quantitative." | Man Institute, *The Revolutions in Credit Trading*, p. 2 (shelf) |
+| Jun 2023 | same | "The new market environment of higher volatility and quantitative tightening may also have left dealers inclined to commit less of their balance sheets to bond trading." (on 2022) | same, p. 3 |
+| Jun 2023 | same | "some of the biggest jumps in electronic trading have come during the most stressful times in credit trading, such as 2020 and 2022." | same, p. 5 |
+| 2022 | Man Group | "As we saw in the GFC and to a lesser extent during the March 2020 coronacrisis, this liquidity can disappear when it is most needed." | *Quantitative Credit: Alpha Opportunities for Early Movers*, p. 6 (shelf) |
+| 2022 | Man Group | "it is something of an indictment of the market that there exists the notion of 'if filled' trades" | same, p. 19 |
+
+Paraphrase: Man Numeric reported that over 90% of its order flow went through electronic venues (as of 1 May 2023), up from about 30% in high yield and 60% in investment grade, and that the "vast majority" of its trades were RFQs.
+
+**Roles in named events.** *March 2020 and 2022:* a liquidity taker that moved to electronic execution in stress (own account above). *Selecta (Europe, 2025):* named as a "favoured holder" in the excluded holders' S.D.N.Y. antitrust complaint of 28 Oct 2025 (an allegation, defendants moved to dismiss on 13 Mar 2026; carried from case_courts_as_regime_variables.md). The LMT role, alleged and not adjudicated, comes from Man's discretionary side, not from Man Numeric.
+
+**How Man looks at our bond.** The systematic desk sees a ranked name with a transaction-cost estimate and a probability of fill; it trades in small clips by RFQ and avoids the name when the cost model or liquidity score says no. Man's discretionary credit team may see the same bond as a co-op candidate. The two views coexist inside one firm, which is the model for the book's hybrid desk.
 
 ### 3.4 BlackRock systematic fixed income
 

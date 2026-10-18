@@ -113,7 +113,9 @@ $$
 
 This is the **Moulton factor**. Read it twice. For an issuer-level signal such as runway, a rating, equity momentum or the PRS, every bond of the issuer carries the same value, so $\rho_x = 1$ and the factor is $1 + (m-1)\rho_u$. That is the denominator of effective breadth, $N/(1 + (m-1)\rho)$, from Law 2. The Moulton factor and effective breadth are the same formula wearing different ties: one says your standard error is too small, the other says your bets are too few, and both say forty-seven CUSIPs of one issuer are one hat.
 
-For Halvorsen's eleven bonds with sibling residual correlation 0.6, the factor is $1 + 10 \times 0.6 = 7$. A panel made entirely of Halvorsens would need its classical standard errors multiplied by $\sqrt{7} \approx 2.65$ *(illustrative)*. A bond-level signal with low sibling correlation, such as a bond's own bid–ask bounce, has $\rho_x$ near zero, and clustering barely moves it. This is why clustering hurts issuer-level signals most, and why Theo's runway lost most of its t-statistic.
+For Halvorsen's eleven bonds with sibling residual correlation 0.6, the factor is $1 + 10 \times 0.6 = 7$. A panel made entirely of Halvorsens would need its classical standard errors multiplied by $\sqrt{7} \approx 2.65$ *(illustrative)*. A bond-level signal with low sibling correlation, such as a bond's own bid–ask bounce, has $\rho_x$ near zero, and clustering barely moves it. This is why clustering hurts issuer-level signals most, and why Theo's runway lost most of its t-statistic. Figure 7-B.1 plots the multiplier and the breadth it implies.
+
+![Figure 7-B.1: Left, how far an issuer-level signal's standard error inflates over the classical formula as bonds per issuer m grows (the Moulton factor with the signal shared across the issuer). Right, the same formula as effective breadth: Halvorsen's eleven bonds at sibling correlation 0.6 carry 1.57 bonds' worth of independent information, and no number of extra rows lifts an issuer past 1/ρ. Illustrative: computed from equation 7B.3, not market data.](assets/figures/ch07b_moulton_breadth.png)
 
 ### Two-way clustering: issuers and months
 
@@ -189,7 +191,9 @@ $$
 1 + 2\sum_{k=1}^{h-1}\Big(1 - \frac{k}{h}\Big)^2 \quad\text{instead of}\quad h .
 $$
 
-For $h = 12$ the sum is $\frac{1}{144}\sum_{j=1}^{11} j^2 = \frac{506}{144} \approx 3.51$, so Newey–West reports a multiplier of about 8.0 where the truth is 12: two-thirds of the variance, and a t-statistic still about 22% too large. With $L = 2h - 1 = 23$ the same calculation gives about 10.0, or 83%. The desk rule follows: for overlapping returns set $L$ to at least $1.5h$–$2h$, and report beside the Newey–West result the $h$ non-overlapping subsamples (start in January, start in February, and so on), whose dispersion is a useful honesty check on its own. For autocorrelation that is not mechanical (stale marks in daily illiquid-bond returns) the plug-in rule $L = \lfloor 4(T/100)^{2/9} \rfloor$ is a reasonable floor; take the larger of the two.
+For $h = 12$ the sum is $\frac{1}{144}\sum_{j=1}^{11} j^2 = \frac{506}{144} \approx 3.51$, so Newey–West reports a multiplier of about 8.0 where the truth is 12: two-thirds of the variance, and a t-statistic still about 22% too large. With $L = 2h - 1 = 23$ the same calculation gives about 10.0, or 83%. The desk rule follows: for overlapping returns set $L$ to at least $1.5h$–$2h$, and report beside the Newey–West result the $h$ non-overlapping subsamples (start in January, start in February, and so on), whose dispersion is a useful honesty check on its own. For autocorrelation that is not mechanical (stale marks in daily illiquid-bond returns) the plug-in rule $L = \lfloor 4(T/100)^{2/9} \rfloor$ is a reasonable floor; take the larger of the two. Figure 7-B.2 shows where the missing variance goes.
+
+![Figure 7-B.2: A 12-month return sampled monthly. With the textbook L = 11 lags, Newey–West recovers a variance multiplier of 8.0 against a truth of 12, so the t-statistic stays about 22% too large; L = 23 recovers 10.0. Left, the Bartlett weights times the overlap triangle show where the variance goes missing. Illustrative: exact calculation from equation 7B.4 for i.i.d. one-month returns, h = 12.](assets/figures/ch07b_newey_west_shortfall.png)
 
 There is a limit no estimator removes. A 20-year backtest of an annual signal has about twenty independent observations, a sample size that would embarrass a focus group. Newey–West t-statistics over-reject when $h/T$ is large, and the cure is not a better kernel but a longer history, more independent instruments, or humility.
 
@@ -326,7 +330,9 @@ $$
 | 30 | Halyard | censored (acquired) | 2 | 0 | 0.400 |
 | 36 | Brambleworth | censored (end) | 1 | 0 | 0.400 |
 
-So $\widehat{\text{PD}}(36) = 60\%$. Greenwood gives $\widehat{\operatorname{Var}} = 0.16 \times \big(\tfrac{1}{20} + \tfrac{1}{12} + \tfrac{1}{6}\big) = 0.16 \times 0.30 = 0.048$, a standard error of 22 points. Nelson–Aalen gives $\hat H = 0.2 + 0.25 + 0.333 = 0.783$ and $\exp(-0.783) = 0.457$. The two naive answers bracket the truth and are both wrong: counting censored issuers as survivors gives three defaults in six, 50%; dropping them gives three in four, 75%. Kaplan–Meier gives each censored issuer exactly the credit it earned.
+So $\widehat{\text{PD}}(36) = 60\%$. Greenwood gives $\widehat{\operatorname{Var}} = 0.16 \times \big(\tfrac{1}{20} + \tfrac{1}{12} + \tfrac{1}{6}\big) = 0.16 \times 0.30 = 0.048$, a standard error of 22 points. Nelson–Aalen gives $\hat H = 0.2 + 0.25 + 0.333 = 0.783$ and $\exp(-0.783) = 0.457$. The two naive answers bracket the truth and are both wrong: counting censored issuers as survivors gives three defaults in six, 50%; dropping them gives three in four, 75%. Kaplan–Meier gives each censored issuer exactly the credit it earned. Figure 7-B.3 draws the cohort and the curve.
+
+![Figure 7-B.3: The six-issuer practice cohort (left) and its Kaplan–Meier survival curve (right). S falls to 0.40 at 36 months, between the naive 0.50 (censored issuers counted as survivors) and 0.25 (censored issuers dropped), and the 95% Greenwood log-log band runs from 0.05 to 0.75. Illustrative: the hypothetical cohort of this section, computed from equations 7B.5 and 7B.6.](assets/figures/ch07b_km_practice_cohort.png)
 
 "A make-whole call," Kaz said. "Is that when the company phones to apologize?"
 

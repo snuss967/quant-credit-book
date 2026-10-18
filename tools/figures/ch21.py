@@ -36,7 +36,6 @@ def fig_settlement_clock():
     xmax = 25.5
     ax.axvspan(0, 7, color=TINT_DEAD, zorder=0)
     ax.axvspan(7, xmax, color=TINT_DC, zorder=0)
-    ax.axvline(7, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
     ax.text(3.5, 3.62, "dead zone: nobody\nis compensated", ha="center", va="bottom", fontsize=8.2, color=INK_2)
     ax.text(16.2, 3.62, "delayed compensation: the seller carries the loan\nand the buyer owes base rate on price (a forced repo)",
             ha="center", va="bottom", fontsize=8.2, color=INK_2)
@@ -52,9 +51,9 @@ def fig_settlement_clock():
     # bonds: T+3 -> T+2 -> T+1
     y = rows["Bonds"]
     ax.plot([3, 1], [y, y], color=C_OLD, linewidth=1.0, zorder=3)
-    dot(3, y, "T+3 (to 2017)", C_OLD, dx=8, dy=0, ha="left", va="center")
+    dot(3, y, "T+3 (to 2017)", C_OLD, dx=6, dy=0, ha="left", va="center")
     dot(2, y, "T+2 (2017)", C_OLD, dy=-9, va="top")
-    dot(1, y, "T+1 (since 28 May 2024)", C_LOAN, strong=True, dx=-4, ha="left")
+    dot(1, y, "T+1 (28 May 2024)", C_LOAN, strong=True, dx=-4, ha="left")
 
     # loan conventions: T+10 par in 2004 -> T+7 today
     y = rows["Loans: convention"]
@@ -310,19 +309,17 @@ def fig_loan_short_call():
     ax.text(147, 101.06, "101: cap inside the soft call", ha="right", va="bottom", fontsize=8.0, color=MUTED)
 
     ax.plot(gap, price(0.0), color=C_OLD, linewidth=LW, linestyle=(0, (4, 3)), zorder=3,
-            label="no call, eq. (21.2): 2.7")
+            label="no call, eq. (21.2): 2.7  (101.36)")
     ax.plot(gap, price(1.0), color=C_LOAN, linewidth=LW, zorder=4,
-            label="h = 1, repricing expected within a year: 0.9")
-    ax.plot(gap, price(4.0), color=C_COST, linewidth=LW, zorder=5, label="h = 4, window open: 0.25")
+            label="h = 1, repricing expected within a year: 0.9  (100.45)")
+    ax.plot(gap, price(4.0), color=C_COST, linewidth=LW, zorder=5, label="h = 4, window open: 0.25  (100.12)")
     ax.legend(loc="lower left", bbox_to_anchor=(0.0, 0.03), fontsize=8.2, handlelength=2.2, borderaxespad=0.3,
-              title="Points gained per 100 bp of tightening", title_fontsize=8.2, alignment="left")
+              title="Points gained per 100 bp of tightening (dot: price at m \u2212 s = 50 bp)", title_fontsize=8.2, alignment="left")
 
     # the three prices quoted in the chapter at m - s = 50 bp
-    for h, dx, dy, ha, va in ((0.0, 6, 4, "left", "bottom"), (1.0, 6, 4, "left", "bottom"), (4.0, 6, -6, "left", "top")):
+    for h in (0.0, 1.0, 4.0):
         pv = float(100.0 * (1.0 + 0.005 * annuity(T, y + h)))
         ax.plot([-50], [pv], "o", color=INK_2, markersize=3.8, zorder=6)
-        ax.annotate(f"{pv:.2f}", (-50, pv), xytext=(dx, dy), textcoords="offset points", ha=ha, va=va,
-                    fontsize=7.8, color=INK_2)
     ax.annotate("m \u2212 s = 50 bp", (-50, 103.55), ha="center", va="top", fontsize=7.8, color=MUTED)
     ax.plot([-50, -50], [100.0, 103.2], color=GRID, linewidth=0.8, zorder=0)
 
@@ -365,13 +362,13 @@ def fig_buffer_queue():
                     color=INK_2)
 
     ax.axhline(4.5, color=C_COST, linewidth=1.2, linestyle=(0, (4, 3)), zorder=2)
-    ax.annotate("median bank-loan fund\nliquidity ratio, about 4.5%", (25, 4.5), xytext=(6, 0), textcoords="offset points",
+    ax.annotate("median bank-loan\nfund liquidity ratio,\nabout 4.5%", (25, 4.5), xytext=(6, 0), textcoords="offset points",
                 ha="left", va="center", fontsize=8.2, color=INK_2)
     for l, lab in ((1, "bond fund\nT+1"), (7, "loan convention\nT+7"), (20, "observed\nabout T+20")):
         ax.axvline(l, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
         ax.annotate(lab, (l, 0.995), xycoords=("data", "axes fraction"), xytext=(3, 0), textcoords="offset points",
                     ha="left", va="top", fontsize=8.0, color=INK_2)
-    spots = {1: (8, -12, "left", "top"), 7: (7, -15, "left", "top"), 20: (-8, 7, "right", "bottom")}
+    spots = {1: (8, -12, "left", "top"), 7: (8, -3.5, "left", "center"), 20: (-8, 7, "right", "bottom")}
     for l, (dx, dy, ha, va) in spots.items():
         v = buffer_needed(l, mu, sigma_f, 0.4)
         ax.plot([l], [v], "o", markerfacecolor="white", markeredgecolor=SEQ_BLUE_STEPS[7], markeredgewidth=1.5,

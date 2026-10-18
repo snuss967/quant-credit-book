@@ -6,8 +6,8 @@
 - [x] 4. Families read aloud, Kaz misreads, RL denominator, Pluralsight seat box.
 - [x] 5. Three feature blocks rewritten as narrative ordered by speed of movement.
 - [x] 6. Payoff-shape and partial-expectation boxes; derivation moved after intuition.
-- [ ] 7. §13.3.1 Serta EXPAND-SCENE + unblended waterfall + decision point + Another Seat #2 (CLO)
-- [ ] 8. §13.3 Trend Watch WHEN-TO-APPLY (digital put)
+- [x] 7. Serta in five movements, unblend table, CLO seat, June 19 argument.
+- [x] 8. Digital-put judgment passage: four failure modes, Mags checks counsel first.
 - [ ] 9. §13.4 payoff matrix Math, Gently #5, #6, #7
 - [ ] 10. §13.4 "Why prices drift" Math, Gently #8 + Incora blocking-third bridge
 - [ ] 11. §13.4 Levers WHEN-TO-APPLY (Robertshaw, knapsack wrong model)
