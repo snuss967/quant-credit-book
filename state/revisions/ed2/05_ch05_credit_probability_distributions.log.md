@@ -20,7 +20,7 @@
 - [x] 18. [5.5.6 P recovery, Q recovery, and the 40%] ANOTHER-SEAT + WHEN-TO-APPLY -- dealer distressed seat with remand valuation; target-field judgment.
 - [x] 19. [5.6.1 The Bernoulli becomes a categorical variable] MATH-GENTLY + WHEN-TO-APPLY -- three-doors competing-risks box with refile cross-check; w_in judgment.
 - [x] 20. [5.6.2 Case Study: Serta Simmons and Hertz] EXPAND-SCENE (2,500-4,000 words) -- six-year Serta scene, CLO seat, Carvana payoff, Hertz PJT hook.
-- [ ] 21. [5.7.2 Hill and peaks-over-threshold] MATH-GENTLY + FULL-DERIVATION-MOVE + WHEN-TO-APPLY
-- [ ] 22. [5.7.4 Diversification eats skew] MATH-GENTLY
-- [ ] 23. [5.8 Choosing the Shape] WHEN-TO-APPLY
-- [ ] 24. [5.10 Desk Debrief] LIST-TO-NARRATIVE
+- [x] 21. [5.7.2 Hill and peaks-over-threshold] MATH-GENTLY + FULL-DERIVATION-MOVE + WHEN-TO-APPLY -- no-top-floor box; GPD formulas moved; tail-tool judgment with Krishnan episode.
+- [x] 22. [5.7.4 Diversification eats skew] MATH-GENTLY -- cumulants-add box and drown-together tail-dependence box added.
+- [x] 23. [5.8 Choosing the Shape] WHEN-TO-APPLY -- week of desk questions earns the router table rows.
+- [x] 24. [5.10 Desk Debrief] LIST-TO-NARRATIVE -- eight takeaways rewritten as Theo Monday walk-through; Ines closes.

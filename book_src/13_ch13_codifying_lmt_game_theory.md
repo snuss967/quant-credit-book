@@ -50,7 +50,7 @@ Ines nods once. "One seat cannot sell, one will sell at anything, and one sells 
 
 Mags finally looks up. "Back in my day we did this with exit consents on bonds and called it an exchange offer. The innovation was doing it to the bank group. The bank group used to be the one holding the knife."
 
-She says the next word the way you might name a horse that once threw you. "Serta. Mattresses, a sponsor, a 2016 first lien and second lien. Spring of 2020 the loans are trading far below par, two lender groups are pitching the company, and the company picks one. June 22, 2020, the deal closes. The winners put in two hundred million of new money and swap their old loans into new super-priority paper. The first-lien holders who got in came out holding second-out debt that people marked around 74. The ones who didn't get in? Years later a court went back and valued their loans on closing day. Twenty-five."
+She says the next word the way you might name a horse that once threw you. "Serta. Mattresses, a sponsor, a 2016 first lien and second lien. Spring of 2020 the loans are trading far below par, two lender groups are pitching the company, and the company picks one. June 22, 2020, the deal closes. The winners put in two hundred million of new money and swap their old loans into new super-priority paper. The first-lien holders who got in swapped at 74 cents on the dollar into paper that now sat near the top of the stack. The ones who didn't get in? Years later a court went back and valued their loans on closing day. Twenty-five."
 
 "Twenty-five," says Theo.
 
@@ -300,9 +300,25 @@ So for $K_1 \le F$, the first region contributes $\frac{1}{F}e^{\mu + s^2/2}\Phi
 
 ### 13.3.1 Case Study: Serta Simmons (2016–2026), in the Formula
 
-The Fifth Circuit's opinion supplies the parameters. In 2016 Serta Simmons Bedding refinanced with "\$1.95 billion in first-lien syndicated loans and \$450 million in second-lien syndicated loans." In June 2020, "The Prevailing Lenders provided SSB with \$200 million in new financing in exchange for \$200 million in first-out, super-priority debt. The Prevailing Lenders also traded in \$1.2 billion of their first-lien and second-lien loans for approximately \$875 million in second-out, super-priority debt." They "held a bare majority of the outstanding first-line debt" (sic; the opinion means first-lien), and the loans "were trading far below par."
+The desk keeps a binder for Serta. It is the only binder on a floor that otherwise believes paper is a legacy system, and on the Wednesday evening after the Larkspur headline Theo takes it down, because Mags said "Serta" in the cold open the way other people say "the flood." Nobody in this scene was in the room in 2020. They are reading the record: the Fifth Circuit's opinion, the remand findings as the law firms summarized them, and a decade of Mags's memory, which she insists is also a primary source.
 
-Map it, treating the two liens as one blended class for the moment (an approximation we flag; the 2L lenders were already junior, so the blended class overstates the 1L excluded lenders' pre-deal recovery in low states):
+Kaz lays a sheet of paper over the opinion and slides it down a paragraph at a time. "Nobody reads below the sheet," Kaz says. "If we know the ending we will fit to it. That is look-ahead bias, and I am told it is frowned upon even in law."
+
+**I. 2016: the document.** The opinion supplies the parameters. In 2016 Serta Simmons Bedding refinanced with "\$1.95 billion in first-lien syndicated loans and \$450 million in second-lien syndicated loans." Theo reads the three clauses that matter in the order a model would want them. Section 2.18 is pro rata sharing, with a remedy in §2.18(c): a lender that receives a disproportionate payment must "purchase (for Cash at face value) participations" so that the benefit is shared ratably. Section 9.02(b) makes the core payment terms sacred, needing each affected lender. Section 9.05(g) lets the borrower buy back loans without offering the same deal to everyone, through a Dutch auction open to all lenders, which the agreement defines to the comma, or through "open market purchases," which it does not define at all.
+
+"In 2016 nobody read 9.05(g) for anything but buybacks," says Mags. "Buybacks were what you did when your loans were at 85 and you had cash in the drawer. It was a cleanup clause. It was the junk drawer of the agreement."
+
+"And the junk drawer," says Kaz, "is where the knife was."
+
+**II. Spring 2020: two groups and an auction.** Mattress showrooms closed along with the rest of physical retail, and Serta's loans "were trading far below par." Two organized groups of lenders formed and each took a proposal to the company. One group became, in the opinion's capital letters, the Prevailing Lenders. The other group did not lose because it was principled. The opinion records that the eventual Excluded Lenders "had made an alternative recapitalization proposal involving a similar kind of debt swap" themselves. Among those who would later fight the deal in court were the LCM lenders, whose names are CLO vehicles, and a Citadel fund that challenged the plan's indemnity.
+
+Ines reads that paragraph twice. "So it was an auction, and the company chose a bidder. The losers weren't bystanders. They were the other bidder." She looks at Theo. "You ran processes like this. What did the company want?"
+
+"Runway, a lower face amount, and enough votes," says Theo. "It needed a bare majority of the first lien. Whichever group could deliver that most cheaply won." He stops, because he has just described §13.4's knapsack without meaning to.
+
+**III. June 22, 2020: the deal.** Kaz slides the sheet down. "The Prevailing Lenders provided SSB with \$200 million in new financing in exchange for \$200 million in first-out, super-priority debt. The Prevailing Lenders also traded in \$1.2 billion of their first-lien and second-lien loans for approximately \$875 million in second-out, super-priority debt." The Prevailing Lenders were Barings, Boston Management and Research, Credit Suisse Asset Management, Eaton Vance and Invesco Senior Secured Management. They "held a bare majority of the outstanding first-line debt" (sic; the opinion means first-lien), 52.6% of the class on the remand findings. First-lien loans went into the second-out at 74 cents of new face per dollar, second-lien loans at 39, discounts of 26% and 61%. The deal closed on Monday, June 22, 2020.
+
+Map it, treating the two liens as one blended class for the moment (an approximation we flag; the 2L lenders were already junior, so the blended class *understates* the 1L excluded lenders' pre-deal recovery in low states, and with it their loss, while overstating the 2L's; we unblend below):
 
 - $N = 200$, $F = 2{,}400$ (all figures \$mm), $pF = 1{,}200$, so $p = 0.5$.
 - $x = 875/1{,}200 \approx 0.729$, a face haircut of about 27 points for the participants.

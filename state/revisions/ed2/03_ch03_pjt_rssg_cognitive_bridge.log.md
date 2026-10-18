@@ -19,9 +19,9 @@
 - [x] 17. [§3.4.2] MATH-GENTLY x2 + FULL-DERIVATION-MOVE: hazard, P vs Q. — Note: bus hazard box, bad-timing P/Q box, SVB drill answered, derivation moved.
 - [x] 18. [§3.4.3] FULL-DERIVATION-MOVE + MATH-GENTLY + WHEN-TO-APPLY: base rates. — Note: rare-disease box; Elkan algebra moved; cleansing and cross-rating breaks.
 - [x] 19. [§3.4, after Trend Watch] ANOTHER-SEAT: distressed fund in the 30s. — Note: Debtwire-sourced distressed seat; Apollo ladder quoted; unverified 30-cent claim avoided.
-- [ ] 20. [§3.5] LIST-TO-NARRATIVE + MATH-GENTLY + fix: Ledger SVB row, half-life, Ch 26.
-- [ ] 21. [§3.6.1] LIST-TO-NARRATIVE + NEW-SCENE: Saks Global.
-- [ ] 22. [§3.6.2] MATH-GENTLY + FULL-DERIVATION-MOVE + WHEN-TO-APPLY: CUSUM.
+- [x] 20. [§3.5] LIST-TO-NARRATIVE + MATH-GENTLY + fix: Ledger SVB row, half-life, Ch 26. — Note: SVB Ledger row narrative; coffee half-life box; Chapter 26 fixed.
+- [x] 21. [§3.6.1] LIST-TO-NARRATIVE + NEW-SCENE: Saks Global. — Note: Saks told as four dated events; May 2025 decision point.
+- [x] 22. [§3.6.2] MATH-GENTLY + FULL-DERIVATION-MOVE + WHEN-TO-APPLY: CUSUM. — Note: two-bells tally box; algebra, Lorden, KL moved; three breaks.
 - [ ] 23. [§3.6.3] EXPAND-SCENE: restricted list, wall-crossing, cleansing, Wolfspeed.
 - [ ] 24. [§3.7 Serta] EXPAND-SCENE: blotter in June 2020.
 - [ ] 25. [§3.7, end] ANOTHER-SEAT: the CLO manager.

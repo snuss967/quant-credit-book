@@ -465,6 +465,78 @@ If $\pi$ is the variable that matters, lenders will try to control it. The instr
 
 > **Poker Table.** Ines draws it on the whiteboard. "A non-pro-rata uptier is a game where the sponsor needs a majority to call. Without a co-op, every lender is thinking, 'If I fold and the others call, I'm the one who gets primed.' So everybody races to call first. A co-op is the table agreeing not to be bluffed. The sponsor's response is to find a new table." The hand history: in the Serta deal of June 2020, the excluded lenders' loans were marked at about 25 cents at the closing, on the remand court's findings. That is the markout on not being in the room.
 
+**Lumen, 31 October 2023 to 22 March 2024: the co-op as the deal.** The desk keeps a folder called "Replays." Each one is a real credit event cut off at a date, with nothing in it that was not public by that date: the filings, the vendor price sheets, the press, and whatever the desk itself traded. Ines runs one on a Friday afternoon every few weeks, and the rule is that nobody may mention anything that happened after the cut-off. Today's folder is Lumen Technologies, and the cut-off is 10 November 2023. Mags and Ines were on the desk then. Theo was still at RSSG, watching the deal from the other side of the street, and Kaz was finishing a postdoc on rough paths. So for two of them this is history and for two of them it is a hand they have never seen.
+
+"We were outside the room on this one," says Ines, "which makes it the best kind of hand history. You get to see exactly what not being in the room cost, to the point."
+
+The folder opens on Tuesday, 31 October 2023. Lumen, the telecom company that owns, among other things, Level 3's fiber network, had a wall: roughly \$10bn of Lumen and Level 3 debt due in 2027. That morning it filed an 8-K announcing a transaction support agreement with a group of creditors holding "over \$7 billion" of its debt. The headline terms were \$1.2bn of new Level 3 first-lien money, in 11% first-lien notes due 2029, with backstop economics that CreditSights summarized as a \$200mm fee plus 5% of the new money, about \$60mm. Level 3's existing 3.4% 2027 and 3.875% 2029 first-lien notes could be exchanged at a 66.7% consent threshold. Up to \$2bn, about 51%, of Level 3's unsecured notes would move into a new second lien. Lumen's term loans would go 85% into super-priority paper.
+
+Kaz reads the 8-K twice, looking for a list. "Who's in the group?"
+
+"Nobody you can name from the 8-K," says Mags. "The filings don't say. Read the advisers."
+
+That is Theo's part of the replay, and he is good at it, because it is the part of a deal he used to live in. Lumen's financial adviser is Guggenheim and its counsel is Wachtell. The creditors have their own financial adviser, and Houlihan Lokey's own deal page later describes itself as the exclusive financial adviser to an ad hoc group of crossholders holding about \$11bn of Lumen debt. Theo puts the word on the whiteboard and underlines it: *crossholders*.
+
+"That's the whole deal," he says. "Lumen has silos. There's debt at the parent, debt at Level 3, debt at Qwest, and each silo has its own collateral and its own guarantees. A holder who owns paper in only one silo wants value moved *into* that silo. A crossholder owns paper in several, so it can agree to move value from one silo to another, because it's on both ends of the transfer. The company needs somebody who can say yes in more than one room at once. The crossholders are the only people who can."
+
+"So who needed whom?" asks Ines, which is the question she always asks of a restructuring, and the one Theo was trained to answer in a pitch book.
+
+"Lumen needed the 2027 wall moved, and it needed new money to do it, and it needed enough consents in each silo to amend the documents: two-thirds for the Level 3 secured, a bare majority for the unsecured. The crossholders needed to be the ones who supplied the money and the consents, because whoever does that gets the new first lien, the fees, and the exchange ratios. Everyone else gets primed." He points at the screen. "And look at the fee stack. Company financial adviser, company counsel, creditor financial adviser, creditor counsel, backstop fees. This was priced and papered for months before the 8-K. By the time we read it, the hand was over. We're reading the hand history of a hand we weren't dealt."
+
+The next document in the folder is the CreditSights price sheet for the week of 9 November 2023, and it is the reason the replay exists. It lists the bonds that were *not* tendered into the agreement, the non-TSA paper, and the ladder is a lesson in what seniority labels are worth once a coalition has formed. At Lumen, the 4% secured notes due 2027 are at 57 and the 5.125% 2026s at 52; the long unsecured bonds from 2028 to 2042 are in the high 20s; the term loan B is at 75. At Level 3, the 3.4% first-lien 2027s are at 83 and the 3.875% first-lien 2029s at 73; the unsecured 2027s at 59, the 2028s at 47, the 2029s at about 40. And across the ladder, by CreditSights' estimate, the same bond held by a TSA signer was worth about ten points more than the identical bond held by someone who had not signed. About 49% of Level 3's unsecured notes, \$1.94bn to \$1.97bn of face, were on the wrong side of that line, primed by the new second lien that the other 51% would receive. *(Prices are vendor-indicative, not trades.)*
+
+Kaz loves this table the way some people love a train timetable. "Ten points between two copies of the same bond. Same coupon, same maturity, same issuer, same indenture. The only difference is a signature." Kaz does the arithmetic aloud, because Kaz always does. "On \$20mm face, ten points is \$2mm. So a signature is worth \$2mm. That's the price of a signature."
+
+"No," says Mags. "If signatures were for sale at \$2mm, you'd buy a non-TSA bond at 47, sign, and sell it on as a TSA bond at 57, and you'd keep doing it until the gap closed. It doesn't close. Read the terms again. The signer's bonds can only be transferred to another signer. A non-TSA bond can be sold to anyone, and a TSA bond can be sold only to someone who is already inside or agrees to join. And nobody is offering you a seat." She taps the line that says the note deals are privately negotiated. "The ten points isn't the price of a signature. It's the price of a closed door. The transfer restriction is what keeps it closed."
+
+Theo sees it before Kaz does. "That's §14.4. Two humps in one issuer, ten points apart, and the deal hasn't even closed. The coin that decides which hump you're in was tossed in the summer, in a room with the crossholders' advisers in it, and the transfer restriction stops anyone from tossing it again in the secondary market." Stage 0 of the recovery model, he realizes, is not a forecast here. For a holder outside the group on 10 November, membership is already a known zero, and the only uncertainty left is what the outside hump turns out to be worth.
+
+"Then why does anyone sell the non-TSA bond at all?" asks Kaz. "If it's going to be primed, it should be worth less than 47. If the co-op could break, it should be worth more."
+
+"Now you're asking the right question," says Ines. She draws the table. Two piles of chips, one large and one small. "The deal needs two-thirds of the Level 3 secured to call, and fifty point one percent of the unsecured. That's how many players at the table have to push their chips in. The crossholders already have more than seven billion dollars' worth of chips in the middle and they've signed an agreement not to pick them up. You're sitting outside the group with twenty million. You can't stop the hand. The only things you can do are fold, which means sell at 47 to someone who thinks the odds are better than you do, or stay in and hope something happens on the turn, or try to buy a seat at a table that isn't selling them."
+
+"What's the pot?" Theo asks, before she can.
+
+"Twenty million face at 47 is \$9.4mm. That's what you'd get for folding now." She writes the question on the board in block capitals, which she does only in replays:
+
+*It is 10 November 2023. You own \$20mm of Level 3 2028s at 47. You have not signed, and once you sign, transfers to non-parties will be void. Sign, sell, or hold, and why?*
+
+The room argues for twenty minutes, which is the point of a replay. Kaz wants to sell. "The co-op has more than \$7bn of a structure where the deal needs two-thirds and one-half. Unless a large fraction of them defect, the deal closes and we're primed. Sell at 47 and stop thinking about it."
+
+Mags wants to hold. "Primed isn't zero. Lumen is a real company with real fiber, and the reason they're doing this out of court is that the business has assets somebody will buy. Primed paper in a company that sells assets gets paid. Primed paper in a company that files gets an adversary proceeding and four years."
+
+Theo wants to know whether "sign" is even on the menu. "The term-loan pieces might be open to everyone. The note deals are negotiated with the group. If the company doesn't need our consent to cross the threshold, it has no reason to let us in. We can't sign a document nobody has sent us." He looks at the board. "The real choice is sell or hold. 'Sign' is a fantasy for a holder our size who wasn't in the room in the summer."
+
+"That's the answer to Kaz's question about why anyone sells," says Ines. "Some holders can't sign and can't wait. A high-yield fund meeting redemptions, or a CLO holding the term loan with a test date at month-end, isn't asking what the paper is worth in two years. It's asking what it's worth by the 30th."
+
+Then she closes the folder on 10 November and opens the next one, which is the part where the replay gives the answers.
+
+On 22 January 2024 Lumen signed an amended and restated transaction support agreement, announced a few days later, that covered "over \$12.5 billion" of debt and commitments, more than 70% of Lumen and Level 3 debt maturing through 2027. The new money grew to \$1.325bn, alongside a new revolver of about \$1bn. The terms said in public what the November prices had already implied. The term-loan pieces were open to all lenders. The note deals were privately negotiated and, in the 8-K's own words, "not offered to all holders." The closing thresholds were 66.7% for the Level 3 secured notes, 50.1% for the unsecured, and 95% for Lumen's Term A and A-1 loans. Each subscriber's share of the new money was capped at \$250mm, which spread the economics across the group and kept any one member from becoming the group. Transfers of a signer's debt to non-parties were void. The outside date was 29 February 2024.
+
+"There's the door," says Mags. "In writing."
+
+The deal closed on 22 March 2024. Lumen reported more than \$15bn of debt and commitments in the transactions, with participation of 94.4% in the Lumen Term A and A-1 loans, 98.5% in the Lumen Term B and 99.5% in the Level 3 Term B. The 2025 and 2026 maturities fell from about \$2.1bn to \$600mm. The 2027 maturities, the wall that had started it, fell from about \$9.5bn to \$800mm. The new money came in as \$1.325bn of secured notes due November 2029.
+
+Kaz looks at the participation numbers for a while. "Ninety-four to ninety-nine and a half percent. With thresholds of fifty and sixty-seven. They didn't just clear the threshold, they buried it."
+
+"That's what a co-op is for," says Ines. "A co-op that clears the threshold by a hair is a coalition. A co-op that clears it by thirty points is the deal."
+
+Then comes the part of the replay that the desk finds hard to sit through, because it is where the people who did nothing were paid. On 17 September 2024 Lumen launched follow-on exchange offers aimed at the non-participants: \$500mm of new 10% Lumen secured notes and \$350mm of 10% Level 3 second-lien notes due 2032. It offered \$975 per \$1,000 for the Lumen 4% secured 2027s, of which 80.8% tendered, \$700 for the 4.5% 2029s, of which 20.9% tendered, and \$860 for the Level 3 4.25% 2028s. Paper that had been 47 in November 2023 was being offered 86 ten months later, in new secured paper. On 2 February 2026 Lumen closed the \$5.75bn sale of its consumer fiber business to AT&T and used about \$4.8bn to retire super-priority debt, leaving total debt under \$13bn, interest about \$300mm a year lower, and net leverage under four times. On 20 May 2026 a cash tender capped at \$750mm took in the Level 3 4.25% 2028s at about 99.4% of par, early premium included. We found no lawsuit by the excluded holders; CreditSights called their indenture claims "difficult," and in the end nobody needed to file one.
+
+Kaz is quiet for a moment, which for Kaz is a long time. "So the holder who did the 'wrong' thing, sat outside, didn't sign, didn't sell, got 86 in new paper in ten months, or about 99 in cash in two and a half years. The holder who sold at 47 to stop thinking about it got 47."
+
+"With hindsight," says Ines. "On 10 November 2023 you didn't know there'd be an AT&T sale. You didn't know the company would want to clean up its stubs. Nobody in the replay folder did. If Lumen had filed instead, the holdout would have been the excluded class in a Chapter 11 with a new super-priority layer in front of it, and you'd be reading about it in §14.8 next to Serta."
+
+"So the answer is 'hold'?" asks Kaz.
+
+"The answer is that 'hold' was a bet on two things," says Theo, "and only one of them was about the co-op. The co-op was going to win. Anyone who could read the advisers' list and the thresholds could see that. The bet was on what came after: whether the company would have assets to sell and a reason to buy back the stubs, or whether it would file. That second bet is the re-default clock from §14.3. Lumen got runway, used it, sold something, and the cure fraction swallowed it. It was one of the three-quarters."
+
+Mags, who has been waiting, gives the lesson the way she always gives lessons, as a correction. "Moyer said the holdout problem was why out-of-court deals failed: holdouts keep their full claim and the deal can't get done. Then contract technology turned the holdout into the victim; that's Serta. And then, at Lumen, the holdout got paid anyway, because the company was healthy enough to come back for the stubs. It's the same problem three times, and the answer depends on the re-default clock, not on the co-op."
+
+"Which means," says Ines, "that on 10 November the question wasn't 'sign, sell, or hold.' It was two questions. Will the co-op hold? And if it does, what is the company's runway after it closes? The second one is §14.3. The first one is a binomial tail, and Kaz is going to compute it."
+
+Kaz is already writing.
+
 ### 14.5.1 The threshold game with a co-op
 
 Let a non-pro-rata amendment need participation of at least a fraction $m$ of the class (for a "Required Lenders" vote, $m$ is just over one half). Let a co-op cover a fraction $c \in [0,1]$ of the class, split among $n$ members of roughly equal size $c/n$.

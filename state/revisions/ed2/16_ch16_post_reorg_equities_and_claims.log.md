@@ -10,8 +10,8 @@
 - [x] 8. [§16.2.4] Note: Dana registry vignette, 13F lag, OTC 13(f), old-name trustee rows.
 - [x] 9. [§16.3.1] Note: Buccola 18-of-19 opener; when-to-apply; ConvergeOne appeal hedged, open.
 - [x] 10. [§16.3.2] Note: put and risk-neutral box (37%, 0.20 corrected); d1/d2 moved.
-- [ ] 11. [§16.3.4 Hertz rights offering] EXPAND-SCENE part one + ANOTHER-SEAT (plan sponsor).
-- [ ] 12. [§16.4.2 Derivation] MATH-GENTLY x2 (fixed point; Poisson) + FULL-DERIVATION-MOVE.
+- [x] 11. [§16.3.4] Note: Harlan scene, Hertz yardstick, sponsor seat box, table kept.
+- [x] 12. [§16.4.2] Note: fixed-point (8.66, 8.58, 8.56) and Poisson boxes; derivations moved.
 - [ ] 13. [§16.4.3 Hertz warrants] EXPAND-SCENE part two.
 - [ ] 14. [§16.5.2 Statute block] LIST-TO-NARRATIVE (two vendors at the courthouse).
 - [ ] 15. [§16.5.3 Derivation] MATH-GENTLY x3 + FULL-DERIVATION-MOVE + ANOTHER-SEAT (claims buyer).

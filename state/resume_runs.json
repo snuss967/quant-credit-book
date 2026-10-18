@@ -13,14 +13,96 @@
    "task": "wc8sol35m",
    "runId": "wf_6e44a234-b6e",
    "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/research-resilient-wf_bd451f4f-5fb.js",
-   "args": "see journal: wf_6e44a234-b6e (5 items: case_lmt_private_and_european_2024_2026, case_courts_as_regime_variables, trend_re_default_and_recovery_dataset, trend_private_credit_marks_and_redemptions_2025_2026, trend_listed_credit_futures_and_index_microstructure); model sonnet, no_map true, today 2026-10-18"
+   "args": {
+    "today": "2026-10-18",
+    "model": "sonnet",
+    "no_map": true,
+    "items": [
+     {
+      "kind": "case",
+      "slug": "lmt_private_and_european_2024_2026",
+      "status": "PARTIAL",
+      "title": "Private-credit and European LMEs, 2024-2026",
+      "scope": "See state/research_queue_ed2.json entry for case_lmt_private_and_european_2024_2026 (read it first) and any existing PARTIAL dossier; finish it."
+     },
+     {
+      "kind": "case",
+      "slug": "courts_as_regime_variables",
+      "status": "PARTIAL",
+      "title": "Courts as regime variables",
+      "scope": "See state/research_queue_ed2.json entry for case_courts_as_regime_variables (read it first) and any existing PARTIAL dossier; finish it."
+     },
+     {
+      "kind": "trend",
+      "slug": "re_default_and_recovery_dataset",
+      "status": "PARTIAL",
+      "title": "Re-default and recovery dataset",
+      "scope": "See state/research_queue_ed2.json entry for trend_re_default_and_recovery_dataset (read it first) and any existing PARTIAL dossier; finish it."
+     },
+     {
+      "kind": "trend",
+      "slug": "private_credit_marks_and_redemptions_2025_2026",
+      "status": "PARTIAL",
+      "title": "Private-credit marks and redemptions, 2025-2026",
+      "scope": "See state/research_queue_ed2.json entry for trend_private_credit_marks_and_redemptions_2025_2026 (read it first) and any existing PARTIAL dossier; finish it."
+     },
+     {
+      "kind": "trend",
+      "slug": "listed_credit_futures_and_index_microstructure",
+      "status": "PARTIAL",
+      "title": "Listed credit futures and index microstructure",
+      "scope": "See state/research_queue_ed2.json entry for trend_listed_credit_futures_and_index_microstructure (read it first) and any existing PARTIAL dossier; finish it."
+     }
+    ]
+   }
   },
   {
    "name": "research-B",
    "task": "wpjuofa0m",
    "runId": "wf_e08bbe4b-b57",
    "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/research-resilient-wf_bd451f4f-5fb.js",
-   "args": "see journal: wf_e08bbe4b-b57 (5 items: trend_part_v_market_structure_2026, case_carvana_svb_wolfspeed_capital_structure, case_manufactured_credit_events, trend_insurance_capital_forced_flow, trend_figure_data_series); model sonnet, no_map true"
+   "args": {
+    "today": "2026-10-18",
+    "model": "sonnet",
+    "no_map": true,
+    "items": [
+     {
+      "kind": "trend",
+      "slug": "part_v_market_structure_2026",
+      "status": "PARTIAL",
+      "title": "Part V market structure, 2026",
+      "scope": "See state/research_queue_ed2.json entry for trend_part_v_market_structure_2026 (read it first) and any existing PARTIAL dossier; finish it."
+     },
+     {
+      "kind": "case",
+      "slug": "carvana_svb_wolfspeed_capital_structure",
+      "status": "PARTIAL",
+      "title": "Carvana, SVB and Wolfspeed: capital-structure pain trades",
+      "scope": "See state/research_queue_ed2.json entry for case_carvana_svb_wolfspeed_capital_structure (read it first) and any existing PARTIAL dossier; finish it."
+     },
+     {
+      "kind": "case",
+      "slug": "manufactured_credit_events",
+      "status": "PARTIAL",
+      "title": "Manufactured credit events",
+      "scope": "See state/research_queue_ed2.json entry for case_manufactured_credit_events (read it first) and any existing PARTIAL dossier; finish it."
+     },
+     {
+      "kind": "trend",
+      "slug": "insurance_capital_forced_flow",
+      "status": "PARTIAL",
+      "title": "Insurance capital and forced flow",
+      "scope": "See state/research_queue_ed2.json entry for trend_insurance_capital_forced_flow (read it first) and any existing PARTIAL dossier; finish it."
+     },
+     {
+      "kind": "trend",
+      "slug": "figure_data_series",
+      "status": "PARTIAL",
+      "title": "Figure data series",
+      "scope": "See state/research_queue_ed2.json entry for trend_figure_data_series (read it first) and any existing PARTIAL dossier; finish it."
+     }
+    ]
+   }
   },
   {
    "name": "u3-media",
@@ -115,23 +197,6 @@
     "stems": [
      "21_ch21_leveraged_loans_and_clo_microstructure",
      "23_ch23_cross_asset_convexity_and_vol_surface"
-    ],
-    "stages": [
-     "figures",
-     "figcheck"
-    ]
-   }
-  },
-  {
-   "name": "figs-VI-b",
-   "task": "wums0yjya",
-   "runId": "wf_8ad4751e-525",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "24_ch24_bond_cds_basis_and_deliverables",
-     "25_ch25_nlp_pacer_and_covenant_scraping"
     ],
     "stages": [
      "figures",

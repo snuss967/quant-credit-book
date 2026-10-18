@@ -5,13 +5,13 @@
 - [x] 3. §15.1.2 table: EA, Kroger, WBD walk-through; make-whole circuit table; spa gag.
 - [x] 4. §15.1.3 bullets: one-week narrative of four edges; CLO-manager Another Seat box.
 - [x] 5. §15.1.3 Trend Watch: two-sentence bridge to the smoke detector added.
-- [ ] 6. §15.2.1: WHEN-TO-APPLY (the put) + EXPAND Mags's 1988 beat
-- [ ] 7. §15.2.2 Steps 1-2: MATH-GENTLY (conditional expectation/covariance; compound option)
-- [ ] 8. §15.2.2 Steps 3-4: MATH-GENTLY (PV, annuity factor, derivative as slope)
-- [ ] 9. §15.2.2 Step 5: MATH-GENTLY (logistic function)
-- [ ] 10. §15.2.2 Step 6: MATH-GENTLY (P vs Q)
-- [ ] 11. §15.2.2 Step 7: MATH-GENTLY (random walk, sigma sqrt t)
-- [ ] 12. Listing 15.1 explanation: MATH-GENTLY (normal vs lognormal, Ito half sigma squared)
+- [x] 6. §15.2.1: Mags RJR 1988 expanded; four-condition when-to-apply judgment added.
+- [x] 7. §15.2.2 Steps 1-2: raffle compound-option box; umbrella covariance box, M=2.
+- [x] 8. §15.2.2 Steps 3-4: PV, annuity factor, slope box; 77.0, 3.7, c* 8.3%.
+- [x] 9. §15.2.2 Step 5: logistic dimmer-switch box with sigma values, slope.
+- [x] 10. §15.2.2 Step 6: insurance-premium P vs Q box, 25% vs 15%.
+- [x] 11. §15.2.2 Step 7: drunk-lamppost random walk box, 53bp, 2 points.
+- [x] 12. Listing 15.1: normal vs lognormal, mean-preserving, Ito half-sigma-squared box.
 - [ ] 13. Three AI spec blocks: FULL-DERIVATION-MOVE (Engine: Full Specifications; Full Derivation subsections)
 - [ ] 14. Case Study EA 2025-26: EXPAND-SCENE (three meetings, decision point, Another Seat)
 - [ ] 15. §15.3.1: WHEN-TO-APPLY + real anchor (Focus Financial, 9fin)

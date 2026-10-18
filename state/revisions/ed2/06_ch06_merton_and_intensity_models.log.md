@@ -22,6 +22,6 @@
 - [x] 20. [6.9.2-6.9.3 Equity leads credit; First Brands] MATH-GENTLY (log-linear) + EXPAND-SCENE + ANOTHER-SEAT (direct lender) -- multiplier box, opacity scene with Marks quotes, decision point, lender seat.
 - [x] 21. [6.10.1 Carvana] EXPAND-SCENE B: "The put that got restruck" -- five beats on the cap-arb pair, 2 June decision, TSA, settlement.
 - [x] 22. [6.10.1 end] ANOTHER-SEAT (opportunistic fund vs multi-strat pod) -- Apollo quoted support vs Paleologo stop-loss view; outcome versus path.
-- [ ] 23. [6.10.2 Hertz] EXPAND-SCENE (plan sponsors; Theo's ATM rule)
-- [ ] 24. [6.10.3 and 6.12] LIST-TO-NARRATIVE
+- [x] 23. [6.10.2 Hertz] EXPAND-SCENE (plan sponsors; Theo's ATM rule) -- whiteboard ATM 12% vs 13.8%, wrong on fleet, sponsors' \$5.9bn.
+- [x] 24. [6.10.3 and 6.12] LIST-TO-NARRATIVE -- 19 July screen walk; Kaz reads twelve items, each gets a scene.
 - [ ] 25. [Exercises] BRIDGE (Check: numbers + two warm-ups)

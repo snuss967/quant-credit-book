@@ -335,3 +335,302 @@ The aha of this chapter, in one table. You already built the inputs. The desk's 
 | Sources and uses at exit | The overhang schedule of who receives what they cannot hold; the take-back transfer | §16.2, §12C.5 | Listing 16.5's `ForcedSellerOverhang`; `plan_value_engine.takeback_note_transfer()` |
 
 Theo's USB stick appears in the first row, for the last time in Part IV. When Exhibit C posts, he recognizes the column widths: the debtor's advisors use the same 13-week template he used for four years, conditional formatting and all. "Congratulations," Kaz says. "The USB stick is now evidence."
+
+## 12C.10 The Halvorsen Files, Part III: The Plan Under Uncertainty
+
+The structure is §12B.9's, unchanged: ABL 150; a first-lien class of 1,400 (TLB 900 and 7.25% secured notes 500, pari passu); unsecured notes 850; trade 150, of which 40 are 503(b)(9) goods; lease rejection 60. The DIP is \$150mm of new money with a 1:1 roll-up, so 1,250 of first-lien claims remain. The day-71 settlement is in the numbers: the first lien hands \$20mm to the unsecured pool, which is \$35mm at plan value. Value splits as in 12-B, with ABL collateral at 250 and the rest divided 32:3 between term collateral and unencumbered value. On those terms, per dollar of claim,
+
+$$
+R_{1\text{L}}(V) = \min\!\left(\frac{\tfrac{32}{35}(V - 250) - 220}{1{,}250},\ 1\right), \qquad
+R_{\text{U}}(V) = \frac{\tfrac{3}{35}(V - 250) - 55 + \tfrac{32}{35}\,(V - V^\star)^+}{1{,}020},
+$$
+
+where $V^\star \approx 1{,}858$ is the plan value at which the first lien is paid in full. (The 220 is the DIP's 300 less the 100 of ABL residual, plus the \$20mm settlement; the 55 is administrative claims of 75 less the same \$20mm.) Both are call spreads, scaled by the share of value each class can reach. At $V = 1{,}300$ they give 59.2% and 3.4%, which is where 12-B left them.
+
+Now put the mixture of §12C.1 on $V$: the debtor's expert at 1,300 with $\sigma_1 = 0.10$ and weight 0.7, the committee's at 1,900 with $\sigma_2 = 0.12$ and weight 0.3. With the formulas of §12C.2 and a normal table, by hand:
+
+| Output | First lien (outside the group) | Unsecured pool |
+| :--- | ---: | ---: |
+| Fulcrum probability | 82.8% | 17.2% |
+| Expected recovery, mixture | 70.3% | 8.3% |
+| Expected recovery if the debtor's expert wins | 59.7% | 3.5% |
+| Expected recovery if the committee's expert wins | 95.2% | 19.4% |
+| 5th / 95th percentile | 46.2% / 100% | 1.9% / 35.2% |
+| Paths below the best-interests floor (21.6% and 0%) | 0.0% | 0.0% |
+
+*(Illustrative. Old equity's fulcrum probability rounds to zero; it needs $V$ above \$2,795mm.)* Three flags complete the report. The best-interests floor never binds, as Moyer predicted, and the engine says so rather than assuming it. The cash wall binds below about \$1,125mm, where unencumbered value no longer covers the \$75mm of administrative claims and the first lien's settlement money starts paying them instead of the pool: about 5% of paths. Feasibility passes on the downside projections with exit debt of \$800mm.
+
+Look at the shape before the numbers. The first lien's distribution has a hump around 60 and a spike at 100: it is a short call capped at par, and almost a third of its expected value comes from the committee's hump, where it is paid in full. The unsecured pool's distribution has a hump around 3 and a long right tail that lives entirely in the committee's scenario. Moving the committee's expert from 1,900 to 1,800 costs the unsecured about 1.8 points of expected recovery; moving the debtor's from 1,300 to 1,200 costs about 0.6. The unsecured class is short the *distance* between experts, not the level of either.
+
+**What the market said.** On the night of the cold open the 6s traded at 14. The table's two conditional recoveries, 3.5 and 19.4, imply that 14 is priced as if the committee's expert wins about two times in three. The first lien at 66 is within a risk premium and nine months of carry of the model's 70.3. The desk's view is about $w$, and it is a view about a judge (Law 16).
+
+**The DIP moves the fulcrum; the roll-up does not.** Generalize the DIP to new money $M$ with roll-up ratio $\kappa$. The first lien is whole when term collateral covers the DIP, its remaining claims and the settlement, which happens at $\tfrac{32}{35}(V - 250) = 1{,}320 + M$. The roll-up ratio cancels: rolled claims are paid either way, only earlier. New money that is spent inside the estate raises the strike, so every \$100mm of new money moves $V^\star$ up by about \$109mm. Figure 12C.2 plots the result. The unsecured class's fulcrum probability falls from about 25% with no new money to 17% at \$150mm and to 10% at about \$280mm. The roll-up decides who inside the first lien gets paid; the new money decides whether the first lien gets paid at all.
+
+![Figure 12C.2: Fulcrum probability by class as DIP new money varies, Halvorsen, roll-up ratio 1:1 (the curves are identical for any ratio). The unsecured class's probability falls from about 25% with no new money to about 17% at the actual \$150mm and 10% near \$280mm; the first lien takes the rest. Illustrative.](assets/figures/ch12c_fulcrum_prob_vs_dip.png)
+
+**The take-back, priced.** The \$350mm of five-year notes at 8% against a 10% market transfers \$26.5mm from note electors to equity electors (§12C.5). The CLOs that elect notes are, almost to the dollar, the first-lien holders outside the ad hoc group. They lose 4.2 points to the roll-up at the start of the case and 4.5 points to the coupon at the end, for being the holders who could not fund new money or hold equity. Figure 12C.3 draws the transfer against the coupon gap.
+
+![Figure 12C.3: The take-back transfer as a function of the coupon gap $\Delta s$, for Halvorsen's \$350mm five-year note: the first-order line $F^{\text{tb}} D^{\text{mod}} \Delta s$ (about \$13.3mm per 100bp) and the exact annuity price of §12B.6, which agree closely below 300bp. The marked point is the plan's 200bp gap, \$26.5mm. Illustrative.](assets/figures/ch12c_takeback_transfer.png)
+
+### When to apply it, and when it breaks
+
+The engine is built for a contested plan with a published disclosure statement, identifiable experts and strikes that will not move much before confirmation. It works best in the six weeks before a valuation hearing, when $w$ is the only thing anyone is arguing about.
+
+It breaks in recognizable ways. When value is set by a **market test**, the mixture is the wrong object: price the bids (Hertz, §16.6). When a **ruling can move liens**, the strikes themselves are random, and the engine needs a regime variable on the attachment points, not just on $V$ (Incora). When the business's value is **binary** (a license renewal, a mass-tort settlement, a single customer contract), a lognormal hump hides the jump; add a Bernoulli component, as in §5.1. When the plan pays in **warrants, rights or deathtrap consideration**, recovery at plan value is not recovery, and §16.3–16.4 must price the paper. And a $w$ fitted on a dozen cases is a story, not an estimate (Law 12). What a seasoned practitioner checks first is none of the math: who holds the fulcrum class, whether they want to own the company, and whether the debtor's valuation is attached to a support agreement with them.
+
+Used in / builds on: §12B.9 (the structure and the challenge settlement), §12C.2–12C.8 (every piece above), §16.1–16.4 (Halvorsen's new equity and warrants), §28.9 (the dashboard row for a restructuring position).
+
+## 12C.11 Case Study: Envision, the Plan Value With a Date on It
+
+"You want the regularity with a date on it," Mags says, the week after the Halvorsen disclosure statement. "Envision." She has the plan open on one screen and a 2025 press report on the other, and she tells it the way she tells everything, out of order and correctly.
+
+Here is the record in order. KKR bought Envision Healthcare in 2018, in a deal reported at roughly \$10bn. By 2022 the company was two businesses in one capital structure: the physician-staffing business, which carried most of the debt and most of the trouble, and AmSurg, the ambulatory surgery centers, which carried most of the value. In April 2022 a drop-down moved AmSurg out of the reach of Envision's lenders: a new AmSurg first-lien facility of about \$1.3bn, about \$1.1bn of proceeds paid up to Envision, and AmSurg designated an unrestricted subsidiary. Between June and August 2022 AmSurg raised about \$1.3bn of second-lien money, lent it to Envision, and Envision repurchased about \$1.9bn of its own debt at a discount; participants were prioritized and the rest went to a "fourth-out" position. Octus puts participation at about 91% (a figure we have not confirmed). By November 2022, by one report, AmSurg debt traded around 98 while Envision's first lien traded around 25 (an advocacy source; treat as approximate). One company, two silos, two prices seventy points apart.
+
+On 15 May 2023 Envision filed in the Southern District of Texas (No. 23-90342, before Judge Christopher Lopez), with two silos and **no DIP**. That last fact matters for this chapter. With no new money and no roll-up, the strikes barely moved during the case; the uncertainty was almost entirely in value and in the litigation over the 2022 transactions. A dissenting lender group's adversary proceeding was dismissed with prejudice on 9 November 2023. An independent director, Gary Begeman, reported on 15 September 2023 that the 2022 transactions had produced about \$1.7bn of quantified benefit and found no fraud. The creditors' committee settled for \$35mm in cash and 1.5% of the reorganized Envision equity for noteholders.
+
+The plan was confirmed on 11 October 2023 and went effective on 3 November 2023. On the AmSurg side the revolver and the first lien were paid in full. The AmSurg second-lien lenders, who had funded the 2022 transactions, took 100% of the reorganized AmSurg equity, together with a \$300mm rights offering priced at a 30% discount, for a projected recovery of 73%. On the Envision side the second-out lenders took the equity and the unsecured notes took warrants. Total debt fell by more than 70%.
+
+Then the date. On 17 June 2025 Ascension agreed to buy AmSurg for a reported \$3.9bn, about \$250mm above the top of the plan's valuation range, and Octus estimated a return of more than 1.3 times for the drop-down lenders.
+
+"So the fulcrum wanted the company," Theo says, "and the fulcrum got a value that let it own all of it."
+
+"And a rights offering at a 30% discount on top," Mags says. "Which only the fulcrum could buy. Read §16.3 and tell me what the put was worth."
+
+Kaz has drawn it as this chapter would. AmSurg is a single silo with the first lien paid in full and the second lien as fulcrum; the plan value sets how many shares the second lien's claim buys, and the plan value was low enough that the claim bought all of them. A high plan value would have left room above the second lien's detachment point for someone else, and nobody below the second lien in that silo was strong enough to argue for one. "The judge didn't pick from two humps," Kaz says. "There was one hump, and it belonged to the people who were going to own the company."
+
+That is the cleanest version of the regularity in §12C.1. When the class that will own the company also writes the plan and faces no credible expert on the other side, the confirmed value sits at the conservative end of the debtor's range, and the market, given time and a buyer, pays the difference to the new owners. The 73% "projected recovery" was a recovery at plan value. The realized recovery, measured at Ascension's price, was something else.
+
+What could a desk have modeled in 2023? Not the Ascension bid, which nobody could forecast. It could have modeled the shape: one silo, one strong fulcrum holder, no DIP, no competing expert, a discounted rights offering reserved for the fulcrum. Under this chapter's engine that is a mixture with $w$ near one on a low hump, and a recovery on the reorganized equity whose physical-measure expectation sits above the plan's 73%. The trade was to own the fulcrum's paper, or the post-reorganization equity once it could be bought, and to be patient. Chapter 16's overhang machinery says why patience paid: the natural holders of AmSurg's new equity were the funds that wanted it, not CLOs that had to sell it.
+
+What could not be modeled from the documents: whether the sponsor-era litigation would survive (it did not), and whether healthcare-services multiples would hold up through 2024 (they did). The desk's edge in Envision was not a better DCF. It was knowing that the number in Exhibit E had an owner.
+
+Used in / builds on: §12C.1 (the regularity), §13.6 (the drop-down as collateral leakage), §16.1–16.3 (post-reorg equity, overhang and rights offerings), Ch 13-B (the Envision docket diary and the 2022 transactions).
+
+> **From the Shop Floor (fictional composite).** *A bank's distressed claims desk, a Tuesday in month eight.* The risk committee meets at 4:15, and the first question is the one it always asks: why is this number different from yesterday? The Halvorsen trade-claims mark has gone from 3.4 to 3.2 overnight. Priya, the desk's claims analyst, has the answer, and it took her most of the morning. Nothing traded. The claims agent's register, which she downloads every night as a CSV that changes its column order without warning, shows a new \$74mm contract-rejection claim from a former resin supplier, filed on the bar date. The unsecured denominator went from 1,020 to 1,094; \$35mm over 1,094 is 3.2%. The committee asks whether the claim will be allowed. Priya says the debtor will object, that objections take months, and that the desk's model now carries the claim at 60% expected allowance with a distribution, which is why the mark is 3.2 and not 3.3 or 3.1. The second item is worse. The desk's books show \$4.12mm face of trade claims bought from three vendors; the register shows \$4.07mm. The missing \$50,000 is a 503(b)(9) portion the debtor has reclassified as administrative, which is *good* news (it will be paid in cash at par), but the assignment agreement's recourse clause means the vendor may owe the desk a refund on the reclassified piece, or may not, depending on a definition on page 11. Priya spends an hour matching Rule 3001(e) notices to assignment agreements, one of which was scanned sideways. Nobody on the committee asks about plan value. It is, she reflects, the most important number in the case, and the least of her problems this week.
+
+## 12C.12 Specification for AI Implementation: `plan_value_engine.py`
+
+**What ROBO built from the vague version.** "Maximize plan value" produced the cold open's \$4,075mm, with everyone paid in full and old equity keeping 40%. "Minimize objections" produced a plan needing \$2.8bn of exit financing for a \$1.3bn company. Both were literal answers to instructions that never said whose value, under which measure, and subject to which constraints. The specification below fixes all three.
+
+**The problem it solves at this point in the story.** By now the reader can price each piece of a contested plan by hand: the mixture on value, the call spreads, the roll-up, the take-back, the burn, the floor, the tax line. Doing that for every class, every DIP size and every expert weight by hand is how §12C.10 took an afternoon. The engine does it in one pass, keeps the pieces separate so each can be audited, and refuses to report a flag it could not compute.
+
+**What it computes, and why it is built this way.** It draws confirmed plan values from a lognormal mixture (one component per expert, weights for the judge), truncated at zero, with a fixed seed so a risk committee can reproduce yesterday's number. For each draw it runs the class waterfall: collateral silos first, then administrative claims against unencumbered value (the cash wall), then the unsecured pool with any waived deficiencies removed. That ordering is 12-B's `silo_waterfall`, re-implemented here only because a plan's deficiency waiver and settlement transfers are not in 12-B's function; the self-test checks that the two agree when there is no waiver, and checks a single-silo stack against Chapter 13's `waterfall_clearing`. The DIP enters as a priming claim of $M(1+\kappa)$ ahead of the primed class, with the rolled claims removed from that class. Recoveries are recorded per class per draw, so that fulcrum probabilities, means, percentiles and floor breaches all come from the same paths.
+
+**Inputs.** A claims register: classes with faces, ranks within each collateral silo, and which classes share the unsecured pool. Silo values as a function of $V$ (fixed amounts plus shares of the remainder). DIP terms: new money $M$, roll-up ratio $\kappa$, upfront and exit fees, expected tenor, base rate and margin. The mixture: medians, log-volatilities and weights. The liquidation analysis: a recovery floor per class, or `None` if not yet filed. Exit terms: take-back face, coupon, tenor and the market yield for comparable paper. Administrative claims at plan, the burn rate $\phi$ and the expected time to the effective date. Optional tax inputs: NOLs, cancellation income, the long-term tax-exempt rate, tax rate, taxable income, discount rate. All money in \$mm, rates as annual decimals, recoveries as fractions of allowed claim.
+
+**Outputs.** `fulcrum_probabilities()`: probability that each class is the fulcrum, with old equity as the last entry. `recovery_distribution()`: per class, mean, median, 5th and 95th percentiles, and the fraction of paths below its best-interests floor. `best_interests_flags()`, `cash_wall_flag()` and `feasibility_proxy()`: each returns `True`, `False` or `None`, and `None` means an input was missing. `dip_package_value()`: coupon, fees, and the roll-up's gross transfer and net gain to the lender group, with a conservation check. `takeback_note_transfer()`: the exact and first-order transfers. `nol_value()`: the present value of the surviving NOL under the chosen §382 branch, after attribute reduction.
+
+**When to use it, and when not.** Use it for a contested plan before confirmation, and to ask "what if" about DIP size, expert weights and coupon gaps. Do not use it to value the enterprise: $V$ is an input with an author. Do not use it once a market test has set value, or where a pending ruling can move liens, unless you add a regime variable on the strikes (§12C.10).
+
+**The edge case that bites.** The roll-up formula assumes the rolled claims are covered by the value the class receives, $W \ge \kappa M$. When they are not, the roll-up is taking value from outside the class and the closed form understates the transfer; the engine raises an error instead of returning a number. The second bite is the boundary $V = K_j$, inherited from 12-B: the class is whole and the next class is the fulcrum at zero, so the comparison must be strict. And a missing floor must never become a zero floor.
+
+<!-- EXPLAINED -->
+```python
+"""plan_value_engine.py (Chapter 12-C).
+
+Plan value as a random variable: a lognormal mixture over confirmed value, a silo
+waterfall per draw, fulcrum probabilities and recovery distributions by class, the
+section 1129 flags, the DIP package, the take-back transfer and the NOL line.
+Money in $mm, rates as annual decimals, recoveries as fractions of allowed claim.
+Every distribution here is a P object: a forecast of a judge, not a price (Law 4).
+"""
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+
+import numpy as np
+
+from lmt_engine import waterfall_clearing                 # Chapter 13, Listing 13.1
+from restructuring_state_machine import (                 # Chapter 12-B
+    Silo, silo_waterfall, rollup_transfer, cramdown_price)
+
+rng = np.random.default_rng(1229)
+
+
+@dataclass
+class PlanCase:
+    classes: dict[str, float]                  # allowed claim by class, after any roll-up
+    silos: list[tuple[float, float, list[list[str]]]]  # (fixed value, share of remainder, lien tiers)
+    fixed_carve: float                         # value carved out before shares (e.g. ABL collateral)
+    pool_classes: list[str]                    # classes sharing the unsecured pool
+    admin: float                               # administrative and priority claims, paid first in cash
+    gift: tuple[str, str, float] | None = None # (from class, to pool, amount) settlement transfer
+    floors: dict[str, float | None] = field(default_factory=dict)  # best-interests floors
+
+
+def _class_recoveries(V: float, case: PlanCase) -> dict[str, float]:
+    """One waterfall at plan value V: silos, cash wall, pool, settlement gift."""
+    rem = max(V - case.fixed_carve, 0.0)
+    got = dict.fromkeys(case.classes, 0.0)
+    unencumbered = 0.0
+    for fixed, share, tiers in case.silos:
+        left = fixed + share * rem
+        if not tiers:                          # an unencumbered silo
+            unencumbered += left
+            continue
+        for tier in tiers:
+            owed = {k: case.classes[k] - got[k] for k in tier}
+            tot = sum(owed.values())
+            paid = min(left, tot)
+            for k, o in owed.items():
+                got[k] += paid * o / tot if tot > 0 else 0.0
+            left -= paid
+        unencumbered += max(left, 0.0)         # equity in collateral returns to the estate
+    if case.gift is not None:                  # settlement: senior hands cash to the pool
+        src, _, amt = case.gift
+        moved = min(amt, got[src])
+        got[src] -= moved
+        unencumbered += moved
+    pool = max(unencumbered - case.admin, 0.0) # section 1129(a)(9): admin is paid first
+    owed = {k: case.classes[k] - got[k] for k in case.pool_classes}
+    tot = sum(owed.values())
+    for k, o in owed.items():
+        got[k] += min(pool, tot) * o / tot if tot > 0 else 0.0
+    return {k: got[k] / case.classes[k] for k in case.classes}
+
+
+def draw_plan_values(medians, sigmas, weights, n=200_000, rng=rng) -> np.ndarray:
+    """Lognormal mixture: the judge picks expert i with probability weights[i]."""
+    w = np.asarray(weights, float)
+    if np.any(w < 0) or abs(w.sum() - 1.0) > 1e-9:
+        raise ValueError("expert weights must be non-negative and sum to one")
+    pick = rng.choice(len(w), size=n, p=w)
+    mu = np.log(np.asarray(medians, float))[pick]
+    sd = np.asarray(sigmas, float)[pick]
+    return np.maximum(np.exp(mu + sd * rng.standard_normal(n)), 0.0)  # truncate at zero
+
+
+def recovery_paths(V: np.ndarray, case: PlanCase) -> dict[str, np.ndarray]:
+    out = {k: np.empty(len(V)) for k in case.classes}
+    for i, v in enumerate(V):
+        for k, r in _class_recoveries(float(v), case).items():
+            out[k][i] = r
+    return out
+
+
+def fulcrum_probabilities(paths: dict[str, np.ndarray], order: list[str]) -> dict[str, float]:
+    """Fulcrum = most senior class in `order` not paid in full (strict: whole means R >= 1)."""
+    n = len(next(iter(paths.values())))
+    first_short = np.full(n, len(order))       # len(order) means old equity is the fulcrum
+    for j in reversed(range(len(order))):
+        first_short = np.where(paths[order[j]] < 1.0 - 1e-12, j, first_short)
+    probs = {c: float(np.mean(first_short == j)) for j, c in enumerate(order)}
+    probs["old_equity"] = float(np.mean(first_short == len(order)))
+    return probs
+
+
+def recovery_distribution(paths, floors) -> dict[str, dict]:
+    rep = {}
+    for k, r in paths.items():
+        f = floors.get(k)
+        rep[k] = dict(mean=float(r.mean()), median=float(np.median(r)),
+                      p5=float(np.percentile(r, 5)), p95=float(np.percentile(r, 95)),
+                      below_floor=None if f is None else float(np.mean(r < f - 1e-12)))
+    return rep
+
+
+def best_interests_flags(rep) -> dict[str, bool | None]:
+    """True = no path breaches; None = floor not supplied. Never pass on a missing floor."""
+    return {k: (None if d["below_floor"] is None else d["below_floor"] == 0.0) for k, d in rep.items()}
+
+
+def cash_wall_flag(V: np.ndarray, case: PlanCase, exit_cash: float | None) -> float | None:
+    """Fraction of paths where unencumbered value plus exit cash misses the admin claims."""
+    if exit_cash is None:
+        return None
+    rem = np.maximum(V - case.fixed_carve, 0.0)
+    unenc = sum(fixed + share * rem for fixed, share, tiers in case.silos if not tiers)
+    return float(np.mean(unenc + exit_cash < case.admin))
+
+
+def feasibility_proxy(fcf_downside: list[float] | None, exit_debt_service: float) -> bool | None:
+    if not fcf_downside:
+        return None
+    return min(fcf_downside) >= exit_debt_service
+
+
+def dip_package_value(M, kappa, W, F, base, margin, upfront, exit_fee, tenor, group_share_after):
+    """Coupon, fees and the roll-up for the lender group (section 12C.4). Raises if W < kappa*M."""
+    if kappa * M > W:
+        raise ValueError("roll-up exceeds value the class receives: transfer comes from outside")
+    coupon = (base + margin) * M * tenor
+    fees = (upfront + exit_fee) * M
+    gross = kappa * M * (1.0 - min(W / F, 1.0))            # rolled claims promoted to par
+    loss_pts = rollup_transfer(W, F, M, kappa)              # 12-B closed form, per remaining claim
+    remaining = F - kappa * M
+    assert abs(gross - loss_pts * remaining) < 1e-6, "roll-up must conserve value"
+    net = gross - loss_pts * group_share_after               # the group pays part of its own bill
+    return dict(coupon=coupon, fees=fees, rollup_gross=gross, rollup_net=net,
+                all_in_annual=(coupon + fees) / (M * tenor))
+
+
+def takeback_note_transfer(face, coupon, market_yield, years):
+    exact = face * (1.0 - cramdown_price(coupon, market_yield, years))
+    a = (1 - (1 + market_yield) ** -years) / market_yield
+    dur_mod = sum(t * (coupon if t < years else 1 + coupon) / (1 + market_yield) ** t
+                  for t in range(1, years + 1)) / ((1 + market_yield) * (1 - (market_yield - coupon) * a))
+    first_order = face * dur_mod * (market_yield - coupon)
+    return dict(exact=exact, first_order=first_order)
+
+
+def nol_value(nol, cod, rate_lt, equity, chi, income, r, branch="l6", years=40, cap=0.8):
+    """Attribute reduction first (section 108(b)), then the section 382 branch."""
+    left = max(nol - cod, 0.0)
+    limit = {"none": np.inf, "l6": rate_lt * equity, "l5": np.inf}[branch]
+    pv = 0.0
+    for t in range(1, years + 1):
+        use = min(limit, left, cap * income)
+        pv += chi * use / (1 + r) ** t
+        left -= use
+        if left <= 0:
+            break
+    return pv
+
+
+def halvorsen_case() -> PlanCase:
+    """Section 12B.9 after the roll-up and the day-71 settlement."""
+    cls = {"ABL": 150.0, "DIP": 300.0, "1L": 1250.0, "UNS": 1020.0}
+    silos = [(250.0, 0.0, [["ABL"], ["1L"]]),             # ABL collateral, fixed at 250
+             (0.0, 32 / 35, [["DIP"], ["1L"]]),           # term collateral, primed by the DIP
+             (0.0, 3 / 35, [])]                           # unencumbered
+    return PlanCase(classes=cls, silos=silos, fixed_carve=250.0, pool_classes=["UNS"],
+                    admin=75.0, gift=("1L", "pool", 20.0),
+                    floors={"ABL": 1.0, "DIP": 1.0, "1L": 0.216, "UNS": 0.0})
+
+
+def _self_test() -> str:
+    case = halvorsen_case()
+    r = _class_recoveries(1300.0, case)
+    assert abs(r["1L"] - 0.592) < 1e-3 and abs(r["UNS"] - 35 / 1020) < 1e-3, r
+    no_gift = PlanCase(**{**case.__dict__, "gift": None})
+    assert abs(_class_recoveries(1300.0, no_gift)["1L"] - 0.608) < 1e-3     # 12-B before settlement
+    # agreement with 12-B's silo_waterfall when nothing is waived or gifted
+    simple = PlanCase(classes={"A": 100.0, "B": 200.0}, silos=[(0.0, 1.0, [["A"]]), (0.0, 0.0, [])],
+                      fixed_carve=0.0, pool_classes=["A", "B"], admin=0.0)
+    ref = silo_waterfall({"A": 100.0, "B": 200.0}, [Silo(value=150.0, tiers=[["A"]])], 0.0)
+    mine = _class_recoveries(150.0, simple)
+    assert all(abs(mine[k] - ref[k]) < 1e-9 for k in ref), (mine, ref)
+    # agreement with Chapter 13's waterfall_clearing on a one-entity, two-rank stack
+    pay, _ = waterfall_clearing({"co": {"value": 150.0, "parent": None}},
+                                [dict(id="A", creditor="ext", debtor="co", face=100.0, rank=1),
+                                 dict(id="B", creditor="ext", debtor="co", face=200.0, rank=2)])
+    assert abs(pay["A"] / 100 - mine["A"]) < 1e-9 and abs(pay["B"] / 200 - 0.25) < 1e-9
+    # roll-up conservation and the 4.2-point transfer
+    pkg = dip_package_value(150, 1.0, 910, 1400, 0.035, 0.08, 0.03, 0.02, 0.5, 662)
+    assert abs(pkg["rollup_gross"] - 52.5) < 1e-6 and abs(pkg["rollup_net"] - 24.696) < 0.01
+    tb = takeback_note_transfer(350.0, 0.08, 0.10, 5)
+    assert abs(tb["exact"] - 26.54) < 0.05
+    # the mixture: fulcrum probabilities near 0.83 / 0.17 by Monte Carlo
+    V = draw_plan_values([1300, 1900], [0.10, 0.12], [0.7, 0.3], n=100_000)
+    paths = recovery_paths(V, case)
+    pf = fulcrum_probabilities(paths, ["ABL", "DIP", "1L", "UNS"])
+    assert abs(pf["1L"] - 0.828) < 0.01 and abs(pf["UNS"] - 0.172) < 0.01, pf
+    flags = best_interests_flags(recovery_distribution(paths, {**case.floors, "UNS": None}))
+    assert flags["UNS"] is None, "a missing floor must not pass"
+    assert nol_value(600, 1495, 0.035, 390, 0.21, 87, 0.10) == 0.0      # attribute reduction first
+    return "plan_value_engine: all checks passed"
+
+
+if __name__ == "__main__":
+    print(_self_test())
+```

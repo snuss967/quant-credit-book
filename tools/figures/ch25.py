@@ -174,7 +174,7 @@ def fig_definition_graph():
             face, edge, wt = SEQ_BLUE_STEPS[4], BLUE, "bold"
         elif t in blast:
             face, edge = SEQ_BLUE_STEPS[0], BLUE
-        _box(ax, x, y, W, H, label.get(t, t), face=face, edge=edge, weight=wt, lw=1.1 if t in blast or t == amended else 0.9)
+        _box(ax, x, y, W, H, label.get(t, t), face=face, edge=edge, weight=wt, fs=7.8, lw=1.1 if t in blast or t == amended else 0.9)
 
     ax.text(94, 83.6, "β = 0: nothing\ndepends on it", fontsize=7.4, color=INK_2, ha="center", va="center",
             linespacing=1.15)
@@ -209,21 +209,21 @@ def fig_addback_capacity():
     a.fill_between(c * 100, before * 100, after * 100, color=SEQ_BLUE_STEPS[0], linewidth=0, zorder=1)
     a.plot(c * 100, before * 100, color=BLUE, linewidth=LW, zorder=3)
     a.plot(c * 100, after * 100, color=ORANGE, linewidth=LW, zorder=3)
-    label_end(a, 50, 50, "Cap on \u0045\u2080 (before)", BLUE, dx=-5, dy=11, ha="right")
-    label_end(a, 50, 100, "Cap on \u0045\u2080 + A (after)", ORANGE, dx=-5, dy=-1, ha="right")
+    label_end(a, 50, 50, "Cap on \u2130\u2080 (before)", BLUE, dx=-5, dy=11, ha="right")
+    label_end(a, 50, 100, "Cap on \u2130\u2080 + A (after)", ORANGE, dx=-5, dy=-1, ha="right")
     c0 = 0.25
     a.plot([c0 * 100] * 2, [c0 * 100, c0 / (1 - c0) * 100], color=INK_2, linewidth=0.9, zorder=4)
     for yy, col in ((c0 * 100, BLUE), (c0 / (1 - c0) * 100, ORANGE)):
         a.plot([c0 * 100], [yy], "o", color=col, markersize=6, zorder=5)
-    a.annotate("25.0% of \u0045\u2080", (c0 * 100, c0 * 100), xytext=(10, -10), textcoords="offset points",
+    a.annotate("25.0% of \u2130\u2080", (c0 * 100, c0 * 100), xytext=(10, -10), textcoords="offset points",
                fontsize=8.5, color=INK_2, ha="left", va="center")
-    a.annotate("33.3% of \u0045\u2080:\n8.3 points from\nfour words", (c0 * 100, c0 / (1 - c0) * 100),
+    a.annotate("33.3% of \u2130\u2080:\n8.3 points from\nfour words", (c0 * 100, c0 / (1 - c0) * 100),
                xytext=(2.0, 66), textcoords="data", fontsize=8.5, color=INK_2, ha="left", va="center",
                arrowprops=dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8, shrinkA=2, shrinkB=5))
     a.set_xlim(0, 50)
     a.set_ylim(0, 108)
     a.set_xlabel("Stated cap, c (% of EBITDA)")
-    a.set_ylabel("Allowed add-back (% of E\u2080)")
+    a.set_ylabel("Allowed add-back (% of \u2130\u2080)")
     a.set_title("One cap, two readings")
     note(a, "gap = c²/(1−c)", loc="lower right")
 
@@ -247,8 +247,8 @@ def fig_addback_capacity():
                fontsize=8.5, color=INK_2, ha="left", va="center",
                arrowprops=dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8, shrinkA=2, shrinkB=5))
     note(b, "slope 4.85 per \\$1 of \u2130\nabove \\$214mm", loc="upper left")
-    b.set_xlim(160, 300)
-    b.set_ylim(0, 470)
+    b.set_xlim(160, 290)
+    b.set_ylim(0, 600)
     b.set_xlabel("Covenant EBITDA, ℰ (\\$mm)")
     b.set_ylabel("Incremental debt capacity, K (\\$mm)")
     b.set_title("Capacity accelerates with EBITDA")
@@ -320,7 +320,7 @@ def _jcrew_panel(ax, trapdoor, title):
         _box(ax, x, y, bw, bh, txt, fs=7.8, lw=1.0, rounding=1.6)
 
     flow_c = BLUE if open_ else NEUTRAL
-    lw1, lw2, lw3 = (3.2, 2.2, 4.4) if open_ else (1.6, 1.6, 1.6)
+    lw1, lw2, lw3 = (3.2, 2.2, 5.4) if open_ else (1.6, 1.6, 1.6)
     gx = (xs + xn) / 2                                    # centre of the s -> N gap
     for rad, lw, yy, txt in ((-0.30, lw1, 34.5, "Non-guarantor investments basket: \\$150mm"),
                              (0.30, lw2, 5.5, "General investments basket: \\$100mm")):
@@ -371,16 +371,16 @@ def fig_token_vs_capacity():
     k = np.logspace(0, 3, 300)
     a.loglog(k, k ** 2 / xx, color=ORANGE, linewidth=LW, zorder=3)
     a.axhline(0.01, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
-    a.annotate("1% move in cosine", (1.2, 0.01), xytext=(0, 4), textcoords="offset points", fontsize=8,
-               color=INK_2, ha="left")
+    a.annotate("1% move in cosine", (1.2, 0.01), xytext=(0, -4), textcoords="offset points", fontsize=8,
+               color=INK_2, ha="left", va="top")
     k1 = 1.0
     a.plot([k1], [k1 ** 2 / xx], "o", color=ORANGE, markersize=6, zorder=5)
     a.annotate("One swapped ratio:\n1 \u2212 cos = " + _sci(1 / xx), (k1, 1 / xx), xytext=(12, -4),
                textcoords="offset points", fontsize=8.5, color=INK_2, ha="left", va="top")
     kc = math.sqrt(0.01 * xx)
     a.plot([kc], [0.01], "o", color=ORANGE, markersize=6, zorder=5)
-    a.annotate(f"{kc:.0f} occurrences\nall amended", (kc, 0.01), xytext=(-8, -12), textcoords="offset points",
-               fontsize=8.5, color=INK_2, ha="right", va="top")
+    a.annotate(f"{kc:.0f} occurrences\nall amended", (kc, 0.01), xytext=(-8, 8), textcoords="offset points",
+               fontsize=8.5, color=INK_2, ha="right", va="bottom")
     a.set_xlim(0.8, 1000)
     a.set_ylim(1e-8, 1.5)
     a.set_xlabel("Occurrences of “4.50” that are amended, k")
@@ -398,14 +398,14 @@ def fig_token_vs_capacity():
     for mm, cc in ((4.5, c0), (5.25, c1)):
         b.plot([mm, mm], [0, cc], color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
         b.plot([mm], [cc], "o", color=BLUE, markersize=6, zorder=5)
-    b.annotate("4.50x: \\$300mm", (4.5, c0), xytext=(9, -9), textcoords="offset points", fontsize=8.5,
+    b.annotate("4.50x:\n\\$300mm", (4.5, c0), xytext=(9, -9), textcoords="offset points", fontsize=8.5,
                color=INK_2, ha="left", va="top")
-    b.annotate("5.25x: \\$500mm", (5.25, c1), xytext=(-8, 8), textcoords="offset points", fontsize=8.5,
+    b.annotate("5.25x:\n\\$500mm", (5.25, c1), xytext=(-8, 8), textcoords="offset points", fontsize=8.5,
                color=INK_2, ha="right", va="bottom")
     _arrow(b, (4.95, c0), (4.95, c1), color=INK_2, lw=1.1, ms=8, sa=1, sb=1)
     b.text(4.99, (c0 + c1) / 2, "+\\$200mm", fontsize=9, color=INK, fontweight="bold", ha="left", va="center")
     b.set_xlim(4.0, 6.0)
-    b.set_ylim(0, 720)
+    b.set_ylim(0, 770)
     b.set_xlabel("Permitted first-lien net leverage, m (x)")
     b.set_ylabel("Ratio-basket capacity (\\$mm)")
     b.set_title("What the capacity vector sees")
@@ -441,21 +441,21 @@ def fig_docket_state_machine():
         on = i in (1, 2)                               # Organized->Contested and Contested->Standstill observed
         x0, x1 = xs[i] + bw / 2, xs[i + 1] - bw / 2
         _arrow(ax, (x0, y), (x1, y), color=BLUE if on else MUTED, lw=2.2 if on else 1.1, ms=9 if on else 7)
-        ax.text(xs[i] + 8.6, y - bh / 2 - 1.6, triggers[i], fontsize=7.0, color=INK_2, ha="center",
+        ax.text(xs[i] + 8.6, y - bh / 2 - 1.6, triggers[i], fontsize=7.6, color=INK_2, ha="center",
                 va="top", fontstyle="italic", linespacing=1.15)
 
     # Hughes docket entries as cards under the three states it passed through
     cy, ch, cw = 22.0, 17.0, 16.0
     cards = [(1, "Doc. 154\n2026-08-10", "Verified Statement\nof Noteholders\n(Rule 2019)"),
-             (2, "Doc. 320\n2026-09-10", "Emergency motion to\nterminate exclusive\nperiods"),
+             (2, "Doc. 320\n2026-09-10", "Emergency motion\nto terminate\nexclusive periods"),
              (3, "Doc. 369\n2026-09-20", "Stipulated order\nstaying litigation\nand investigations")]
     for i, head, body in cards:
         x = xs[i]
         ax.plot([x, x], [y - bh / 2, cy + ch / 2], color=BLUE, linewidth=0.9, zorder=1)
         _box(ax, x, cy, cw, ch, "", edge=BLUE, lw=0.9, rounding=1.2)
-        ax.text(x, cy + 4.6, head, fontsize=7.3, color=INK, fontweight="bold", ha="center", va="center",
+        ax.text(x, cy + 4.6, head, fontsize=7.6, color=INK, fontweight="bold", ha="center", va="center",
                 linespacing=1.15, zorder=5)
-        ax.text(x, cy - 3.6, body, fontsize=6.9, color=INK_2, ha="center", va="center", linespacing=1.15, zorder=5)
+        ax.text(x, cy - 3.6, body, fontsize=7.4, color=INK_2, ha="center", va="center", linespacing=1.15, zorder=5)
     # dwell brackets
     for (i, j, txt) in ((1, 2, "31 days"), (2, 3, "10 days")):
         yb = 8.4
@@ -467,10 +467,10 @@ def fig_docket_state_machine():
             ax.plot([xx, xx], [cy - ch / 2, yb + 1.5], color=NEUTRAL, linewidth=0.8, linestyle=(0, (2, 2)), zorder=1)
     ax.text(0.6, 1.2, "Hughes Satellite Systems Corp., Bankr. S.D. Tex. No. 26-90739", fontsize=7.6, color=INK_2,
             fontweight="bold", va="center", ha="left")
-    ax.text(99.4, 27.5, "Blue: the path Hughes took.\nGray: states it had not reached.", fontsize=7.4,
-            color=MUTED, ha="right", va="center", linespacing=1.2)
-    ax.text(99.4, 12.5, "Rate estimate: q\u0302\u2090\u1d66 = N\u2090\u1d66 / T\u2090,\nunfinished spells count in T\u2090",
-            fontsize=7.4, color=MUTED, ha="right", va="center", linespacing=1.2)
+    ax.text(99.4, 27.5, "Blue: the path the three entries show.\nGray: states before or after it.", fontsize=7.6,
+            color=INK_2, ha="right", va="center", linespacing=1.2)
+    ax.text(99.4, 12.5, r"Rate estimate: $\hat{q}_{ab} = N_{ab}\,/\,T_a$," + "\nunfinished spells count in $T_a$",
+            fontsize=7.6, color=INK_2, ha="right", va="center", linespacing=1.2)
     return finish(fig, "ch25_docket_state_machine")
 
 

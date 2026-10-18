@@ -81,7 +81,7 @@ def fig_z_basis_vintage():
         yv = 1e4 * (s_cds - z)
         a.plot([P], [yv], "o", color=BLUE, markersize=6, markeredgecolor="white", zorder=6)
         a.annotate(f"{c * 100:.0f}% coupon, {P:.0f}", (P, yv), xytext=(8, 2), textcoords="offset points",
-                   va="center", ha="left", fontsize=7.5, color=MUTED)
+                   va="center", ha="left", fontsize=8, color=INK_2)
     a.grid(axis="x", visible=False)
     a.set_title("(a) Two bases for one correctly priced bond")
 
@@ -118,18 +118,22 @@ def fig_haircut_roe_mtm():
     for bb, col in shades.items():
         y = np.array([100.0 * roe(bb, phi, x) for x in h])
         a.plot(h * 100.0, y, color=col)
-        label_end(a, h[-1] * 100.0, y[-1], f"b = {bb:.0f} bp", col, dx=5)
-    for hh, txt in ((0.15, "h = 15%"), (0.30, "h = 30%")):
+        label_end(a, h[-1] * 100.0, y[-1], f"b = \u2212{abs(bb):.0f} bp", col, dx=5)
+    # worked points: base haircut = BLUE, stressed (doubled) haircut = ORANGE, as in panel (b); the labels
+    # sit left of / above the points so they clear the curves and the dashed lines
+    for hh, txt, col, off, ha in ((0.15, "h = 15%", BLUE, (-7, -11), "right"),
+                                  (0.30, "h = 30%", ORANGE, (-5, 9), "right")):
         mark_event(a, hh * 100.0, txt)
         v = 100.0 * roe(-100.0, phi, hh)
-        a.plot([hh * 100], [v], "o", color=ORANGE, markersize=6.5, markeredgecolor="white", zorder=6)
-        a.annotate(f"{v:.1f}%", (hh * 100, v), xytext=(6, 7), textcoords="offset points", fontsize=8.5,
-                   color=INK_2, va="bottom")
+        a.plot([hh * 100], [v], "o", color=col, markersize=6.5, markeredgecolor="white", zorder=6)
+        a.annotate(f"{v:.1f}%", (hh * 100, v), xytext=off, textcoords="offset points", fontsize=8.5,
+                   color=INK_2, va="center", ha=ha)
     a.set_xlabel("Repo haircut h (% of position)")
     a.set_ylabel("Excess return on equity (% a year)")
     a.set_xlim(6, 52)
     a.grid(axis="x", visible=False)
-    note(a, "repo spread 40 bp", "lower left")
+    a.text(0.99, 0.56, "repo spread 40 bp", transform=a.transAxes, ha="right", va="center", fontsize=8,
+           color=MUTED)
     a.set_title("(a) Return on equity vs haircut")
 
     # (b) mark-to-market on equity vs widening of the basis, two haircuts
@@ -144,7 +148,7 @@ def fig_haircut_roe_mtm():
                fontsize=8, color=INK_2)
     pt = 100.0 * mtm(-150.0, D, 0.15)
     b.plot([150], [pt], "o", color=BLUE, markersize=6.5, markeredgecolor="white", zorder=6)
-    b.annotate("basis -100 → -250 bp:\n−45% of equity at h = 15%", (150, pt), xytext=(14, -80),
+    b.annotate("basis \u2212100 \u2192 \u2212250 bp:\n\u221245% of equity at h = 15%", (150, pt), xytext=(14, -80),
                textcoords="data", fontsize=8, color=INK_2, va="center", ha="left",
                arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.8, shrinkA=2, shrinkB=4))
     b.set_xlim(0, 300)
@@ -175,6 +179,10 @@ def fig_ctd_deliverable_prices():
     p5 = 100.0 * R_claim * (1.0 + 0.05 * 0.25)
     a.plot([1.5], [p8], "o", color=ORANGE, markersize=7, markeredgecolor="white", zorder=6)
     a.plot([22.0], [p5], "o", color=ORANGE, markersize=7, markeredgecolor="white", zorder=6)
+    a.annotate("8% due 1.5y", (1.5, p8), xytext=(8, -9), textcoords="offset points", ha="left", va="top",
+               fontsize=8, color=INK_2)
+    a.annotate("5% due 22y", (22.0, p5), xytext=(0, -9), textcoords="offset points", ha="center", va="top",
+               fontsize=8, color=INK_2)
     a.set_ylim(0, 118)
     a.set_xlim(0, 30)
     a.set_xlabel("Remaining maturity (years)")
@@ -240,14 +248,14 @@ def fig_auction_final_price():
     a.annotate(f"IMM {imm:.3f}", (-129, imm), xytext=(2, 9), textcoords="offset points", fontsize=8,
                color=INK_2, va="bottom")
     a.annotate("shaded: IMM ± 1-point Cap", (-129, imm - cap), xytext=(2, -4), textcoords="offset points",
-               fontsize=7.5, color=MUTED, va="top")
+               fontsize=8, color=INK_2, va="top")
     a.annotate("net forced sellers:\nprice walks down the bids\nuntil the bids run out", (-128, 38.5), ha="left",
                va="top", fontsize=8, color=INK_2)
     a.annotate("net forced buyers:\nprice walks up\nthe offers", (8, 12), ha="left", va="center", fontsize=8,
                color=INK_2)
-    a.annotate("offers run out\n(price 100)", (51, 36), xytext=(-4, -2), textcoords="offset points", ha="right",
+    a.annotate("offers run out\n(price 100)", (51, 40), xytext=(-4, -2), textcoords="offset points", ha="right",
                va="top", fontsize=8, color=INK_2)
-    a.annotate("bids\nrun out:\nprice 0", (-128, 1.5), ha="left", va="bottom", fontsize=7.5, color=INK_2)
+    a.annotate("bids\nrun out:\nprice 0", (-128, 1.5), ha="left", va="bottom", fontsize=8, color=INK_2)
     a.set_title("(a) The chapter's book")
 
     # (b) zoom on small selling open interest: a rogue high bid, with and without the cap
@@ -278,7 +286,7 @@ def fig_auction_final_price():
 # --------------------------------------------------------------------------------------------
 def fig_successor_cliffs():
     succ = E["successors"]
-    fig, (a, b) = new_figure("panel2", ncols=2)
+    fig, (a, b) = new_figure((7.0, 3.7), ncols=2, gridspec_kw={"width_ratios": [1.0, 1.1]})
 
     # (a) one new entity takes a share w; the original keeps 1 - w
     w = np.linspace(0.0, 1.0, 2001)
@@ -291,16 +299,16 @@ def fig_successor_cliffs():
     a.step(w * 100, orig, where="post", color=BLUE)
     a.step(w * 100, new, where="post", color=ORANGE)
     a.set_xlim(0, 100)
-    a.set_ylim(-3, 124)
+    a.set_ylim(-3, 134)
     a.set_xlabel("Share of debt moved to the new entity (%)")
     a.set_ylabel("Share of each CDS (%)")
     a.axvline(25, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
     a.axvline(75, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
-    a.annotate("above 25%:\nswap splits 50/50", (25, 123), xytext=(3, 0), textcoords="offset points", va="top",
+    a.annotate("above 25%:\nswap splits 50/50", (25, 133), xytext=(3, 0), textcoords="offset points", va="top",
                fontsize=8, color=INK_2)
-    a.annotate("75% or more:\nsole Successor", (75, 123), xytext=(3, 0), textcoords="offset points", va="top",
+    a.annotate("75% or more:\nsole\nSuccessor", (75, 133), xytext=(3, 0), textcoords="offset points", va="top",
                fontsize=8, color=INK_2)
-    label_end(a, 12, 100, "original entity", BLUE, dx=0, dy=-9, ha="center")
+    label_end(a, 12, 100, "original", BLUE, dx=0, dy=-9, ha="center")
     label_end(a, 88, 100, "new entity", ORANGE, dx=0, dy=-9, ha="center")
     a.set_yticks([0, 25, 50, 75, 100])
     a.grid(axis="x", visible=False)
@@ -341,13 +349,13 @@ def fig_successor_cliffs():
     b.spines["left"].set_visible(True)
     b.spines["bottom"].set_visible(True)
 
-    def lab(x, y, txt, dark=False, fs=7.5):
+    def lab(x, y, txt, dark=False, fs=8):
         b.text(x, y, txt, ha="center", va="center", fontsize=fs, color="white" if dark else INK)
 
     lab(12.5, 12.5, "unchanged")
     lab(50, 11, "original\n+ A")
     lab(12.5, 50, "original\n+ B")
-    lab(32.5, 33, "orig.\n+A+B", dark=True, fs=6.5)
+    lab(32.5, 33, "orig.\n+A+B", dark=True, fs=7)
     lab(50, 38, "A + B", dark=True)
     lab(86, 8, "A\nonly")
     lab(8, 86, "B\nonly")

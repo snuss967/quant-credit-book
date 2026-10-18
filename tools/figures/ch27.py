@@ -127,7 +127,7 @@ def fig_edge_decay():
         ("Value or carry signal\nT = 63 trading days", 63 * DAY, BLUE),
         ("Trend signal\nT = 42 trading days", 42 * DAY, ORANGE),
         ("Client RFQ\nT = 100 s", 100.0, AQUA),
-        ("Hedge-instrument jump\nT = 79 µs", 79e-6, VIOLET),
+        ("Hedge-instrument jump\nT = 79 µs", 79e-6, YELLOW),
     ]
     fig, ax = new_figure("wide")
     lag = np.logspace(-7, 8, 1200)
@@ -151,13 +151,13 @@ def fig_edge_decay():
     ax.annotate("1.5 s: the p99\nof the cold open", (1.5, 0.04), xytext=(-4, 0), textcoords="offset points",
                 ha="right", va="bottom", fontsize=8, color=INK_2)
 
-    # direct labels (slots 2-3 are low-contrast, so every curve is labelled on the plot)
+    # direct labels (aqua and yellow are low-contrast, so every curve is named beside the curve itself)
     def lab(x, y, text, ha, col):
         ax.annotate(text, (x, y), xytext=(8 if ha == "left" else -6, 0), textcoords="offset points", ha=ha,
                     va="center", fontsize=8, color=INK_2, linespacing=1.15)
 
     lab(-np.log(0.7) * curves[3][1], 0.7, curves[3][0], "left", curves[3][2])
-    lab(-np.log(0.5) * curves[2][1], 0.5, curves[2][0], "right", curves[2][2])
+    lab(-np.log(0.7) * curves[2][1], 0.7, curves[2][0], "left", curves[2][2])   # right of its curve, clear of the 1.5 s line
     lab(-np.log(0.5) * curves[1][1], 0.5, curves[1][0], "right", curves[1][2])
     lab(-np.log(0.5) * curves[0][1], 0.5, curves[0][0], "left", curves[0][2])
     ax.text(10 ** -3.4, 0.30, "Dots: the lag that\ncosts 1% of the edge", fontsize=8, color=MUTED, ha="left",
@@ -275,6 +275,9 @@ def fig_queue_tail():
                va="bottom", fontsize=8, color=INK_2)
     b.annotate("150-line PT: 78%", (150, 1 - 0.99 ** 150), xytext=(-7, 7), textcoords="offset points", ha="right",
                va="bottom", fontsize=8, color=INK_2)
+    label_end(b, 1000, 1.0, "1 in 100", BLUE, dx=-8, dy=-11, ha="right")
+    label_end(b, 1000, 1 - (1 - 0.001) ** 1000, "1 in 1,000", ORANGE, dx=-8, dy=11, ha="right")
+    label_end(b, 1000, 1 - (1 - 0.0001) ** 1000, "1 in 10,000", AQUA, dx=-8, dy=11, ha="right")
     b.legend(handles=[Line2D([], [], color=BLUE, linewidth=LW, label="1 call in 100 slow"),
                       Line2D([], [], color=ORANGE, linewidth=LW, label="1 in 1,000"),
                       Line2D([], [], color=AQUA, linewidth=LW, label="1 in 10,000")],
@@ -321,6 +324,8 @@ def fig_trigger_geometry():
         ax.text(px, py, n, ha="center", va="center", fontsize=8, color="white", fontweight="bold", zorder=6,
                 bbox=dict(boxstyle="circle,pad=0.25", facecolor=INK, edgecolor="none"))
     ax.text(0.325, 0.325, "both rules\npull the offer", ha="right", va="top", fontsize=8, color=INK_2,
+            linespacing=1.15, zorder=6)
+    ax.text(-0.325, -0.325, "both rules\npull the bid", ha="left", va="bottom", fontsize=8, color=INK_2,
             linespacing=1.15, zorder=6)
 
     ax.set_xlim(-lim, lim)

@@ -159,8 +159,8 @@ def fig_waterfall_call_spreads():
     ax1.set_xlabel(r"Firm value at resolution, $V_T$")
     ax1.set_ylabel("Payoff to each claim")
     kw = dict(fontsize=8, fontweight="bold", va="center", ha="center", zorder=6)
-    ax1.text(100, 20, "First lien\n0 to 40", color="white", **kw)
-    ax1.text(100, 47.5, "Second lien: 40 to 55", color=INK, **kw)
+    ax1.text(100, 20, "1st lien\n0 to 40", color="white", **kw)
+    ax1.text(100, 47.5, "2nd lien: 40 to 55", color=INK, **kw)
     ax1.text(100, 62.5, "Unsecured: 55 to 70", color=INK, **kw)
     ax1.text(115, 88, "Equity:\ncall at\nF = 70", color="white", **kw)
     ax1.text(3, 121, r"Each band is $(V_T-a_k)^+ - (V_T-b_k)^+$", fontsize=8, color=INK_2, va="center",
@@ -181,24 +181,26 @@ def fig_waterfall_call_spreads():
     for k in (40, 55, 70):
         ax2.plot([k, k], [0, float(lognormal_pdf(np.array([k]), V0, sig, r, T)[0])], color="white", linewidth=0.8,
                  zorder=4)
-    ax2.axvline(V0, color=INK, linewidth=1.0, linestyle=(0, (3, 2)), zorder=5)
+    ymax = pdf.max() * 1.7
+    ax2.plot([V0, V0], [0, ymax * 0.84], color=INK, linewidth=1.0, linestyle=(0, (3, 2)), zorder=5)
     ax2.set_xlim(0, 130)
-    ymax = pdf.max() * 1.55
     ax2.set_ylim(0, ymax)
     ax2.set_yticks([])
     ax2.grid(False)
     ax2.set_xticks([0, 40, 55, 70, 100, 130])
     ax2.set_xlabel(r"Firm value at resolution, $V_T$")
     ax2.set_ylabel("Risk-neutral density")
-    ax2.text(V0 + 2.5, ymax * 0.78, r"Today: $V_0 = 62$" + "\nunsecured is\nthe fulcrum", fontsize=8, color=INK,
+    ax2.text(V0 + 2.5, ymax * 0.73, r"Today: $V_0 = 62$" + "\nunsecured is\nthe fulcrum", fontsize=8, color=INK,
              ha="left", va="center")
-    # probabilities of ending in each interval, as a labelled strip along the top
-    xs = [20.0, 47.5, 62.5, 100.0]
-    for xc, p, (name, a, b, col) in zip(xs, probs, tranches):
-        ax2.text(xc, ymax * 0.94, f"{100 * p:.0f}%", fontsize=8.5, fontweight="bold", color=INK, ha="center",
+    # probability of ending in each interval, as a strip along the top that names each claim
+    xs = [19.0, 41.0, 68.0, 100.0]
+    short_names = ["1st lien", "2nd lien", "Unsecured", "Equity"]
+    for xc, p, name in zip(xs, probs, short_names):
+        ax2.text(xc, ymax * 0.955, f"{100 * p:.0f}%", fontsize=8.5, fontweight="bold", color=INK, ha="center",
                  va="center", zorder=6)
-    ax2.text(2, ymax * 0.76, "Chance $V_T$ lands\nin each claim's\ninterval = chance\nit is the fulcrum", fontsize=7.5,
-             color=MUTED, ha="left", va="center")
+        ax2.text(xc, ymax * 0.895, name, fontsize=8, color=INK_2, ha="center", va="center", zorder=6)
+    ax2.text(2, ymax * 0.72, "Chance $V_T$ lands\nin each claim's\ninterval = chance\nit is the fulcrum", fontsize=8,
+             color=INK_2, ha="left", va="center")
     return finish(fig, "ch23_waterfall_call_spreads")
 
 
@@ -283,8 +285,8 @@ def fig_creditgrades_ghost():
     ax1.set_ylim(0.55, 1.02)
     ax1.set_xlabel("Years")
     ax1.set_ylabel(r"Survival probability $\mathcal{S}(t)$")
-    ax1.annotate(f"At $S_0=\\$5$, {100 * (1 - s5):.0f}% of the default\nprobability is booked at t = 0:\nthe time-zero ghost", (0.0, s5),
-                 xytext=(0.35, 0.86), textcoords="data", fontsize=8, color=INK, ha="left", va="center",
+    ax1.annotate(f"At $S_0=\\$5$, a {100 * (1 - s5):.0f}% default\nprobability is booked at\nt = 0: the time-zero ghost", (0.0, s5),
+                 xytext=(0.45, 0.805), textcoords="data", fontsize=8, color=INK, ha="left", va="center",
                  arrowprops=dict(arrowstyle="-", color=INK_2, lw=0.8, shrinkA=2, shrinkB=4))
     label_end(ax1, 5.0, float(cg_survival(5.0, 30.0, sE, F_ps)), r"\$30", RAMP["light"])
     label_end(ax1, 5.0, float(cg_survival(5.0, 15.0, sE, F_ps)), r"\$15", RAMP["mid"])
@@ -295,7 +297,7 @@ def fig_creditgrades_ghost():
     for S0, col, lab in names:
         sp = np.array([cg_cds_spread(T, S0, sE, F_ps) for T in tenors]) * 1e4
         ax2.plot(tenors, sp, color=col, linewidth=LW, marker="o", markersize=4, zorder=3)
-        label_end(ax2, tenors[-1], sp[-1], end_lab[S0], col)
+        label_end(ax2, tenors[-1], sp[-1], end_lab[S0], col, dy={30.0: -4, 15.0: 4, 5.0: 0}[S0])
     ax2.set_yscale("log")
     ax2.set_xlim(0, 10)
     ax2.set_ylim(10, 12000)
@@ -352,7 +354,7 @@ def fig_jtd_skew_floor():
                  color=INK_2, ha="left", va="bottom")
     ax2.text(0.02, 0.45, "no jump: falls to 0", fontsize=8, color=MUTED, ha="left", va="bottom")
     ax2.set_xlim(0.0, 1.0)
-    ax2.set_ylim(0, 14)
+    ax2.set_ylim(0, 16.5)
     ax2.set_xlabel(r"Strike / spot, $K/S_0$")
     ax2.set_ylabel(r"Put price per dollar of strike, $P(K)/K$ (%)")
     note(ax2, r"$\sigma=30\%$, $T=1$, $r=3\%$", loc="upper left")
@@ -373,15 +375,17 @@ def fig_bank_run_runway():
     carried = d1["start"] + d1["raised"] - d1["outflow"]
     short = d2["liquidity"] - d2["outflow"]
 
-    steps = [("Opening\ncash", d1["start"], "total", f"{d1['start']:.0f}"),
-             ("Sell\nsecurities", d1["raised"], "in", f"+{d1['raised']:.0f}"),
-             ("Day-1\nliquidity", d1["liquidity"], "total", f"{d1['liquidity']:.0f}"),
-             ("Day-1\noutflow", -d1["outflow"], "out", f"−{d1['outflow']:.0f}"),
-             ("Carried\nto day 2", carried, "total", f"{carried:.1f}"),
-             ("Sell\nsecurities", d2["raised"], "in", f"+{d2['raised']:.0f}"),
-             ("Day-2\nliquidity", d2["liquidity"], "total", f"{d2['liquidity']:.0f}"),
-             ("Day-2\noutflow", -d2["outflow"], "out", f"−{d2['outflow']:.0f}"),
-             ("Shortfall:\ndefault", short, "default", f"{short:.0f}".replace("-", "−"))]
+    def num(v):                      # whole bn when exact, else two decimals, so every bar adds up on the page
+        return f"{v:.0f}" if abs(v - round(v)) < 1e-9 else f"{v:.2f}"
+    steps = [("Opening\ncash", d1["start"], "total", num(d1["start"])),
+             ("Sell\nsecurities", d1["raised"], "in", "+" + num(d1["raised"])),
+             ("Day-1\nliquidity", d1["liquidity"], "total", num(d1["liquidity"])),
+             ("Day-1\noutflow", -d1["outflow"], "out", "−" + num(d1["outflow"])),
+             ("Carried\nto day 2", carried, "total", num(carried)),
+             ("Sell\nsecurities", d2["raised"], "in", "+" + num(d2["raised"])),
+             ("Day-2\nliquidity", d2["liquidity"], "total", num(d2["liquidity"])),
+             ("Day-2\noutflow", -d2["outflow"], "out", "−" + num(d2["outflow"])),
+             ("Shortfall:\ndefault", short, "default", "−" + num(-short))]
     fig, ax = new_figure((7.0, 3.9))
     ax.grid(False)
     cum = 0.0

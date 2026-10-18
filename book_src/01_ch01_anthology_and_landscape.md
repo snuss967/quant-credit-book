@@ -552,15 +552,109 @@ Use it to size capacity before a trigger date, not to forecast the price: capaci
 
 ### 1.8.2 Case Study A: Ford and the March 2020 Fallen-Angel Wave
 
-March 2020 is the flow graph with every edge lit. More than \$90bn of debt fell from investment grade in that one month, nearly twice the prior monthly record of \$48bn set in 2005, and the first half of 2020 reached \$197bn, the largest on record (J.P. Morgan data via T. Rowe Price, Nov 2020). The headline was Ford: S&P cut it to BB+ on 25 March 2020 (as reported by Bloomberg), and with two high-yield ratings roughly \$36bn of Ford debt left the IG index at the month-end rebalance (T. Rowe Price). Man's paper describes the mechanism exactly: "When a company is downgraded to below investment grade status by the ratings agencies, it drops out of the index at the next monthly rebalancing and there is a significant wave of forced selling around the event" (*Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.38*).
+**Long Scene 1: The Month Every Edge Lit Up.** *The desk, its people and its positions are fictional, and every number attributed to the desk is illustrative. Every dated market fact is sourced, and nothing a real firm did is invented.*
 
-Walk the graph. *Who sells, and when:* IG index funds and ETFs on the rebalance date (a date anyone could read off a calendar); IG active funds over weeks; insurers over quarters, because higher capital charges make holding costly but not impossible. *Who buys:* HY index funds, forced to add the bond at inclusion, which made Ford one of the largest issuers in HY indices overnight; fallen-angel programs; crossover funds. *What broke:* absorption capacity, because HY funds were themselves facing record outflows. *What changed it:* the Federal Reserve. The Secondary Market Corporate Credit Facility was established on 23 March 2020, and in April the Fed extended its corporate facilities to issuers that had been investment grade as of 22 March, which covered Ford. A forced-seller event became a forced-buyer event by announcement. In (1.6), a new absorber with very large $A$ appeared, and $I_k$ went from huge to manageable before most of the selling had happened.
+Once a quarter, on a Saturday, Ines runs what the desk calls a replay. The rules are simple and strictly enforced. Pick a historical episode. Put the calendar back to the first day of it. Then trade it, out loud, using only what was known on each day, and anyone who mentions the ending pays for lunch. "It's how you practise a hand you can never play again," Ines says. "Poker players do it with hand histories. Pilots do it in simulators. Credit people mostly do it at the bar, badly."
+
+This quarter it was March 2020, and the reason was Mags. She had traded it, from a distressed book at a fund she describes only as "a place with good coffee and bad risk limits," and she arrived at 9:00 a.m. with a cardboard box of printed run sheets she had kept for six years, in the way some people keep letters. Kaz had the flow-graph code from §1.8.1 on the projector. Theo had the USB stick in his pocket and a notebook on the table. The pastries were from the place by the station, which is to say they were technically pastries.
+
+"Back in my day," Mags said, sitting down, and for once nobody groaned, because for once her day was the subject. "Back in my day, which is this month, the problem wasn't that nobody had a model. Everybody had a model. The problem was that every model assumed somebody would be on the other side."
+
+**Act 1: Thursday, 12 March 2020.** Ines put the date on the whiteboard. "It's the close. What do you see?"
+
+Kaz had the numbers ready. On 12 March 2020, the iShares iBoxx \$ Investment Grade Corporate Bond ETF, LQD, closed at a 5.0% discount to its net asset value. The Vanguard and SPDR intermediate corporate funds, VCIT and SPIB, were at discounts of 3.2% and 3.1% (WealthManagement.com, 16 Mar 2020). "Five points," Kaz said. "On the most liquid IG product in the world. Buy the ETF, short the basket, deliver the bonds, collect five points. It's an arbitrage. It's the cleanest one I've ever seen."
+
+"Short what basket?" Mags asked. "With what borrow? At whose price?"
+
+"At NAV."
+
+"NAV is a number somebody's pricing service computed at four o'clock from bonds that didn't trade." Mags pulled a run sheet from the box and slid it across: a dealer's offering sheet from that week, a column of IG corporates with bids and, under most of the offers, nothing at all. "That's what the basket looked like. You want to sell me the basket at NAV? I'll buy all of it. I'll buy it all day."
+
+Kaz looked at the sheet for a long time. Theo, who had once spent a week reconciling a borrower's reported cash to its actual bank statements, recognized the expression: the moment you realise the number in the model is a description of a world that is no longer there.
+
+The BIS later measured how far that world had drifted. Todorov's study of bond ETF arbitrage (BIS Quarterly Review, March 2021) found that corporate bond ETF creation baskets covered about 20% of holdings and redemption baskets about 35%, that the holdings' bid–ask spread was about 17 times the ETF's, and that tracking error in March 2020 exceeded 200 bp against an average of 0.7 bp. The ETF was trading. The bonds were not. The authorized participants who normally close the gap had stopped, because they could not sell the underlying bonds at NAV either.
+
+"So which price is right?" Ines asked.
+
+"The one that trades," Theo said, slowly. "The ETF."
+
+"Write that down," Ines said, and moved the clock forward one day. "Friday, 13 March. Close."
+
+On 13 March the LQD discount was 0.19% (WealthManagement.com). Kaz started to say "so the arb worked," and Mags raised one finger. "The gap closed because the NAV came down to meet the ETF. The bonds caught up with the truth. If you'd bought the ETF and shorted the basket at Thursday's NAV, you'd have needed to *find* those bonds to deliver, at Friday's prices, in a market with no offers." Kaz conceded the point, which on this desk is entered in the minutes. (The technical post-mortem of Act 1 is §1.8.3.)
+
+**Act 2: Monday, 23 March 2020.** "Eleven days later," Ines said. "Things have not improved. What's new?"
+
+What was new was an absorber. On 23 March 2020 the Federal Reserve established the Secondary Market Corporate Credit Facility (Federal Reserve). Kaz added a node to the graph on the projector: a dashed box labelled *Fed (SMCCF)*, with an arrow into the IG segment and a capacity so large that the line width broke the plotting library's default scale.
+
+"Back in my day," Mags said, "I read that announcement on my phone in an elevator, and when the doors opened I knew two things. One, the IG market was going to stop falling. Two, anything that wasn't IG was going to fall harder, because everybody would sell what the Fed wouldn't buy to raise cash for what it would."
+
+"Is that in the model?" Theo asked.
+
+"It's in the edges," Kaz said, and showed him. The facility was for investment-grade issuers. In equation (1.6), a new absorber with a very large $A$ had appeared, but only in the segments it was allowed to buy. Everything outside that boundary still had the old, exhausted absorbers: high-yield funds that were themselves facing record outflows, crossover funds that had already spent their dry powder, and dealers whose balance sheets were full. "The Fed made the IG imbalance small," Kaz said. "It made the boundary very important."
+
+"Which brings us to the boundary," said Ines.
+
+**Act 3: Wednesday, 25 March 2020.** On 25 March 2020 S&P cut Ford to BB+ (as reported by Bloomberg). With two high-yield ratings, roughly \$36bn of Ford debt would leave the investment-grade index at the month-end rebalance (T. Rowe Price, Nov 2020). Ford was not alone; it was the headline. More than \$90bn of debt fell from investment grade in that one month, nearly twice the prior monthly record of \$48bn set in 2005, and the first half of 2020 would reach \$197bn, the largest on record (J.P. Morgan data via T. Rowe Price, Nov 2020).
+
+Kaz read the mechanism aloud from Man's paper, because it describes the next six days exactly:
+
+"'When a company is downgraded to below investment grade status by the ratings agencies, it drops out of the index at the next monthly rebalancing and there is a significant wave of forced selling around the event'" (*Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.38*).
+
+"That's a date," Theo said. "It's on a calendar. Anyone could have read it."
+
+"Everyone did," Mags said. "That's the point. A forced sale you can see coming is still a forced sale. The seller has no choice about *whether*. They only have a choice about how badly to do it."
+
+Kaz ran the graph with the demo numbers from Listing 1.3, which are Ford-sized and illustrative: holders forced to sell \$12.9bn; absorbers with \$6.5bn of capacity; \$6.4bn left over for the dealers. At \$0.5bn of daily volume and an impact of 0.4 points per day of volume, the imbalance of 12.8 days' volume opened a dent of 5.12 points below fair value. With the stress toggle on, every absorber switched off, the March 2020 setting, all \$12.9bn went to the dealers, and the dent more than doubled.
+
+"Which is it?" Theo asked. "Stress or not?"
+
+"That," said Ines, "is the only question that matters this week, and the model can't answer it. The model can tell you what each answer costs."
+
+Then came the part of the replay that nobody puts in a war story, which took most of the next hour. Theo, reading down the holdings table Kaz had loaded, noticed that one large fund appeared twice: once in the "IG index funds" column and again in "IG active," because the vendor's holdings file classified a fund-of-funds by its wrapper rather than by its rulebook. The forced supply was overstated by the size of that fund. Kaz fixed the mapping, re-ran the graph, and the conservation assertion, which had been passing all along, kept passing, because a double-counted seller is still perfectly conserved: it sells twice and someone buys twice. "The assertion checks the plumbing," Kaz said, a little defensively, "not the census." Then Mags pointed out that the insurers' edge was firing on the rebalance date, when every insurer she had known in 2020 sold over the following quarters, if at all, because a higher capital charge makes holding costly but not impossible. Kaz split the insurer edge into a slow window, which shrank the day-one imbalance and fattened the tail of the pressure curve. Neither fix was clever. Both changed the answer by more than any parameter Kaz had spent the morning tuning. That is what the "Where this blows up" paragraph in §1.8.1 looks like on a Saturday: holders double-counted, windows misaligned, and a model that is exactly as good as its census.
+
+<!-- FIGURE: ch01_march2020_timeline.png (12 Mar LQD −5.0% / VCIT −3.2% / SPIB −3.1%; 13 Mar −0.19%; 23 Mar SMCCF; 25 Mar Ford to BB+; 31 Mar index rebalance; 12 May ETF purchases begin; Jun bonds; 31 Dec purchases end) -->
+
+**Act 4: Monday, 30 March 2020, the decision point.** Ines wiped the board and wrote one line. "Rebalance is tomorrow. Who has to sell, who has to buy, and what do we bid?"
+
+Kaz went first, because Kaz always goes first. "The sellers are IG index funds and ETFs. They are the textbook uninformed seller. They don't know anything about Ford; they know about a rulebook. So $\pi \approx 0$. The toxicity term vanishes. The bid is fair value minus inventory minus cost, and the only hard part is sizing the inventory term, because $\sigma_{\text{IDO}}$ is enormous right now. Use DTS, with the crisis slope." Kaz sat back. "Buy. Size by DTS. Collect the reversal."
+
+Mags shook her head, not in disagreement exactly. "I've seen fallen angels stay fallen," she said. "Your $\pi$ is about the *seller*. It says the index fund isn't selling because it knows something. Fine. But the seller doesn't have to know anything for the bond to be worth less next month. Ford sells cars. In March 2020 nobody was buying cars. The fair-value term is moving under you while you're busy congratulating yourself about the toxicity term." She tapped the run sheet. "A forced seller is information-free about the bond. It isn't a guarantee about the bond."
+
+"So the distance to default matters," Theo said.
+
+"Distance to default, equity momentum, whether anyone in the capital structure has hired counsel," Mags said. "All the things that tell you whether this is a fallen angel or a falling knife."
+
+Theo had been quiet, drawing the graph in his notebook. Then he asked the question the replay was designed to provoke. "The Fed's facility is for IG issuers. Ford isn't IG any more. But what if the Fed decides that bonds which were IG a week ago still count? What does that do to $A$?"
+
+"Is that a question," Kaz asked, "or are you buying lunch?"
+
+"It's a question. It's 30 March. I'm asking what *could* happen."
+
+The room went quiet in the way a room does when someone has asked the right question for the wrong reason, or the wrong question for the right one. "If that happened," Kaz said, "there would be a new absorber, with a very large $A$, on the high-yield side of the boundary. The imbalance would collapse. The dent would heal faster. And the reversal you were about to be paid for would be paid to you by the central bank, not earned by your balance sheet."
+
+"So do you want it to happen or not?" Ines asked.
+
+"I want it to happen," Theo said. "I just don't want to pretend I'm smart if it does."
+
+Ines handed out index cards. "It is 30 March 2020. The rebalance is tomorrow. You do not know what the Fed will do in April. Write three things: what you bid, in what size, and why. Then we'll look at what happened."
+
+The question is the reader's too. Before turning the page, write your own card: *what would you bid, in what size, and why?*
+
+<!-- FIGURE: ch01_forced_seller_flow_graph.png (holders: IG index funds, IG active, insurers, CLOs, open-end HY; absorbers: HY index funds, fallen-angel programs, crossover/distressed, dealer residual; Fed dashed from t0+10; widths from the Listing 1.3 demo: $12.9bn supply, $6.5bn capacity, $6.4bn dealer residual) -->
+
+**What happened, and the answer.** Walk the graph. *Who sells, and when:* IG index funds and ETFs on the rebalance date (a date anyone could read off a calendar); IG active funds over weeks; insurers over quarters, because higher capital charges make holding costly but not impossible. *Who buys:* HY index funds, forced to add the bond at inclusion, which made Ford one of the largest issuers in HY indices overnight; fallen-angel programs; crossover funds. *What broke:* absorption capacity, because HY funds were themselves facing record outflows. *What changed it:* the Federal Reserve. The Secondary Market Corporate Credit Facility was established on 23 March 2020, and in April the Fed extended its corporate facilities to issuers that had been investment grade as of 22 March, which covered Ford. A forced-seller event became a forced-buyer event by announcement. In (1.6), a new absorber with very large $A$ appeared, and $I_k$ went from huge to manageable before most of the selling had happened.
 
 *How a systematic desk would have flagged it:* distance to default collapsing through February and March as equity fell and equity volatility rose (§1.5); Ford's equity in the bottom momentum decile (§1.6); the rating-agency watch list giving the trigger date, and the index calendar giving the window. *How it would have traded it:* estimate $Q^{\text{sell}}$ by holder, stand ready to absorb at the rebalance with a bid that charged for inventory and cost but put $\pi$ near zero (index funds are the textbook uninformed seller), and size it with DTS rather than duration. IDO or it didn't happen: the profit that followed was mostly the Fed and spread beta, and a desk that booked it as alpha learned nothing.
 
+The cards, when Ines turned them over, were instructive. Kaz had bid for full size at a DTS-scaled concession and written "$\pi = 0$" with a box around it. Mags had bid for a third of Kaz's size, written "fallen angel or falling knife?" and drawn an arrow to Ford's distance to default. Theo had bid for half, and under "why" he had written: *the seller is forced; the bond is not safe; the absorber I'm counting on might be me.* Ines read it twice and pinned it to the board. "That's the trade," she said. "Not because it made the most money. It didn't; Kaz's did, because the Fed bailed out the size. It's the trade because it would have survived the version of April where the Fed didn't come."
+
+Mags packed the run sheets back into the box. At the door she stopped, which she rarely does. "Back in my day we did all of this on the phone, by memory, and half of us got it wrong," she said. "This is better." It was the closest thing to praise anyone on the desk had heard her give a model, and Kaz wrote the date in a notebook.
+
 ### 1.8.3 Case Study B: 12 March 2020, LQD at a 5% Discount
 
-On 12 March 2020, the iShares iBoxx \$ Investment Grade Corporate Bond ETF (LQD) closed at a 5.0% discount to its net asset value; the next day the discount was 0.19%, while VCIT and SPIB had shown discounts of 3.2% and 3.1% (WealthManagement.com, 16 Mar 2020). Kaz's first instinct was arbitrage: buy the ETF, short the basket, collect five points. The problem was the basket. The NAV was computed from evaluated bond prices that had not traded, so it was stale, and the ETF price was the only live price in the market. Authorized participants stopped closing the gap because they could not sell the underlying bonds at NAV either. The ETF was not mispriced; the NAV was.
+This is the technical post-mortem of Act 1 of the replay. On 12 March 2020, the iShares iBoxx \$ Investment Grade Corporate Bond ETF (LQD) closed at a 5.0% discount to its net asset value; the next day the discount was 0.19%, while VCIT and SPIB had shown discounts of 3.2% and 3.1% (WealthManagement.com, 16 Mar 2020). Kaz's first instinct was arbitrage: buy the ETF, short the basket, collect five points. The problem was the basket. The NAV was computed from evaluated bond prices that had not traded, so it was stale, and the ETF price was the only live price in the market. Authorized participants stopped closing the gap because they could not sell the underlying bonds at NAV either. The ETF was not mispriced; the NAV was.
+
+Read that back through the bid equation and it is the most uncomfortable case in the chapter. Every term in (1.2) is measured from $S_t$, and $S_t$ is a mid built from exactly the kind of evaluated prices that made up the NAV; on 12 March 2020 the mid itself was the lie. A perfect toxicity model and a perfectly sized inventory term would both have been subtracted from the wrong number, so neither $\pi$ nor $q$ could save you: the only defence was to notice that the one live price in the market, the ETF's, disagreed with your mid by five points, and to believe the price that traded.
 
 In the bid equation, both the inventory term and the cost term exploded at once: $\sigma_{\text{IDO}}$ jumped because DTS-scaled volatility jumps in a crisis (Ben Dor p.26), and $c(\Delta q)$ jumped because the exit was the same crowded door. In the flow graph, open-end funds and ETFs became sellers of whatever was liquid, and the absorber of last resort arrived only by announcement: the SMCCF was established on 23 March 2020, began buying ETFs on 12 May 2020 (New York Fed, 11 May 2020) and corporate bonds in June, and ceased purchases on 31 December 2020 (Federal Reserve). Chapter 20 rebuilds the creation–redemption arbitrage band and shows why it widens exactly when you want to use it.
 

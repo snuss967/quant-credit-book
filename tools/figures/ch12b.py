@@ -64,8 +64,8 @@ def fig_out_of_court_machine():
     perf = draw_node(ax, 22, 75, 19, 8, "Performing", "runway above ~12 months", ec=NEUTRAL)
     stre = draw_node(ax, 22, 58, 19, 8, "Stressed", "runway below ~12 months", ec=NEUTRAL, fc=TINT)
     grace = draw_node(ax, 51, 58, 17, 8, "Grace", "invariant c \u2264 30 days", ec=ORANGE, fc=TINT)
-    eod = draw_node(ax, 78, 58, 19, 8, "Event of default", "cross-default fans out", ec=ORANGE, fc=TINT)
-    forb = draw_node(ax, 78, 41, 19, 8, "Forbearance", "clock of weeks", ec=ORANGE, fc=TINT)
+    eod = draw_node(ax, 76, 58, 19, 8, "Event of default", "cross-default fans out", ec=ORANGE, fc=TINT)
+    forb = draw_node(ax, 76, 41, 19, 8, "Forbearance", "clock of weeks", ec=ORANGE, fc=TINT)
     lmt = draw_node(ax, 22, 37, 27, 11, "Post-LMT", "A&E, exchange, uptier,\ndrop-down, double-dip", ec=BLUE, fc=TINT)
 
     rsa = draw_node(ax, 24, 11, 19, 8, "RSA signed", "milestone clocks", ec=VIOLET)
@@ -79,10 +79,10 @@ def fig_out_of_court_machine():
     draw_arrow(ax, stre.R(), grace.L())
     edge_label(ax, 37.0, 64.3, "missed\ninterest", bg=TINT)
     draw_arrow(ax, grace.R(), eod.L())
-    edge_label(ax, 64.5, 64.3, "grace expires,\nforced", bg=TINT)
+    edge_label(ax, 63.0, 64.3, "grace expires,\nforced", bg=TINT)
     # forbearance from EoD and from Grace
     draw_arrow(ax, eod.B(), forb.T())
-    edge_label(ax, 80.0, 49.5, "forbearance: Required\nLenders (loans) or\nmajority (bonds)", ha="left", bg=TINT)
+    edge_label(ax, 77.6, 49.5, "forbearance: Required\nLenders (loans) or\nmajority (bonds)", ha="left", bg=TINT)
     draw_arrow(ax, grace.B(dx=4), forb.L(dy=2), lw=1.0, ls=(0, (4, 3)))
     # LMT edges and the re-default edge
     draw_arrow(ax, stre.B(dx=-4), lmt.T(dx=-4))
@@ -117,62 +117,58 @@ def fig_out_of_court_machine():
 def fig_chapter11_clocks():
     # (label, group colour, [(start, end, kind)], end label, marker)
     BL, OR, VI = BLUE, ORANGE, VIOLET
+    xmin, xmax = -140, 700
     rows = [
-        ("Automatic stay (§362)",                       BL, [(0, 640, "solid")], "until relief or case end", "arrow"),
-        ("Interim-relief window (Rule 6003)",               BL, [(0, 21, "solid")], "21 d", None),
-        ("Schedules due (Rule 1007(c))",                    BL, [(0, 14, "solid")], "14 d, usually extended", None),
-        ("Final DIP hearing notice (Rule 4001(c)(2))",      BL, [(0, 14, "solid")], "at least 14 d", None),
-        ("§341 meeting (Rule 2003(a))",                 BL, [(21, 40, "solid")], "day 21–40", None),
-        ("Lien-challenge period (DIP order)",               OR, [(0, 60, "mid"), (60, 75, "solid")], "60–75 d", None),
-        ("Exclusivity to file (§1121(b), (d)(2))",      OR, [(0, 120, "solid"), (120, 548, "light")], "120 d; cap 18 mo", None),
-        ("Exclusivity to solicit (§1121(c)(3), (d)(2))", OR, [(0, 180, "solid"), (180, 608, "light")], "180 d; cap 20 mo", None),
-        ("Real-property leases (§365(d)(4))",           VI, [(0, 120, "solid"), (120, 210, "mid")], "120 + 90 d", None),
-        ("Governmental bar date (§502(b)(9))",          VI, [(0, 180, "solid")], "180 d", None),
-        ("Avoidance actions (§546(a))",                 VI, [(0, 640, "solid")], "2 years (730 d)", "arrow"),
-        ("Preference look-back (§547(b)(4))",           VI, [(-365, -90, "light"), (-90, 0, "solid")], "90 d; insiders 1 year", None),
-        ("503(b)(9) goods look-back (§503(b)(9))",      VI, [(-20, 0, "solid")], "20 d", None),
+        ("Automatic stay (\u00a7362)",                    BL, [(0, 1, "solid")], "until relief or case end", "arrow"),
+        ("Interim-relief window (Rule 6003)",            BL, [(0, 21, "solid")], "21 d", None),
+        ("Schedules due (Rule 1007(c))",                 BL, [(0, 14, "solid")], "14 d, usually extended", None),
+        ("Final DIP hearing (Rule 4001(c))",             BL, [(0, 14, "solid")], "at least 14 d after service", None),
+        ("\u00a7341 meeting (Rule 2003(a))",              BL, [(21, 40, "solid")], "day 21\u201340", None),
+        ("Lien-challenge period (DIP order)",            OR, [(0, 60, "mid"), (60, 75, "solid")], "60\u201375 d", None),
+        ("Exclusivity to file (\u00a71121(b))",           OR, [(0, 120, "solid"), (120, 548, "light")], "120 d; cap 18 months", None),
+        ("Exclusivity to solicit (\u00a71121(c)(3))",     OR, [(0, 180, "solid"), (180, 608, "light")], "180 d; cap 20 months", None),
+        ("Real-property leases (\u00a7365(d)(4))",        VI, [(0, 120, "solid"), (120, 210, "mid")], "120 + 90 d", None),
+        ("Governmental bar date (\u00a7502(b)(9))",       VI, [(0, 180, "solid")], "180 d", None),
+        ("Avoidance actions (\u00a7546(a))",              VI, [(0, 1, "solid")], "2 years (730 d)", "arrow"),
+        ("Preference look-back (\u00a7547(b)(4))",        VI, [(-365, -90, "light"), (-90, 0, "solid")], "90 d; insiders 1 year", None),
+        ("Goods look-back (\u00a7503(b)(9))",             VI, [(-20, 0, "solid")], "20 d", None),
     ]
     n = len(rows)
-    fig, ax = new_figure((7.0, 5.0))
+    fig, ax = new_figure((7.0, 4.9))
     ax.grid(False)
     ax.grid(axis="x", color=GRID, linewidth=0.7)
     ax.set_axisbelow(True)
-    xmin, xmax = -140, 650
     bar_h = 0.58
     alpha = {"solid": 1.0, "mid": 0.55, "light": 0.28}
     for i, (label, col, segs, endlab, mk) in enumerate(rows):
         y = n - 1 - i
-        for (a, b, kind) in segs:
-            a_c = max(a, xmin); b_c = min(b, xmax - 8)
-            ax.barh(y, b_c - a_c, left=a_c, height=bar_h, color=col, alpha=alpha[kind], linewidth=0, zorder=3)
-        a_last, b_last = segs[-1][0], segs[-1][1]
-        start_first = segs[0][0]
         if mk == "arrow":
-            ax.annotate("", xy=(xmax - 1, y), xytext=(xmax - 30, y),
-                        arrowprops=dict(arrowstyle="-|>", color=col, lw=1.4, shrinkA=0, shrinkB=0), zorder=4)
-            ax.text(xmax - 36, y, endlab, ha="right", va="center", fontsize=7.6, color=INK, zorder=5,
-                    bbox=dict(fc=SURFACE, ec="none", pad=0.8, alpha=0.9))
-        else:
-            ax.text(min(b_last, xmax) + 7, y, endlab, ha="left", va="center", fontsize=7.6, color=INK_2, zorder=5)
-    # the petition date and the stated caps
+            # open-ended clock: a bar to the right edge with an arrowhead, label inside the bar
+            ax.barh(y, xmax - 14, left=0, height=bar_h, color=col, alpha=alpha["solid"], linewidth=0, zorder=3)
+            ax.plot([xmax - 10], [y], marker=">", color=col, markersize=7, clip_on=False, zorder=4, linestyle="none")
+            ax.text(14, y, endlab, ha="left", va="center", fontsize=7.8, color=SURFACE, fontweight="bold", zorder=5)
+            continue
+        for (a, b, kind) in segs:
+            ax.barh(y, b - a, left=a, height=bar_h, color=col, alpha=alpha[kind], linewidth=0, zorder=3)
+        ax.text(segs[-1][1] + 8, y, endlab, ha="left", va="center", fontsize=7.8, color=INK_2, zorder=5)
+        if segs[0][0] < xmin:       # the look-back runs past the left edge of the axis
+            ax.plot([xmin + 5], [y], marker="<", color=col, alpha=alpha["light"], markersize=6, clip_on=False,
+                    zorder=4, linestyle="none")
     ax.axvline(0, color=INK_2, linewidth=1.0, zorder=4)
-    ax.annotate("petition (order for relief)", (0, n - 0.45), xytext=(6, 0), textcoords="offset points",
-                fontsize=7.8, color=INK_2, va="bottom", ha="left", annotation_clip=False)
+    ax.text(6, n - 0.2, "petition (order for relief)", fontsize=7.8, color=INK_2, va="center", ha="left")
     ax.set_yticks(range(n))
     ax.set_yticklabels([r[0] for r in rows][::-1], fontsize=8)
     ax.tick_params(axis="y", length=0)
     ax.set_xlim(xmin, xmax)
-    ax.set_ylim(-0.7, n - 0.2)
+    ax.set_ylim(-0.7, n + 0.2)
     ax.set_xticks([-100, 0, 100, 200, 300, 400, 500, 600])
     ax.set_xlabel("Days from the petition (negative = look-back before it)")
-    # key for the three bar weights
-    kx = 292
-    ky = -0.15
-    ax.text(kx, 4.35, "Bar weight", fontsize=7.6, color=INK_2, ha="left", va="center", zorder=6)
-    for j, (kind, txt) in enumerate([("solid", "fixed period"), ("mid", "extension or range"), ("light", "court may extend to the cap")]):
-        yy = 3.6 - 0.75 * j
-        ax.add_patch(Rectangle((kx, yy - 0.2), 28, 0.4, fc=BLUE, alpha=alpha[kind], ec="none", zorder=6))
-        ax.text(kx + 36, yy, txt, fontsize=7.6, color=INK_2, ha="left", va="center", zorder=6)
+    # key for the three bar weights, in the empty lower right
+    from matplotlib.patches import Patch
+    handles = [Patch(fc=INK_2, alpha=alpha[k], label=t) for k, t in
+               [("solid", "fixed period"), ("mid", "range or extension"), ("light", "court may extend, to the cap")]]
+    ax.legend(handles=handles, loc="lower right", bbox_to_anchor=(1.0, 0.0), frameon=True, framealpha=1.0,
+              facecolor=SURFACE, edgecolor="none", fontsize=7.8, handlelength=1.4, borderpad=0.3, labelspacing=0.35)
     return finish(fig, "ch12b_chapter11_clocks")
 
 
@@ -229,7 +225,7 @@ def fig_waterfall_call_spreads():
     bx.tick_params(axis="x", length=0, pad=14)
     bx.set_ylim(0, 19)
     bx.set_ylabel("Expected change in recovery\n(points per +$100mm of V)")
-    note(bx, "π = P(class is the fulcrum)", loc="upper right")
+    note(bx, "π = P(class is the fulcrum)\nV lognormal, median 450, σ = 0.40", loc="upper right")
     return finish(fig, "ch12b_waterfall_call_spreads")
 
 
@@ -246,27 +242,24 @@ def fig_plan_value_transfer():
     ax.plot(vp, R1, color=BLUE, linewidth=LW, zorder=3)
     ax.plot(vp, R2, color=ORANGE, linewidth=LW, zorder=3)
     ax.axhline(100, color=NEUTRAL, linewidth=0.9, zorder=1)
-    mark_event(ax, V, "plan value = true value", y_frac=0.97)
-    ax.plot([V], [100], "o", color=BLUE, markersize=6, zorder=5)
+    ax.axvline(V, color=NEUTRAL, linewidth=0.9, linestyle=(0, (3, 3)), zorder=1)
+    ax.annotate("plan value = true value\n(senior 100%, junior 33%)", (V, 0.985), xycoords=("data", "axes fraction"),
+                xytext=(4, 0), textcoords="offset points", fontsize=8, color=INK_2, va="top", linespacing=1.15)
     r2_at = (V - C1) * V / (C2 * V) * 100
+    ax.plot([V], [100], "o", color=BLUE, markersize=6, zorder=5)
     ax.plot([V], [r2_at], "o", color=ORANGE, markersize=6, zorder=5)
-    # direct labels
-    label_end(ax, vp[-1], R1[-1], "", BLUE, dx=0)
-    label_end(ax, vp[-1], R2[-1], "", ORANGE, dx=0)
-    ax.annotate("Senior (claim 800)", (vp[0], R1[0]), xytext=(812, 114), fontsize=8.5, color=INK_2, va="center")
-    ax.annotate("Junior (claim 600)", (1180, (1180 - C1) * V / (C2 * 1180) * 100), xytext=(1140, 21), fontsize=8.5,
-                color=INK_2, va="center")
-    ax.annotate("At 1,000 the senior is paid in full\nand the junior gets one third", (V, 100),
-                xytext=(1035, 90), fontsize=8, color=INK_2, va="center",
-                arrowprops=dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8, shrinkA=2, shrinkB=4))
-    ax.annotate("Every dollar of plan value above 1,000\nmoves recovery from senior to junior", (1250, 77),
-                xytext=(1115, 52), fontsize=8, color=INK_2, va="center", ha="left",
-                arrowprops=dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8, shrinkA=2, shrinkB=4))
+    # direct labels: a coloured dot carries identity, the text stays ink
+    ax.plot([812], [92], "o", color=BLUE, markersize=4, zorder=5)
+    ax.text(822, 92, "Senior, claim 800", fontsize=8.5, color=INK_2, va="center")
+    ax.plot([1085], [22], "o", color=ORANGE, markersize=4, zorder=5)
+    ax.text(1095, 22, "Junior, claim 600", fontsize=8.5, color=INK_2, va="center")
+    ax.text(1175, 112, "A higher plan value pays the senior\nin shares worth less than its claim\nand the junior in shares worth more",
+            fontsize=8, color=INK_2, va="center", ha="left", linespacing=1.2)
     ax.set_xlim(C1, C1 + C2)
     ax.set_ylim(0, 132)
-    ax.set_xlabel("Plan value V$^{\\mathrm{plan}}$ in the disclosure statement ($mm)")
+    ax.set_xlabel("Plan value in the disclosure statement, V$^{\\mathrm{plan}}$ (\\$mm)")
     ax.set_ylabel("Realised recovery (% of claim)")
-    note(ax, "Senior 800, junior 600, all-equity consideration; shares truly worth V = 1,000", loc="lower left")
+    note(ax, "Claims 800 and 600; shares worth V = 1,000", loc="lower right")
     return finish(fig, "ch12b_plan_value_transfer")
 
 
@@ -288,57 +281,58 @@ def fig_halvorsen_waterfall():
     src = [("ABL collateral", 250.0), ("Term-loan collateral", 960.0), ("Unencumbered value", 90.0)]
     dst = [("ABL revolver", 150.0, GREEN, "150 of 150 = 100%"),
            ("First lien (TLB + secured notes)", 760.0, BLUE, "760 of 1,250 = 60.8%"),
-           ("DIP, taken out by exit term loan", 300.0, ORANGE, "300 of 300 = 100%"),
+           ("DIP, taken out by the exit term loan", 300.0, ORANGE, "300 of 300 = 100%"),
            ("Administrative and priority", 75.0, YELLOW, "75 of 75 = 100%"),
            ("Unsecured pool", 15.0, MAGENTA, "15 of 1,020 = 1.5%")]
     flows = [(0, 0, 150.0), (0, 1, 100.0), (1, 1, 660.0), (1, 2, 300.0), (2, 3, 75.0), (2, 4, 15.0)]
-    total = 1300.0
-    gap = 28.0
-    scale = 1.0
+    gap_s, gap_d = 70.0, 112.0
 
-    fig, ax = new_figure((7.0, 4.1))
+    fig, ax = new_figure((7.0, 4.7))
     ax.grid(False); ax.axis("off")
     x_src, x_dst, bw = 0.0, 5.0, 0.28
 
-    # node y-positions (bars stacked top-down with gaps)
-    def stack(items):
+    def stack(items, gap):
         pos, y = [], 0.0
         for it in items:
             amt = it[1]
             pos.append((y - amt, y))      # (bottom, top)
             y = y - amt - gap
         return pos
-    sp = stack(src)
-    dp = stack(dst)
-    # centre the two stacks vertically
+    sp = stack(src, gap_s)
+    dp = stack(dst, gap_d)
     s_h = sp[0][1] - sp[-1][0]; d_h = dp[0][1] - dp[-1][0]
     off_s = (max(s_h, d_h) - s_h) / 2; off_d = (max(s_h, d_h) - d_h) / 2
     sp = [(b - off_s, t - off_s) for b, t in sp]
     dp = [(b - off_d, t - off_d) for b, t in dp]
 
-    # flows: allocate ribbon slots inside each node in the order given
     s_cursor = [t for b, t in sp]
     d_cursor = [t for b, t in dp]
+    mids = {}
     for (si, di, amt) in flows:
         y0t = s_cursor[si]; y0b = y0t - amt; s_cursor[si] = y0b
         y1t = d_cursor[di]; y1b = y1t - amt; d_cursor[di] = y1b
         ribbon(ax, x_src + bw, x_dst, y0t, y0b, y1t, y1b, dst[di][2])
+        mids[(si, di)] = 0.25 * (y0t + y0b + y1t + y1b)
+    # numbers that explain the first lien's 760, written on the ribbons
+    ax.text(2.6, mids[(0, 1)], "100: second lien on the ABL collateral", ha="center", va="center", fontsize=7.6, color=INK, zorder=5)
+    ax.text(2.6, mids[(1, 1)], "660: term-loan collateral left after the DIP primes it", ha="center", va="center", fontsize=7.8, color=INK, zorder=5)
+    ax.text(2.6, mids[(1, 2)], "300: DIP lien, ahead of the first lien", ha="center", va="center", fontsize=7.8, color=INK, zorder=5)
 
     for (name, amt), (b, t) in zip(src, sp):
         ax.add_patch(Rectangle((x_src, b), bw, t - b, fc=NEUTRAL, ec="none", zorder=3))
-        ax.text(x_src - 0.12, 0.5 * (b + t) + 14, name, ha="right", va="center", fontsize=8.5, color=INK, zorder=5)
-        ax.text(x_src - 0.12, 0.5 * (b + t) - 24, f"{amt:,.0f}", ha="right", va="center", fontsize=8.5, color=INK_2, zorder=5)
+        yc = 0.5 * (b + t)
+        ax.text(x_src - 0.12, yc + 30, name, ha="right", va="center", fontsize=8.5, color=INK, zorder=5)
+        ax.text(x_src - 0.12, yc - 30, f"{amt:,.0f}", ha="right", va="center", fontsize=8.5, color=INK_2, zorder=5)
     for (name, amt, col, rec), (b, t) in zip(dst, dp):
         ax.add_patch(Rectangle((x_dst, b), bw, t - b, fc=col, ec="none", zorder=3))
         yc = 0.5 * (b + t)
-        ax.text(x_dst + bw + 0.12, yc + 17, name, ha="left", va="center", fontsize=8.5, color=INK, zorder=5)
-        ax.text(x_dst + bw + 0.12, yc - 21, rec, ha="left", va="center", fontsize=8.2, color=INK_2, zorder=5)
-    # note on priming
-    ax.text(2.5, dp[2][0] - 6, "the DIP primes the term-loan collateral", ha="center", va="top", fontsize=7.8, color=MUTED, zorder=5)
-    ax.text(x_src + bw / 2, sp[0][1] + 40, "Where the value sits", ha="center", va="bottom", fontsize=8.2, color=MUTED)
-    ax.text(x_dst + bw / 2, dp[0][1] + 40, "Who is paid", ha="center", va="bottom", fontsize=8.2, color=MUTED)
-    ax.set_xlim(-1.9, 8.1)
-    ax.set_ylim(min(sp[-1][0], dp[-1][0]) - 60, max(sp[0][1], dp[0][1]) + 110)
+        ax.text(x_dst + bw + 0.12, yc + 30, name, ha="left", va="center", fontsize=8.5, color=INK, zorder=5)
+        ax.text(x_dst + bw + 0.12, yc - 30, rec, ha="left", va="center", fontsize=8.2, color=INK_2, zorder=5)
+    ytop = max(sp[0][1], dp[0][1])
+    ax.text(x_src + bw / 2, ytop + 50, "Where the 1,300 of plan value sits", ha="center", va="bottom", fontsize=8.2, color=MUTED)
+    ax.text(x_dst + bw / 2, ytop + 50, "Who is paid", ha="left", va="bottom", fontsize=8.2, color=MUTED)
+    ax.set_xlim(-1.9, 8.3)
+    ax.set_ylim(min(sp[-1][0], dp[-1][0]) - 40, ytop + 150)
     return finish(fig, "ch12b_halvorsen_waterfall")
 
 

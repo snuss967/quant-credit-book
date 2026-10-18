@@ -19,8 +19,8 @@
 - [x] 16. §1.6 Harvestable flows: LIST-TO-NARRATIVE + Another Seat (systematic fund) + Math, Gently + When to apply. — Theo chart opening, decile/IR box, systematic seat, judgment section.
 - [x] 17. §1.7 Where flows end up: Another Seat (opportunistic credit) + BRIDGE. — Rowan/Marks/Hertz sourced opportunistic seat; Post-it bridge to §1.8.
 - [x] 18. §1.8.1 The model: Math, Gently x2. — Conservation box and half-life box with 5.12/4.87 demo numbers.
-- [ ] 19. §1.8.2 Ford: EXPAND-SCENE (Long Scene 1).
-- [ ] 20. §1.8.3 LQD: BRIDGE.
+- [x] 19. §1.8.2 Ford: EXPAND-SCENE (Long Scene 1). — Saturday replay, four acts, index cards; answer paragraphs kept verbatim.
+- [x] 20. §1.8.3 LQD: BRIDGE. — Post-mortem framing; mid-is-the-lie paragraph tied to S_t.
 - [ ] 21. §1.9.1 Serta: EXPAND-SCENE (Long Scene 2).
 - [ ] 22. §1.9 Trend Watch LM: BRIDGE.
 - [ ] 23. §1.10 Desk Debrief: BRIDGE.

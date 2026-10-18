@@ -220,7 +220,9 @@ The out-of-court states are Performing, Stressed, Grace, Forbearance, Post-LMT, 
 | Any distressed state → Petition (free-fall) | Filing | Board resolution | Stay begins | §12B.5 |
 | Post-LMT → Stressed | Re-default | None | The re-default clock | §14.3 |
 
-Two edges carry most of the desk's risk. **Post-LMT → Stressed** is why the Post-LMT state is parole, not immunity (Law 7); Chapter 14 builds its front-loaded re-default clock. **Stressed → Post-LMT** gets three answers to "did it default?" S&P records a selective default, Moody's counts a default event (§14.1), and a standard North American CDS, which has no Restructuring credit event, usually records nothing at all (App D, §24.8). Say which one your labels use (Law 11).
+Two edges carry most of the desk's risk. **Post-LMT → Stressed** is why the Post-LMT state is parole, not immunity (Law 7); Chapter 14 builds its front-loaded re-default clock. **Stressed → Post-LMT** gets three answers to "did it default?" S&P records a selective default, Moody's counts a default event (§14.1), and a standard North American CDS, which has no Restructuring credit event, usually records nothing at all (App D, §24.8). Say which one your labels use (Law 11). Figure 12-B.1 draws the whole menu with its guards and clocks.
+
+![Figure 12-B.1: The out-of-court menu is a state machine whose arrows carry guards and clocks, and the Post-LMT state feeds back into Stressed, so an exchange or uptier is parole rather than immunity. Source: the transition table of §12B.4 (typical credit-agreement and indenture terms, SEC Rule 14e-1 and 11 U.S.C. §1126(b)); no particular borrower.](assets/figures/ch12b_out_of_court_machine.png)
 
 Exit consents are where the menu began: the tendering holders vote to strip the old bond's covenants, so a holdout chooses between a new bond and an old one with no covenants left (§13.4 solves the game). "Back in my day," Mags says, "an exchange offer came with a prospectus and a threat. Now it comes with a co-op and a threat. The prospectus is the part that got shorter."
 
@@ -274,7 +276,9 @@ The transfer is zero when $W \ge F$: rolling up an oversecured claim costs nobod
 - **(a)(10):** at least one impaired class, not counting insiders, accepts.
 - **(a)(11) feasibility:** confirmation is not likely to be followed by liquidation or another reorganization.
 
-After confirmation comes the **effective date**, the state that requires exit financing, regulatory approvals and other conditions precedent. On that date the discharge takes effect (§1141), distributions begin, and the claims-reconciliation machinery of §12B.8 keeps running, often for years, through a plan administrator or a litigation trust.
+After confirmation comes the **effective date**, the state that requires exit financing, regulatory approvals and other conditions precedent. On that date the discharge takes effect (§1141), distributions begin, and the claims-reconciliation machinery of §12B.8 keeps running, often for years, through a plan administrator or a litigation trust. Figure 12-B.2 lays the case's clocks on one day axis.
+
+![Figure 12-B.2: Four clocks run out within six weeks of the petition, but exclusivity and the avoidance period stretch from months to years, so the case's calendar is set by a few long clocks. Source: 11 U.S.C. §§362, 365(d)(4), 502(b)(9), 503(b)(9), 546(a), 547(b)(4), 1121; Fed. R. Bankr. P. 1007(c), 2003(a), 4001(c), 6003 (the clock table of §12B.5); the challenge period is a typical DIP-order term, drawn from the petition although it runs from committee appointment.](assets/figures/ch12b_chapter11_clocks.png)
 
 ### The clock table
 
@@ -335,7 +339,9 @@ $$
 \left.\frac{\partial}{\partial h}\,\mathbb{E}^{\mathbb{P}}\!\big[R_j(V + h)\big]\right|_{h=0} = \frac{\pi_j}{C_j}
 $$
 
-for continuously distributed $V$. A class's expected sensitivity to value is its fulcrum probability divided by its face. That gives the desk a first-order hedge ratio for any restructuring claim without a single model of the court.
+for continuously distributed $V$. A class's expected sensitivity to value is its fulcrum probability divided by its face. That gives the desk a first-order hedge ratio for any restructuring claim without a single model of the court. Figure 12-B.3 draws the stack and the hedge ratios for a four-class example.
+
+![Figure 12-B.3: Each class is a call spread on distributable value (left), so only the class currently filling, the fulcrum, has delta, and its expected sensitivity is its fulcrum probability over its face, largest here for Classes 2 and 3 (right). Illustrative: strict absolute priority, claims of 100, 300, 400 and 200 (in millions), V lognormal with median 450 and σ = 0.40, expected delta = π/C per class from §12B.6.](assets/figures/ch12b_waterfall_call_spreads.png)
 
 ### Plan value is a price
 
@@ -359,7 +365,9 @@ $$
 \frac{\partial R_2}{\partial V^{\text{plan}}} = +\frac{C_1\,V}{C_2\,(V^{\text{plan}})^2} > 0 .
 $$
 
-**A high plan value is the senior class selling equity to the junior class at $V^{\text{plan}}$ when the shares are worth $V$.** If $V^{\text{plan}} > V$, the senior is "paid in full" in shares worth $V/V^{\text{plan}} < 1$ of its claim. If $V^{\text{plan}} \le C_1$, the senior takes all the equity, and if $V$ then turns out above $C_1$, it has recovered more than its claim, which a plan may not provide on purpose. So seniors argue for low valuations, juniors for high ones, and the valuation fight is a fight over the strike of an option that the plan writes from one class to another. That is why the plan value moves \$300mm in an afternoon (§16.1).
+**A high plan value is the senior class selling equity to the junior class at $V^{\text{plan}}$ when the shares are worth $V$.** If $V^{\text{plan}} > V$, the senior is "paid in full" in shares worth $V/V^{\text{plan}} < 1$ of its claim. If $V^{\text{plan}} \le C_1$, the senior takes all the equity, and if $V$ then turns out above $C_1$, it has recovered more than its claim, which a plan may not provide on purpose. So seniors argue for low valuations, juniors for high ones, and the valuation fight is a fight over the strike of an option that the plan writes from one class to another. That is why the plan value moves \$300mm in an afternoon (§16.1). Figure 12-B.4 plots both classes' recoveries against the plan value for a two-class example.
+
+![Figure 12-B.4: A higher plan value moves recovery from the senior class to the junior class: the senior is made whole only when the plan value equals the true value, and every dollar above it pays the senior in shares worth less than its claim. Illustrative: the §12B.6 two-class all-equity model with claims of 800 and 600 (in millions) and shares truly worth V = 1,000.](assets/figures/ch12b_plan_value_transfer.png)
 
 ### Absolute priority and its exceptions
 
@@ -476,7 +484,9 @@ so first-lien holders outside the group recover 60.8%, while the group's blended
 4. Unencumbered value of 90 pays 75 of administrative and priority claims (the 40 of 503(b)(9) goods, 25 of accrued fees, 10 of priority taxes and wages), leaving 15.
 5. The first lien waives its deficiency share as part of the plan, so the unsecured class splits 15 across 1,020: a 1.5% recovery.
 
-The plan delivers an exit ABL (150), an exit term loan that takes out the DIP (300), \$350mm of takeback first-lien notes and 100% of the new equity (worth $1{,}300 - 150 - 300 - 350 - 15 - 75 = 410$) to the first lien: $350 + 410 = 760$, or **60.8%**. The unsecured class receives its \$15mm cash pool, plus deathtrap warrants for 7.5% of the equity if, and only if, it votes yes. A Chapter 7 liquidation would pay the unsecured class nothing, so the best-interests test is met. Old equity receives nothing, so cramming down a rejecting unsecured class satisfies the absolute priority rule.
+The plan delivers an exit ABL (150), an exit term loan that takes out the DIP (300), \$350mm of takeback first-lien notes and 100% of the new equity (worth $1{,}300 - 150 - 300 - 350 - 15 - 75 = 410$) to the first lien: $350 + 410 = 760$, or **60.8%**. The unsecured class receives its \$15mm cash pool, plus deathtrap warrants for 7.5% of the equity if, and only if, it votes yes. A Chapter 7 liquidation would pay the unsecured class nothing, so the best-interests test is met. Old equity receives nothing, so cramming down a rejecting unsecured class satisfies the absolute priority rule. Figure 12-B.5 follows the 1,300 from the collateral silos to the claims.
+
+![Figure 12-B.5: Of the 1,300 of plan value the first lien receives 760, made of 100 from the ABL collateral and the 660 of term-loan collateral left after the DIP primes it, while the unsecured pool gets only 15. Illustrative: the Halvorsen waterfall of §12B.9 (fictional company, in millions).](assets/figures/ch12b_halvorsen_waterfall.png)
 
 | $V^{\text{plan}}$ | First-lien secured value | Pool after administrative claims | First-lien recovery | Unsecured recovery | Fulcrum |
 | ---: | ---: | ---: | ---: | ---: | :--- |
