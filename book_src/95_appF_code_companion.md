@@ -14118,5 +14118,338 @@ assert np.isclose(capture(0.162, -0.0578, -0.0458), 0.3605, atol=1e-3)          
 print("pair_book.py: all chapter checks pass")
 ```
 
+## F.2-B: Chapter 2-B: Transaction Cost Analysis for Credit: Arrival, Cover, Shortfall and the Dealer Scorecard {#code-2b}
+
+Listings from `02_ch02b_transaction_cost_analysis_for_credit.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
+
+
+### Listing 2-B.1: tca.py (Chapter 2-B): transaction cost analysis for an RFQ market {#code-2b-1}
+
+```python
+"""tca.py (Chapter 2-B): transaction cost analysis for an RFQ market.
+
+Every function reads the desk's RFQ log, one row per child order, through the order
+state machine of Section 27.4.2. Units: face in $mm, prices per 100 of face, costs in
+dollars unless a name ends in _bp (basis points of price). side = +1 when we buy and
+-1 when we sell; a positive cost is bad for us. Demo numbers are illustrative.
+"""
+from dataclasses import dataclass
+from typing import Callable, Optional, Sequence
+import math
+
+import numpy as np
+
+TERMINAL = ("FILLED", "EXPIRED", "EXPIRED_PARTIAL", "DONE_AWAY", "REJECTED", "CANCELLED")
+
+
+@dataclass
+class Order:
+    order_id: str
+    side: int                          # +1 we buy, -1 we sell
+    target: float                      # face the optimiser asked for, $mm
+    filled: float                      # face executed, $mm
+    terminal: str                      # one of TERMINAL
+    m_new: Optional[float]             # composite mid at NEW: the arrival benchmark
+    m_routed: Optional[float] = None   # composite mid at ROUTED
+    m_quoted: Optional[float] = None   # composite mid at QUOTED (None if nobody quoted)
+    fill_px: Optional[float] = None    # size-weighted fill price
+    cover: Optional[float] = None      # second-best response, if two or more quoted
+    m_end: Optional[float] = None      # mid when the remainder is retried or abandoned
+    beta_end: float = 0.0              # market part of (m_end - m_new), points
+    parent_id: Optional[str] = None    # the legs of one pair share a parent
+    protocol: str = "rfq"              # rfq, a2a, pt, voice, session
+    regime: str = "calm"               # label in force at NEW (Section 2B.5)
+
+    def __post_init__(self):
+        if self.terminal not in TERMINAL:
+            raise ValueError(f"{self.order_id}: unknown terminal state {self.terminal}")
+        if self.filled > self.target + 1e-9:
+            raise ValueError(f"{self.order_id}: filled more than the target")
+
+
+def _usd(face_mm: float, points: float) -> float:
+    """Dollars from face in $mm and a price difference in points per 100."""
+    return face_mm * 1e6 * points / 100.0
+
+
+def benchmarks_bp(o: Order, print_px: Optional[float] = None) -> dict:
+    """One fill scored against every benchmark the log supplies, bp of price, + = cost."""
+    if o.fill_px is None:
+        return {}
+    refs = {"arrival": o.m_new, "rfq_time": o.m_routed, "cover": o.cover,
+            "next_print": print_px}
+    return {k: o.side * (o.fill_px - b) / b * 1e4 for k, b in refs.items() if b is not None}
+
+
+def shortfall(o: Order) -> dict:
+    """Perold's shortfall for one child order, split along the log's stamps (dollars)."""
+    flags = []
+    m0 = o.m_new
+    if m0 is None:                                   # no composite at the decision
+        m0 = o.m_routed
+        flags.append("no_arrival_mid")
+    if m0 is None:
+        return {"total": float("nan"), "flags": flags + ["unscorable"]}
+    m_r = o.m_routed if o.m_routed is not None else m0
+    m_q = o.m_quoted if o.m_quoted is not None else m_r
+    out = dict.fromkeys(("delay", "drift", "half_spread", "opp_beta", "opp_idio"), 0.0)
+    if o.filled > 0:
+        if o.fill_px is None:
+            raise ValueError(f"{o.order_id}: filled size but no fill price")
+        out["delay"] = o.side * _usd(o.filled, m_r - m0)
+        out["drift"] = o.side * _usd(o.filled, m_q - m_r)
+        out["half_spread"] = o.side * _usd(o.filled, o.fill_px - m_q)
+        if o.protocol == "pt":
+            flags.append("basket_price_allocated")
+    rest = o.target - o.filled
+    if rest > 1e-9:
+        if o.m_end is None:
+            flags.append("unfilled_unmarked")        # flagged, never silently zero
+        else:
+            out["opp_beta"] = o.side * _usd(rest, o.beta_end)
+            out["opp_idio"] = o.side * _usd(rest, (o.m_end - m0) - o.beta_end)
+    out["total"] = sum(out.values())
+    out["flags"] = flags
+    return out
+
+
+def event_study(sent, placebo) -> dict:
+    """Leakage as sent-minus-placebo drift. Rows are orders, columns minutes after
+    ROUTED; values are bp of price signed so that + means the price moved against us."""
+    sent, placebo = np.asarray(sent, float), np.asarray(placebo, float)
+    mu_s, mu_p = np.nanmean(sent, axis=0), np.nanmean(placebo, axis=0)
+    n_s = np.sum(~np.isnan(sent), axis=0)
+    n_p = np.sum(~np.isnan(placebo), axis=0)
+    se = np.sqrt(np.nanvar(sent, axis=0, ddof=1) / n_s
+                 + np.nanvar(placebo, axis=0, ddof=1) / n_p)
+    leak = mu_s - mu_p
+    return {"sent": mu_s, "placebo": mu_p, "leak": leak, "se": se, "t": leak / se}
+
+
+def scorecard(dealer, regime, quoted, won, quote_mo, k: float = 20.0,
+              stress_weight: float = 0.4) -> dict:
+    """Per dealer: response and hit rates shrunk toward the panel with a prior worth k
+    inquiries, the mean counterfactual markout of every quote shown (not only wins;
+    bp, + = good for us), and the same on stress days. stress_weight is a judgment."""
+    dealer, regime = np.asarray(dealer), np.asarray(regime)
+    quoted, won = np.asarray(quoted, bool), np.asarray(won, bool)
+    quote_mo = np.asarray(quote_mo, float)
+    p_resp = quoted.mean()
+    p_hit = won[quoted].mean() if quoted.any() else 0.0
+    rows = {}
+    for d in np.unique(dealer):
+        row = {}
+        for label, mask in (("all", dealer == d),
+                            ("stress", (dealer == d) & (regime == "stress"))):
+            n, q, h = int(mask.sum()), int((mask & quoted).sum()), int((mask & won).sum())
+            row[label] = {
+                "n": n,
+                "resp": (q + k * p_resp) / (n + k),
+                "hit": (h + k * p_hit) / (q + k),
+                "quote_mo": float(np.nanmean(quote_mo[mask & quoted])) if q else float("nan"),
+            }
+        row["tier_score"] = ((1 - stress_weight) * row["all"]["resp"]
+                             + stress_weight * row["stress"]["resp"])
+        rows[str(d)] = row
+    return rows
+
+
+def sqrt_prior(c0_bp: float, eta_bp: float, adv_mm: float, mult: float = 1.0) -> Callable:
+    """Section 4.8's square-root law as a stated prior: mult * (c0 + eta * sqrt(size/ADV))."""
+    return lambda size_mm: mult * (c0_bp + eta_bp * math.sqrt(size_mm / adv_mm))
+
+
+def cost_curve(size, cost_bp, edges: Sequence[float], min_count: int = 30,
+               prior: Optional[Callable] = None) -> list:
+    """Mean cost per size bucket with its count; a thin bucket reports the prior, flagged."""
+    size, cost_bp = np.asarray(size, float), np.asarray(cost_bp, float)
+    out = []
+    for lo, hi in zip(edges[:-1], edges[1:]):
+        m = (size >= lo) & (size < hi)
+        n = int(m.sum())
+        est = float(cost_bp[m].mean()) if n else float("nan")
+        mid = 1.5 * lo if math.isinf(hi) else (math.sqrt(lo * hi) if lo > 0 else hi / 2.0)
+        use_prior = n < min_count and prior is not None
+        out.append({"bucket": (lo, hi), "n": n, "estimate": est,
+                    "used": prior(mid) if use_prior else est, "prior_used": use_prior})
+    return out
+
+
+def participation(desk_vol, trace_vol, dates: Sequence[str],
+                  breaks: Sequence[str] = ("2026-08-31", "2027-08-02")) -> dict:
+    """Desk volume over TRACE volume in the same bonds and window, with a 0/1 dummy per
+    known break in the denominator (ISO date strings compare correctly as text)."""
+    desk, trace = np.asarray(desk_vol, float), np.asarray(trace_vol, float)
+    ratio = np.divide(desk, trace, out=np.full(desk.shape, np.nan), where=trace > 0)
+    dummies = {b: np.array([d >= b for d in dates], dtype=int) for b in breaks}
+    return {"ratio": ratio, "breaks": dummies}
+
+
+def we_are_the_market(part, mo_trend, resp_trend, part_max: float = 0.20) -> np.ndarray:
+    """Fires only when all three agree: participation above part_max (on the dummied
+    series), residualised markouts trending against us, response counts falling."""
+    part = np.asarray(part, float)
+    return (part > part_max) & (np.asarray(mo_trend) < 0) & (np.asarray(resp_trend) < 0)
+
+
+def legging_sd(dts: float, minutes: float, sigma_day_rel: float = 0.022,
+               day_minutes: float = 390.0, rho_bridge: float = 0.0) -> float:
+    """Dollar s.d. of an open DTS exposure held for `minutes`. DTS is in $ per 1% relative
+    spread move; sigma_day_rel is the daily s.d. of relative spread changes (decimal).
+    A bridge hedge with correlation rho leaves sqrt(1 - rho^2) of the risk."""
+    sd_pct = 100.0 * sigma_day_rel * math.sqrt(minutes / day_minutes)
+    return abs(dts) * sd_pct * math.sqrt(max(0.0, 1.0 - rho_bridge ** 2))
+
+
+def pair_line(leg_costs: Sequence[float], dts_open: float, rel_move_pct: float,
+              minutes_open: float, standing_per_day: float = 0.0, days: float = 0.0) -> dict:
+    """Two-leg cost under one parent arrival: the legs' own shortfalls, the legging term
+    (signed DTS left open, + = net long credit, times the relative spread move in %, so a
+    widening costs a long), and the short leg's standing cost over the holding days."""
+    legs = float(sum(leg_costs))
+    legging = dts_open * rel_move_pct
+    standing = standing_per_day * days
+    return {"legs": legs, "legging": legging, "standing": standing,
+            "total": legs + legging + standing,
+            "legging_sd": legging_sd(dts_open, minutes_open)}
+
+
+if __name__ == "__main__":
+    fill = Order("2B1-demo", +1, 2.0, 2.0, "FILLED", m_new=98.38, m_routed=98.40,
+                 m_quoted=98.40, fill_px=98.42, cover=98.45)
+    print({k: round(v, 1) for k, v in benchmarks_bp(fill, print_px=98.47).items()})
+    # arrival 4.1, rfq_time 2.0, cover -3.0, next_print -5.1
+
+    nine = Order("2B2-unfilled", +1, 40.5, 0.0, "EXPIRED", m_new=100.00,
+                 m_end=100.28, beta_end=0.11)
+    sf = shortfall(nine)
+    print(round(sf["opp_beta"]), round(sf["opp_idio"]), round(sf["total"]))
+    # 44550 68850 113400
+
+    trim = pair_line([14_000.0, 1_937.5], dts_open=-17_700.0, rel_move_pct=-0.25,
+                     minutes_open=12.0)
+    print({k: round(v) for k, v in trim.items()})
+    # legs 15938, legging 4425, standing 0, total 20362, legging_sd about 6,830
+```
+
+
+## F.4-D: Chapter 4-D: Getting the Seat: Interviews for Market-Making and Systematic Credit, From Probability Puzzles to the Thirty-Minute Credit Pitch, and the Portfolio That Proves It {#code-4d}
+
+Listings from `04_ch04d_getting_the_seat.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
+
+
+### Listing 4-D.1: interview_drills.py: seeded drills for Chapter 4-D (illustrative numbers) {#code-4d-1}
+
+```python
+"""interview_drills.py: seeded drills for Chapter 4-D (illustrative numbers).
+
+Each drill returns (question, answer, check); check(x) is True when x is within
+the drill's tolerance of the answer. Home sections are in the docstrings.
+"""
+import math
+import random
+
+
+def _check(answer, tol):
+    return lambda x: x is not None and abs(x - answer) <= tol
+
+
+def measure_drill(rng):
+    """§4D.2: two-point bond, risk-neutral default probability, with a rate."""
+    hi, lo = 100.0, rng.choice([20.0, 30.0, 40.0, 50.0])
+    price = rng.choice([80.0, 85.0, 88.0, 92.0])
+    r = rng.choice([0.0, 0.02, 0.04])
+    q_d = (hi - price * math.exp(r)) / (hi - lo)  # undiscounted mean under Q
+    text = (f"Pays {hi:.0f} or {lo:.0f} in one year; price {price:.0f}; "
+            f"rate {r:.0%} continuous. Q-default probability?")
+    return text, q_d, _check(q_d, 0.005)
+
+
+def gm_drill(rng):
+    """§4D.3 and §3.2: value after n sells from new sellers, two-point prior."""
+    hi, lo = 100.0, rng.choice([30.0, 40.0, 60.0])
+    pi = rng.choice([0.1, 0.2, 0.3])
+    n = rng.randint(1, 4)
+    p_sell_bad, p_sell_good = pi + (1 - pi) / 2, (1 - pi) / 2
+    odds = (p_sell_bad / p_sell_good) ** n       # prior odds 1: fifty-fifty
+    post_bad = odds / (1 + odds)
+    value = post_bad * lo + (1 - post_bad) * hi
+    text = (f"Worth {hi:.0f} or {lo:.0f}, fifty-fifty; {pi:.0%} of sellers "
+            f"informed. Value after {n} sells from new sellers?")
+    return text, value, _check(value, 0.25)
+
+
+def kelly_drill(rng):
+    """§4D.5 and §28.4: discrete Kelly for a bond; None means no edge, no bet."""
+    c = rng.choice([0.03, 0.045, 0.06])
+    q_d = rng.choice([0.01, 0.031, 0.05, 0.08])
+    loss = rng.choice([0.4, 0.6, 0.8, 1.0])
+    f = (1 - q_d) / loss - q_d / c
+    text = (f"Carry {c:.1%}, PD {q_d:.1%}, LGD {loss:.0%}. "
+            f"Full-Kelly fraction of NAV (None if no edge)?")
+    if f <= 0:
+        return text, None, lambda x: x is None
+    return text, f, _check(f, 0.01)
+
+
+def stop_drill(rng):
+    """§4D.5 and §8D.5: largest long that one default cannot push past a line."""
+    capital = rng.choice([100.0, 200.0, 400.0])               # $mm
+    line = rng.choice([0.025, 0.05, 0.075])
+    price, recovery = rng.choice([(98.0, 40.0), (90.0, 30.0), (75.0, 25.0)])
+    size = capital * line / ((price - recovery) / 100.0)
+    text = (f"Capital ${capital:.0f}mm; one default may cost {line:.1%}. "
+            f"Bond at {price:.0f}, recovery {recovery:.0f}. Largest long, $mm?")
+    return text, size, _check(size, 0.1)
+
+
+def ruler_drill(rng):
+    """§4D.6 and §8D.3: short size under the duration, DTS or beta ruler."""
+    long_mv = rng.choice([20.0, 40.0, 60.0])
+    s_a, d_a = rng.choice([(380, 4.2), (300, 5.0), (450, 3.8)])
+    s_b, d_b = rng.choice([(520, 4.6), (600, 4.0), (410, 5.2)])
+    beta = rng.choice([0.5, 0.6, 0.8])
+    ruler = rng.choice(["duration", "dts", "beta"])
+    short = {"duration": long_mv * d_a / d_b,
+             "dts": long_mv * d_a * s_a / (d_b * s_b),
+             "beta": long_mv * d_a * beta / d_b}[ruler]
+    text = (f"Long ${long_mv:.0f}mm of A ({s_a}bp, spread duration {d_a}); "
+            f"short B ({s_b}bp, {d_b}); beta {beta}. Short by {ruler}, $mm?")
+    return text, short, _check(short, 0.1)
+
+
+def dv01_drill(rng):
+    """§4D.7 and §4B.5: DV01 per $10mm = D_mod x dirty price x face x 1e-6."""
+    d_mod = rng.choice([3.9, 4.2, 6.5, 8.11])
+    price = rng.choice([92.39, 100.0, 108.38])
+    dv01 = d_mod * price * 10_000_000 * 1e-6
+    text = f"Modified duration {d_mod}, dirty price {price}. DV01 per $10mm?"
+    return text, dv01, _check(dv01, 0.05 * dv01)              # mental-math band
+
+
+DRILLS = [measure_drill, gm_drill, kelly_drill, stop_drill, ruler_drill,
+          dv01_drill]
+
+
+def session(seed, k=6):
+    """A reproducible set of k drills: same seed, same questions."""
+    rng = random.Random(seed)
+    return [rng.choice(DRILLS)(rng) for _ in range(k)]
+
+
+if __name__ == "__main__":
+    # The chapter's anchors, recomputed from the drill formulas.
+    assert abs((100 - 85) / 60 - 0.25) < 1e-12                    # §4D.2
+    assert abs((100 - 85 * math.exp(0.04)) / 60 - 0.192) < 1e-3   # §4D.2, 4%
+    assert abs(0.6 * 40 + 0.4 * 100 - 64.0) < 1e-12               # §4D.3
+    assert abs(0.969 / 0.6 - 0.031 / 0.045 - 0.926) < 1e-3        # §4D.5
+    assert abs(15 / 0.58 - 25.86) < 0.01                          # §4D.5 stop
+    assert abs(40 * 4.2 * 380 / (4.6 * 520) - 26.69) < 0.01       # §4D.6 DTS
+    assert abs(8.11 * 108.38 * 10 - 8789.6) < 1.0   # §4D.7 (4-B prints $8,785)
+    for text, answer, check in session(seed=2026):
+        print(text)
+        assert check(answer)
+```
+
 
 <!-- STATUS: COMPLETE -->

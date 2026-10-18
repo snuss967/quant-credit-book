@@ -58,13 +58,6 @@
    }
   },
   {
-   "name": "newfiles-4d-2b-0002",
-   "task": "wewa62ywq",
-   "runId": "wf_d222286e-517",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/u3_research_and_new_chapters.js",
-   "args": "items [] + chapters 04_ch04d, 02_ch02b, 00_02 (see the 14:35 launch in the ledger)"
-  },
-  {
    "name": "missing-toc-chapters",
    "task": "wr9ksz5pq",
    "runId": "wf_88dd2b76-e50",
@@ -136,6 +129,26 @@
      "26_ch26_ai_agents_and_llms_on_the_credit_desk",
      "27_ch27_system_architecture_and_asics",
      "28_ch28_pm_playbook"
+    ]
+   }
+  },
+  {
+   "name": "figs-4d-2b-0002",
+   "task": "wl3spbmbr",
+   "runId": "wf_e9852c77-c8a",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "04_ch04d_getting_the_seat",
+     "02_ch02b_transaction_cost_analysis_for_credit",
+     "00_02_how_to_use_this_book"
+    ],
+    "stages": [
+     "u1",
+     "figures",
+     "figcheck",
+     "resgraph"
     ]
    }
   }

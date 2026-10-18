@@ -27,3 +27,17 @@ Kept untouched: Practitioner Writing, Academic Papers, Data & Code.
 Replaced: "Bloomberg Odd Lots episodes on post-bankruptcy equity rallies and on distressed exchanges (titles to be confirmed)" with Cloud 9fin, "Jane's LME Addiction" (Glenn Agre, 15 Sep 2025) for distressed exchanges and The Octus Download EP 22, Judge Kaplan (23 Dec 2025) for the court side. No dossier episode covers post-bankruptcy equity rallies as such.
 Added (3): Alpha Exchange, Peter Cecchini (8 Aug 2021; the dossier's §6.9.2 pick, which also serves the credit-equity-linkages slot dropped from Graph 1); The Octus Download EP 21, Josh Sussberg (10 Dec 2025); Risk.net Quantcast, Richard Martin on EM debt, copulas, machine learning (22 Jun 2018).
 Kept untouched: Practitioner Writing (Carvana and Hertz SEC filings), Academic Papers (Berndt et al., Schaefer-Strebulaev, Duarte-Longstaff-Yu, BIS QR), Data & Code.
+
+## Graph 5 (end of chapter, after §6.13 Exercises; covers the whole chapter)
+
+Replaced: "Bloomberg Odd Lots (episodes on liability management, private credit, and the 2023 bank failures; titles to be verified)" with Cloud 9fin, "LME Doomscrolling" (Roe and Rotaru, 7 Apr 2026) for liability management and Odd Lots, Dan Davies on SVB (14 Mar 2023, repeated from Graph 2 because the replaced line named the 2023 bank failures) ; "Flirting with Models by Corey Hoffstein (episodes on systematic credit; titles to be verified)" with the Jeff Rosenberg episode (S7E19, 18 Aug 2025); "ISDA's podcast series, isda.org" dropped for want of any credit-specific episode (see Graph 3). No dossier or verified episode covers private credit, so that clause is gone.
+Added (4): The Credit Edge, Blackstone "Big Surge in Quant Credit Investing" (8 Oct 2026); The Credit Edge, "Acadian Sees Quants Moving to Loans, CLOs" (19 Feb 2026); Man Group Long Story Short, "Extra Credit: Algorithmic Advantage" (recorded Mar 2024); Masters in Business, Paul Wilmott (13 Oct 2017), placed against §6.12 and §6.13.
+Kept untouched: Practitioner Writing, Academic Papers, Data & Code.
+
+## Totals and checks
+
+27 specific items now sit in the five graphs (5 + 6 + 4 + 5 + 7, counting replacements; 18 are pure additions). Every URL was matched against the dossier text by script; none is new to it. The five channel-level "Podcasts" lines are the only text removed (git diff shows 5 deletions, all of them those lines).
+
+Not replaced (flag for a later pass): Practitioner Writing in Graph 5 still cites "Moody's CreditEdge quick reference (title only)", and Graphs 1 and 5 cite shelf papers without links; they are specific titles, not channels, so they stay. Dossier items considered but not used here: Capital Allocators (Frumes and Indap, Friedman), Odd Lots White/Barse/Harris, Flirting with Models Hari Krishnan, Risk.net Acerbi, Oaktree Marks, OCW Lectures 19 and 20 and Scholes Nobel lecture (Chapter 6-B), Wired Salmon on the Gaussian copula (Chapter 5).
+
+<!-- STATUS: COMPLETE -->
