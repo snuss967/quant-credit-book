@@ -145,3 +145,96 @@ Three further lenses cut across the seats rather than replacing them.
 
 **The RV path.** 1-B → 4-B → 5 → 8 → 8-D → 8-B → 8-C → 24 → 28: the long-one-credit, short-another trade from the first time the reader sees it on a pod's Tuesday to the year-end review that decides what the pod is paid. Section 0.9 describes it, because it is less a path than a second book running inside this one.
 
+## 0.5 The Gates: "Before You Leave This Part, You Can…"
+
+*Wednesday 30 September 2026, 12:20 p.m., the desk's lunch table, Theo's second week. Fictional.*
+
+Theo mentioned that each Part of the reading list ended in a gate, and Kaz brightened, because this was a word they knew.
+
+"Like the gate on a semi-liquid credit fund? Five per cent of the shares a quarter, pro rata, and everyone who asked for more joins the queue?"
+
+"The other kind," Theo said.
+
+"In the other kind, how many get through each quarter?"
+
+"Everyone who can do the ten things."
+
+Kaz thought about it while eating a sandwich in the methodical way Kaz ate everything. "Then it isn't a gate. A gate rations a shared resource. Yours has no capacity constraint; nobody else's request changes your fill." They put the sandwich down. "It's a test with a door."
+
+That is a better definition than the one Theo had been given, and it is the right one. Chapter 17 §17.6 has the other kind of gate, where a 5% quarterly cap turns a run on a fund into a twenty-quarter queue and the order of the requests matters a great deal. The gates in this book ration nothing. They answer one question for one reader, the question on Theo's index card: am I ready for the next Part, or do I only feel ready?
+
+Each Part opener will close, in this edition, with a list of ten things the reader can do on leaving the Part. Every item names the section that builds it and the exercise that tests it, and Appendix Z, as it fills in, will hold the worked solution. The gate is a markout, not a quiz. A quiz asks whether you recognise the right answer among four. A gate asks for the number, written down before you look, and the number is either within the check or it is not. There is no partial credit for having read the section recently.
+
+Here is the Part II gate in full, as the model for the other seven. It is the gate the transition coach drafted first, and it is the one where the most readers will discover that they had a feeling and not a skill.
+
+| # | Before you leave Part II, you can… | Built in | The check |
+| :-- | :-- | :-- | :-- |
+| 1 | Compute by hand the skew of a one-year bond with a 4% default probability, and say why the shortcut $-1/\sqrt{\text{PD}}$ is close | §5.1.3 | About −4.7; the shortcut gives −5 |
+| 2 | Derive the $\tfrac12\sigma^2$ in Itô's lemma on paper from $(dW)^2 = dt$, and say in one sentence what it does to a median path | §6.1.2 | The median grows at $\mu - \tfrac12\sigma^2$ |
+| 3 | Explain to Kaz why $N(-\text{DD})$ is not a default probability anyone should quote | §6.4.3 | At a DD of 4 the normal says about 3 in 100,000; most firms sit at 4 or above and default anyway, so the desk maps DD through an empirical table |
+| 4 | Bootstrap a hazard curve from five CDS quotes, and flag the bucket where the hazard goes negative | §6.8 | A negative bucket means survival rises with time: a stale quote or an arbitrage, never a probability |
+| 5 | Turn a spread and a recovery into a hazard rate in your head | §6.8 | 300 bp at 40% recovery is about 5% a year |
+| 6 | Say which measure a number is in before you say the number | §6-B.6 | A CDS-implied PD is $\mathbb{Q}$, a cohort default rate is $\mathbb{P}$, and their ratio is a premium, not an error |
+| 7 | Replicate a one-period option with the stock and a bond, and read the risk-neutral probability off as a ratio of prices | §6-B.2.2 | The probability comes from prices, not from anyone's forecast |
+| 8 | Cluster a panel regression by issuer and watch a t-statistic of six fall to about two and a half | §7-B.0, §7-B.1 | Eleven bonds of one issuer are one observation wearing eleven CUSIPs |
+| 9 | Fit a Kaplan–Meier curve to a cohort with censored bonds, and say what dropping the censored ones does | §7-B.4 | It throws away survivors, so the default rate comes out too high |
+| 10 | Split a panel for validation so that no issuer sits in both the training and the test set | §7.7 | The grouping key is the ultimate parent, not the CUSIP |
+
+> **Math, Gently.** *Skew, and why a 4% bond has so much of it.* Skew measures lopsidedness: how much a distribution leans to one side, in units of its own spread. A symmetric bell has skew zero. The survive-or-jump bond of section 0.3 is about as lopsided as an everyday instrument gets, and the arithmetic fits on a napkin. Treat the bond's outcome as a coin that comes up "default" with probability $p$. The skew of such a coin is $(1 - 2p)/\sqrt{p(1-p)}$, and because default is the *bad* side for a bondholder, the bond's return carries the minus sign. At $p = 0.04$, $\sqrt{0.04 \times 0.96} \approx 0.196$ and $1 - 2p = 0.92$, so the skew is $-0.92/0.196 \approx -4.7$. When $p$ is small, both $1 - 2p$ and $1 - p$ are close to one, which leaves $-1/\sqrt{p} = -5$: the shortcut in the gate. Notice which way it moves. The *safer* the bond, the *more* skewed it is, because the rarer the default, the further it sits from everything else in units of a standard deviation. That is why a normal distribution, which has no skew at all, calls a day that a mixture finds ordinary a fourteen-sigma event. The full version is §5.1.3.
+
+Theo failed item 4 the first time, in the second week of August, and the way he failed it is typical. His bootstrap produced a hazard of −0.4% a year in the bucket between three and five years, and he did not flag it, because the survival curve still looked like a survival curve and the number was small. Kaz, who saw the hand history a month later, explained the problem in one sentence: a negative hazard means the probability of surviving to five years is *higher* than the probability of surviving to three, which is not a probability statement about the company but a statement that somebody's quotes do not agree with each other. Either a quote was stale or there was an arbitrage, and the desk's answer to both is the same, which is to find out before using the curve. The gate item exists because the failure is silent. Nothing crashes. The number is merely impossible.
+
+The other seven gates are summarised here in a line each; their full lists close the Part openers.
+
+| Part | The gate, in one line |
+| :-- | :-- |
+| I. Arrival | Price a two-point bond in both measures; quote the bid after two sales from a seller who may be informed (§3.2); compute a markout with the sign right (§3.3); compute DV01 and DTS for one bond and size its hedge (§4B.5); fill in your own rows of the Edge Ledger (§3.5) |
+| III. Isolating IDO | Decompose a bond's return into rates, spread beta and residual with the right signs (§8.1); hedge in DTS rather than notional (§8.4); make an explain foot (§8C.4); size a pair to a stop (§8D.5); filter, not smooth, a two-state regime (§12.4) |
+| IV. Restructuring | Find the fulcrum (§12B.6); write an uptier as a transfer of recovery (§13.3); score one credit agreement for priming risk (§13.8); split a default intensity into competing risks (§14.2) |
+| V. Markets | Derive the reservation price and spread of a market maker (§18.4); put jump-to-default inside it (§18.6); price a portfolio trade's four terms (§19.2); derive an ETF's arbitrage band (§20.3) |
+| VI. Cross-asset | Turn equity volatility into a spread (§23.2); price the two legs of a CDS (§24.2); name the four things people mean by "basis" (§24.3) |
+| VII. Machines | Turn a definitions article into a graph and find the add-back fixed point (§25.2, §25.3); write a spec with invariants that ROBO cannot satisfy vacuously (§26.9); explain why a kill switch is a stopping rule (§27.7) |
+| VIII. The PM | Compute effective breadth when issuers cluster (§28.2); size with Kelly through a trapdoor and say why the answer is a fraction of it (§28.4); state the standard error of a year of P&L (§28.8) |
+
+A reader on one of the seat paths of section 0.4 meets only the gates on their path. A market maker who never opens Part IV never faces its gate, and should not feel bad about the fact; the gate is for the Part you are leaving, not for the book.
+
+## 0.6 The Ninety Days Before Day One
+
+*Thursday 8 October 2026, 6:45 p.m., Theo's third week. Fictional.*
+
+Mags found the calendar because it fell out of Theo's notebook. It was a single printed page, ninety boxes in rows of seven, every box filled in pencil with section numbers and a time, most of them crossed through, a few circled in red. Week eleven had a coffee ring on it.
+
+She held it at arm's length, the way she held anything with a formula on it.
+
+"Back in my day," she said, "the study plan was a Bloomberg terminal and someone shouting. You learned what a make-whole was when a salesman screamed it at you across the floor at four o'clock, and you learned what a springing lien was when one sprang." She turned the page over, as though there might be more on the back. "My first restructuring, I read the indenture on the plane. The second one, I read it before the plane. That was the whole curriculum."
+
+"Did it work?"
+
+"For the ones who survived it." She handed the calendar back. "This has a calendar. It has the red circles where you got it wrong." She paused, the way she paused before saying anything kind. "It's better than shouting. Don't tell anyone I said so."
+
+The plan that page records was built from the transition coach's 30/60/90 proposal, adjusted for the arithmetic of one person's evenings, and it is offered here as a worked example rather than a prescription. Ines's offer arrived at the end of the interview week of Chapter 4-D, the calendar started on Sunday 28 June, and the first day was Tuesday 22 September, which is eighty-six days away; the plan was called ninety because every plan is, and the missing four came out of sleep, which is how every plan the desk has ever written was funded.
+
+The first thing the calendar settles is how many hours there are. Theo budgeted twelve to fifteen a week, two evenings and most of a weekend day, around a notice period at PJT that was supposed to be quiet and was not. Over a little more than twelve weeks that is somewhere between 150 and 185 hours. The book, read in full at the pace assumed in section 0.4, would take something like twice that. So the plan does not read the book. It reads the parts of the book that the first ninety days on a desk will draw on, at the tier those days will demand, and leaves the rest for the year. This turns out to be the most realistic feature of the whole exercise. A desk never has time to read everything either; it triages, and the triage is a skill.
+
+| Days | Chapters, and the tier they get | Projects and checkpoints | Hours |
+| :-- | :-- | :-- | --: |
+| 1–30 | 1-B in full; Chapters 1, 2 and 4 at Tier 1 (cold opens, case studies, the Trend Watches); Chapter 3 with §3.1–3.3 at Tier 2; 3-B; 4-B at Tier 2 with `bondmath.py` built; Chapter 5 with §5.1–5.3 at Tier 2. Appendix A's phrasebook (§A.10) open on the second screen throughout | Edge Ledger rows drafted (§3.5); the Part I gate on day 30 | 55–60 |
+| 31–60 | Chapter 6 with §6.1, §6.2, §6.4 and §6.8 at Tier 2 and §6.11 built; 6-B; Chapter 7 at Tier 1 except §7.7; 7-B at Tier 2; Chapter 8 through §8.4 | Portfolio project 1 (the TRACE panel and the Roll spread by trade size) and project 6 (the DD-to-PD map with issuer-grouped validation), from §4D.11; the Part II gate on day 60 | 55–60 |
+| 61–86 | 12-B; Chapters 13 and 14 at Tier 1 with §13.3, §13.8 and §14.2 at Tier 2; Chapter 18 through §18.6 | Project 2 (the Priming Risk Score on public credit agreements) and project 4 (the RFQ quoting game with a hand history); Chapter 4-D's sixty tagged problems; a mock interview, or for a reader with an offer, a mock morning | 45–55 |
+
+<!-- FIGURE: ch00_ninety_days.png (a calendar strip, days 1 to 90 with days 87 to 90 hatched as "funded by sleep"; chapters above the line, coloured by tier; projects and the three gate checkpoints below; the mock interview or mock morning at day 86; an arrow off the right edge labelled "§3B.8: the ninety days after") -->
+
+A few choices in that table carry most of its weight. Appendix A's phrasebook sits beside the first month because the ex-banker's hardest problem in the first weeks is not an equation; it is that he already has a word for everything and every word is subtly wrong. "Downside case" becomes a left tail at a stated horizon, "cushion" becomes a distance to a barrier, "the market is pricing in" becomes a $\mathbb{Q}$ quantity that is not a forecast, and the dictionary is where those translations live (§A.10). Projects 1 and 6 come in the second month because they force the reader to touch real data (TRACE prints, filings, equity prices) and to make the two mistakes everyone makes with it, the look-ahead join and the issuer that appears in both folds, before anyone is paying for them. Projects 2 and 4 come last because they are the two a desk head asks about first: one reads documents as features, the other plays the market-maker's game against an informed counterparty and scores it by markouts.
+
+The last box is a choice between two endings. A reader still looking for a seat ends the ninety days with a mock interview built from Chapter 4-D: a market on something with a document answer, a Kelly question with a trapdoor, and a pitch delivered as a distribution. A reader who already has the seat, as Theo did, ends with a mock morning instead. He took a week of public prices for a handful of bonds, built the explain he expected the desk to show him, wrote down in advance the line he thought would refuse to tie, and checked it against what actually happened. The prediction was wrong in an instructive way (he had forgotten accrued interest on a bond that went ex-coupon midweek), which is exactly what the first thirty days on the seat would ask of him.
+
+The ritual that held the plan together took one hour on Sunday evenings. Theo listed the week's exercises, and for each one he wrote down his number, the check, the gap, the minutes it took, its tier, and a confidence he had recorded *before* checking: 50, 70 or 90 per cent. Ines called it the hand history, and the name is exact. A poker player reviews hands to find the leaks that a single session hides; a trader reviews markouts for the same reason; a reader reviews the week's exercises to find which kind of mistake is recurring, which is almost never the kind they expected.
+
+> **Math, Gently.** *How many exercises before you know you are good.* Suppose that after the first month the hand history shows 25 exercises, 18 of them right within the check. The hit rate is $18/25 = 0.72$. How sure can you be that it is really 0.72 and not, say, 0.60? A hit rate built from $n$ independent tries wobbles by about one *standard error*, $\sqrt{p(1-p)/n}$. Here that is $\sqrt{0.72 \times 0.28 / 25} \approx 0.09$. A rough 95% band is two standard errors either side, about 0.54 to 0.90, which is wide enough to include "fine" and "not yet." After a hundred exercises at the same rate the standard error halves to about 0.045, and the band narrows to 0.63 to 0.81. The lesson is not that 25 exercises are useless; it is that a month of exercises can tell you that you are not hopeless, and it takes a quarter to tell you that you are good. Section 4D.10 does the same arithmetic on a year of trading calls (forty calls at 55% have a standard error of about 7.9 points, which makes a 55% year indistinguishable from a coin), and §28.8 makes the same argument from the PM's chair. The general machinery of standard errors, including what happens when the tries are *not* independent, is §7-B.1 and §7-B.8.
+
+The confidence column turned out to be the most useful thing in the hand history, more useful than the hit rate. By the end of July, Theo's 90% answers were right about 75% of the time, and his 50% answers were right about 70% of the time. He was overconfident about the derivations he had read recently and underconfident about the arithmetic he had done for years at PJT, which is the standard profile of an ex-banker in month one, and the calibration table said so before any person had to.
+
+> **View From Another Seat.** *Three rooms reading the same ninety-day plan.* Show Theo's calendar to the head of a **dealer's market-making desk** and the first question is whether, by day ninety, he can predict the morning explain: which line will be large, which will refuse to tie, which hedge leg will need a roll quote. The plan's mock morning is the part she would read twice. Show it to the PM of a **multi-manager pod** and the question is about the ledger: is every view written as a sentence with a date in it, with the hedge, the ratio and the exit stated before the trade, so that a risk manager can audit the book without asking what anybody meant? The hand history is the part he would read twice. Show it to a **distressed fund** and the question is about documents: has the candidate read a credit agreement this summer, all of it, including the definitions article and the exhibits, and can he say which paragraph moves the price? Project 2 is the part that room would read twice, and it would wonder, politely, why it comes so late. None of the three is wrong. They are describing different jobs, and the plan's own seat path (section 0.4) is what decides which of the three is reading.
+
+The ninety days end where Chapter 3-B begins. Its §3B.8 takes over on the first day of the seat, with a plan that is shorter than Theo expected, because the desk does not want a plan from a new hire; it wants evidence that he can be given a clock. In days 1 to 30 he reads the feed diff, the security master, the explain and the risk pack every morning, until he can predict the unexplained line before he sees it; by days 61 to 90 he ships one feature through the first rung of the deployment ladder (replay, then paper, §27.8). The artifact that bridges the two plans is the RSSG Edge Ledger of §3.5: the inventory of what the banker brings, with a decay rate on each skill. Theo drafted his rows in the first month at the kitchen table, revised them after the Part II gate, and brought them to the desk on day one. It was the first document anybody on the desk asked him for, and the only one from the summer that he had written entirely himself.
+
