@@ -491,3 +491,340 @@ The plan delivers an exit ABL (150), an exit term loan that takes out the DIP (3
 **The price of the clock.** Take a chain from the petition state with intensities per year: petition to solicitation at 3.0, petition to contested at 1.0, contested to solicitation at 2.0, contested to sale at 0.5, solicitation to effective at 6.0. At $r = 5\%$, §12B.7 gives $U_{P,\text{eff}} = 0.927$, $U_{P,\text{sale}} = 0.048$, $\mathbb{E}[T] = 0.51$ years and $W_{P,\text{eff}} = 0.457$. With a fee burn of \$60mm a year on the 1,250 fulcrum class, the first lien's value at the petition is about $0.927 \times 60.8 + 0.048 \times 50 - (60/1{,}250) \times 0.457 \times 100 \approx 56.6$, taking 50 as its recovery in the sale state. The 63 in the cold open priced the out-of-court edges, and the petition removed them. (Strictly, the first \$15mm of extra fees comes out of the unsecured pool, because administrative claims are paid from unencumbered value first. Only after that does the burn reach the first lien, through the carve-out. Charging it all to the fulcrum is off by at most 1.2 points.)
 
 Used in: §13.3 (Larkspur, the out-of-court sibling of this case), the cold opens of Chapters 18 and 24 (earlier Halvorsen chapters, before the grace period), §24.6 (the CDS auction the petition triggers), §16.1–16.4 (Halvorsen's new equity, warrants and forced sellers), §25.7 (the docket this case would leave).
+
+## 12B.10 Specification for AI Implementation: `restructuring_state_machine.py`
+
+### Case Study: Serta to Incora, One Guard Read Four Times
+
+On 22 June 2020 the uptier edge out of Serta's Stressed state fired. Its guard was one question, "is this an open market purchase?", and the bare majority holding the pens answered yes. A Texas bankruptcy court agreed in 2023. On 31 December 2024 the Fifth Circuit said no, because an open market purchase happens "on the secondary market for syndicated loans," and in July 2026 the remand court priced the wrong answer at \$261.13mm plus 9% interest (§13.3.1, §25.7.3). The machine never changed. One Boolean was read four times and flipped once, four and a half years after the edge fired. Wesco/Incora did the same to the min–max of §12B.1: read together, the steps faced a two-thirds bar the group lacked (bankruptcy court, January 2025); read one at a time, each cleared its own (district court, December 2025). Lawyers choose the outer min, and a panel audits the choice later.
+
+> **Math, Gently.** A guard nobody can read yet is a coin nobody can see. Call $p$ the chance that a court finally says "true." An edge worth +30 points to the participants if it stands and −30 if it is unwound with damages is worth $60p - 30$ today: 18 points at $p = 0.8$, minus 12 at $p = 0.3$. That is a Bernoulli variable with a timestamp, and an appeal can flip it again. The full version is Law 16 and §14.6.
+
+**What that asks of the code.** ROBO's answer to "model the Halvorsen bankruptcy" was the cold open's 40: no state, no clock, no document. The module keeps four layers apart. The *legal layer* is the automaton of §12B.4, with guards that return probabilities: a sacred right is 0, a clean majority vote is 1, and Serta's clause in 2024 sat in between. `legal_edges` lists every edge with a positive guard and never picks one, and the log keeps each guard's value at firing, so a later ruling revalues the edge rather than rewriting history. The *contract layer* is pure functions of §12B.1–12B.6, the *clock layer* turns a petition date into §12B.5's deadlines, and the *probability layer* returns §12B.7's $\mathbf{U}$, $\mathbf{W}$ and $\mathbf{m}$ by linear solves. Claims are in \$mm, intensities per year, recoveries fractions of claim.
+
+Use it for the structure of a case, not to value the enterprise: $V$ is an input, and every recovery is conditional on it (§5.5 and §16.1 own its distribution). The edge case that bites is $V = K_j$, where class $j$ is whole and class $j+1$ is the fulcrum at zero, so a `<=` where a `<` belongs hands the new equity to the wrong class. Turnover runs in the order agreements are listed, and a chain with no exit makes $\mathbf{G}_{\mathcal{T}\mathcal{T}}$ singular, a case that cannot end. The self-test reproduces Moyer's Dead Co. (bank 50.00, trade 18.75, sub 6.25; Moyer_Distressed_Debt_Analysis p.160–161) and this chapter's numbers.
+
+<!-- EXPLAINED -->
+```python
+"""restructuring_state_machine.py (Chapter 12-B).
+
+Four layers, kept apart: a timed automaton whose guards are probabilities (12B.4),
+contract arithmetic (12B.1-12B.6), statutory clocks (12B.5) and the pricing
+resolvent (12B.7). Claims and values in $mm, intensities per year, rates as annual
+decimals, recoveries as fractions of allowed claim. Every generator G is a P object.
+"""
+from __future__ import annotations
+
+import datetime as dt
+import math
+from dataclasses import dataclass, field
+from typing import Callable
+
+import numpy as np
+
+Guard = Callable[[dict, dict], float]  # (document state, clocks) -> P(guard holds)
+
+
+# ---------------------------------------------------------------- legal layer
+@dataclass(frozen=True)
+class Edge:
+    src: str
+    dst: str
+    event: str
+    guard: Guard = lambda doc, clk: 1.0
+    resets: tuple[str, ...] = ()
+    forced: bool = False  # fires when an invariant of `src` is about to fail
+
+
+@dataclass
+class Machine:
+    edges: list[Edge]
+    invariants: dict[str, dict[str, float]] = field(default_factory=dict)
+    state: str = "Performing"
+    clocks: dict[str, float] = field(default_factory=dict)
+    t: float = 0.0  # days elapsed
+    log: list[tuple[float, str, str, str, float]] = field(default_factory=list)
+
+    def legal_edges(self, doc: dict) -> list[tuple[Edge, float]]:
+        """Every edge out of the current state with a positive guard. Never picks one."""
+        out = []
+        for e in self.edges:
+            if e.src != self.state:
+                continue
+            p = float(e.guard(doc, self.clocks))
+            if not 0.0 <= p <= 1.0:
+                raise ValueError(f"guard on {e.event!r} returned {p}")
+            if p > 0.0:
+                out.append((e, p))
+        return out
+
+    def fire(self, event: str, doc: dict) -> str:
+        """Take a legal edge. The log keeps the guard's value so a later ruling can revalue it."""
+        for e, p in self.legal_edges(doc):
+            if e.event == event:
+                for c in e.resets:
+                    self.clocks[c] = 0.0
+                self.log.append((self.t, self.state, e.dst, event, p))
+                self.state = e.dst
+                return self.state
+        raise ValueError(f"{event!r} is not a legal edge from {self.state!r}")
+
+    def advance(self, days: float, doc: dict) -> str:
+        """Run every clock; when an invariant binds, fire the forced edge at the deadline."""
+        while days > 0:
+            inv = self.invariants.get(self.state, {})
+            for c in inv:
+                self.clocks.setdefault(c, 0.0)
+            slack = min((cap - self.clocks[c] for c, cap in inv.items()), default=math.inf)
+            step = min(days, max(slack, 0.0))
+            for c in self.clocks:
+                self.clocks[c] += step
+            self.t += step
+            days -= step
+            if days > 0:
+                forced = [e for e, _ in self.legal_edges(doc) if e.forced]
+                if not forced:
+                    raise RuntimeError(f"invariant fails in {self.state!r} and no edge is forced")
+                self.fire(forced[0].event, doc)
+        return self.state
+
+
+# ------------------------------------------------------------- contract layer
+def effective_threshold(implementations: list[list[float]]) -> float:
+    """12B.1: min over implementations of the max threshold among the rights each touches."""
+    return min(max(thetas) for thetas in implementations)
+
+
+def blocking_stake(theta: float, turnout: float = 1.0) -> float:
+    """12B.3: a no-voter blocks an amount test of `theta` (share of the amount voting) with
+    any share above this, when everyone else turns out at `turnout` and votes yes."""
+    t = turnout
+    return (1 - theta) * t / (1 - (1 - theta) * (1 - t))
+
+
+@dataclass
+class Silo:
+    value: float
+    tiers: list[list[str]]  # lien order; classes within one tier share pro rata
+
+
+def _pro_rata(amount: float, owed: dict[str, float]) -> dict[str, float]:
+    total = sum(owed.values())
+    if total <= 0.0:
+        return {k: 0.0 for k in owed}
+    paid = min(amount, total)
+    return {k: paid * v / total for k, v in owed.items()}
+
+
+def silo_waterfall(claims: dict[str, float], silos: list[Silo], unencumbered: float,
+                   admin: float = 0.0, subordination=()) -> dict[str, float]:
+    """12B.2 in four steps: silos, deficiencies, the pool, turnover. `subordination` is a
+    list of (junior, [beneficiaries]) and runs in the order given."""
+    got = dict.fromkeys(claims, 0.0)
+    for s in silos:
+        left = s.value
+        for tier in s.tiers:
+            paid = _pro_rata(left, {k: claims[k] - got[k] for k in tier})
+            for k, x in paid.items():
+                got[k] += x
+            left = max(left - sum(paid.values()), 0.0)
+        unencumbered += left  # equity in the collateral belongs to the estate
+    dist = _pro_rata(max(unencumbered - admin, 0.0), {k: claims[k] - got[k] for k in claims})
+    for junior, seniors in subordination:
+        moved = _pro_rata(dist[junior], {b: claims[b] - got[b] - dist[b] for b in seniors})
+        dist[junior] -= sum(moved.values())
+        for b, x in moved.items():
+            dist[b] += x
+    return {k: (got[k] + dist[k]) / claims[k] for k in claims}
+
+
+def call_spread_recoveries(V: float, claims: list[float]) -> list[float]:
+    """12B.6: C_j R_j = (V - K_{j-1})^+ - (V - K_j)^+, classes in priority order."""
+    out, K = [], 0.0
+    for c in claims:
+        out.append((max(V - K, 0.0) - max(V - K - c, 0.0)) / c)
+        K += c
+    return out
+
+
+def fulcrum(V: float, claims: list[float]) -> int | None:
+    """min{j : K_j > V}. At V == K_j class j is whole and the fulcrum is j + 1, at zero
+    recovery. None means every class is whole and old equity is in the money."""
+    K = 0.0
+    for j, c in enumerate(claims):
+        K += c
+        if K > V:
+            return j
+    return None
+
+
+def fulcrum_deltas(V_samples, claims: list[float]):
+    """pi_j = P(class j is the fulcrum) over draws of V (say which measure drew them), and
+    the expected value delta pi_j / C_j per $mm of V."""
+    V = np.asarray(V_samples, float)
+    K = np.concatenate([[0.0], np.cumsum(claims)])
+    pi = np.array([np.mean((K[j] <= V) & (V < K[j + 1])) for j in range(len(claims))])
+    return pi, pi / np.asarray(claims, float)
+
+
+def rollup_transfer(W: float, F: float, M: float, kappa: float) -> float:
+    """12B.5: recovery lost by class members outside the DIP group, R - R'."""
+    rolled = kappa * M
+    if rolled > min(W, F):
+        raise ValueError("roll-up exceeds the value the class receives")
+    return 0.0 if W >= F else rolled * (F - W) / (F * (F - rolled))
+
+
+def cramdown_price(c: float, y: float, n: int) -> float:
+    """12B.6: takeback paper per unit of allowed secured claim, 1 - (y - c) a_n(y)."""
+    a = n if y == 0 else (1 - (1 + y) ** -n) / y
+    return 1 - (y - c) * a
+
+
+# ---------------------------------------------------------------- clock layer
+def _add_months(d: dt.date, months: int) -> dt.date:
+    y, m = divmod(d.month - 1 + months, 12)
+    for day in (d.day, 30, 29, 28):
+        try:
+            return dt.date(d.year + y, m + 1, day)
+        except ValueError:
+            pass
+    raise ValueError(d)
+
+
+def statutory_clocks(petition: dt.date) -> dict[str, dt.date]:
+    """12B.5 clock table from a voluntary petition (the order for relief). Court-set clocks
+    (challenge period, general bar date, DIP milestones) are case inputs, not statute."""
+    day = lambda n: petition + dt.timedelta(days=n)
+    return {
+        "interim_relief_window_ends": day(21),                  # Rule 6003
+        "exclusive_filing_ends": day(120),                      # 1121(b)
+        "exclusive_solicitation_ends": day(180),                # 1121(c)(3)
+        "exclusive_filing_cap": _add_months(petition, 18),      # 1121(d)(2)
+        "exclusive_solicitation_cap": _add_months(petition, 20),
+        "lease_decision_with_extension": day(210),              # 365(d)(4)
+        "governmental_bar_date": day(180),                      # 502(b)(9)
+        "avoidance_limitations": _add_months(petition, 24),     # 546(a)
+        "preference_lookback_start": day(-90),                  # 547(b)(4)
+        "insider_lookback_start": _add_months(petition, -12),
+        "goods_503b9_lookback_start": day(-20),                 # 503(b)(9)
+    }
+
+
+def transfer_trace(claim_kind: str, proof_filed: bool) -> str:
+    """12B.8, Rule 3001(e): what a claim transfer leaves on the docket."""
+    if claim_kind == "public_bond":
+        return "none: settles through DTC"
+    if proof_filed:
+        return "evidence of transfer; the transferor has 21 days to object"
+    return "only the transferee or an indenture trustee may file the proof"
+
+
+# ---------------------------------------------------------- probability layer
+def resolvent(G, transient: list[int], absorbing: list[int], r: float = 0.0):
+    """12B.7: U = (rI - G_TT)^-1 G_TA, W = (rI - G_TT)^-1 U, m = (-G_TT)^-1 1.
+    Rows are transient states, columns absorbing ones. Linear solves, no inverse."""
+    G = np.asarray(G, float)
+    if (G - np.diag(np.diag(G)) < 0).any() or not np.allclose(G.sum(axis=1), 0.0):
+        raise ValueError("not a generator: off-diagonals must be >= 0 and rows sum to 0")
+    GTT = G[np.ix_(transient, transient)]
+    A = r * np.eye(len(transient)) - GTT
+    U = np.linalg.solve(A, G[np.ix_(transient, absorbing)])
+    W = np.linalg.solve(A, U)
+    m = np.linalg.solve(-GTT, np.ones(len(transient)))  # singular: a case that cannot end
+    return U, W, m
+
+
+# ------------------------------------------------------------------ self-test
+def _self_test() -> str:
+    def close(a, b, tol=1e-3):
+        assert abs(a - b) < tol, (a, b)
+
+    # Moyer's Dead Co.: assets 75, all unsecured; the sub is subordinated to the bank only
+    r = silo_waterfall({"bank": 50, "trade": 50, "sub": 100}, [], 75.0,
+                       subordination=[("sub", ["bank"])])
+    close(r["bank"], 1.0); close(r["trade"], 0.375); close(r["sub"], 0.0625)
+    # 12B.2: lien subordination, then payment subordination as well
+    claims, silo = {"1L": 100, "2L": 100, "U": 100}, [Silo(80.0, [["1L"], ["2L"]])]
+    r = silo_waterfall(claims, silo, 60.0)
+    close(r["1L"], 0.8545); close(r["2L"], 0.2727); close(r["U"], 0.2727)
+    r = silo_waterfall(claims, silo, 60.0, subordination=[("2L", ["1L"])])
+    close(r["1L"], 1.0); close(r["2L"], 0.1273); close(r["U"], 0.2727)
+    # thresholds, the fulcrum boundary, roll-up, cramdown
+    close(blocking_stake(2 / 3, 0.7), 0.2593)
+    close(effective_threshold([[0.5, 1.0], [0.5, 2 / 3]]), 2 / 3)
+    assert fulcrum(100.0, [100.0, 50.0]) == 1
+    assert call_spread_recoveries(100.0, [100.0, 50.0]) == [1.0, 0.0]
+    pi, delta = fulcrum_deltas([50, 120, 140, 200], [100.0, 50.0])
+    close(pi[0], 0.25); close(pi[1], 0.5); close(delta[1], 0.01)
+    close(rollup_transfer(910, 1400, 150, 1.0), 0.042)
+    close(cramdown_price(0.085, 0.11, 7), 0.882)
+    # the Halvorsen clock (12B.9): Petition, Contested, Solicitation | Effective, Sale
+    G = [[-4.0, 1.0, 3.0, 0.0, 0.0],
+         [0.0, -2.5, 2.0, 0.0, 0.5],
+         [0.0, 0.0, -6.0, 6.0, 0.0],
+         [0.0] * 5, [0.0] * 5]
+    U, W, m = resolvent(G, [0, 1, 2], [3, 4], r=0.05)
+    close(U[0, 0], 0.927); close(U[0, 1], 0.048); close(W[0, 0], 0.457); close(m[0], 0.508)
+    # out of court: a Serta blocker closes the uptier; the grace invariant forces the EoD
+    edges = [
+        Edge("Stressed", "Grace", "missed_coupon", resets=("grace",)),
+        Edge("Grace", "EoD", "grace_expires", forced=True),
+        Edge("Grace", "Petition", "file"),
+        Edge("Stressed", "Post-LMT", "uptier",
+             guard=lambda doc, clk: 0.0 if doc["subordination_sacred"] else 1.0),
+        Edge("Stressed", "Post-LMT", "exchange", guard=lambda doc, clk: doc["p_min_tender"]),
+    ]
+    doc = {"subordination_sacred": True, "p_min_tender": 0.35}
+    mach = Machine(edges, invariants={"Grace": {"grace": 30.0}}, state="Stressed")
+    assert {e.event for e, _ in mach.legal_edges(doc)} == {"missed_coupon", "exchange"}
+    try:
+        mach.fire("uptier", doc)
+        raise AssertionError("a sacred right was amended by a majority")
+    except ValueError:
+        pass
+    mach.fire("missed_coupon", doc)
+    assert mach.advance(28, doc) == "Grace"
+    assert mach.advance(5, doc) == "EoD" and mach.log[-1][0] == 30.0
+    # clocks and transfers
+    c = statutory_clocks(dt.date(2026, 3, 31))
+    assert c["exclusive_filing_ends"] == dt.date(2026, 7, 29)
+    assert c["exclusive_filing_cap"] == dt.date(2027, 9, 30)
+    assert transfer_trace("public_bond", True).startswith("none")
+    return "restructuring_state_machine: all checks passed"
+
+
+if __name__ == "__main__":
+    print(_self_test())
+```
+
+Used in: §13.3 and §13.7 (the uptier and multi-obligor engines extend `silo_waterfall`), §13.8 (the PRS supplies the LMT edges' guard probabilities), §14.3 and §14.6 (the re-default chain; rulings as guard jumps), §16.1 and §16.5 (plan value and claims), §25.7.2 (where $\mathbf{G}$ is estimated), §28.4 (sizing against the clock).
+
+## 12B.11 Desk Debrief
+
+- **Ask "under which document?" before "what's the recovery?"** The binding threshold is a min over implementations of a max over rights, and a court can shrink the menu. (Laws 8, 16)
+- **Lien subordination is one buffet; payment subordination is all of them.** Turnover pays only the named beneficiaries, so a defined term is a payoff. (Law 8)
+- **Turnout is a position.** At 70% turnout a quarter of a class blocks, and threshold fights are fought over the denominator. (Law 8)
+- **Every class is a call spread, and only the fulcrum has delta.** Plan values, roll-ups and cramdown rates are strikes that move value between classes. (Laws 7, 8)
+- **Time is a senior claim.** Fees burn ahead of every prepetition class and push the fulcrum up the stack; one resolvent prices the clock, in $\mathbb{P}$ until you say otherwise. (Law 4)
+- **A guard is a probability with a forum and a date.** Serta's took four and a half years to read. (Law 16)
+
+**The Spec You Hand the Robot.** "Implement `restructuring_state_machine.py` per §12B.10: a timed automaton whose guards are probabilities and whose log keeps them; the min–max threshold; the turnout-adjusted blocking stake; the silo waterfall with ordered turnover; call spreads and a fulcrum that puts $V = K_j$ in class $j+1$; roll-up and cramdown prices; statutory deadlines; and $\mathbf{U}$, $\mathbf{W}$, $\mathbf{m}$ by linear solves on a validated $\mathbb{P}$ generator. \$mm and years. Tests: Dead Co., §12B.2, §12B.9."
+
+### Exercises
+
+1. *(Kaz's buffet.)* In Dead Co. (assets 75; bank 50, trade 50, sub 100, all unsecured) the sub is subordinated to the bank. Who gets what, and what changes if "Senior Debt" includes trade? *Solution:* 37.5% each, then 31.25 of turnover: bank 100%, trade 37.5%, sub 6.25%. With trade inside the definition, the sub's 37.5 splits by shortfall: bank and trade 75%, sub nothing.
+2. *(The denominator.)* A coalition holds 59% of a \$600mm series and needs two-thirds. What new face closes the gap, and what share blocks a plan vote at 60% turnout? *Solution:* $N \ge 46/(1/3) = 138$, so \$138mm; any share above $0.6/2.6 = 23.1\%$.
+3. *(The burn.)* In §12B.9, what fee rate takes the first lien's petition-date value from 56.6 to 50? *Solution:* before fees it is $0.927 \times 60.8 + 0.048 \times 50 = 58.8$, so fees must cost 8.8 points: $(\phi/1{,}250) \times 45.7 = 8.8$ gives $\phi \approx$ \$240mm a year, four times the assumed burn. Closing the out-of-court edges (63 to 58.8) cost the first lien more than the clock does.
+4. *(ROBO confirms on filing day.)* Name three guards that should have stopped it. *Solution:* no post-petition solicitation without an approved disclosure statement (§1125(b)); 28 days' notice of the confirmation hearing (Rule 2002(b)); and §1129(a)(8) or (a)(10), which need votes. A prepack is fast only because its votes came before the petition (§1126(b)).
+
+### Deep-Dive Resource Graph
+
+- **Podcasts:** Bloomberg *Odd Lots*, "Inside the Blood Sport of Creditor-on-Creditor Violence," with Sujeet Indap (25 Nov 2024), transcript at https://podscripts.co/podcasts/odd-lots/inside-the-blood-sport-of-creditor-on-creditor-violence ; *Money Stuff: The Podcast*, "Hurt People Hurt People: SBUX, LMEs, BofA" (16 Aug 2024; no link verified).
+- **Practitioner Writing:** Octus, "RX 101: Creditor-on-Creditor Violence," https://octus.com/resources/articles/rx-101-creditor-on-creditor-violence ; Cleary Gottlieb, "Recent Developments in DIP Financing," *GRR Americas Restructuring Review 2024*, https://www.clearygottlieb.com/-/media/files/grr-americas-restructuring-review-2024--recent-developments-in-dip-financing.pdf ; Mayer Brown on *Serta* and the remand (July 2026), https://www.mayerbrown.com/en/insights/publications/2026/07/serta-simmons-bedding-the-fifth-circuits-uptier-decision-and-the-landmark-damages-ruling-on-remand ; Moyer, *Distressed Debt Analysis* (2005).
+- **Academic Papers:** Weiss (1990), *Bankruptcy Resolution: Direct Costs and Violation of Priority of Claims*, JFE; Eberhart, Moore and Roenfeldt (1990), *Security Pricing and Deviations from the Absolute Priority Rule in Bankruptcy Proceedings*, JF; Roe and Rotaru (2026), *Liability Management's Limited Runway*, HLS Bankruptcy Roundtable, https://bankruptcyroundtable.law.harvard.edu/2026/02/24/liability-managements-limited-runway-corporate-restructuring-today/ ; the Fifth Circuit's *Serta* opinion, https://www.ca5.uscourts.gov/opinions/pub/23/23-20181-CV0.pdf
+- **Data & Code:** `restructuring_state_machine.py` (§12B.10); Title 11, https://www.law.cornell.edu/uscode/text/11 ; Federal Rules of Bankruptcy Procedure, https://www.law.cornell.edu/rules/frbp ; CourtListener API, https://www.courtlistener.com/help/api/
+
+Used in: every Part IV chapter and §25.6–25.8; the Desk Debrief bullets feed App E (Laws 4, 7, 8, 16).
+
+<!-- STATUS: COMPLETE -->

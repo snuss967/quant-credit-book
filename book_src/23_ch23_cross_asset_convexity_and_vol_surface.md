@@ -253,8 +253,17 @@ As $K \to 0$, $d_2 \to \infty$ and $N(-d_1)$ vanishes faster than $K$, leaving a
 
 **Schema.** `OptionChain` is a pandas DataFrame with columns `T` (years, ACT/365), `K` (\$), `cp` (`"P"` or `"C"`), `bid`, `ask` (\$ per share), and `american` (bool), plus optional `open_interest`. Pivoting by expiry gives bid and ask tensors of shape `(n_expiries, n_strikes)`, kept separate. Interpolate missing strikes linearly in *price*, never in vol, and never extrapolate outside the listed strikes. Every unit recovery claim carries a `convention` tag (`"at_default"` for American, `"at_expiry"` for European), and comparisons across conventions raise an error.
 
-<!-- EXPLAIN: Listing 23.2 -->
-> **Code Companion: Listing 23.2.** Textbook Black-Scholes put (independent reference for the lam = 0 check). The full python listing is in [Appendix F, Listing 23.2](#code-23-2).
+The corridor theorem is lovely and useless until it meets a real option chain. Real chains have ragged strikes, wide bids and offers at the bottom where the interesting information lives, American exercise on every listed single-stock put, and no one to tell you which convention a given row follows. The question the desk actually asks is blunt: the stock is down by half, the CDS says one thing, the puts struck at five percent of spot say another, who is right, and is the gap big enough to trade after costs? Answering that on every name, every morning, is a job for code, and the code needs a synthetic market inside it so that it can be tested against a world where the answer is known.
+
+The listing starts with two pricers. `bs_put` is the textbook put, kept only as an independent reference; `jtd_put_price` is (23.8), the put on a stock that diffuses and may jump to zero at rate $\lambda$. The hazard enters as an extra drift term in $d_1$ and as a default-probability term in the payoff, written with `expm1` so that a small hazard does not lose its digits. `make_put_chain` uses it to manufacture a chain with a chosen half-spread, which is how the later checks get a market whose true $\sigma$ and $\lambda$ are known.
+
+`urc_from_puts` is (23.6) in code. It selects the puts at one expiry, interpolates bid and ask linearly in price, and forms the claim from a put spread struck at $A$ and $B$. With $A = 0$ the claim is simply $P(B)/B$; otherwise the claim's bid is B's bid less A's ask, because you must sell one leg and buy the other, and the ask uses the opposite pair. It returns the bid, the ask and a convention tag: `at_default` if every put in the slice is American, `at_expiry` otherwise. `urc_from_cds` produces the same claim from a flat-hazard CDS under either timing, which is what the tag is for. `jtd_fit` fits $\sigma$ and $\lambda$ jointly to mid prices divided by strike, so the cheap low strikes are not drowned by the money, and returns `floor_ratio`: the lowest-strike price ratio over the floor the fitted hazard implies. A value near one says jump-to-default describes the wing; a value far from one says something else, stochastic volatility or borrow, does.
+
+Inputs are a chain, spot, rate, dividend yield and a corridor; outputs are a bid-ask claim, a convention and a fitted hazard. Use it on liquid single names with listed puts deep into the wings and, ideally, a quoted CDS. Do not use it where the low strikes are dead or the borrow is special.
+
+The edge case that bites is the corridor guard. `urc_from_puts` raises if $B$ exceeds the highest listed strike, or if $A > 0$ lies below the lowest. With $A = 0$, though, the low-side check is skipped, and a $B$ below the lowest listed strike would be priced by `np.interp` holding the first quote flat, a quiet extrapolation of exactly the kind the spec forbids. Choose $B$ at or above the lowest strike yourself.
+
+*The full listing is [Listing 23.2 in Appendix F](#code-23-2).*
 
 ## 23.5 Greeks in Spread Terms: Natenberg for the Credit Desk
 
@@ -312,8 +321,17 @@ For the illustrative firm of Section 23.1 ($V = 100$, $F = 70$), $h \approx 0.02
 
 ### Specification for AI Implementation (continued): spread Greeks
 
-<!-- EXPLAIN: Listing 23.3 -->
-> **Code Companion: Listing 23.3.** MTM per unit notional of bought protection, running coupon c, market spread s. The full python listing is in [Appendix F, Listing 23.3](#code-23-3).
+The last few pages gave you five Greeks in prose, and prose does not get a hedge ticket sent. The risk meeting asks a plainer question about the same name: if the spread moves one basis point, what happens to the bond, what happens to the protection, and how many shares do I buy against it? If three people answer on three spreadsheets with three bump sizes, the book's number never ties to the desk's number, and the morning is spent reconciling instead of trading. The cure is one differencing routine, applied to every instrument, so that the answers are comparable by construction.
+
+The listing has three layers. The first is a pair of pricing primitives. `cds_rpv01` is the risky annuity of a flat-hazard CDS, with hazard equal to the spread over one minus recovery, and `cds_mtm_buyer` is the protection buyer's mark: spread minus coupon, times that annuity. `bond_price_flat` prices a semiannual bond discounted at the risk-free rate plus a flat spread. The second layer, `spread_greeks`, takes any function from a spread to a price, bumps the spread up and down by one basis point, and returns spread duration, convexity, CS01 and duration times spread; because it takes a function, a bond, a loan and a CDS all go through the same code. `merton_elasticity` is (23.10) in closed form, the percent move in the bond per percent move in the stock.
+
+The third layer, `cg_greeks`, is the one a hedge ticket needs. It strikes a protection position at today's CreditGrades spread, so the mark starts at zero, then reprices it under bumps. Delta is the negative slope of the mark in the stock price (a central difference of 1% of the share price), reported as shares to buy against the protection; gamma is the second difference in stock space; equity vega is one volatility point, and asset vega rescales it through (23.4). The repricing values the annuity with the flat-hazard formula at the new model spread, not with the CreditGrades integral.
+
+Use it for sizing a stock hedge and for risk reporting on non-financial names with a liquid stock. It does not hedge the jump (that is the put spread's job), and it is no use for instruments with optionality in the spread. The checks confirm that duration and convexity explain a 50bp move, that bought protection is short spread convexity, and that the hedge ratio rises as the stock falls from \$30 to \$15.
+
+The edge case that bites is the coupon. Because the position is struck at the model spread, the term (spread minus coupon) vanishes at the start, and delta collapses to the annuity times the slope of the model spread. A real trade done at a standard coupon with an upfront, or at a spread away from the model's, carries a nonzero mark and therefore a different delta. Greek the position you hold, not the par trade.
+
+*The full listing is [Listing 23.3 in Appendix F](#code-23-3).*
 
 ## 23.6 Capital-Structure Arbitrage: Rules, Returns, and Why Single Trades Lose
 
@@ -365,8 +383,17 @@ for a protection seller, with signs flipped for a buyer. Only the first term is 
 
 **Inputs.** `panel`: long DataFrame with `issuer`, `day`, `S`, `sigma_E`, `F_ps`, `s_model` (decimal, from CreditGrades), `ds_dS` (decimal per \$), `s_mkt`. Parameters: `alpha` (entry threshold on $z$), `eps` (exit), `hold_max_days = 180`, `cost_bp_cds` (running-spread equivalent, converted to upfront with RPV01), `cost_bp_eq` (bp of traded stock notional). Unit CDS notional per trade. Output: daily portfolio P&L, per-trade P&L, Sharpe, hit rate, and carry reported separately.
 
-<!-- EXPLAIN: Listing 23.4 -->
-> **Code Companion: Listing 23.4.** GBM equity paths (no defaults) and CreditGrades model spreads with stock-space slopes. The full python listing is in [Appendix F, Listing 23.4](#code-23-4).
+Here is the trouble with testing a capital-structure rule on real data: when the rule loses money, you cannot tell whether the model was wrong, the mispricing was never there, or the costs ate it. Real panels also contain only a handful of defaults, so the one outcome that ruins a protection seller is almost absent from the sample. A desk that wants to understand its rule before it risks capital builds a market where the answer is known: the model is exactly right, the market is the model plus noise, and the only dial is how long the noise remembers itself. Then the backtest measures the rule, not the data.
+
+The listing runs three functions in sequence. `simulate_cg_panel` builds the world: twenty issuers over 500 trading days, each with a random starting price between \$15 and \$60, equity volatility between 25% and 60%, and debt per share between \$10 and \$60. Stocks follow geometric Brownian motion with no defaults, and for every day the function computes the CreditGrades spread at that day's price, together with the stock-space slope of the spread by a central difference of plus or minus 1% of the price. `add_market_noise` turns the model spread into a market spread by multiplying it by $e^{u}$, where $u$ is an AR(1) with persistence $\phi$ and a stationary standard deviation of 0.30.
+
+`capstruct_backtest` trades the rules of (23.11) on the signal $z$, the market spread over the model spread, minus one. When $|z|$ exceeds `alpha` and the name is flat, it sells protection if the market is wide and shorts stock against it, or buys protection and goes long stock if the market is tight. The hedge is the annuity times the slope, rescaled to the market spread and rebalanced daily. It exits when $|z|$ falls below `eps`, after 180 days, or on the last day. Daily P&L is the change in the CDS mark plus the stock hedge's gain, less costs on entry, exit and every rebalance. Carry is accumulated but kept out of P&L. Outputs are an annualized Sharpe ratio, trade count, hit rate, the carry total and a trade ledger.
+
+Use it to learn what a rule can and cannot do under assumptions you control, and to compare persistence regimes. Do not quote its Sharpe as a forecast: the data have no defaults, no jumps, no borrow fees and no gaps.
+
+The edge case that bites is the time stop. A mispricing with persistence near one often fails to close inside 180 days, so the trade is force-closed wherever $z$ happens to sit, paying exit costs and realizing whatever the position lost on the way.
+
+*The full listing is [Listing 23.4 in Appendix F](#code-23-4).*
 
 The Sharpe ratios this prints are large, and they are large because the only thing in the synthetic market is mean-reverting noise around a correct model. That is the point of the exercise and the reason not to put the number in a pitch book. The useful output is the *shape*: as the persistence $\phi$ of the mispricing rises toward one, the expected daily convergence per unit of noise scales like $\sqrt{(1-\phi)/(1+\phi)}$ and the Sharpe ratio decays toward zero. Kapadia and Pu's weak integration is a statement that real $\phi$ is high and varies by name.
 
@@ -438,8 +465,17 @@ Hertz filed for Chapter 11 on May 22, 2020, with an equity that every model said
 
 **Rule.** Any issuer with deposits above 50% of liabilities, or any instrument with a contractual write-down or conversion trigger, is routed out of the CreditGrades engine. Banks go to a liquidity-runway model; trigger instruments carry a `contractual_waterfall_override = True` flag, and the risk system refuses to net them against equity as if priority held. The code is purely illustrative: inputs are round numbers loosely scaled to a \$200bn bank, not SVB's balance sheet.
 
-<!-- EXPLAIN: Listing 23.5 -->
-> **Code Companion: Listing 23.5.** Liquidity default day under a run whose outflow rate rises with equity losses (kappa) and with cumulative outflows (rho, the panic feedback). The full python listing is in [Appendix F, Listing 23.5](#code-23-5).
+The default clock above is a definition, and a definition is not a number a risk system can use. The desk needs to know, for each deposit-funded name in the book, on which day the line crosses zero under a stressed equity path, and it needs to know it every morning, because the answer changes with the stock. This is the one place in the book where the restructuring banker's habit is the right tool: a cash runway, sources against uses, day by day. SVB's version of Theo's 13-week model had two days in it. The routine that follows is that model with a feedback term and a for-loop, and its job is to sit next to the Merton number and disagree with it loudly.
+
+The function keeps three stocks: liquid cash, a pool of securities, and the uninsured deposits that can leave. Each day it does four things in a fixed order. It sets a run rate: `kappa` times the day's equity loss (nothing if the stock is up), plus `rho` times the share of uninsured deposits already gone, which is the panic feedback, capped at 100%. It multiplies that rate by the uninsured deposits still there to get the day's outflow. It sells securities, raising the lesser of what the pool fetches after the `haircut` and `max_monetize_per_day`, and adds the proceeds to liquidity. Then it tests: if the day's outflow exceeds the liquidity on hand, the bank defaults that day and the function returns the day and the path; otherwise it pays the outflow and carries the rest forward. If the equity returns run out first, the default day is `None`.
+
+The example is a bank loosely scaled to \$200bn: \$13bn of cash, \$115bn of securities, a 10% haircut, \$30bn a day of selling capacity, \$165bn of uninsured deposits, and equity returns of $-60\%$, $-30\%$ and $-10\%$. On day one the outflow is about \$42bn against \$43bn of liquidity, and the bank survives with \$1.4bn. On day two the panic term pushes the run rate above 60% of what is left, about \$78bn goes out against \$31bn of liquidity, and the bank defaults. The Merton one-year default probability for the same balance sheet, at 4% asset volatility, is under 1%, because Merton is asking whether assets fall below debt, and nobody in this story was waiting for that.
+
+Use it to route and stress deposit-funded names, running many equity paths and a grid of `kappa` and `rho` to turn a scenario into a distribution. Do not read the default day as a forecast, and do not calibrate `kappa` and `rho` to one event; they are illustrative.
+
+The edge case that bites is the haircut. It is one number applied to one pool for every day of the run, so the model sells securities at the same discount on day two as on day zero. In a real run the discount widens exactly when you need to sell, and the unrealized losses on a held-to-maturity book live entirely in that parameter. Stress it, or the function flatters the bank.
+
+*The full listing is [Listing 23.5 in Appendix F](#code-23-5).*
 
 ## 23.9 Cross-Asset Trend: Does the Surface Lead the Spread?
 
