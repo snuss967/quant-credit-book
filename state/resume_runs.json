@@ -213,6 +213,23 @@
    "runId": "wf_26de4e7f-ed8",
    "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/ed2-cleanup-batch-1-wf_26de4e7f-ed8.js",
    "args": null
+  },
+  {
+   "name": "figs-ch4",
+   "task": "ww95d3tpy",
+   "runId": "wf_95868132-0bd",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "04_ch04_inside_the_systematic_credit_industry"
+    ],
+    "stages": [
+     "figures",
+     "figcheck",
+     "resgraph"
+    ]
+   }
   }
  ]
 }
