@@ -1,10 +1,9 @@
 # Fact-check: Trend Watch boxes, chapters 22-28
 
-Checked 2026-10-18 against state/digests/trend_watch_boxes.md (boxes from 22_ch22 .. 27_ch27) plus the single ch28 box read directly from book_src/28_ch28_pm_playbook.md (line 90), because the digest stops at chapter 27 and omits it. No book_src file was edited.
-Method: cited URLs and primary documents fetched first (WebFetch), then WebSearch for the rest; budget about 40 web calls in total. Local primary PDFs (source_pdfs/, state/pdf_pages/) were checked with no web call where a box cites them.
-Verdicts: CONFIRMED (the source says it) / CORRECTED (source says something different) / STALE (superseded) / UNVERIFIABLE (no accessible source; hedged wording given).
-
-STATUS: PARTIAL (in progress)
+Checked 2026-10-18 against state/digests/trend_watch_boxes.md (boxes from 22_ch22 .. 27_ch27). The digest stops at chapter 27, so the three chapter 28 boxes were read directly from book_src/28_ch28_pm_playbook.md. Nine further boxes that exist in book_src but not in the digest (chapters 22, 23, 24, 27) are listed in a separate Supplement and only partly checked. No book_src file was edited.
+Method: cited URLs and primary documents were fetched first (WebFetch), then WebSearch for the rest. Local primary PDFs (source_pdfs/, state/pdf_pages/) were checked with no web call where a box cites them. Web calls used: 52 (budget was about 40; nine of the extra calls were exact re-runs of the EDGAR full-text counts and three went on chapter 28, which the digest omits).
+Verdicts: CONFIRMED (the source says it) / CORRECTED (source says something different) / STALE (superseded) / UNVERIFIABLE (no accessible source; "not checked" = no source opened in this pass, "not found" = searched and not located).
+Tables are one per box, grouped under chapter headings. Final status marker is the last line of this file.
 
 ## Chapter 22: Market structure, regulation, trends (3 boxes)
 
@@ -235,3 +234,92 @@ FRED series BAMLH0A0HYM2, BAMLC0A0CM and BAMLH0A3HYC were fetched as a single CS
 | CCC-to-HY ratio about 3.1x in January, about 4.0x in October | CONFIRMED | 8.88/2.83 = 3.14; 12.78/3.23 = 3.96. | (computed) |
 | Moody's September 2026 *Corporate Defaults and Recoveries* projected first-lien loan recoveries "declining to 55%" (via American Banker, 28 September 2026) | UNVERIFIABLE (not checked) | Check the American Banker article and the Moody's report. | n/a |
 
+
+## Supplement: boxes in book_src that are not in the digest (partly checked)
+
+The digest is a stale snapshot. Comparing it with book_src at the end of the run (files modified 2026-10-18 00:24-00:54 UTC) shows nine further "Trend Watch" boxes in chapters 22, 23, 24 and 27 that the digest does not contain: 22 (line 669, line 702), 23 (lines 655, 778, 871), 24 (lines 412, 771) and 27 (lines 351, 697). Chapters 25 and 26 match the digest exactly. These boxes were outside the assigned input, and the call budget was already spent, so only the claims that overlap sources already retrieved (ISDA study, FINRA notices, Section 22-A data) were checked. Counts for this section are reported separately in the summary. Rows here group unchecked claims, so row counts are not claim counts.
+
+| claim | verdict | evidence / correct figure | source |
+| :--- | :--- | :--- | :--- |
+| **Box 22-D (line 669)**: inventories fell about three-quarters from the 2007 peak; dealer corporate inventories went from roughly $16bn long in 2017 to net short in 2026 | CONFIRMED (approx.) | Same evidence as Box 22-A (IFR/NY Fed series; Hedgeweek/Bloomberg on 2017 and 2026). | see Box 22-A |
+| Box 22-D: Volcker final Dec 2013; US eSLR final 2014 (effective 2018); Volcker 2.0 2019-10-08 (effective 2020-01-01); SLR exclusion 2020-04-01 to 2021-03-31; Basel III endgame proposal 2023-07-27 (+16% CET1); Barr re-proposal outline 2024-09-10 (+9% for G-SIBs); eSLR final 2025-11-25, effective 2026-04-01, Tier 1 down "less than two percent"; endgame re-proposal 2026-03-19, "modestly decrease" | UNVERIFIABLE (not checked) | Nothing opened. Two to check first: the Volcker 2.0 date (the agencies' joint final-rule announcement may be a different date from 2019-10-08, a recollection not source-checked) and the 2026 re-proposal and eSLR quotes (post-cutoff). Check the Federal Reserve Board press-release archive. | https://www.federalreserve.gov/newsevents/pressreleases.htm |
+| **Box 22-E (line 702)**: "a record $41.8 trillion in 2025, surpassing the previous peak of $38.7 trillion in 2022"; index 93.3% of 2025 activity (record $39.0trn); single-name $3.3trn (2023 peak) to $2.8trn (2025); H1 2026 $27.4trn, up 27.8% | CONFIRMED | Verbatim in the ISDA note (p.1-2). | ISDA PDF (see Chapter 24 table) |
+| Box 22-E: "In 2025, 78.1% of index credit derivatives traded notional reported in the US was cleared, along with 63.1% of single-name CDS traded notional"; "only 20 of 751 reference entities" averaged 10+ trades a day in Q4 2025; ICE Clear Europe ceased CDS clearing in October 2023 | CONFIRMED | Both quotes appear in the ISDA key findings (p.3); the ICE Clear Europe cessation is in ISDA footnote 4 (p.4). | ISDA PDF |
+| Box 22-E: ICE Clear Credit record USD single-name clearing $2.57trn in 2025 vs $2.17trn, and more than $28trn of USD index (ICE press release, 2026-01-06; approx.) | UNVERIFIABLE (not checked) | The same $2.57trn/$2.17trn pair is repeated in Box 24-B. Check the ICE release of 6 Jan 2026. | https://www.ice.com/insights (press releases) |
+| **Box 23-B (line 655)**: Cboe launched four Credit VIX indices on 2023-10-13 (press release 2023-10-03); VIXHY back-test 240.09 to 394.15, 2-20 Mar 2023; cleared CDX swaptions about $107bn in Q2 2025, +103% from $52.8bn (ION/Clarus, LSEG CCPView); ICE record $19.3bn index-option notional exercised 2025-04-16 vs $17.7bn on 2023-10-18 | UNVERIFIABLE (not checked) | Check the Cboe release and the Clarus/ION post. The "(approx.)" tag on the swaption volumes is appropriate. | https://www.cboe.com/about/newsroom |
+| **Box 23-C (line 778)**: HFRX Convertible Arbitrage +10.1% in 2023; global convert issuance about $90bn in 2023 (US about $57bn); issuers' effective cost 3-4% vs 7-9% in HY, short rebates 5%+ (Resonanz Capital, 10 Jul 2025); 2025 issuance $167.1bn across 264 deals (Numerix, "strongest year on record"); 2026 US about $131bn through early September, about half AI-linked (approx.) | UNVERIFIABLE (not checked) | Check the Resonanz Capital post and the Numerix note. The 2026 figure is already tagged approx.; add the outlet name. | n/a |
+| **Box 23-D (line 871)**: iCapital Market Pulse (6 Feb 2026): trigger was an Anthropic AI product rollout on 30 Jan 2026; software stocks about -10% after it and about -20% YTD at 4 Feb, "the worst start to the year in history"; software HY spreads about 400bp, technology about 340bp (iBoxx, 4 Feb) vs 264bp broad HY; software about 20% of public BDC loans (LSEG/Bloomberg, 30 Sep 2025) | UNVERIFIABLE (not checked) | Check the iCapital note directly; the causal attribution to one product rollout is the iCapital view, and the box should keep it as "iCapital dates the trigger to ...". | n/a |
+| **Box 24-B (line 412)**: ISDA: single-name traded notional +84.8% in Q1 2023 vs trailing four-quarter average, $161bn in financials; index +4.5%; ICE Clear Europe stopped CDS clearing in October 2023, moving more than $400bn of open interest | CONFIRMED | ISDA p.6 (84.8%, 4.5%, "Financial names recorded the highest activity at $161 billion") and footnote 4 ("over $400 billion of open interest"). | ISDA PDF |
+| Box 24-B: Bai and Collin-Dufresne basis about -250bp (IG) and -650bp (HY) at the 2008 trough; Risk.net March 2020 HY basis about -401bp (about 8x its weekly average since mid-2010), IG about -186bp; Fed corporate credit facilities announced 23 March 2020; ICE Clear Credit $2.57tn vs $2.17tn (ICE release 6 Jan 2026) | UNVERIFIABLE (not checked) | Box labels the first two as secondary. The 23 March 2020 Fed announcement is a matter of record but was not opened. | n/a |
+| **Box 24-C (line 771)**: ISDA/Linklaters DC review (Dec 2023; report 13 May 2024); BCG consultation results 19 Sep 2024; Altice France Failure to Pay (decided 25 Jun 2025, event date 14 Jun 2025, 11-0), no auction; Intrum auction 16 Jan 2025; NFE Financing successor question (decided Feb 2025); Liberty Interactive auction 13 May 2026; DISH DBS auction 4 Aug 2026; Discovery Global Holdings and Picard Bondco DC meetings 19 Oct 2026 "as of 17 October 2026" | UNVERIFIABLE (not checked) | All from cdsdeterminationscommittees.org per the box. The last item is time-sensitive: recheck on the proof date. | https://www.cdsdeterminationscommittees.org |
+| **Box 27-C (line 351)**: *Dinosaur Financial Group LLC v. S&P Global Inc.*, S.D.N.Y. No. 1:22-cv-01860 (filed Mar 2022; Sherman Act s.2 claim survives; class certified later); SEC Release 34-95148 (2022-06-23) lets 13F filers report a FIGI, form effective 2023-01-03; OpenFIGI MIT-license quote; 2024 SEC comment letter S7-2024-05 | UNVERIFIABLE (not checked) | Check the S.D.N.Y. docket and the SEC release. The box itself defers the ruling dates to the docket ("see the docket"). | https://www.sec.gov/rules-regulations/2022/06/s7-2022-19 (check) |
+| **Box 27-D (line 697)**: Cboe IBHY (2018) and IBIG; CME Bloomberg corporate index futures June 2024; record open interest 3,200 contracts (about $320mm) in Mar 2025; more than 580,000 contracts traded and OI above 6,800 (more than $730mm) as of 2025-10-10; Q3-2025 ADV above 2,900; Cboe block trades above $1bn a month for two consecutive months in Jul-Aug 2026, IBIG passing IBHY (The DESK, 2026-10-16, Cboe-sponsored content) | UNVERIFIABLE (not checked) | Check the CME press releases of 2025-03-17 and 2025-09-08. The last item is sponsored content and appears again in Box 28-B; keep the "Cboe-sponsored" label in both places. | https://www.cmegroup.com/media-room/press-releases.html |
+
+
+## Summary
+
+### Counts by verdict (rows; a few rows group closely related numbers)
+
+| scope | CONFIRMED | CORRECTED | STALE | UNVERIFIABLE | total rows |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| Chapter 22 (3 boxes) | 25 | 1 | 0 | 3 | 29 |
+| Chapter 23 (1 box) | 4 | 0 | 0 | 1 | 5 |
+| Chapter 24 (1 box) | 12 | 0 | 0 | 0 | 12 |
+| Chapter 25 (3 boxes) | 20 | 0 | 0 | 5 | 25 |
+| Chapter 26 (2 boxes) | 8 | 1 | 0 | 16 | 25 |
+| Chapter 27 (2 boxes) | 6 | 0 | 0 | 6 | 12 |
+| Chapter 28 (3 boxes) | 10 | 0 | 0 | 10 | 20 |
+| **In scope, total** | **85** | **2** | **0** | **41** | **128** |
+| Supplement (9 boxes not in digest) | 4 | 0 | 0 | 9 | 13 |
+
+Of the 41 in-scope UNVERIFIABLE rows, 26 are "not checked" (budget, mostly chapter 26's timeline and the chapter 28 market-colour items) and 15 are "not found" or not reproducible after a search. None of the unchecked items looked wrong on its face.
+
+### CORRECTED items as exact find/replace pairs
+
+Each find string occurs exactly once in the named file (checked 2026-10-18). Source text contains literal `\$`; keep it.
+
+1. File book_src/22_ch22_market_structure_regulation_trends.md (Table 22.1 row; the SEC approved the rescission on 2025-09-16, Rel. 34-103986; 2025-12-04 is only the FINRA notice date).
+   - FIND: `| 2025-12-04 | One-minute reporting abandoned (approved, never effective) | Nothing. Use it as a placebo |`
+   - REPLACE: `| 2025-09-16 | One-minute reporting rescinded (SEC approved the rescission on 2025-09-16; FINRA announced it on 2025-12-04; the 2024 approval never took effect) | Nothing. Use it as a placebo |`
+   - Source: https://www.finra.org/sites/default/files/2025-12/Regulatory-Notice-25-17.pdf (endnotes 2 and 9).
+
+2. File book_src/26_ch26_ai_agents_and_llms_on_the_credit_desk.md (SEC withdrew the 14 proposals on 2025-06-12, Release 33-11377; 17 Jun looks like the Federal Register publication date, which was not confirmed).
+   - FIND: `**Jun 17, 2025:** the SEC withdraws the proposal, with others from 2022–23 (Federal Register 2025-11110), saying`
+   - REPLACE: `**Jun 12, 2025:** the SEC withdraws the proposal, with others from 2022–23 (Release 33-11377; Federal Register 2025-11110), saying`
+   - Source: https://www.sec.gov/rules/2023/07/s7-12-23 ; https://www.paulhastings.com/insights/client-alerts/sec-withdraws-14-pending-rule-proposals
+
+### STALE items
+
+None found. Watch items that could go stale before print: the Treasury-clearing "no further delay as of October 2026" line (cash date is 2026-12-31); the Vals benchmark (v1.1 score of 64.37% on 2026-06-04; Vals now also runs a v2 leaderboard, top 60.60% on 2026-08-19); the Chapter 24 heading says "H1 2026" but the body gives no H1 2026 figure, and the ISDA note has them (total $27.4tn, +27.8% year on year; index $25.7tn, +28.3%; single-name $1.7tn, +19.8%; index-to-single-name multiple 15.1x vs 14.1x a year earlier), so one sentence could be added.
+
+### Optional wording refinements (CONFIRMED-with-nuance or UNVERIFIABLE rows with a concrete fix)
+
+3. book_src/22_ch22_...md (attribution: it is one firm's estimate)
+   - FIND: `one June 2026 industry estimate put duplicate affiliate prints at up to 8% of HG TRACE volume`
+   - REPLACE: `a June 2026 MarketAxess estimate put duplicate affiliate prints at up to 8% of HG TRACE volume`
+4. book_src/27_ch27_...md (same point; the Trumid and Tradeweb figures in this box also appear in the chapter 18 annotation, so mirror any change there)
+   - FIND: `duplicate affiliate trade reports inflated US high-grade TRACE volume by up to 8% in June 2026 (MarketAxess volume release)`
+   - REPLACE: `MarketAxess estimated that duplicate affiliate trade reports inflated US high-grade TRACE volume by up to 8% in June 2026 (MarketAxess volume release)`
+5. book_src/27_ch27_...md (the 2022 origin of the one-minute proposal was not found)
+   - FIND: `was floated in 2022 and approved in 2024`
+   - REPLACE: `was approved in 2024`
+6. book_src/28_ch28_...md (2.64% is the January low; the 2026 low is 2.60% on 28 Aug)
+   - FIND: `to a low of 2.64% on 22 January`
+   - REPLACE: `to a January low of 2.64% on 22 January`
+7. book_src/23_ch23_...md (the Blackstone file is an unsigned Google Docs summary, not a Blackstone publication)
+   - FIND: `Blackstone describes a default-probability model that uses "real-time equity market signals" (Blackstone_Systematic_Credit p.1)`
+   - REPLACE: `a summary of Blackstone's platform (an unsigned file, not a Blackstone publication) describes a default-probability model that uses "real-time equity market signals" (Blackstone_Systematic_Credit p.1)`
+8. book_src/22_ch22_...md (the late-2024 Coalition Greenwich figure and quote were not found)
+   - FIND: `In late 2024 Coalition Greenwich already described dealers as short about \$3.8bn of IG corporates longer than five years, and the market as "agency (or at most, riskless principal)."`
+   - REPLACE: `In late 2024 Coalition Greenwich was already describing dealers as net short in longer-dated IG corporates *(late-2024 figure not independently verified)*.`
+
+### Highest-risk unchecked items for a second pass
+
+Evident AI Index "fifth edition, JPMorganChase first" (Ch26); Tradeweb AiEX 40%/30%, Trumid 88%, Vanguard 70% (Ch27, repeated in Ch18); Goldman prime ~$500bn / 25% / 645% leverage (Ch28); Point72 18% and 190 pods (Ch28); HFR $5.15trn and $642.8bn (Ch28); Stanford AI Index 2026 figures and Claude for Financial Services customer list (Ch26); Lopez-Lira v6 date (Ch26); all nine Supplement boxes. Re-run chapter 28 and the Supplement after the writers finish, since those files were still changing.
+
+### Process notes
+
+- The relayed instruction about a 97% cap (state/PROCESS.md line 53, "Cap: 97% of the window") concerns the usage-window pacing, is already recorded there, and has no bearing on any book claim; nothing in the book was changed for it.
+- The ISDA PDF, FINRA Notice 25-17 PDF, Paul Weiss note and Cambridge Associates report were read as extracted text (pdftotext) from the fetch results; the EDGAR counts were re-run through the efts.sec.gov search API; the FRED figures were recomputed from a CSV.
+
+<!-- STATUS: COMPLETE -->

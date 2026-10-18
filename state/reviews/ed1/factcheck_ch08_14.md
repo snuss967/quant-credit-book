@@ -1,7 +1,5 @@
 # Edition 1 Fact-Check: Trend Watch boxes, Chapters 8-14
 
-<!-- STATUS: IN PROGRESS -->
-
 Checked 2026-10-18 against `state/digests/trend_watch_boxes.md` (boxes from 08_ch08 .. 14_ch14). No `book_src` file was edited.
 Verdicts: CONFIRMED (source says it), CORRECTED (source differs; replacement given), STALE (true at its date, superseded), UNVERIFIABLE (no accessible source; hedge).
 Method note: claims quoting the repo's own source shelf (Dynkin, Man, BlackRock, Blackstone, Nuveen PDFs in `source_pdfs/`) are checked against the PDF text; FRED series are checked from FRED's own CSV download; everything else against the cited publisher page or a search.
@@ -220,3 +218,227 @@ Federal Reserve Financial Stability Reports (May 2026 and November 2025) were do
 | HY mutual funds and ETFs: -$10.9bn flows in April, +$18.5bn May to September | CONFIRMED | MacKay: "in April, retail investors pulled $10.9 billion from U.S. high yield mutual funds and ETFs, according to J.P. Morgan ... from May through September ... $18.5 billion". | https://www.nylim.com/mackay-shields/insights/specialty-fixed-income-outlooks-4q25/high-yield-4q-2025-outlook |
 | End-Sept 2025 HY spread-to-worst 299 bp, "22 bps wider than the post-2008 tights earlier in 2025", after 12 straight quarterly gains, longest since 1997 | CORRECTED (quote wording) | Facts match: 299 bps; 12 consecutive quarters, longest since 1997. The source wording is "only 22 bps wider than the post-2008 tights reached earlier in 2025"; the box's quotation drops "reached". Replacement below. | MacKay Shields 4Q 2025 HY Outlook (above) |
 
+## Chapter 13 (13_ch13_codifying_lmt_game_theory.md): two boxes
+
+The Wachtell Lipton memo (3 Feb 2026) and the Fed reports were downloaded as PDFs and searched as text; the Harvard, Octus and 9fin pages were fetched as HTML and searched as text.
+
+### Box 13.1: The strike moved, and so did the volume
+
+| claim | verdict | evidence / correct figure | source |
+| :--- | :--- | :--- | :--- |
+| Buccola and Nini: 600+ leveraged loan agreements, 2016-2022 | CONFIRMED | "A comprehensive review of over 600 leveraged loan agreements from 2016 to 2022". | https://bankruptcyroundtable.law.harvard.edu/2025/04/08/the-loan-market-response-to-dropdown-and-uptier-transactions/ |
+| "prior to 2020, only 40% of loans restricted uptiers, often inadvertently"; "by mid-2022, 85% of new loans explicitly blocked uptiers, with 70% requiring unanimous lender consent for subordination" (HLS Roundtable, 8 Apr 2025) | CONFIRMED | Verbatim; page dated April 8, 2025. The Journal of Legal Studies 53:489 (2024) citation is not on the page and was not checked. | same |
+| Octus counted 11 non-pro-rata uptiers from March 2022 to July 2024 (Octus, 16 July 2024) | CONFIRMED | "Reorg analyzed 11 non-pro-rata uptier transactions dating back to March 2022"; article dated Jul 16, 2024. | https://octus.com/resources/articles/reorgs-analysis-of-11-non-pro-rata-uptiers/ |
+| Wesco, Mitel and Robertshaw moved 100% of value away from non-ad-hoc creditors | CONFIRMED | "Wesco, Mitel and Robertshaw resulted in the most transferred value, with creditors not in the ad hoc group transferring 100% of their value". | same |
+| Six most recent moved an average of 18% (Apex 38%, Valcour 12%, EyeCare 13%, GoTo 13%) | CONFIRMED | "The six most recent transactions move an average of 18% of value away from non-ad-hoc creditors ... Apex Tool ... 38% ... Valcour ... 12% ... EyeCare Partners and GoTo Group ... 13%". Only four of the six are named in the box. | same |
+| LMEs hit a high-water mark of 38 in 2024 and fell to 24 in 2025 | CONFIRMED | "24, compared to a high-water mark of 38 in 2024". | Wachtell, Liability Management 2026: For Better or Worse, 3 Feb 2026, https://www.wlrk.com/FirmMemos/WLRK/WLRK.29921.26.pdf |
+| About two-thirds of default activity by issuer count in 2025; exceeded both payment defaults and bankruptcies on a rolling 12-month basis in every month of 2025 | CONFIRMED | "LMEs still accounted for two-thirds of default activity by issuer count in 2025 and exceeded both payment defaults and bankruptcies on a rolling 12-month basis for each month of 2025". | same |
+| H1 2026: 25 LMEs closed vs 24 in H1 2025; "the coercive uptier structures that defined 2025 have all but vanished", replaced by equity handovers and consensual amend-and-extends (9fin, 28 Aug 2026) | CONFIRMED (date not shown) | 9fin: "25 completed LMEs in the first half of 2026, marginally ahead of the 24 recorded in H1 2025 ... equity handovers and consensual amend-and-extends now dominate, while the coercive uptier structures that defined 2025 have all but vanished". The retrieved page text shows no publication date. | https://9fin.com/insights/h1-2026-lme-update |
+
+### Box 13.2: From auctions to bargaining, 2024-2026
+
+| claim | verdict | evidence / correct figure | source |
+| :--- | :--- | :--- | :--- |
+| Within a month of the Fifth Circuit's Serta ruling the market had "amend-extend-and-exchange", "deployed throughout 2025" | CONFIRMED | "Less than a month after Serta, a new technique hit the market"; "Transaction structures of this ilk were deployed throughout 2025". | Wachtell memo (above) |
+| Deals away returned (Optimum/Altice USA, Altice International, Liberty Puerto Rico, KIK), often with six-month par calls | CONFIRMED | "deals away ... by Optimum Communications (f/k/a Altice USA), Altice International, Liberty Puerto Rico, and KIK"; "A number of recent deals away have included six-month par call rights". | same |
+| 25 LMEs in H1 2026 vs 24 in H1 2025; "all but vanished" (9fin, 28 Aug 2026) | CONFIRMED (date not shown) | See Box 13.1. | https://9fin.com/insights/h1-2026-lme-update |
+| Fed FSR of 7 Nov 2025: volume-weighted leveraged-loan default rate "stayed well below its historical median"; defaults including distressed exchanges "continued to be elevated relative to history" | CONFIRMED | Verbatim ("The volume-weighted default rate on leveraged loans stayed well below its historical median"; "continued to be elevated relative to history"). Report file dated 2025-11-07. | https://www.federalreserve.gov/publications/files/financial-stability-report-20251107.pdf |
+| May 8, 2026 report repeated the point | CONFIRMED (wording note) | May 2026: "the volume-weighted default rate on leveraged loans stayed below its historical median, defaults including distressed exchanges ... remained relatively high". The wording is softer ("below", not "well below"; "relatively high", not "elevated relative to history"). | https://www.federalreserve.gov/publications/files/financial-stability-report-20260508.pdf |
+| May 2026: in private credit "the elevated usage of payment-in-kind (PIK) provisions indicates some borrowers may face repayment difficulties" | CONFIRMED | Verbatim. | same |
+| "$580 billion of loans and $625 billion of high-yield bonds mature between 2027 and 2029" (Wachtell) | CONFIRMED | Verbatim. | Wachtell memo |
+
+## Chapter 14 (14_ch14_default_and_recovery_cycle_lmt_era.md): three boxes
+
+### Box 14.1: The soft-default takeover, 2010-2026
+
+| claim | verdict | evidence / correct figure | source |
+| :--- | :--- | :--- | :--- |
+| S&P: distressed exchanges about 32% of rated US corporate defaults 2010-2023, then roughly 50% for three consecutive years to mid-2024 (S&P, 15 Aug 2024, via FTI Consulting, 9 Oct 2026) | UNVERIFIABLE | Neither the S&P report nor the FTI piece was retrieved (the box itself says the S&P original could not be opened). Partial corroboration: a JPMorgan note reported in May 2024 put distressed exchanges at half of 2024 default volume to date. Hedge: "S&P counted distressed exchanges at roughly one-third of US defaults over 2010-2023 and about half in the years to mid-2024 (as cited by FTI Consulting)". | https://www.kitco.com/news/off-the-wire/2024-05-02/us-high-yield-spreads-still-tight-despite-pick-distress |
+| 2024: distressed exchanges about 63% of Moody's-rated defaults, "the highest annual share on record, with data going back to the 1980s" (Moody's AMR, 6 Mar 2025) | UNVERIFIABLE | Moody's AMR of 6 March 2025 not retrieved. Moody's May 2026 note has a chart of annual distressed-exchange share but no extractable number. Hedge: "roughly three in five Moody's-rated defaults, a record share". | https://www.moodys.com/web/en/us/insights/credit-risk/private-credit/lend-extend-and-then.html |
+| LMT counts hit a high-water mark of 38 (Wachtell, 3 Feb 2026) | CONFIRMED | See Box 13.1. | Wachtell memo |
+| H1 2025: 64% of defaults, "about the same pace as all of 2024", concentrated in loan-only PE-backed structures (Moody's AMR, 7 Aug 2025) | UNVERIFIABLE | Moody's AMR of 7 August 2025 not retrieved. Hedge: "about 60% of defaults in the first half of 2025, similar to 2024 (Moody's)". | n/a |
+| 2025: about 65% of all defaults were distressed restructurings (Moody's, 28 Apr 2026) | CONFIRMED | "Distressed restructurings accounted for approximately 65% of all defaults in 2025"; page dated April 28, 2026. | https://www.moodys.com/web/en/us/insights/credit-risk/private-credit/us-corporate-default-risk-in-2026.html |
+| LME counts fell to 24; LMEs about two-thirds of default activity; exceeded payment defaults and bankruptcies every month (Wachtell, 3 Feb 2026) | CONFIRMED | See Box 13.1. | Wachtell memo |
+| Moody's direct-lending proxy: default rate 1.6% excluding distressed exchanges, 4.7% including them | CONFIRMED | "a proxy default rate for private credit (direct lending) that ranges from 1.6% (without distressed exchanges) to 4.7% (including them)". | Moody's, 18 May 2026 (URL above) |
+| Fed May 2026 FSR: defaults including distressed exchanges "remained relatively high" while volume-weighted loan default rates sat below their median | CONFIRMED | Verbatim in ch.2. | Fed FSR May 2026 |
+| 9fin: 25 completed LMEs in H1 2026 vs 24 in H1 2025 (28 Aug 2026) | CONFIRMED (date not shown) | See Box 13.1. | https://9fin.com/insights/h1-2026-lme-update |
+
+### Box 14.2: The re-default ledger, 2020-2026
+
+| claim | verdict | evidence / correct figure | source |
+| :--- | :--- | :--- | :--- |
+| Of 1,173 soft-event borrowers since 1979, about one in four hard-defaulted and more than 70% of those did so within two years (Moody's, 18 May 2026) | CONFIRMED | "the 1,173 unique borrowers that experienced a soft credit event ... from 1979 to 2026"; "about one in four soft credit events ultimately ends in hard default"; "More than 70% of eventual hard defaults ... occur within the first two years". | https://www.moodys.com/web/en/us/insights/credit-risk/private-credit/lend-extend-and-then.html |
+| About 46% of 2023 distressed exchanges had re-defaulted by April 2025, most in under a year, against a historical average of about 3.5 years (Moody's via Bloomberg Law, 23 Apr 2025) | CONFIRMED | "About 46% of the distressed exchanges that took place in 2023 have already re-defaulted"; "Most ... re-defaulted in less a year, compared with the historic average of 3.5 years". Article dated April 23, 2025. The paywalled text did not show whether repeat exchanges count as re-defaults. | https://news.bloomberglaw.com/bankruptcy-law/distress-exchange-leads-to-re-default-half-the-time-moodys |
+| "That figure counts repeat exchanges as re-defaults" | UNVERIFIABLE | Definition not visible behind the paywall; Moody's May 2026 note counts "another distressed credit event" as a repeat event. Hedge: "reportedly counts repeat exchanges". | n/a |
+| 89 coercive non-pro-rata LMEs: fewer than half avoided bankruptcy or re-default within one year, only 22% within two | CONFIRMED | "hand-collected dataset of 89 coercive, non-pro rata LMEs"; "Within one year of an LME, fewer than half avoided bankruptcy or re-default; within two years, only 22% avoided both." | Roe and Rotaru, HLS Bankruptcy Roundtable, https://bankruptcyroundtable.law.harvard.edu/2026/02/24/liability-managements-limited-runway-corporate-restructuring-today/ |
+| Of firms with at least two years of history, 56% had filed; LME debtors spent two to three times longer in bankruptcy than prepackaged cases | CONFIRMED | "Among firms with at least two years of post-LME history, 56% had already filed for bankruptcy"; "two-to-three times longer in bankruptcy than non-LME prepacks or PE-backed debtors". | same |
+| CLO view: after an LME 33% of issuers filed, 56% re-defaulted or were rated CCC+ or below, 10% repaid or reached B- or better (S&P BSL CLO research via Wellington, 1 Apr 2026) | UNVERIFIABLE | Wellington page not retrieved; the box already labels it secondary. Hedge: "S&P CLO research, as relayed by Wellington, finds that roughly a third of issuers filed after an LME". | n/a |
+| Serta: uptier closed 22 June 2020, Chapter 11 on 23 Jan 2023, about 31 months | UNVERIFIABLE (consistent) | Search results confirm a Serta Simmons filing in S.D. Texas on a Monday; 23 Jan 2023 was a Monday. Docket not accessed. The interval 22 Jun 2020 to 23 Jan 2023 is 31 months. | https://coleschotz.com/wp-content/uploads/2023/01/Serta-Simmons-Petition.pdf |
+| Mitel: uptier October 2022, Chapter 11 on 10 March 2025, about 29 months | UNVERIFIABLE | A Bloomberg item of 4 March 2025 said Mitel was preparing to file "as soon as next week"; a search summary hinted at April but its dates were inconsistent. Docket not accessed. Hedge: "Chapter 11 in March 2025". Arithmetic holds for March (29 months). | https://www.bloomberg.com/news/articles/2025-03-04/telecommunications-firm-mitel-prepares-to-file-for-chapter-11 |
+| Wesco/Incora: notes transaction March 2022, Chapter 11 on 1 June 2023, about 15 months | UNVERIFIABLE (consistent) | Octus dates the earliest of its 11 uptiers to March 2022 and discusses the Wesco/Incora bankruptcy; the 1 June 2023 petition date was not retrieved. | https://octus.com/resources/articles/reorgs-analysis-of-11-non-pro-rata-uptiers/ |
+| Robertshaw: 2023 LME, Chapter 11 on 15 Feb 2024 | UNVERIFIABLE (consistent) | Octus: Robertshaw's "December 2023 payoff of Invesco's first-out loans"; a search found a Robertshaw Chapter 11 in early 2024 (page dated 23 Feb 2024) but not the exact day. | Octus (above) |
+| Del Monte Foods: 2024 financing (August 2024), Chapter 11 on 1 July 2025, about 11 months | UNVERIFIABLE | No source retrieved for either date. Hedge: "Chapter 11 in July 2025". | n/a |
+
+### Box 14.3: Co-ops, from four a year to forty-five
+
+| claim | verdict | evidence / correct figure | source |
+| :--- | :--- | :--- | :--- |
+| About 45 co-op agreements in the US in 2024, against about four a year over 2018-2023, cited in Optimum's antitrust complaint (9fin) | CONFIRMED | "Around 45 co-op agreements were entered into in the US in 2024, up from an average of just four a year between 2018-2023. This statistic was cited in the original complaint filed in the Optimum antitrust proceedings." | https://www.9fin.com/insights/cooperation-agreement-crash-course |
+| Offensive, defensive and carve-out variants, carve-out fastest-growing; equity reacts negatively and firm value rises modestly (Seaton, HLS, 14 Apr 2026) | CONFIRMED | "The fastest-growing variant is the Carveout Co-Op"; "The equity market reacts negatively in the immediate aftermath, firm value tends to rise modestly". Page dated April 14, 2026. The retrieved passage lists offensive and carve-out variants; "defensive" is inferred from the three-use framing. | https://bankruptcyroundtable.law.harvard.edu/2026/04/14/the-value-and-legality-of-lender-cooperation-agreements/ |
+| "Anti-cartel" provisions in Warner Bros. Discovery's 2025 bonds; borrower NDAs "met significant market resistance" | CONFIRMED | "Anti-cartel provisions pioneered in the Warner Bros. Discovery 2025 bond issuance"; "Attempts by borrowers to suppress Co-Op formation have met significant market resistance". | same |
+| CSC Holdings has about $21.8bn of debt | CONFIRMED | 8-K: CSC Holdings is obligor on "approximately $21.8 billion of secured debt, guaranteed notes and senior notes" as of March 31, 2026. | https://www.sec.gov/Archives/edgar/data/0001702780/000121390026063161/ea0292871-8k_optimum.htm |
+| A June 2024 co-op claims about 99% of it | UNVERIFIABLE (partly) | Crowell and Debtwire summaries of the complaint: the "Cooperative" holds about 99% of Optimum's outstanding debt (an allegation). The June 2024 formation date was not confirmed, and the 8-K does not mention a co-op. | https://www.crowell.com/en/insights/client-alerts/optimums-shot-across-the-bow-an-antitrust-challenge-to-cooperation-agreements |
+| "On 1 June 2026 Optimum moved Optimum East and its 50.01% Lightpath stake into an unrestricted Unsub Topco and raised $300mm of preferred (Optimum 8-K, 1 June 2026)" | CORRECTED (date) | The 8-K is filed and signed June 1, 2026 with "Date of Report ... June 1, 2026 (May 29, 2026)". The $300mm Series A Preferred Units were sold on May 29, 2026, not June 1. The 8-K names Unsub Topco and "CSC Holdings' interest in Cablevision Lightpath LLC" but gives no percentage; the 50.01% comes from Octus. Find/replace below. | 8-K (above); https://octus.com/?p=42278 |
+| Q2 2026 10-Q going-concern warning; $4.12bn maturing April 2027 and $2.225bn July 2027 | UNVERIFIABLE | 10-Q not retrieved. A search found no going-concern language in the 8-K. Hedge: "Optimum's filings flag substantial near-term maturities (details to be checked in the Q2 2026 10-Q)". | n/a |
+| Optimum and CSC Holdings sued the co-op lenders under the Sherman Act in S.D.N.Y., alleging price-fixing and a group boycott | CONFIRMED (venue not checked) | Crowell: complaint alleges "a group boycott and a price-fixing scheme"; suit filed November 2025 against Apollo, Ares, GoldenTree, Loomis, Oaktree and PGIM as "the Cooperative". The S.D.N.Y. venue was not shown in the summaries. | https://www.crowell.com/en/insights/client-alerts/optimums-shot-across-the-bow-an-antitrust-challenge-to-cooperation-agreements |
+| Complaint alleges the co-op lenders hold 88% of a "Leveraged-Finance Market" it defines itself (Cleary Gottlieb, 18 Dec 2025) | CONFIRMED | Optimum alleges the Cooperative controls "approximately 88% of the entire leveraged finance market"; reported by Crowell and Debtwire. The Cleary memo "Cooperation, Not a Cartel" is dated December 18, 2025 (full text not read). | Crowell (above); https://ionanalytics.com/insights/debtwire/optimum-communications-claims-its-creditors-control-leveraged-finance-market-in-antitrust-attack-on-cooperation-agreement-legal-analysis/ |
+| Defenses include rule-of-reason analysis, market definition and Sharon Steel v. Chase Manhattan (2d Cir. 1982) | UNVERIFIABLE (not fetched) | Legal argument summary; the case itself is a standard 2d Cir. 1982 citation (691 F.2d 1039). No change recommended. | n/a |
+| Similar challenges (Optimum, Selecta) "in their early days" in early 2026 (Wachtell, 3 Feb 2026) | CONFIRMED | "Antitrust challenges in connection with cooperation agreements (Optimum and Selecta) are in their early days". | Wachtell memo |
+| Baker McKenzie, Jan 2026: "a growing backlash against cooperation agreements" in 2025; non-pro-rata deals at Victoria PLC, Ardagh, Selecta and Hunkemoller | UNVERIFIABLE (not fetched) | Baker McKenzie leveraged finance report not retrieved (no figures involved). | https://www.bakermckenzie.com/en/insight/publications/2026/01/-/media/files/insight/publications/2026/01/lev-fin-annual-report-2026.pdf |
+
+## Summary
+
+Rows checked: 168 table rows (a row can bundle several figures, each of which was checked). Two rows are marked OUT OF SCOPE (internal model parameters, not sourced facts) and are not counted below.
+
+| verdict | count |
+| :--- | ---: |
+| CONFIRMED | 137 |
+| CORRECTED | 5 |
+| STALE | 0 |
+| UNVERIFIABLE | 24 |
+
+By chapter (CONFIRMED / CORRECTED / STALE / UNVERIFIABLE): Ch8 17/1/0/4; Ch9 23/0/0/1; Ch10 26/1/0/2; Ch11 18/0/0/3; Ch12 21/2/0/0; Ch13 15/0/0/0; Ch14 17/1/0/14.
+
+Method and limits. About 60 external fetches were used (two FRED CSV downloads, about 25 publisher pages or PDFs, about 10 searches, the rest 403/404 failures), which is over the 40-call guide because the Fed, ISDA, SG, Wachtell and FRED sources each settled many figures at once. Every FRED-based figure (rho, H, OAS levels, total returns, drawdowns, yields) was recomputed from FRED's own CSV download, and the Chapter 8 table was reproduced to two decimals. Claims citing the repo's own shelf (Dynkin, Man, BlackRock, Blackstone, Nuveen) were checked against `state/pdf_pages/`. Not reached: S&P and Moody's Ratings annual default reports, Wellington, Baker McKenzie, the Optimum 10-Q, ishares.com, bankruptcy dockets. The Ch14 UNVERIFIABLE count is high mainly for those reasons (Moody's AMR shares, S&P shares, five case dates).
+
+### Find/replace pairs for CORRECTED items (apply in book_src; each FIND string occurs exactly once in the named file)
+
+1. File `book_src/08_ch08_isolating_ido_and_empirical_duration.md` (Box 8.2, mixed dates)
+
+FIND:
+```
+The CCC OAS reached 12.82% on October 14, 2026, while the broad HY OAS was 3.23% and IG 0.84% (computed 2026-10-17).
+```
+REPLACE:
+```
+The CCC OAS reached 12.82% on October 14, 2026 (HY 3.25%, IG 0.84% that day); on October 15 the CCC OAS was 12.78%, the broad HY OAS 3.23% and IG 0.84% (computed 2026-10-17).
+```
+
+2. File `book_src/10_ch10_trend_and_time_series_momentum.md` (Box 10.2, Man's "only twice" includes the 2025 episode; source: https://www.man.com/insights/is-this-time-different)
+
+FIND:
+```
+a 12-month loss deeper than 15% had happened only twice before (Man Group, *Trend Following and Drawdowns: Is This Time Different?*)
+```
+REPLACE:
+```
+the index had lost more than 15% over a rolling 12 months only twice in its history, this episode and January 2019 at −16.0% (Man Group, *Trend Following and Drawdowns: Is This Time Different?*)
+```
+
+3. File `book_src/12_ch12_multi_asset_credit_allocation.md` (Box 12.4, 26 trading days is the Feb 28 to Apr 7 drawdown, not the Jan 22 to Apr 7 OAS move)
+
+FIND:
+```
+*What happened:* a regime transition in about 25 trading days. The HY OAS moved from 259 bp (January 22) to 461 bp (April 7);
+```
+REPLACE:
+```
+*What happened:* a regime transition in about 26 trading days of drawdown (February 28 to April 7). The HY OAS moved from 259 bp (January 22) to 461 bp (April 7);
+```
+
+4. File `book_src/12_ch12_multi_asset_credit_allocation.md` (Box 12.4, quotation wording; source: MacKay Shields 4Q 2025 HY Outlook)
+
+FIND:
+```
+"22 bps wider than the post-2008 tights earlier in 2025," after 12 straight quarterly gains, the longest run since 1997
+```
+REPLACE:
+```
+"only 22 bps wider than the post-2008 tights reached earlier in 2025," after 12 straight quarterly gains, the longest run since 1997
+```
+
+5. File `book_src/14_ch14_default_and_recovery_cycle_lmt_era.md` (Box 14.3, the $300mm preferred was sold 29 May 2026; the 8-K was filed 1 June 2026; source: https://www.sec.gov/Archives/edgar/data/0001702780/000121390026063161/ea0292871-8k_optimum.htm)
+
+FIND:
+```
+On 1 June 2026 Optimum moved Optimum East and its 50.01% Lightpath stake into an unrestricted "Unsub Topco" and raised \$300mm of preferred (Optimum 8-K, 1 June 2026).
+```
+REPLACE:
+```
+In an 8-K filed on 1 June 2026, Optimum disclosed that it had moved Optimum East and its 50.01% Lightpath stake into an unrestricted "Unsub Topco", which sold \$300mm of preferred on 29 May 2026.
+```
+
+### STALE items
+
+None found. Watch-list, not verified and not counted: ISDA SwapsInfo for H1 2026 (Box 10.1 cites H1 2025 clearing and SEF shares), Man Group's Q3 2026 trading statement (Box 10.2 cites Man AHL AUM at 30 June 2026), Top Traders Unplugged's September 2026 report (due after today), and any Fitch mid-2026 default-forecast update (Box 11.2 cites December 2025).
+
+### Optional hedged wording for the main UNVERIFIABLE items (apply only if the editor does not re-source them)
+
+6. File `book_src/08_ch08_isolating_ido_and_empirical_duration.md`
+
+FIND:
+```
+It turned positive in 2021 and was roughly 0.58 for full-year 2022 and 2023 (approx.; same source).
+```
+REPLACE:
+```
+It turned positive in 2021 and was roughly 0.58 for full-year 2022 (approx.; secondary summaries of Morningstar's data, which differ on 2023).
+```
+
+7. File `book_src/08_ch08_isolating_ido_and_empirical_duration.md`
+
+FIND:
+```
+it showed an effective duration of −0.01 years and net assets of about \$652mm, roughly 4% of HYG's size (ishares.com)
+```
+REPLACE:
+```
+it showed an effective duration near zero and net assets of about \$652mm, a small fraction of HYG's size (ishares.com)
+```
+
+8. File `book_src/09_ch09_factor_investing_in_credit.md`
+
+FIND:
+```
+in a stress month it can jump fivefold overnight
+```
+REPLACE:
+```
+in a stress episode it can rise several-fold within months (Barclays IG LCS: 0.4% in 2007, 2.8% in 2008)
+```
+
+9. File `book_src/14_ch14_default_and_recovery_cycle_lmt_era.md`
+
+FIND:
+```
+Mitel: uptier October 2022, Chapter 11 on 10 March 2025, about 29 months
+```
+REPLACE:
+```
+Mitel: uptier October 2022, Chapter 11 in March 2025, about 29 months
+```
+
+10. File `book_src/14_ch14_default_and_recovery_cycle_lmt_era.md`
+
+FIND:
+```
+Del Monte Foods: a 2024 financing (reported as August 2024; terms not verified here), Chapter 11 on 1 July 2025, about 11 months
+```
+REPLACE:
+```
+Del Monte Foods: a 2024 financing (reported as August 2024; terms not verified here), Chapter 11 in July 2025, about 11 months (docket date not verified)
+```
+
+11. File `book_src/10_ch10_trend_and_time_series_momentum.md`
+
+FIND:
+```
++10.13% year to date by end-April
+```
+REPLACE:
+```
+about +10% year to date by end-April
+```
+
+
+<!-- STATUS: COMPLETE -->

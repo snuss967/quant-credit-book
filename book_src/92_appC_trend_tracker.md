@@ -16,7 +16,7 @@ Ines Okafor is reading the 2025 section. "Same game at two speeds. A structural 
 
 ROBO, asked to "track the trends," has computed a 12-month moving average of the word *trend* across the manuscript. The series is rising. ROBO is not wrong.
 
-This appendix is the wall, cleaned up. §C.1 boils the 74 boxes down to seven megatrends. Each one gets a thesis, its key numbers, the chapters it feeds, and the indicators to watch in 2027. §C.2 is the master timeline: one row per sourced fact, deduplicated across chapters. §C.3 collects the numbers on which good sources disagree, and explains why. §C.4 tells the next edition's editor how to keep the tracker alive. Everything here comes from the Trend Watch boxes and the research dossiers behind them, compiled on 2026-10-18. The appendix adds no new research, so it inherits every *approx.* and every CHECK flag from its sources.
+This appendix is the wall, cleaned up. §C.1 boils the 74 boxes down to seven megatrends. Each one gets a thesis, its key numbers, the chapters it feeds, and the indicators to watch in 2027. §C.2 is the master timeline: one row per sourced fact, deduplicated across chapters. §C.3 collects the numbers on which good sources disagree, and explains why. §C.4 tells the next edition's editor how to keep the tracker alive. Everything here comes from the Trend Watch boxes and the research notes behind them, compiled on 2026-10-18. The appendix adds no new research, so it inherits every *approx.* and every CHECK flag from its sources.
 
 ## C.1 The Seven Megatrends of Credit, 2018–2026
 
@@ -40,7 +40,7 @@ A megatrend is a direction that showed up in at least three chapters and in more
 
 *Feeds.* Chapters 1, 2, 3, 4, 11, 18, 19 and 27.
 
-*Watch in 2027.* Whether HY breaks out of the 30–33% band on Greenwich's annual series. No-touch share and auto-execution fill rates on high-VIX days, which is the "auto-ex stops executing" signal. The non-bank share of market-making revenue, which the industry dossier expects to move toward the mid-teens. Bid–ask recovery half-life after the next shock. The ICE–MarketAxess closing, expected in H1 2027, and whether the market leader's monthly volume data come back.
+*Watch in 2027.* Whether HY breaks out of the 30–33% band on Greenwich's annual series. No-touch share and auto-execution fill rates on high-VIX days, which is the "auto-ex stops executing" signal. The non-bank share of market-making revenue, which Coalition Greenwich expects to grow over the next two to three years. Bid–ask recovery half-life after the next shock. The ICE–MarketAxess closing, expected in H1 2027, and whether the market leader's monthly volume data come back.
 
 ### C.1.2 Megatrend 2: Risk Moves in Baskets
 
@@ -101,3 +101,160 @@ A megatrend is a direction that showed up in at least three chapters and in more
 *Feeds.* Chapters 1, 4, 6, 7, 9, 10, 11, 23 and 26.
 
 *Watch in 2027.* Man Group's quarterly systematic-versus-discretionary split, the cleanest public flow series. Systematic-credit M&A, with Ares–BlueCove as the template. The outcome of the replication paper's revision and the next Open Source Bond Asset Pricing release. IGEB and HYDB assets. CTA crowding (pairwise correlation and same-direction drawdowns). Whether HY OAS breaks out of its 2024–2026 band for long enough to give credit trend something to follow.
+
+## C.2 The Master Timeline
+
+One row per event, deduplicated across chapters; when several chapters cite the same fact, the row lists them all. Dates are ISO. A month-level date (`2025-09`) sorts at the start of its month, and a single event known only by year sorts at the start of that year. A statistic for a full year, half or quarter (`2024 FY`, `2024 YE`, `2026 Q1`) sorts at the end of its period, after the dated events that produced it. *(approx.)* marks a figure its chapter flagged as approximate, secondary or unverified, and CHECK means the source chapter asked for a primary-source check before anyone relies on it. "Authors' computation" means the book's own arithmetic on the public series named. Rows dated after 2026-10-18 are scheduled, not observed.
+
+| Date | Event | Magnitude | Source | Chapter |
+| :-- | :-- | :-- | :-- | :-- |
+| 2002-07-01 | TRACE launches with 75-minute reporting | ~520 securities disseminated by end-2002 | FINRA TRACE Fact Book 2025 | 2, 22 |
+| 2007 | Dealer corporate inventories peak | ~\$235bn, cut ~3/4 by 2012 *(approx.; upper bound)* | Fed FR 2004 | 22 |
+| 2015-06-15 | Robeco QI Global Multi-Factor Credits launches | EUR 1,039mm; costs 0.20%/yr (Sep 2026) | Robeco fund page | 9 |
+| 2016 FY | IG trading electronically facilitated | ~19% | Greenwich via Bessembinder, Spatt & Venkataraman (2020) | 3 |
+| 2017-07-11 | BlackRock launches IGEB and HYDB systematic bond ETFs | HYDB \$1.52bn, IGEB \$1.43bn (Oct 2026) | stockanalysis.com | 4, 11 |
+| 2018 FY | Portfolio trading share of IG volume | ~1% (7% by 2021) | Meli & Todorova (Dec 2023) | 19 |
+| 2018 Q4 | US CLOs outstanding | \$617bn, ~half of US leveraged loans | Fed FEDS Note (2019) | 21 |
+| 2019 | Bai, Bali & Wen publish four-factor bond model | Retracted 2023 | *JFE* 131(3); retraction, *JFE* 150(3) | 1, 7 |
+| 2019-09-26 | SEC adopts ETF Rule 6c-11 (effective 2019-12-23) | ~2,000 ETFs, >\$3.3tn at adoption | SEC press release 2019-190 | 20 |
+| 2020-02-10 | FIMSAC recommends a TRACE portfolio-trade flag | ≥30 issuers, one basket price | The DESK (2020-03-31) | 2, 22 |
+| 2020-03 | COVID stress; largest banks shut auto-quoters | Immediacy premium up ~200bp per dollar at peak | Kargar et al. (2021); Coalition Greenwich (2024-02-13) | 18, 27 |
+| 2020-06-22 | Serta Simmons uptier closes | \$200mm new money; ~\$1.2bn exchanged into ~\$875mm super-priority | Proskauer (2025-01-02) | 13, 14 |
+| 2020-11-30 | Blackstone agrees to buy DCI (KMV-founder heritage) | ~\$7.5bn | Institutional Investor (2020-11-30) | 4, 6 |
+| 2021-10 | Cov-lite share of leveraged-loan issuance | >90%, a record | S&P Global (Oct 2021) | 25 |
+| 2021 FY | US IG / HY e-trading | 37% / 27% *(contested; see §C.3)* | Coalition Greenwich via IFR | 1, 4 |
+| 2021 FY | Actively managed quant credit | ~\$52bn; ~0.4% of ~\$66trn FI *(approx.; date CHECK)* | eVestment and BlueCove via IFR | 4 |
+| 2022-03 | Wesco/Incora notes transaction | \$250mm new money; Chapter 11 on 2023-06-01 | Octus (2024-06-26); S.D. Tex. docket | 13, 14 |
+| 2022 mid | New loans explicitly blocking uptiers | 85% (~40% pre-2020); 70% need unanimity to subordinate | Buccola & Nini, *J. Legal Stud.* 53:489 (2024) | 13 |
+| 2022-09-28 | Bank of England buys long gilts in LDI crisis; CLO BWIC wave | >€1.5bn of CLOs listed in a week; AA "in the 80s" | TwentyFour AM (2022-10-05) | 18 |
+| 2022-10 | Mitel uptier | ~\$156mm new money; ~\$857mm priming debt | Paul Weiss (2025-01-10) | 14 |
+| 2022-11-30 | ChatGPT launches | Reading costs start to fall | Launch announcement (§26.14) | 26 |
+| 2022 FY | Rates shock | 10y 1.52%→3.88%; 2y 0.73%→4.41%; US HY "down over 11%" | FRED DGS10/DGS2; `BlackRock_Systematic_High_Yield_Credit p.3` | 8, 11 |
+| 2022 FY | Trend's record year | SG Trend +27.3%, mostly short bonds | Hedgeweek (2023-01-27) | 10 |
+| 2022 FY | Distressed exchanges' share of defaults | 45% by volume, 50% by count | Fitch, *Annual Manual* (2023-03-30) | 5 |
+| 2023 | Prior bond factors add ~nothing beyond the market factor | 2019 factor paper retracted | Dickerson, Mueller & Robotti, *JFE* 150(2) | 1, 7 |
+| 2023-01 | Hand-cleaned TRACE replication of bond factors | Only 23% of significant factors keep alphas | Dick-Nielsen, Feldhütter, Pedersen & Stolborg (2023) | 7 |
+| 2023 Q1 | Single-name CDS peaks on bank stress | \$1.1tn quarterly; traded names 854 (Q1 2018) → 719 | ISDA (May 2023) | 6, 24 |
+| 2023-05-01 | Man Numeric routes order flow electronically | >90% (from ~30% HY, ~60% IG) | `Man_Revolutions_in_Credit_Trading_2023 p.3` | 2, 4, 11 |
+| 2023-05-15 | TRACE portfolio-trade modifier mandatory | ≥10 issues, single basket price | FINRA RN 22-12 | 2, 20, 22 |
+| 2023-06 | *Mata v. Avianca* sanctions over invented citations | Hallucination becomes a legal term | S.D.N.Y. No. 1:22-cv-01461 | 26 |
+| 2023-08-24 | *Kirschner*: syndicated term loans are not securities | No T+1 path for loans | 2d Cir. No. 21-2726 | 21 |
+| 2023-12-13 | SEC adopts Treasury clearing mandate | Cash 2025-12-31, repo 2026-06-30 (later extended) | SEC release | 22 |
+| 2023 FY | Systematic credit funds | "Doubled in size" | Bloomberg (2024-05-20) via BBH | 4 |
+| 2024-04-23 | CME announces IG, HY and duration-hedged credit futures | Launch 2024-06-17 | Markets Media (2024-04-29) | 8 |
+| 2024-05-28 | T+1 settlement for corporate bonds | Loans stay on T+7 par convention | SEC; §22.3 | 21, 22 |
+| 2024-06 | Dealer automation survey | ~30% no-touch; 57% top-tier dealers; 70% non-bank LPs | Coalition Greenwich (June 2024) | 3, 18 |
+| 2024-06 | Optimum/CSC Holdings co-op | ~99% of ~\$21.8bn of debt | Optimum 8-K (2026-06-01) | 14 |
+| 2024-07-16 | Non-pro-rata uptier tally | 11 since Mar 2022; early deals moved 100% of value, latest six avg 18% | Octus (2024-07-16) | 13 |
+| 2024-08-15 | Distressed exchanges' share of S&P-rated defaults | ~50% for three years (32% in 2010–2023) *(secondary)* | S&P via FTI Consulting (2026-10-09) | 5, 14 |
+| 2024-09-20 | SEC approves one-minute TRACE rule | Up to 16.4% of volume, 6.1mm trades affected | SEC Rel. 34-101121 | 2 |
+| 2024-09-26 | Citi–Apollo private credit program | \$25bn initial | Citi press release | 17 |
+| 2024-11-20 | Dealers net short long-dated IG | −\$3.8bn | The DESK (2024-11-20) | 18, 22 |
+| 2024-11-25 | Model Context Protocol open-sourced | Standard model-to-data port | Anthropic | 26 |
+| 2024-12-31 | Fifth Circuit *Serta*: not an "open market purchase"; NY App. Div. upholds Mitel uptier | 125 F.4th 555 | Quinn Emanuel (Jan 2026) | 6, 13, 16 |
+| 2024 FY | US corporate bond trading | ADNV \$46.2bn (+21%); IG/HY e-share 48%/33%; non-bank LPs ~10% of revenue | Coalition Greenwich (Jan 2025) | 1, 2, 4 |
+| 2024 FY | Electronic PT and ETF volume | E-PT \$3.3bn/day (+76%); ETF/cash ratio 16.6% (23.2% in 2022) | Coalition Greenwich (Jan 2025) | 2, 19, 20 |
+| 2024 FY | Loan repricing record | \$756.8bn | William Blair citing PitchBook LCD | 21 |
+| 2024 FY | LMEs hit high-water mark; co-ops multiply | 38 LMEs; ~45 co-ops (~4/yr in 2018–2023) | Wachtell Lipton (2026-02-03); 9fin | 3, 13, 14 |
+| 2024 FY | Distressed exchanges' share of Moody's-rated defaults | ~63%, highest on record | Moody's (2025-03-06) | 14 |
+| 2024 YE | US bond ETFs | \$1.8tn, 17% of ETF assets | ICI 2025 Fact Book | 20 |
+| 2024 YE | Cov-lite share of outstanding leveraged loans | 91.09% (~\$1,292.74bn) | PitchBook LCD via Paul Weiss (2025) | 25 |
+| 2025-02-25 | Treasury clearing deadlines extended | Cash 2026-12-31; repo 2027-06-30 | SEC | 22 |
+| 2025-03 | PT share of institutional IG risk trades | ~25% | Bloomberg *Market Dialogues* (2025-07-07) | 19 |
+| 2025-04-07 | Tariff-shock peak | HY OAS 461bp (259bp on 01-22); \$99bn FI ETFs traded | FRED; The DESK (2025-06-10) | 5, 12, 20 |
+| 2025-04-08 | Then-record trading day | \$89.7bn, 12% PT | Coalition Greenwich (2025-04-14) | 2, 19 |
+| 2025-04-23 | Re-default and recovery data | 46% of 2023 DEs re-defaulted; 1L DE recovery 71% (55% in 2023) | Moody's via Bloomberg Law | 5, 14 |
+| 2025-05-12 | HY regains prior peak: a ten-week V | −3.83% drawdown (02-28 to 04-07) | FRED, authors' computation | 11, 12 |
+| 2025-05-14 | CTA drawdown trough | −21.8% from 2024-04-15 | AlphaSimplex (June 2025) | 10 |
+| 2025-06 | IG electronic share; spec-grade default rate | 52%; 5.8% incl. DEs vs 2.1% excl. | Coalition Greenwich (2025-07-14); Moody's (July 2025) | 2, 3, 5 |
+| 2025-06-30 | FICC cleared peak | \$11.8trn *(approx.)* | DTCC releases | 22 |
+| 2025-07 | PT share of US corporate volume peaks | 17% (11% in 2024; 15% in 2025) | Morgan Stanley via The DESK (2026-02-19) | 1 |
+| 2025-08-07 | Federal courts' case system under cyberattack | >20 courts restrict sealed filings *(secondary)* | Administrative Office, as reported by CNN | 25 |
+| 2025-09 | IG OAS tightest since 1998 | ~72bp | SSGA (2025-11-25) | 9 |
+| 2025-09 | No-touch and venue tie | Trumid 88% no-touch; three venues at \$8.5–8.8bn ADV each | The DESK (2025-10-08) | 3, 4, 18, 27 |
+| 2025-09 | First Brands and Tricolor bankruptcies | Fed: "isolated" so far (Nov 2025) | Fed FSR (Nov 2025) | 12, 17 |
+| 2025-09-25 | *ConvergeOne*: exclusive backstop reversed | \$245mm rights offering, 10% fee | S.D. Tex. district court | 16 |
+| 2025-09-29 | EA take-private agreed | ~\$55bn EV, \$210/share | EA press release | 15 |
+| 2025-09-30 | Record trading day | \$84.7bn, 18% PT | Coalition Greenwich (2026-01-27) | 1, 2, 19 |
+| 2025-10-30 | Ares agrees to buy BlueCove | \$5.5bn AUM | The DESK | 4 |
+| 2025-11-05 | OBDC/OBDC II merger announced; terminated 11-19 | Fourteen days | Blue Owl releases | 17 |
+| 2025-12-04 | FINRA drops one-minute rule; 15 minutes stays | Optional allocation reports from 2026-06-08 | FINRA RN 25-17 | 2, 22, 27 |
+| 2025 FY | US corporate bond trading | ADNV >\$50bn; IG just under 50%, HY 32%; disclosed RFQ 38.6% | Coalition Greenwich via The DESK (2026-01-30) | 1 |
+| 2025 FY | CDS trading record | \$41.8tn; index 93.3%; single names \$2.8tn | ISDA (2026-07-29) | 10, 24 |
+| 2025 FY | Loans | Repricing \$503.6bn; secondary record \$971bn | William Blair; LSTA | 21 |
+| 2025 FY | LMEs fall, soft share holds | 24 LMEs; DRs ~65% of defaults | Wachtell (2026-02-03); Moody's (2026-04-28) | 3, 13, 14 |
+| 2025 FY | Trend lags equities | SG Trend +2.39% vs S&P 500 TR +17.89% | Top Traders Unplugged (2026-01-23) | 10 |
+| 2025 Q4 | Institutional leveraged loans | \$1,549bn (+9.2%) | Fed FSR (2026-05-08) | 12, 21 |
+| 2026-01 | Record trading month | ADNV \$61bn (+22%) | Coalition Greenwich (2026-02-17) | 1 |
+| 2026-02-24 | Coercive LME outcomes | 22% clean after two years (89 deals) | Roe & Rotaru, HLS Bankruptcy Roundtable | 14 |
+| 2026-03 | Middle East energy shock | EUR IG bid–ask +64%; recovery 4 to 14+ weeks; TRACE ADV \$70.2bn | The DESK (2026-10-01; 2026-04-09) | 4, 18 |
+| 2026-03-26 | BDC Q1 redemption requests | ~\$13bn; >\$4.6bn trapped | Bloomberg Law | 17 |
+| 2026-03-30 | HY OAS peaks in energy shock | 3.46% | FRED | 10 |
+| 2026 Q1 | Semi-liquid private credit redemptions exceed inflows | First time; \$425bn gross / \$241bn net | Fed FSR (2026-05-08) | 12, 17 |
+| 2026 Q1 | PT and index-mark clustering | 19.8% of customer volume; 15.5% at the mark | Bondwave (2026-05-20) | 2 |
+| 2026-04 | FRED ICE BofA series cut to three years | Free history starts Oct 2023 | FRED series pages | 5, 8 |
+| 2026-04 | Fitch US private credit default rate | Record 6% | The DESK (2026-05-27) | 11 |
+| 2026-04-09 | *The Corporate Bond Factor Replication Crisis* | 26 of 432 specs (6.0%) survive | Dickerson, Robotti & Rossetti, arXiv:2604.07880 | 1, 7 |
+| 2026-05-11 | Repricing window reopens after the software freeze | Feb–Apr repricings \$11.8bn; BB− loans at/above par 13% (end-Mar) → 76% | PitchBook LCD via Yahoo Finance | 21 |
+| 2026-05-18 | Soft-event study, 1979–2026 | 1,173 borrowers; ~1 in 4 hard default | Moody's | 1, 3, 5, 14 |
+| 2026-06 | Duplicate affiliate prints | Up to 8% of HG TRACE volume | MarketAxess volume release | 22, 27 |
+| 2026-06-01 | Optimum drop-down to "Unsub Topco" | \$300mm preferred | Optimum 8-K | 14 |
+| 2026-07 | US CLO ETFs; trend crowding | >\$50bn; SG Trend −1.12%, "positioned the same way" | BofA via Octus; Top Traders Unplugged | 10, 21 |
+| 2026-07-07 | Serta remand damages against participating lenders | \$261.13mm + 9% interest | Mayer Brown (Jul 2026) | 13, 14 |
+| 2026-07-13 | Dealers net short corporates on average | ~\$4bn, first in ≥25 years *(approx.)* | Hedgeweek, citing Coalition Greenwich | 18, 22 |
+| 2026-07-24 | SEC approves affiliate-indicator expansion | Voluntary 2026-08-31 | FINRA RN 26-16 | 2, 22, 27 |
+| 2026-07-29 | ICE agrees to buy MarketAxess | \$167/share; ~\$6.0bn equity | MarketAxess 8-K Ex. 99.1 | 4 |
+| 2026-08 | Cboe credit futures blocks | >\$1bn/month; IBIG blocks overtake IBHY | The DESK (2026-10-16) | 10 |
+| 2026-08 | Default rate and recoveries | 5.3%; DEs+LMEs ~70% since 2022; 1L recovery seen at 55% | Moody's (2026-09-22) via American Banker | 5 |
+| 2026-08-28 | LMT mix shifts | 25 in H1 2026 (24 in H1 2025); coercive uptiers "all but vanished" | 9fin | 13, 14 |
+| 2026-09 | Systematic vs discretionary long-only credit at Man | \$3.1bn vs \$37.5bn | Man Group Q3 2026 trading statement | 4 |
+| 2026-09-11 | CCC/HY OAS ratio high | 4.06 (low 2.24, 2023-10-20) | FRED, authors' computation | 5 |
+| 2026-10-01 | Apollo daily pricing reaches all credit vehicles | Asset-level from 10-30 | Apollo | 17 |
+| 2026-10-14 | Vanguard automation | ~70% of FI desk volume (from ~40%) | The DESK (2026-10-14) | 4, 18, 27 |
+| 2026-10-15 | The HY split | HY 323bp; BB 197bp; CCC 1,278bp; CCC/BB 6.5×; CCC YTD −5.21% | FRED, authors' computation | 5, 8, 12 |
+| 2026-10-16 | Private credit enters the Fed's Z.1 | \$1,493.5bn (2025), ~20%/yr growth | Brinkman et al., FEDS Note | 17 |
+| 2026-10-16 | AI Hallucination Cases database | 2,199 decisions; 871 involve lawyers | Charlotin database | 26 |
+| 2026-12-31 | Treasury cash clearing; NAIC CLO C-1 factors | 11.77% surcharge on thin below-IG BSL tranches | SEC; NAIC Proposal 2026-12-IRE | 21, 22 |
+| 2027-04 | Optimum maturities begin | \$4.12bn (April), \$2.225bn (July) | Optimum 10-Q | 14 |
+| 2027-06-30 | Treasury repo clearing deadline | — | SEC | 22 |
+| 2027 H1 | ICE–MarketAxess expected close | Outside date 2027-07-29 | ICE 8-K | 4 |
+| 2027-08-02 | TRACE affiliate indicator mandatory | Volume series de-inflate | FINRA RN 26-16 | 22, 27 |
+| 2027–2029 | Maturity wall | \$580bn loans, \$625bn HY | Wachtell (2026-02-03) | 13 |
+
+## C.3 Contested Numbers
+
+Some of the book's most-quoted figures come in two or three versions, each from a careful source. The table keeps both sides and says why they differ. Where the chapters did not reconcile a pair, we say so rather than guess.
+
+| Quantity | Figure A | Figure B (and C) | Why they differ |
+| :-- | :-- | :-- | :-- |
+| US IG electronic share, 2024–2025 | 48% (2024), 52% (June 2025): Coalition Greenwich, notional | ~50% (2024) and ~60% (2025): MarketAxess 10-K; "more than 50%": Barclays (Sept 2025) | "Electronic" means fully electronic, electronically processed voice, or auto-executed, depending on the source. MarketAxess's company definition runs above Greenwich's |
+| US IG / HY e-share, 2021 | 37% / 27%: Greenwich via IFR (early 2022) | ≈34% / ≈25%: Greenwich's January 2025 review | Series vintage plus chart reading. Both sides carry CHECK flags (citation date; chart mapping) |
+| Portfolio-trading share | 11.4% of TRACE (Dec 2024); 15% of volume (2025, Morgan Stanley) | 19.8% of customer volume (Q1 2026, Bondwave); ~25% of institutional IG risk trades (Mar 2025) | Denominator: TRACE includes interdealer prints, customer volume does not, and institutional-size trades exclude odd lots |
+| Record trading day of 2025 | \$89.7bn on 2025-04-08 (Greenwich, citing Trumid) | \$84.7bn on 2025-09-30 (Greenwich's 2025 review); \$92bn on 2025-04-30 (one report, CHECK) | Different volume definitions; Chapter 22 untangles them |
+| LMT counts | 38 (2024) and 24 (2025): Wachtell Lipton | 24 in H1 2025 and 25 in H1 2026: 9fin; Octus ~40 US LMTs a year; Debtwire 213 since 2020 | 9fin's half-year count equals Wachtell's full-year count, so the talliers use different inclusion rules (completed vs announced, size, geography). None of the boxes reconciles them |
+| Default rate | 5.8% spec-grade incl. DEs (Moody's, June 2025); private credit 6.1% (Fitch, July 2026) | 2.1% excl. DEs, same report; private credit 0.85% (S&P credit estimates, 2Q26), 2.51% (Proskauer), 5.8% incl. PIK and extensions (Moody's), ~19% shadow (PIMCO BDC) | Event definition (hard, selective, shadow) and sample (rated, CLO-held, BDC-held). A model's default label is now a modeling choice |
+| Re-default after a soft event | ~25% hard default, 1,173 borrowers since 1979 (Moody's) | 46% of the 2023 DE cohort; only 22% of coercive LMEs clean at two years; ~80% within three years (FT via Wachtell, CHECK); 63% avoid Chapter 11 (S&P via proponents, CHECK) | Cohort (all soft events, a stressed vintage, coercive deals only) and event (hard only, or hard plus repeat exchange). Each is a valid estimate of a different $p$ |
+| First-lien recovery | 71% ultimate, term loans 1987–2023; 71% for 1L distressed exchanges (end-2024) | 59.5% average 30-day post-default price, 2007–2022 (Fitch); mid-to-low 60s (S&P recovery ratings); 55% projected (Moody's, Sept 2026); 55% for 1L DEs (2023) | Ultimate vs trading-price recovery, DE vs all defaults, and the vintage of the capital structure |
+| Size of systematic credit | Under 2% of FI (2025); ~\$52bn active quant credit (2021) | \$90–140bn in quant-screened funds (2024); one platform alone at "over \$40 billion" (undated) | Pure systematic vs funds that use a screen, plus a self-description with no as-of date |
+| Size of the HY and private-credit markets | HY index ~\$1.4tn face (Apr 2025); private-credit loans \$1,493.5bn (Z.1, 2025) | \$1,772bn of HY and unrated bonds (Fed FSR, May 2026); private-credit vehicle AUM >\$2.6tn, global AUM >\$2.2tn (Mar 2025) | Index eligibility vs every bond; loans outstanding vs AUM (including uncalled capital); US vs global |
+| Life insurers' private placements | 22% of corporate bond holdings (2024; Chicago Fed) | 48.4% of life-industry bonds (YE2025; S&P via Insurance Business) | Different numerators and denominators. The chapters do not reconcile them, so quote each with its definition |
+| ICE–MarketAxess price | ~\$6.0bn equity value | ~\$5.7bn enterprise value | Not a disagreement: equity vs enterprise value. It is the easiest row in this table, and it still gets misquoted |
+
+Three causes explain nearly every row: *definition* (what counts as electronic, a default, or an LMT), *denominator* (TRACE, customer volume, or institutional trades), and *vintage* (which year's capital structure, which revision of the chart). The desk rule from Chapter 2 applies to the whole table. Never average two contested figures. Carry both, label each with its definition, and let the model choose the one that matches its own target variable. Ines's version: "When two honest sources disagree, you've learned something about the deck, not about the dealer."
+
+## C.4 How to Update This Appendix
+
+The tracker is a dated object, and its value decays at the speed of the trends it tracks. For the next edition:
+
+1. **Start from the watch lists.** Each megatrend's "Watch in 2027" list is the first update target. Score every indicator as *moved as expected*, *flat*, or *reversed*, and keep that scorecard in the appendix. A tracker that never admits it was wrong is just a brochure.
+2. **One fact, one row.** Search the timeline before adding a row. If the event is already there, add your chapter number to it. The earliest dated primary source wins the Source column; later citations go in the chapters.
+3. **Date the event, not the article.** Put the publication date in the Source column, and follow the sorting rules at the top of §C.2.
+4. **Source or delete.** Name the document. Write "via" for secondary reporting. Add a URL only if it was verified in that session or is a canonical root.
+5. **Expire the flags.** An *approx.* or CHECK that survives two editions is resolved against the primary source or deleted. It is not inherited a third time.
+6. **Log the breaks.** When a reporting rule changes (the 2027-08-02 affiliate indicator, the N-PORT move to quarterly reporting), add a timeline row *and* a regime tag in Appendix B, so that no series silently changes meaning.
+7. **Contested means unreconciled.** A pair joins §C.3 only after the definitions have been checked, and it leaves once someone has reconciled it.
+8. **Re-cut the seven.** Retire a megatrend once it stops producing new rows. Promote a candidate once it appears in three chapters and two independent series.
+
+> **The Spec You Hand the Robot.** *What ROBO built from the vague version ("keep the tracker up to date"):* a nightly job that sets every date to today. *The spec:* maintain `trend_tracker.csv` with columns `date` (ISO; plus `date_precision` ∈ {day, month, quarter, year}), `event`, `magnitude`, `unit`, `source`, `source_type` ∈ {primary, secondary}, `approx` (bool), `check` (bool), `chapters` (list of ints), `megatrend` ∈ {1, …, 7}, and `last_verified` (ISO). The sort key follows §C.2. Reject any row with an empty `source`. Raise a warning when `check` is true and `last_verified` is more than 365 days old. Flag two rows as duplicates when they share `event`, `date` and `magnitude`. Never edit `date` on an existing row: corrections go in a new row that names the one it supersedes.
+
+<!-- STATUS: COMPLETE -->
