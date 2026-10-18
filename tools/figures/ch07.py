@@ -81,7 +81,7 @@ def fig_ffd_weights():
     a.text(K04 * 1.08, 1.6e-6, f"lag {K04}", fontsize=8, color=INK_2, va="bottom", ha="left")
     for d, col in ds:
         label_end(a, n, np.abs(ffd_weights(d, n))[n], f"d = {d:g}", col, dx=5)
-    note(a, "d = 0.4 meets \u03c4 at lag 282:\nthe 280-day warm-up of section 7.3", loc="lower left")
+    note(a, "d = 0.4 meets \u03c4 at lag 282:\nthe 280-day warm-up", loc="lower left")
     a.set_xlim(1, 5000)
     a.set_ylim(1e-6, 2)
     a.set_xticks([1, 10, 100, 1000])
@@ -106,8 +106,8 @@ def fig_ffd_weights():
                arrowprops=dict(arrowstyle="-", color=MUTED, linewidth=0.7))
     for d, col in ds:
         s = np.cumsum(ffd_weights(d, n))
-        label_end(b, n, s[n], f"d = {d:g}", col, dx=5, dy=(4 if d == 0.6 else 0))
-    b.text(1.4, 0.03, "d = 1: nothing left after one lag", fontsize=8, color=INK_2, va="bottom", ha="left")
+        label_end(b, n, s[n], f"d = {d:g}", col, dx=5, dy={0.2: 0, 0.4: 9, 0.6: 3}[d])
+    b.text(1.4, 0.03, "d = 1: none left", fontsize=8, color=INK_2, va="bottom", ha="left")
     b.set_xlim(1, 5000)
     b.set_ylim(-0.04, 0.85)
     b.set_xticks([1, 10, 100, 1000])
@@ -249,9 +249,10 @@ def fig_purged_folds():
     b.text(L / 2, 25.5, "test block:\nset aside", fontsize=8, color=INK_2, ha="center", va="center")
     b.annotate("", xy=(T1, len(fs) - 0.2), xytext=(T1 + ETA, len(fs) - 0.2),
                arrowprops=dict(arrowstyle="<->", color=INK_2, linewidth=0.9, shrinkA=0, shrinkB=0))
-    b.text(T1 + ETA / 2, len(fs) + 0.15, "embargo η: the FFD window,\nabout 280 days at τ = 10⁻⁴", fontsize=8, color=INK_2,
-           ha="center", va="top")
-    b.set_ylim(len(fs) + 2.7, -2.2)
+    b.text(T1 + ETA / 2, len(fs) + 0.9, "embargo η: the FFD window,\nabout 280 days at τ = 10⁻⁴", fontsize=8, color=INK_2,
+           ha="center", va="top", zorder=6,
+           bbox=dict(facecolor="white", edgecolor="none", pad=1.5))
+    b.set_ylim(len(fs) + 7.6, -2.2)
     b.set_xlim(-46, 136)
     b.set_yticks([])
     b.set_xticks([-40, 0, 40, 80, 120])
@@ -300,7 +301,7 @@ def fig_dsr_noise_max():
     ax.plot(Ns, curve, color=C_FIX, zorder=3)
     ax.plot(sim_N, sim, "o", color=INK_2, markersize=5, markerfacecolor="white", markeredgewidth=1.2, zorder=4)
     ax.set_axisbelow(True)
-    ax.text(2.4, 0.04, "what pure noise delivers\nbefore the model has done anything", fontsize=8.5, color=INK_2,
+    ax.text(4.0, 0.04, "what pure noise delivers\nbefore the model has done anything", fontsize=8.5, color=INK_2,
             ha="left", va="bottom")
 
     for n, txt, xt, yt, ha in [(400, "N = 400 effectively distinct trials", 360, 0.27, "right"),
@@ -321,8 +322,8 @@ def fig_dsr_noise_max():
     ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:,.0f}"))
     ax.set_xlabel("Number of trials N (log scale)")
     ax.set_ylabel("Expected best Sharpe of pure noise\n(annualized)")
-    ax.text(0.99, 0.02, "T = 240 months; true Sharpe 0 for every trial; open dots: simulated mean of the maximum",
-            transform=ax.transAxes, ha="right", va="bottom", fontsize=7.5, color=MUTED)
+    ax.text(0.99, 0.98, "T = 240 months; every trial has true Sharpe 0.\nOpen dots: simulated mean of the maximum.",
+            transform=ax.transAxes, ha="right", va="top", fontsize=8, color=MUTED)
     print("dsr: SR*(3000) %.3f/month %.3f annualized; SR*(400) %.3f; sim dots %s | formula at sim_N %s" % (
         sr_star(3000, T), sr_star(3000, T) * ann, sr_star(400, T), [round(s, 3) for s in sim],
         [round(float(sr_star(n, T)) * ann, 3) for n in sim_N]))
@@ -337,8 +338,8 @@ def fig_reversal_gap():
     # (state/research/papers_factor_replication_crisis_and_bond_data.md section 3.2).
     prem = [-0.99, -0.09, -0.17]
     tstat = [-4.46, -0.51, None]
-    names = ["Month-end price in\nsignal and return", "Signal gap\n(signal 1–10 days earlier)",
-             "Return gap\n(month-begin start)"]
+    names = ["Textbook:\nmonth-end price\nin both", "Signal gap:\nsignal 1\u201310 days\nbefore month-end",
+             "Return gap:\nreturn starts at\nmonth-begin"]
     cols = [C_NAIVE, C_FIX, C_FIX]
 
     fig, (a, b) = new_figure("wide", ncols=2, gridspec_kw={"width_ratios": [1.35, 1]})

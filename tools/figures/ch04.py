@@ -117,8 +117,8 @@ def fig_truncation_bias():
     a.set_ylabel("Density")
     a.yaxis.set_major_formatter(lambda v, _: f"{v:.1f}")
     # balance points, magnified on an inset: they sit only 0.027 sigma apart
-    ins = a.inset_axes([0.63, 0.58, 0.365, 0.26])
-    ins.set_xlim(-0.034, 0.054)
+    ins = a.inset_axes([0.65, 0.58, 0.345, 0.26])
+    ins.set_xlim(-0.037, 0.054)
     ins.set_ylim(0, 1)
     ins.grid(False)
     ins.set_yticks([])
@@ -128,7 +128,7 @@ def fig_truncation_bias():
     ins.plot([0], [0.16], "^", color=INK_2, markersize=8, clip_on=False, zorder=4)
     ins.plot([0.027], [0.16], "^", color=BLUE, markersize=8, clip_on=False, zorder=4)
     ins.text(0.004, 0.42, "before", ha="right", va="bottom", fontsize=8, color=INK_2)
-    ins.text(0.023, 0.42, "after", ha="left", va="bottom", fontsize=8, color=INK_2)
+    ins.text(0.022, 0.42, "after", ha="left", va="bottom", fontsize=8, color=INK_2)
     ins.set_title("the mean,\nmagnified (σ)", fontsize=8, color=INK_2, fontweight="normal", pad=3, linespacing=1.1)
 
     # (b) the manufactured premium against the fraction deleted

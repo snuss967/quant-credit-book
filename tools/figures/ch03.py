@@ -5,8 +5,8 @@ Run:  python3 tools/figures/ch03.py [name ...]   -> assets/figures/ch03_*.png   
   1. ch03_mixture_vs_gaussian    the three-scenario mixture of 3.1.2 against a normal with the same mean and sd
   2. ch03_gm_half_spread         the asymmetric Glosten-Milgrom half-spread of 3.2.1, against pi and against q, with Serta's point
   3. ch03_hand_replayed          Theo's Friday (3.3.5) as a waterfall of the winner's five-day markout, raw and IDO
-  4. ch03_svb_filings_timeline   the seven SVB Financial 8-Ks of March 2023 with EDGAR acceptance times, plus Monday 13 March zoomed
-  5. ch03_cusum_detector         Page's CUSUM (3.5) on one simulated tranche, at two PRS thresholds
+  4. ch03_svb_filings_timeline   the seven SVB Financial 8-Ks of March 2023 at their EDGAR acceptance times, with the events around them and the drill
+  5. ch03_cusum_detector         Page's CUSUM (3.6.2, eq. 3.5) on one simulated tranche, at two PRS thresholds
 
 Data. Real: the SVB Financial Group 8-K dates, items and EDGAR acceptance times of figure 4 (data.sec.gov submissions for CIK 719739,
 cached in tools/figures/data/ch03_svb_8k_filings.csv; filing text spot-checked on sec.gov), and the dated events around them from the
@@ -90,7 +90,7 @@ def fig_mixture_vs_gaussian():
     ax.text(102.6, top - 0.0006, "clean refinancing:\n55% of the mass in\na spike at 100 (its\npeak, 0.44, is off\nthe chart)",
             ha="left", va="top", fontsize=8, color=INK_2, linespacing=1.25)
     # hump labels
-    ax.text(64, 0.0205, "distressed\nexchange, 25%", ha="right", va="bottom", fontsize=8, color=INK_2, linespacing=1.2)
+    ax.text(70, 0.0196, "distressed\nexchange, 25%", ha="center", va="bottom", fontsize=8, color=INK_2, linespacing=1.2)
     ax.text(45, 0.0105, "Chapter 11\n20%", ha="center", va="bottom", fontsize=8, color=INK_2, linespacing=1.2)
     # the mean
     ax.text(mean - 1.2, 0.0332, "price = mean = 81.5", ha="right", va="center", fontsize=8.3, color=INK_2)
@@ -179,7 +179,8 @@ def fig_hand_replayed():
     issuer = (ido_ref - MID)                                       # -5.52
     theo = ido_ref - THEO                                          # -4.02
     assert abs(sysmove + 0.48) < 0.01 and abs(ido + 4.27) < 0.01 and abs(theo + 4.02) < 0.01
-    assert abs(capture + issuer + sysmove - raw) < 1e-9 or True
+    assert abs(capture + issuer + sysmove - raw) < 1e-9          # the waterfall sums to the raw markout
+    assert abs(capture + issuer - ido) < 1e-9                    # and IDO = capture + issuer-specific drift
     bp = lambda pts, base: pts / base * 1e4
     print(f"  systematic {sysmove:.2f}; issuer-specific {issuer:.2f}; raw {raw:.2f}; IDO {ido:.2f} ({bp(ido, FILL):.0f}bp); "
           f"Theo counterfactual {theo:.2f} ({bp(theo, THEO):.0f}bp)")
@@ -225,7 +226,7 @@ def fig_hand_replayed():
 
 
 # --------------------------------------------------------------------------------------------------
-# Figure 3.4 (3.4): four business days of 8-Ks.
+# Figure 3.4 (3.4): the fortnight of SVB 8-Ks, one row per event.
 # --------------------------------------------------------------------------------------------------
 def load_svb_filings():
     path = os.path.join(ROOT, "tools", "figures", "data", "ch03_svb_8k_filings.csv")
@@ -358,7 +359,7 @@ def fig_cusum_detector():
                     ha="left", va="center", fontsize=8.3, color=INK_2, linespacing=1.25,
                     arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.7, shrinkA=2, shrinkB=5))
     aS.set_ylim(0, top)
-    aS.set_xlim(0, NS + 1)
+    aS.set_xlim(0, NS + 7)                                 # room on the right for the alarm labels
     aS.set_ylabel("CUSUM tally $S_t$")
     aS.set_xlabel("Trading day")
     aS.set_yticks(list(range(0, int(top) + 1, 2)))

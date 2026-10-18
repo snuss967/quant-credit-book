@@ -42,6 +42,11 @@ OLD_COST, NEW_COST = VIOLET, GREEN
 LEADER = dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8, shrinkA=1, shrinkB=3)
 
 
+def matplotlib_fixed(days):
+    from matplotlib.ticker import FixedLocator
+    return FixedLocator([mdates.date2num(pd.Timestamp(x)) for x in days])
+
+
 def pct(x, _pos=None):
     return f"{100 * x:.0f}%"
 
@@ -78,7 +83,8 @@ def fig_trace_censoring_pareto():
         ax.set_xticks(ticks)
         ax.set_title(name)
         ax.set_xlabel("True trade size ($mm)")
-        note(ax, f"Pareto tail index α = {alpha:.2f} (below 2:\ninfinite variance)", loc="lower right")
+        ax.text(0.99, 0.19, f"Pareto tail index α = {alpha:.2f}\n(below 2: infinite variance)", transform=ax.transAxes,
+                ha="right", va="bottom", fontsize=8, color=INK_2)
         ax.yaxis.set_major_formatter(FuncFormatter(pct))
     axs[0].set_ylabel("Share of capped prints larger")
     return finish(fig, "ch02_trace_censoring_pareto")
@@ -125,8 +131,9 @@ def fig_adoption_ceiling():
         ax.axhline(1.0, color=NEUTRAL, linewidth=0.9, zorder=1)
         ax.text(2012.3, 1.015, "all trading = 100%", fontsize=8, color=INK_2, ha="left", va="bottom")
         ax.axhline(0.8, color=NEUTRAL, linewidth=0.8, linestyle=(0, (3, 3)), zorder=1)
+        ax.text(2012.3, 0.815, "ceiling if K = 0.8", fontsize=8, color=INK_2, ha="left", va="bottom")
         ax.axvline(2030, color=NEUTRAL, linewidth=0.8, linestyle=(0, (3, 3)), zorder=1)
-        ax.text(2030.3, 0.03, "2030", fontsize=8, color=INK_2, ha="left", va="bottom")
+        ax.text(2029.7, 0.03, "2030", fontsize=8, color=INK_2, ha="right", va="bottom")
         for K, ls in ((1.0, "-"), (0.8, (0, (5, 2.5)))):
             r, t0, _ = chk[(seg, K)]
             ax.plot(t, logistic(t, K, r, t0), color=col, linewidth=LW, linestyle=ls, zorder=3)
@@ -144,12 +151,14 @@ def fig_adoption_ceiling():
             ax.annotate(txt, (2036.5, y), xytext=(0, dy), textcoords="offset points", ha="center",
                         va="bottom" if dy > 0 else "top", fontsize=8.5, color=INK_2)
         ax.set_xlim(2012, 2040)
-        ax.set_ylim(0, 1.12)
+        ax.set_ylim(0, 1.24)
+        ax.set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1.0])
         ax.set_xticks([2015, 2020, 2025, 2030, 2035, 2040])
         ax.set_title(name)
         ax.yaxis.set_major_formatter(FuncFormatter(pct))
         r1, r8 = chk[(seg, 1.0)][2], chk[(seg, 0.8)][2]
-        note(ax, f"2030: {100 * r1:.0f}% if K = 1, {100 * r8:.0f}% if K = 0.8", loc="lower right")
+        ax.text(0.99, 0.10, f"in 2030: {100 * r1:.0f}% if K = 1,\n{100 * r8:.0f}% if K = 0.8", transform=ax.transAxes,
+                ha="right", va="bottom", fontsize=8.2, color=INK_2)
         ax.set_xlabel("Year")
     axs[0].set_ylabel("Electronic share of notional")
     # ROBO's constant-growth rule, high yield only
@@ -157,12 +166,12 @@ def fig_adoption_ceiling():
     tr = np.linspace(2024, 2030, 60)
     ax.plot(tr, robo(tr), color=RED, linewidth=LW, linestyle=(0, (1.5, 2)), zorder=4)
     ax.plot([2030], [robo(2030)], "o", color=RED, markersize=5.5, zorder=6)
-    ax.annotate("ROBO's constant growth:\n103% in 2030", (2030, robo(2030)), xytext=(-10, 6),
+    ax.annotate("ROBO's constant growth:\n103% in 2030", (2030, robo(2030)), xytext=(-8, 9),
                 textcoords="offset points", ha="right", va="bottom", fontsize=8.2, color=INK_2)
     # note on the fitted points
-    axs[0].annotate("ringed: the 2015 and\n2025 points that pin\nboth curves", (2015, .20), xytext=(2012.8, 0.46),
+    axs[0].annotate("ringed: the 2015 and\n2025 points that pin\nboth curves", (2015, .20), xytext=(2012.8, 0.60),
                     textcoords="data", ha="left", va="center", fontsize=8.2, color=INK_2, arrowprops=LEADER)
-    axs[1].annotate("hollow: chart readings", (2021, .25), xytext=(2013.2, 0.52), textcoords="data",
+    axs[1].annotate("hollow: chart readings", (2021, .25), xytext=(2013.2, 0.46), textcoords="data",
                     ha="left", va="center", fontsize=8.2, color=INK_2, arrowprops=LEADER)
     return finish(fig, "ch02_adoption_ceiling")
 
@@ -185,11 +194,11 @@ def fig_rfq_neff():
     axl.text(12.4, 11.3, "independent dealers:\nn_eff = n", ha="left", va="center", fontsize=8.2, color=INK_2)
     for phi, col in shade.items():
         axl.plot(n, neff(n, phi), color=col, linewidth=LW, zorder=3)
-        axl.axhline(1 / phi, color=col, linewidth=0.8, linestyle=(0, (1.5, 2.5)), zorder=1)
+        axl.plot([0.5, 20], [1 / phi, 1 / phi], color=col, linewidth=0.8, linestyle=(0, (1.5, 2.5)), zorder=1)
         label_end(axl, 20, neff(20, phi), f"φ = {phi:g}", col, dx=5)
     axl.text(1.0, 10.15, "ceiling 1/φ = 10", fontsize=8, color=INK_2, ha="left", va="bottom")
-    axl.text(1.0, 4.15, "ceiling 1/φ = 4", fontsize=8, color=INK_2, ha="left", va="bottom")
-    axl.text(1.0, 2.37, "ceiling 1/φ = 2.2", fontsize=8, color=INK_2, ha="left", va="bottom")
+    axl.text(12.5, 4.15, "ceiling 1/φ = 4", fontsize=8, color=INK_2, ha="left", va="bottom")
+    axl.text(12.5, 2.35, "ceiling 1/φ = 2.2", fontsize=8, color=INK_2, ha="left", va="bottom")
     axl.plot([11], [2.0], "o", color=shade[0.45], markersize=6.5, zorder=6, markeredgecolor=INK, markeredgewidth=1.0)
     axl.annotate("Theo's 11 responders at\nφ = 0.45 are worth 2", (11, 2.0), xytext=(6.3, 0.62),
                  textcoords="data", ha="left", va="center", fontsize=8.2, color=INK_2, arrowprops=LEADER)
@@ -210,15 +219,15 @@ def fig_rfq_neff():
     assert abs(up0 - 2.0) < 1e-9 and abs(up45 - 1.085) < 0.001
     axr.text(11.2, 0.30, f"independent: halving the\nresponders doubles the\nbest quote's distance (×{up0:.1f})",
              ha="left", va="center", fontsize=8.2, color=INK_2)
-    axr.text(8.5, 0.74, f"φ = 0.45: it moves {100 * (up45 - 1):.0f}%,\nthe same θ and φ",
+    axr.text(8.5, 0.68, f"φ = 0.45: it moves {100 * (up45 - 1):.0f}%,\nthe same θ and φ",
              ha="left", va="center", fontsize=8.2, color=INK_2)
-    axr.annotate("9 Apr 2025: 13.2 to 6.6\nprices per RFQ", (n_lo, best(n_lo, 0)), xytext=(2.4, 0.05),
-                 textcoords="data", ha="left", va="bottom", fontsize=8.2, color=INK_2, arrowprops=LEADER)
+    axr.text(7.0, 0.93, "dots: 13.2 and 6.6 prices per RFQ\n(US high grade, 9 Apr 2025)", ha="left", va="center",
+             fontsize=8.2, color=INK_2)
     axr.set_xlim(0.5, 20)
     axr.set_ylim(0, 1.05)
     axr.set_xticks([1, 5, 10, 15, 20])
     axr.set_xlabel("Dealers responding, n")
-    axr.set_ylabel("Expected best quote ÷ θ (average quote distance)")
+    axr.set_ylabel("Expected best quote ÷ θ")
     return finish(fig, "ch02_rfq_neff")
 
 
@@ -248,11 +257,10 @@ def fig_data_exhaust_curve():
         to_star, a_star = peaks[c_bp]
         ax.plot([to_star, to_star], [0, a_star], color=col, linewidth=0.9, linestyle=(0, (3, 3)), zorder=3)
         ax.plot([to_star], [a_star], "o", color=col, markersize=6.5, zorder=6, markeredgecolor=INK, markeredgewidth=0.8)
-    ax.annotate("c = 12 bp: best is 4.0 turns a year,\n48 bp of net alpha", (4.0, 48.0), xytext=(7.0, 12),
+    ax.annotate("c = 12 bp: best is 4.0 turns,\n48 bp of net alpha", (4.0, 48.0), xytext=(4.7, 16),
                 textcoords="data", ha="left", va="center", fontsize=8.5, color=INK_2, arrowprops=LEADER)
     ax.annotate("c = 7.5 bp: best is 10.2 turns,\n77 bp of net alpha", (10.24, 76.8), xytext=(11.0, 108),
                 textcoords="data", ha="left", va="center", fontsize=8.5, color=INK_2, arrowprops=LEADER)
-    ax.plot([8.4], [12], "o", color=OLD_COST, markersize=0)       # (anchor for layout only; invisible)
     ax.annotate("", xy=(10.0, 70.5), xytext=(4.25, 51.0),
                 arrowprops=dict(arrowstyle="-|>", color=INK_2, linewidth=1.1, mutation_scale=9, shrinkA=0, shrinkB=0))
     ax.text(1.0, 98, "cutting the cost from 12 to 7.5 bp\nmultiplies the best turnover by 2.56\nand the net alpha by 1.6",
@@ -261,10 +269,6 @@ def fig_data_exhaust_curve():
     ax.set_ylim(-14, 175)
     ax.set_xlabel("Turnover (one-way turns of the book per year)")
     ax.set_ylabel("Alpha (bp per year)")
-    # direct labels for the two net-alpha curves, at the right edge
-    for c_bp, col, xx in ((12.0, OLD_COST, 16.2), (7.5, NEW_COST, 16.2)):
-        yy = (k * np.sqrt(xx) * 1e4) - c_bp * xx
-        label_end(ax, xx, yy, f"net, c = {c_bp:g} bp", col, dx=5, dy=-5 if c_bp == 12 else 5)
     note(ax, "k = 0.0048", loc="upper left")
     return finish(fig, "ch02_data_exhaust_curve")
 
@@ -297,7 +301,8 @@ def fig_two_shocks_timeline():
     for ax, (a, b), events, title, loc, fmt in (
             (axs[0], ("2020-02-18", "2020-07-31"), ev20, "March 2020", mdates.MonthLocator(), "%-d %b"),
             (axs[1], ("2025-03-31", "2025-05-14"), ev25, "April 2025",
-             mdates.DayLocator(bymonthday=[1, 8, 15, 22, 29]), "%-d %b")):
+             matplotlib_fixed(["2025-04-01", "2025-04-08", "2025-04-15", "2025-04-22", "2025-04-29", "2025-05-06",
+                               "2025-05-13"]), "%-d %b")):
         seg = s[(s.index >= a) & (s.index <= b)]
         ax.plot(seg.index, seg.values, color=IG, linewidth=LW, zorder=3)
         ax.set_xlim(d(a), d(b))
