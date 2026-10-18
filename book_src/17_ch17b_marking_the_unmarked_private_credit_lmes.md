@@ -93,3 +93,266 @@ That third column is Theo's, and the book has it elsewhere: Chapter 12-B for whi
 > **View From Another Seat.** *The direct lender's committee.* From the chair at the end of Danny's table, a mark is not a forecast. It is a decision with consequences that arrive the next morning. A markdown changes the fund's reported return and, through it, the incentive fee and the fundraising slide; for a vehicle with a credit line it changes what the bank will lend against the loan; and in a club deal it is read by the other lenders and, sooner or later, by the sponsor, both of whom are about to be across a negotiating table. A lender marking to 50 in April would have been right, and would also have been the first holder to tell the sponsor what it thought the company was worth. The seat's honest defence is the one Ares Capital's president Jim Miller gave on the firm's fourth-quarter 2025 call (4 February 2026), describing first-lien loan-to-values across Ares's portfolio "in the high 30% to low 40% range" (§17.1): a first-lien lender with sixty cents of equity beneath it can be patient, because it expects to own the company before it loses money. The arithmetic of that defence is also its limit. Patience is priced on the equity cushion, and the equity cushion is the sponsor's mark, which is precisely the column the room did not have. When the cushion goes to zero, the loan is the company, and patience becomes ownership.
 
 *Builds on:* §17.3.3 (the Medallia ledger), §17.4 (the Pluralsight replay and its three cards), §7-B.1 (clustered errors), §12B.4 (the out-of-court menu), §13.6 (drop-down leakage). *Used in:* §17B.4 (the dispersion and sponsor-mark features), §17B.5 (why the pod could not short it), §14.3 (the re-cut).
+
+## 17B.2 PIK as a Hidden Default, Measured
+
+#### Quant-Shop Life: The Reconciliation That Would Not Tie
+
+*(A fictional composite of month-end on a systematic credit desk. The desk, its people, its tables, its tickets and its dialogue are invented; every BDC figure is from the company releases and filings cited, and the arithmetic on them is the desk's.)*
+
+The last day of September 2026 is a Wednesday, which on Theo's desk means month-end, which means the risk committee's pack, which means that by four o'clock every number on page nine has to agree with the number its source published. Page nine is new. It is the private-credit page, and it has one chart: the share of each large BDC's loans on non-accrual, measured two ways, cost and fair value, over four quarters. Theo volunteered to own it in his second week, on the theory that a man who has reconciled a claims register to a proof-of-claim docket can reconcile anything. Kaz agreed to write the code, on the theory that anything Theo reconciles by hand will eventually need to be reconciled by a machine.
+
+The desk's own number comes from the `soi` table of §17.8, every facility in every schedule of investments, one row per facility per quarter, with a flag for loans the schedule marks as on non-accrual. Sum the flagged rows, divide by the total, and the ratio should match what the BDC's earnings release says. At 10:15 it matches for none of the seven.
+
+The misses are small and boring, which is the worst kind, because small and boring misses get waved through and then become the number. One BDC's release divides by total investments including equity and the desk divides by debt only. Another reports first-lien non-accruals in one table and everything else in another, and the parser read the first table. A third shows a loan on non-accrual in a footnote rather than with the marker beside the row, and the parser, which looks for the marker, did not see it. By 1:40 Theo has six of the seven within a tenth of a point and a ticket for the seventh. By 2:20 he has a list of every loan that appears in more than one BDC's schedule, which is the part nobody does, and finds what he half expected: loans flagged as non-accrual at one holder and accruing at another, in the same quarter.
+
+Kaz looks at the list with the expression of someone whose model has just been told that the data have opinions. "So non-accrual is a legal event? Like an event of default under the credit agreement?"
+
+"It's an accounting decision," Theo says. "The lender stops booking interest income it no longer expects to collect. The credit agreement can say the borrower is fine, and the lender can still decide it doesn't believe the borrower."
+
+"So the default is whenever the CFO says so?"
+
+"Welcome to private credit," Mags says from two chairs down, without looking up.
+
+The list is not an anecdote. Octus, adjusting sector non-accruals for loans held by several BDCs, found that the figure rose from 1.45% to 2.18% of cost, and that widely held stressed loans showed "pricing gaps of nearly 40 points as measured by fair value divided by par" (Octus, 16 April 2026; §17.3.3). A loan that one committee has stopped believing in and another still accrues is the cross-holder dispersion of §17B.1 in a second unit, a flag rather than a price, and it goes into the detector of §17B.4 the same way: per valuer, clustered.
+
+By 3:30 the chart on page nine has two lines per BDC, and the gap between them is the point.
+
+> **Math, Gently.** *A ratio of two rulers.* Every BDC reports its non-accrual loans twice: as a share of the portfolio at what the loans cost, and as a share at what the manager now says they are worth. If the bad loans are 2.8% of cost but only 0.8% of fair value, the manager is carrying them at a fraction of what was paid, and the fraction is roughly the ratio of the two shares, $0.8/2.8\approx0.29$, times the whole portfolio's fair value over cost (about 0.98 here), so about 28 cents on the dollar. Two rulers, one bucket of loans, and the ratio between the readings is a mark the release never prints. That is OBDC's June 2026 quarter, and §17.3.3 derives it in full. The part that matters for a series is what happens when the rulers drift apart: a falling fair-value share with a rising cost share means new bad loans are arriving already marked down hard, so the headline improves while the hole deepens.
+
+Here is the table that went to the committee, every BDC's second quarter of 2026 on the same two rulers:
+
+| BDC | Non-accrual, % of fair value | Non-accrual, % of cost | Cost share ÷ FV share | FV share ÷ cost share |
+| :-- | --: | --: | --: | --: |
+| Ares Capital (ARCC) | 1.4 | 2.4 | 1.7x | 0.58 |
+| Blue Owl Capital Corp (OBDC) | 0.8 | 2.8 | 3.5x | 0.29 |
+| FS KKR (FSK) | 3.8 | 7.1 | 1.9x | 0.54 |
+| Blackstone Secured Lending (BXSL) | 1.8 | 3.6 | 2.0x | 0.50 |
+| Goldman Sachs BDC (GSBD) | 2.9 | 5.0 | 1.7x | 0.58 |
+| Oaktree Specialty Lending (OCSL) | 1.8 | 4.2 | 2.3x | 0.43 |
+| BCRED (non-traded) | 1.1 | 2.2 | 2.0x | 0.50 |
+
+*Source: second-quarter 2026 earnings releases and reports; the two right-hand columns are computed. The last column, times each BDC's portfolio fair value over cost, is the implied carrying value of its bad loans (§17.3.3).*
+
+Read across the last column and the seven managers are carrying their bad loans at between about 29 and 58 cents, before the portfolio adjustment. That is not a statement about whose loans are worse. A BDC that puts loans on non-accrual early, while they are still marked in the eighties, will show a high last column; one that waits until a loan has been marked to the forties will show a low one. Kaz's question had the chapter's argument folded inside it: when the flag is a decision, the flag's timing is a feature of the manager, and a ratio built on it carries the manager's habits along with the loans.
+
+The same desk had a second series to reconcile that afternoon, and it did not tie either, for the same reason at a larger scale. In 2026 a reader asking how many private loans had defaulted got answers from 2.5% to 19%, depending on whom they asked:
+
+| Measure | Level | As of | What is counted | PIK amendments and extensions |
+| :-- | --: | :-- | :-- | :-- |
+| Proskauer Private Credit Default Index | 2.51% | Q2 2026 | 716 loans in its index | as the index defines a default |
+| KBRA middle-market measure | 3.5% | Aug 2026 | KBRA's forward-looking rate | — |
+| Moody's, middle-market CLO obligors | 4.0% / 5.8% | 2026 | 607 obligors in 47 CLOs (as published) | excluded / included |
+| Fitch private credit default rate | 6.3% | Aug 2026 | as reported in the trade press | included: PIK and deferrals were 47% of events |
+| PIMCO shadow default rate | about 19% | 31 Mar 2026 | BDC loans, PIMCO's construction | broadest |
+
+Every number is right about something. Mags put it in §17.8.2 as a menu, the same menu as the LMT chapters, moved into a market with no docket, and Chapter 14 (§14.1) has the general version: a default rate is a choice of what counts, and in a decade of liability management a choice of what counts is most of the answer. What changed on the desk at 3:45 is smaller and more useful. Theo added three columns to the default series in the desk's data store, beside every observation: *count or dollars*, *cost or fair value*, *PIK and extensions in or out*. "A default rate without its basis," he said, "is a bond price without a day count." Nobody wrote it on the whiteboard, which on this desk is how a sentence becomes permanent.
+
+Mags, reading over Kaz's shoulder, finds the line in Medallia's schedules that makes the third column matter. Through 2025 the loan carried a coupon of SOFR plus 6.50%, of which 4% was paid in kind: added to the principal rather than paid in cash. In the December 2025 schedules the PIK component is gone and the coupon reads SOFR plus 6.00%, all in cash (BDC 10-K schedules; §17.3.3). The total spread fell by half a point, which looks like good news, and the cash the borrower owed rose from SOFR plus 2.50% to SOFR plus 6.00%, an extra \$3.5mm a year on every \$100mm of loan, which was not. One quarter later the two Blackstone vehicles carried the loan on non-accrual.
+
+"Back in my day," Mags says, "a PIK was a confession with a deferral. You knew it when the coupon changed, because the borrower's lawyer called you to ask for it." She watches Kaz type *Medallia* into EDGAR's full-text search, restrict it to 10-Q filings and get seven holders' schedules in four minutes. "In 1998 that took a week, a fax machine and a favor." A pause. "Fine. That's good."
+
+The PIK that lapsed is the mirror image of the PIK that §17.8.2 calls bad: one is a borrower who could not pay cash and a lender who preferred not to call it a default, and the other is a borrower who was allowed to defer until the deferral ran out. Both are visible in the schedules as a change in the coupon's composition, and both carry information a total spread hides. The desk ends the day with two derived columns on every facility-quarter, `pik_on_by_amendment` (a PIK component that was not there when the loan first appeared) and `pik_cliff` (a PIK component that disappears, raising the cash coupon), and a note that BCRED's PIK income was 5.6% of its total in the second quarter of 2026, the quarter its distribution rate went from 10.0% to 9.1% (BCRED reports). Whether the Fed's 25-basis-point rise of 17 September turns some of that PIK into non-accrual is a question the third-quarter schedules will answer in November, and it is on the Trend Watch of §17B.6.
+
+The seventh BDC's ticket is still open at 5:30. It turns out to be a loan that moved from one line of the schedule to another between quarters, keeping its fair value and changing its name, and it takes until the following Tuesday to close. Nobody outside the desk ever knows.
+
+*Builds on:* §14.1 (two default rates), §17.3.3 (the non-accrual gap), §17.8.2 (bad PIK; the six features). *Used in:* §17B.4 (the PIK states of the detector), §17B.6 (the Fed's hike and PIK), Appendix C (the default ladder, dated).
+
+## 17B.3 The Queue, Estimated
+
+*(Theo's desk, Thursday 15 October 2026. The desk, its dialogue, ROBO's output and the desk's nowcasts are fictional and illustrative. Every request, fill, backlog and quoted phrase is from the funds' Schedule TO-I/A filings and letters, the Federal Reserve and the IMF, or a tracker or press report where the text says so; "computed" marks the desk's arithmetic on those figures.)*
+
+The week before, Kaz had asked ROBO to "forecast redemptions for the non-traded BDCs." ROBO returned a tidy table: every fund, every quarter from the fourth quarter of 2026 through 2028, 5.0%. It had done exactly what was asked. It had found, for each fund, the line in the 10-Q cash-flow statement for shares repurchased, divided it by shares outstanding, fitted the series, and observed correctly that for the last three quarters almost every number in it was the cap. ROBO had forecast the fills. It was right about the fills. It had learned nothing whatever about how many people wanted to leave, because the series it learned from could not show a number above five.
+
+Theo spends Thursday morning building the series that can. Chapter 17's table of the 2026 queue (§17.6, Long Scene 2) has the request percentages from fund letters and press; he wants them from the filings, final amendment by final amendment, for ten funds and three cycles. A tender offer by a non-traded BDC is filed as a Schedule TO-I. The fund amends it as the offer runs, and the last amendment reports the result: shares tendered, shares accepted, the proration factor. By eleven he has thirty filings open in thirty tabs and has stopped seeing them as tender offers.
+
+"It's a docket," he says to Kaz.
+
+"It's a tender offer."
+
+"It's a docket. Numbered entries, filed with a public authority, in order, each one amending the last, and the final one tells you who got paid how much." He scrolls. "And the 10-Q is the claims register. Every holder of a loan files its claim on it every quarter, in a schedule anyone can read. The restructuring I used to run from a data room is all here, late and in pieces, filed by seven different lenders who disagree with each other." He stops, because the next sentence is the one he has been circling since Danny's story. "And the disagreement is the signal."
+
+It is the aha of this chapter, and it arrives with a filing index. The private market has no tape, but every large private loan sits in several public vehicles, and every semi-liquid vehicle has to publish what its holders asked for. The asset class without prices leaves a paper trail dense enough to build on. The trail is late, it is quarterly, and it is written by people with reasons to write it a particular way, all of which is also true of a bankruptcy docket.
+
+> **Math, Gently.** *A censored series.* Imagine weighing people on a bathroom scale that stops at five. Anyone lighter than five shows their weight; anyone heavier shows five. Average the readings and you will badly underestimate how heavy people are, and if every reading for the last three days was five, a model trained on the readings will predict five forever. That is ROBO's table. A fund's repurchases are the bathroom scale: when requests are below the cap, repurchases show demand exactly; when requests are above it, repurchases show the cap. To see past five you need a second instrument, and the funds supply one when they report requests or a proration factor alongside the payment. OTIC, Blue Owl's software-focused fund, reported requests for 40.4% of its shares in the first cycle of 2026 and a fill of 14.4%, so it repurchased about 5.8% and left about 34.6% of its shares in the line (computed). A forecast built on the 5.8% says next quarter looks like this quarter. A forecast built on the 34.6% says most of next quarter's requests are already known. Law 14 has the likelihood that uses both readings at once, and the full version for the queue is below.
+
+Theo's first table is the one anyone would build, requests and fills by fund and cycle. His second is the one his thirteen-week model on the USB stick has been asking for since Chapter 1: a beginning balance, the new arrivals, the amount served, an ending balance carried to the next period. The model refuses to die again, this time as a queue. The arrival rate is new requests; the service rate is the cap, 5% of shares a quarter, and what that service costs the fund in cash is the cap less whatever new subscriptions arrive, the row that used to say *revolver draws*; the backlog is the line. Kaz recognizes it as Chapter 17's recursion (§17.6.2) and points out, correctly, that the recursion takes the new arrivals as an input. Theo's job is to recover them.
+
+The algebra is three lines, in Chapter 17's notation: $a_t$ is the share of the fund's shares tendered in cycle $t$, $f_t$ the fill, $c$ the cap, and the share actually repurchased is $p_t=a_tf_t$, which equals $\min(a_t,c)$ when the cap is applied as written. Let $\xi$ be the share of last cycle's unfilled requests that come back, and $\iota_t$ the shares issued between the two offers as a fraction of last cycle's shares. Then the returning line, as a share of this cycle's shares, and the share of holders not already in line who joined it are
+
+$$
+b_t=\xi\,\frac{a_{t-1}-p_{t-1}}{1-p_{t-1}+\iota_t},
+\qquad
+a^{\text{new}}_t=\frac{a_t-b_t}{1-b_t}.
+$$
+
+The second expression is Chapter 17's $a^{\text{new}}$, the fraction of non-queued shares that request, recovered from published numbers instead of assumed. Setting $\xi=1$ and $\iota_t=0$ says every prorated holder resubmits and nobody new subscribes, which makes $a^{\text{new}}_t$ a lower bound on new demand. The bound can be checked against the one fund that published the other side. Morgan Stanley's North Haven fund (NHPIF) asked for 11.6% in the second cycle and filled 43.0%, then drew 11.4% in the third. With $\xi=1$ the returning line is about 7.0% of shares, which would make resubmissions about 61% of the third cycle's requests (computed). Its letter says nearly two thirds were (NHPIF letter, third cycle of 2026). On the one fund that reports both sides, the assumption that almost everyone comes back is almost right.
+
+Here is the panel with the line taken out *(computed; requests and fills from Schedule TO-I/A final amendments unless noted; joiners are lower bounds under $\xi=1$, $\iota=0$)*:
+
+| Fund | Requests, % of shares (Q1 / Q2 / Q3 2026) | Fill (Q1 / Q2 / Q3) | Joiners $a^{\text{new}}$, Q2 | Joiners $a^{\text{new}}$, Q3 |
+| :-- | :-- | :-- | --: | --: |
+| OTIC (Blue Owl, technology) | 40.4 / 38.1 / — | 14.4% / 13.1% / — | 2.2% | — |
+| OCIC (Blue Owl) | 21.9 / 18.8 / 16.8 | 22.8% / 26.6% / about 30% | 1.2% | 2.7% |
+| ADS (Apollo) | 11.0 / 16.8 / pending | 45.2% / 29.8% / — | 11.2% | — |
+| HLEND (HPS) | 9.2 / 13.3 / pending | 54.0% / 37.6% / — | 9.3% | — |
+| ASIF (Ares) | 11.6 / 14.4 / 13.1 | 43.1% / 34.7% / 38.2% | 8.0% | 3.6% |
+| BPCC (Blackstone, private credit) | 11.3 / 10.9 / 10.7 | 44.3% / 46.0% / 46.8% | 4.6% | 4.8% |
+| NHPIF (Morgan Stanley) | 10.9 / 11.6 / 11.4 | 45.8% / 43.0% / 43.8% | 5.7% | 4.8% |
+| BCRED (Blackstone) | about 7.9 / about 10 / about 10 | upsized to 7%, paid / about half / 5% of shares | about 10% | about 5% |
+
+*BCRED's first-cycle request is a press figure; its first cycle was paid in full after Blackstone and its employees put about \$400mm into a feeder fund, and its later cycles are from its letters (\$4.5 billion requested and about half paid in the second, a \$2.3 billion backlog, about \$4.3 billion requested and 5% of shares repurchased in the third). ADS and HLEND had not filed third-cycle results by 18 October 2026.*
+
+Kaz reads the table twice and then reads it out, which on this desk is the beginning of a change of mind. "OTIC had forty percent of its shares in line two quarters running, and the headline said the run was continuing. But the joiners were two percent. The line is long and it isn't lengthening. Same at OCIC." He moves his finger down. "ADS and HLEND are the opposite. Their headlines were smaller. Their joiners in the second quarter were ten percent. That's new belief arriving, at funds that weren't in the news."
+
+"And by the third quarter," Theo says, "everything that reported has joiners at or under five percent. Under the cap. If that holds, the lines stop growing and start draining." He does not say *the run is over*, because the joiners are lower bounds and because the arithmetic of draining is slower than the word suggests.
+
+> **Math, Gently.** *How long is the line, really?* A queue has three numbers: how fast people arrive, how fast they are served, and how many are waiting. If arrivals are slower than service, the line drains; if faster, it grows without limit, until someone changes the rules. A rule from operations research, Little's law, links the three on average: the typical wait equals the length of the line divided by the rate at which it is served. OTIC after its second cycle had about 35% of its shares in line and served 5% a quarter, so a holder at the back of a first-come-first-served line would wait about $35/5=7$ quarters. But a tender line is not first come, first served. It is pro rata: everyone in line gets the same fraction each quarter, so a holder who tenders everything every quarter at OTIC's 13.1% fill gets 13.1% out in the first quarter and 13.1% of the remainder in the next. After $n$ quarters the share still trapped is $(1-0.131)^n$. Half is out after 5 quarters; 90% is out after 17, more than four years (computed, at a constant fill). Pro rata is fair to everyone in line and slow for all of them, and the tail is longer than the average suggests. The fill rises as the line drains, so the 17 quarters is a ceiling for OTIC as of the second cycle, not a forecast. The full version, the recursion with a backlog, is §17.6.2.
+
+The nowcast the desk builds that afternoon is two parts, and the honest thing about it is that one part is nearly arithmetic and the other is nearly a guess. Next cycle's requests are the returning line plus the joiners. The returning line comes straight out of this cycle's filing: requests minus repurchases, carried to the new share count. The joiners need a model. Kaz fits the simplest one the panel can bear, the logarithm of joiners against the drawdown of the median listed BDC over the tender window, with the cycles where only a payout at the cap was published entering the likelihood as lower bounds rather than exact numbers, the survival term of Law 14. On twenty-odd fund-cycles the slope comes out positive and the interval around it is nearly as wide as the slope *(illustrative)*. Theo writes beside it: *joiners rise when the listed sibling falls; the panel cannot say by how much.*
+
+The two pending funds make the point concrete. ADS repurchased about 5% of its shares in the second cycle out of 16.8% requested, so its third-cycle line starts at about 12.4% of shares before anyone new asks. If its joiners fall back to 5%, third-cycle requests will be about 16.8%; if they stay at the second cycle's 11.2%, about 22.2%. HLEND's line starts at about 8.7%, and the same two cases give about 13.3% and 17.2% *(computed; the desk's illustrative nowcast as of 15 October 2026, before either fund reported)*. The range is the joiners. The floor is arithmetic.
+
+"So what can it forecast?" Ines asks at the end of the day, standing behind them with her coat on.
+
+"The part that's already in line," Theo says. "Almost perfectly. The part that's new, badly. And the part that matters most, not at all: what the sponsor does about it." He has the letters open in the other window. "That's not in the queue. It's in the board minutes."
+
+Blue Owl's letter to OCIC's holders after the third cycle says that "the vast majority" of the requests came from holders who had tendered before; it is the same fact North Haven reported with a fraction. The Federal Reserve had put the year's turn in one sentence in May: accepted redemptions at perpetual BDCs "somewhat exceeded new inflows in the first quarter of 2026, the first time this has occurred since these vehicles were created" (Fed *Financial Stability Report*, 8 May 2026). The IMF's runway arithmetic, 9 to 11 quarters of 5% redemptions in mild stress and 5 to 7 in a moderate shock, is the denominator of §17.6.2's $\mathcal{T}$, and §4C.6 has the same arithmetic from inside a direct lender whose own fund drew 8% against its cap. Chapter 12 (§12.7) has the allocator's version: a sleeve whose exit is a pro rata fill belongs in a liquidity tier of its own.
+
+> **View From Another Seat.** *The sponsor.* From the chair of the firm that runs a semi-liquid fund, the queue is a problem with five known tools, and in 2026 the sponsors used all five (§17.6, Long Scene 2). What the sponsor's seat sees and the investor's often does not is that every tool moves value between the holders who leave and the holders who stay, in a direction that depends on whether the marks are right. *Upsizing the cap with house money*, as Blackstone did for BCRED in the first quarter, buys leavers' shares at NAV: if the marks are right, the sponsor has bought a fair asset and signalled confidence; if they are high, the sponsor has paid the leavers' premium out of its own pocket rather than the stayers'. *Return of capital in place of tenders*, as OBDC II did in February, pays everyone pro rata; it ends the race to the door, because there is no door, but it turns every holder into a leaver on the sponsor's schedule. *Selling loans at par to fund the exit*, as Blue Owl did on 18 February, is fair to the stayers only if the loans sold were average; the buyer chose what it bought, so the slices left behind are, on average, no better than the slices sold (§17.9's second warning). *Buying back the listed sibling below NAV*, as OBDC did at 86% of book, moves value the other way, from the sellers to the holders who stay, and is the one tool on the list that pays stayers. *Cutting the distribution*, as BCRED did from 10.0% to 9.1%, keeps cash in the fund and taxes the holders who came for income, who are often the ones most likely to leave. The IMF's reading of the gate as "discretionary," with managers who "either accommodated redemptions above the 5 percent limit or gated them despite apparent balance sheet capacity" (IMF *Global Financial Stability Report*, April 2026), is the same observation from the regulator's chair. None of the five appears in the queue's recursion, and all five change it.
+
+Theo's thirteen-week model went home that evening on the same USB stick it arrived on, now with three new rows and a Little's-law cell that someone had labeled *wait (qtrs)* in red.
+
+The listing below is what the afternoon's arithmetic became. At this point in the story the desk has thirty final amendments a quarter, a press figure here and there, and a nowcast that has to be re-run the morning each new amendment lands, for every fund at once. One quarter on a calculator is easy; three cycles of de-duplication across ten funds is where hand arithmetic stops tying, and a forecast that is half mechanical and half belief is exactly the kind that gets quietly re-typed wrong.
+
+`split_requests` takes last cycle's requests and fill and this cycle's requests, all as fractions of shares, plus the resubmission share $\xi$ and any new subscriptions, and returns four numbers: the returning line $b_t$, new requests as a share of all shares, the joiners $a^{\text{new}}_t$, and the resubmission share a fund letter would report. It is built around the fill a fund actually achieved, not the cap it advertised, so an upsized quarter like BCRED's first one carries its real repurchase forward. When the returning line computed under $\xi$ would exceed this cycle's requests, it caps the line at the requests and reports zero new demand; that floor binding is a message that $\xi$ is too high for this fund, usually because prorated holders gave up. `nowcast_requests` adds the returning line to a low and a high case for joiners and returns next cycle's range. `prorata_quarters` counts the quarters a holder needs to get a target share out at a constant pro rata fill, and `littles_wait` is the first-come-first-served average for comparison. `fit_censored_lognormal` fits log joiners on a covariate by maximum likelihood, with cycles known only as lower bounds entering through the normal survival function, which is Law 14's likelihood with a cap in place of TRACE's.
+
+The checks reproduce the table: OTIC's 2.2% joiners, OCIC's 2.7%, ADS's 11.2%, North Haven's 61% resubmission share, the 5- and 17-quarter pro rata clocks, Little's 7 quarters, and the ADS range of 16.8% to 22.2%. A seeded simulation then shows the censored fit recovering a known slope and spread while a naive fit that treats capped rows as exact gets both too small, which is ROBO's table in miniature.
+
+It fits any fund that publishes requests and fills, and funds that publish only payouts once the censoring flag is set. It does not forecast what a board will do, and a cycle in which the sponsor changed the rules (an upsized cap, a switch to return of capital, a suspension) belongs outside the fit, as an event, not inside it as an observation. The edge case that bites is the word *fill*. Some filings and letters report the fill as a share of requests and others as a share of shares outstanding, and the dossier's own note on OCIC's third cycle reads "5% filled" in the second sense. Passing 0.05 as `f_prev` there would make the repurchase 0.84% of shares instead of 5%, and next cycle's returning line about four points too long, with nothing raised to warn you.
+
+<!-- EXPLAINED -->
+```python
+# pc_queue.py: the redemption queue, de-duplicated and nowcast (Chapter 17-B, §17B.3)
+import numpy as np
+from scipy import optimize, stats
+
+
+def paid_share(a, f):
+    """Share of shares outstanding repurchased this cycle, p = a * f (decimals)."""
+    if not (0.0 <= a <= 1.0 and 0.0 <= f <= 1.0):
+        raise ValueError("requests a and fill f must be decimals in [0, 1]")
+    return a * f
+
+
+def split_requests(a_prev, f_prev, a_now, xi=1.0, subs=0.0):
+    """Split this cycle's requests into the returning line and new joiners.
+
+    a_prev, f_prev: last cycle's requests and fill (fill as a share of REQUESTS),
+                    both as fractions of last cycle's shares.
+    a_now: this cycle's requests, as a fraction of this cycle's shares.
+    xi: share of last cycle's unfilled requests that come back (1.0 = all of them).
+    subs: shares issued between the two offers, as a fraction of last cycle's shares.
+
+    Returns a dict:
+      returning  b_t, the resubmitted line, as a fraction of this cycle's shares;
+      new_share  a_t - b_t, new requests as a fraction of all shares;
+      joiners    (a_t - b_t) / (1 - b_t), Chapter 17's a^new;
+      resub      b_t / a_t, the resubmission share a fund letter would report.
+    With xi = 1 and subs = 0, joiners is a lower bound and resub an upper bound."""
+    if not (0.0 <= xi <= 1.0) or subs < 0.0:
+        raise ValueError("xi must be in [0, 1] and subs >= 0")
+    p = paid_share(a_prev, f_prev)
+    b = xi * (a_prev - p) / (1.0 - p + subs)
+    b = min(b, a_now)  # the floor: more returning than requested means xi is too high here
+    joiners = (a_now - b) / (1.0 - b) if b < 1.0 else np.nan
+    resub = b / a_now if a_now > 0 else np.nan
+    return {"returning": b, "new_share": a_now - b, "joiners": joiners, "resub": resub}
+
+
+def nowcast_requests(a_now, f_now, joiners_lo, joiners_hi, xi=1.0, subs=0.0):
+    """Next cycle's requests: the returning line (arithmetic) plus a range of joiners (belief).
+    Returns (returning, low, high) as fractions of next cycle's shares."""
+    p = paid_share(a_now, f_now)
+    b = xi * (a_now - p) / (1.0 - p + subs)
+    lo = b + joiners_lo * (1.0 - b)
+    hi = b + joiners_hi * (1.0 - b)
+    return b, min(lo, 1.0), min(hi, 1.0)
+
+
+def prorata_quarters(fill, target=0.5):
+    """Quarters for a holder who tenders everything every cycle to get `target` of the shares
+    out at a constant pro rata fill: the smallest n with 1 - (1 - fill)**n >= target."""
+    if not (0.0 < fill <= 1.0) or not (0.0 < target < 1.0):
+        raise ValueError("fill must be in (0, 1] and target in (0, 1)")
+    if fill == 1.0:
+        return 1
+    return int(np.ceil(np.log(1.0 - target) / np.log(1.0 - fill)))
+
+
+def littles_wait(backlog, throughput):
+    """Average wait, in quarters, in a first-come-first-served line: W = L / throughput."""
+    return np.inf if throughput <= 0 else backlog / throughput
+
+
+def fit_censored_lognormal(y, censored, x):
+    """Maximum likelihood for log(y) = mu0 + mu1 * x + sigma * eps, eps ~ N(0, 1).
+
+    Rows with censored=True are lower bounds (the filing says only that the cap bound)
+    and contribute log P(Y >= y), the survival term of Law 14, instead of a density."""
+    y = np.asarray(y, float)
+    x = np.asarray(x, float)
+    c = np.asarray(censored, bool)
+    if y.shape != x.shape or y.shape != c.shape:
+        raise ValueError("y, censored and x must have the same length")
+    if np.any(y <= 0):
+        raise ValueError("y must be positive: drop or floor zero rows before fitting")
+    ly = np.log(y)
+
+    def nll(theta):
+        mu0, mu1, log_s = theta
+        z = (ly - mu0 - mu1 * x) / np.exp(log_s)
+        ll_obs = stats.norm.logpdf(z[~c]) - log_s - ly[~c]
+        ll_cen = stats.norm.logsf(z[c])
+        return -(ll_obs.sum() + ll_cen.sum())
+
+    x0 = np.array([ly.mean(), 0.0, np.log(ly.std() + 1e-3)])
+    res = optimize.minimize(nll, x0, method="Nelder-Mead",
+                            options={"xatol": 1e-6, "fatol": 1e-7, "maxiter": 20000})
+    mu0, mu1, log_s = res.x
+    return {"mu0": float(mu0), "mu1": float(mu1), "sigma": float(np.exp(log_s)),
+            "n": int(y.size), "n_censored": int(c.sum()), "converged": bool(res.success)}
+
+
+# --- sanity checks: the chapter's numbers (computed; xi = 1, no subscriptions) ---
+otic = split_requests(0.404, 0.144, 0.381)
+assert abs(otic["new_share"] - 0.0138) < 5e-4 and abs(otic["joiners"] - 0.022) < 1e-3
+assert abs(split_requests(0.188, 0.266, 0.168)["joiners"] - 0.027) < 1e-3     # OCIC, Q3
+assert abs(split_requests(0.110, 0.452, 0.168)["joiners"] - 0.112) < 1e-3     # ADS, Q2
+assert 0.58 < split_requests(0.116, 0.430, 0.114)["resub"] < 0.64             # NHPIF: "nearly two thirds"
+assert split_requests(0.20, 0.25, 0.04)["new_share"] == 0.0                     # the floor binds
+assert prorata_quarters(0.131, 0.5) == 5 and prorata_quarters(0.131, 0.9) == 17
+assert abs(littles_wait(0.35, 0.05) - 7.0) < 1e-12
+_, lo, hi = nowcast_requests(0.168, 0.298, 0.05, 0.112)                          # ADS, pending Q3
+assert abs(lo - 0.168) < 2e-3 and abs(hi - 0.222) < 2e-3
+
+# --- the censored fit recovers known parameters; the naive fit shrinks them ---
+rng = np.random.default_rng(1702)
+n = 2000
+x = rng.normal(0.0, 1.0, n)
+y_true = np.exp(np.log(0.04) + 0.3 * x + 0.5 * rng.normal(0.0, 1.0, n))
+cap = 0.08
+cens = y_true > cap
+y_obs = np.where(cens, cap, y_true)
+fit = fit_censored_lognormal(y_obs, cens, x)
+naive = fit_censored_lognormal(y_obs, np.zeros(n, bool), x)
+assert fit["converged"] and abs(fit["mu1"] - 0.3) < 0.05 and abs(fit["sigma"] - 0.5) < 0.05
+assert naive["mu1"] < fit["mu1"] and naive["sigma"] < fit["sigma"]
+print({k: (round(v, 3) if isinstance(v, float) else v) for k, v in fit.items()})
+```
+
+![Figure 17-B.2: The queue with the line taken out. Left: requests against fills for the funds in the table, three cycles of 2026, with the curve $f=c/a$ at a 5% cap drawn through them (OTIC near 40% and 14%, OCIC near 20% and 25%, the middle of the pack between 9% and 17% requested, a tracker's Golub, Goldman Sachs and Fidelity vehicles at 3% to 5% and paid in full), and an inset of BCRED's second and third cycles as bars (\$4.5 billion requested, about half paid, a \$2.3 billion backlog, about \$4.3 billion requested). Right: for each fund and cycle, the headline request share beside the joiners $a^{\text{new}}$ once the returning line is removed (lower bounds, $\xi=1$). Source: Schedule TO-I/A final amendments; BCRED letters; a secondary tracker for the paid-in-full funds; computed columns as in the table.](assets/figures/ch17b_queue_requests_fills.png)
+
+<!-- FIGURE: ch17b_queue_requests_fills.png (left scatter: (40.4,14.4),(38.1,13.1) OTIC; (21.9,22.8),(18.8,26.6),(16.8,~30) OCIC; ADS (11.0,45.2),(16.8,29.8); HLEND (9.2,54.0),(13.3,37.6); ASIF (11.6,43.1),(14.4,34.7),(13.1,38.2); BPCC (11.3,44.3),(10.9,46.0),(10.7,46.8); NHPIF (10.9,45.8),(11.6,43.0),(11.4,43.8); tracker: GCRED (4.8,100), GS PCC (3.2,100), Fidelity (2.9,100); curve f = min(1, 5/a). Inset bars BCRED Q2 4.5bn req / ~2.25bn paid / 2.3bn backlog; Q3 ~4.3bn req. Right paired bars headline vs joiners: OTIC Q2 38.1 vs 2.2; OCIC Q2 18.8 vs 1.2, Q3 16.8 vs 2.7; ADS Q2 16.8 vs 11.2; HLEND Q2 13.3 vs 9.3; ASIF Q2 14.4 vs 8.0, Q3 13.1 vs 3.6; BPCC Q2 10.9 vs 4.6, Q3 10.7 vs 4.8; NHPIF Q2 11.6 vs 5.7, Q3 11.4 vs 4.8.) -->
+
+*Builds on:* §17.6.2 (the run with a pro-rata cap, the backlog recursion, the runway), Law 14, §4C.6 (the direct lender's 8% quarter), §12.7 (liquidity tiers). *Used in:* §17B.4 (the holder's own queue as a feature), §17B.5 (OBDC II's return of capital), §17B.6 (Trend Watch: the pending ADS and HLEND results), Appendix B (Schedule TO-I/A as a data source).

@@ -43,26 +43,6 @@
    }
   },
   {
-   "name": "figs-4d-2b-0002",
-   "task": "wl3spbmbr",
-   "runId": "wf_e9852c77-c8a",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "04_ch04d_getting_the_seat",
-     "02_ch02b_transaction_cost_analysis_for_credit",
-     "00_02_how_to_use_this_book"
-    ],
-    "stages": [
-     "u1",
-     "figures",
-     "figcheck",
-     "resgraph"
-    ]
-   }
-  },
-  {
    "name": "appz-notes-fix",
    "task": "wbfh0pe8o",
    "runId": "wf_ce9abb98-d99",

@@ -78,7 +78,7 @@ The report lists what you checked, what you fixed, and what remains doubtful. Yo
 
 function tagOf(stem) {
   const m = stem.match(/^\d+_ch(\d+)([a-z]?)_/)
-  if (!m) return { tag: stem.slice(0, 6), label: stem.slice(0, 6) }
+  if (!m) { const a = stem.match(/^9\d_app([A-Z])_/); if (a) return { tag: `app${a[1]}`, label: a[1] }; return { tag: stem.slice(0, 5), label: String(parseInt(stem.slice(0, 2), 10)) } }
   const n = String(parseInt(m[1], 10))
   return { tag: `ch${m[1]}${m[2]}`, label: m[2] ? `${n}-${m[2].toUpperCase()}` : n }
 }
