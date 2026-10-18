@@ -21,6 +21,7 @@ from style import *  # noqa: E402,F401,F403  (applies the rcParams on import)
 
 import numpy as np  # noqa: E402
 from scipy.stats import norm  # noqa: E402
+from matplotlib.patches import Patch  # noqa: E402
 
 # --------------------------------------------------------------------------------------------------
 # The chapter's model
@@ -128,11 +129,11 @@ def fig_call_spreads():
     # direct labels inside the bands, at x = 3,000 where every band has height
     stack_at = lambda x: [float(b[np.argmin(abs(v - x))]) for b in bands]
     names = ["ABL, DIP, admin (525)", "First lien (1,250)", "Unsecured pool (1,020)", "Old equity"]
-    xls = [3000, 3000, 3000, 3250]
+    xls = [3000, 3000, 3000, 3200]
     for k, (name, xl) in enumerate(zip(names, xls)):
         h = stack_at(xl)
         lo = sum(h[:k])
-        ax1.annotate(name, (xl, lo + h[k] / 2), ha="center", va="center", fontsize=8.5 if k < 3 else 8,
+        ax1.annotate(name, (xl, lo + (h[k] / 2 if k < 3 else 0.4 * h[k])), ha="center", va="center", fontsize=8.5 if k < 3 else 8,
                      color=INK if k < 3 else INK_2)
     ax1.text(310, 2600, "Each band's thickness is one class's call spread:\nzero below its attachment point, a ramp,\nthen flat at its claim above its detachment point.",
              fontsize=8, color=MUTED, va="top", ha="left")
@@ -211,7 +212,7 @@ def fig_rollup_transfer():
                  ha="right", va="center", fontsize=8, color=INK_2)
     axr.annotate("no roll-up: 65.0%", (0, base), xytext=(4, 4), textcoords="offset points", ha="left", va="bottom",
                  fontsize=8, color=INK_2)
-    axr.annotate("shaded gap =\ntransfer to the\nrolled holders", (640, 57), ha="center", va="center", fontsize=8,
+    axr.annotate("shaded gap =\nloss per 100 of\nface left behind", (640, 57), ha="center", va="center", fontsize=8,
                  color=INK_2)
     axr.set_xlim(0, 960)
     axr.set_ylim(0, 75)
@@ -252,8 +253,8 @@ def fig_recovery_distributions():
     axa.bar(mids, w2 * c * 100, width=wd, bottom=W_DEBTOR * d * 100, color=BLUE, alpha=0.38,
             label="Committee's expert (0.3)")
     p_par = 1 - float(mix_cdf(VSTAR))
-    axa.bar([98.75], [p_par * 100], width=2.25, color=BLUE, alpha=0.38, zorder=3)
-    axa.annotate(f"{p_par * 100:.1f}%\npaid in full", (98.75, p_par * 100), xytext=(-5, -2), textcoords="offset points",
+    axa.bar([100.9], [p_par * 100], width=1.6, color=BLUE, alpha=0.38, zorder=3)   # point mass at par, beside the last bin
+    axa.annotate(f"{p_par * 100:.1f}%\npaid in full", (100.9, p_par * 100), xytext=(-5, -2), textcoords="offset points",
                  ha="right", va="top", fontsize=8.5, color=INK)
     axa.set_xlim(0, 103)
     axa.set_ylim(0, 22)
@@ -287,6 +288,10 @@ def fig_recovery_distributions():
                  ha="left", va="center", fontsize=8, color=INK_2)
     axb.text(0.99, 0.97, "37 bins, equal in\nlog recovery", transform=axb.transAxes, ha="right", va="top",
              fontsize=8, color=MUTED)
+    axb.legend(handles=[Patch(facecolor=ORANGE, label="Debtor's"),
+                        Patch(facecolor=ORANGE, alpha=0.38, label="Committee's")],
+               title="Expert adopted", title_fontsize=8, alignment="left",
+               loc="center right", bbox_to_anchor=(1.0, 0.57), fontsize=8, handlelength=1.2)
     return finish(fig, "ch12c_recovery_distributions")
 
 
@@ -331,14 +336,14 @@ def fig_takeback_transfer():
     first = F * a5(0.10) * ds                            # duration (annuity) at the plan's own 10% market yield
     fig, ax = new_figure("wide")
     bp = ds * 1e4
-    ax.plot(bp, first, color=ORANGE, linewidth=LW, linestyle=(0, (5, 3)))
+    ax.plot(bp, first, color=MUTED, linewidth=LW, linestyle=(0, (5, 3)))
     ax.plot(bp, exact, color=BLUE, linewidth=LW)
     ax.set_xlim(0, 400)
     ax.set_ylim(0, 58)
     ax.set_xlabel(r"Coupon gap $\Delta s$ = market yield $-$ plan coupon (bp)")
     ax.set_ylabel(r"Transfer to the equity electors (\$mm)")
-    label_end(ax, bp[-1], exact[-1], "Exact price", BLUE, dx=6)
-    label_end(ax, bp[-1], first[-1], "First order", ORANGE, dx=6)
+    label_end(ax, bp[-1], exact[-1], "Exact price", BLUE, dx=6, dy=-3)
+    label_end(ax, bp[-1], first[-1], "First order", MUTED, dx=6, dy=3)
     x200, y200 = 200, F * 0.02 * a5(0.10)
     ax.plot([x200], [y200], "o", color=INK, markersize=6.5, zorder=6)
     ax.annotate(f"the plan: 200bp gap, \\${y200:.1f}mm", (x200, y200), xytext=(-12, 10), textcoords="offset points",

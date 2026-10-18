@@ -283,7 +283,7 @@ def fig_two_mornings():
                 arrowprops=dict(arrowstyle="-|>", color=INK_2, lw=0.9, linestyle=(0, (2, 2)), shrinkA=0, shrinkB=0))
     ax.annotate("challenge filed\n2 Nov, 11:00", (D(2, 11), 83.2), xytext=(-6, 0), textcoords="offset points",
                 ha="right", va="center", fontsize=8, color=INK_2, linespacing=1.15)
-    ax.set_xlim(D(19.6), D(8, 11))
+    ax.set_xlim(D(19.6), D(9, 11))
     ax.set_ylim(80.9, 86.2)
     ax.set_yticks([81, 82, 83, 84, 85, 86])
     ax.xaxis.set_major_locator(FixedLocator([D(21), D(26), D(30), D(2, 11)]))
@@ -403,6 +403,8 @@ def fig_unexplained_by_day():
     ax.set_axisbelow(True)
     ax.axhspan(-TOL, TOL, color=C_TOL, zorder=1, lw=0)
     ax.axvspan(55.5, 58.5, color=SEQ_BLUE_STEPS[0], alpha=0.55, zorder=0, lw=0)
+    for xe in (55.5, 58.5):
+        ax.axvline(xe, color=NEUTRAL, lw=0.9, linestyle=(0, (3, 3)), zorder=1)
     for d, v in quiet.items():
         ax.bar(d, v, width=0.78, color=NEUTRAL, zorder=3)
     for d, vs in breaches.items():
@@ -423,7 +425,7 @@ def fig_unexplained_by_day():
     ax.annotate("Sep month-end", (63, 0.99), xycoords=("data", "axes fraction"), xytext=(-3, 0),
                 textcoords="offset points", fontsize=8, color=INK_2, va="top", ha="right")
     ax.text(55.0, 112, "roll week", ha="right", va="center", fontsize=8, color=INK_2)
-    ax.annotate("Mon 21 Sep: stale CDX\nseries, " + MINUS + "$119k as found", (55.6, -119), xytext=(-4, -2),
+    ax.annotate("Mon 21 Sep:\nstale CDX series,\n" + MINUS + "$119k as found", (55.6, -119), xytext=(-4, -2),
                 textcoords="offset points", fontsize=8, color=INK_2, va="center", ha="right", linespacing=1.15)
     ax.annotate("two true-ups\non one day", (41.6, -105), xytext=(-2, 0), textcoords="offset points",
                 fontsize=8, color=INK_2, va="center", ha="right", linespacing=1.15)

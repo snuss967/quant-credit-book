@@ -13,7 +13,7 @@ the chapter's own numbers, so every caption says "Illustrative":
 Colour roles are fixed across the chapter:
   BLUE   = the Gaussian layer (factors and idiosyncratic residuals)
   ORANGE = the jump layer (JTD)
-  VIOLET = the shortcut / the folded-in alternative (one Gaussian with the jump's variance; sqrt(h))
+  VIOLET = the shortcut / the folded-in alternative (one Gaussian with the jump's variance; sqrt(h)); nothing else
   INK / NEUTRAL = the honest total, thresholds and reference levels
   STATUS (grey / amber / red) = limit state, always with a text label
 
@@ -81,7 +81,7 @@ SCENARIOS = [
          idio=3.0, q=dict(sub80=.06, cb=.02, bb=.005, bank=.005)),
     dict(name="2022 rates year", s=(60, 60, 60), rho=1.0, H=1.1, dy=(250, 245, 236, 230), liq=1, etf=0, struct=0,
          cdx=0, idio=1.5, q=dict(sub80=.03, cb=.01, bb=.002, bank=.002)),
-    dict(name="LDI BWIC week (Oct 2022)", s=(10, 10, 10), rho=1.0, H=1.0, dy=(0, 0, 0, 0), liq=5, etf=0, struct=8,
+    dict(name="LDI BWIC week (Sep\u2013Oct 2022)", s=(10, 10, 10), rho=1.0, H=1.0, dy=(0, 0, 0, 0), liq=5, etf=0, struct=8,
          cdx=0, idio=1.5, q=dict(sub80=.01, cb=.005, bb=.001, bank=.001)),
     dict(name="SVB (Mar 2023)", s=(10, 10, 10), rho=1.0, H=0.7, dy=(-100, -85, -70, -35), liq=2, etf=0, struct=0,
          cdx=0, idio=1.8, q=dict(sub80=.02, cb=.01, bb=.002, bank=1.0)),
@@ -243,15 +243,15 @@ def fig_mixture_traps():
     var_b = norm.isf(0.01) * sd_blend
     a.plot([var_h], [0.01], "o", color=INK, markersize=6, markerfacecolor="white", markeredgewidth=1.5, zorder=6)
     a.plot([var_b], [0.01], "o", color=C_SHORT, markersize=6, markerfacecolor="white", markeredgewidth=1.5, zorder=6)
-    a.annotate(f"VaR {var_h:.2f}\nES {es_h:.2f}", (var_h, 0.01), xytext=(-6, -6), textcoords="offset points",
+    a.annotate(f"mixture:\nVaR {var_h:.2f}\nES {es_h:.2f}", (var_h, 0.01), xytext=(-6, -6), textcoords="offset points",
                ha="right", va="top", fontsize=8.3, color=INK_2)
     a.annotate(f"VaR {var_b:.2f}", (var_b, 0.01), xytext=(7, 7), textcoords="offset points",
                ha="left", va="bottom", fontsize=8.3, color=INK_2)
     a.annotate("1% line", (0.045, 0.01), xytext=(0, 3), textcoords="offset points", ha="left", va="bottom",
                fontsize=8, color=MUTED)
-    a.plot([2.6], [p1], "o", color=INK, markersize=4, zorder=6)
-    a.annotate("default plateau:\n0.099% of days,\nmean loss $7.56mm", (2.6, p1), xytext=(0, -8),
-               textcoords="offset points", ha="center", va="top", fontsize=8.3, color=INK_2)
+    a.plot([3.2], [p1], "o", color=INK, markersize=4, zorder=6)
+    a.annotate("default plateau:\n0.099% of days,\nmean loss $7.56mm", (3.2, p1), xytext=(0, 7),
+               textcoords="offset points", ha="center", va="bottom", fontsize=8.3, color=INK_2)
     x_dot = 1.03
     a.plot([x_dot], [5e-5], "o", color=C_SHORT, markersize=4, zorder=6)
     a.annotate("one Gaussian,\nvariance folded in", (x_dot, 5e-5), xytext=(-6, 0),
@@ -393,7 +393,7 @@ def fig_backtest():
     b.set_xticks([0, 1])
     b.set_xticklabels(["after a quiet day\n(4 of 242)", "after an exception\n(3 of 7)"])
     b.set_ylabel("Chance of an exception today (%)")
-    b.annotate("the model\nclaims 1%", (-0.08, 1.0), xytext=(0, 24), textcoords="offset points", ha="center",
+    b.annotate("the model\nclaims 1%", (-0.24, 1.0), xytext=(0, 24), textcoords="offset points", ha="center",
                va="bottom", fontsize=8.3, color=INK_2,
                arrowprops=dict(arrowstyle="-", color=NEUTRAL, linewidth=0.8, shrinkA=1, shrinkB=0))
     b.annotate(f"{100 * pi01:.1f}%", (0, 100 * pi01), xytext=(0, 3), textcoords="offset points", ha="center",
@@ -458,7 +458,7 @@ def fig_limit_sheet():
     xs = np.arange(2)
     w = 0.34
     b.bar(xs - w / 2 - 0.02, fri, width=w, color=NEUTRAL, zorder=3)
-    b.bar(xs + w / 2 + 0.02, mon, width=w, color=C_SHORT, zorder=3)
+    b.bar(xs + w / 2 + 0.02, mon, width=w, color=C_GAUSS, zorder=3)
     for x, f, m in zip(xs, fri, mon):
         b.text(x - w / 2 - 0.02, f + 0.03, f"{f:.2f}", ha="center", va="bottom", fontsize=8.3, color=INK_2)
         b.text(x + w / 2 + 0.02, m + 0.03, f"{m:.2f}", ha="center", va="bottom", fontsize=8.3, color=INK_2)
@@ -474,11 +474,12 @@ def fig_limit_sheet():
     b.set_xticklabels(cells, fontsize=8.2)
     b.set_ylabel("DTS cell exposure ($mm)")
     b.grid(axis="x", visible=False)
-    b.legend(handles=[Rectangle((0, 0), 1, 1, color=NEUTRAL), Rectangle((0, 0), 1, 1, color=C_SHORT)],
+    b.legend(handles=[Rectangle((0, 0), 1, 1, color=NEUTRAL), Rectangle((0, 0), 1, 1, color=C_GAUSS)],
              labels=["Friday", "Monday"], loc="upper left", bbox_to_anchor=(0.0, 1.0), frameon=False,
              fontsize=8.3, handlelength=1.1, handleheight=0.9)
-    b.annotate("40 bonds, 12 issuers\nmoved, nothing traded;\n10-day ES +11%",
-               (0.30, 0.98), ha="left", va="center", fontsize=8.1, color=INK_2)
+    b.annotate("40 bonds, 12\nissuers moved,\nnothing traded;\n10-day ES +11%",
+               (0.30, 1.12), ha="left", va="top", fontsize=8.1, color=INK_2,
+               bbox=dict(facecolor="white", edgecolor="none", pad=1.5), zorder=6)
     return finish(fig, "ch08b_limit_sheet")
 
 

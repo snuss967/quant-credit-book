@@ -7,7 +7,7 @@ Colour roles, held fixed across the chapter's figures (identity is always also c
   ORANGE = a routine real firms describe in public (sourced practice); the wrong / retracted / booked-by-choice number;
            the short leg
   MUTED grey = composite (the chapter's invented scene); context
-  VIOLET = the index overlay (CDX) and the "in private talks" state in the last figure is BLUE, not violet
+  VIOLET = the index overlay (CDX) in Figure 1-B.2 (the "in private talks" share in Figure 1-B.5 is BLUE, not violet)
 Aqua, yellow and magenta are not used (below 3:1 contrast on white).
 
 Data. Real: the Senate Permanent Subcommittee on Investigations report on JPMorgan's Chief Investment Office
@@ -84,7 +84,7 @@ def fig_five_clocks():
                            edgecolor="none", zorder=2))
     ax.annotate("", xy=(xmax + 0.15, y_fri), xytext=(xmax - 0.7, y_fri),
                 arrowprops=dict(arrowstyle="-|>", color=ORANGE, lw=1.2), zorder=4, annotation_clip=False)
-    ax.text(12.1, y_fri - 0.005, "restricted until the next 8-K (no date)", fontsize=7.5, color=INK, va="center",
+    ax.text(12.1, y_fri - 0.005, "restricted until the next 8-K (no date)", fontsize=8, color=INK, va="center",
             ha="left", zorder=4)
 
     for i, y in enumerate(ypos):
@@ -96,7 +96,7 @@ def fig_five_clocks():
                 dy = 7 * side
                 ax.annotate(label, (h, y), xytext=(0 if ha == "center" else (-2 if ha == "right" else 2), dy),
                             textcoords="offset points", ha=ha, va="bottom" if side > 0 else "top",
-                            fontsize=7.5, color=INK_2, linespacing=1.15, zorder=6)
+                            fontsize=8, color=INK_2, linespacing=1.15, zorder=6)
 
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(-0.62, n - 1 + 0.62)
@@ -109,7 +109,7 @@ def fig_five_clocks():
     ax.grid(False)
     ax.spines["left"].set_visible(False)
 
-    handles = [Line2D([], [], marker="o", color="none", markerfacecolor=REG, markersize=7, label="set by a rule"),
+    handles = [Line2D([], [], marker="o", color="none", markerfacecolor=REG, markersize=7, label="tied to a rule"),
                Line2D([], [], marker="o", color="none", markerfacecolor=SRC, markersize=7,
                       label="routine from a public account"),
                Line2D([], [], marker="o", color="none", markerfacecolor=COMP, markersize=7, label="composite (the story)")]
@@ -152,29 +152,23 @@ def fig_dts_drift():
         tot_long = sum(longs)
         net = short - tot_long
         top = max(tot_long, short) / 1000
+        # one value in ink above each bar (the stack shows its total; the CDX piece is in the legend)
+        for x, v in ((x_long, tot_long), (x_short, short)):
+            ax.annotate(f"{v / 1000:.1f}", (x, v / 1000), xytext=(0, 2), textcoords="offset points", ha="center",
+                        va="bottom", fontsize=8, color=INK_2)
         if abs(net) < 1500:
             txt = "matched"
         else:
             txt = f"net short market\n{net / 1000:.0f}k ({100 * net / tot_long:.0f}% of a leg)"
-        ax.annotate(txt, (g, top), xytext=(0, 5), textcoords="offset points", ha="center", va="bottom", fontsize=8,
+        ax.annotate(txt, (g, top), xytext=(0, 17), textcoords="offset points", ha="center", va="bottom", fontsize=8,
                     color=INK if abs(net) >= 1500 else INK_2, fontweight="bold" if abs(net) >= 1500 else "normal")
-        if len(longs) == 1:
-            ax.annotate(f"{tot_long / 1000:.1f}", (x_long, tot_long / 1000), xytext=(0, -2), textcoords="offset points",
-                        ha="center", va="top", fontsize=7.5, color="white", zorder=5)
-        else:
-            ax.annotate(f"{longs[0] / 1000:.1f}", (x_long, longs[0] / 1000), xytext=(0, -2), textcoords="offset points",
-                        ha="center", va="top", fontsize=7.5, color="white", zorder=5)
-            ax.annotate(f"+{longs[1] / 1000:.1f}", (x_long, tot_long / 1000), xytext=(0, -2), textcoords="offset points",
-                        ha="center", va="top", fontsize=7.5, color="white", zorder=5)
-        ax.annotate(f"{short / 1000:.1f}", (x_short, short / 1000), xytext=(0, -2), textcoords="offset points",
-                    ha="center", va="top", fontsize=7.5, color="white", zorder=5)
     ax.set_xticks(range(len(groups)))
     ax.set_xticklabels([g[0] for g in groups], fontsize=8.5)
     ax.tick_params(axis="x", length=0)
-    ax.set_ylim(0, 150)
+    ax.set_ylim(0, 158)
     ax.set_ylabel("Market-value DTS (thousands)")
     ax.legend(handles=[Rectangle((0, 0), 1, 1, color=BLUE, label="long Kestrel 6% 2030"),
-                       Rectangle((0, 0), 1, 1, color=VIOLET, label="CDX HY protection sold"),
+                       Rectangle((0, 0), 1, 1, color=VIOLET, label="CDX HY protection sold (+%.1f)" % (cdx / 1000)),
                        Rectangle((0, 0), 1, 1, color=ORANGE, label="short Halvorsen 7.25% 2029")],
               loc="upper left", ncol=3, columnspacing=1.2, handlelength=1.0, handletextpad=0.5, fontsize=8.5,
               bbox_to_anchor=(0.0, 1.02))
@@ -210,7 +204,7 @@ def fig_trace_cascade():
         x, y = cx[k], lane_y[lane]
         ax.add_patch(FancyBboxPatch((x - bw / 2, y - bh / 2), bw, bh, boxstyle="round,pad=0,rounding_size=1.2",
                                     facecolor=fill, edgecolor=edge, linewidth=1.1, zorder=2))
-        ax.text(x, y, text, ha="center", va="center", fontsize=7.5, color=INK, linespacing=1.25, zorder=3)
+        ax.text(x, y, text, ha="center", va="center", fontsize=8, color=INK, linespacing=1.25, zorder=3)
 
     def arrow(p, q, color=INK_2, ls="-"):
         ax.add_patch(FancyArrowPatch(p, q, arrowstyle="-|>", mutation_scale=9, color=color, linewidth=1.1,
@@ -218,18 +212,18 @@ def fig_trace_cascade():
 
     # tape lane
     box(0, "tape", "A dealer reports a\nHalvorsen trade at 71\n(a keying error)", ORANGE, ORANGE_TINT)
-    box(2, "tape", "The dealer cancels the\n71 and re-reports it\nas/of at 77", BLUE, BLUE_TINT)
+    box(2, "tape", "The dealer cancels\nthe 71 and re-reports\nit as/of at 77", BLUE, BLUE_TINT)
     arrow((cx[0] + bw / 2, lane_y["tape"]), (cx[2] - bw / 2, lane_y["tape"]), color=MUTED, ls=(0, (4, 3)))
-    ax.text((cx[0] + cx[2]) / 2, lane_y["tape"] + 1.6, "a day later", ha="center", va="bottom", fontsize=7.5, color=MUTED)
+    ax.text((cx[0] + cx[2]) / 2, lane_y["tape"] + 1.6, "a day later", ha="center", va="bottom", fontsize=8, color=MUTED)
 
     # model lane
     box(1, "model", "Sees the 71:\nMonday  \u22129.0%\nTuesday +9.2%\nrank 206", ORANGE, ORANGE_TINT)
     box(3, "model", "Sees the 77:\nMonday  \u22121.3%\nTuesday +0.6%\nrank 41", BLUE, BLUE_TINT)
     arrow((cx[1] + bw / 2, lane_y["model"]), (cx[3] - bw / 2, lane_y["model"]), color=INK_2)
     xm = cx[2] + 0.12 * bw
-    ax.text(xm, lane_y["model"] + 1.6, "moves 165\nplaces:", ha="center", va="bottom", fontsize=7.6, color=INK,
+    ax.text(xm, lane_y["model"] + 1.6, "moves 165\nplaces:", ha="center", va="bottom", fontsize=8, color=INK,
             fontweight="bold", linespacing=1.15)
-    ax.text(xm, lane_y["model"] - 1.8, "nothing happened\nto the bond", ha="center", va="top", fontsize=7.6,
+    ax.text(xm, lane_y["model"] - 1.8, "nothing happened\nto the bond", ha="center", va="top", fontsize=8,
             color=INK, linespacing=1.2)
 
     # tape -> model
