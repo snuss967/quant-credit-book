@@ -45,8 +45,8 @@ Growth 31,789 / 14,619 = **2.17×** against the 1.6–1.9× target (23,390–27,
 
 ## (c) Templates and detached judgment paragraphs
 
-- [ ] C1. L51 Ines's syllabus ("First you date ... Then you read ... You fit ... You price ... You compute ... You treat ... And at the end") — a syllabus in costume. Cut to the one-line answer; the Debrief already gives each outcome to a cast member.
-- [ ] C2. L97 detached "When to reach for it" paragraph ("the first thing a seasoned trader checks"). Recast as a Mags/Ines beat at the end of the §2.1 exchange.
+- [x] C1. L51 Ines's syllabus ("First you date ... Then you read ... You fit ... You price ... You compute ... You treat ... And at the end") — a syllabus in costume. Cut to the one-line answer; the Debrief already gives each outcome to a cast member. **Done:** Syllabus cut; Ines stops counting at one; Debrief carries outcomes.
+- [x] C2. L97 detached "When to reach for it" paragraph ("the first thing a seasoned trader checks"). Recast as a Mags/Ines beat at the end of the §2.1 exchange. **Done:** Judgment paragraph now Mags's challenge and Ines's comparable-fills line.
 - [x] C3. L304 "So when does the curve earn its place? ... an experienced hand checks three things" — delete; the stress-year and splice points live in Ines's L282/L278, the fitted-ceiling point in L302; the one new idea (PT moves the ceiling) goes to L302 and the Finder row. **Done:** Judgment paragraph deleted; PT-moves-the-ceiling line joins Kaz's paragraph.
 - [x] C4. L476 "So the router has a natural territory ... A seasoned desk watches" — recast as Ines's beat after "the formula took its time"; Vanguard quote into the Ways box. **Done:** Territory paragraph now Theo's question and Ines's spoken answer.
 - [x] C5. L746 "So which LCS deserves trust? ... The score also breaks in three known places" — replace with a 150–200-word scene (Theo's floater LCS); the callable and price-quoting breaks go to the Finder row. **Done:** Theo's floater scene replaces 'three known places'; others to Finder.
@@ -60,12 +60,12 @@ Growth 31,789 / 14,619 = **2.17×** against the 1.6–1.9× target (23,390–27,
 
 Count: 12 Math, Gently (L63 P/Q, L138 mixture, L154 censoring, L168 distribution shapes, L294 S-curve, L338 order statistics, L410 markout, L462 random walk, L514 covariance, L608 no-arbitrage band, L736 duration, L752 fundamental law) against a cap of 10. Density fine (1 per ~2,650 words); no two Math, Gently adjacent. Runs of more than two boxed elements: none found (max two: L206–208, L242–246, L420–422).
 
-- [ ] D1. L63 P/Q box: survey mention; Ch 1 owns "What 'risk-neutral' really means", Ch 6 owns Q. Demote to a one-sentence gloss with pointers, merged into L61.
+- [x] D1. L63 P/Q box: survey mention; Ch 1 owns "What 'risk-neutral' really means", Ch 6 owns Q. Demote to a one-sentence gloss with pointers, merged into L61. **Done:** P/Q box demoted to one-sentence gloss pointing to Ch 1, 6.
 - [x] D2. L168 "How distributions differ": survey of five shapes (Ch 1 owns normal/Poisson/exponential/fat tails; Ch 5 §5.7 fits tails). Demote: Pareto gets a two-sentence gloss in Kaz's L170; exponential's memorylessness already explained in the L338 box (fix its back-pointer). **Done:** Shapes box retired; Pareto gloss in Kaz's paragraph; pointer fixed.
 - [x] D3. L462 random walk: Ch 1 owns the box and §6.1.1 the load-bearing use. Demote to Kaz's two-line answer to Theo with the 0.8 bp number. **Done:** Random-walk box now Kaz's two-line answer with 0.8 bp.
-- [ ] D4. L138 mixture box: trim "what a distribution is" (Ch 1's box); give it its own number (not FINRA's 82.9%, which L146 states).
-- [ ] D5. Boxes that reuse the text's numbers (lesson 7) get their own: L294 (S-curve), L338 (order statistics), L514 (covariance), L736 (duration), L752 (fundamental law). Vary sign-offs ("The full version follows" ×5).
-- [ ] D6. After D1–D3: 9 Math, Gently. Re-check runs and adjacency after B4, B7, B17 moves.
+- [x] D4. L138 mixture box: trim "what a distribution is" (Ch 1's box); give it its own number (not FINRA's 82.9%, which L146 states). **Done:** Mixture box retitled, points to Ch 1, own 60% number.
+- [x] D5. Boxes that reuse the text's numbers (lesson 7) get their own: L294 (S-curve), L338 (order statistics), L514 (covariance), L736 (duration), L752 (fundamental law). Vary sign-offs ("The full version follows" ×5). **Done:** Five boxes get their own numbers; sign-offs vary, none repeat twice.
+- [x] D6. After D1–D3: 9 Math, Gently. Re-check runs and adjacency after B4, B7, B17 moves. **Done:** Nine Math, Gently; none adjacent; longest boxed run is two.
 
 ## (e) Research-note leaks and fiction labels
 

@@ -33,10 +33,10 @@
 - [x] P3 · §1.4, line 338, regression-slope box · Add worked number (yields +100 bp, HY price +1 point → slope +1, "negative duration"). — *Two-dot example added: slope +1, empirical duration −1, negative duration.*
 - [x] P3 · §1.3.2 box vs cold open in numbers · Link 0.19 and 0.317 in one sentence. — *Box now adds 5 × 0.025 to reach the desk's 0.317.*
 - [x] P3 · Ford scene, lines 559, 651 · Trim ~150 words of framing padding. — *Pastries, USB, door pause and Kaz's dated notebook cut; content kept.*
-- [x] P3 · Serta scene, lines 680–686 · Trim opening 300 words to ~150; keep "I have. Twice in one afternoon. Only one of them was." — *Opening cut from 231 to 129 words; key line and analyst kept.*
-- [ ] P3 · §1.4, line 346, Veronesi annotation · Lead with the phantom position (Tuesday's markout residual), then the rule.
-- [ ] P3 · Appendix F · Title Listing 1.4 properly; trim 1.2's stray prose and duplicate block.
-- [ ] P3 · Resource Graphs (289, 661, 798) · U3 item; do not invent episodes.
+- [x] P3 · Serta scene, lines 680–686 · Trim opening 300 words to ~150; keep "I have. Twice in one afternoon. Only one of them was." — *Opening cut from 242 to 146 words; key line and analyst kept.*
+- [x] P3 · §1.4, line 346, Veronesi annotation · Lead with the phantom position (Tuesday's markout residual), then the rule. — *Phantom-position narration precedes extraction; annotation then states the rule.*
+- [x] P3 · Appendix F · Title Listing 1.4 properly; trim 1.2's stray prose and duplicate block. — *1.4 retitled; 1.2's stray §1.5 prose and duplicate code cut; fences balanced.*
+- [x] P3 · Resource Graphs (289, 661, 798) · U3 item; do not invent episodes. — *Deferred to U3 as instructed; no episodes invented, graphs untouched.*
 
 ## Open items
 

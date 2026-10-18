@@ -3,7 +3,7 @@
  "runs": [
   {
    "name": "u2-A",
-   "task": "w8b9ar4yf",
+   "task": "wr692j1iy",
    "runId": "wf_2e88049d-039",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/u2_chapter_pipeline.js",
    "args": {
@@ -14,27 +14,11 @@
      "02_ch02_revolutions_in_credit_trading",
      "04_ch04_inside_the_systematic_credit_industry"
     ]
-   },
-   "status": "HELD until state/rv_thread.md is COMPLETE"
-  },
-  {
-   "name": "u2-B",
-   "task": "wynhrqb36",
-   "runId": "wf_5d92fc41-dcb",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/u2_chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "05_ch05_credit_probability_distributions",
-     "06_ch06_merton_and_intensity_models",
-     "07_ch07_ml_on_small_sample_credit_data"
-    ]
-   },
-   "status": "HELD until state/rv_thread.md is COMPLETE"
+   }
   },
   {
    "name": "part-III-a",
-   "task": "wr7mis8ev",
+   "task": "wfbnk1w8c",
    "runId": "wf_b92bbb19-5ce",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
    "args": {
@@ -51,12 +35,11 @@
      "revise",
      "verify"
     ]
-   },
-   "status": "HELD until state/rv_thread.md is COMPLETE"
+   }
   },
   {
    "name": "part-III-b",
-   "task": "wklksowgz",
+   "task": "wigxyoqqm",
    "runId": "wf_bb2c1276-ba3",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
    "args": {
@@ -73,12 +56,11 @@
      "revise",
      "verify"
     ]
-   },
-   "status": "HELD until state/rv_thread.md is COMPLETE"
+   }
   },
   {
    "name": "part-III-c",
-   "task": "wu9xnpg9n",
+   "task": "w7gcrqovx",
    "runId": "wf_5b507d53-841",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
    "args": {
@@ -95,8 +77,7 @@
      "revise",
      "verify"
     ]
-   },
-   "status": "HELD until state/rv_thread.md is COMPLETE"
+   }
   },
   {
    "name": "fixes-and-cast",
@@ -113,7 +94,7 @@
   },
   {
    "name": "part-VII-u2",
-   "task": "waulio30e",
+   "task": "wsvmbvdds",
    "runId": "wf_803b0227-6ae",
    "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
    "args": {
@@ -127,8 +108,7 @@
      "revise",
      "verify"
     ]
-   },
-   "status": "HELD until state/rv_thread.md is COMPLETE"
+   }
   },
   {
    "name": "rv-thread",
@@ -138,42 +118,6 @@
    "args": {
     "today": "2026-10-18"
    }
-  },
-  {
-   "name": "lessons-rv-13-14",
-   "task": "wh7jk9av4",
-   "runId": "wf_b378f1d7-e91",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "13_ch13_codifying_lmt_game_theory",
-     "14_ch14_default_and_recovery_cycle_lmt_era"
-    ],
-    "stages": [
-     "lessons",
-     "rv"
-    ]
-   },
-   "status": "lessons DONE; rv returned 'no thread' -> rerun stage rv once thread exists"
-  },
-  {
-   "name": "lessons-rv-15-16",
-   "task": "wmcxw8m61",
-   "runId": "wf_da0f3c2b-711",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "15_ch15_event_driven_mna_and_coc",
-     "16_ch16_post_reorg_equities_and_claims"
-    ],
-    "stages": [
-     "lessons",
-     "rv"
-    ]
-   },
-   "status": "lessons DONE; rv returned 'no thread' -> rerun stage rv once thread exists"
   },
   {
    "name": "lessons-rv-3-2-7",
@@ -190,6 +134,115 @@
     "stages": [
      "lessons",
      "rv"
+    ]
+   }
+  },
+  {
+   "name": "rv-partIV",
+   "task": "w91qhlhr4",
+   "runId": "wf_3d4b0e7d-d18",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "13_ch13_codifying_lmt_game_theory",
+     "14_ch14_default_and_recovery_cycle_lmt_era",
+     "15_ch15_event_driven_mna_and_coc",
+     "16_ch16_post_reorg_equities_and_claims"
+    ],
+    "stages": [
+     "rv"
+    ]
+   }
+  },
+  {
+   "name": "rv-5-6-4c-1b",
+   "task": "wd3vlznsg",
+   "runId": "wf_25aa10ed-73d",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "05_ch05_credit_probability_distributions",
+     "06_ch06_merton_and_intensity_models",
+     "04_ch04c_other_seats_at_the_table",
+     "01_ch01b_a_week_in_five_quant_shops"
+    ],
+    "stages": [
+     "rv"
+    ]
+   }
+  },
+  {
+   "name": "u2-V-a",
+   "task": "wc9sar225",
+   "runId": "wf_cbf26479-589",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "18_ch18_otc_microstructure_and_avellaneda_stoikov",
+     "19_ch19_portfolio_trading_pricing_engines"
+    ],
+    "stages": [
+     "brief",
+     "revise",
+     "verify"
+    ]
+   }
+  },
+  {
+   "name": "u2-V-b",
+   "task": "wwl30ddf2",
+   "runId": "wf_6a0bfcb4-22d",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "20_ch20_credit_etf_creation_redemption_arb",
+     "21_ch21_leveraged_loans_and_clo_microstructure"
+    ],
+    "stages": [
+     "brief",
+     "revise",
+     "verify"
+    ]
+   }
+  },
+  {
+   "name": "u2-VI",
+   "task": "w7ocjapuq",
+   "runId": "wf_b0a1ad6d-370",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "22_ch22_market_structure_regulation_trends",
+     "23_ch23_cross_asset_convexity_and_vol_surface"
+    ],
+    "stages": [
+     "brief",
+     "revise",
+     "verify"
+    ]
+   }
+  },
+  {
+   "name": "u2-VII-VIII",
+   "task": "w2d0b422q",
+   "runId": "wf_555f9532-3bf",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "26_ch26_ai_agents_and_llms_on_the_credit_desk",
+     "27_ch27_system_architecture_and_asics",
+     "28_ch28_pm_playbook"
+    ],
+    "stages": [
+     "brief",
+     "revise",
+     "verify"
     ]
    }
   }

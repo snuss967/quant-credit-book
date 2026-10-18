@@ -136,82 +136,6 @@ for sigma_rel in (0.05, 0.10):
 assert abs(5.0 / (1.00 * 5.0) - 1.0) < 1e-12 and abs(5.0 / (1.50 * 10.0) - 0.3333) < 1e-3
 assert abs(lcs(bid=455.0, ask=445.0, oasd=4.0) - 0.40) < 1e-12      # 10bp wide x 4y = 0.40%
 assert abs(lcs(bid=62.0, ask=64.0, price_quoted=True) - 100 * 2 / 62) < 1e-12
-
----
-
-## 1.5 The Anthology, Part B: Pricing the Default You Might Be Catching (Bohn–Stein; Schmid; Bolder; BlackRock)
-
-The second question about the forced seller: *if the seller is not informed, what is the bond actually worth?* That is the fair-value term, and the shelf offers two families of answers that have been arguing since the 1970s.
-
-> **[SOURCE EXTRACTION]** *Bohn_Stein_Active_Credit_Portfolio_Management p.128:* "we need only stipulate that the market is attempting to fairly value a firm, most typically through its equity."
->
-> **Annotation.** This is the structural model's entire philosophical cost, and it is cheap. If the equity market is trying to value the firm, then equity is a call option on the assets struck at the debt, $E_t = V_t N(d_1) - F e^{-r(T-t)} N(d_2)$, and the bond is the assets minus that call. Replace the risk-free drift with the physical asset drift $\mu_V$ and you get the distance to default, the number of asset-volatility standard deviations between the firm and its default point:
->
-> $$
-> \text{DD}_t = \frac{\ln(V_t/F) + (\mu_V - \tfrac12\sigma_V^2)(T-t)}{\sigma_V\sqrt{T-t}}, \qquad \text{PD}^{\mathbb{P}}_{\text{Gauss}} = N(-\text{DD}). \tag{1.4}
-> $$
->
-> $V_t$ and $\sigma_V$ are not observed; they are backed out of equity value and equity volatility using $\sigma_E E_t = \sigma_V V_t N(d_1)$ (Chapter 6 and Chapter 23 do it properly). The default point $F$ is a convention; the KMV choice commonly reported is short-term liabilities plus half of long-term debt. The desk use is immediate: equity trades every millisecond and the bond trades twice a week, so the equity market gives you a fresh fair-value input for the bid between bond prints.
-
-> **[SOURCE EXTRACTION]** *Bohn_Stein_Active_Credit_Portfolio_Management p.138:* "under MKMV's empirical distribution and using the VK model described later in this chapter, a DD of 4 converts into an EDF of almost 1 percent."
->
-> **Annotation.** Under the Gaussian map, $N(-4) \approx 0.003\%$. Under the empirical map, it is almost $1\%$: a factor of roughly 300. Kaz, on hearing this: "Let's just assume Gaussian... I regret it already." The lesson for a specifier is that the structural model is excellent at *ranking* firms and terrible at *calibrating* them, so production systems keep the DD and replace $N(\cdot)$ with an empirically fitted, monotone map from DD to default frequency. If ROBO is told to "compute PD from Merton," it will use $N(-\text{DD})$, and every IG name in the book will look immortal.
-
-> **[SOURCE EXTRACTION]** *Schmid_Credit_Risk_Pricing_Models p.128:* "the default time is unpredictable and therefore the behavior of credit spreads for short maturities can be captured more realistically." ... "their main draw-back is the missing link between firm value and corporate default."
->
-> **Annotation.** The other family. Intensity (reduced-form) models skip the balance sheet and let default arrive as the first jump of a Poisson process with intensity $\lambda_t$. Their virtue is that a pure diffusion can never default by surprise tomorrow, so structural models imply near-zero short-dated spreads, which the market flatly contradicts. With a constant $\lambda$ under $\mathbb{Q}$, a flat rate $r$, recovery $R$ of par paid at default, and a continuously paid premium $s$, equate the two legs of a CDS:
->
-> $$
-> s\int_0^T e^{-(r+\lambda)t}\,dt \;=\; (1-R)\int_0^T \lambda\,e^{-(r+\lambda)t}\,dt \quad\Longrightarrow\quad s = \lambda\,(1-R). \tag{1.5}
-> $$
->
-> The integrals are identical, so they cancel exactly, at every maturity: this is the credit triangle. With quarterly ACT/360 premium accrual it becomes an approximation. Two errors to forbid in every spec: feeding a physical EDF into (1.5), which is a $\mathbb{Q}$ relation (risk-neutral intensities run well above physical ones for IG, which Chapter 6 derives); and treating "40% recovery" as a fact about the bond rather than a CDS quoting convention (Chapter 5).
-
-> **[SOURCE EXTRACTION]** *Bolder_Credit_Risk_Modelling p.597:* "If one assumes independence of default, then default risk is entirely idiosyncratic." ... "Relaxing this unrealistic choice, however, is the source of most of the complexity in this field."
->
-> **Annotation.** For a desk catching forced flow, correlation is not a portfolio-risk nicety; it is the reason forced sellers arrive in herds. The one-factor threshold model makes it concrete: firm $i$ defaults when $\sqrt{\rho}\,Y + \sqrt{1-\rho}\,\varepsilon_i < N^{-1}(p)$, with a common factor $Y$ and idiosyncratic $\varepsilon_i$, both standard normal. Conditional on the factor, defaults are independent with probability
->
-> $$
-> p(Y) = N\!\left(\frac{N^{-1}(p) - \sqrt{\rho}\,Y}{\sqrt{1-\rho}}\right),
-> $$
->
-> so a bad draw of $Y$ moves *every* PD at once, and with it every downgrade, every CCC bucket, and every redemption. Bolder's chapter opens with Richard Feynman's line, "What I cannot create, I do not understand," which belongs on the wall of anyone who specifies models for a coding agent: if you cannot write the simulation, you do not understand the model, and neither will ROBO.
-
-> **[SOURCE EXTRACTION]** *BlackRock_Systematic_High_Yield_Credit p.6:* "Our proprietary probability of default signal that has underpinned all of our credit strategies for over 20 years has successfully identified 77% of the defaulted bonds in the ICE BofA High Yield Index within 24 months of its default since 2010."
->
-> **Annotation.** This is the structural lineage in production, reported by the manager about its own signal (treat it as a self-reported hit rate, not an audited one, and note that a hit rate without a false-positive rate is half a confusion matrix). The point for Chapter 1 is what the signal is *for*: in high yield, avoiding the default you might be catching is worth more than any factor tilt, because a 50-point jump to default erases years of carry. Chapter 11 builds the defensive book around it.
-
-```python
-from scipy.integrate import trapezoid
-from scipy.stats import norm
-
-
-def distance_to_default(V, F, mu_V, sigma_V, T=1.0):
-    """Eq. (1.4): physical distance to default (unitless)."""
-    return (np.log(V / F) + (mu_V - 0.5 * sigma_V**2) * T) / (sigma_V * np.sqrt(T))
-
-
-def credit_triangle_check(lam=0.03, R=0.40, r=0.04, T=5.0, n=200_001):
-    """Numerically integrate both CDS legs (measure Q) and return the par spread."""
-    t = np.linspace(0.0, T, n)
-    disc_surv = np.exp(-(r + lam) * t)
-    prem_annuity = trapezoid(disc_surv, t)
-    protection = (1.0 - R) * trapezoid(lam * disc_surv, t)
-    return protection / prem_annuity
-
-
-dd = distance_to_default(V=150.0, F=100.0, mu_V=0.06, sigma_V=0.10)   # illustrative IG-like firm
-assert dd > 4.0 and norm.cdf(-dd) < 1e-4                               # Gaussian: 'immortal'
-assert abs(credit_triangle_check() - 0.03 * 0.60) < 1e-10              # s = lambda (1 - R)
-
-# One-factor threshold model: Monte Carlo default rate matches p; tails fatten with rho
-rng = np.random.default_rng(RNG_SEED + 1)
-p, rho, n_sims, n_firms = 0.02, 0.20, 20_000, 500
-Y = rng.standard_normal(n_sims)
-p_cond = norm.cdf((norm.ppf(p) - np.sqrt(rho) * Y) / np.sqrt(1.0 - rho))
-loss_frac = rng.binomial(n_firms, p_cond) / n_firms
-assert abs(loss_frac.mean() - p) < 4 * loss_frac.std() / np.sqrt(n_sims)
-assert np.quantile(loss_frac, 0.99) > 5 * p                            # herds, not coin flips
 ```
 
 
@@ -12311,7 +12235,7 @@ if __name__ == "__main__":
 Listings from `01_ch01_anthology_and_landscape.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
 
 
-### Listing 1.4: Eq {#code-1-4}
+### Listing 1.4: Distance to default, credit-triangle check, one-factor simulation {#code-1-4}
 
 ```python
 from scipy.integrate import trapezoid
