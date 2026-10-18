@@ -299,3 +299,7 @@ Stopped (TaskStop) at 17:01; all resumable from state/resume_runs.json at the 19
 - cleanup-queue (wf_b4c8ff84-ee9): fixers done for appF-listings, basis-and-pairs, facts-12-16-17-22-26, part-i-and-cast; reviews done for basis-and-pairs and facts; partial: math-2b-4b-7b-10-15 fixer and the part-i review; not started: the appF-listings review. Args: state/cleanup_args.json.
 - App Z assembled (two files); remaining editor notes listed in state/appZ/_editor_notes.md (they are fixed by the appz-complete fix stages).
 - Book rebuilt at 17:00 (PDF sent to the user, not committed).
+
+## 2026-10-18 18:56 UTC: PAUSED by the user ("Let's stop progress for now")
+- Disabled the 19:33 restart (trig_01WppFSgkiFUZCn8ycNV2AN6, kept so it can be re-enabled). No workflows, guard or autosnap are running.
+- To resume later: re-enable or recreate the restart, then follow state/resume_runs.json (appz-complete, new-chapter-finish, cleanup-queue; args in state/appz_complete_args.json and state/cleanup_args.json). The remaining-work list is in the 17:01 entry above and in the chat summary of 18:30.

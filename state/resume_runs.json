@@ -1,5 +1,5 @@
 {
- "note": "Window 14:30-19:30 UTC; restart 19:33. Resume each with Workflow({scriptPath, resumeFromRunId, args}). Durable agents skip finished work via their logs/markers.",
+ "note": "PAUSED by the user at 18:56 UTC on 2026-10-18; the 19:33 restart is disabled. To resume: Workflow({scriptPath, resumeFromRunId, args}) for each run below.",
  "runs": [
   {
    "name": "appz-complete",
