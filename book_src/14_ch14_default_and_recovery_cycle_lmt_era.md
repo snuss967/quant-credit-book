@@ -4,25 +4,49 @@
 
 The RFQ arrives at 2:40: a client wants an offer on \$12mm of the Quillfeather Packaging first-lien term loan due 2029. (Quillfeather is fictional. Its history is a composite of real ones.) Fourteen months ago Quillfeather's sponsor ran a non-pro-rata uptier. A 52% majority of the first-lien lenders exchanged into a new super-priority tranche and put in \$90mm of new money. The other 48% kept their old loans, which now sit behind more than a billion dollars of debt that did not exist the week before. The agencies called it a distressed exchange, counted it as a default, and a few weeks later re-rated the company out of default. The client wants the old, excluded first lien. It was marked at 41 last night.
 
+It is a one-way request. The client has asked for an offer and not for a bid, which on a loan desk is the difference between "what is this worth?" and "I want it." The name on the ticket belongs to a special-situations fund that the coverage sheet lists as a buyer of stressed paper. As far as anyone can tell from the press reports and the cleansing materials published after the uptier, it was not in the June group.
+
+Ines Okafor does not look up from her screen. "Hand history."
+
+Theo Marsh pulls the markouts. The desk has traded the excluded Quillfeather loan nine times since the uptier, all in small size, almost all of it CLOs selling to the desk in the last week of a month, and the desk made money a week later on every one of those trades *(illustrative)*. "Nobody has ever asked us for an offer on this," he says. "Only bids."
+
+"So this is the first hand where somebody is raising into us," says Ines.
+
 "So it already defaulted," says Kaz Lind. "Is it immune now? Like chickenpox?"
 
 "It's not immune," says Mags Dunleavy. "It's on parole."
 
-Theo Marsh has the 13-week cash flow model open, the one he still carries on a USB stick for emotional support. "The new money buys them runway to about the third quarter of next year. After that, the interest bill comes back."
+"I don't understand why it trades at all." Kaz has the look of someone whose model just produced a negative variance. "In every model I have ever built, default is absorbing. The process stops. You collect $R$ and go home. This thing defaulted fourteen months ago and it was marked last night."
 
-Ines Okafor turns her chair a quarter turn. "What's the pot, what are the odds, and who at this table was in the majority group?"
+"That's a bankruptcy you're describing," says Mags. "This was a default the way a speeding ticket is a criminal record. The agencies wrote it down. The company kept paying interest. The loan is still outstanding, and the people who own it still have to decide every morning whether to keep owning it. Back in my day, default meant the phone stopped ringing. Now it means the phone starts." She does not reach for a terminal. She has been asked for this comparison often enough that she gives it from memory. "Serta. Twenty-second of June, 2020. A bare majority of the first lien, 52.6% of the class on the numbers the remand court eventually used, put in new money and swapped their loans into a super-priority tranche at 74. Everybody else in the same class stayed behind in loans the court later valued at about 25. Same loan, same Monday, forty-nine points apart, and the only difference was who had picked up the phone." She taps the 41 on Theo's screen. "That 41 is the 25 and the 74 averaged by someone who doesn't know which one they own."
+
+Kaz takes the line literally, which is the most useful thing Kaz does. "If the only two outcomes are 25 and 74, a price of 41 puts weight $(41-25)/(74-25) = 16/49 \approx 0.33$ on the good one. So the market thinks a holder of this loan has about a one-in-three chance of being in the room next time."
+
+"Or of a court putting them there," says Mags. "Ask the Serta excluded lenders how long that takes. And your arithmetic ignores time, which is the expensive part."
+
+Theo has the 13-week cash flow model open, the one he still carries on a USB stick for emotional support. He rolled it forward last night out of habit, the way some people check the weather, and he reads the bottom line off the screen. "The new money buys them runway to about the third quarter of next year. After that, the interest bill comes back." He scrolls. "Liquidity crosses the revolver's minimum-availability test somewhere in that quarter, unless they sell something or get another deal done."
+
+"Another deal," says Kaz, "meaning another default."
+
+"Meaning another default by the agencies' definition, possibly," says Theo. "Or a filing. Those are different events with different recoveries, and the 41 doesn't tell you which one it's pricing."
+
+Ines turns her chair a quarter turn. "What's the pot, what are the odds, and who at this table was in the majority group?"
 
 "The pot is about \$4.9mm at 41. The odds..." Theo stops. "The odds are the problem. In 2015 I'd have looked up a recovery for a defaulted first lien and called it forty cents. But this loan has already defaulted once and it isn't in bankruptcy. Its next default could be a filing or another exchange. And its recovery depends less on the word 'first' in its name than on which side of the table its holders were sitting on in June."
 
 "And the buyer?" Ines asks.
 
-"Either they think the parole ends well, or they want to be inside the room for the next deal."
+"Either they think the parole ends well, or they want to be inside the room for the next deal." Theo looks at the ticket again, and the thing he had been circling lands. "And they weren't inside the room last time. A fund that wasn't in the June group, asking only for an offer, in a loan that has only ever traded one way. They're not buying a recovery. They're buying a seat."
+
+"Then the flow is the information," says Ines. "If they're assembling a block for the next negotiation, every piece they buy is a piece the sponsor will have to call, and 41 is too cheap to be short to them. If they just like the runway, 41 is fine and we're a normal dealer having a normal Thursday. Which hump our \$12mm ends up in depends on who is buying it, and that isn't on the term sheet."
 
 From offstage, the Ad Hoc Group speaks in unison, through counsel: *"We are not sellers. We neither confirm nor deny that we are buyers."*
 
+Ines lets that go by. "Here's what I want before you answer. I want to know which of the two default rates that 41 is pricing, the one that counts this exchange or the one that pretends it didn't happen. I want the soft tap and the hard tap on that hazard split apart, and their cumulative incidence estimated without the Kaplan–Meier lie. I want a re-default clock calibrated to Moody's 2026 soft-default study, not to your gut. I want recovery written as two humps and a coin, and I want to see for myself that the coin, one binary variable for which side of the room you sat on, explains more of the spread in recoveries than seniority and the cycle that the textbooks credit. I want the co-op and the courts on a calendar, as variables with dates. I want a filter on the default mix that tells me which world we're in. I want the bookmaker's odds and the true odds kept in separate drawers when the CDS contract and the agency disagree about what a default even is. And then I want ROBO to be able to build all of it without asking you a single question, because it won't ask. It'll just build the wrong thing."
+
 **The question this chapter answers: what is the joint law of (time to the next default, recovery) for a credit that has already been restructured once, and how is it different from the law we all learned in 2015?**
 
-By the end of this chapter you will be able to: read a default rate and say which of the two default rates it is; split a default intensity into competing soft and hard hazards and estimate their cumulative incidence without the classic Kaplan–Meier bias; calibrate a mixture-cure re-default clock to Moody's 2026 soft-default study; write recovery as a mixture over coalition membership and show that one binary variable can produce most of the cross-sectional dispersion the textbooks attribute to seniority and the cycle; treat cooperation agreements and court rulings as regime variables with dates; run a Markov-switching filter on the default mix; keep $\mathbb{P}$ and $\mathbb{Q}$ apart when the CDS contract and the rating agency disagree about what a default is; and hand ROBO a spec it cannot misread.
+By the end of this chapter you will be able to do everything on Ines's list, and to answer the question she asks next. It is 2:41. Do you offer \$12mm at 41, and what would make you offer 38 or 44?
 
 ## 14.1 Two Default Rates, Two Recovery Rates
 

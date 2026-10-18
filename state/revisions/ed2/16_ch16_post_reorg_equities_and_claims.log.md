@@ -1,0 +1,25 @@
+# Edition 2 Revision Log: Chapter 16 (U2)
+
+- [ ] 1. [Cold Open: Effective Date, 9:31 a.m.] EXPAND-SCENE (~2,000 words), eleven CLO clocks, Mags 2003 story, Kaz/Ines bids, Wolfspeed contrast, decision point; objectives to narrative; move measures/notation after decision.
+- [ ] 2. [§16.1.1 Desk framing] MATH-GENTLY (share is a call) + LIST-TO-NARRATIVE + BRIDGE (plan values below trading; Envision/AmSurg; Ch 12-C pointer).
+- [ ] 3. [§16.1.1, after Moyer p.370 extraction] ANOTHER-SEAT (CLO manager).
+- [ ] 4. [§16.1.2 What history says] MATH-GENTLY (mean vs median).
+- [ ] 5. [§16.2.1 Desk framing] WHEN-TO-APPLY (overhang model).
+- [ ] 6. [§16.2.2 Derivation] MATH-GENTLY x2 (martingale; exponential decay) + FULL-DERIVATION-MOVE.
+- [ ] 7. [§16.2.3 Fitting theta] MATH-GENTLY (logs turn ratios into differences).
+- [ ] 8. [§16.2.4 From model to signal] SHOP-LIFE (holder registry that did not tie).
+- [ ] 9. [§16.3.1 Desk framing] BRIDGE + WHEN-TO-APPLY (Buccola facts; ConvergeOne hedge).
+- [ ] 10. [§16.3.2 Derivation] MATH-GENTLY (put, risk-neutral) + FULL-DERIVATION-MOVE.
+- [ ] 11. [§16.3.4 Hertz rights offering] EXPAND-SCENE part one + ANOTHER-SEAT (plan sponsor).
+- [ ] 12. [§16.4.2 Derivation] MATH-GENTLY x2 (fixed point; Poisson) + FULL-DERIVATION-MOVE.
+- [ ] 13. [§16.4.3 Hertz warrants] EXPAND-SCENE part two.
+- [ ] 14. [§16.5.2 Statute block] LIST-TO-NARRATIVE (two vendors at the courthouse).
+- [ ] 15. [§16.5.3 Derivation] MATH-GENTLY x3 + FULL-DERIVATION-MOVE + ANOTHER-SEAT (claims buyer).
+- [ ] 16. [§16.5.3, after "The pair"] WHEN-TO-APPLY.
+- [ ] 17. [§16.6 Hertz, the Whole Circuit] EXPAND-SCENE part three (desk replay; admin burn; make-whole split; Oct 2026 decision).
+- [ ] 18. [§16.7 Spirit Airlines] EXPAND-SCENE (2,000-2,500 words) + MATH-GENTLY (runway intensity) + Wolfspeed counterweight + WHEN-TO-APPLY.
+- [ ] 19. [§16.8.1 The distribution you are trading] MATH-GENTLY (half-variance; mixtures).
+- [ ] 20. [§16.8.2 Sizing] MATH-GENTLY (Kelly) + FULL-DERIVATION-MOVE + WHEN-TO-APPLY.
+- [ ] 21. [§16.8.3 The pair trades] LIST-TO-NARRATIVE (+ optional dealer seat).
+- [ ] 22. [§16.9 Desk Debrief] LIST-TO-NARRATIVE (+ claims desk section or pointer).
+- [ ] 23. [All Deep-Dive Resource Graphs] BRIDGE (specific episodes/posts).

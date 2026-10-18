@@ -12306,5 +12306,675 @@ if __name__ == "__main__":
         print("Laws below three Debriefs:", admission_failures(cov) or "none")
 ```
 
+## F.1 (continued): Chapter 1: The Anthology of the Desk & The Modern Quant Credit Landscape
+
+Listings from `01_ch01_anthology_and_landscape.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
+
+
+### Listing 1.4: Eq {#code-1-4}
+
+```python
+from scipy.integrate import trapezoid
+from scipy.stats import norm
+
+
+def distance_to_default(V, F, mu_V, sigma_V, T=1.0):
+    """Eq. (1.4): physical distance to default (unitless)."""
+    return (np.log(V / F) + (mu_V - 0.5 * sigma_V**2) * T) / (sigma_V * np.sqrt(T))
+
+
+def credit_triangle_check(lam=0.03, R=0.40, r=0.04, T=5.0, n=200_001):
+    """Numerically integrate both CDS legs (measure Q) and return the par spread."""
+    t = np.linspace(0.0, T, n)
+    disc_surv = np.exp(-(r + lam) * t)
+    prem_annuity = trapezoid(disc_surv, t)
+    protection = (1.0 - R) * trapezoid(lam * disc_surv, t)
+    return protection / prem_annuity
+
+
+dd = distance_to_default(V=150.0, F=100.0, mu_V=0.06, sigma_V=0.10)   # illustrative IG-like firm
+assert dd > 4.0 and norm.cdf(-dd) < 1e-4                               # Gaussian: 'immortal'
+assert abs(credit_triangle_check() - 0.03 * 0.60) < 1e-10              # s = lambda (1 - R)
+
+# One-factor threshold model: Monte Carlo default rate matches p; tails fatten with rho
+rng = np.random.default_rng(RNG_SEED + 1)
+p, rho, n_sims, n_firms = 0.02, 0.20, 20_000, 500
+Y = rng.standard_normal(n_sims)
+p_cond = norm.cdf((norm.ppf(p) - np.sqrt(rho) * Y) / np.sqrt(1.0 - rho))
+loss_frac = rng.binomial(n_firms, p_cond) / n_firms
+assert abs(loss_frac.mean() - p) < 4 * loss_frac.std() / np.sqrt(n_sims)
+assert np.quantile(loss_frac, 0.99) > 5 * p                            # herds, not coin flips
+```
+
+
+## F.4-B: Chapter 4-B: Bond Math for the Desk: Price, Yield, Duration, Convexity, Spread Measures and the Callable Bond {#code-4b}
+
+Listings from `04_ch04b_bond_math_for_the_desk.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
+
+
+### Listing 4-B.1: Year fraction from d1 to d2 {#code-4b-1}
+
+```python
+# bondmath.py (Chapter 4-B): one list of cash flows, one curve, one solver.
+# Units: prices per 100 face (dirty unless a name says otherwise); rates, spreads and hazards
+# as annual decimals; times in years. Every number in Chapter 4-B is reproduced at the bottom.
+import math
+from datetime import date
+
+import numpy as np
+
+
+def year_frac(d1, d2, basis="30/360"):
+    """Year fraction from d1 to d2. '30/360' is the US bond basis, 31st rule included."""
+    if basis == "30/360":
+        a1 = min(d1.day, 30)
+        a2 = 30 if (d2.day == 31 and a1 == 30) else d2.day
+        return (360 * (d2.year - d1.year) + 30 * (d2.month - d1.month) + (a2 - a1)) / 360.0
+    days = (d2 - d1).days
+    if basis == "ACT/360":
+        return days / 360.0
+    if basis == "ACT/365F":
+        return days / 365.0
+    raise ValueError(f"unknown day count {basis!r}")
+
+
+def accrued(coupon, last_coupon, settle, basis="30/360"):
+    """Accrued interest per 100 face, counted to the settlement date, not the trade date."""
+    return 100.0 * coupon * year_frac(last_coupon, settle, basis)
+
+
+def cashflows(c, n, f=2, w=1.0):
+    """Times (years) and flows per 100 face: n coupons left, w of the current period to run."""
+    t = (np.arange(n, dtype=float) + w) / f
+    cf = np.full(n, 100.0 * c / f)
+    cf[-1] += 100.0
+    return t, cf
+
+
+def workout_flows(c, k, redemption, f=2):
+    """Flows to a call date or maturity after k coupons, redeemed at `redemption` per 100."""
+    t, cf = cashflows(c, k, f)
+    cf[-1] += redemption - 100.0
+    return t, cf
+
+
+def price(y, c, n, f=2, w=1.0):
+    """Street dirty price at periodic yield y (Sec. 4B.2)."""
+    t, cf = cashflows(c, n, f, w)
+    return float(np.sum(cf * (1.0 + y / f) ** (-f * t)))
+
+
+def solve(fn, target, lo, hi, tol=1e-12):
+    """Bisection for a monotone fn(x) = target on [lo, hi]; refuses an unbracketed target."""
+    f_lo, f_hi = fn(lo) - target, fn(hi) - target
+    if f_lo * f_hi > 0:
+        raise ValueError("target not bracketed: check units, dirty vs clean, or recovery")
+    while hi - lo > tol:
+        mid = 0.5 * (lo + hi)
+        f_mid = fn(mid) - target
+        if (f_mid > 0) == (f_lo > 0):
+            lo, f_lo = mid, f_mid
+        else:
+            hi = mid
+    return 0.5 * (lo + hi)
+
+
+def ytm(p_dirty, c, n, f=2, w=1.0):
+    """Yield to maturity; unique because price is strictly decreasing in yield."""
+    return solve(lambda y: price(y, c, n, f, w), p_dirty, -0.05, 5.0)
+
+
+def ytw(p_dirty, c, n, schedule, f=2):
+    """(yield, coupon number, redemption) to worst over every coupon date of every call window
+    and maturity. schedule: [(first callable coupon number, call price), ...] in date order."""
+    workouts = [(n, 100.0)]
+    for j, (k0, K) in enumerate(schedule):
+        k1 = schedule[j + 1][0] if j + 1 < len(schedule) else n
+        workouts += [(k, K) for k in range(k0, k1)]
+
+    def y_to(k, K):
+        t, cf = workout_flows(c, k, K, f)
+        return solve(lambda y: float(np.sum(cf * (1.0 + y / f) ** (-f * t))), p_dirty, -0.05, 5.0)
+
+    return min((y_to(k, K), k, K) for k, K in workouts)
+
+
+def risk_at_yield(y, c, n, f=2, w=1.0):
+    """Price, Macaulay and modified duration, modified convexity, from analytic derivatives."""
+    t, cf = cashflows(c, n, f, w)
+    v, e = 1.0 + y / f, f * t
+    pv = cf * v ** (-e)
+    p = float(pv.sum())
+    d_mac = float(np.sum(pv * t)) / p
+    c_mod = float(np.sum(pv * e * (e + 1.0))) / (p * f * f * v * v)
+    return {"price": p, "D_mac": d_mac, "D_mod": d_mac / v, "C_mod": c_mod}
+
+
+def dv01(d_mod, p_dirty, face):
+    """Dollars gained per 1bp fall in yield (positive for a long position)."""
+    return d_mod * p_dirty * face * 1e-6
+
+
+def effective(pricer, h=1e-4):
+    """(D_eff, C_eff) of pricer(h), the full price after a parallel shift h; central differences."""
+    p0, p_up, p_dn = pricer(0.0), pricer(h), pricer(-h)
+    return (p_dn - p_up) / (2.0 * h * p0), (p_up + p_dn - 2.0 * p0) / (h * h * p0)
+
+
+def flat_curve(r, f=2):
+    """Discount function of a flat curve quoted at periodic rate r (par = zero = r)."""
+    return lambda t: (1.0 + r / f) ** (-f * np.asarray(t, dtype=float))
+
+
+def curve_from_par(par, f=2):
+    """Bootstrap d(t_n), t_n = n/f, from par yields on that grid; linear in zero rates."""
+    par = np.asarray(par, dtype=float)
+    d = np.empty(len(par))
+    for n, cn in enumerate(par):
+        d[n] = (1.0 - cn / f * d[:n].sum()) / (1.0 + cn / f)
+    nodes = np.arange(1, len(par) + 1) / f
+    z = -np.log(d) / nodes
+    return lambda t: np.exp(-np.interp(t, nodes, z) * np.asarray(t, dtype=float))
+
+
+def z_spread(p_dirty, t, cf, disc):
+    """Constant continuous shift over the zero curve that reprices the flows."""
+    base = cf * disc(t)
+    return solve(lambda z: float(np.sum(base * np.exp(-z * t))), p_dirty, -0.05, 3.0)
+
+
+def key_rate_durations(t, cf, disc, z, keys):
+    """KRDs from tent bumps of the zero curve at `keys`; the tents sum to one everywhere."""
+    pv = cf * disc(t) * np.exp(-z * t)
+    eye = np.eye(len(keys))
+    return np.array([np.sum(t * pv * np.interp(t, keys, eye[j])) for j in range(len(keys))]) / pv.sum()
+
+
+def asw_par(p_dirty, t, cf, disc, f=2):
+    """Par-par asset-swap spread over the swap curve `disc` (full coupon periods)."""
+    d = disc(t)
+    return (float(np.sum(cf * d)) - p_dirty) / (100.0 * float(np.sum(d)) / f)
+
+
+def discount_margin(p_dirty, margin, base, life, f=4):
+    """Margin over a flat-forward base rate that reprices a floater paying base + margin."""
+    k = np.arange(1, int(round(life * f)) + 1, dtype=float)
+
+    def pv(dm):
+        v = (1.0 + (base + dm) / f) ** (-k)
+        return float(100.0 * (base + margin) / f * v.sum() + 100.0 * v[-1])
+
+    return solve(pv, p_dirty, -0.05, 3.0)
+
+
+def hazard_price(lam, t, cf, r, R):
+    """Q-price per 100: survival-weighted flows plus recovery of face R at default (flat, cc)."""
+    k, T = lam + r, float(t[-1])
+    rec = 100.0 * R * lam * T if abs(k) < 1e-12 else 100.0 * R * lam / k * (1.0 - math.exp(-k * T))
+    return float(np.sum(cf * np.exp(-k * t))) + rec
+
+
+def pecs(p_dirty, t, cf, r, R=0.40):
+    """Par-equivalent CDS spread (ACT/360 premium, paid continuously) and the flat hazard."""
+    lo, hi = 1e-10, 10.0
+    if not hazard_price(hi, t, cf, r, R) < p_dirty < hazard_price(lo, t, cf, r, R):
+        raise ValueError("no hazard reprices this price: is the bond at or below recovery?")
+    lam = solve(lambda x: hazard_price(x, t, cf, r, R), p_dirty, lo, hi)
+    k, T = lam + r, float(t[-1])
+    protection = (1.0 - R) * lam / k * (1.0 - math.exp(-k * T))
+    rpv01 = (365.0 / 360.0) * (1.0 - math.exp(-k * T)) / k
+    return protection / rpv01, lam
+
+
+def toy_tree(s, call=101.0):
+    """Sec. 4B.7 hand lattice: 3-year 9% annual bond, simple rates, p = 1/2, call ex-coupon."""
+    tree = [[0.04], [0.05, 0.03], [0.06, 0.04, 0.02]]
+    V = [109.0 / (1.0 + r + s) for r in tree[2]]
+    for i in (1, 0):
+        V = [min(v, call) for v in V] if call else V
+        V = [0.5 * (V[j] + V[j + 1] + 18.0) / (1.0 + tree[i][j] + s) for j in range(i + 1)]
+    return V[0]
+
+
+def ho_lee(disc, T, steps, sigma):
+    """Ho-Lee tree fitted to disc(t) with Arrow-Debreu prices, no root-finding (Sec. 4B.7)."""
+    dt, Q, rates = T / steps, np.array([1.0]), []
+    for i in range(steps):
+        x = sigma * math.sqrt(dt) * (2.0 * np.arange(i + 1) - i)
+        theta = -math.log(float(disc((i + 1) * dt)) / float(np.sum(Q * np.exp(-x * dt)))) / dt
+        rates.append(theta + x)
+        g = Q * np.exp(-rates[-1] * dt)
+        Q = 0.5 * (np.append(g, 0.0) + np.append(0.0, g))
+    return dt, rates
+
+
+def on_grid(t, cf, dt, steps):
+    """Flows by lattice step; refuses any flow that is not on a step date."""
+    a = np.zeros(steps + 1)
+    for ti, ci in zip(t, cf):
+        k = int(round(ti / dt))
+        if abs(k * dt - ti) > 1e-9:
+            raise ValueError("cash flow off the grid: choose steps so every coupon date is a node")
+        a[k] += ci
+    return a
+
+
+def lattice_price(flows, dt, rates, s, calls=None, mw=None):
+    """Backward induction at spread s. calls: {step: strike}; the issuer pays the coupon plus
+    min(continuation, strike). With mw the strike is max(100, W), W = remaining flows at r + mw."""
+    calls = calls or {}
+    V = np.full(len(rates) + 1, flows[-1])
+    W = V.copy()
+    for i in range(len(rates) - 1, -1, -1):
+        V = np.exp(-(rates[i] + s) * dt) * 0.5 * (V[:-1] + V[1:])
+        if mw is not None:
+            W = np.exp(-(rates[i] + mw) * dt) * 0.5 * (W[:-1] + W[1:])
+        if i in calls:
+            V = np.minimum(V, np.maximum(100.0, W) if mw is not None else calls[i])
+        V = V + flows[i]
+        if mw is not None:
+            W = W + flows[i]
+    return float(V[0])
+
+
+def oas(p_dirty, flows, dt, rates, calls=None, mw=None):
+    """The spread at which the lattice, with every option exercised, reprices the dirty price."""
+    return solve(lambda s: lattice_price(flows, dt, rates, s, calls, mw), p_dirty, -0.05, 3.0)
+
+
+def explain(p0, d_mod, c_mod, dy_rates, ds, p1):
+    """P&L explain per 100 face: rates, spread, convexity, and the residual nobody likes."""
+    rates, spread = -d_mod * dy_rates * p0, -d_mod * ds * p0
+    convexity = 0.5 * c_mod * (dy_rates + ds) ** 2 * p0
+    return {"rates": rates, "spread": spread, "convexity": convexity,
+            "residual": p1 - p0 - rates - spread - convexity}
+
+
+def fallen_angel_row(y, y_tsy, c=0.045, n=20, f=2, R=0.40, face=10e6):
+    """Table 4B.1: every measure of the stylized note from one flat Treasury curve."""
+    t, cf = cashflows(c, n, f)
+    disc, rk = flat_curve(y_tsy, f), risk_at_yield(y, c, n, f)
+    p, g = rk["price"], y - y_tsy
+    a = asw_par(p, t, cf, disc, f)
+    s_pe, _ = pecs(p, t, cf, f * math.log(1.0 + y_tsy / f), R)
+    return {"price": p, "G": 1e4 * g, "Z": 1e4 * z_spread(p, t, cf, disc), "ASW_par": 1e4 * a,
+            "ASW_mm": 1e4 * a * 100.0 / p, "PECS": 1e4 * s_pe, "D_mod": rk["D_mod"],
+            "C_mod": rk["C_mod"], "DV01": dv01(rk["D_mod"], p, face), "DTS": rk["D_mod"] * 1e4 * g}
+
+
+# ---- every identity in the chapter, asserted ----
+assert abs(accrued(0.045, date(2020, 2, 15), date(2020, 3, 25)) - 0.50) < 1e-12
+assert abs(year_frac(date(2020, 1, 30), date(2020, 3, 31)) - 60 / 360) < 1e-12      # the 31st rule
+assert abs(price(0.045, 0.045, 20) - 100.0) < 1e-10                                 # par: c = y
+assert abs(ytm(price(0.09, 0.045, 20), 0.045, 20) - 0.09) < 1e-10
+feb = risk_at_yield(0.035, 0.045, 20)
+fd_d, fd_c = effective(lambda h: price(0.035 + h, 0.045, 20))
+assert abs(fd_d - feb["D_mod"]) < 1e-5 and abs(fd_c - feb["C_mod"]) < 1e-3
+assert abs(feb["D_mod"] - 8.106) < 0.005 and abs(feb["C_mod"] - 78.0) < 0.1
+grid = np.arange(1, 21) / 2
+assert np.allclose(curve_from_par([0.03] * 20)(grid), flat_curve(0.03)(grid), rtol=0, atol=1e-12)
+assert abs(discount_margin(100.0, 0.0375, 0.04, 3.0) - 0.0375) < 1e-10              # floater at par
+assert abs(toy_tree(0.05) - 99.67) < 0.01 and abs(toy_tree(0.05, None) - 100.03) < 0.01
+y_w, k_w, K_w = ytw(103.0, 0.0925, 10, [(4, 104.625), (6, 102.3125), (8, 100.0)])
+assert k_w == 8 and K_w == 100.0 and abs(y_w - 0.0835) < 0.0005                    # the par call
+
+# Table 4B.1 and the 23 March column
+dates = {"2020-02-20": (0.035, 0.0152), "2020-03-23": (0.09, 0.0076), "2020-06-30": (0.055, 0.0066)}
+table = {d: fallen_angel_row(*yy) for d, yy in dates.items()}
+for d, row in table.items():
+    print(d, "  ".join(f"{k} {v:,.2f}" for k, v in row.items()))
+mar = table["2020-03-23"]
+assert abs(mar["G"] - 824) < 0.01 and abs(mar["Z"] - 804.5) < 0.5 and abs(mar["ASW_par"] - 678.5) < 1
+assert abs(mar["ASW_mm"] - 959) < 1 and abs(mar["PECS"] - 945) < 2
+assert abs(table["2020-02-20"]["DV01"] - 8785) < 2 and abs(mar["DV01"] - 5236) < 2
+
+# The P&L explain and the hedge with the wrong sign (Sec. 4B.8)
+print({k: round(v, 1) for k, v in explain(feb["price"], feb["D_mod"], feb["C_mod"],
+                                           0.0076 - 0.0152, 0.0824 - 0.0198, mar["price"]).items()})
+ust = risk_at_yield(0.0152, 0.0152, 20)
+print("hedge ratio", round(feb["D_mod"] * feb["price"] / (ust["D_mod"] * 100.0), 3),
+      "hedge P&L", round(-9.5e6 * (price(0.0076, 0.0152, 20) - 100.0) / 100.0))
+
+# Key rates sum to effective duration; the bullet's OAS is its Z; the make-whole never binds
+t_fa, cf_fa = cashflows(0.045, 20)
+disc_mar, z_mar = flat_curve(0.0076), mar["Z"] / 1e4
+krd = key_rate_durations(t_fa, cf_fa, disc_mar, z_mar, [2.0, 5.0, 10.0, 30.0])
+d_eff, _ = effective(lambda h: float(np.sum(cf_fa * disc_mar(t_fa) * np.exp(-(z_mar + h) * t_fa))))
+assert abs(krd.sum() - d_eff) < 1e-4 and abs(d_eff - risk_at_yield(0.09, 0.045, 20)["D_mac"]) < 1e-4
+mw_calls = {k: None for k in range(2, 40, 2)}
+for d, (y_b, y_t) in dates.items():                                  # the OAS row of Table 4B.1
+    dt_fa, rates_fa = ho_lee(flat_curve(y_t), 10.0, 40, 0.01)
+    flows_fa = on_grid(t_fa, cf_fa, dt_fa, 40)
+    oas_d = oas(table[d]["price"], flows_fa, dt_fa, rates_fa, mw_calls, mw=0.005)
+    assert abs(oas_d - table[d]["Z"] / 1e4) < 1e-9
+assert abs(lattice_price(flows_fa, dt_fa, rates_fa, z_mar, mw_calls, 0.005)
+           - lattice_price(flows_fa, dt_fa, rates_fa, z_mar)) < 1e-12
+try:
+    pecs(39.0, t_fa, cf_fa, 0.0076)
+    raise AssertionError("a bond below its recovery must have no PECS")
+except ValueError:
+    pass
+
+# Brambleworth on a lattice: zero-vol OAS is the spread to worst; curve shift = spread shift; OAS < Z
+disc_b = flat_curve(0.03)
+t_b, cf_b = cashflows(0.0925, 10)
+calls_b = {4: 104.625, 5: 104.625, 6: 102.3125, 7: 102.3125, 8: 100.0, 9: 100.0}
+stw = min(z_spread(103.0, *workout_flows(0.0925, k, K), disc_b) for k, K in [*calls_b.items(), (10, 100.0)])
+dt_b, rates_0 = ho_lee(disc_b, 5.0, 10, 0.0)
+flows_b = on_grid(t_b, cf_b, dt_b, 10)
+assert abs(oas(103.0, flows_b, dt_b, rates_0, calls_b) - stw) < 1e-9
+_, rates_b = ho_lee(disc_b, 5.0, 10, 0.01)
+_, rates_h = ho_lee(lambda t: disc_b(t) * np.exp(-1e-3 * np.asarray(t, dtype=float)), 5.0, 10, 0.01)
+s_b = oas(103.0, flows_b, dt_b, rates_b, calls_b)
+assert abs(lattice_price(flows_b, dt_b, rates_h, s_b, calls_b)
+           - lattice_price(flows_b, dt_b, rates_b, s_b + 1e-3, calls_b)) < 1e-9
+assert s_b < z_spread(103.0, t_b, cf_b, disc_b)
+_, rates_b2 = ho_lee(disc_b, 5.0, 10, 0.02)
+print("Brambleworth OAS (bp) at 100bp and 200bp vol:", round(1e4 * s_b),
+      round(1e4 * oas(103.0, flows_b, dt_b, rates_b2, calls_b)))
+print("Larkspur DM (bp) at 97 and 84:", [round(1e4 * discount_margin(p, 0.0375, 0.04, 3.0)) for p in (97.0, 84.0)])
+```
+
+
+## F.12-B: Chapter 12-B: The Restructuring Process as a State Machine: Documents, Liens, Intercreditor Agreements, Out-of-Court and Chapter 11 {#code-12b}
+
+Listings from `12_ch12b_the_restructuring_process_as_a_state_machine.md`, in the order they appear in the chapter. Blocks within a chapter are written to run cumulatively in one interpreter.
+
+
+### Listing 12-B.1: restructuring_state_machine.py (Chapter 12-B) {#code-12b-1}
+
+```python
+"""restructuring_state_machine.py (Chapter 12-B).
+
+Four layers, kept apart: a timed automaton whose guards are probabilities (12B.4),
+contract arithmetic (12B.1-12B.6), statutory clocks (12B.5) and the pricing
+resolvent (12B.7). Claims and values in $mm, intensities per year, rates as annual
+decimals, recoveries as fractions of allowed claim. Every generator G is a P object.
+"""
+from __future__ import annotations
+
+import datetime as dt
+import math
+from dataclasses import dataclass, field
+from typing import Callable
+
+import numpy as np
+
+Guard = Callable[[dict, dict], float]  # (document state, clocks) -> P(guard holds)
+
+
+# ---------------------------------------------------------------- legal layer
+@dataclass(frozen=True)
+class Edge:
+    src: str
+    dst: str
+    event: str
+    guard: Guard = lambda doc, clk: 1.0
+    resets: tuple[str, ...] = ()
+    forced: bool = False  # fires when an invariant of `src` is about to fail
+
+
+@dataclass
+class Machine:
+    edges: list[Edge]
+    invariants: dict[str, dict[str, float]] = field(default_factory=dict)
+    state: str = "Performing"
+    clocks: dict[str, float] = field(default_factory=dict)
+    t: float = 0.0  # days elapsed
+    log: list[tuple[float, str, str, str, float]] = field(default_factory=list)
+
+    def legal_edges(self, doc: dict) -> list[tuple[Edge, float]]:
+        """Every edge out of the current state with a positive guard. Never picks one."""
+        out = []
+        for e in self.edges:
+            if e.src != self.state:
+                continue
+            p = float(e.guard(doc, self.clocks))
+            if not 0.0 <= p <= 1.0:
+                raise ValueError(f"guard on {e.event!r} returned {p}")
+            if p > 0.0:
+                out.append((e, p))
+        return out
+
+    def fire(self, event: str, doc: dict) -> str:
+        """Take a legal edge. The log keeps the guard's value so a later ruling can revalue it."""
+        for e, p in self.legal_edges(doc):
+            if e.event == event:
+                for c in e.resets:
+                    self.clocks[c] = 0.0
+                self.log.append((self.t, self.state, e.dst, event, p))
+                self.state = e.dst
+                return self.state
+        raise ValueError(f"{event!r} is not a legal edge from {self.state!r}")
+
+    def advance(self, days: float, doc: dict) -> str:
+        """Run every clock; when an invariant binds, fire the forced edge at the deadline."""
+        while days > 0:
+            inv = self.invariants.get(self.state, {})
+            for c in inv:
+                self.clocks.setdefault(c, 0.0)
+            slack = min((cap - self.clocks[c] for c, cap in inv.items()), default=math.inf)
+            step = min(days, max(slack, 0.0))
+            for c in self.clocks:
+                self.clocks[c] += step
+            self.t += step
+            days -= step
+            if days > 0:
+                forced = [e for e, _ in self.legal_edges(doc) if e.forced]
+                if not forced:
+                    raise RuntimeError(f"invariant fails in {self.state!r} and no edge is forced")
+                self.fire(forced[0].event, doc)
+        return self.state
+
+
+# ------------------------------------------------------------- contract layer
+def effective_threshold(implementations: list[list[float]]) -> float:
+    """12B.1: min over implementations of the max threshold among the rights each touches."""
+    return min(max(thetas) for thetas in implementations)
+
+
+def blocking_stake(theta: float, turnout: float = 1.0) -> float:
+    """12B.3: a no-voter blocks an amount test of `theta` (share of the amount voting) with
+    any share above this, when everyone else turns out at `turnout` and votes yes."""
+    t = turnout
+    return (1 - theta) * t / (1 - (1 - theta) * (1 - t))
+
+
+@dataclass
+class Silo:
+    value: float
+    tiers: list[list[str]]  # lien order; classes within one tier share pro rata
+
+
+def _pro_rata(amount: float, owed: dict[str, float]) -> dict[str, float]:
+    total = sum(owed.values())
+    if total <= 0.0:
+        return {k: 0.0 for k in owed}
+    paid = min(amount, total)
+    return {k: paid * v / total for k, v in owed.items()}
+
+
+def silo_waterfall(claims: dict[str, float], silos: list[Silo], unencumbered: float,
+                   admin: float = 0.0, subordination=()) -> dict[str, float]:
+    """12B.2 in four steps: silos, deficiencies, the pool, turnover. `subordination` is a
+    list of (junior, [beneficiaries]) and runs in the order given."""
+    got = dict.fromkeys(claims, 0.0)
+    for s in silos:
+        left = s.value
+        for tier in s.tiers:
+            paid = _pro_rata(left, {k: claims[k] - got[k] for k in tier})
+            for k, x in paid.items():
+                got[k] += x
+            left = max(left - sum(paid.values()), 0.0)
+        unencumbered += left  # equity in the collateral belongs to the estate
+    dist = _pro_rata(max(unencumbered - admin, 0.0), {k: claims[k] - got[k] for k in claims})
+    for junior, seniors in subordination:
+        moved = _pro_rata(dist[junior], {b: claims[b] - got[b] - dist[b] for b in seniors})
+        dist[junior] -= sum(moved.values())
+        for b, x in moved.items():
+            dist[b] += x
+    return {k: (got[k] + dist[k]) / claims[k] for k in claims}
+
+
+def call_spread_recoveries(V: float, claims: list[float]) -> list[float]:
+    """12B.6: C_j R_j = (V - K_{j-1})^+ - (V - K_j)^+, classes in priority order."""
+    out, K = [], 0.0
+    for c in claims:
+        out.append((max(V - K, 0.0) - max(V - K - c, 0.0)) / c)
+        K += c
+    return out
+
+
+def fulcrum(V: float, claims: list[float]) -> int | None:
+    """min{j : K_j > V}. At V == K_j class j is whole and the fulcrum is j + 1, at zero
+    recovery. None means every class is whole and old equity is in the money."""
+    K = 0.0
+    for j, c in enumerate(claims):
+        K += c
+        if K > V:
+            return j
+    return None
+
+
+def fulcrum_deltas(V_samples, claims: list[float]):
+    """pi_j = P(class j is the fulcrum) over draws of V (say which measure drew them), and
+    the expected value delta pi_j / C_j per $mm of V."""
+    V = np.asarray(V_samples, float)
+    K = np.concatenate([[0.0], np.cumsum(claims)])
+    pi = np.array([np.mean((K[j] <= V) & (V < K[j + 1])) for j in range(len(claims))])
+    return pi, pi / np.asarray(claims, float)
+
+
+def rollup_transfer(W: float, F: float, M: float, kappa: float) -> float:
+    """12B.5: recovery lost by class members outside the DIP group, R - R'."""
+    rolled = kappa * M
+    if rolled > min(W, F):
+        raise ValueError("roll-up exceeds the value the class receives")
+    return 0.0 if W >= F else rolled * (F - W) / (F * (F - rolled))
+
+
+def cramdown_price(c: float, y: float, n: int) -> float:
+    """12B.6: takeback paper per unit of allowed secured claim, 1 - (y - c) a_n(y)."""
+    a = n if y == 0 else (1 - (1 + y) ** -n) / y
+    return 1 - (y - c) * a
+
+
+# ---------------------------------------------------------------- clock layer
+def _add_months(d: dt.date, months: int) -> dt.date:
+    y, m = divmod(d.month - 1 + months, 12)
+    for day in (d.day, 30, 29, 28):
+        try:
+            return dt.date(d.year + y, m + 1, day)
+        except ValueError:
+            pass
+    raise ValueError(d)
+
+
+def statutory_clocks(petition: dt.date) -> dict[str, dt.date]:
+    """12B.5 clock table from a voluntary petition (the order for relief). Court-set clocks
+    (challenge period, general bar date, DIP milestones) are case inputs, not statute."""
+    day = lambda n: petition + dt.timedelta(days=n)
+    return {
+        "interim_relief_window_ends": day(21),                  # Rule 6003
+        "exclusive_filing_ends": day(120),                      # 1121(b)
+        "exclusive_solicitation_ends": day(180),                # 1121(c)(3)
+        "exclusive_filing_cap": _add_months(petition, 18),      # 1121(d)(2)
+        "exclusive_solicitation_cap": _add_months(petition, 20),
+        "lease_decision_with_extension": day(210),              # 365(d)(4)
+        "governmental_bar_date": day(180),                      # 502(b)(9)
+        "avoidance_limitations": _add_months(petition, 24),     # 546(a)
+        "preference_lookback_start": day(-90),                  # 547(b)(4)
+        "insider_lookback_start": _add_months(petition, -12),
+        "goods_503b9_lookback_start": day(-20),                 # 503(b)(9)
+    }
+
+
+def transfer_trace(claim_kind: str, proof_filed: bool) -> str:
+    """12B.8, Rule 3001(e): what a claim transfer leaves on the docket."""
+    if claim_kind == "public_bond":
+        return "none: settles through DTC"
+    if proof_filed:
+        return "evidence of transfer; the transferor has 21 days to object"
+    return "only the transferee or an indenture trustee may file the proof"
+
+
+# ---------------------------------------------------------- probability layer
+def resolvent(G, transient: list[int], absorbing: list[int], r: float = 0.0):
+    """12B.7: U = (rI - G_TT)^-1 G_TA, W = (rI - G_TT)^-1 U, m = (-G_TT)^-1 1.
+    Rows are transient states, columns absorbing ones. Linear solves, no inverse."""
+    G = np.asarray(G, float)
+    if (G - np.diag(np.diag(G)) < 0).any() or not np.allclose(G.sum(axis=1), 0.0):
+        raise ValueError("not a generator: off-diagonals must be >= 0 and rows sum to 0")
+    GTT = G[np.ix_(transient, transient)]
+    A = r * np.eye(len(transient)) - GTT
+    U = np.linalg.solve(A, G[np.ix_(transient, absorbing)])
+    W = np.linalg.solve(A, U)
+    m = np.linalg.solve(-GTT, np.ones(len(transient)))  # singular: a case that cannot end
+    return U, W, m
+
+
+# ------------------------------------------------------------------ self-test
+def _self_test() -> str:
+    def close(a, b, tol=1e-3):
+        assert abs(a - b) < tol, (a, b)
+
+    # Moyer's Dead Co.: assets 75, all unsecured; the sub is subordinated to the bank only
+    r = silo_waterfall({"bank": 50, "trade": 50, "sub": 100}, [], 75.0,
+                       subordination=[("sub", ["bank"])])
+    close(r["bank"], 1.0); close(r["trade"], 0.375); close(r["sub"], 0.0625)
+    # 12B.2: lien subordination, then payment subordination as well
+    claims, silo = {"1L": 100, "2L": 100, "U": 100}, [Silo(80.0, [["1L"], ["2L"]])]
+    r = silo_waterfall(claims, silo, 60.0)
+    close(r["1L"], 0.8545); close(r["2L"], 0.2727); close(r["U"], 0.2727)
+    r = silo_waterfall(claims, silo, 60.0, subordination=[("2L", ["1L"])])
+    close(r["1L"], 1.0); close(r["2L"], 0.1273); close(r["U"], 0.2727)
+    # thresholds, the fulcrum boundary, roll-up, cramdown
+    close(blocking_stake(2 / 3, 0.7), 0.2593)
+    close(effective_threshold([[0.5, 1.0], [0.5, 2 / 3]]), 2 / 3)
+    assert fulcrum(100.0, [100.0, 50.0]) == 1
+    assert call_spread_recoveries(100.0, [100.0, 50.0]) == [1.0, 0.0]
+    pi, delta = fulcrum_deltas([50, 120, 140, 200], [100.0, 50.0])
+    close(pi[0], 0.25); close(pi[1], 0.5); close(delta[1], 0.01)
+    close(rollup_transfer(910, 1400, 150, 1.0), 0.042)
+    close(cramdown_price(0.085, 0.11, 7), 0.882)
+    # the Halvorsen clock (12B.9): Petition, Contested, Solicitation | Effective, Sale
+    G = [[-4.0, 1.0, 3.0, 0.0, 0.0],
+         [0.0, -2.5, 2.0, 0.0, 0.5],
+         [0.0, 0.0, -6.0, 6.0, 0.0],
+         [0.0] * 5, [0.0] * 5]
+    U, W, m = resolvent(G, [0, 1, 2], [3, 4], r=0.05)
+    close(U[0, 0], 0.927); close(U[0, 1], 0.048); close(W[0, 0], 0.457); close(m[0], 0.508)
+    # out of court: a Serta blocker closes the uptier; the grace invariant forces the EoD
+    edges = [
+        Edge("Stressed", "Grace", "missed_coupon", resets=("grace",)),
+        Edge("Grace", "EoD", "grace_expires", forced=True),
+        Edge("Grace", "Petition", "file"),
+        Edge("Stressed", "Post-LMT", "uptier",
+             guard=lambda doc, clk: 0.0 if doc["subordination_sacred"] else 1.0),
+        Edge("Stressed", "Post-LMT", "exchange", guard=lambda doc, clk: doc["p_min_tender"]),
+    ]
+    doc = {"subordination_sacred": True, "p_min_tender": 0.35}
+    mach = Machine(edges, invariants={"Grace": {"grace": 30.0}}, state="Stressed")
+    assert {e.event for e, _ in mach.legal_edges(doc)} == {"missed_coupon", "exchange"}
+    try:
+        mach.fire("uptier", doc)
+        raise AssertionError("a sacred right was amended by a majority")
+    except ValueError:
+        pass
+    mach.fire("missed_coupon", doc)
+    assert mach.advance(28, doc) == "Grace"
+    assert mach.advance(5, doc) == "EoD" and mach.log[-1][0] == 30.0
+    # clocks and transfers
+    c = statutory_clocks(dt.date(2026, 3, 31))
+    assert c["exclusive_filing_ends"] == dt.date(2026, 7, 29)
+    assert c["exclusive_filing_cap"] == dt.date(2027, 9, 30)
+    assert transfer_trace("public_bond", True).startswith("none")
+    return "restructuring_state_machine: all checks passed"
+
+
+if __name__ == "__main__":
+    print(_self_test())
+```
+
 
 <!-- STATUS: COMPLETE -->

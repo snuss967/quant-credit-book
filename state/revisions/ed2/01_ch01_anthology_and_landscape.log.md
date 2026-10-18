@@ -4,9 +4,9 @@
 - [x] 1. Cold open: EXPAND-SCENE (lightly) + BRIDGE. — Added 00:06 instinct beat, Monday Ines exchange, narrative promise paragraph.
 - [x] 2. §1.1 Epistemological Clash: LIST-TO-NARRATIVE + ANOTHER-SEAT + Math, Gently (conditional expectation). — Two Mondays narrative, coin Math box, RV-pod seat box added.
 - [x] 3. §1.1 "Why the Hybrid... Owns the Future": LIST-TO-NARRATIVE + Poker Table. — Kaz-Mags-Theo scene, Barclays numbers replace assertions, Poker Table added.
-- [ ] 4. §1.2 Market Set: LIST-TO-NARRATIVE + View From Another Seat (CLO manager).
-- [ ] 5. §1.3.1 Setup and units: Math, Gently (distribution, mean-variance).
-- [ ] 6. §1.3.2 Inventory term: Math, Gently + When to apply.
+- [x] 4. §1.2 Market Set: LIST-TO-NARRATIVE + View From Another Seat (CLO manager). — Six-chair table walk, generic firm column, sourced CLO seat box.
+- [x] 5. §1.3.1 Setup and units: Math, Gently (distribution, mean-variance). — Bag-of-slips distribution box with CE worked number added.
+- [x] 6. §1.3.2 Inventory term: Math, Gently + When to apply. — Indifference box with 0.025/0.0127 numbers; when-it-breaks paragraph added.
 - [ ] 7. §1.3.3 Bayes on the RFQ: Math, Gently + LIST-TO-NARRATIVE.
 - [ ] 8. "The cold open, in numbers": BRIDGE.
 - [ ] 9. Ways This Blows Up: Math, Gently + Full Derivation move.

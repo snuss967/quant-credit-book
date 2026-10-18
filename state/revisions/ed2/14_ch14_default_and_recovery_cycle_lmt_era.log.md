@@ -1,6 +1,6 @@
 # Progress Log, Edition 2 (U2): Chapter 14
 
-- [ ] 1. [Cold open] EXPAND-SCENE (Quillfeather, Serta comp, ~1,200 words)
+- [x] 1. [Cold open] EXPAND-SCENE (Quillfeather, Serta comp, ~1,200 words) -- done: one-way RFQ, Serta comp, Kaz weight, seat-buying twist.
 - [ ] 2. [14.1 opening] BRIDGE + MATH-GENTLY (rate vs. hazard, exponential)
 - [ ] 3. [14.1 Trend Watch] LIST-TO-NARRATIVE (CLO manager's chair lead-in)
 - [ ] 4. [14.1 after Moyer] SHOP-LIFE vignette (three default_flag columns)

@@ -10,9 +10,9 @@
 - [x] 8. [5.2.4 Return: sign-flipping in distress] BRIDGE to the cold open -- Carvana payoff: q above half, stack 53.8 to 84.7.
 - [x] 9. [5.2.4 Ways This Blows Up: stale-price smoother] SHOP-LIFE vignette -- Hana TRACE vignette, SR 11-7 review, ends with ticket.
 - [x] 10. [5.3.2 Merton (1976)] MATH-GENTLY + FULL-DERIVATION-MOVE -- raindrop Poisson box; density and truncation moved after 5.3.3.
-- [ ] 11. [5.3.3 Kou (2002)] MATH-GENTLY + EXPAND-SCENE (short)
-- [ ] 12. [5.3.4 What the jump model is for] WHEN-TO-APPLY + LIST-TO-NARRATIVE
-- [ ] 13. [5.4 Levy processes] MATH-GENTLY + FULL-DERIVATION-MOVE + WHEN-TO-APPLY
+- [x] 11. [5.3.3 Kou (2002)] MATH-GENTLY + EXPAND-SCENE (short) -- bus memorylessness box; Mags one-week bill grace scene; conditions moved.
+- [x] 12. [5.3.4 What the jump model is for] WHEN-TO-APPLY + LIST-TO-NARRATIVE -- three jobs as narrative; Kou judgment; Kaz failure stories.
+- [x] 13. [5.4 Levy processes] MATH-GENTLY + FULL-DERIVATION-MOVE + WHEN-TO-APPLY -- fingerprint and racing-clock box; formulas moved; data-driven judgment.
 - [ ] 14. [5.5.1 Desk framing] EXPAND-SCENE (short) + reviewer fix
 - [ ] 15. [5.5.2 Beta and the method of moments] MATH-GENTLY
 - [ ] 16. [5.5.3 Beta regression] MATH-GENTLY + LIST-TO-NARRATIVE + FULL-DERIVATION-MOVE

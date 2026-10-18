@@ -6,7 +6,13 @@
 
 ## Method and verification notes
 
-(METHOD_PLACEHOLDER)
+All work was done on 2026-10-18 from `/home/user/quant-credit-book`.
+
+1. **Feeds first.** I downloaded and parsed the publishers' RSS feeds this session (Odd Lots, Masters in Business, Trillions, The Credit Edge, Money Stuff, Capital Allocators, Macro Musings, Cloud 9fin, The Octus Download, Flirting with Models, ReSolve Riffs, Alpha Exchange, Top Traders Unplugged, Risk.net Quantcast, Tradeweb Off The Desk). Feed titles, guests and `pubDate` values are the record for podcast dates. Cross-checking every podcast row against its feed found no date differences.
+2. **Every table URL was fetched this session** (80 distinct URLs, all HTTP 200, titles matching the item). Where the title alone was ambiguous I read the page text (Wired, the Fed note, the Nobel pages, OCW, the CXO, Oxford and GARP pages, the Marks and Duffie PDFs).
+3. **Refinement, not duplication.** I started from `media_podcasts_credit_quant.md` and `map_media_eco.md` (whose placement notes for Ch 2 oral history, the Ch 3 Edge Ledger box, the Ch 4 penetration curve and the hedged lines in Ch 5 I followed). 26 of the 80 URLs come from the parent dossier and were re-verified; 54 are new, mostly non-podcast items and the credit-model and statistics chapters, which the parent barely covered. The parent's `localhost` Top Traders Unplugged links are replaced by real URLs from the show's sitemap.
+4. **Host caveats.** Alpha Exchange pages (Simplecast) are a client-side shell that returns HTTP 200 and the same page for any path, including an invented one, so its four rows (Lowenstein, Cecchini, "Black Scholes Turns 50", Abdelmessih) rest on the RSS item, not the page. capitalallocators.com returns 403 unless requests are throttled. Bloomberg-hosted pages return 403, so no Bloomberg article is in a table. Omny slugs truncate at 50 characters; the Harris episode's Omny page could not be reconstructed, so its row uses the podscripts page (title matches, transcript present). Risk.net and IFR are paywalled (title and date only). The Nobel lecture PDFs are scanned images.
+5. **Search limit.** The shared WebSearch budget ran out partway through, so late discovery used primary sites (feeds, sitemaps, tag pages, the OCW course index) instead of open-web queries. Gaps this causes are listed under Unverified leads.
 
 ## 01_ch01_anthology_and_landscape
 
@@ -45,8 +51,8 @@ Serves: §3.1 (survival questions to distributions), §3.2 (Glosten-Milgrom for 
 | type | item | date | URL | why / section |
 |---|---|---|---|---|
 | podcast episode | Capital Allocators, "Max Frumes and Sujeet Indap: Inside the Sausage Factory of the Caesar's Restructuring" (EP.209; Ted Seides with the authors of *The Caesars Palace Coup*) | 2021-08-16 | https://www.capitalallocators.com/podcast/inside-the-sausage-factory-of-the-caesars-restructuring/ | The Caesars bankruptcy as a game among Apollo, TPG, GSO, Elliott, Silver Point, Oaktree and Appaloosa, plus lessons for investors: a stakeholder map the RSSG reader already holds, ready to be tagged as features in the §3.5 Edge Ledger. |
-| podcast episode | Capital Allocators, "Josh Friedman: Master Class in Credit Investing at Canyon" (EP.263) | 2022-07-25 | https://www.capitalallocators.com/podcast/master-class-in-credit-investing-at-canyon/ | A distressed-fund founder (Goldman, Drexel, then Canyon from 1990) on how a credit shop thinks in ranges of outcomes; useful contrast for §3.1 (two-point survival questions versus a distribution). |
-| podcast episode | Flirting with Models, "Thao Tran: Market Making Illiquid, Non-Fungible Assets (S7E14)" (host Corey Hoffstein) | 2025-02-03 | https://www.flirtingwithmodels.com/episodes/eNEcTaLcPCU | How to quote an asset where every unit is unique and the counterparty may know more: a plain-language companion to the §3.2 RFQ poker-hand model and the winner's curse in §3.2.3. |
+| podcast episode | Capital Allocators, "Josh Friedman: Master Class in Credit Investing at Canyon" (EP.263) | 2022-07-25 | https://www.capitalallocators.com/podcast/master-class-in-credit-investing-at-canyon/ | A Canyon co-founder (Goldman, Drexel with Michael Milken, then Canyon from 1990) on the firm's investment philosophy and key stages across distressed, securitizations and risk arbitrage; a buy-side contrast case for §3.1 (the two-point survival question versus a distribution of outcomes). |
+| podcast episode | Flirting with Models, "Thao Tran: Market Making Illiquid, Non-Fungible Assets (S7E14)" (host Corey Hoffstein) | 2025-02-03 | https://www.flirtingwithmodels.com/episodes/eNEcTaLcPCU | Hoffstein asks how market making works in illiquid, non-fungible assets (the running example is NFTs); Tran covers inventory risk and the features that drive spreads. An analogy, not credit: read it next to the §3.2 RFQ poker-hand model and the winner's curse in §3.2.3. |
 | podcast episode | The Octus Download, "EP 21 | How Bankruptcy Really Works: Inside the System with Josh Sussberg" (Kirkland & Ellis; hosts Jason Sanjana and Kevin Eckhardt) | 2025-12-10 | https://share.transistor.fm/s/81750469 | A Kirkland & Ellis restructuring lawyer on how the 2005 Code amendments compressed timelines and pushed negotiation outside court, and on first-day presentations (Toys "R" Us, Claire's): timing priors for the §3.4 four-day update after an 8-K. |
 | podcast episode | The Octus Download, "EP 22 | Judge Michael B. Kaplan, Vegas Squeeze & the First Brands Conspiracy" (U.S. Bankruptcy Judge, District of New Jersey) | 2025-12-23 | https://share.transistor.fm/s/aaf0387e | A sitting bankruptcy judge on how feasibility is judged, "Chapter 22" refilings such as Rite Aid, venue choice and why courts hesitate to reject aggressive DIP financing: the court-side view behind the §3.7 Serta case and the book's "the court is a random variable" law. |
 | podcast episode | Cloud 9fin, "Jane's LME Addiction: The minority report with Shai Schmidt" (Glenn Agre; host Jane Komsky) | 2025-09-15 | https://share.transistor.fm/s/a41d627c | When minority holders should organize, negotiate or litigate: the demand side of the §3.6 pre-LMT flow detector, the part a quant desk can only infer from tape. |
@@ -70,7 +76,7 @@ Serves: §4.2 (why credit lagged equities), §4.4 (alpha families), §4.5 (data 
 
 ## 04_ch04b_bond_math_for_the_desk
 
-Serves: Cold Open (six columns called spread), §4B.1 (cash flows, day counts), §4B.2 (price-yield), §4B.3 (duration), §4B.4 (convexity and its three meanings), §4B.5 (DV01, CS01, DTS), §4B.7 (callable bond, make-whole). Media on bond math is thin; this list pairs two free MIT lectures with four convexity/duration conversations and one DTS source.
+Serves: Cold Open (six columns called spread), §4B.1 (cash flows, day counts), §4B.2 (price-yield), §4B.3 (duration), §4B.4 (convexity and its three meanings), §4B.5 (DV01, CS01, DTS), §4B.7 (callable bond, make-whole). Media on bond math is thin; this list pairs three free MIT lecture resources with four convexity/duration conversations and one DTS source.
 
 | type | item | date | URL | why / section |
 |---|---|---|---|---|
@@ -160,6 +166,40 @@ Serves: §7-B.0 (a t-statistic of six), §7-B.1 (panel regression, clustering), 
 
 ## Unverified leads
 
+Not placed in any table because the item's own page could not be fetched or its content could not be confirmed this session.
+
+- Bloomberg News, "ETF Giant Jane Street Is Following Goldman Sachs Into Big Credit Trades" (2019-02-01) and "PJT's Tim Coleman, Architect of Big Restructuring Deals, to Exit" (2021-02-02): bloomberg.com returned 403. A mirror of the 2019-06-05 Bloomberg piece "Rise of ETFs Is Improving the Bond Market, Say BofA, Jane Street" does load (https://www.thewealthadvisor.com/article/rise-etfs-improving-bond-market-say-bofa-jane-street) and is a spare for Ch 2 §2.7.
+- Two Sigma Venn, "A Machine Learning Approach to Regime Modeling" (venn.twosigma.com): the connection failed, so the article is unverified.
+- Robeco, "Data sets: factor investing in corporate bonds" (March 2024) and its DTS PDF (docu-201708): both URLs redirect to Robeco's generic insights or home page. BlackRock, "Fixed income factor investing": redirects to a listing. Acadian, "Perspectives: Systematic Credit" (Q&A with Scott Richardson): the PDF now returns 404.
+- Flirting with Models episodes in the feed whose own pages did not resolve (the old libsyn links now 404 and the new site IDs are not discoverable): "Machine learning isn't the edge; it enhances the edge you've developed" (2023-02-27), Kai Wu (S5E6, 2022-07-03; "big data can have small data problems"), Ernest Chan (S3E5, 2020-07-10; machine learning and overfitting), Antti Ilmanen (S5E8, 2022-07-18).
+- Man Numeric authors Lam and Kamenski, "The Revolutions in Credit Trading" (the shelf paper), and Lam's IPE feature "Ahead of the curve: The future of quant credit" (October 2021): the publisher pages were not located (IPE returned 405).
+- López de Prado: the Bloomberg Quant Seminar page (403), SSRN abstract 2460551 on the deflated Sharpe ratio (403) and any recording of the "7 Reasons" talk were not reachable. The Campbell Harvey AFA presidential address (Journal of Finance 72(4), 2017) has no recording that I could find.
+- Nassim Taleb on Odd Lots (2023-04-06, 2025-07-04) exists in the feed, but the descriptions do not mention tails or distributions, so they were left out of Ch 5.
+- Quantcast, "Lipton and Lopez de Prado 15/06/26" (2026-06-22) exists on SoundCloud, but its blurb is generic; listen before citing.
+
 ## Sources
 
+Every URL in the ten tables above (80 distinct) returned HTTP 200 on 2026-10-18. Supporting pages fetched this session:
+
+- Feeds parsed (primary record for podcast dates): Odd Lots https://www.omnycontent.com/d/playlist/e73c998e-6e60-432f-8610-ae210140c5b1/8a94442e-5a74-4fa2-8b8d-ae27003a8d6b/982f5071-765c-403d-969d-ae27003a8d83/podcast.rss ; Masters in Business https://www.omnycontent.com/d/playlist/e73c998e-6e60-432f-8610-ae210140c5b1/4e4cd910-40a1-4619-a5f3-ae2b0012ffff/5873a3cb-298f-40bc-b71f-ae2b0013000d/podcast.rss ; Credit Edge https://www.omnycontent.com/d/playlist/e73c998e-6e60-432f-8610-ae210140c5b1/e74a35e9-c028-4e5f-a3f7-afb10164a717/8792a2e9-d66c-4038-a1fe-afb101654894/podcast.rss ; Money Stuff https://www.omnycontent.com/d/playlist/e73c998e-6e60-432f-8610-ae210140c5b1/ee4336cb-155f-4488-90e0-b1400134e40e/77e6a3a7-290d-4a82-8164-b14001353ef2/podcast.rss ; Trillions https://www.omnycontent.com/d/playlist/e73c998e-6e60-432f-8610-ae210140c5b1/ee08231b-2e0c-40d0-afa9-ae3c0021f0dc/ab3c08b0-6606-450f-a60c-ae3c0021f0e6/podcast.rss .
+- Other feeds: https://rss.libsyn.com/shows/94820/destinations/482814.xml (Capital Allocators); https://macromusings.libsyn.com/rss ; https://feeds.captivate.fm/flirting-with-models/ ; https://feeds.captivate.fm/resolve-gestalt-university/ ; https://feeds.captivate.fm/top-traders-unplugged/ ; https://feeds.simplecast.com/8g9ryFGf (Alpha Exchange); https://feeds.transistor.fm/cloud-9fin ; https://feeds.transistor.fm/the-octus-download ; https://feeds.soundcloud.com/users/soundcloud:users:387150302/sounds.rss (Quantcast); https://feed.podbean.com/offthedesk/feed.xml .
+- Index and detail pages: https://www.toptradersunplugged.com/podcast-sitemap.xml ; https://www.flirtingwithmodels.com/episodes ; https://libertystreeteconomics.newyorkfed.org/tag/corporate-bonds/ ; https://ocw.mit.edu/courses/18-s096-topics-in-mathematics-with-applications-in-finance-fall-2013/video_galleries/video-lectures/ ; https://www.nobelprize.org/uploads/2018/06/merton-lecture.pdf ; https://www.nobelprize.org/uploads/2018/06/scholes-lecture.pdf ; https://microstructure.exchange/past-talks.html ; https://verdadcap.com/archive ; https://www.pjtpartners.com/people/steve-zelin .
+
 ## Book placement
+
+The list below says where each item should be cited; the sections are the current build's headings. "Start here" picks are one per chapter for the App E listening syllabus.
+
+- **Ch 1.** Open §1.1 with White 2015 (start here). §1.2: Harris 2021. §1.8.1: Barse 2018 and the Liberty Street dealer-balance-sheet post. §1.8.2: the Liberty Street fallen-angels post with White 2020. §1.8.3: Trillions 2020. §1.9.1: Indap 2024.
+- **Ch 2.** Build the planned Edition-2 oral-history box from White 2015 (Ch 1), Elson 2017, Morningstar 2021, Harris 2021 (Ch 1), Golay 2026 and the TME overnight-bond talk. §2.6 sidebar: Greenwich panel 2024. §2.7-2.8: ETF Central (Jane Street) and The DESK on Citadel. §2.9.3: April 8 2025. Start here: Elson.
+- **Ch 3.** "What the seat teaches" box (§3.5): Frumes and Indap, Friedman, IFR on PJT. §3.2: Thao Tran. §3.4: Sussberg. §3.6: minority report and NYDJ. §3.7: Kaplan. Start here: Frumes and Indap.
+- **Ch 4.** Trend Watch penetration line: Man 2021 (Hedgeweek), Man 2024 (Extra Credit), Blackstone 2026, each written into App C as a dated claim. §4.2: Rosenberg. §4.4: Obenshain. §4.5-4.6: Ralph Smith. §4.7: Man webinar. §4.11: Acadian. Start here: Dwinells.
+- **Ch 4-B.** Put MIT 15.401 Lectures 4-6 and Recitation 2a in the Prerequisites box. §4B.3: MiB duration, OCW Lecture 10. §4B.4: ReSolve and Off The Desk (Bassman). §4B.5: CFA Digest on DTS. Cold open alternative: Davies on SVB. Start here: ReSolve with Bassman.
+- **Ch 5.** §5.1: Marks 2015. §5.3 and §5.7.4: Salmon in Wired plus Richard Martin (Risk.net). §5.6: Verdad and Roe-Rotaru (cite the study, not the episode). §5.7: Krishnan, Acerbi, Lowenstein. Start here: Salmon.
+- **Ch 6.** Prerequisite box: OCW Lecture 18 (Itô). §6.2: Merton's Nobel lecture and Risk.net. §6.3: the FEDS excess-bond-premium note and Duffie's Clarendon lectures. §6.6-6.8: Duffie (Pisa) and OCW Lecture 24. §6.9.2: Cecchini. Start here: Merton's Nobel lecture.
+- **Ch 6-B.** §6-B.1.3: OCW Lecture 20. §6-B.2: OCW Lecture 19 notes, Scholes's Nobel lecture, "Black Scholes Turns 50". §6-B.3: Abdelmessih. §6-B.3.5 and the blow-up list: Hagan, Wilmott. §6-B.6: Brigo. Start here: "Black Scholes Turns 50".
+- **Ch 7.** Use the CXO summary as the chapter's map (its seven fixes match §7.3-7.8), the GARP paper and Oxford post for §7.8 and §7.11, Signals and Threads for §7.1, Wellington and Carrano for §7.10, Kondratyev and Schwarz for §7.1 caveats. Start here: Signals and Threads Episode 22.
+- **Ch 7-B.** OCW Lectures 6, 8 and 15 in the Prerequisites box. §7-B.3: Altman, Martin, Tetlock. §7-B.4: Kolm. §7-B.6: Brennan. Start here: Tetlock.
+
+Spare items verified this session or in the parent dossier, not placed: Odd Lots Duffie (2023-08-28); BIS Bulletin 6, https://www.bis.org/publications/bulletin-6-recent-distress-corporate-bond-markets-cues-etfs (2020-04-14; ETF discounts, Ch 1/2); Verdad "Echoes of Junk Bonds Past" (2026-04-06) and "Weaponized Risk Models" (2026-02-17); Tradeweb Off The Desk on automation and on ETFs (both 2024-09-13); Capital Allocators with Cliff Asness, https://www.capitalallocators.com/podcast/simple-investing-is-hard/ (2024-05-13); Masters in Business with Jon McAuliffe (2023-09-08); Top Traders Unplugged SI348 on overfitting (2025-05-17).
+
+<!-- STATUS: COMPLETE -->

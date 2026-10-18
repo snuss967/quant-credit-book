@@ -147,3 +147,5 @@ Scheduled restart: 09:33 UTC (trigger trig_016k2PhmaKrabSxxMUUnipys; user-set, 4
 | figs-VII | w3c662d09 | figures → figcheck | Ch 26, 27 | running |
 
 Still to queue: figures for Ch 8–12, 17, 28, 1-B, 4-C, primers, Ch 1–7 (after their revisions); U2 for Ch 17, Part III, Parts V–VIII.
+| primers-finish | wz1dbyljo | WP2 | 04_ch04b, 12_ch12b, 07_ch07b finished (COMPLETE); new listings swept to App F | done |
+| primers-pipeline | (see below) | u1 → figures → figcheck | 07_ch07b, 04_ch04b, 12_ch12b | running |

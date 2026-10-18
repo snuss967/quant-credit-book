@@ -119,6 +119,8 @@ The whiteboard became the table below, and it is the chapter's map. Its job is t
 
 Everyone in that table is smart. Most of them are not the problem. The problem is the last column: every row has a trigger that converts a rating, a test, or a redemption into a sale, at a time you can often predict and in a size you can often estimate. A forced sale is **information-free about the bond and information-rich about the seller**. The rest of this chapter is about telling those two kinds of information apart, at speed, for money.
 
+> **View From Another Seat.** *The CLO manager (a generic seat; no manager is named).* Imagine the same Friday from the fourth chair, and suppose the RFQ is not for Halvorsen's unsecured notes but for its term loan, which a CLO is far likelier to own, and which the agencies have just cut one notch, from B3 into Caa1 territory. The CLO is the marginal buyer of the whole loan market: CLO managers buy "nearly three-quarters of all leveraged loans issued" (Deutsche Bank Flow, 7 Oct 2025), so their rulebook shapes loan prices in a way no single fundamental view can. The rulebook says that CCC and Caa1 loans above the typical 7.5% limit are marked, in the over-collateralization numerator, at the *lowest* market value in the CCC bucket, not at their own price (Kundu, ESRB Working Paper No. 141, Mar 2023, pp. 7–8). Kundu finds that the average CCC loan in the sample was priced at 85 while the cheapest CCC loan in each CLO averaged 58, which means the haircut can reward selling a *higher*-priced CCC to shrink the excess. The bucket is a soft wall, not a cliff: S&P Global Ratings reported in April 2023 that about 42% of the 554 reinvesting US BSL CLOs in its index had CCC exposure above 7.5%, yet just over 1% were failing a junior OC test (S&P, 28 Apr 2023). So the manager is not panicking. She is optimizing, against a test date. Her view of the RFQ, if she could type it into the box: "I am not selling because I think it's cheap or rich. I am selling because my CCC bucket is 7.9% and the test date is Thursday." From the desk's chair that is close to the best sentence a seller can say. It means $\pi$ is low, the size is predictable, and the price pressure will fade once Thursday passes. The danger is assuming every CLO sale sounds like that one. A manager who sells *before* the downgrade, a week ahead of the agencies, is a different kind of seller, and Chapter 21 shows how to tell them apart in the flow.
+
 
 ---
 
@@ -136,9 +138,13 @@ Everything in this section is a physical-measure object. The mid $S_t$ may come 
 - $\sigma_{\text{IDO}}$: the standard deviation of the bond's price change *after* the hedges (Treasury futures for rates, CDX or an ETF for spread beta), in **points per $\sqrt{\text{year}}$**. Chapter 8 is entirely about getting this number right.
 - P&L is measured in **\$mm·points**: one point on \$1mm of par is one unit, which is \$10,000. The risk aversion $\gamma$ is then in units of $1/(\$\text{mm}\cdot\text{pt})$.
 
+> **Math, Gently.** *What is a distribution, and what is a certainty equivalent?* Think of the desk's P&L over the next five days as a bag of possible outcomes, each written on a slip of paper, with more slips for the likelier outcomes. That bag is a **distribution**. Its **mean** is where the bag is centred: shake out every slip, add them up, divide by the number of slips. Its **variance** is how wide the bag is: the average squared distance of a slip from the mean, and the **standard deviation** is the square root of that, back in points. A **certainty equivalent** is the sure amount you would accept in exchange for the whole bag. A risk-averse desk will swap a bag for less than its mean, and the mean–variance rule says how much less: subtract $\tfrac12\gamma$ times the variance. A tiny number: a position with expected P&L of $+1.0$ and a standard deviation of $2.0$ (so variance $4$), held by a desk with $\gamma = 0.5$, has $\text{CE} = 1.0 - \tfrac12 \times 0.5 \times 4 = 0$. The desk is exactly indifferent between holding it and not; it would want to be paid something extra to take it on. That "paid extra" is the inventory term, and §1.3.2 computes it. Not every bag has the same shape. This chapter will meet the normal (many small wiggles), the lognormal (proportional wiggles that cannot go below zero), the Poisson (rare jumps), and the fat-tailed bags that real credit P&L comes in, and each gets its own box when it first appears.
+
 Assume the desk evaluates a position with a mean–variance certainty equivalent, $\text{CE}(X) = \mathbb{E}^{\mathbb{P}}[X] - \tfrac12\gamma\,\mathrm{Var}^{\mathbb{P}}(X)$. This is exact for exponential (CARA) utility with Gaussian P&L, and it is the standard first-order approximation otherwise (the "otherwise" is the Ways This Blows Up box below). Let $m = \mathbb{E}^{\mathbb{P}}[S_{t+h}\mid\mathcal{F}_t, \mathcal{O}_t]$ be the fair value **conditional on the fact that this RFQ arrived**. That conditioning is the whole game, and we will come back to it.
 
 ### 1.3.2 The inventory term
+
+> **Math, Gently.** *Pricing by indifference.* Here is a trick that runs through the whole book. You do not ask "what is this bond worth?" in the abstract. You ask: at what price would I feel exactly the same about doing the trade and not doing it? Below that price, you are happy to buy; above it, you would rather pass. To find it, write down how you feel about the world without the trade (your current inventory, with its risk), write down how you feel about the world with it (more inventory, more risk, less cash), and set the two equal. Everything that makes the second world worse, the extra variance in particular, gets charged to the seller as a lower bid. With the cold open's numbers ($\gamma = 0.02$, and $\sigma^2_{\text{IDO}}h = 1.270$ pt² over the five-day holding period), every \$mm the desk *already* holds costs $0.02 \times 1.270 \approx 0.025$ points of bid, because the new bonds will wobble together with the old ones. The \$15mm block costs half that per \$mm on itself, about $0.0127$ points per \$mm, or $0.19$ points in all, because a position's variance grows with the square of its size and you are only paying for the new part of the square. The full version is the derivation that follows.
 
 The desk is indifferent between not trading and buying $\Delta q$ at price $B$ when the certainty equivalents match. Holding $q + \Delta q$ until $t+h$ is worth $(q+\Delta q)\,m$ in expectation, costs $B\,\Delta q$ in cash today, and carries variance $(q+\Delta q)^2\sigma^2_{\text{IDO}}h$:
 
@@ -159,6 +165,8 @@ B^{\text{res}} \;=\; m \;-\; \tfrac12\,\gamma\,\sigma^2_{\text{IDO}}\,h\,(2q+\De
 $$
 
 Three things fall out immediately. First, the bid falls one-for-one in $q$: a desk that is already long is a worse buyer, by $\gamma\sigma^2_{\text{IDO}}h$ per \$mm of existing inventory. Second, the bid falls in the client's size, by $\tfrac12\gamma\sigma^2_{\text{IDO}}h$ per \$mm; this is the "block discount," and it is the term most often dropped by people who linearize too early. Third, letting $\Delta q \to 0$ gives the reservation mid $r^{\text{res}} = m - \gamma\sigma^2_{\text{IDO}}h\,q$, which is the Avellaneda–Stoikov reservation price with the trading horizon $T-t$ replaced by the expected holding period $h$. (The notation table reserves $r$ for interest rates, so the reservation price wears a superscript.) The same algebra for a client *buying* $\Delta q$ from us gives the ask $A^{\text{res}} = m' + \tfrac12\gamma\sigma^2_{\text{IDO}}h\,(\Delta q - 2q)$, where $m'$ conditions on a buy RFQ: a long desk is a keen seller.
+
+**When to reach for it, and when it breaks.** The inventory term is the most trusted piece of the bid, and it earns that trust in a particular kind of market. It works when the hedge is real and what is left after the hedge is small and roughly symmetric: an investment-grade bond with Treasury futures against the rates and CDX against the spread beta, or a liquid high-yield name that trades every day. In those markets the residual really does look like a bag of small wiggles, and charging for its variance is the right idea. It breaks in three places, and each of them has a chapter. It breaks when the residual is a jump rather than a wiggle: a distressed name in the week of a lender call, where the risk is not a wider bag but a trapdoor, and variance badly understates what you can lose (the Ways This Blows Up box below). It breaks when $h$ is not yours to choose: the formula assumes you can get out in about five days, and a bond that stops trading turns your five-day horizon into a five-month one with nobody asking your permission. And it breaks when inventory is not one bond but a book of correlated bonds, in which case the right variance is the book's, not the bond's (Chapters 8 and 28). Before trusting the term on any given afternoon, a seasoned trader checks three things: whether the composite mid behind $S_t$ is stale, whether the hedge can actually be executed at the size the formula assumes, and whether this name's $\sigma_{\text{IDO}}$ has been re-estimated since its last lender call.
 
 ### 1.3.3 The toxicity term: Bayes on the RFQ
 
@@ -319,39 +327,7 @@ The second question about the forced seller: *if the seller is not informed, wha
 
 *The edge case that bites.* `credit_triangle_check` will happily accept a physical, $\mathbb{P}$-measure EDF as `lam` and return a "spread." The number will be perfectly formatted and far too tight. The code cannot know which measure you meant; the spec must.
 
-<!-- EXPLAINED -->
-```python
-from scipy.integrate import trapezoid
-from scipy.stats import norm
-
-
-def distance_to_default(V, F, mu_V, sigma_V, T=1.0):
-    """Eq. (1.4): physical distance to default (unitless)."""
-    return (np.log(V / F) + (mu_V - 0.5 * sigma_V**2) * T) / (sigma_V * np.sqrt(T))
-
-
-def credit_triangle_check(lam=0.03, R=0.40, r=0.04, T=5.0, n=200_001):
-    """Numerically integrate both CDS legs (measure Q) and return the par spread."""
-    t = np.linspace(0.0, T, n)
-    disc_surv = np.exp(-(r + lam) * t)
-    prem_annuity = trapezoid(disc_surv, t)
-    protection = (1.0 - R) * trapezoid(lam * disc_surv, t)
-    return protection / prem_annuity
-
-
-dd = distance_to_default(V=150.0, F=100.0, mu_V=0.06, sigma_V=0.10)   # illustrative IG-like firm
-assert dd > 4.0 and norm.cdf(-dd) < 1e-4                               # Gaussian: 'immortal'
-assert abs(credit_triangle_check() - 0.03 * 0.60) < 1e-10              # s = lambda (1 - R)
-
-# One-factor threshold model: Monte Carlo default rate matches p; tails fatten with rho
-rng = np.random.default_rng(RNG_SEED + 1)
-p, rho, n_sims, n_firms = 0.02, 0.20, 20_000, 500
-Y = rng.standard_normal(n_sims)
-p_cond = norm.cdf((norm.ppf(p) - np.sqrt(rho) * Y) / np.sqrt(1.0 - rho))
-loss_frac = rng.binomial(n_firms, p_cond) / n_firms
-assert abs(loss_frac.mean() - p) < 4 * loss_frac.std() / np.sqrt(n_sims)
-assert np.quantile(loss_frac, 0.99) > 5 * p                            # herds, not coin flips
-```
+*The full python listing is [Listing 1.4 in Appendix F](#code-1-4).*
 
 ---
 
