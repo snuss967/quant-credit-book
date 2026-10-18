@@ -35,3 +35,9 @@ Replaced: "none cited ... see Cloud 9fin 'It Hertz you to see it' ... listed und
 Added: Octus EP 21 Sussberg (2025-12-10 feed; plan-negotiation context, line says it does not discuss warrants); Duke FinReg Blog on post-reorg equity (2021-09-17; dossier Ch 16 row, under Practitioner Writing).
 Shortfall: the dossier has no warrant-specific episode or post, so this graph carries 3 items (Hertz 9fin, Sussberg, Duke), one of them a re-use, rather than padding with items that do not fit. First sentence now says no warrant-pricing audio was verified.
 Kept: Hertz re-IPO release, Moyer p.373, Galai-Schneller, Merton, Geske, Third Circuit opinion, EDGAR.
+
+### Graph 5: end of 16.5 (claims)
+Replaced: "Podcasts: none cited." (no channel named) -> a candid "no claims-trading episode verified" line plus two adjacent episodes.
+Added: Cloud 9fin, "Unjustice for all" (2024-08-21 feed; dossier Ch 12B row); Money Stuff, "Blood Farming: Purdue Pharma, empty voting and frozen heads" (2024-07-12, fetched by me; the line warns that the empty-voting segment is about proxy fights, not claims); Troutman Pepper Locke, Creditor's Rights Toolkit, Chapter 11 life cycle Part I (2025; dossier Ch 12B row; I read the PDF, it covers the proof-of-claim bar date).
+Fit notes: all three are adjacent (plan limits and the claims calendar), because the dossier has no claims-trading podcast or post beyond the ABI column already in the chapter.
+Kept: Jones Day 503(b)(9), Decrypt FTX, ABI column, Ivashina-Iverson-Smith, Harvard Forum summary, statutes, CourtListener.

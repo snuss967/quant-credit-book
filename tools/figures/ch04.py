@@ -62,8 +62,8 @@ def fig_effective_breadth():
     ax.set_xlabel("Within-issuer residual correlation ρ")
     ax.set_ylabel("Effective breadth, as a share of bond count\n(BR$_{\\mathrm{eff}}$ / N)")
     ax.yaxis.set_major_formatter(lambda v, _: f"{v:.1f}")
-    ax.text(0.99, 0.085, "ρ = 0: every bond is a bet;  ρ = 1: one bet per issuer",
-            transform=ax.transAxes, fontsize=8, color=INK_2, ha="right", va="center", zorder=6)
+    ax.text(0.99, 0.905, "ρ = 0: every bond is a bet\nρ = 1: one bet per issuer", fontsize=8, color=INK_2,
+            ha="right", va="center", linespacing=1.35, zorder=6)
     return finish(fig, "ch04_effective_breadth")
 
 
@@ -106,10 +106,10 @@ def fig_truncation_bias():
     cut = u <= zq
     a.fill_between(u[cut], 0, f[cut], color=DIVERGING(0.82), zorder=2)
     a.fill_between(u[~cut], 0, f[~cut], color=SEQ_BLUE(0.12), zorder=1)
-    a.annotate("worst 1% of\nmonths deleted\n(u < −2.33)", (zq - 0.12, 0.010), xytext=(-3.95, 0.175),
-               ha="left", va="center", fontsize=8.3, color=INK,
+    a.annotate("worst 1%\nof months\ndeleted\n(u < −2.33)", (zq - 0.12, 0.010), xytext=(-3.95, 0.165),
+               ha="left", va="center", fontsize=8.3, color=INK, bbox=BACK,
                arrowprops=dict(arrowstyle="-", color=INK_2, linewidth=0.9, shrinkA=1, shrinkB=1))
-    a.text(0.0, 0.095, "what is left:\n99% of months", ha="center", va="center", fontsize=8.3, color=INK)
+    a.text(0.0, 0.07, "what is left:\n99% of months", ha="center", va="center", fontsize=8.3, color=INK)
     a.set_ylim(0, 0.43)
     a.set_xlim(-4, 4)
     a.set_yticks([0, 0.1, 0.2, 0.3, 0.4])
@@ -117,8 +117,8 @@ def fig_truncation_bias():
     a.set_ylabel("Density")
     a.yaxis.set_major_formatter(lambda v, _: f"{v:.1f}")
     # balance points, magnified on an inset: they sit only 0.027 sigma apart
-    ins = a.inset_axes([0.64, 0.56, 0.34, 0.28])
-    ins.set_xlim(-0.036, 0.058)
+    ins = a.inset_axes([0.63, 0.58, 0.365, 0.26])
+    ins.set_xlim(-0.034, 0.054)
     ins.set_ylim(0, 1)
     ins.grid(False)
     ins.set_yticks([])
@@ -129,7 +129,7 @@ def fig_truncation_bias():
     ins.plot([0.027], [0.16], "^", color=BLUE, markersize=8, clip_on=False, zorder=4)
     ins.text(0.004, 0.42, "before", ha="right", va="bottom", fontsize=8, color=INK_2)
     ins.text(0.023, 0.42, "after", ha="left", va="bottom", fontsize=8, color=INK_2)
-    ins.set_title("the mean, magnified (σ)", fontsize=8, color=INK_2, fontweight="normal", pad=3)
+    ins.set_title("the mean,\nmagnified (σ)", fontsize=8, color=INK_2, fontweight="normal", pad=3, linespacing=1.1)
 
     # (b) the manufactured premium against the fraction deleted
     qs = np.linspace(0.001, 0.05, 80)
@@ -311,8 +311,8 @@ def fig_empty_cells():
             ax.add_patch(Rectangle((j + gap, y + gap), 1 - 2 * gap, 1 - 2 * gap, facecolor=LEVEL_FILL[lv],
                                    edgecolor="none", zorder=2))
             if lv == X:
-                w = words.get(j, "silent")
-                ax.text(j + 0.5, y + 0.5, w, ha="center", va="center", fontsize=7.6 if len(w) < 9 else 6.9,
+                w = words.get(j, "silent").replace("not ", "not\n")
+                ax.text(j + 0.5, y + 0.5, w, ha="center", va="center", fontsize=7.8, linespacing=1.0,
                         color=INK_2, style="italic", zorder=3)
     for j, h in enumerate(COLS):
         ax.text(j + 0.5, -0.12, h, ha="center", va="bottom", fontsize=8.8, color=INK, linespacing=1.05)

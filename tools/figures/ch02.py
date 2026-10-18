@@ -68,7 +68,7 @@ def fig_trace_censoring_pareto():
         # the mean of the hidden blocks
         ax.plot([m, m], [0, s_mean], color=col, linewidth=0.9, linestyle=(0, (3, 3)), zorder=3)
         ax.plot([m], [s_mean], "o", color=col, markersize=5.5, zorder=5)
-        ax.annotate(f"mean of the hidden blocks:\n\\${m:g}mm = {m / cap:g} × the cap;\n"
+        ax.annotate(f"mean of the hidden blocks:\n${m:g}mm = {m / cap:g} × the cap;\n"
                     f"{100 * s_mean:.0f}% of capped prints\nare larger than that",
                     (m, s_mean), xytext=(0.42, 0.50), textcoords="axes fraction", ha="left", va="center",
                     fontsize=8.2, color=INK_2,
@@ -77,10 +77,10 @@ def fig_trace_censoring_pareto():
         ax.set_ylim(0, 1.05)
         ax.set_xticks(ticks)
         ax.set_title(name)
-        ax.set_xlabel("True trade size (\\$mm)")
+        ax.set_xlabel("True trade size ($mm)")
         note(ax, f"Pareto tail index α = {alpha:.2f} (below 2:\ninfinite variance)", loc="lower right")
         ax.yaxis.set_major_formatter(FuncFormatter(pct))
-    axs[0].set_ylabel("Share of capped prints larger than the size")
+    axs[0].set_ylabel("Share of capped prints larger")
     return finish(fig, "ch02_trace_censoring_pareto")
 
 
@@ -284,14 +284,14 @@ def fig_two_shocks_timeline():
 
     ev20 = [("2020-03-12", 4.95, "12 Mar: LQD closes 5.0% below NAV"),
             ("2020-03-23", 4.58, "23 Mar: Fed announces the SMCCF and PMCCF"),
-            ("2020-04-09", 4.21, "9 Apr: facilities expanded to up to \\$850bn with TALF"),
+            ("2020-04-09", 4.21, "9 Apr: facilities expanded to up to $850bn with TALF"),
             ("2020-05-12", 3.84, "12 May: first purchases, of ETFs"),
             ("2020-06-16", 3.47, "16 Jun: first purchases of bonds")]
-    ev25 = [("2025-04-07", 4.95, "7 Apr: US fixed-income ETFs trade a record \\$98.9bn at one-cent spreads"),
-            ("2025-04-08", 4.58, "8 Apr: \\$89.7bn of corporates trade, 12% by portfolio trade; LQD 0.22% below NAV"),
+    ev25 = [("2025-04-07", 4.95, "7 Apr: US fixed-income ETFs trade a record $98.9bn at one-cent spreads"),
+            ("2025-04-08", 4.58, "8 Apr: $89.7bn of corporates trade, 12% by portfolio trade; LQD 0.22% below NAV"),
             ("2025-04-09", 4.21, "9 Apr: prices per RFQ fall from 13.2 to 6.6; tariff pause that afternoon"),
             ("2025-04-16", 3.84, "within a week: back to 11.3 prices per RFQ"),
-            ("2025-04-30", 3.47, "30 Apr: about \\$92bn record day;\nportfolio trades 22.4% of IG")]
+            ("2025-04-30", 3.47, "30 Apr: about $92bn record day;\nportfolio trades 22.4% of IG")]
 
     fig, axs = new_figure((7.0, 6.1), nrows=2, sharey=True)
     for ax, (a, b), events, title, loc, fmt in (
