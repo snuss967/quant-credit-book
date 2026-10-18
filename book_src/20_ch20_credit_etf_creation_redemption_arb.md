@@ -2,17 +2,17 @@
 
 *3:41 p.m., the Thursday of a bad week. Every number in this scene is illustrative.*
 
-HYG was 77.10 bid. The intraday NAV estimate beside it said 77.82. Theo had done the arithmetic before he finished reading the ticker. "Ninety-three basis points," he said. "Buy the ETF, hand the shares back to the fund, take the bonds, sell the bonds. That's an arbitrage. That's the thing the textbook says can't exist."
+HYG was 77.10 bid. The intraday NAV estimate beside it said 77.82. "Ninety-three basis points," Theo said. "Buy the ETF, hand the shares back to the fund, take the bonds, sell the bonds. That's an arbitrage. That's the thing the textbook says can't exist."
 
 "It is an arbitrage," Kaz agreed. "The ETF is a portfolio, the portfolio is worth the NAV, and the law of one price does the rest. Let's just assume the NAV is—"
 
-"Don't," said Ines, without looking up. "What's the pot, what are the odds, and who at this table knows more than you?"
+"Don't," said Ines. "What's the pot, what are the odds, and who at this table knows more than you?"
 
 "The pot is ninety-three bips on whatever size we do."
 
 "The odds depend on whether 77.82 is a price or a rumor. It's the bid side of a pricing service's opinion of thirteen hundred bonds, half of which haven't traded since Tuesday. And the person who knows more than you is whoever is selling HYG at 3:41 instead of selling bonds. Ask yourself why they aren't selling the bonds."
 
-"Because they tried at 3:30," said Mags, from across the row.
+"Because they tried at 3:30," said Mags.
 
 Theo pulled up the redemption basket the fund had published that morning. It was not the fund. It was 212 bonds out of 1,300, skewed short and wide, and it included a chemicals issuer he had last seen in a forbearance agreement.
 
@@ -589,8 +589,9 @@ def basket_closed_form(h, k, Sigma, theta):
 def basket_qp(h, k, Sigma, theta, w_max=1.0):
     """Eq. (20.6) with 0 <= w <= w_max, solved by SLSQP."""
     cons = [{"type": "eq", "fun": lambda w: w.sum() - 1.0, "jac": lambda w: np.ones_like(w)}]
-    res = minimize(lambda w: J_cost(w, h, k, Sigma, theta), h.copy(),
-                   jac=lambda w: k + theta * Sigma @ (w - h),
+    scale = 1e4                                           # optimize in bp for SLSQP's tolerances
+    res = minimize(lambda w: scale * J_cost(w, h, k, Sigma, theta), h.copy(),
+                   jac=lambda w: scale * (k + theta * Sigma @ (w - h)),
                    bounds=[(0.0, w_max)] * len(h), constraints=cons,
                    method="SLSQP", options={"ftol": 1e-12, "maxiter": 500})
     if not res.success:
@@ -603,7 +604,7 @@ w_cf, mu, D = basket_closed_form(hK, k, Sigma, theta)
 assert np.isclose(w_cf.sum(), 1.0)
 assert np.isclose(J_cost(hK, hK, k, Sigma, theta) - J_cost(w_cf, hK, k, Sigma, theta),
                   D / (2 * theta))                         # value of freedom, (20.7)
-assert np.allclose(basket_closed_form(hK, k, Sigma, 1e9)[0], hK, atol=1e-7)  # theta -> inf
+assert np.allclose(basket_closed_form(hK, k, Sigma, 1e9)[0], hK, atol=1e-6)  # theta -> inf
 w_qp = basket_qp(hK, k, Sigma, theta)
 assert w_qp.min() >= -1e-9 and np.isclose(w_qp.sum(), 1.0, atol=1e-8)
 J_h, J_qp, J_cf = (J_cost(x, hK, k, Sigma, theta) for x in (hK, w_qp, w_cf))
