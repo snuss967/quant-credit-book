@@ -26,4 +26,8 @@
 - Cast bible !C1: Ch 6's cold open is dated Thu 9 Mar 2023 and is not yet labelled as a replay; Ch 6 §6.8.1 still says "Theo, who was in college in 2009" and "fifteen years" (cast bible canon: "in middle school in 2009", "eighteen"). Outside this fix list.
 - S&P Market Signal PD figures (§6.4.4 "What the structural model saw") remain hedged as "as reported by the vendor in a blog post; figures not independently verified".
 
+- Template paragraphs not on the fix list (lesson 4): §6.5.2 "When to reach for a barrier, and when it breaks" and §6.6.3 "When to reach for intensities, and when they break" ("They break in two ways... The first... The second... The first check a seasoned practitioner makes"); the §6.11 listing explanations open six paragraphs with "Use it for / Use the..." and "The edge case that bites" (lesson 12). Recast as scenes in a later pass; the Finder table now carries the rules.
+- §6.10.1 Carvana still has a recap after Beat 5 ("Here are the facts again, compressed" + **The facts.**), the same pattern P1 removed from SVB; §6.9.3 First Brands answers its decision point in the same paragraph that poses it (lesson 9).
+- Cast bible !C7: §6.5.1 has Kaz "reading a revolver term sheet for the first time" and misreading "springing lien" as seasonal; canon makes that a Ch 3 first, so Ch 6 should be a callback Kaz pre-empts.
+
 <!-- STATUS: COMPLETE -->

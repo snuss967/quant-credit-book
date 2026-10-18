@@ -60,9 +60,19 @@ Six movements matter for the figure build and for Appendix C. Each is stated wit
 | 2025; 2025-01 | Greenwich: IG e-share just under 50%, HY 32%; ADNV $51bn; trade size $398k; 128,141 trades/day; disclosed RFQ 38.6%. January 2025: IG 47%, HY 33%, PT 18% of e-volume (13% a year earlier). Underlying series are sold (MarketView) | The DESK, 2026-01-30; Greenwich PDF |
 | 2025-02 to 2025-12 | SG Trend monthly (TTU): -3.19, -1.67, -4.89, -2.22, +1.52, -0.04, +2.74, +5.73, +1.41, +1.37, +1.92%; FY +2.39%. Compounding reproduces the reported YTD to 0.02pp; January 2025 implied +0.14% (derived) | TTU monthly reports |
 | 2026-02 to 2026-10 | SG Trend 2026: Feb +3.90, Apr +2.85, May +0.26, Jun -1.17, Jul -1.12, Aug +2.94%; YTD +11.07% (Aug), +16.14% (9 Oct), +14.97% (16 Oct); Jan and Mar pages 404; implied September about +4.3% (derived, CHECK); TTU Barometer 36 on 16 Oct | TTU reports and weekly reviews |
-| 2022-03; 2023-03; 2024-05 | SG Trend stress anchors: +9.90%, -7.69% (YTD -7.27%), -2.18% (YTD +11.82%). A full 2022-2024 table was not extractable; SG's own site (bot wall) and BarclayHedge (paid redirect) give no free CSV | TTU reports; curl tests |
+| 2022-03; 2023-03; 2024-05 | SG Trend stress anchors: +9.90%, -7.69% (YTD -7.27%), -2.18% (YTD +11.82%). The 2022-2024 monthly table is in the next three rows; SG's own site (bot wall) and BarclayHedge (paid redirect) give no free CSV | TTU reports; curl tests |
+| 2022-01 to 2022-12 | SG Trend monthly as stated in TTU report prose: +3.32, +3.61, +9.90, +7.06, +0.82, +2.85, -4.28, +4.06, +5.78, -0.11, -5.96, -0.25%; reported YTD +29.2 (Jun), +23.79 (Jul), +36.1 (Sep), +27.3 (Dec). The twelve stated months compound to +28.9%, not +27.3%, and Jan-Jun compound to +30.6% against +29.3% implied by the July YTD; TTU's May page says YTD "9.7%" (typo: Jan-May compounds to +27.0%). Treat 2022 monthly values as CHECK | TTU "Trend Following Performance Report" pages Jan-Dec 2022, computed |
+| 2023-01 to 2023-12 | SG Trend monthly as stated: -1.37, +1.85, -7.69, +2.89, +3.32, +1.85, -1.60, -0.95, +3.64, +0.12, -4.87, -0.32%; Dec YTD -4.16%. Months implied by the reported YTD path differ for May (+3.23), Jun (+1.94), Sep (+3.39) and Oct (-0.10, a sign change); all other months match to 0.01pp. Use the YTD-implied values; CHECK against SG | TTU reports Jan-Dec 2023, computed |
+| 2024-01 to 2024-12 | SG Trend monthly as stated: +1.18, +6.45, +4.19, +1.85, -2.18, -2.68, -2.41, -4.51, +0.98, -4.30, +3.27, +1.40%; Dec YTD +2.42%. YTD-implied Jan +1.19, Jun -2.80, Nov +3.31, Dec +1.29; the rest match. Whole of 2024 reproduces to 0.2pp | TTU reports Jan-Dec 2024, computed |
+| 2025-01 | TTU's January 2025 page quotes three intramonth SG Trend snapshots (+1.06%, +0.85%, -0.21% MTD) and no month-end figure; the March YTD (-4.67%) with Feb -3.19% and Mar -1.67% implies January +0.14% CHECK | TTU January 2025 report, computed |
+| 2026-10-18 | URL probes with curl through the proxy: all FRED graph-CSV and series pages, Fed ebp_csv.csv, FSR PDF and accessibility-tables page, FINRA workbooks, Fact Book and About-TRACE pages, SEC exhibits (MarketAxess, Tradeweb), iShares HYG and LQD pages, eCFR, NY Fed pd API and TTU report pages return HTTP 200; investor.marketaxess.com/volume returns a Cloudflare "Just a moment" 403 to curl (workbook parsed from the copy fetched earlier in the run) | curl status checks, 2026-10-18 |
 | 2015-01-07 to 2026-10-07 | NY Fed primary dealers, eight weekly series PDPOSCSBND-{L13,G13,G5L10,G10,BELL13,BELG13,BELG5L10,BELG10}: IG+HY net annual mean $16.1bn (2017), $8.0bn (2024), $1.3bn (2025), -$2.3bn (2026 YTD; IG -$4.9bn, HY +$2.6bn); low -$11.3bn (2026-02-25); latest -$1.5bn; 56 of 614 weeks negative. Appendix C's "about $4bn net short" matches IG alone CHECK | NY Fed API, computed |
 | 2026-10-18 | Repo scan: 102 line-start Trend Watch boxes in `book_src` against 74 in the digest and in Appendix C; about 323 day-level dates (mean 3.2 per box), 10 boxes cite FRED, 23 carry "approx.", 6 CHECK. Appendix C already specifies `trend_tracker.csv`; no extractor script exists in `tools/` | book_src, state/digests |
+| 2026-10-15 | Constant-mix check recomputed from a fresh pull: BB 1.97, B 3.26, CCC 12.78, HY 3.23. At the December 2024 weights (53.4/34.0/12.6) the HY OAS would be 377bp; at April 2024 weights 371bp; at October 2026 weights 326bp (actual 323bp, a 3bp identity error). CCC/HY ratio 3.96. Window max 4.61% (2025-04-07), min 2.59% (2025-01-22) reproduced | FRED fredgraph.csv pulls, 2026-10-18 |
+| 2025-06-02 | Fridson's article gives 360bp on 2019-12-31 and 1,087bp on "March 23, 2023" in one sentence and March 23, 2020 as the maximum-OAS date later; the 2023 is an internal slip, and the figure caption must say 2020 CHECK. Also confirmed: 53.55% BB on 17 April 2025, 44.53% average 31 Dec 1996 to 31 Dec 2024, face $1.4tn "unchanged from 10 years earlier", +2,147bp peak in 2008-09 | CFA Institute Enterprising Investor (via rpc.cfainstitute.org redirect) |
+| 2022-12 | MacKay Shields (New York Life Investments), as quoted in a search snippet: ICE BofA US HY Index 51% BB on a par-value basis at end-2022 against 43% at end-2011, CCC down to 11%; the page itself returned 404 on re-fetch, so par-weight, not market-value-weight, and unverified CHECK | WebSearch snippet, nylim.com page 404 |
+| 2025-12-31 | Chapter 12's composition-adjustment inputs reproduce on FRED: HY 2.81%, BB 1.69, B 3.01, CCC 8.85, IG 0.79; 2025-04-30 HY 3.94% (the month-end that hides the 4.61% intraperiod peak). The chapter's illustrative 2025 mix (53/36/11) gives 295bp against 281bp actual; the regression-implied December 2025 mix (55.4/34.3/10.3) gives 288bp, closer. The FRED CSV header is `observation_date,<ID>` (not DATE) and 8 of the 794 HY OAS rows are blank holidays | FRED pulls; book_src/12_ch12 lines 59, 171 |
+| 2013-04-03 to 2026-10-07 | NY Fed pd API returns `{"pd":{"timeseries":[{"asofdate","keyid","value"}]}}` with `value` as a string in $mm (first L13 value 3111 on 2013-04-03 = $3.1bn) | markets.newyorkfed.org API, fetched 2026-10-18 |
 <!-- ROWS-END -->
 
 ## 3. Narrative: drivers and the 2026-2028 outlook
@@ -91,7 +101,60 @@ My read is that the equilibrium is a desk-owned archive plus a spread built from
 
 ## 5. Quant hooks (variables, datasets, signals)
 
-(pending)
+**Variables, with identifiers and the licence risk that goes with each.** Names are the column names a `figure_series.csv` should carry; the Appendix B atlas row can be generated from the same table.
+
+| variable | definition | identifier / URL pattern | free window | note |
+|---|---|---|---|---|
+| `hy_oas`, `bb_oas`, `b_oas`, `ccc_oas`, `ig_oas`, `bbb_oas` | ICE BofA option-adjusted spreads, % | FRED BAMLH0A0HYM2, BAMLH0A1HYBB, BAMLH0A2HYB, BAMLH0A3HYC, BAMLC0A0CM, BAMLC0A4CBBB | rolling 3 years (794 rows to 2026-10-15) | "internal use only"; archive daily |
+| `hy_tr`, `bb_tr`, `b_tr`, `ccc_tr`, `ig_tr` | total-return index levels | BAMLHYH0A0HYM2TRIV, ...A1BBTRIV, ...A2BTRIV, ...A3CMTRIV, BAMLCC0A0CMTRIV | rolling 3 years | the guessed ID BAMLH0A0HYM2TRIV does not exist |
+| `baa10y`, `dgs10`, `dgs2`, `vix` | Moody's Baa less 10y; Treasury CMT; VIX close | BAA10Y, DGS10, DGS2, VIXCLS | 1986, 1962, 1976, 1990 to date | no window; safe long axis |
+| `gz_spread`, `ebp`, `est_prob` | Gilchrist-Zakrajsek spread, excess bond premium, implied recession probability | federalreserve.gov/econres/notes/feds-notes/ebp_csv.csv | 1973-01 to 2026-09, monthly | Board product, no licence issue |
+| `w_bb`, `w_b`, `w_ccc` | implied ICE HY market-value weights | author regression on the four HY total-return series, 126-day window | 2024-04 onward (limited by the window) | standard error about 0.2pp; not an ICE-published weight |
+| `prem_hyg`, `prem_lqd` | close less NAV, % of NAV | embedded `premiumDiscountChartData` on the iShares pages | 2025-01-02 to date, until the Rule 6c-11 roll in 2027 | archive monthly; flag bond-holiday sessions |
+| `trace_ats_par_share`, `trace_corp_par_day` | ATS share of corporate par; average daily par, $bn | cdn.finra.org/trace/volume/monthly/TRACE_Public_Monthly_Report_YYYY-MM.xlsx | 2017-01 to 2026-09 | sell-side definition; RFQ trades land in "Customer" |
+| `mkt_ot_share`, `mkt_hg_share_trace` | Open Trading % of MarketAxess credit volume; MarketAxess HG ADV over FINRA HG TRACE ADV | MarketAxess monthly workbook | 2018-01 to 2026-06, now frozen | restated retrospectively; denominator changes in 2021-07 and 2026-03 |
+| `tw_fe_hg`, `tw_fe_hy`, `tw_total_hg` | Tradeweb share of US TRACE, fully electronic and total | quarterly 8-K Ex-99.1 | 4Q22 (HG), 1Q22 (HY) to 2Q26 | quarterly, restated by about 10bp |
+| `pt_share` | portfolio trading as % of corporate volume | three vantage points (MarketAxess, Morgan Stanley, Greenwich) | sparse | always store the denominator as a text column |
+| `sg_trend_m` | SG Trend Index monthly return, % | TTU monthly reports (secondary) | 2022-01 to 2026-08 | cross-check by YTD; 2022-23 carry CHECK |
+| `pd_net_ig`, `pd_net_hy` | primary-dealer net corporate position, $mm | NY Fed API PDPOSCSBND-* | weekly from 2013 (IG) and 2015 (all eight) | state the perimeter in the caption |
+
+**A script stub (not run; for the figure build).** It encodes the three gotchas found this session: one series per request, a header and row-count assertion so a silently shortened window raises, and a dated archive so history accrues locally.
+
+```python
+import csv, io, datetime as dt, pathlib, urllib.request
+
+FRED = "https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}"   # one id per call; cosd applies to the first id only
+MIN_ROWS = {"BAMLH0A0HYM2": 700, "BAA10Y": 10000}                 # fail loudly if the window shrinks or grows unexpectedly
+
+def pull(sid, root="archive/fred"):
+    raw = urllib.request.urlopen(FRED.format(sid=sid), timeout=40).read().decode()
+    if not raw.startswith("observation_date," + sid):               # a wrong id returns HTML, not CSV
+        raise ValueError(f"{sid}: not a FRED CSV: {raw[:60]!r}")
+    rows = [r for r in csv.reader(io.StringIO(raw))][1:]
+    rows = [(d, float(v)) for d, v in rows if v not in ("", ".")]    # holidays are blank
+    if len(rows) < MIN_ROWS.get(sid, 100):
+        raise ValueError(f"{sid}: only {len(rows)} rows; window changed?")
+    out = pathlib.Path(root) / f"{sid}_{dt.date.today():%Y%m%d}.csv"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text("date,value\n" + "\n".join(f"{d},{v}" for d, v in rows))
+    return rows                                                      # first date is 2023-10-17 today and rolls daily
+
+def implied_weights(r_hy, r_bb, r_b, r_ccc):
+    """126-day constrained least squares: r_hy = w_bb*r_bb + w_b*r_b + w_ccc*r_ccc, w >= 0, sum(w) = 1."""
+    ...  # scipy.optimize.minimize with SLSQP; report the standard error of each weight
+```
+
+**Tables that can be written as CSV today.** Each has a verified source in section 2: `sg_trend_monthly.csv` (date, return_pct, ytd_reported_pct, ytd_implied_return_pct, flag; 2022-01 to 2026-08); `trace_corp_monthly.csv` (month, par_mm, trades, ats_par, interdealer_par, customer_par; 117 rows); `mkt_platform_quarterly.csv` (quarter, ot_share, hg_adv, hy_adv, trace_hg_adv, trace_hy_adv, pt_adv); `tw_share_quarterly.csv` (quarter, fe_hg, fe_hy, total_hg, total_hy; 4Q22 to 2Q26); `etf_premium_daily.csv` (date, ticker, premium_pct; 448 x 2 rows, to be archived before 2027); `ice_weights_implied.csv` (date, w_bb, w_b, w_ccc, se); `trend_tracker.csv` for Appendix C, whose columns already exist in the specification, with a regex extractor over `book_src/*.md` for the 102 line-start Trend Watch boxes and their about 323 day-level dates (an `approx` column from the 23 "approx." flags and a `check` column from the 6 CHECK flags).
+
+**Signals and features these series make possible.**
+1. *Composition-adjusted spread.* `oas_adj(t) = sum_k w_k(ref) * s_k(t)` with the reference weights frozen at a named date, and `composition_effect = oas - oas_adj`. On 15 October 2026 the effect against December 2024 is -54bp (323 against 377). Standardize `oas_adj`, not `oas`.
+2. *CCC-to-HY ratio.* 3.96 now, 2.28 on 17 October 2023, 2.44 on 8 April 2025. A rising ratio with a flat headline OAS is the index-composition signature of weak tails inside a tight average.
+3. *Premium z-score with a calendar mask.* `z = (prem - mean) / sd`, estimated off sessions where NYSE was open and SIFMA was closed. The three holiday sessions in the sample have means of +0.37% (HYG) and +0.27% (LQD) against +0.135% and +0.038% overall.
+4. *Platform share with a denominator flag.* Store `denominator in {FINRA_capped, FINRA_uncapped, company_estimate}` and a break dummy for 2021-07 (ATS double-report fix) and 2026-03 (affiliate duplicates).
+5. *Long-axis anchor.* GZ and EBP for 1973 to date; the Baa-10y spread for 1986 to date. These supply regime labels (EBP 3.41 in October 2008 against -0.39 in September 2026) that the ICE window cannot.
+6. *Lead-lag.* HY OAS peaked on 7 April 2025 and the VIX on 8 April; a one-day lead on a single episode is an anecdote, but the daily series are free to test on every episode of the window.
+7. *Dealer inventory.* `pd_net_ig + pd_net_hy` at -$1.5bn in the latest week, with 56 of 614 weeks negative; the sign flips of 2026 are the cleanest free proxy for dealer balance-sheet retreat.
+8. *Crowding.* TTU Trend Barometer 36 on 16 October 2026 beside SG Trend YTD +14.97%: a trend-following sleeve that is up 15% and cold at once is where the book's Chapter 10 should look first.
 
 ## 6. TOC proposals
 
