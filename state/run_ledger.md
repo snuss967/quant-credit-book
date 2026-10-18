@@ -99,4 +99,4 @@ All workflows were stopped to protect the user's 97% cap. On disk at the pause:
 - PARTIAL: 04_ch04b, 07_ch07b, 12_ch12b, and 4 dossiers.
 - MISSING: the synthesis and 6 dossiers.
 
-The resume checklist is in state/continuation_prompt.md, and a resume is scheduled for 04:35 UTC.
+The resume checklist is in state/continuation_prompt.md, and a resume is scheduled for 04:17 UTC (user-set: 2h40m after 01:37 UTC).

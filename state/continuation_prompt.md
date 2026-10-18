@@ -130,7 +130,7 @@ Acceptance: every chapter's Python runs clean; `state/reviews/ed2/code_ledger.md
 3. Edition 3 planning inputs exist: `state/reviews/ed2/*`, updated `state/exploratory_space.md`, writer returns consolidated.
 
 
-## Resume Checklist (paused 2026-10-18 01:30 UTC at ~92% usage; resume after the 04:30 UTC reset)
+## Resume Checklist (paused 2026-10-18 01:30 UTC at ~92% usage; scheduled restart 04:17 UTC)
 
 Run `python3 tools/status.py` first. Workflow scripts live in ~/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/.
 1. **Synthesis and new chapters.** The three reader-lens reviews are COMPLETE in state/reviews/ed2/. Resume the reader-lens workflow so the cached reviews replay and the Fable synthesis runs live, followed by the 4 Opus writers: `Workflow({scriptPath: ".../ed2-reader-lens-reviews-wf_aa7ed3ed-60e.js", resumeFromRunId: "wf_aa7ed3ed-60e"})`.
