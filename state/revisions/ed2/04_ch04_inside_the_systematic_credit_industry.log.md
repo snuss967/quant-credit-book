@@ -4,7 +4,7 @@
 - [x] 2. [§4.1 The Five Businesses] LIST-TO-NARRATIVE + ANOTHER-SEAT (Ares/BlueCove vs ARCC) — five creditors of fictional retailer; Ares two-seats box added.
 - [x] 3. [§4.1, end] SHOP-LIFE vignette (security master, exchange-offer CUSIPs) — packaging-co exchange, 19 mismaps, vendor issuer_id call, Man paraphrase.
 - [x] 4. [§4.2 Why Credit Lagged] BRIDGE + AUM Trend Watch — existing box augmented (Man \$14.7→42.7bn); Mags paradox scene added.
-- [ ] 5. [§4.3 Six-Axis Map, six questions] LIST-TO-NARRATIVE
+- [x] 5. [§4.3 Six-Axis Map, six questions] LIST-TO-NARRATIVE — six headers discovered from Man p.31, Man23 p.3, Dynkin p.207, BlackRock p.3.
 - [ ] 6. [§4.3 Scoring the breadth column] MATH-GENTLY x3 + FULL-DERIVATION + WHEN-TO-APPLY
 - [ ] 7. [§4.4 Value Q vs P] MATH-GENTLY + ANOTHER-SEAT (Apollo) + WHEN-TO-APPLY
 - [ ] 8. [§4.4 cross-sectional neutralization] MATH-GENTLY (residuals/handicap)

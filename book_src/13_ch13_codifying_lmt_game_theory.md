@@ -752,6 +752,16 @@ What the engine cannot do is choose its own inputs. Theo's whiteboard reproduced
 
 "You've told me how much I lose if I'm dealt out," says Ines. "Now tell me how often the dealer deals."
 
+Theo's first answer is a banker's answer: it depends on the company, the sponsor, the advisors, and whether anyone has called sponsor counsel yet. Ines wants a trader's answer, a number per name per year that can be compared across the book on a Monday morning without anyone reading a credit agreement. Kaz has an answer that sounds like neither.
+
+"Every loan has a clock on it," Kaz says. "It clicks when somebody does an LMT. We can't see the clock. We can see what the loan looked like each time it clicked."
+
+Theo pulls up what there is to see. Roe and Rotaru hand-collected 89 coercive LMEs. Priya's list from §13.6 has about 1,500 loans in the desk's universe. The documents that produced most of the 89 were written before anyone had heard of a Serta blocker, and the documents the desk is pricing were written after.
+
+"Eighty-nine," says Mags. "In my day we'd have called that a war story, not a dataset."
+
+She is not wrong, and the section is built around her objection. It needs three ideas, each of them small: a hazard, to say exactly what "how often" means; a logistic link, to turn a row of features into a probability; and a prior, to stop 89 examples from saying something absurd.
+
 **From hazard to a fixed-horizon score.** The template is the proportional-hazards model Bohn and Stein use for default (Bohn_Stein_Active_Credit_Portfolio_Management p.233), applied to the LMT event:
 
 $$
@@ -759,21 +769,15 @@ $$
 \text{PRS}_i(t, h) = 1 - \exp\!\Big(-\int_t^{t+h} \lambda^{\text{LMT}}_i(u)\,du\Big) \in [0,1].
 $$
 
+> **Math, Gently.** *Hazard rates and the Poisson clock.* A hazard rate is the speed of a clock that clicks at random. Picture a Geiger counter on the desk, pointed at one loan, where each click is an LMT. Its hazard is the number of clicks per year you would expect if the counter held its speed. Clicks in a window follow the **Poisson** distribution: if you expect $H$ clicks over the year, the chance of exactly $k$ is $e^{-H}H^k/k!$, and in particular the chance of no click at all is $e^{-H}$. That is the survival probability, and one minus it is the PRS, the chance of at least one click. For a counter at steady speed $\lambda^{\text{LMT}}$, the wait until the first click is **exponential**, with mean $1/\lambda^{\text{LMT}}$, and it is memoryless, which is a polite way of saying that a loan nobody has primed for three years is not "due." Tiny number: a one-year PRS of 10% means $e^{-H} = 0.90$, so $H = -\ln 0.9 \approx 0.105$, a counter expected to click 0.105 times a year; held at that speed, the average wait would be about 9.5 years. The proportional-hazards model says the counter's speed is a baseline $\lambda_0(t)$ times $e^{\beta^{\top}x}$, so each feature turns a dial, and a coefficient of 0.69 doubles the speed, since $e^{0.69} \approx 2$. When the speed changes over time, "expected clicks" becomes the integral of the hazard in the formula above, which is all that integral means. Mags's clock from §13.1 is the same kind of counter, attached to a company after its LMT and clicking much faster. The full version, with intensities that are themselves random, is in §6.6 and §7-B.4.
+
 ($\lambda^{\text{LMT}}$ carries a superscript because $\lambda_t$ is reserved for default.) With roughly a hundred observed LMTs (Roe and Rotaru hand-collected 89 coercive ones), a time-varying baseline is a luxury. Fit at a fixed horizon $h = 1$ year with a logistic link on standardized features $z_i$: $\text{PRS}_i = \sigma(\beta_0 + \beta^{\top} z_i)$, $\sigma(u) = 1/(1+e^{-u})$. For small probabilities $1 - \exp(-e^{u}) \approx e^{u} \approx \sigma(u)$, so the logistic and the Cox model agree in the region where the desk lives.
 
-**Priors, because 89 is not a sample size.** Put $\beta \sim \mathcal{N}(\beta^{\text{prior}}, \tau^2 I)$ on the slopes and a Beta$(a,b)$ prior on the base rate $\pi_0 = \sigma(\beta_0)$, the base-rate framing of Bohn–Stein p.447. In $\beta_0$-space, including the Jacobian, that prior has log density $a \ln \sigma(\beta_0) + b \ln(1 - \sigma(\beta_0))$. The MAP estimate is
+> **Math, Gently.** *The logistic link.* A regression produces a score that can be any number, $-3$ or $+7$; a probability has to live between 0 and 1. The logistic function $\sigma(u) = 1/(1+e^{-u})$ is the squasher. Large negative scores come out near 0, large positive ones near 1, and a score of 0 comes out as exactly one half. Run it backwards and you get the log-odds, $\ln\big(p/(1-p)\big)$, so a logistic regression is a straight line drawn in log-odds. Tiny number: a score of $u = -2.2$ gives $\sigma = 1/(1 + e^{2.2}) \approx 1/10.0 = 10.0\%$. Feed the same score to the Poisson clock as a speed, $e^{-2.2} \approx 0.111$ expected clicks, and it says $1 - e^{-0.111} \approx 10.5\%$. At $u = -3$ the two say 4.7% and 4.9%. At $u = 0$ they say 50% and 63%, thirteen points apart, but a loan with a coin-flip chance of being primed this year has bigger problems than the choice of link. Below about 10%, where nearly every name on the desk sits, the logistic and the clock tell the same story. The full version, with calibration, is in §7-B.3.
 
-$$
-\hat\beta = \arg\max_{\beta}\; \sum_{i=1}^{n}\big[y_i \eta_i - \ln(1 + e^{\eta_i})\big] - \frac{\lVert \beta_{1:k} - \beta^{\text{prior}} \rVert^2}{2\tau^2} + a \ln \sigma(\beta_0) + b \ln\!\big(1 - \sigma(\beta_0)\big), \qquad \eta_i = \beta_0 + \beta_{1:k}^{\top} z_i .
-$$
+**Priors, because 89 is not a sample size.** Mags's objection has a formal answer, and it is to say in advance what the desk believed before the data arrived. Put $\beta \sim \mathcal{N}(\beta^{\text{prior}}, \tau^2 I)$ on the slopes and a Beta$(a,b)$ prior on the base rate $\pi_0 = \sigma(\beta_0)$, the base-rate framing of Bohn–Stein p.447. The maximum a posteriori (MAP) estimate is the coefficient vector that best balances the logistic likelihood against both priors, and two consequences carry all the intuition. The intercept's first-order condition says that the mean fitted PRS equals the observed event rate plus a correction of order $\max(a,b)/n$, so the base-rate prior nudges the level and does not overrule it. And each fitted slope is, to a good approximation, a weighted average of the prior's slope and the maximum-likelihood estimate (MLE), with the weight set by how much information the data carry relative to $1/\tau^2$. The boundary conditions are the sanity checks: as $\tau \to \infty$ the prior vanishes and the fit returns the MLE; as $\tau \to 0$ the data vanish and the fit returns the prior. The code tests both limits. The objective, the first-order condition and the shrinkage matrix are written out in "The Full Derivation: the MAP estimate and its two limits" at the end of this section.
 
-The first-order condition in $\beta_0$ says exactly what the base-rate prior does: $\sum_i (y_i - \hat p_i) + a(1 - \sigma(\hat\beta_0)) - b\,\sigma(\hat\beta_0) = 0$, so the mean fitted PRS equals the observed event rate plus a correction of order $\max(a,b)/n$. For the slopes, a quadratic expansion of the log-likelihood around the MLE (information matrix $H$) gives the shrinkage form
-
-$$
-\hat\beta_{1:k} \approx \Lambda\,\beta^{\text{prior}} + (I - \Lambda)\,\hat\beta^{\text{MLE}}, \qquad \Lambda = (H + \tau^{-2} I)^{-1}\tau^{-2},
-$$
-
-with boundary conditions $\tau \to \infty \Rightarrow \Lambda \to 0$ (the MLE) and $\tau \to 0 \Rightarrow \Lambda \to I$ (the prior). The code tests both limits.
+> **Math, Gently.** *The Beta prior, and shrinkage as a dial.* A **Beta** distribution is a histogram over a probability itself. Instead of saying "the base rate of LMTs is 10%," it says how sure you are of that. Beta$(a, b)$ behaves as if you had already seen $a$ events and $b$ non-events before the real data arrived, and its mean is $a/(a+b)$. Tiny number: $a = 2$, $b = 18$ says "10%, about as sure as twenty observations would make you." Now add real data, say 90 events in 1,000 borrower-years *(illustrative)*. The updated estimate is $(2 + 90)/(20 + 1{,}000) \approx 9.02\%$, against 9.0% from the data alone: twenty imaginary observations barely move a thousand real ones, which is the "correction of order $\max(a,b)/n$." Take instead 30 borrower-years with 9 events. The data say 30%; the prior pulls the estimate to $(2+9)/(20+30) = 22\%$. When data are thin, the prior pulls hard. That pull is shrinkage, and it is a dial, not a fog. The Gaussian prior on each slope works the same way, with $\tau$ as the knob: a large $\tau$ says "I barely believe my prior" and returns the data's answer, a small $\tau$ says "I barely believe my data" and returns the prior's, and every fitted slope lives somewhere in between. The listing's default, Beta$(2, 38)$, is a 5% base rate held with the confidence of forty observations. Beta distributions return as models of recovery in §5.5; the full version of this one is in "The Full Derivation" below.
 
 > **[SOURCE EXTRACTION]** *Bohn_Stein_Active_Credit_Portfolio_Management p.447:* "the Bayesian approach answers the question, “Given that I know that I have already observed zero defaults, what is the highest probability of default that I could expect with 95 percent certainty?”"
 >
@@ -788,6 +792,24 @@ $$
 and the quote is approximately $P \approx P_{\text{no-LMT}} - 100\cdot\text{EPL}_i - \text{risk premium}$, in points. The last factor comes from §13.3 (or §13.6 for a drop-down), the third from the knapsack of §13.4, the second from the co-op state of §13.5. **Measure discipline:** PRS is a $\mathbb{P}$-forecast of an event. The price impact is $\mathbb{Q}$-flavoured, because the marginal holder is averse to exactly this jump, and the *Serta* damages award shows a court measuring it with a market price. Never calibrate PRS to prices; regress price residuals on EPL and call the slope the premium.
 
 > **Ways This Blows Up.** *Separation.* On the training data, `loan_px < 80` and `runway_months < 9` together nearly separate events from non-events. An unpenalized logistic responds by sending those coefficients toward infinity and reporting a PRS of 1.000 for every distressed name, which is confident and useless. The Gaussian prior keeps $\hat\beta$ finite. The prior's most important covariate is Theo's 13-week model, reborn as `runway_months`: the spreadsheet he carries for emotional support is now the only thing standing between the desk and an infinite coefficient.
+
+#### The Full Derivation: the MAP estimate and its two limits
+
+**The objective.** In $\beta_0$-space, including the Jacobian, the Beta$(a,b)$ prior on $\pi_0 = \sigma(\beta_0)$ has log density $a \ln \sigma(\beta_0) + b \ln(1 - \sigma(\beta_0))$. With the Gaussian prior on the slopes, the MAP estimate is
+
+$$
+\hat\beta = \arg\max_{\beta}\; \sum_{i=1}^{n}\big[y_i \eta_i - \ln(1 + e^{\eta_i})\big] - \frac{\lVert \beta_{1:k} - \beta^{\text{prior}} \rVert^2}{2\tau^2} + a \ln \sigma(\beta_0) + b \ln\!\big(1 - \sigma(\beta_0)\big), \qquad \eta_i = \beta_0 + \beta_{1:k}^{\top} z_i .
+$$
+
+**The intercept.** The first-order condition in $\beta_0$ says exactly what the base-rate prior does: $\sum_i (y_i - \hat p_i) + a(1 - \sigma(\hat\beta_0)) - b\,\sigma(\hat\beta_0) = 0$, so the mean fitted PRS equals the observed event rate plus a correction of order $\max(a,b)/n$.
+
+**The slopes.** A quadratic expansion of the log-likelihood around the MLE (information matrix $H$) gives the shrinkage form
+
+$$
+\hat\beta_{1:k} \approx \Lambda\,\beta^{\text{prior}} + (I - \Lambda)\,\hat\beta^{\text{MLE}}, \qquad \Lambda = (H + \tau^{-2} I)^{-1}\tau^{-2},
+$$
+
+with boundary conditions $\tau \to \infty \Rightarrow \Lambda \to 0$ (the MLE) and $\tau \to 0 \Rightarrow \Lambda \to I$ (the prior). ($\Lambda$ here is the shrinkage matrix of this subsection only; the order-arrival intensity $\Lambda(\delta)$ of Part V is a different object.) The code tests both limits.
 
 ### Specification for AI Implementation
 

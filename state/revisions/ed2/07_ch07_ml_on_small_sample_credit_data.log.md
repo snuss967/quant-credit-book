@@ -6,7 +6,7 @@
 - [x] 4. [§7.1, "sampling faster does not buy you a better mean"] · MATH-GENTLY. Note: river-gauge box, 2%/4% monthly-versus-annual worked number, Paleologo pointer.
 - [x] 5. [§7.2 Trend Watch] · NEW-SCENE (Scene 1, The Four-Factor File). Note: framed as Ines replay of Oct 2022; WBS quotes verified.
 - [x] 6. [§7.2, after the box] · WHEN-TO-APPLY. Note: hypothesis list vs benchmark; DRR placebo; BH Math Gently placed here.
-- [ ] 7. [§7.3 Fractional Differentiation] · MATH-GENTLY x3, then FULL-DERIVATION-MOVE.
+- [x] 7. [§7.3 Fractional Differentiation] · MATH-GENTLY x3, then FULL-DERIVATION-MOVE. Note: walker, lognormal, memory-weights, ADF boxes; derivation moved intact; PDP scene.
 - [ ] 8. [§7.3, before Ways This Blows Up] · WHEN-TO-APPLY.
 - [ ] 9. [§7.4 Triple Barrier in DTS Space] · MATH-GENTLY + reorder.
 - [ ] 10. [§7.4] · ANOTHER-SEAT (box 1 of 3, CLO manager).

@@ -185,16 +185,21 @@ Theo has five answers by the end of the afternoon, and he ranks them by how much
 
 ## 4.3 The Six-Axis Framework Map
 
-Theo's sheet of paper has six columns because every systematic credit process, from a ten-person team to a \$40bn platform, has to answer the same six engineering questions:
+Theo's sheet of paper has six columns because every systematic credit process, from a ten-person team to a \$40bn platform, has to answer the same six engineering questions. He does not start with six. He starts with one, and the pile hands him the other five over the afternoon, each in a sentence that some author probably thought was a footnote.
 
-1. **Alpha families.** Where does the forecast come from?
-2. **Data stack.** What are you allowed to know, and when did you know it?
-3. **Portfolio construction.** How does a forecast become a position?
-4. **Execution.** How do you get filled, and what does it cost?
-5. **Capacity.** How big can the book grow before the book is the market?
-6. **Risk.** What do you hedge, and what are you paid to hold?
+The first header he writes before lunch, because it is the one every paper leads with: **alpha families**, the question of where the forecast comes from. All six documents fill it, and they fill it alike. That is Mags's memo, and he gives it the column on the far left, where pitch books put the things they want you to see first.
 
-Lay the industry's framework papers and public descriptions on those six axes and you get the map below. Read it as a desk reads a pitch book: the full cells say what the manager wants you to see, and the empty cells say what it would rather you did not ask about.
+The second arrives on page 31 of the Man paper, in a sentence an RSSG banker could have written. "Quant strategies are only as good as the data upon which they base their investment decisions," it says, and the pricing data "needs to be supplemented with a complete and up-to-date database of issuer and security-specific information" so that the models "specify the correct bonds" and can map datasets "at both issue- and issuer-level" (`Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.31`). Theo, fresh from the packaging company's three CUSIPs, writes **data stack** above column two, and under it the question from his sticky note: what are you allowed to know, and when did you know it?
+
+The third comes from Kaz's laptop rather than the pile. Between the alpha model and the trade list sits the optimizer Kaz wrote over a long weekend, and in Man's version the same step is three layers, which the paper calls guard rails, autopilot and GPS (p.15–18). The phrase makes Theo picture a car being driven by a committee, which is not far wrong. **Portfolio construction**: how does a forecast become a position?
+
+The fourth is on page 3 of Man's 2023 paper. The firm reports that it moved "from having roughly 30% of our order flow in high yield and 60% in investment grade going through electronic venues, to over 90% of our order flow going through electronic-trading venues," and that the tipping point came not when electronic venues won the majority of the market but when they started "delivering best execution from a transaction-cost perspective by slicing up trades more efficiently" (`Man_Revolutions_in_Credit_Trading_2023 p.3`). A firm rebuilt how it trades, wrote a paper about it, and did not change a signal. **Execution**: how do you get filled, and what does it cost?
+
+The fifth is from the Barclays book, page 207, where the authors concede that the strategy returns reported in an earlier chapter "implicitly assumed that the capital invested in any of the strategies would be sufficiently small relative to the aggregate supply of fallen angels to not affect their pricing" (`Dynkin_Systematic_Investing_in_Credit p.207`). Theo has rarely seen a research team own an assumption that cheerfully, or follow it, as they do on the next page, with an explicit rule for how much of an issuer you are allowed to hold. **Capacity**: how big can the book grow before the book is the market?
+
+The sixth is from BlackRock, page 3. In eVestment data for 2005–2025, the average high-yield manager "tended to participate in 89.56% of down markets and 92.24% of up markets," which the note reads as building a defensive exposure "largely by creating a portfolio that has a lower beta than the broad index" (`BlackRock_Systematic_High_Yield_Credit p.3`). Defence bought by owning less of the market is not really defence; it is a smaller position wearing a helmet. **Risk**: what do you hedge, and what are you paid to hold?
+
+Laid across those six axes, the industry's framework papers and public descriptions make the map below. Theo reads it the way a desk reads a pitch book: the full cells say what the manager wants you to see, and the empty cells say what it would rather you did not ask about.
 
 | Framework (source) | Alpha families | Data stack | Portfolio construction | Execution | Capacity | Risk |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -207,7 +212,7 @@ Lay the industry's framework papers and public descriptions on those six axes an
 | **Acadian** (Institutional Investor, 1 June 2023; Acadian news, 19 August 2024) | "Components," not factors: default rates, value, credit deterioration, rating migration | Reuses its equity data infrastructure; over 20,000 securities | Benchmark-relative | Silent | Silent (CHECK) | Not disclosed |
 | **Barclays QPS** (`Dynkin_Systematic_Investing_in_Credit`) | Value, momentum, equity-to-credit momentum, fallen angels; no size premium (p.516, p.628) | LCS liquidity scores since 2009, over 20,000 securities, bond-level history from January 2007 (p.702) | DTS as the risk unit; turnover buffers and budgets (p.724) | LCS-based cost estimates (p.702, p.711) | Explicit method: hold at most 5% of an issuer's market value (p.207–208) | DTS-based |
 
-Look at the columns, not the rows. The alpha column is crowded and repetitive: value, momentum, quality or low risk, carry, with one or two house specials. That is Mags's "one memo." The execution and capacity columns are mostly "silent." Only Man 2023 and Barclays treat them as first-class, and only Barclays gives a capacity *method* you could audit. This is the chapter's first aha for an RSSG reader. The quant shops compete less on math, which is published, than on plumbing: a cost model that is right about dealer fade, a security master that survives an LMT exchange, a router that can fill \$2mm clips in 400 names on a Tuesday. The math is the menu. The plumbing is the kitchen.
+The trick is to read the columns, not the rows. The alpha column is crowded and repetitive: value, momentum, quality or low risk, carry, with one or two house specials. That is Mags's "one memo." The execution and capacity columns are mostly "silent." Only Man 2023 and Barclays treat them as first-class, and only Barclays gives a capacity *method* you could audit. This is the chapter's first aha for an RSSG reader. The quant shops compete less on math, which is published, than on plumbing: a cost model that is right about dealer fade, a security master that survives an LMT exchange, a router that can fill \$2mm clips in 400 names on a Tuesday. The math is the menu. The plumbing is the kitchen.
 
 To score a row you need numbers, and the first number every pitch book gets wrong is breadth.
 
