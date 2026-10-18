@@ -89,8 +89,8 @@ Growth 34641 / 15148 = **2.29×**, against the 1.6–1.9× target (24,237–28,7
 - [x] 2. §16.1.1: demote share-is-call box into the option-language paragraph; trim 93; merge 111 into 113; trim CLO seat box (b2, b3, d). Note: call-on-a-call kept as gloss; opening-bid clause; columns merged.
 - [x] 3. §16.1.2: merge the mean-median box into the "Read the third bullet" paragraph (b4, d). Note: three-stock arithmetic and tall-person image now in prose.
 - [x] 4. §16.2.1: retire the When-to subsection; Mags's election beat (b5, c). Note: three-conditions template replaced by Mags "Did they elect?" beat.
-- [ ] 5. §16.2.2: demote martingale and half-life boxes to glosses; cut the duplicate peak sentence in the Full Derivation; trim line 208 (b6, b8, b9, d).
-- [ ] 6. §16.2.3: demote the logs box to one clause (b7, d).
+- [x] 5. §16.2.2: demote martingale and half-life boxes to glosses; cut the duplicate peak sentence in the Full Derivation; trim line 208 (b6, b8, b9, d). Note: two boxes now glosses pointing to Ch 6, Ch 1.
+- [x] 6. §16.2.3: demote the logs box to one clause (b7, d). Note: A cancels, two photographs of tub, in one clause.
 - [ ] 7. §16.2.4: "First... Second" in 242; reorder Ways → narration → vignette → Spec; Trend Watch to the end of §16.2; rewrite the Listing 16.1 explanation (c, d).
 - [ ] 8. §16.3.1: retire "When the put view applies"; move Hanen and the mootness ruling into the Harlan scene (b10, c).
 - [ ] 9. §16.3.2: demote the put box into 333 and the worked number; fix the Full Derivation's reference to the box (b12, d).

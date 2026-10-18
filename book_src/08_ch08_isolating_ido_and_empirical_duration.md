@@ -43,7 +43,7 @@ $$
 \frac{\Delta P}{P} \approx \frac{1}{P}\frac{\partial P}{\partial t}\,\Delta t + \frac{1}{P}\frac{\partial P}{\partial y}\,\Delta y + \frac{1}{2}\,\frac{1}{P}\frac{\partial^2 P}{\partial y^2}\,(\Delta y)^2 .
 $$
 
-Define modified duration $D^{\text{mod}} = -\frac{1}{P}\frac{\partial P}{\partial y}$ and convexity $C = \frac{1}{P}\frac{\partial^2 P}{\partial y^2}$. Add the coupon accrual to the price change to get total return. At an unchanged yield, price pull plus coupon accrual earns the yield, so the time terms collapse to yield carry $y\,\Delta t$ plus a roll-down term when the curve is sloped. Now split $\Delta y = \Delta y^{\text{TSY}} + \Delta s$ and allow the spread sensitivity to differ from the rate sensitivity. For a fixed-rate bullet they are equal; for a floater, a callable, or a bond trading to a call date they are not. The result is
+Define modified duration $D^{\text{mod}} = -\frac{1}{P}\frac{\partial P}{\partial y}$ and convexity $C = \frac{1}{P}\frac{\partial^2 P}{\partial y^2}$. Add the coupon accrual to the price change to get total return. At an unchanged yield, price pull plus coupon accrual earns the yield, so the time terms collapse to yield carry $y\,\Delta t$ (two parts with two different owners, split in the table below) plus a roll-down term when the curve is sloped. Now split $\Delta y = \Delta y^{\text{TSY}} + \Delta s$ and allow the spread sensitivity to differ from the rate sensitivity. For a fixed-rate bullet they are equal; for a floater, a callable, or a bond trading to a call date they are not. The result is
 
 $$
 R^{\text{tot}} \approx \underbrace{y\,\Delta t}_{\text{carry}} + \underbrace{\text{roll}}_{\text{curve}} \;-\; D^{\text{mod}}\,\Delta y^{\text{TSY}} \;-\; D^{\text{spr}}\,\Delta s \;+\; \tfrac{1}{2}\,C\,(\Delta y)^2 \;+\; \epsilon .
@@ -75,16 +75,20 @@ with factor returns $F_{k,t}$, loadings $\beta_{i,k}$, and residual $\epsilon_{i
 
 ### The thirty-seven cents, itemized
 
-Apply the decomposition to Theo's bond *(illustrative inputs)*: price \$95, $D^{\text{mod}} = 4.1$, $D^{\text{spr}} = 4.0$, yield 11.1%, one day of 30/360 carry. The 10-year sold off $\Delta y^{\text{TSY}} = +0.0018$, and the bond's OAS tightened 9 bp, $\Delta s = -0.0009$.
+Apply the decomposition to Theo's bond *(illustrative inputs)*: price \$95, $D^{\text{mod}} = 4.1$, $D^{\text{spr}} = 4.0$, yield 11.1%, a coupon of 10% (about what the price, yield and duration imply), one day of 30/360 carry. The 10-year sold off $\Delta y^{\text{TSY}} = +0.0018$, and the bond's OAS tightened 9 bp, $\Delta s = -0.0009$.
 
 | Source | Formula | Return | Cents on \$95 |
 | :--- | :--- | ---: | ---: |
 | Carry | $y\,\Delta t = 0.111/360$ | +0.031% | +3 |
+| *of which coupon accrual (custodian)* | $\dfrac{c\,\Delta t}{0.95} = \dfrac{0.10/360}{0.95}$ | +0.029% | +2.8 |
+| *of which pull-to-par (model)* | $y\,\Delta t - \dfrac{c\,\Delta t}{0.95}$ | +0.002% | +0.2 |
 | Rates | $-D^{\text{mod}}\Delta y^{\text{TSY}} = -4.1 \times 0.0018$ | −0.738% | −70 |
 | Spread | $-D^{\text{spr}}\Delta s = -4.0 \times (-0.0009)$ | +0.360% | +34 |
 | Convexity | $\tfrac12 C (\Delta y)^2$, $C \approx 20$ | +0.000% | 0 |
 | Residual | plug | −0.043% | −4 |
 | **Total** | | **−0.390%** | **−37** |
+
+The two italic lines split the carry row and add back to it. They are not extra sources, and the total foots on the headline rows alone. They are separate because they have different owners. The coupon accrual is a fact: the custodian's records of accrued interest confirm it to the cent, and if the books disagree, someone has misbooked a coupon. Pull-to-par is a forecast: the model's projection of where a discount bond's price drifts if the yield stays where it is, and it is wrong the moment the yield moves. On this bond the forecast is 0.2 of a cent, so folding the two into one carry line costs nothing today. On a bond trading far below par it would not be small, and a missing coupon would hide inside it. Product control keeps the lines apart for that reason, and the production explain of Chapter 8-C does too.
 
 Kaz's "alpha" was the 34 cents of spread tightening. The question for the next three sections is whether those 9 bp of tightening belonged to the bond or to the rate move. If high-yield spreads systematically tighten when yields rise for growth reasons, the 34 cents is beta wearing a disguise, and a hedge of 232 futures would have converted a modestly hedged position into a short rates bet with a spread rider.
 

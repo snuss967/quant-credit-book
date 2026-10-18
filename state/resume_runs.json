@@ -154,24 +154,6 @@
    "status": "HELD until state/rv_thread.md is COMPLETE"
   },
   {
-   "name": "figs-misc",
-   "task": "woka093x1",
-   "runId": "wf_e4574d02-36e",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "28_ch28_pm_playbook",
-     "06_ch06b_options_and_measures_for_credit",
-     "03_ch03b_your_first_year_on_the_desk"
-    ],
-    "stages": [
-     "figures",
-     "figcheck"
-    ]
-   }
-  },
-  {
    "name": "fixes-and-cast",
    "task": "wjaxjrny2",
    "runId": "wf_c8095cb4-bb7",
@@ -286,6 +268,22 @@
     "stages": [
      "figures",
      "figcheck",
+     "resgraph"
+    ]
+   }
+  },
+  {
+   "name": "resgraph-6b-3b",
+   "task": "wc8knrqe2",
+   "runId": "wf_bc16652d-ce3",
+   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
+   "args": {
+    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
+    "stems": [
+     "06_ch06b_options_and_measures_for_credit",
+     "03_ch03b_your_first_year_on_the_desk"
+    ],
+    "stages": [
      "resgraph"
     ]
    }

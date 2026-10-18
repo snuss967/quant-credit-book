@@ -164,34 +164,34 @@ def fig_call_spreads():
 
 
 # --------------------------------------------------------------------------------------------------
-# Figure (section 12C.4): the roll-up as a transfer inside the tranche
+# Figure 12-C.2 (section 12C.4): the roll-up as a transfer inside the tranche
 # --------------------------------------------------------------------------------------------------
 def fig_rollup_transfer():
     F, Wv = 1400.0, 910.0
     fig, (axl, axr) = new_figure("wide", ncols=2, gridspec_kw=dict(width_ratios=[1, 1.25]))
 
     # left: recovery by holder, before and after the 1:1 roll-up
-    base = Wv / F * 100                      # 65.0
-    after_left = (Wv - 150) / (F - 150) * 100  # 60.8
+    base = Wv / F * 100                          # 65.0
+    after_left = (Wv - 150) / (F - 150) * 100    # 60.8
     xs = np.array([0.0, 1.0])
     bw = 0.34
-    axl.bar(xs - bw / 2 - 0.01, [base, base], width=bw, color=NEUTRAL, label="No roll-up")
-    axl.bar(xs + bw / 2 + 0.01, [100.0, after_left], width=bw, color=BLUE, label="With 1:1 roll-up")
-    for x, val in zip(np.concatenate([xs - bw / 2 - 0.01, xs + bw / 2 + 0.01]), [base, base, 100.0, after_left]):
+    xa, xb = xs - bw / 2 - 0.01, xs + bw / 2 + 0.01
+    axl.bar(xa, [base, base], width=bw, color=NEUTRAL, label="No roll-up")
+    axl.bar(xb, [100.0, after_left], width=bw, color=BLUE, label="With 1:1 roll-up")
+    for x, val in zip(np.concatenate([xa, xb]), [base, base, 100.0, after_left]):
         axl.annotate(f"{val:.1f}", (x, val), xytext=(0, 3), textcoords="offset points", ha="center", va="bottom",
                      fontsize=8.5, color=INK_2)
     axl.set_xticks(xs)
     axl.set_xticklabels(["Rolled paper\n(150 of face)", "Left behind\n(1,250 of face)"])
-    axl.set_ylim(0, 128)
+    axl.set_ylim(0, 132)
     axl.set_yticks([0, 25, 50, 75, 100])
     axl.set_ylabel("Recovery (% of face)")
-    axl.legend(loc="upper center", ncols=2, bbox_to_anchor=(0.5, 1.02), handlelength=1.2, columnspacing=1.0,
+    axl.legend(loc="upper center", ncols=2, bbox_to_anchor=(0.5, 1.03), handlelength=1.2, columnspacing=1.0,
                fontsize=8)
-    axl.text(0.5, 0.97 - 0.0, "", transform=axl.transAxes)
-    axl.annotate("gain 52.5", (xs[0] + bw / 2, 100), xytext=(0, 17), textcoords="offset points", ha="center",
+    axl.annotate("gains \\$52.5mm", (xb[0], 100), xytext=(0, 17), textcoords="offset points", ha="center",
                  fontsize=8, color=INK_2)
-    axl.annotate("loss 52.5\n(4.2 pts x 1,250)", (xs[1], base), xytext=(0, 14), textcoords="offset points",
-                 ha="center", va="bottom", fontsize=8, color=INK_2)
+    axl.annotate("lose \\$52.5mm in all\n(4.2 pts × 1,250)", (xs[1], base), xytext=(0, 15),
+                 textcoords="offset points", ha="center", va="bottom", fontsize=8, color=INK_2)
 
     # right: recovery of the non-participants against the size of the roll-up
     x = np.linspace(0, Wv - 1, 600)
@@ -199,83 +199,98 @@ def fig_rollup_transfer():
     axr.axhline(base, color=NEUTRAL, linewidth=LW)
     axr.fill_between(x, rec, base, color=BLUE, alpha=TINT_ALPHA, linewidth=0)
     axr.plot(x, rec, color=BLUE, linewidth=LW)
-    for xm, tag in ((150, "1:1"), (300, "2:1")):
+    spots = ((150, "1:1 roll-up (150)", (30, 44)), (300, "2:1 roll-up (300)", (345, 20)))
+    for xm, name, (tx, ty) in spots:
         yv = (Wv - xm) / (F - xm) * 100
         axr.plot([xm], [yv], "o", color=BLUE, markersize=5.5, zorder=5)
-        axr.annotate(f"{tag}: {yv:.1f}%\n(-{base - yv:.1f} pts)", (xm, yv), xytext=(10, -6 if tag == "1:1" else -10),
-                     textcoords="offset points", ha="left", va="top", fontsize=8, color=INK)
+        axr.annotate(f"{name}:\n{yv:.1f}% ({yv - base:+.1f} pts)".replace("-", "−"), (xm, yv), xytext=(tx, ty),
+                     textcoords="data", ha="left", va="center", fontsize=8, color=INK,
+                     arrowprops=dict(arrowstyle="-", color=INK_2, lw=0.7, shrinkA=2, shrinkB=3))
     axr.axvline(Wv, color=INK_2, linewidth=0.9, linestyle=(0, (3, 3)))
-    axr.annotate("roll-up = value W:\nformula refused", (Wv, 58), xytext=(-5, 0), textcoords="offset points",
+    axr.annotate("roll-up = W = 910:\nformula refused", (Wv, 42), xytext=(-5, 0), textcoords="offset points",
                  ha="right", va="center", fontsize=8, color=INK_2)
-    axr.annotate("No roll-up: 65.0%", (0, base), xytext=(4, 4), textcoords="offset points", ha="left", va="bottom",
+    axr.annotate("no roll-up: 65.0%", (0, base), xytext=(4, 4), textcoords="offset points", ha="left", va="bottom",
                  fontsize=8, color=INK_2)
+    axr.annotate("shaded gap =\ntransfer to the\nrolled holders", (640, 57), ha="center", va="center", fontsize=8,
+                 color=INK_2)
     axr.set_xlim(0, 960)
     axr.set_ylim(0, 75)
     axr.set_xlabel(r"Prepetition paper rolled up, $\kappa M$ (\$mm)")
     axr.set_ylabel("Left-behind recovery (% of face)")
-    note(axr, "tranche 1,400; value W = 910", loc="lower left")
+    note(axr, "tranche face 1,400; value W = 910", loc="lower left")
     return finish(fig, "ch12c_rollup_transfer")
 
 
 # --------------------------------------------------------------------------------------------------
-# Figure (section 12C.10): recovery distributions by class under the mixture
+# Figure 12-C.3 (section 12C.10): recovery distributions by class under the mixture
 # --------------------------------------------------------------------------------------------------
-def _recovery_bins(fn, edges, w_comp, vgrid):
-    """Probability that recovery lands in each [edge_k, edge_k+1), split by expert component, via the V grid."""
+def _recovery_bins(fn, edges, vgrid):
+    """Probability that recovery lands in each [edge_k, edge_k+1), by expert component (unweighted by w)."""
     r = fn(vgrid)
     out = []
     for m, s in ((M1, S1), (M2, S2)):
         cdf = norm.cdf((np.log(vgrid) - np.log(m)) / s)
-        # smallest V reaching each recovery level (r is nondecreasing in V)
-        idx = np.searchsorted(r, edges, side="left")
-        idx = np.clip(idx, 0, len(vgrid) - 1)
+        idx = np.clip(np.searchsorted(r, edges, side="left"), 0, len(vgrid) - 1)   # smallest V reaching each level
         c = cdf[idx]
         c[edges <= r[0]] = 0.0
         out.append(np.diff(c))
-    return out[0] * w_comp, out[1] * (1 - w_comp)
+    return out
 
 
 def fig_recovery_distributions():
     fig, (axa, axb) = new_figure("wide", ncols=2)
     vgrid = np.exp(np.linspace(np.log(300), np.log(6000), 400001))
+    w2 = 1 - W_DEBTOR
+    mean = lambda fn: W_DEBTOR * expected_recovery(fn, M1, S1) + w2 * expected_recovery(fn, M2, S2)
 
-    specs = [
-        (axa, r_first, BLUE, "First lien (left behind)", 2.5, (0, 100)),
-        (axb, r_unsec, ORANGE, "Unsecured pool", 1.0, (0, 40)),
-    ]
-    for ax, fn, col, name, bw, xr in specs:
-        edges_pct = np.arange(0, 100 + 1e-9, bw)
-        edges = edges_pct / 100.0
-        # recovery strictly below par: bins up to 100 - bw plus a final bin that excludes par itself
-        d, c = _recovery_bins(fn, edges, W_DEBTOR, vgrid)
-        mids = edges_pct[:-1] + bw / 2
-        width = bw * 0.9
-        ax.bar(mids, d * 100, width=width, color=col, alpha=1.0, label="Debtor's expert wins (0.7)")
-        ax.bar(mids, c * 100, width=width, bottom=d * 100, color=col, alpha=0.38, label="Committee's expert wins (0.3)")
-        ax.set_xlim(*xr)
-        ax.set_xlabel("Recovery (% of allowed claim)")
-        ax.set_title(name)
-        ax.set_ylabel("Probability per %s-point bin (%%)" % ("2.5" if bw == 2.5 else "1"))
-        mean = W_DEBTOR * expected_recovery(fn, M1, S1) + (1 - W_DEBTOR) * expected_recovery(fn, M2, S2)
-        ax.axvline(mean * 100, color=INK_2, linewidth=0.9, linestyle=(0, (3, 3)), zorder=4)
-        ax.annotate(f"mean {mean * 100:.1f}", (mean * 100, 0.97), xycoords=("data", "axes fraction"),
-                    xytext=(4, 0), textcoords="offset points", ha="left", va="top", fontsize=8, color=INK_2)
-    # first lien: the point mass at par (a bar at 100 whose height is the probability of V above V*)
+    # first lien: linear axis, 2.5-point bins, plus the point mass at par
+    bw = 2.5
+    pct = np.arange(0, 100 + 1e-9, bw)
+    d, c = _recovery_bins(r_first, pct / 100.0, vgrid)
+    mids, wd = pct[:-1] + bw / 2, bw * 0.9
+    axa.bar(mids, W_DEBTOR * d * 100, width=wd, color=BLUE, label="Debtor's expert (0.7)")
+    axa.bar(mids, w2 * c * 100, width=wd, bottom=W_DEBTOR * d * 100, color=BLUE, alpha=0.38,
+            label="Committee's expert (0.3)")
     p_par = 1 - float(mix_cdf(VSTAR))
-    axa.bar([100 - 1.25], [p_par * 100], width=2.25, color=BLUE, zorder=3)
-    axa.annotate(f"{p_par * 100:.1f}% paid in full", (98.75, p_par * 100), xytext=(-4, 3), textcoords="offset points",
-                 ha="right", va="bottom", fontsize=8.5, color=INK)
+    axa.bar([98.75], [p_par * 100], width=2.25, color=BLUE, alpha=0.38, zorder=3)
+    axa.annotate(f"{p_par * 100:.1f}%\npaid in full", (98.75, p_par * 100), xytext=(-5, -2), textcoords="offset points",
+                 ha="right", va="top", fontsize=8.5, color=INK)
     axa.set_xlim(0, 103)
     axa.set_ylim(0, 22)
+    axa.set_title("First lien (left behind)")
+    axa.set_xlabel("Recovery (% of allowed claim)")
+    axa.set_ylabel("Probability per 2.5-point bin (%)")
+    axa.axvline(mean(r_first) * 100, color=INK_2, linewidth=0.9, linestyle=(0, (3, 3)), zorder=4)
+    axa.annotate(f"mean {mean(r_first) * 100:.1f}", (mean(r_first) * 100, 0.62), xycoords=("data", "axes fraction"),
+                 xytext=(-4, 0), textcoords="offset points", ha="right", va="center", fontsize=8, color=INK_2)
     axa.legend(loc="upper left", fontsize=8, handlelength=1.2)
-    # unsecured: clip the debtor-hump peak so the committee tail stays visible
-    axb.set_ylim(0, 8)
-    ymax_true = None
+
+    # unsecured pool: log axis so the hump near 3 and the tail to 100 share one picture
+    edges_pct = np.logspace(np.log10(0.5), 2.0, 38)
+    d, c = _recovery_bins(r_unsec, edges_pct / 100.0, vgrid)
+    lefts, widths = edges_pct[:-1], np.diff(edges_pct)
+    axb.bar(lefts, W_DEBTOR * d * 100, width=widths * 0.92, align="edge", color=ORANGE)
+    axb.bar(lefts, w2 * c * 100, width=widths * 0.92, align="edge", bottom=W_DEBTOR * d * 100, color=ORANGE, alpha=0.38)
+    axb.set_xscale("log")
+    axb.set_xlim(0.5, 100)
+    axb.set_xticks([1, 2, 5, 10, 20, 50, 100])
+    axb.set_xticklabels(["1", "2", "5", "10", "20", "50", "100"])
+    axb.minorticks_off()
+    axb.set_title("Unsecured pool")
+    axb.set_xlabel("Recovery (% of allowed claim, log scale)")
+    axb.set_ylabel("Probability per bin (%)")
+    mu = mean(r_unsec) * 100
+    axb.axvline(mu, color=INK_2, linewidth=0.9, linestyle=(0, (3, 3)), zorder=4)
+    axb.annotate(f"mean {mu:.1f}", (mu, 0.80), xycoords=("data", "axes fraction"), xytext=(5, 0),
+                 textcoords="offset points", ha="left", va="center", fontsize=8, color=INK_2)
+    axb.annotate("tail: almost all\ncommittee's expert", (22, 0.30), xycoords=("data", "axes fraction"),
+                 ha="left", va="center", fontsize=8, color=INK_2)
+    note(axb, "37 bins, equal in log recovery", loc="upper right")
     return finish(fig, "ch12c_recovery_distributions")
 
 
 # --------------------------------------------------------------------------------------------------
-# Figure 12-C.2 (section 12C.10): fulcrum probability against DIP new money
+# Figure 12-C.4 (section 12C.10): fulcrum probability against DIP new money
 # --------------------------------------------------------------------------------------------------
 def fig_fulcrum_prob_vs_dip():
     fig, ax = new_figure("wide")
@@ -290,22 +305,22 @@ def fig_fulcrum_prob_vs_dip():
     ax.set_ylabel("Fulcrum probability (%)")
     label_end(ax, m[-1], pf[-1], "First lien", BLUE, dx=6)
     label_end(ax, m[-1], pu[-1], "Unsecured pool", ORANGE, dx=6)
-    for x0, dy_f, dy_u in ((0, 7, 7), (150, 7, 7), (280, 7, 7)):
-        ax.plot([x0], [fulcrum_probs(x0)[0] * 100], "o", color=BLUE, markersize=5.5, zorder=5)
-        ax.plot([x0], [fulcrum_probs(x0)[1] * 100], "o", color=ORANGE, markersize=5.5, zorder=5)
-        ax.annotate(f"{fulcrum_probs(x0)[0] * 100:.0f}%", (x0, fulcrum_probs(x0)[0] * 100), xytext=(0, dy_f),
-                    textcoords="offset points", ha="center", fontsize=8.5, color=INK_2)
-        ax.annotate(f"{fulcrum_probs(x0)[1] * 100:.0f}%", (x0, fulcrum_probs(x0)[1] * 100), xytext=(0, dy_u),
-                    textcoords="offset points", ha="center", fontsize=8.5, color=INK_2)
+    for x0 in (0, 150, 280):
+        p_f, p_u, _ = fulcrum_probs(x0)
+        ax.plot([x0], [p_f * 100], "o", color=BLUE, markersize=5.5, zorder=5, clip_on=False)
+        ax.plot([x0], [p_u * 100], "o", color=ORANGE, markersize=5.5, zorder=5, clip_on=False)
+        ax.annotate(f"{p_f * 100:.0f}%", (x0, p_f * 100), xytext=(8, 7), textcoords="offset points", ha="left",
+                    fontsize=8.5, color=INK_2)
+        ax.annotate(f"{p_u * 100:.0f}%", (x0, p_u * 100), xytext=(8, 7), textcoords="offset points", ha="left",
+                    fontsize=8.5, color=INK_2)
     mark_event(ax, 150, "actual DIP: 150", y_frac=0.60)
-    note(ax, "Roll-up ratio 1:1; the curves are the same for any ratio.\nOld equity's probability stays under 0.1%.",
-         loc="upper right")
-    ax.grid(axis="y")
+    ax.text(0.99, 0.40, "Roll-up ratio 1:1; the curves are the same for any ratio.\nOld equity's probability stays under 0.1%.",
+            transform=ax.transAxes, ha="right", va="center", fontsize=8, color=MUTED)
     return finish(fig, "ch12c_fulcrum_prob_vs_dip")
 
 
 # --------------------------------------------------------------------------------------------------
-# Figure 12-C.3 (section 12C.10): the take-back transfer against the coupon gap
+# Figure 12-C.5 (section 12C.10): the take-back transfer against the coupon gap
 # --------------------------------------------------------------------------------------------------
 def fig_takeback_transfer():
     F, c = 350.0, 0.08
@@ -325,13 +340,11 @@ def fig_takeback_transfer():
     label_end(ax, bp[-1], first[-1], "First order", ORANGE, dx=6)
     x200, y200 = 200, F * 0.02 * a5(0.10)
     ax.plot([x200], [y200], "o", color=INK, markersize=6.5, zorder=6)
-    ax.annotate(f"plan: 200bp, ${y200:.1f}mm".replace("$", r"\$"), (x200, y200), xytext=(-10, 12),
-                textcoords="offset points", ha="right", va="bottom", fontsize=8.5, color=INK)
-    ax.annotate("", (x200, y200), xytext=(x200 - 8, y200 + 10), textcoords="data",
-                arrowprops=dict(arrowstyle="-", color=INK_2, lw=0.8))
-    ax.annotate(r"slope $\approx$ \$13.3mm per 100bp", (100, F * a5(0.10) * 0.01), xytext=(8, 20),
-                textcoords="offset points", ha="left", va="bottom", fontsize=8.5, color=INK_2)
-    note(ax, "Five-year annual-pay note, face \\$350mm, plan coupon 8.0%.\nFirst-order line: face x duration 3.79 (annuity at 10%) x gap.",
+    ax.annotate(f"the plan: 200bp gap, \\${y200:.1f}mm", (x200, y200), xytext=(-12, 10), textcoords="offset points",
+                ha="right", va="bottom", fontsize=8.5, color=INK)
+    ax.annotate(f"first-order slope: \\${F * a5(0.10) * 0.01:.1f}mm per 100bp", (300, 17), ha="center", va="center",
+                fontsize=8.5, color=INK_2)
+    note(ax, "Five-year annual-pay note, face \\$350mm, plan coupon 8.0%.\nFirst-order line: face × duration 3.79 (annuity at 10%) × gap.",
          loc="upper left")
     return finish(fig, "ch12c_takeback_transfer")
 
