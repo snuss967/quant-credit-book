@@ -13,7 +13,7 @@
 - [x] 11. [§7.5 Meta-Labeling] · MATH-GENTLY x2 + SHOP-LIFE. Note: Phi/z box, confusion matrix box, Model Review Tuesday vignette.
 - [x] 12. [§7.6 Sample Weights] · MATH-GENTLY + LIST-TO-NARRATIVE. Note: hats/Kish box, decay and attribution argued, bootstrap box.
 - [x] 13. [§7.6] · WHEN-TO-APPLY. Note: overlap factor, overkill case, cross-parent energy 2015, first-slide check.
-- [ ] 14. [§7.7 Purged, Embargoed, Issuer-Grouped CV] · MATH-GENTLY + EXPAND-SCENE.
+- [x] 14. [§7.7 Purged, Embargoed, Issuer-Grouped CV] · MATH-GENTLY + EXPAND-SCENE. Note: Kaz "oh" scene, K-fold photocopy box, grid described, HoldCo tie-back.
 - [ ] 15. [§7.7] · WHEN-TO-APPLY.
 - [ ] 16. [§7.8 Deflated Sharpe] · MATH-GENTLY x2, then FULL-DERIVATION-MOVE.
 - [ ] 17. [§7.8] · ANOTHER-SEAT (box 2 of 3, multi-strategy pod risk desk).

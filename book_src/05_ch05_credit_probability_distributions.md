@@ -98,6 +98,8 @@ Theo looks at his own report, with its heat map and its 4.1% and its one in twen
 
 "First you tell me the distribution," Ines says. "Then you tell me which way it leans. Then we can talk about what you do."
 
+*The dialogue in this scene is invented and belongs to the fictional desk. The Carvana dates, terms, prices and quoted phrases come from the filings and press reports cited, and no real person speaks.*
+
 **The question this chapter answers:** *what is the right shape for a high-yield or distressed credit return, and how do you specify it precisely enough that a literal-minded coding agent cannot build the wrong one?*
 
 By the end of this chapter, the second of June will have an answer, and so will the Tuesday report. Along the way Theo will write a high-yield bond's one-year return as a survive-or-jump mixture and compute its first four moments in closed form, which is where the slogan "skew is minus one over root PD" comes from. He will learn, the hard way, to keep the price, the spread and the return in three separate ledgers, because they have three different shapes. Kaz will sort the jump and Lévy machinery that earns its keep on a desk from the machinery that is decoration. Mags will insist that recovery is itself a random variable, a Beta conditioned on collateral, seniority, debt cushion and, since 2020, which side of the cooperation agreement you signed. Carvana's failed exchange will become a third component of the mixture, the distressed exchange, with its own re-default hazard. And the extreme-value tools everyone reaches for when a tail frightens them will be put where they belong, which is on books, indices and spread changes, and not on a single bond.
@@ -755,6 +757,8 @@ Theo does not answer with a prediction, which is the first sign that the chapter
 "Not 'minimize the kurtosis'," Kaz says.
 
 "Never again," says Theo.
+
+*As in the cold open, the dialogue in the Serta, Carvana and Hertz scenes is invented and belongs to the fictional desk. The dates, terms, rulings and figures come from the filings, opinions and client alerts cited; the one real person quoted, Marc Rowan, is quoted verbatim from the transcript cited, and Mags's own trades and prices are invented for illustration.*
 
 ### Deep-Dive Resource Graph
 

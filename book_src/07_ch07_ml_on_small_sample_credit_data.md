@@ -474,7 +474,33 @@ The check a seasoned reviewer runs first needs no code. Turn to the first slide 
 
 ## 7.7 Cross-Validation That Cannot Peek: Purged, Embargoed, Issuer-Grouped
 
-Kaz's in-sample Sharpe of 2.9 had a cousin: a cross-validated Sharpe of 1.8 from shuffled K-fold, which Kaz considered the conservative number. It was not. Shuffled K-fold on overlapping labels puts the label formed on Tuesday into the test fold and the nearly identical labels formed on Monday and Wednesday into the training fold. The model then "predicts" Tuesday by remembering Monday. The leakage is mechanical, not subtle, and it is fatal in credit, where labels are long and issuers repeat.
+Kaz's in-sample Sharpe of 2.9 had a cousin, and Kaz brought it to Theo's desk the morning after the hat count, the way a patient brings a second opinion to a doctor who did not like the first. It was a cross-validated Sharpe of 1.8 from shuffled K-fold.
+
+"This is the conservative number," Kaz said. "Five folds. Every label is scored by a model that never saw it. Out of sample, every one."
+
+Theo had learned to distrust the word "every" the way he distrusted "including without limitation." "Pick one test label," he said. "Any one."
+
+Kaz picked one: a 13-week label on a single-B chemicals bond, formed on a Tuesday in March 2017. "Fold three. Scored by a model trained on folds one, two, four, and five."
+
+"What day was it formed?"
+
+"Tuesday the fourteenth."
+
+"And the label on the same bond formed on Monday the thirteenth. Which fold is that in?"
+
+Kaz looked. "Fold one. Training."
+
+"Wednesday the fifteenth?"
+
+"Fold four. Training." A pause. "Thursday's in fold two."
+
+"So the model learned this bond's next thirteen weeks from Monday's label, which covers all of Tuesday's window except one day, and from Wednesday's, which covers all of it except one day at the other end. Then you asked it to predict Tuesday."
+
+Kaz scrolled through the fold assignments of the label's neighbors, then the neighbors' neighbors, then a sibling bond from the same issuer whose labels from that week were scattered across the training folds as well, and said, quietly and to their very great credit, "Oh."
+
+Shuffled K-fold on overlapping labels puts the label formed on Tuesday into the test fold and the nearly identical labels formed on Monday and Wednesday into the training fold. The model then "predicts" Tuesday by remembering Monday. The leakage is mechanical, not subtle, and it is fatal in credit, where labels are long and issuers repeat. The 1.8 was not the conservative number. It was a measurement of how well the model could remember.
+
+> **Math, Gently.** *What K-fold does, and why shuffling is cheating here.* Cross-validation estimates how a model will do on data it has not seen by hiding part of the data you have. **K-fold** cuts the sample into $K$ pieces, trains on $K - 1$ of them, tests on the one held out, and rotates until every piece has served as the test once. Shuffling the rows before cutting is harmless, even wise, when each row is an independent draw. Credit labels are not independent draws. Shuffling them is like grading a student on an exam whose questions were photocopied from yesterday's homework: the score is real, and what it measures is memory. Tiny number: with daily labels and a 63-day horizon, every test label shares part of its window with 124 other labels on the same bond, 62 formed on the days before it and 62 after. Shuffled five-fold puts about four in five of them, roughly 100, into training, and the nearest overlap the test label's window on all but a day or two. Add two sibling bonds from the same parent and the count triples. The cure, below, is to stop cutting by row and start cutting by time and by company.
 
 The credit-risk modeling tradition knew a version of this decades before machine learning arrived on bond desks.
 
@@ -490,9 +516,9 @@ $$
 
 **The embargo.** Even after purging, features computed from trailing windows leak forward: a 12-month momentum feature for a training label formed just after $T_1$ is built from prices *inside* the test window. So also drop training labels with $t_{0,j} \in (T_1, T_1 + \eta]$, where $\eta$ is at least the longest feature lookback that touches price data. The textbook default is $\eta \approx 1\%$ of the sample length. In credit, set $\eta$ to the maximum of that and the feature lookback, which usually makes it months, not days. Mags, on the embargo: "So the model isn't allowed to call the bond desk for a month after the test. Fine. Neither were we, after Enron."
 
-**The group.** Assign every label to a fold by ultimate parent, so no parent appears on both sides. Grouping removes *issuer-specific* leakage: the model cannot learn in training that this particular company defaulted in 2021 and then "predict" its 2019 deterioration in the test. Grouping does *not* remove *time* leakage through the common factor, because other issuers' labels from the same weeks still carry the market move. Purging does not remove issuer leakage, because a parent's labels from other years still identify the parent. You need both. The resulting scheme is a two-way split: the test set is (parents in group $G_k$) during (time block $B_m$); the training set is (parents not in $G_k$) during (times outside $B_m$, purged and embargoed). With $K$ parent groups and $M$ time blocks, each test fold trains on roughly $(1 - 1/K)(1 - 1/M)$ of the data, less the purge. That is expensive. It is also the true price of an honest estimate, and it is cheaper than finding out in production.
+**The group.** Assign every label to a fold by ultimate parent, so no parent appears on both sides. Grouping removes *issuer-specific* leakage: the model cannot learn in training that this particular company defaulted in 2021 and then "predict" its 2019 deterioration in the test. Grouping does *not* remove *time* leakage through the common factor, because other issuers' labels from the same weeks still carry the market move. Purging does not remove issuer leakage, because a parent's labels from other years still identify the parent. Neither split does the other's job. The resulting scheme is a two-way split: the test set is (parents in group $G_k$) during (time block $B_m$); the training set is (parents not in $G_k$) during (times outside $B_m$, purged and embargoed). As a picture, draw time blocks running left to right and parent groups stacked top to bottom. The test fold is one cell of that grid: one group of parents during one block of time. Training is every cell that shares neither its row nor its column, minus a hatched strip on either side of the test column where training labels' windows reach into the test span (the purge) and a further band after it, as wide as the longest feature lookback, which for a fractionally differentiated feature can be the 280 days of §7.3 (the embargo). Everything else in the test cell's row and column is set aside, and that is where the cost comes from. With $K$ parent groups and $M$ time blocks, each test fold trains on roughly $(1 - 1/K)(1 - 1/M)$ of the data, less the purge. That is expensive. It is also the true price of an honest estimate, and it is cheaper than finding out in production.
 
-**Group by parent, not ticker, especially in the LMT era.** The interesting bonds of 2016–2026 often live in entities created to receive assets: the unrestricted subsidiary that received J.Crew's intellectual property, the new-money super-priority tranche issued through a fresh financing SPV, the HoldCo and OpCo notes of the same family. A ticker-level grouping sends the drop-down entity to the training fold and the parent to the test fold, and the model learns the parent's fate from the child's price. The grouping key is the corporate-family tree from the security master (Chapter 27), and the RSSG reader is the person on the desk best qualified to audit it.
+**Group by parent, not ticker, especially in the LMT era.** The interesting bonds of 2016–2026 often live in entities created to receive assets: the unrestricted subsidiary that received J.Crew's intellectual property, the new-money super-priority tranche issued through a fresh financing SPV, the HoldCo and OpCo notes of the same family. A ticker-level grouping sends the drop-down entity to the training fold and the parent to the test fold, and the model learns the parent's fate from the child's price. The grouping key is the corporate-family tree from the security master (Chapter 27), and the RSSG reader is the person on the desk best qualified to audit it. Theo's two HoldCo/OpCo pairs from the night of the review were exactly this case. Under the desk's ticker grouping, one holding company's notes sat in fold two and its operating company's in fold four, and when he asked who maintained the mapping from ticker to parent, the answer was a vendor file that nobody had reconciled in years. The *ultimate parent?* he had underlined on the term sheet turned out to be the grouping key for the entire test.
 
 **Walk-forward is the special case you already trust.**
 
