@@ -403,7 +403,8 @@ class BitemporalMaster:
     def snapshot(self, known_t):
         tk = pd.Timestamp(known_t)
         live = [r for r in self.rows if r["known_from"] <= tk < r["known_to"]]
-        df = pd.DataFrame(live, columns=self.COLS).astype({"value": object})
+        # known_to is excluded: closing a row later changes its known_to, not what was visible at tk.
+        df = pd.DataFrame(live, columns=self.COLS[:-1]).astype({"value": object})
         return df.sort_values(["instrument_key", "attr", "valid_from"]).reset_index(drop=True)
 
     def check_exclusion(self):
