@@ -149,3 +149,16 @@ Scheduled restart: 09:33 UTC (trigger trig_016k2PhmaKrabSxxMUUnipys; user-set, 4
 Still to queue: figures for Ch 8–12, 17, 28, 1-B, 4-C, primers, Ch 1–7 (after their revisions); U2 for Ch 17, Part III, Parts V–VIII.
 | primers-finish | wz1dbyljo | WP2 | 04_ch04b, 12_ch12b, 07_ch07b finished (COMPLETE); new listings swept to App F | done |
 | primers-pipeline | (see below) | u1 → figures → figcheck | 07_ch07b, 04_ch04b, 12_ch12b | running |
+
+## Stopped at cap (2026-10-18 05:18 UTC, meter ~92%)
+
+The pace guard fired NEAR_CAP at 05:17. All 10 running workflows were stopped (wrt9kw1ej, wc8sol35m, wpjuofa0m, wgydgxc54, w28pii0xt, wmllmn46e, wt3057wkb, wgzz9zxzv, w0wcd6yna, w9ho5nhr0). The autosnap loop keeps running (git only). Exact resume arguments are in `state/resume_runs.json`.
+
+State on disk at the stop:
+- **U2 narrative revision.** COMPLETE (log ticked): Ch 1 (10.7k→27.7k words), Ch 5 (15.2k→33.9k), Ch 6 (14.2k→36.7k). Nearly done: Ch 3 (26/27). In progress: Ch 7 (4/24), Ch 13 (13/23), Ch 14 (17/23), Ch 15 (15/26), Ch 16 (18/23). Brief only: Ch 2, Ch 4 (0/22). No verify pass has run yet on any of them.
+- **Figures (U4), checked.** Ch 13–16, 18–27 and primers 4-B and 12-B (85 PNGs). 7-B figures are made but not checked.
+- **Reader-lens.** synthesis.md COMPLETE. New file 03_ch03b_your_first_year_on_the_desk COMPLETE (11.7k). 12_ch12c_plan_valuation_dip_and_exit_as_derivatives PARTIAL (15.2k). Briefs exist for 08_ch08b (risk model and limit sheet) and 08_ch08c (morning P&L explain), but those files are not written yet.
+- **Research.** COMPLETE: lmt_private_and_european, courts_as_regime_variables, re_default_and_recovery_dataset, part_v_market_structure_2026, carvana_svb_wolfspeed. PARTIAL: private_credit_marks, listed_credit_futures, manufactured_credit_events, insurance_capital_forced_flow. MISSING: figure_data_series.
+- **U3.** COMPLETE: media parts I–II and III–IV, life_quant_shop_daily_life, perspectives_buyside. PARTIAL: media parts V–VIII, perspectives_dealers_and_systematic_shops. The briefs and chapters for 04_ch04c and 01_ch01b have not started.
+
+**Resume at 09:33:** resume each run in `state/resume_runs.json` (Workflow with scriptPath + resumeFromRunId + args). Then add a Fable quality read of revised Ch 1 (check for duplication, pacing, and bloat, since chapters grew 2–2.5×) BEFORE U2 scales to the rest of the book.

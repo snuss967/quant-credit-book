@@ -14,9 +14,9 @@
 - [x] 12. [14.4.2] LIST-TO-NARRATIVE + ANOTHER-SEAT (direct lender, ARCC Pluralsight) -- done: Mags reads Rule 2019 for Kaz; ARCC Pluralsight direct-lender seat.
 - [x] 13. [14.5] NEW-SCENE (Lumen, 2,500-3,500 words) -- done: Replays-folder Lumen scene, 2,560 words, decision on 10 Nov.
 - [x] 14. [14.5.1] MATH-GENTLY (binomial tail) + Full Derivation -- done: jury binomial box; Lumen answer via mirrored tail; Full Derivation.
-- [ ] 15. [14.5 Trend Watch] EXPAND-SCENE (Optimum) + ANOTHER-SEAT (CLO; opportunistic)
-- [ ] 16. [14.6 Docket Diary] EXPAND-SCENE (Robertshaw) + WHEN-TO-APPLY
-- [ ] 17. [14.6.1] BRIDGE + FULL-DERIVATION-MOVE (Lions Gate caution)
+- [x] 15. [14.5 Trend Watch] EXPAND-SCENE (Optimum) + ANOTHER-SEAT (CLO; opportunistic) -- done: courts-calendar Optimum scene; CLO and special-sits seats; 10-Q verified.
+- [x] 16. [14.6 Docket Diary] EXPAND-SCENE (Robertshaw) + WHEN-TO-APPLY -- done: Robertshaw register story; remedy-first judgment; Incora diary dates aligned.
+- [x] 17. [14.6.1] BRIDGE + FULL-DERIVATION-MOVE (Lions Gate caution) -- done: betting-line intuition, logit pointer, Full Derivation, Lions Gate window.
 - [ ] 18. [14.7.1] MATH-GENTLY (HMM, Bayes) + SHOP-LIFE beat
 - [ ] 19. [14.7.2] MATH-GENTLY (P vs Q) + WHEN-TO-APPLY
 - [ ] 20. [14.8.1 Serta] NEW-SCENE (3,000-4,000 words, three acts)

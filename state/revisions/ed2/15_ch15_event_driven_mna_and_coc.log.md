@@ -12,9 +12,9 @@
 - [x] 10. §15.2.2 Step 6: insurance-premium P vs Q box, 25% vs 15%.
 - [x] 11. §15.2.2 Step 7: drunk-lamppost random walk box, 53bp, 2 points.
 - [x] 12. Listing 15.1: normal vs lognormal, mean-preserving, Ito half-sigma-squared box.
-- [ ] 13. Three AI spec blocks: FULL-DERIVATION-MOVE (Engine: Full Specifications; Full Derivation subsections)
-- [ ] 14. Case Study EA 2025-26: EXPAND-SCENE (three meetings, decision point, Another Seat)
-- [ ] 15. §15.3.1: WHEN-TO-APPLY + real anchor (Focus Financial, 9fin)
+- [x] 13. Specs moved to Engine subsection; four Full Derivation subsections created.
+- [x] 14. EA case: three meetings, decision point, interlude, three-seat box.
+- [x] 15. §15.3.1: three-condition portability judgment; Focus Financial and 9fin anchors.
 - [ ] 16. §15.3.2: MATH-GENTLY (bell curve, Phi, digital options)
 - [ ] 17. §15.4.1 bullets: LIST-TO-NARRATIVE (three prospectuses side by side)
 - [ ] 18. §15.4.2: MATH-GENTLY (mixture inversion, dollar duration) + WHEN-TO-APPLY

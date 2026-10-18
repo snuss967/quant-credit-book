@@ -14,10 +14,10 @@
 - [x] 12. [§16.4.2] Note: fixed-point (8.66, 8.58, 8.56) and Poisson boxes; derivations moved.
 - [x] 13. [§16.4.3] Note: Kaz reprices at 29, spot-not-vol, Mags forecast, $3 coda.
 - [x] 14. [§16.5.2] Note: two vendors walked through statutes, Exercise 5 set up, citations kept.
-- [ ] 15. [§16.5.3 Derivation] MATH-GENTLY x3 + FULL-DERIVATION-MOVE + ANOTHER-SEAT (claims buyer).
-- [ ] 16. [§16.5.3, after "The pair"] WHEN-TO-APPLY.
-- [ ] 17. [§16.6 Hertz, the Whole Circuit] EXPAND-SCENE part three (desk replay; admin burn; make-whole split; Oct 2026 decision).
-- [ ] 18. [§16.7 Spirit Airlines] EXPAND-SCENE (2,000-2,500 words) + MATH-GENTLY (runway intensity) + Wolfspeed counterweight + WHEN-TO-APPLY.
+- [x] 15. [§16.5.3] Note: lognormal, Jensen, hazard boxes; square moved; claims-buyer seat added.
+- [x] 16. [§16.5.3 pair] Note: when-to-apply, three breaks, bar date first check.
+- [x] 17. [§16.6] Note: six-streets replay, admin-burn theta, make-whole table, October decision.
+- [x] 18. [§16.7] Note: post-mortem scene, runway dial box, Wolfspeed counterweight, when-to-apply, decision.
 - [ ] 19. [§16.8.1 The distribution you are trading] MATH-GENTLY (half-variance; mixtures).
 - [ ] 20. [§16.8.2 Sizing] MATH-GENTLY (Kelly) + FULL-DERIVATION-MOVE + WHEN-TO-APPLY.
 - [ ] 21. [§16.8.3 The pair trades] LIST-TO-NARRATIVE (+ optional dealer seat).

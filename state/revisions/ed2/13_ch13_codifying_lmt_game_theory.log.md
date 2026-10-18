@@ -8,12 +8,12 @@
 - [x] 6. Payoff-shape and partial-expectation boxes; derivation moved after intuition.
 - [x] 7. Serta in five movements, unblend table, CLO seat, June 19 argument.
 - [x] 8. Digital-put judgment passage: four failure modes, Mags checks counsel first.
-- [ ] 9. §13.4 payoff matrix Math, Gently #5, #6, #7
-- [ ] 10. §13.4 "Why prices drift" Math, Gently #8 + Incora blocking-third bridge
-- [ ] 11. §13.4 Levers WHEN-TO-APPLY (Robertshaw, knapsack wrong model)
-- [ ] 12. §13.5 Lumen NEW-SCENE + decision point + counter 3
-- [ ] 13. §13.5 Nash/Shapley Math, Gently #9, #10 + Full Derivation move
-- [ ] 14. §13.5 antitrust EXPAND-SCENE (Optimum) + Another Seat #3 (opportunistic)
+- [x] 9. Payoff matrix, knapsack, loser-pays auction Math Gently boxes with numbers.
+- [x] 10. Thermometer global-games box; Wesco blocking-third price rise as exception.
+- [x] 11. Robertshaw register fight: knapsack wrong when coalitions self-assemble.
+- [x] 12. Lumen scene: wall, prices, argument, joinder decision, take-out twist, counter 3.
+- [x] 13. Nash and Shapley boxes; FOC and summation moved to section end.
+- [x] 14. Selecta and Optimum suits dated, cast reaction, opportunistic-fund seat box.
 - [ ] 15. §13.6 WHEN-TO-APPLY capped forward + quant-shop-life vignette (holder_hhi)
 - [ ] 16. §13.7 Math, Gently #11 fixed points + Full Derivation move (clearing map)
 - [ ] 17. §13.7.1 Trinseo EXPAND-SCENE + decision point

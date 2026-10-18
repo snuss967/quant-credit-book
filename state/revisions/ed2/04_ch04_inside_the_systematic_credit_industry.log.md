@@ -1,0 +1,24 @@
+# U2 progress log: Chapter 4, Inside the Systematic Credit Industry
+
+- [ ] 1. [Chapter opening, 7:40 a.m.] EXPAND-SCENE (~2,000 words); learning objectives to paragraph
+- [ ] 2. [§4.1 The Five Businesses] LIST-TO-NARRATIVE + ANOTHER-SEAT (Ares/BlueCove vs ARCC)
+- [ ] 3. [§4.1, end] SHOP-LIFE vignette (security master, exchange-offer CUSIPs)
+- [ ] 4. [§4.2 Why Credit Lagged] BRIDGE + AUM Trend Watch
+- [ ] 5. [§4.3 Six-Axis Map, six questions] LIST-TO-NARRATIVE
+- [ ] 6. [§4.3 Scoring the breadth column] MATH-GENTLY x3 + FULL-DERIVATION + WHEN-TO-APPLY
+- [ ] 7. [§4.4 Value Q vs P] MATH-GENTLY + ANOTHER-SEAT (Apollo) + WHEN-TO-APPLY
+- [ ] 8. [§4.4 cross-sectional neutralization] MATH-GENTLY (residuals/handicap)
+- [ ] 9. [§4.5 Data stack, ex-post filter bias] MATH-GENTLY x2 + FULL-DERIVATION
+- [ ] 10. [§4.5 Case Study Factor Zoo] EXPAND-SCENE 2,500-3,500 words + decision point
+- [ ] 11. [§4.6 DTS] MATH-GENTLY (proportional moves) + WHEN-TO-APPLY
+- [ ] 12. [§4.6 Man's three layers] MATH-GENTLY x2 + FULL-DERIVATION + WHEN-TO-APPLY
+- [ ] 13. [§4.6 Nuveen's identity] MATH-GENTLY (random walk vs OU) + FULL-DERIVATION
+- [ ] 14. [§4.7 TC decomposition] MATH-GENTLY + ANOTHER-SEAT (dealer/NBLP)
+- [ ] 15. [§4.7 Break-even turnover] MATH-GENTLY + WHEN-TO-APPLY
+- [ ] 16. [§4.7 Case Study Man Numeric execution] EXPAND-SCENE 2,000-3,000 words + decision point
+- [ ] 17. [§4.8 Capacity] MATH-GENTLY x2 + FULL-DERIVATION + LIST-TO-NARRATIVE + WHEN-TO-APPLY
+- [ ] 18. [§4.8 Dynkin cap weights] MATH-GENTLY (one line)
+- [ ] 19. [§4.9 Risk] MATH-GENTLY x2 + FULL-DERIVATION + WHEN-TO-APPLY
+- [ ] 20. [§4.10 KMV to Blackstone] EXPAND-SCENE + MATH-GENTLY (Merton) + ANOTHER-SEAT (insurer)
+- [ ] 21. [§4.11 Genealogy and Empty Cells] LIST-TO-NARRATIVE + BRIDGE + figure hook
+- [ ] 22. [§4.12 Desk Debrief] BRIDGE end-of-day scene

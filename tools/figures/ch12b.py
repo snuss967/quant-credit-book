@@ -115,34 +115,36 @@ def fig_out_of_court_machine():
 # Figure 12-B.2: the Chapter 11 clocks on one day axis (section 12B.5)
 # --------------------------------------------------------------------------------------------------
 def fig_chapter11_clocks():
-    # (label, group colour, [(start, end, kind)], end label, marker)
+    # (label, group colour, [(start, end, kind)], end label, mode)
+    # mode: "out" label to the right of the bar, "in_light" label inside the light (extension) part,
+    #       "in_solid" label inside the solid bar, "arrow" open-ended bar to the axis edge.
     BL, OR, VI = BLUE, ORANGE, VIOLET
-    xmin, xmax = -140, 700
+    xmin, xmax = -140, 760
     rows = [
         ("Automatic stay (\u00a7362)",                    BL, [(0, 1, "solid")], "until relief or case end", "arrow"),
-        ("Interim-relief window (Rule 6003)",            BL, [(0, 21, "solid")], "21 d", None),
-        ("Schedules due (Rule 1007(c))",                 BL, [(0, 14, "solid")], "14 d, usually extended", None),
-        ("Final DIP hearing (Rule 4001(c))",             BL, [(0, 14, "solid")], "at least 14 d after service", None),
-        ("\u00a7341 meeting (Rule 2003(a))",              BL, [(21, 40, "solid")], "day 21\u201340", None),
-        ("Lien-challenge period (DIP order)",            OR, [(0, 60, "mid"), (60, 75, "solid")], "60\u201375 d", None),
-        ("Exclusivity to file (\u00a71121(b))",           OR, [(0, 120, "solid"), (120, 548, "light")], "120 d; cap 18 months", None),
-        ("Exclusivity to solicit (\u00a71121(c)(3))",     OR, [(0, 180, "solid"), (180, 608, "light")], "180 d; cap 20 months", None),
-        ("Real-property leases (\u00a7365(d)(4))",        VI, [(0, 120, "solid"), (120, 210, "mid")], "120 + 90 d", None),
-        ("Governmental bar date (\u00a7502(b)(9))",       VI, [(0, 180, "solid")], "180 d", None),
-        ("Avoidance actions (\u00a7546(a))",              VI, [(0, 1, "solid")], "2 years (730 d)", "arrow"),
-        ("Preference look-back (\u00a7547(b)(4))",        VI, [(-365, -90, "light"), (-90, 0, "solid")], "90 d; insiders 1 year", None),
-        ("Goods look-back (\u00a7503(b)(9))",             VI, [(-20, 0, "solid")], "20 d", None),
+        ("Interim-relief window (Rule 6003)",            BL, [(0, 21, "solid")], "21 d", "out"),
+        ("Schedules due (Rule 1007(c))",                 BL, [(0, 14, "solid")], "14 d, usually extended", "out"),
+        ("Final DIP hearing (Rule 4001(c))",             BL, [(0, 14, "solid")], "at least 14 d after service", "out"),
+        ("\u00a7341 meeting (Rule 2003(a))",              BL, [(21, 40, "solid")], "day 21\u201340", "out"),
+        ("Lien-challenge period (DIP order)",            OR, [(0, 60, "mid"), (60, 75, "solid")], "60\u201375 d", "out"),
+        ("Exclusivity to file (\u00a71121(b))",           OR, [(0, 120, "solid"), (120, 548, "light")], "120 d; cap 18 months", "in_light"),
+        ("Exclusivity to solicit (\u00a71121(c)(3))",     OR, [(0, 180, "solid"), (180, 608, "light")], "180 d; cap 20 months", "in_light"),
+        ("Nonresidential leases (\u00a7365(d)(4))",       VI, [(0, 120, "solid"), (120, 210, "mid")], "120 + 90 d", "out"),
+        ("Governmental bar date (\u00a7502(b)(9))",       VI, [(0, 180, "solid")], "180 d", "out"),
+        ("Avoidance actions (\u00a7546(a))",              VI, [(0, 730, "solid")], "2 years (730 d)", "in_solid"),
+        ("Preference look-back (\u00a7547(b)(4))",        VI, [(-365, -90, "light"), (-90, 0, "solid")], "90 d; insiders 1 year", "out"),
+        ("Goods look-back (\u00a7503(b)(9))",             VI, [(-20, 0, "solid")], "20 d", "out"),
     ]
     n = len(rows)
-    fig, ax = new_figure((7.0, 4.9))
+    fig, ax = new_figure((7.0, 5.1))
     ax.grid(False)
     ax.grid(axis="x", color=GRID, linewidth=0.7)
     ax.set_axisbelow(True)
     bar_h = 0.58
     alpha = {"solid": 1.0, "mid": 0.55, "light": 0.28}
-    for i, (label, col, segs, endlab, mk) in enumerate(rows):
+    for i, (label, col, segs, endlab, mode) in enumerate(rows):
         y = n - 1 - i
-        if mk == "arrow":
+        if mode == "arrow":
             # open-ended clock: a bar to the right edge with an arrowhead, label inside the bar
             ax.barh(y, xmax - 14, left=0, height=bar_h, color=col, alpha=alpha["solid"], linewidth=0, zorder=3)
             ax.plot([xmax - 10], [y], marker=">", color=col, markersize=7, clip_on=False, zorder=4, linestyle="none")
@@ -150,7 +152,12 @@ def fig_chapter11_clocks():
             continue
         for (a, b, kind) in segs:
             ax.barh(y, b - a, left=a, height=bar_h, color=col, alpha=alpha[kind], linewidth=0, zorder=3)
-        ax.text(segs[-1][1] + 8, y, endlab, ha="left", va="center", fontsize=7.8, color=INK_2, zorder=5)
+        if mode == "out":
+            ax.text(segs[-1][1] + 8, y, endlab, ha="left", va="center", fontsize=7.8, color=INK_2, zorder=5)
+        elif mode == "in_light":
+            ax.text(segs[-1][0] + 10, y, endlab, ha="left", va="center", fontsize=7.8, color=INK, zorder=5)
+        elif mode == "in_solid":
+            ax.text(14, y, endlab, ha="left", va="center", fontsize=7.8, color=SURFACE, fontweight="bold", zorder=5)
         if segs[0][0] < xmin:       # the look-back runs past the left edge of the axis
             ax.plot([xmin + 5], [y], marker="<", color=col, alpha=alpha["light"], markersize=6, clip_on=False,
                     zorder=4, linestyle="none")
@@ -161,14 +168,19 @@ def fig_chapter11_clocks():
     ax.tick_params(axis="y", length=0)
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(-0.7, n + 0.2)
-    ax.set_xticks([-100, 0, 100, 200, 300, 400, 500, 600])
+    ax.set_xticks([-100, 0, 100, 200, 300, 400, 500, 600, 700])
     ax.set_xlabel("Days from the petition (negative = look-back before it)")
-    # key for the three bar weights, in the empty lower right
     from matplotlib.patches import Patch
+    # key for the bar weights, in the empty lower right
     handles = [Patch(fc=INK_2, alpha=alpha[k], label=t) for k, t in
-               [("solid", "fixed period"), ("mid", "range or extension"), ("light", "court may extend, to the cap")]]
+               [("solid", "fixed period"), ("mid", "range or extension"), ("light", "longer period: cap, or insiders")]]
     ax.legend(handles=handles, loc="lower right", bbox_to_anchor=(1.0, 0.0), frameon=True, framealpha=1.0,
               facecolor=SURFACE, edgecolor="none", fontsize=7.8, handlelength=1.4, borderpad=0.3, labelspacing=0.35)
+    # key for the bar colours (what kind of clock), above the axes
+    groups = [Patch(fc=BL, label="first days: court-set procedure"), Patch(fc=OR, label="bargaining windows"),
+              Patch(fc=VI, label="claims and estate value")]
+    fig.legend(handles=groups, loc="outside upper center", ncol=3, fontsize=7.8, frameon=False,
+               handlelength=1.4, columnspacing=1.6, labelcolor=INK_2)
     return finish(fig, "ch12b_chapter11_clocks")
 
 
@@ -248,11 +260,14 @@ def fig_plan_value_transfer():
     r2_at = (V - C1) * V / (C2 * V) * 100
     ax.plot([V], [100], "o", color=BLUE, markersize=6, zorder=5)
     ax.plot([V], [r2_at], "o", color=ORANGE, markersize=6, zorder=5)
-    # direct labels: a coloured dot carries identity, the text stays ink
-    ax.plot([812], [92], "o", color=BLUE, markersize=4, zorder=5)
-    ax.text(822, 92, "Senior, claim 800", fontsize=8.5, color=INK_2, va="center")
-    ax.plot([1085], [22], "o", color=ORANGE, markersize=4, zorder=5)
-    ax.text(1095, 22, "Junior, claim 600", fontsize=8.5, color=INK_2, va="center")
+    # direct labels beside each curve: a coloured dot on the curve carries identity, the text stays ink
+    x_s, x_j = 1250.0, 1130.0
+    ax.plot([x_s], [V / x_s * 100], "o", color=BLUE, markersize=4, zorder=5)
+    ax.annotate("Senior, claim 800", (x_s, V / x_s * 100), xytext=(4, 9), textcoords="offset points",
+                fontsize=8.5, color=INK_2, va="center")
+    ax.plot([x_j], [(x_j - C1) * V / (C2 * x_j) * 100], "o", color=ORANGE, markersize=4, zorder=5)
+    ax.annotate("Junior, claim 600", (x_j, (x_j - C1) * V / (C2 * x_j) * 100), xytext=(4, -10),
+                textcoords="offset points", fontsize=8.5, color=INK_2, va="center")
     ax.text(1175, 112, "A higher plan value pays the senior\nin shares worth less than its claim\nand the junior in shares worth more",
             fontsize=8, color=INK_2, va="center", ha="left", linespacing=1.2)
     ax.set_xlim(C1, C1 + C2)

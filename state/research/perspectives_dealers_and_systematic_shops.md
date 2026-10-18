@@ -6,170 +6,131 @@ Conventions: the paragraph "How X looks at our bond" in each section is the rese
 
 ## 0. How to use this dossier
 
-(to be written last)
+**What is solid.** Section 1 to 4 statements marked with a date, speaker and source come from fetched primary or near-primary text: bank earnings-call transcripts (Fool machine transcripts, so wording may carry transcription errors), SEC exhibits (Jefferies, Virtu, ICE/MarketAxess, the SEC's Two Sigma order), JPMorgan and Barclays investor documents, firm web pages, the shelf PDFs with page numbers, and the FSB, Fed and NBER sources.
+
+**What is thin.** (1) The web search budget was spent, so no search-found interviews with heads of credit trading exist here; the nearest are Fred Orlan (Jefferies, Investor Day) and Paris Pender (Trumid). (2) Citadel Securities' site returned 403, so its views arrive through The DESK. (3) AQR, Two Sigma and Invesco have no credit quote on their own pages that I could fetch; the book should say so rather than invent. (4) I did not fetch 2020 or 2022 earnings calls for JPMorgan, Goldman, BofA or Citi; only Morgan Stanley's Q1 2020 call, so first-person dealer accounts of March 2020 and 2022 are thin. (5) Credit-specific revenue is undisclosed at Jane Street, Virtu and Citadel Securities.
+
+**Hybrid claims.** Any sentence starting "How X looks at our bond" and any (i) in the table is inference. Facts "carried" from other dossiers inherit their CHECK status.
 
 ## 1. Dealer credit desks
 
 ### 1.1 Jefferies
 
-**Seat.** Mid-sized, partly employee-owned dealer. Management said at its 16 Oct 2025 Investor Day that Handler, Friedman, the chairman and the leadership "collectively own roughly 35% of the Company." Fixed income is a flow-and-ideas business: Fred Orlan (Global Head of Fixed Income) said the franchise "prioritiz[es] quality share over simple market share" and that in high yield Jefferies ranks "number two in portfolio trading" (his words, no ranking source given). The book is funded by the group's unsecured debt and, increasingly, by a Japanese bank partner: SMBC had raised its stake to about 20% by the Q3 FY26 release (28 Sep 2026). Prime brokerage is the growth engine on the balance sheet, so inventory is growing "in line with" the business, and Level 3 assets were 3.1% of inventory (Investor Day, finance presentation; speaker not named in the transcript extract).
-
-**Stated views (verbatim).**
+**Seat.** Mid-sized dealer: management owns "roughly 35% of the Company" (Investor Day, 16 Oct 2025) and SMBC about 20% (28 Sep 2026). Fixed income is a flow-and-ideas franchise; Global Head Fred Orlan says it "prioritiz[es] quality share over simple market share" and runs high yield as one book across e-trading, portfolio trading and voice. Funded by group debt; Level 3 assets were 3.1% of inventory.
 
 | Date | Speaker | Quote | Source |
 | --- | --- | --- | --- |
-| 16 Oct 2025 | Rich Handler, CEO | "it doesn't feel like we're on the edge of a default cycle, quite frankly, to me, and I've been on the edge of default cycles before." | Investor Day transcript, Q&A (Ryan Kenney, Morgan Stanley, asked about credit) |
-| 16 Oct 2025 | Handler | "there's a functioning liquid debt and equity market right now." | same |
-| 16 Oct 2025 | Fred Orlan, Global Head of Fixed Income | "seamless integration between our low touch electronic trading and our high touch voice desks is essential to making this happen." | same |
-| 28 Sep 2026 | Handler and Friedman | Fixed Income net revenues "were $176 million, down 26% from the prior year quarter, reflecting ongoing slowness in market activity." | Q3 FY26 earnings release (8-K Ex. 99) |
+| 16 Oct 2025 | Rich Handler, CEO | "it doesn't feel like we're on the edge of a default cycle, quite frankly, to me, and I've been on the edge of default cycles before." | Investor Day transcript (SEC Ex. 99.1), Q&A |
+| 16 Oct 2025 | Orlan | "seamless integration between our low touch electronic trading and our high touch voice desks is essential to making this happen." | same |
+| 28 Sep 2026 | Handler and Friedman | Fixed Income net revenues "were $176 million, down 26% from the prior year quarter, reflecting ongoing slowness in market activity." | Q3 FY26 release |
 
-Paraphrase: Orlan said high-yield volumes rose five times over ten years, driven by the e-trading build, which in turn doubled voice volumes; international is 27% of fixed-income trading revenue. The nine-month FY26 release attributes lower fixed income to "ongoing lower industry volumes" and notes the securitized business took "a mark-to-market loss associated with Market Financial Solutions."
+**Roles.** *First Brands (2025):* its Point Bonita fund bought the receivables; Handler: "we believe we were defrauded"; Friedman: "we did not do a deal for First Brands in 2025." *Saks Global:* initial purchaser of the $2.2bn 11.000% senior secured notes due 2029 (Dec 2024); Chapter 11 on 13 Jan 2026. *Revlon (2020):* BrandCo facility agent (Saks and Revlon carried from case_lmt_autopsies_us_2020_2026.md).
 
-**Roles in named events.**
-- *First Brands (2025-26): arranger of past financings and, through Point Bonita (Leucadia Asset Management), buyer of its receivables.* Brian Friedman told the Investor Day: "we did not do a deal for First Brands in 2025," and Handler said "we believe we were defrauded." The Q3 FY26 release blames "weaker performance across several fund strategies, including Point Bonita." A Jefferies-linked fund held about $715M of related receivables (carried from trend_private_credit_convergence.md; UNVERIFIED amount).
-- *Market Financial Solutions (2026):* the same release books an MTM loss in securitized products.
-- *Saks Global (Dec 2024 to Jan 2026): initial purchaser.* Jefferies placed the $2.2bn of 11.000% senior secured notes due 2029 that funded the Neiman Marcus purchase (23 Dec 2024); Saks missed about $126mm of December 2025 interest and filed Chapter 11 on 13 Jan 2026, S.D. Tex. No. 26-90103 (carried from case_lmt_autopsies_us_2020_2026.md; cites Debtwire, Bondoro and Latham). A dealer's new-issue book is a credit position until it is distributed.
-- *Revlon BrandCo (May 2020): administrative agent on the BrandCo facility* (Citibank was agent on the 2016 term loan; carried from case_lmt_autopsies_us_2020_2026.md).
-- *Credit-event advisory:* Jefferies' Bill Derrough is a recurring LME voice (podcast, 31 Aug 2026, carried from media_podcasts_credit_quant.md). No verified Jefferies role as an uptier participant.
-
-**How Jefferies looks at our bond.** The desk sees a 20-day jump-to-default haircut on a B-rated 2029. Jefferies sees a client conversation: a sponsor-backed issuer it helped underwrite, a hedge-fund buyer who wants the new-issue allocation, and a way to turn flow into trade ideas. It wants the bond to turn (small inventory, fast), prefers e-trading for the low-touch tail, keeps voice for the unusual, and carries little of it overnight. Its edge is relationships and the repeated game across ECM, DCM and trading; its constraint is a balance sheet and a stock that react to a single bad fund.
+**Our bond.** A client conversation: the issuer is a banking client, the buyer a hedge fund wanting allocation. Jefferies turns the bond fast, keeps little overnight, and its stock reacts to a single bad fund or deal.
 
 ### 1.2 Bank of America
 
-**Seat.** BofA Global Markets is a flow-credit franchise with a deposit-funded balance sheet ($3.5 trillion of assets and more than $960B of global liquidity sources at Q1 2026). CFO Alastair Borthwick (14 Oct 2026): "we tend to benefit a lot from the fact that we're really big in credit mortgages and munis. Those are great leading franchises for us." Sales and trading was $5.1B in Q3 2026 (down 5%), with equities a record and FICC down 17%. Holding period is days; the book is client-driven; the stated constraint is client activity, not capital.
-
-**Stated views (verbatim).**
+**Seat.** Flow-credit franchise on a deposit-funded balance sheet ($3.5 trillion of assets, more than $960B of liquidity, Q1 2026). CFO Alastair Borthwick, 14 Oct 2026: "we tend to benefit a lot from the fact that we're really big in credit mortgages and munis." Q3 2026 sales and trading was $5.1B (down 5%), FICC down 17%. Holding period is days.
 
 | Date | Speaker | Quote | Source |
 | --- | --- | --- | --- |
-| 14 Oct 2026 | Alastair Borthwick, CFO | "reduced client activity and changing market conditions, including a major shift in interest rates, significantly affected our leading FICC micro businesses, including credit mortgages and municipals." | Q3 2026 call (Fool transcript) |
-| 14 Oct 2026 | Borthwick | "It just happens when rates go up 85 basis points in a quarter, that tends not to be good for those businesses. Clients tend to slow their activity." | same, Q&A (Jim Mitchell) |
+| 14 Oct 2026 | Borthwick | "It just happens when rates go up 85 basis points in a quarter, that tends not to be good for those businesses. Clients tend to slow their activity." | Q3 2026 call |
 | 14 Oct 2026 | Borthwick | "we happen to have a bigger fixed income shop than we do equities." | same |
-| 16 Jul 2025 | BofA management (prepared remarks) | "Global markets continue to perform well with a record second quarter level of sales and trading revenue." | Q2 2025 call (the quarter that contained the April 2025 tariff shock) |
 
-Paraphrase: Q1 2026 (15 Apr 2026): BofA reported 15 straight quarters of year-on-year sales-and-trading growth, so the March 2026 volatility did not hurt the credit book; by Q3 2026 the rate shock turned the sign. "Micro" in BofA's vocabulary means the cash-and-credit products (credit, mortgages, munis) against "macro" (rates, FX, commodities).
+**Roles.** Dealer in March 2020, 2022 and April 2025 (no first-person credit remarks found); in Q2 2025 BofA reported a "record second quarter level of sales and trading revenue." No verified LMT role.
 
-**Roles in named events.** Dealer in March 2020, 2022 and April 2025; no first-person BofA credit remarks about those episodes were found in the calls read. BofA is a named leveraged-finance underwriter and syndicate bank; no verified LMT participation.
-
-**How BofA looks at our bond.** BofA sees a name in its credit-flow franchise: a client wants to sell $5mm, the desk must decide in seconds whether to take it into inventory or work it. Its edge is client flow and a cheap balance sheet; its P&L is mostly bid-ask on turnover, which collapses when "clients tend to slow their activity." It will buy the bond when it can turn it, and it widens when rates gap. It is a seller of risk to the buy side, not a holder.
+**Our bond.** A name in a "micro" franchise where P&L is bid-ask on turnover, which collapses when clients stop trading. It buys what it can turn and widens when rates gap.
 
 ### 1.3 JPMorgan
 
-**Seat.** The largest US dealer. CEO Jamie Dimon (Q1 2026 call, 14 Apr 2026): "we buy and sell almost $4 trillion a day. And you make a little bit each time you buy and sell, and then you have to manage the exposure and the risk." Credit is one line inside Fixed Income Markets (Q3 2026: $5.4B, down 4% year on year; credit, rates and commodities lower, currencies and EM higher). Holding periods are days. Risk comes from client flow, funded on a deposit-rich balance sheet; the binding limits are G-SIB surcharge, RWA and the stress-capital buffer, not funding cost. CFO Jeremy Barnum (14 Apr 2026): G-SIB is "a significant disincentive to a particular type of business, in particular some markets business."
-
-**Stated views (verbatim).**
+**Seat.** Largest US dealer. Dimon (14 Apr 2026): "we buy and sell almost $4 trillion a day. And you make a little bit each time you buy and sell, and then you have to manage the exposure and the risk." Credit sits inside Fixed Income Markets ($5.4B in Q3 2026, down 4%, "credit" lower). Days-long holds, deposit funding; the binding limits are G-SIB, RWA and the stress buffer: Barnum calls G-SIB "a significant disincentive to a particular type of business, in particular some markets business" (14 Apr 2026).
 
 | Date | Speaker | Quote | Source |
 | --- | --- | --- | --- |
-| 4 Apr 2023 | Jamie Dimon, shareholder letter | "many of the new 'shadow bank' market makers are fair-weather friends — they do not step in to help clients in tough times." | 2022 Annual Report letter, pp. 22-23 (printed), dated 4 Apr 2023 |
-| 4 Apr 2023 | Dimon | "banks deployed over $500 billion in liquidity for clients" at the beginning of COVID-19 in March 2020 | same |
-| 6 Apr 2026 | Dimon, 2025 shareholder letter | "brokerage inventories are far smaller as a percentage of investments than ever before and, as a result, market makers are less able to intermediate in extremely volatile markets." | 2025 Annual Report letter |
-| 14 Apr 2026 | Barnum | "the types of extremely gappy discontinuous markets with low liquidity that keep clients on the sidelines" (his definition of "bad volatility"; he said none had broadly been seen in March 2026) | Q1 2026 call |
-| 14 Apr 2026 | Dimon | "volatility ... generally helps because it makes spreads a little bit wider, all things being equal." | same |
+| 4 Apr 2023 | Dimon | "many of the new 'shadow bank' market makers are fair-weather friends — they do not step in to help clients in tough times." | 2022 shareholder letter, pp. 22-23 |
+| 6 Apr 2026 | Dimon | "brokerage inventories are far smaller as a percentage of investments than ever before and, as a result, market makers are less able to intermediate in extremely volatile markets." | 2025 shareholder letter |
+| 14 Apr 2026 | Barnum | "extremely gappy discontinuous markets with low liquidity that keep clients on the sidelines" (his "bad volatility"; none broadly seen in March 2026) | Q1 2026 call |
 | 13 Oct 2026 | Dimon | "some of the credit terms have got a little bit loose ... a little too much priming good assets" | Q3 2026 call (machine transcript) |
 
-Paraphrase: the Q2 2025 call (15 Jul 2025) had Barnum "a little bit surprised by the resilience of the Markets revenues" after the April 2025 tariff shock; Dimon on 13 Oct 2026 said a couple of recent "unwise" episodes, "not huge," including on "the fixed income arbitrage type of side," "were handled pretty easily by the street" (machine transcript; the rest is paraphrase).
+**Roles.** March 2020: dealer; Dimon says banks "deployed over $500 billion in liquidity for clients" (self-reported). Autumn 2025: creditor to Tricolor and First Brands; the "cockroach" remark is carried from the Oaktree memo. No verified LMT role.
 
-**Roles in named events.** *March 2020:* primary dealer and liquidity provider; Dimon's count is $500B+ of liquidity deployed to clients (self-reported; the Fed's PDCF and corporate facilities are in section 5). *Tricolor and First Brands (autumn 2025):* creditor; Dimon's "cockroach" remark ("when you see one cockroach, there are probably more," 14 Oct 2025) is carried from the Oaktree memo quoted in perspectives_buyside_credit_managers.md and not re-verified here. No verified JPMorgan role as uptier participant.
-
-**How JPMorgan looks at our bond.** To the desk it is a spread and a jump-to-default. To JPMorgan it is one of roughly 4 trillion dollars a day of turnover, an inventory line that must clear the G-SIB and RWA tests, a hedge in CDX or a basket in a portfolio trade, and a name tied to a lending, underwriting and treasury relationship. It will make a price to keep the franchise, widen if volatility turns "gappy," and recycle the risk to the buy side. It is not the natural holder.
+**Our bond.** One of $4 trillion of daily turnover, an inventory line that must clear the G-SIB test, a CDX or portfolio-trade hedge. It prices to keep the franchise, widens when markets gap, and sells the risk on.
 
 ### 1.4 Goldman Sachs
 
-**Seat.** Goldman's FICC is split into intermediation (market making in rates, credit, mortgages, FX, commodities) and financing (repo, prime-like lending against collateral, structured financing). The financing leg has become the point: CFO Denis Coleman, 13 Oct 2026, "financing revenues of $12.7 billion were a record and represented over 40% of combined FICC and Equities revenues" year to date. In Q3 2026 FICC intermediation fell 7% "as lower results in mortgages, rates and credit were largely offset by strong performance in currencies and commodities," while FICC financing rose 14% to $1.21B. Holding periods are days for intermediation and months for financing; the funding is Goldman's secured and unsecured wholesale book.
-
-**Stated views (verbatim).**
+**Seat.** FICC splits into intermediation (market making) and financing (repo, structured and asset-backed lending). Financing is the point: CFO Denis Coleman (13 Oct 2026): "total financing revenues of $12.7 billion were a record and represented over 40% of combined FICC and Equities revenues." FICC intermediation fell 7% in Q3 2026 "as lower results in mortgages, rates and credit were largely offset by strong performance in currencies and commodities."
 
 | Date | Speaker | Quote | Source |
 | --- | --- | --- | --- |
-| 13 Oct 2026 | David Solomon, CEO | "financing activities have become a larger and more durable component of our markets businesses, representing over 40% of FICC and Equities revenues year-to-date." | Q3 2026 call (Fool transcript) |
-| 13 Oct 2026 | Coleman | "growth in financing revenues has contributed to greater durability in FICC and Equities and is underpinned by a robust risk framework that includes diversified exposures, limits, concentration management and comprehensive stress testing." | same |
-| 13 Apr 2026 | Coleman | FICC intermediation in rates and mortgages was lower "as results were impacted by a tougher market making backdrop." | Q1 2026 call |
-| 16 Jul 2025 | Goldman management, prepared remarks (the transcript labels the speaker inconsistently) | "While balances declined modestly in early April, clients quickly re-levered" | Q2 2025 call (April 2025 tariff shock) |
+| 13 Oct 2026 | Solomon, CEO | "financing activities have become a larger and more durable component of our markets businesses, representing over 40% of FICC and Equities revenues year-to-date." | Q3 2026 call |
+| 13 Apr 2026 | Coleman | rates and mortgages were lower "as results were impacted by a tougher market making backdrop." | Q1 2026 call |
+| 16 Jul 2025 | Goldman management (speaker label unreliable) | "While balances declined modestly in early April, clients quickly re-levered" | Q2 2025 call |
 
-Paraphrase: Goldman leads the league tables in M&A and ranks first or second in leveraged lending and high-yield underwriting (Q3 2026 call), so its credit trading is partly a distribution arm for its own leveraged-finance book.
+**Roles.** Dealer through March 2020 and April 2025 (no first-person credit remarks found). Through its asset manager, a scaled private-credit lender: record $491B of alternative assets under supervision (Q3 2026); Goldman Sachs BDC was a Pluralsight lender (carried).
 
-**Roles in named events.** Dealer through March 2020 and April 2025 (no first-person credit remarks found in the calls read); and, through Goldman Sachs Asset Management, a scaled private-credit manager: alternative assets under supervision reached a record $491B (Q3 2026), which links it to the direct-lending side of the book (see Ch 17). No verified Goldman role as LMT participant.
-
-**How Goldman looks at our bond.** Goldman sees the bond as collateral and as a client trade. It will lend against it (secured financing), make a price in size to a hedge fund that finances with it, and keep any residual inventory small and hedged. The profit is spread plus financing carry; the constraint is RWA. A bond whose price is moving on a document trapdoor is a problem for the risk framework, not an opportunity for the desk.
+**Our bond.** Collateral and a client trade: lend against it, quote size to a hedge fund that finances with it, hold little. Profit is spread plus financing carry; the constraint is RWA.
 
 ### 1.5 Citi
 
-**Seat.** Citi's Markets division reports "Spread products and other fixed income" separately from "Rates and currencies"; credit trading and securitized financing sit in the first. The strategic pivot since its Investor Day is toward financing: CFO Gonzalo Luchetti (13 Oct 2026) said average loans rose 30% "primarily driven by spread products, as we executed against our Investor Day strategy to drive more stable financing revenues." The seat is therefore a financier of credit assets (asset-backed, commercial real estate, private-credit-linked lending) more than a pure market maker. Funding is deposit-based, with the balance sheet at $2.8 trillion (Q1 2026).
-
-**Stated views (verbatim).**
+**Seat.** Credit trading and securitized financing sit in "Spread products and other fixed income." The pivot is toward financing: CFO Gonzalo Luchetti (13 Oct 2026) said average loans rose 30%, "primarily driven by spread products, as we executed against our Investor Day strategy to drive more stable financing revenues." Deposit-funded; balance sheet $2.8 trillion (Q1 2026).
 
 | Date | Speaker | Quote | Source |
 | --- | --- | --- | --- |
-| 13 Oct 2026 | Luchetti, CFO | "Fixed income revenues were up 4% with spread products and other fixed income up 13% driven by an increase in spread products financing revenues." | Q3 2026 call |
-| 13 Oct 2026 | Jane Fraser, CEO | "spreads are remaining tight in investment grade, refinancing activity should stay elevated." | same |
-| 15 Jul 2025 | Mark Mason, then CFO | "Spread products and other fixed income was up 3%, driven by higher financing activity and loan growth partially offset by lower credit trading." | Q2 2025 call (the quarter of the April 2025 shock) |
-| 14 Apr 2026 | Citi CFO (prepared remarks) | Corporate exposure is "78% investment grade"; Citibank's non-bank loans include "$22 billion of corporate private credit, which is 100% securitized, 98% investment grade" | Q1 2026 call |
+| 15 Jul 2025 | Mark Mason, then CFO | "Spread products and other fixed income was up 3%, driven by higher financing activity and loan growth partially offset by lower credit trading." | Q2 2025 call (the April 2025 quarter) |
+| 13 Oct 2026 | Jane Fraser, CEO | "spreads are remaining tight in investment grade, refinancing activity should stay elevated." | Q3 2026 call |
+| 14 Apr 2026 | Citi CFO | "$22 billion of corporate private credit, which is 100% securitized, 98% investment grade" | Q1 2026 call |
 
-Paraphrase: Fraser (13 Oct 2026) said the lead-left on SoftBank's high-yield deal was "the largest ever high yield bond issue" and that Citi is on 17 of the top 25 investment-grade deals; the point for the desk is that Citi's distribution business creates the new issue the secondary desk later makes markets in.
+**Roles.** *Revlon (11 Aug 2020):* agent on the 2016 term loan that wired about $894mm of principal by mistake; the Second Circuit vacated the lower court on 8 Sep 2022 (carried from case_lmt_autopsies_us_2020_2026.md). Dealer in March 2020 and April 2025.
 
-**Roles in named events.** *Revlon (Aug 2020):* administrative agent on the 2016 term loan that mistakenly wired about $894mm of principal on 11 Aug 2020 (carried from case_lmt_autopsies_us_2020_2026.md; Second Circuit reversed the lower court in 2022). It is the textbook case of the agent bank as an operational counterparty in a stressed credit. *March 2020 and April 2025:* dealer; Citi's Q2 2025 line above is the only first-person credit-trading remark found.
-
-**How Citi looks at our bond.** Citi sees a name in a loan-and-bond book it may also lend to, finance, underwrite and hedge with its CDS desk. It will price the bond off the relationship, quote tighter to clients who bring ECM and DCM mandates, and prefer to own the financing leg (repo, warehouse) than the credit. A bond with a trapdoor to a drop-down is, for Citi, also a loan-agent question: who is the agent, and who funds the wire?
+**Our bond.** A relationship name Citi may lend to, finance, underwrite and hedge. It prefers owning the financing leg (repo, warehouse) to the credit, and a drop-down bond is also an agent-bank question: who funds the wire?
 
 ### 1.6 Barclays
 
-**Seat.** The only European universal bank in the set with a large US-style credit franchise. Group CEO C. S. Venkatakrishnan, at the H1 2026 call on 28 Jul 2026: "This is the house that Fixed Income built." Equities is now "30-odd%" of Markets revenue, and the bank is steering to "Financing versus the rest," meaning stable financing income over intermediation. Venkatakrishnan said the investment bank would run "a stable capital base of around £200 billion, give or take" (the transcript does not say whether this is RWA). Barclays is also the most-quoted dealer source on the market's electronic evolution (portfolio trading and e-share studies, see Book placement).
-
-**Stated views (verbatim).**
+**Seat.** European universal bank with a US-style credit franchise. CEO C. S. Venkatakrishnan (28 Jul 2026): "This is the house that Fixed Income built. I'm very happy, I'm fond of saying. But it's increasingly a house on which we lean on Equities." The strategy is stable capital ("around £200 billion, give or take," the transcript does not say if this is RWA) and more financing income ("Financing versus the rest").
 
 | Date | Speaker | Quote | Source |
 | --- | --- | --- | --- |
-| 28 Jul 2026 | Venkatakrishnan, CEO | "This is the house that Fixed Income built. I'm very happy, I'm fond of saying. But it's increasingly a house on which we lean on Equities." | Barclays Q2 2026 Q&A transcript (PDF) |
-| 28 Apr 2026 | Venkatakrishnan | "We're a top [three] Fixed Income financier, and we have been for a long, long time." | Barclays Q1 2026 Q&A transcript |
+| 28 Apr 2026 | Venkatakrishnan | "We're a top [three] Fixed Income financier, and we have been for a long, long time." | Q1 2026 Q&A transcript |
 | 28 Apr 2026 | Anna Cross, CFO | "we don't perceive that the US peers have been leverage constrained up to this point." | same |
-| 28 Apr 2026 | Venkatakrishnan | "you've seen the US banks put in both capital and balance sheet much more than we have." | same |
+| 28 Jul 2026 | Management speech | "Equities income was up 44% ... whilst FICC was stable versus a strong comparator." | Q2 2026 speech |
 
-Paraphrase: the Q2 2026 management speech says Markets income rose 17% year on year in US dollars, "Equities income was up 44% driven by Equity Derivatives and Prime Financing ... whilst FICC was stable versus a strong comparator," and Financing grew 16% for the eighth consecutive quarter. Barclays' own e-trading research (Todorova, via The DESK, carried from trend_electronification_pt_etf_liquidity.md) puts European portfolio trading at 10-12% of EUR investment grade and the ceiling for electronic execution at about 80% of volume.
+Carried: Barclays research (via The DESK) puts European portfolio trading at 10-12% of EUR investment grade and the ceiling for electronic execution near 80%.
 
-**Roles in named events.** Dealer across March 2020, 2022 and April 2025 (no first-person credit quote found). Sell-side researcher of record on portfolio trading. No verified LMT role.
+**Roles.** Dealer across March 2020, 2022 and April 2025 (no first-person credit quote found); sell-side researcher of record on portfolio trading. No verified LMT role.
 
-**How Barclays looks at our bond.** Barclays sees a EUR or USD bond it can intermediate cheaply across two time zones and finance cheaply against a stable capital allocation. It is capital-light by choice ("stable capital"), so it will not warehouse a falling credit. Its edge is the credit-and-rates cross-sell in London; its constraint is the stable-capital ceiling. For it, our B-rated bond is a flow item and a financing collateral line, never a convex bet.
+**Our bond.** A flow and financing item across two time zones, held against a stable capital allocation. It will not warehouse a falling credit.
 
 ### 1.7 Morgan Stanley
 
-**Seat.** Morgan Stanley's Institutional Securities leans on equities financing and advisory more than on fixed income. In Q3 2026 (14 Oct) equities revenue was $5.8B up 41% on financing, while fixed income was $2.0B down 7% on "lower structured activity in credit and commodities" (call summary, paraphrase). The credit book is "micro": credit corporates and securitized products. The firm's priority is the integrated franchise (wealth, IB, equities financing), so credit trading is a distribution and hedging service rather than a standalone proprietary risk-taker. Funding is the bank deposit base, and a 2026 reorganization moved over $100B of assets into the US banking entity (Q1 2026 call, paraphrase).
-
-**Stated views (verbatim).**
+**Seat.** Fixed income is the junior business inside an equities-and-wealth franchise. Q3 2026: equities $5.8B (up 41%, on financing), fixed income $2.0B (down 7%, call summary: "lower structured activity in credit and commodities"). Credit corporates and securitized products are "micro." Deposit-funded.
 
 | Date | Speaker | Quote | Source |
 | --- | --- | --- | --- |
-| 15 Apr 2026 | Sharon Yeshaya, CFO | "Fixed income revenues were postcrisis record at $3.4 billion." | Q1 2026 call (the quarter containing the March 2026 stress) |
-| 15 Apr 2026 | Yeshaya | "Micro results increased meaningfully year-over-year, driven by securitized products and credit corporates." | same |
+| 16 Apr 2020 | Jonathan Pruzan, CFO | "Historical relationships broke down and liquidity dried up. Clients reacted by reducing risk and raising cash." | Q1 2020 call (March 2020) |
+| 15 Apr 2026 | Sharon Yeshaya, CFO | "Fixed income revenues were postcrisis record at $3.4 billion." | Q1 2026 call (March 2026) |
 | 15 Apr 2026 | Ted Pick, CEO | "we remain vigilant in the context of higher asset prices, tight credit spreads and interest rate path uncertainty." | same |
-| 16 Jul 2025 | Pick | "The first half began with uncertainty and market volatility associated with U.S. trade policy, and the second half ended with increasing engagement and a steady rebound in capital markets." | Q2 2025 call |
 
-Paraphrase: on 16 Jul 2025 Yeshaya said fixed income revenue was $2.2B on macro strength and that the derivatives desk "actively supported clients, particularly around tariff-related market events." The Q3 2026 call summary has Pick saying clients are "accepting some additional structural volatility" (Fool summary paraphrase; not verified as a spoken quote).
+**Roles.** *March 2020:* credit corporates "saw good velocity," offset by "mark-downs on inventory in munis and securitized products"; the firm underwrote "over $70 billion of corporate and municipal bonds globally" that month. *April 2025:* the derivatives desk "actively supported clients, particularly around tariff-related market events." No verified LMT role.
 
-**Roles in named events.** Dealer across March 2020, 2022 and April 2025; underwriter and lender in leveraged finance. The Q1 2026 record shows that elevated-volatility quarters are earnings events for the credit-corporate market maker with client flow. No verified LMT role.
-
-**How Morgan Stanley looks at our bond.** To MS the bond is part of a wealth and institutional client conversation: the wealth channel buys it for yield, the institutional desk hedges it. The credit corporates desk earns on flow when volatility lifts volume (Q1 2026) and gives it back when issuance and client activity slow (Q3 2026). It holds the bond briefly and prefers the structured or financing leg to the cash risk.
+**Our bond.** A wealth-channel yield product and an institutional hedge. The credit desk earns when volatility lifts volume (Q1 2026) and gives it back when client activity slows (Q3 2026).
 
 ## 2. Electronic market makers and liquidity providers
 
 ### 2.1 Citadel Securities
 
-**Seat.** Private principal market maker, a separate business from the Citadel hedge fund. In credit it is a late entrant (corporate-bond activity from mid-2023, per the earlier trend dossier, carried and UNVERIFIED against a primary source), but it now claims scale in blocks. It is a principal dealer without a bank balance sheet: capital is internally funded, positions are presumably hedged against rates, CDX and ETFs, and holding periods are presumably minutes to days (my characterization; the firm publishes neither). The firm's site returned HTTP 403 to the fetch tools this session, so every statement below is second-hand through The DESK.
-
-**Stated views (as reported; all firm-level, no named speaker).**
+**Seat.** Private principal market maker, separate from the hedge fund; in corporate bonds since about mid-2023 (carried, UNVERIFIED against a primary source). No bank balance sheet; hedged risk; hold periods presumably minutes to days (my characterization). The firm's site returned 403, so every statement is second-hand through The DESK.
 
 | Date | Speaker | Statement | Source |
 | --- | --- | --- | --- |
 | 8 Oct 2026 | Citadel Securities (whitepaper) | "long-standing and consistent track record of delivering dependable pricing and liquidity" | The DESK, Lucy Carter |
-| 8 Oct 2026 | Citadel Securities (report) | "We maintained industry-leading low 'no-quote-rates' while trading a record $1.36 trillion in a day." (a rates statement, not credit) | same |
-| 8 Oct 2026 | (paraphrase) | By its own estimate it has a 14.2% share of investment-grade credit block risk transfer and has traded $406B year to date; the Q2 dealer rankings it cites are not public | same |
-| 8 Oct 2026 | (paraphrase) | It cites four volatility episodes from 2020 to 2026 (Covid, SVB, tariffs and the Iran conflict) and proposes five metrics for liquidity resilience: non-quote rates, market share, execution cost savings, hit rates and risk executed | same |
+| 8 Oct 2026 | Citadel Securities (report) | "We maintained industry-leading low 'no-quote-rates' while trading a record $1.36 trillion in a day." (rates, not credit) | same |
+| 8 Oct 2026 | paraphrase | Claims a 14.2% share of IG credit block risk transfer and $406B year to date (self-reported; the Q2 rankings it cites are not public); proposes five resilience metrics: non-quote rates, market share, execution cost savings, hit rates, risk executed | same |
 
-Other facts from The DESK (12 Oct 2026, Lucy Carter): Citadel Securities reported $7.3B of trading revenue for Q2 2026, and named Redha Achour head of APAC credit trading in May 2026. Tradeweb's CEO, on the Q1 2026 call (29 Apr 2026), listed "standout trading from nonbank liquidity providers" among the conditions creating a "prime environment"; on 30 Jul 2026 he said "the nonbank liquidity providers are arriving in force inside of credit."
+The DESK (12 Oct 2026): Q2 2026 trading revenue $7.3B; a head of APAC credit trading named in May 2026. Tradeweb's CEO (30 Jul 2026): "the nonbank liquidity providers are arriving in force inside of credit."
 
-**Roles in named events.** Liquidity provider in the Treasury and equity dislocations of March 2020, the SVB week of March 2023, the April 2025 tariff shock and the March 2026 shock, by its own account. Its public case, countering JPMorgan's "fair-weather friends" line, is that its no-quote rates stayed low. No independent, public, credit-specific no-quote data exist for those days (see section 5 and trend_part_v_market_structure_2026.md).
+**Roles.** Liquidity provider in the stress episodes it names (Covid, SVB, tariffs, the Iran conflict), by its own account; no independent credit no-quote data exist.
 
-**How Citadel Securities looks at our bond.** It sees a block to be priced against a running hedge book, not a story. It will bid for a size the dealers are reluctant to carry, if the hedge (CDX, HYG, rates) is cheap and the information content of the flow is low, and it will skip the bond in the days around an LMT rumor because it cannot read the document. Its edge is speed, hedging and a client list it is paid by (wholesale volume); its constraint is that it has no balance sheet to warehouse a name that gaps.
+**Our bond.** A block priced against a running hedge book: it bids if the CDX, ETF or rates hedge is cheap and the flow looks uninformed, and skips the name around LMT rumors because it cannot read the document.
 
 ### 2.2 Jane Street
 
@@ -299,7 +260,7 @@ Paraphrase: the authors argue that high-yield markets mean-revert after outsized
 - *Pluralsight (Aug 2024):* a lender in the Vista-sponsored LME (case_lmt_private_and_european_2024_2026.md).
 - *Saks Global (May 2025):* named among a 51% holder group weighing new financing (Debtwire, via the same dossier).
 - *Optimum (2024-26):* named defendant in the co-op antitrust complaint; *Thames Water:* member of the Class A group per LBC (case_courts_as_regime_variables.md).
-- *March 2020:* iShares credit ETFs traded at discounts to NAV, which the FSB (below) says "became one of the key mechanisms for price discovery." BlackRock's role as the Fed's SMCCF manager is UNVERIFIED (from memory; not fetched).
+- *March 2020:* credit ETFs, the largest sponsor of which is BlackRock's iShares (my characterization, not sourced here), traded at large gaps to NAV; the FSB says ETFs "became one of the key mechanisms for price discovery during the dash for cash" (section 5). BlackRock's role as the Fed's corporate-facility investment manager is UNVERIFIED (from memory; not fetched).
 
 **How BlackRock's systematic desk looks at our bond.** It sees a B-rated 2029 as a candidate for a quality-adjusted overweight or, more often, an underweight: the default-probability signal, the equity-volatility feature and the CCC-bucket constraint decide, not the covenant analysis. The same firm's fundamental analysts may be in the creditor group on the same issuer, so its systematic arm is exposed to LMT risk it cannot see in its model. The overlap is the book's Ch 11 and Ch 13 bridge.
 
@@ -322,7 +283,7 @@ The order is the cautionary tale for a bank-to-quant reader: a model-governance 
 
 ### 3.6 Robeco quant credit
 
-**Seat.** Rotterdam-based asset manager with both a fundamental credit house ("corporate bond investors since the 1970s") and a quantitative credit group ("Robeco's work in quantitative fixed income dates back to 1995"). The systematic book is long-only, benchmark-aware and enhanced-index-like, with holding periods of months; funding is client mandates. The head of Quant Fixed Income and lead portfolio manager is Patrick Houweling, co-author of the 2014 factor-in-credit study. Strategies named on the page: QI Global Multi-Factor Credits and QI Global Multi-Factor High Yield. Risk is DTS: "We developed an innovative method to do so in 2003, based on the observation that the product of a bond's credit spread and its duration ... accurately predicts its future volatility" (robeco.com credit page).
+**Seat.** Asset manager with both a fundamental credit house ("corporate bond investors since the 1970s") and a quantitative credit group ("Robeco's work in quantitative fixed income dates back to 1995"). The systematic book is long-only, benchmark-aware and enhanced-index-like, with holding periods of months; funding is client mandates. The head of Quant Fixed Income and lead portfolio manager is Patrick Houweling, co-author of the 2014 factor-in-credit study. Strategies named on the page: QI Global Multi-Factor Credits and QI Global Multi-Factor High Yield. Risk is DTS: "We developed an innovative method to do so in 2003, based on the observation that the product of a bond's credit spread and its duration ... accurately predicts its future volatility" (robeco.com credit page).
 
 **Stated views (verbatim, 7 Sep 2026 insight by Lodewijk van der Linden and Patrick Houweling).**
 
@@ -337,7 +298,7 @@ Paraphrase: the selection model spans about 1,600 issuers and 5,000 bonds in glo
 
 **Roles in named events.** None verified. Robeco's public role is a research source (DTS, factor-in-credit) rather than a trading participant.
 
-**How Robeco looks at our bond.** Through the ranking engine first (valuation, balance-sheet quality, momentum, issuer risk) and then through a human gate: the 20-analyst overlay. The overlay is where an LMT flag would be raised, and where an ex-RSSG analyst is most useful, a role the 2026 article describes without naming.
+**How Robeco looks at our bond.** Through the ranking engine first (valuation, balance-sheet quality, momentum, issuer risk) and then through a human gate: the 20-analyst overlay. The overlay is where an LMT flag would be raised; the article does not mention restructuring skills, so the point that an ex-RSSG analyst fits there is my inference.
 
 ### 3.7 Invesco
 
@@ -356,14 +317,128 @@ Paraphrase: the selection model spans about 1,600 issuers and 5,000 bonds in glo
 
 ### 4.1 MarketAxess
 
+**Seat.** Electronic credit venue; it earns commissions on dealer-to-client RFQ and on all-to-all "Open Trading," where buy-side firms also respond to RFQs. It holds no inventory. Record 2025 revenue was $846M (Q4 2025 call, 6 Feb 2026); Open Trading carried about 37% of eligible credit volume across about 1,800 firms in 2025 (10-K, carried from trend_electronification_pt_etf_liquidity.md). Its US high-grade share slid from 20.4% (2023) to 18.4% (2025) and 17.5% (Q2 2026); on 29-30 Jul 2026 ICE agreed to buy it for $167 per share in cash, a 33% premium, equity value about $6.0B and enterprise value about $5.7B (ICE/MarketAxess 8-K Ex. 99.1, verified this session).
+
+**Stated views (verbatim).**
+
+| Date | Speaker | Quote | Source |
+| --- | --- | --- | --- |
+| 7 May 2026 | Chris Concannon, CEO | "clients continue to leverage automation even in more volatile periods." (a record $144 billion of automation volume in the quarter) | Q1 2026 call |
+| 7 May 2026 | Ilene Bieler, CFO | "U.S. credit market share continue[s] to require attention and focus." | same |
+| 6 Feb 2026 | Concannon | "28% estimated market share in US high yield portfolio trading" (at the end of 2025) | Q4 2025 call |
+| 30 Jul 2026 | ICE and MarketAxess release | "fixed income trading remains disproportionately manual, bilateral, and information-asymmetric relative to equities and other asset classes" | ICE deal release |
+| 30 Jul 2026 | Concannon | "Together, we will have the scale to invest more deeply in the areas that matter most to our customers." | same |
+
+**Role in stress events.** A venue sees the stress rather than financing it. Carried from the earlier dossiers: on 8 Apr 2025 US credit traded a then-record $89.7B with portfolio trading 12% (Trumid/Greenwich); in the March 2026 shock, MarketAxess data show EUR IG bid-ask 64% above its January average, with recovery taking 4 weeks for EUR IG, 6 for US HY, 8 for US IG and 13 for EUR HY (The DESK, 1 Oct 2026). Man Numeric's 2023 view, that the biggest jumps in electronic trading occurred in the stress of 2020 and 2022, is the buyer-side confirmation.
+
+**How the venue looks at our bond.** As an inquiry: it wants the RFQ to be answered, preferably by many respondents, and it earns the same fee whether the bond is a fallen angel or a seasoned BBB. Its worry is information leakage, which is why it sells protocols (PT, sessions, blocks) and data (CP+) instead of risk.
+
 ### 4.2 Tradeweb
+
+**Seat.** Electronic venue and data provider across rates, credit, money markets and equities; no inventory. US credit is a growth priority; the company is the leader on fully electronic US credit by share (Q4 2025 8-K, carried: 18.3% of US HG TRACE fully electronic, 25.7% total). Its automation tool AiEX handled more than 40% of institutional trades in 2025 (10-K FY2025, carried), and portfolio trading is a differentiator ("Tradeweb offered the first corporate-bond PT in 2019," carried). Fee capture per million of cash credit has fallen (Q4 2025 -14.3%, carried).
+
+**Stated views (verbatim).**
+
+| Date | Speaker | Quote | Source |
+| --- | --- | --- | --- |
+| 29 Apr 2026 | William (Billy) Hult, CEO | "strong partner bank performance in global markets, plus standout trading from nonbank liquidity providers, creates a prime environment." | Q1 2026 call |
+| 29 Apr 2026 | Tradeweb management (prepared remarks) | "March volatility rose over 50% from the December lows, it was still nearly 40% below what we saw in April 2025." | same |
+| 30 Jul 2026 | Hult | "the nonbank liquidity providers are arriving in force inside of credit." | Q2 2026 call |
+| 30 Jul 2026 | Hult | "The nuance it takes to actually solve for both the needs of those firms. Plus to make sure you're keeping the biggest, most important counterparties, banks, globally in the world, on side, is everything." | same |
+| 30 Jul 2026 | Tradeweb management | "our competitive advantage is increasingly being defined by workflow, data and automation rather than connectivity alone." | same |
+
+Paraphrase: Q1 2026 credit-derivatives ADV rose 59.5%, "driven by hedge fund and systematic account activity" (8-K Ex. 99.1, carried); Hult on 30 Jul 2026 called ICE's offer for MarketAxess validation of the credit fee pool and said the Tradeweb "playbook" is "a hyper focus on ultimately solving for more complexity and more risk trades."
+
+**Role in stress events.** The venue's own comparison says the April 2025 tariff shock was more volatile than the March 2026 shock by about 40% on its volatility measure (above). In March 2026 clients "went electronic" (Q1 2026 8-K, carried). Both statements are about venue volume and client behavior, not dealer capital.
+
+**How the venue looks at our bond.** As a protocol-selection problem: should the bond be traded in RFQ, a portfolio, a session or by a dealer on the phone? Its stated aim is to hold both the banks and the non-banks on the platform. A distressed or LMT-affected bond is a "more risk trade" that the platform wants to move from voice to e-trading.
 
 ### 4.3 Trumid
 
+**Seat.** Fintech electronic credit venue founded in 2014 "by former traders and fixed income market experts" (trumid.com/about-us). It trades US-dollar IG, HY, distressed and EM bonds through RFQ, portfolio trading, Attributed Trading (bilateral dealer-client), Swarms (anonymous sessions) and an automation agent (Full Self Trading, FST). Q3 2026: ADV $9.6B, up 38% year on year against an estimated 16% TRACE growth; 60% of users traded on two or more protocols; about one in three FST orders was in new issues; more than 60% of new-issue secondary trading on the last day of the quarter (press release, 8 Oct 2026). No inventory; it earns fees.
+
+**Stated views (verbatim).**
+
+| Date | Speaker | Quote | Source |
+| --- | --- | --- | --- |
+| 8 Oct 2026 | Mike Sobel, Co-CEO and President | "Trumid recorded its third consecutive quarter of record overall market share, with gains across all business lines, while continuing to play a leading role in new issue trading." | Trumid Q3 2026 press release |
+| 10 Feb 2026 | Paris Pender, Head of PT and Macro Credit Trading | "as the protocol has matured, margins have compressed and balance sheets have ballooned, elevating the importance of efficiently recycling residual risk." | Trumid, "Hitting Its Stride" |
+| 10 Feb 2026 | Pender | "Dealer engagement has also advanced, with more consistent quoting, tighter covers, and resilient performance during periods of volatility throughout 2025, particularly in April." | same |
+| 10 Feb 2026 | Pender | "we're not going back to the margins of yesterday." | same |
+
+Paraphrase: Pender says portfolio trading was more than 21% of US electronic corporate bond trading in early 2025 against 6% in 2021, that 20-25% of dealer-to-client volume traded via PT in 2025, and that Trumid PT ADV grew about 50% in 2025 against 22% growth in TRACE PT volumes. His 2026 predictions: PT stable near 13-14% of the market, dealer risk recycling as an industry standard, and new protocols driven by analytics. Carried: Trumid FY2025 ADV $7B (+24%), Jun 2026 ADV $9.6B (+68% YoY); the venue's electronic volume is 88% no-touch for eligible RFQ lines (The DESK, Oct 2025).
+
+**Role in stress events.** Pender's account of April 2025 is the only first-person venue statement found that credits dealers with "resilient performance" in a named stress. It is a vendor's claim, and Trumid's record market share in Q3 2026 means it benefits from the narrative.
+
+**How the venue looks at our bond.** As a line item in an RFQ or list, probably in a portfolio trade, with the residual risk recycled to the next dealer. Pender's argument ("margins have compressed and balance sheets have ballooned") explains why a dealer wants to send the bond on at once: the dealer's profit per trade is shrinking while its inventory is growing.
+
 ## 5. The three stress events seen from each seat (March 2020, 2022, 2025)
+
+Four public themes recur: dealers say they stayed in; non-banks say they stayed in; buyers say liquidity vanished; and the central bank or the volume record settles the argument. The evidence by event:
+
+**March 2020 (the dash for cash).**
+- *Authorities.* The FSB's 17 Nov 2020 review: "Dealers also faced difficulties absorbing large sales of assets," and ETFs "became one of the key mechanisms for price discovery during the dash for cash." Kargar, Lester, Lindsay, Liu, Weill and Zuniga (NBER 27355, Jun 2020) find "the cost of trading immediately via risky-principal trades increased dramatically," pushing customers to slower agency trades; the Fed's corporate credit facilities (SMCCF announced 23 Mar 2020; expanded on 9 Apr 2020 so the credit programs supported "up to $850 billion") "had a positive effect on market liquidity." Customers' willingness to pay for immediacy rose about 200 bp per dollar traded.
+- *Dealer seat.* Dimon: banks "deployed over $500 billion in liquidity for clients" (self-reported). Morgan Stanley's CFO (16 Apr 2020): "liquidity dried up"; credit corporates "saw good velocity" but securitized and muni inventory was marked down.
+- *Systematic and quant-fundamental seat.* D. E. Shaw bought more than $400 million of GSE credit-risk-transfer bonds in March and April 2020 from holders under "redemption requests and margin calls." Man Group (2022): dealer liquidity "can disappear when it is most needed." The data (Man 2023): electronic share jumped in this stress.
+- *Market makers.* Public statements are firm-level and self-described (Jane Street: "a consistent fixed income liquidity provider for clients in all market environments"; Citadel Securities lists "Covid" among four volatility periods). No third-party credit no-quote data are public.
+
+**2022 (rates shock, quantitative tightening).**
+- Man Numeric (Jun 2023): "dealers inclined to commit less of their balance sheets to bond trading," portfolio-trading costs rose in H1 2022 and the loss of customised ETF baskets aggravated it, yet "One of the venues where pricing and liquidity held up best last year ... was electronic execution." BlackRock's eVestment data: the average high-yield manager beat its benchmark by 0.47% in 2022 and lagged by 0.68% in 2023. Dimon's letter of 4 Apr 2023 draws the policy conclusion: "many of the new 'shadow bank' market makers are fair-weather friends."
+
+**April 2025 (tariff shock).**
+- *Authorities.* Fed Financial Stability Report (25 Apr 2025): corporate bond liquidity was "in line with the average level observed in recent years but deteriorated with the higher volatility in early April." The Nov 2025 report says Treasury market liquidity "hit historically low levels."
+- *Dealers.* JPMorgan's CFO was "a little bit surprised by the resilience of the Markets revenues" (15 Jul 2025); Citi reported "lower credit trading"; Goldman said "clients quickly re-levered"; Morgan Stanley's derivatives desk "actively supported clients." Trumid's Pender credits dealers with "resilient performance ... particularly in April."
+- *Non-banks.* Citadel Securities cites "tariffs" among its four episodes; Flow Traders reports volatility that "drove elevated activity" in 2025 but cut fixed-income capital anyway. Tradeweb's CEO says March 2026 volatility was "nearly 40% below" April 2025.
+
+**March 2026 (outside the brief, in the data).** JPMorgan's Barnum saw no "bad volatility" and fixed income revenue rose 21%; Morgan Stanley booked a "postcrisis record" $3.4B of fixed income; Virtu's Adjusted Net Trading Income rose 58.2%. Stress months now pay the market maker; the open question is who bears the tail when the market gaps.
+
+**Read-across for the desk.** In each event the same pattern repeats: (1) price discovery moves to ETFs and electronic venues first; (2) dealers' balance-sheet statements are self-reported and favourable; (3) the buy side reports lost liquidity; (4) the ex-post proof is a regulator's or academic's dataset, which I found in depth for 2020 and only in outline for 2025. A systematic credit desk should log its own no-quote and markout statistics by regime rather than trust any seat's account.
 
 ## 6. Comparison table of the seats
 
+Cells are drawn from the sections above; where a cell is my inference from them rather than a firm's statement it is marked (i).
+
+| Seat | Horizon | Capital | Edge | Constraints | What makes it buy | What makes it sell |
+| --- | --- | --- | --- | --- | --- | --- |
+| Flow dealer (JPM, BofA, Citi, MS, Barclays, GS) | Days; financing legs months | Deposit and wholesale funding; RWA, G-SIB, stress buffer | Client franchise, underwriting pipeline, cheap balance sheet | G-SIB surcharge ("disincentive," Barnum); client activity falls when rates gap (Borthwick) | A client sells and the franchise needs the relationship; hedge exists | Position reaches limit; volatility turns "gappy"; the next client buys |
+| Mid-size dealer (Jefferies) | Days to weeks | Unsecured debt plus SMBC (about 20%) | Idea flow, e-trading plus voice, ECM/DCM link | Stock and funding react to one bad fund or deal (First Brands, Saks) | New-issue allocations, client flow | Distribution complete; model flags a fund-level loss (i) |
+| Non-bank electronic market maker (Citadel Securities, Jane Street, Virtu; Flow Traders in ETPs) | Seconds to days | Internal capital; Jane Street and Virtu now use secured debt | Hedging across bond, ETF, futures; speed; cost of capital | No client franchise; capital cap on warehousing; Flow Traders cut fixed-income capital | A cheap hedge and a small, low-information size (i) | A jump-to-default signal or a failed hedge; capital better used elsewhere |
+| Systematic long-only (AQR, Robeco, BlackRock SFI, Man Numeric) | Months | Client mandates, benchmark-relative | Breadth (Robeco: 1,600 to 2,600 issuers) and cost control | Transaction costs ("if filled" trades), CCC limits, no document reading | Cheap residual, improving signals, within risk budget | Signal decay, rebalancing, stop-loss on quality (default-probability signal) |
+| Quant-fundamental / multi-strategy (D. E. Shaw, Two Sigma) | Months to years | Investor capital in horizon pools | Loan-level data plus fundamental scenario work | Team depth; model governance (SEC v. Two Sigma) | Price below modelled loss value after forced selling (D. E. Shaw 2020) | Price converges to model value; capital needed elsewhere (i) |
+| Loan / CLO manager in LMTs (Invesco SSM, BlackRock, Man discretionary) | Years | Client funds and CLOs | Register position, documentation, votes | Fiduciary scrutiny, litigation (Serta, Robertshaw, Selecta) | A co-op or priming deal that improves its tranche | A better offer; a lost vote; fund redemption (i) |
+| Venue (MarketAxess, Tradeweb, Trumid) | None; per trade | Equity; fees per million | Network, data, protocols | Fee compression (Tradeweb -14.3% FPM); consolidation (ICE) | n/a | n/a |
+| Our hybrid desk (the book's reader) | Minutes to quarters | Pod capital with limits | Document reading plus market-making math | All of the above | Residual spread after IDO and document risk | Signal exhausted; inventory limit; LMT state change |
+
 ## 7. Sources (URLs verified this session)
 
+All fetched on 18 Oct 2026 unless noted. Fool transcripts are machine transcriptions; call dates are those printed on the page, not the URL date.
+
+*Dealers.* JPMorgan: Q3 2026 https://www.fool.com/earnings/call-transcripts/2026/10/13/jpmorgan-chase-jpm-q3-2026-earnings-call-transcript/ ; Q1 2026 https://www.fool.com/earnings/call-transcripts/2026/04/21/jpmorgan-jpm-q1-2026-earnings-call-transcript/ ; Q2 2025 https://www.fool.com/earnings/call-transcripts/2025/08/04/jpmorgan-jpm-q2-2025-earnings-call-transcript/ ; letters https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/annualreport-2022.pdf and .../annualreport-2025.pdf. Goldman: https://www.fool.com/earnings/call-transcripts/2026/10/13/goldman-sachs-gs-q3-2026-earnings-call-transcript/ ; .../2026/04/13/goldman-sachs-gs-q1-2026-earnings-transcript/ ; .../2025/07/16/goldman-sachs-gs-q2-2025-earnings-call-transcript/. BofA: .../2026/10/14/bofa-bac-q3-2026-earnings-call-transcript/ ; .../2026/04/15/bofa-bac-q1-2026-earnings-call-transcript/ ; .../2025/07/16/bofa-bac-q2-2025-earnings-call-transcript/. Citi: .../2026/10/13/citi-c-q3-2026-earnings-call-transcript/ ; .../2026/04/14/citigroup-c-q1-2026-earnings-call-transcript/ ; .../2025/07/15/citigroup-c-q2-2025-earnings-call-transcript/. Morgan Stanley: .../2026/10/14/morgan-stanley-ms-q3-2026-earnings-call-transcript/ ; .../2026/04/15/morgan-stanley-ms-q1-2026-earnings-transcript/ ; .../2025/07/16/morgan-stanley-ms-q2-2025-earnings-call-transcript/ ; .../2020/04/16/morgan-stanley-ms-q1-2020-earnings-call-transcript.aspx. Barclays: https://home.barclays/content/dam/home-barclays/documents/investor-relations/ResultAnnouncements/H12026Results/Barclays%20Q2%202026%20Results%20Q%20and%20A%20transcript.pdf ; .../Q12026Results/Q126%20Results%20QA%20transcript.pdf ; .../H12026Results/Q226-Management-Speech.pdf. Jefferies (SEC): Investor Day transcript https://www.sec.gov/Archives/edgar/data/96223/000114036125038352/ef20057341_ex99-1.htm ; Q3 FY26 release https://www.sec.gov/Archives/edgar/data/96223/000009622326000028/jfgpressrelease8312026.htm.
+
+*Market makers.* The DESK: https://www.fi-desk.com/citadel-securities-reveals-glimpse-of-credit-platform-broker-rankings/ ; https://www.fi-desk.com/jane-street-launches-giant-bond-issuance/ ; https://www.fi-desk.com/huang-joins-citadel-securities/. Jane Street: https://www.janestreet.com/what-we-do/overview/ , .../client-offering/ , .../global-capital-markets/. Flow Traders AR 2025: https://flowtraders.com/media/itid3d0e/flow-traders-annual-report-2025.pdf. Virtu: 10-K https://www.sec.gov/Archives/edgar/data/1592386/000159238626000009/virt-20251231.htm ; Q1 2026 release https://www.sec.gov/Archives/edgar/data/1592386/000159238626000012/exhibit991q126.htm ; call https://www.fool.com/earnings/call-transcripts/2026/04/29/virtu-virt-q1-2026-earnings-call-transcript/.
+
+*Systematic managers.* D. E. Shaw: https://www.deshaw.com/library/assessing-us-mortgage-2020 ; https://www.deshaw.com/what-we-do/investment-management. AQR: https://www.aqr.com/Insights/Research/Journal-Article/Style-Investing-in-Fixed-Income ; https://www.wealthmanagement.com/fixed-income/aqr-quant-sketches-a-factor-investing-future-for-corporate-bonds. Shelf PDFs (page numbers cited): Man_Revolutions_in_Credit_Trading_2023.pdf; Man_Quantitative_Credit_Alpha_Early_Mover_2022.pdf; BlackRock_Systematic_High_Yield_Credit.pdf. Two Sigma: https://www.twosigma.com/businesses/securities/ , .../investment-management/ , .../sightway-capital/ ; https://www.sec.gov/newsroom/press-releases/2025-15. Robeco: https://www.robeco.com/en-int/about-us/key-strengths/credit-investing ; https://www.robeco.com/en-int/insights/2026/09/systematic-fixed-income-bringing-diversification-benefits-to-credit-portfolios. Invesco (via WebFetch): https://www.invesco.com/apac/en/institutional/insights/factor-investing/global-systematic-investing-study.html ; https://www.asiaasset.com/analysis/from-factors-to-ai-the-evolution-of-systematic-investing/.
+
+*Venues.* MarketAxess: https://www.fool.com/earnings/call-transcripts/2026/06/01/marketaxess-mktx-q1-2026-earnings-transcript/ ; .../2026/02/06/marketaxess-mktx-q4-2025-earnings-transcript/ ; ICE deal https://www.sec.gov/Archives/edgar/data/1278021/000119312526324933/d159148dex991.htm. Tradeweb: https://www.fool.com/earnings/call-transcripts/2026/04/29/tradeweb-tw-q1-2026-earnings-transcript/ ; .../2026/08/07/tradeweb-tw-q2-2026-earnings-call-transcript/. Trumid: https://www.trumid.com/news/2026/trumid-reports-september-and-q3-2026-trading-highlights/ ; https://www.trumid.com/news/2026/trumid-pt-viewpoint-february-2026/ ; https://www.trumid.com/about-us/.
+
+*Authorities.* FSB https://www.fsb.org/wp-content/uploads/P171120-2.pdf ; NBER https://www.nber.org/papers/w27355 ; Fed 23 Mar 2020 https://www.federalreserve.gov/newsevents/pressreleases/monetary20200323b.htm ; Fed 9 Apr 2020 https://www.federalreserve.gov/newsevents/pressreleases/monetary20200409a.htm ; Fed FSR https://www.federalreserve.gov/publications/files/financial-stability-report-20250425.pdf and .../financial-stability-report-20251107.pdf.
+
+*Carried, not re-fetched:* case_lmt_autopsies_us_2020_2026.md, case_lmt_private_and_european_2024_2026.md, case_courts_as_regime_variables.md, perspectives_buyside_credit_managers.md, trend_electronification_pt_etf_liquidity.md, trend_systematic_credit_industry.md, trend_part_v_market_structure_2026.md, life_quant_shop_daily_life.md in state/research.
+
+*Not reached:* citadelsecurities.com (403), ir.virtu.com (403), tradeweb.com and investor.marketaxess.com (403), man.com credit page (no body text), invesco.com study PDF (406), NY Fed SMCCF pages (404).
+
 ## 8. Book placement
+
+- **Ch 1 (anthology, flow graph of forced sellers) and Ch 1-B (a week in five quant shops).** Section 6 table as the "who is a forced seller to whom" legend; Jefferies' First Brands and Saks lines as the proof that a dealer's new-issue book is a credit position; Citadel's five liquidity metrics as the market-maker self-image.
+- **Ch 2 (revolutions) and Ch 2-B (TCA).** Venues (4.1-4.3): ICE-MarketAxess terms, Hult's "arriving in force," Pender's "margins have compressed and balance sheets have ballooned"; Man 2023 on 2021 as the year of PT and 2022 as the year of electronic. Use the dealer fee-per-million slide as a TCA input.
+- **Ch 3 (cognitive bridge) and Ch 3-B (first year).** Dimon's "volatility ... makes spreads a little bit wider" and Barnum's "gappy discontinuous markets" as the definition of the regime the desk head must price.
+- **Ch 4 (inside the systematic industry), Ch 4-C (other seats at the table; user directive) and Ch 4-D (getting the seat).** Sections 1-3 are the sourced seat descriptions: Jefferies/BofA-style dealer, D. E. Shaw-style RV, systematic funds. Use only the quotes in the tables; the "How X looks at our bond" paragraphs are draft text for 4-C, not citations.
+- **Ch 9 and 9-B (factors, replication).** AQR (Brooks-Palhares-Richardson 2018), Robeco (DTS, 7 Sep 2026 article), Man (2022, p. 19 on "if filled" trades).
+- **Ch 11 (defensive systematic HY).** BlackRock's Achilles'-heel quote and the +0.47% / -0.68% eVestment numbers; Robeco's "benchmark-close" design.
+- **Ch 13, 13-B (LMT game theory; Autopsy Room).** Role evidence by participant: Invesco (Serta, Robertshaw, Selecta), BlackRock (Incora minority, Saks, Pluralsight, Optimum, Thames), Man (Selecta, alleged), Jefferies (Revlon BrandCo agent, Saks initial purchaser), Citi (Revlon wire). Each needs its home dossier's primary citation.
+- **Ch 17-B (private credit marks).** Goldman's alternatives AUS of $491B and "financing" at over 40% of FICC and equities; Citi's $22B corporate private credit disclosure; Dimon's "weak covenants ... priming good assets."
+- **Ch 18, 18-B (market maker equations; RFQ response engine).** Dealer constraints (G-SIB, "a significant disincentive"), Barclays' "stable capital base," Flow Traders' capital cut, Virtu's levered structure: the inventory-cost and risk-aversion parameters. Trumid's recycling of residual risk and Citadel's no-quote metric as the observable variables.
+- **Ch 19, 20 (portfolio trading, ETFs).** FSB on ETFs as price discovery; Jane Street's "ETF liquidity provider"; BlackRock's discount to NAV episode (to be sourced).
+- **Ch 22 (regulation).** JPMorgan's G-SIB and Basel remarks; Barclays CFO on US peers not being "leverage constrained."
+- **Ch 28 (PM playbook) and App C (trend tracker).** Section 5 read-across and dated rows: 16 Apr 2020 (MS Q1 call), 4 Apr 2023 (Dimon letter), 25 Apr 2025 (Fed FSR), 1 Sep 2026 (Jane Street $14.6B notes), 30 Jul 2026 (ICE-MarketAxess), 8 Oct 2026 (Citadel whitepaper; Trumid Q3).
+

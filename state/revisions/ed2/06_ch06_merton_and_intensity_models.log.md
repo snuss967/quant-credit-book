@@ -25,3 +25,7 @@
 - [x] 23. [6.10.2 Hertz] EXPAND-SCENE (plan sponsors; Theo's ATM rule) -- whiteboard ATM 12% vs 13.8%, wrong on fleet, sponsors' \$5.9bn.
 - [x] 24. [6.10.3 and 6.12] LIST-TO-NARRATIVE -- 19 July screen walk; Kaz reads twelve items, each gets a scene.
 - [x] 25. [Exercises] BRIDGE (Check: numbers + two warm-ups) -- Check numbers on all six; SVB holdco and Carvana warm-ups.
+
+Note: chapter grew from about 17.4k to about 36.7k words (wc), mostly the brief-mandated scene lengths (SVB, Carvana, cold open, First Brands, Hertz) and 17 Math, Gently boxes. No web calls used; all new facts from named dossiers, CHECK items hedged.
+
+<!-- STATUS: COMPLETE -->

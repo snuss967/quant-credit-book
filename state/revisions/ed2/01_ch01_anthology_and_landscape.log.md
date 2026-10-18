@@ -21,6 +21,10 @@
 - [x] 18. §1.8.1 The model: Math, Gently x2. — Conservation box and half-life box with 5.12/4.87 demo numbers.
 - [x] 19. §1.8.2 Ford: EXPAND-SCENE (Long Scene 1). — Saturday replay, four acts, index cards; answer paragraphs kept verbatim.
 - [x] 20. §1.8.3 LQD: BRIDGE. — Post-mortem framing; mid-is-the-lie paragraph tied to S_t.
-- [ ] 21. §1.9.1 Serta: EXPAND-SCENE (Long Scene 2).
-- [ ] 22. §1.9 Trend Watch LM: BRIDGE.
-- [ ] 23. §1.10 Desk Debrief: BRIDGE.
+- [x] 21. §1.9.1 Serta: EXPAND-SCENE (Long Scene 2). — Mags two-RFQ story, labelled fictional, coda; NY suit date unverified, omitted.
+- [x] 22. §1.9 Trend Watch LM: BRIDGE. — Added bridging sentence: Scene 2 is the last word.
+- [x] 23. §1.10 Desk Debrief: BRIDGE. — Friday train term-sheet scene precedes intact debrief bullets.
+
+Notes: the §1.5 code was already in Appendix F inside Listing 1.2 (the ad55d97 mover swallowed §1.5 prose + code there); re-added with EXPLAINED, and the orchestrator moved it as Listing 1.4 (#code-1-4). Appendix F Listing 1.2 still carries the stray §1.5 prose and a duplicate of that code; trim it. Serta NY suit date (CHECK) not verified: web budget exhausted, so the scene omits it. Figure placements marked with <!-- FIGURE: ... --> comments for U4.
+
+<!-- STATUS: COMPLETE -->

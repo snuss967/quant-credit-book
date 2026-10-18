@@ -124,23 +124,25 @@ def fig_taylor():
 
     bp = 1e4 * dy
     err_lin, err_quad = lin - actual, quad - actual
+    e_lin550, e_quad550 = p_lin - p_act, p_quad - p_act        # exact at +550 bp, not at the nearest grid point
+    halo = dict(boxstyle="square,pad=0.15", fc=SURFACE, ec="none")
     b.axhline(0, color=NEUTRAL, linewidth=0.9, zorder=1)
     b.plot(bp, err_lin, color=C_DUR)
     b.plot(bp, err_quad, color=C_CONV)
-    i = int(np.argmin(np.abs(bp - 550)))
     mark_event(b, 550, "+550 bp", y_frac=0.075)
-    b.plot([550], [err_lin[i]], "o", color=C_DUR, markersize=5.5, zorder=6)
-    b.plot([550], [err_quad[i]], "o", color=C_CONV, markersize=5.5, zorder=6)
-    b.annotate(f"{err_lin[i]:+.1f}".replace("-", MINUS), (550, err_lin[i]), xytext=(-7, -3),
+    b.plot([550], [e_lin550], "o", color=C_DUR, markersize=5.5, zorder=6)
+    b.plot([550], [e_quad550], "o", color=C_CONV, markersize=5.5, zorder=6)
+    b.annotate(f"{e_lin550:+.1f}".replace("-", MINUS), (550, e_lin550), xytext=(-7, -3),
                textcoords="offset points", ha="right", va="top", fontsize=8.5, color=INK_2)
-    b.annotate(f"{err_quad[i]:+.1f}", (550, err_quad[i]), xytext=(-7, 3), textcoords="offset points",
+    b.annotate(f"{e_quad550:+.1f}", (550, e_quad550), xytext=(-7, 3), textcoords="offset points",
                ha="right", va="bottom", fontsize=8.5, color=INK_2)
     j = int(np.argmin(np.abs(bp - 760)))
     b.annotate("duration only", (bp[j], err_lin[j]), xytext=(-10, -12), textcoords="offset points",
-               ha="right", va="top", fontsize=8.5, color=INK_2)
+               ha="right", va="top", fontsize=8.5, color=INK_2, bbox=halo, zorder=7)
     k = int(np.argmin(np.abs(bp - 800)))
     b.annotate("duration + convexity", (bp[k], err_quad[k]), xytext=(-10, 13),
-               textcoords="offset points", ha="right", va="bottom", fontsize=8.5, color=INK_2)
+               textcoords="offset points", ha="right", va="bottom", fontsize=8.5, color=INK_2,
+               bbox=halo, zorder=7)
     b.plot([bp[j]], [err_lin[j]], "o", color=C_DUR, markersize=4, zorder=6)
     b.plot([bp[k]], [err_quad[k]], "o", color=C_CONV, markersize=4, zorder=6)
     b.set_ylim(-31, 13)
@@ -184,7 +186,7 @@ def fig_dv01_dts():
     b.set_ylim(0, 1.28 * max(dts))
     b.set_xticks(x, names)
     b.set_ylabel("DTS = modified duration × G-spread (bp)")
-    b.set_title("Per percent: 3.8\u00d7 riskier", fontsize=9.5)
+    b.set_title(f"Per percent: {dts[1] / dts[0]:.1f}\u00d7 riskier", fontsize=9.5)
     b.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:,.0f}"))
     return finish(fig, "ch04b_dv01_vs_dts")
 
@@ -221,7 +223,7 @@ def fig_rulers():
 
     ratios = [MAR[k] / FEB[k] for _, k in rows]
     b.set_axisbelow(True)
-    b.barh(ypos, ratios, color=SEQ_BLUE_STEPS[7], height=0.58)
+    b.barh(ypos, ratios, color=SEQ_BLUE_STEPS[11], height=0.58)
     for yp, r in zip(ypos, ratios):
         b.annotate(f"{r:.1f}×", (r, yp), xytext=(4, 0), textcoords="offset points",
                    ha="left", va="center", fontsize=8.5, color=INK_2)
@@ -242,9 +244,11 @@ def fig_pnl_waterfall():
     p0, p1 = FEB["price"], MAR["price"]
     ex = E["explain"](p0, FEB["D_mod"], FEB["C_mod"], TSY["2020-03-23"] - TSY["2020-02-20"],
                       MAR["G"] / 1e4 - FEB["G"] / 1e4, p1)
-    steps = [("Treasury rally\n" + f"({MINUS}76 bp)", ex["rates"]),
-             ("Spread widening\n(+626 bp)", ex["spread"]),
-             ("Convexity\n(on +550 bp)", ex["convexity"]),
+    d_tsy = 1e4 * (TSY["2020-03-23"] - TSY["2020-02-20"])
+    d_spr = MAR["G"] - FEB["G"]
+    steps = [("Treasury rally\n" + f"({d_tsy:+.0f} bp)".replace("-", MINUS), ex["rates"]),
+             ("Spread widening\n" + f"({d_spr:+.0f} bp)", ex["spread"]),
+             ("Convexity\n" + f"(on {d_tsy + d_spr:+.0f} bp)", ex["convexity"]),
              ("Residual\n(third order)", ex["residual"])]
     labels = ["20 Feb\nprice"] + [s[0] for s in steps] + ["23 Mar\nprice"]
     x = np.arange(len(labels))
@@ -271,7 +275,8 @@ def fig_pnl_waterfall():
     ax.set_ylim(0, 128)
     ax.set_ylabel("Price (per 100 face)")
     ax.set_axisbelow(True)
-    ax.text(0.19, 0.04, "Risk numbers at 20 Feb: D = 8.11, C = 78.0", transform=ax.transAxes, ha="left",
+    ax.text(0.19, 0.04, f"Risk numbers at 20 Feb: D = {FEB['D_mod']:.2f}, C = {FEB['C_mod']:.1f}",
+            transform=ax.transAxes, ha="left",
             va="bottom", fontsize=8, color=MUTED)
     return finish(fig, "ch04b_pnl_explain_waterfall")
 

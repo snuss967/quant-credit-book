@@ -237,7 +237,7 @@ so duration falls as yields rise at a rate equal to the dispersion, and a zero's
 
 The Taylor expansion is $\Delta P/P \approx -D^{\text{mod}}\,\Delta y + \tfrac12 C^{\text{mod}}(\Delta y)^2$. The fallen angel on 20 February 2020 had $D^{\text{mod}} = 8.11$ and $C^{\text{mod}} = 78.0$ at a price of 108.38. Its yield then rose 550bp to 23 March. Duration alone predicts a loss of $8.11 \times 0.055 \times 108.38 = 48.3$ points. The convexity term gives back $\tfrac12 \times 78.0 \times 0.055^2 \times 108.38 = 12.8$, for a predicted $-35.5$. The bond actually lost 37.6. Convexity was worth thirteen points and overshot by two, because at 550bp the third-order term is not small. Use the expansion for risk reports and attribution. For stress and P&L, reprice. Figure 4-B.2 draws the two approximations against the true curve.
 
-![Figure 4-B.2: Price against yield for the fallen angel, with the duration-only and duration-plus-convexity approximations built at the 3.50% yield of 20 February: at 9.00% duration alone is 10.6 points too low, and adding convexity overshoots by 2.1 because the third-order term is not small after a 550bp move. Illustrative: the stylized 4.50% ten-year note, computed by Listing 4-B.1.](assets/figures/ch04b_price_yield_taylor.png)
+![Figure 4-B.2: Price against yield for the fallen angel, with the duration-only and duration-plus-convexity approximations built at the 3.50% yield of 20 February: at 9.00% duration alone is 10.7 points too low, and adding convexity overshoots by 2.1 because the third-order term is not small after a 550bp move. Illustrative: the stylized 4.50% ten-year note, computed by Listing 4-B.1.](assets/figures/ch04b_price_yield_taylor.png)
 
 ### Convexity is paid for
 
@@ -421,7 +421,7 @@ Four identities make this lattice testable, and each is an assertion in §4B.9:
 Near the call price the issuer's option binds and the callable's price flattens toward the strike as rates fall; Veronesi's Treasury callable shows the same thing, where "the bond price has to converge to the call price ($100) as interest rates decline" (Veronesi_Fixed_Income_Securities p.464). Effective convexity turns negative there, and far from the call, where the option is worthless, the two curves merge and convexity is positive again.
 
 ```text
-Figure 4B.1 (schematic). Price against the level of rates (or spreads) at fixed OAS.
+Sketch 4B.1 (schematic, not a numbered figure). Price against the level of rates (or spreads) at fixed OAS.
 
  price
    | .                                          .  straight bond: convex everywhere

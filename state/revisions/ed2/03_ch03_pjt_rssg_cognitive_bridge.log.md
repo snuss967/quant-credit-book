@@ -23,7 +23,7 @@
 - [x] 21. [§3.6.1] LIST-TO-NARRATIVE + NEW-SCENE: Saks Global. — Note: Saks told as four dated events; May 2025 decision point.
 - [x] 22. [§3.6.2] MATH-GENTLY + FULL-DERIVATION-MOVE + WHEN-TO-APPLY: CUSUM. — Note: two-bells tally box; algebra, Lorden, KL moved; three breaks.
 - [x] 23. [§3.6.3] EXPAND-SCENE: restricted list, wall-crossing, cleansing, Wolfspeed. — Note: wall-crossing, public/private side, big-boy letter, Wolfspeed cleansing calendar.
-- [ ] 24. [§3.7 Serta] EXPAND-SCENE: blotter in June 2020.
-- [ ] 25. [§3.7, end] ANOTHER-SEAT: the CLO manager.
-- [ ] 26. [§3.8 Engine, §3.9 Debrief] BRIDGE.
+- [x] 24. [§3.7 Serta] EXPAND-SCENE: blotter in June 2020. — Note: archived-blotter scene, §9.05(g) reading, 19 June decision, six-year coda.
+- [x] 25. [§3.7, end] ANOTHER-SEAT: the CLO manager. — Note: CLO seat: no new money, CCC bucket, OC tests; Sound Point.
+- [x] 26. [§3.8 Engine, §3.9 Debrief] BRIDGE. — Note: one sentence per function; two Debrief lines applying SVB, Serta.
 - [ ] 27. [Resource Graph] BRIDGE: 9fin episodes, Signals and Threads Ep 29.

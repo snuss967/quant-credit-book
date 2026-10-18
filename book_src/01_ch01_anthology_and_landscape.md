@@ -431,7 +431,7 @@ so a bad draw of $Y$ moves every PD at once. With $p = 0.02$, $\rho = 0.2$ and $
 >
 > **Annotation.** This is the structural lineage in production, reported by the manager about its own signal (treat it as a self-reported hit rate, not an audited one, and note that a hit rate without a false-positive rate is half a confusion matrix). The point for Chapter 1 is what the signal is *for*: in high yield, avoiding the default you might be catching is worth more than any factor tilt, because a 50-point jump to default erases years of carry. Chapter 11 builds the defensive book around it.
 
-**Reading the §1.5 listing.** By this point the section has made three claims that are easy to say and easy to get wrong: that a firm four asset-volatility standard deviations from its default point looks immortal under the bell curve, that a flat hazard rate and a recovery give a spread through the credit triangle, and that a common factor turns independent coin flips into herds. The listing that follows checks all three by brute force, so that nobody on the desk, and certainly not ROBO, has to take the algebra on faith.
+**Reading Listing 1.4.** By this point the section has made three claims that are easy to say and easy to get wrong: that a firm four asset-volatility standard deviations from its default point looks immortal under the bell curve, that a flat hazard rate and a recovery give a spread through the credit triangle, and that a common factor turns independent coin flips into herds. Listing 1.4 checks all three by brute force, so that nobody on the desk, and certainly not ROBO, has to take the algebra on faith.
 
 *What it computes.* `distance_to_default(V, F, mu_V, sigma_V, T)` evaluates eq. (1.4) under $\mathbb{P}$ and returns a unitless number of standard deviations. `credit_triangle_check(lam, R, r, T, n)` integrates both legs of a CDS numerically on a fine grid (measure $\mathbb{Q}$) and returns the par spread as a decimal, which should equal $\lambda(1-R)$ to ten decimal places. The last block simulates the one-factor threshold model: 20,000 draws of the common factor $Y$, 500 firms per draw, default probability 2% and correlation 0.2, and it records the fraction of firms that default in each world.
 
@@ -640,7 +640,7 @@ Ines handed out index cards. "It is 30 March 2020. The rebalance is tomorrow. Yo
 
 The question is the reader's too. Before turning the page, write your own card: *what would you bid, in what size, and why?*
 
-<!-- FIGURE: ch01_forced_seller_flow_graph.png (holders: IG index funds, IG active, insurers, CLOs, open-end HY; absorbers: HY index funds, fallen-angel programs, crossover/distressed, dealer residual; Fed dashed from t0+10; widths from the Listing 1.3 demo: $12.9bn supply, $6.5bn capacity, $6.4bn dealer residual) -->
+<!-- FIGURE: ch01_forced_seller_flow_graph.png (holders: IG index funds, IG active, insurers, CLOs, open-end HY; absorbers: HY index funds, fallen-angel programs, crossover/distressed, dealer residual; Fed dashed from t0+10; widths from the Listing 1.3 demo: USD 12.9bn supply, USD 6.5bn capacity, USD 6.4bn dealer residual) -->
 
 **What happened, and the answer.** Walk the graph. *Who sells, and when:* IG index funds and ETFs on the rebalance date (a date anyone could read off a calendar); IG active funds over weeks; insurers over quarters, because higher capital charges make holding costly but not impossible. *Who buys:* HY index funds, forced to add the bond at inclusion, which made Ford one of the largest issuers in HY indices overnight; fallen-angel programs; crossover funds. *What broke:* absorption capacity, because HY funds were themselves facing record outflows. *What changed it:* the Federal Reserve. The Secondary Market Corporate Credit Facility was established on 23 March 2020, and in April the Fed extended its corporate facilities to issuers that had been investment grade as of 22 March, which covered Ford. A forced-seller event became a forced-buyer event by announcement. In (1.6), a new absorber with very large $A$ appeared, and $I_k$ went from huge to manageable before most of the selling had happened.
 
@@ -687,7 +687,7 @@ The Risk analyst, who had a train to catch, looked at the clock. Ines looked at 
 
 "What did they say?" Theo asked, because somebody had to.
 
-"The 2016 credit agreement had a pro rata sharing clause, a sacred right that needed every affected lender's consent to change. It also let the company buy back its own loans on a non-pro-rata basis, two ways: through a Dutch auction open to all lenders, which it defined, or through 'open market purchases,' which it didn't." She drew two boxes on the whiteboard and wrote *defined* in one and *undefined* in the other. "One defined term next to one undefined phrase. If you'd been on my old team at an advisory firm, you'd have circled the undefined one in the first hour. On a trading desk in June 2020, I don't think anyone circled anything. We were still recovering from March."
+"The 2016 credit agreement had a pro rata sharing clause, a sacred right that needed every affected lender's consent to change. It also let the company buy back its own loans on a non-pro-rata basis, two ways: through a Dutch auction open to all lenders, which it defined, or through 'open market purchases,' which it didn't." She drew two boxes on the whiteboard and wrote *defined* in one and *undefined* in the other. "One defined term next to one undefined phrase. Put a restructuring adviser in front of that page, someone like Theo, and they'd have circled the undefined one in the first hour. On a trading desk in June 2020, I don't think anyone circled anything. We were still recovering from March."
 
 Theo, who had been on exactly that kind of team, said nothing, but he wrote *open market purchase* in his notebook and underlined it twice.
 
@@ -708,6 +708,16 @@ Kaz answered first, carefully. "From the loan's price history, nothing. The two 
 "Which features?" Ines asked.
 
 Theo had them before she finished, and he gave them the way she had taught him to, one likelihood ratio at a time. "Whether the account is in the group, or has been in groups like it. Whether it called or used the platform, and whether it showed the loan to one dealer or to everyone. How close the request is to any lender meeting we know about. The account's own markout history with us: what happened to the last twenty things we bought from it. And the document itself, because the document tells you how big $J$ can be. If the agreement lets the company do a non-pro-rata deal with a bare majority, then the left-behind lenders can lose a great deal, and anyone who knows a deal is coming knows which side of it they don't want to be on."
+
+"Then pass on both," Theo said. "If I can't tell them apart with confidence, I don't play."
+
+"Passing is a price too," Ines said. "You learned that on a Friday. Here's the other half of the lesson. If you pass on the CLO, the CLO calls someone else next month, and the month after. A dealer who refuses every seller in a stressed name ends up being shown only the flow nobody else wanted, because the good flow goes to whoever bids for it. That's adverse selection on the *franchise*, not the trade. You pass your way into a book of nothing but toxic RFQs."
+
+"Then bid both at the same price," Kaz said, "and let diversification work. Over a thousand hands, the informed ones are a small fraction."
+
+"Diversification works across independent hands," Ines said. "The informed seller isn't an independent hand. She's a player who chooses *when* to sit at your table, and she sits down exactly when the hand is worth the most to her and least to you. If you show everyone the same price, the people who know more than you will take it on precisely the days it's wrong." She turned to Mags. "So what's left?"
+
+"What's left is the only thing that ever works," Mags said. "Different prices for different senders. Which means you need a number for each of them."
 
 "Good," said Ines. "Now put numbers on it."
 
@@ -755,9 +765,13 @@ Kaz read the Fifth Circuit's sentence twice and asked the question every quant a
 
 > **Trend Watch: Liability management takes over the default statistics, 2024–2026.** *What changed:* most "defaults" are now negotiated. Distressed exchanges were more than 60% of default volume in 2024 through mid-December, the highest share since at least 2000; the 2024 HY default rate was 1.4% including distressed exchanges against 0.3% excluding them, and for loans 4.0% against 1.5% (Marquette Associates, 18 Dec 2024). Moody's (18 May 2026) put distressed restructurings at about 65% of 2025 corporate defaults, and in its sample of 1,173 borrowers with soft credit events since 1979, about one in four ended in a hard default, with more than 70% of eventual hard defaults after a distressed restructuring arriving within two years. *What it means for the desk:* the jump $J$ in the bid equation is increasingly a *negotiated* jump, timed by lender calls and documents rather than by a missed coupon, which makes counterparty state the dominant feature in $\pi(\mathbf{x})$ and makes "default" a poor label for anything you train on. Chapter 14 models the regime shift.
 
+A market in which the jump is negotiated is a market in which the most important fact about any RFQ is who was in the negotiation, which is why Scene 2, the counterparty who knew, is the chapter's last word, not Scene 1.
+
 ---
 
 ## 1.10 Desk Debrief
+
+On the Friday train home, four weeks after Halvorsen, Theo found the old term sheet for the Halvorsen notes folded inside his notebook, where he had kept it since the Monday the bonds opened at 78. The USB stick was in his pocket, as always. He turned the term sheet over and wrote, in the small, square hand he had once used for margin notes on credit agreements, three lines. *Fair value: what is it worth to someone who knows only what's public?* *Inventory: what does it cost me to hold it until someone else wants it?* *Toxicity: who is selling, why now, and what do they know?* Under the third line he wrote *this one is mine*, then crossed out *mine* and wrote *ours*, because Ines had been right about that too. The train stopped between stations, as it does. He used the time to write the list that follows, and taped it to his monitor on Monday.
 
 - **Every bid is three bets.** Fair value, inventory, toxicity: $B^* = S_t - \pi J - \tfrac12\gamma\sigma^2_{\text{IDO}}h(2q+\Delta q) - c$. Kaz's engine got two of them right; the third cost \$2mm.
 - **A forced sale is information-free about the bond and information-rich about the seller.** Price the seller, not just the CUSIP.

@@ -22,7 +22,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from style import *  # noqa: E402,F401,F403
 import numpy as np  # noqa: E402
-from matplotlib.ticker import FuncFormatter, PercentFormatter  # noqa: E402
+from matplotlib.ticker import FuncFormatter  # noqa: E402
 from scipy.stats import norm  # noqa: E402
 
 MINUS = "−"

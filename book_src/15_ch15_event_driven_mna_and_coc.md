@@ -329,17 +329,47 @@ Two things to notice in the output. First, the 1.85% bond's put is worth somethi
 
 ### Case Study: Electronic Arts 2025–26, the In-the-Money Put That Got Defeased
 
-**The deal.** On September 29, 2025, Electronic Arts agreed to be acquired by PIF, Silver Lake and Affinity Partners for \$210 per share in cash, about \$55 billion of enterprise value and a 25% premium to the unaffected close of \$168.32 on September 25, with PIF rolling its existing 9.9% stake. The announcement called it "the largest all-cash sponsor take-private investment in history" (EA press release, Sept. 29, 2025, EDGAR). All regulatory approvals were in hand by July 30, 2026, and the deal closed on August 4, 2026: about ten months from signing to close.
+This story takes one sentence to tell and ten months to live: a sponsor bought a company whose bonds carried a 101 put deep in the money, and did not pay it. The desk watched it happen across three meetings, and was right about it in the first one without knowing what to do with being right.
 
-**The legacy bonds.** EA had two series outstanding from February 2021: \$750mm of 1.850% Senior Notes due 2031 and \$750mm of 2.950% Senior Notes due 2051. Their prospectus supplement gives holders a "Change of Control Repurchase Event" offer at "101% of the aggregate principal amount of the notes to be repurchased plus any accrued and unpaid interest" (EA 424B2/424B5 prospectus supplement, Feb. 2021, EDGAR). Run them through Step 4. With 2026 Treasury yields in the 4s, the 2031s were worth roughly 89–90 at Treasury flat and the 2051s, a 2.95% coupon with a quarter-century left, far less *(illustrative)*. Add any LBO spread and both are deep in the money. Mark this as the cleanest real-world example of aha number one: the most valuable thing about the EA 2031s was the year they were printed.
+**Tuesday, September 30, 2025: the morning after.** The morning meeting has one item, and it was announced the evening before. On September 29, 2025, Electronic Arts agreed to be acquired by PIF, Silver Lake and Affinity Partners for \$210 per share in cash, about \$55 billion of enterprise value and a 25% premium to the unaffected close of \$168.32 on September 25, with PIF rolling its existing 9.9% stake. The announcement called it "the largest all-cash sponsor take-private investment in history" (EA press release, Sept. 29, 2025, EDGAR).
 
-**The new capital structure.** The August 4, 2026 closing 8-K describes the financing: a first-lien term loan B of \$6,125mm plus €1,725mm, a term loan A of \$3,250mm, a \$500mm revolver, and notes issued on April 8, 2026 consisting of \$2,875mm of 7.250% senior secured notes due 2033, €1,080mm of 6.250% senior secured notes due 2033 and \$2,500mm of 8.750% senior notes due 2034, with 40% equity claws at 107.25, 106.25 and 108.75 (EA 8-K, Aug. 4, 2026, EDGAR). A 7.25% secured coupon on the new money tells you where $s^{\text{post}}$ was going to be for the old money.
+The equity desk two rows over is arguing about the premium. The credit desk is looking at two bonds. EA had two series outstanding from February 2021: \$750mm of 1.850% Senior Notes due 2031 and \$750mm of 2.950% Senior Notes due 2051. Their prospectus supplement gives holders a "Change of Control Repurchase Event" offer at "101% of the aggregate principal amount of the notes to be repurchased plus any accrued and unpaid interest" (EA 424B2/424B5 prospectus supplement, Feb. 2021, EDGAR). Run them through Step 4. With 2026 Treasury yields in the 4s, the 2031s were worth roughly 89–90 at Treasury flat and the 2051s, a 2.95% coupon with a quarter-century left, far less *(illustrative)*. Add any LBO spread and both are deep in the money. Mark this as the cleanest real-world example of aha number one: the most valuable thing about the EA 2031s was the year they were printed.
 
-**The tender.** The legacy notes were the subject of tender offers launched February 10, 2026 and expiring July 30, 2026. Only \$68.830mm of the 2031s and \$7.922mm of the 2051s were tendered, leaving \$681.170mm and \$742.078mm outstanding (same 8-K). About 5% of the face accepted. We do not reproduce the tender consideration here; pull the offer documents before citing it. What the participation tells you is that 95% of holders preferred whatever came next.
+Kaz has already run the §15.2 engine, because Kaz runs engines the way other people check the weather. A sponsor take-private of this size will be financed with a great deal of debt, so the logistic of Step 5 is pinned at "on": both agencies will take the notes below investment grade, and the trigger probability given a close is close to one. The deal has a long regulatory road but a motivated buyer. Feed in a sponsor-style post-close spread of 350bp *(illustrative)* and the 2031s' put is worth something in the high teens of points; the 2051s', on a bond whose price before the news was in the mid-60s, is worth more than forty. "The single most valuable thing EA owns this morning," Kaz says, "might be a promise it made in 2021 to buy back its own bonds." By lunchtime the 2031s have rallied hard, and the 2051s, near 65 before the LBO news, would trade up toward 90 on hopes of 101 (Fancourt, Bond Vigilantes, Feb. 16, 2026).
 
-**What came next.** At closing, Parent "caused the Company to defease certain obligations" under the 2016/2021 indenture by irrevocably depositing U.S. Government Obligations sufficient to pay principal, premium, if any, and interest when due (same 8-K). Our reading, which the reader should check against the indenture's defeasance article and the agencies' rating actions: a deposit of Treasuries that covers every scheduled payment satisfies the payment obligations, and under a covenant-defeasance provision it releases the issuer from covenants including the repurchase covenant. The holders now own a Treasury-collateralized 1.85% or 2.95% bond that pays on schedule. They do not get 101 today. The sponsor's arithmetic is the Step 4 table read backwards: defeasing costs the present value of the remaining cash flows at Treasury yields, about 89–90 per 100 for the 2031s and considerably less for the 2051s *(illustrative)*, against 101 for a put that pays in cash. On roughly \$1.4bn of remaining face, the saving is in the low hundreds of millions *(illustrative)*.
+Theo asks for the indenture. Not the prospectus supplement, which describes the put, but the base indenture from 2016 that the 2021 notes were issued under, with its supplements. He reads it the way he used to read credit agreements at RSSG, from the definitions out, and on the second pass he finds what he is looking for: the article on legal defeasance and covenant defeasance. The issuer may deposit with the trustee enough U.S. Government Obligations to pay every scheduled payment on a series, and on doing so be released from a list of covenants. Theo cannot tell from a first read whether the change-of-control repurchase covenant is on that list in a form that survives, and he says so. But the possibility is there in the text, and it changes the payoff completely.
 
-**What the desk should have flagged.** Not "LBO candidate, low coupon, long the put." The right flag was "LBO candidate, low coupon, *and the base indenture contains a covenant-defeasance article that the CoC covenant does not survive*." That is a document feature, and it belongs in the security master as a field alongside the trigger definition (Chapter 13 treats document features as state variables; Chapter 25 extracts them with NLP). In the pricing engine, it is the `defeasance_prob` callable: the issuer's counter-option is exercised when it saves money, which is exactly when the put is deep in the money. Kaz priced the put. Theo read the defeasance section. Theo was right.
+Nobody listens, in the specific way a desk does not listen to a correct point that has no trade attached. Ines asks whether it is in the price. Theo does not know. Kaz says that defeasance means the holder is paid in full in advance, so why would a holder mind? "Because 'in full' means the scheduled payments," Theo says. "Not 101. On a 2.95% bond due 2051, the scheduled payments are worth a lot less than par at today's Treasury yields." Mags says, "Write it down. Nobody will read it." He types one line into the free-text comment field of the security master: *base indenture has covenant-defeasance article; check whether CoC repurchase covenant is released.* The field has no structure and no alert. It will sit there for four months.
+
+**Wednesday, February 11 to Tuesday, February 17, 2026: the tender.** On February 10, EA launches tender offers for both series, scheduled to expire on July 30. We do not reproduce the tender consideration from the offer documents here; pull them before citing it. The market's reading arrives within the week. On Monday, February 16, David Fancourt, writing as a guest on Jupiter's Bond Vigilantes blog in "Electronic Arts: How to madden bondholders," lays out the price path for the 2051s (near 65 before the LBO news, near 90 on hopes of 101) and puts the tender equivalent near 74. His estimate is that defeasing the bonds instead of honoring the change-of-control offer saves the buyers over \$250mm. On Tuesday the *Cloud 9fin* podcast episode "What's in the EA endgame?" (Feb. 17, 2026) says the LBO "upended expectations" for the 2031 and 2051 bonds, with investors weighing a tender and a defeasance strategy that could strip covenants instead of a straightforward 101 payout.
+
+Mags reads the post twice. "They're tendering below par for a bond with a 101 put?"
+
+"They're tendering below par for a bond they think doesn't have a 101 put," Theo says. "The tender is the defeasance, offered in advance at roughly the same price. Take it now, or take it in August."
+
+Ines runs the hand, because that is what she does when a price moves for reasons nobody on the desk predicted. "What's the pot? The gap between 101 and whatever a box of Treasuries costs, times a billion and a half of face. What are the odds? That depends on whether the sponsor's counsel reads the indenture the way Theo does, and I'd bet they read it first. Who at this table knows more than us? The sponsor's counsel, obviously. The tender agent. Theo, since September, which nobody acted on." She pulls up the desk's prints. "And whoever has been selling us 2051s since Tuesday. That's the person I'd like to have lunch with."
+
+Kaz reruns the engine with the fourth check switched on: a `defeasance_prob` callable that returns one whenever the put's intrinsic value exceeds a few points, because a sponsor defeases precisely when defeasing is cheaper than paying 101. The put's value collapses to roughly zero, as check (4) promised it would, and the bond is worth only its scheduled payments, discounted at something close to Treasury yields because a Treasury deposit is about to stand behind them. For the 2051s that is a number in the low 70s *(illustrative, at long Treasury yields near 5%)*, which is to say a little below where Fancourt put the tender.
+
+It is February 17. You own the 2051s, marked near 90. The tender is worth about 74. The sponsor is signalling defeasance. Do you tender, hold, or hit the street bid, and why?
+
+**March to July 2026: the boring part.** For five months almost nothing happens, which on a desk means a great deal of work. Theo files a ticket asking the data team to turn his free-text comment into a structured field, `defeasance_releases_coc`, with three allowed values: yes, no, and "read it yourself." The ticket is triaged as low priority, because no position limit depends on it. In April the acquisition notes price, and Kaz replaces the illustrative 350bp in the engine with a spread read off the new 7.25% secured coupon, which changes the put's value on the screen and nothing else, since the `defeasance_prob` callable has already set it to zero. Ines spends a week reconciling the desk's EA marks against two pricing vendors who disagree by four points on the 2051s, one of which is still pricing the put and one of which is not. The vendor that is still pricing the put is wrong, but it is wrong in the direction that makes everyone's month-end look better, and that conversation takes longer than the reconciliation. By July the ticket has been upgraded, because a risk manager has asked why the desk's two EA bonds have two different stories in two different systems. Nobody has asked whether the answer is in the indenture.
+
+**Tuesday, August 4, 2026: the close.** All regulatory approvals were in hand by July 30, 2026, and the deal closed on August 4, 2026: about ten months from signing to close.
+
+The August 4, 2026 closing 8-K describes the financing: a first-lien term loan B of \$6,125mm plus €1,725mm, a term loan A of \$3,250mm, a \$500mm revolver, and notes issued on April 8, 2026 consisting of \$2,875mm of 7.250% senior secured notes due 2033, €1,080mm of 6.250% senior secured notes due 2033 and \$2,500mm of 8.750% senior notes due 2034, with 40% equity claws at 107.25, 106.25 and 108.75 (EA 8-K, Aug. 4, 2026, EDGAR). A 7.25% secured coupon on the new money tells you where $s^{\text{post}}$ was going to be for the old money.
+
+The tender had expired on July 30. Only \$68.830mm of the 2031s and \$7.922mm of the 2051s were tendered, leaving \$681.170mm and \$742.078mm outstanding (same 8-K). About 5% of the face accepted. What the participation tells you is that 95% of holders preferred whatever came next.
+
+What came next was one sentence. At closing, Parent "caused the Company to defease certain obligations" under the 2016/2021 indenture by irrevocably depositing U.S. Government Obligations sufficient to pay principal, premium, if any, and interest when due (same 8-K). Our reading, which the reader should check against the indenture's defeasance article and the agencies' rating actions: a deposit of Treasuries that covers every scheduled payment satisfies the payment obligations, and under a covenant-defeasance provision it releases the issuer from covenants including the repurchase covenant. The holders now own a Treasury-collateralized 1.85% or 2.95% bond that pays on schedule. They do not get 101 today. The sponsor's arithmetic is the Step 4 table read backwards: defeasing costs the present value of the remaining cash flows at Treasury yields, about 89–90 per 100 for the 2031s and considerably less for the 2051s *(illustrative)*, against 101 for a put that pays in cash. On roughly \$1.4bn of remaining face, the saving is in the low hundreds of millions *(illustrative)*, consistent with Fancourt's February estimate of over \$250mm.
+
+So, back to February 17. The engine had already given the answer, and it is less dramatic than the price path. Once the `defeasance_prob` callable is switched on, the put is worth about nothing and the bond is worth its scheduled payments at near-Treasury yields, so the three doors compare like this. *Tendering* at about 74 bought you out at roughly the defeased value, perhaps a point or two above it: little loss against what you would end up owning, little gain either, and an end to the option that the sponsor might, for some reason, choose to pay 101 after all. *Holding* left you with roughly the same economic value in August plus that option, which was worth little but not zero while the deal was pending, and which a holder who cared about tracking error, or who was not allowed to own a Treasury-backed orphan, might value differently. *Hitting the street bid* was the best door if it was open at a price materially above the defeased value, because anyone paying you 85 or 88 for the 2051s that week *(illustrative)* was buying a put that a defeasance article had already knocked out. The 95% who stayed were not obviously wrong; the tender did not pay them to leave. The people who were wrong were the ones who bought at 90 on the theory that 101 was a contract. Exercise 1 asks you to do the arithmetic properly.
+
+What do the 95% own now? A 2.95% bond due 2051 whose payments are backed by a deposit of Treasuries, with no covenants worth the name, no change-of-control put and, for practical purposes, no Electronic Arts credit risk. It is a long Treasury strip with a corporate CUSIP and a coupon from a different interest-rate era: about sixteen years of duration and almost no spread *(illustrative)*. They were promised an option on a sponsor's balance sheet. They were handed duration.
+
+**What the desk should have flagged.** Not "LBO candidate, low coupon, long the put." The right flag was "LBO candidate, low coupon, *and the base indenture contains a covenant-defeasance article that the CoC covenant does not survive*." That is a document feature, and it belongs in the security master as a field alongside the trigger definition (Chapter 13 treats document features as state variables; Chapter 25 extracts them with NLP), not as a line of free text in a comment box that nobody queries. In the pricing engine, it is the `defeasance_prob` callable: the issuer's counter-option is exercised when it saves money, which is exactly when the put is deep in the money. Kaz priced the put. Theo read the defeasance section. Theo was right.
+
+> **View From Another Seat.** *Three seats, one defeased bond (generic descriptions, no firm's stated view).* **The insurer.** For a life insurer's asset-liability book, a defeased 2051 is a curious gift: long, Treasury-backed duration that matches long liabilities and is cheap in capital terms, but that yields roughly what Treasuries yield, which is not why the insurer bought a corporate bond. The ALM desk does not mourn the put. It asks whether the bond still earns its place in a portfolio built to harvest spread, and usually concludes that it is now a Treasury that is harder to sell. **The multi-strategy relative-value pod.** For a pod running IG relative value, the EA story was a curve trade from September to August: the 2031s against the 2051s, through the tender, on the question of which series the sponsor would treat better and when. The pod's risk manager wants it flat the new 8.75% notes, because those are a high-yield bet on the new company, and an IG relative-value book that is accidentally long a levered buyout is no longer the book the risk committee approved. **The opportunistic credit fund.** For a fund that buys complexity, the 7.25% secured print in April was the most informative number of the year: it marked the new senior curve, and it made the legacy unsecured notes look structurally junior to more than \$9 billion of secured debt if they were neither repaid nor defeased (§15.2, blow-up 3). At 65, a bond with three exits (paid at 101, defeased at Treasury value, or left as junior unsecured paper behind a secured stack) is worth buying if two of the three exits clear the price. At 90, only one does.
 
 Mags, finishing her 1988 story: "Then in 2026 a sponsor learned about the poison put and spent one afternoon inventing a Treasury deposit." She considers this. "It's good work. I hate it."
 
@@ -356,6 +386,8 @@ Kaz hears the word in a morning meeting and brightens. "Portability. Like a phon
 "Close," Ines says. "The issuer keeps the number. You get dropped."
 
 A portability clause, usually drafted as a "Specified Change of Control Event" or a "Permitted Change of Control" carve-out, says that a change of control which would otherwise trigger the 101 put does *not* trigger it if conditions hold. Typical conditions, in the order a covenant analyst checks them: the change of control happens within a window after issue (two or three years is common); pro-forma leverage on the closing date is at or below a test, often the leverage at issuance or a fixed multiple; the carve-out can be used once; and sometimes the acquirer must meet a size or experience test. The details vary by deal and the analyst's job is to read them. The pricing job is the same every time: the holder sold the issuer a digital option on leverage, and the sponsor gets to choose the leverage.
+
+**When portability bites, and when it is a footnote.** Three conditions have to line up. The sale has to happen inside the window, which is why portability matters most in the first two or three years after a sponsor-friendly deal and fades as the clock runs. The buyer has to be able to finance the purchase at or below the leverage test, which means a buyer that wants to keep the existing debt in place because it is cheaper than anything it could raise today. And the add-back definition has to be generous enough to make the test passable, which is the subject of the derivation below. When all three hold, the clause is worth real money to the sponsor and costs the holder the put in exactly the states where it would have paid. When the buyer is a strategic acquirer that will refinance the target's debt anyway, portability is irrelevant: nobody ports a capital structure they are about to retire. A real case makes the point about wording. The *Cloud 9fin* episode "Focus and Foresight" (May 11, 2023), in which Will Caiger-Smith talks to covenant expert James Wallick, asks "when is a change in control not a change of control?" about Focus Financial's \$7bn buyout, financed without refinancing the company's existing debt, and the answer turns on the wording of the credit agreement. For the definition itself, the portability segment of *Cloud 9fin*'s "Amigo Loans, Portability, Shipping" (Sept. 3, 2021) is the covenant explanation; the derivation that follows is the pricing. The seasoned check is the first condition, because it is a date: if the window has closed, the rest of the analysis is a history lesson.
 
 ### 15.3.2 Derivation: a short digital on a number the counterparty chooses
 
@@ -462,15 +494,7 @@ The bond market thinks there is a one-in-five chance the judge blocks the deal. 
 
 ![Figure 15.3: Left, an SMR tranche's price is a straight line in the break probability whose slope changes sign when rates move; right, the gauge goes blind as the close-leg price approaches the fail-leg price. Illustrative: the three-year 4.60% tranche of Section 15.4.2 (fail-leg value 100.98, resolution in a quarter), with a 0.10-point price error on the right.](assets/figures/ch15_smr_gauge.png)
 
-**Probabilistic duration.** Dollar durations add across the two legs, so with $D_f \approx T_f$ the fail leg's duration and $D^{\text{close}}$ the close leg's,
-
-$$
-P_0\,D^{\text{SMR}} \;=\; \pi_f\,G_f\,D_f + (1-\pi_f)\,P^{\text{close}}\,D^{\text{close}}
-\qquad\Longrightarrow\qquad
-D^{\text{SMR}} \;=\; w\,D_f + (1-w)\,D^{\text{close}},\quad w = \frac{\pi_f\,G_f}{P_0},
-$$
-
-which collapses to the probability-weighted $\pi_f D_f + (1-\pi_f) D^{\text{close}}$ when both legs are near par. In the example, $w \approx 0.20$ and $D^{\text{close}} \approx 2.8$, so $D^{\text{SMR}} \approx 2.3$. On ruling day it becomes either 0.25 or 2.8. The hedge ratio does not drift; it jumps, on a date the court has published. Ben Dor documents the same discontinuity for rating changes, where a downgraded IG bond's limit hedge ratio "decreased from 1.00 to 0.45 after the rating change" (Ben_Dor_Quantitative_Credit_Portfolio_Management pp.212–213). The SMR does by contract what a downgrade does by repricing.
+**Probabilistic duration.** Dollar durations add across the two legs, so the SMR tranche's duration is a value-weighted average of the fail leg's duration, which is about $T_f$, and the close leg's, $D^{\text{close}}$. The weight $w$ on the fail leg is its share of the price, which is close to the break probability itself when both legs trade near par. In the example, $w \approx 0.20$ and $D^{\text{close}} \approx 2.8$, so $D^{\text{SMR}} \approx 2.3$. On ruling day it becomes either 0.25 or 2.8. The hedge ratio does not drift; it jumps, on a date the court has published. Ben Dor documents the same discontinuity for rating changes, where a downgraded IG bond's limit hedge ratio "decreased from 1.00 to 0.45 after the rating change" (Ben_Dor_Quantitative_Credit_Portfolio_Management pp.212–213). The SMR does by contract what a downgrade does by repricing.
 
 **Measure.** $\hat\pi_f$ is a $\mathbb{Q}$ number. The survival models of §15.5 produce $\mathbb{P}$ numbers. The gap between the two is the deal-break risk premium, and Mitchell & Pulvino (2001) tell you which way it points.
 
@@ -492,6 +516,18 @@ The other three 2023–25 SMR deals fill in the outcome distribution, and a desk
 | Synopsys–Ansys | 2027, 2028, 2030, 2032 (not 2035, 2055) | Announced Jan. 16, 2024; closed July 17, 2025 | SMR expired worthless; about 18 months to close |
 
 Tapestry's \$61.1mm premium on \$6.1bn is the 101 in its purest form: one point, paid for the privilege of having borrowed in advance for a handbag company the FTC would not let it buy.
+
+#### The Full Derivation: probabilistic duration
+
+Dollar durations add across the two legs, so with $D_f \approx T_f$ the fail leg's duration and $D^{\text{close}}$ the close leg's,
+
+$$
+P_0\,D^{\text{SMR}} \;=\; \pi_f\,G_f\,D_f + (1-\pi_f)\,P^{\text{close}}\,D^{\text{close}}
+\qquad\Longrightarrow\qquad
+D^{\text{SMR}} \;=\; w\,D_f + (1-w)\,D^{\text{close}},\quad w = \frac{\pi_f\,G_f}{P_0},
+$$
+
+which collapses to the probability-weighted $\pi_f D_f + (1-\pi_f) D^{\text{close}}$ when both legs are near par. The weight is exact; the probability-weighted shortcut is an approximation that is good to a few hundredths of a year in the worked example, where $G_f/P_0 \approx 1.016$.
 
 ### Specification for AI Implementation
 
@@ -550,35 +586,17 @@ The base rates are lopsided in the way that makes survival analysis worth doing.
 
 Put $t=0$ at signing (or at HSR filing; say which). Each deal ends in one of three causes, $k=c$ (close), $a$ (abandon), $b$ (litigated block), or is right-censored at the cutoff. Let $t_1 < t_2 < \dots$ be the distinct event times, $n_i$ the number of deals pending just before $t_i$, $d_{k,i}$ the number ending in cause $k$ at $t_i$, and $d_i = \sum_k d_{k,i}$.
 
-**All-cause survival.** The Kaplan–Meier estimator and Greenwood's variance are
+**All-cause survival.** The Kaplan–Meier estimator walks through the event dates in order and, at each one, multiplies in the fraction of still-pending deals that did not end that day:
 
 $$
 \hat S(t) \;=\; \prod_{t_i \le t}\Big(1 - \frac{d_i}{n_i}\Big),
-\qquad
-\widehat{\operatorname{Var}}\big(\hat S(t)\big) \;=\; \hat S(t)^2 \sum_{t_i \le t} \frac{d_i}{n_i(n_i - d_i)},
 $$
 
-and the Nelson–Aalen cumulative hazard is $\hat\Lambda(t) = \sum_{t_i\le t} d_i/n_i$. (We write $\Lambda$ for a cumulative deal hazard only inside this section; $\lambda$ stays reserved for default intensity.)
+and the Nelson–Aalen cumulative hazard adds the same fractions instead of multiplying their complements, $\hat\Lambda(t) = \sum_{t_i\le t} d_i/n_i$. (We write $\Lambda$ for a cumulative deal hazard only inside this section; $\lambda$ stays reserved for default intensity.) Greenwood's formula puts a standard error around $\hat S$, and it grows as the number still at risk shrinks; it is written out in "The Full Derivation" at the end of this section.
 
-**Cause-specific hazards with covariates.** For each cause, $h_k(t\mid x) = h_{0,k}(t)\,e^{x'\beta_k}$. Bohn and Stein state the restriction exactly: "the shape of the hazard function (and the corresponding survival function) is arbitrary, but the impact ratio of the hazards over time is constant" (Bohn_Stein_Active_Credit_Portfolio_Management p.233). With $R_i = \{j: t_j \ge t_i\}$ the risk set, the Breslow partial log-likelihood for cause $k$ is
+**Cause-specific hazards with covariates.** For each cause, $h_k(t\mid x) = h_{0,k}(t)\,e^{x'\beta_k}$. Bohn and Stein state the restriction exactly: "the shape of the hazard function (and the corresponding survival function) is arbitrary, but the impact ratio of the hazards over time is constant" (Bohn_Stein_Active_Credit_Portfolio_Management p.233). The coefficients are fit by Breslow's partial likelihood, which never estimates the baseline at all: at each date on which a deal ended in cause $k$, it asks how surprising it was that *this* deal ended rather than any of the others still pending, given their covariates, and chooses $\beta_k$ to make the realized sequence of endings least surprising. A Second Request coefficient of $-1.2$, for instance, says a deal under a Second Request closes at $e^{-1.2} \approx 0.30$ times the rate of an otherwise identical deal. Deals ending in other causes are censored for cause $k$; that is correct for cause-specific hazards and wrong for anything else. The partial likelihood and its gradient are in "The Full Derivation."
 
-$$
-\ell_k(\beta) \;=\; \sum_{i:\,\text{cause}_i = k}\Big[x_i'\beta - \log\!\sum_{j\in R_i} e^{x_j'\beta}\Big],
-\qquad
-\nabla \ell_k \;=\; \sum_{i:\,\text{cause}_i = k}\big(x_i - \bar x_w(t_i)\big),
-$$
-
-with $\bar x_w(t_i)$ the $e^{x'\beta}$-weighted mean of the covariates in $R_i$. Deals ending in other causes are censored for cause $k$; that is correct for cause-specific hazards and wrong for anything else.
-
-**Cumulative incidence.** The probability of ending in cause $k$ by $t$ is not $1 - e^{-\Lambda_k(t)}$, because a deal that is blocked cannot later close. The Aalen–Johansen estimator is
-
-$$
-\hat F_k(t) \;=\; \sum_{t_i \le t} \hat S(t_{i}^{-})\,\frac{d_{k,i}}{n_i},
-\qquad
-\sum_k \hat F_k(t) \;=\; 1 - \hat S(t),
-$$
-
-and the identity on the right is exact, which makes it the best unit test in the chapter. Figure 15.4 shows the three incidences on the Listing 15.4 cohort, and how far the cause-specific shortcut overstates closing.
+**Cumulative incidence.** The probability of ending in cause $k$ by $t$ is not $1 - e^{-\Lambda_k(t)}$, because a deal that is blocked cannot later close. The Aalen–Johansen estimator respects that: at each event date it takes the probability of still being pending just before it and multiplies by the fraction of pending deals that ended in cause $k$ on that date, then adds those pieces up. Because every deal that ends must end through exactly one door, the three incidences sum exactly to the probability of having ended at all, $\sum_k \hat F_k(t) = 1 - \hat S(t)$, which makes that identity the best unit test in the chapter. The estimator itself is in "The Full Derivation." Figure 15.4 shows the three incidences on the Listing 15.4 cohort, and how far the cause-specific shortcut overstates closing.
 
 ![Figure 15.4: By about 1.5 years the cause-specific shortcut (dashed) says 90% of deals have closed, while the competing-risks estimate says 72%, because 14% were abandoned and 9% blocked, and the three incidences sum exactly to total exits. Illustrative: Aalen–Johansen estimates from the seeded 600-deal synthetic cohort of Listing 15.4 (Weibull cause-specific hazards with planted coefficients, independent censoring), stopped where fewer than 20 deals remain at risk.](assets/figures/ch15_competing_risks_incidence.png)
 
@@ -599,6 +617,36 @@ which rises whenever $q_d > q_b$. Giglio & Shue (2014) show that equity markets 
 > **Poker Table.** Ines on the Second Request: "It's a tell, but a cheap one. In FY2024 the agencies issued 59 Second Requests and brought 32 merger enforcement actions, most of them consents and abandonments; the FTC litigated six. A Second Request means the hand goes to the river, not that you lose it. The expensive tell is the one nobody announces: the timing agreement with the agency, which you infer when the parties stop guiding to a close date." Replay the hand: markouts on the target's bonds over the ten days after each Second Request, split by eventual outcome. If the bonds that eventually closed sold off as hard as the ones that were blocked, the market was paying you to know the base rate.
 
 > **Trend Watch.** *Regulatory regime as a shift in the baseline hazard, 2016–2026.* Early terminations of the HSR waiting period, the fast lane for clean deals, ran at 1,102 in FY2016 and 1,220 in FY2017, fell to 417 in FY2021 after the agencies suspended the practice, to 5 in FY2022 and 0 in FY2023, and came back to 265 in FY2025 (FTC/DOJ HSR Annual Reports, Appendix A). The second-request rate meanwhile oscillated between 1.6% and 3.0% of adjusted transactions. In procedure, the new HSR form took effect February 10, 2025; a federal district court vacated it on February 12, 2026 (FTC notice dated February 13, 2026); the Fifth Circuit granted an administrative stay on February 19 and then denied a stay pending appeal on March 19, 2026, and the agencies now accept filings on either form (FTC Premerger Notification Program page). What it means for the desk: the baseline $h_{0,c}(t)$ in the first 30 days is not stationary across administrations, so never pool FY2016–2019 clocks with FY2022–2024 clocks without a regime covariate, and expect the first month of every filing in 2025–26 to carry procedural variance that had nothing to do with antitrust.
+
+#### The Full Derivation: Greenwood, Breslow and Aalen–Johansen
+
+With $t_i$, $n_i$, $d_i$ and $d_{k,i}$ as defined at the start of §15.5.2, the Kaplan–Meier estimator and Greenwood's variance are
+
+$$
+\hat S(t) \;=\; \prod_{t_i \le t}\Big(1 - \frac{d_i}{n_i}\Big),
+\qquad
+\widehat{\operatorname{Var}}\big(\hat S(t)\big) \;=\; \hat S(t)^2 \sum_{t_i \le t} \frac{d_i}{n_i(n_i - d_i)} .
+$$
+
+For the cause-specific Cox model, with $R_i = \{j: t_j \ge t_i\}$ the risk set, the Breslow partial log-likelihood for cause $k$ is
+
+$$
+\ell_k(\beta) \;=\; \sum_{i:\,\text{cause}_i = k}\Big[x_i'\beta - \log\!\sum_{j\in R_i} e^{x_j'\beta}\Big],
+\qquad
+\nabla \ell_k \;=\; \sum_{i:\,\text{cause}_i = k}\big(x_i - \bar x_w(t_i)\big),
+$$
+
+with $\bar x_w(t_i)$ the $e^{x'\beta}$-weighted mean of the covariates in $R_i$. The gradient reads as the sum, over the deals that ended in cause $k$, of how far each one's covariates sat from the risk-weighted average of those still pending; the maximum is where those gaps cancel. Deals ending in other causes are censored for cause $k$.
+
+The Aalen–Johansen estimator of cumulative incidence is
+
+$$
+\hat F_k(t) \;=\; \sum_{t_i \le t} \hat S(t_{i}^{-})\,\frac{d_{k,i}}{n_i},
+\qquad
+\sum_k \hat F_k(t) \;=\; 1 - \hat S(t),
+$$
+
+and the identity on the right is exact: summing over $k$ replaces $d_{k,i}$ by $d_i$, and $\hat S(t_i^-)\,d_i/n_i$ is precisely the drop in $\hat S$ at $t_i$, so the sum telescopes to $1 - \hat S(t)$.
 
 ### Specification for AI Implementation
 

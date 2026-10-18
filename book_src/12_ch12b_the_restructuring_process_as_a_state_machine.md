@@ -367,7 +367,7 @@ $$
 
 **A high plan value is the senior class selling equity to the junior class at $V^{\text{plan}}$ when the shares are worth $V$.** If $V^{\text{plan}} > V$, the senior is "paid in full" in shares worth $V/V^{\text{plan}} < 1$ of its claim. If $V^{\text{plan}} \le C_1$, the senior takes all the equity, and if $V$ then turns out above $C_1$, it has recovered more than its claim, which a plan may not provide on purpose. So seniors argue for low valuations, juniors for high ones, and the valuation fight is a fight over the strike of an option that the plan writes from one class to another. That is why the plan value moves \$300mm in an afternoon (§16.1). Figure 12-B.4 plots both classes' recoveries against the plan value for a two-class example.
 
-![Figure 12-B.4: A higher plan value moves recovery from the senior class to the junior class: the senior is made whole only when the plan value equals the true value, and every dollar above it pays the senior in shares worth less than its claim. Illustrative: the §12B.6 two-class all-equity model with claims of 800 and 600 (in millions) and shares truly worth V = 1,000.](assets/figures/ch12b_plan_value_transfer.png)
+![Figure 12-B.4: A higher plan value moves recovery from the senior class to the junior class: the senior receives exactly its claim only when the plan value equals the true value, every dollar above it pays the senior in shares worth less than its claim, and below it the senior would be overpaid, which a plan may not provide on purpose. Illustrative: the §12B.6 two-class all-equity model with claims of 800 and 600 (in millions) and shares truly worth V = 1,000.](assets/figures/ch12b_plan_value_transfer.png)
 
 ### Absolute priority and its exceptions
 
