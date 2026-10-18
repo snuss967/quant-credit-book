@@ -192,22 +192,6 @@
    }
   },
   {
-   "name": "lessons-rv-1",
-   "task": "wm5vr9zt0",
-   "runId": "wf_8a985a3f-9b4",
-   "scriptPath": "/home/user/quant-credit-book/tools/workflows/chapter_pipeline.js",
-   "args": {
-    "pre_commit": "9ac1c379053d9d0254e9d524d9a40efdec4a2c71",
-    "stems": [
-     "01_ch01_anthology_and_landscape"
-    ],
-    "stages": [
-     "lessons",
-     "rv"
-    ]
-   }
-  },
-  {
    "name": "lessons-4",
    "task": "wdxhee1hj",
    "runId": "wf_a057e3f8-944",

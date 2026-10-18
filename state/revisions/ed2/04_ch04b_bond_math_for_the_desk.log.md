@@ -1,0 +1,23 @@
+# Progress log: 04_ch04b_bond_math_for_the_desk (Ed2 U2)
+
+- [ ] 1. [Cold Open: Six Columns Called "Spread"] EXPAND-SCENE (to 1,000–1,300 words)
+- [ ] 2. [Prerequisites box] BRIDGE
+- [ ] 3. [4B.1 The list] MATH-GENTLY (present value and the discount factor)
+- [ ] 4. [4B.2 The street formula] MATH-GENTLY (a yield is a price in another font)
+- [ ] 5. [4B.3 Macaulay: the balance point] MATH-GENTLY (duration as a slope)
+- [ ] 6. [4B.3 Spread duration, and the two routes to zero] LIST-TO-NARRATIVE
+- [ ] 7. [4B.3, new `#### Long Scene: The Book That Had a Duration and a Bank That Did Not` (before Key-rate durations)] NEW-SCENE (2,000–2,500 words)
+- [ ] 8. [4B.4 The curvature] MATH-GENTLY (convexity as dispersion) + FULL-DERIVATION-MOVE
+- [ ] 9. [4B.4 Convexity is paid for] MATH-GENTLY in two parts (Jensen's coin, then the ½σ² that Itô will own)
+- [ ] 10. [4B.4 The three meanings] BRIDGE
+- [ ] 11. [4B.5 The Risk Report] MATH-GENTLY (DTS: percent, not basis points) + one telling
+- [ ] 12. [4B.5 The hedge ratio] RV BEAT, The Pair box, PB-03 pre-open as arithmetic
+- [ ] 13. [4B.6 The curve] MATH-GENTLY (bootstrapping as peeling)
+- [ ] 14. [4B.6 Discount margin] ANOTHER-SEAT (CLO manager, generic, no firm named)
+- [ ] 15. [4B.6 PECS] BRIDGE
+- [ ] 16. [4B.7 Yield-to-worst and the Poker Table] WHEN-TO-APPLY inside the scene
+- [ ] 17. [4B.7 The production lattice] MATH-GENTLY (what "risk-neutral" means) + FULL-DERIVATION-MOVE + LIST-TO-NARRATIVE
+- [ ] 18. [4B.7 Negative convexity] BRIDGE
+- [ ] 19. [4B.8 Case Study, promote to `#### Long Scene: One Month, Six Rulers, One Pot` with `####` beat headings] EXPAND-SCENE (2,500–3,000 words) + SHOP-LIFE
+- [ ] 20. [4B.9 Specification] BRIDGE
+- [ ] 21. [4B.10 Desk Debrief] Finder table at the top

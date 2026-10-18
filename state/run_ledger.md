@@ -256,3 +256,7 @@ Status at the stop:
 ## Restart 14:35 UTC (window 14:30–19:30)
 
 All 12 stopped runs were resumed. New launches: rv for 3-B, 8-B, 8-C, 12-C (wvsjasszl); figures→figcheck→resgraph for 8-D, Ch 3, 5, 6 (wwq74cnva); U2 for primers 4-B and 6-B (wuxvihes2) and 7-B and 12-B (w25wiy3wc); synthesis files 4-D (Getting the Seat, with the pod-interview RV pitch), 2-B (TCA, with two-leg pair costs) and 00_02 (How to Use This Book, with the Pair Book route) (wewa62ywq). Pace guard byptqmpjt (alarm 88%). Autosnap b8kzig7kp. Still queued: figures and resgraph for Ch 1, 2, 4, 7 once their lessons/rv passes end; App A §A.10; App Z last; the cleanup queue (Stage 7).
+
+### 14:42 UTC: user reading 14% (the meter read 14.3%, so it is accurate on the 59%@05:45 scale). User rule: "Raise the guard to stop when you count to 105%."
+The guard bphm68mek runs `--target 111 --cap-only --check-every 60` (alarm at 105% on the meter). Because the meter currently matches the user's readings, the window will probably hit the hard usage limit near 100% before the alarm fires. Every agent writes durably, so nothing beyond in-context drafts is lost, and a restart is scheduled for 19:33 UTC (trig_01WppFSgkiFUZCn8ycNV2AN6) to resume from `state/resume_runs.json`.
+Ch 1 finished its lessons pass (16 → 9 Math, Gently boxes, modal 3.9 → 3.7) and its rv beat (PB-01 rebuilt on the flow-graph equations). Figures and resgraph for Ch 1 are launched.

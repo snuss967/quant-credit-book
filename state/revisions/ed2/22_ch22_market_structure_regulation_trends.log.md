@@ -20,8 +20,8 @@
 - [x] 18. [§22.6.1] MATH-GENTLY (risk-neutral) — Fire-insurer risk-neutral box; 10% versus 15%, \$90k CVA.
 - [x] 19. [§22.6.2] EXPAND-SCENE (to 800-1,000 words) — Two desk mornings; Ines gives multiple rule at Kaz hedge decision.
 - [x] 20. [§22.6.2, end] RV beat: scene "A rule is a price, on the short leg" with The Pair box — Wen recall call, Pair box, card, Dov moves thesis date, BIS coda.
-- [ ] 21. [§22.7] LIST-TO-NARRATIVE + ANOTHER-SEAT (insurer)
-- [ ] 22. [§22.8.1] MATH-GENTLY + FULL-DERIVATION-MOVE
-- [ ] 23. [§22.8] WHEN-TO-APPLY inside a short scene
+- [x] 21. [§22.7] LIST-TO-NARRATIVE + ANOTHER-SEAT (insurer) — Morning-meeting calendar scene, insurer seat box, Thames coda; facts verified.
+- [x] 22. [§22.8.1] MATH-GENTLY + FULL-DERIVATION-MOVE — Two-lines 2x2 box, equations stated, fixed-effects algebra moved below.
+- [x] 23. [§22.8] WHEN-TO-APPLY inside a short scene — Kaz affiliate-indicator DiD; Theo, Ines expose contaminated controls; template removed.
 - [ ] 24. [Trend Watches, all sections] placement rule
 - [ ] 25. [§22.9 Desk Debrief] Finder table

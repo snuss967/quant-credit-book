@@ -22,4 +22,6 @@
 - [x] 20. [§21.7] Done: box 10 smoothing; Full Derivation; Ines exchange; CHECKs hedged; pronoun fixed.
 - [x] 21. [§21.8] Done: Weil memo read aloud to Mags; insurer NAIC seat box C.
 - [x] 22. [§21.8 Trinseo] Done: PB-15 replay scene, two cuts, card, Pair box; ledger closed.
-- [ ] 23. [§21.9 Desk Debrief] Finder table; promote Long Scenes, vignette, Pair boxes to #### headings.
+- [x] 23. [§21.9 Desk Debrief] Done: ten-row Finder, DC cell fixed, headings verified, tail verbatim.
+
+<!-- STATUS: COMPLETE -->

@@ -32,3 +32,10 @@
 - Open items to log in state/research/open_items_ch23_ed2.md at end: (a) GM timeline table's "June 1: both names leave the CDX and iTraxx indices at the roll" is doubtful (CDX/iTraxx roll Mar/Sep; bond-index exits were end-May 2005); table protected, prose avoids restating. (b) Figure ch23_gm_2005_two_leg_pnl: for sold protection + short stock the stock-space gamma term is negative; the only positive bar is Mags's call (and trivial carry). (c) Hedged CHECKs: holdco notes near 90 week of 6 Mar; 37–42 at 10 Mar close; ~60 by 17 Mar; Centerbridge/DK/PIMCO reported buyers near 30. (d) Earlier note from figures log: Edition 1 said BS $5 put ~1e-11; chapter now says ~1e-24 (matches code).
 - New figures from brief §3 are not yet generated; placeholders left as HTML comments <!-- FIGURE (brief §3): ... --> for U4.
 - Cast bible: Mags 1999 paging-company convert, stock-loan recall on the up day, bought in 40,000 shares (§23.7); Kaz misread 'tender offer' = gentle (GM scene); Mags's 'Kerkorian put' calls, 1995 Chrysler bid missed by a year (C5-consistent); Theo GM card 'no trade'.
+
+## End-of-chapter tasks (resumed pass, 2026-10-18)
+- [x] Ch 6 continuity: GM scene now the second sitting; envelope opened at grading; Mags's asterisk; PB-04 Pair Book row "Opened in" set to Ch 6 §6.9.2.
+- [x] Figure placeholders added for the three remaining brief §3 figures (persistence, Carvana h*, CS AT1 waterfall).
+- [x] Cast bible: "## Ch 23 additions (U2, 2026-10-18)" written (story dates, Theo, Kaz, Mags, Ines, Dana, Owen, ROBO, Pair Book).
+- [x] Open items logged: state/research/open_items_ch23_ed2.md (SVB price hedges, GM June 1 table row, gamma-bar caption, continuity, figures).
+<!-- STATUS: COMPLETE -->

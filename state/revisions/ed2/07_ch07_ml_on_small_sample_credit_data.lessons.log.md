@@ -16,7 +16,7 @@ Growth 34,543 / 14,523 = **2.38×** against the 1.6–1.9× target (23,237–27,
 ## (b) Duplication: a new scene retelling what an older paragraph still states
 
 - [x] B1. §7.1: FRED numbers (3.23%, 12.78%, 11.37%, 4.61%) told in the Defect 5 paragraph (L100) and again in the regime scene (L102). Survives: the scene, which takes the series IDs, fetch date and the 2.59% January 2025 point; L100 keeps the regime count and "one hat on nineteen hundred heads". **Done:** FRED values told once, in the scene, with series and date.
-- [ ] B2. Cold open L56 ends by retelling §7.7 L521's payoff ("grouping key for the entire test", a mapping "nobody had audited in years"). Survives: §7.7; L56 ends on a pointer. **Done:** Cold open now points to §7.7; payoff told there once.
+- [x] B2. Cold open L56 ends by retelling §7.7 L521's payoff ("grouping key for the entire test", a mapping "nobody had audited in years"). Survives: §7.7; L56 ends on a pointer. **Done:** Cold open now points to §7.7; payoff told there once.
 - [x] B3. Long Scene 1's ending (L196) restates the protected Trend Watch (L210): JFE volume and article numbers, the retraction-notice citation, "This is the first time this has happened." Survives: the Trend Watch for the bibliography; Mags's ending keeps the quotes the box lacks (traded liquidity, lead/lag error, capping losses, 400 citations, "no investment advantage at all"). **Done:** Scene keeps the quotes; bibliography and "first time" left to the Trend Watch.
 - [x] B4. The card is posed by Ines at L190 and re-posed in italics at L202 after the ending. Survives: Ines's card (lesson 9); L202 keeps the two forward pointers. **Done:** Second card cut; reader's card points to §7.7 and Case A.
 - [x] B5. §7.2 L222 retells Kaz's three objections and Ines's test (fourth telling). Survives: the scene; the one new idea (a factor file is a hypothesis list, not a benchmark) moves into Theo's reflection at L200. **Done:** Hypothesis-list idea now Theo's note on the card's back.
@@ -72,15 +72,15 @@ Count at start: 17 Math, Gently (L68 risk-neutral, L110 standard error, L218 fal
 
 ## (f) Reference layer
 
-- [ ] F1. Finder table (ten rows: concept · equation · intuition box · judgment scene · listing) at the top of §7.13, carrying the one-line rules retired by C3–C7.
-- [ ] F2. Promote "Long Scene 1", "Long Scene 2" and "Quant-shop life: Model Review Tuesday" (bold paragraphs) to `####` headings; add `####` decision-point headings for 6 p.m. Friday 14 October 2022 and the morning after the coda.
+- [x] F1. Finder table (ten rows: concept · equation · intuition box · judgment scene · listing) at the top of §7.13, carrying the one-line rules retired by C3–C7. **Done:** Ten-row Finder heads the Debrief; carries retired one-line rules.
+- [x] F2. Promote "Long Scene 1", "Long Scene 2" and "Quant-shop life: Model Review Tuesday" (bold paragraphs) to `####` headings; add `####` decision-point headings for 6 p.m. Friday 14 October 2022 and the morning after the coda. **Done:** Three scenes, two decision points, ending and algebra now headed.
 
 ## (g) Cast-bible contradictions
 
-- [ ] G1. Mags "had been on the desk in October 2022" (L130) and "Mags's objection had been a two-line email" in October 2022 (L728) contradict C5's canon (bank to Jan 2021, a fund Feb 2021–2022, this desk by 2023). L130 → "knew how the story ended"; the unanswered 2022 email becomes Ines's.
-- [ ] G2. L122 "Once a quarter, on a Saturday ... This quarter she did not pick a crisis" collides with Ch 1's quarterly Saturday ("This quarter it was March 2020") and C14's canon (ordinary replays are Friday afternoons). Make it a Friday-afternoon replay; adjust Mags's "six hours" and the lunch.
-- [ ] G3. Exercise 4 "on his new report" (Kaz) → "Kaz's" (C8).
-- [ ] G4. L854 "the Serta pattern Theo had spent two years of his life inside" attaches Theo to Serta (cast rule 4); L90 "the Serta-style transactions he had spent two years of his life on". Make both generic uptier work.
+- [x] G1. Mags "had been on the desk in October 2022" (L130) and "Mags's objection had been a two-line email" in October 2022 (L728) contradict C5's canon (bank to Jan 2021, a fund Feb 2021–2022, this desk by 2023). L130 → "knew how the story ended"; the unanswered 2022 email becomes Ines's. **Done:** Mags off the 2022 desk; Ines's own email went unanswered.
+- [x] G2. L122 "Once a quarter, on a Saturday ... This quarter she did not pick a crisis" collides with Ch 1's quarterly Saturday ("This quarter it was March 2020") and C14's canon (ordinary replays are Friday afternoons). Make it a Friday-afternoon replay; adjust Mags's "six hours" and the lunch. **Done:** Friday-afternoon replay; three hours; Mags buys Monday's lunch.
+- [x] G3. Exercise 4 "on his new report" (Kaz) → "Kaz's" (C8). **Done:** Exercise 4 now reads Kaz's report; no other pronoun slips.
+- [x] G4. L854 "the Serta pattern Theo had spent two years of his life inside" attaches Theo to Serta (cast rule 4); L90 "the Serta-style transactions he had spent two years of his life on". Make both generic uptier work. **Done:** Both Serta links now generic uptier math; no mandate named.
 - [ ] G5. Record in `state/cast_bible.md`: Ana (Model Review Tuesday analyst, fictional systematic manager); Ch 7 facts for Ines (the 14 Oct 2022 file replay; her unanswered 2022 email), Kaz (the reversal sleeve, paper-traded from July, re-formed flat, moved to inventory skew), Theo ("Four" as a defined term; the drop-down flag he got most wrong), Mags (1998 page-140 definition, already canon), and the Wen/Marcus beat (H1).
 
 ## (h) Relative-value beat

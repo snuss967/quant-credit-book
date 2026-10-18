@@ -21,5 +21,7 @@
 - [x] 19. [27.7.3 Citigroup → the Citi/Revlon wire] NEW-SCENE, Long Scene 2 (2,000–2,800 words), `#### Long Scene: The default field, 11 August 2020`. — Revlon wire scene from 2d Cir opinion; agent seat; Citi coda; open items filed.
 - [x] 20. [Spec for AI Implementation (kill switch)] WHEN-TO-APPLY inside the scene. — Listing 27.5 opens at 9:34; c judgment pointer to Ines.
 - [x] 21. [27.8 Observability] SHOP-LIFE (main vignette, 700–1,000 words) + LIST-TO-NARRATIVE. — Tomasz eleven-percent rota vignette; ops plane walked as four screens.
-- [ ] 22. [27.9 Desk Debrief] BRIDGE: Finder table.
-- [ ] 23. [27.10 Resource Graph] BRIDGE.
+- [x] 22. [27.9 Desk Debrief] BRIDGE: Finder table. — Ten-row Finder added before bullets; PB-01 one-leg Exercise 7 added.
+- [x] 23. [27.10 Resource Graph] BRIDGE. — Hauff, Friedberg, Liberty Street 2015, DESK, Revlon opinion, 10-K added.
+
+<!-- STATUS: COMPLETE -->

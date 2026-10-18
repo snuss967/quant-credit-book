@@ -1,0 +1,25 @@
+# Progress log: Ch 28 PM Playbook (Ed2 U2)
+
+- [ ] 1. **[§28.0 Cold Open] · EXPAND-SCENE (to 1,000–1,300 words).** Keep every existing beat (lanyard, "two billion", Kaz's 93%, Mags's CFO breathi
+- [ ] 2. **[§28.1, before the identity] · MATH-GENTLY (box 1, two parts).** *Part one, risk is the budget:* poker bankroll analogy (Ines: a \$1m bank
+- [ ] 3. **[§28.1 "three substitutions"] · LIST-TO-NARRATIVE.** Turn the numbered list into one paragraph in Theo's voice (he tries to hand out \$500
+- [ ] 4. **[§28.2 head] · MATH-GENTLY (box 2): what a distribution is, via the hit rate.** A distribution is a list of outcomes with weights; the ±1 
+- [ ] 5. **[§28.2 "Two definitions of effective breadth"] · MATH-GENTLY (box 3): correlation as a ceiling.** Picture: 300 umbrellas from 40 factories
+- [ ] 6. **[§28.2, before Block 1] · SHOP-LIFE vignette (400–600 words, labeled fictional).** *Shop type: a multi-manager platform's central risk tea
+- [ ] 7. **[§28.3 head] · MATH-GENTLY (box 4): exponential decay and half-life.** Coffee cooling; tiny number: α₀ = 3% and a 0.6% round trip give h* 
+- [ ] 8. **[§28.4 head] · MATH-GENTLY (box 5): Kelly and log growth.** Why log: a 50% loss needs a 100% gain; ruin is minus infinity. Tiny number: a 
+- [ ] 9. **[§28.4 "Continuous time, and the jump"] · MATH-GENTLY (box 6, two parts): Poisson jumps and Itô's ½σ².** *Part one:* normal vs Poisson in 
+- [ ] 10. **[§28.4 "Which measure, and which loss"] · MATH-GENTLY (box 7): P vs Q.** Risk-neutral is the bookkeeping that makes today's price fair, no
+- [ ] 11. **[§28.4 Case Study: CCC decompression] · EXPAND-SCENE (to 1,200–1,600 words, live, Sept–Oct 2026).** Rafe's HY book has leaned into CCC car
+- [ ] 12. **[§28.4 case, after the decision] · ANOTHER-SEAT (box): the CLO manager.** Same decompression from the seat that must keep a 7.5% CCC bucke
+- [ ] 13. **[§28.5 head] · MATH-GENTLY (box 8): VaR, the lognormal, and √T.** A 1% daily σ gives a 99% one-day VaR of 1 − e^{−2.33×0.01} ≈ 2.3%; ten d
+- [ ] 14. **[§28.5 Case Study: Third Avenue] · NEW-SCENE, Long Scene (2,000–2,800 words), promoted to `####`.** *Ines's replay ritual (before 22 Sep 2
+- [ ] 15. **[§28.5 after the scene] · WHEN-TO-APPLY inside the scene.** Give (28.16)–(28.17) to Ines at the card's answer: COL is a pre-trade number f
+- [ ] 16. **[§28.6 head] · MATH-GENTLY (box 9, two parts): a random walk with drift, and the PM's call.** *Part one:* the reflection trick in one pict
+- [ ] 17. **[§28.6 Case Study: March 2020 and March 2026] · NEW-SCENE, Long Scene (2,000–3,000 words), promoted to `####`.** *Replay for March 2020, l
+- [ ] 18. **[§28.6 scene, beat (ii)] · ANOTHER-SEAT (box): the dealer desk.** JPMorgan Q1 2020 call, 14 Apr 2020: "our bridge book commitments were ma
+- [ ] 19. **[§28.7] · MATH-GENTLY (box 10): a ceiling that moves when you lean on it.** The fixed point in two iterations the reader can redo: with A 
+- [ ] 20. **[§28.8 after the hybrid-shop case] · NEW-SCENE, Long Scene (2,500–3,000 words), promoted to `####`: "Dov Adler's Year-End Review: the Pair
+- [ ] 21. **[§28.8] · LIST-TO-NARRATIVE and keep the reviewer fixes.** D7 (calibration, ρ, hit rate with SE) and the covariates-vs-estimator softening
+- [ ] 22. **[§28.9–28.10] · BRIDGE and the Finder table.** The dashboard table is the payoff and stays; the desk-head reviewer's C9 asks (P&L panel, m
+- [ ] 23. **[whole chapter] · BRIDGE.** Thread one line of narration between every two boxed elements; never three boxes in a row (§28.1 currently sta

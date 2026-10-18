@@ -1,0 +1,22 @@
+# U2 Progress Log: Ch 7-B
+
+- [ ] 1. [7-B.0 Cold Open] EXPAND-SCENE (to 1,100–1,400 words).
+- [ ] 2. [7-B.1 Desk framing] BRIDGE + MATH-GENTLY (box 1 of 10, two parts).
+- [ ] 3. [7-B.1 The estimator … through Errors in variables] FULL-DERIVATION-MOVE.
+- [ ] 4. [new `#### Long Scene: One March, Counted Once` after Errors in variables, before Ways This Blows Up] NEW-SCENE (2,200–2,800 words), the chapter's first long scene and its RV beat.
+- [ ] 5. [7-B.1 Ways This Blows Up] LIST-TO-NARRATIVE.
+- [ ] 6. [7-B.2 Desk framing + How much overlap] MATH-GENTLY (box 2) + WHEN-TO-APPLY.
+- [ ] 7. [7-B.3 Desk framing] LIST-TO-NARRATIVE + MATH-GENTLY (box 3).
+- [ ] 8. [7-B.3 Calibration] MATH-GENTLY (box 4) + ANOTHER-SEAT.
+- [ ] 9. [7-B.4 Desk framing + Censoring and truncation] MATH-GENTLY (box 5, two parts).
+- [ ] 10. [new `#### Long Scene: The Chapter 22 Cohort` after Three functions that are one object, before Kaplan–Meier, derived] NEW-SCENE (2,400–3,000 words), the chapter's second long scene.
+- [ ] 11. [7-B.4 Kaplan–Meier, derived + Cox] FULL-DERIVATION-MOVE + MATH-GENTLY (box 6).
+- [ ] 12. [7-B.4 Check the proportionality] WHEN-TO-APPLY inside the scene.
+- [ ] 13. [7-B.5 Desk framing] MATH-GENTLY (box 7, two parts) + ANOTHER-SEAT.
+- [ ] 14. [7-B.5 Shrinkage + Ledoit–Wolf] MATH-GENTLY (box 8) + FULL-DERIVATION-MOVE.
+- [ ] 15. [7-B.6] MATH-GENTLY (box 9) + LIST-TO-NARRATIVE + SHOP-LIFE.
+- [ ] 16. [7-B.7] LIST-TO-NARRATIVE + WHEN-TO-APPLY.
+- [ ] 17. [7-B.8] MATH-GENTLY (box 10, two parts) + LIST-TO-NARRATIVE + SHOP-LIFE vignette.
+- [ ] 18. [7-B.9 Case Study] EXPAND-SCENE (to 900–1,200 words) and ANOTHER-SEAT.
+- [ ] 19. [7-B.10] BRIDGE.
+- [ ] 20. [7-B.11 Desk Debrief] Finder table + ANOTHER-SEAT kept.

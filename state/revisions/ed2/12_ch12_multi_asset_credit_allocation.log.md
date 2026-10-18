@@ -23,4 +23,6 @@
 - [x] 21. [§12.10] BRIDGE listing explanations to scenes. — Scene openers per listing (12.2/12.3 mapping corrected); templates removed.
 - [x] 22. [§12.11 Desk Debrief] Finder table. — Ten-row Finder; bullets, Spec, exercises kept; no box solves exercises.
 - [x] 23. [whole chapter] Fiction labels and CHECKs. — Scene labels, illustrative tags, no CHECK; open items logged in state.
-- [ ] 24. [whole chapter] Box spacing.
+- [x] 24. [whole chapter] Box spacing. — Threaded SE pair, Pair-SE, SE-SE; ten Math boxes, none adjacent.
+
+<!-- STATUS: COMPLETE -->

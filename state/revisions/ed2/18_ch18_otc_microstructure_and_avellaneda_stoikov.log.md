@@ -17,7 +17,7 @@
 - [x] 15. §18.6.3 Credit Suisse AT1: EXPAND-SCENE 600-900 words. — CS AT1 weekend replay, A=0, viability misread, pointer to §23.8.
 - [x] 16. §18.7 hit rates: Box 9 + Another Seat (Jane Street) + Niang scene beat; AiEX hedge. — Box 9 win curve/MLE/nu; hit-ratio email scene; Jane Street seat; AiEX hedged.
 - [x] 17. §18.8 TRACE: LIST-TO-NARRATIVE + Quant-Shop Life vignette. — Marisol fifteen-minute clock vignette; rulebook as Theo's Tuesday read; pointers.
-- [ ] 18. §18.9 BWICs: Box 10 (winner is the most wrong) + FULL-DERIVATION-MOVE.
+- [x] 18. §18.9 BWICs: Box 10 (winner is the most wrong) + FULL-DERIVATION-MOVE. — Box 10 Galton ox, coin margin, statement, Full Derivation, leak subsection.
 - [ ] 19. §18.9.1 Long Scene: LDI BWIC week (replay) + Another Seat (TwentyFour AM).
 - [ ] 20. §18.10 Desk Debrief: Finder table; promote Exercises with difficulty tags.
 - [ ] 21. Whole chapter: ban the templates in code explanations.
