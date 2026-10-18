@@ -291,3 +291,11 @@ Ch 26–28 are done (PB-16 "ROBO's forty-seven pairs" in Ch 26; the PB-01 one-le
 - Launched cleanup-queue (wf_b4c8ff84-ee9): 5 Sonnet fixer groups split by file (App F listings incl. a renumber tool; Ch 24/8/19 basis and pairs; facts in Ch 12/16/17/22/26 incl. the Ares quote, OCC 2011-12, Uyeda; Part I + cast bible + Columbus Day story clock + the three Ch 4 figures; math in 7-B/4-B/2-B/10/15), each followed by a Sonnet reviewer who checks the diff and greps for stragglers.
 - Not sent: data licensing (owner decision); items already marked DONE in the queue.
 - Workflow concurrency here is 2 agents per workflow (CPU-bound cap), so parallelism comes from running several workflows.
+
+## 2026-10-18 17:01 UTC: STOP at the user's 105% guard (meter 105.2%)
+Stopped (TaskStop) at 17:01; all resumable from state/resume_runs.json at the 19:33 restart:
+- appz-complete (wf_47f3acab-447): solved 1-B, 2-B, 3-B, 4-B, 4-C, 6-B, 7-B, 8-B, 8-C, 9-B and 4-D P1-30; partial 8-D, 12-B (durable files resume); not started: 12-C, 18-B, App D, App E, 4-D P31-60, all fix stages, all eight gates. Args: state/appz_complete_args.json.
+- new-chapter-finish (wf_0c696e1b-c8b): fact-checks done for 18-B, 9-B, 13-B, 17-B; partial 10-B and the 9-B figures; then figures/figcheck/resgraph and App Z for all five.
+- cleanup-queue (wf_b4c8ff84-ee9): fixers done for appF-listings, basis-and-pairs, facts-12-16-17-22-26, part-i-and-cast; reviews done for basis-and-pairs and facts; partial: math-2b-4b-7b-10-15 fixer and the part-i review; not started: the appF-listings review. Args: state/cleanup_args.json.
+- App Z assembled (two files); remaining editor notes listed in state/appZ/_editor_notes.md (they are fixed by the appz-complete fix stages).
+- Book rebuilt at 17:00 (PDF sent to the user, not committed).

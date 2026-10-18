@@ -110,3 +110,34 @@ Checked that "will not be extended" appears nowhere else in `book_src/`. The dos
 | uyeda-speech | fixed (verified against the SEC page; one quotation corrected) |
 
 <!-- STATUS: COMPLETE -->
+
+## Review
+
+Reviewer pass (2026-10-18). Each changed passage was read in the file; stragglers were found by grepping `book_src/` (and `state/appZ/`, the App Z source parts) for the old values and phrases.
+
+**blue-owl-99.7: confirmed.** Ch 12 line 703 reads 99.7% for the whole \$1.4bn, with \$600mm from OBDC II. Ch 17 (lines 472, 663, 963), Ch 17-B (line 306, which also gives 99.8% for OBDC II's own \$600mm share per its 8-K) and Ch 26 (line 196) agree. No "99.8% of par" remains in `book_src/`; the only other 99.8 hits are the Zayo bond in Ch 13-B and Ch 17-B. The paragraph's currency escapes are intact. The dossier follow-up stands.
+
+**ch16-ref: confirmed.** Ch 1 §1.8.1 carries the coffee gloss ("§9.4 cools the same cup for a signal"). The box *Half-life, or how fast the coffee goes cold* is in Ch 9 §9.4.1 (line 366), and §16.2.3 is the fitting subsection. The Ch 16 sentence and its math delimiters (12 `$`, balanced) are undamaged. Stragglers fixed, one Edit each, all now pointing to §9.4.1:
+- Ch 3 line 539, "the half-life box is in §1.8.1" (not on the fixer's list)
+- Ch 3 line 892, "box in §1.8.1"
+- App Z line 507, "the half-life box in §1.8.1"
+- the `state/appZ/03_ch03_pjt_rssg_cognitive_bridge.md` source copy of the App Z line, so a reassembly does not restore it
+App Z line 87 ("§1.8.1 ... half-life gloss") is correct and unchanged.
+
+**ares-quote: confirmed, with one correction.**
+- Ch 17 line 101 now carries the attributed paraphrase ("management ... 'a heightened focus on documentation terms'"), identical in treatment to Ch 25 line 232. The closing note is intact and no unescaped `$` appears.
+- Correction: the same sentence said management "put the *portfolio's* first-lien loan-to-values 'in the high 30% to low 40% range'". The fixer's own side finding, and Ch 17-B line 89, place that phrase in Schnabel's prepared remarks on *2025 originations*. It now reads "the loan-to-values on its 2025 first-lien originations".
+- Stragglers fixed (the "We will walk away ..." quote or its paraphrase, with Miller or "president" as speaker):
+  - Ch 4 line 125: speaker changed to "ARCC's management", and the quote replaced with the shared phrase. The "merits of not being a benchmark-style investor" quote is kept, now attributed to management. Its wording and speaker are still unverified, which a future pass should check.
+  - Ch 4-C line 201: the LTV range is now attributed to chief executive Kort Schnabel and to 2025 first-lien originations, matching Ch 17-B. The "walk away" quote is replaced by "a heightened focus on documentation terms".
+  - Ch 14 line 448: "ARCC's management has said publicly that there is 'a heightened focus on documentation terms'", with the Miller attribution dropped.
+  - Ch 6 line 880: paraphrase changed from "will walk away" to "described a heightened focus on documentation terms".
+- Not edited: `state/research/perspectives_buyside_credit_managers.md` line 39 still attributes the LTV phrase to Miller. Dossier follow-up.
+
+**OCC-2011-12: confirmed (softened).** Ch 26 line 562 reads "the Federal Reserve and the OCC issued jointly on 4 April 2011, organizes validation ...". The sentence is grammatical, and the attachment supports "jointly" and the date. No "OCC Bulletin" or "2011-12" remains in `book_src/`. I tried one fetch of the occ.gov bulletin URL, which returned 404, so the number stays unconfirmed and out of the text.
+
+**uyeda-speech: confirmed, with one straggler.** The Ch 22 line 977 entry now uses the verified wording ("approximately 165% higher than before the Commission's proposal"; the two named clearing agencies; "does not currently intend to extend these deadlines"). The process note and the false quotation are gone, and "will not be extended" appears nowhere in `book_src/`. The straggler was App Zb line 576, "Uyeda put FICC cleared volume about 165% above pre-proposal levels". The speech says daily cleared Treasury volumes, not FICC, so it now reads "daily cleared Treasury volume". The same fix went into the `state/appZ/22_ch22_market_structure_regulation_trends.md` source copy. Ch 22 line 512 still carries "(approx.; check the SEC orders)" on the CME and ICE approval dates. That is a separate claim and was left alone. The speech's "in the past year" is consistent with December 2025 and early 2026.
+
+**Net:** 5 of 5 items confirmed. 1 fix corrected (Ch 17 LTV scope). 11 stragglers fixed in 9 files: Ch 3 (2), App Z (1), Ch 4, Ch 4-C (2), Ch 6, Ch 14, App Zb, and the 2 `state/appZ` source copies.
+
+<!-- STATUS: COMPLETE -->

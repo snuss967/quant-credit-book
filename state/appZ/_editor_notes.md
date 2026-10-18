@@ -116,6 +116,18 @@ NOTE (for the editor): §8C.6(b) says the Corriveau true-up of $-\$240{,}000$ is
 
 NOTE (for the editor): the printed check says "when the idio line is negative, the ledger prints the lines and leaves the ratio blank". I cannot find that rule anywhere else in §8C or §8D.6, and the companion listing does not implement it: Listing 8-D.1's `capture(idio, leak, friction)` is `(idio + leak + friction) / idio` with no guard, so this exercise's 4:00 case returns 3.4 and an idio of exactly zero raises `ZeroDivisionError`. Either state the rule in §8D.6 and add the guard (`None` when `idio <= 0`), or drop the sentence from the check.
 
+### 08_ch08d_the_pair_book_long_one_credit_short_another
+
+NOTE (for the editor): The Cold Open gives the lender's inventory as \$300 million *face* and the short as \$60 million market value (about \$61 million face), but §8D.5 says the 20% cap "on \$300 million is \$60 million, exactly the current short", and Listing 8-D.1 documents `inventory` as "lendable market value, \$mm". In one unit the two do not match. In face the cap is \$60.0mm against a current short of \$61.2mm face, so the pod is already \$1.2mm over; in market value the cap is \$58.8mm against \$60.0mm. The borrow-based size is then \$26.1mm rather than \$26.7mm. The stop still binds at \$22.5mm, so nothing downstream moves. Suggest stating the unit once and saying "about the current short".
+
+### 08_ch08d_the_pair_book_long_one_credit_short_another
+
+NOTE (for the editor): §8D.4 calls a \$23.2 million loss "5.8% of capital" that is "past the first of the two lines" (5% and 7.5%). Dov's own first line is \$24 million (§1B.2), which is 6.0% of \$400 million, not 5% (\$20 million). From a flat book \$23.2mm leaves \$0.8mm of room under \$24mm; it breaches only because the book is already \$11mm down (the distance is \$13mm). Either say "past the 5% line of the press-reported template" or give Vantress a \$20mm first line.
+
+### 08_ch08d_the_pair_book_long_one_credit_short_another
+
+NOTE (for the editor): The §8D.3 scenario table (\$85.6mm; +138, +205 and +385 in \$000) is built on the rounded ratio 2.14. At the unrounded 2.142857 that Listing 8-D.1's `scenarios` and self-check use, the same cells read \$85.7mm, +139, +206 and +386. The listing's own assert (0.2057 at `atol=1e-3`) passes either way. One clause ("at a ratio rounded to 2.14") would stop a reader who reproduces the table from missing by \$1,000.
+
 ### 09_ch09b_the_bond_data_problem_and_the_replication_crisis
 
 NOTE (for the editor): The printed solution, and Theo's "September's month-end price for this bond just changed" in §9B.1, hold only on an assumption the scene does not state. Under the pipeline's rule (the last daily VWAP inside the final five business days), deleting the 29 September print moves the month-end price only if the 29th was the bond's last printing day in that window. If the bond also printed on the 30th, the 30th sets the price and nothing changes. If the \$500,000 sale was the only print in the window, September has no month-end price at all, so September's and October's returns do not move, they vanish. Suggest "can change" or one clause saying the 29th was the bond's last print. The sale also belonged to the 2028s, so presumably a corrected as-of report lands in that bond's September window and moves its history too.

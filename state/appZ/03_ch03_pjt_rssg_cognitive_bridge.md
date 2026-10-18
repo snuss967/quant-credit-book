@@ -72,7 +72,7 @@ By day 20 the flow signal has been through almost seven half-lives, while the fu
 
 **The trap:** Ranking the features by $\text{IC}_0$ and putting the flow signal everywhere because 0.10 beats 0.04. The ranking flips after four days, which is inside the RFQ engine's own five-day horizon. The banker's version of the mistake runs the other way: keeping the fulcrum view out of $\pi(x)$ because it is "a portfolio view" that took ninety hours to build. At five days it beats the tape. A mechanical slip is to write $e^{-h/h_{1/2}}$ for $2^{-h/h_{1/2}}$, which treats the half-life as an e-folding time and gives $h^\star = 2.8$ days.
 
-**If you got this wrong, read:** §3.5 (the decay column, the IC formula and Paleologo's common clock), the half-life box in §1.8.1, and §3.3.4 for shrinking the lie rate.
+**If you got this wrong, read:** §3.5 (the decay column, the IC formula and Paleologo's common clock), the half-life box in §9.4.1, and §3.3.4 for shrinking the lie rate.
 
 **Z.03.5: Detector economics**
 

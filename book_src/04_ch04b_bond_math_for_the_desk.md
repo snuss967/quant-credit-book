@@ -10,13 +10,13 @@ The folder was called `FA_2020_cut0323`, and Ines had stuck the rules to Theo's 
 
 Theo opened the vendor file the way he used to open a data room. At PJT the first click was the same on every deal: the credit agreement, Article I, Definitions, because a number in a deal is worth exactly what the paragraph defining it says. "Consolidated EBITDA" had run to four pages and eleven add-backs in his last deal, and he could still recite the fight over each one. He looked for the vendor file's Article I. There was a tab called `data`; a tab called `meta`, which listed forty-one columns in alphabetical order, every one of type `float64`; and a README of two lines: *Spreads in bp. See methodology.* The methodology was a link to a PDF dated 2017. He bookmarked it and did not open it, a decision that would cost the desk forty minutes the next morning (§4B.8).
 
-Six of the forty-one columns had "spread" in the name. On 23 March 2020 they read, left to right: `g_spd 824`, `z_spd 804`, `asw_par 679`, `asw_mm 959`, `oas 804`, `cds_equiv 945`. (The bond is a stylized ten-year 4.50% note of a BBB− auto issuer, held at constant maturity; the Treasury yields are real, the bond's yields are illustrative, and every number in this chapter is reproduced by the code in §4B.9.)
+Six of the forty-one columns had "spread" in the name. On 23 March 2020 they read, left to right: `g_spd 824`, `z_spd 804`, `asw_par 678`, `asw_mm 959`, `oas 804`, `cds_equiv 945`. (The bond is a stylized ten-year 4.50% note of a BBB− auto issuer, held at constant maturity; the Treasury yields are real, the bond's yields are illustrative, and every number in this chapter is reproduced by the code in §4B.9.)
 
 "Which one is the spread?" Theo asked.
 
 "All of them," said Kaz. "Same bond, six coats."
 
-"They differ by 280 basis points. In my old job, 280 basis points was a covenant reset and two weeks of lawyers."
+"They differ by about 280 basis points. In my old job, 280 basis points was a covenant reset and two weeks of lawyers."
 
 Mags, from the next desk, without looking up: "When I started there was one spread. It was whatever the man on the phone said, minus whatever he thought you knew."
 
@@ -645,7 +645,7 @@ Mags had watched the whiteboard fill. "My first year, I'd have called the salesm
 
 Then Kaz put up the table.
 
-*Table 4B.1. The Chapter 1 fallen angel (stylized ten-year 4.50% note, semi-annual, on a coupon date, so dirty equals clean) on three dates, every measure computed from one flat curve. Treasury yields are real; the bond's yields are illustrative; §4B.9 reproduces every entry. Spreads in basis points.*
+*Table 4B.1. The Chapter 1 fallen angel (stylized ten-year 4.50% note, semi-annual, on a coupon date, so dirty equals clean) on three dates, every measure computed from one flat curve. Treasury yields are real; the bond's yields are illustrative; §4B.9 reproduces every entry, rounded to the nearest basis point (the March par-par asset swap is 678.497, which the listing prints as 678.50). Spreads in basis points.*
 
 | | 20 Feb 2020 | 23 Mar 2020 | 30 Jun 2020 |
 | :--- | ---: | ---: | ---: |
@@ -655,7 +655,7 @@ Then Kaz put up the table.
 | G-spread | 198 | 824 | 484 |
 | Z-spread (continuous) | 196 | 804 | 477 |
 | OAS (Ho–Lee, $\sigma$ = 100bp, make-whole at T+50) | 196 | 804 | 477 |
-| Asset swap, par-par | 207 | 679 | 463 |
+| Asset swap, par-par | 207 | 678 | 463 |
 | Asset swap, market value | 191 | 959 | 501 |
 | PECS ($R = 40\%$) | 186 | 945 | 482 |
 | $D^{\text{mod}}$ | 8.11 | 7.40 | 7.86 |
@@ -760,7 +760,7 @@ At 7:40 on Wednesday the function Kaz needed first was the one that would not re
 >
 > **Annotation.** ROBO picked a correct dictionary entry, and the wrong one. The cure is not a better guess but a signature that cannot be called without the missing facts: which curve, which compounding, which price (dirty, per 100), which unit comes back. This module implements eight meanings and computes none of them from a clean price.
 
-*What the module is for, at this point in the story.* The cold open showed what happens when every consumer of a spread computes its own: six columns, 280bp apart. So `bondmath.py` is less a pricing library than a single source of arithmetic. Chapters 5, 8, 9, 10, 12, 15 and 19 import it, so that when two chapters disagree, they disagree about the market and not about compounding.
+*What the module is for, at this point in the story.* The cold open showed what happens when every consumer of a spread computes its own: six columns, about 280bp apart. So `bondmath.py` is less a pricing library than a single source of arithmetic. Chapters 5, 8, 9, 10, 12, 15 and 19 import it, so that when two chapters disagree, they disagree about the market and not about compounding.
 
 *Why it is built this way.* The chapter reduces to two objects and one verb. The objects are a list of (time, cash flow) pairs (§4B.1) and a discount function $d(t)$ (§4B.6). The verb is *reprice*: a yield, a Z-spread, an OAS, a hazard rate and a discount margin are each the single constant that, inserted in the right place, makes the list equal the dirty price. So there is one pricing kernel per model (yield, curve, hazard, lattice) and one solver for all of them: bisection, on purpose. Every kernel is strictly monotone in its constant (§4B.2), so a bracketed bisection cannot find the wrong root or diverge, and when the price is impossible it fails loudly, which is the failure you want.
 
