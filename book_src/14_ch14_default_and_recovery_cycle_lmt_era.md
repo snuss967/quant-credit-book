@@ -266,7 +266,7 @@ Run the envelope version with $\lambda_H = 0.022$, $\lambda_D = 0.038$, $T = 3$,
 | Blended at a 52.6% chance of being inside | 0.49 | 9.0% |
 | Naive single-state model: 16.5% default probability × 47% LGD | n/a | 7.7% |
 
-The naive model is wrong on average, understating the blended loss by more than a point, and wrong in the cross-section, where the two sides of the same class are four points apart over three years. The exact integral gives slightly lower numbers, because an exchange in year 2.9 has little time to re-default before $T$. Our engine computes both. The four-point gap comes almost entirely from one variable, and the next section is about that variable.
+The naive model is wrong on average, understating the blended loss by more than a point, and wrong in the cross-section, where the two sides of the same class are four points apart over three years. The exact integral gives slightly lower numbers, because an exchange in year 2.9 has little time to re-default before $T$. Our engine computes the exact version and checks it against Monte Carlo. The four-point gap comes almost entirely from one variable, and the next section is about that variable.
 
 ## 14.4 Recovery Is a Mixture over Coalition Membership
 
@@ -916,3 +916,100 @@ The tests double as documentation. If a later contributor "simplifies" `aalen_jo
 
 - **Academic Papers.** Hamilton (1989), *A New Approach to the Economic Analysis of Nonstationary Time Series and the Business Cycle*, Econometrica. Fine & Gray (1999), *A Proportional Hazards Model for the Subdistribution of a Competing Risk*, JASA 94(446). Aalen & Johansen (1978), *An Empirical Transition Matrix for Non-homogeneous Markov Chains Based on Censored Observations*, Scandinavian Journal of Statistics.
 - **Data & Code.** Moody's and S&P annual default studies (vendor) for DE counts by year; Federal Reserve FSR Figure 2.9 for a public DE-inclusive series.
+
+## 14.8 Case Studies: Three Clocks
+
+### 14.8.1 Case Study: Serta Simmons Bedding, 2020–2026 (the whole regime in one name)
+
+- **2016.** A \$1.95bn first-lien term loan and a \$450mm second lien (Duane Morris, February 2025).
+- **22 June 2020.** The uptier closes. It brings \$200mm of new-money first-out super-priority debt, and participating lenders exchange about \$1.2bn of first- and second-lien loans into about \$875mm of second-out super-priority debt, first liens at 74 and second liens at 39 (Proskauer, 2 January 2025; Jones Day, March 2025). On the remand court's findings, the participants held about 52.6% of the first-lien class, and the excluded loans were worth about \$0.25 at the closing.
+- **23 January 2023.** Chapter 11 in the Southern District of Texas, about 31 months after the uptier. On 28 March 2023 the bankruptcy court grants partial summary judgment that the exchange was an "open market purchase." The plan is confirmed on 14 June 2023.
+- **31 December 2024.** The Fifth Circuit reverses and strikes the plan's indemnity (§14.6).
+- **November 2025 to July 2026.** Serta itself wins summary judgment on discharge grounds, which leaves the participating lenders as the defendants. Trial is held in March 2026. On 7 July 2026 the court awards \$261.13mm (but-for value of about \$484.88mm against actual value of \$223.75mm, which is \$895mm face at \$0.25), plus 9% New York prejudgment interest from 22 June 2020, allocated severally by each defendant's holdings (Mayer Brown, July 2026).
+
+Run the interest. From 22 June 2020 to 7 July 2026 is about 6.04 years, so 9% simple interest adds roughly 54% to the award, about \$142mm, for a total near \$403mm *(approx.; before allocation, collection risk, or appeal)*. On \$895mm of face, that is about 45 points of par, *on top of* whatever the excluded loans recovered in the plan. Our "illustrative" $\mu_{\text{out}} = 0.25$ was the value at closing. Six years later, the excluded hump had a litigation tail worth more than the loan. Mags's line about New York interest was not entirely a joke.
+
+The remand also produced the most useful hand history in the book. Defendants' mitigation expert testified that up to \$186mm face of the first-lien loans traded between June 2020 and the end of 2021, and constructed hypothetical sales of \$62mm to \$94mm. The court recited Bloomberg chats with a dealer's loan market maker. "That's my markout," says Ines. "Entered into evidence."
+
+**How a systematic desk flags it.** Four signals were observable before 22 June 2020: the document token ("open market purchase" with no definition, a Priming Risk Score input in Chapter 13), a fragmented CLO-heavy holder base with no co-op ($c \approx 0$ in §14.5), Rule 2019 and press evidence that a group was forming, and RFQ flow in the loan that was one-sided by holder type. After the closing, the trade was the inside/outside spread and, after 31 December 2024, the excluded claim as a contingent asset with a dated appellate path.
+
+### 14.8.2 Case Study: Mitel Networks, 2022–2025 (win the case, lose the credit)
+
+In October 2022 participating lenders provided about \$156mm of new-money first-out debt, exchanged first-lien loans into second-out at a 5% discount, and exchanged second-lien loans into third-out at an 18% discount (Paul Weiss, 10 January 2025). The excluded lenders were left behind about \$857mm of priming debt. On 31 December 2024 the First Department held the deal permitted. On 10 March 2025 Mitel filed a prepackaged Chapter 11 in the Southern District of Texas, about 29 months after the uptier, and the plan was confirmed in April 2025.
+
+The lesson is about which parameter a ruling moves. Mitel's legal victory set $\theta_w$ for the bare-"purchase" wording close to one. It did nothing to the re-default clock, because the clock runs on runway, and \$156mm of new money bought about two and a half years of it. In the mixture-cure model, Mitel was one of the susceptible 25%, and it failed inside the high-hazard window that the $k > 1$ calibration predicts. Legality and survival are close to independent.
+
+### 14.8.3 Case Study: Del Monte Foods, 2024–2026 (the fast clock)
+
+Here we keep to the dockets. A 2024 financing, reported as a non-pro-rata deal in August 2024, was followed by Chapter 11 on 1 July 2025 (Bankr. D.N.J. 25-16984), about eleven months later and well inside Moody's two-year window. Litigation between lender groups followed: an adversary proceeding naming members of the Ad Hoc Term Lender Group and of the Ad Hoc Group of Minority Secured Lenders (23 January 2026), a district-court action by the minority group (6 March 2026), and a bankruptcy appeal (28 May 2026). The deal terms, recoveries and holdings are in the first-day declaration and the complaints, and a desk should read them before putting numbers on this one. The shape is already instructive: a short $\eta$, then a second fight about $\pi$ inside the bankruptcy itself.
+
+## 14.9 Trading the Regime
+
+Five signals come out of this chapter. Each is a feature with a timestamp, not an opinion.
+
+1. **Post-LME re-default versus market-implied.** Six to 24 months after an exchange, a name sits in the peak of the hazard hump, but agency ratings often stay flat after LMEs (Roe & Rotaru, 2026). Compare the cure-model hazard to the hazard implied by the loan price, computed with the *post*-LME recovery rather than 40%. The gap is a systematic underweight in defensive high-yield books (Chapter 11).
+2. **Coalition membership.** Stage 0 of §14.4 scored from Rule 2019 statements, co-op announcements, CLO trustee holdings, and the adviser-hire headlines that Chapter 25's NLP pipeline extracts. Long likely-inside, short likely-outside in the same class, where the document score is high and the holder base fragmented.
+3. **Docs vintage.** Pre- versus post-blocker documents. Buccola and Nini (2024) find that most new loans blocked uptiers by mid-2022 while the legacy stock stayed loose, and that stock decays only as it matures or is amended. It is a factor, not a one-off.
+4. **The dual default-rate spread.** Headline minus ex-DE default rate as a regime input to high-yield beta and to the Hamilton filter of §14.7.
+5. **Ruling dates as event windows.** Pending appellate decisions (Wesco and ConvergeOne in the Fifth Circuit, the first co-op antitrust ruling) are known catalysts with direction-dependent jumps in $\theta_w$ and $\mu_{\text{out}}$. Pre-compute the repricing under each outcome.
+
+> **[SOURCE EXTRACTION]** *BlackRock_Systematic_High_Yield_Credit p.6:* "Our proprietary probability of default signal that has underpinned all of our credit strategies for over 20 years has successfully identified 77% of the defaulted bonds in the ICE BofA High Yield Index within 24 months of its default since 2010."
+>
+> **Annotation.** A strong claim, and the right kind of signal to own. The question this chapter teaches you to ask is: *which* default? A bond-index default definition, a structural model built on asset value and volatility, and a sample mostly from before the LMT era were all built to catch hard defaults. A soft default is a negotiation over runway and coalition, and asset value is only one input to it. A 2026 default-avoidance signal should be scored separately on $F_H$ and $F_D$, and its hit rate on distressed exchanges reported on its own line.
+
+"IDO or it didn't happen," says Ines, closing the hand. "Knowing that distressed exchanges are 65% of defaults is beta. Everyone has the Moody's report. Knowing which 52.6% of the class you're in is alpha."
+
+## 14.10 Desk Debrief
+
+- **"The default rate" is two numbers.** Headline and ex-DE rates differed by a factor of almost three in June 2025 (5.8% vs. 2.1%). Carry $\lambda_H$ and $\lambda_D$ separately, and name the definition in the column.
+- **Use cumulative incidence, not 1 − Kaplan–Meier.** Censoring the competing cause overstates the probability of the cause you care about, and the bias grows with horizon.
+- **A distressed exchange is parole, not immunity.** About a quarter of soft events end in hard default, more than 70% of those within two years. The hazard among the susceptible *rises* at first, because the deal bought runway. Calibrate $k \gtrsim 1$, not $k < 1$.
+- **Recovery is two humps.** Membership alone can generate a 24-point standard deviation. Stage 0 of the LGD model is $\mathbb{P}(\text{in majority})$, and it belongs to the holder, not the loan.
+- **Co-ops move risk; they don't remove it.** Coverage above the blocking line crushes the uptier hazard and raises the drop-down and deal-away hazard. The co-op's own legality is a dated scenario.
+- **Rulings are regime switches with timestamps.** Encode them as documented log-odds jumps by wording class. Serta and Mitel, decided the same day, are the proof that tokens beat economics.
+- **Never compare a CDS hazard with an agency default rate** without removing $\lambda_D$ and replacing the 40% convention. Most "the market is underpricing default" notes are units errors.
+
+**The Spec You Hand the Robot.** "Build `lme_cycle_engine.py` per §14.7. Inputs: an event table with the schema given, or `LMEParams` for simulation. Hazards are per year under $\mathbb{P}$, recoveries are fractions of par, and the DE recovery is the value held immediately after the exchange. Estimate cause-specific Nelson–Aalen and Aalen–Johansen CIFs on first events only, and assert $S + \sum_k F_k = 1$ to 1e-10. Fit the post-DE clock as a mixture-cure Weibull with right-censoring. Never fit an exponential or set the hazard to zero after the last observed event. Report EL by coalition side (`in`, `out`, `blend`) by quadrature, and check it against Monte Carlo within 0.005. Fit the two-state binomial Markov-switching model on DE *counts*, with ordered shares and a log-space filter, and accept time-varying $P$ as a $(T,2,2)$ array. Never delete DE rows to 'exclude' them: report the ex-DE rate as a second output. Seed every generator. Raise on a horizon beyond `T_max`. Print PASS/FAIL for every check in block 5."
+
+## Exercises
+
+1. **Two rates, two hazards.** Moody's reports 5.8% including and 2.1% excluding distressed exchanges. Convert both to intensities, compute $\lambda_D/\lambda_H$, and compute the three-year $F_D$ and $F_H$. Then explain, in one paragraph a PM would read, why a CDX-implied hazard should be compared with only one of them.
+2. **Kaz's parole question.** Using the mixture-cure model with $p = 0.25$, find $\eta$ for $k = 0.8, 1.0, 1.2, 1.5$ from the 70%-within-two-years condition. For each, compute the population hazard $h_H(u)$ at $u = 0.5, 2, 6$ years and the year-six increment in cumulative incidence. Which shapes satisfy all four Moody's facts? What does your answer say about when to short a post-LME loan?
+3. **Which hump are you in?** You own \$10mm of a first-lien loan in a class where a co-op covers 70% and you are not in it. Under the §14.5.1 game ($m = 0.501$, $n = 10$, $\varphi = 0.10$), compute the probability of a non-pro-rata deal. Then let the sponsor buy defectors so that $\varphi = 0.35$. Using the coalition mixture with $\mu_{\text{in}} = 0.74$ and $\mu_{\text{out}} = 0.25$, what is the most you would pay to join the co-op, in points?
+4. **The best-performing tranche.** An excluded Serta lender bought \$5mm face of the excluded first lien at 20 in January 2021. Using the July 2026 award, 9% simple prejudgment interest from 22 June 2020, a 60% probability that the award is collected in full by July 2027 and zero otherwise, and ignoring plan recoveries, compute the expected multiple and IRR. Then state every assumption a litigation-finance desk would attack.
+5. **Fix ROBO.** Rewrite the instruction "exclude distressed exchanges from the default rate" as a spec of no more than 120 words that ROBO cannot misread. Include units, the output columns, what happens to the excluded issuers' future events, and one assert.
+6. **Regime detection.** Simulate 40 years of DE counts with $\rho_0 = 0.30$, $\rho_1 = 0.63$, and mean defaults 90 per year, with a switch in year 30. Fit `fit_ms2` and report the first year in which the filtered LME-regime probability exceeds 0.9. Repeat with mean defaults of 12 per year (a private-credit-sized sample). How many years of "it's just noise" does the small sample buy you?
+
+### Deep-Dive Resource Graph
+
+**Podcasts**
+- *Cloud 9fin*, 9fin's podcast on leveraged finance and restructuring (episode titles via 9fin's insights listing).
+- *Bloomberg Odd Lots*: search the archive for episodes on liability management and creditor-on-creditor violence (titles not verified here).
+- *Petition*, restructuring writing and podcast: https://www.petition11.com/archive.
+
+**Practitioner Writing**
+- Moody's (David Hamilton), *Lend, Extend, and Then?* (18 May 2026): https://www.moodys.com/web/en/us/insights/credit-risk/private-credit/lend-extend-and-then.html.
+- Moody's, *America's Corporate Credit Is at a Tipping Point* (28 April 2026): https://www.moodys.com/web/en/us/insights/credit-risk/private-credit/us-corporate-default-risk-in-2026.html.
+- 9fin, *A Crash Course on Co-ops*: https://www.9fin.com/insights/cooperation-agreement-crash-course. 9fin, *H1 2026 LME Update* (28 August 2026): https://www.9fin.com/insights/h1-2026-lme-update.
+- Seaton, *The Value and Legality of Lender Cooperation Agreements*, HLS Bankruptcy Roundtable (14 April 2026): https://bankruptcyroundtable.law.harvard.edu/2026/04/14/the-value-and-legality-of-lender-cooperation-agreements/.
+- Mayer Brown, *Serta Simmons Bedding: The Fifth Circuit's Uptier Decision and the Landmark Damages Ruling on Remand* (July 2026): https://www.mayerbrown.com/en/insights/publications/2026/07/serta-simmons-bedding-the-fifth-circuits-uptier-decision-and-the-landmark-damages-ruling-on-remand.
+- Paul Weiss, *Appellate Review of Uptier Transactions* (10 January 2025): https://paulweiss.com/media/3985746/appellate_review_of_uptier_transactions_serta_and_mitel_decisions_reversed_on_appeal.pdf.
+- Cleary Gottlieb, *Cooperation, Not a Cartel* (18 December 2025), on the Optimum antitrust complaint (title only).
+- Baker McKenzie, *In the Know: Leveraged Finance Annual Report 2026* (January 2026): https://www.bakermckenzie.com/en/insight/publications/2026/01/-/media/files/insight/publications/2026/01/lev-fin-annual-report-2026.pdf.
+- Matt Levine, *Money Stuff* (Bloomberg Opinion), passim on uptiers and "open market purchase."
+
+**Academic Papers**
+- Buccola & Nini (2024), *The Loan Market Response to Dropdown and Uptier Transactions*, 53 J. Legal Stud. 489.
+- Parikh (2023), *Creditors Strike Back: The Return of the Cooperation Agreement*, 73 Duke L.J. Online 1.
+- Ellias & Stark (2020), *Bankruptcy Hardball*, 108 Cal. L. Rev.: https://www.californialawreview.org/print/bankruptcy-hardball.
+- Roe & Rotaru (2026), *Liability Management's Limited Runway*, HLS Bankruptcy Roundtable summary (link in §14.4 graph).
+- Franks & Torous (1994), JFE 35; Altman, Brady, Resti & Sironi (2005), Journal of Business 78(6); Fine & Gray (1999), JASA 94(446); Hamilton (1989), Econometrica.
+
+**Data & Code**
+- Fifth Circuit opinion, *In re Serta Simmons Bedding*, No. 23-20181: https://www.ca5.uscourts.gov/opinions/pub/23/23-20181-CV0.pdf.
+- CourtListener REST API (dockets, filing dates, opinions): https://www.courtlistener.com/help/api/.
+- SEC EDGAR (LME 8-Ks, Item 1.01 and 2.03 filings, unrestricted-subsidiary designations): https://www.sec.gov/edgar.
+- Federal Reserve, *Financial Stability Report* (May 2026): https://www.federalreserve.gov/publications/files/financial-stability-report-20260508.pdf.
+- Vendor datasets, named without links: Moody's Default & Recovery Database, S&P CreditPro, Fitch leveraged finance recovery studies, PitchBook LCD default tracker (with and without LMEs), and the Octus, Debtwire and 9fin LME trackers.
+
+<!-- STATUS: COMPLETE -->

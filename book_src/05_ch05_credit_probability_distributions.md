@@ -536,3 +536,623 @@ The FRED data agree with the algebra. Using daily ICE BofA total-return indices 
 - **Academic Papers:** Hill (1975), *A Simple General Approach to Inference About the Tail of a Distribution*, Annals of Statistics; McNeil, Frey, and Embrechts (2015), *Quantitative Risk Management*, 2nd ed., Princeton University Press; Embrechts, Klüppelberg, and Mikosch (1997), *Modelling Extremal Events*, Springer.
 - **Data & Code:** FRED ICE BofA total-return series (search the series IDs above at https://fred.stlouisfed.org/); `hill_estimator`, `gpd_var_es`, and `t_copula_tail_dep` in §5.9.
 
+## 5.8 Choosing the Shape: Five Objects, Five Distributions
+
+By the end of the week Theo has stopped asking for "the distribution" and started asking "the distribution of *what*?", which Ines says is the first question a good player asks about any pot. The chapter's results fit on one table, and the table is the router that the §5.9 code implements.
+
+| Object | Support | Model that earns its keep | What it replaces | Tail tool | Measure |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| Single-bond horizon return (§5.1, §5.6) | Bounded below by $-1$, capped above by the call | Survive-or-jump mixture: DTS survival leg, inflated-Beta recovery leg, categorical events (HD, DE) for LMT-exposed names | Gaussian with trailing vol | ES and JTD; no Hill | $\mathbb{P}$ |
+| Single-bond horizon price (§5.2) | $[0, K_{\text{call}}]$ | Capped survival price plus a recovery lump | Lognormal price | None needed: the bounds are the tails | $\mathbb{P}$ |
+| Spread change (§5.2–5.3) | Unbounded above in practice | Lognormal-ish relative changes (DTS); jump-diffusion at the short end | Gaussian basis-point changes | Hill or GPD on de-GARCHed relative changes | $\mathbb{P}$ for risk, $\mathbb{Q}$ for pricing |
+| Recovery (§5.5–5.6) | $[0, 1]$, or $[0, 1.2]$ when post-petition interest is in play | Zero-one-inflated Beta regression; Beta mixture by participation status | Constant 40% | Not applicable: it *is* the tail | $\mathbb{P}$ (ultimate) or $\mathbb{Q}$ (trading price), never pooled |
+| Index, ETF, or portfolio return (§5.4, §5.7) | Bounded only at 100% of the book, far beyond any quantile you will estimate | Factor or $t$-copula mixture of the single-name mixtures; VG or NIG for daily index and option data | Gaussian copula with Gaussian margins | GPD peaks-over-threshold; $t$-copula tail dependence | $\mathbb{P}$ |
+
+Three questions route every request. *What object?* A price, a spread, a return, a recovery, or a book. *What support?* If the sample maximum sits on a bound, the tail is a lump, not a power law. *Which measure?* If the inputs came off a CDS curve they are $\mathbb{Q}$ quantities, and the risk report has just been handed the market's fear instead of its forecast. Kaz notes, with some dignity, that the Gaussian survives in exactly one cell, as the survival leg of row one, which is where it belonged all along. It was not fired. It was demoted to a component.
+
+Mags reads the table twice. "Back in my day we had one distribution for everything. You called the other desk, asked what they'd pay, and the tails were whatever they said after lunch." She taps the recovery row. "That participation column, though. We'd have paid real money for that column."
+
+## 5.9 The Credit Mixture Lab: A Reference Implementation
+
+Every function this chapter has promised lives here, in one file, in the order the chapter introduced the ideas. The spec is written for ROBO, which means it is written for the most literal reader in the building. Ines's rule for a spec is the poker rule: name the pot (the object and its units), the odds (the measure), and the opponent (the edge case that will take your money).
+
+> **What ROBO built from the vague version.** Asked to "fit a Beta to our recoveries," ROBO wrote a Beta log-likelihood, met $\ln 0 = -\infty$ at the recoveries that were exactly zero, propagated NaN gradients through the optimizer, and returned $(a, b) = (\text{nan}, \text{nan})$ with the message "optimization terminated successfully." Asked to "estimate the tail index of the book's bonds," it ran Hill on single-bond losses, got $\hat{\alpha}$ well above 100 at $k = 1{,}000$ and between 3 and 4 at $k = 20{,}000$, averaged them, and reported that high yield is thin-tailed. Both answers are exactly what was asked for. Neither is what was meant.
+
+### 5.9.1 One last derivation: exact moments of the DTS survival leg
+
+Section 5.1.4 handed the survival leg a Gaussian with Theo's 4.1%. The code should build it from the bond instead. Let $\Delta s \sim N(0, v)$ with $v = \kappa^2 s^2 h$ (the DTS scaling of §5.1.2), and write $c = \tfrac{1}{2}C^{\text{spr}}$ and $x_0 = s\,h + \text{roll}$, so that
+
+$$
+X = x_0 - D^{\text{spr}}\,\Delta s + c\,(\Delta s)^2.
+$$
+
+Put $W = (\Delta s)^2 - v$. Then $\mathbb{E}[X] = x_0 + c\,v$ and $X - \mathbb{E}[X] = -D^{\text{spr}}\Delta s + c\,W$. Every term carrying an odd power of $\Delta s$ has zero expectation. The variable $W/v$ is a centered $\chi^2_1$, whose second, third, and fourth central moments are 2, 8, and 60, and the Gaussian moments $\mathbb{E}[(\Delta s)^4] = 3v^2$ and $\mathbb{E}[(\Delta s)^6] = 15v^3$ give $\mathbb{E}[(\Delta s)^2 W] = 2v^2$ and $\mathbb{E}[(\Delta s)^2 W^2] = 10v^3$. Expanding the binomials and keeping the even terms:
+
+$$
+\sigma_X^2 = (D^{\text{spr}})^2\,v + 2c^2v^2,
+$$
+
+$$
+\mu_{3,X} = 6\,(D^{\text{spr}})^2\,c\,v^2 + 8c^3v^3,
+$$
+
+$$
+\mu_{4,X} = 3\,(D^{\text{spr}})^4\,v^2 + 60\,(D^{\text{spr}})^2 c^2 v^3 + 60\,c^4 v^4.
+$$
+
+At $c = 0$ these are the Gaussian's moments, as they must be. The sign of $\mu_{3,X}$ is the sign of the convexity. A callable high-yield bond trading near its call has negative spread convexity, so its survival leg is *already* left-skewed before anyone defaults: the issuer's call takes the rallies and leaves you the sell-offs. Negative convexity also lowers the mean by $|c|\,v$, a convexity tax collected whether spreads go up or down. That is the §5.2 cap, now in a formula. (The code's $C^{\text{spr}} = -8$ is an *illustrative* near-the-call value, in decimal-spread units per unit of price, not a calibration.)
+
+### Specification for AI Implementation
+
+**Module.** `credit_mixture_lab.py`; numpy, scipy, and pandas only; every random draw flows from `numpy.random.default_rng(seed)`; the five blocks below run in order in one interpreter, and each ends in seeded asserts.
+
+**Schemas.**
+
+- `RecoverySpec` (frozen dataclass): `a, b > 0`; `pi0, pi1 >= 0` with `pi0 + pi1 < 1` (masses at exactly zero and exactly par); `support_max` in $[1.0, 1.5]$ (a Moody's-style 1.2 is allowed for Hertz-type outcomes, §5.6.2); `convention` in `{RFV, RMV, RT}`, named, never implied.
+- Bond inputs to `mixture_moments`: `q`, the **physical** horizon default probability; `price0`, the full price per 1.0 of par, in $(0, 1.5]$; and the survival leg as a 4-tuple `(mean, var, mu3, mu4)` from `gaussian_moments` or `survival_moments_dts(spread, h, spr_dur, spr_conv, kappa, roll)`, with spread in decimal and horizon in years.
+- `RecoveryPanel` (pandas): `issuer_id, instrument_id, default_date, seniority, collateral_cov, debt_cushion` (in $[0,1]$), `loan_only, cov_lite, sponsor, prior_lmt, participant` (`in`, `out`, `na`), `industry_distress, trailing_dr, rec_trading_30d, rec_ultimate_disc`. Categorical fields are dummy-encoded before fitting (`first_lien`, `participant_out`, and so on). The two recovery columns live under different measures (§5.5.6); `fit_beta_regression` takes exactly one of them as `target` and refuses anything else.
+
+**Shapes.** Simulations return `(n,)` float64 arrays and `(n,)` boolean flags; copula draws are `(n, 2)`; regression fits return `pandas.Series` of coefficients and standard errors indexed by covariate name.
+
+**Guards.** The Beta method of moments raises when $\sigma^2 \ge \mu(1-\mu)$; the plain Beta regression raises on exact zeros or ones; the Kou simulator raises unless $\eta_1 > 1$; `hill_estimator` returns NaN with a warning when the sample maximum sits at a declared support bound; `gpd_var_es` raises when $\hat{\xi} \ge 1$ (infinite ES) or when there are fewer than 50 exceedances. Monte Carlo used to *test* the closed form is stratified on $D$; Monte Carlo used for *risk* must draw $D$ (see Ways This Blows Up below).
+
+Block 1 is §5.1 and §5.2 in code: the recovery spec, the closed-form mixture moments, a Monte Carlo that reproduces them, the table in §5.1.4, and the capped horizon value.
+
+```python
+# credit_mixture_lab.py, block 1 of 5: mixture moments, recovery spec, Monte Carlo.
+# Blocks run in order in one interpreter; every random draw flows from SEED.
+import warnings
+from dataclasses import dataclass
+
+import numpy as np
+import pandas as pd
+from scipy import optimize, special, stats
+
+SEED = 7
+
+
+@dataclass(frozen=True)
+class RecoverySpec:
+    """Recovery R per 1.0 of par: 0 w.p. pi0, 1.0 (par) w.p. pi1,
+    otherwise support_max * Beta(a, b). The convention is named, never implied."""
+    a: float
+    b: float
+    pi0: float = 0.0
+    pi1: float = 0.0
+    support_max: float = 1.0
+    convention: str = "RFV"
+
+    def __post_init__(self):
+        if not (self.a > 0 and self.b > 0):
+            raise ValueError("Beta parameters must be positive")
+        if self.pi0 < 0 or self.pi1 < 0 or self.pi0 + self.pi1 >= 1.0:
+            raise ValueError("need pi0, pi1 >= 0 and pi0 + pi1 < 1")
+        if not 1.0 <= self.support_max <= 1.5:
+            raise ValueError("support_max must lie in [1.0, 1.5]")
+        if self.convention not in ("RFV", "RMV", "RT"):
+            raise ValueError("convention must be RFV, RMV or RT")
+
+
+def beta_mom(mu, sd, support_max=1.0):
+    """Method-of-moments Beta(a, b) for a recovery with mean mu, s.d. sd on [0, support_max]."""
+    m, s = mu / support_max, sd / support_max
+    if not (0.0 < m < 1.0 and s > 0.0):
+        raise ValueError("need 0 < mu < support_max and sd > 0")
+    if s**2 >= m * (1.0 - m):
+        raise ValueError("variance at or above the Bernoulli bound: the data are "
+                         "all-or-nothing; add inflation masses, do not clip")
+    k = m * (1.0 - m) / s**2 - 1.0
+    return m * k, (1.0 - m) * k
+
+
+def central_from_raw(m1, m2, m3, m4):
+    """(mean, variance, mu3, mu4) from raw moments E[Z], E[Z^2], E[Z^3], E[Z^4]."""
+    return (m1, m2 - m1**2, m3 - 3 * m1 * m2 + 2 * m1**3,
+            m4 - 4 * m1 * m3 + 6 * m1**2 * m2 - 3 * m1**4)
+
+
+def recovery_moments(rec):
+    """Exact (mean, var, mu3, mu4) of R under the inflated, rescaled Beta."""
+    w = 1.0 - rec.pi0 - rec.pi1
+    raw = [rec.pi1 + w * rec.support_max**k
+           * np.prod([(rec.a + j) / (rec.a + rec.b + j) for j in range(k)])
+           for k in range(1, 5)]
+    return central_from_raw(*raw)
+
+
+def gaussian_moments(mean, sd):
+    return mean, sd**2, 0.0, 3.0 * sd**4
+
+
+def survival_moments_dts(spread, h, spr_dur, spr_conv, kappa, roll=0.0):
+    """Exact moments of X = s*h + roll - D*ds + 0.5*C*ds**2, ds ~ N(0, (kappa*s)**2 * h)."""
+    if spread <= 0 or h <= 0 or kappa <= 0:
+        raise ValueError("spread (decimal), horizon (years) and kappa must be positive")
+    v, c, D = (kappa * spread) ** 2 * h, 0.5 * spr_conv, spr_dur
+    return (spread * h + roll + c * v,
+            D**2 * v + 2 * c**2 * v**2,
+            6 * D**2 * c * v**2 + 8 * c**3 * v**3,
+            3 * D**4 * v**2 + 60 * D**2 * c**2 * v**3 + 60 * c**4 * v**4)
+
+
+def mixture_moments(q, price0, surv, rec):
+    """Closed-form moments of R_h = (1-D) X + D Y with Y = R/price0 - 1, D ~ Bernoulli(q).
+    q is a PHYSICAL horizon default probability; surv = (mean, var, mu3, mu4) of X."""
+    if not 0.0 <= q <= 1.0:
+        raise ValueError("q must be a probability")
+    if not 0.0 < price0 <= 1.5:
+        raise ValueError("price0 is per 1.0 of par and must lie in (0, 1.5]")
+    mx, vx, m3x, m4x = surv
+    mr, vr, m3r, m4r = recovery_moments(rec)
+    my, vy, m3y, m4y = mr / price0 - 1.0, vr / price0**2, m3r / price0**3, m4r / price0**4
+    J, qc = mx - my, 1.0 - q
+    var = qc * vx + q * vy + q * qc * J**2
+    mu3 = -q * qc * (1 - 2 * q) * J**3 + 3 * q * qc * J * (vx - vy) + qc * m3x + q * m3y
+    mu4 = (qc * (q**4 * J**4 + 6 * q**2 * J**2 * vx + 4 * q * J * m3x + m4x)
+           + q * (qc**4 * J**4 + 6 * qc**2 * J**2 * vy - 4 * qc * J * m3y + m4y))
+    return {"mean": mx - q * J, "vol": np.sqrt(var), "skew": mu3 / var**1.5,
+            "exkurt": mu4 / var**2 - 3.0}
+
+
+def sample_recovery(rec, n, rng):
+    u = rng.random(n)
+    r = rec.support_max * rng.beta(rec.a, rec.b, size=n)
+    r[u < rec.pi0] = 0.0
+    r[(u >= rec.pi0) & (u < rec.pi0 + rec.pi1)] = 1.0
+    return r
+
+
+def gaussian_sampler(mean, sd):
+    return lambda m, rng: mean + sd * rng.standard_normal(m)
+
+
+def simulate_mixture(q, price0, surv_sampler, rec, n=1_000_000, seed=SEED):
+    """Monte Carlo of R_h, stratified on D (exactly round(q*n) defaults) so a test of the
+    closed form is not swamped by binomial noise. Returns (returns, default flags)."""
+    rng = np.random.default_rng(seed)
+    n_def = int(round(q * n))
+    dflag = np.zeros(n, dtype=bool)
+    dflag[:n_def] = True
+    ret = np.empty(n)
+    ret[~dflag] = surv_sampler(n - n_def, rng)
+    ret[dflag] = sample_recovery(rec, n_def, rng) / price0 - 1.0
+    return ret, dflag
+
+
+def sample_moments(x):
+    c = x - x.mean()
+    var = np.mean(c**2)
+    return {"mean": x.mean(), "vol": np.sqrt(var), "skew": np.mean(c**3) / var**1.5,
+            "exkurt": np.mean(c**4) / var**2 - 3.0}
+
+
+def var_es(x, p):
+    """Lower-tail VaR and expected shortfall of returns x at confidence p, as returns."""
+    v = np.quantile(x, 1.0 - p)
+    return v, x[x <= v].mean()
+
+
+def horizon_value(price0, ret, dflag, carry, call_price=None):
+    """Horizon value per 1.0 par. In default it is R exactly; in survival the call
+    caps the clean price, not the coupons already collected (carry)."""
+    v = price0 * (1.0 + ret)
+    if call_price is not None:
+        v = np.where(dflag, v, np.minimum(v - carry, call_price) + carry)
+    return v
+
+
+# ---- Sanity check 1: Theo's bond (5.1.4), closed form vs. the table vs. Monte Carlo
+a_su, b_su = beta_mom(0.40, 0.275)                      # Schmid p.103 senior unsecured moments
+assert abs(a_su - 0.87) < 0.01 and abs(b_su - 1.30) < 0.01
+a_fam, b_fam = beta_mom(0.5021, 0.2646, support_max=1.2)
+assert abs(a_fam - 1.68) < 0.01 and abs(b_fam - 2.33) < 0.01
+try:
+    beta_mom(0.50, 0.55)
+    raise AssertionError("beta_mom must refuse all-or-nothing moments")
+except ValueError:
+    pass
+
+rec_su = RecoverySpec(a=a_su, b=b_su)
+theo_surv = gaussian_moments(0.07, 0.041)
+theo = mixture_moments(0.04, 0.92, theo_surv, rec_su)
+assert abs(theo["mean"] - 0.0446) < 5e-4 and abs(theo["vol"] - 0.144) < 2e-3
+assert abs(theo["skew"] + 5.1) < 0.1 and abs(theo["exkurt"] - 28.0) < 1.0
+
+m0 = mixture_moments(0.0, 0.92, theo_surv, rec_su)      # q = 0: the survival world
+assert abs(m0["vol"] - 0.041) < 1e-12 and abs(m0["skew"]) < 1e-12 and abs(m0["exkurt"]) < 1e-9
+m1 = mixture_moments(1.0, 0.92, theo_surv, rec_su)      # q = 1: the default world
+beta_skew = (2 * (b_su - a_su) * np.sqrt(a_su + b_su + 1)
+             / ((a_su + b_su + 2) * np.sqrt(a_su * b_su)))
+assert abs(m1["skew"] - beta_skew) < 1e-8
+
+for q in (0.0005, 0.01, 0.04):                          # Bernoulli skeleton (5.1.3)
+    skel = mixture_moments(q, 1.0, gaussian_moments(0.05, 1e-6), RecoverySpec(a=4e6, b=6e6))
+    assert abs(skel["skew"] / (-(1 - 2 * q) / np.sqrt(q * (1 - q))) - 1) < 1e-3
+    assert abs(skel["exkurt"] / ((1 - 6 * q * (1 - q)) / (q * (1 - q))) - 1) < 1e-3
+
+ret, dflag = simulate_mixture(0.04, 0.92, gaussian_sampler(0.07, 0.041), rec_su)
+mc = sample_moments(ret)
+assert abs(mc["mean"] - theo["mean"]) < 1e-3
+for key, tol in (("vol", 0.02), ("skew", 0.02), ("exkurt", 0.05)):
+    assert abs(mc[key] / theo[key] - 1) < tol, (key, mc[key], theo[key])
+print(pd.DataFrame({"closed_form": theo, "monte_carlo": mc}).round(4))
+
+var99, es99 = var_es(ret, 0.99)                         # 1% / 4%: inside the default lump
+r25 = stats.beta.ppf(0.25, a_su, b_su)
+es_exact = 0.40 * stats.beta.cdf(r25, a_su + 1, b_su) / 0.25 / 0.92 - 1.0
+assert abs(var99 - (r25 / 0.92 - 1.0)) < 0.01 and abs(es99 - es_exact) < 0.01
+
+# DTS survival leg of a callable (negative convexity): left-skewed before any default
+dts = survival_moments_dts(spread=0.055, h=1.0, spr_dur=3.5, spr_conv=-8.0, kappa=0.35)
+ds = 0.35 * 0.055 * np.random.default_rng(SEED).standard_normal(2_000_000)
+emp = sample_moments(0.055 - 3.5 * ds + 0.5 * (-8.0) * ds**2)
+assert abs(emp["mean"] - dts[0]) < 2e-4 and abs(emp["vol"] / np.sqrt(dts[1]) - 1) < 0.01
+assert dts[2] < 0 and abs(emp["skew"] - dts[2] / dts[1] ** 1.5) < 0.02
+
+value = horizon_value(0.92, ret, dflag, carry=0.08, call_price=1.04)
+assert value.min() >= 0.0 and value[~dflag].max() <= 1.04 + 0.08 + 1e-12
+assert abs(value[dflag].mean() - 0.40) < 0.005
+```
+
+The VaR and ES checks deserve a sentence. With $q = 4\%$, the 1% quantile of the mixture is the 25% quantile of the recovery lump, so the 99% VaR is $F_R^{-1}(0.25)/P_0 - 1$ and the 99% ES uses the Beta identity $\mathbb{E}[R\,\mathbf{1}\{R \le r\}] = \tfrac{a}{a+b}\,I_r(a+1, b)$, where $I_r$ is the regularized incomplete Beta function. Those two lines reproduce the $-83\%$ and $-92\%$ in the §5.1.4 table without a single simulated path, and the simulation agrees.
+
+Block 2 is §5.5 in code. The zero-one-inflated likelihood factorizes into a multinomial logit for the masses and a Beta regression on the interior observations, because the two pieces share no parameters, so each is fitted on its own with an analytic gradient and a numerical Hessian for standard errors.
+
+```python
+# credit_mixture_lab.py, block 2 of 5: zero-one-inflated Beta regression for recoveries.
+TARGETS = ("rec_ultimate_disc", "rec_trading_30d")      # never pooled in one fit (5.5.6)
+
+
+def _beta_nll(params, X, y):
+    """Negative log-likelihood and gradient: logit mean, log precision (Ferrari-Cribari-Neto)."""
+    k = X.shape[1]
+    phi = np.exp(params[k])
+    mu = np.clip(special.expit(X @ params[:k]), 1e-10, 1 - 1e-10)
+    a, b = mu * phi, (1.0 - mu) * phi
+    ly, l1y = np.log(y), np.log1p(-y)
+    ll = (special.gammaln(phi) - special.gammaln(a) - special.gammaln(b)
+          + (a - 1.0) * ly + (b - 1.0) * l1y)
+    dg_a, dg_b = special.digamma(a), special.digamma(b)
+    g_beta = X.T @ (phi * ((ly - l1y) - (dg_a - dg_b)) * mu * (1.0 - mu))
+    g_phi = np.sum(special.digamma(phi) - mu * dg_a - (1.0 - mu) * dg_b
+                   + mu * ly + (1.0 - mu) * l1y)
+    return -ll.sum(), -np.append(g_beta, g_phi * phi)
+
+
+def _mnl_nll(params, X, cls):
+    """Multinomial logit over {0: interior, 1: exact zero, 2: exact par}; class 0 is the base."""
+    k = X.shape[1]
+    eta = X @ np.column_stack([np.zeros(k), params.reshape(2, k).T])
+    logp = eta - special.logsumexp(eta, axis=1, keepdims=True)
+    resid = np.exp(logp) - np.eye(3)[cls]
+    return -logp[np.arange(cls.size), cls].sum(), (X.T @ resid)[:, 1:].T.ravel()
+
+
+def _num_hessian(f, x, args, eps=1e-5):
+    """Central-difference Hessian from an analytic gradient, symmetrized."""
+    H = np.empty((x.size, x.size))
+    for j in range(x.size):
+        e = np.zeros(x.size)
+        e[j] = eps
+        H[:, j] = (f(x + e, *args)[1] - f(x - e, *args)[1]) / (2 * eps)
+    return 0.5 * (H + H.T)
+
+
+def _mle(f, x0, args):
+    res = optimize.minimize(f, x0, args=args, jac=True, method="BFGS")
+    if not res.success:
+        warnings.warn(f"optimizer: {res.message}; inspect before use")
+    return res.x, np.linalg.inv(_num_hessian(f, res.x, args))
+
+
+def fit_beta_regression(panel, target, covariates, eps=1e-6, inflate=True):
+    """Zero-one-inflated Beta regression (Ospina-Ferrari). Returns coefficient and
+    standard-error Series for the masses ('mass', 'mass_se') and the Beta part ('beta', 'beta_se')."""
+    if target not in TARGETS:
+        raise ValueError(f"target must be one of {TARGETS}: name the measure")
+    if set(covariates) & set(TARGETS):
+        raise ValueError("a recovery column cannot be a covariate")
+    df = panel.dropna(subset=[target])
+    names = ["const"] + list(covariates)
+    if len(df) < 20 * len(names):
+        raise ValueError("too few non-missing observations for this many covariates")
+    y = df[target].to_numpy(dtype=float)
+    if y.min() < 0.0 or y.max() > 1.0:
+        raise ValueError("rescale recoveries to [0, 1] (divide by support_max) first")
+    X = np.column_stack([np.ones(len(df))] + [df[c].to_numpy(dtype=float) for c in covariates])
+    cls = np.where(y <= eps, 1, np.where(y >= 1.0 - eps, 2, 0))
+    out = {}
+    if inflate:
+        if min((cls == 1).sum(), (cls == 2).sum()) < 5:
+            raise ValueError("fewer than 5 exact zeros or pars: use inflate=False or pool more data")
+        g, cov_g = _mle(_mnl_nll, np.zeros(2 * X.shape[1]), (X, cls))
+        idx = [f"zero:{n}" for n in names] + [f"one:{n}" for n in names]
+        out["mass"] = pd.Series(g, index=idx)
+        out["mass_se"] = pd.Series(np.sqrt(np.diag(cov_g)), index=idx)
+    elif (cls != 0).any():
+        raise ValueError("exact zeros or pars present: a plain Beta has log-likelihood -inf there")
+    inner = cls == 0
+    coef, cov_b = _mle(_beta_nll, np.append(np.zeros(X.shape[1]), np.log(5.0)),
+                       (X[inner], y[inner]))
+    idx = names + ["log_phi"]
+    out["beta"] = pd.Series(coef, index=idx)
+    out["beta_se"] = pd.Series(np.sqrt(np.diag(cov_b)), index=idx)
+    return out
+
+
+TRUE_BETA = np.array([-1.0, 0.8, 0.9, 1.2, -2.0])      # const, 1L, coverage, cushion, out-of-deal
+TRUE_LOG_PHI = np.log(10.0)
+TRUE_G0 = np.array([-3.0, -1.0, -0.8, -1.0, 2.0])      # exact-zero mass
+TRUE_G1 = np.array([-3.5, 1.0, 0.5, 0.5, -1.5])        # exact-par mass
+COVS = ["first_lien", "collateral_cov", "debt_cushion", "participant_out"]
+
+
+def synthetic_recovery_panel(n=6000, seed=SEED):
+    """RecoveryPanel-shaped frame with known parameters; trading-price recoveries left NaN."""
+    rng = np.random.default_rng(seed)
+    df = pd.DataFrame({
+        "issuer_id": rng.integers(0, 1500, n),
+        "first_lien": rng.random(n) < 0.5,
+        "collateral_cov": rng.uniform(0.2, 1.6, n),
+        "debt_cushion": rng.uniform(0.0, 0.6, n),
+        "participant_out": rng.random(n) < 0.15,
+    })
+    X = np.column_stack([np.ones(n)] + [df[c].to_numpy(dtype=float) for c in COVS])
+    mu, phi = special.expit(X @ TRUE_BETA), np.exp(TRUE_LOG_PHI)
+    r = rng.beta(mu * phi, (1.0 - mu) * phi)
+    eta = np.column_stack([np.zeros(n), X @ TRUE_G0, X @ TRUE_G1])
+    prob = np.exp(eta - special.logsumexp(eta, axis=1, keepdims=True))
+    u = rng.random(n)
+    df["rec_ultimate_disc"] = np.where(u < prob[:, 1], 0.0,
+                                       np.where(u < prob[:, 1] + prob[:, 2], 1.0, r))
+    df["rec_trading_30d"] = np.nan
+    return df
+
+
+# ---- Sanity check 2: parameter recovery on a synthetic panel; refusals on unnamed measures
+panel = synthetic_recovery_panel()
+fit = fit_beta_regression(panel, "rec_ultimate_disc", COVS, eps=1e-9)
+z_b = (fit["beta"].to_numpy() - np.append(TRUE_BETA, TRUE_LOG_PHI)) / fit["beta_se"].to_numpy()
+z_m = (fit["mass"].to_numpy() - np.append(TRUE_G0, TRUE_G1)) / fit["mass_se"].to_numpy()
+assert np.all(np.abs(z_b) < 4) and np.all(np.abs(z_m) < 4), (z_b.round(2), z_m.round(2))
+assert fit["beta"]["participant_out"] < -1.0 and fit["mass"]["zero:participant_out"] > 1.0
+for bad_target in ("recovery", "rec_trading_30d"):     # unnamed measure; all-NaN column
+    try:
+        fit_beta_regression(panel, bad_target, COVS)
+        raise AssertionError(f"must refuse target={bad_target}")
+    except ValueError:
+        pass
+```
+
+Two details are deliberate. The tolerance is four standard errors, not two: with sixteen coefficients under test, a two-standard-error band would fail on roughly half of all seeds through no fault of the code, which is Chapter 7's multiple-testing lesson applied to a unit test. And the test's `eps=1e-9` keeps genuine Beta draws near zero from being misfiled as exact zeros; on real data, recoveries are reported to a tenth of a point or so, and `eps` should match that rounding.
+
+Block 3 is §5.3 in code: a first-passage simulator for Kou's model, checked against both closed-form results.
+
+```python
+# credit_mixture_lab.py, block 3 of 5: Kou jump-diffusion first passage (P-measure risk run).
+def kou_jump_sizes(m, p, eta1, eta2, rng):
+    """m log-jumps: up ~ Exp(eta1) w.p. p, down ~ -Exp(eta2) w.p. 1 - p."""
+    up = rng.random(m) < p
+    return np.where(up, rng.exponential(1.0 / eta1, m), -rng.exponential(1.0 / eta2, m))
+
+
+def simulate_kou_jd(V0, barrier, mu, sigma, lam, p, eta1, eta2, T, n_steps, n, seed=SEED):
+    """Time-stepped first passage of x = log(V/B). Returns dict of (n,) arrays: default,
+    tau (inf if alive), via_jump, ratio = V_tau/B (nan if alive; 1.0 for diffusive hits)."""
+    if not V0 > barrier > 0:
+        raise ValueError("need V0 > barrier > 0")
+    if not (eta1 > 1 and eta2 > 0 and 0 <= p <= 1 and lam >= 0 and sigma >= 0):
+        raise ValueError("Kou parameters out of range (eta1 > 1 keeps E[exp(Y)] finite)")
+    rng = np.random.default_rng(seed)
+    dt = T / n_steps
+    zeta = p * eta1 / (eta1 - 1) + (1 - p) * eta2 / (eta2 + 1) - 1.0   # E[e^Y] - 1
+    drift = (mu - 0.5 * sigma**2 - lam * zeta) * dt
+    x = np.full(n, np.log(V0 / barrier))
+    alive = np.ones(n, dtype=bool)
+    tau, ratio = np.full(n, np.inf), np.full(n, np.nan)
+    via_jump = np.zeros(n, dtype=bool)
+    for step in range(1, n_steps + 1):
+        idx = np.flatnonzero(alive)
+        x[idx] += drift + sigma * np.sqrt(dt) * rng.standard_normal(idx.size)
+        hit = idx[x[idx] <= 0.0]
+        tau[hit], ratio[hit], alive[hit] = step * dt, 1.0, False
+        idx = np.flatnonzero(alive)
+        n_j = rng.poisson(lam * dt, idx.size)
+        if n_j.sum() == 0:
+            continue
+        sizes = kou_jump_sizes(int(n_j.sum()), p, eta1, eta2, rng)
+        x[idx] += np.bincount(np.repeat(np.arange(idx.size), n_j), weights=sizes,
+                              minlength=idx.size)
+        hit = idx[x[idx] <= 0.0]                       # alive after diffusion, so jump-driven
+        tau[hit], ratio[hit], alive[hit] = step * dt, np.exp(x[hit]), False
+        via_jump[hit] = True
+    return {"default": ~alive, "tau": tau, "via_jump": via_jump, "ratio": ratio}
+
+
+# ---- Sanity check 3: short-maturity jump-to-default intensity and the exponential undershoot
+kou = dict(V0=1.5, barrier=1.0, mu=0.05, sigma=0.25, lam=0.5, p=0.4, eta1=10.0, eta2=4.0)
+lam_jtd = kou["lam"] * (1 - kou["p"]) * (kou["barrier"] / kou["V0"]) ** kou["eta2"]
+assert abs(lam_jtd - 0.059) < 1e-3                                  # table in 5.3.3
+short = simulate_kou_jd(**kou, T=1 / 52, n_steps=4, n=2_000_000)
+assert abs(short["default"].mean() * 52 / lam_jtd - 1) < 0.10
+assert short["via_jump"].sum() >= 0.99 * short["default"].sum()    # diffusion can't get there in a week
+undershoot = short["ratio"][short["via_jump"]].mean()
+assert abs(undershoot - kou["eta2"] / (1 + kou["eta2"])) < 0.025
+
+# PD-LGD correlation for free: fatter down-jumps raise PD and lower V_tau/B together
+runs = {e2: simulate_kou_jd(**{**kou, "eta2": e2}, T=1.0, n_steps=52, n=200_000)
+        for e2 in (4.0, 2.0)}
+pd_by = {e2: r["default"].mean() for e2, r in runs.items()}
+und_by = {e2: r["ratio"][r["via_jump"]].mean() for e2, r in runs.items()}
+assert pd_by[2.0] > pd_by[4.0] and und_by[2.0] < und_by[4.0], (pd_by, und_by)
+```
+
+Block 4 is §5.7 in code. The Hill estimator gets a refusal mode, and the test runs it twice: once on Student-$t$ draws with $\alpha = 3$, where it should find three, and once on Theo's bond, where it should refuse and, if forced, drift.
+
+```python
+# credit_mixture_lab.py, block 4 of 5: Hill and peaks-over-threshold, with a bounded-support refusal.
+def hill_estimator(x, k, support_max=None, tol=1e-3):
+    """Hill tail index from the top k positive losses. Returns nan (and warns) when the
+    sample maximum sits at a declared support bound: that tail is a lump, not a power law."""
+    x = np.sort(np.asarray(x, dtype=float))[::-1]
+    x = x[x > 0]
+    if not 1 <= k < x.size:
+        raise ValueError("need 1 <= k < number of positive losses")
+    if support_max is not None and x[0] >= support_max - tol:
+        warnings.warn("bounded support: sample maximum at the cap; EVT not applicable")
+        return np.nan
+    return 1.0 / np.mean(np.log(x[:k] / x[k]))
+
+
+def hill_table(x, ks, **kw):
+    return pd.Series({k: hill_estimator(x, k, **kw) for k in ks}, name="alpha_hat")
+
+
+def gpd_var_es(x, u, p):
+    """POT VaR and ES (as losses) at confidence p from losses x over threshold u."""
+    x = np.asarray(x, dtype=float)
+    exc = x[x > u] - u
+    if exc.size < 50:
+        raise ValueError("fewer than 50 exceedances: lower u or get more data")
+    xi, _, beta_gpd = stats.genpareto.fit(exc, floc=0.0)
+    if xi >= 1.0:
+        raise ValueError("xi >= 1: expected shortfall is infinite")
+    tail = x.size / exc.size * (1.0 - p)
+    if not 0.0 < tail < 1.0:
+        raise ValueError("p must lie beyond the threshold's empirical level")
+    if abs(xi) < 1e-6:
+        var = u - beta_gpd * np.log(tail)              # exponential-tail limit
+    else:
+        var = u + beta_gpd / xi * (tail ** (-xi) - 1.0)
+    return {"xi": xi, "beta_gpd": beta_gpd, "VaR": var,
+            "ES": (var + beta_gpd - xi * u) / (1.0 - xi)}
+
+
+# ---- Sanity check 4: Hill finds alpha = 3 in t(3); refuses, and drifts, on the bounded bond
+t3 = np.random.default_rng(SEED).standard_t(3, size=500_000)
+alphas = hill_table(t3, [500, 1000, 2000])
+assert alphas.between(2.5, 3.5).all(), alphas
+pot = gpd_var_es(t3, np.quantile(t3, 0.99), 0.999)
+var_true = stats.t.ppf(0.999, 3)
+es_true = stats.t.pdf(var_true, 3) / 0.001 * (3 + var_true**2) / 2
+assert 0.2 < pot["xi"] < 0.5
+assert abs(pot["VaR"] / var_true - 1) < 0.10 and abs(pot["ES"] / es_true - 1) < 0.15
+
+loss = -ret                                            # Theo's bond, from block 1
+with warnings.catch_warnings(record=True) as caught:
+    warnings.simplefilter("always")
+    refused = hill_estimator(loss, 1000, support_max=1.0)
+assert np.isnan(refused) and any("bounded support" in str(w.message) for w in caught)
+drift = hill_table(loss, [1000, 5000, 20000])
+assert drift.max() / drift.min() > 3.0, drift          # no plateau, only a cliff
+```
+
+The drift is the vague-version ROBO result reproduced on purpose. At $k = 1{,}000$ the top losses are all near-zero recoveries piled against the 100% cap, the log-spacings are tiny, and $\hat{\alpha}$ is enormous; at $k = 20{,}000$ the order statistics span the whole recovery lump and $\hat{\alpha}$ falls to single digits. There is no Hill, only a cliff at $1 - R/P_0$, which is the joke in §5.7 with an assert attached.
+
+Block 5 is the copula check from §5.7.4, with one subtlety that the naive version of the test gets wrong, flagged in the box after the code.
+
+```python
+# credit_mixture_lab.py, block 5 of 5: tail dependence, the limit vs. the finite level.
+def t_copula_tail_dep(rho, nu):
+    """Coefficient of (upper = lower) tail dependence lambda_U of a bivariate t copula."""
+    if not (-1.0 < rho < 1.0 and nu > 0):
+        raise ValueError("need -1 < rho < 1 and nu > 0")
+    return 2.0 * stats.t.cdf(-np.sqrt((nu + 1.0) * (1.0 - rho) / (1.0 + rho)), df=nu + 1.0)
+
+
+def simulate_copula_pairs(rho, nu, n, seed=SEED):
+    """(n, 2) draws with t (finite nu) or Gaussian (nu = inf) dependence."""
+    rng = np.random.default_rng(seed)
+    chol = np.linalg.cholesky(np.array([[1.0, rho], [rho, 1.0]]))
+    g = rng.standard_normal((n, 2)) @ chol.T
+    return g if np.isinf(nu) else g * np.sqrt(nu / rng.chisquare(nu, n))[:, None]
+
+
+def conditional_exceedance(z, level):
+    """chi_hat(level) = Pr(Z2 above its level-quantile | Z1 above its level-quantile)."""
+    first = z[:, 0] > np.quantile(z[:, 0], level)
+    return np.mean(z[first, 1] > np.quantile(z[:, 1], level))
+
+
+# ---- Sanity check 5: the t copula keeps tail dependence; the Gaussian loses it only in the limit
+lam_t = t_copula_tail_dep(0.5, 4.0)
+assert 0.2 < lam_t < 0.3 and t_copula_tail_dep(0.5, 1e4) < 1e-6
+chi_t = conditional_exceedance(simulate_copula_pairs(0.5, 4.0, 2_000_000), 0.999)
+chi_g = conditional_exceedance(simulate_copula_pairs(0.5, np.inf, 2_000_000), 0.999)
+assert abs(chi_t - lam_t) < 0.08 and 0.0 < chi_g < chi_t - 0.08, (lam_t, chi_t, chi_g)
+print(f"lambda_U(t4, rho=0.5) = {lam_t:.3f}; chi_hat(0.999): t = {chi_t:.3f}, Gaussian = {chi_g:.3f}")
+```
+
+> **Ways This Blows Up.** *Three ways the lab lies to you.* (1) *The stratified sampler is a test fixture, not a risk engine.* Fixing the default count at exactly $qn$ removes binomial noise so the closed form can be checked to 2%; in a risk run it also removes the scenario in which more names default than expected, which is the scenario you are paying for. Production simulation draws $D$, and for a book it draws $D$ conditional on the common factor $Z_t$ of §5.5.4. (2) *Discrete monitoring misses diffusive defaults.* Checking the barrier once a step lets paths dip below and recover unseen, which biases the default probability down. Conditional on log-distances $x_t > 0$ and $x_{t+\Delta t} > 0$, the probability that the diffusion touched the barrier in between is $\exp\!\left(-2x_t\,x_{t+\Delta t}/(\sigma^2\Delta t)\right)$ (the Brownian-bridge correction); draw a uniform against it each step. The one-week test above does not need it, because the barrier sits about twelve diffusive standard deviations away; a one-year run with weekly steps does. (3) *Finite-level exceedance is not tail dependence.* The Gaussian copula has $\lambda_U = 0$, yet at the 99.9th percentile with $\rho = 0.5$ its conditional exceedance rate is still several percent, and sanity check 5 prints it. Zero is a limit, approached slowly. A desk that "verifies" tail independence from a few years of daily data has verified nothing, and a desk that reads any positive $\hat{\chi}$ as proof of a $t$-copula has made the opposite mistake.
+
+### Deep-Dive Resource Graph
+
+- **Podcasts:** *Flirting with Models* (Corey Hoffstein), episodes on systematic credit and tail risk (titles to be confirmed).
+- **Practitioner Writing:** Li, Zhang, and Zhao (2018), *Modeling Loss Given Default*, FDIC Center for Financial Research Working Paper 2018-03, https://www.fdic.gov/analysis/cfr/working-papers/2018/cfr-wp2018-03.pdf ; Bohn and Stein, *Active Credit Portfolio Management in Practice* (Wiley), LGD modeling (shelf: Bohn_Stein_Active_Credit_Portfolio_Management p.313–316).
+- **Academic Papers:** Ferrari and Cribari-Neto (2004), *Beta Regression for Modelling Rates and Proportions*, Journal of Applied Statistics; Ospina and Ferrari (2010), *Inflated Beta Distributions*, Statistical Papers; Kou (2002), *A Jump-Diffusion Model for Option Pricing*, Management Science; Kou and Wang (2003), on first-passage times of a double-exponential jump-diffusion; Hill (1975), Annals of Statistics.
+- **Data & Code:** `credit_mixture_lab.py` (this section); SciPy's `stats.genpareto`, `stats.beta`, and `special.digamma` for the fits; numpy's `default_rng` for every draw.
+
+## 5.10 Desk Debrief
+
+On Monday Theo reissues the risk report. It is still one page. It now has two columns, *survival world* and *default world*, and a coin between them labeled $q = 4\%$ ($\mathbb{P}$, from the 13-week model, lender case). Kaz's Gaussian sits in the left column with a footnote explaining that it describes the bond on the days nothing happens. The bottom line reads: 99% expected shortfall $-92\%$; jump-to-default 52 points per 100 of par.
+
+Mags reads the bottom line, says "Ninety-two. That's about what I'd have guessed by phone," and goes back to her screen, which is how Mags says *good*. Ines turns the heat map face up again. "Now it's a hand," she says. "Pot, odds, river. Hand history Friday." ROBO receives the spec and, for once, has no questions.
+
+- **A high-yield return is two worlds and a coin.** $R_h = (1-D)X + DY$. The between-world term $q(1-q)J^2$ is most of the variance, and trailing price volatility measures only the world in which nothing happens.
+- **Skew is minus one over root PD.** Excess kurtosis is about $1/q$. The safer the bond, the stranger its shape; investment-grade books look normal because they are big, not because their bonds are.
+- **95% VaR is blind whenever $q < 5\%$.** Report expected shortfall and jump-to-default, $P_0 - \mathbb{E}[R]$ per unit of par, next to any VaR, or the risk report is a speedometer that only works below the speed limit.
+- **Keep three ledgers.** Price lives on $[0, K_{\text{call}}]$, spread changes are right-skewed and DTS-scaled, and returns are left-skewed. Negative convexity skews a callable's survival leg left before anyone defaults.
+- **Jumps earn their keep at the short end.** Kou's model gives a non-zero short spread, $\lambda^{\mathbb{Q}}L^{\mathbb{Q}}$, and PD–LGD correlation from a single parameter. Infinite-activity Lévy fits to single-name high-yield bonds are decoration.
+- **Recovery is a U, not a bell, and 40% is a convention.** Fit a zero-one-inflated Beta regression on the covariates the RSSG seat knows cold. Participation status carries the biggest coefficient. Never pool trading-price and ultimate recoveries in one fit.
+- **Default is a menu now.** Hard default, distressed exchange, and re-default are separate mixture components with separate recovery distributions, and $w_{\text{in}}$ is the probability that *you* get the call, not the share of lenders who do.
+- **EVT belongs to unbounded objects.** Run Hill and GPD on spread changes, indices, ETFs, and books. On a single bond the sample maximum sits at the cap, and the "tail index" is the jump mass.
+
+### The Spec You Hand the Robot
+
+This is the version that fits in a prompt. Everything in it is defined in §5.9; the point of the compact form is that every noun has a unit, every probability has a measure, and every edge case has an instruction.
+
+```text
+TASK: build credit_mixture_lab.py (numpy, scipy, pandas; all randomness via numpy.random.default_rng(seed)).
+OBJECT: horizon-h excess return of one high-yield bond, per 1.0 of par, under the PHYSICAL measure P.
+MODEL: R_h = (1 - D) * X + D * Y, with D ~ Bernoulli(q) and q = 1 - S_P(h).
+  - q must be physical (from a hazard model or the 13-week cash model); refuse inputs tagged as CDS-implied.
+  - X = s*h + roll - D_spr*ds + 0.5*C_spr*ds^2, ds ~ N(0, (kappa*s)^2 * h); use exact moments incl. convexity.
+  - Y = R / price0 - 1 (price basis, NOT 1 - R). R is zero-one-inflated Beta on [0, support_max];
+    name the recovery convention (RFV, RMV or RT).
+OUTPUTS: mean, vol, skew, excess kurtosis (closed form AND Monte Carlo); 99% VaR and 99% ES; JTD = price0 - E[R].
+RECOVERY FITS: zero-one-inflated Beta regression, logit mean, log precision, multinomial logit for the masses.
+  target is exactly one of {rec_ultimate_disc, rec_trading_30d}; refuse anything else; never pool them.
+  covariates: seniority, collateral coverage, debt cushion, loan-only, cov-lite, sponsor, prior LMT,
+  participation status, industry distress, trailing default rate.
+TAILS: Hill and GPD only on unbounded objects (spread changes, index or ETF returns, portfolio losses).
+  If the sample maximum sits at a declared support bound, return NaN and warn.
+DEPENDENCE: report the t-copula lambda_U; never infer tail independence from a finite-level exceedance rate.
+TESTS (seeded asserts): closed form vs Monte Carlo (vol and skew within 2%, kurtosis within 5%);
+  q = 0 and q = 1 limits; Bernoulli skeleton skew = -(1 - 2q) / sqrt(q(1 - q));
+  Beta-regression parameter recovery within 4 standard errors; Kou short-maturity default rate within 10%
+  of lam * (1 - p) * (B / V)^eta2 and mean V_tau/B within 0.025 of eta2 / (1 + eta2);
+  Hill on t(3) draws in [2.5, 3.5]; t-copula exceedance above the Gaussian's.
+NEVER: use trailing price volatility as total risk; report 95% VaR alone when q < 5%; minimize kurtosis.
+```
+
+### Exercises
+
+1. **Two bonds, one VaR.** A BB name has a physical one-year default probability of 0.8%; a CCC name has 12%. (a) Compute the Bernoulli-skeleton skew and excess kurtosis of each. (Check: about $-11.0$ and $120$ for the BB; about $-2.34$ and $3.5$ for the CCC.) (b) For each bond, say whether a 95% VaR ever sees the default world. (c) A kurtosis screen ranks the CCC as the "safer" bond. Explain in one sentence what the screen is actually measuring.
+
+2. **The convexity tax.** Using §5.9.1 with $s = 550$ bp, $\kappa = 0.35$, $h = 1$, $D^{\text{spr}} = 3.5$, and $C^{\text{spr}} = -8$, compute $\sigma_X$, the survival-leg skew, and the convexity tax $|c|\,v$. (Check: $\sigma_X \approx 6.7\%$, skew $\approx -0.13$, tax $\approx 15$ bp.) Then flip the sign of $C^{\text{spr}}$, show that the survival leg of a non-call bond is right-skewed, and explain why the mixture is still left-skewed overall.
+
+3. **Find the jump.** In Kou's model with $V/B = 1.5$, $\lambda^{V} = 0.5$ per year, and $p = 0.4$, find the $\eta_2$ that produces a jump-to-default intensity of 10% per year. Compute $\mathbb{E}[V_\tau/B]$ and the expected recovery given a jump default with $B = F$ and bankruptcy cost $\alpha = 0.3$. (Check: $\eta_2 = \ln 3/\ln 1.5 \approx 2.71$; $\mathbb{E}[V_\tau/B] \approx 0.73$; recovery $\approx 51\%$.) Then add the Brownian-bridge correction from the Ways This Blows Up box to `simulate_kou_jd` and measure how much the one-year default probability rises under weekly steps.
+
+4. **ROBO minimizes kurtosis.** ROBO is told to "maximize yield subject to single-name excess kurtosis of at most 10." Using the Bernoulli skeleton, show that the constraint is equivalent to $q(1-q) \ge 1/16$, that is, $q \ge (1 - \sqrt{3}/2)/2 \approx 6.7\%$, so the kurtosis limit is a mandate to own distressed paper. Show that at $q = 1/2$ the bond attains excess kurtosis $-2$, the minimum for *any* distribution, and explain why ROBO's ideal holding is a coin flip with a coupon. Rewrite the constraint as a 99% expected-shortfall or jump-to-default limit that does what the PM meant.
+
+5. **The 13-week model, one more time.** Theo's cash model, run under shocks, gives weekly conditional hazards of 0.2% for weeks 1 through 8 and 1.5% for weeks 9 through 13. (a) Compute the 13-week default probability. (Check: about 8.75%.) (b) Compute the Bernoulli-skeleton skew at that $q$ and say whether a 95% VaR sees the default world. (c) Theo asks, "But what does the credit agreement say?" It permits a non-pro-rata uptier with a simple majority. Split the 8.75% into hard-default and distressed-exchange components using §5.6.1, assign each component a recovery distribution (including the participant and non-participant Betas), and write the resulting categorical mixture.
+
+### Deep-Dive Resource Graph
+
+- **Podcasts:** Bloomberg *Odd Lots*, episodes on liability management exercises and "creditor-on-creditor violence" (2023–2025; titles to be confirmed); Bloomberg Intelligence *The Credit Edge*, episodes on recoveries and LMEs (titles to be confirmed); *Flirting with Models* (Corey Hoffstein), episodes on systematic credit and tail risk.
+- **Practitioner Writing:** Octus, "The Year in LMEs" (January 8, 2026), https://octus.com/resources/articles/the-year-in-lmes/ ; Holwell Shuster & Goldberg, "Liability Management Exercises and the Courts in 2025" (December 22, 2025), https://www.hsgllp.com/about-news-Liability-Management-Exercises-and-the-Courts-in-2025 ; Moody's, *Loss Given Default Rating Methodology* (August 2006), mirror at https://care-mendoza.nd.edu/assets/152347/loss-given-default-rating-methodology.pdf ; Matt Levine, *Money Stuff*, columns on Serta, "open market purchase," and the Hertz make-wholes (no link).
+- **Academic Papers:** Altman, Brady, Resti, and Sironi (2005), *The Link between Default and Recovery Rates: Theory, Empirical Evidence, and Implications*, Journal of Business; Altman and Kalotay (2014), *Ultimate Recovery Mixtures*, Journal of Banking & Finance; Bruche and González-Aguado (2010), *Recovery Rates, Default Probabilities, and the Credit Cycle*, Journal of Banking & Finance; Merton (1976), *Option Pricing When Underlying Stock Returns Are Discontinuous*, Journal of Financial Economics; Berd, *Recovery Swaps*, Journal of Credit Risk, preprint at https://arxiv.org/abs/1001.0783 ; Giesecke, Longstaff, Schaefer, and Strebulaev (2011), *Corporate Bond Default Risk: A 150-Year Perspective*, Journal of Financial Economics.
+- **Data & Code:** FRED, https://fred.stlouisfed.org/ (ICE BofA OAS and total-return series); SEC EDGAR, https://www.sec.gov/edgar (credit agreements and 8-Ks for the recovery covariates); CourtListener REST API, https://www.courtlistener.com/help/api/ (plans and disclosure statements for realized recoveries); Moody's Default & Recovery Database and Ultimate Recovery Database (subscription, no link); `credit_mixture_lab.py` in §5.9.
+
+
+<!-- STATUS: COMPLETE -->

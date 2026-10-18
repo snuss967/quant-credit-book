@@ -776,4 +776,171 @@ The runway check is a non-traded BDC with 0.2% cash, an undrawn line of 10% of N
 - **Academic Papers:** George and Shin, "The Rise of Semiliquid Funds for Retail Investors," FEDS Note (Oct 14, 2026), https://www.federalreserve.gov/econres/notes/feds-notes/the-rise-of-semiliquid-funds-for-retail-investors-20261014.html ; Diamond and Dybvig, "Bank Runs, Deposit Insurance, and Liquidity," *Journal of Political Economy* (1983), the original first-mover game.
 - **Data & Code:** Federal Reserve *Financial Stability Report* (May 2026), https://www.federalreserve.gov/publications/files/financial-stability-report-20260508.pdf ; IMF *Global Financial Stability Report* (April 2026), ch. 1, https://www.imf.org/-/media/files/publications/gfsr/2026/april/english/ch1.pdf ; SEC EDGAR Schedule TO and 8-K filings for request percentages.
 
-<!-- PASS 3 END -->
+## 17.7 The Plumbing That Turns Marks into Prices
+
+### 17.7.1 Desk framing: a 2022 prediction, scored in 2026
+
+> **[SOURCE EXTRACTION]** *Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.41:* "While loans and other private credit instruments are obviously problematic from a data availability perspective at present, we believe that the momentum of quant activity in other areas of the fixed income markets will drive innovation and transparency in these historically opaque areas. Already both Refinitiv and IHS Markit are providing daily pricing on 6,500 loan facilities."
+>
+> **Annotation.** Four years later the prediction scores well on infrastructure and poorly on causation. Private credit did acquire identifiers, daily estimated values, a secondary desk, a CDS index with private-credit names in it and an official statistics line, all between 2025 and 2026. But the driver was not quant activity spilling over from public bonds. It was the wealth channel: managers competing for retail and 401(k) money needed something that looked like a daily price, and stressed redemption queues made the absence of one expensive. The desk's departure from Man's framing is practical. The new data are not prices in the sense of Chapter 19's TRACE prints; most of them are *marks published more often*. The smoothing kernel of §17.2 still applies, with shorter lags.
+
+Mags has her own version. "Back in my day, distressed was the private market. You called three desks, got a 32–34 market on five million, and the bid evaporated if you said the word 'size.'" Moyer's description of the old distressed market is still the best one: "Liquidity, of course, is a matter of degree" (Moyer_Distressed_Debt_Analysis p.313). Then the grudging respect: "A firm bid that a manager is contractually obliged to honor every day? We'd have killed for that. Check who's on the other side of it."
+
+### 17.7.2 Five price sources, and what each one actually measures
+
+1. **Listed BDC equity and bonds.** True market prices, set by people who can lose money, on a wrapper that includes fees and leverage. §17.3 inverts them.
+2. **Daily estimated values from managers.** Apollo extended daily pricing from its investment-grade products (July 1, 2026) to direct lending, asset-backed finance, multi-credit and opportunistic vehicles on October 1, 2026, with asset-level pricing from October 30, 2026. The release is careful to call it an internal estimated fair value, "not a market-clearing price" (Apollo release, October 1, 2026). A daily mark is still a mark. It stair-steps on smaller stairs.
+3. **Identifiers and a secondary market.** ICE's private credit service had issued more than 5,000 ICE IDs by March 2026, and Apollo reported more than \$30 billion of secondary trading since 2024 (same release). Identifiers matter more than they sound: they are the join key that turns fifty BDC schedules of investments into one panel, which is what the cross-holder dispersion of §17.3 needs.
+4. **A contractual bid.** The SPDR SSGA IG Public & Private Credit ETF (PRIV) launched in February 2025 with a 10–35% private-credit policy. At October 15, 2026 it held \$802.8 million in 363 positions, about 22.1% sourced from Apollo, and Apollo must post daily firm, executable bids on those assets and buy them back at those bids within stress-redemption limits (State Street fund page). The smoothing problem becomes a counterparty problem: the ETF's private sleeve is worth what Apollo's bid is worth, up to the facility's limits.
+5. **Credit derivatives.** S&P Dow Jones Indices announced a CDX Financials index in early 2026, reported to contain 25 North American financial names including BDCs and private-credit managers, with trading from April 2026 (S&P DJI announcement, February 25, 2026; constituents and weights not verified for this edition). It is the first $\mathbb{Q}$-measure instrument with private credit inside it, and §17.9 explains why it is a worse hedge than it looks.
+
+> **Trend Watch.** *From "no price" to five price sources, 2022–2026.* 2022: Man notes daily vendor pricing on 6,500 syndicated loan facilities and calls private credit "problematic from a data availability perspective" (Man p.41). February 2025: PRIV launches with a manager's firm bid on its private sleeve (State Street). March 2026: ICE passes 5,000 private-credit identifiers (Apollo release). April 2026: CDX Financials begins trading, reportedly with BDCs among its names (S&P DJI; details unverified). July 1 and October 1, 2026: Apollo daily pricing reaches investment-grade and then all credit vehicles; asset-level from October 30 (Apollo). October 16, 2026: private credit enters the Fed's Z.1 with holder-level series (Brinkman et al.). **What it means for the desk:** for the first time there are enough *public* observations of *private* marks to estimate the kernel, the gap and the lead–lag on live data rather than on CDLI back-fills. Wire each source into Appendix B's data atlas with its own measurement label: price, mark, bid or spread.
+
+## 17.8 Systematic Approaches to Private Credit
+
+### 17.8.1 Desk framing: four marks a year and a lot of footnotes
+
+What can "systematic" mean for an asset that reports four times a year? Not high-frequency anything. It means a **look-through security master** built from BDC schedules of investments (every facility, every quarter, with cost, fair value, spread, lien and PIK flags) plus a set of slow, fundamental features computed on it. The corpus is research-grade: Davydiuk, Marchuk and Rosen used BDC schedule-of-investment data to show that BDC capital substitutes for bank credit after regulatory and lender-specific supply shocks ("Direct Lenders in the U.S. Middle Market," *Journal of Financial Economics* 162, 2024). Chapter 25's parser builds the table; this section says what to compute on it.
+
+> **[SOURCE EXTRACTION]** *Bohn_Stein_Active_Credit_Portfolio_Management p.235 (fn. 11):* "it would be unusual in the private credit risk setting to have more than 10 year-end financial statements and quarterly financial statements."
+>
+> **Annotation.** Bohn and Stein are describing borrower-level data for private-firm default models, and the warning transfers directly to vehicle-level work: forty quarterly NAVs is a long history for a BDC, and many semi-liquid funds have fewer than twenty. Every estimate in this chapter (the kernel, the lead–lag, the hazard loadings) is a small-sample estimate, so the 2026 desk departs from single-vehicle modeling altogether. It pools across vehicles that hold the same loans, as Couts, Gonçalves and Rossi recommend; it uses purged, embargoed cross-validation with quarterly blocks (Chapter 7); and it reports intervals. The breadth of a private-credit strategy comes from the cross-section of vehicles and facilities, not from the time series of any one of them.
+
+### 17.8.2 The features worth computing
+
+- **Sector and AI exposure.** About one-fifth of direct-lending loans are to software companies, and software can exceed half of NAV in some levered vehicles (IMF GFSR, April 2026). Public markets repriced first: syndicated loan spreads widened "reflecting a high concentration of leveraged loan borrowers in the software industry" before private-credit new-loan spreads "ticked up" (Fed FSR, May 2026). A per-vehicle software loading is a sector factor in Chapter 9's framework.
+- **Diversification.** BDCs with more than 200 borrowers averaged a 9.5% return on equity in 2025, against 6.1% for those with fewer than 100 (Cliffwater data via BlackRock *Private Credit Primer*, January 2026). Scale is a factor, not a footnote.
+- **Hidden default.** PIK interest was 7.3% of CDLI income in 2025 (Cliffwater, March 31, 2026). Of investments paying PIK at the end of 2025, 58.3% carried "bad PIK," meaning PIK amended in after closing rather than agreed at origination (Lincoln International data via BlackRock's *Credit Currents* chartbook, 1H2026). Kaz asks whether that means there is a good PIK. There is: a PIK toggle priced into the original deal is a contract term. A PIK amended in after closing is a borrower who could not pay cash and a lender who preferred not to call it a default. Theo's "but what does the amendment say?" is, here, the entire feature.
+- **Mark quality.** Stale-mark share (§17.3), cross-holder dispersion (§17.3) and the gap series $g_t$.
+- **Net-of-fee reality.** Private debt funds' net-of-fee abnormal returns are statistically insignificant; gross alpha is positive, and so is alpha against a debt-only benchmark, which reflects embedded equity risk (Erel, Flanagan and Weisbach, NBER w32278, 2024). IDO or it didn't happen: strip leveraged-loan beta, rates and the equity-like tail before calling anything alpha.
+- **Collateral uniqueness.** The unit-sum constraint of §17.2 fails when the collateral was never there. First Brands (Chapter 11, September 2025), Tricolor and the UK lender Market Financial Solutions were all accompanied by allegations that receivables or loans had been pledged to more than one lender (press and court reports; amounts not verified for this edition). No smoothing kernel catches that. A UCC lien-overlap check and a flag for receivables bought off-platform do.
+
+### 17.8.3 Derivation: what the public data already knows about the next marks
+
+The chapter's main engine combines §17.2 and §17.3. Under the smoothing model, the true value change through quarter $t$ is $\beta\sum_{s\le t}F_s$ (ignoring the idiosyncratic part, which has mean zero), and the marks through $t$ have recognized $\beta\sum_{s\le t}F_s\sum_{k=0}^{t-s}\theta_k$ of it. The difference is the **pending mark**:
+
+$$
+\Pi_t=\beta\sum_{s\le t}F_s\Big(1-\sum_{k=0}^{t-s}\theta_k\Big)=\beta\sum_{j=0}^{K-1}\bar\Theta_{j+1}\,F_{t-j},
+\qquad \bar\Theta_{j}\equiv\sum_{k=j}^{K}\theta_k ,
+$$
+
+using $j=t-s$ and the unit-sum constraint, so that $1-\sum_{k=0}^{j}\theta_k=\bar\Theta_{j+1}$. $\Pi_t$ is the sum of all future reported returns already implied by public factor returns, known at $t$. With $\theta=(0.5,0.3,0.2)$, $\Pi_t=\beta(0.5F_t+0.2F_{t-1})$. If the loan index fell 4% this quarter and was flat last quarter, a unit-beta book still has 2% of markdowns to come.
+
+The **mark-gap signal** compares that mechanical catch-up with what the listed price implies:
+
+$$
+G_{i,t}=m_{i,t}-\max\!\big(0,-\Pi_{i,t}\big).
+$$
+
+When $G_{i,t}>0$, the price discounts more than the public data says the marks will fall: either the market knows something about this book beyond its beta (high software share, bad PIK, stale marks), or it is overreacting. The cross-sectional regression of $G$ on the §17.8.2 features separates the two, and the residual is the relative-value signal. When $G_{i,t}<0$, the price has not caught up with marks that are coming, which is the cleanest short in the book.
+
+```python
+# ---- block 5: what the public data already knows about the next marks ----
+def pending_mark(theta, beta, F_recent):
+    """Expected sum of all future reported returns already implied by public factor returns.
+    F_recent = [F_t, F_{t-1}, ..., F_{t-K+1}] (newest first). Returns beta * sum_j Theta_{j+1} F_{t-j}."""
+    th = np.asarray(theta, dtype=float)
+    th = th / th.sum()
+    K = th.size - 1
+    tail = np.array([th[j + 1:].sum() for j in range(K)])           # Theta_{j+1} = sum_{k > j} theta_k
+    F_recent = np.asarray(F_recent, dtype=float)
+    if F_recent.size != K:
+        raise ValueError("need exactly K recent factor returns, newest first")
+    return float(beta * np.dot(tail, F_recent))
+
+
+def mark_gap_signal(p_nav, lev, fee_drag, theta, beta, F_recent):
+    """G = price-implied markdown minus the markdown the public data says is still coming."""
+    m_hat = implied_markdown(p_nav, lev, fee_drag)
+    return m_hat - max(-pending_mark(theta, beta, F_recent), 0.0)
+
+
+# --- sanity checks, block 5 ---
+th = np.array([0.5, 0.3, 0.2])
+assert abs(pending_mark(th, 1.0, [-0.04, 0.0]) + 0.02) < 1e-12          # 2% of markdowns still to come
+shock = np.zeros(8)
+shock[3] = -0.04                                                         # one bad quarter at t = 3
+reported = np.array([sum(th[k] * shock[t - k] for k in range(3) if t - k >= 0) for t in range(8)])
+assert abs(reported[4:].sum() - pending_mark(th, 1.0, [shock[3], shock[2]])) < 1e-12
+G = mark_gap_signal(0.86, 1.19, 0.05, th, 1.0, [-0.04, 0.0])
+assert abs(G - (0.0411 - 0.02)) < 1e-3                                   # price discounts ~2% beyond catch-up
+print("pending mark %.4f, mark-gap signal %.4f" % (pending_mark(th, 1.0, [-0.04, 0.0]), G))
+print("mark_gap: all sanity checks passed")
+```
+
+### Deep-Dive Resource Graph
+
+- **Academic Papers:** Davydiuk, Marchuk and Rosen, "Direct Lenders in the U.S. Middle Market," *Journal of Financial Economics* 162 (2024), DOI 10.1016/j.jfineco.2024.103946; Erel, Flanagan and Weisbach, "Risk-Adjusting the Returns to Private Debt Funds" (NBER w32278), https://www.nber.org/papers/w32278
+- **Practitioner Writing:** BlackRock, *Credit Currents* private credit chartbook (1H2026), https://www.blackrock.com/gls-download/literature/market-commentary/1h2026-credit-currents-chartbook-stamped.pdf
+- **Data & Code:** Apollo daily pricing release (Oct 1, 2026), https://www.apollo.com/insights-news/pressreleases/2026/10/apollo-expands-daily-pricing-to-all-credit-assets-advancing-transparency-in-private-credit-3372805 ; State Street PRIV fund page, https://www.ssga.com/us/en/intermediary/etfs/spdr-ssga-ig-public-private-credit-etf-priv
+
+## 17.9 What a Public-Markets Quant Desk Can Arbitrage
+
+You cannot buy the loans. You can trade every public instrument whose price is a function of private marks. The menu, with the signal from this chapter that drives each one:
+
+| Trade | Instruments | Signal | Hedge | Main failure mode |
+| :--- | :--- | :--- | :--- | :--- |
+| BDC equity relative value | Long scaled, diversified, low-software, low-bad-PIK BDCs; short sub-scale ones | Residual of $G_{i,t}$ on features; stale-mark share; cross-holder dispersion | Leveraged-loan TRS, loan ETF or HY CDX for beta; equity index for the equity tail | Borrow cost and buyback squeezes on the short side |
+| BDC capital structure | Unsecured notes vs equity (revolver senior to both) | Deleveraging, asset sales near par, bank line pricing and utilization | Ratio from a Merton-on-a-CLO map (Chapter 23) | Thin bond trading; a single buyer can take a whole new issue |
+| Index vs basket | CDX Financials vs a BDC-only basket | BDC spread dispersion vs index | Ratio-weighted index protection | Few private-credit names in the index: small, unstable hedge ratio |
+| Wrapper premium/discount | PRIV and future hybrid ETFs | Premium/discount vs firm-bid facility headroom | Public IG sleeve | Facility limits bind in stress; counterparty concentration |
+| Event-driven | Mergers at NAV, tender-to-RoC conversions, listings, portfolio sales | Exchange-ratio math, request percentages | Sector basket | Adverse selection in sales "at fair value" |
+| Gate-driven selling | Syndicated loans held in semi-liquid sleeves | Quarter-end queues, runway $\mathcal{T}$ | Loan index | Crowded, small, and quickly arbitraged |
+| Takeout supply | CLO tranches, repricing-sensitive loans | $Q^{P\to B}$ from §17.4 | CLO AAA vs equity | Misread regime; dual-track noise |
+| Insurer rotation | Public BBB/BB vs MM-CLO mezzanine | NAIC calendar, designation challenges | Duration-matched IG index | Regulatory delay; the rotation is pre-announced |
+
+Two of these deserve a warning label.
+
+> **Ways This Blows Up.** (1) *The index hedge that isn't.* CDX Financials is a broad financials index with only a handful of private-credit names, so its beta to a BDC basket is small and moves with bank and insurer news that has nothing to do with marks. Hedging a BDC bond book with it is hedging a cough with an umbrella. (2) *The sale at fair value.* Every portfolio sale at or near par is evidence about the loans that were sold, not the loans that were kept. Treat a "sale at 99.7% of par" as an upper bound on the remaining book's marks, never as a confirmation of them. (3) *Equity beta in disguise.* Listed BDC equity carries equity-market beta that rises in selloffs; a BDC relative-value book that is not hedged against the equity index will look like private-credit alpha until the first equity drawdown. (4) *Crowding the obvious.* By mid-2026 every desk had the redemption series. The edge moved to its *second derivative*, the change in fill rates and backlog, and to vehicles whose sibling relationships are less obvious than Blue Owl's.
+
+### Deep-Dive Resource Graph
+
+- **Practitioner Writing:** Matt Levine, *Money Stuff* (Bloomberg Opinion), columns on private credit marks, BDC discounts and semi-liquid funds, 2025–2026 (search the archive; specific columns not verified for this edition).
+- **Academic Papers:** Avalos, Doerr and Pinter, "The Global Drivers of Private Credit," *BIS Quarterly Review* (Mar 2025), https://www.bis.org/publications/qr-202503/global-drivers-private-credit
+- **Data & Code:** FINRA TRACE for BDC unsecured bond prints, https://www.finra.org ; SEC EDGAR for 8-K and Schedule TO filings, https://www.sec.gov/edgar
+
+## 17.10 Desk Debrief
+
+Ines replays the cold-open hand. The desk bid the \$25mm of notes two points back of the screen and hedged half the risk with a short in the BDC's own equity, on the view that the seller knew about the redemption queue at a sibling-type vehicle and the equity would reprice before the bonds. The markouts said they were right about the direction and wrong about the ratio: the equity fell more than the bonds, as the capital-structure algebra predicts when the debt is money-good. The hand history goes in the file. *(The trade is illustrative.)*
+
+- **Private credit is public credit with the price removed.** Same borrowers, same sponsors, two pricing regimes. The difference is measurement, not credit.
+- **A mark is a moving average of the truth.** Reported volatility is deflated by $\sqrt{\sum_k\theta_k^2}$, contemporaneous beta by $\theta_0$, and the Sharpe ratio is inflated by $1/\sqrt{\sum_k\theta_k^2}$. NAV momentum is a property of the valuation calendar.
+- **Sum the lags.** The Dimson aggregated beta recovers the true beta, and the lagged coefficients forecast the next mark from public data you already have.
+- **Unsmooth gently.** Inverting a kernel with $\theta=0.7$ amplifies measurement noise more than sixteen times. Pool across co-holders and report intervals.
+- **One discount point is half an asset point.** $m=\big((1-\phi)-P/\text{NAV}\big)/(1+\ell)$: at 1.1x leverage, a 20% equity discount says the loans are worth about 90, not 80.
+- **The non-accrual pair hides a mark.** $\hat R^{\text{mark}}_{\text{NA}}=(w^{FV}/w^{C})(FV/C)$; a rising cost-minus-fair-value gap with a falling headline rate is the hole getting deeper.
+- **A 5% cap rations a run; it does not stop one.** Requesting dominates once $m>0$ is believed, the transfer is $p\cdot m$ per quarter, and the request percentage is the best public belief series in the asset class.
+- **Trade the wrappers.** BDC equity, BDC bonds, ETFs with firm bids, CDX Financials, the loans semi-liquid funds sell and the supply private takeouts create. IDO or it didn't happen.
+
+### The Spec You Hand the Robot
+
+**Vague version.** "ROBO, minimize the mark gap." ROBO writes to the valuation committee recommending that all loans be marked to the listed BDC's implied price, which minimizes the gap to zero and the manager's fee base by 10%. It did exactly what was asked.
+
+**Precise version: the Mark-Gap Monitor.**
+
+- **Inputs.** `bdc_quarterly`, `soi`, `redemptions` and `public_index` with the §17.2 schemas; quarterly frequency; decimals, not percent strings; net (not gross) debt to NAV; NAV vintage stored alongside each restatement.
+- **Step 1, kernel.** For each cluster of co-holding vehicles, fit $\hat\theta$ by pooled Dimson regression with $K\le3$, requiring $10(K+1)$ observations; bootstrap quarters in blocks of four; refuse a point estimate if the 90% interval for $\theta_0$ is wider than 0.4.
+- **Step 2, pending mark.** $\Pi_{i,t}=\hat\beta_i\sum_{j=0}^{K-1}\bar\Theta_{j+1}F_{t-j}$ using the vehicle's sector-matched public index.
+- **Step 3, implied markdown.** $m_{i,t}=\max\big(0,((1-\phi_i)-P/\text{NAV})/(1+\ell_i)\big)$ on buyback-adjusted forward NAV; NaN for non-traded vehicles, never 1.0.
+- **Step 4, gap and features.** $G_{i,t}=m_{i,t}-\max(0,-\Pi_{i,t})$; regress cross-sectionally on software share, bad-PIK share, stale-mark share, cross-holder dispersion, non-accrual gap $g_t$, borrower count and the sibling redemption request percentage; output the residual.
+- **Step 5, runway.** For every semi-liquid vehicle, $\mathcal{T}$ with repayments taken from the §17.4 hazard model under the current regime; flag $\mathcal{T}<5$ quarters.
+- **Outputs.** One row per (`bdc_id`, `qdate`): $\hat\theta$ with interval, $\Pi$, $m$, $G$, residual signal, $\mathcal{T}$ and every flag that fired. Units in column names.
+- **Tests.** All five blocks' sanity checks in this chapter, plus a restatement test (a restated NAV must not change any earlier row's signal) and a non-traded test (no P/NAV, no $m$, no signal, but a runway).
+
+### Exercises
+
+1. **The year-long lag.** A manager's marks recognize a true return evenly over four quarters, $\theta_k=1/4$ for $k=0,\dots,3$. Show that the reported Sharpe ratio is twice the true one and that $\rho^o_1=3/4$. ROBO reports the vehicle's annualized volatility as 2.1%. What is the true figure, and what correlation with the loan index should you expect contemporaneously and after summing three lags?
+2. **Marking the discount.** A listed BDC trades at 0.62 of NAV with net leverage 1.25x and an estimated fee drag of 4%. Compute $m$. Then argue, without computing, whether the true markdown is higher or lower once you admit that the BDC's unsecured notes are not money-good, and say which chapter's model you would use to find out.
+3. **The bad bucket.** A BDC reports non-accruals of 3.1% at cost and 1.0% at fair value, with portfolio fair value at 97% of cost. What is the implied carrying value of its non-accrual loans? Compare it with the roughly 50-cent restructuring recoveries Octus reported in April 2026, and state which number you would put in a Chapter 14 recovery model, and why neither is a recovery.
+4. **Kaz's fix.** Kaz proposes eliminating redemption queues by raising the cap to 100%. With requests at 40% of shares and a true markdown of 8%, compute the stayers' true value per share under a 5% cap and under Kaz's 100% cap. Then explain why the 100% cap does not end the game but changes it into a classic bank run, and what Diamond and Dybvig would have told him.
+5. **Takeout season.** Using block 3, find the regime value $\zeta$ at which expected private-to-syndicated supply halves relative to $\zeta=0$. Then show that the naive supply estimate overstates the competing-risks one by more in the tight regime, and explain why that matters for a CLO-demand forecast.
+6. **The thirteen-week model, reborn.** Take any perpetual BDC's latest 10-Q and fill in Theo's runway: cash, undrawn lines (net of any borrowing-base exclusion for PIK or non-accrual loans), the syndicated sleeve, unfunded commitments, debt maturities and trailing repayments. How many quarters of 5% redemptions can it fund? Now cut repayments by half, as in the 2022–2024 tight regime, and recompute. Write down what the credit agreement says about the borrowing base before you trust either number.
+
+### Deep-Dive Resource Graph (Chapter 17)
+
+- **Podcasts:** Bloomberg *Odd Lots* (Joe Weisenthal and Tracy Alloway), episodes on private credit, BDCs and the bank–private credit relationship; *Capital Allocators* (Ted Seides), conversations with private credit allocators; *Flirting with Models* (Corey Hoffstein), episodes on systematic fixed income. Specific episodes were not verified for this edition; search each archive for "private credit."
+- **Practitioner Writing:** Asness, "The Illiquidity Discount?" (AQR, 2019), https://www.aqr.com/Insights/Perspectives/The-Illiquidity-Discount ; Octus on BDC discounts and non-accruals (Apr 16, 2026), https://octus.com/resources/blog/bdcs-trading-at-50-discount-to-nav-but-nonaccruals-ticking-downward/ ; Blue Owl Capital Corporation press releases, https://www.blueowlcapitalcorporation.com/investors/news-events/press-releases ; IMF blog, "Fast-Growing \$2 Trillion Private Credit Market Warrants Closer Watch" (Apr 8, 2024), https://www.imf.org/en/Blogs/Articles/2024/04/08/fast-growing-USD2-trillion-private-credit-market-warrants-closer-watch ; Man Group, *Quantitative Credit Alpha: Early Mover* (2022, shelf); Nuveen, *Multi-Asset Credit Quant Framework* (shelf).
+- **Academic Papers:** Getmansky, Lo and Makarov (NBER w9571), https://www.nber.org/papers/w9571 ; Couts, Gonçalves and Rossi, *Review of Financial Studies* 37(7), 2024; Cai and Haque, "Private Credit: Characteristics and Risks," FEDS Note (Feb 23, 2024), https://www.federalreserve.gov/econres/notes/feds-notes/private-credit-characteristics-and-risks-20240223.html ; Block, Jang, Kaplan and Schulze (NBER w30868), https://www.nber.org/papers/w30868 ; Erel, Flanagan and Weisbach (NBER w32278), https://www.nber.org/papers/w32278 ; Ellias and de Fontenay, 134 Yale L.J. (2025), https://www.yalelawjournal.org/article/the-credit-markets-go-dark ; Davydiuk, Marchuk and Rosen, *JFE* 162 (2024).
+- **Data & Code:** Federal Reserve Z.1 (private credit series FL893167205, FL453067203, FL443067205, FL673067205), https://www.federalreserve.gov/releases/z1/ ; Fed FEDS Notes index, https://www.federalreserve.gov/econres/notes/feds-notes/default.htm ; Fed *Financial Stability Report*, https://www.federalreserve.gov/publications/financial-stability-report.htm ; SEC EDGAR (schedules of investments, 8-K, Schedule TO, N-PORT), https://www.sec.gov/edgar ; NAIC private credit resource center, https://content.naic.org/resource-center/private-credit-insurance-regulation ; Cliffwater Direct Lending Index and KBRA DLD (subscription; no link).
+
+<!-- STATUS: COMPLETE -->

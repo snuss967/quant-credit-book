@@ -351,8 +351,705 @@ Equation (9.4) gives the duration part of the story a mechanism. Barclays docume
 > \frac{\mathbb{E}^{\mathbb{P}}[r^{xs}_i]}{\sigma(r^{xs}_i)} \;\approx\; \frac{s_i - \lambda^{\mathbb{P}}_i L}{\sqrt{\text{DTS}_i^2\,\sigma_\eta^2 + \lambda^{\mathbb{P}}_i L^2}}\,\sqrt{\Delta t},
 > $$
 >
-> which falls as spreads rise whenever the expected-loss share of the spread, $\lambda^{\mathbb{P}}_i L/s_i$, rises with $s_i$. Empirically it does, steeply: in the synthetic universe of §9.11 it is about 4% for single-A and 42% for CCC *(illustrative calibration)*, and the real-world pattern runs the same way. That is the low-risk premium in credit: not a behavioral puzzle but the shape of a capped payoff. Where the modern desk departs from the simple story is leverage. A DTS-neutral low-risk book is long short-dated, high-grade paper levered several times against short long-dated, low-grade paper. In §9.11's synthetic universe, the long leg needs roughly ten times leverage to match the short leg's DTS. That leverage is the price of the premium, as in Frazzini and Pedersen's (2014) *Betting Against Beta*, and the factor's drawdowns are funding events.
+> which falls as spreads rise whenever the expected-loss share of the spread, $\lambda^{\mathbb{P}}_i L/s_i$, rises with $s_i$. Empirically it does, steeply: in the synthetic universe of §9.11 it is about 4% for single-A and 42% for CCC *(illustrative calibration)*, and the real-world pattern runs the same way. That is the low-risk premium in credit: not a behavioral puzzle but the shape of a capped payoff. Where the modern desk departs from the simple story is leverage. A DTS-neutral low-risk book is long short-dated, high-grade paper levered several times against short long-dated, low-grade paper. In §9.11's synthetic universe the long leg is levered several times over to match the short leg's DTS (the leg-DTS series `dL` and `dS` print the exact multiple). That leverage is the price of the premium, as in Frazzini and Pedersen's (2014) *Betting Against Beta*, and the factor's drawdowns are funding events.
 
 ### 9.5.3 Two live reminders that low-risk is a duration bet
 
 Factor returns in this chapter are *excess* returns: duration-matched Treasuries are subtracted, so rates do not enter the factor's return. A client's total-return statement does not subtract anything. In 2022, when the Bloomberg US Aggregate fell about 13% and high yield about 11% (BlackRock_Systematic_High_Yield_Credit p.3), a low-risk book that held short-duration bonds *without* hedging rates looked brilliant in total return for reasons that had nothing to do with credit. The reverse happened in 2025–2026. Robeco's attribution for its Multi-Factor Credits fund, as of 30 September 2026, names the low-risk/quality factor as the largest detractor, "driven by an underweight in longer-dated bonds," as the long end rallied (Robeco fund page). Both are correct readings of a defensive tilt. Neither is the factor premium. A desk that reports factor performance must say, every time, whether the number is an excess return or a total return, and how the duration was hedged.
+
+## 9.6 Quality, Size, and the Informed Investor
+
+### 9.6.1 Quality is a high-yield factor
+
+Quality in credit means profitability, coverage, low leverage, and, most directly, a low probability of default. Its value depends on where you stand. In investment grade, default risk is too small and too similar across issuers to sort on, and Henke, Kaufmann, Messow, and Fang-Klingler (2020, *Factor Investing in Credit*), as summarized by Man, find quality only weakly related to performance there (Man p.26–27). In high yield, quality is default avoidance, and default avoidance is most of the game: BlackRock reports that its probability-of-default signal identified 77% of the defaulted bonds in the ICE BofA High Yield Index within 24 months of default since 2010 (BlackRock_Systematic_High_Yield_Credit p.6). Chapter 11 builds that engine. One caution on signs: Chordia et al. (2017) find profitability *negatively* related to bond returns unconditionally, which is not a contradiction of Israel, Palhares, and Richardson's positive premium for gross profitability, because they compare bonds *within* DTS quintiles. Unconditionally, profitable issuers have tight spreads and low carry. Within a DTS bucket, a profitable issuer is a safer bond for the same pay.
+
+Ratings-based quality has its own structural flows. When Kaz first heard "fallen angel," he asked which Greek letter it was. Mags explained: "It's the bond an insurance company sells you at 11 a.m. because one policy says it can't hold high yield, and buys back from you at 2 p.m. because another policy says it must hold the index." Index and ratings constraints create forced sellers, and forced sellers create premia that look like factors. Dynkin's Part II covers them; for this chapter, note that a quality factor built on ratings is partly a bet against those constraints.
+
+### 9.6.2 Size, the factor that isn't
+
+In equities, small is beautiful. In credit, small is a bond nobody will quote you, whose price is a rumor, whose return is the rumor's variance.
+
+> **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.679:* "Our findings generally do not support the existence of a size factor that could be exploited by credit investors the same way many equity investors systematically favor smaller‐capitalization stocks with a view to enhance returns."
+>
+> **Annotation.** This is the one place where the major practitioner sources openly disagree. Barclays says no. Man has "seen little evidence to suggest that Size is a meaningful factor in quant credit, especially after transaction costs" (Man p.26), and Israel, Palhares, and Richardson leave size out because "the corporate bond market is notoriously expensive to trade." Houweling and van Zundert (2017) include it, define it as small issuers by debt outstanding, and find it survives their cost assumptions. The reconciliation is liquidity and data. Small issuers' liquidity cost scores run more than 50% higher than large issuers' (Dynkin p.659), so any premium must clear a higher cost bar. And small, rarely traded bonds have the noisiest prices, which by the Blume–Stambaugh mechanism of §9.9 inflates their measured returns. A size premium measured on noisy month-end marks and charged a large-issuer cost is a premium the desk cannot collect. The 2026 position: treat size as a liquidity exposure to be priced and controlled, not a factor to be harvested, unless your own clean data and your own fills say otherwise.
+
+### 9.6.3 The informed investor
+
+Man's fourth style factor reads positioning rather than fundamentals.
+
+> **[SOURCE EXTRACTION]** *Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.27:* "The Informed Investor style factor looks to exploit information about investor activity to drive investment decisions, working along a 'wisdom of crowds' thesis. This harnesses data points such as short interest and call/put positioning to build a picture of investor activity across markets."
+>
+> **Annotation.** The canonical inputs are equity short interest (ESI) and bond short interest (BSI):
+>
+> $$
+> \text{ESI}_{j,t} = \frac{\text{shares on loan}_{j,t}}{\text{shares outstanding}_{j,t}}, \qquad
+> \text{BSI}_{i,t} = \frac{\text{par on loan}_{i,t}}{\text{par outstanding}_{i,t}}.
+> $$
+>
+> Barclays finds that high equity short interest, within rating, predicts downgrades over the next 3 to 12 months and index underperformance, that bond short interest is subsumed by equity short interest, and that "bond short interest is not a useful indicator in the IG space as IG bonds are likely shorted as part of market‐making activity" (Dynkin p.794). In investment grade, a borrowed bond usually means a dealer sold a client something it did not own, which is information about the dealer's inventory rather than the issuer's prospects. The Bayesian reading links this to Chapter 3's Glosten–Milgrom model: short interest raises the posterior probability that informed traders are present, so the *change* in ESI, not its level, is the news. Man's simulated stand-alone information ratio for this factor is 0.79, the lowest of its four (Man p.28), yet Barclays reports that ESI combined with ESP "achieves almost twice the risk-adjusted return" of either alone (Dynkin p.794). It is a combination factor: weak alone, useful as a filter on value, because it flags the cheap bonds whose equity holders already know why they are cheap.
+
+Mags met bond borrow with the usual war story. "In 1998, shorting a bond meant calling a man named Sal and asking nicely. Now your prime broker emails you a spreadsheet every morning." Then she read the spreadsheet. "Fine. The spreadsheet is better than Sal."
+
+There is a human version of the informed investor, too. Barclays' QPS and credit research teams, as reported by Impax (19 September 2025), found that in US investment grade the issuer-level hit rate rose from about 58% to about 66% when analyst and quant signals agreed and fell to about 52% when they conflicted. Concentrating on aligned decisions lifted excess return from 2.0% to 3.7% a year and the IR from 1.09 to 1.71. Doubling exposure to aligned signals gave 4.1% with an IR of 1.83. The analyst is an informed investor whose positioning you already have access to, if you write it down.
+
+## 9.7 Combining Factors: Correlations, Weights, and Effective Breadth
+
+### 9.7.1 The combination formula
+
+Scale each factor's return series $f_{k,t}$ to unit volatility, so its mean is its information ratio $\text{IR}_k$. A combination with weights $w$ has mean $w^\top \text{IR}$ and variance $w^\top \rho\, w$, where $\rho$ is the factor correlation matrix. Hence
+
+$$
+\text{IR}_{\text{combo}}(w) \;=\; \frac{w^\top \text{IR}}{\sqrt{w^\top \rho\, w}}, \qquad
+w^{\ast} \;\propto\; \rho^{-1}\,\text{IR}, \qquad
+\text{IR}_{\text{combo}}(w^{\ast}) \;=\; \sqrt{\text{IR}^\top \rho^{-1}\,\text{IR}} \;\ge\; \max_k |\text{IR}_k| . \tag{9.5}
+$$
+
+The inequality follows from Cauchy–Schwarz and holds in-sample for the optimal weights. It does *not* hold for equal-risk weights $w = \mathbf{1}/K$. With three uncorrelated factors of IR 3.0, 0.5, and 0.5, the equal-risk combination has IR $4/\sqrt3 = 2.31$, which loses to the best single factor. Equal-risk combination wins when the component IRs are similar and the correlations are low. Otherwise, weight by $\rho^{-1}\text{IR}$, shrunk toward equal weights because both inputs are estimated with error.
+
+Run the formula backward on published numbers. Israel, Palhares, and Richardson's quintile-spread Sharpe ratios are carry 0.35, defensive 1.11, momentum 0.85, and value 1.75, and their equal-risk combination is 2.19. With four equal weights, $2.19 = 4.06/\sqrt{4 + 12\bar\rho}$ implies an average pairwise correlation $\bar\rho \approx -0.05$. Man's simulated IRs (Value 2.15, Momentum 1.69, Quality 1.55, Informed Investor 0.79, Final 2.35; Man p.28) imply $\bar\rho \approx 0.24$ under the same equal-risk assumption. Treat both as back-of-the-envelope figures, since neither firm necessarily combines at the return level with equal weights. The direction still teaches something: diversification across credit factors is real but not free, and the correlations that matter are the ones *after* DTS neutralization. The pairwise matrix from Henke et al. that Man reproduces for investment grade (Man p.27) shows the expected structure: Value–Carry +0.52 (two spread-adjacent sorts), Value–Momentum 0.00, Value–Quality −0.04, Value–Size −0.10, Momentum–Quality −0.07, Momentum–Carry +0.02, Quality–Carry −0.21.
+
+> **[SOURCE EXTRACTION]** *Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.28:* "These results do not directly account for liquidity, transaction costs, and borrow costs."
+>
+> **Annotation.** This footnote sits under the chart showing a combined IR of 2.35 (simulated, January 2005 to December 2020), and it deserves equal billing with the chart. Every IR in §9.7.1 is gross. Combination changes the cost picture in two directions. It helps, because trades net out: when momentum wants to sell a bond that value wants to buy, the combined portfolio does nothing, and doing nothing is free. It hurts if it raises the weight on fast signals. The correct object is therefore not $\text{IR}_{\text{combo}}$ but the IR of the *traded* combined portfolio after the optimizer of §9.8 has priced every trade. A desk that combines gross IRs and then applies an average cost has assumed the netting away.
+
+### 9.7.2 Effective breadth: forty-seven hats again
+
+By the fundamental law, $\text{IR} \approx \text{IC}\sqrt{\text{BR}}$. In credit, breadth is not the bond count. With $N$ bonds from issuers holding $\bar n$ bonds each, and within-issuer return correlation $\bar\rho_w$,
+
+$$
+\text{BR}_{\text{eff}} \;\approx\; \frac{N}{1 + (\bar n - 1)\,\bar\rho_w}.
+$$
+
+Man's universe of more than 10,000 bonds from about 2,000 issuers (Man p.10–11) has $\bar n \approx 5$. At $\bar\rho_w = 0.8$, effective breadth is $10{,}000/4.2 \approx 2{,}400$ per cross-section, not 10,000: forty-seven bonds from one issuer are one data point wearing forty-seven hats (Chapter 7). That is still an enormous advantage over CDS, where only around 100 US single names trade regularly (Man p.10–11), and it is the reason serious credit factor investing is done in cash bonds. Bond-level value (§9.3.4) is the one signal that recovers some of the lost breadth, because it is the one that differs across an issuer's bonds.
+
+### Case Study: One Telecom, Four Factors (Man Numeric, 2016–2017)
+
+Man's paper includes the only shelf example that shows the four style factors disagreeing and then agreeing on a single issuer, an anonymized telecom (Man p.29–30). In 2016 the company stabilized customer retention, relieved liquidity concerns, and announced about \$500mm of cost cuts. In 2017 it reached free-cash-flow breakeven, with EBITDA margins rising from about 25% to about 30%. The signals moved in sequence. Value and quality strengthened from distressed levels first: the spread still priced a credit the fundamentals no longer described. The informed-investor signal turned cautiously positive as bond and equity short interest fell. Cross-asset momentum turned positive as the equity began to rerate. The combined signal went from strongly positive to *monetizing* as the bond's OAS travelled from roughly 1,200bp toward the tights *(approximate, read from Man's chart)*.
+
+Read it as an RSSG reader would. Each signal is a witness who saw a different part of the event. Value saw a balance sheet that was better than its price. Quality saw margins. Informed investor saw the shorts leave. Momentum saw the equity market agree. No single witness justified a full position at 1,200bp; together they did, and the position was sized up as they agreed and sold as the spread compressed and the value signal faded. Two facts keep the example honest. It is a backtest narrative of a winner, chosen by the author after the fact. And at 1,200bp the bond was in the zone where §9.2 says DTS stops being a good risk measure, so a desk would have sized it on price and recovery rather than DTS. Section 9.10 pairs it with two dated, named, live results.
+
+## 9.8 Portfolio Construction Under Costs
+
+The signal tells you what you would like to own. Construction tells you what you can afford to own. In credit the second question is the larger one.
+
+### 9.8.1 The optimizer
+
+Let $w$ be portfolio weights, $w_0$ current holdings, $\alpha$ the combined expected active return, $\Sigma$ a covariance matrix, $\gamma$ risk aversion, and $c_i$ the one-way cost of trading bond $i$. The construction problem is
+
+$$
+\max_{w}\;\; \alpha^\top w \;-\; \frac{\gamma}{2}\, w^\top \Sigma\, w \;-\; \sum_i c_i\,\lvert w_i - w_{0,i}\rvert
+$$
+
+subject to:
+
+- **DTS cell matching:** $\sum_{i \in g} w_i\,\text{DTS}_i = \text{DTS}^{\text{bm}}_g$ for every rating × sector cell $g$, so active bets are expressed as DTS contributions (Ben Dor p.33–34);
+- **key-rate durations** matched to the benchmark, so that rates do not leak into an excess-return mandate (Man p.10);
+- **issuer caps in DTS:** $w_j D^{\text{spr}}_j s_j \le \kappa$. Ben Dor's example: under such a cap, a position in an issuer with a 100bp spread and five-year duration "could be up to 1% of portfolio market value," while one with a 150bp spread and ten-year duration "would be limited to 0.33%" (Ben Dor p.61);
+- **liquidity:** a filter on Barclays' Trade Efficiency Score (TES ≤ 3, the more liquid end of its scale; Dynkin p.710);
+- **turnover:** $\tfrac12\sum_i |w_i - w_{0,i}| \le \text{TO}^{\max}$, for example 10% a month as in Israel, Palhares, and Richardson;
+- **long-only** $w \ge 0$ where the mandate requires it.
+
+The absolute-value cost term makes the objective non-smooth. The standard fix is to split each trade into a buy and a sell, $w = w_0 + u^{+} - u^{-}$ with $u^{\pm} \ge 0$, so that the cost becomes the linear term $\sum_i c_i(u^{+}_i + u^{-}_i)$ and the problem is a quadratic program. For $\Sigma$, Man's approach normalizes bond returns by DTS, extracts statistical factors, fills new issues from issuer-level loadings, and rescales by current DTS (Man p.15). For ten thousand bonds and two thousand issuers, shrink it (Chapter 8) or the optimizer will find the eigenvector with the smallest estimated variance and put the whole book in it.
+
+### 9.8.2 What a trade costs
+
+> **[SOURCE EXTRACTION]** *Ben_Dor_Quantitative_Credit_Portfolio_Management p.118:* "A bond's LCS, therefore, represents the roundtrip cost, as a percent of the bond's value, of immediately executing a standard institutional transaction."
+>
+> **Annotation.** For a spread-quoted bond, Barclays' liquidity cost score is the bid–ask spread *in spread terms* times OAS duration, $\text{LCS}_i = (\text{ask} - \text{bid})_{s}\times D^{\text{OAS}}_i$; for a price-quoted bond it is $(P^{\text{ask}} - P^{\text{bid}})/P^{\text{bid}}$ (Ben Dor p.118). The one-way cost in the optimizer is $c_i = \tfrac12\text{LCS}_i$. Notice the duration in that formula: an 8bp bid–ask on a 15-year bond costs more than an 8bp bid–ask on a three-year bond, so long-duration bonds are expensive to trade for the same reason they are risky to hold. Two features of the 2026 desk go beyond the definition. First, LCS measures the cost of a *standard* institutional trade; a \$50mm block of a \$300mm issue is not standard, and Man's decomposition, "TC = Inside Market Spread + Slippage + Spread Calibration" (Man p.21), adds the size and market-impact terms that LCS leaves out. Second, credit fills are probabilistic. An RFQ may go unfilled, and an unfilled order leaves an exposure the optimizer did not plan (Man p.19). The construction loop must re-optimize on what was actually filled, not on what was sent.
+
+### 9.8.3 Buffers: doing nothing on purpose
+
+A turnover buffer is hysteresis. Buy a bond when its score rises above $\theta_B$; sell it only when the score falls below $\theta_S < \theta_B$; hold it in between. A bond that slides from the 95th percentile to the 88th is held, not sold and replaced with a slightly better one at the cost of two bid–asks. Barclays shows the gross cost of the buffer honestly: the IR falls from 1.52 to 1.31 to 1.20 as the buffer widens from 0 to 10% to 15%, *before* transaction costs (Dynkin p.538). After costs, the picture improves, because the buffer removes the trades whose expected alpha was smaller than their cost. The code in §9.11 reproduces both effects.
+
+> **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.711:* "Accounting for the rebalancing costs reduces relative returns from 2.66%/yr to 1.78%/yr, while the tracking error volatility remains virtually unchanged at 1.41%/yr."
+>
+> **Annotation.** This is a liquid ESP-plus-EMC strategy portfolio, and the arithmetic is the chapter in miniature: about a third of the gross outperformance goes to the dealers, and the risk is unchanged, so the IR falls by a third too. The more striking number sits on the same page: the cost drag was about 1.15% a year in 2007–2012 and about 0.64% a year in 2013–2019. The cost of running the same strategy fell by nearly half in a decade, which is why systematic credit grew when it did. For the long-only case, Israel, Palhares, and Richardson's optimized portfolio with turnover capped at 10% a month earned 5.72% a year gross and 5.26% net, with an active net return of 2.20% a year, tracking error of 2.56%, and an IR of 0.86. It had a net Sharpe ratio of 1.03 against the benchmark's 0.69. These numbers are achievable, and none of them looks like the cold open's 1.9.
+
+> **Trend Watch.** *The cost curve, 2007–2026.*
+>
+> - **2007 (the academic baseline).** Chen, Lesmond, and Wei (2007) estimated bid–ask spreads of about 25bp for AAA bonds and 180bp for CCC. Man notes that "Both of these figures would be markedly tighter in the current market," yet academic papers still use them (Man p.20).
+> - **2007–2019 (Barclays LCS, investment-grade index average).** 0.4% in 2007, 2.8% in 2008, then down to 0.6% in 2018–2019 (Dynkin p.703). In July 2019: IG 0.608%, HY 0.941%, Treasuries 0.028% (Dynkin p.703).
+> - **2007–2012 versus 2013–2019.** The cost drag on Barclays' liquid ESP+EMC strategy fell from about 1.15% a year to about 0.64% a year (Dynkin p.711).
+> - **February–March 2020.** Man's 20-day average high-yield bid–ask spread spiked and then normalized within months (Man p.20; levels are shown only in a chart, so we describe the shape, not the numbers).
+> - **2023–2026 (live).** Robeco's Multi-Factor Credits fund reports realized transaction costs of 0.20% a year, as a three-year average to 30 September 2026 (fund page).
+>
+> *What it means for the desk.* The cost of trading credit factors fell by roughly half per decade, but not monotonically: in a stress month it can jump fivefold overnight. Construction must use a *state-dependent* cost (LCS today, not the average), and the turnover budget must be set for the stress state, because that is when the signals fire hardest.
+
+## 9.9 The Replication Debate, Read as a Desk
+
+Chapter 7 told the 2019–2026 story in full: the Bai–Bali–Wen (2019) factor model, its retraction after Dickerson, Mueller, and Robotti found a timing misalignment in the data, Dick-Nielsen, Feldhütter, Pedersen, and Stolborg's finding that only 23% of significant literature factors keep significant alphas in a clean framework, and Dickerson, Robotti, and Rossetti's April 2026 audit of 108 signals, most of which have no bond-CAPM alpha after correction. When Kaz learned that the benchmark paper behind half his reading list had been retracted, he asked whether a journal could file under Chapter 11. Mags said, "It did an out-of-court restructuring. The creditors were Dickerson, Mueller, and Robotti." (No cooperation agreement was signed, so the counter does not move.) Here we need only the mechanics that matter for constructing factors.
+
+**Mechanism 1: noisy prices raise average returns.** Let the observed price be $\tilde P_t = P_t(1 + u_t)$ with $u_t$ independent over time, $\mathbb{E}[u_t] = 0$, and $\operatorname{Var}(u_t) = \sigma_u^2$. The computed return is $\tilde r_{t+1} = (1 + r_{t+1})\,(1+u_{t+1})/(1+u_t) - 1$. Because $\mathbb{E}[1/(1+u_t)] \approx 1 + \sigma_u^2$ by a second-order expansion,
+
+$$
+\mathbb{E}\big[\tilde r_{t+1}\big] \;\approx\; \mathbb{E}\big[r_{t+1}\big] \;+\; \sigma_u^2 , \tag{9.6}
+$$
+
+which is the bias identified by Blume and Stambaugh (1983, *Biases in Computed Returns*). At $\sigma_u = 3\%$, a plausible pricing error for a small, rarely traded high-yield bond, the bias is 9bp a month, about 1.1% a year, earned by whoever sorts toward noisy bonds. That is the size factor of §9.6.2 explained without any economics.
+
+**Mechanism 2: sorting on a noisy price manufactures a premium.** To first order, $\tilde r_t \approx r_t + u_t - u_{t-1}$ and $\tilde r_{t+1} \approx r_{t+1} + u_{t+1} - u_t$, so
+
+$$
+\operatorname{Cov}\!\left(\tilde r_t,\, \tilde r_{t+1}\right) \;\approx\; \operatorname{Cov}\!\left(r_t,\, r_{t+1}\right) \;-\; \sigma_u^2 .
+$$
+
+The same error $u_t$ appears in the signal (with a plus sign) and in the next return (with a minus sign). Sort on last month's noisy return and you buy bonds whose price was marked too low; their next return recovers the error, and you call it short-term reversal. Sort on a noisy *price level* (any value signal that uses a price-implied spread) and the same thing happens: a bond that looks cheap because of a bad mark "earns" the correction. Dickerson, Robotti, and Rossetti call this correlated errors-in-variables: the error sits in both the sort and the return denominator. In the §9.11 lab, a lag-one reversal sort on noisy prices shows a large, highly significant "alpha" that disappears once the signal skips a month.
+
+**Mechanism 3: filters that peek, and defaults that vanish.** Dropping returns above some threshold, or dropping "bounce-backs" that reverse within days, is conditioning on the future when the filter is applied after seeing the return. Dropping defaulted bonds removes the left tail of exactly the high-carry, high-value portfolios. Both make factors look better than any portfolio could have done.
+
+What survived the cull is small but not zero, and it matches what practitioners actually run: equity-derived signals (momentum spillover, profitability and quality), value built on clean prices with DTS control, and low-risk or short duration. What died was mostly built on noisy price levels: short-term reversal, naive illiquidity, and "downside risk" measured from bond return histories. The academic retreat and the desk's practice turn out to be the same conclusion, reached from opposite ends. Dickerson, Julliard, and Mueller (2026, *The Co-Pricing Factor Zoo*) add the deeper point: once Treasury term-structure risk is priced, equity and nontradable factors explain bond premia, which makes much of the separate bond-factor literature redundant for pricing, although a model-averaged stochastic discount factor over dozens of factors still reaches an out-of-sample Sharpe ratio of 1.5–1.8.
+
+The desk turns this into five rules for its own factor library:
+
+1. **Signal and return never share a price.** Use a different source (for example, a composite mid for the signal and executable levels for the return) or skip a month between them.
+2. **No ex-post filters.** Clean data with rules written before the returns are seen, and review extreme outliers individually rather than dropping them automatically.
+3. **Defaults stay in.** The default-month return is recovery minus the last price, and the bond leaves the panel the following month, never retroactively.
+4. **Double-sort on DTS or rating.** Every factor is reported within DTS buckets or rating groups, so beta cannot pose as alpha.
+5. **Replicate in continuous integration.** Open Bond Asset Pricing (launched November 2025) publishes cleaned TRACE panels, the 108-signal set, and corrected Bai–Bali–Wen factors. The in-house library should reproduce those public series as an automated test before anyone trusts it with a new signal.
+
+## 9.10 Crowding, Capacity, and the Drawdowns That Matter
+
+> **[SOURCE EXTRACTION]** *Paleologo_Advanced_Portfolio_Management p.71:* "If you think of the extreme case in which every hedge fund holds a copy of the same portfolio, then this factor is a measure of “crowding”."
+>
+> **Annotation.** Paleologo is describing an equity factor built from hedge-fund holdings, and the next lines on his page describe the deleveraging cycle: consensus positions are bid up in calm markets, and when an adverse shock forces some holders to sell, prices fall, others' risk limits are hit, and the selling feeds on itself. Credit adds two accelerants. Long–short credit books run leverage that, in Man's words, "starts at 4-5x" (Man p.11), so a modest loss forces a large sale. And the exit is narrower: a crowded equity factor sells into an exchange, while a crowded credit factor sells into dealer balance sheets that shrink in exactly the same stress. The 2026 desk measures crowding directly rather than waiting to find out. Useful measures (all ours, numbers illustrative): holdings overlap with known factor ETFs and published model portfolios; a *factor valuation spread*, the ratio of the average spread of the cheap leg to the rich leg within DTS-matched cells, which compresses as a value trade gets crowded; short interest in the bonds and stocks of the short leg; and the share of TRACE volume concentrated in top-decile names. Robeco's credit team put the intuition plainly in its *Guide to Credits* (c. 2017): it is "wary of crowded trades where investors stretch the models."
+
+> **Poker Table.** Ines drew it on a napkin. "Four players. Same hand history, same model, same stack, same rule: if you're down two percent, you fold. One of them gets a bad card. He folds. His fold moves the pot against everyone else, and now they're all down two percent." She pushed the napkin across. "Everyone at this table has the same exit. That isn't an edge, it's a fire drill. Your edge is knowing where the door is before they do, or not being at the table."
+
+### Case Study: March 2020 Through the Factor Lens
+
+The cleanest test of everything in this chapter came in four weeks. From late February to late March 2020, US investment-grade spreads roughly tripled to nearly 400bp and high-yield spreads passed 1,000bp, then retraced most of the move by year-end after the Federal Reserve announced corporate-bond purchases *(levels approximate)*. Man's chart of investment-grade spreads from February 2020 to February 2021 shows the shape a systematic credit fund launched in January 2020 lived through: a large mark-to-market loss in March, recovered by year-end (Man p.12). Liquidity broke at the same time. Man's 20-day average high-yield bid–ask spread spiked in February–March and normalized within months (Man p.20).
+
+Through the factor lens, Barclays' drawdown analysis (January 1993 to March 2020) tells the story. Without DTS matching, ESP value was *pro-cyclical*: its long leg was wider and higher-DTS, so it lost money in the drawdown. Raw EMC was *contra-cyclical*, because in a flight to quality the issuers with the strongest equity momentum are the safe ones, so the long leg's DTS fell below the short leg's and the factor profited from the selloff. With DTS matching, both "delivered strong performance during all drawdown episodes," and their market correlations collapsed (Dynkin p.739–741). The investors themselves split. A 2020 survey of credit factor investors by PGGM, reported by IPE under the title *Will corona be a watershed moment for credit factor investing?*, divided them into keep-it-simple and sophisticated camps (Man p.30).
+
+How would a systematic desk have read March 2020 in real time? First, the P&L of a factor book that month was mostly its *net DTS*, not its signals. A book that was DTS-neutral lost on liquidity and cost, not on direction. Second, the cost curve matters more than the signal in a stress month. Signals fire hardest when spreads are dispersed, which is exactly when trading is most expensive, so a turnover budget set for average conditions is breached on the first day. The right response in March 2020 was usually to trade *less*, let the buffer widen, and let the drifting portfolio decay toward the new signal. Third, the electronification of the previous decade (the cost drag halved between 2007–2012 and 2013–2019; Dynkin p.711) is why a liquidity shock that size was survivable for credit factor books. In 2008, with the average investment-grade LCS at 2.8% (Dynkin p.703), the same shock cost several times as much to trade through.
+
+> **Trend Watch.** *The tight-spread regime and the first live track records, 2024–2026.*
+>
+> - **The tights.** US investment-grade OAS moved from about 77bp (4 July 2025) to about 72bp (September 2025), which State Street described as "the tightest since 1998" (SSGA SAFI Q3 2025 commentary, 25 November 2025).
+> - **What tight spreads do to value.** Barclays finds that ESP's outperformance "is larger when there is a high dispersion in ESP" (Dynkin p.545). At record tights, dispersion compresses, so the value opportunity set shrinks just as more capital arrives to harvest it.
+> - **A good live start.** State Street's two systematic high-quality corporate strategies (systematic since 31 December 2023) report Q3 2025 value contributions of +14bp (intermediate) and +43bp (long), momentum roughly flat to +4bp, a maximum relative drawdown since January 2024 of −5bp against a peer average of −44bp, roughly flat net performance through the March–April 2025 credit drawdown while the average manager lagged by about 35bp, and since-inception IRs of 2.89 and 2.63 (SSGA, 25 November 2025). The sample is under two years.
+> - **A long live record.** Robeco QI Global Multi-Factor Credits (launched June 2015), as of 30 September 2026, annualized and net of fees against the Bloomberg Global Aggregate Corporates (hedged): 1 year −2.69% against −2.77%; 3 years 3.14% against 3.45%; 5 years −2.00% against −1.64%; since inception 0.63% against 0.87%. Attribution: value slightly positive, low-risk/quality the largest detractor (the long-end underweight of §9.5.3), momentum neutral, size slightly negative (Robeco fund page).
+>
+> *What it means for the desk.* The backtests in this chapter run from an IR of 0.5 to 2.4. A decade of live, net, multi-factor credit returns from a careful manager is close to the benchmark, with a defensive tilt that cost money in the latest period. A desk that budgets for a 2.0 IR is budgeting for a backtest. Budget for something like 0.5 net, demand the DTS-neutral decomposition every quarter, and treat any two-year live IR above 2 as a sample that has not yet met its first bad year.
+
+## 9.11 The Credit Factor Lab: A Reference Implementation
+
+### Specification for AI Implementation
+
+**What ROBO builds.** `credit_factor_lab`: a synthetic corporate-bond universe whose data-generating process obeys the DTS law of §9.2 exactly, plus the full factor pipeline of §9.3–§9.9: signals, dollar-neutral versus DTS-neutral long–short portfolios, costs, buffers, a DTS-matched long-only tilt with a turnover cap, factor combination, and the price-noise module. Everything is numpy and pandas, seeded, and runs in seconds. The seven blocks below run in order in one interpreter. Every number the code prints is *illustrative*: the point is to verify the mechanics, not to estimate a premium.
+
+**Data-generating process (monthly, $T = 240$).** There are $J = 400$ issuers and about 2,000 bonds (one plus Poisson(4) per issuer). Issuer log spreads are a fair value (rating base, leverage, net debt to EBITDA, coverage, and a *hidden priming-risk* flag that the market prices but the three ratios cannot see) plus a common market factor $M_t$, sector factors $S_{g,t}$, and an issuer residual $c_{j,t}$ that mean-reverts (this is the planted value alpha) and absorbs equity news with a one-month lag (the planted momentum alpha). The bond excess return is $s_{i,t}/12 - D^{\text{spr}}_i s_{i,t}\,\Delta\log s_{i,t+1}$ plus CUSIP noise, so $\beta_i = \text{DTS}_i/\text{DTS}_m$ holds by construction. Defaults are issuer-level with rating-dependent intensity (tripled for hidden-risk issuers) and a 40% recovery.
+
+**Schemas and shapes.**
+
+| Object | Shape / type | Units and meaning |
+| :--- | :--- | :--- |
+| `bonds` | DataFrame, $N$ rows | `issuer`, `rating` (0=A … 4=CCC), `sector`, `mat` (years), `dur` (spread duration, years), `lcs` (round-trip cost, fraction of value), `mbucket` (0: <5y, 1: 5–10y, 2: >10y) |
+| `s` | `(T+1, N)` float | OAS at the start of month $t$, decimal, floored at 1bp |
+| `xs` | `(T, N)` float | excess return over month $t \to t+1$, decimal; NaN when not held |
+| `held` | `(T, N)` bool | bond in the universe at the start of month $t$ (true through its default month) |
+| `DTS` | `(T, N)` float | $D^{\text{spr}} \cdot s \cdot 100$, years × percent, start of month |
+| signal | `(T, N)` float | higher = buy; NaN = ineligible |
+| `backtest(...)` | dict of `(T,)` arrays | `gross`, `cost`, `to` (one-way turnover), `dL`, `dS` (leg DTS) |
+
+**Edge cases ROBO must handle exactly as stated.** A rating cell with fewer than 30 bonds is skipped in the ESP regression (production: pool into the adjacent rating). A defaulting bond earns recovery minus par in its default month, then leaves the universe; its exit is free, and it is never removed retroactively. New momentum history is NaN for the first six months and excluded from momentum but not from value. Negative-EBITDA issuers get `NDE_CAP = 15` turns *before* the 0.1 floor. OAS is floored at 1bp so DTS is never zero or negative. All leg scaling uses start-of-month DTS.
+
+**Acceptance tests (asserts).** (1) The dollar-neutral DTS-sorted long–short has OLS beta within 10% of its DTS-implied beta, and the DTS-neutral version has $|\beta| < 0.05$. (2) Excess-return volatility is linear in DTS across 30 buckets ($R^2 > 0.9$, positive slope). (3) Dollar-neutral ESP has beta above 0.1 (the cold open), and every DTS-neutral factor has $|\beta| < 0.10$. (4) Turnover falls strictly as the buffer widens. (5) The long-only tilt has nonnegative weights and matches benchmark DTS in every rating cell to $10^{-9}$. (6) The combination formula (9.5) reproduces the directly computed combo IR to $10^{-8}$, and the max-IR combination beats every single factor in-sample. (7) The Blume–Stambaugh bias (9.6) is measured within ±20% of $\sigma_u^2$, and the lag-one reversal sort on noisy prices has $t > 5$. Weaker statistical expectations are printed as PASS or WARN, not asserted.
+
+```python
+# ---------- Block 1: synthetic universe and data-generating process (Sections 9.2-9.3) ----------
+import numpy as np
+import pandas as pd
+
+SEED = 20261018
+rng = np.random.default_rng(SEED)
+pd.set_option("display.width", 140)
+
+J, T, K_SEC = 400, 240, 8                  # issuers, months, sectors
+RATINGS = ["A", "BBB", "BB", "B", "CCC"]   # index 0..4; 2 and above is high yield
+P_RATING = np.array([0.20, 0.30, 0.22, 0.18, 0.10])
+BASE_S = np.array([0.0085, 0.0140, 0.0260, 0.0400, 0.0850])   # median OAS, decimal (illustrative)
+LAMBDA = np.array([0.0005, 0.0020, 0.0080, 0.0250, 0.0600])   # P-measure default intensity, 1/yr
+BIDASK = np.array([0.0005, 0.0007, 0.0012, 0.0018, 0.0035])   # bid-ask quoted in spread, decimal
+LEV_MU = np.array([0.25, 0.35, 0.45, 0.55, 0.70])             # leverage, decimal
+NDE_MU = np.array([1.5, 2.5, 3.5, 5.0, 7.0])                  # net debt / EBITDA, turns
+ICOV_MU = np.array([12.0, 7.0, 4.5, 2.5, 1.4])                # interest coverage, times
+RECOVERY = 0.40                                               # fraction of par
+PHI_C, SIG_C, A0, A1 = 0.98, 0.04, 0.03, 0.005   # issuer residual AR(1); equity news now / next month
+PHI_M, SIG_M, PHI_S, SIG_S = 0.97, 0.08, 0.95, 0.03
+BOND_NOISE = 0.03          # CUSIP-level relative spread noise per month
+NDE_CAP = 15.0             # turns for negative-EBITDA issuers, applied BEFORE any floor (Section 9.3.2)
+DTS_TARGET = 12.0          # years x percent (Dynkin p.739)
+
+
+def build_issuers(rng):
+    r = rng.choice(5, size=J, p=P_RATING)
+    lev = np.clip(LEV_MU[r] + 0.07 * rng.standard_normal(J), 0.05, 0.95)
+    nde = NDE_MU[r] * np.exp(0.25 * rng.standard_normal(J))
+    nde = np.where(rng.random(J) < 0.02, -nde, nde)          # negative EBITDA -> negative ratio
+    icov = ICOV_MU[r] * np.exp(0.30 * rng.standard_normal(J))
+    hidden = (r >= 3) & (rng.random(J) < 0.15)               # undisclosed priming risk (Chapter 13)
+    prs = np.clip(0.2 + 0.6 * hidden + 0.15 * rng.standard_normal(J), 0.0, 1.0)
+    nde_eff = np.where(nde > 0, nde, NDE_CAP)
+    log_fair = (np.log(BASE_S[r]) + 0.8 * (lev - LEV_MU[r]) + 0.05 * (nde_eff - NDE_MU[r])
+                - 0.03 * (icov - ICOV_MU[r]) + 0.6 * hidden)  # the market prices the hidden risk
+    lam = LAMBDA[r] * np.where(hidden, 3.0, 1.0)
+    sector = rng.integers(0, K_SEC, size=J)
+    return pd.DataFrame(dict(rating=r, sector=sector, lev=lev, nde=nde, nde_eff=nde_eff,
+                             icov=icov, hidden=hidden, prs=prs, log_fair=log_fair, lam=lam))
+
+
+def build_bonds(iss, rng):
+    nb = 1 + rng.poisson(4, size=J)                          # bonds per issuer, mean 5
+    iid = np.repeat(np.arange(J), nb)
+    r = iss.rating.values[iid]
+    mat = np.where(r >= 2, rng.uniform(2, 10, iid.size), rng.uniform(1, 20, iid.size))
+    dur = (1.0 - 1.05 ** (-mat)) / 0.05                      # spread-duration proxy, years
+    log_s0 = (iss.log_fair.values[iid] + 0.15 * np.log(mat / 7.0)
+              + 0.05 * rng.standard_normal(iid.size))         # issuer curve slope + CUSIP noise
+    return pd.DataFrame(dict(issuer=iid, rating=r, sector=iss.sector.values[iid], mat=mat,
+                             dur=dur, log_s0=log_s0, lcs=BIDASK[r] * dur,
+                             mbucket=np.digitize(mat, [5.0, 10.0])))
+
+
+def simulate(iss, bonds, rng):
+    n, iid = len(bonds), bonds.issuer.values
+    M, S = np.zeros(T + 1), np.zeros((T + 1, K_SEC))
+    news = rng.standard_normal((T + 1, J))
+    c = np.zeros((T + 1, J))
+    c[0] = rng.standard_normal(J) * np.sqrt((SIG_C**2 + A0**2 + A1**2) / (1 - PHI_C**2))
+    eq_m = 0.045 * rng.standard_normal(T + 1)               # market equity return, monthly
+    for t in range(1, T + 1):
+        zM = -0.5 * eq_m[t] / 0.045 + np.sqrt(0.75) * rng.standard_normal()
+        M[t] = PHI_M * M[t - 1] + SIG_M * zM
+        S[t] = PHI_S * S[t - 1] + SIG_S * rng.standard_normal(K_SEC)
+        c[t] = PHI_C * c[t - 1] + SIG_C * rng.standard_normal(J) - A0 * news[t] - A1 * news[t - 1]
+    eq_ret = 0.006 + eq_m[:, None] + 0.08 * news            # issuer equity return over (t-1, t]
+    log_s = bonds.log_s0.values[None, :] + M[:, None] + S[:, bonds.sector.values] + c[:, iid]
+    log_s = np.maximum(log_s, np.log(1e-4))                 # floor OAS at 1bp
+    s = np.exp(log_s)
+    p_def = 1.0 - np.exp(-iss.lam.values / 12.0)
+    hit = rng.random((T, J)) < p_def[None, :]
+    drow = np.where(hit.any(axis=0), hit.argmax(axis=0), T + 10)   # row of the default-month return
+    drow_b = drow[iid]
+    rows = np.arange(T)[:, None]
+    dur = bonds.dur.values[None, :]
+    xs = (s[:-1] / 12.0 - dur * s[:-1] * np.diff(log_s, axis=0)
+          + dur * s[:-1] * BOND_NOISE * rng.standard_normal((T, n)))
+    xs = np.where(rows == drow_b[None, :], RECOVERY - 1.0, xs)     # default: recovery minus par
+    held = rows <= drow_b[None, :]                                  # in universe at start of row t
+    xs = np.where(held, xs, np.nan)
+    return dict(s=s, xs=xs, held=held, eq_ret=eq_ret, drow_b=drow_b)
+
+
+iss = build_issuers(rng)
+bonds = build_bonds(iss, rng)
+sim = simulate(iss, bonds, rng)
+N = len(bonds)
+s, xs, held, drow_b = sim["s"], sim["xs"], sim["held"], sim["drow_b"]
+D, RAT, IID = bonds.dur.values, bonds.rating.values, bonds.issuer.values
+DTS = D[None, :] * s[:-1] * 100.0                      # (T, N) years x percent, START of month
+r_mkt = np.array([xs[t, held[t]].mean() for t in range(T)])     # equal-weight market excess return
+dts_mkt = np.array([DTS[t, held[t]].mean() for t in range(T)])
+assert np.isfinite(xs[held]).all() and not np.isfinite(xs[~held]).any()
+print(f"{N} bonds, {J} issuers, {T} months; mean market DTS {dts_mkt.mean():.1f} (yrs x %); "
+      f"{int((drow_b < T).sum())} bonds default in sample")
+```
+
+```python
+# ---------- Block 2: DTS is beta (Section 9.2) ----------
+def ols(y, x):
+    X = np.column_stack([np.ones_like(x), x])
+    coef, *_ = np.linalg.lstsq(X, y, rcond=None)
+    return coef[1], coef[0]                                # slope, intercept
+
+
+def soft_check(ok, msg):
+    print(("PASS " if ok else "WARN ") + msg)
+
+
+def backtest(score, kind="dts", q=0.10, buffer=0.0, ret=None):
+    """Top-minus-bottom q long-short. score (T, N): higher = buy, NaN = ineligible.
+    kind 'mv': $1 per leg. kind 'dts': each leg scaled to DTS_TARGET with START-of-month DTS.
+    buffer: hysteresis; a held bond stays until its percentile leaves [1-q-buffer, 1] (long)."""
+    ret = xs if ret is None else ret
+    out = {k: np.zeros(T) for k in ("gross", "cost", "to", "dL", "dS")}
+    w_prev = np.zeros(N)
+    inL, inS = np.zeros(N, bool), np.zeros(N, bool)
+    for t in range(T):
+        ok = held[t] & np.isfinite(score[t])               # never condition on the future return
+        w_prev = np.where(held[t], w_prev, 0.0)            # defaulted bonds leave at no cost
+        pct = np.full(N, -1.0)
+        if ok.sum() >= 20:
+            pct[ok] = pd.Series(score[t][ok]).rank(pct=True).values
+        inL = ok & ((pct >= 1 - q) | (inL & (pct >= 1 - q - buffer)))
+        inS = ok & ((pct <= q) | (inS & (pct <= q + buffer)))
+        w = np.zeros(N)
+        if inL.any() and inS.any():
+            dL, dS = DTS[t, inL].mean(), DTS[t, inS].mean()
+            sL, sS = (1.0, 1.0) if kind == "mv" else (DTS_TARGET / dL, DTS_TARGET / dS)
+            w[inL], w[inS] = sL / inL.sum(), -sS / inS.sum()
+            out["dL"][t], out["dS"][t] = dL, dS
+        dw = np.abs(w - w_prev)
+        out["to"][t] = dw.sum() / (2.0 * max(np.abs(w).sum(), 1e-12))
+        out["cost"][t] = (dw * bonds.lcs.values / 2.0).sum()        # one-way cost = LCS / 2
+        out["gross"][t] = np.nansum(w * ret[t])
+        w_prev = w
+    return out
+
+
+dts_score = np.where(held, DTS, np.nan)
+mv_dts = backtest(dts_score, "mv", q=0.20)
+beta_hat = ols(mv_dts["gross"], r_mkt)[0]
+beta_th = ((mv_dts["dL"] - mv_dts["dS"]) * dts_mkt).sum() / (dts_mkt ** 2).sum()
+print(f"DTS-sorted dollar-neutral L/S: OLS beta {beta_hat:.3f} vs (DTS_L - DTS_S)/DTS_m = {beta_th:.3f}")
+assert abs(beta_hat / beta_th - 1.0) < 0.10, "beta is not (DTS_L - DTS_S) / DTS_m"
+beta_dn = ols(backtest(dts_score, "dts", q=0.20)["gross"], r_mkt)[0]
+print(f"DTS-sorted DTS-neutral L/S: OLS beta {beta_dn:.4f}")
+assert abs(beta_dn) < 0.05, "DTS-neutral legs should have no market beta"
+
+not_def = np.arange(T)[:, None] != drow_b[None, :]
+clean = np.where(held & not_def, xs, np.nan)
+keep = np.isfinite(clean).sum(axis=0) >= 24
+vol_i = np.nanstd(clean[:, keep], axis=0, ddof=1) * 100.0      # percent per month
+dts_i = np.nanmean(np.where(held, DTS, np.nan)[:, keep], axis=0)
+bk = pd.qcut(dts_i, 30, labels=False)
+vb = pd.Series(vol_i).groupby(bk).mean().values
+db = pd.Series(dts_i).groupby(bk).mean().values
+slope, icpt = ols(vb, db)
+r2 = np.corrcoef(vb, db)[0, 1] ** 2
+print(f"vol(%/mo) = {icpt:.3f} + {slope:.4f} x DTS   R^2 = {r2:.3f}   (slope = sigma_eta)")
+assert slope > 0 and r2 > 0.90, "excess-return vol should be linear in DTS (Ben Dor p.51)"
+soft_check(abs(icpt) < 0.15 * vb.mean(), "vol-DTS intercept is near zero")
+```
+
+```python
+# ---------- Block 3: signals (Sections 9.3-9.6) ----------
+FUND = iss[["lev", "nde_eff", "icov"]].values[IID]
+PRS = iss.prs.values[IID][:, None]
+SEC_D = np.eye(K_SEC)[bonds.sector.values]          # sector intercepts
+MAT_D = np.eye(3)[bonds.mbucket.values][:, 1:]      # maturity-bucket shifts
+
+
+def winsorize(v, lo=1.0, hi=99.0):
+    a, b = np.percentile(v, [lo, hi])
+    return np.clip(v, a, b)
+
+
+def esp_score(with_prs=False, min_cell=30):
+    """Excess spread to peers: residual of log OAS on fundamentals, with sector and maturity
+    intercepts, estimated by rating each month (Dynkin p.524). Fundamentals are static here;
+    in production they are point-in-time and lagged at least three months."""
+    X_all = np.hstack([SEC_D, MAT_D, FUND] + ([PRS] if with_prs else []))
+    out = np.full((T, N), np.nan)
+    for t in range(T):
+        y = np.log(s[t])
+        for g in range(5):
+            m = held[t] & (RAT == g)
+            if m.sum() < min_cell:                 # production: pool into the adjacent rating
+                continue
+            coef, *_ = np.linalg.lstsq(X_all[m], y[m], rcond=None)
+            out[t, m] = y[m] - X_all[m] @ coef
+        ok = np.isfinite(out[t])
+        out[t, ok] = winsorize(out[t, ok])
+    return out
+
+
+def zscore_within(x, groups, mask):
+    z = np.full(x.shape, np.nan)
+    for g in np.unique(groups[mask]):
+        m = mask & (groups == g)
+        sd = x[m].std()
+        z[m] = (x[m] - x[m].mean()) / sd if sd > 0 else 0.0
+    return z
+
+
+def spider_score():
+    lev_mult = np.clip(iss.nde_eff.values[IID], 0.1, None)   # Man p.24 floor, AFTER the NDE_CAP fix
+    return np.vstack([zscore_within(np.log(s[t] / lev_mult), RAT, held[t]) for t in range(T)])
+
+
+def emc_score():
+    """Equity momentum in credit: mean of 1-, 3-, 6-month issuer equity returns, each per month."""
+    eq, out = sim["eq_ret"], np.full((T, N), np.nan)
+    for t in range(5, T):
+        r1, r3, r6 = eq[t], eq[t - 2:t + 1].sum(axis=0), eq[t - 5:t + 1].sum(axis=0)
+        out[t] = ((r1 + r3 / 3.0 + r6 / 6.0) / 3.0)[IID]
+    return np.where(held, out, np.nan)
+
+
+def low_risk_score():
+    z = (D - D.mean()) / D.std() + (RAT - RAT.mean()) / RAT.std()
+    return np.where(held, -z[None, :], np.nan)            # short duration, high rating = buy
+
+
+def zrow(score):
+    out = np.full(score.shape, np.nan)
+    for t in range(T):
+        ok = np.isfinite(score[t])
+        if ok.sum() > 1:
+            v = score[t, ok]
+            out[t, ok] = (v - v.mean()) / v.std()
+    return out
+
+
+SIG = {"ESP": esp_score(False), "ESP+PRS": esp_score(True), "SPiDER": spider_score(),
+       "EMC": emc_score(), "LowRisk": low_risk_score()}
+stack = np.stack([zrow(SIG[k]) for k in ("ESP+PRS", "EMC", "LowRisk")])
+cnt = np.isfinite(stack).sum(axis=0)
+SIG["Composite"] = np.where(cnt > 0, np.nansum(stack, axis=0) / np.maximum(cnt, 1), np.nan)
+hid_b = iss.hidden.values[IID]
+top_esp = (zrow(SIG["ESP"]) > 1.28) & held
+print(f"share of hidden-risk bonds in ESP top decile: {np.broadcast_to(hid_b, (T, N))[top_esp].mean():.0%} "
+      f"(universe: {hid_b.mean():.0%})")
+```
+
+```python
+# ---------- Block 4: dollar-neutral vs DTS-neutral factors, costs, buffers (Sections 9.2-9.8) ----------
+def summarize(res, name):
+    g, net = res["gross"], res["gross"] - res["cost"]
+    vol = g.std(ddof=1) * np.sqrt(12)
+    return {"factor": name, "gross_%": 1200 * g.mean(), "net_%": 1200 * net.mean(),
+            "vol_%": 100 * vol, "IR_gross": 12 * g.mean() / vol, "IR_net": 12 * net.mean() / vol,
+            "beta": ols(g, r_mkt)[0], "TO_%/mo": 100 * res["to"].mean()}
+
+
+RUNS, rows = {}, []
+for name, sc in SIG.items():
+    for kind in ("mv", "dts"):
+        RUNS[(name, kind)] = backtest(sc, kind)
+        rows.append(summarize(RUNS[(name, kind)], f"{name} [{kind}]"))
+table = pd.DataFrame(rows).set_index("factor")
+print(table.round(2))
+
+assert ols(RUNS[("ESP", "mv")]["gross"], r_mkt)[0] > 0.1, "dollar-neutral value should be long beta"
+for (name, kind), res in RUNS.items():
+    assert (res["cost"] >= 0).all() and res["cost"].sum() > 0
+    if kind == "dts":
+        assert abs(ols(res["gross"], r_mkt)[0]) < 0.10, f"{name}: DTS-neutral beta too large"
+soft_check(table.loc["ESP+PRS [dts]", "IR_gross"] > table.loc["ESP [dts]", "IR_gross"],
+           "adding the document-risk regressor improves value (Section 9.3.4)")
+
+buf = []
+for b in (0.0, 0.05, 0.10, 0.20):
+    res = backtest(SIG["EMC"], "dts", buffer=b)
+    buf.append({"buffer": b, "gross_%": 1200 * res["gross"].mean(), "cost_%": 1200 * res["cost"].mean(),
+                "net_%": 1200 * (res["gross"] - res["cost"]).mean(), "TO_%/mo": 100 * res["to"].mean()})
+buf = pd.DataFrame(buf).set_index("buffer")
+print(buf.round(2))
+assert (np.diff(buf["TO_%/mo"].values) < 0).all(), "turnover must fall as the buffer widens"
+soft_check(buf.loc[0.10, "net_%"] > buf.loc[0.0, "net_%"], "a 10% buffer beats no buffer net of cost")
+```
+
+```python
+# ---------- Block 5: long-only DTS-matched tilt with a turnover cap (Section 9.8) ----------
+def long_only_tilt(score, k=0.5, to_cap=0.10):
+    """Benchmark: equal-weight held universe. Tilt by score, cap one-way turnover, then re-match
+    each rating cell's DTS contribution to the benchmark (Ben Dor p.33-34). Any weight not in
+    bonds sits in duration-matched Treasuries, whose excess return is zero."""
+    act, cost, to, err = np.zeros(T), np.zeros(T), np.zeros(T), np.zeros(T)
+    w_prev, wmin = held[0] / held[0].sum(), np.inf
+    for t in range(T):
+        h = held[t]
+        bm = h / h.sum()
+        wp = np.where(h, w_prev, 0.0)
+        z = np.where(h & np.isfinite(score[t]), score[t], 0.0)
+        w = bm * np.clip(1.0 + k * z, 0.0, None)
+        want = 0.5 * np.abs(w - wp).sum()
+        if want > to_cap:
+            w = wp + (to_cap / want) * (w - wp)
+        for g in range(5):
+            m = h & (RAT == g)
+            if not m.any():
+                continue
+            tgt, got = (bm[m] * DTS[t, m]).sum(), (w[m] * DTS[t, m]).sum()
+            w[m] = w[m] * (tgt / got) if got > 0 else bm[m]
+            err[t] = max(err[t], abs((w[m] * DTS[t, m]).sum() - tgt))
+        dw = np.abs(w - wp)
+        to[t], cost[t] = 0.5 * dw.sum(), (dw * bonds.lcs.values / 2.0).sum()
+        act[t] = np.nansum((w - bm) * xs[t])
+        wmin, w_prev = min(wmin, w.min()), w
+    return dict(active=act, cost=cost, to=to, err=err, wmin=wmin)
+
+
+lo = long_only_tilt(SIG["Composite"])
+te = lo["active"].std(ddof=1) * np.sqrt(12)
+lo_net = lo["active"] - lo["cost"]
+print(f"long-only tilt: active gross {1200 * lo['active'].mean():.2f}%/yr, net {1200 * lo_net.mean():.2f}%/yr, "
+      f"TE {100 * te:.2f}%, IR net {12 * lo_net.mean() / te:.2f}, turnover {100 * lo['to'].mean():.1f}%/mo")
+assert lo["wmin"] >= 0.0 and lo["err"].max() < 1e-9, "long-only and cell-DTS matching violated"
+soft_check(abs(ols(lo["active"], r_mkt)[0]) < 0.05, "long-only active beta ~ 0 after cell DTS matching")
+```
+
+```python
+# ---------- Block 6: combining factors (Section 9.7) ----------
+names = ["ESP+PRS", "SPiDER", "EMC", "LowRisk"]
+Fm = pd.DataFrame({k: RUNS[(k, "dts")]["gross"] for k in names}).iloc[6:]   # drop momentum warm-up
+mu, sd = Fm.mean(), Fm.std(ddof=1)
+IR = np.sqrt(12) * mu / sd
+rho = Fm.corr().values
+w_eq = np.full(len(names), 1.0 / len(names))
+combo = (Fm / sd).values @ w_eq
+ir_direct = np.sqrt(12) * combo.mean() / combo.std(ddof=1)
+ir_formula = (w_eq @ IR.values) / np.sqrt(w_eq @ rho @ w_eq)        # equation (9.5)
+w_opt = np.linalg.solve(rho, IR.values)
+ir_opt = np.sqrt(IR.values @ w_opt)
+print(pd.DataFrame(rho, index=names, columns=names).round(2))
+print("single-factor IRs:", IR.round(2).to_dict())
+print(f"equal-risk combo IR {ir_formula:.2f}; max-IR combo {ir_opt:.2f}")
+assert abs(ir_direct - ir_formula) < 1e-8, "combination formula does not match the data"
+assert ir_opt >= IR.abs().max() - 1e-9, "max-IR combination must beat every single factor in-sample"
+off = rho[~np.eye(len(names), dtype=bool)]
+if off.max() < 0.3 and ir_formula < IR.max():
+    print("WARN equal-risk combo lost to the best single factor: IRs too unequal for 1/K weights")
+```
+
+```python
+# ---------- Block 7: the replication module, noisy prices (Section 9.9) ----------
+def noisy_returns(sig_u, rng):
+    """Clean prices from excess returns; observed = clean x (1 + u), u iid N(0, sig_u^2)."""
+    P = 100.0 * np.vstack([np.ones(N), np.cumprod(1.0 + np.nan_to_num(xs, nan=0.0), axis=0)])
+    Pn = P * (1.0 + sig_u[None, :] * rng.standard_normal(P.shape))
+    rc, rn = P[1:] / P[:-1] - 1.0, Pn[1:] / Pn[:-1] - 1.0
+    return np.where(held, rc, np.nan), np.where(held, rn, np.nan)
+
+
+su = 0.01
+rc, rn = noisy_returns(np.full(N, su), np.random.default_rng(SEED + 1))
+mask = held & not_def
+bias = rn[mask].mean() - rc[mask].mean()
+print(f"Blume-Stambaugh: measured bias {1e4 * bias:.3f}bp/mo vs sigma_u^2 = {1e4 * su**2:.3f}bp/mo")
+assert abs(bias / su**2 - 1.0) < 0.20, "noisy-price bias should be sigma_u^2 (equation 9.6)"
+
+sig_u = np.where(RAT >= 2, 0.012, 0.004)                 # noisier marks in high yield (illustrative)
+_, rn2 = noisy_returns(sig_u, np.random.default_rng(SEED + 2))
+lag1 = np.full((T, N), np.nan); lag1[1:] = -rn2[:-1]     # last month's loser = buy (shares a price)
+lag2 = np.full((T, N), np.nan); lag2[2:] = -rn2[:-2]     # skip a month: no shared price
+tstat = lambda x: x.mean() / x.std(ddof=1) * np.sqrt(len(x))
+t1 = tstat(backtest(lag1, "dts", ret=rn2)["gross"][1:])
+t2 = tstat(backtest(lag2, "dts", ret=rn2)["gross"][2:])
+print(f"short-term reversal on noisy prices: t = {t1:.1f}; skip-month version: t = {t2:.1f}")
+assert t1 > 5.0, "the shared-price reversal 'alpha' should be large"
+soft_check(abs(t2) < 3.0, "skip-month reversal is near zero: the 'alpha' was the pricing error")
+print("All hard checks passed.")
+```
+
+Three notes on what the lab shows when you run it. First, compare each signal's `[mv]` and `[dts]` rows: the dollar-neutral value rows carry a large positive beta and the low-risk rows a negative one, and DTS-neutralization removes both, which is §9.2 in a table. Second, the `share of hidden-risk bonds` line shows how many of ESP's "cheapest" bonds are fairly priced bonds carrying a risk the three ratios cannot see, and the `ESP+PRS` row shows what a document-risk regressor buys back. Third, the momentum buffer table reproduces §9.4 and §9.8 together: gross alpha that is real, turnover that is not affordable, and a buffer that trades some of the first for much less of the second.
+
+## 9.12 Desk Debrief
+
+A week after the cold open, Kaz put the value strategy back on the screen, rebuilt with DTS-neutral legs inside rating × sector cells, start-of-month DTS, default months kept, and a skip-month rule between the price used for the signal and the price used for the return. The Sharpe ratio was 0.9 gross and 0.7 net. The beta was 0.02 *(illustrative)*.
+
+"It's less," Kaz said.
+
+"It's *yours*," Ines said. "Last week sixty percent of it belonged to the index. Now replay the hand: what did the cheap decile cost to trade, and how much of it was cheap because somebody at the table knew something?"
+
+Theo had the answer to the second half. He had added two columns to the ESP regression: the 13-week model's liquidity runway and a crude document-risk flag for drop-down capacity. In B and CCC they pulled a fifth of the names out of the cheap decile. Most of the names they removed had widened further over the next six months. IDO or it didn't happen, and this time some of it had.
+
+Mags read the new tear sheet twice, which for her is applause. "Back in my day, the value factor was a guy who bought what everybody else was selling and had a strong stomach. Yours has a cost model and a lawyer." A pause. "Fine. Yours is better than the guy."
+
+- **Beta in credit is $\text{DTS}_i/\text{DTS}_m$.** A dollar-neutral spread sort is a long-beta portfolio. Report every factor both dollar-neutral and DTS-neutral; the gap is how much of it was beta.
+- **Carry is the price of DTS.** Per unit of DTS, carry is $1/D^{\text{spr}}$, so a DTS-neutral carry factor is a short-duration factor and belongs with low-risk.
+- **Value is a residual within a peer cell, on clean prices.** The residual is either cheapness or information you lack. Document-risk features (Chapter 13) separate the two, and that is where the RSSG reader's edge lives.
+- **Momentum is real gross and perishable.** A top-decile half-life of about 1.2 months and the break-even rule $c^\ast = \mathbb{E}[r^{\text{gross}}]/\text{TO}$ decide whether you can keep it. At 73% monthly turnover you need round-trip costs below 72bp.
+- **Size is mostly liquidity and price noise; the informed investor is a filter.** Neither is a stand-alone engine.
+- **Combine with $\rho^{-1}\text{IR}$, shrunk toward equal weights.** Equal-risk weights can lose to the best single factor, and trade netting exists only in the traded portfolio.
+- **Signal and return never share a price, defaults stay in, filters are written before the data are seen, and the library replicates Open Bond Asset Pricing in CI.**
+- **Budget for a live net IR near 0.5, not 2.** Ten years of live multi-factor credit returns sit near the benchmark; the backtests do not.
+
+### The Spec You Hand the Robot
+
+Paste the block below into ROBO's prompt. The seven Python blocks in §9.11 are the executable reference, and their asserts are the acceptance tests.
+
+```text
+ROBO: build credit_factor_engine, a DTS-aware cross-sectional credit factor pipeline.
+Implement exactly this. Where something is unspecified, stop and ask; do not guess.
+
+INPUTS (point-in-time; every field carries available_at; monthly rebalance at start of month t)
+  oas[t,i] decimal (OAS, never Z-spread, on callables); oasd[t,i] years; DTS = oasd*oas*100 (yrs x %)
+  rating[t,i] in {A,BBB,BB,B,CCC}; sector[t,i]; maturity bucket {<5y, 5-10y, >10y}
+  fundamentals[t,j]: leverage, net_debt/EBITDA, interest coverage; lag >= 3 months, no restatements
+  equity_ret[t,j]; esi[t,j]; prs[t,j] (Chapter 13, optional); lcs[t,i] round-trip cost, fraction
+  ultimate_parent[i]; default_month[i]; recovery[i]
+
+SIGNALS (higher = buy; NaN = ineligible)
+  ESP: monthly OLS of log OAS on cell intercepts + 3 ratios (+ prs if present), by rating;
+       cells < 30 bonds pool to the adjacent rating; winsorize residuals 1/99; negative EBITDA -> 15x
+  SPiDER: z-score within rating of log(OAS / max(ND/EBITDA_fixed, 0.1))
+  EMC: mean over h in {1,3,6} of equity return(h)/h; NaN until 6 months of history
+  LowRisk: -(z(duration) + z(rating index))
+  Composite: mean of available z-scores of ESP(+PRS), EMC, LowRisk
+
+PORTFOLIOS
+  L/S: top vs bottom decile; legs scaled to DTS 12 (yrs x %) per leg using START-of-month DTS
+  Long-only: bm * max(1 + 0.5*z, 0); one-way turnover cap 10%/month; then rescale each rating
+       cell so that sum(w*DTS) equals the benchmark's; residual weight sits in Treasuries
+  Buffer: enter at decile 10, exit below percentile 0.90 - buffer
+  Issuer cap: w_j * D_j * s_j <= kappa (state kappa and units); exclude s > 1,000bp from DTS scaling
+
+COSTS
+  cost_t = sum_i |dw_i| * lcs_i / 2 ; report gross, cost, net, turnover, beta to the market
+
+DATA RULES
+  signal and return never share a price (skip a month or use separate sources)
+  defaults: return = recovery - last price in the default month; drop the bond next month only
+  no ex-post return filters; log every outlier reviewed
+
+OUTPUT
+  table per factor x {mv, dts}: gross %, net %, vol %, IR gross, IR net, beta, turnover %/month
+  correlation matrix; equal-risk and rho^-1 IR combination IRs; buffer table; noise-bias table
+
+ACCEPTANCE TESTS (fail loudly)
+  dollar-neutral DTS sort: |beta / ((DTS_L - DTS_S)/DTS_m) - 1| < 0.10; DTS-neutral |beta| < 0.05
+  every DTS-neutral factor |beta| < 0.10; long-only weights >= 0; cell DTS error < 1e-9
+  combo IR formula equals direct computation to 1e-8; max-IR combo >= best single factor
+  turnover strictly decreasing in buffer; noisy-price bias within 20% of sigma_u^2
+```
+
+### Exercises
+
+1. **Kaz's hedge, two ways.** The long leg has DTS 12, the short leg 7.2, and the market 8. (a) Compute the dollar-neutral beta and the DTS-neutral short notional per \$100mm long. (b) Now let the legs differ in duration: long $D^{\text{spr}} = 4$ at 3.0% spread, short $D^{\text{spr}} = 8$ at 0.9%. Both legs have the same DTS as before. Compute the DTS-neutral book's net carry, and explain the answer using equation (9.4). Which factor have you actually built?
+2. **Can you afford it?** A signal earns 3.0% a year gross with one-way turnover of 40% a month. Using Barclays' July 2019 liquidity cost scores (IG 0.608%, HY 0.941%; Dynkin p.703), decide whether it survives in investment grade, in high yield, or neither. Then find the turnover cap at which it survives in high yield, and say what a buffer would have to do to the gross return to make that cap worth it.
+3. **The measure trap.** A three-year bond has a physical default probability of 1%, an asset Sharpe ratio $\theta = 0.3$, and loss given default 0.6. Compute the fair spread with and without the $\mathbb{P}\to\mathbb{Q}$ step of equation (9.2). The bond trades at 65bp. Is it cheap? Is it cheap to a desk that skipped the step?
+4. **ROBO literalism.** Theo's draft spec says: "Buy cheap bonds, avoid momentum crashes, and keep costs low." List three things ROBO could build that satisfy the sentence and lose money (one of them should involve Treasuries), then rewrite the spec with units, timing, and boundary conditions.
+5. **Extend the lab.** Add bond momentum (trailing six-month excess return) and an equity-short-interest signal with a planted link to future spread widening. Run both on clean and noisy prices. Which one does the Blume–Stambaugh mechanism inflate more, and why does your answer depend on whether the signal is built from bond prices or equity data?
+6. **First-day declaration.** Kaz wants the retracted factor model to "file under Chapter 11." Write its first-day declaration in one page: the cause of distress (identify the data errors of §9.9), the debtor-in-possession financing (what clean data would replace it), and the plan of reorganization (your five library rules). The Ad Hoc Group of Replicators, represented by counsel, will object to anything vague.
+
+### Deep-Dive Resource Graph
+
+**Podcasts**
+
+- No credit-factor episode was verified for this edition. Search by topic in *Flirting with Models* (Corey Hoffstein), Bloomberg's *Odd Lots*, and *Resolve Riffs* for episodes with credit-factor researchers; cite them only after you have checked the episode yourself.
+
+**Practitioner Writing**
+
+- Impax, "Quant meets credit: enhancing fundamental analysis through systematic screening" (19 September 2025), which reports the Barclays QPS US\$90–140bn estimate and the "Better Together" hit-rate results: https://impaxam.com/insights-and-news/blog/quant-meets-credit-enhancing-fundamental-analysis-through-systematic-screening/
+- State Street Global Advisors, SAFI Q3 2025 commentary (25 November 2025): https://www.ssga.com/us/en/institutional/insights/fixed-income-q3-2025-safi-commentary
+- Robeco QI Global Multi-Factor Credits, fund page with performance and attribution: https://www.robeco.com/en-int/products/funds/isin-lu1235145304/robeco-qi-global-multi-factor-credits-fh-eur
+- Robeco, *Guide to Credits* (c. 2017): https://www.robeco.com/files/docm/docu-guide-to-credits.pdf
+- Robeco, "A prudent route to effective factor timing" (12 July 2023; equity evidence on factor timing after costs): https://www.robeco.com/en-us/insights/2023/07/a-prudent-route-to-effective-factor-timing
+- Quantpedia's summary of Dick-Nielsen, Feldhütter, Pedersen, and Stolborg: https://quantpedia.com/corporate-bond-factors-replication-failures-and-a-new-framework/
+- Title only: Barclays QPS, Mateer et al. (2024), *QPS & Credit Research: Better Together*; AQR, *Alternative Thinking* (October 2017), "The Illusion of Active Fixed Income Alpha"; IPE (2020), "Will corona be a watershed moment for credit factor investing?" (the PGGM survey); Robeco (June 2022), "Ten years of successful factor investing in credit markets."
+- Shelf: Dynkin et al., *Systematic Investing in Credit* (Dynkin p.45, 524–553, 606–633, 679, 693–711, 739–741, 794); Ben Dor et al., *Quantitative Credit Portfolio Management* (Ben_Dor p.33–34, 51, 61, 118); Man Group, *Quantitative Credit Alpha: Early Mover* (2022) (Man p.10–30); Paleologo, *Advanced Portfolio Management* (Paleologo p.27, 71); BlackRock, *Systematic High Yield Credit* (p.3, 6); Blackstone, *Systematic Credit* (p.2).
+
+**Academic Papers**
+
+- Dickerson, Robotti, and Rossetti (2026), "The Corporate Bond Factor Replication Crisis," arXiv:2604.07880: https://arxiv.org/abs/2604.07880
+- Dickerson, Mueller, and Robotti (2023), "Priced Risk in Corporate Bonds," *Journal of Financial Economics* 150(2); arXiv posting: https://arxiv.org/abs/2604.05699
+- Dickerson, Julliard, and Mueller (2026), "The Co-Pricing Factor Zoo," arXiv:2604.04430: https://arxiv.org/abs/2604.04430 ; project origin, Inquire Europe (26 November 2023): https://www.inquire-europe.org/news/new-reseach-started-the-corporate-bond-factor-zoo/
+- Dick-Nielsen, Feldhütter, Pedersen, and Stolborg (2023), "Corporate Bond Factors: Replication Failures and a New Framework," SSRN 4586652; AQR working-paper page: https://www.aqr.com/Insights/Research/Working-Paper/Corporate-Bond-Factors-Replication-Failures-and-a-New-Framework
+- Bai, Bali, and Wen (2019), "Common risk factors in the cross-section of corporate bond returns," *Journal of Financial Economics* 131(3): 619–642; retraction notice, *JFE* 150(3), DOI 10.1016/j.jfineco.2023.103721: https://econpapers.repec.org/article/eeejfinec/v_3a150_3ay_3a2023_3ai_3a3_3as0304405x23001617.htm
+- Houweling and van Zundert (2017), "Factor Investing in the Corporate Bond Market," *Financial Analysts Journal* 73(2), DOI 10.2469/faj.v73.n2.1: https://rpc.cfainstitute.org/research/financial-analysts-journal/2017/factor-investing-in-the-corporate-bond-market
+- Israel, Palhares, and Richardson (2018), "Common Factors in Corporate Bond Returns," *Journal of Investment Management* 16(2): 17–46: https://www.aqr.com/-/media/AQR/Documents/Journal-Articles/Common-Factors-in-Corporate-Bond-Returns.pdf
+- Chordia, Goyal, Nozawa, Subrahmanyam, and Tong (2017), "Are Capital Market Anomalies Common to Equity and Corporate Bond Markets?" *Journal of Financial and Quantitative Analysis* 52(4): 1301–1342: https://www.cambridge.org/core/product/identifier/S0022109017000515/type/journal_article
+- Title only: Kelly, Palhares, and Pruitt (2023), "Modeling Corporate Bond Returns," *Journal of Finance*; Jostova, Nikolova, Philipov, and Stahel (2013), "Momentum in Corporate Bond Returns," *Review of Financial Studies* 26(7); Haesen, Houweling, and van Zundert (2017), "Momentum Spillover from Stocks to Corporate Bonds," *Journal of Banking & Finance* 79; Correia, Richardson, and Tuna (2012), "Value Investing in Credit Markets," *Review of Accounting Studies* 17(3); Koijen, Moskowitz, Pedersen, and Vrugt (2018), "Carry," *Journal of Financial Economics*; Henke, Kaufmann, Messow, and Fang-Klingler (2020), "Factor Investing in Credit"; Frazzini and Pedersen (2014), "Betting Against Beta," *Journal of Financial Economics*; Blume and Stambaugh (1983), "Biases in Computed Returns," *Journal of Financial Economics*; Chen, Lesmond, and Wei (2007), "Corporate Yield Spreads and Bond Liquidity," *Journal of Finance*; Dick-Nielsen and Rossi (2019), "The Cost of Immediacy for Corporate Bonds," *Review of Financial Studies* 32(1); Asquith, Au, Covert, and Pathak (2013), "The Market for Borrowing Corporate Bonds," *Journal of Financial Economics*; Alquist, Israel, and Moskowitz (2018), "Fact, Fiction, and the Size Effect," *Journal of Portfolio Management*; van Binsbergen, Nozawa, and Schwert, "Duration-Based Valuation of Corporate Bonds," *Review of Financial Studies* (forthcoming).
+
+**Data & Code**
+
+- Open Bond Asset Pricing: cleaned TRACE panels, the 108-signal set, the 341-factor set, corrected Bai–Bali–Wen factors, and duration-matched Treasury returns: https://openbondassetpricing.com/
+- Lasse H. Pedersen's data page, which links the Dick-Nielsen–Feldhütter–Pedersen–Stolborg factor data: https://www.lhpedersen.com/data
+- SEC EDGAR, for point-in-time fundamentals: https://www.sec.gov/edgar
+- Title only: FINRA TRACE specifications; WRDS Bond Returns.
+- This book: §9.11 (`credit_factor_lab`), Chapter 7 (purged cross-validation and the replication audit), Chapter 8 (shrinkage and empirical duration), Chapter 13 (the Priming Risk Score as a value regressor), and Appendix B (data feeds).
+
+<!-- STATUS: COMPLETE -->

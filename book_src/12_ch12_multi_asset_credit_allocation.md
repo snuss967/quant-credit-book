@@ -342,3 +342,634 @@ $$
 At $\phi = 0.8$, which is not an exotic level of persistence for appraisal-based marks, $\xi = 1/9$: true volatility is three times reported, true beta five times reported contemporaneous beta, and the correlation is understated by 40%. Kaz's 1.9% becomes about 5.7%, close to the loan proxy. Mags's verdict on the original number: "Measured by the fund or by the fund's lawyer?" The formula's verdict: $\sigma_{\text{true}} = \sigma_{\text{reported}}/\sqrt{\sum_j \theta_j^2}$, whoever measured it.
 
 > **Ways This Blows Up.** *Desmoothing the wrong series.* A listed BDC's share price is marked by the market every day; desmoothing it inflates a volatility that was never smoothed. Desmooth the NAV series and treat the price-to-NAV discount as a separate liquidity signal (Chapter 20). *Mixing frequencies.* Desmoothing a quarterly NAV series and dropping it into a monthly covariance matrix aligns nothing; aggregate the public series to quarterly first. *Non-invertible fits.* The moving-average weights are identified only up to reversal ($\theta$ and its mirror image give the same autocorrelations); the recursion that recovers true returns explodes for the non-invertible one. The code checks the roots and refuses rather than guesses.
+
+## 12.6 Optimization: Mean-Variance, Risk Budgets, and Why the Frontier Is Flat
+
+Nuveen's optimizer (Nuveen pp.5–6) takes a five-year horizon, a 6.00% minimum return target and the sector bounds of Figure 5 (HY 20–60%, leveraged loans 5–25%, EM sovereign and EM corporate HY 2–15% each, CoCos and HY preferreds 2–10% each, ABS, CMBS BBB, CLO BBB to B and CRT 0–10% each, middle-market direct lending 0–35%), and produces six efficient portfolios. Forward returns run from 5.11% to 6.20%, volatilities from 5.50% to 6.29%, forward Sharpe ratios from 0.26 to 0.40 (Figure 6).
+
+> **[SOURCE EXTRACTION]** *Nuveen p.6:* "portfolio six has the optimal allocation, with a return of 6.20%. While portfolio six represents an optimal allocation under the given assumptions and constraints, it should be viewed as a starting point for discussion."
+>
+> **Annotation.** This is the most honest sentence a vendor of optimizers can write, and the math below explains why it is also correct. The six portfolios are 110 bp apart in return and 79 bp apart in volatility, and the inputs that produced them (a five-year expected loss, a spread path, a covariance) each carry error bars wider than that. The modern desk keeps the optimizer and changes its job: it searches for the region of allocations that are near-optimal under perturbed inputs (resampling, shrinkage of means, or a robust objective) and lets the binding constraints, which are known exactly, do the rest.
+
+Ines looked at Figure 6 for about four seconds. "Six portfolios, 110 basis points apart, and you want to argue about number four versus number five? That's not a hand. That's a tip."
+
+**Why the frontier is flat.** Suppose every sector loads on one common spread factor $f$ with volatility normalized to one: excess return $x_i + a_i f + \epsilon_i$, with expected excess return $x_i = \mu_i - r$, factor exposure $a_i = \text{DTS}_i\,\sigma(u)\,b_i > 0$ and idiosyncratic noise $\epsilon_i$. For a long-only portfolio $w \ge 0$, the variance is $(w^{\top}a)^2 + \sum_i w_i^2\sigma^2_{\epsilon,i} \ge (w^{\top}a)^2$, so
+
+$$
+\text{SR}(w) \;=\; \frac{w^{\top}x}{\sqrt{w^{\top}\Sigma w}} \;\le\; \frac{\sum_i w_i x_i}{\sum_i w_i a_i} \;=\; \sum_i \underbrace{\frac{w_i a_i}{\sum_j w_j a_j}}_{\text{risk share}}\;\frac{x_i}{a_i} \;\le\; \max_i \frac{x_i}{a_i}.
+$$
+
+The middle expression is the mediant inequality: the portfolio's return per unit of factor exposure is a weighted average of the sectors' *systematic Sharpe ratios* $x_i/a_i$, weighted by factor-risk share. Once idiosyncratic risk is diversified, every long-only credit portfolio's Sharpe ratio lies between the smallest and the largest systematic Sharpe in the menu. If spreads are priced to the common factor, as they roughly are, those ratios cluster, and the frontier is flat. Nuveen's 0.26–0.40 is that cluster seen through constraints.
+
+A flat objective is an amplifier for input error. Chopra and Ziemba (1993) showed that errors in expected returns cost a mean-variance investor far more certainty-equivalent wealth than errors in variances, which in turn matter more than errors in covariances; the oft-quoted multiples (roughly an order of magnitude for means versus variances) depend on risk tolerance, so quote the paper, not the folklore. DeMiguel, Garlappi and Uppal (2009) found that sample-based mean-variance portfolios did not reliably beat equal weighting out of sample in their datasets, because the estimation window needed to beat $1/N$ is far longer than the data. In MAC terms: when every portfolio on the frontier has the same Sharpe within the error bars, the optimizer's choice among them is decided by noise in $\mu$, and its weights swing by tens of points when an expected-loss assumption moves by 25 bp.
+
+**Three formulations.** All three are in the reference code.
+
+*Mean-variance with bounds:* $\max_w\; w^{\top}\mu - \tfrac{\gamma}{2}w^{\top}\Sigma w$ subject to $\mathbf{1}^{\top}w = 1$, $l \le w \le u$, and optionally $w^{\top}\mu \ge \mu^{\star}$. With bounds inactive, the maximum-Sharpe (tangency) solution is $w \propto \Sigma^{-1}(\mu - r\mathbf{1})$, which is the unit test.
+
+*Risk budgeting:* choose $w$ so that each sector's contribution to variance equals a budget $b_i$ ($\sum_i b_i = 1$):
+
+$$
+\text{RC}_i(w) = \frac{w_i(\Sigma w)_i}{w^{\top}\Sigma w} = b_i .
+$$
+
+This system is nonlinear, but it is the first-order condition of a convex problem (Maillard, Roncalli and Teiletche 2010; Bruder and Roncalli 2012): $\min_{y>0}\; \tfrac12 y^{\top}\Sigma y - \sum_i b_i \ln y_i$. Setting the gradient to zero gives $(\Sigma y)_i = b_i/y_i$, so $y_i(\Sigma y)_i = b_i$; summing, $y^{\top}\Sigma y = 1$; and $w = y/\mathbf{1}^{\top}y$ inherits $\text{RC}_i = b_i$ because risk contributions are scale-free. Newton's method on this objective converges in a handful of steps. Budgets set in DTS contributions are the MAC version of Ben Dor's consistency argument (§12.5), and they need no expected returns at all, which is a feature when the expected returns are the least reliable input.
+
+*The beta share.* Paleologo's rule (Paleologo p.124) is "The higher your Sharpe, the lower the exposure to the market." Derive it: combine a credit-beta stream with Sharpe $\text{SR}_\beta$ and an uncorrelated alpha overlay with Sharpe $\text{SR}_\alpha$. Mean-variance sizes each at $x_k \propto \text{SR}_k/\sigma_k$, so each stream's variance contribution is proportional to $\text{SR}_k^2$, and the share of the variance budget given to beta is
+
+$$
+\frac{\text{SR}_\beta^2}{\text{SR}_\alpha^2 + \text{SR}_\beta^2} \;=\; \frac{1}{1 + (\text{SR}_\alpha/\text{SR}_\beta)^2}.
+$$
+
+With a strategic credit beta at a Sharpe of 0.35 and a sector-rotation overlay that also runs at 0.35, beta gets half the risk budget. If the overlay's Sharpe is really 0.1, which is what the AQR residual alphas in §12.1 suggest for the median manager, beta should get over 90% and the overlay should be small. The rotation desk's risk budget is a measured quantity, not a political one.
+
+> **[SOURCE EXTRACTION]** *Dynkin p.67:* "when adding the same credit index to a 60/40 equities/Treasuries benchmark, the portfolio Sharpe ratio will increase if credit replaces equities but will decrease if credit replaces Treasuries."
+>
+> **Annotation.** The value of a credit sleeve depends on what it is funded from, and the same is true inside MAC: a tilt into CLO BBB funded from HY is a different trade from one funded from ABS, even with the same target weight. The modern desk specifies every tactical tilt as a *pair* (into, out of) with a DTS-neutral or DTS-targeted funding leg, so the risk change is known before the trade, not discovered in the attribution.
+
+## 12.7 Liquidity Tiers as the Binding Constraint
+
+"Liquidity tiers," Theo said, pointing at the constraint table.
+
+"Liquidity *tears*?" Kaz asked. "Is that the technical term for March 2020?"
+
+"It is now," said Mags.
+
+The optimizer's bounds come from the client; the liquidity constraints come from the law and from the exit door, and they bind harder than either the return target or the risk budget. The US template is SEC Rule 22e-4, adopted October 13, 2016. It requires open-end funds to classify each investment into one of four buckets by how quickly it can be converted to cash (or sold) without significantly changing its market value: *highly liquid* (convertible to cash in three business days or less), *moderately liquid* (more than three but no more than seven calendar days), *less liquid* (can be sold within seven calendar days, but settlement is expected to take longer), and *illiquid* (cannot be sold within seven calendar days without significantly moving the price). A fund may not acquire an illiquid investment if afterwards more than 15% of net assets would be illiquid, and it must set a highly liquid investment minimum. On August 28, 2024 the SEC adopted amendments to Forms N-PORT and N-CEN and guidance on the rule, without adopting the 2022 swing-pricing and hard-close proposal; compliance began November 17, 2025, or May 18, 2026 for fund groups under \$1bn (Sullivan & Cromwell memo, September 2024). The "less liquid" bucket exists largely because of leveraged loans, whose assignments routinely settle after seven days: a loan can be *sold* on Monday and still not be *cash* two weeks later.
+
+**The constraint set.** Let $\mathcal{T}_{\text{IL}}$ be the illiquid sectors, $\mathcal{T}_{\text{L}}$ the highly and moderately liquid sectors, $\tau_i$ the days needed to liquidate sector $i$ at an acceptable participation rate, and $\text{LCS}_i$ its round-trip cost:
+
+$$
+\sum_{i \in \mathcal{T}_{\text{IL}}} w_i \le 0.15, \qquad
+\sum_{i \in \mathcal{T}_{\text{L}}} w_i \ge h_{\min}, \qquad
+\sum_i w_i\,\tau_i \le \bar\tau, \qquad
+\text{cost}(w) = \sum_i |w_i - w^{\text{ref}}_i|\,\frac{\text{LCS}_i}{2}. \tag{12.4}
+$$
+
+The days budget prices what the cap does not: 15% in direct lending at $\tau = 180$ days contributes 27 days to the portfolio's weighted liquidation time on its own. A position-level $\tau_i = \text{position}_i / (\text{participation} \times \text{ADV}_i)$ is better than a sector constant when you have the volume data (Chapter 17 and Chapter 19).
+
+The KKT conditions say what the cap costs. If $\eta \ge 0$ is the multiplier on the illiquid cap in the mean-variance problem, then at an interior optimum in sector $i \in \mathcal{T}_{\text{IL}}$, $\mu_i - \gamma(\Sigma w)_i - \eta = \nu$, the common multiplier on the budget constraint. The illiquidity premium has to beat $\eta$, the shadow price of the cap, before another dollar of private credit is worth buying. When the reference code reports $\eta$ for Kaz's allocation, it is the number to bring to the investment committee instead of "direct lending yields 10%."
+
+> **[SOURCE EXTRACTION]** *Ben_Dor p.296:* "risk-averse investors demand additional spread, a risk premium, beyond the expected default and liquidity costs, to compensate them for the possibility that the credit bond may have to be sold exactly during economic times when both default and liquidity costs are high."
+>
+> **Annotation.** This is the economic content of the liquidity tier: the cost of an illiquid asset is not its average round-trip cost but its cost in the state where you need to sell. For a perpetual BDC that state is literal. The gate (5% of NAV per quarter) is a contractual statement that you cannot sell in the bad state. The modern desk models it as a tier with a state-dependent exit time. If redemption requests total $Q$ of NAV against a gate $g$, each redeemer receives $g/Q$ of its request per quarter, so with $Q = 15\%$ and $g = 5\%$ a full exit takes at least three quarters, and longer if the queue keeps growing.
+
+The 13-week model came back, as it always does. Theo rebuilt it on Thursday as a redemption-coverage ledger for the BDC: inflows, loan repayments, undrawn bank lines and cash on one side; 5% of NAV per quarter of redemptions on the other; thirteen weeks at a time. The Fed had done the same exercise at the industry level: the ten largest perpetual BDCs, holding about 80% of sector assets, could cover at least three quarters of 5% redemptions from bank lines and cash (Federal Reserve, *Financial Stability Report*, May 2026, Box 4.1). "Same spreadsheet," Theo said. "Bigger borrower."
+
+> **Trend Watch: Private Credit's First Redemption Cycle (September 2025 to Q1 2026).** *What changed:* the semi-liquid wrappers that brought private credit to wealth channels met their first sustained redemption wave. By the Fed's count, semi-liquid vehicles held \$425bn gross (\$241bn net) of assets, about 20% of private-credit vehicle net assets: perpetual-life BDCs \$306bn gross (\$161bn net) and interval funds \$119bn gross (\$80bn net). Redemption requests rose in 2025Q4 and "accelerated further in the first quarter of 2026, when a number of funds received requests that were much larger than 5 percent of NAV"; most managers capped payouts at 5%; and "accepted redemption requests somewhat exceeded new inflows in the first quarter of 2026, the first time this has occurred since these vehicles were created" (Federal Reserve, *Financial Stability Report*, May 2026, Box 4.1). Six months earlier the November 2025 report had judged the First Brands and Tricolor bankruptcies to "so far appear to be isolated events" while noting that they "highlight that unexpected losses could arise from opaque off-balance-sheet funding arrangements." *What it means for the desk:* the 5% gate is a liquidity tier that the optimizer must see, and its exit time is a function of everyone else's behavior. A MAC model that treats a BDC sleeve as a "less liquid" credit allocation with a 1.9% volatility is long a queue position it has not priced.
+
+### Deep-Dive Resource Graph (§12.4–12.7)
+
+**Podcasts**
+
+- *Flirting with Models* (Corey Hoffstein) has hosted several conversations on regime detection and risk parity; no specific episode was verified for this edition.
+
+**Practitioner Writing**
+
+- Federal Reserve, *Financial Stability Report* (November 2025; May 2026, Box 4.1 on semi-liquid private-credit vehicles): https://www.federalreserve.gov/publications/financial-stability-report.htm
+- Sullivan & Cromwell, memo on the 2024 amendments to Forms N-PORT and N-CEN and liquidity-rule guidance: https://www.sullcrom.com/insights/memo/2024/September/Amendments-Forms-N-PORT-N-CEN-Liquidity-Rule-Guidance
+
+**Academic Papers**
+
+- Getmansky, Lo and Makarov (2004), *An Econometric Model of Serial Correlation and Illiquidity in Hedge Fund Returns*, Journal of Financial Economics 74(3); NBER w9571: https://www.nber.org/papers/w9571
+- Kritzman, Page and Turkington (2012), *Regime Shifts: Implications for Dynamic Strategies*, Financial Analysts Journal 68(3): https://rpc.cfainstitute.org/research/financial-analysts-journal/2012/regime-shifts-implications-for-dynamic-strategies-corrected
+- Nystrup (2014), *Regime-Based Asset Allocation: Do Profitable Strategies Exist?*, DTU M.Sc. thesis: https://www2.imm.dtu.dk/pubdb/pubs/6808-full.html
+- Bernis, Carassus, Docq and Scotti (2015), *Optimal Credit Allocation Under Regime Uncertainty With Sensitivity Analysis*, IJTAF 18(1): https://ideas.repec.org/a/wsi/ijtafx/v18y2015i01ns0219024915500028.html
+- Hamilton (1989), *A New Approach to the Economic Analysis of Nonstationary Time Series and the Business Cycle*, Econometrica; Ledoit and Wolf (2004), *Honey, I Shrunk the Sample Covariance Matrix*, Journal of Portfolio Management; Maillard, Roncalli and Teiletche (2010), *On the Properties of Equally-Weighted Risk Contributions Portfolios*; Chopra and Ziemba (1993), *The Effect of Errors in Means, Variances, and Covariances on Optimal Portfolio Choice*, Journal of Portfolio Management; DeMiguel, Garlappi and Uppal (2009), *Optimal Versus Naive Diversification*, Review of Financial Studies.
+
+**Data & Code**
+
+- SEC Rule 22e-4 adopting release (2016): https://www.sec.gov/rules-regulations/2016/10/investment-company-liquidity-risk-management-programs ; rule text at Cornell LII: https://www.law.cornell.edu/cfr/text/17/270.22e-4
+
+## 12.8 Tactical Overlays and the Turnover Budget
+
+The strategic allocation answers "what should we own over five years?" The tactical overlay answers "what should we change this year?", which Nuveen frames as a shorter, one-year horizon applied to the same framework (Nuveen pp.3 and 7). The engineering question is how much the overlay may move the book. Write the tilt budget as an $\ell_1$ constraint, $\|w - w^{\text{SAA}}\|_1 \le \kappa$, and linearize it with split variables: $w = w^{\text{SAA}} + d^{+} - d^{-}$ with $d^{\pm} \ge 0$ and $\mathbf{1}^{\top}(d^{+} + d^{-}) \le \kappa$. Because each unit of $d^{+}$ and $d^{-}$ also costs $\text{LCS}_i/2$ in the objective, the optimizer never sets both positive for the same sector, so $d^{+} + d^{-} = |w - w^{\text{SAA}}|$ at the solution and the constraint is exactly the turnover budget.
+
+Three signals feed the overlay's expected returns, and they disagree in exactly the months that matter.
+
+*Carry.* Across sectors, carry is the yield-minus-expected-loss term of (12.1) and it has a long record as a premium.
+
+> **[SOURCE EXTRACTION]** *Man_2022 p.26:* "Koijen et al. find that the Carry factor has, on average, positive returns, with Sharpe ratios between 0.4 and 0.5. Over the long run, Carry appears to offer a significant premium, but with incredibly high volatility of returns."
+>
+> **Annotation.** Koijen, Moskowitz, Pedersen and Vrugt (2018) measured carry across asset classes, including credit; the MAC application is cross-sector carry per unit of DTS (Ratio 2 of §12.3). "Incredibly high volatility" is the regime problem in two words: carry pays steadily in calm and gives it back in a stress month, because high-carry sectors are high-DTS sectors. The modern desk scales the carry tilt by the filtered calm-state probability, which is a regime hedge bought at the price of being a month late.
+
+*Mean reversion.* The OU forecast of §12.3 buys after spreads widen. Blackstone's systematic credit description says it plainly (Blackstone p.1): "When credit spreads widen aggressively (often due to market panic rather than fundamental deterioration), the model algorithmically increases credit exposure."
+
+*Regime.* The HMM of §12.4 does the opposite in the same month: the stress probability rises and the regime-mixture means in (12.2) fall.
+
+The reconciliation is about timing, and the sign of the error matters. In the first weeks of a widening, the regime signal is right and the mean-reversion signal is early. After the peak, the reversion signal is right and the regime filter, still reading stress, is late. BlackRock's warning about defensive tilts is the cost of being late (BlackRock p.5): "In many cases, these managers gave up more excess return in subsequent 'Very Positive' regimes than was mitigated on the downside during 'Very Negative' regimes." A practical overlay therefore uses the regime probability to *size* the tilt budget (smaller $\kappa$ in stress, so that neither signal can move the book much while it is least reliable) and the valuation signal to *direct* it. Equity momentum in credit, which Dynkin and coauthors found positive in both drawdown and recovery regimes (§12.4; Dynkin p.617), is the one signal in the set that does not need the reconciliation.
+
+> **Trend Watch: April 2025 as a Transition Test.** *What happened:* a regime transition in about 25 trading days. The HY OAS moved from 259 bp (January 22) to 461 bp (April 7); peak-to-trough total returns were HY −3.83% (February 28 to April 7), CCC −7.80%, B −4.21%, BB −2.83%, IG −3.03% (March 3 to April 11), EM corporate −2.37% and EM HY corporate −3.79% (ICE BofA indices via FRED). HY mutual funds and ETFs saw −\$10.9bn of flows in April and +\$18.5bn from May to September, and by the end of September 2025 the HY spread-to-worst was 299 bp, "22 bps wider than the post-2008 tights earlier in 2025," after 12 straight quarterly gains, the longest run since 1997 (MacKay Shields, *High Yield 4Q 2025 Outlook*, October 2025). *What it means for the desk:* the drawdowns lined up by DTS and quality, as (12.3) predicts, and the snap-back was faster than any monthly regime filter. A book that de-risked on the filtered stress probability in mid-April would have sold near the wides and paid round-trip LCS to own less of the recovery. The private-credit sleeve's marks did not move at all, by construction, which made it look like the best diversifier of the quarter. That is the desmoothing lesson of §12.5, delivered in real time.
+
+## 12.9 Case Studies: Three Stress Tests of the Framework
+
+### Case Study A: April 2025, a Regime Transition in 25 Trading Days
+
+The tape is in the Trend Watch of §12.8: HY OAS from 259 bp to 461 bp, VIX at 52.33, sector drawdowns ordered by DTS and quality from CCC (−7.80%) to EM corporates (−2.37%), then a recovery that left HY spreads near their post-2008 tights by September. Three things a systematic MAC desk should have seen. *First*, the filtered stress probability rises only after the first bad month has printed. A monthly filter with a one-month action delay acts in May, after the trough. A weekly filter on the BB/B/CCC vector would have acted in mid-March, near the start. *Second*, cross-sector correlation went to one exactly as the DTS-scaled factor model predicts. With (12.3), doubling the factor variance raises every pairwise correlation toward one without any change to $\Omega$'s structure, so the model's stress covariance was right before the fact; only its *probability* was late. *Third*, the private-credit sleeve did not move. A desk that rebalanced to target weights in April mechanically *sold* public credit near the wides to stay at its private-credit weight, because private credit had "outperformed." The fix is in the spec: rebalance on desmoothed weights, or not at all, inside a stress regime.
+
+### Case Study B: First Brands, Tricolor and the First BDC Redemption Cycle
+
+First Brands, an auto-parts supplier with about \$5.5bn of leveraged loans and no HY bonds, filed for Chapter 11 in September 2025; its term loan, rated B1/B+ that month, traded at \$96 on September 4 and \$11 on October 14. Tricolor, a subprime auto lender, filed for Chapter 7; AAA tranches of its ABS traded in the \$70s and a lower tranche fell from \$105 to \$12.50 (MacKay Shields, *High Yield 4Q 2025 Outlook*, October 2025). Both cases involved allegations about collateral, including receivables pledged more than once. JPMorgan took a charge of about \$170mm on Tricolor, and Jamie Dimon said on the October 14 earnings call, "When you see one cockroach, there are probably more" (CNN Business, October 16, 2025). Cambridge Associates (November 2025) noted that the losses fell on banks, CLOs and public ABS, not only on private lenders, and cited a KBRA direct-lending default forecast of 1.5% for 2025 against roughly 3.8% for broadly syndicated loans.
+
+For the RSSG reader, double-pledged receivables are a collateral-perfection problem: the UCC search and the lien review, not a macro forecast. No allocation model would have predicted either failure. What the framework *does* control is the damage. A single-issuer DTS cap limits it. A recovery assumption set by the seat in the waterfall prices it: a fraud recovers far less than the 52% syndicated-loan average. And the liquidity tier caps the second-round effect. Through the Fed's two reports, "isolated events" (November 2025) became "accepted redemption requests somewhat exceeded new inflows" (May 2026). The hit to private credit came through the gate, not through the marks. Kaz's 35% allocation would have met that queue at the head of the line.
+
+### Case Study C: The 2026 CCC/BB Split
+
+By October 15, 2026, the HY index OAS was 323 bp, unremarkable. Inside it, CCC was at 1,278 bp and BB at 197 bp, a 1,081 bp gap; CCC returned −5.21% year to date against +0.33% for BB (FRED). An index-level MAC engine reads "HY at 323, fair, hold the strategic weight." A bucket-level engine sees two markets. The break-even default rate on CCC is about 19.7% a year at a 35% recovery (*illustrative*; §12.3), and the expected-loss term of (12.1) for the CCC bucket depends almost entirely on which issuers enter liability management transactions and at what recovery (Chapter 13). CCC risk also arrives through the back door. CLO BBB to B tranches are levered to the CCC bucket through the overcollateralization tests (typical documents haircut CCC holdings above about 7.5% of the pool to market value), and the Fed's May 2026 report put software at the top of private-credit sector exposure. The systematic response is to split the HY sleeve into BB, B and CCC sub-sleeves with their own loss terms, to compute CLO tranche loss as a function of the CCC bucket rather than the rating, and to fit the regime model on the bucket vector, where a dispersion regime is visible as rising idiosyncratic variance even while the index is calm.
+
+## 12.10 The MAC Engine: A Reference Implementation
+
+### Specification for AI Implementation
+
+**The Spec You Hand the Robot.** What ROBO built from the vague version ("maximize Sharpe across our credit sectors"): a portfolio at the 35% direct-lending bound, a claimed volatility it computed from appraisal marks, and an EM sovereign allocation sized on an index yield that included a defaulted country. It never complains and never guesses; it did exactly what it was asked. The precise version follows.
+
+*Inputs.* Sector table, one row per sector: `{sector: str, yld, pd, rec: decimal, dmod, dspr: years, spread: decimal, dspread_h: decimal change over the horizon, tier in {HL, ML, LL, IL}, days: float, lcs_bp: float, w_min, w_max: decimal}`. Return panel `R: (T, n)` monthly excess returns (decimal), relative spread changes `U: (T, n)`. Horizon `h` in years. All rates are decimals per year; the code raises if anything looks like a percent.
+
+*Pipeline.* (1) forward returns by (12.1) with physical PD and seat-level recovery; (2) desmooth any appraisal-marked series (GLM weights, invertibility check) or build its risk from a proxy via `smoothed_view`; (3) $\Omega$ by EWMA on relative spread changes, shrunk to a one-factor target, then $\Sigma$ by (12.3); (4) two-state HMM on the bucket-level excess-return vector, filtered probabilities only; (5) regime-mixture moments by (12.2); (6) strategic allocation by mean-variance with the tiers of (12.4), with shadow prices of the binding constraints reported; (7) tactical tilt with an $\ell_1$ budget and LCS costs.
+
+*Edge cases and guards.* Log-space densities with a max-shift before exponentiating; ridge $10^{-10}$ on regime covariances; label alignment after every fit; refuse non-invertible smoothing weights; feasibility check on bounds before optimizing; every optimizer output is re-checked against every constraint by assert, not trusted from the solver's success flag.
+
+The five blocks run in order in one interpreter; each ends in asserts that are the acceptance tests.
+
+```python
+import numpy as np
+from scipy.optimize import minimize
+
+rng = np.random.default_rng(20251119)   # Nuveen's as-of date; superstition is free
+
+SECTORS = ["HY corp", "EM sov BB-B", "EM corp HY BB-B", "Lev loans", "CoCos", "Pref HY",
+           "ABS other", "CMBS BBB", "CLO BBB-B", "MBS CRT", "MM direct lending"]
+N, DL = len(SECTORS), 10
+# Illustrative inputs (decimals per year; durations in years). Bounds are Nuveen Fig. 5.
+TAB = dict(
+    yld=np.array([.0697, .0750, .0720, .0800, .0680, .0700, .0600, .0850, .0950, .0780, .0975]),
+    pd=np.array([.0425, .0300, .0350, .0400, .0150, .0180, .0100, .0350, .0380, .0230, .0500]),
+    rec=np.array([.40, .40, .40, .52, .20, .30, .40, .30, .35, .35, .33]),
+    dmod=np.array([3.2, 6.0, 3.8, .25, 4.5, 5.0, 2.5, 4.5, .25, .5, .25]),
+    dspr=np.array([3.2, 6.0, 3.8, 4.0, 4.5, 5.0, 2.5, 4.5, 4.0, 3.5, 3.0]),
+    spread=np.array([.030, .033, .034, .035, .030, .031, .015, .042, .055, .038, .060]),
+    dspread_h=np.array([.0075, .003, .004, .005, .004, .004, .002, .006, .006, .004, .004]),
+    tier=np.array(["ML", "ML", "LL", "LL", "ML", "ML", "LL", "LL", "LL", "LL", "IL"]),
+    days=np.array([3, 3, 5, 10, 2, 4, 5, 10, 7, 5, 180], float),
+    lcs_bp=np.array([60, 50, 80, 70, 60, 90, 40, 120, 100, 80, 300], float),
+    w_min=np.array([.20, .02, .02, .05, .02, .02, 0, 0, 0, 0, 0]),
+    w_max=np.array([.60, .15, .15, .25, .10, .10, .10, .10, .10, .10, .35]),
+)
+HORIZON, D_RATES_H, CASH = 5.0, 0.0050, 0.0368   # years; +50bp over horizon; cash from Fig. 6
+
+def _decimal(name, x):
+    if np.any(np.abs(np.asarray(x, float)) > 1.0):
+        raise ValueError(f"{name} looks like a percent; pass decimals")
+
+def expected_loss(pd, rec):
+    _decimal("pd", pd)
+    return np.asarray(pd) * (1.0 - np.asarray(rec))
+
+def mtm_drag(duration, change_over_h, h):
+    _decimal("change", change_over_h)
+    return np.asarray(duration) * np.asarray(change_over_h) / h
+
+def forward_return(yld, el, rates_mtm, spread_mtm):          # eq. (12.1), convexity dropped
+    for nm, v in (("yld", yld), ("el", el), ("rates_mtm", rates_mtm), ("spread_mtm", spread_mtm)):
+        _decimal(nm, v)
+    return np.asarray(yld) - el - rates_mtm - spread_mtm
+
+def breakeven_default(s, rec):
+    return s / (1.0 - rec)
+
+assert abs(forward_return(.0697, .0255, .0037, .0049) - .0356) < 1e-12   # Nuveen Fig. 3 reading
+fig6 = np.array([[5.11, 5.50, .26], [5.25, 5.52, .28], [5.50, 5.60, .33],
+                 [5.75, 5.76, .36], [6.00, 6.05, .38], [6.20, 6.29, .40]])
+implied_cash = fig6[:, 0] - fig6[:, 2] * fig6[:, 1]                       # our inference, in %
+assert np.all((implied_cash > 3.60) & (implied_cash < 3.75))
+assert abs(breakeven_default(.1278, .35) - .1966) < 1e-3                  # Section 12.3 CCC
+assert np.isclose(2.0 * 0.02, 4.0 * 0.01)                                 # Ben Dor p.50 DTS
+
+MU = forward_return(TAB["yld"], expected_loss(TAB["pd"], TAB["rec"]),
+                    mtm_drag(TAB["dmod"], D_RATES_H, HORIZON),
+                    mtm_drag(TAB["dspr"], TAB["dspread_h"], HORIZON))
+DTS = TAB["dspr"] * TAB["spread"]
+print("implied cash (%):", implied_cash.round(3))
+for s_, m_ in zip(SECTORS, MU):
+    print(f"{s_:18s} forward {m_:6.2%}   excess {m_ - CASH:+6.2%}")
+```
+
+Block 2 desmooths (§12.5). The planted profile $\theta = (0.5, 0.3, 0.2)$ has $\xi = 0.38$.
+
+```python
+def acf(x, nlags):
+    x = np.asarray(x, float) - np.mean(x)
+    g0 = x @ x
+    return np.array([x[k:] @ x[:-k] / g0 for k in range(1, nlags + 1)])
+
+def _ma_rho(th, k):
+    g = np.array([th[: len(th) - j] @ th[j:] for j in range(k + 1)])
+    return g[1:] / g[0]
+
+def _softmax(z):
+    e = np.exp(z - z.max())
+    return e / e.sum()
+
+def fit_smoothing(r_obs, k=2):
+    """GLM (2004) MA(k) weights by matching autocorrelations; theta >= 0, sum(theta) = 1."""
+    rho = acf(r_obs, k)
+    loss = lambda zz: np.sum((_ma_rho(_softmax(zz), k) - rho) ** 2)
+    z0 = np.log(np.linspace(1.0, 0.3, k + 1))          # decreasing start: the invertible branch
+    res = minimize(loss, z0, method="Nelder-Mead",
+                   options={"xatol": 1e-10, "fatol": 1e-14, "maxiter": 20000})
+    th = _softmax(res.x)
+    return th, float(th @ th)
+
+def desmooth(r_obs, theta):
+    th = np.asarray(theta, float)
+    if len(th) > 1 and np.any(np.abs(np.roots(th[::-1])) <= 1.0):
+        raise ValueError("smoothing weights not invertible; refuse rather than guess")
+    r = np.zeros(len(r_obs))
+    for t in range(len(r_obs)):
+        acc = r_obs[t] - sum(th[j] * r[t - j] for j in range(1, len(th)) if t - j >= 0)
+        r[t] = acc / th[0]
+    return r
+
+def ar1_profile(phi, k=60):
+    th = (1 - phi) * phi ** np.arange(k + 1)
+    return th / th.sum()
+
+T_DS, theta_true = 6000, np.array([0.5, 0.3, 0.2])
+r_true = 0.006 + 0.02 * rng.standard_normal(T_DS)
+r_obs = np.convolve(r_true, theta_true)[:T_DS]
+th_hat, xi_hat = fit_smoothing(r_obs[10:], k=2)
+sig_hat = r_obs[10:].std() / np.sqrt(xi_hat)
+assert abs(xi_hat - 0.38) < 0.05, xi_hat
+assert abs(sig_hat / r_true[10:].std() - 1.0) < 0.10
+assert np.allclose(desmooth(r_obs, theta_true), r_true, atol=1e-10)
+th_ar = ar1_profile(0.8)
+assert abs(th_ar @ th_ar - (1 - 0.8) / (1 + 0.8)) < 1e-3                # xi = (1-phi)/(1+phi)
+print("theta_hat", th_hat.round(3), " xi_hat", round(xi_hat, 3))
+```
+
+Block 3 builds the DTS covariance, the smoothed view an optimizer would see, and a synthetic regime panel: 3,000 months, which is 250 years, longer than the HY market by about two centuries, because a planted-parameter test needs power that real history does not have.
+
+```python
+SIG_U = np.array([.35, .40, .40, .35, .45, .40, .30, .45, .45, .40, .35])  # annual vol of ds/s
+B_LOAD = np.array([.90, .80, .85, .90, .80, .85, .70, .80, .85, .80, .90])
+SIG_Y = 0.0080                                                         # annual vol of TSY dy
+
+def dts_cov(dts, omega, dmod=None, sig_y=0.0):                         # eq. (12.3)
+    S = np.outer(dts, dts) * omega
+    return S if dmod is None else S + sig_y ** 2 * np.outer(dmod, dmod)
+
+C1 = np.outer(B_LOAD, B_LOAD); np.fill_diagonal(C1, 1.0)
+SIGMA = dts_cov(DTS, np.outer(SIG_U, SIG_U) * C1, TAB["dmod"], SIG_Y)
+
+def smoothed_view(Sigma, i, theta):
+    """Covariance an optimizer sees when sector i is reported with GLM smoothing theta."""
+    th = np.asarray(theta, float); S = Sigma.copy()
+    S[i, :] *= th[0]; S[:, i] *= th[0]; S[i, i] = Sigma[i, i] * (th @ th)
+    return S
+
+SIGMA_REP = smoothed_view(SIGMA, DL, ar1_profile(0.8))
+print("DL vol: true %.2f%%, reported %.2f%%" % (100 * np.sqrt(SIGMA[DL, DL]),
+                                               100 * np.sqrt(SIGMA_REP[DL, DL])))
+
+P_TRUE = np.array([[0.95, 0.05], [0.20, 0.80]])
+MU_F, SD_F, SD_E = np.array([-0.025, 0.10]), np.array([0.05, 0.12]), np.array([0.03, 0.06])
+T_SIM = 3000
+z = np.zeros(T_SIM, dtype=int)
+for t in range(1, T_SIM):
+    z[t] = int(rng.random() < P_TRUE[z[t - 1], 1])
+f = MU_F[z] + SD_F[z] * rng.standard_normal(T_SIM)                 # common spread factor
+U = f[:, None] * B_LOAD[None, :] + SD_E[z][:, None] * rng.standard_normal((T_SIM, N))
+R = TAB["spread"][None, :] / 12.0 - DTS[None, :] * U               # monthly excess returns
+
+def ewma_cov(U, lam=0.97, warmup=24):
+    S = np.cov(U[:warmup].T, bias=True)
+    for u in U[warmup:]:
+        S = lam * S + (1 - lam) * np.outer(u, u)
+    return S
+
+def one_factor_target(S):
+    w = np.full(S.shape[0], 1.0 / S.shape[0]); var_m = w @ S @ w
+    beta = S @ w / var_m
+    F = var_m * np.outer(beta, beta); np.fill_diagonal(F, np.diag(S))
+    return F
+
+def lw_delta(U):
+    """Ledoit-Wolf (2004) intensity toward the one-factor target (diagonal-rho simplification)."""
+    X = U - U.mean(0); T, n = X.shape; S = X.T @ X / T
+    pi_mat = ((X[:, :, None] * X[:, None, :] - S) ** 2).mean(0)
+    gam = ((one_factor_target(S) - S) ** 2).sum()
+    return float(np.clip((pi_mat.sum() - np.trace(pi_mat)) / gam / T, 0.0, 1.0))
+
+U_win = U[-300:]
+S_ew, delta = ewma_cov(U_win), lw_delta(U_win)
+OMEGA_HAT = 12.0 * (delta * one_factor_target(S_ew) + (1 - delta) * S_ew)   # annualized
+SIGMA_HAT = dts_cov(DTS, OMEGA_HAT, TAB["dmod"], SIG_Y)
+assert 0.0 <= delta <= 1.0
+assert np.linalg.eigvalsh(SIGMA_HAT).min() >= -1e-10
+assert np.isclose(np.sqrt(dts_cov(DTS, OMEGA_HAT)[0, 0]), DTS[0] * np.sqrt(OMEGA_HAT[0, 0]))
+print("Ledoit-Wolf delta %.3f" % delta)
+```
+
+Block 4 is the regime engine (§12.4): log-space forward–backward, EM, label alignment, and the mixture moments of (12.2).
+
+```python
+def mvn_logpdf(X, mu, S):
+    L = np.linalg.cholesky(S)
+    Z = np.linalg.solve(L, (X - mu).T)
+    return -0.5 * (Z ** 2).sum(0) - np.log(np.diag(L)).sum() - 0.5 * X.shape[1] * np.log(2 * np.pi)
+
+def forward_backward(logB, P, pi0):
+    T, K = logB.shape
+    m = logB.max(1, keepdims=True); B = np.exp(logB - m)            # underflow guard
+    alpha, c, pred = np.zeros((T, K)), np.zeros(T), pi0.copy()
+    for t in range(T):
+        a = pred * B[t]; c[t] = a.sum(); alpha[t] = a / c[t]         # xi_{t|t}
+        pred = alpha[t] @ P                                           # xi_{t+1|t} = P' xi_{t|t}
+    beta = np.ones((T, K))
+    for t in range(T - 2, -1, -1):
+        beta[t] = P @ (B[t + 1] * beta[t + 1]) / c[t + 1]
+    gamma = alpha * beta; gamma /= gamma.sum(1, keepdims=True)
+    xi_sum = np.zeros((K, K))
+    for t in range(T - 1):
+        x = alpha[t][:, None] * P * (B[t + 1] * beta[t + 1])[None, :]
+        xi_sum += x / x.sum()
+    return alpha, gamma, xi_sum, float(np.log(c).sum() + m.sum())
+
+def hmm2_em(R, n_iter=200, tol=1e-9, ridge=1e-10):
+    T, n = R.shape; K = 2
+    score = R.mean(1)
+    stress = score <= np.quantile(score, 0.20)                      # init: worst 20% of months
+    gamma = np.column_stack([~stress, stress]).astype(float)
+    P, pi0, ll_old = np.array([[0.9, 0.1], [0.3, 0.7]]), np.array([0.5, 0.5]), -np.inf
+    for it in range(n_iter):
+        mu = np.array([gamma[:, k] @ R / gamma[:, k].sum() for k in range(K)])
+        Sig = np.array([(gamma[:, k, None] * (R - mu[k])).T @ (R - mu[k]) / gamma[:, k].sum()
+                        + ridge * np.eye(n) for k in range(K)])
+        logB = np.column_stack([mvn_logpdf(R, mu[k], Sig[k]) for k in range(K)])
+        alpha, gamma, xi_sum, ll = forward_backward(logB, P, pi0)
+        P, pi0 = xi_sum / xi_sum.sum(1, keepdims=True), gamma[0]
+        if ll - ll_old < tol * abs(ll):
+            break
+        ll_old = ll
+    o = np.argsort(-mu.mean(1))                                      # label 0 = calm
+    return dict(P=P[np.ix_(o, o)], mu=mu[o], Sig=Sig[o], filt=alpha[:, o],
+                smooth=gamma[:, o], loglik=ll, iters=it + 1)
+
+def stationary(P):
+    K = P.shape[0]
+    A = np.vstack([P.T - np.eye(K), np.ones(K)])
+    return np.linalg.lstsq(A, np.r_[np.zeros(K), 1.0], rcond=None)[0]
+
+def regime_cma(P, mu_k, Sig_k, xi_now, h):                          # eq. (12.2)
+    p, probs = np.asarray(xi_now, float), np.zeros(len(xi_now))
+    for _ in range(h):
+        p = p @ P; probs += p / h
+    mu = probs @ mu_k
+    Sig = sum(probs[k] * (Sig_k[k] + np.outer(mu_k[k] - mu, mu_k[k] - mu)) for k in range(len(probs)))
+    return mu, Sig, probs
+
+fit = hmm2_em(R)
+acc_filt = np.mean(fit["filt"].argmax(1) == z)
+acc_smooth = np.mean(fit["smooth"].argmax(1) == z)
+assert np.all(np.abs(np.diag(fit["P"]) - np.diag(P_TRUE)) < 0.05), fit["P"]
+assert acc_filt > 0.85, acc_filt
+print("P_hat", fit["P"].round(3), " durations (months)", (1 / (1 - np.diag(fit["P"]))).round(1))
+print("state accuracy: filtered %.3f, smoothed %.3f (smoothed peeks)" % (acc_filt, acc_smooth))
+mu_stress, Sig_stress, pr = regime_cma(fit["P"], fit["mu"], fit["Sig"], [0.0, 1.0], h=12)
+assert np.isclose(pr.sum(), 1.0) and np.linalg.eigvalsh(Sig_stress).min() > -1e-12
+_, _, pr_long = regime_cma(fit["P"], fit["mu"], fit["Sig"], [0.0, 1.0], h=600)
+assert np.allclose(pr_long, stationary(fit["P"]), atol=0.02)
+```
+
+Block 5 is the optimizers (§12.6–12.8): tangency and ERC unit tests, the flat frontier, Kaz's allocation on reported versus desmoothed risk, the tiered strategic allocation with shadow prices, and the tactical tilt.
+
+```python
+def feasible_start(lo, hi):
+    lo, hi = np.asarray(lo, float), np.asarray(hi, float)
+    if lo.sum() > 1 + 1e-12 or hi.sum() < 1 - 1e-12:
+        raise ValueError("bounds cannot sum to one")
+    return lo + (1.0 - lo.sum()) / (hi - lo).sum() * (hi - lo)
+
+BUDGET = {"type": "eq", "fun": lambda w: w.sum() - 1.0, "jac": lambda w: np.ones_like(w)}
+OPTS = {"ftol": 1e-12, "maxiter": 2000}
+
+def max_sharpe(mu, Sigma, lo, hi, cash=CASH):
+    ex = mu - cash
+    def f(w): return -(w @ ex) / np.sqrt(w @ Sigma @ w)
+    def g(w):
+        Sw = Sigma @ w; v = np.sqrt(w @ Sw)
+        return -(ex / v - (w @ ex) * Sw / v ** 3)
+    return minimize(f, feasible_start(lo, hi), jac=g, bounds=list(zip(lo, hi)),
+                    constraints=[BUDGET], method="SLSQP", options=OPTS).x
+
+def min_var(mu, Sigma, lo, hi, target=None):
+    cons = [BUDGET] + ([] if target is None else
+                       [{"type": "ineq", "fun": lambda w: w @ mu - target, "jac": lambda w: mu}])
+    return minimize(lambda w: w @ Sigma @ w, feasible_start(lo, hi), jac=lambda w: 2 * Sigma @ w,
+                    bounds=list(zip(lo, hi)), constraints=cons, method="SLSQP", options=OPTS).x
+
+def max_return_under_bounds(mu, lo, hi):
+    w, room = np.asarray(lo, float).copy(), 1.0 - np.sum(lo)
+    for i in np.argsort(-mu):
+        add = min(hi[i] - w[i], room); w[i] += add; room -= add
+    return w
+
+def frontier(mu, Sigma, lo, hi, n_pts=6):
+    r_lo = min_var(mu, Sigma, lo, hi) @ mu
+    r_hi = max_return_under_bounds(mu, lo, hi) @ mu
+    targets = np.linspace(r_lo, r_lo + 0.95 * (r_hi - r_lo), n_pts)
+    return [min_var(mu, Sigma, lo, hi, tg) for tg in targets], targets
+
+def optimize_erc(Sigma, b=None, tol=1e-13, max_iter=100):
+    n = Sigma.shape[0]
+    b = np.full(n, 1.0 / n) if b is None else np.asarray(b, float) / np.sum(b)
+    obj = lambda y: 0.5 * y @ Sigma @ y - b @ np.log(y)
+    y = 1.0 / np.sqrt(np.diag(Sigma))
+    for _ in range(max_iter):
+        g = Sigma @ y - b / y
+        if np.max(np.abs(g)) < tol:
+            break
+        step, t = np.linalg.solve(Sigma + np.diag(b / y ** 2), g), 1.0   # Newton, PD Hessian
+        while t > 1e-12 and (np.any(y - t * step <= 0)
+                             or obj(y - t * step) > obj(y) - 1e-4 * t * (g @ step)):
+            t *= 0.5
+        y = y - t * step
+    return y / y.sum()
+
+def risk_contrib(w, Sigma):
+    Sw = Sigma @ w
+    return w * Sw / (w @ Sw)
+
+def beta_variance_share(sr_alpha, sr_beta):
+    return 1.0 / (1.0 + (sr_alpha / sr_beta) ** 2)
+
+def utility(w, mu, Sigma, gamma):
+    return w @ mu - 0.5 * gamma * (w @ Sigma @ w)
+
+def optimize_tiered(mu, Sigma, lo, hi, tiers, days, gamma=8.0, illiquid_cap=0.15,
+                    liquid_min=0.35, tau_max=32.0, w_ref=None, tilt_budget=None, lcs=None):
+    """Mean-variance with the tiers of eq. (12.4); optional l1 tilt budget and LCS costs."""
+    n = len(mu); il = (tiers == "IL").astype(float); lq = np.isin(tiers, ["HL", "ML"]).astype(float)
+    tilt = w_ref is not None; m = 2 * n if tilt else 0
+    c2 = np.tile(0.5 * np.asarray(lcs, float), 2) if tilt else np.zeros(0)   # one-way cost
+    pad = lambda v: np.concatenate([v, np.zeros(m)])
+    f = lambda x: -utility(x[:n], mu, Sigma, gamma) + c2 @ x[n:]
+    g = lambda x: np.concatenate([-(mu - gamma * Sigma @ x[:n]), c2])
+    cons = [{"type": "eq", "fun": lambda x: x[:n].sum() - 1.0, "jac": lambda x: pad(np.ones(n))},
+            {"type": "ineq", "fun": lambda x: illiquid_cap - il @ x[:n], "jac": lambda x: pad(-il)},
+            {"type": "ineq", "fun": lambda x: lq @ x[:n] - liquid_min, "jac": lambda x: pad(lq)},
+            {"type": "ineq", "fun": lambda x: tau_max - days @ x[:n], "jac": lambda x: pad(-days)}]
+    if tilt:
+        I = np.eye(n)
+        cons += [{"type": "eq", "fun": lambda x: x[:n] - w_ref - x[n:2 * n] + x[2 * n:],
+                  "jac": lambda x: np.hstack([I, -I, I])},
+                 {"type": "ineq", "fun": lambda x: tilt_budget - x[n:].sum(),
+                  "jac": lambda x: np.concatenate([np.zeros(n), -np.ones(2 * n)])}]
+        x0 = np.concatenate([w_ref, np.zeros(2 * n)])
+        bnds = list(zip(lo, hi)) + [(0.0, 1.0)] * (2 * n)
+    else:
+        x0, bnds = feasible_start(lo, np.where(il > 0, np.minimum(hi, illiquid_cap), hi)), list(zip(lo, hi))
+    res = minimize(f, x0, jac=g, bounds=bnds, constraints=cons, method="SLSQP", options=OPTS)
+    return res.x[:n], res
+
+lo, hi = TAB["w_min"], TAB["w_max"]
+# Unit tests: tangency with inactive bounds, ERC to 1e-8, Paleologo's beta share
+mu3 = np.array([.05, .06, .07]); S3 = np.array([[.04, .01, .01], [.01, .06, .01], [.01, .01, .09]])
+w_tan = np.linalg.solve(S3, mu3 - CASH); w_tan /= w_tan.sum()
+w_num = max_sharpe(mu3, S3, np.full(3, -10.0), np.full(3, 10.0))
+assert np.max(np.abs(w_num - w_tan) / np.abs(w_tan)) < 1e-4      # solver tolerance, not theorem
+assert np.max(np.abs(risk_contrib(optimize_erc(SIGMA), SIGMA) - 1.0 / N)) < 1e-8
+assert np.isclose(beta_variance_share(0.35, 0.35), 0.5)
+
+# The flat frontier (six portfolios, as in Nuveen Fig. 6)
+W_F, targets = frontier(MU, SIGMA, lo, hi)
+vols = np.array([np.sqrt(w @ SIGMA @ w) for w in W_F]); rets = np.array([w @ MU for w in W_F])
+assert np.all(np.diff(vols) > -1e-7) and np.all(rets >= targets - 1e-7)
+for k, (r_, v_) in enumerate(zip(rets, vols), 1):
+    print(f"portfolio {k}: return {r_:.2%}  vol {v_:.2%}  Sharpe {(r_ - CASH) / v_:.2f}")
+
+# Kaz's allocation: reported (smoothed) risk vs desmoothed risk for direct lending
+w_rep, w_tru = max_sharpe(MU, SIGMA_REP, lo, hi), max_sharpe(MU, SIGMA, lo, hi)
+vol_claimed, vol_actual = np.sqrt(w_rep @ SIGMA_REP @ w_rep), np.sqrt(w_rep @ SIGMA @ w_rep)
+assert vol_actual > vol_claimed                  # a theorem, not a seed: smoothing hides risk
+print(f"DL weight: reported-risk {w_rep[DL]:.1%}, desmoothed {w_tru[DL]:.1%}; "
+      f"the reported-risk book claims {vol_claimed:.2%} vol and carries {vol_actual:.2%}")
+
+# Strategic allocation with liquidity tiers, plus shadow prices by finite difference
+GAMMA = 8.0
+tiers, days = TAB["tier"], TAB["days"]
+w_saa, _ = optimize_tiered(MU, SIGMA, lo, hi, tiers, days, gamma=GAMMA)
+assert abs(w_saa.sum() - 1) < 1e-8 and np.all(w_saa >= lo - 1e-9) and np.all(w_saa <= hi + 1e-9)
+assert w_saa[tiers == "IL"].sum() <= 0.15 + 1e-8                 # never violates the 15% cap
+assert w_saa @ days <= 32.0 + 1e-6 and w_saa[np.isin(tiers, ["HL", "ML"])].sum() >= 0.35 - 1e-8
+u0 = utility(w_saa, MU, SIGMA, GAMMA)
+w_cap, _ = optimize_tiered(MU, SIGMA, lo, hi, tiers, days, gamma=GAMMA, illiquid_cap=0.16)
+lo_hy = lo.copy(); lo_hy[0] -= 0.01
+w_hy, _ = optimize_tiered(MU, SIGMA, lo_hy, hi, tiers, days, gamma=GAMMA)
+d_cap = utility(w_cap, MU, SIGMA, GAMMA) - u0
+d_hy = utility(w_hy, MU, SIGMA, GAMMA) - u0
+assert d_cap > -1e-8 and d_hy > -1e-8                            # relaxing cannot hurt
+print(f"utility gain per 1% of NAV relaxed: illiquid cap {d_cap * 1e4:.2f} bp, "
+      f"HY floor {d_hy * 1e4:.2f} bp")
+
+# Tactical tilt: the filter says stress; 10% l1 budget, LCS costs, all tiers still binding
+mu_stat = stationary(fit["P"]) @ fit["mu"]
+overlay = 12.0 * (mu_stress - mu_stat)                          # annualized regime tilt
+w_tac, _ = optimize_tiered(MU + overlay, SIGMA, lo, hi, tiers, days, gamma=GAMMA,
+                           w_ref=w_saa, tilt_budget=0.10, lcs=TAB["lcs_bp"] / 1e4)
+assert np.abs(w_tac - w_saa).sum() <= 0.10 + 1e-6
+assert w_tac[tiers == "IL"].sum() <= 0.15 + 1e-8
+print("tilt (pp):", dict(zip(SECTORS, (100 * (w_tac - w_saa)).round(1))))
+```
+
+Two notes on reading the output. The asserts check what is a theorem or a tolerance: the frontier's volatility rises with its target, the reported-risk portfolio is riskier than it claims, relaxing a constraint cannot reduce utility, and the caps hold. The *weights* are printed rather than asserted, because they depend on illustrative inputs. The useful exercise is to change one expected-loss assumption by 25 bp and watch how far they move (§12.6).
+
+## 12.11 Desk Debrief
+
+Friday afternoon. Kaz's direct-lending weight had fallen from the 35% bound to whatever the 15% cap and the days budget allowed. The PM's comment on the new spreadsheet said "Why?" Theo answered it with three numbers, and none of them was a yield.
+
+- **The forward return is an identity with two measures in it.** Yield is a market ($\mathbb{Q}$-flavored) quantity; the loss term must be physical. A CDS-implied default probability in the loss term forecasts a zero risk premium by construction.
+- **Expected credit loss is the restructuring banker's variable.** Set recovery by the seat in the waterfall (about 33% for direct loans, 52% for syndicated loans, 39% for HY bonds per FEDS 2024), not by a rating table. A 33% recovery has a 40% larger loss given default than a 52% one.
+- **Rank sectors by spread per unit of something.** Break-even default $s/(1-R)$, carry per unit of DTS risk $(1 - \text{EL}/s)/(D^{\text{spr}}\sigma(\Delta s/s))$, and spread net of LCS. A wider spread is a bigger bet, not a better one.
+- **Composition moves the mean, not the tail.** The HY index went from 37% BB to 51–54% BB. Z-scores against raw history mostly measure that change. Use fixed-mix spreads and bucket-level models.
+- **Desmooth before you optimize.** $\sigma_{\text{true}} = \sigma_{\text{reported}}/\sqrt{\sum_j\theta_j^2}$; contemporaneous beta is understated by $\theta_0$. At AR(1) $\phi = 0.8$, volatility is understated threefold and beta fivefold.
+- **The frontier is flat by the mediant inequality.** Long-only credit Sharpe ratios are weighted averages of sectors' systematic Sharpes. When the optimizer's choice sits inside the error bars, the constraints, not the objective, decide the allocation.
+- **Liquidity tiers bind first.** The 15% illiquid cap, the liquid-sleeve minimum and the days-to-liquidate budget are known exactly; expected returns are not. Report shadow prices, and remember that a 5% quarterly gate is a queue position.
+- **Regimes size the tilt; valuation directs it.** Trade on filtered probabilities with a delay, never smoothed ones. Expect the filter to be a month late into stress and a month late out of it, as in April 2025.
+
+### The Spec You Hand the Robot
+
+```text
+ROBO: build mac_engine, a multi-asset credit allocator. Implement exactly this; where anything is
+unspecified, stop and ask. Do not guess.
+
+INPUTS (decimals per year; durations in years; point-in-time)
+  sectors[n]: yld (yield-to-worst EX-DISTRESSED: drop constituents priced < 50, model them separately),
+              pd (PHYSICAL annual default rate; never CDS-implied), rec (by seat in the waterfall),
+              dmod, dspr (OAS duration for callables), spread, dspread_h (expected change over horizon),
+              tier in {HL, ML, LL, IL} (Rule 22e-4 style), days (to liquidate), lcs_bp (round trip),
+              w_min, w_max, smoothed (bool: appraisal-marked series?)
+  R[T,n] monthly excess returns at bucket level (BB, B, CCC split); U[T,n] relative spread changes
+  h horizon (years), cash rate, gamma (risk aversion)
+PIPELINE
+  1 mu_i = yld - pd*(1-rec) - dmod*d_rates/h - dspr*dspread_h/h   (eq. 12.1; raise on percent inputs)
+  2 smoothed series: fit GLM theta (k=2, theta>=0, sum 1, invertible or REFUSE); vol /= sqrt(sum theta^2);
+    covariances with others /= theta_0 (i.e. use the true-risk view, never the reported one)
+  3 Omega = EWMA(U, lam chosen by out-of-sample likelihood), shrink to one-factor target (LW delta);
+    Sigma = diag(DTS) Omega diag(DTS) + sig_y^2 dmod dmod'; assert min eigenvalue >= -1e-10
+  4 HMM: K=2, full covariance, log-space forward-backward, EM; align labels (state 0 = higher mean);
+    act on FILTERED probabilities with a one-month delay; never use smoothed ones in a backtest
+  5 regime CMA: horizon-averaged mixture (eq. 12.2); overlay = mixture mean - stationary mean
+  6 SAA: max w'mu - gamma/2 w'Sigma w  s.t. sum w = 1, w_min <= w <= w_max, sum_IL w <= 0.15,
+    sum_{HL,ML} w >= liquid_min, w'days <= tau_max; report shadow prices of every binding constraint
+  7 TAA: same, plus ||w - w_saa||_1 <= kappa via split variables, cost sum |dw| * lcs/2;
+    kappa shrinks as the filtered stress probability rises
+  8 single-issuer DTS share <= cap; report top-5 issuer yield contribution per sector
+ACCEPTANCE TESTS: the asserts in Section 12.10, plus: every constraint re-checked after the solver
+returns; weights printed with and without desmoothing; a 25bp perturbation to any el moves no
+weight by more than the stated tolerance or the run is flagged "fragile".
+```
+
+### Exercises
+
+1. **Read the chart.** Nuveen's Figure 3 prints 6.97, 2.55, 0.37, 0.49 and 3.56. Compute the default rate implied by each possible assignment of 2.55 and 0.49 to expected credit loss at 40% recovery. Which assignment survives? What would you need from the PDF itself to settle it without economics?
+2. **The appraisal discount.** A perpetual BDC reports quarterly NAV returns with volatility 1.8% annualized and a lag-1 autocorrelation of 0.6. Under AR(1) smoothing, compute $\xi$, the true volatility and the factor by which its contemporaneous HY beta is understated. Then explain to the valuation committee, politely, why the annualization was the problem and not the arithmetic.
+3. **Kaz's typo.** Kaz's HMM has $P_{11} = 0.97$ and $P_{22} = 0.10$. Compute the expected duration of each regime and the stationary distribution. Show that a filter acting with a one-month delay cannot, on average, act on this stress state at all. Then propose a reparameterization (weekly data, or a prior on $P_{22}$) and say what it costs.
+4. **Two-asset ERC.** Show that for $n = 2$ the equal-risk-contribution weights are $w_i \propto 1/\sigma_i$ for any correlation. Apply this to HY (DTS 0.096) and CLO BBB to B (DTS 0.22) at a common $\sigma(\Delta s/s)$, and compare with 50/50 market-value weights.
+5. **The gate as a queue.** A BDC has a 5% quarterly gate. Redemption requests are 15% of NAV this quarter and will be 10% of the remaining NAV in each later quarter. How many quarters until an investor who requested a full exit this quarter is fully paid, assuming pro-rata fills? What days-to-liquidate $\tau$ should the optimizer use, and why is a constant the wrong answer?
+6. **ROBO literalism.** You tell ROBO to "minimize the number of regime switches the model reports." What does it build, and which single line in the spec above prevents it?
+
+### Deep-Dive Resource Graph
+
+**Podcasts**
+
+- *Bloomberg Odd Lots* ran conversations on private credit and on the First Brands and Tricolor failures in autumn 2025; no specific episode was verified for this edition, so search the archive by topic.
+- *Capital Allocators* (Ted Seides) and Bloomberg Intelligence's *The Credit Edge* both cover multi-asset and private-credit allocators; episode-level citations were not verified.
+
+**Practitioner Writing**
+
+- MacKay Shields, *High Yield 4Q 2025 Outlook* (October 2025): https://www.nylim.com/mackay-shields/insights/specialty-fixed-income-outlooks-4q25/high-yield-4q-2025-outlook
+- Cambridge Associates, "Do the Recent Bankruptcies of First Brands and Tricolor Suggest Trouble Ahead in Private Credit?" (November 2025): https://www.cambridgeassociates.com/insight/do-the-recent-bankruptcies-of-first-brands-and-tricolor-suggest-trouble-ahead-in-private-credit/
+- CNN Business, on the "cockroach" remark (October 16, 2025): https://abc17news.com/money/cnn-business-consumer/2025/10/16/why-jamie-dimon-is-warning-of-cockroaches-in-the-us-economy/
+- Morningstar Indexes, on the Morningstar LSTA US Leveraged Loan Index (June 2024): https://indexes.morningstar.com/insights/analysis/blt17eb4431bd8a16bb/morningstar-lsta-us-leveraged-loan-index-highlights-a-growing-asset-class-popular-with-credit-investors
+- Macquarie Asset Management, *Outlook 2026: Private Credit*: https://www.macquarie.com/at/en/about/company/macquarie-asset-management/insights/outlook/private-credit.html
+- Pensions Age, on the Aeon Investments survey of MAC allocation plans (October 2023): https://www.pensionsage.com/pa/Nine-out-of-ten-investors-set-to-increase-allocations-to-multi-asset-credit-strategies.php
+- On the shelf: Nuveen (Zheng), *Multi-asset credit investing: A quantitative framework* (pp. 2–9); Ben Dor et al., *Quantitative Credit Portfolio Management* (pp. 50, 63, 85, 111, 168, 177, 296); Dynkin et al., *Systematic Investing in Credit* (pp. 62, 67, 617); Paleologo, *Advanced Portfolio Management* (pp. 124, 149); Bolder (p. 524); Bohn and Stein (p. 492); BlackRock, *Systematic High Yield Credit* (p. 5); Blackstone, *Systematic Credit* (p. 1); Man Group 2022 (p. 26).
+
+**Academic Papers**
+
+- Ang and Bekaert (2002), *International Asset Allocation with Regime Shifts*, Review of Financial Studies 15(4): https://doi.org/10.1093/rfs/15.4.1137
+- Guidolin and Timmermann (2007), *Asset Allocation under Multivariate Regime Switching*, Journal of Economic Dynamics and Control.
+- Koijen, Moskowitz, Pedersen and Vrugt (2018), *Carry*, Journal of Financial Economics 127(2).
+- Nystrup, Hansen, Madsen and Lindström (2015), *Regime-Based Versus Static Asset Allocation: Letting the Data Speak*, Journal of Portfolio Management 42(1); Nystrup, Madsen and Lindström (2018), Quantitative Finance (title not verified here).
+- Bruder and Roncalli (2012), *Managing Risk Exposures Using the Risk Budgeting Approach*; Asness, Frazzini and Pedersen (2012), *Leverage Aversion and Risk Parity*, Financial Analysts Journal 68(1).
+- Dimson (1979), *Risk Measurement When Shares Are Subject to Infrequent Trading*, Journal of Financial Economics.
+- Books: Roncalli, *Introduction to Risk Parity and Budgeting* (2013); Ilmanen, *Expected Returns* (2011).
+
+**Data & Code**
+
+- FRED, ICE BofA OAS and total-return indices (HY, IG, BBB, BB, B, CCC, EM corporate, EM HY corporate, Euro HY), DGS10, DFF and VIXCLS: https://fred.stlouisfed.org/series/BAMLH0A3HYC
+- Federal Reserve, *Financial Stability Report*: https://www.federalreserve.gov/publications/financial-stability-report.htm
+- SEC Rule 22e-4: https://www.sec.gov/rules-regulations/2016/10/investment-company-liquidity-risk-management-programs ; text at https://www.law.cornell.edu/cfr/text/17/270.22e-4
+
+<!-- STATUS: COMPLETE -->

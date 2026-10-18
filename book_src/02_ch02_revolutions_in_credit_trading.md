@@ -167,7 +167,7 @@ Here is why a pre-RFQ quant could not build the obvious cost model directly from
 
 > **[SOURCE EXTRACTION]** *Ben_Dor_Quantitative_Credit_Portfolio_Management p.120:* "Although it is possible to capture transaction spread data via TRACE, for most bonds the time between a broker-dealer buy and sell transaction for a given CUSIP can be very long, so it is difficult to calculate an accurate bid-ask spread using TRACE."
 >
-> **Annotation.** A bid-ask spread is a statement about two prices *at the same moment*. TRACE gives you two prices at *different* moments, a dealer buy on Tuesday and a dealer sell on Friday, with three days of spread moves mixed into the difference. Measured that way, a bond's "spread" is mostly volatility. This is why Barclays built its Liquidity Cost Score from trader quotes (§2.10), and why RFQ data is the better cost instrument: an RFQ records competing quotes for the same bond within the same two-minute window. Where the 2026 desk departs: composites such as MarketAxess CP+ and Tradeweb Ai-Price (which covers about 30,000 US corporates, per Tradeweb's FY2025 10-K) now provide a continuous estimated mid. The remaining problem is not getting a mid. It is checking whether the composite deserves your trust (§2.3.2).
+> **Annotation.** A bid-ask spread is a statement about two prices *at the same moment*. TRACE gives you two prices at *different* moments, a dealer buy on Tuesday and a dealer sell on Friday, with three days of spread moves mixed into the difference. Measured that way, a bond's "spread" is mostly volatility. This is why Barclays built its Liquidity Cost Score from trader quotes (§2.9.1), and why RFQ data is the better cost instrument: an RFQ records competing quotes for the same bond within the same two-minute window. Where the 2026 desk departs: composites such as MarketAxess CP+ and Tradeweb Ai-Price (which covers about 30,000 US corporates, per Tradeweb's FY2025 10-K) now provide a continuous estimated mid. The remaining problem is not getting a mid. It is checking whether the composite deserves your trust (§2.3.2).
 
 The first large academic look at the new protocol is Hendershott and Madhavan (2015), *Click or Call? Auction versus Search in the Over-the-Counter Market* (*Journal of Finance*). They study every US corporate bond transaction from January 2010 to April 2011, about 4.6 million trades. Electronic auctions account for 467,614 trades in 5,528 bonds and voice for 4,153,611 trades in 11,122 bonds, so about one trade in ten was electronic. Auctions lasted 5 to 20 minutes, and they turned out to be a workable source of liquidity even in bonds that rarely trade. The paper also carries a warning this book repeats often: traders choose the venue. Easy tickets go electronic and hard tickets go to the phone, so a raw comparison of "electronic cost" with "voice cost" flatters the wire. Every venue-choice model in Chapter 19 has to deal with that selection.
 
@@ -221,11 +221,11 @@ Now plug in Greenwich's 2015 and 2025 numbers with $K = 1$. For IG, $z = \ln(0.2
 
 Two lessons sit inside that arithmetic, and both are better than the numbers.
 
-*The ceiling is not identified from two points.* Each choice of $K$ gives a different line through the same two observations. Redo the fit with $K = 0.80$, roughly the ceiling Barclays has suggested for electronic execution (via The DESK, Jan 2025). The IG slope rises to $\hat r_{IG}(0.8) = [\ln(0.48/0.32) - \ln(0.20/0.60)]/10 = 0.150$, and the 2030 projection falls to $0.8/(1 + e^{-1.158}) = 61\%$. HY becomes $\hat r = 0.211$ with a 2030 value of 53%. A lower ceiling means a *faster* implied adoption rate, because the same observed share is closer to the ceiling than it looked. You need curvature to estimate $K$, meaning at least three points with the curve visibly bending. The only bend in the US IG series is 2024 to 2025 (48% to 48%), a single year that could just as well be noise. In practice, $K$ comes from outside evidence, and here the outside evidence is blunt: in December 2023 about 90% of block trades (IG of \$5mm or more, HY of \$1mm or more) were still done by phone or chat (Greenwich, Dec 7, 2023). Section 2.9 returns to those blocks.
+*The ceiling is not identified from two points.* Each choice of $K$ gives a different line through the same two observations. Redo the fit with $K = 0.80$, roughly the ceiling Barclays has suggested for electronic execution (via The DESK, Jan 2025). The IG slope rises to $\hat r_{IG}(0.8) = [\ln(0.48/0.32) - \ln(0.20/0.60)]/10 = 0.150$, and the 2030 projection falls to $0.8/(1 + e^{-1.158}) = 61\%$. HY becomes $\hat r = 0.211$ with a 2030 value of 53%. A lower ceiling means a *faster* implied adoption rate, because the same observed share is closer to the ceiling than it looked. You need curvature to estimate $K$, meaning at least three points with the curve visibly bending. The only bend in the US IG series is 2024 to 2025 (48% to 48%), a single year that could just as well be noise. In practice, $K$ comes from outside evidence, and here the outside evidence is blunt: in December 2023 about 90% of block trades (IG of \$5mm or more, HY of \$1mm or more) were still done by phone or chat (Greenwich, Dec 7, 2023). Section 2.8 returns to those blocks.
 
-*Fit the right object.* If you fit all three parameters by least squares on the levels, an optimizer given the IG points $\{0.20, 0.48, 0.48\}$ is free to set $K$ at about 0.48, make $r$ as steep as its bounds allow and report that US IG electronification was over by about 2017. The fit is perfect, and meaningless. Kaz tried this. Kaz now treats a fitted ceiling equal to the latest observation as a diagnostic, not a result. The code in §2.10 prints a warning when it happens.
+*Fit the right object.* If you fit all three parameters by least squares on the levels, an optimizer given the IG points $\{0.20, 0.48, 0.48\}$ is free to set $K$ at about 0.48, make $r$ as steep as its bounds allow and report that US IG electronification was over by about 2017. The fit is perfect, and meaningless. Kaz tried this. Kaz now treats a fitted ceiling equal to the latest observation as a diagnostic, not a result. The code in §2.9 prints a warning when it happens.
 
-> **Ways This Blows Up.** *Splicing denominators.* Greenwich reports notional share of total market volume. MarketAxess reports its own estimate of the electronic share. Bondwave reports portfolio trading as a share of *customer* volume. A platform reports its share of TRACE, which includes interdealer prints. Splice two of these into one series and your fitted $r$ partly measures the change of definition. The rule: one series per source, and the source and denominator go in the dataframe schema (§2.10), not in a footnote.
+> **Ways This Blows Up.** *Splicing denominators.* Greenwich reports notional share of total market volume. MarketAxess reports its own estimate of the electronic share. Bondwave reports portfolio trading as a share of *customer* volume. A platform reports its share of TRACE, which includes interdealer prints. Splice two of these into one series and your fitted $r$ partly measures the change of definition. The rule: one series per source, and the source and denominator go in the dataframe schema (§2.9), not in a footnote.
 
 ### 2.3.2 The RFQ as an auction: why eleven anchored dealers are worth about two
 
@@ -445,7 +445,7 @@ In a sell-off both terms are negative. Liquidating the redemption basket is expe
 
 The discount is the cleanest real-time stress variable a credit desk has. It is observable every second, it combines the cost of immediacy with information about stale marks, and it is the regime input the router in §2.5.1 was asking for. On a calm day the ETF is an inexpensive hedge. On a stressed day it becomes the place where prices are discovered, and on April 7, 2025, US fixed-income ETFs traded a record \$98.9bn, 3.4 times the 2025 year-to-date daily average, while ETF bid-ask spreads held at one cent through April 1–8 (iShares). As a share of cash bond volume, though, credit ETFs *shrank* in calm markets: the ETF-to-cash ratio fell from 23.2% in 2022 to 16.6% in 2024 (Greenwich), as portfolio trading took over part of the basket risk transfer. ETFs, PTs and cash bonds are now three routes for the same basket risk, and credit index futures are becoming a fourth (Cboe iBoxx futures block trades topped \$1bn a month in mid-2026; The DESK, Oct 2026).
 
-And then there is the Fed. The Secondary Market Corporate Credit Facility, announced March 23, 2020, was allowed to buy IG bonds and US-listed ETFs giving broad exposure to IG corporates, and was expanded on April 9. The New York Fed began "certain" SMCCF purchases on May 12, 2020, and those first purchases were ETFs; "additional" purchases, the individual bonds, began on June 16 (NY Fed SMCCF page). So for about five weeks in 2020 the most powerful central bank on earth was trading credit through the same ticker as a dentist in Scottsdale. The more important lesson, from Haddad, Moreira and Muir, is that the *announcements* did most of the work: discounts closed well before the Fed bought much. Purchase authority expired December 31, 2020, ETF sales began June 7, 2021 and bond sales July 12, 2021, and by August 31, 2021 all holdings had been sold or had matured (NY Fed). Section 2.10 compares March 2020 with April 2025.
+And then there is the Fed. The Secondary Market Corporate Credit Facility, announced March 23, 2020, was allowed to buy IG bonds and US-listed ETFs giving broad exposure to IG corporates, and was expanded on April 9. The New York Fed began "certain" SMCCF purchases on May 12, 2020, and those first purchases were ETFs; "additional" purchases, the individual bonds, began on June 16 (NY Fed SMCCF page). So for about five weeks in 2020 the most powerful central bank on earth was trading credit through the same ticker as a dentist in Scottsdale. The more important lesson, from Haddad, Moreira and Muir, is that the *announcements* did most of the work: discounts closed well before the Fed bought much. Purchase authority expired December 31, 2020, ETF sales began June 7, 2021 and bond sales July 12, 2021, and by August 31, 2021 all holdings had been sold or had matured (NY Fed). Section 2.9.3 compares March 2020 with April 2025.
 
 ### Deep-Dive Resource Graph
 
@@ -532,3 +532,299 @@ Kaz insists on the caveats. Bets are not independent, so $\mathrm{BR} \propto \m
 
 **What a systematic desk would have flagged.** In 2020: the ETF–NAV basis as a regime switch, a jump in Man-style spread calibration (dealers fading their runs), and rising fill-failure rates in the attempted-but-not-executed table. In 2025: the same indicators moved, but by much less and with faster recovery, and PT share *rose* on the worst days. **How it would have traded.** Shrink tickets, route to all-to-all and PT first under the odds threshold of §2.5.1, use the ETF as the hedge and as a price signal rather than an exit, and slow rebalancing until markouts normalize. **The lesson.** The trend is real. The same type of shock, five years later, cleared through electronic channels. But the March 2026 EUR IG episode in §2.5 is a reminder that "cleared" is a statement about one market in one shock. Chapter 28 builds the stress playbook for the day it does not clear.
 
+### Specification for AI Implementation
+
+Asked to "route every line to the cheapest protocol," ROBO sent the whole book to all-to-all, because the spec never said an unfilled order costs anything. Half the book did not fill, and the desk ended up short beta it never chose (§2.1). What follows is the spec that prevents that, with $\kappa$ included.
+
+**Module.** `ch02_electronification_trend.py`, four cumulative blocks that run in order in one interpreter on numpy, scipy and pandas, seeded with `SEED = 7`.
+
+**Schemas and shapes.** `OBS: DataFrame[year: float, segment: str, share: float in (0,1), source: str]`, one row per *sourced* observation, one source series per segment (§2.3 Ways This Blows Up). `fit_adoption(years, shares, K)` takes two `(N,)` arrays and returns a dict `{K, r, t0, odds_doubling_years, logit_resid, projection, note}`, where `projection: DataFrame[year: int, share_hat: float, K: float]` covers 2026–2030. `rfq_best_of_n(theta, n, phi)` returns Monte Carlo and closed-form best quote, cover gap and $n_{\text{eff}}$. Quote distances are in points of price. `lcs_*` return a round-trip fraction of price. `man_tc_bp` returns one-way bp of price. `route(lines, kappa_bp)` takes `DataFrame[line_id: str, protocol: str, pi_fill: float in [0,1], c_fill_bp: float]` and returns the best protocol per line together with the full $J$ table.
+
+**Edge cases and guards.** Shares at 0 or 1 are clipped to $[10^{-4}, 1-10^{-4}]$ with a warning, and the logarithm only ever sees clipped values. A single observation returns `None`. A ceiling $K$ at or below the largest observed share raises an error. A non-increasing series raises an error, and a non-monotone one is fitted with its logit residuals reported. The three-parameter fit runs `curve_fit` with bounds $K \in [0.05, 1]$, $r \in (0, 2]$, `maxfev=10000` and `p0 = (0.9, r_ols, t0_ols)`. If it fails, the code falls back to logit-OLS, and it attaches a "not identified" note when $\hat K$ lands on the last observation or $\hat r$ hits its bound. Years are centered on 2015 so the optimizer is not asked to resolve $t_0 \approx 2025$ to $10^{-6}$ in absolute terms. Monte Carlo uses $2\times 10^5$ draws, which gives a standard error of about 0.2% on each mean.
+
+```python
+# ch02_electronification_trend.py -- block 1: the adoption S-curve (measure: P)
+import warnings
+import numpy as np
+import pandas as pd
+from scipy.optimize import OptimizeWarning, curve_fit
+
+SEED = 7
+CLIP = 1e-4
+T_REF = 2015.0      # centre time so the optimiser is well conditioned
+CHECKS = []         # rows of the sanity table: (check, value, passed)
+
+
+def check(name, value, passed):
+    CHECKS.append((name, float(value), bool(passed)))
+    assert passed, f"sanity check failed: {name} ({value})"
+
+
+OBS = pd.DataFrame(
+    [(2015.0, "US_IG", 0.20, "Greenwich, McPartland 2025-06-10"),
+     (2024.0, "US_IG", 0.48, "Greenwich FY2024, Jan 2025"),
+     (2025.0, "US_IG", 0.48, "Greenwich, McPartland 2025-06-10"),
+     (2015.0, "US_HY", 0.06, "Greenwich, McPartland 2025-06-10"),
+     (2024.0, "US_HY", 0.33, "Greenwich FY2024, Jan 2025"),
+     (2025.0, "US_HY", 0.32, "Greenwich, McPartland 2025-06-10")],
+    columns=["year", "segment", "share", "source"])
+
+
+def logistic(t, K, r, t0):
+    return K / (1.0 + np.exp(-r * (t - t0)))
+
+
+def _logit_ols(t, e, K):
+    z = np.log(e / (K - e))                  # generalised logit; caller guarantees e < K
+    r, b = np.polyfit(t, z, 1)
+    return float(r), float(-b / r)
+
+
+def fit_adoption(years, shares, K=None):
+    """K=None: ceiling 1. K=float: fixed ceiling. K='fit': 3-parameter fit (a diagnostic)."""
+    years = np.asarray(years, dtype=float)
+    raw = np.asarray(shares, dtype=float)
+    if years.size < 2:
+        return None                           # one point identifies nothing
+    if np.any((raw <= 0.0) | (raw >= 1.0)):
+        warnings.warn("shares at 0 or 1 were clipped")
+    e = np.clip(raw, CLIP, 1.0 - CLIP)
+    t = years - T_REF
+    fit_K = isinstance(K, str) and K == "fit"
+    K_val = 1.0 if (K is None or fit_K) else float(K)
+    if not (e.max() < K_val <= 1.0):
+        raise ValueError("ceiling K must exceed every observed share and be <= 1")
+    r, t0 = _logit_ols(t, e, K_val)
+    if r <= 0.0:
+        raise ValueError("series is not increasing: nothing to fit")
+    resid = np.log(e / (K_val - e)) - r * (t - t0)
+    note = ""
+    if fit_K:
+        try:
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", OptimizeWarning)
+                p, _ = curve_fit(logistic, t, e, p0=(0.9, min(r, 1.9), t0),
+                                 bounds=([0.05, 1e-6, -50.0], [1.0, 2.0, 100.0]),
+                                 maxfev=10000)
+            K_val, r, t0 = (float(v) for v in p)
+            if K_val - e.max() < 0.02 or r > 1.9:
+                note = "K not identified: ceiling ~ last observation or rate at bound"
+        except (RuntimeError, ValueError):
+            note = "curve_fit failed; kept the logit-OLS fit with K = 1"
+    years_out = np.arange(2026, 2031)
+    proj = pd.DataFrame({"year": years_out,
+                         "share_hat": logistic(years_out - T_REF, K_val, r, t0),
+                         "K": K_val})
+    return {"K": K_val, "r": r, "t0": t0 + T_REF, "odds_doubling_years": np.log(2.0) / r,
+            "logit_resid": resid, "projection": proj, "note": note}
+
+
+def two_points(seg):
+    return OBS[(OBS.segment == seg) & OBS.year.isin([2015.0, 2025.0])]
+
+
+ig2, hy2 = two_points("US_IG"), two_points("US_HY")
+fit_ig = fit_adoption(ig2.year, ig2.share)
+fit_hy = fit_adoption(hy2.year, hy2.share)
+
+
+def zlogit(e, K=1.0):
+    return np.log(e / (K - e))
+
+
+r_closed = (zlogit(0.48) - zlogit(0.20)) / (2025.0 - 2015.0)
+check("(a) OLS slope equals two-point slope", fit_ig["r"], abs(fit_ig["r"] - r_closed) < 1e-12)
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", OptimizeWarning)
+    p2, _ = curve_fit(lambda t, r, t0: logistic(t, 1.0, r, t0),
+                      ig2.year.to_numpy() - T_REF, ig2.share.to_numpy(),
+                      p0=(0.5 * fit_ig["r"], fit_ig["t0"] - T_REF + 2.0), maxfev=10000)
+gap_b = max(abs(p2[0] - fit_ig["r"]), abs(p2[1] + T_REF - fit_ig["t0"]))
+check("(b) curve_fit at K=1 reproduces logit-OLS", gap_b, gap_b < 1e-6)
+
+for name, f in (("IG", fit_ig), ("HY", fit_hy)):
+    s = f["projection"]["share_hat"].to_numpy()
+    check(f"(c) {name} projection monotone and inside (0, K)", s[-1],
+          np.all(np.diff(s) > 0.0) and np.all((s > 0.0) & (s < f["K"])))
+check("IG 2030 at K=1 is about 64%", fit_ig["projection"].share_hat.iloc[-1],
+      abs(fit_ig["projection"].share_hat.iloc[-1] - 0.64) < 0.01)
+check("HY odds double in about 3.5 years", fit_hy["odds_doubling_years"],
+      abs(fit_hy["odds_doubling_years"] - 3.47) < 0.05)
+fit_ig80 = fit_adoption(ig2.year, ig2.share, K=0.80)
+check("a lower ceiling implies a faster rate", fit_ig80["r"], fit_ig80["r"] > fit_ig["r"])
+
+robo_2030 = 0.33 * (0.33 / 0.06) ** (6.0 / 9.0)        # what ROBO built from the vague spec
+check("ROBO's constant-growth projection leaves [0, 1]", robo_2030, robo_2030 > 1.0)
+
+fit_ig3 = fit_adoption(OBS[OBS.segment == "US_IG"].year, OBS[OBS.segment == "US_IG"].share, K="fit")
+check("3-parameter K stays inside its bounds", fit_ig3["K"], 0.05 <= fit_ig3["K"] <= 1.0)
+print("3-parameter IG fit: K =", round(fit_ig3["K"], 3), "|", fit_ig3["note"] or "no warning")
+print(fit_ig["projection"].round(3).to_string(index=False))
+```
+
+```python
+# block 2: the RFQ as an auction, with an anchoring share phi
+def rfq_best_of_n(theta, n, phi=0.0, n_sims=200_000, seed=SEED):
+    """Quote distance = common Exp(mean phi*theta) + i.i.d. Exp(mean (1-phi)*theta)."""
+    if theta <= 0.0 or n < 2 or not 0.0 <= phi < 1.0:
+        raise ValueError("need theta > 0, n >= 2 and 0 <= phi < 1")
+    rng = np.random.default_rng(seed)
+    common = rng.exponential(phi * theta, size=(n_sims, 1)) if phi > 0.0 else 0.0
+    quotes = common + rng.exponential((1.0 - phi) * theta, size=(n_sims, n))
+    q = np.partition(quotes, 1, axis=1)       # q[:, 0] = best, q[:, 1] = cover
+    return {"mc_best": float(q[:, 0].mean()),
+            "mc_gap": float((q[:, 1] - q[:, 0]).mean()),
+            "cf_best": phi * theta + (1.0 - phi) * theta / n,
+            "cf_gap": (1.0 - phi) * theta / (n - 1),
+            "n_eff": n / (1.0 + (n - 1) * phi)}
+
+
+for n in (3, 5, 8, 12):
+    res = rfq_best_of_n(1.0, n)
+    err = max(abs(res["mc_best"] / res["cf_best"] - 1.0),
+              abs(res["mc_gap"] / res["cf_gap"] - 1.0))
+    check(f"(d) best-of-{n} and cover gap vs closed form", err, err < 0.02)
+
+n_eff_11 = rfq_best_of_n(1.0, 11, phi=0.45, n_sims=10)["n_eff"]
+check("n_eff(n=11, phi=0.45) = 2", n_eff_11, abs(n_eff_11 - 2.0) < 1e-12)
+anchored, indep = rfq_best_of_n(1.0, 11, phi=0.5), rfq_best_of_n(1.0, 2)
+check("11 anchored dealers quote worse than 2 independent", anchored["mc_best"],
+      anchored["mc_best"] > indep["mc_best"])
+```
+
+```python
+# block 3: LCS conventions and the Man cost decomposition (units!)
+def bond_price(coupon, maturity, y, freq=2):
+    """Price per 100 par on a coupon date; y is the annual yield, decimal, compounded at freq."""
+    n = int(round(maturity * freq))
+    t = np.arange(1, n + 1) / freq
+    cf = np.full(n, 100.0 * coupon / freq)
+    cf[-1] += 100.0
+    return float(np.sum(cf * (1.0 + y / freq) ** (-freq * t)))
+
+
+def spread_duration(coupon, maturity, y_tsy, s, h=1e-5):
+    p0 = bond_price(coupon, maturity, y_tsy + s)
+    up = bond_price(coupon, maturity, y_tsy + s + h)
+    dn = bond_price(coupon, maturity, y_tsy + s - h)
+    return -(up - dn) / (2.0 * h * p0)
+
+
+def lcs_spread_quoted(D_spr, s_bid, s_ask):
+    """Round-trip LCS as a fraction of price; spreads in decimal, never bp."""
+    if s_bid < s_ask:
+        raise ValueError("the bid spread must be >= the ask spread")
+    return D_spr * (s_bid - s_ask)
+
+
+def lcs_price_quoted(P_bid, P_ask):
+    if not P_ask >= P_bid > 0.0:
+        raise ValueError("need P_ask >= P_bid > 0")
+    return (P_ask - P_bid) / P_bid
+
+
+def man_tc_bp(inside_spread_bp, slippage_bp, calibration_bp):
+    """One-way cost in bp of price; calibration may be negative (prints better than runs)."""
+    if inside_spread_bp < 0.0 or slippage_bp < 0.0:
+        raise ValueError("inside spread and slippage are nonnegative")
+    return inside_spread_bp + slippage_bp + calibration_bp
+
+
+cpn, mat, y_tsy, s_mid = 0.05, 5.5, 0.040, 0.012          # illustrative BBB
+D = spread_duration(cpn, mat, y_tsy, s_mid)
+s_bid, s_ask = s_mid + 0.0005, s_mid - 0.0005               # 10 bp bid-offer in spread
+lcs_s = lcs_spread_quoted(D, s_bid, s_ask)
+lcs_p = lcs_price_quoted(bond_price(cpn, mat, y_tsy + s_bid), bond_price(cpn, mat, y_tsy + s_ask))
+check("(e) LCS conventions agree within 5%", lcs_p / lcs_s, abs(lcs_p / lcs_s - 1.0) < 0.05)
+one_way_bp = 1e4 * lcs_s / 2.0
+check("one-way cost = LCS / 2, in a sane bp range", one_way_bp, 10.0 < one_way_bp < 40.0)
+check("Man TC adds like units", man_tc_bp(6.0, 2.5, -1.0), abs(man_tc_bp(6.0, 2.5, -1.0) - 7.5) < 1e-12)
+```
+
+```python
+# block 4: the data-exhaust theorem and the protocol router
+def optimal_turnover(k, c):
+    """alpha_net(TO) = k*sqrt(TO) - c*TO; c is one-way cost as a fraction of notional."""
+    if k <= 0.0 or c <= 0.0:
+        raise ValueError("k and c must be positive")
+    return k ** 2 / (4.0 * c ** 2), k ** 2 / (4.0 * c)
+
+
+k_sig = 0.0048                                               # illustrative signal strength
+to_old, a_old = optimal_turnover(k_sig, 12e-4)
+to_new, a_new = optimal_turnover(k_sig, 7.5e-4)
+grid = np.linspace(0.01, 30.0, 300_001)
+to_grid = grid[np.argmax(k_sig * np.sqrt(grid) - 7.5e-4 * grid)]
+check("closed-form TO* matches grid search", to_grid, abs(to_grid / to_new - 1.0) < 1e-3)
+check("cost 12 -> 7.5 bp: TO* rises 2.56x", to_new / to_old, abs(to_new / to_old - 2.56) < 1e-9)
+check("cost 12 -> 7.5 bp: net alpha rises 1.6x", a_new / a_old, abs(a_new / a_old - 1.6) < 1e-9)
+
+
+def route(lines, kappa_bp):
+    """One-shot router: J = pi*c + (1 - pi)*kappa, minimised per line."""
+    df = lines.copy()
+    if not df["pi_fill"].between(0.0, 1.0).all():
+        raise ValueError("fill probabilities must lie in [0, 1]")
+    df["J_bp"] = df["pi_fill"] * df["c_fill_bp"] + (1.0 - df["pi_fill"]) * kappa_bp
+    best = df.loc[df.groupby("line_id")["J_bp"].idxmin()].reset_index(drop=True)
+    return best, df
+
+
+def try_a2a_first(pi_a, c_a, chi_a, J_r):
+    """Sequential rule: odds of an A2A fill must beat leakage / saving."""
+    if J_r <= c_a:
+        return False                          # nothing to save, so leakage buys nothing
+    if pi_a >= 1.0:
+        return True
+    return pi_a / (1.0 - pi_a) > chi_a / (J_r - c_a)
+
+
+lines = pd.DataFrame({"line_id": ["BBB_7Y"] * 3, "protocol": ["A2A", "RFQ", "VOICE"],
+                      "pi_fill": [0.55, 0.90, 0.98], "c_fill_bp": [4.0, 7.0, 12.0]})
+best, table = route(lines, kappa_bp=20.0)
+J_r = float(table.loc[table.protocol == "RFQ", "J_bp"].iloc[0])
+J_seq = 0.55 * 4.0 + 0.45 * (1.5 + J_r)
+check("one-shot router picks disclosed RFQ", J_r, best.protocol.iloc[0] == "RFQ")
+check("A2A first beats RFQ when the odds clear the threshold", J_seq,
+      try_a2a_first(0.55, 4.0, 1.5, J_r) and J_seq < J_r)
+check("stressed name: the threshold flips", 0.25, not try_a2a_first(0.25, 4.0, 6.0, J_r))
+
+print(pd.DataFrame(CHECKS, columns=["check", "value", "passed"]).to_string(index=False))
+```
+
+## 2.10 Desk Debrief
+
+- **Liquidity used to be a relationship and is now a variable.** A bond's value lives in its documents, and its tradability lives in its data exhaust. A systematic strategy needs both certainty of execution and a cost it can model (`Man_Revolutions p.4`), and each revolution improved one or both.
+- **TRACE is censored, not missing.** `5MM+` and `1MM+` hide the blocks. Ben Dor's imputed caps imply Pareto tail indices of about 5/3 (IG) and 4/3 (HY), both with infinite variance. Train on the capped feed you will see live, and deduplicate affiliate echoes before fitting anything.
+- **Fit adoption with a ceiling, and get the ceiling from outside the data.** Two points cannot identify $K$, and a fitted $K$ equal to the last observation is a warning, not a result. IG is around half electronic and HY has been near a third for four years. The gap between them is the structural fact.
+- **Eleven anchored dealers are worth about two.** $n_{\text{eff}} = n/(1 + (n-1)\phi)$, capped at $1/\phi$. A falling cover gap is consistent with competition and with herding, so measure the winner against an independent fair value.
+- **Route on all-in cost, including the cost of failing.** $J_p = \pi_p c_p + (1-\pi_p)\kappa$. Try all-to-all first only when the fill odds exceed leakage divided by savings. Near an LMT, leakage jumps and the formula agrees with Mags.
+- **Protocol share is a regime, not a trend.** PT went from boom (2021) to bust (2022) to infrastructure (19.8% of customer volume, Q1 2026). Label every share with its denominator, and treat the ETF–NAV basis as the regime switch.
+- **Cheaper plumbing makes the same signal a better strategy.** $\mathrm{TO}^\star \propto 1/c^2$ and $\alpha^{\text{net}\,\star} \propto 1/c$. Cutting cost from 12 to 7.5 bp is worth 2.56 times the turnover and 1.6 times the net alpha.
+- **Theo's edge lives where the exhaust is thinnest.** About 90% of blocks still trade by phone or chat. The `5MM+` world of stressed names and ad hoc groups is where the router hands control to a person, and that person should have read the credit agreement.
+
+### The Spec You Hand the Robot
+
+Build `ch02_electronification_trend.py` with four functions and one sanity table. (1) `fit_adoption(years, shares, K=None|float|"fit")`: generalized-logit OLS for a fixed ceiling, plus a bounded three-parameter `curve_fit` diagnostic ($K \in [0.05,1]$, $r \in (0,2]$, `maxfev=10000`, logit-OLS fallback, a "not identified" note). Clip shares to $[10^{-4}, 1-10^{-4}]$, refuse a single point, reject $K \le \max(\text{share})$, center years on 2015, and return a 2026–2030 projection inside $(0, K)$. (2) `rfq_best_of_n(theta, n, phi)`: seeded Monte Carlo ($2\times10^5$ draws) of best quote and cover gap with anchoring share $\phi$, checked against $\phi\theta + (1-\phi)\theta/n$ and $(1-\phi)\theta/(n-1)$ within 2%, and returning $n_{\text{eff}} = n/(1+(n-1)\phi)$. (3) `lcs_spread_quoted`, `lcs_price_quoted` and `man_tc_bp`: spreads in decimal, LCS round trip, TC one way in bp, agreement within 5% for a 5.5-year bond with a 10 bp bid-offer. (4) `optimal_turnover(k, c)` returning $(k^2/4c^2,\ k^2/4c)$, verified by grid search, and `route(lines, kappa_bp)` minimizing $J = \pi c + (1-\pi)\kappa$ per line, plus the sequential odds rule. Every number in the demo is either sourced in `OBS.source` or labeled illustrative. Every check is an `assert`, collected and printed as a table.
+
+### Exercises
+
+1. **(Censoring.)** Suppose 10% of HY trades print as `1MM+`, uncapped HY trades average \$0.3mm, and the hidden tail is Pareto with $\hat\alpha = 4/3$. Show that TRACE's displayed volume is $(0.1 \times 1 + 0.9 \times 0.3)/(0.1 \times 4 + 0.9 \times 0.3) \approx 55\%$ of true volume. Then find the tail index at which the displayed share would be 80%. (Interpret it in terms of how much a desk can see.)
+2. **(The ceiling.)** For observations $e_1 < e_2 < K$, prove that $\hat r(K)$ from §2.3.1 is decreasing in $K$. Compute $\hat r$ and the 2030 projection for US HY with $K \in \{0.5, 0.6, 0.8, 1.0\}$, and explain to ROBO, in one spec line, why $K = 0.5$ is not free.
+3. **(Order statistics.)** Show that for i.i.d. Uniform$[0, b]$ quote distances, $\mathbb{E}[\delta_{(1)}] = b/(n+1)$. Then Kaz asks how many anchored dealers with $\phi = 0.6$ it takes to match two independent ones. Prove the answer is "none," and say what that implies about paying for a twelfth platform connection.
+4. **(Units.)** A junior adds a 50 bp round-trip LCS to 3 bp of one-way slippage and 2 bp of calibration and gets "TC = 55 bp." Fix it. Then use $\mathrm{TO}^\star \propto 1/c^2$ to compute by how much the error was shrinking the strategy's optimal turnover.
+5. **(The router and Mags.)** With $c_A = 4$ bp, $J_R = 8.3$ bp and $\chi_A = 1.5$ bp, find the smallest $\pi_A$ at which all-to-all goes first. Now the name is three weeks from an uptier and $\chi_A = 6$ bp. Find the new threshold, and write the one-sentence note Theo leaves for ROBO explaining where the 6 came from.
+6. **(Data-exhaust theorem.)** Re-derive $\mathrm{TO}^\star$ and $\alpha^{\text{net}\,\star}$ when cost rises with turnover through crowding, $c(\mathrm{TO}) = c_0 + c_1\,\mathrm{TO}$. Show that optimal turnover now responds *less* than $1/c_0^2$ to a fall in $c_0$, and connect $c_1$ to the 4 p.m. index-mark clustering in §2.6.
+
+### Deep-Dive Resource Graph
+
+**Podcasts.** We list no episodes for this chapter because none were verified this edition. Candidates for Edition 2, to be checked before listing: *Bloomberg Odd Lots* on bond electronification, portfolio trading and bond ETFs in March 2020. *Flirting with Models* (Corey Hoffstein) and *Capital Allocators* episodes with systematic-credit managers.
+
+**Practitioner Writing.** Man Group, Russell Korgaonkar, *Systematic Credit: A New Frontier* (data as at Sept 30, 2025): https://www.man.com/insights/systematic-credit-new-frontier. Rupak Ghose, on Citadel Securities and the HFT industry (Mar 27, 2026): https://rupakghose.substack.com/p/citadel-securities-and-hft-industry. Coalition Greenwich, *US corporate bond trading: 2025 by the numbers*: https://www.greenwich.com/market-structure-technology/us-corporate-bond-trading-2025-numbers. The DESK, on December 2025 platform shares versus TRACE (Jan 14, 2026): https://www.fi-desk.com/marketaxess-and-tradeweb-beat-trace-in-december-slowdown/. Bloomberg, "High-Speed Trader Hudson River Steps Up Battle With Citadel Securities, Jane Street" (Dec 1, 2025; title only).
+
+**Academic Papers.** Kargar, Lester, Lindsay, Liu, Weill & Zúñiga (2021), *Corporate Bond Liquidity During the COVID-19 Crisis* (RFS; NBER w27355). Pintér, Wang & Zou (2022), *Size discount and size penalty: trading costs in bond markets*, BoE SWP 970: https://www.bankofengland.co.uk/working-paper/2022/size-discount-and-size-penalty-trading-costs-in-bond-markets. Bessembinder, Jacobsen, Maxwell & Venkataraman (2018), *Capital commitment and illiquidity in corporate bonds* (JF). Dick-Nielsen & Rossi (2019), *The cost of immediacy for corporate bonds* (RFS). Bessembinder, Spatt & Venkataraman (2020), *A survey of the microstructure of fixed-income markets* (JFQA). Grinold & Kahn, *Active Portfolio Management* (the fundamental law).
+
+**Data & Code.** ICE 8-K Exhibit 99.1 on the MarketAxess acquisition (July 2026): https://www.sec.gov/Archives/edgar/data/0001571949/000119312526324909/d116245dex991.htm. MarketAxess Q2 2026 results: https://investor.marketaxess.com/news/news-details/2026/MarketAxess-Reports-Second-Quarter-2026-Financial-Results/default.aspx. Tradeweb Q2 2026 Exhibit 99.1: https://www.sec.gov/Archives/edgar/data/1758730/000175873026000132/tw-2026xq2xex991.htm. SIFMA US corporate bond statistics: https://www.sifma.org/resources/research/statistics/us-corporate-bonds-statistics/. FINRA Rule 6730 (TRACE reporting, including the PT modifier): https://www.finra.org/rules-guidance/rulebooks/finra-rules/6730. Federal Reserve FEDS Note on bank-loan and HY fund liquidity (Aug 19, 2026): https://www.federalreserve.gov/econres/notes/feds-notes/liquidity-transformation-risks-in-u-s-bank-loan-and-high-yield-mutual-funds-a-2026-update-20260819.html.
+
+<!-- STATUS: COMPLETE -->

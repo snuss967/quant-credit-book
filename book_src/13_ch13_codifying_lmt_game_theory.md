@@ -686,3 +686,64 @@ print(f"events={int(y.sum())} PRS={prs_lark:.3f} E[dR]={e_loss:.3f} EPL={100 * e
 ```
 
 The three blocks are cumulative: (c) composes the knapsack's participation share from (b) and the Serta-shaped expected transfer, and in production the drop-down and double-dip transfers from (a) slot into the same last factor.
+
+## 13.9 Autopsies: The Court Is a Random Variable
+
+The $q$ in the litigation option of §13.4 has been the most volatile parameter on the desk since 2023. Two features carry it: the clause and the doctrine.
+
+**Steps versus plans.** Write an LMT as a composition of document moves $\mathcal{D}_0 \to \mathcal{D}_1 \to \cdots \to \mathcal{D}_m$, where step $k$ needs holders with share $v_k(\mathcal{D}_{k-1})$ of the class to clear $\theta_k$. A step-by-step court asks whether $v_k(\mathcal{D}_{k-1}) \ge \theta_k$ for every $k$. An integrated court treats the composite as one move and measures support before anything happened, $v(\mathcal{D}_0) \ge \max_k \theta_k$, plus unanimity for any sacred right the composite touches. The gap $g = \max_k \theta_k - v(\mathcal{D}_0)$ is the feature `integration_gap`. When $g > 0$ the deal works only in a step-by-step forum, and $q$ becomes a bet on doctrine. Wesco/Incora is the textbook case: the group held more than two-thirds of the 2024 notes but not of the 2026 notes (§13.4), used a majority to issue itself enough secured notes to reach two-thirds, then used the two-thirds to release liens. Each step clears its own bar. The composite does not. *STG Logistics* (§13.6) is the same test applied to a drop-down.
+
+> **Docket Diary.** *Wesco Aircraft/Incora, 2022–2026.* **2022:** the transaction closes. **2024:** Judge Isgur (Bankr. S.D. Tex.) sends to trial whether the deal was an "open market purchase" or a "redemption" and whether it was a "single, integrated transaction" (Ropes & Gray via HLS Roundtable, May 21, 2024); under his "domino theory," "the majority group did not have the requisite two-thirds majority at the time of the first amendment" (Wachtell). **2025:** District Judge Crane reverses, looking "no further than the language of the agreements, the sophistication of the parties, and the 'direct effect' of a specific amendment." **Jan 13, 2026:** the Fifth Circuit dockets the appeal, *Wesco v. 2026 Noteholders*, No. 26-20018. *The Ad Hoc Group, represented by counsel:* "We were two-thirds. Eventually." In the model, $g > 0$ and $q$ swung from high to low on doctrine alone; the excluded noteholders now hold an option on a Fifth Circuit panel.
+
+**Forum is time-varying.** In 2023 a Texas bankruptcy court found *Serta*'s "open market purchase" "clear and unambiguous" in the borrower's favor. On Dec 31, 2024 the Fifth Circuit read the same words against the borrower, and New York's First Department upheld *Mitel*'s uptier under a bare "purchase" exception; Mitel nonetheless filed for Chapter 11 on Mar 10, 2025 and emerged on June 20, 2025 owned by its lenders *(approx.; Wikipedia citing Bloomberg)*. A PRS fitted with a static forum coefficient averages a sign flip, so interact `forum_ny_vs_tx` with `buyback_exception` and a post-2024 dummy. In the bankruptcy court itself the *Serta* rule keeps spreading: in *ConvergeOne* (S.D. Tex. district court, 2025, on appeal), backstop fees on a \$245mm exit rights offering were "a form of recovery on participating creditors' pre-bankruptcy debt claims, and therefore had to be open to all creditors in the applicable class, absent robust market testing" (Wachtell). The next observations are already docketed: *Invesco v. Robertshaw* (5th Cir. No. 26-20422) and the bond-side exit-consent fight over Lions Gate/Starz's 2024 exchange of \$389,861,000 of 5.500% notes due 2029 (*CPPIB Credit Investments II v. Deutsche Bank Trust Co. Americas*, Sup. Ct. N.Y. Cnty., Mar 17, 2026). IDO or it didn't happen: LMT P&L is the one place where "idiosyncratic" was defined by two courts, in two states, on the same day.
+
+## 13.10 Desk Debrief
+
+- **An LMT is the difference of two waterfalls.** In low states it is zero-sum among creditors; the liquidity story lives in high states. Compute $\Delta_j(V)$ before you read the press release.
+- **Know your payoff shape.** Excluded from an uptier: short a soft digital put struck at $K_1$. Victim of a drop-down: short a forward capped at $C^{\text{unsub}}/F$. Diluted by a double-dip: someone is counted twice in your denominator.
+- **The sponsor solves a knapsack** and leaves out the constrained, the fragmented and the litigious. Model your invitation probability, not your participation decision.
+- **A co-op above $1 - \theta$ turns an auction into a bargain.** Deal-away capacity costs the co-op $\eta$ per dollar; carve-out premiums are Shapley values. (Cooperation agreements signed in this book so far: 2. Antitrust complaints about them: 2, and counting.)
+- **One word can be the whole loss.** The court is a random variable with a clause, a forum, a doctrine and a vintage.
+- **PRS is $\mathbb{P}$; the price is $\mathbb{Q}$.** Never calibrate the score to prices. The prior keeps $\hat\beta$ finite, and Theo's runway is the covariate that separates.
+- **The LMT is not the terminal state.** Only 22% of coercive-LME firms avoided both re-default and bankruptcy within two years. Price the next event.
+
+### The Spec You Hand the Robot
+
+Build `lmt_engine.py` (numpy/scipy; `rng = np.random.default_rng(13)`; runs top to bottom; values in \$mm, recoveries in fraction of par, runway in months, PRS at a 12-month horizon). (1) `waterfall_clearing(entities, claims)`: priority ranks, pro rata within rank, intercompany receipts and subsidiary equity routed to parents, `reduce_by` for co-obligor claims on one debt; stop at $\lVert \Delta p \rVert_\infty < 10^{-10}$, raise after 10,000 iterations; assert conservation to $10^{-8}$, no payment above face, monotonicity in $V$, the double-dip closed form, pari-plus collapse at $V_f = 0$. (2) `uptier`, `priming_loss`: guard $N = 0$ and $p = 1$; assert conservation, zero loss for $V \ge F + N$, full loss for $V \le K_1$; expected loss by quadrature checked against Monte Carlo and the lognormal partial expectation. (3) `min_cost_coalition`: brute force to 12 holders, greedy beyond, `None` when a co-op exceeds $1 - \theta$; `shapley` by enumeration. (4) `fit_map`: Newton with step-halving, Gaussian slope prior, Beta base-rate prior; assert the intercept first-order condition, both $\tau$ limits, the bootstrap band, signs, and a holdout Brier score below the base rate. (5) `expected_priming_loss` $=$ PRS $\times$ P(NPR $\mid$ LMT) $\times$ P(excluded $\mid$ NPR) $\times$ $\mathbb{E}[\Delta R]$, inputs in $[0,1]$. Never fit PRS to prices.
+
+### Exercises
+
+1. **Unblend Serta.** Redo §13.3.1 with the \$1.95bn first lien and \$450mm second lien as separate classes. Parameterize the unknown lien split of the \$1.2bn exchanged, compute $K_1$ for the excluded first-lien lenders, and find the split at which the blended 44.8-point transfer at $V = \$1.075$bn is off by more than 10 points.
+2. **The 5% veto.** A co-op holds A 20%, B 10% and C 5%, and the action needs $\theta = \tfrac23$. Show that each Shapley value is $\tfrac13$. Find the smallest block of C's loans that, sold to A, destroys C's veto, and explain why C will ask for more than par.
+3. **Forward or digital?** For a drop-down with $T = 300$, $D_u = 280$, $\phi = 0.1$ and $F = 2{,}000$ (\$mm, illustrative), plot $\Delta R(V)$, verify $\Delta R \le T/F$, and compute its expectation under the lognormal in block (b). Then redo it with PetSmart-style leverage, where moving 36.5% of a subsidiary's shares releases its whole guarantee.
+4. **Rebuild Trinseo.** From the figures in §13.7.1, build an entity graph for `waterfall_clearing` and find ranges of $V$ and of the allowed intercompany claim that reproduce both 60–78% and 2–9%. Which parameter matters most?
+5. **ROBO minimizes priming loss.** Told to "build the portfolio with the lowest expected priming loss," ROBO bought only loans in which every amendment needs unanimous consent. Explain in one sentence why the portfolio is empty, then rewrite the objective with a carry constraint, a turnover limit and units.
+
+### Deep-Dive Resource Graph
+
+**Podcasts**
+- Bloomberg *Odd Lots*, episodes on liability management and creditor-on-creditor violence (search the archive; episode titles not verified here).
+- *Cloud 9fin* and Octus podcasts on LME structures and cooperation agreements (titles not verified).
+
+**Practitioner Writing**
+- Wachtell Lipton, *Liability Management 2026: For Better or Worse* (Feb 3, 2026): https://www.wlrk.com/FirmMemos/WLRK/WLRK.29921.26.pdf
+- 9fin, H1 2026 LME update (Aug 28, 2026): https://9fin.com/insights/h1-2026-lme-update
+- Harvard Law School Bankruptcy Roundtable, liability-management archive: https://bankruptcyroundtable.law.harvard.edu/category/liability-management/
+- *Petition* archive: https://www.petition11.com/archive
+- Mayer Brown on the *Serta* remand damages (July 2026); Paul, Weiss on *Serta* and *Mitel* (Jan 10, 2025); Octus on non-pro-rata uptiers (July 16, 2024); Matt Levine's *Money Stuff* columns on uptiers (titles only).
+
+**Academic Papers**
+- Buccola and Nini (2024), *Journal of Legal Studies* 53:489, on uptier restrictions in 600+ loan agreements (SSRN abstract 4143928, via HLS).
+- Roe and Rotaru (2026), 89 coercive LMEs and their aftermath (SSRN abstract 6103369; HLS Roundtable, Feb 24, 2026).
+- Antill, Jiang and Wang, LMEs and renegotiation debt overhang (SSRN abstract 4821620); Buccola and Kahan, *Getting to Yes* (SSRN abstract 5014946); Seaton, defensive cooperation agreements (SSRN abstract 5247506); Miller (SSRN abstract 5549919); Huang, Lewellen and Wang, Rule 2019 data (SSRN abstract 4854111); Parikh (SSRN abstract 4410235).
+- Buccola (2023), *Efficacious Answers to the Non-Pro Rata Workout*, 171 U. Pa. L. Rev. 1859; Skeen (2023), *Uptier Exchange Transactions: Lawful Innovation or Lender-on-Lender Violence?*, 40 Yale J. Reg. 408.
+- Eisenberg and Noe (2001), *Systemic Risk in Financial Systems*; Morris and Shin (1998), *Unique Equilibrium in a Model of Self-Fulfilling Currency Attacks*; Jehiel, Moldovanu and Stacchetti (1996), *How (Not) to Sell Nuclear Weapons*.
+
+**Data & Code**
+- Fifth Circuit *Serta* opinion (rev. Feb 14, 2025): https://www.ca5.uscourts.gov/opinions/pub/23/23-20181-CV0.pdf
+- CourtListener opinions: *Serta* https://www.courtlistener.com/opinion/10333637/, *Mitel* https://www.courtlistener.com/opinion/10309794/, *CPPIB v. Deutsche Bank Trust Co. Americas* https://www.courtlistener.com/opinion/11001279/
+- CourtListener dockets: Wesco appeal https://www.courtlistener.com/docket/74956914/, Robertshaw appeal https://www.courtlistener.com/docket/74695342/, Trinseo case and adversary proceeding https://www.courtlistener.com/docket/73388469/ and https://www.courtlistener.com/docket/73394456/; REST API https://www.courtlistener.com/help/api/
+- SEC EDGAR, for the J.Crew, Chewy, Sabre, Trinseo and Lions Gate filings cited by date above: https://www.sec.gov/edgar
+- Federal Reserve *Financial Stability Report*, Nov 2025 https://www.federalreserve.gov/publications/files/financial-stability-report-20251107.pdf and May 2026 https://www.federalreserve.gov/publications/files/financial-stability-report-20260508.pdf; FEDS Notes https://www.federalreserve.gov/econres/notes/feds-notes/
+
+<!-- STATUS: COMPLETE -->

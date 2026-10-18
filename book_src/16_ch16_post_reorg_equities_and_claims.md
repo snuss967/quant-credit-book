@@ -526,3 +526,464 @@ print(f"Hertz ex post: fee shares ${fee_value:,.0f}mm + unsubscribed gain ${unsu
 - **Practitioner Writing:** Gunjan Seth, *Do Rights Offerings Reduce Bargaining Complexity in Chapter 11?*, CLS Blue Sky Blog (11 Mar 2025), https://clsbluesky.law.columbia.edu/2025/03/11/do-rights-offerings-reduce-bargaining-complexity-in-chapter-11/ ; Lowenstein Sandler, *ConvergeOne Decision: Fifth Circuit Weighs In On Unequal Treatment, Plan Finality* (via Mondaq, Dec 2025), https://www.mondaq.com/unitedstates/insolvencybankruptcy/1719792/convergeone-decision-fifth-circuit-weighs-in-on-unequal-treatment-plan-finality-video ; Bloomberg Law, *Fifth Circuit Decisions Level the Playing Field for Creditors* (30 Jan 2026), https://news.bloomberglaw.com/business-and-practice/fifth-circuit-decisions-level-the-playing-field-for-creditors
 - **Academic Papers:** Buccola, Marcovich Gross & McBrady, *The Backstop Party*, *American Bankruptcy Law Journal* 100(1) (2026); Seth, *Do Rights Offerings Reduce Bargaining Complexity in Chapter 11?* (working paper, NBER conference version 2024).
 - **Data & Code:** Hertz 8-K/A on the plan sponsor auction (14 May 2021), https://www.sec.gov/Archives/edgar/data/1657853/000110465921066944/tm2116104d2_8k.htm ; Hertz 8-K on the effective date (7 Jul 2021), https://www.sec.gov/Archives/edgar/data/1657853/000110465921089858/tm2121430d1_8k.htm
+
+## 16.4 Warrants: Long-Dated Calls Handed to People Who Were Told They'd Get Nothing
+
+### 16.4.1 Desk framing: the consolation prize is the most convex thing in the plan
+
+Plans hand out warrants for the same reason game shows hand out consolation prizes: the losing contestant has to leave the stage quietly. The class that is out of the money at the plan value, often old equity and sometimes the unsecured creditors, receives a long-dated call on the reorganized company, struck at or above the plan value, in exchange for not objecting. The plan describes this as a premium to the firm. Moyer agrees, with an important qualifier.
+
+> **[SOURCE EXTRACTION]** *Moyer_Distressed_Debt_Analysis p.373:* "Warrants give the holder an economic interest in a firm, but also require the holder to pay cash upon exercise (i.e. the strike price of the warrant) to purchase a share of its stock. Investors presumably are better off because they generally would not exercise warrants unless the stock was higher than the exercise price. On the other hand, where the strike price is above the plan of reorganization's projected value, the firm is effectively, relative to the plan, receiving a premium."
+>
+> **Annotation.** The load-bearing words are "relative to the plan." A strike set above a plan value that was negotiated *down* (§16.1) may be at or below fair value. The desk therefore never measures warrant moneyness against the disclosure statement; it measures it against the price at which informed insiders are buying stock in the same plan, which in a rights-offering case is printed in the plan itself. Moyer adds on the same page that warrants are freely tradable when issued but generally less liquid than the stock, so a warrant quote is not a stock quote with a strike subtracted. The departure for a 2026 desk is that we can price the warrant properly (dilution, jump-to-default, a long-dated volatility) and use the plan's *own* warrant valuation to back out the volatility the plan's advisors assumed, which is a free read on how the other side of the table modeled the company.
+
+### 16.4.2 Derivation: dilution, the fixed point, and the jump that Kaz gets backwards
+
+**Dilution.** Let $n_0$ be shares outstanding, $n_w$ the number of warrants, each exercisable into one new share at strike $K$ at expiry $T$, and $\omega = n_w/n_0$ the dilution ratio. Let $S_t$ be the share price and $W_t$ the warrant price. The total market value of the equity claims, shares plus warrants, is $n_0 S_t + n_w W_t$. If the warrants are exercised at $T$, the company receives $n_w K$ in cash and has $n_0 + n_w$ shares, so each warrant holder receives
+$$\frac{n_0 S_T + n_w W_T + n_w K}{n_0 + n_w} - K = \frac{n_0}{n_0 + n_w}\left(S_T + \omega W_T - K\right) = \frac{1}{1+\omega}\left(\hat S_T - K\right),$$
+where $\hat S_t \equiv S_t + \omega W_t$ is the equity value per *existing* share including the warrants' claim. Exercise is rational iff $\hat S_T > K$. If $\hat S$ follows a lognormal with volatility $\sigma$, the warrant is $1/(1+\omega)$ calls on $\hat S$:
+$$W = \frac{1}{1+\omega}\,C_{\text{BS}}\!\left(S + \omega W,\;K,\;T,\;\sigma,\;r\right).$$
+This is a fixed point in $W$, the classic Galai–Schneller formulation. It is a contraction, since the derivative of the right-hand side in $W$ is $\omega\,\Delta/(1+\omega) < 1$ with $\Delta = \partial C_{\text{BS}}/\partial S \in (0,1)$, so iterating from $W^{(0)} = C_{\text{BS}}(S, K)$ converges. One more bound we will assert in code: because $C_{\text{BS}}$ is convex with slope below one, $C_{\text{BS}}(S + \omega W) \le C_{\text{BS}}(S) + \omega W$, which rearranges to $W \le C_{\text{BS}}(S)$. Dilution never makes a warrant worth more than the equivalent call, so backing out volatility while ignoring dilution always *understates* the volatility.
+
+**The compound-option view.** In the Merton model of Chapter 6 the share is itself a call on firm value $V_t$ struck at debt face $F$. A plan warrant is therefore a call on a call, and it inherits the leverage-driven skew: as $V_t$ falls toward $F$, equity volatility $\sigma_E$ rises, and an out-of-the-money warrant is mostly a bet on the right tail of $V$. For a 30-year tenor, the warrant price is dominated by two things that are not delta: vega, and the probability that the company does not need a second Chapter 11 before expiry.
+
+**The jump to zero.** Add a default event, at intensity $\lambda$ per year, at which the stock goes to zero (Chapter 6 notation; the warrant then expires worthless). To keep the stock price itself fairly priced in a nominal pricing measure that earns $r$, the pre-default stock must drift at $r + \lambda$: the survivors are compensated for the jump. Writing $\tilde S_T = S\,e^{(r+\lambda-\sigma^2/2)T + \sigma W_T}$ for the pre-default path (here $W_T$ is the Brownian motion, not the warrant):
+$$C^{\text{JD}} = e^{-rT}\,\mathbb{E}\!\left[\mathbf 1_{\{\tau > T\}}(\tilde S_T - K)^{+}\right] = e^{-rT}e^{-\lambda T}\,\mathbb{E}\!\left[(\tilde S_T - K)^{+}\right] = C_{\text{BS}}(S, K, T, \sigma, r + \lambda),$$
+because $e^{-(r+\lambda)T}\mathbb{E}[(\tilde S_T - K)^+]$ is exactly the Black–Scholes call at rate $r + \lambda$. Holding the observed share price and the diffusive volatility fixed, **adding a jump to zero makes the call worth more, not less**: the strike is paid only in survival states, and the stock must outperform while it survives.
+
+Kaz's first draft multiplied the Black–Scholes warrant by $e^{-\lambda T}$. At $\lambda = 2\%$ for 30 years that is $e^{-0.6} \approx 0.55$, a 45% haircut, and Kaz presented it with the confidence of someone who has never been wrong in front of a restructuring banker. Ines put it gently: "The share price already knows the company can die. You charged the warrant holder for the funeral twice." The haircut is correct only if your spot is a *going-concern* value, such as a plan DCF that assumes survival; then the survival factor belongs. If your spot is a market price, it does not.
+
+**What the plan assumed.** Hertz's plan valued the warrants issued to old stockholders at \$769mm (Third Circuit opinion, footnote 5), and the effective-date 8-K reports 89,049,029 warrants with a \$13.80 strike expiring 30 Jun 2051. That is \$8.64 per warrant. The rights offering priced the stock at \$10.00, and the plan valued the old holders' 3% at \$141mm, which is \$10 a share on 14.13mm shares. Taking $S = 10$, $K = 13.80$, $T = 30$, $r \approx 2\%$ *(assumption)* and $\omega = 89.05/471.10 \approx 0.19$, the volatility that reproduces \$8.64 is in the low 50s, both with and without dilution (the code below solves it; dilution adds a little). That is a perfectly reasonable long-run volatility for a levered rental-car company. Had the advisors instead used the \$13.80 implied by the \$6.5bn "warrant basis" as spot, the same \$8.64 would imply a volatility in the mid-20s, which no one who has watched a rental-car equity would sign. The plan's numbers are internally consistent only at the lower spot, which is the honest one. The \$769mm was not a gift. The gift was the \$29 print four months later.
+
+### 16.4.3 Case Study: the Hertz warrants, from "worthless" to \$1.35bn of intrinsic value
+
+In June 2020, while selling stock into a retail rally during its bankruptcy, Hertz's prospectus supplement warned of "a significant risk that the [Stockholders] will receive no recovery under the Chapter 11 [c]ases and that our common stock will be worthless" (quoted in the Third Circuit opinion, 10 Sep 2024). Twelve months later the plan sponsor auction turned on a different question: how much old equity would get, not whether. On 8 Nov 2021, selling stockholders priced 44.52mm shares at \$29.00 in a re-IPO, and the stock and warrants began trading on Nasdaq as HTZ and HTZWW the next day (Hertz press release, 8 Nov 2021).
+
+At \$29 a \$13.80-strike warrant had \$15.20 of intrinsic value. Across 89.05mm warrants that is about \$1.35bn, roughly 1.76 times the plan's \$769mm estimate *(derived from sourced counts and prices)*. Averaged over all ≈156mm old shares, the package an old stockholder received was:
+
+| Component | Per old share | Value at the \$29 re-IPO |
+| :--- | :--- | :--- |
+| Cash | \$1.53 | \$1.53 |
+| New common (14.13mm ÷ 156mm ≈ 0.091 shares) | 0.091 × \$29 | ≈ \$2.63 |
+| Warrants (89.05mm ÷ 156mm ≈ 0.571 warrants) | 0.571 × \$15.20 intrinsic | ≈ \$8.68 |
+| **Total** | | **≈ \$12.8** |
+
+*(Approx.; averaged across all old shares, warrants at intrinsic value only, before time value. Holders who elected rights instead of warrants received a different mix.)* The stock that its own prospectus said might be worthless delivered roughly \$12.8 of value per share 4.5 months after emergence. The systematic desk's lesson is not "buy meme stocks in bankruptcy." It is that the warrant's value was almost entirely *timing and volatility*: priced at a plan volatility in the low 50s with a spot the sponsors chose, and then marked at a spot the public market chose. Anyone long the warrant at the plan's mark was long a 30-year option at a reasonable volatility on a spot that was about to be re-rated by a factor of nearly three.
+
+The warrants expire on 30 Jun 2051. As §16.6 shows, by October 2026 Hertz was back in the restructuring room, which makes "a 30-year warrant is mostly a bet on not needing Chapter 11 again before 2051" sound less like a modeling assumption and more like a weather forecast.
+
+### Specification for AI Implementation
+
+**The Spec You Hand the Robot.** *Vague version:* "Price the Hertz warrants." *What ROBO built:* a Black–Scholes call with the stock's 30-day realized volatility from the meme week of June 2020, which priced a 30-year option at roughly the value of the stock and confidently recommended selling the stock to buy the warrant. *Precise version:* implement `warrant_price` as the dilution fixed point with an optional jump-to-zero intensity entering as $r + \lambda$, raise if the iteration does not converge, and implement `implied_vol_warrant` by bracketing root-finding on $\sigma \in [0.01, 3.0]$. Inputs: `S` (USD per share, the spot you believe, labeled market or going-concern), `K` (USD), `T` (years), `r` (continuously compounded, stated), `omega` = warrants / shares outstanding (dimensionless, $\ge 0$), `lam` (per year, $\ge 0$). Guards: reject negative $\omega$; never apply an $e^{-\lambda T}$ haircut to a market spot.
+
+```python
+# --- Block 3: warrants with dilution and jump-to-default (reuses bs_call, brentq) ---
+
+def warrant_price(S, K, T, sigma, r, omega, lam=0.0, tol=1e-12, max_iter=1000):
+    """Galai-Schneller fixed point W = C_BS(S + omega*W, K, T, sigma, r + lam) / (1 + omega).
+    lam: jump-to-zero intensity; with a MARKET spot it enters through the rate, not a haircut."""
+    if omega < 0 or lam < 0:
+        raise ValueError("omega and lam must be non-negative")
+    r_eff = r + lam
+    W = float(bs_call(S, K, T, sigma, r_eff))
+    for _ in range(max_iter):
+        W_new = float(bs_call(S + omega * W, K, T, sigma, r_eff)) / (1.0 + omega)
+        if abs(W_new - W) < tol:
+            return W_new
+        W = W_new
+    raise RuntimeError("warrant fixed point did not converge")
+
+
+def implied_vol_warrant(W_target, S, K, T, r, omega, lam=0.0, lo=0.01, hi=3.0):
+    f = lambda sig: warrant_price(S, K, T, sig, r, omega, lam) - W_target
+    if f(lo) * f(hi) > 0:
+        raise ValueError("target warrant price not bracketed")
+    return brentq(f, lo, hi, xtol=1e-10)
+
+
+HZ_WARRANTS = 89.049029           # mm (8-K, 7 Jul 2021)
+HZ_W_STRIKE, HZ_W_T = 13.80, 30.0
+HZ_W_PLAN = 769.0 / HZ_WARRANTS   # USD per warrant (3d Cir. opinion, fn. 5)
+R_30Y = 0.02                      # assumption, stated
+omega_hz = HZ_WARRANTS / HZ_TOTAL
+assert 8.6 < HZ_W_PLAN < 8.7 and 0.18 < omega_hz < 0.20
+
+# fixed point actually solves its equation, and dilution never adds value
+W_fp = warrant_price(10.0, HZ_W_STRIKE, HZ_W_T, 0.5, R_30Y, omega_hz)
+rhs = float(bs_call(10.0 + omega_hz * W_fp, HZ_W_STRIKE, HZ_W_T, 0.5, R_30Y)) / (1 + omega_hz)
+assert abs(W_fp - rhs) < 1e-10
+assert W_fp <= float(bs_call(10.0, HZ_W_STRIKE, HZ_W_T, 0.5, R_30Y)) + 1e-12
+
+# the plan's implied volatility at the honest spot ($10) and at the warrant basis ($13.80)
+iv_undil = implied_vol_warrant(HZ_W_PLAN, 10.0, HZ_W_STRIKE, HZ_W_T, R_30Y, 0.0)
+iv_dil = implied_vol_warrant(HZ_W_PLAN, 10.0, HZ_W_STRIKE, HZ_W_T, R_30Y, omega_hz)
+iv_jump = implied_vol_warrant(HZ_W_PLAN, 10.0, HZ_W_STRIKE, HZ_W_T, R_30Y, omega_hz, lam=0.02)
+iv_basis = implied_vol_warrant(HZ_W_PLAN, HZ_W_STRIKE, HZ_W_STRIKE, HZ_W_T, R_30Y, omega_hz)
+assert 0.40 < iv_undil < 0.65 and iv_dil >= iv_undil - 1e-8     # ignoring dilution understates vol
+assert iv_jump < iv_dil                                          # jump risk does part of vol's job
+assert iv_basis < 0.35                                           # implausibly low for this equity
+
+# Kaz's double-counted funeral: the correct jump price exceeds the no-jump price,
+# which exceeds the haircut price
+w_nojump = warrant_price(10.0, HZ_W_STRIKE, HZ_W_T, iv_dil, R_30Y, omega_hz)
+w_jump = warrant_price(10.0, HZ_W_STRIKE, HZ_W_T, iv_dil, R_30Y, omega_hz, lam=0.02)
+w_kaz = w_nojump * np.exp(-0.02 * HZ_W_T)
+assert w_jump > w_nojump > w_kaz
+
+# re-IPO arithmetic (8 Nov 2021, $29)
+intrinsic_total = HZ_WARRANTS * (29.0 - HZ_W_STRIKE)
+assert 1.7 < intrinsic_total / 769.0 < 1.8
+OLD_SHARES = 156.0
+package = 1.53 + HZ_OLD3PCT / OLD_SHARES * 29.0 + HZ_WARRANTS / OLD_SHARES * (29.0 - HZ_W_STRIKE)
+assert 12.5 < package < 13.1
+
+print(f"plan-implied vol: {iv_undil:.1%} (no dilution), {iv_dil:.1%} (dilution), "
+      f"{iv_jump:.1%} (dilution + 2% jump), {iv_basis:.1%} at the $13.80 basis")
+print(f"old-share package at $29: ${package:.2f}")
+```
+
+### Deep-Dive Resource Graph
+
+- **Podcasts:** none cited; the warrant-pricing literature lives in textbooks and papers, not audio.
+- **Practitioner Writing:** Hertz press release on the re-IPO pricing (8 Nov 2021), https://newsroom.hertz.com/press-releases/press-release-details/hertz-announces-pricing-of-upsized-public-offering-of-common-stock-by-selling-stockholders/ ; Moyer, *Distressed Debt Analysis*, p.373 on plan warrants.
+- **Academic Papers:** Galai & Schneller (1978), *Pricing of Warrants and the Value of the Firm*, *Journal of Finance*; Merton (1976), *Option Pricing When Underlying Stock Returns Are Discontinuous*, *Journal of Financial Economics* (the jump-to-zero case); Geske (1979), *The Valuation of Compound Options*, *Journal of Financial Economics*.
+- **Data & Code:** Third Circuit opinion, *In re The Hertz Corp.*, No. 23-1169 (10 Sep 2024), https://www2.ca3.uscourts.gov/opinarch/231169p.pdf ; SEC EDGAR for warrant agreements filed as 8-K exhibits, https://www.sec.gov/edgar
+
+## 16.5 Claims: 503(b)(9) vs. General Unsecured, and the Denominator Problem
+
+### 16.5.1 Desk framing: a claim is a zero-coupon bond with a random face, a random maturity, and a random number of siblings
+
+A trade claim is the least glamorous instrument in this chapter and the one a former RSSG banker understands best. It pays no coupon (Moyer p.413, n.26, notes that trade claims do not accrue interest, which is also why hedging one with a short bond position costs carry), it matures on an effective date nobody can promise, and its recovery is a fraction whose *denominator*, the total pool of allowed claims in the class, is unknown for most of the case. Sellers are usually not investors at all.
+
+> **[SOURCE EXTRACTION]** *Moyer_Distressed_Debt_Analysis p.310:* "1. The claim is significantly less liquid and thus purchasers often insist on a discount to compensate for this illiquidity. 2. The claim holder may not have the financial wherewithal to wait until the completion of a bankruptcy case to realize full value of the claim and thus is a forced seller."
+>
+> **Annotation.** Moyer lists five reasons a trade creditor sells below the trading level of similarly ranked bonds; the first two are illiquidity and the forced seller, and the others (preferring cash to stock, being a business rather than an investor, unfamiliarity with the process) are variations on the same theme. Notice that this is §16.2's overhang again, one level down the capital structure: the vendor who shipped goods on credit is the CLO of the claims market, constrained not by an indenture but by payroll. The modern desk departs from Moyer in two ways. First, it prices the discount as a sum of separable premia (allowance, timing, pool size, illiquidity) rather than as a single haircut. Second, the claims market now includes customer claims in crypto and fintech bankruptcies, where the seller is a retail depositor and the forced-selling motive is acute (Trend Watch below).
+
+> **[SOURCE EXTRACTION]** *Moyer_Distressed_Debt_Analysis p.311:* "This "nonallowance" risk can be managed through a variety of mechanisms. The first is to only purchase claims that have been deemed allowed by the bankruptcy court or at least have been admitted by the debtor."
+>
+> **Annotation.** The parameter $p_A$ in the pricing formula below. Moyer immediately notes the cost of this safety: claims are often allowed late, sometimes after confirmation, so buying only allowed claims means buying after most of the discount has gone. The desk's version is a classifier: given the claim's documentation, its match to the debtor's schedules, its type, and the objection history of similar claims in the same case, estimate $p_A$. Transfers are noticed on the docket under Bankruptcy Rule 3001(e) (Moyer p.311), which makes the claims register and the transfer notices a public, machine-readable record of who is buying what.
+
+Moyer also describes (p.269) the classic hedge: a trade claim and a senior unsecured bond of the same debtor are *pari passu*, so long claim / short bond isolates the claim's discount while neutralizing the enterprise-value risk they share. The desk keeps that trade and adds a sharper one, the 503(b)(9) pair.
+
+### 16.5.2 The statute block: what decides the face value
+
+The legal rules below are the entire source of the pool-size randomness. Each one is a truncation, a priority switch, or an estimation procedure.
+
+- **§503(b)(9)** (added by the 2005 bankruptcy amendments, after Moyer was written) grants administrative-expense priority to "the value of any goods received by the debtor within 20 days before the date of commencement of a case under this title in which the goods have been sold to the debtor in the ordinary course of such debtor's business" (11 U.S.C. §503, Cornell LII).
+- **§1129(a)(9)(A)** requires administrative claims, including 503(b)(9) claims, to be paid in full in cash on the effective date unless the holder agrees otherwise. That is what makes a 503(b)(9) claim a near-par instrument.
+- **"Received" means physical possession.** *In re World Imports, Ltd.*, 862 F.3d 338 (3d Cir. 2017): goods are received when the debtor or its agent takes physical possession; delivery to a common carrier with risk of loss passing at the shipping point does not count. Bankruptcy courts in Delaware have since denied 503(b)(9) status to drop-shipped goods (*In re SRC Liquidation*). The vendor who shipped on day 22 by boat and the vendor who delivered on day 19 by truck hold different instruments.
+- **§502(b)(2)** disallows claims "for unmatured interest": no post-petition coupon accrues on a general unsecured claim, with the solvent-debtor exception that §16.6 shows Hertz paying for.
+- **§502(b)(6)** caps a landlord's lease-rejection damages at "the rent reserved by such lease, without acceleration, for the greater of one year, or 15 percent, not to exceed three years, of the remaining term," plus unpaid rent (11 U.S.C. §502, Cornell LII).
+- **§502(b)(7)** caps employment-contract termination claims at one year's compensation plus unpaid compensation.
+- **§502(c)** requires estimation of contingent or unliquidated claims whose liquidation would unduly delay the case.
+
+Kaz is delighted by §502(c). "The statute requires estimation! Which estimator? Maximum likelihood? Bayesian with a conjugate prior?" Theo explains that the estimator is a bankruptcy judge. Kaz writes this down as "an M-estimator with a robe," which is not wrong: a §502(c) estimate is a court's point estimate for the purpose of voting or reserves, not the mean of anything, and the desk should treat it as one more noisy observation of the pool, not as the pool.
+
+### 16.5.3 Derivation: the random denominator
+
+**Setup.** Let $\mathcal{V}$ be the value distributable to the class and $\mathcal{C}$ the total allowed claims in the class. A claim's recovery per dollar of allowed face is
+$$R = \min\!\left(1, \frac{\mathcal{V}}{\mathcal{C}}\right).$$
+Let $Y \equiv \ln(\mathcal{V}/\mathcal{C})$ and assume $Y \sim N(\mu_Y, s_Y^2)$ under $\mathbb{P}$, which holds if $\mathcal{V}$ and $\mathcal{C}$ are jointly lognormal; their correlation enters through $s_Y^2 = s_{\mathcal{V}}^2 + s_{\mathcal{C}}^2 - 2\varrho\, s_{\mathcal{V}} s_{\mathcal{C}}$. Split the expectation at $Y = 0$:
+$$\mathbb{E}[R] = \Pr(Y \ge 0) + \mathbb{E}\!\left[e^{Y}\mathbf 1_{\{Y<0\}}\right].$$
+The first term is $\Phi(\mu_Y/s_Y)$. For the second, complete the square in the exponent of the normal density:
+$$y - \frac{(y - \mu_Y)^2}{2 s_Y^2} = -\frac{(y - \mu_Y - s_Y^2)^2}{2 s_Y^2} + \mu_Y + \frac{s_Y^2}{2},$$
+so the exponential tilts the normal's mean by $s_Y^2$, and
+$$\mathbb{E}\!\left[e^{Y}\mathbf 1_{\{Y<0\}}\right] = e^{\mu_Y + s_Y^2/2}\,\Phi\!\left(\frac{0 - \mu_Y - s_Y^2}{s_Y}\right).$$
+Putting the pieces together:
+$$\mathbb{E}[R] = \Phi\!\left(\frac{\mu_Y}{s_Y}\right) + e^{\mu_Y + s_Y^2/2}\,\Phi\!\left(-\frac{\mu_Y}{s_Y} - s_Y\right).$$
+This is Black–Scholes bookkeeping with $\mathcal{V}/\mathcal{C}$ in the role of $S/K$: a claim is a long position in the ratio with a short call at 1 on top (the cap at par). Boundary checks: as $s_Y \to 0$ the formula collapses to $\min(1, e^{\mu_Y})$, and as $\mu_Y \to +\infty$ it tends to 1.
+
+**The special case that matters most.** Fix $\mathcal{V}$ and let the pool be lognormal with mean $m_{\mathcal{C}}$ and log-standard deviation $s$, so $\ln\mathcal{C} \sim N(\ln m_{\mathcal{C}} - s^2/2,\, s^2)$ and $\mu_Y = \ln(\mathcal{V}/m_{\mathcal{C}}) + s^2/2$. With $a \equiv \mu_Y/s$:
+$$\mathbb{E}[R] = \Phi(a) + \frac{\mathcal{V}}{m_{\mathcal{C}}}\,e^{s^2}\,\Phi(-a - s).$$
+At $\mathcal{V} = m_{\mathcal{C}}$ (the class is covered *on average*) and $s = 0.30$: $a = 0.15$ and $\mathbb{E}[R] \approx 0.5596 + 1.0942 \times 0.3264 \approx 0.917$ *(illustrative)*. More than eight points of recovery disappear purely because the denominator is uncertain, even though the expected pool exactly equals the value available. That is the cap at work: when the pool comes in small you cannot recover more than par, and when it comes in large you lose.
+
+**Jensen cuts both ways.** Now take a deeply impaired class, $\mathcal{V}/m_{\mathcal{C}} = 0.30$, with the same $s$. The cap almost never binds, and the reciprocal $1/\mathcal{C}$ is *convex*, so variance helps: the formula gives $\mathbb{E}[R] \approx 0.328 > 0.30$. Near par, pool uncertainty is a cost; deep out of the money, it is a (small) gift. The desk must know which side of the kink a class sits on before it decides whether it wants to own the uncertainty or sell it.
+
+**Pricing the claim.** With allowance probability $p_A$, an effective date $T$ that arrives at hazard rate $h$ per year (so $T$ is exponential with mean $1/h$ and independent of $R$), a discount rate $r$ and an illiquidity premium $\psi$, the expected discount factor is
+$$\mathbb{E}\!\left[e^{-(r+\psi)T}\right] = \int_0^\infty h\,e^{-ht}\,e^{-(r+\psi)t}\,dt = \frac{h}{h + r + \psi},$$
+and the price per dollar of face of a general unsecured claim is
+$$\pi^{\text{GUC}} = p_A\,\frac{h}{h + r + \psi}\,\mathbb{E}[R] \;+\; \underbrace{p_A\,\Pr(\text{solvent})\,\mathbb{E}[\text{post-petition interest} \mid \text{solvent}]}_{\text{the Hertz option, usually} \;\approx\; 0}.$$
+No coupon appears anywhere, because §502(b)(2) bars one. A **503(b)(9) claim** is the same bond with the face problem removed: it is paid in full in cash on the effective date unless the estate is administratively insolvent (probability $p_{AI}$, loss given that event $L_{AI}$):
+$$\pi^{(9)} = p_A^{(9)}\,\frac{h}{h + r + \psi}\,\left(1 - p_{AI}L_{AI}\right), \qquad p_A^{(9)} = \Pr(\text{goods, ordinary course, physical receipt within 20 days}).$$
+
+**The pair.** Because both claims share the same timing factor, the log price spread cancels it exactly:
+$$\ln \pi^{(9)} - \ln \pi^{\text{GUC}} = \ln\frac{p_A^{(9)}}{p_A} + \ln\!\left(1 - p_{AI}L_{AI}\right) - \ln \mathbb{E}[R].$$
+Duration is held fixed and what remains is allowance risk, administrative-insolvency risk, and pool risk. For a near-par class, where more pool uncertainty lowers $\mathbb{E}[R]$, *long 503(b)(9) / short GUC is long pool uncertainty*: it pays if the denominator surprises the market by coming in large or ragged. The reverse trade, long the GUC and short the 503(b)(9), is the trade for the person who has *shrunk* $s$ by doing the work: counting rejected leases and applying the §502(b)(6) cap lease by lease, matching filed claims to the schedules, striking duplicates and superseded amendments, sizing WARN Act and litigation claims. That person is the former RSSG associate. This is the chapter's cleanest example of being paid for a variance everyone else is afraid of.
+
+**Denomination risk.** In customer bankruptcies the claim is often fixed in petition-date dollars. If a claim on an asset worth $A_{t_0}$ at the petition date recovers $R$ in cash at $T$, the recovery *in kind*, in units of the asset the customer actually had, is
+$$R^{\text{in-kind}} = R\,\frac{A_{t_0}}{A_T}.$$
+A 120% cash recovery on a bitcoin claim dollarized at about \$17k on 11 Nov 2022 is roughly a 20% in-kind recovery if bitcoin trades at \$100k on the distribution date *(illustrative)*. The claimant is short a call on the asset, struck at the petition-date price, and was paid nothing for it.
+
+> **Trend Watch.** *Claims trading went crypto, 2023–2026.*
+> - **Price path.** FTX customer claims traded around 15% of face at the start of 2023 and about 35% by September 2023, according to Claims Market pricing cited by Decrypt (22 Sep 2023), which also reported more than \$250mm of claims bought by Silver Point Capital, Diameter Capital Partners and Attestor Capital, a \$23mm claim bought by Hudson Bay, and possibly more than \$100mm of trades not yet reported because of transfer-paperwork lags.
+> - **Distributions.** Under the confirmed plan, convenience-class claims (Class 7) received 100% of petition-date value plus 9% annual post-petition interest from 11 Nov 2022, about 120% cumulative; distributions to larger customer classes began on 30 May 2025 with more than \$5bn, followed by about \$1.6bn in September 2025 and about \$2.2bn on 31 Mar 2026, bringing the dotcom customer class (5A) to about 96% and the US customer class (5B) to about 100% cumulative *(per press reports; verify against FTX Recovery Trust notices)*.
+> - **Scale then and now.** In the Lehman era, trade-press estimates put monthly claims trading at roughly \$2.2–3.6bn *(approx.; 2011 Reuters report on SecondMarket data)*. FTX was the Lehman of this cycle: a right-tail buyer who read the dollarization clause correctly went from about 15 cents to more than 100 cents in cash in roughly two years, roughly seven times the money.
+> - **What it means for the desk.** Claims are now a data problem as much as a legal one: public claims registers, Rule 3001(e) transfer notices, distribution notices and docketed objections are machine-readable. The pricing edge is in $p_A$ and $s$, and the risk the market most often misprices is denomination.
+
+### Specification for AI Implementation
+
+**The Spec You Hand the Robot.** *Vague version:* "Value the claims in this case." *What ROBO built:* filed amount times the plan's estimated recovery percentage, summed over the register, which counted every amended claim alongside the claim it superseded, valued a \$40mm landlord claim at its full remaining rent, and produced an estimated recovery higher than the debtor's total assets. *Precise version:* implement `ClaimsWaterfallPricer` with closed-form $\mathbb{E}[R]$ under lognormal $Y$, the fixed-value special case, a Monte Carlo check, per-claim pricing for `GUC` and `503b9` kinds, the priority-spread decomposition, and the in-kind recovery transform.
+
+*Claims-register schema (one row per proof of claim, from the claims agent's public register export and the docket):* `claim_id`, `debtor_entity`, `claimant_type` in {`trade`, `landlord`, `employee`, `customer`, `litigation`, `tax`, `bond_trustee`, `other`}, `filed_amount` (USD), `scheduled_amount` (USD or null), `asserted_priority` in {`secured`, `admin`, `503b9`, `priority`, `GUC`, `convenience`}, `status` in {`filed`, `objected`, `allowed`, `disallowed`, `withdrawn`, `superseded`}, `amends_claim_id` (nullable), `filed_date`, `receipt_date_evidence` (for 503(b)(9): delivery date and mode), `denomination` (USD or asset ticker) and `petition_price` (USD per unit), `transfer_notice_dates` (list, Rule 3001(e)). *Guards:* drop superseded and withdrawn claims before summing; apply §502(b)(6) and (b)(7) caps per claim; reject $s_Y \le 0$; clip convenience-class elections at the class cap before computing the pool.
+
+```python
+# --- Block 4: claims with a random denominator (reuses RNG, norm) ---
+
+def expected_recovery_lognormal(mu_Y, s_Y):
+    """E[min(1, e^Y)], Y ~ N(mu_Y, s_Y^2)."""
+    if s_Y <= 0:
+        raise ValueError("s_Y must be positive")
+    return float(norm.cdf(mu_Y / s_Y) + np.exp(mu_Y + 0.5 * s_Y**2) * norm.cdf(-mu_Y / s_Y - s_Y))
+
+
+def expected_recovery_fixed_value(V, m_C, s):
+    """Fixed distributable value V, lognormal pool with mean m_C and log-sd s."""
+    return expected_recovery_lognormal(np.log(V / m_C) + 0.5 * s**2, s)
+
+
+@dataclass
+class ClaimSpec:
+    kind: str                  # "GUC" or "503b9"
+    p_allow: float             # probability the claim is allowed (with this priority)
+    hazard_exit: float         # h, per year: effective date arrives at rate h
+    r: float                   # discount rate, per year
+    psi: float                 # illiquidity premium, per year
+    mu_Y: float = 0.0          # GUC only: mean of ln(V/C)
+    s_Y: float = 0.3           # GUC only: sd of ln(V/C)
+    p_admin_insolvent: float = 0.0   # 503b9 only
+    lgd_admin: float = 0.0           # 503b9 only
+
+
+def timing_factor(c):
+    return c.hazard_exit / (c.hazard_exit + c.r + c.psi)
+
+
+def price_claim(c):
+    """Price per dollar of face (no coupon: 11 U.S.C. 502(b)(2)); Hertz option omitted."""
+    if c.kind == "GUC":
+        return c.p_allow * timing_factor(c) * expected_recovery_lognormal(c.mu_Y, c.s_Y)
+    if c.kind == "503b9":
+        return c.p_allow * timing_factor(c) * (1.0 - c.p_admin_insolvent * c.lgd_admin)
+    raise ValueError(f"unknown claim kind {c.kind!r}")
+
+
+def in_kind_recovery(R_cash, price_at_petition, price_at_distribution):
+    return R_cash * price_at_petition / price_at_distribution
+
+
+# closed form vs Monte Carlo
+mu_t, s_t = 0.10, 0.40
+Y = RNG.normal(mu_t, s_t, 1_000_000)
+assert abs(np.minimum(1.0, np.exp(Y)).mean() - expected_recovery_lognormal(mu_t, s_t)) < 0.002
+
+# Jensen near par: covered on average, yet ~8 points lost
+er_par = expected_recovery_fixed_value(1.0, 1.0, 0.30)
+assert abs(er_par - 0.917) < 0.002
+# ...and the other side of the kink: deep impairment, variance helps
+er_deep = expected_recovery_fixed_value(0.30, 1.0, 0.30)
+assert er_deep > 0.30
+# limit s -> 0 recovers min(1, V/m_C)
+assert abs(expected_recovery_fixed_value(0.8, 1.0, 1e-6) - 0.8) < 1e-4
+
+# the pair: same timing factor, so the log spread decomposes exactly
+guc = ClaimSpec("GUC", p_allow=0.95, hazard_exit=1.5, r=0.04, psi=0.08, mu_Y=np.log(0.9), s_Y=0.35)
+b9 = ClaimSpec("503b9", p_allow=0.97, hazard_exit=1.5, r=0.04, psi=0.08,
+               p_admin_insolvent=0.05, lgd_admin=0.5)
+p_guc, p_b9 = price_claim(guc), price_claim(b9)
+spread = np.log(p_b9) - np.log(p_guc)
+decomp = (np.log(b9.p_allow / guc.p_allow) + np.log(1 - b9.p_admin_insolvent * b9.lgd_admin)
+          - np.log(expected_recovery_lognormal(guc.mu_Y, guc.s_Y)))
+assert abs(spread - decomp) < 1e-12
+assert 0.0 < p_guc < p_b9 < 1.0
+# near par, more pool uncertainty widens the spread (long 503b9 / short GUC is long s_Y)
+guc_wide = ClaimSpec("GUC", 0.95, 1.5, 0.04, 0.08, mu_Y=np.log(0.9), s_Y=0.60)
+assert np.log(p_b9) - np.log(price_claim(guc_wide)) > spread
+
+# denomination risk: 120% in cash, ~20% in kind (illustrative prices)
+assert abs(in_kind_recovery(1.20, 17_000.0, 100_000.0) - 0.204) < 1e-9
+
+print(f"E[R] at par with s=0.30: {er_par:.3f}; deep (V/m=0.3): {er_deep:.3f}")
+print(f"GUC {p_guc:.3f}  503(b)(9) {p_b9:.3f}  log spread {spread:.3f}")
+```
+
+### Deep-Dive Resource Graph
+
+- **Podcasts:** none cited.
+- **Practitioner Writing:** Jones Day, *To Have and to Hold: Third Circuit Rules That Physical Possession of Goods Is Required Under Section 503(b)(9) of the Bankruptcy Code* (Nov 2017), https://www.jonesday.com/en/insights/2017/11/to-have-and-to-hold-third-circuit-rules-that-physical-possession-of-goods-is-required-under-section-503b9-of-the-bankruptcy-code ; Decrypt on FTX claim prices (22 Sep 2023), https://decrypt.co/198356/ftx-claims-trading-near-35-of-debt-amount-in-secondary-markets
+- **Academic Papers:** Ivashina, Iverson & Smith (2016), *The Ownership and Trading of Debt Claims in Chapter 11 Restructurings*, *Journal of Financial Economics* 119(2): 316–335 (136 large cases, 1998–2009; concentration speeds cases and raises class recoveries; in-case trading does not improve outcomes); summary at the Harvard Law School Forum, https://corpgov.law.harvard.edu/2016/02/25/the-ownership-and-trading-of-debt-claims-in-chapter-11-restructurings
+- **Data & Code:** 11 U.S.C. §503, https://www.law.cornell.edu/uscode/text/11/503 ; 11 U.S.C. §502, https://www.law.cornell.edu/uscode/text/11/502 ; CourtListener API for claims-transfer notices and objections, https://www.courtlistener.com/help/api/
+
+## 16.6 Case Study: Hertz 2020–2026, the Whole Circuit
+
+Hertz is the only case we know of that runs every instrument in this chapter through one company: equity trading during bankruptcy, a competitive plan auction, a rights offering with a backstop, 30-year warrants, a re-IPO, a solvent-debtor fight over post-petition interest, and then, five years later, a return to the liability-management zone. Read the docket as a sequence of option exercises.
+
+> **Docket Diary.** *Hertz, 2020–2026 (sourced from the SEC filings, the Third Circuit opinion and press reports noted; approximate figures marked).*
+> - **22 May 2020.** The Hertz Corporation and affiliates file for Chapter 11 in Delaware after the pandemic shut down car rental.
+> - **Late May to mid-June 2020.** Old Hertz stock, already in bankruptcy, rallies on retail flows. Public Robinhood-holder trackers showed the holder count roughly tripling between the filing and 11 June *(approx.; Robintrack data as reported in the press)*.
+> - **12 Jun 2020.** The bankruptcy court authorizes an at-the-market program to sell up to \$1bn of new common stock. The prospectus warns that the stock may be "worthless." After the SEC raises questions, Hertz suspends the program, having sold about \$29mm of stock *(approx.; per press reports)*.
+> - **11 May 2021.** The plan sponsor auction ends. Knighthead, Certares and Apollo-advised funds win with a package giving old stockholders about \$239mm in cash (\$1.53 a share), 3% of the reorganized common, and a choice of 30-year warrants for 18% (strike set off a \$6.5bn equity value) or rights in a \$1.635bn offering at \$10 (off about \$4.7bn). The losing Centerbridge/Warburg Pincus/Dundon "best and final" had offered \$175mm of cash, warrants for 14% struck off \$8bn, and \$250mm of 7.25% cumulative perpetual preferred (Hertz 8-K/A, 14 May 2021).
+> - **10 Jun 2021.** Plan confirmed. **15 Jun 2021:** rights offering expires. **30 Jun 2021:** effective date. New money: \$2.781bn of common bought directly by the sponsors, \$1.5bn of preferred from Apollo, \$1.635bn from the rights offering; exit financing including a \$1.3bn Term B loan, a \$245mm Term C loan, a \$1.255bn revolver and new fleet ABS. Unsecured notes are paid in cash: principal, pre-petition contract interest and post-petition interest at the federal judgment rate, but not the make-whole premiums or contract-rate post-petition interest (8-K, 7 Jul 2021; Third Circuit opinion). The noteholders are classified as unimpaired, so they cannot vote, and they sue in July 2021.
+> - **8–9 Nov 2021.** Selling stockholders price 44.52mm shares at \$29.00; Hertz buys back 10.34mm shares for \$300mm at the offering price; HTZ and HTZWW begin trading on Nasdaq (Hertz press release, 8 Nov 2021).
+> - **10 Sep 2024.** The Third Circuit holds that the make-whole is the economic equivalent of unmatured interest and is disallowed by §502(b)(2) in the ordinary case, *but* that a solvent debtor must pay unimpaired creditors post-petition interest at the contract rate, make-whole included, before equity receives anything. More than \$270mm is at stake. The federal judgment rate applied in the plan was 0.15% a year, and the court notes the contract rate "exceeds the former by more than 30 times in this case."
+> - **June 2026.** After a profit warning, Hertz announces a financing package combining about \$100mm of shares made available to borrow (the usual way buyers of exchangeable paper get the short they need to hedge) with \$300mm, upsized to \$350mm, of 6.75% exchangeable first-lien secured PIK notes due 2030. The stock falls about 41% in a day to about \$3, its biggest drop since the 2021 listing *(per press reports, Bloomberg Law and IFR; dates and figures to be checked against filings)*.
+> - **October 2026.** Bloomberg Law reports (16 Oct 2026) that revolver lenders have hired Milbank, a secured creditor group has hired Evercore and Gibson Dunn, and Hertz is working with PJT Partners to extend its runway.
+>
+> *The Ad Hoc Group, represented by counsel, wishes to note for the record that in 2021 it was unimpaired, which is how it lost its vote and found its lawsuit.*
+
+The Third Circuit's opening paragraph is the cleanest statement of the absolute priority rule a systematic desk will ever read: "The debtors here, able to pay their creditors in full, believe they have the leverage to deny their unsecured noteholders more than a quarter billion dollars of interest they promised to pay pre-bankruptcy, all while giving lower priority equityholders four times that amount" (*In re The Hertz Corp.*, 3d Cir., 10 Sep 2024). Footnote 5 of the same opinion gives us the plan's own marks for what equity received: about \$240mm of cash, a 3% stake valued at \$141mm, and warrants valued at \$769mm, which is the roughly \$1.1bn the court describes the stockholders receiving.
+
+**How a systematic desk would have traded each leg.**
+
+1. **June 2020, equity in bankruptcy.** Old equity in a Chapter 11 case is a deep out-of-the-money call on enterprise value struck at *all* claims, including post-petition interest. The useful number was the enterprise value implied by the equity market cap plus every claim ahead of it, compared with any plausible range for the business. In June 2020 that comparison said "sell," and the debtor itself tried to sell. It also turned out that the call finished in the money, helped by the recovery in travel and the 2021 surge in used-car prices, which raised the value of the fleet. The desk lesson is humility about deep out-of-the-money calls on a company whose main asset is a commodity in a supply shock, and discipline about borrow cost and locates if you are short them.
+2. **May 2021, the auction.** Two competing bids are a free market test of the equity. Pricing each bid's package for old holders with the warrant and rights machinery of §16.3–16.4 tells you which bid the equity should prefer and how much the auction moved old-equity value. It is also the moment to read the warrant strike basis (\$6.5bn) against the rights valuation (\$4.7bn): a 38% gap that the plan described as a premium and that the derivation in §16.4 shows was only a premium relative to the sponsors' own lowball.
+3. **June 2021, the rights and the backstop.** §16.3.4: a short-dated put sold for a 10% fee paid in shares, plus a 22% unsubscribed block created by the plan's own warrant-or-rights election.
+4. **July to November 2021, emergence to re-IPO.** Hertz is an unusual post-reorg equity because its unsecured creditors were paid in cash, so there was little CLO-driven overhang. The "supply" was the sponsors' and backstop parties' wish to monetize, released on a schedule through an underwritten secondary. In the language of §16.2, $Q_0$ was large but its release date was known, and the buyback of \$300mm at the offering price was the company absorbing part of the release itself.
+5. **2021 to 2024, the make-whole fight.** This is the "Hertz option" term in the GUC pricing formula of §16.5.3: post-petition interest that exists only in the solvent branch. Usually it is worth approximately zero and we drop it. In Hertz it was worth more than \$270mm, and the noteholders were paid for having written the option into their indentures in the first place.
+6. **2026, round two.** At a \$3 stock the \$13.80-strike warrants expiring in 2051 are a 25-year call roughly 4.6 times out of the money, which is to say a pure bet on volatility and survival. The new exchangeable first-lien PIK notes rank ahead of existing unsecured debt, and the creditor groups that organized in October 2026 put Hertz squarely in the territory of the Priming Risk Score of Chapter 13. Theo, who did not work on Hertz at PJT, notes that his former colleagues are now on the other side of a trade his current desk might want to make, and that the wall between the two is exactly as thick as the compliance manual says.
+
+Mags reads the whole Docket Diary twice and puts down her coffee. "Back in my day a company went through Chapter 11 once and spent the rest of its life embarrassed about it. These kids treat it like a pit stop." She pauses. "I'll grant you the pit crew is better."
+
+## 16.7 Case Study: Spirit Airlines, the Five-Month Zero
+
+If Hertz shows how far the right tail of post-reorg equity can run, Spirit Airlines shows how fast the left tail arrives. Per press reports and the company's announcements, Spirit filed for Chapter 11 on 18 Nov 2024 in the Southern District of New York, emerged on 12 Mar 2025 after about four months, having converted roughly \$795mm of debt into equity, with old shareholders wiped out and the new equity issued to noteholders. On 29 Aug 2025, less than six months after emergence, it filed again, listing roughly \$8.1bn of debts against \$8.6bn of assets, after aircraft-lease terminations and card-processor holdbacks squeezed its liquidity; the company said its new shares would likely be cancelled and worthless *(dates and figures per press reports; verify on the docket)*.
+
+The post-reorg equity of March 2025 was therefore not "a small-cap airline at a cheap multiple." It was a short-dated call on the business plan's **liquidity bridge**: the weeks between emergence and the point at which the plan's revenue assumptions either showed up in cash or did not. A multiple cannot see a card processor holding back receipts or a lessor taking back aircraft. A 13-week cash flow model can, because those are exactly the line items it is built from: receipts by week net of holdbacks, aircraft rent by week, minimum liquidity covenants by week.
+
+Theo does not say "I told you so." He takes out the USB stick, puts it on the desk, and lets the stick say it. The desk turns his model into a feature in the jump term of every post-reorg position: let the weekly default intensity be a decreasing function of liquidity runway,
+$$\lambda_t = \lambda_0 \exp\!\left(-\beta\,\frac{L_t}{B_t}\right),$$
+where $L_t$ is unrestricted liquidity (after holdbacks), $B_t$ is projected weekly cash burn, $L_t/B_t$ is runway in weeks, and $\lambda_0, \beta > 0$ are fitted on re-defaults (Chapter 14's re-default clock covers the fitting). A post-reorg position's size then shrinks automatically as runway shortens, which is what a restructuring banker would have done by instinct and what a systematic book has to be told explicitly. For the warrant pricer in §16.4, this $\lambda_t$ is the jump intensity; for the book in §16.8, it is the jump-to-zero probability.
+
+### Deep-Dive Resource Graph
+
+- **Podcasts:** none cited.
+- **Practitioner Writing:** Mayer Brown, *Third Circuit Orders Hertz to Pay Noteholders Post-Petition Interest, Including Make-Whole Premiums, at Contract Rates* (Oct 2024), and Morgan Lewis, *Third Circuit Finds Make-Whole Is Unmatured Interest That Must Be Paid by Solvent Debtor* (Sep 2024), titles only; Patterson Belknap, *Selling the Dip: Hertz's Scrapped Stock Plan Unlikely to Generate Followers* (2020), title only.
+- **Academic Papers:** Edward Altman's research on Chapter 22 recidivism (title-level pointer); Jiang, Wang & Yang, *The Disappearing Outperformance of Post-reorg Equity* (title only).
+- **Data & Code:** Third Circuit opinion, https://www2.ca3.uscourts.gov/opinarch/231169p.pdf ; Hertz effective-date 8-K, https://www.sec.gov/Archives/edgar/data/1657853/000110465921089858/tm2121430d1_8k.htm ; SEC EDGAR full-text search for Spirit's emergence and second-filing 8-Ks, https://www.sec.gov/edgar
+
+## 16.8 Putting It Together: A Post-Reorg Book
+
+### 16.8.1 The distribution you are actually trading
+
+Combine §16.1's Trend Watch with §16.7's left tail. Over a 200-day horizon a single post-reorg equity's return $R$ is roughly a lognormal with median zero and mean +40% (the Jiang–Wang–Yang shape) with a jump to $-100\%$ mixed in (the Spirit shape). Write $X \sim N(0, s^2)$ and a jump indicator $J$ with $\Pr(J=1) = p_J$:
+$$R = (1 - J)\left(e^{X} - 1\right) - J, \qquad \mathbb{E}[e^X] = e^{s^2/2} = 1.4 \;\Rightarrow\; s = \sqrt{2\ln 1.4} \approx 0.82 .$$
+Then $\mathbb{E}[R] = (1-p_J)(1.4) - 1$, which is +33% for $p_J = 5\%$ *(illustrative)*, while the median is slightly *negative*: solving $p_J + (1-p_J)\Phi(\ln(1+m)/s) = \tfrac12$ gives $m \approx -5\%$. **The typical single name loses money; the average name makes a third.** That is the sentence to tape to the monitor before anyone proposes a concentrated post-reorg book.
+
+Diversification turns the mean into the median. For an equal-weighted book of $N$ independent names, the book return has the same mean, standard deviation reduced by $\sqrt N$, and skewness reduced by $\sqrt N$, so its median moves toward its mean. With $N = 20$ (about the size of Jiang, Wang & Yang's portfolio) the median book return is comfortably positive, as Block 5 confirms by simulation.
+
+### 16.8.2 Sizing: Kelly with a trapdoor, then a liquidity ceiling
+
+For a single name held as a fraction $f$ of capital, growth-optimal sizing maximizes $g(f) = \mathbb{E}[\ln(1 + fR)]$. The jump to $-100\%$ makes $g(f) \to -\infty$ as $f \to 1$, so the Kelly fraction is always strictly less than one, and the first-order condition
+$$g'(f) = \mathbb{E}\!\left[\frac{R}{1 + fR}\right] = 0$$
+has a neat check point. At $f = \tfrac12$, the non-jump term is $\mathbb{E}[2\tanh(X/2)] = 0$ by symmetry of $X$, and the jump term is $p_J \cdot (-1)/(1 - \tfrac12) = -2p_J$, so $g'(\tfrac12) = -2p_J < 0$: with any jump risk at all, full-name Kelly is below one half. In practice we use half-Kelly (Chapter 28) and then hit the constraint that actually binds, which is liquidity. If a position must be exitable at participation rate $\pi$ of average daily dollar volume $\text{ADV}$ within $d$ days, its size is capped at $\pi \cdot \text{ADV} \cdot d$. For an OTC post-reorg stock trading \$200k a day, a 10% participation and a 20-day exit give a \$400k position. This is why the surviving post-reorg alpha, which lives in the OTC segment, does not scale: it is real, and a \$500mm book can own about four hundred thousand dollars of it per name.
+
+### 16.8.3 The pair trades
+
+The instruments in this chapter come in natural pairs, each isolating one risk:
+
+| Pair | What it isolates | Section |
+| :--- | :--- | :--- |
+| Long 503(b)(9) / short GUC (or the reverse) | Pool-size risk, holding timing fixed | §16.5.3 |
+| Long trade claim / short senior unsecured bond | The forced-seller discount on the claim, holding enterprise value fixed | §16.5.1, Moyer p.269 |
+| Long warrant / short stock at the dilution-adjusted delta | Volatility and survival, holding direction fixed | §16.4.2 |
+| When-issued vs. regular-way stock | Settlement and delivery timing, i.e. the $\alpha$ of §16.2.2 | §16.2.2, Moyer p.370 |
+| Backstop seat vs. plain rights | The put premium plus exclusivity | §16.3.2 |
+
+> **Poker Table.** Ines replays the cold open's hand through the model, assuming most of the CLO's allocation had not yet settled (delivery rate $\alpha = 5$ per year, execution rate $\theta \approx 3.4$, total discount $\kappa Q_0/M = 15\%$, all *illustrative*). Buying the CLO's first offer at the open marks out at about −4.4% after one month and about −6.6% at the three-month trough, then climbs back to about −1.2% after a year: the open was the first card of a long deal, not the end of the hand. Buying at the trough instead earns about +5.4% to the one-year mark from the flow alone, before anyone has an opinion about trucking. "You didn't lose because the stock was bad," Ines says. "You lost because you called before the seller had finished getting chips." The hand history is in Block 5.
+
+### Specification for AI Implementation
+
+**The Spec You Hand the Robot.** *Vague version:* "Size the post-reorg book." *What ROBO built:* full Kelly on the sample mean, which put 100% of capital into the single name with the highest historical return, a stock that had since gone through Chapter 22. *Precise version:* simulate 200-day returns from the jump-lognormal mixture, verify the mean–median gap and its disappearance under diversification, compute the single-name Kelly fraction on a grid strictly below one, apply half-Kelly and a liquidity cap, and replay the cold-open hand through `ForcedSellerOverhang` markouts.
+
+```python
+# --- Block 5: the post-reorg book (reuses RNG, ForcedSellerOverhang, ovh_sched, theta_fa) ---
+P_JUMP = 0.05                        # illustrative jump-to-zero probability over 200 days
+S_LOG = np.sqrt(2.0 * np.log(1.4))   # lognormal with median 0 and mean +40%
+
+
+def simulate_post_reorg_returns(n, p_jump=P_JUMP, s_log=S_LOG, rng=RNG):
+    X = rng.normal(0.0, s_log, n)
+    R = np.exp(X) - 1.0
+    R[rng.random(n) < p_jump] = -1.0
+    return R
+
+
+def kelly_fraction(R, grid=None):
+    grid = np.linspace(0.0, 0.95, 191) if grid is None else grid
+    growth = np.array([np.mean(np.log1p(f * R)) for f in grid])
+    return float(grid[np.argmax(growth)]), growth
+
+
+def position_cap(adv_usd, participation=0.10, exit_days=20):
+    return participation * adv_usd * exit_days
+
+
+def size_position(capital, f_kelly, adv_usd, kelly_mult=0.5, participation=0.10, exit_days=20):
+    return min(kelly_mult * f_kelly * capital, position_cap(adv_usd, participation, exit_days))
+
+
+R1 = simulate_post_reorg_returns(400_000)
+assert abs(R1.mean() - ((1 - P_JUMP) * 1.4 - 1.0)) < 0.02      # mean about +33%
+assert np.median(R1) < 0.0                                      # the typical name loses
+
+N_NAMES, N_BOOKS = 20, 50_000
+books = simulate_post_reorg_returns(N_NAMES * N_BOOKS).reshape(N_BOOKS, N_NAMES).mean(axis=1)
+assert np.median(books) > 0.15                                  # diversification moves the median
+
+f_kelly, growth = kelly_fraction(R1)
+assert 0.05 < f_kelly < 0.5                                     # g'(1/2) = -2 p_J < 0
+
+otc_size = size_position(500e6, f_kelly, adv_usd=2e5)
+assert otc_size == position_cap(2e5) == 4e5                     # liquidity binds, not Kelly
+
+# Ines's hand history: markouts for buying at the open vs at the trough (illustrative)
+def markout(model, s_entry, s_exit):
+    return float(model.discount(s_exit) - model.discount(s_entry))
+
+s_pk = ovh_sched.peak_time()
+assert markout(ovh_sched, 0.0, 1 / 12) < -0.04
+assert markout(ovh_sched, 0.0, s_pk) < -0.06
+assert markout(ovh_sched, s_pk, 1.0) > 0.05
+
+print(f"single name: mean {R1.mean():.1%}, median {np.median(R1):.1%}; "
+      f"20-name book median {np.median(books):.1%}; Kelly {f_kelly:.2f}")
+print(f"OTC position at $200k ADV: ${otc_size:,.0f}; "
+      f"markout open->trough {markout(ovh_sched, 0.0, s_pk):.1%}, trough->1y {markout(ovh_sched, s_pk, 1.0):.1%}")
+```
+
+### Deep-Dive Resource Graph
+
+- **Podcasts:** *Flirting with Models* and *Resolve Riffs* on position sizing and the difference between mean and median outcomes (no single episode cited).
+- **Practitioner Writing:** Chapter 28 of this book on liquidity-adjusted Kelly; Moyer p.269 on the claim-versus-bond hedge.
+- **Academic Papers:** Kelly (1956), *A New Interpretation of Information Rate*, *Bell System Technical Journal*; Blume & Stambaugh (1983), *Biases in Computed Returns: An Application to the Size Effect*, *Journal of Financial Economics*.
+- **Data & Code:** FINRA OTC equity data and SEC EDGAR for float and holder data, https://www.sec.gov/edgar
+
+## 16.9 Desk Debrief
+
+- **The plan value is a negotiated number.** Anchor every post-reorg instrument to the price insiders actually pay in the same plan (the rights price, the direct-investment price), never to the disclosure statement's midpoint.
+- **Forced selling is a supply schedule, not a mood.** Overhang $Q_0$, execution rate $\theta$ (about 3.4 a year, a 2.4-month half-life, from the fallen-angel aggregates), capital $M_t$ arriving slowly. The discount peaks *after* the event when delivery is staggered, and the signal expires when the 13G says the constrained holders are out.
+- **The post-reorg premium is a portfolio property.** Mean +40%, median zero, and no alpha after 2010 for listed names. Only a diversified book harvests the right tail, and the surviving OTC alpha does not scale past a few hundred thousand dollars a name.
+- **A backstop is a short put, and the fee is its smallest leg.** At a 25% discount and 70% volatility the fair fee is about 6%; the discount, the fee paid in shares and the exclusivity option take the all-in transfer to about 20% of the raise. Since *ConvergeOne*, an exclusive backstop without a market test also carries legal reversal risk.
+- **Price warrants with dilution, and never charge for the funeral twice.** With a market spot, jump-to-default enters through $r + \lambda$, not as an $e^{-\lambda T}$ haircut. The plan's own warrant valuation tells you the volatility the other side assumed.
+- **A claim is long a ratio and short a call at par.** Near par, pool uncertainty costs recovery (about 8 points at a 30% log-sd); deep out of the money, it helps. Know which side of the kink you are on.
+- **The 503(b)(9)/GUC pair isolates pool risk.** The person who has counted the leases, applied the §502(b)(6) cap and struck the duplicate claims should be long the GUC against the 503(b)(9). That person used to work at PJT.
+- **Check the 13-week model before the multiple.** Spirit's first post-reorg equity lasted under six months; Hertz's warrants run to 2051 and the company was back in the room in 2026. Runway drives the jump term.
+
+**The Spec You Hand the Robot.** Build `post_reorg_engine.py` with five modules, each under $\mathbb{P}$ unless labeled, each carrying the asserts in Blocks 1–5 as unit tests. (1) `overhang`: `ForcedSellerOverhang(Q0, theta, M0, M_star, rho, kappa, alpha=None)` with `Q`, `discount`, `drift`, `half_life`, `peak_time`; inputs from a holder registry (plan schedule, Rule 2019, 13D/13G, Form 4, 13F, trustee reports); output a daily expected-excess-drift signal per name that is exactly zero once executed fraction reaches one. (2) `rights`: `RightsOffering(n0, m, K)` with `post_money`, `right_value_per_plan_share`, `backstop_payoff`, `fair_fee(x0, sigma, T)`; plus an all-in transfer with fee in shares, reserved fraction `a`, unexercised-in-the-money fraction `eta`, and a fee-survival probability by circuit and market test. (3) `warrants`: `warrant_price(S, K, T, sigma, r, omega, lam)` as the dilution fixed point with jump via $r+\lambda$; `implied_vol_warrant` by bracketed root-finding; spot must be labeled `market` or `going_concern`, and only the latter may take a survival haircut. (4) `claims`: register ingestion (drop superseded and withdrawn claims, apply §502(b)(6)/(b)(7) caps, separate 503(b)(9) by receipt evidence), `expected_recovery_lognormal`, `price_claim` for `GUC` and `503b9`, the priority-spread decomposition, and `in_kind_recovery` for claims fixed in petition-date dollars. (5) `book`: jump-lognormal return simulation, Kelly on a grid strictly below one, half-Kelly, a liquidity cap of participation × ADV × exit days, and a runway-driven jump intensity $\lambda_t = \lambda_0 e^{-\beta L_t/B_t}$. Units: shares in millions, money in USD millions unless a field says per share, rates and intensities per year, time in years. Seed every simulation with `np.random.default_rng(16)`. ROBO should refuse, not guess, when a required field is missing.
+
+### Exercises
+
+1. **The CLO that wanted a term loan.** A plan gives a fulcrum class 100% of the new equity; CLOs hold 30% of the class, a sponsor holds a locked 35%, and the rest is free. (a) Compute $\phi^{\text{OH}}$. (b) Using Block 1 with $\theta = 3.4$, $\kappa = 0.3$ and capital equal to twice the overhang, compute the expected total abnormal return. (c) The plan is amended to let CLOs elect take-back term loans instead, and 80% of them do. Recompute (a) and (b), and explain why the CLO managers' election improved the stock for everyone else.
+2. **Two speeds.** Simulate a panel with Block 1 using $\rho = 0.5$, $M_0 = 30$ and $M^* = 60$, then fit $(\theta, \rho)$ jointly with `scipy.optimize.least_squares`. Show that a single exponential fitted to the first two six-month windows underpredicts the third, as the single-exponential fit to Dynkin's 5.75/1.04/0.86 does, and report which parameter the third window identifies.
+3. **Four legs of the seat.** For a \$500mm rights offering at a 30% discount to fair value, 65% volatility, a 0.3-year commitment window, a dilution factor of 0.6, a 10% fee paid in shares, 20% of the offering reserved for the backstop parties and 15% of in-the-money rights left unexercised, compute each leg of $\Pi^{\text{BP}}$ in expectation. Which leg is largest? Now apply a 60% probability that the fee survives an equal-treatment challenge, and say which legs a court can and cannot reach.
+4. **Kaz's funeral, formally.** Show that $C_{\text{BS}}(S, K, T, \sigma, r + \lambda) > C_{\text{BS}}(S, K, T, \sigma, r)$ for $\lambda > 0$. Then find the going-concern spot $S^{\text{GC}}$ at which Kaz's haircut price $e^{-\lambda T}C_{\text{BS}}(S^{\text{GC}}, K, T, \sigma, r)$ equals the correct jump price at the market spot $S$, for the Hertz warrant inputs. Interpret $S^{\text{GC}}/S$ in one sentence a restructuring banker would accept.
+5. **The boat and the truck.** Vendor A shipped \$2mm of goods by sea 25 days before the petition, free on board at the shipping point; they were unloaded at the debtor's warehouse 18 days before the petition. Vendor B's truck delivered \$2mm of goods 22 days before the petition. Under *World Imports*, which vendor holds a 503(b)(9) claim? Price both claims with Block 4 (use $h = 1.5$, $r = 4\%$, $\psi = 8\%$, a GUC class with $\mu_Y = \ln 0.4$ and $s_Y = 0.35$) and compute the dollar value of having hired a slower ship.
+6. **Short a call, paid nothing.** An FTX-style customer held 1 BTC, dollarized at about \$17k at the petition date, and received 120% of that in cash about 2.5 years later. Using Black–Scholes with 60% volatility, value the call on 1.2 BTC struck at the petition-date dollar amount that the dollarization clause implicitly made the customer write. Compare it with what a claims buyer at 15 cents paid for the claim, and explain who was really short volatility.
+
+### Deep-Dive Resource Graph
+
+- **Podcasts:** *Bloomberg Odd Lots* archive on distressed debt, bankruptcy claims and liability management; *Flirting with Models* (Corey Hoffstein) on trend and sizing. No specific episodes cited.
+- **Practitioner Writing:** Duke FinReg Blog on post-reorg equity (17 Sep 2021), https://sites.duke.edu/thefinregblog/2021/09/17/has-post-reorg-equity-outperformed-in-the-last-three-decades/ ; Gunjan Seth on rights offerings, CLS Blue Sky Blog (11 Mar 2025), https://clsbluesky.law.columbia.edu/2025/03/11/do-rights-offerings-reduce-bargaining-complexity-in-chapter-11/ ; Lowenstein Sandler on *ConvergeOne* (via Mondaq), https://www.mondaq.com/unitedstates/insolvencybankruptcy/1719792/convergeone-decision-fifth-circuit-weighs-in-on-unequal-treatment-plan-finality-video ; Moyer, *Distressed Debt Analysis* (2004), Chapter 13 and the trade-claims discussion at pp.310–311.
+- **Academic Papers:** Eberhart, Altman & Aggarwal (1999), *Journal of Finance* 54(5); Jiang, Wang & Yang, *The Disappearing Outperformance of Post-reorg Equity*; Buccola, Marcovich Gross & McBrady (2026), *The Backstop Party*, *American Bankruptcy Law Journal* 100(1); Seth, *Do Rights Offerings Reduce Bargaining Complexity in Chapter 11?*; Ivashina, Iverson & Smith (2016), *Journal of Financial Economics* 119(2); Duffie (2010), *Journal of Finance*; Galai & Schneller (1978), *Journal of Finance*.
+- **Data & Code:** SEC EDGAR, https://www.sec.gov/edgar ; CourtListener REST API, https://www.courtlistener.com/help/api/ ; 11 U.S.C. §§502–503 at Cornell LII, https://www.law.cornell.edu/uscode/text/11/502 and https://www.law.cornell.edu/uscode/text/11/503 ; Third Circuit *Hertz* opinion, https://www2.ca3.uscourts.gov/opinarch/231169p.pdf ; Hertz plan 8-K filings, https://www.sec.gov/Archives/edgar/data/1657853/000110465921066944/tm2116104d2_8k.htm and https://www.sec.gov/Archives/edgar/data/1657853/000110465921089858/tm2121430d1_8k.htm
+
+<!-- STATUS: COMPLETE -->

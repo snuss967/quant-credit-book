@@ -388,11 +388,11 @@ The total available move is $2d$ (down $d$, up $d$), so the capture ratio is $(T
 
 The AQR team's out-of-sample test of trend in alternative markets, Babu, Levine, Ooi, Pedersen, and Stamelos (2020), *Trends Everywhere*, includes five CDS indices (CDX NA IG from October 2003, CDX NA HY from March 2004, iTraxx Europe and Crossover from June 2004, and an EM index from March 2004), with annualized volatilities of only 3.9–5.5%. Across all alternative assets, 12-month TSMOM earned a gross Sharpe of 1.34. Credit, however, was the weakest group once passive beta was removed. Regressed on an equal-volatility passive long portfolio, 12-month credit TSMOM had an annualized alpha of 4.4% with a *t*-statistic of 0.49, a beta of 0.52 (*t* = 8.84), and an $R^2$ of 33%, the highest of any group. Fidelity's decomposition of SG Trend Index returns (data to December 2025) finds that about 76% of a simple trend strategy's risk is beta timing, and puts the index's correlation with the S&P 500 at −0.11 unconditionally and −0.31 in down months.
 
-The desk motto applies without modification. Trend is beta that changed its mind, and it is still beta. Strip it before you call it alpha. In credit there is a structural reason the stripping removes so much. The carry hurdle (§10.1.2) keeps the 12-month signal long through most of the cycle, so a large share of credit TSMOM's return is the credit risk premium, collected while spreads drift tighter. The genuine trend component is the 10–20% of months in which the signal is short, which is why it matters so much whether those months are slow sell-offs or sharp Vs.
+The desk motto applies without modification. Trend is beta that changed its mind, and it is still beta. Strip it before you call it alpha. In credit there is a structural reason the stripping removes so much. The carry hurdle (§10.1.2) keeps the 12-month signal long through most of the cycle, so a large share of credit TSMOM's return is the credit risk premium, collected while spreads drift tighter. The genuine trend component lives in the minority of months in which the signal is short, which is why it matters so much whether those months are slow sell-offs or sharp Vs.
 
 Hurst, Ooi, and Pedersen (2017), *A Century of Evidence on Trend-Following Investing*, give the long-run base rate. Across 67 markets from 1880 to 2016, TSMOM was profitable in every decade and positive in 8 of the 10 worst drawdowns of a 60/40 portfolio, which lasted about 15 months peak to trough on average, long enough for trend to flip short. It struggled in abrupt crashes such as October 1987. For credit, this is the whipsaw arithmetic stated as history.
 
-> **Trend Watch: CTAs, speed, and crowding, 2024–2026.** CTAs, in SG's phrase, "showcase a level of adaptability akin to the Kardashians," and the last two years tested it. *The drawdown:* the SG Trend Index fell 4.9% in April 2025 and was down 9.3% for the year to that point (SG Prime Services, *CTA Industry Update*, May 2025). Its 12-month return to 30 April 2025 was −18.6%, a level it had breached only twice before (Man Group, *Trend Following and Drawdowns: Is This Time Different?*). AlphaSimplex dates the peak-to-trough drawdown at −21.8% from 15 April 2024 to 14 May 2025 (Kaminski and Wen, June 2025), and Cambridge Associates calls it the second-largest since 2000. *The recovery:* for full-year 2025, SG Trend returned +2.39% against +17.89% for the S&P 500 total return, according to Top Traders Unplugged's compilation (23 January 2026). In 2026 trend made money during the Middle East energy shock, +10.13% year to date by end-April while HY OAS peaked at only 3.46% on 30 March (FRED), and stood at +11.07% year to date at end-August (Top Traders Unplugged; secondary figures, check against SG Prime Services). *The crowding:* in July 2026 the SG Trend Index lost 1.12%, and the same compiler noted that "the programs were largely positioned the same way," so breadth across programs gave little protection. SG put the 2024 pairwise correlation of index constituents at 0.78, and Man reports that correlation was 0.87 before 2007. *The speed:* SG finds that since 2007 the index "behaves more like a much slower model," while faster models "delivered the best hypothetical returns" in 2020. Man finds that adding alternative markets, "such as power, synthetic credit indices and interest rate swaps," improved performance, more so for slower systems. *Scale:* SG cites industry AUM of about \$340bn (BarclayHedge, Q4 2024). Man AHL reports \$39.4bn of trend-following AUM across "900+ traditional and alternative markets" as of 30 June 2026. *What it means for the desk:* the 2025 drawdown was not a credit event. Credit indices are a small, slow sleeve in CTA books, and HY OAS has spent 2024–2026 in a tight band (2.59–4.61%), with few trends long enough to pass the carry hurdle. The credit trend sleeve's job in this regime is to be cheap, small, and ready for the next slow sell-off, not to earn its keep in a market that keeps snapping back.
+> **Trend Watch: CTAs, speed, and crowding, 2024–2026.** CTAs, in SG's phrase, "showcase a level of adaptability akin to the Kardashians," and the last two years tested it. *The drawdown:* the SG Trend Index fell 4.9% in April 2025 and was down 9.3% for the year to that point (SG Prime Services, *CTA Industry Update*, May 2025). Its 12-month return to 30 April 2025 was −18.6%; a 12-month loss deeper than 15% had happened only twice before (Man Group, *Trend Following and Drawdowns: Is This Time Different?*). AlphaSimplex dates the peak-to-trough drawdown at −21.8% from 15 April 2024 to 14 May 2025 (Kaminski and Wen, June 2025). Cambridge Associates, measuring −20.4% from May 2024 to May 2025, calls it the second-largest drawdown since 2000. *The recovery:* for full-year 2025, SG Trend returned +2.39% against +17.89% for the S&P 500 total return, according to Top Traders Unplugged's compilation (23 January 2026). In 2026 trend made money during the Middle East energy shock, +10.13% year to date by end-April while HY OAS peaked at only 3.46% on 30 March (FRED), and stood at +11.07% year to date at end-August (Top Traders Unplugged; secondary figures, check against SG Prime Services). *The crowding:* in July 2026 the SG Trend Index lost 1.12%, and the same compiler noted that "the programs were largely positioned the same way," so breadth across programs gave little protection. SG put the 2024 pairwise correlation of index constituents at 0.78, and Man reports that correlation was 0.87 before 2007. *The speed:* SG finds that since 2007 the index "behaves more like a much slower model," while faster models "delivered the best hypothetical returns" in 2020. Man finds that adding alternative markets, "such as power, synthetic credit indices and interest rate swaps," improved performance, more so for slower systems. *Scale:* SG cites industry AUM of about \$340bn (BarclayHedge, Q4 2024). Man AHL reports \$39.4bn of trend-following AUM across "900+ traditional and alternative markets" as of 30 June 2026. *What it means for the desk:* the 2025 drawdown was not a credit event. Credit indices are a small, slow sleeve in CTA books, and HY OAS has spent 2024–2026 in a tight band (2.59–4.61%), with few trends long enough to pass the carry hurdle. The credit trend sleeve's job in this regime is to be cheap, small, and ready for the next slow sell-off, not to earn its keep in a market that keeps snapping back.
 
 ## 10.7 Case Studies: 2008, 2020, 2022, and the April 2025 Coda
 
@@ -426,7 +426,7 @@ All four episodes are told the same way: what trend did, what it should have bee
 
 *Why.* The whipsaw arithmetic of §10.6.2 with $T \approx 2$ months. Any lag over two weeks loses money on the round trip, and the only trend that paid was fast. Fast trend is ruinous in cash credit, where bid–ask had gapped, and affordable in CDX, which dealers kept quoting at record volume. A long-protection trend position is not an open market purchase of anyone's bonds. It is a bet that the dealers who quote CDX IG hundreds of times a day keep doing so. In March 2020 they did, and the cash market did not.
 
-> **The Spec You Hand the Robot (vague version).** Theo, early in his first month: "Follow the trend and don't get whipsawed." *What ROBO built:* a strategy with a 36-month lookback and a 200 bp dead band that traded twice in 18 years and was long protection on CDX HY at full risk on 24 March 2020, the morning after the Fed announcement. It was never whipsawed. It simply arrived after every trend had ended. Speed is a parameter with units, and "don't get whipsawed" is an objective that the cash-in-a-drawer strategy satisfies perfectly.
+> **What ROBO Built from the Vague Version.** Theo, early in his first month: "Follow the trend and don't get whipsawed." *What ROBO built:* a strategy with a 36-month lookback and a 200 bp dead band that traded twice in 18 years and was long protection on CDX HY at full risk on 24 March 2020, the morning after the Fed announcement. It was never whipsawed. It simply arrived after every trend had ended. Speed is a parameter with units, and "don't get whipsawed" is an objective that the cash-in-a-drawer strategy satisfies perfectly.
 
 *What the 2026 desk would have flagged.* A fast sleeve (20/120-day crossover on CDX, cheap to trade) flipping short in late February. A slow sleeve flipping short near the wides, which is the expensive moment. A blended forecast (§10.4) whose value term by late March outweighed the trend term, so the blend was cutting the short as the slow signal was adding to it. An index-versus-cash execution rule that kept the whole sleeve out of cash bonds. Lesson: in a $\kappa$-week, the trend sleeve's job is to be small, and the blend makes it small without anyone having to forecast the Fed.
 
@@ -515,3 +515,516 @@ with variances annualized, so $\Delta t$ cancels. On the 2026 desk $\hat\lambda^
 > **[SOURCE EXTRACTION]** *Schmid_Credit_Risk_Pricing_Models p.48:* "Rating momentum means that prior rating changes may have predictive power for the direction of future rating changes. For example, downgrade rating momentum suggests that an obligor downgraded to B is more likely to be further downgraded than upgraded within the next year."
 >
 > **Annotation.** Rating momentum is a trend in the *intensity* $\lambda$, not in the price, and it is the one kind of single-name trend that survives the jump problem, because it trends the thing that drives the jumps. Schmid presents it as a departure from Markov rating transitions: the probability of the next move depends on the direction of the last one. For a trend desk it means a downgrade raises next year's downgrade probability, which raises $\hat\lambda^{\text{J}}$ in the weight formula above, which shrinks the position before the next jump instead of after. Lee, Naranjo, and Sirmans (2021), *CDS Momentum*, connect the two channels: CDS momentum of about 7.1% a year, strongest in liquid contracts ahead of slow-moving rating changes. Ratings move slowly, and the market partly anticipates them. The modern desk does not trade rating momentum as a stand-alone signal. Downgrades are public and their predictable part is priced fast in liquid names. It uses rating momentum, together with the PRS, as an input to the jump intensity that sizes everything else. It also remembers the RSSG lesson that ratings agencies are the last to arrive at a restructuring, usually just after the professionals have sent their invoices.
+
+## 10.10 The Credit Trend Lab: A Reference Implementation
+
+### Specification for AI Implementation
+
+**The Spec You Hand the Robot.** Build `credit_tsmom.py`: a credit trend engine that (1) builds roll-safe, ACT/360 excess returns for spread-quoted and price-quoted indices; (2) computes sign, ensemble, and crossover trend signals; (3) sizes them with the maximum of an EWMA forecast, a DTS-law forecast, and a floor; (4) blends trend with carry and value using coefficients estimated only on past data; (5) tests equity-to-credit lead–lag with HAC standard errors and a Granger F-test; and (6) reports Sharpe ratio, drawdown, turnover, a convexity regression, and a crisis-window table. Weights known at $t$ earn returns from $t$ to $t+1$. Positive weight means long risk. Every guard below is an `assert`, and a failed guard stops the run.
+
+| Object | Shape / type | Units and convention |
+| :--- | :--- | :--- |
+| `spread_dec` | `pd.Series[T]`, DatetimeIndex | decimal spread (0.045 = 450 bp), one `series_id` |
+| `price_pts` | `pd.Series[T]` | points of par (CDX HY), coupon decimal (0.05) |
+| `quotes` | DataFrame `[date, series_id, spread_dec]` | old and new series overlap on the roll date |
+| `r` | `pd.Series[T-1]` | excess return per unit notional, long risk positive |
+| `sig` | `pd.Series[T-1]` in $[-1,1]$ | known at close of $t$; NaN during warm-up |
+| `vol` | `pd.Series[T-1]` | annualized decimal; floored at 0.5% |
+| `w` | `pd.Series[T-1]` | notional per unit capital, capped at $\pm 10$ |
+| `pnl` | `pd.Series` | `w.shift(1) * r`, warm-up dropped |
+
+Edge cases the robot must handle and not guess: a return across two `series_id` values (raise); a missing quote for the held series on the roll date (raise with the date); non-positive or missing spreads (raise); exactly zero trailing returns (sign 0 is allowed but must be counted in turnover); FRED's "." for missing values (coerce and drop); the leverage cap binding (report the fraction of capped days). Numerical guards: volatility floor, leverage cap, `lstsq` rather than an explicit inverse in the expanding regression, and HAC standard errors whenever returns overlap.
+
+The six blocks run in order in one interpreter. Blocks 1–5 are seeded simulations with asserted guards; block 6 adds the lead–lag, whipsaw, and convexity checks and runs on real data only when the FRED file is present.
+
+```python
+# credit_tsmom.py, block 1 of 6: conventions, return construction, carry and roll guards (Sections 10.1-10.2)
+# Optional data preamble. Run once, outside the chapter; nothing below touches the network.
+#   import pandas as pd
+#   for sid in ["BAMLH0A0HYM2", "BAMLC0A0CM"]:
+#       pd.read_csv(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}").to_csv(f"{sid}.csv", index=False)
+# FRED values are OAS in percent; the loader in block 6 divides by 100.
+import os
+import numpy as np
+import pandas as pd
+from scipy import stats
+
+PPY_D, PPY_M = 252, 12                 # periods per year (MOP use 261 trading days; pin it in the spec)
+D_SPR = {"HY": 4.0, "IG": 7.0}         # spread durations, illustrative
+D_HY = D_SPR["HY"]
+
+
+def excess_returns(spread_dec: pd.Series, dur: float) -> pd.Series:
+    """r_t = s_{t-1} * (ACT/360 year fraction) - dur * (s_t - s_{t-1}); long risk is positive.
+    Input: one series_id only, decimal spreads, sorted DatetimeIndex, no gaps."""
+    s = spread_dec.astype(float)
+    if not isinstance(s.index, pd.DatetimeIndex) or not s.index.is_monotonic_increasing:
+        raise ValueError("need a sorted DatetimeIndex for ACT/360 accrual")
+    if s.isna().any() or (s <= 0).any():
+        raise ValueError("spreads must be positive decimals with no missing values")
+    yf = s.index.to_series().diff().dt.days / 360.0
+    r = s.shift(1) * yf - dur * s.diff()
+    return r.iloc[1:]
+
+
+def cdx_price_returns(price_pts: pd.Series, coupon_dec: float) -> pd.Series:
+    """Price-quoted index (CDX HY): r = dP/100 + coupon * ACT/360. Never round-trip through spread."""
+    p = price_pts.astype(float)
+    yf = p.index.to_series().diff().dt.days / 360.0
+    return (p.diff() / 100.0 + coupon_dec * yf).iloc[1:]
+
+
+def roll_safe_returns(quotes: pd.DataFrame, dur: float) -> pd.Series:
+    """quotes: columns [date, series_id, spread_dec]. The return from t-1 to t is computed inside the
+    series that was on the run at t-1, so no return ever spans two series."""
+    wide = quotes.pivot(index="date", columns="series_id", values="spread_dec").sort_index()
+    held = wide.apply(lambda row: row.last_valid_index(), axis=1)
+    idx, out = wide.index, []
+    for t in range(1, len(idx)):
+        k = held.iloc[t - 1]
+        s0, s1 = wide.iloc[t - 1][k], wide.iloc[t][k]
+        if np.isnan(s1):
+            raise ValueError(f"series {k} has no quote on {idx[t].date()}; extend the overlap window")
+        yf = (idx[t] - idx[t - 1]).days / 360.0
+        out.append(s0 * yf - dur * (s1 - s0))
+    return pd.Series(out, index=idx[1:])
+
+
+# Guard 1 (carry): constant spreads earn exactly s * ACT/360.
+dates = pd.bdate_range("2020-01-01", "2020-12-31")
+r_flat = excess_returns(pd.Series(0.045, index=dates), D_HY)
+assert abs(r_flat.sum() - 0.045 * (dates[-1] - dates[0]).days / 360.0) < 1e-10, "carry guard"
+
+# Guard 2 (price-quoted carry): a CDX HY price pinned at 100 earns the 500 bp coupon, ACT/360.
+r_par = cdx_price_returns(pd.Series(100.0, index=dates), 0.05)
+assert abs(r_par.sum() - 0.05 * (dates[-1] - dates[0]).days / 360.0) < 1e-10, "price carry guard"
+
+# Guard 3 (roll): a 10 bp roll-up between two flat series is not a loss.
+q = pd.concat([
+    pd.DataFrame({"date": pd.bdate_range("2025-01-02", "2025-03-31"), "series_id": 44, "spread_dec": 0.0350}),
+    pd.DataFrame({"date": pd.bdate_range("2025-03-20", "2025-06-30"), "series_id": 45, "spread_dec": 0.0360}),
+])
+r_safe = roll_safe_returns(q, D_HY)
+wide_q = q.pivot(index="date", columns="series_id", values="spread_dec").sort_index()
+generic = wide_q.apply(lambda row: row[row.last_valid_index()], axis=1)   # vendor-style splice
+r_naive = excess_returns(generic, D_HY)
+assert abs((r_naive.sum() - r_safe.sum()) + D_HY * 0.0010) < 1e-12, "the splice shows a fake -D x 10 bp"
+assert (r_safe > 0).all(), "flat spreads: every within-series return is pure carry"
+print(f"block 1 ok: roll splice error = {r_naive.sum() - r_safe.sum():+.4%} of notional")
+```
+
+```python
+# credit_tsmom.py, block 2 of 6: signals, sizing, P&L; sign, turnover and Sheppard guards (Sections 10.2, 10.8)
+def tsmom_sign(r: pd.Series, h: int) -> pd.Series:
+    """sign of the trailing h-period summed excess return, known at the close of t."""
+    return np.sign(r.rolling(h, min_periods=h).sum())
+
+
+def ensemble_sign(r: pd.Series, hs) -> pd.Series:
+    """mean of sign signals over lookbacks hs; NaN until the longest lookback is available."""
+    return pd.concat([tsmom_sign(r, h) for h in hs], axis=1).mean(axis=1, skipna=False)
+
+
+def crossover_signal(r: pd.Series, fast: int = 20, slow: int = 120) -> pd.Series:
+    """tanh z-score of the gap between fast and slow EWMAs of the cumulative excess-return index."""
+    level = r.cumsum()
+    gap = level.ewm(span=fast, min_periods=fast).mean() - level.ewm(span=slow, min_periods=slow).mean()
+    scale = gap.rolling(slow, min_periods=slow).std().replace(0.0, np.nan)
+    return np.tanh(gap / scale)
+
+
+def ewma_vol(r: pd.Series, com: float = 60.0, ppy: int = PPY_D, min_periods: int = 20) -> pd.Series:
+    """annualized EWMA volatility, centre of mass `com` periods, zero-mean convention."""
+    return np.sqrt((r ** 2).ewm(com=com, min_periods=min_periods).mean() * ppy)
+
+
+def positions(sig: pd.Series, vol: pd.Series, target: float = 0.10,
+              vol_floor: float = 0.005, lev_cap: float = 10.0) -> pd.Series:
+    """w = target / max(vol, floor) * sig, capped at +/- lev_cap (notional per unit of capital)."""
+    return (target / np.maximum(vol, vol_floor) * sig).clip(-lev_cap, lev_cap)
+
+
+def strategy_pnl(w: pd.Series, r: pd.Series) -> pd.Series:
+    """the weight known at t earns the return from t to t+1."""
+    return (w.shift(1) * r).dropna()
+
+
+def sharpe(x, ppy: int) -> float:
+    x = pd.Series(np.asarray(x, dtype=float)).dropna()
+    return float(x.mean() / x.std(ddof=1) * np.sqrt(ppy))
+
+
+def max_drawdown(pnl) -> float:
+    cum = np.cumsum(np.asarray(pnl, dtype=float))
+    peak = np.maximum.accumulate(np.r_[0.0, cum])[1:]
+    return float((cum - peak).min())
+
+
+def turnover(w: pd.Series) -> float:
+    return float(w.dropna().diff().abs().sum())
+
+
+# Guard 4 (sign): 120 days of tightening at 1 bp/day, then 200 days of widening at 2 bp/day.
+h = 60
+path = np.r_[0.050 - 0.0001 * np.arange(120), 0.0381 + 0.0002 * np.arange(1, 201)]
+s_path = pd.Series(path, index=pd.bdate_range("2021-01-04", periods=len(path)))
+r_path = excess_returns(s_path, D_HY)
+turn = 119                                          # position of the first widening return
+assert (r_path.iloc[turn:] < 0).all(), "2 bp/day of widening must beat carry, Mondays included"
+sig_path = tsmom_sign(r_path, h)
+pnl_path = strategy_pnl(positions(sig_path, ewma_vol(r_path)), r_path)
+assert (sig_path.iloc[h - 1:turn] == 1).all(), "long during the tightening"
+assert (sig_path.iloc[turn + h - 1:] == -1).all(), "short within one lookback of the turn"
+assert (pnl_path.loc[r_path.index[turn + h]:] > 0).all(), "a short earns money while spreads widen"
+
+# Guard 5 (turnover identity): a unit sign strategy trades 2 units per flip.
+rng = np.random.default_rng(10)
+sig_n = tsmom_sign(pd.Series(rng.normal(0.0, 0.01, 5000)), 12).dropna()
+assert set(np.unique(sig_n.values)) <= {-1.0, 1.0}
+flips = int((sig_n.values[1:] != sig_n.values[:-1]).sum())
+assert abs(turnover(sig_n) - 2 * flips) < 1e-9, "turnover = 2 x flips"
+
+# Guard 6 (Sheppard, Section 10.8.1): the flip probability of a 12-period sign is arccos(11/12)/pi.
+sg = tsmom_sign(pd.Series(np.random.default_rng(11).standard_normal(200_000)), 12).dropna().values
+flip_rate = float((sg[1:] != sg[:-1]).mean())
+assert abs(flip_rate - np.arccos(11 / 12) / np.pi) < 0.01, flip_rate
+print(f"block 2 ok: flip rate {flip_rate:.4f} vs {np.arccos(11 / 12) / np.pi:.4f}; "
+      f"turnover per year (monthly, h=12) = {2 * 12 * np.arccos(11 / 12) / np.pi:.2f}")
+```
+
+```python
+# credit_tsmom.py, block 3 of 6: no free lunch under a random walk, real money under persistence (Section 10.2)
+def simulate_ar1_changes(n: int, phi: float, sd: float, seed: int, burn: int = 200) -> np.ndarray:
+    """monthly spread changes with AR(1) persistence phi (phi = 0 is a random walk in spreads)."""
+    e = np.random.default_rng(seed).normal(0.0, sd, n + burn)
+    x = np.empty_like(e)
+    x[0] = e[0]
+    for t in range(1, len(e)):
+        x[t] = phi * x[t - 1] + e[t]
+    return x[burn:]
+
+
+N_M = 6000                                   # 500 synthetic years, about 478 more than CDX has existed
+sd_m = 0.25 * 0.045 / np.sqrt(PPY_M)         # 25% relative vol at a 450 bp level, per month
+H_M = [1, 3, 6, 12]
+results = {}
+for label, phi, seed in [("random walk", 0.0, 1), ("phi = 0.25", 0.25, 2)]:
+    r_sim = pd.Series(-D_HY * simulate_ar1_changes(N_M, phi, sd_m, seed))     # MTM-only returns
+    results[label] = sharpe(strategy_pnl(ensemble_sign(r_sim, H_M), r_sim), PPY_M)
+years = N_M / PPY_M
+assert abs(results["random walk"]) < 3.5 / np.sqrt(years), results
+assert results["phi = 0.25"] - results["random walk"] >= 0.3, results
+print("block 3 ok:", {k: round(v, 2) for k, v in results.items()})
+```
+
+```python
+# credit_tsmom.py, block 4 of 6: volatility scaling is DTS scaling (Section 10.3)
+def simulate_log_ou_spreads(n_days: int, s_bar: float = 0.045, kappa: float = 0.5, sigma: float = 0.25,
+                            seed: int = 3, start: str = "1990-01-01") -> pd.Series:
+    """daily spreads with log-OU dynamics, so sd(ds) is proportional to s (Ben Dor's law, beta = sigma)."""
+    dt = 1.0 / PPY_D
+    z = np.random.default_rng(seed).standard_normal(n_days)
+    x = np.empty(n_days)
+    x[0] = np.log(s_bar)
+    for t in range(1, n_days):
+        x[t] = x[t - 1] + kappa * (np.log(s_bar) - x[t - 1]) * dt + sigma * np.sqrt(dt) * z[t]
+    return pd.Series(np.exp(x), index=pd.bdate_range(start, periods=n_days))
+
+
+def beta_dts(spread: pd.Series, win: int = 63) -> float:
+    """zero-intercept regression of non-overlapping realized spread-change vol on spread level."""
+    vol = spread.diff().rolling(win).std() * np.sqrt(PPY_D)
+    lvl = spread.rolling(win).mean()
+    sel = np.arange(win, len(spread), win)
+    v, l = vol.iloc[sel].values, lvl.iloc[sel].values
+    return float((v * l).sum() / (l ** 2).sum())
+
+
+s_d = simulate_log_ou_spreads(PPY_D * 40)
+r_d = excess_returns(s_d, D_HY)
+beta_hat = beta_dts(s_d)
+assert abs(beta_hat / 0.25 - 1.0) < 0.20, beta_hat
+
+s_now = s_d.reindex(r_d.index)              # spread known at the close of t
+sig_d = tsmom_sign(r_d, 60)
+vols = {"ewma": ewma_vol(r_d), "dts": beta_hat * D_HY * s_now}
+vols["max"] = np.maximum(vols["ewma"], vols["dts"])
+for name, vol in vols.items():
+    realized = strategy_pnl(positions(sig_d, vol, target=0.10), r_d).std() * np.sqrt(PPY_D)
+    print(f"block 4: {name:>4} sizing, realized vol {realized:.3f} (target 0.100)")
+    if name in ("ewma", "dts"):
+        assert abs(realized / 0.10 - 1.0) < 0.25, (name, realized)
+
+# Constant-DTS identity: |w| * D * s = target / beta wherever the leverage cap does not bind.
+w_dts = positions(sig_d, vols["dts"], target=0.10).dropna()
+uncapped = w_dts.abs() < 10.0 - 1e-9
+assert uncapped.mean() > 0.99, "leverage cap binding too often; check the floor and the spread units"
+expo = w_dts[uncapped].abs() * D_HY * s_now.reindex(w_dts.index)[uncapped]
+assert np.allclose(expo.values, 0.10 / beta_hat), "vol targeting in credit = constant DTS exposure"
+print(f"block 4 ok: beta_DTS = {beta_hat:.3f}; constant DTS exposure = {0.10 / beta_hat:.3f}")
+```
+
+```python
+# credit_tsmom.py, block 5 of 6: trend plus carry under D3, estimated on an expanding window (Section 10.4)
+def simulate_d3(n: int, kappa: float = 0.03, phi: float = 0.25, s_bar: float = 0.045,
+                beta: float = 0.25, floor: float = 0.0025, seed: int = 4) -> np.ndarray:
+    """monthly D3: ds_{t+1} = kappa (s_bar - s_t) + phi ds_t + eps, sd(eps) = beta s_t sqrt(dt)."""
+    rng, dt = np.random.default_rng(seed), 1.0 / PPY_M
+    s = np.full(n, s_bar)
+    for t in range(1, n - 1):
+        eps = beta * s[t] * np.sqrt(dt) * rng.standard_normal()
+        s[t + 1] = max(s[t] + kappa * (s_bar - s[t]) + phi * (s[t] - s[t - 1]) + eps, floor)
+    return s
+
+
+def d3_components(s: np.ndarray, dur: float, min_obs: int = 120) -> dict:
+    """carry, value and trend forecasts of r_{t+1}; (a, b_s, phi) re-estimated using data up to t only."""
+    n, dt = len(s), 1.0 / PPY_M
+    ds = np.r_[np.nan, np.diff(s)]
+    comp = {k: np.full(n, np.nan) for k in ("carry", "value", "trend", "kappa", "phi")}
+    for t in range(min_obs, n - 1):
+        k = np.arange(1, t)                               # regress ds[k+1] on [1, s[k], ds[k]], k+1 <= t
+        X = np.column_stack([np.ones(len(k)), s[k], ds[k]])
+        a, b_s, phi_hat = np.linalg.lstsq(X, ds[k + 1], rcond=None)[0]
+        comp["carry"][t] = s[t] * dt
+        comp["value"][t] = -dur * (a + b_s * s[t])        # = dur * kappa * (s_t - s_bar), no division by kappa
+        comp["trend"][t] = -dur * phi_hat * ds[t]
+        comp["kappa"][t], comp["phi"][t] = -b_s, phi_hat
+    return comp
+
+
+N_D3 = 1200
+s_m = simulate_d3(N_D3)
+dt_m = 1.0 / PPY_M
+r_m = np.r_[np.nan, s_m[:-1] * dt_m - D_HY * np.diff(s_m)]       # r_m[t]: return from t-1 to t
+c = d3_components(s_m, D_HY)
+var_m = (D_HY * 0.25 * s_m) ** 2 * dt_m                            # DTS-law variance forecast
+sleeves = {"carry+value": c["carry"] + c["value"], "trend": c["trend"],
+           "blend": c["carry"] + c["value"] + c["trend"]}
+pnl_m = {name: (f / var_m)[:-1] * r_m[1:] for name, f in sleeves.items()}   # mean-variance weights
+assert np.allclose(sleeves["blend"], sleeves["carry+value"] + sleeves["trend"], equal_nan=True)
+assert c["phi"][N_D3 - 2] > 0.10, "the expanding-window phi should find the persistence (true 0.25)"
+ok = np.isfinite(pnl_m["trend"]) & np.isfinite(pnl_m["carry+value"])
+rho_tc = float(np.corrcoef(pnl_m["trend"][ok], pnl_m["carry+value"][ok])[0, 1])
+for name, p in pnl_m.items():
+    pf = p[np.isfinite(p)]
+    pf = pf / (pf.std() * np.sqrt(PPY_M)) * 0.10                  # scaled to 10% vol ex post, display only
+    print(f"block 5: {name:>11} Sharpe {sharpe(pf, PPY_M):+.2f}, max DD at 10% vol {max_drawdown(pf):+.1%}")
+print(f"block 5 ok: kappa_hat {c['kappa'][N_D3 - 2]:.3f} (true 0.03), phi_hat {c['phi'][N_D3 - 2]:.3f} "
+      f"(true 0.25), corr(trend, carry+value) {rho_tc:+.2f}")
+```
+
+```python
+# credit_tsmom.py, block 6 of 6: stale-mark lead-lag, whipsaw, convexity, crisis table (Sections 10.5-10.7)
+def ols_hac(y, X, lags: int = 4):
+    """OLS coefficients, Newey-West (Bartlett) standard errors and t-statistics; X includes a constant."""
+    y, X = np.asarray(y, dtype=float), np.asarray(X, dtype=float)
+    XtX_inv = np.linalg.inv(X.T @ X)
+    b = XtX_inv @ X.T @ y
+    Xu = X * (y - X @ b)[:, None]
+    S = Xu.T @ Xu
+    for L in range(1, lags + 1):
+        G = Xu[L:].T @ Xu[:-L]
+        S += (1.0 - L / (lags + 1.0)) * (G + G.T)
+    se = np.sqrt(np.diag(XtX_inv @ S @ XtX_inv))
+    return b, se, b / se
+
+
+def granger_f(y_next, own_lag, x_lag):
+    """F-test that x_lag adds nothing to y_next = a + c * own_lag (+ b * x_lag) + e."""
+    y = np.asarray(y_next, dtype=float)
+    n = len(y)
+    Xu = np.column_stack([np.ones(n), own_lag, x_lag])
+    Xr = np.column_stack([np.ones(n), own_lag])
+    rss = lambda X: float(np.sum((y - X @ np.linalg.lstsq(X, y, rcond=None)[0]) ** 2))
+    F = (rss(Xr) - rss(Xu)) / (rss(Xu) / (n - Xu.shape[1]))
+    return F, float(stats.f.sf(F, 1, n - Xu.shape[1]))
+
+
+# (a) Stale marks manufacture an equity "lead" of about p(1-p) beta_ce (Section 10.5.3).
+rng = np.random.default_rng(5)
+n_w, p_print, beta_ce = 2000, 0.5, 0.2
+r_eq = rng.normal(0.0, 0.025, n_w)                                # weekly equity returns
+dP = beta_ce * r_eq + rng.normal(0.0, 0.003, n_w)                  # true credit: contemporaneous only
+P = np.cumsum(dP)
+printed = rng.random(n_w) < p_print
+m = P.copy()
+for t in range(1, n_w):
+    if not printed[t]:
+        m[t] = m[t - 1]                                          # no print this week: the mark goes stale
+dm = np.r_[0.0, np.diff(m)]
+ti = np.arange(1, n_w - 1)
+_, _, t_mark = ols_hac(dm[ti + 1], np.column_stack([np.ones(len(ti)), dm[ti], r_eq[ti]]))
+_, _, t_true = ols_hac(dP[ti + 1], np.column_stack([np.ones(len(ti)), dP[ti], r_eq[ti]]))
+F_mark, p_mark = granger_f(dm[ti + 1], dm[ti], r_eq[ti])
+assert t_mark[2] > 3.0, "stale marks should show a significant equity lead"
+assert abs(t_true[2]) < 4.0, "true prices have no lead by construction"
+print(f"block 6a: equity->mark t = {t_mark[2]:.1f} (Granger p = {p_mark:.1e}); equity->true t = {t_true[2]:.1f}")
+
+
+# (b) Whipsaw arithmetic (Section 10.6.2): the follower's P&L on a stylized V is 2d(T - 4L)/T.
+def v_capture(d: float, T: int, L: int) -> float:
+    half = T // 2
+    dp = np.r_[np.full(half, -d / half), np.full(half, d / half)]
+    t = np.arange(2 * half)
+    pos = np.where((t >= L) & (t < half + L), -1.0, 1.0)
+    return float((pos * dp).sum())
+
+
+for T, L in [(20, 3), (20, 6), (60, 10), (40, 12)]:
+    assert np.isclose(v_capture(1.0, T, L), 2.0 * (T - 4 * L) / T), (T, L)
+
+# (c) The convexity regression must find the smile in a payoff that is a smile by construction ...
+x = rng.normal(0.0, 0.05, 400)
+b_cx, _, t_cx = ols_hac(np.abs(x) + rng.normal(0.0, 0.01, 400),
+                        np.column_stack([np.ones(400), x, x ** 2]), lags=2)
+assert b_cx[2] > 0 and t_cx[2] > 3.0
+# ... and then we ask the same question of the persistent-trend simulation, on non-overlapping quarters.
+r_tr = pd.Series(-D_HY * simulate_ar1_changes(N_M, 0.25, sd_m, seed=2))
+pnl_tr = strategy_pnl(ensemble_sign(r_tr, H_M), r_tr)
+qtr = pd.DataFrame({"tf": pnl_tr, "mkt": r_tr.reindex(pnl_tr.index)}).groupby(np.arange(len(pnl_tr)) // 3).sum()
+b_q, _, t_q = ols_hac(qtr["tf"], np.column_stack([np.ones(len(qtr)), qtr["mkt"], qtr["mkt"] ** 2]), lags=2)
+print(f"block 6c: quarterly smile b2 = {b_q[2]:.2f} (t = {t_q[2]:.1f}); a positive b2 is the receipt for momentum")
+
+# (d) Crisis-window table on real data, if the FRED CSV from the block 1 preamble is present.
+CRISES = {"GFC": ("2007-06-01", "2009-06-30"), "COVID": ("2020-02-01", "2020-06-30"),
+          "2022": ("2022-01-01", "2022-10-31"), "Tariffs 2025": ("2025-02-01", "2025-05-31")}
+
+
+def crisis_table(pnl: pd.Series, bench: pd.Series) -> pd.DataFrame:
+    rows = []
+    for name, (a, b) in CRISES.items():
+        p, bm = pnl.loc[a:b], bench.loc[a:b]
+        if len(p) < 20:
+            continue                                             # window not covered by the data
+        rows.append({"window": name, "strategy": p.sum(), "long_risk": bm.sum(), "max_dd": max_drawdown(p)})
+    return pd.DataFrame(rows)
+
+
+def perf_summary(pnl: pd.Series, w: pd.Series, ppy: int) -> dict:
+    yrs = len(pnl) / ppy
+    return {"ann_ret": pnl.mean() * ppy, "ann_vol": pnl.std() * np.sqrt(ppy), "sharpe": sharpe(pnl, ppy),
+            "max_dd": max_drawdown(pnl), "turnover_per_yr": turnover(w) / yrs}
+
+
+fred = "BAMLH0A0HYM2.csv"
+if os.path.exists(fred):
+    raw = pd.read_csv(fred)
+    oas = pd.to_numeric(raw.iloc[:, 1], errors="coerce") / 100.0      # FRED writes "." for missing
+    hy = pd.Series(oas.values, index=pd.to_datetime(raw.iloc[:, 0])).dropna().sort_index()
+    r_hy = excess_returns(hy, D_HY)
+    sig_hy = 0.5 * ensemble_sign(r_hy, [21, 63, 126, 252]) + 0.5 * crossover_signal(r_hy)
+    vol_hy = np.maximum(ewma_vol(r_hy), beta_dts(hy) * D_HY * hy.reindex(r_hy.index))
+    w_hy = positions(sig_hy, vol_hy)
+    pnl_hy = strategy_pnl(w_hy, r_hy)
+    print(perf_summary(pnl_hy, w_hy, PPY_D))
+    print(crisis_table(pnl_hy, r_hy))
+else:
+    print("block 6d: FRED CSV not found; crisis table skipped (see the block 1 preamble).")
+print("all blocks ok")
+```
+
+What the blocks demonstrate, in desk language: block 1 shows that a vendor-spliced series loses $D^{\text{spr}}\times 10$ bp on a flat roll that costs nothing; block 2 that turnover is arithmetic you can know before you trade; block 3 that the machinery finds nothing in a random walk and something when persistence is real; block 4 that inverse-volatility sizing in credit holds DTS constant; block 5 that $\phi$ is estimable on a long sample while $\kappa$ is noisy; and block 6 that half the "equity leads credit" result you will ever see in cash bonds can be manufactured by marks that print every other week.
+
+## 10.11 Desk Debrief
+
+- **Trend is absolute; momentum is relative.** Trade credit trend in indices (CDX, iTraxx, listed credit futures). Signal it from the markets that price information first: equity, then CDS, then cash.
+- **Trend on returns, not spread levels.** The carry hurdle $\Delta s^*_h = \bar s\,h\,\Delta t / D^{\text{spr}}$ means 12-month HY trend goes short only after roughly 110 bp of widening *(illustrative)*. Write the version you mean.
+- **Vol targeting in credit is a constant-DTS budget.** It sells after widening before any signal fires. Forecast volatility as $\max(\text{EWMA}, \beta^{\text{DTS}}\text{DTS}, \text{floor})$ and cap leverage.
+- **Do not join a tribe.** $\mathbb{E}_t[r^{ex}_{t+1}] = s_t\Delta t + D\kappa(s_t-\bar s) - D\phi\Delta s_t$. Estimate $\kappa$ and $\phi$ on an expanding window and blend; carry and trend disagree exactly after large moves.
+- **Equity leads credit, and stale marks fake it.** A bond that prints with probability $p$ shows a fake equity lead of about $p(1-p)\beta^{\text{ce}}$. Test on trades, or on the index.
+- **Convexity is the receipt for momentum.** The smile coefficient is positive if and only if returns trend. A V captures $(T-4L)/T$ of the round trip. Trend hedges slow sell-offs, not gaps.
+- **IDO or it didn't happen.** Credit TSMOM's alpha against passive beta had a *t*-statistic of 0.49 in AQR's test. Trend is beta that changed its mind. Strip it before you call it alpha.
+- **Single names jump.** Add $\lambda^{\text{J}}\,\mathbb{E}[J^2]$ to the variance, map $\lambda^{\text{J}}$ from the Priming Risk Score, and switch engines when the capital structure stops moving together.
+
+### The Spec You Hand the Robot
+
+```text
+TASK: credit_tsmom engine (index trend sleeve). Positive weight = long risk (sold protection).
+INPUTS: daily spreads (decimal) or prices (points) per index and series_id; optional equity TR series;
+        spread duration / RPV01 per day; coupon (IG 100 bp, HY 500 bp); FRED OAS CSV for research.
+RETURNS: r_t = s_{t-1} * days/360 - D * (s_t - s_{t-1}) within one series_id; price-quoted:
+         dP/100 + c * days/360. Never difference across series. Never use OAS level changes as returns.
+SIGNALS (known at close t, applied to r_{t+1}; also report a 2-day lag run):
+  sign TSMOM at 1, 3, 6, 12 months (21/63/126/252 days), ensemble mean; 20/120 EWMA crossover (tanh z);
+  equity-to-credit: residualized equity momentum, horizons 1/3/6 months, each divided by sqrt(h).
+SIZING: w = 0.10 / max(EWMA_vol(com=60), beta_DTS * DTS_t, 0.005) * sig; cap |w| <= 10;
+        beta_DTS = zero-intercept fit of non-overlapping 63-day spread-change vol on spread level.
+BLEND: f_t = s_t*dt - D*(a_t + b_t*s_t) - D*phi_t*ds_t, with (a, b, phi) from OLS on data up to t
+       (min 120 months); w = f / (D * beta_DTS * s_t)^2 / dt, then scale to the risk budget.
+SINGLE NAMES: variance += lambda_J * E[J^2], lambda_J = l0 + l1 * PRS; switch to the event engine when
+       PRS > threshold or 63-day corr(tranche, equity) < threshold. Do not run index logic on names.
+REPORT: Sharpe, vol, max drawdown, turnover/yr, % days capped, quadratic smile b2 (quarterly, HAC),
+        alpha and beta vs passive long risk, crisis table (2007-06..2009-06, 2020-02..06, 2022-01..10,
+        2025-02..05) where data cover the window.
+GUARDS (assert, fail loudly): carry guard (flat spreads -> s*days/360, 1e-10); roll guard (no cross-series
+        return); sign guard (monotone widening -> short within one lookback, positive P&L after);
+        turnover = 2 x flips; random-walk Sharpe within 3.5/sqrt(years) of 0; realized vol within 25% of target.
+DO NOT: forward-fill marks across days without a print flag; estimate anything with future data;
+        "minimize whipsaw" (that objective is satisfied by holding cash forever).
+```
+
+### Exercises
+
+1. **The Crossover hurdle.** iTraxx Crossover trades at 300 bp with a spread duration of 4.2. Compute the carry hurdle for a 6-month return-based trend signal, and explain to a PM why "spreads are trending wider" and "the trend signal is long" can both be true. *Check:* $\Delta s^*_6 = 0.03 \times 0.5 / 4.2 \approx 36$ bp. Any widening smaller than that over six months is, on a return basis, an uptrend paid for by carry.
+
+2. **Sheppard's turnover.** For a monthly 3-month sign signal on i.i.d. returns, show that $\rho_3 = 2/3$ and that annual turnover is about 6.4 units. At a cost of 1.1 bp of notional per unit traded, what gross Sharpe ratio does a 10%-volatility sleeve need for costs to be under a tenth of its expected return? *Check:* $\arccos(2/3)/\pi \approx 0.268$, so turnover is $2 \times 12 \times 0.268 \approx 6.4$. The cost is about 7 bp a year at unit notional; scale it by your average $|w|$ before comparing with $\text{SR} \times 10\%$.
+
+3. **Kaz's runway momentum.** Kaz proposes trading CDX HY on the trend of the median constituent's liquidity runway (Theo's 13-week model, aggregated). Write down what must be true for "runway momentum" to predict index excess returns *beyond* equity momentum, and specify the regression and the out-of-sample test that would kill the idea. Theo is not allowed to bring the USB stick to the review.
+
+4. **The every-other-week bond.** Using §10.5.3, show that the spurious lead coefficient $p(1-p)\beta^{\text{ce}}$ is maximized at $p=\tfrac12$. Evaluate it for a bond that prints once every five weeks ($p = 0.2$). Then propose a sample filter that removes the artifact without discarding most of the HY universe. *Check:* $0.16\,\beta^{\text{ce}}$; condition on prints at both $t$ and $t+1$, or measure the lead on CDX, where $p\approx 1$.
+
+5. **Liberation Day, priced.** Treat April–May 2025 as a V with $T \approx 1.5$ months. What effective lag makes the capture zero? If SG's 20/120-day crossover has an effective lag of a few weeks, what sign does the formula predict for its credit P&L over the episode, and why would a vol-targeted, carry-hurdled sleeve have lost less than the formula says? *Check:* $L = T/4 \approx 0.375$ months, roughly eight trading days. Any longer lag loses money on the round trip, and the loss is smaller for a sleeve that entered the episode small.
+
+### Deep-Dive Resource Graph
+
+**Podcasts**
+
+- *Top Traders Unplugged*, Systematic Investor, episode 422, with Katy Kaminski, "Why Trend Following Rewards Patience" (17 October 2026): https://www.toptradersunplugged.com/podcast/why-trend-following-rewards-patience-ft-katy-kaminski/
+- *Top Traders Unplugged*, with Patrick Welton, "Why Investors Keep Getting Trend Following Wrong" (30 September 2026): https://www.toptradersunplugged.com/podcast/why-investors-keep-getting-trend-following-wrong-ft-patrick-welton/
+- *Flirting with Models* (Corey Hoffstein), Season 7, Episode 19, Jeff Rosenberg on systematic fixed income (18 August 2025): https://www.flirtingwithmodels.com/episodes/8V74zBaN4jN
+- *Flirting with Models*, Season 7, Episode 25, Takahe Capital on trend-following spreads (12 January 2026): https://www.flirtingwithmodels.com/episodes/1iIqmQ7piJd
+- *Bloomberg Odd Lots*. No trend-in-credit episode was verified for this edition; search its CTA and credit market-structure episodes.
+
+**Practitioner Writing**
+
+- AQR, Hurst, Ooi, and Pedersen, "A Century of Evidence on Trend-Following Investing": https://www.aqr.com/Insights/Research/Journal-Article/A-Century-of-Evidence-on-Trend-Following-Investing
+- AQR, Babu, Levine, Ooi, Pedersen, and Stamelos, "Trends Everywhere": https://www.aqr.com/Insights/Research/Journal-Article/Trends-Everywhere
+- AQR, "You Can't Always Trend When You Want": https://www.aqr.com/Insights/Research/Journal-Article/You-Cant-Always-Trend-When-You-Want
+- Man Group, "A Trend Following Deep Dive: The Dynamics of Dispersion": https://www.man.com/insights/deep-dive-trend-following ; "Trend Following and Drawdowns: Is This Time Different?": https://www.man.com/insights/is-this-time-different ; "Trend Following: Equity and Bond Crisis Alpha": https://www.man.com/insights/trend-following-equity-and-bond-crisis-alpha
+- Kaminski and Wen (AlphaSimplex, June 2025), "Market Cycles and Managed Futures Drawdowns": https://www.alphasimplex.com/assets/files/2025.06---market-cycles-and-managed-futures---kaminski-and-wen.pdf
+- Cambridge Associates (August 2025), "Does Trend Following's Recent Struggle Signal That the Strategy Is Structurally Broken?": https://www.cambridgeassociates.com/insight/does-trend-followings-recent-struggle-signal-that-the-strategy-is-structurally-broken/
+- SG Prime Services (May 2025), "CTA Industry Update: Keeping Up with the Trend Followers": https://content.sgmarkets.com/CTA_UPDATE_KEEPING_UP_WITH_THE_TRENDFOLLOWERS_2025
+- *The Hedge Fund Journal*, "AHL Evolution": https://thehedgefundjournal.com/ahl-evolution/
+- ISDA (29 July 2026), "CDS Market Dynamics: Five Years of Activity and a Record 2025": https://www.isda.org/2026/07/29/cds-market-dynamics-five-years-of-activity-and-a-record-2025/
+- Clarus FT (10 June 2026), March 2026 index CDS volumes: https://www.clarusft.com/us-firms-powered-march-2026-itraxx-swaps-volume-growth/
+- The DESK (16 October 2026), Cboe iBoxx credit futures block trading: https://www.fi-desk.com/cboe-block-trading-has-arrived-in-credit-index-futures-2/
+- Haynes and McPhail (CFTC Office of the Chief Economist, 2017), "The Liquidity of Credit Default Index Swap Networks": https://www.cftc.gov/sites/default/files/idc/groups/public/@economicanalysis/documents/file/oce_credit_swap_liquidity.pdf
+- Top Traders Unplugged monthly trend-following performance reports (secondary compilations of SG and BTOP50 data; check against the index providers): https://www.toptradersunplugged.com/trend-following-performance-report-december-2025/
+
+**Academic Papers**
+
+- Moskowitz, Ooi, and Pedersen (2012), *Time Series Momentum*, *JFE* 104(2): https://ideas.repec.org/a/eee/jfinec/v104y2012i2p228-250.html
+- Koijen, Moskowitz, Pedersen, and Vrugt (2018), *Carry*, *JFE* 127(2): https://ideas.repec.org/a/eee/jfinec/v127y2018i2p197-225.html
+- Pitkäjärvi, Suominen, and Vaittinen (2020), *Cross-asset signals and time series momentum*, *JFE* 136(1): https://ideas.repec.org/a/eee/jfinec/v136y2020i1p63-85.html
+- Daniel and Moskowitz (2016), *Momentum Crashes*, *JFE* 122(2): https://ideas.repec.org/a/eee/jfinec/v122y2016i2p221-247.html
+- Barroso and Santa-Clara (2015), *Momentum Has Its Moments*, *JFE* 116(1): https://ideas.repec.org/a/eee/jfinec/v116y2015i1p111-120.html
+- Moreira and Muir (2017), *Volatility-Managed Portfolios*, *JF* 72(4): https://ideas.repec.org/a/bla/jfinan/v72y2017i4p1611-1644.html
+- Jostova, Nikolova, Philipov, and Stahel (2013), *Momentum in Corporate Bond Returns*, *RFS* 26(7): https://ideas.repec.org/a/oup/rfinst/v26y2013i7p1649-1693.html
+- Haesen, Houweling, and van Zundert (2017), *Momentum spillover from stocks to corporate bonds*, *JBF* 79: https://ideas.repec.org/a/eee/jbfina/v79y2017icp28-41.html
+- Hilscher, Pollet, and Wilson (2015), *Are Credit Default Swaps a Sideshow?*, *JFQA* 50(3): https://www.cambridge.org/core/journals/journal-of-financial-and-quantitative-analysis/article/abs/are-credit-default-swaps-a-sideshow-evidence-that-information-flows-from-equity-to-cds-markets/F7CCD2FFB20AAEACE1E093D12EEF7A31
+- Norden and Weber (2009), *The Comovement of CDS, Bond and Stock Markets*, *EFM* 15(3): https://ideas.repec.org/a/bla/eufman/v15y2009i3p529-562.html
+- Lee, Naranjo, and Sirmans (2021), *CDS Momentum: Slow-Moving Credit Ratings and Cross-Market Spillovers*, *RAPS* 11(2): https://ideas.repec.org/a/oup/rasset/v11y2021i2p352-401..html
+- Lee, Naranjo, and Velioglu (2018), *When do CDS spreads lead?*, *JFE* 130(3): https://ideas.repec.org/a/eee/jfinec/v130y2018i3p556-578.html
+- Collin-Dufresne, Junge, and Trolle (2020), *Market Structure and Transaction Costs of Index CDSs*, *JF* 75(5): https://ideas.repec.org/a/bla/jfinan/v75y2020i5p2719-2763.html
+- Dickerson, Robotti, and Rossetti (2026), *The Corporate Bond Factor Replication Crisis*: https://openbondassetpricing.com/wp-content/uploads/2026/04/corp-bond-replication-crisis-dickerson.pdf
+- Title only: Kim, Tse, and Wald, *Time Series Momentum and Volatility Scaling*; Baz, Granger, Harvey, Le Roux, and Rattray (2015), *Dissecting Investment Strategies in the Cross Section and Time Series*; Fung and Hsieh (2001), *The Risk in Hedge Fund Strategies: Theory and Evidence from Trend Followers*; Gebhardt, Hvidkjaer, and Swaminathan (2005), *Stock and bond market interaction: Does momentum spill over?*; Brooks, Palhares, and Richardson (2018), *Style Investing in Fixed Income*.
+
+**Data & Code**
+
+- FRED, ICE BofA US High Yield Index OAS: https://fred.stlouisfed.org/series/BAMLH0A0HYM2 ; ICE BofA US Corporate Index OAS: https://fred.stlouisfed.org/series/BAMLC0A0CM (FRED now serves only recent ICE history; the full series needs a licensed source).
+- Open Source Bond Asset Pricing (bias-corrected bond factors and a TRACE daily panel): https://openbondassetpricing.com/
+- ISDA SwapsInfo, H1 2025 credit derivatives volumes: https://www.isda.org/a/4cpgE/SwapsInfo-First-Half-of-2025-and-the-Second-Quarter-of-2025.pdf
+- Chapter 7 (bond-factor replication), Chapter 8 (stripping beta), Chapter 9 (cross-sectional momentum), Chapter 13 (Priming Risk Score), and Appendix B (data atlas) are the in-book companions to this engine.
+
+<!-- STATUS: COMPLETE -->

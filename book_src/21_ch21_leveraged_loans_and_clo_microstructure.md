@@ -1,0 +1,504 @@
+# Chapter 21: Leveraged Loans, CLOs & Loan-Market Microstructure
+
+Mags Dunleavy dropped a trade ticket on Theo's desk the way other people drop subpoenas. "Twenty-three business days," she said. "We bought seven million of a B2 term loan B on the eleventh of last month. It has not settled. The agent wants a \$3,500 transfer fee and our KYC packet. Again. Back in my day we settled these by fax, and the fax machine at least had the decency to jam where you could see it."
+
+Theo read the ticket. Trade price 99.75. Settlement date: blank. "Delayed comp should have been running since T+7," he said. "Unless we didn't sign the assignment by T+5. Then it's our fault and nobody owes us anything."
+
+Ines rolled her chair over. "Hand history, please. What is the position worth right now?"
+
+"Easy," said Kaz, without looking up. "It's a floating-rate bond with a slightly odd call. Give me the curve and ten minutes."
+
+"It's a loan," Theo said. "Nobody has a price. There's a mark. The mark is a composite of dealer quotes that may or may not include the dealer we bought it from. Nothing has printed since we traded, because nothing prints. There is no TRACE for loans."
+
+"Then what do you use?"
+
+"Whatever the CLOs are doing," said Mags.
+
+A headline crossed all four screens: well over half the loan index bid above par, January repricing launches at a record pace, three more launched before lunch.
+
+Kaz frowned. "If everything is above par, why does everyone look unhappy?"
+
+"Because above par," said Ines, "is where the borrower takes chips off the table. A loan at 100.5 is about to be handed back to you at 100 with fifty basis points less coupon. You are long a bond and short its upside. And two-thirds of the players at this table use house rules that tell them exactly when they must fold."
+
+Theo took the USB stick with his 13-week cash flow model out of his pocket, looked at it, and put it back. This one was going to need a different model.
+
+The question this chapter answers: **who sets the price of a leveraged loan when two-thirds of its holders cannot freely choose what they buy, the borrower can call it at par, and the trade settles in three weeks?**
+
+By the end of this chapter you will be able to:
+
+- price a loan as a credit-risky floater that is short a par call;
+- compute a CLO's overcollateralization (OC) test with its CCC, defaulted and discount haircuts, and derive the cure trade a manager is pushed into;
+- size a loan fund's liquidity buffer as a queue whose service time is the settlement cycle;
+- build a CLO Forced-Sale Pressure Index and a repricing-hazard carry signal;
+- correct stale loan marks before you mistake smoothing for momentum;
+- read a CLO indenture the way you used to read a credit agreement, because the indenture now decides who is a forced seller under the credit agreement.
+
+The PJT bridge in one line: at RSSG you asked, "What does the credit agreement say?" Here you also ask, "What does the *CLO indenture* say?"
+
+## 21.1 The Leveraged Loan as an Instrument: A Floater That Is Short a Call
+
+At RSSG the term loan B was the top of the capital structure: first lien, secured, the tranche whose recovery you fought over and whose lenders you organized. That view is right in distress. For the large majority of loans on the large majority of days, when nobody is distressed, it misses where the price comes from. A performing leveraged loan's price is set by three things that are not financial covenants. (There usually aren't any: more than 90% of the index is covenant-lite.) The three things are a floating coupon, a borrower call at par, and a holder base dominated by vehicles that follow rules.
+
+The instrument, as a desk sees it:
+
+- **Coupon.** Term SOFR plus a margin $m$, reset monthly or quarterly. Legacy loans converted from LIBOR may carry a credit spread adjustment (CSA). Many loans have a base-rate floor. Interest accrues ACT/360.
+- **Security and covenants.** First-lien senior secured. Covenant-lite: no maintenance tests for the term loan. The revolver may keep a springing leverage test.
+- **Amortization.** Roughly 1% per year, with a bullet at maturity *(typical; check the agreement)*.
+- **Call.** Prepayable at par at any time, except that a "101 soft call" usually applies for six months after closing or after a repricing. During that window, a *repricing* transaction (not every prepayment) costs the borrower one point.
+- **Transfer.** Assignment, not a book-entry transfer. It needs the agent's consent, often the borrower's consent (frequently deemed given after a set number of days), a check against the disqualified-lender list, and an entry in the agent's register. This is the root cause of §21.2.
+- **Legal status.** Not a security. In *Kirschner v. J.P. Morgan Chase Bank, N.A.* (2d Cir., 24 August 2023), the court held that syndicated term loans are not securities under the *Reves* test. So no T+1 mandate, no DTC settlement, and no securities-law disclosure regime are coming to rescue the plumbing.
+
+Kaz read the list twice and asked whether "soft call" meant the borrower phones the lenders and asks nicely. It means something close to that. The borrower's arranger phones the lenders, tells them the new margin, and lets anyone who objects be taken out at par.
+
+### 21.1.1 Derivation: carry, price, and the two durations
+
+Let $b_t$ be the base rate (term SOFR) and $m$ the contractual margin, both decimals per year. Quote the price $P_t$ in points per 100 of par. Over an accrual period of length $\Delta$ (ACT/360, so $\Delta = \text{days}/360$), the holding-period return splits into two parts:
+
+$$
+r_{t,t+\Delta} \;=\; \underbrace{\frac{100\,(b_t + m)\,\Delta}{P_t}}_{\text{interest (carry)}} \;+\; \underbrace{\frac{P_{t+\Delta} - P_t}{P_t}}_{\text{market value}} . \tag{21.1}
+$$
+
+The index providers publish exactly this split. Here is why it matters. In 2022 the Morningstar LSTA US Leveraged Loan Index returned **−0.6%**, while US high yield lost more than 11%. The market-value component was **−6.2%**, the worst since 2008. The interest component made up the difference: about +5.6% by subtraction, and a monthly interest return that rose to a two-decade high of 0.73% *(Morningstar Indexes; LSTA citing Citi Research)*. Rising rates destroyed bond prices and *raised* loan coupons. A loan's return is mostly carry. Price is a bounded nuisance until it isn't.
+
+Next, value the loan ignoring the call. Under a recovery-of-market-value convention, a credit-risky floater that pays exactly $b + s$ and is discounted at $b + s$ is worth par at every reset date. Here $s$ is the spread the market currently requires, called the discount margin. This is the standard reset argument: on a reset date the next coupon is set to the then-current rate, so the remaining cash flows are worth par, and by backward induction so is the whole note. Our loan pays $b + m = (b + s) + (m - s)$, so it is worth par plus an annuity of the margin difference. With expected life $T$ (a common quoting convention assumes a three-year life) and discount rate $y = b + s$ taken as flat:
+
+$$
+P^{\text{nc}} \;=\; 100\left[\,1 + (m - s)\,a(T;y)\right], \qquad a(T;y) = \int_0^T e^{-yu}\,du = \frac{1 - e^{-yT}}{y}. \tag{21.2}
+$$
+
+Two durations follow immediately. The **rate duration** is the time to the next reset, at most $\tfrac{1}{12}$ or $\tfrac14$ of a year, because the coupon re-fixes and the $b$ terms cancel. The **spread duration** comes from differentiating (21.2) with respect to $s$, holding $a$ fixed to first order:
+
+$$
+D^{\text{spr}} \;=\; -\frac{1}{P}\frac{\partial P}{\partial s} \;\approx\; \frac{100\,a(T;y)}{P}.
+$$
+
+With $T = 3$ and $y = 7.5\%$, $a = (1 - e^{-0.225})/0.075 \approx 2.69$, so a loan at par has a spread duration of about 2.7 years and a rate duration of about 0.1. It is a bond for credit and a money-market fund for rates. That combination is why allocators hold it.
+
+Now add the call. If $s$ falls below $m$, (21.2) says the loan should trade above par. But the borrower can prepay at par (or at 101 inside the soft call) and refinance at $s$. So the upside of (21.2) belongs to the borrower, and the price is capped:
+
+$$
+P_t \;\lesssim\; \min\!\left(P^{\text{nc}}_t,\; K_t + \epsilon_t\right), \qquad K_t \in \{100, 101\},
+$$
+
+where $\epsilon_t$ is the small premium that survives because exercise is not instantaneous (§21.5 derives it). On the way down the loan has the full 2.7 years of spread duration. On the way up it has almost none. **A par loan is a short call struck at 100.** Its return distribution is left-skewed by construction, and §21.7 shows what that does to momentum.
+
+> **[SOURCE EXTRACTION]** *Nuveen_Multi_Asset_Credit_Quant_Framework p.9:* Leveraged loans are benchmarked to the "S&P UBS Leveraged Loan Index (Formerly Credit Suisse Leveraged Loan Index)," and private credit is proxied by the "S&P UBS Leveraged Loan B Index."
+>
+> **Annotation.** This is how an allocator sees the sleeve: an index return series with an allocation band. On p.6 the same framework constrains leveraged loans to 5–25% of a multi-asset credit portfolio and CLO BBB–B to 0–10%. Using single-B loans as a proxy for private credit is a joke that teaches. Both markets now refinance each other (more than \$30bn moved each way in 2025, per William Blair's Q4-2025 newsletter), so the proxy is better than it looks. But a monthly index return hides the three things this chapter is about: a capped price, a holder base that sells by rule, and a settlement lag. Chapter 12's optimizer consumes these sleeves. This chapter supplies the inputs it should be fed: carry net of expected repricing loss, a forced-flow drawdown term, and a liquidity horizon set by settlement, not by the trading screen.
+
+> **Trend Watch: from bank asset to CLO asset, 2018–2026.**
+> *Size.* At end-2018, US CLOs outstanding were \$617bn, "approximately half of U.S. leveraged loans outstanding" (Fed FEDS Note, "Who Owns U.S. CLO Securities?", 2019). That implies a loan market of roughly \$1.2tn. By 2025:Q4, institutional leveraged loans were \$1,549bn, with 12.6% average annual growth since 2000, the fastest of any asset class in the Fed's table (Fed *Financial Stability Report*, 8 May 2026, Table 1.1).
+> *Holders.* CLOs hold about two-thirds of outstandings and buy "nearly three-quarters" of new issue (Deutsche Bank Flow, 7 Oct 2025; approx.). Bank-loan mutual funds shrank 21% to \$71bn over 2019–2025, and their median liquidity ratio fell from about 10% (2021) to about 4.5% (Fed FEDS Note, 19 Aug 2026).
+> *Coupon.* USD LIBOR panels ended on 30 June 2023. The ARRC's fallback CSAs were 11.448/26.161/42.826 bp (1m/3m/6m), but loan practice often used a "10/15/25" curve or a flat 10 bp, and the 2024–2025 repricing wave stripped many CSAs entirely (law-firm surveys; approx.).
+> *Recycling, not growth.* In 2025 gross loan issuance of about \$400bn produced only about \$106bn of net new loans against \$294bn of repayments (Eagle Point Income Co, Form N-CSR FY2025).
+> *What it means for the desk.* The marginal buyer of a performing loan is a rule-bound vehicle. Model its rulebook before you model the borrower.
+
+## 21.2 Plumbing: Settlement, Marks, and the Arrival of E-Trading
+
+"In bonds," Ines told Theo, "the hand history is TRACE. In loans, the hand history is a rumor someone told a pricing service." Every systematic idea in this chapter has to survive that sentence.
+
+**Marks, not prints.** No public trade tape exists for loans. Prices come from dealer-quote composites (LSTA/LSEG mark-to-market, IHS Markit, now S&P Global). A composite is an average of indications that may be stale, may cluster, and may include the dealer who is your counterparty. In June 2025 the average LSTA/LSEG bid-ask was **72 bp**, the median **50 bp**, and both were flat year on year. The average trade level was 97.2 and the median 99.6. Turnover, annual volume divided by average outstandings, reached **65%** over the trailing twelve months, a five-year best equal to 2020 *(LSTA, "2Q25 Secondary Trading Monthly Executive Summary," 24 Jul 2025)*. Compare that to a TRACE-eligible bond: a print within fifteen minutes, a public tape, and a T+1 settlement.
+
+> **[SOURCE EXTRACTION]** *Man_Quantitative_Credit_Alpha_Early_Mover_2022 p.41:* "funds targeting opportunities in leveraged loans and, particularly, convertible bonds, where we see the potential for significant alpha. While loans and other private credit instruments are obviously problematic from a data availability perspective at present... Already both Refinitiv and IHS Markit are providing daily pricing on 6,500 loan facilities."
+>
+> **Annotation.** "Daily pricing" means daily *marks*. That distinction is the whole data problem. A daily mark built from quotes is a smoothed, partly stale estimate of an unobserved price, and its errors are autocorrelated. §21.7 shows that naive momentum on such marks partly rediscovers the smoother. The 2026 desk has two things Man did not have in 2022. The first is electronic venue data (Octaura's inquiry and trade flow, below), which adds real executable prints for a growing share of volume. The second is CLO trustee data (holdings, prices and test results by deal), which tells you who *must* trade before they do. The modern desk combines the three sources: composite marks for coverage, venue prints for truth where they exist, and trustee holdings for flow. It does not trust any one of them alone.
+
+### 21.2.1 Settlement: the slowest thing in credit
+
+> **[SOURCE EXTRACTION]** *Moyer_Distressed_Debt_Analysis p.322:* "For loans of healthy borrowers (referred to as the par loan market), the settlement convention typically is 10 days (T+10), but modest delays are common... The settlement convention in the distressed bank debt market is 30 days, but delays (sometimes of up to 120 days) are fairly common."
+>
+> **Annotation.** Moyer wrote this in 2004, when bonds settled T+3. Since then bonds went to T+2 (2017) and T+1 (28 May 2024). Loans moved their *convention* to T+7 for par and T+20 for distressed, but barely moved their *reality*. Moyer's page also notes an agent transfer fee of "\$2500–\$5000" and that loan holders can be identified from amendment signature pages. Both are still true, and the second is why holder-base modeling (§21.8) is possible. The modern departure is legal: after *Kirschner*, nothing forces loans onto securities rails. The ledger stays with the agent bank, and every trade is an assignment with consents.
+
+Why is it slow? A par trade needs a confirmation, an assignment agreement, agent consent, borrower consent (or the passage of a deemed-consent period), KYC on the buyer, a disqualified-lender check, a funding memo, and an update to the agent's register. Each step involves a different party, and none of them is paid for speed. Over the decade to January 2025 the LSTA's own chart puts the average par settlement time at about **20 days** against the T+7 convention *(LSTA, April 2025 conference slides, via search; CHECK before print)*. Vendors describe averages "upwards of 20 days" for many firms. The LSTA's quarterly settlement studies with exact medians are members-only.
+
+The one well-documented policy experiment is instructive. Before September 2016, delayed compensation (defined below) was paid to the buyer whether or not the buyer had done its paperwork. That meant a buyer could sit on an unsigned assignment and collect the loan's coupon, financed at the base rate, with no capital tied up. In effect the LSTA had written every buyer a free repo option. The delayed-compensation protocol (Phase I for trades from 1 September 2016, Phase II from 1 November 2016) made compensation "requirements-based." Under it, the buyer must execute the documents by T+5 and pick a settlement date of T+7 or earlier, or it loses compensation for the delay. Median par settlement fell from T+12 (January–August 2016) to T+9 (September 2016), and the share settling within T+7 rose from 23% to 37% *(Markets Media, 2 Nov 2016)*. When you take away a free option, people stop exercising it. This is the most reliable law in finance.
+
+### 21.2.2 Derivation: delayed compensation is a forced repo
+
+Let a buyer purchase par $n$ at price $P$ (points) on trade date $T$. The settlement date is the random variable $T + \ell$, measured in business days. In stylized form (the LSTA Standard Terms and Conditions govern the details), delayed compensation starts on day $T+7$ if the buyer has met its obligations. From then until settlement, the seller pays the buyer the interest accruing on the loan, and the buyer pays the seller a cost of carry on the purchase price at a benchmark rate, which we write as the base rate $b$. The net daily transfer to the buyer, for $u \in (T+7, T+\ell]$, is
+
+$$
+\text{DC}_u \;=\; \frac{n}{360}\left[(b_u + m) \;-\; b_u\,\frac{P}{100}\right].
+$$
+
+Read it as positions. From $T+7$ the buyer has the loan's full economics: price risk (which passed on trade date) plus coupon. It pays $b$ on the purchase price while its own cash, still undelivered, earns roughly $b$ in a money fund. The buyer therefore owns the loan, financed at $b$ flat. The seller still carries the loan on its balance sheet, funded at its own rate $f_S$, collects $b$ on the price, and passes the coupon through. Its daily cost is
+
+$$
+\text{cost}^{\text{seller}}_u \;=\; \frac{n\,P}{100 \cdot 360}\,\big(f_S - b_u\big) \;+\; \text{capital and operational charges}.
+$$
+
+So **every late loan trade is a short-dated repo that the seller is forced to provide at the base rate flat.** For a dealer funding at $b + 50$ bp, carrying \$10mm at 99 for 13 extra days costs about $10{,}000{,}000 \times 0.99 \times 0.005 \times 13/360 \approx$ \$1,800 *(illustrative)*. That is small per trade and large across a book with \$1tn of annual volume. The bigger costs are elsewhere. Counterparty exposure lives for $\ell$ days instead of one. A seller that needed *cash* (a loan fund meeting redemptions) does not get it for $\ell$ days, which is §21.6. And between $T$ and $T+7$ nobody compensates anybody, so the first week is a dead zone in which the buyer's cash and the seller's loan both sit idle.
+
+For a pricing engine, $\ell$ is a distribution, not a constant. Model it by regime (par vs distressed), by agent bank, by whether borrower consent is required, and by calendar (quarter-ends and CLO effective dates congest the queue). A shifted negative binomial in business days is a reasonable first fit. Chapter 19's portfolio-trading engine should price a loan line with $\mathbb{E}[\ell]$ and its tail, not with T+1.
+
+### 21.2.3 E-trading arrives, two decades late
+
+Octaura, a dealer-backed platform that began life as "Project Octopus," launched loan trading in April 2023 with three dealers and 34 buy-side firms. By April 2026 it had about 30 dealers and more than 170 buy-side firms. Its share of LSTA-reported secondary volume went from 1% (April 2024) to 6.4% (July 2025) to 7.7% (January 2026). It reports a record \$19.6bn traded in Q1 2026 and its CFO says it exited June 2026 at 7.51% *(Octaura blog posts, 2025–2026; Pulse 2.0 interview, 29 Jul 2026; vendor-reported)*. It added a CLO platform in September 2025 and a "Live Feedback" auction protocol for CLO BWICs in February 2026. Separately, Versana, a consortium of agent banks, put amendment and consent voting on a live digital platform in October 2026. For Part IV readers that is the real headline: liability management transactions are consent games, and the consent machinery is now an API.
+
+The inquiry tape is already a signal. In March 2025, 70% of Octaura inquiry was customer selling. In April it was balanced (55% sellers). By June, 72% was buying. In May 2025 the platform's estimated cost to sell fell from 23 cents to 9 cents, against 13 cents to buy *(Octaura, "On the Blotter: 2025 in review")*. A buy/sell imbalance that a venue publishes monthly is a crude flow factor, but it is a real, timestamped one, which is more than loans have ever had.
+
+> **Trend Watch: settlement and e-trading, 2004–2026.**
+> *Settlement.* T+10 par / T+30 distressed conventions with delays to 120 days (`Moyer_Distressed_Debt_Analysis p.322`, 2004) → median T+12 falling to T+9 after the September 2016 delayed-comp protocol (Markets Media, Nov 2016) → a ten-year average near 20 days to January 2025 (LSTA slides; CHECK). Over the same period bonds went T+3 → T+2 (2017) → T+1 (May 2024).
+> *Volume.* Secondary loan trading was \$824bn in 2022 (then a record), \$821.4bn in 2024, and a record **\$971bn** in 2025. Trailing-twelve-month volume passed **\$1tn** in Q1 2026, then Q2 2026 fell 18% "as volatility subsided" (LSTA).
+> *Electronification.* Octaura share 0% (April 2023) → 1% (April 2024) → 6.4% (July 2025) → about 7.5–7.7% (H1 2026), vendor-reported.
+> *What it means.* Execution is getting faster while settlement is not. The gap between the two is a balance-sheet cost (the forced repo above) and a liquidity mismatch (§21.6), and both scale with turnover, which is at a record.
+
+### Deep-Dive Resource Graph (21.2)
+
+- **Practitioner Writing.** LSTA, "2Q25 Secondary Trading Monthly Executive Summary" (24 Jul 2025): https://www.lsta.org/content/lsta-secondary-trading-monthly-executive-summary-2q25-secondary-loan-trading-volumes-spike-again-to-a-record-262-billion/ · LSTA quarterly settlement-study index (members-only decks): https://www.lsta.org/content-category/quarterly-secondary-settlement-data-study/ · Markets Media, "LSTA's Delayed Comp Protocol Shows Encouraging Progress" (2016): https://www.marketsmedia.com/lstas-delayed-comp-protocol-shows-encouraging-progress-moves-phase-ii/ · Octaura, "On the Blotter: 2025 in review": https://news.octaura.com/on-the-blotter-2025-in-review · Simpson Thacher on *Kirschner* (25 Aug 2023): https://www.stblaw.com/about-us/publications/view/2023/08/25/second-circuit-holds-that-kirschner-syndicated-term-loans-are-not-securities
+- **Data & Code.** Versana: https://www.versana.io/ · LSTA/LSEG and S&P Global loan pricing (commercial; no public API).
+
+## 21.3 CLO Anatomy and the Arbitrage
+
+Mags's definition: "A CLO is a bank that the rating agencies designed and the equity investors rent." It is a bankruptcy-remote special-purpose vehicle, usually Cayman-incorporated, with a trustee, a collateral manager, and an indenture. It buys about 200–400 broadly syndicated loans and funds them with a stack of floating-rate notes. A typical US broadly syndicated (BSL) CLO stack is AAA 60–63%, AA 10–13%, A 7–9%, BBB 4–6%, BB 4–6%, sometimes a sliver of single-B at 1–2%, and equity 8–10% *(Barings, "What is a CLO," June 2025; approx.)*. The AAA's subordination, which is its credit enhancement, is typically 35–40%. At issue the deal has a reinvestment period of roughly four to five years, during which the manager trades the pool, and a non-call period of about two years, after which the equity can refinance the notes.
+
+The life cycle runs warehouse → pricing → ramp → effective date → reinvestment → amortization. The equity holds a call on the liabilities. It can *refinance* (reprice some tranches and keep the dates) or *reset* (reprice everything and extend the reinvestment period and maturity). That call has become the liability-side twin of the borrower's repricing call. US CLO new issuance set records of \$202bn in 2024 and \$209bn in 2025. Resets were \$223bn and \$232bn, and refinancings \$84bn and \$105bn *(Eagle Point Credit Co and Eagle Point Income Co, Forms N-CSR, FY2024 and FY2025)*. In H1 2026, new issue was only about 35% of roughly \$230bn of activity *(Dechert OnPoint, 4 Aug 2026; Eagle Point N-CSRS)*. JPMorgan, via Maples, called *net* new supply "near-anaemic." Most of the CLO market's activity is the same deals refinancing themselves, the way most of the loan market's activity is the same loans repricing themselves. It is turtles all the way down, and every turtle has a call option.
+
+> **[SOURCE EXTRACTION]** *Bohn_Stein_Active_Credit_Portfolio_Management p.14:* In his June 2008 foreword Darrell Duffie wrote that "by mid-2008 the issuance of bank-loan collateralized loan obligations (CLOs) has fallen off significantly," and that CLOs are "well suited to transferring credit risk... to buy-and-hold investors who are less crucial to the provision of liquidity."
+>
+> **Annotation.** Both halves aged in interesting ways. The issuance collapse of 2008 became, by 2024–2025, back-to-back records above \$200bn a year. The "buy-and-hold" description survives as the most expensive half-truth in the asset class. A CLO's *liabilities* are held by buy-and-hold investors: banks, insurers and, since 2020, retail through AAA CLO ETFs (§21.6). Its *assets* are traded under a rulebook that turns rating changes into sales. A CLO is buy-and-hold until a rating agency moves. After that it is the most predictable seller in credit. That predictability is the alpha in §21.4.
+
+### 21.3.1 Derivation: the arbitrage and its 11× gearing
+
+Work per unit of collateral par. Let liability class $k = 1,\dots,K$ have size $w_k$ (as a fraction of collateral par) and spread $s_k$ over the base rate $b$. The equity is $w_E = 1 - \sum_k w_k$. The assets earn $b + \text{WAS}$, where WAS is the weighted-average spread. Annual fees are $f$ (senior and subordinated management fees plus administration), and expected annual credit loss is $\text{EL} = \text{PD} \cdot L$, with $L = 1 - R$. The equity's annual cash yield is what is left after paying the notes, divided by the equity's size:
+
+$$
+y_E \;=\; \frac{(b + \text{WAS}) - \sum_k w_k\,(b + s_k) - f - \text{EL}}{w_E}
+\;=\; b \;+\; \frac{\text{WAS} - \sum_k w_k s_k - f - \text{EL}}{w_E}. \tag{21.3}
+$$
+
+The second equality uses $b\,(1 - \sum_k w_k) = b\,w_E$: the equity earns the base rate on its own slice, so CLO equity is a floating-rate instrument too. The gearing is
+
+$$
+\frac{\partial y_E}{\partial\, \text{WAS}} = \frac{1}{w_E} \approx 11 \quad (w_E = 9\%).
+$$
+
+So a 50 bp repricing across the pool takes about 5.6 points a year off the equity's yield. TwentyFour Asset Management put the same arithmetic in one sentence: "a 50 bp reduction in spreads means a potential 5% reduction in [CLO] equity returns." Every repricing wave in §21.5 is therefore a transfer from CLO equity to borrowers, levered 11×, and the equity's only defence is its own call on the liabilities.
+
+Compare two vintages. Moyer's 2004 worked example uses collateral at 535 bp and investment-grade tranches (87% of the structure) at about 88 bp. The BB/B tranches are at 750 bp, which gives blended funding of about 110 bp and a net spread of about 425 bp to a 10% equity (`Moyer_Distressed_Debt_Analysis p.53–54`). Before fees and losses, that is about 42% a year on the equity, by our division. Now an illustrative 2025 deal. Take WAS = 319 bp, the index's nominal spread at year-end 2025 *(Loomis Sayles, "Loomis on Loans Q4 2025")*, and AAA at 130 bp (Eagle Point puts year-end AAA at 133 bp). Put AA at 175, A at 210, BBB at 310 and BB at 575 bp, with weights 62/11/8/5/5% *(mezzanine spreads illustrative)*. Then $\sum_k w_k s_k \approx 161$ bp, and the excess spread is about 158 bp. Subtract 45 bp of fees and 75 bp of expected loss *(illustrative)* and 38 bp remains, which is about 4.2% on a 9% equity, plus the base rate. The 2004 arbitrage paid for a lot of mistakes. The 2025 arbitrage pays for very few. That is why managers fight for every basis point of par build, buying loans at 97 rather than 100, and why the CCC haircut in §21.4 bites so hard.
+
+> **[SOURCE EXTRACTION]** *Moyer_Distressed_Debt_Analysis p.53:* CDOs "frequently face purchase and sale pressures not driven by return maximization."
+>
+> **Annotation.** Moyer wrote this when CDOs held "over 20%" of the low-rated loan and bond market (p.55). The share is now about two-thirds of loans outstanding. The sentence has moved from a curiosity in a chapter on market participants to the first-order fact about loan price formation. The modern desk turns it into code. "Pressures not driven by return maximization" become a set of indicator functions on ratings and prices (the tests below), and each one is a predictable flow.
+
+### 21.3.2 Derivation: why every CLO owns the same 200 names
+
+Rating agencies require diversity, and Moody's measures it with the binomial expansion technique (BET). BET replaces a pool of correlated credits with a smaller number of *independent* credits that match the first two moments of the loss distribution. `Schmid_Credit_Risk_Pricing_Models p.183–184` gives the general formulas. Here is the homogeneous case, which is all the intuition needs. Take $J$ obligors, each with par $n_0$, default probability $P$ over the horizon, loss given default $L$, and pairwise default correlation $\rho$. The pool loss has mean and variance
+
+$$
+\mathbb{E}[\text{Loss}] = J n_0 L P, \qquad
+\operatorname{Var}[\text{Loss}] = n_0^2 L^2 P(1-P)\,\big[J + J(J-1)\rho\big].
+$$
+
+The BET pool has $\text{DS}$ independent obligors with par $n_0 J/\text{DS}$ each, which preserves total par, so its mean is the same. Its variance is $(n_0 J/\text{DS})^2 L^2 P(1-P)\,\text{DS}$. Setting the two variances equal and solving gives
+
+$$
+\text{DS} \;=\; \frac{J}{1 + (J-1)\rho}. \tag{21.4}
+$$
+
+(Schmid calls this number the "diversity score of the collateral pool." We write it DS to keep $n$ free for par and $D$ free for duration.) With $J = 250$ and $\rho = 0.03$, $\text{DS} \approx 29.5$. As $J \to \infty$, $\text{DS} \to 1/\rho$. Adding names beyond about a hundred buys almost nothing, so managers meet the diversity test and then compete for the same large, liquid, B2/B-rated names that also satisfy the WARF (weighted-average rating factor) and WAS tests and can be sold if needed. The result is heavy overlap. Elkamhi and Nozawa's working-paper title said it plainly: "Too Big to Diversify." The test that makes each CLO diversified makes the CLO *sector* concentrated. When one large borrower is downgraded, it hits many CLO tests at once. §21.4 turns that correlation into a price.
+
+## 21.4 The Tests as an Option Book
+
+Theo, on day one: "At RSSG, CLOs were the lenders who couldn't fund the new money." Ines, on day two: "Here they're the players who must fold when the board shows a CCC. Learn which card makes which player fold, and you don't need to read faces."
+
+> **[SOURCE EXTRACTION]** *Schmid_Credit_Risk_Pricing_Models p.175:* "There are two types of tests (so called coverage tests) that are intended as a warning if the cash flows from the collateral pool are running short to cover interest and/or principal payments to the tranches. If the coverage tests fail, the cash flows from the collateral are redirected. They are used to repay the outstandings on the tranches according to their seniority."
+>
+> **Annotation.** On p.176 Schmid gives the textbook OC ratio: collateral par divided by the par of the tranche and everything senior to it. He adds that the OC test "is done for every single tranche but the equity tranche." The 2026 indenture keeps the structure and changes the numerator. Par becomes *adjusted* par, with haircuts that depend on prices and ratings. Post-crisis US deals test a combined AAA/AA class and each class down to BB, usually with no test for a single-B tranche *(Creditflux CLO Guide, ch. 6)*. The modern departure is that the haircuts make a par test price-sensitive in exactly the tail of the portfolio where prices are least reliable.
+
+### 21.4.1 Derivation: the adjusted numerator
+
+Index the pool's loans by $j$, with par $n_j$ and price $p_j$ as a fraction of par. Define four disjoint sets: defaulted loans $\mathcal{D}$; discount obligations $\mathcal{O}$ (bought below a threshold, often 80–85, and carried at purchase price $p^0_j$ until the loan trades above about 90 for 30 days, per Kundu 2023); non-defaulted, non-discount CCC loans $\mathcal{C}$ (Caa1/CCC+ or below, deal-specific); and everything else. Let $n^{\text{nd}} = \sum_{j \notin \mathcal{D}} n_j$ be non-defaulted par and $\bar c$ the CCC limit (typically 7.5%; some deals use 5%). The CCC excess is
+
+$$
+X = \Big(\sum_{j \in \mathcal{C}} n_j - \bar c\, n^{\text{nd}}\Big)^{+}.
+$$
+
+Sort the CCC loans by price, $p_{(1)} \le p_{(2)} \le \cdots$. The **excess set** $\mathcal{X}$ is the cheapest loans whose par adds up to $X$ (the last one taken partially). Let $p^{\ast}$ be the price of the last loan taken, the *marginal* CCC. The adjusted collateral principal amount (ACPA), plus principal cash $\text{Cash}$, is
+
+$$
+\text{ACPA} = \sum_j n_j + \text{Cash}
+\;-\; \underbrace{\sum_{j\in\mathcal{D}} n_j\big(1 - \min(p_j, R^{\text{ag}}_j)\big)}_{\text{defaulted}}
+\;-\; \underbrace{\sum_{j\in\mathcal{O}} n_j\,(1 - p^0_j)}_{\text{discount}}
+\;-\; \underbrace{\sum_{(k)\in\mathcal{X}} n_{(k)}\,(1 - p_{(k)})}_{\text{CCC excess}} , \tag{21.5}
+$$
+
+where $R^{\text{ag}}_j$ is the rating agency's assumed recovery. The OC ratio and cushion of class $k$, with note balances $B_l$ ordered from senior to junior and trigger $\underline{\text{OC}}_k$, are
+
+$$
+\text{OC}_k = \frac{\text{ACPA}}{\sum_{l \le k} B_l}, \qquad \kappa_k = \text{OC}_k - \underline{\text{OC}}_k .
+$$
+
+When $\kappa_k < 0$, interest that would have gone to classes junior to $k$, to the subordinated fees and to the equity is diverted to pay down the most senior notes until the test is cured. The interest diversion (reinvestment OC) test triggers earlier and diverts interest into *buying collateral*. That raises the numerator instead of shrinking the denominator. The IC test (interest proceeds after senior fees divided by interest due on the class and those senior to it) is computed similarly and "historically rarely failed" (Creditflux). Once a test fails, "maintain or improve" rules forbid trades that make it worse.
+
+**Why it is an option book.** Write each haircut as a payoff on prices:
+
+- *Defaulted:* $\min(p_j, R^{\text{ag}}_j) = R^{\text{ag}}_j - (R^{\text{ag}}_j - p_j)^{+}$. The CLO is short a put on each defaulted loan, struck at the agency recovery.
+- *Discount:* the carrying value jumps from $p^0_j$ to 1 when the price stays above the threshold long enough. That is a barrier digital on par.
+- *CCC excess:* minus the sum of $(1 - p)$ over the *lowest order statistics* of the CCC price vector. The CLO is short the cheapest tail of its own CCC book.
+
+The price sensitivities follow directly from (21.5):
+
+$$
+\frac{\partial\,\text{ACPA}}{\partial p_j} \;=\; n_j\,\mathbf{1}\{j \in \mathcal{X}\} \;+\; n_j\,\mathbf{1}\{j \in \mathcal{D},\ p_j < R^{\text{ag}}_j\}, \qquad \text{and } 0 \text{ for every performing par loan}.
+$$
+
+The OC test cannot see the price of 90% of the book and is hypersensitive to the cheapest few percent. Now the **cliff**. Treat CCC par $C$ as the variable:
+
+$$
+\frac{\partial\,\text{ACPA}}{\partial C} \;=\;
+\begin{cases}
+0, & C < \bar c\, n^{\text{nd}} \quad \text{(bucket not full)},\\[2pt]
+-(1 - p^{\ast}), & C > \bar c\, n^{\text{nd}} \quad \text{(bucket full)}.
+\end{cases}
+$$
+
+A downgrade into a full bucket marks *some other loan*, the marginal cheap CCC, from par to market. Kundu (2023) finds the average CCC/Caa1 loan in CLOs priced at 85 cents but the cheapest CCC in each CLO at 58 cents on average. So the slope past the cliff is about $-0.42$: each dollar of fresh CCC beyond the bucket costs about 42 cents of numerator, *whatever the downgraded loan itself is worth*. Kaz, reading this, asked whether the cheapest loan had done anything wrong. It hadn't. It was standing at the edge of the cliff when someone else was pushed.
+
+### 21.4.2 The cure-trade theorem
+
+Suppose the bucket is full ($X > 0$). The manager sells par $\Delta n$ of a CCC loan $i$ at $p_i$ and buys a performing loan at par with the proceeds. Two things happen. The trade burns par of $(1 - p_i)\,\Delta n$, because cash $p_i \Delta n$ buys only $p_i \Delta n$ of new par. And the excess shrinks.
+
+**Claim.** Let loan $i$ lie above the excess set ($p_i \ge p^{\ast}$), and let the trade be small enough that the excess stays positive. Then
+
+$$
+\Delta\text{ACPA} \;\ge\; \Delta n\,\Big[(p_i - p^{\ast}) \;-\; \bar c\,(1 - p^{\ast})(1 - p_i)\Big]. \tag{21.6}
+$$
+
+If instead $i$ lies inside the excess set, then $-\bar c\,(1 - p_i)\,\Delta n \le \Delta\text{ACPA} \le 0$.
+
+**Proof.** *Case 1: $i$ above the excess set.* CCC par falls by $\Delta n$. Non-defaulted par falls by the par burn, so the bucket limit falls by $\bar c(1 - p_i)\Delta n$. The excess therefore falls by $\Delta n\,[1 - \bar c(1 - p_i)]$. The par leaving the excess set comes off its *top*: loans priced at or below $p^{\ast}$, each with haircut rate $(1 - p) \ge (1 - p^{\ast})$. So the CCC haircut falls by at least $(1 - p^{\ast})\,\Delta n\,[1 - \bar c(1 - p_i)]$. Subtract the par burn $(1 - p_i)\Delta n$ and rearrange to get (21.6).
+
+*Case 2: $i$ inside the excess set.* Selling it realizes exactly the haircut it was already carrying: the par burn $(1-p_i)\Delta n$ equals the haircut removed. The only residual is the bucket-limit effect. The limit shrinks by $\bar c(1-p_i)\Delta n$, which pulls up to that much par back into the excess at haircut rates of at most 1. So $\Delta\text{ACPA} \in [-\bar c(1-p_i)\Delta n,\, 0]$. $\blacksquare$
+
+Ignoring the small $\bar c$ term, the OC-optimal cure is to **sell the highest-priced CCC loan**. The gain per unit of par is $p_i - p^{\ast}$. Selling the cheap ones is OC-neutral at best: it just turns a haircut into a realized loss. Kundu calls this "contractual arbitrage." Notice what it means for the market. The highest-priced CCC in a CLO is usually the *freshly downgraded* one: yesterday a B− at 92, today a CCC+ at 88, still well above the 58-cent tail. So the theorem predicts exactly what Elkamhi and Nozawa (2022) measure. Constrained CLOs sell recently downgraded loans, those loans' prices fall temporarily, and because diversity rules make CLOs overlap (§21.3.2), the selling is correlated across deals. **The forced seller sells its best CCC, which is the one a fundamental buyer most wants.** The ex-RSSG reader knows that loan cold: a decent business, a bad quarter, a fresh downgrade, and a capital structure that is not yet a restructuring.
+
+The magnitudes are large enough to trade. Elkamhi and Nozawa find that loans widely held by constrained CLOs earn 3.4% lower cumulative abnormal returns over the 20 weeks leading to the downgrade, and that the fire-sale price impact of CCC-downgraded loans is −3.35%. Over three months the unconditional probability that a CLO sells a downgraded loan is 13.27%. A one-standard-deviation (3.26%) drop in junior OC slack raises that probability by 1.56 pp. Average downgrade-week price impact was 17.31% in 2008–09, 1.26% in 2010–19 and 4.41% in 2020. Kundu (2023) finds that the median CLO operates within 4% of its most stringent covenant. After the 2014 oil-and-gas shock, she finds, each extra percentage point of a firm's CLO-routed oil-and-gas exposure lowered the secondary price of that firm's *unrelated* loan by 61 bp (IV estimates 81–254 bp). Selling \$1mm moved prices 180–404 bp on an Amihud measure. Loumioti and Vasvari (2019) add the manager's other lever: discretionary fair values and strategic trading around monthly tests. Strategic trading, but not fair-value discretion, predicts worse future CLO performance.
+
+> **[SOURCE EXTRACTION]** *Moyer_Distressed_Debt_Analysis p.55:* "CDO-ORs typically limit the percentage of the CDO's portfolio that can be rated in the lowest rating categories. When an investment in the portfolio is downgraded to B– or CCC, the manager may be forced to sell something (again without regard to the portfolio manager's view of fair value) to remain in compliance with the CDO-ORs."
+>
+> **Annotation.** "Sell something" is the entire chapter in two words. Moyer's 2004 insight was qualitative: rating-based rules create involuntary selling, which a distressed investor should expect and exploit. Equation (21.6) makes it specific. The "something" is the highest-priced CCC, the timing is the next test date, and the size depends on the bucket's overshoot and the junior cushion. Two departures from 2004 matter. First, the rulebook is now haircut-based rather than a hard ban, so the pressure is graded, not binary. Second, the CLO share of the market went from about 20% to about 65%, so the forced seller is no longer a corner of the market. It is the market.
+
+> **Desk Myth vs. Desk Reality.** *Myth:* "CLOs are buy-and-hold investors, so they stabilize the loan market." *Reality:* CLO *liabilities* are held by buy-and-hold investors. CLO *assets* are traded by a rulebook that turns a downgrade of one borrower into sales of that borrower and, through the cliff, of others. In 2020 BSL CLO exposure to CCC-range companies peaked at 12.31% (S&P, Apr 2023), against a 7.5% bucket. A stabilizer would not have needed a cure trade.
+
+> **Poker Table.** "Most of poker is reading people," Ines said. "This isn't. When a CCC hits the board, the CLO with a 0.9% junior cushion must fold its best CCC hand before the next payment date. I don't need to read its face. I need its trustee report, and I need to know what it holds that is priced highest. The pot is the temporary discount, three points or so. The odds are the reversal rate. Who knows more than you? Nobody: the seller *told* you it was selling, in its indenture, years ago." Then the hand history, as always, through markouts. Buy on the downgrade week at the fire-sale discount. The markout is negative at day 1 because the other constrained CLOs are still selling, flat at week 2, and positive by week 8 if the reversal Elkamhi and Nozawa document arrives. *IDO or it didn't happen*: strip the loan's carry and its beta to the loan index before you call the week-8 markout alpha.
+
+### 21.4.3 The CLO Forced-Sale Pressure Index
+
+Let CLO $c$ hold par $n_{i,c}$ of loan $i$, whose outstanding amount is $O_i$. Let $\pi_{c,t}$ be the probability that CLO $c$ sells a downgraded holding within three months, given its junior cushion $\kappa^{\text{jr}}_{c,t}$ and its CCC excess $X_{c,t}$ as a fraction of par:
+
+$$
+\pi_{c,t} = \sigma\!\left(a - b_{\kappa}\,\kappa^{\text{jr}}_{c,t} + d\,\frac{X_{c,t}}{n^{\text{nd}}_{c,t}}\right), \qquad \sigma(z) = \frac{1}{1 + e^{-z}},
+$$
+
+$$
+\text{FSPI}_{i,t} = \frac{1}{O_i}\sum_c n_{i,c}\,\pi_{c,t} \;\in\; [0,\ \text{CLO share of } i].
+$$
+
+FSPI is the expected fraction of loan $i$ that constrained CLOs will sell. It is Kundu's Bartik-style exposure (holder weights times holder constraints) turned into a live signal. Calibrate $a$ and $b_{\kappa}$ so that $\pi = 13.27\%$ at a 4% cushion and a one-SD (3.26%) drop in cushion adds 1.56 pp, matching Elkamhi and Nozawa. Because $\sigma'(z) = \sigma(1-\sigma)$, that requires $b_{\kappa} = (0.0156/0.0326)/[0.1327 \times 0.8673] \approx 4.16$ per unit of cushion. The CCC-excess loading $d$ is illustrative until you fit it on trustee data. The trade is liquidity provision: buy high-FSPI loans after CCC downgrades or LME rating events, conditional on a fundamental view, sized by the expected reversal, and exit as the reversal completes. Before month-end test dates, fade the relative price of the highest-priced CCCs in CLO-heavy names, because those are what constrained managers will sell.
+
+> **Ways This Blows Up.** (1) *Stale trustee data.* Trustee reports are monthly and lag by weeks, so your cushion is last month's cushion. Nowcast it with the prices of the deal's CCC tail, which (21.5) says is all the numerator can see. (2) *Wrong "market value."* Each indenture defines market value: pricing-service bid, average of dealer bids, or, failing those, the manager's own estimate. If you use a composite mid, you are computing a different test from the one the trustee runs. (3) *Rating mapping.* The CCC classification may use the lower of two agencies' ratings, include B3/B− on negative watch, or treat a selective default differently. Parse the indenture. Do not guess. (4) *Discretion.* Loumioti and Vasvari show that managers move marks and trade strategically around tests. Your model of a deal can be right on the documents and wrong on the manager. (5) *Crowding.* If every desk runs the same FSPI, the reversal is bought before the forced sale completes, and the signal becomes a timing bet against other quants.
+
+### Case Study: COVID-19 2020 and the 2022–2023 Junior-OC Failures
+
+**March 2020.** The S&P/LSTA index's weighted-average bid fell from 95.18 on 29 February to 76.23 on 23 March. March's return was −12.4%, second only to October 2008's −13.2%. The distress ratio peaked at 57%. On 19 March the LSTA reported record volumes and bid-ask spreads that had "widened beyond 300 basis points" *(S&P Global LCD 1Q20 review; LSTA)*. The index rebounded to 82.9 by 31 March. Then the downgrades arrived, and the cliff did the rest. BSL CLO exposure to CCC-range companies peaked at 12.31% and the average junior OC cushion fell to 1.13% *(S&P Global Ratings, 28 Apr 2023)*. Elkamhi and Nozawa's 2020 downgrade-week price impact was 4.41%, more than three times the 2010–19 average. A systematic desk running FSPI in April 2020 would have seen pressure concentrated in recently downgraded, CLO-heavy names. By (21.6), those were exactly the highest-priced CCCs. The trade was to buy them from the forced sellers and hold through the reversal, sized against the risk that the downgrades kept coming.
+
+**2022–2023: one deal, autopsied.** An April 2023 Academy Securities note counted 42 CLO deals failing their junior OC test, based on trustee reports. Cushions ranged from −3 bp (SRANC 2014-2A, just failing class E) to −104.7 bp (HLA 2012-1A, failing class C since August 2022) *(Academy Securities, "OC Triggers," 4 Apr 2023)*. Take ZAIS6 2017-1A. Its required OC ratios ran from 122.6% (class A/B) to 103.7% (class E). The class E ratio was 103.56%, a failure by 14 bp. The haircuts were: defaulted −\$13.5mm, deferring −\$0.12mm, discount zero, and excess CCC −\$5.0mm, for a total of 5.72% of aggregate principal. The notes were A-1-R \$146.6mm, A-2 \$25mm, B-R \$45mm, C-R \$30mm, D \$25mm and E \$25mm, so \$296.6mm in total. Now do the arithmetic the note invites (ours). A class E ratio of 103.56% implies an ACPA of about \$307.2mm. Total haircuts of about \$18.6mm at 5.72% imply aggregate principal of about \$325.5mm. Without haircuts the class E ratio would be about 109.7%, a six-point cushion. **The par was there. The option book failed the test.** The CCC excess alone was worth about 1.7 points of class E OC, and without it the deal would have passed at about 105.2%. ZCCP 2019-1A, another deal in the note, breached class E in February 2023 and cured the following month through cash diversion, the waterfall working as Schmid described in 2003.
+
+### Specification for AI Implementation
+
+**The Spec You Hand the Robot (OC engine).** *What ROBO built from the vague version ("cure the OC test"):* it sold the entire CCC bucket, cheapest first, because "cheapest" sounded like "least valuable." It realized every haircut as a loss, burned \$4mm of par, and left the junior test exactly where it was. By (21.6) that is the correct result for that instruction. The precise spec:
+
+- **Inputs.** `pool`: one row per loan, with `par` (\$mm, ≥0), `price` (fraction of par, in (0, 1.2]), `is_ccc`, `is_default`, `agency_rec` (fraction), `is_discount`, `purchase_px` (fraction). `balances`: (K,) note balances, senior to junior, \$mm. `triggers`: (K,) required OC ratios as decimals. `cash`: principal cash, \$mm. `ccc_limit`: decimal (default 0.075).
+- **Outputs.** ACPA and its three haircuts; CCC share, excess and marginal price $p^{\ast}$; OC ratios and cushions per class; for each candidate sale, $\Delta$ACPA from an exact recompute, never from the linearization.
+- **Rules.** Excess is assigned cheapest-first. The haircut is $\max(0, 1-p)$ (no gains above par). Defaulted loans are excluded from both the CCC base and the CCC queue. Discount obligations are excluded from the CCC queue in this reference version. Real indentures apply the single most punitive treatment "without duplication," so implement the deal's actual priority.
+- **Guards.** Raise on missing columns, negative par, or prices outside (0, 1.2]. Return NaN for $p^{\ast}$ when there is no excess. Never divide by a zero base.
+- **Sanity checks.** With all flags off, ACPA equals total par (Schmid's textbook ratio). A downgrade below the limit changes nothing. A downgrade into a full bucket costs at most par × (1 − cheapest CCC price). Selling the richest CCC satisfies (21.6). Selling the cheapest lies in $[-\bar c(1-p)\Delta n, 0]$.
+
+```python
+# Chapter 21 reference implementation, block 1: the OC engine and the cure trade.
+import numpy as np
+import pandas as pd
+
+RNG = np.random.default_rng(21)
+CCC_LIMIT = 0.075   # CCC bucket as a fraction of non-defaulted collateral par
+TOL = 1e-9
+POOL_COLS = ["par", "price", "is_ccc", "is_default", "agency_rec", "is_discount", "purchase_px"]
+
+
+def ccc_excess_haircut(par_ccc, px_ccc, limit_par):
+    """Haircut (par minus market value) on the CCC excess, cheapest CCC loans first.
+
+    par_ccc, px_ccc : 1-D arrays for the CCC loans only (price as a fraction of par).
+    limit_par       : bucket size in par (ccc_limit * non-defaulted par).
+    Returns (haircut, excess_par, marginal_price); marginal_price is NaN if no excess.
+    """
+    par_ccc = np.asarray(par_ccc, dtype=float)
+    px_ccc = np.asarray(px_ccc, dtype=float)
+    excess = max(0.0, float(par_ccc.sum()) - limit_par)
+    if excess <= TOL:
+        return 0.0, 0.0, float("nan")
+    order = np.argsort(px_ccc, kind="stable")          # cheapest first
+    haircut, remaining, p_marg = 0.0, excess, float("nan")
+    for p, n in zip(px_ccc[order], par_ccc[order]):
+        take = min(n, remaining)
+        haircut += max(0.0, 1.0 - p) * take             # never a gain above par
+        remaining -= take
+        p_marg = float(p)
+        if remaining <= TOL:
+            break
+    return haircut, excess, p_marg
+
+
+def acpa(pool, cash=0.0, ccc_limit=CCC_LIMIT):
+    """Adjusted collateral principal amount, equation (21.5)."""
+    missing = set(POOL_COLS) - set(pool.columns)
+    if missing:
+        raise ValueError(f"pool missing columns: {sorted(missing)}")
+    par = pool["par"].to_numpy(float)
+    px = pool["price"].to_numpy(float)
+    rec = pool["agency_rec"].to_numpy(float)
+    p0 = pool["purchase_px"].to_numpy(float)
+    dflt = pool["is_default"].to_numpy(bool)
+    disc = pool["is_discount"].to_numpy(bool) & ~dflt
+    ccc = pool["is_ccc"].to_numpy(bool) & ~dflt & ~disc
+    if np.any(par < 0) or np.any(px <= 0) or np.any(px > 1.2):
+        raise ValueError("par must be >= 0 and price a fraction of par in (0, 1.2]")
+    h_def = float(np.sum(par[dflt] * (1.0 - np.minimum(px[dflt], rec[dflt]))))
+    h_disc = float(np.sum(par[disc] * (1.0 - np.minimum(p0[disc], 1.0))))
+    base = float(par[~dflt].sum())
+    h_ccc, x_ccc, p_marg = ccc_excess_haircut(par[ccc], px[ccc], ccc_limit * base)
+    value = float(par.sum()) + cash - h_def - h_disc - h_ccc
+    share = float(par[ccc].sum()) / base if base > 0 else float("nan")
+    return {"acpa": value, "h_def": h_def, "h_disc": h_disc, "h_ccc": h_ccc,
+            "ccc_excess": x_ccc, "p_marg": p_marg, "ccc_share": share}
+
+
+def oc_test(acpa_value, balances, triggers):
+    """OC ratio and cushion (ratio minus trigger, decimals) per class, senior to junior."""
+    cum = np.cumsum(np.asarray(balances, dtype=float))
+    ratio = acpa_value / cum
+    return ratio, ratio - np.asarray(triggers, dtype=float)
+
+
+def make_pool(n_loans=250, par_each=2.0, n_ccc=21, n_default=2, n_disc=3, rng=RNG):
+    """Synthetic 500mm pool (par in mm): CCC prices span 50-92 cents (illustrative)."""
+    price = np.clip(rng.normal(0.985, 0.012, n_loans), 0.93, 1.005)
+    is_ccc = np.zeros(n_loans, bool)
+    is_default = np.zeros(n_loans, bool)
+    is_disc = np.zeros(n_loans, bool)
+    is_ccc[:n_ccc] = True
+    price[:n_ccc] = np.linspace(0.50, 0.92, n_ccc)
+    is_default[n_ccc:n_ccc + n_default] = True
+    price[n_ccc:n_ccc + n_default] = 0.40
+    d0 = n_ccc + n_default
+    is_disc[d0:d0 + n_disc] = True
+    price[d0:d0 + n_disc] = 0.86
+    return pd.DataFrame({
+        "par": np.full(n_loans, par_each), "price": price, "is_ccc": is_ccc,
+        "is_default": is_default, "agency_rec": np.full(n_loans, 0.45),
+        "is_discount": is_disc, "purchase_px": np.where(is_disc, 0.80, 1.0)})
+
+
+def sell_and_rebuy_par(pool, idx):
+    """Sell loan idx at its price and buy a performing loan at par with the proceeds."""
+    row = pool.loc[idx]
+    new = pd.DataFrame({"par": [row["par"] * row["price"]], "price": [1.0],
+                        "is_ccc": [False], "is_default": [False], "agency_rec": [0.45],
+                        "is_discount": [False], "purchase_px": [1.0]})
+    return pd.concat([pool.drop(index=idx), new], ignore_index=True)
+
+
+pool = make_pool()
+BAL = np.array([365.0, 40.0, 30.0, 25.0])   # AAA/AA combined, A, BBB, BB (mm)
+TRIG = np.array([1.22, 1.15, 1.08, 1.04])    # illustrative OC triggers
+res = acpa(pool)
+ratio, cushion = oc_test(res["acpa"], BAL, TRIG)
+
+# Sanity 1: with every haircut off, ACPA is plain par (Schmid's textbook ratio).
+clean = pool.assign(is_ccc=False, is_default=False, is_discount=False)
+assert abs(acpa(clean)["acpa"] - pool["par"].sum()) < TOL
+
+# Sanity 2: the bucket is over its limit; the marginal CCC is the third-cheapest here.
+assert res["ccc_share"] > CCC_LIMIT and res["h_ccc"] > 0.0
+assert abs(res["p_marg"] - pool.loc[pool.is_ccc, "price"].nsmallest(3).max()) < TOL
+
+# Sanity 3: the cliff. Flat below the limit, (1 - p) on someone else's loan above it.
+under = pool.copy()
+under.loc[under.index[:5], "is_ccc"] = False             # CCC share about 6.5%
+assert acpa(under)["h_ccc"] == 0.0
+j = under.index[(~under.is_ccc) & (~under.is_default) & (~under.is_discount)][-1]
+under_dg = under.copy()
+under_dg.loc[j, "is_ccc"] = True
+assert acpa(under_dg)["h_ccc"] == 0.0                    # flat side of the cliff
+over_dg = pool.copy()
+over_dg.loc[j, "is_ccc"] = True                          # the bucket is already full
+d_h = acpa(over_dg)["h_ccc"] - res["h_ccc"]
+assert 0.0 < d_h <= 2.0 * (1.0 - 0.50) + TOL
+print(f"downgrading a loan at {pool.loc[j, 'price']:.3f} cost {d_h:.3f}mm via other loans")
+
+# Sanity 4: the cure-trade theorem, equation (21.6).
+ccc_px = pool.loc[pool.is_ccc, "price"]
+i_rich, i_cheap = ccc_px.idxmax(), ccc_px.idxmin()
+n_i, p_i, p_m = pool.loc[i_rich, "par"], pool.loc[i_rich, "price"], res["p_marg"]
+d_rich = acpa(sell_and_rebuy_par(pool, i_rich))["acpa"] - res["acpa"]
+d_cheap = acpa(sell_and_rebuy_par(pool, i_cheap))["acpa"] - res["acpa"]
+bound = n_i * ((p_i - p_m) - CCC_LIMIT * (1.0 - p_m) * (1.0 - p_i))
+assert d_rich >= bound - TOL and d_rich > 0.0
+p_c, n_c = pool.loc[i_cheap, "price"], pool.loc[i_cheap, "par"]
+assert -CCC_LIMIT * (1.0 - p_c) * n_c - TOL <= d_cheap <= TOL
+assert d_rich > d_cheap
+print(f"junior OC {ratio[-1]:.4f} (cushion {cushion[-1]:+.4f}); "
+      f"cure: sell richest CCC {d_rich:+.3f}mm, cheapest {d_cheap:+.3f}mm")
+```
+
+```python
+# Block 2: CLO Forced-Sale Pressure Index, calibrated to Elkamhi-Nozawa (2022) magnitudes.
+P0, K0 = 0.1327, 0.04                 # 3-month sale probability at a 4% junior cushion
+DP_PER_SD, SD_K = 0.0156, 0.0326      # +1.56pp per one-SD (3.26%) drop in cushion
+B_FS = (DP_PER_SD / SD_K) / (P0 * (1.0 - P0))
+A_FS = np.log(P0 / (1.0 - P0)) + B_FS * K0
+D_FS = 10.0                           # illustrative loading on CCC excess / par
+
+
+def sale_prob(jr_cushion, ccc_excess_frac):
+    """P(a CLO sells a downgraded holding within 3 months); inputs are decimals."""
+    z = (A_FS - B_FS * np.asarray(jr_cushion, float)
+         + D_FS * np.maximum(0.0, np.asarray(ccc_excess_frac, float)))
+    return 1.0 / (1.0 + np.exp(-z))
+
+
+def fspi(holdings, outstanding, jr_cushion, ccc_excess_frac):
+    """holdings (C, I): par of loan i held by CLO c; outstanding (I,).
+    Returns (I,) expected fraction of each loan sold by constrained CLOs."""
+    H = np.asarray(holdings, float)
+    out = np.asarray(outstanding, float)
+    if H.ndim != 2 or H.shape[1] != out.shape[0]:
+        raise ValueError("holdings must be (C, I) with I == len(outstanding)")
+    if np.any(H.sum(axis=0) > out + TOL):
+        raise ValueError("CLOs cannot hold more than a loan's outstanding amount")
+    return (sale_prob(jr_cushion, ccc_excess_frac) @ H) / out
+
+
+assert abs(sale_prob(K0, 0.0) - P0) < 1e-12
+slope = (sale_prob(K0 - 1e-6, 0.0) - sale_prob(K0 + 1e-6, 0.0)) / 2e-6
+assert abs(slope * SD_K - DP_PER_SD) < 1e-4
+
+n_clo, n_loan = 40, 60
+outstanding = RNG.uniform(400.0, 1500.0, n_loan)                 # mm
+share = RNG.dirichlet(np.ones(n_clo), size=n_loan).T * 0.65      # CLOs own 65% of each loan
+holdings = share * outstanding                                    # (C, I)
+cush = RNG.normal(0.038, 0.0326, n_clo)
+exc = np.maximum(0.0, RNG.normal(0.0, 0.01, n_clo))
+f_now = fspi(holdings, outstanding, cush, exc)
+assert np.all((f_now >= 0.0) & (f_now <= 0.65 + TOL))
+f_stress = fspi(holdings, outstanding, cush - 0.02, exc + 0.01)
+assert np.all(f_stress > f_now)                                  # thinner cushions, more selling
+print(f"FSPI median {np.median(f_now):.3f} -> stressed {np.median(f_stress):.3f}")
+```
+
+### Deep-Dive Resource Graph (21.4)
+
+- **Academic Papers.** Elkamhi, R. and Nozawa, Y. (2022), "Fire-Sale Risk in the Leveraged Loan Market," *Journal of Financial Economics* 146(3), 1120–1147: https://ideas.repec.org/a/eee/jfinec/v146y2022i3p1120-1147.html · Kundu, S. (2023), "The Externalities of Fire Sales: Evidence from Collateralized Loan Obligations," ESRB Working Paper No. 141: https://www.esrb.europa.eu/pub/pdf/wp/esrb.wp.141.en.pdf · Loumioti, M. and Vasvari, F. (2019), "Portfolio Performance Manipulation in Collateralized Loan Obligations," *Journal of Accounting and Economics* 67(2–3), 438–462 (accepted manuscript: https://lbsresearch.london.edu/id/eprint/1014) · Cordell, Roberts and Schwert, "CLO Performance" (*Journal of Finance*, 2023; check volume and pages).
+- **Practitioner Writing.** Creditflux CLO Guide, ch. 6, "Understanding the Tests": https://cloguide.creditflux.com/6-understanding-the-tests · Academy Securities, "OC Triggers: Subtle Thresholds Come to the Fore as Collateral Distress Builds Up" (Apr 2023) · S&P Global Ratings, "Scenario Analysis: How Rising U.S. BSL CLO 'CCC' Baskets Could Affect Junior Overcollateralization Test Cushions" (28 Apr 2023).
+- **Data & Code.** CLO trustee reports via commercial vendors (CLO-i/Creditflux, Intex, Octus); TRACE for CLO tranches; Elkamhi–Nozawa replication package (Mendeley Data).

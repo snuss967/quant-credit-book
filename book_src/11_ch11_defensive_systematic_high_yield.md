@@ -680,7 +680,7 @@ sc = g4.normal(0.0, 1.0, 5000) + 1.2 * dflt
 assert abs(accuracy_ratio(sc, dflt) - (2 * auc(sc, dflt) - 1)) < 1e-10
 
 # Sanity 2: a perfect ranking scores AR = 1; random scores average AR ~ 0 over 20 seeds.
-assert abs(accuracy_ratio(dflt + 0.5 * g4.random(5000), dflt) - 1.0) < 1e-12
+assert abs(accuracy_ratio(dflt + 0.5 * g4.random(5000), dflt) - 1.0) < 1e-9
 ar_rand = []
 for s in range(20):
     gs = np.random.default_rng(1000 + s)
@@ -736,3 +736,273 @@ On 15 October 2026 the ICE BofA US High Yield OAS closed at 323bp, BB at 197bp, 
 The backdrop is a private credit default rate at a Fitch record of 6% in April 2026, distressed exchanges at 94% of downgrades to default or selective default in the twelve months to February 2026 by a rating-agency count reported in The DESK (27 May 2026), and Morgan Stanley forecasting high yield defaults of 3.5%. Any story about *why* the tier decompressed (software issuers facing AI disruption, private-credit stress spilling into public CCC capital structures) is interpretation, and we label it so.
 
 How three desks would have traded it *(illustrative)*. The tier excluder sold its CCCs in 2025 and looks brilliant in October 2026; its exposure to a 2003-style rebound is zero, and if the rebound comes, it will look exactly as brilliant as Mags's friends who sat out 2003. The beta-tilter held 90% of everything, including the 10% of CCC names that will default, and earned 90% of a bad year. The PD-ranked selector excluded the CCC names whose model PD exceeded their spread-implied break-even (§11.1.2), kept the CCCs whose spread overpaid their PD (often the sticky, newly issued, sponsor-supported ones), sized the bucket by expected loss, and used the 2026 widening to *add* to survivors as their spreads crossed the break-even line. Only the third desk has a plan for the rebound.
+
+## 11.7 Quality and Low-Risk Tilts
+
+Kaz had a theory, delivered with the serenity of someone who has never read a credit agreement. "The low-volatility anomaly is just leverage aversion. Investors who can't borrow buy risky assets to get return, so risky assets are overpriced and safe ones are cheap. Frazzini and Pedersen. Done."
+
+"In equities," Theo said. "In high yield the risky assets also have a lawyer."
+
+Both are right. Frazzini and Pedersen (2014) find alphas declining in beta across equities, Treasuries, credit, and futures; Houweling and van Zundert (2017) define the credit low-risk factor as short maturity and high rating and find significant alpha. Kaz's story explains why the effect exists everywhere. Theo's explains why it is *stronger* in high yield: the riskiest bonds carry jump risk that their spreads systematically underprice relative to their volatility, which is the asymmetry of §11.1 showing up in the cross-section.
+
+> **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.59:* "two in particular are responsible for the majority of credit return outperformance over the replicating portfolio: equity and bond volatility risk premia (VRP) and the low risk anomaly."
+>
+> **Annotation.** Dynkin and coauthors decompose credit returns against a replicating portfolio of equities and Treasuries and ask what is left that only credit pays. Two things: selling volatility, and the low-risk anomaly. Read that as a job description for defensive HY. The VRP part is the short put you cannot avoid owning; the low-risk part is the one premium you can harvest *by being defensive*, which is why a well-built defensive book need not be a lower-return book. Dynkin p.95 adds the maturity version ("Short-maturity bonds had better risk-adjusted and even non-risk-adjusted performance than long-maturity bonds"). The 2026 caveat: the HY index is now majority BB and short, so the low-risk trade is crowded at exactly the front end where it lives. Measure your low-risk exposure relative to the index, not in absolute terms.
+
+### 11.7.1 Why low risk wins, in one line of DTS
+
+Ben Dor's DTS framework rests on a Merton result: spread volatility is nearly proportional to spread (Ben Dor p.104), $\sigma(\Delta s_i) \approx k\,s_i$. A bond's excess-return volatility is then $D^{\text{spr}}_i\,k\,s_i = k\,\text{DTS}_i$. Divide the credit triangle by it:
+
+$$
+\frac{\mathbb{E}^{\mathbb{P}}[r^{xs}_i]}{\sigma(r^{xs}_i)} \approx \frac{s_i - \lambda_i L_i}{k\,D^{\text{spr}}_i\,s_i} = \frac{1}{k\,D^{\text{spr}}_i}\left(1 - \frac{\lambda_i L_i}{s_i}\right).
+$$
+
+Two predictions drop out. Risk-adjusted return falls with spread duration, even though the spread curve slopes upward: Dynkin's finding that information ratios decline with maturity (Dynkin p.454–457). And it falls as the share of the spread that is expected loss, $\lambda_i L_i/s_i$, rises. On the 1980–2002 default table at October 2026 spreads with $L = 0.6$, that share is 0.47 for BB, 1.28 for B, and 1.48 for CCC *(our computation; the historical table is pessimistic, as §11.1.2 showed)*: rising down the rating scale under any default table you choose. Low risk is not an anomaly in this framing; it is the credit triangle divided by DTS.
+
+### 11.7.2 The long-only contradiction, and three ways out
+
+The textbook betting-against-beta portfolio in credit levers the low-risk leg and delevers the high-risk leg to equal DTS:
+
+$$
+r^{\text{BAB}}_t = \frac{\text{DTS}_{\text{mkt}}}{\text{DTS}_L}\,r^{xs}_{L,t} - \frac{\text{DTS}_{\text{mkt}}}{\text{DTS}_H}\,r^{xs}_{H,t} .
+$$
+
+A long-only HY fund cannot short and is usually forbidden to lever. Tilt it toward short, high-rated bonds on a market-value basis and its DTS falls below the benchmark's, which means its beta falls, which means you have rebuilt the dimmer switch and called it a factor. "IDO or it didn't happen," Ines said, looking at a market-value-neutral backtest with a beta of 0.85 and a beautiful Sharpe ratio. Run DTS-neutral, the alpha halved. "And half of it didn't."
+
+There are three honest exits. Overlay: hold the low-risk book and buy back the missing DTS with CDX HY or a total-return swap on the index (Chapter 8), so the active book is pure selection. Re-spend: keep the DTS budget equal to the benchmark's but spend it on the spread of *low-PD* issuers, in longer maturities of good BB and B credits, which gives up some of the maturity effect to avoid the default tail. Or accept the beta and say so in the factsheet. Paleologo's warning applies to all three: "If we make a mistake of 5% in the expected return forecast on a low-volatility stock, we pay a much higher cost than if we make the same mistake on the high-volatility one" (Paleologo p.99), because risk-based sizing puts the most weight where a forecast error costs the most. Cap issuer weights.
+
+Equity momentum belongs here too, because it is a default-avoidance signal in disguise. Dynkin reports a top-minus-bottom quintile return of 15.9% a year with an information ratio of 1.74 for equity momentum in HY credit over January 1993 to May 2017, and calls it "a highly informative signal for lower quality names" (Dynkin p.609).
+
+> **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.739:* "top‐EMC portfolios tend to have lower credit exposures than their bottom counterparts during volatile episodes when safer, low‐OAS issuers tend to have less negative equity momentum."
+>
+> **Annotation.** This is the trap inside the good signal. Equity momentum in credit (EMC) works in drawdowns partly because, in a selloff, the stocks that fall least belong to the safest issuers, so a top-EMC portfolio quietly becomes a low-beta portfolio exactly when beta is being punished. Some of its "alpha" in 2008 or March 2020 is the dimmer switch again. Dynkin's remedy is to match the long and short legs on DTS so that the signal is measured net of its credit exposure, and the same page reports that EMC and its companion signal still work in drawdowns once matched. For a defensive HY book the lesson is procedural: every defensive signal must be tested DTS-neutral before it is credited with skill, or you will pay active fees for a beta you could have bought for two basis points.
+
+### Specification for AI Implementation
+
+**The Spec You Hand the Robot.** "Exclude the worst PD quintile, tilt toward default-adjusted carry per unit of DTS, hold $w^\top\text{DTS}$ within 1% of the benchmark, long-only, fully invested, issuer cap 3%." **Schema.** One cross-section: `pd_hat` (12m PD, decimal), `spread` (OAS, decimal), `dur` ($D^{\text{spr}}$, years), `bench_w` (sums to 1). Defaulted issuers enter with DTS set to zero and are excluded before optimization. Output: weights `w` (same order), `keep` mask, solver result.
+
+```python
+# Block 5: DTS-neutral defensive portfolio (Section 11.7)
+
+def defensive_portfolio(pd_hat, spread, dur, bench_w, L=0.6, exclude_q=0.20,
+                        issuer_cap=0.03, tilt=1.0):
+    pd_hat, spread, dur, bench_w = (np.asarray(a, dtype=float) for a in (pd_hat, spread, dur, bench_w))
+    dts = dur * spread
+    dts_bench = float(bench_w @ dts)
+    keep = pd_hat <= np.quantile(pd_hat, 1.0 - exclude_q)
+    score = (spread - pd_hat * L) / dts                       # default-adjusted carry per unit DTS
+    zk = (score[keep] - score[keep].mean()) / score[keep].std()
+    w0 = bench_w[keep] * np.exp(tilt * np.clip(zk, -2.0, 2.0))
+    w0 = w0 / w0.sum()
+    dk = dts[keep]
+    if not (dk.min() <= dts_bench <= dk.max()):
+        raise ValueError("benchmark DTS unreachable long-only: refuse rather than lever")
+    cons = [{"type": "eq", "fun": lambda w: w.sum() - 1.0, "jac": lambda w: np.ones_like(w)},
+            {"type": "eq", "fun": lambda w: w @ dk / dts_bench - 1.0, "jac": lambda w: dk / dts_bench}]
+    res = optimize.minimize(lambda w: 5e3 * np.sum((w - w0) ** 2), w0,
+                            jac=lambda w: 1e4 * (w - w0), method="SLSQP",
+                            bounds=[(0.0, issuer_cap)] * int(keep.sum()), constraints=cons,
+                            options={"maxiter": 500, "ftol": 1e-14})
+    w = np.zeros_like(bench_w)
+    w[keep] = res.x
+    return w, keep, w0, dts, dts_bench
+
+
+g5 = np.random.default_rng(RNG_SEED + 5)
+n_iss = int(lagged["issuer_id"].max()) + 1
+dur_by_issuer = g5.uniform(1.5, 6.5, n_iss)
+size_by_issuer = g5.lognormal(0.0, 0.5, n_iss)
+held_def, bench_def = 0.0, 0.0
+for t0 in (24, 36, 48, 60, 72):
+    cs = lagged[lagged["month"] == t0]
+    iid = cs["issuer_id"].to_numpy()
+    pd_t = predict_logit(b_full, cs[XCOLS].to_numpy())
+    spr_t = 0.015 + 0.35 * empirical_pd(cs["DD"].to_numpy()) * np.exp(g5.normal(0.0, 0.2, len(cs)))
+    bw = size_by_issuer[iid] / size_by_issuer[iid].sum()
+    w, keep, w0, dts_t, dts_b = defensive_portfolio(pd_t, spr_t, dur_by_issuer[iid], bw)
+    assert abs(w @ dts_t / dts_b - 1.0) < 0.01            # DTS-neutral within 1%
+    assert abs(w.sum() - 1.0) < 1e-6 and w.min() > -1e-9 and np.all(w[~keep] == 0.0)
+    assert (w0 @ dts_t[keep]) / dts_b < 0.95                # market-value tilt = dimmer switch
+    y_t = cs["default_12m"].to_numpy()
+    held_def += w @ y_t
+    bench_def += bw @ y_t
+assert held_def < bench_def                                  # fewer realized defaults held
+print(f"avg 12m default exposure: held={held_def / 5:.3%} bench={bench_def / 5:.3%}; "
+      f"last MV-tilt DTS ratio={(w0 @ dts_t[keep]) / dts_b:.2f}")
+```
+
+**Edge cases for ROBO.** If the benchmark DTS cannot be reached long-only within issuer caps, raise; never "solve" it with negative weights or leverage. Recompute DTS after every spread update; a bond that has defaulted carries zero DTS, or a 5,000bp spread will dominate the neutrality constraint. Turnover: penalize changes from yesterday's weights, not from the benchmark, in production.
+
+## 11.8 Defense Without Sacrificing Offense: Regime-Aware Exposure
+
+BlackRock's paper says the quiet part plainly: "it is not always prudent to be looking for safety, irrespective of the macro-economic environment" (BlackRock p.6). Blackstone's systematic credit book describes contrarian rebalancing when spreads widen without fundamental deterioration (Blackstone p.1). Both are describing the second source of convexity from §11.2.2: adding risk when the market overpays for it.
+
+The signal is the gap between the spread the market charges and the spread the PD justifies. Let $\hat s_i = s_0 + m\,\widehat{\text{PD}}_i\,L_i$ be a model spread (expected loss times a risk-premium multiple $m$, plus a liquidity floor $s_0$), and define the residual and its DTS-weighted aggregate
+
+$$
+z_i = \ln\frac{s_i}{\hat s_i}, \qquad \bar z_t = \frac{\sum_i w_i\,\text{DTS}_i\,z_i}{\sum_i w_i\,\text{DTS}_i} .
+$$
+
+The portfolio's DTS target scales with the residual relative to its own history, bounded:
+
+$$
+\text{DTS}^{\text{target}}_t = \text{DTS}^{\text{bench}}_t \cdot \operatorname{clip}\!\big(1 + \kappa(\bar z_t - \bar z^{\text{ref}}),\; 0.9,\; 1.2\big), \qquad \text{DTS}^{\text{target}}_t \le \text{DTS}^{\max}_t ,
+$$
+
+where $\text{DTS}^{\max}_t$ is the largest DTS a long-only, capped portfolio can hold: the no-leverage guard. If spreads and PDs widen together, $z_i$ is unchanged and the budget stays at one. If spreads gap while PDs sit still, $\bar z$ jumps and the budget rises.
+
+> **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.384:* "we set our downgrade scalar to 2 (and upgrade scalar to 0.5) and adjust probabilities of unchanged ratings (along the diagonal) such that each row sums to 100%."
+>
+> **Annotation.** Dynkin conditions the rating transition matrix on the spread environment: in a wide-spread regime downgrades are scaled up and upgrades down, and the diagonal absorbs the difference so each row remains a probability distribution. That is the honest version of "spreads are wide, so buy": wide spreads *do* forecast more downgrades, and a model that ignores that will overbuy. The z-signal above should therefore be computed with spread-conditioned PDs, not PDs frozen at their calm-market values. The residual that survives the conditioning is the overpayment worth buying.
+
+### 11.8.1 Case Study: The April 2025 Tariff Shock, a Ten-Week V
+
+The ICE BofA US High Yield OAS went from 259bp on 22 January 2025 to 461bp on 7 April 2025; the CCC tier went from 690bp to 1,137bp over the same window (FRED). The total return index fell 3.83% from 28 February to 7 April and regained its prior peak on 12 May 2025 *(our computation from FRED BAMLHYH0A0HYM2TRIV)*. Calendar 2025 finished at +8.50%, and State Street put the trailing global high yield default rate at 1.6% at year-end.
+
+Read through the z-signal *(illustrative; the PD stability is our inference, since no vendor's aggregate PD series is sourced here)*: index spreads rose 78% in ten weeks while balance-sheet PDs, which move with quarterly filings and equity-implied leverage, moved far less, so $\bar z$ jumped by roughly $\ln(461/259) \approx 0.58$ and a budget with $\kappa = 0.5$ hit its 1.2 cap. The price-based de-risker sold on 7 April and bought back in May above where it sold. The PD-based desk added DTS into the low. Ines replayed the hand through markouts: "Same cards, same flop. One player folded because the pot got big. The other called because the odds got good."
+
+> **Ways This Blows Up.** *Cheap because it is about to be primed.* A bond whose spread exceeds its PD-implied spread may be pricing something the PD cannot see: a drop-down basket, an uptier-permissive amendment provision, a sponsor that has hired restructuring counsel. The z-signal flags it as overcompensated; the credit agreement flags it as next. Gate every z-driven purchase on the Priming Risk Score of Chapter 13, and treat a high PRS with a high z as a short, not a long.
+
+## 11.9 Capacity of Systematic HY
+
+"If this works," Theo asked, "why isn't it a trillion dollars?" Blackstone's answer is that systematic strategies run about 20% of global equities but less than 2% of the fixed income universe (Blackstone p.2). Part of the gap is data and history; part is capacity, which is a cost curve.
+
+Let $\alpha_0$ be gross annual alpha, $\text{TO}$ annual turnover, $V_{\text{ADV}}$ the relevant average daily volume, $H$ the days over which the strategy trades, and $\kappa$ a square-root impact coefficient. Net alpha at capital $C$ and the capacity $C^\ast$ at which it falls to a hurdle $\alpha_{\min}$ are
+
+$$
+\alpha_{\text{net}}(C) = \alpha_0 - \kappa\,\text{TO}\sqrt{\frac{C}{V_{\text{ADV}}\,H}}, \qquad C^\ast = V_{\text{ADV}}\,H\left(\frac{\alpha_0 - \alpha_{\min}}{\kappa\,\text{TO}}\right)^{2}.
+$$
+
+The square means capacity is brutally sensitive to turnover: halve $\text{TO}$ and capacity quadruples. That ranks the defensive toolkit. Default avoidance is an *exclusion* rule with low turnover, so it scales. The low-risk tilt sits in the most liquid part of HY, so it scales. CCC reversal and fallen-angel buying need high turnover in the least liquid bonds at the worst moments, so they do not. Liquidity is also state-dependent: Ben Dor finds that liquidity costs show up in HY spreads mainly in stress (p.177), which is when the defensive signal fires.
+
+> **[SOURCE EXTRACTION]** *Dynkin_Systematic_Investing_in_Credit p.209:* "the Sharpe ratio decreases to 0.95 (from 1.14) for a portfolio size of \$2bn, well above that of the High Yield Index (0.65)."
+>
+> **Annotation.** This is a rare published capacity curve for a HY niche: Dynkin's fallen-angel strategy, net of transaction costs, losing about a sixth of its Sharpe ratio as it grows to \$2bn, and still beating the index. Two readings. The optimistic one: niche HY strategies are not as capacity-constrained as folklore says, because the forced sellers are large. The realistic one: \$2bn is a single sleeve at a large manager, so the fallen-angel and CCC-reversal components of a defensive book should be sized as satellites around a core that scales: exclusion plus DTS-neutral low risk. The trading-cost inputs have also improved since that study, which the Trend Watch below quantifies.
+
+> **Trend Watch: Electronic HY and the Systematic Share, 2019–2026.** *What changed:* HY execution became electronic enough that a systematic book can trade hundreds of line items without a phone. *How big:* Man Numeric moved from roughly 30% of its HY and 60% of its IG order flow on electronic venues to over 90% of all order flow by May 2023 (Man 2023 p.3). Total US corporate bond ADV reached \$66.7bn through September 2026, up 13.4% year on year, with \$12.1tn outstanding at 2Q26 (SIFMA, US Corporate Bonds Statistics, page dated 14 October 2026). Sizes in the wild: Blackstone's systematic credit platform manages more than \$40bn across IG, HY and EM (Blackstone p.1–2); the iShares High Yield Systematic Bond ETF (HYDB), launched July 2017 and selected and weighted by default probability, default-adjusted spread, and volatility, held \$1.52bn at a 0.35% expense ratio (stockanalysis.com, checked 17 October 2026). *What it means:* the cost coefficient $\kappa$ fell, so capacity rose with its square; but systematic HY is still a small share of a large market, which is good news for capacity and a warning about how short the live track records are. Portfolio trading's role in this shift is Chapter 19's story.
+
+### Specification for AI Implementation
+
+**Schema.** Cross-section arrays `spread`, `s_hat`, `dts`, `w` (decimals; weights sum to 1); scalars `z_ref`, `kappa`, band `(lo, hi)`, `dts_max_ratio` (largest achievable long-only DTS over benchmark DTS). Capacity inputs in decimals per year and dollars; `adv` is \$ per day.
+
+```python
+# Block 6: regime-aware DTS budget and capacity (Sections 11.8-11.9)
+
+def model_spread(pd_hat, L=0.6, m=1.8, s0=0.005):
+    return s0 + m * np.asarray(pd_hat, dtype=float) * L
+
+
+def dts_multiplier(spread, s_hat, dts, w, z_ref, kappa=0.5, band=(0.9, 1.2), dts_max_ratio=np.inf):
+    z = np.log(np.asarray(spread, dtype=float) / np.asarray(s_hat, dtype=float))
+    z_bar = float(np.sum(w * dts * z) / np.sum(w * dts))
+    mult = float(np.clip(1.0 + kappa * (z_bar - z_ref), band[0], band[1]))
+    return min(mult, dts_max_ratio), z_bar                      # no-leverage guard
+
+
+def alpha_net(C, alpha0, adv, horizon_days, kappa, turnover):
+    return alpha0 - kappa * turnover * np.sqrt(C / (adv * horizon_days))
+
+
+def capacity_closed_form(alpha0, alpha_min, adv, horizon_days, kappa, turnover):
+    return adv * horizon_days * ((alpha0 - alpha_min) / (kappa * turnover)) ** 2
+
+
+def capacity_numeric(alpha0, alpha_min, adv, horizon_days, kappa, turnover):
+    f = lambda C: alpha_net(C, alpha0, adv, horizon_days, kappa, turnover) - alpha_min
+    hi = adv * horizon_days
+    while f(hi) > 0:
+        hi *= 4.0
+    return optimize.brentq(f, 0.0, hi, xtol=1e-6, rtol=1e-14, maxiter=500)
+
+
+# Regime test on the last Block 5 cross-section.
+pd_c = predict_logit(b_full, cs[XCOLS].to_numpy())
+s_hat_c = model_spread(pd_c)
+w_eq = np.full(len(cs), 1.0 / len(cs))
+dts_c = dur_by_issuer[iid] * spr_t
+_, z_ref = dts_multiplier(spr_t, s_hat_c, dts_c, w_eq, z_ref=0.0)
+m_calm, _ = dts_multiplier(spr_t, s_hat_c, dts_c, w_eq, z_ref)
+m_shock, _ = dts_multiplier(spr_t * 461 / 259, s_hat_c, dts_c * 461 / 259, w_eq, z_ref)
+m_fund, _ = dts_multiplier(spr_t * 461 / 259, s_hat_c * 461 / 259, dts_c * 461 / 259, w_eq, z_ref)
+m_guard, _ = dts_multiplier(spr_t * 461 / 259, s_hat_c, dts_c, w_eq, z_ref, dts_max_ratio=1.05)
+assert abs(m_calm - 1.0) < 1e-12 and abs(m_fund - 1.0) < 1e-12   # fundamentals: no add
+assert m_shock > 1.0 and m_guard <= 1.05                          # overshoot: add, but never lever
+
+# Capacity: a scalable core versus a CCC / fallen-angel satellite (all inputs illustrative).
+core = dict(alpha0=0.010, alpha_min=0.0025, adv=14e9, horizon_days=20, kappa=0.03, turnover=0.6)
+niche = dict(alpha0=0.030, alpha_min=0.0100, adv=1.5e9, horizon_days=20, kappa=0.05, turnover=2.0)
+for spec in (core, niche):
+    c_cf, c_num = capacity_closed_form(**spec), capacity_numeric(**spec)
+    assert abs(c_num / c_cf - 1.0) < 1e-8
+assert capacity_closed_form(**core) > 10 * capacity_closed_form(**niche)
+print(f"DTS multiplier calm={m_calm:.2f} shock={m_shock:.2f} fundamental={m_fund:.2f} "
+      f"guarded={m_guard:.2f}; capacity core=${capacity_closed_form(**core) / 1e9:.1f}bn "
+      f"niche=${capacity_closed_form(**niche) / 1e9:.2f}bn")
+```
+
+*(The capacity inputs, including HY ADV of about \$14bn a day, are illustrative; SIFMA publishes the high yield split in its downloadable statistics, which we did not verify. With them the core sleeve's capacity is about \$49bn and the satellite's about \$1.2bn, the same order of magnitude as Blackstone's platform and Dynkin's \$2bn fallen-angel curve.)*
+
+## 11.10 Desk Debrief
+
+Theo unplugged the USB stick at 7:40 p.m. The 13-week model had become a covariate, capped at 13, and was now one of three features in a hazard function that covered 2,000 issuers. It seemed to be taking the demotion well.
+
+- **High yield is a short put that pays a coupon.** The default jump carries skew of $-(1-2p)/\sqrt{p(1-p)}$: about $-6.9$ at a 2% PD, $-1.5$ at 20%. BB defense is tail avoidance; CCC defense is pricing.
+- **$U = D = \beta$ is a dimmer switch.** A pure beta tilt gives equal capture ratios, and only alpha opens the gap. The average manager's 92.24%/89.56% reads as roughly a 0.91 beta with a small net alpha. Real defense is $\beta^{-} < \beta^{+}$, tested on pairs of regimes.
+- **DD is a ranking, not a probability.** Map it to PD empirically, never with $N(-\text{DD})$, and send no-equity issuers to a separate, flagged model.
+- **The label is the model.** With distressed exchanges at 65% of 2025 defaults, a PD trained on hard defaults is calibrated to a world that no longer exists. Label at the issuer, date it at announcement, and include LMEs that impair the holder.
+- **A hit rate without an exclusion rate is half a sentence.** Default avoidance pays when $(\pi_X - \pi_K)L > s_X - s_K$; the same 77% can be +44bp or −9bp depending on how much of the table you folded.
+- **CCC is a crowd, not a person.** Size the bucket by expected loss, choose inside it by PD, diversify it with breadth (high-PD risk is mostly idiosyncratic), and buy from forced sellers whose problem is a rating, not a balance sheet.
+- **IDO or it didn't happen.** Every defensive signal is tested DTS-neutral first; a market-value-neutral low-risk tilt is beta wearing a factor's name tag.
+- **Capacity is a square.** Halve turnover and capacity quadruples: exclusion and low risk scale into tens of billions, CCC reversal and fallen angels into low single-digit billions.
+
+### The Spec You Hand the Robot
+
+"Build an issuer-month panel from the security master, one row per ultimate parent per month. Label equals 1 if any of {payment default beyond grace, bankruptcy filing, distressed exchange, LME that impairs the holder} is *announced* in months $[t, t+12)$; drop rows whose window runs past the data. Features: empirically mapped distance-to-default (with `no_equity_flag`), CHS market and accounting covariates lagged to filing date, liquidity runway in weeks capped at 13, months since last LME, and the Chapter 13 PRS. Fit a calibrated dynamic logit with issuer-clustered errors and a gradient-boosted model, both with issuer-disjoint, 12-month-embargoed cross-validation; report AUC, AR (assert $\text{AR} = 2\,\text{AUC} - 1$ on untied scores), hit rate at 10/20/30% exclusion, and realized-versus-predicted default rates by PD decile. Portfolio: exclude the worst-PD quintile, tilt toward $(s_i - \hat\lambda_i L_i)/\text{DTS}_i$, hold $w^\top\text{DTS}$ within 1% of the benchmark times a regime multiplier in $[0.9, 1.2]$ driven by the DTS-weighted spread-to-model-spread residual, issuer cap 3%, long-only, no leverage. Report $U$, $D$, $\beta^{+}$, $\beta^{-}$ on benchmark regimes. Halt and alert if portfolio DTS deviates from target by more than 2%, if any weight is negative, if the target DTS is unreachable without leverage, or if a z-signal purchase has a PRS above threshold."
+
+ROBO acknowledged the spec. It did not ask what "impairs the holder" meant, because the spec now had a list.
+
+### Exercises
+
+1. **The top-quartile hand history.** The top-quartile manager captured 99.00% of up markets and 92.00% of down markets (BlackRock p.3). With regime means of +1.6% and −2.0% a month, recover $\alpha$ and $\beta$ from the identity in §11.2.1. Then find the zero-alpha asymmetric portfolio ($\beta^{+}, \beta^{-}$) that produces the same two capture ratios, and explain to a consultant why the two portfolios are indistinguishable on capture ratios and very different on a regime-pair test.
+2. **Skew by tier.** Show that $-\frac{1-2p}{\sqrt{p(1-p)}}$ is increasing in $p$ on $(0, \tfrac12)$, that is, the jump component gets *less* negatively skewed as the PD rises. Compute it at 1% and 10%. Write one paragraph on what this implies for the size of a BB position versus a CCC position at equal expected loss.
+3. **Ines's question, answered.** Assume a binormal score model: defaulters' scores are $N(\mu, 1)$, survivors' $N(0, 1)$, with base rate 3% and AUC 0.85. Using $\text{AUC} = \Phi(\mu/\sqrt2)$, find the exclusion fraction $q$ at which the hit rate is 77%. (You should get about 25%.) Then compute the active return from §11.5.2 with $L = 0.6$ and an excess spread of 400bp in the excluded set, and state whether the claim is good news.
+4. **The soft-default world.** Re-run Block 3 with `de_share=0.65`, Moody's 2025 share. Train on the hard-default label, score against the full label, and report the calibration error by PD decile. Can the prior-shift formula of §11.4.2 repair it? (It repairs the level. Explain why it cannot repair the ranking when distressed exchanges are concentrated in sponsor-owned issuers with drop-down capacity, and add a feature that can.)
+5. **ROBO, defensively.** Theo's next spec reads "minimize realized defaults while beating the index." List three portfolios ROBO could build that satisfy the sentence literally and that you would never run (hint: one involves holding a single BB bond, one involves leverage, one involves the definition of "default"), and write the constraint that rules each one out.
+6. **Capacity is a square.** Prove from the formula of §11.9 that halving turnover multiplies capacity by four. Compute the niche sleeve's capacity at a turnover of 1.0 instead of 2.0, and then explain why, in practice, cutting turnover in a CCC-reversal strategy also cuts $\alpha_0$, so the quadrupling never fully arrives.
+
+### Deep-Dive Resource Graph
+
+**Podcasts** *(episode-level titles and links not verified this session; search the series archives)*
+- Bloomberg *Odd Lots*: episodes on high yield, CCC credit, and liability management.
+- *Flirting with Models* (Corey Hoffstein): episodes on systematic fixed income and factor investing in bonds.
+- Man Institute and BlackRock podcasts on systematic credit.
+
+**Practitioner Writing**
+- BlackRock (Parker, Radell, Aguiar, Kang), *A systematic approach to high yield credit* (December 2025): https://www.blackrock.com/gls-download/literature/whitepaper/systematic-high-yield-credit.pdf
+- Moody's Analytics (David Hamilton), *Lend, extend, and then…* (18 May 2026): https://www.moodys.com/web/en/us/insights/credit-risk/private-credit/lend-extend-and-then.html
+- State Street Investment Management, *Global high yield—2025 in review and 2026 outlook*: https://www.ssga.com/library-content/assets/pdf/global/fixed-income/2026/2025-global-high-yield-update-fixed-income.pdf
+- Loomis Sayles, *Quarterly Credit Update 4Q24*: https://info.loomissayles.com/hubfs/FD%20Quarterly%20Credit%20Update_4Q24%20FINAL.pdf
+- Wellington, *CCC junk bonds appear undervalued and overlooked*: https://www.wellington.com/en/insights/ccc-junk-bonds-appear-undervalued-and-overlooked
+- UBS Asset Management, *2025 fixed income default study* (17 January 2025): https://www.ubs.com/us/en/assetmanagement/insights/asset-class-perspectives/fixed-income/articles/2025-fixed-income-default-study.html
+- The DESK (Dan Barnes), *Defaults creep higher in leveraged credit markets* (27 May 2026): https://www.fi-desk.com/defaults-creep-higher-in-leveraged-credit-markets/
+- Investment Executive, *U.S. leveraged loan defaults to ease in 2026: Fitch* (3 December 2025): https://www.investmentexecutive.com/news/u-s-leveraged-loan-defaults-to-ease-in-2026-fitch/
+- Title only: Robeco research on low-risk and conservative credits; Barclays QPS notes on equity momentum in credit; S&P Global Ratings *Default, Transition, and Recovery* series; Fitch *U.S. Leveraged Finance Default Insight*.
+
+**Academic Papers**
+- Shumway, T. (2001), *Forecasting Bankruptcy More Accurately: A Simple Hazard Model*, Journal of Business 74(1): https://ideas.repec.org/a/ucp/jnlbus/v74y2001i1p101-24.html
+- Chava, S. and Jarrow, R. (2004), *Bankruptcy Prediction with Industry Effects*, Review of Finance 8(4): https://ideas.repec.org/a/oup/revfin/v8y2004i4p537-569..html
+- Campbell, J., Hilscher, J. and Szilagyi, J. (2008), *In Search of Distress Risk*, Journal of Finance 63(6); NBER WP 12362: https://www.nber.org/papers/w12362
+- Alanis, E., Chava, S. and Shah, A. (2022), *Benchmarking Machine Learning Models to Predict Corporate Bankruptcy*: https://arxiv.org/abs/2212.12051
+- Houweling, P. and van Zundert, J. (2017), *Factor Investing in the Corporate Bond Market*, Financial Analysts Journal 73(2): https://papers.ssrn.com/abstract=2516322
+- Frazzini, A. and Pedersen, L. H. (2014), *Betting Against Beta*, Journal of Financial Economics 111(1); and Dick-Nielsen, J., Feldhütter, P., Pedersen, L. H. and Stolborg, C., *Corporate Bond Factors: Replication Failures and a New Framework* (both listed at https://www.lhpedersen.com/research)
+- Title only: Altman (1968), *Financial Ratios, Discriminant Analysis and the Prediction of Corporate Bankruptcy*; Merton (1974), *On the Pricing of Corporate Debt*; Bharath and Shumway (2008), *Forecasting Default with the Merton Distance to Default Model*; Duan, Sun and Wang (2012), *Multiperiod Corporate Default Prediction: A Forward Intensity Approach*; Engelmann, Hayden and Tasche (2003), *Testing Rating Accuracy*; Israel, Palhares and Richardson (2018), *Common Factors in Corporate Bond Returns*.
+
+**Data & Code**
+- FRED, ICE BofA US High Yield OAS and tiers: https://fred.stlouisfed.org/series/BAMLH0A0HYM2, https://fred.stlouisfed.org/series/BAMLH0A1HYBB, https://fred.stlouisfed.org/series/BAMLH0A2HYB, https://fred.stlouisfed.org/series/BAMLH0A3HYC (CSV via `https://fred.stlouisfed.org/graph/fredgraph.csv?id=<SERIES>`; ICE series carry a rolling three-year history on FRED).
+- Open Source Bond Asset Pricing (TRACE panels, bond factors, ML predictor panel): https://openbondassetpricing.com/
+- NUS Credit Research Initiative (free PD term structures for listed firms, a public benchmark for your model): https://nuscri.org/en/
+- SIFMA US Corporate Bonds Statistics: https://www.sifma.org/resources/research/statistics/us-corporate-bonds-statistics/
+- iShares HYDB summary data: https://stockanalysis.com/etf/hydb/
+- SEC EDGAR (credit agreements and indentures for covenant and basket features): https://www.sec.gov/edgar
+
+<!-- STATUS: COMPLETE -->

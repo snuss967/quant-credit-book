@@ -570,7 +570,7 @@ The three episodes below cover all three regimes of §8.2, in four years. Each i
 
 *The levels.* The 2-year Treasury yield fell from 5.05% on March 8, 2023 to 4.03% on March 13, a 102 bp drop in three sessions. The 10-year fell from 3.98% to 3.55% (FRED). Credit went the other way. The ICE BofA HY OAS widened 42 bp in a single day, from 461 bp on Friday, March 10 to 503 bp on Monday, March 13, the largest daily widening since June 2020 (Reuters, via Kitco, March 14, 2023).
 
-*The mechanism.* A flight to quality: $\rho_{y,s}$ sharply negative for a week, regime one, the world Ben Dor's sample was built on, arriving exactly one year after the regime that broke it. Take a B book with duration 4 *(illustrative)*, intermediate yields down about 70 bp, and spreads out about 60 bp over the window. The bond gains roughly $4 \times 0.70\% = 2.8\%$ on rates and loses $4 \times 0.60\% = 2.4\%$ on spread, for a net of about +0.4%. A full analytical futures short loses 2.8%, so the "hedged" book is down about 2.4%. Hedged at $H = 0.3$, the futures lose only 0.84%, and the book is down about 0.4%. The full hedge was not a hedge. It was a short-rates position with a credit position attached, entered the week the Federal Reserve's most-watched banking question arrived.
+*The mechanism.* A flight to quality: $\rho_{y,s}$ sharply negative for a week, regime one, the world Ben Dor's sample was built on, arriving exactly one year after the regime that broke it. Take a B book with duration 4 *(illustrative)*, intermediate yields down about 70 bp, and spreads out about 60 bp over the window. The bond gains roughly $4 \times 0.70\% = 2.8\%$ on rates and loses $4 \times 0.60\% = 2.4\%$ on spread, for a net of about +0.4%. A full analytical futures short loses 2.8%, so the "hedged" book is down about 2.4%. Hedged at $H = 0.3$, the futures lose only 0.84%, and the book is down about 0.4%. The full hedge was not a hedge. It was a short-rates position with a credit position attached, entered the week a bank failure became the only macro variable that mattered.
 
 *The systematic flag.* The week's realized $\rho$ was strongly negative while the trailing 60-day $\rho$ still carried 2022's positive memory, so the two estimates disagreed sharply. That disagreement is the signal. It says the *source* of rate moves has changed: from inflation, which hurts both legs, to flight to quality, which helps the rates leg and hurts the spread leg. Conditioning the hedge ratio on the source of the rate move is a classification problem, not a regression problem, and Chapter 10 (trend) and Chapter 12 (regimes) supply the classifiers.
 
@@ -581,7 +581,7 @@ The three episodes below cover all three regimes of §8.2, in four years. Each i
 | Date (2025) | 10-year | HY OAS | BB | B | CCC | IG | What the hedge did |
 | :--- | ---: | ---: | ---: | ---: | ---: | ---: | :--- |
 | Apr 2 | 4.20% | 342 | 212 | 353 | 925 | 96 | (baseline, before the tariff announcement) |
-| Apr 4 | 4.01% | 445 | n/r | n/r | n/r | n/r | Rally plus widening: $\rho < 0$. Full futures hedge loses on both legs |
+| Apr 4 | 4.01% | 445 | n/r | n/r | n/r | n/r | Rally plus widening: $\rho < 0$. The futures short loses into the widening; a full hedge forfeits the rally's cushion |
 | Apr 7 | 4.15% | 461 | 306 | 486 | 1,137 | 120 | Sell-off plus widening: $\rho > 0$. Under-hedged book loses on both legs |
 | Apr 11 | 4.48% | 426 | n/r | n/r | n/r | n/r | Sell-off plus tightening: $\rho < 0$ again |
 | Apr 30 | 4.17% | 394 | n/r | n/r | n/r | n/r | Month: Treasuries +0.63%, HY −0.02% |
@@ -604,7 +604,7 @@ After the Treasury leg, the empirical rate beta, and the DTS-scaled market sprea
 
 Let $\text{DTS}_{i,t-1}$ be bond $i$'s DTS at the previous close, known before the return occurs, so the definition cannot look ahead. The pure-IDO return is defined by four subtractions:
 
-1. **Rates.** Excess return over KRD-matched Treasuries, $R^{\text{xs}}_{i,t} = R^{\text{tot}}_{i,t} - \sum_k w_{i,k}R^{\text{TSY}}_{k,t}$ (§8.1). If you hedge with futures at an empirical $H$, add back $(1 - H_i)\,D_i\,\Delta y_t$; that part of the rate move is now spread beta and the next step takes it out.
+1. **Rates.** Excess return over KRD-matched Treasuries, $R^{\text{xs}}_{i,t} = R^{\text{tot}}_{i,t} - \sum_k w_{i,k}R^{\text{TSY}}_{k,t}$ (§8.1). This removes the full analytical rate exposure. The part of the spread move that is correlated with rates stays in $R^{\text{xs}}$, and the market spread factor in the next step removes it, whatever $\rho$ happens to be.
 2. **Market, sector and rating spread factors, DTS-scaled.** Regress $R^{\text{xs}}_{i,t}/\text{DTS}_{i,t-1}$ on factor returns $F_{k,t}$ with Dimson-summed loadings for stale marks (§8.5):
 $$
 \frac{R^{\text{xs}}_{i,t}}{\text{DTS}_{i,t-1}} = \sum_{k} \beta^{\text{D}}_{i,k}\,F_{k,t} + \tilde\epsilon_{i,t} .
@@ -647,3 +647,482 @@ A residual is a claim until a signal predicts it. The ledger keeps three numbers
 - **Its $t$-statistic**, $t = \overline{\text{IC}}\,\sqrt{T}/\mathrm{sd}(\text{IC}_t)$ over $T$ months. Chapter 7's warning applies: a $t$ of 2 after forty specification searches is not a $t$ of 2.
 
 The fundamental law, $\text{IR} \approx \text{IC}\sqrt{\text{BR}}$ (Chapter 9), connects the ledger to the PM's question. If the IC is measured on raw excess returns, the IR it implies is partly a beta IR, and it disappears in the first regime change. If it is measured on IDO, it is the desk's. IDO or it didn't happen.
+
+## 8.9 The IDO Engine: A Reference Implementation
+
+### Specification for AI Implementation
+
+**What ROBO built from the vague version.** Asked to "hedge the rates," ROBO sold analytical-duration TY futures against a B/CCC book and reported, accurately, that the hedged P&L was more volatile than the unhedged one, which is Rudin's (2025) finding reproduced by accident. Asked to "minimize hedged variance with HYG," ROBO sold \$38mm of HYG against \$40mm of bonds and delivered a pleasant, alpha-free flat line. Both outputs were correct implementations of bad specs. The spec below names the objective, the instruments, the units, and the failure modes.
+
+**Module.** `ido_engine.py`, numpy and scipy only, `float64` throughout, seeded with `np.random.default_rng(8)`.
+
+**Schemas.**
+
+- `bond_returns: (T, N)` daily total returns, decimal. `oas: (T, N)` decimal, strictly positive where relative changes are used. `dur_mod, dur_spr: (T, N)` years. All aligned to one trading calendar.
+- `factors: (T, K)` factor returns. `hedge_returns: (T, m)` per 1 unit of notional for each instrument, with the sign convention "long risk" (CDX quoted long risk, futures long, ETF long, puts long).
+- Every column carries a `close_time` attribute. If two columns' close times differ by more than 30 minutes, the engine warns and uses Dimson-summed covariances (§8.6).
+- Missing marks are `NaN`. Never forward-fill a price into a return: compute returns only between actual marks and record the gap length.
+- Output `h: (m,)` is the notional of each instrument to **short** per 1 unit of target notional. Unit conversion is a separate, explicit step (`futures_contracts`, `etf_shares`).
+
+**Hedge objective (required field, no default).** One of `"min_total_variance"`, `"zero_rates_keep_spread"`, or `"zero_rates_zero_spread"`. ROBO refuses to run without it.
+
+**Guards.** $|\Delta y| < 0.05$ per day, else raise (unit error). `oas > 0` before relative changes. Refuse more than 5 Dimson lags. Raise on a non-invertible smoothing polynomial. Alarm when $\text{cond}(C) > 10^3$ on the instrument correlation matrix. Cap $\text{cond}(C + \eta I)$ at 50 by default. Check `abs(h).sum()` against a gross budget.
+
+**Sanity checks (built in, printed PASS/FAIL).** The decomposition foots to $10^{-10}$. Regression $H$ matches the closed form. OLS beta on stale data is attenuated to $\theta_0$, Dimson recovers it, and the stale volatility ratio is $\sqrt{\sum\theta_k^2}$. DTS equivalence and zero carry hold. Ridge caps the condition number, hedges out of sample, and produces stable weights. The single-proxy hedge is less than naive. Futures sizing matches §8.6. The common residual factor is stripped, and the ledger recovers a planted IC.
+
+The blocks below run in order in one interpreter.
+
+```python
+# ---------- 0. Setup: one seeded generator, one scoreboard ----------
+import numpy as np
+from scipy import optimize, stats
+
+RNG = np.random.default_rng(8)
+CHECKS = {}
+
+
+def report(name, ok, detail=""):
+    CHECKS[name] = bool(ok)
+    print(f"{'PASS' if ok else 'FAIL'}  {name:<40s} {detail}")
+```
+
+```python
+# ---------- 1. Return decomposition with the right signs (Section 8.1) ----------
+def decompose_returns(total_ret, y, s, dy_tsy, ds, D_mod, D_spr, convexity, dt):
+    """Split realized total returns into carry, rates, spread, convexity and residual.
+
+    Shapes: every argument is a float scalar or an array of shape (T,).
+    Units: y, s, dy_tsy, ds in DECIMAL (0.0018 = 18 bp); durations in years;
+    convexity in years^2; dt in years under the bond's day count (30/360).
+    carry_oas is reported for excess-return work but is NOT part of the total-return sum.
+    """
+    total_ret, y, s, dy_tsy, ds = (np.asarray(a, dtype=float) for a in (total_ret, y, s, dy_tsy, ds))
+    if np.any(np.abs(dy_tsy) > 0.05) or np.any(np.abs(ds) > 0.05):
+        raise ValueError("a daily move above 500 bp: inputs are probably in bp, not decimal")
+    parts = {
+        "carry_yield": y * dt,
+        "rates_pnl": -D_mod * dy_tsy,            # the minus sign ROBO forgets
+        "spread_pnl": -D_spr * ds,
+        "convexity_pnl": 0.5 * convexity * (dy_tsy + ds) ** 2,
+    }
+    parts["residual"] = total_ret - sum(parts.values())
+    parts["carry_oas"] = s * dt
+    recon = sum(parts[k] for k in ("carry_yield", "rates_pnl", "spread_pnl", "convexity_pnl", "residual"))
+    assert np.allclose(recon, total_ret, atol=1e-10, rtol=0.0), "decomposition does not foot"
+    return parts
+
+
+# The cold-open bond (illustrative inputs from Section 8.1)
+cold = decompose_returns(total_ret=-0.0039, y=0.111, s=0.062, dy_tsy=0.0018, ds=-0.0009,
+                         D_mod=4.1, D_spr=4.0, convexity=20.0, dt=1.0 / 360.0)
+cents = {k: 95.0 * 100.0 * float(v) for k, v in cold.items()}      # cents on a 95-dollar price
+report("8.1 decomposition foots",
+       abs(cents["rates_pnl"] + 70.1) < 0.5 and abs(cents["residual"] + 4.1) < 0.5,
+       f"rates {cents['rates_pnl']:.1f}c, spread {cents['spread_pnl']:.1f}c, resid {cents['residual']:.1f}c")
+```
+
+```python
+# ---------- 2. Empirical duration: regression and closed form (Section 8.2) ----------
+def empirical_duration(R, dy, D, s):
+    """Pooled no-intercept OLS of R on [-D*dy, -D*s*dy]; H(s) = beta + gamma*s.
+
+    R, dy, D, s: 1-D float arrays of equal length (stack bonds and days).
+    Returns (beta, gamma, H) where H maps a spread grid (decimal) to hedge ratios.
+    """
+    R, dy, D, s = (np.asarray(a, dtype=float).ravel() for a in (R, dy, D, s))
+    X = np.column_stack([-D * dy, -D * s * dy])
+    (beta, gamma), *_ = np.linalg.lstsq(X, R, rcond=None)
+    return float(beta), float(gamma), (lambda grid: beta + gamma * np.asarray(grid, dtype=float))
+
+
+def h_closed_form(s, rel_ds, dy):
+    """H = 1 + s * rho * sig_s / sig_y from sample moments (Ben Dor's two-factor result)."""
+    c = np.cov(rel_ds, dy)
+    rho = c[0, 1] / np.sqrt(c[0, 0] * c[1, 1])
+    return 1.0 + np.asarray(s, dtype=float) * rho * np.sqrt(c[0, 0] / c[1, 1])
+
+
+T = 2500
+SIG_Y, SIG_S, RHO = 0.0006, 0.02, -0.4          # 6 bp/day yield vol; 2%/day relative-spread vol
+D_BOND, S_BOND = 4.0, 0.06
+LINK = RHO * SIG_S / SIG_Y                       # linkage factor: -13.3 per unit of decimal spread
+dy = SIG_Y * RNG.standard_normal(T)
+x = LINK * dy + SIG_S * np.sqrt(1.0 - RHO ** 2) * RNG.standard_normal(T)   # relative spread change
+S_LEVELS = np.array([0.01, 0.03, 0.06, 0.09])
+R_panel = np.stack([-D_BOND * dy - D_BOND * sl * x + 0.0005 * RNG.standard_normal(T) for sl in S_LEVELS])
+
+beta_hat, gamma_hat, H_of = empirical_duration(
+    R_panel.ravel(), np.tile(dy, len(S_LEVELS)), np.full(R_panel.size, D_BOND), np.repeat(S_LEVELS, T))
+H_true = 1.0 + S_BOND * LINK                     # = 0.20
+H_reg, H_cf = float(H_of(S_BOND)), float(h_closed_form(S_BOND, x, dy))
+report("8.2 regression H matches closed form",
+       abs(H_reg - H_cf) < 0.05 and abs(beta_hat - 1.0) < 0.05,
+       f"H_reg {H_reg:.3f}, H_closed {H_cf:.3f}, beta {beta_hat:.3f}")
+report("8.2 H near population value", abs(H_reg - H_true) < 0.15, f"H_true {H_true:.2f}")
+```
+
+```python
+# ---------- 3. Stale-price betas: Dimson, Scholes-Williams, de-smoothing (Section 8.5) ----------
+def lagged(f, k):
+    """out[t] = f[t-k], NaN where undefined. k > 0 is a lag, k < 0 a lead."""
+    f = np.asarray(f, dtype=float)
+    out = np.full(f.shape, np.nan)
+    if k >= 0:
+        out[k:] = f[:len(f) - k]
+    else:
+        out[:k] = f[-k:]
+    return out
+
+
+def ols_slope(yv, xv):
+    ok = ~(np.isnan(xv) | np.isnan(yv))
+    xc, yc = xv[ok] - xv[ok].mean(), yv[ok] - yv[ok].mean()
+    return float(xc @ yc / (xc @ xc))
+
+
+def dimson_beta(r_obs, f, lags=2, leads=0):
+    """Sum of slopes from ONE regression of r_obs[t] on f[t+leads], ..., f[t-lags] (Dimson 1979)."""
+    if lags > 5 or leads > 5:
+        raise ValueError("refusing more than 5 lags or leads: estimation noise dominates the sum")
+    r_obs = np.asarray(r_obs, dtype=float)
+    ks = list(range(-leads, lags + 1))
+    X = np.column_stack([np.ones(len(f))] + [lagged(f, k) for k in ks])
+    ok = ~np.isnan(X).any(axis=1) & ~np.isnan(r_obs)
+    coef, *_ = np.linalg.lstsq(X[ok], r_obs[ok], rcond=None)
+    b = dict(zip(ks, coef[1:]))
+    return float(sum(b.values())), b
+
+
+def scholes_williams_beta(r_obs, f):
+    """(b_lead + b_0 + b_lag) / (1 + 2 rho_f), each slope from its own univariate regression."""
+    b = [ols_slope(r_obs, lagged(f, k)) for k in (-1, 0, 1)]
+    rho_f = np.corrcoef(f[1:], f[:-1])[0, 1]
+    return float(sum(b) / (1.0 + 2.0 * rho_f))
+
+
+def desmooth(r_obs, theta):
+    """Invert r_obs[t] = sum_k theta[k] * r[t-k] recursively; theta must be invertible."""
+    theta = np.asarray(theta, dtype=float)
+    if np.any(np.abs(np.roots(theta[::-1])) <= 1.0):
+        raise ValueError("MA polynomial not invertible: the de-smoothed series would explode")
+    q = len(theta) - 1
+    r_hat = np.array(r_obs, dtype=float)
+    for t in range(q, len(r_hat)):
+        r_hat[t] = (r_obs[t] - theta[1:] @ r_hat[t - q:t][::-1]) / theta[0]
+    return r_hat
+
+
+DTS_BOND = D_BOND * S_BOND                       # 0.24
+THETA = np.array([0.5, 0.3, 0.2])                # 50% of news priced today, 30% tomorrow, 20% the day after
+r_true = -D_BOND * dy - DTS_BOND * x + 0.0005 * RNG.standard_normal(T)
+r_obs = np.convolve(r_true, THETA)[:T]           # r_obs[t] = sum_k THETA[k] * r_true[t-k]
+burn = slice(10, None)
+beta_true = ols_slope(r_true[burn], x[burn])
+beta_ols = ols_slope(r_obs[burn], x[burn])
+beta_dim, b_lags = dimson_beta(r_obs[burn], x[burn], lags=2)
+beta_sw = scholes_williams_beta(r_obs[burn], x[burn])
+vol_ratio = r_obs[burn].std() / r_true[burn].std()
+report("8.5 OLS beta attenuated to theta_0", abs(beta_ols / beta_true - THETA[0]) < 0.05,
+       f"OLS/true {beta_ols / beta_true:.3f}")
+report("8.5 Dimson(2) recovers beta", abs(beta_dim / beta_true - 1.0) < 0.10,
+       f"Dimson/true {beta_dim / beta_true:.3f}")
+report("8.5 Scholes-Williams catches one lag", 0.70 < beta_sw / beta_true < 0.90,
+       f"SW/true {beta_sw / beta_true:.3f}")
+report("8.5 stale vol ratio", abs(vol_ratio - np.sqrt(np.sum(THETA ** 2))) < 0.03,
+       f"{vol_ratio:.3f} vs {np.sqrt(np.sum(THETA ** 2)):.3f}")
+
+theta_hat = np.array([b_lags[k] for k in range(3)]) / beta_dim
+r_hat = desmooth(r_obs, theta_hat)
+tail = slice(50, None)
+vr = r_hat[tail].std() / r_true[tail].std()
+report("8.5 de-smoothing restores vol",
+       abs(vr - 1.0) < 0.10 and np.corrcoef(r_hat[tail], r_true[tail])[0, 1] > 0.9,
+       f"vol ratio {vr:.3f}, theta_hat {np.round(theta_hat, 3)}")
+```
+
+```python
+# ---------- 4. DTS: the unit of credit beta (Section 8.4) ----------
+def dts(D_spr, oas):
+    oas = np.asarray(oas, dtype=float)
+    if np.any(oas <= 0.0):
+        raise ValueError("non-positive OAS: use absolute spread changes for these bonds, with a warning")
+    return np.asarray(D_spr, dtype=float) * oas
+
+
+def dts_scale(xs_returns, dts_lag):
+    """Excess return per unit of previous-close DTS (approximately minus the relative spread change)."""
+    return np.asarray(xs_returns, dtype=float) / np.asarray(dts_lag, dtype=float)
+
+
+def dts_pair_hedge(dts_long, dts_short):
+    """Notional of the short bond per 1 unit of long notional that zeroes net DTS."""
+    return float(dts_long / dts_short)
+
+
+h_pair = dts_pair_hedge(dts(2.0, 0.02), dts(4.0, 0.01))        # 200 bp x 2y vs 100 bp x 4y
+h_carry = dts_pair_hedge(dts(5.0, 0.03), dts(5.0, 0.015))      # equal durations, 300 vs 150 bp
+report("8.4 DTS equivalence and zero carry",
+       np.isclose(h_pair, 1.0) and np.isclose(0.03 - h_carry * 0.015, 0.0),
+       f"pair hedge {h_pair:.2f}, carry-pair hedge {h_carry:.2f}")
+
+# Beta to the market equals the DTS ratio when relative spread shocks are common.
+x_m = SIG_S * RNG.standard_normal(T)
+dts_cs = np.array([0.05, 0.12, 0.24, 0.40])
+xs_cs = -dts_cs[:, None] * (x_m[None, :] + 0.005 * RNG.standard_normal((4, T)))
+xs_mkt = xs_cs.mean(axis=0)
+beta_cs = np.array([ols_slope(xs_cs[i], xs_mkt) for i in range(4)])
+report("8.4 beta equals DTS ratio", np.allclose(beta_cs, dts_cs / dts_cs.mean(), rtol=0.10),
+       f"betas {np.round(beta_cs, 2)} vs {np.round(dts_cs / dts_cs.mean(), 2)}")
+```
+
+```python
+# ---------- 5. The hedge matrix: min-variance, ridge, bounds, units (Section 8.6) ----------
+def cond_number(M):
+    w = np.linalg.eigvalsh(M)
+    return float(w.max() / max(w.min(), 1e-300))
+
+
+def eta_for_condition(C, cond_max=50.0):
+    """Smallest ridge penalty capping cond(C + eta I) at cond_max (C a correlation matrix)."""
+    w = np.linalg.eigvalsh(C)
+    return max(0.0, float((w.max() - cond_max * w.min()) / (cond_max - 1.0)))
+
+
+def _moments(r_p, R_H):
+    S = np.cov(np.column_stack([R_H, r_p]), rowvar=False)
+    return S[:-1, :-1], S[:-1, -1]
+
+
+def hedge_matrix(r_p, R_H, eta=None, cond_max=50.0):
+    """Variance-scaled ridge hedge. r_p: (T,), R_H: (T, m), returns per 1 unit of notional.
+
+    Returns h (notional of each instrument to SHORT per unit of target), in-sample residual
+    variance, cond(C) before and after regularization, and the penalty eta used.
+    """
+    r_p, R_H = np.asarray(r_p, dtype=float), np.asarray(R_H, dtype=float)
+    S_HH, S_Hp = _moments(r_p, R_H)
+    sd = np.sqrt(np.diag(S_HH))
+    C = S_HH / np.outer(sd, sd)
+    if eta is None:
+        eta = eta_for_condition(C, cond_max)
+    h = np.linalg.solve(S_HH + eta * np.diag(np.diag(S_HH)), S_Hp)
+    resid_var = float(np.var(r_p - R_H @ h, ddof=1))
+    return h, resid_var, cond_number(C), cond_number(C + eta * np.eye(len(sd))), eta
+
+
+def hedge_qp(r_p, R_H, bounds, eta=0.0):
+    """Ridge hedge with per-instrument bounds [(lo, hi), ...], solved by L-BFGS-B."""
+    S_HH, S_Hp = _moments(np.asarray(r_p, dtype=float), np.asarray(R_H, dtype=float))
+    A = S_HH + eta * np.diag(np.diag(S_HH))
+    k = 1.0 / np.mean(np.diag(A))                # rescale so the optimizer sees O(1) numbers
+    res = optimize.minimize(lambda h: k * (h @ A @ h - 2.0 * h @ S_Hp), np.zeros(len(S_Hp)),
+                            jac=lambda h: k * (2.0 * A @ h - 2.0 * S_Hp),
+                            bounds=bounds, method="L-BFGS-B")
+    return res.x
+
+
+def futures_contracts(dv01_target, dv01_ctd_per_contract, conv_factor, hedge_ratio=1.0):
+    """N = H * DV01_target / (DV01_CTD / CF)."""
+    return hedge_ratio * dv01_target / (dv01_ctd_per_contract / conv_factor)
+
+
+def etf_shares(h, target_notional, etf_price):
+    return h * target_notional / etf_price
+
+
+# Four instruments plus a near-copy (JNK ~ HYG), all built from the same rate and spread factors.
+dyH = SIG_Y * RNG.standard_normal(T)
+xH = LINK * dyH + SIG_S * np.sqrt(1.0 - RHO ** 2) * RNG.standard_normal(T)
+
+
+def noise(sd):
+    return sd * RNG.standard_normal(T)
+
+
+cdx = -0.14 * xH + noise(0.0005)                 # CDX HY, long risk: ~RPV01 4 x spread 3.5%
+ty = -6.5 * dyH + noise(0.0001)                  # TY future, per unit of face
+hyg = -3.2 * dyH - 0.11 * xH + noise(0.0012)     # HYG: rates + spread beta + NAV basis
+put = 0.30 * xH + noise(0.004)                   # equity put proxy: gains when spreads widen
+jnk = hyg + noise(0.000002)                      # the collinearity trap
+R_H = np.column_stack([cdx, ty, hyg, put, jnk])
+r_book = -D_BOND * dyH - DTS_BOND * xH + noise(0.003)   # B book with 30 bp/day of IDO
+
+tr, te = slice(0, 2000), slice(2000, None)
+h_ols, _, cond_raw, _, _ = hedge_matrix(r_book[tr], R_H[tr], eta=0.0)
+h_rdg, _, _, cond_rdg, eta = hedge_matrix(r_book[tr], R_H[tr])
+
+
+def oos(h):
+    return float(np.var(r_book[te] - R_H[te] @ h, ddof=1))
+
+
+v_un, v_ols, v_rdg = float(np.var(r_book[te], ddof=1)), oos(h_ols), oos(h_rdg)
+report("8.6 collinearity detected and capped", cond_raw > 1e3 and cond_rdg <= 50.0 * (1 + 1e-6),
+       f"cond {cond_raw:.1e} -> {cond_rdg:.1f}, eta {eta:.3f}")
+report("8.6 ridge hedges out of sample", v_rdg < 0.6 * v_un and v_rdg <= 1.15 * v_ols,
+       f"vs unhedged {v_rdg / v_un:.2f}, vs OLS {v_rdg / v_ols:.3f}")
+
+half_a, half_b = slice(0, 1000), slice(1000, 2000)
+
+
+def drift(e):
+    ha = hedge_matrix(r_book[half_a], R_H[half_a], eta=e)[0]
+    hb = hedge_matrix(r_book[half_b], R_H[half_b], eta=e)[0]
+    return float(np.linalg.norm(ha - hb))
+
+
+report("8.6 ridge weights are stable", drift(eta) < drift(0.0),
+       f"weight drift ridge {drift(eta):.2f} vs OLS {drift(0.0):.2f}")
+
+# Paleologo's attenuation: one noisy proxy, so hedge less than the naive amount.
+f_true = 0.01 * RNG.standard_normal(T)
+proxy = f_true + 0.01 * RNG.standard_normal(T)   # omega^2 = sigma_f^2, so attenuation is one half
+target = 0.8 * f_true + 0.005 * RNG.standard_normal(T)
+h_star = hedge_matrix(target, proxy[:, None], eta=0.0)[0][0]
+report("8.6 hedge less than naive",
+       abs(h_star - 0.4) < 0.05 and np.var(target - h_star * proxy) < np.var(target - 0.8 * proxy),
+       f"h* {h_star:.3f} vs naive 0.8")
+
+bounds = [(0.0, 1.0), (-1.0, 1.0), (-0.5, 0.5), (-0.5, 0.0), (-0.5, 0.5)]   # liquidity and mandate limits
+h_box = hedge_qp(r_book[tr], R_H[tr], bounds, eta=eta)
+inside = all(lo - 1e-9 <= hb <= hi + 1e-9 for hb, (lo, hi) in zip(h_box, bounds))
+report("8.6 bounded hedge respects limits", inside and oos(h_box) < 0.8 * v_un,
+       f"h_box {np.round(h_box, 2)}")
+
+dv01_bond = 40e6 * 4.1 * 1e-4                    # the cold-open bond: 16,400 per bp
+n_full = futures_contracts(dv01_bond, 63.0, 0.89)
+n_emp = futures_contracts(dv01_bond, 63.0, 0.89, hedge_ratio=0.73)
+report("8.6 futures sizing matches Table 8.2", round(n_full) == 232 and round(n_emp) == 169,
+       f"{n_full:.1f} and {n_emp:.1f} TY contracts")
+```
+
+```python
+# ---------- 6. Common residual factor and the IDO ledger (Section 8.8) ----------
+def strip_common_factor(eps_scaled, n_pc=1):
+    """Remove the leading principal components from a (T, N) panel of DTS-scaled residuals."""
+    X = np.asarray(eps_scaled, dtype=float)
+    X = X - X.mean(axis=0)
+    U, sv, Vt = np.linalg.svd(X, full_matrices=False)
+    share = sv ** 2 / np.sum(sv ** 2)
+    return X - (U[:, :n_pc] * sv[:n_pc]) @ Vt[:n_pc], share
+
+
+def ido_ledger(ido, signal, min_names=10):
+    """ido, signal: (T, N). signal[t] must be known before ido[t] is realized."""
+    ics = []
+    for t in range(ido.shape[0]):
+        ok = ~(np.isnan(ido[t]) | np.isnan(signal[t]))
+        if ok.sum() >= min_names:
+            ics.append(stats.spearmanr(signal[t, ok], ido[t, ok])[0])
+    ics = np.asarray(ics)
+    return {"resid_vol": float(np.nanstd(ido)), "ic_mean": float(ics.mean()),
+            "ic_t": float(ics.mean() * np.sqrt(len(ics)) / ics.std(ddof=1)), "months": len(ics)}
+
+
+TM, NB = 60, 200
+g = 0.02 * RNG.standard_normal(TM)                               # the CDGM common residual factor
+eps_scaled = np.outer(g, RNG.uniform(0.5, 1.5, NB)) + 0.03 * RNG.standard_normal((TM, NB))
+clean, share_before = strip_common_factor(eps_scaled)
+_, share_after = strip_common_factor(clean)
+ido = clean * RNG.uniform(0.05, 0.40, NB)[None, :]              # back to returns with each bond's DTS
+signal = 0.15 * ido / ido.std() + RNG.standard_normal((TM, NB))  # a planted, modest edge
+ledger = ido_ledger(ido, signal)
+report("8.8 common residual factor stripped", share_before[0] > 0.2 and share_after[0] < 0.1,
+       f"PC1 share {share_before[0]:.2f} -> {share_after[0]:.2f}")
+report("8.8 IDO ledger finds the planted IC", ledger["ic_mean"] > 0.05 and ledger["ic_t"] > 3.0,
+       f"IC {ledger['ic_mean']:.3f}, t {ledger['ic_t']:.1f} over {ledger['months']} months")
+
+print(f"\n{sum(CHECKS.values())}/{len(CHECKS)} checks passed")
+assert all(CHECKS.values()), [k for k, v in CHECKS.items() if not v]
+```
+
+> **Ways This Blows Up.** The simulation is kinder than the market in three ways. Its rate–spread correlation is constant, so the trailing-window problem of §8.7 never appears; rerun section 2 with $\rho$ switching sign halfway through and watch the regression $H$ average two regimes into a hedge ratio that fits neither. Its smoothing weights are the same for every bond, while real weights differ by price source and liquidity bucket. And its instruments have no roll dates, so the jumps in real CDX and futures series never reach the covariance matrix. Each is an exercise below.
+
+## 8.10 Desk Debrief
+
+- **IDO or it didn't happen, in two subtractions.** First accounting (carry, KRD-matched Treasuries, convexity), then attribution (DTS-scaled factors, then the common residual factor). The P&L-explain residual is a bookkeeping error, not alpha.
+- **Analytical duration answers a question nobody asked.** $H = 1 + s\,\rho_{y,s}\,\sigma_s/\sigma_y$. The sign of $\rho$ decides everything, and it has changed sign twice since 2021.
+- **There are two roads to zero duration.** The correlation road is a regime. The recovery road, $H^{\text{rec}} = c/(c + \lambda R)$, is structural. CCC books travel both.
+- **The IG/HY line is a quoting convention you can measure.** Baa at 700 bp hedges at 0.71; HY at 700 bp hedges at zero. Re-bucket the hedge ratio on the day of a downgrade across the line.
+- **DTS is the unit of credit beta.** $\beta_i = \text{DTS}_i/\text{DTS}_M$. DTS-neutral pairs carry nothing, so what they earn is IDO.
+- **Stale marks shrink betas to $\theta_0\beta$ and volatility to $\sqrt{\sum\theta_k^2}$.** Dimson-sum rates and credit factors. Treat lagged equity coefficients as a signal to test, not a correction to apply.
+- **The hedge you want and the hedge you can trade are different matrices.** Cap the condition number, shrink, hedge less than naive, and if your mandate is IDO, hedge each factor with its own instrument instead of through a correlation.
+- **The empirical hedge ratio is a bet on why rates move.** When this week's $\rho$ disagrees with the trailing window, cut confidence in the hedge. Do not re-estimate harder.
+
+### The Spec You Hand the Robot
+
+```text
+TASK: Build ido_engine.py (numpy/scipy only, float64, seed np.random.default_rng(8)).
+INPUTS: bond_returns (T,N) daily total returns, decimal; oas (T,N) decimal > 0; dur_mod, dur_spr (T,N) years;
+        factors (T,K); hedge_returns (T,m) per unit notional, "long risk" sign convention; close_time per column.
+        Missing marks are NaN. Never forward-fill prices into returns.
+OBJECTIVE (required, no default): one of min_total_variance | zero_rates_keep_spread | zero_rates_zero_spread.
+COMPUTE, in order:
+ 1. decompose_returns: carry, -D_mod*dy, -D_spr*ds, 0.5*C*(dy+ds)^2, residual; assert it foots to 1e-10.
+ 2. empirical_duration: pooled OLS of R on [-D*dy, -D*s*dy] by rating bucket; H(s) = beta + gamma*s,
+    clipped at -0.5; re-estimate monthly; re-bucket H on the day of a rating change across Baa3/Ba1.
+ 3. Dimson betas (lags <= 3 daily) on rate and credit-index factors; equity lags reported, never auto-applied.
+ 4. DTS-scale excess returns by previous-close DTS before any covariance or PCA.
+ 5. hedge_matrix: variance-scaled ridge, eta chosen so cond(C + eta I) <= 50; Dimson-summed covariances if
+    close times differ by > 30 min; bounded QP when limits are given; output h = notional to SHORT per unit.
+ 6. Units: TY contracts = H * DV01_target / (DV01_CTD / CF); CDX notional = h * target; ETF shares = h * notional / price.
+ 7. IDO = DTS_{t-1} * (scaled residual minus first principal component). Ledger: residual vol, monthly Spearman IC
+    of the signal at t-1 against IDO at t, and its t-stat.
+GUARDS: |dy| < 0.05/day; oas > 0 before relative changes; refuse lags > 5; raise on a non-invertible smoothing
+        polynomial; alarm if cond(C) > 1e3; alarm when the 60-day rolling rho(dy, ds/s) changes sign.
+TESTS: every sanity check in Section 8.9 prints PASS. Do not "improve" the objective. Ask if anything is ambiguous.
+```
+
+### Exercises
+
+1. **Theo's thirty-seven cents, three ways.** For the cold-open bond (price \$95, $D^{\text{mod}} = 4.1$, OAS 620 bp), compute $H$ and the TY hedge under (a) Ben Dor's B-rated 1998–2009 parameters ($\rho = -0.56$, $\sigma_s = 2.2\%$/day, $\sigma_y = 6.4$ bp/day), (b) the 2026 year-to-date B estimate from §8.2's Trend Watch, and (c) a 2022-style regime with $\rho = +0.3$ and the same volatilities. State in one sentence what each hedge assumes about *why* rates move.
+2. **Kaz's fulcrum.** Kaz now claims the fulcrum security is the one where $H^{\text{rec}} = 0.5$. Using the perpetuity of §8.3 with $c = 7\%$ and $R = 35\%$, find the default intensity at which Kaz is accidentally right. (Answer: $\lambda = c/R = 20\%$.) Then explain to Kaz, in one sentence and without the word "priest," why the true fulcrum's hedge ratio is closer to zero.
+3. **When Scholes–Williams is enough.** Show analytically that with one day of smoothing, $\theta = (\theta_0, 1 - \theta_0)$, and a serially uncorrelated factor, $\hat\beta_{\text{SW}}$ recovers $\beta$. Then compute its bias under the chapter's $\theta = (0.5, 0.3, 0.2)$ and confirm it against the code's printout.
+4. **The regime-switching robot.** Modify section 2 of the code so that $\rho = -0.4$ for the first half of the sample and $+0.3$ for the second. Show that the full-sample $H$ hedges neither half well, then build a rolling 60-day $H$ and measure how many days it takes to cross 1 after the switch. Relate the answer to Case Study C.
+5. **The duration-hedged future as a sixth column.** Add an instrument equal to the HY spread factor plus a futures overlay at a fixed $H = 1$ *(illustrative methodology)*. Show what happens to $\text{cond}(C)$ and to the CDX weight, and explain when a fixed-$H$ product is worse than building the hedge yourself.
+6. **ROBO and the flat line.** Write the single sentence you would add to ROBO's spec to stop it from selling \$38mm of HYG against \$40mm of bonds. Then write the test that would have caught it.
+
+### Deep-Dive Resource Graph
+
+**Podcasts**
+
+- *Bloomberg Odd Lots*: episodes on credit ETFs, the 2022 bond sell-off, and the April 2025 Treasury sell-off (show and topic only; episode numbers not verified).
+- *Flirting with Models* (Corey Hoffstein): episodes on systematic credit and on smoothed returns in illiquid assets (show and topic only).
+- *Resolve Riffs*: discussions of stock–bond correlation regimes (show and topic only).
+
+**Practitioner Writing**
+
+- Prentis and Ripka (Wellington, July 31, 2022), "Empirical duration of risk assets": https://www.wellington.com/en-us/institutional/insights/empirical-duration-risk-assets
+- Slok (Apollo Academy, December 3, 2022), "High Yield Total Returns in 2022 Mainly Driven by Moves in Duration": https://apolloacademy.com/?p=11885
+- Reuters via Kitco (March 14, 2023), report on US junk-bond spreads widening to a five-month high after SVB: https://www.kitco.com/news/off-the-wire/2023-03-14/us-junk-bond-spreads-balloon-widest-five-months
+- CCMG, "Benchmark Review: Monthly Recap, April 2025": https://ccmg.com/benchmark-review-monthly-recap-april-2025/
+- GW&K, "Taxable Monthly Update, April 2025": https://www.gwkinvest.com/wp-content/uploads/GWK-Taxable-Monthly-Update-April-2025.pdf
+- Victory Capital, "Fixed Income Monthly Update, April 2025": https://advisor.vcm.com/assets/market-insights/VINC-Fixed-Income-Monthly-Update-COM-April-2025.pdf
+- Markets Media (April 29, 2024), "CME US credit futures to begin trading on June 17": https://www.marketsmedia.com/cme-us-credit-futures-to-begin-trading-on-june-17
+- FI Desk, "CME Group to begin trading credit futures in June": https://www.fi-desk.com/cme-group-to-begin-trading-credit-futures-in-june/
+- Title only: Mesirow, "Wrong-way bonds" (2021); Robeco, "Duration Times Spread" explainer (2017); CME Group, "Understanding Bloomberg credit futures" (2024) and "A practitioner's guide to credit futures" (2026).
+
+**Academic Papers**
+
+- Ambastha, Ben Dor, Dynkin, Hyman and Konstantinovsky (2010), "Empirical Duration of Corporate Bonds and Credit Market Segmentation," *Journal of Fixed Income* 20(1), DOI 10.3905/jfi.2010.20.1.005.
+- Ben Dor, Dynkin, Hyman, Houweling, van Leeuwen and Penninga (2007), "DTS (Duration Times Spread)," *Journal of Portfolio Management* 33(2), DOI 10.3905/jpm.2007.674796.
+- Schaefer and Strebulaev (2008), "Structural models of credit risk are useful: Evidence from hedge ratios on corporate bonds," *Journal of Financial Economics* 90(1): https://ideas.repec.org/a/eee/jfinec/v90y2008i1p1-19.html (the academic twin of §8.2–8.3: Merton hedge ratios survive, but corporate rate sensitivity is "substantially lower than conventional duration measures would suggest").
+- Collin-Dufresne, Goldstein and Martin (2001), "The Determinants of Credit Spread Changes," *Journal of Finance* 56(6): https://ideas.repec.org/a/bla/jfinan/v56y2001i6p2177-2207.html
+- Rudin (2025), "Hedging Interest Rate Risk in High-Yield Bonds," in Fabozzi and de Jong (eds.), *Derivatives Applications in Asset Management*, Springer, DOI 10.1007/978-3-031-86354-7_24: https://ideas.repec.org/h/spr/sprchp/978-3-031-86354-7_24.html
+- Dimson (1979): https://ideas.repec.org/a/eee/jfinec/v7y1979i2p197-226.html ; Scholes and Williams (1977): https://ideas.repec.org/a/eee/jfinec/v5y1977i3p309-327.html ; Getmansky, Lo and Makarov (2004): https://ideas.repec.org/a/eee/jfinec/v74y2004i3p529-609.html
+- Bao, Pan and Wang (2011), "The Illiquidity of Corporate Bonds," *Journal of Finance* 66(3): https://ideas.repec.org/a/bla/jfinan/v66y2011i3p911-946.html
+- Gebhardt, Hvidkjaer and Swaminathan (2005), "Stock and bond market interaction: Does momentum spill over?": https://ideas.repec.org/a/eee/jfinec/v75y2005i3p651-690.html
+- Carr and Wu (2011), "A Simple Robust Link Between American Puts and Credit Protection": https://ideas.repec.org/a/oup/rfinst/v24y2011i2p473-505.html ; Kapadia and Pu (2012), "Limited arbitrage between equity and credit markets": https://ideas.repec.org/a/eee/jfinec/v105y2012i3p542-564.html
+- Asvanunt and Richardson (2017), "The Credit Risk Premium": https://www.aqr.com/Insights/Research/Journal-Article/The-Credit-Risk-Premium ; Ilmanen, McGuire and Warga (1994), "The Value of Duration as a Risk Measure for Corporate Debt": https://www.aqr.com/Insights/Research/Journal-Article/The-Value-Of-Duration-as-a-Risk-Measure-for-Corporate-Debt
+- Asness, Krail and Liew (2001), "Do Hedge Funds Hedge?", *Journal of Portfolio Management* 28(1), DOI 10.3905/jpm.2001.319819.
+- Title only: Israel, Palhares and Richardson (2018), "Common Factors in Corporate Bond Returns," *Journal of Investment Management*; Molenaar, Senechal, Swinkels and Wang (2023), *Empirical evidence on the stock–bond correlation*.
+
+**Data & Code**
+
+- FRED, ICE BofA OAS by rating (BAMLH0A0HYM2, BAMLH0A1HYBB, BAMLH0A2HYB, BAMLH0A3HYC, BAMLC0A0CM) and Treasury yields (DGS2, DGS10): https://fred.stlouisfed.org/series/BAMLH0A3HYC . Since April 2026, only three years of history.
+- FINRA TRACE (transaction-based returns and the staleness diagnostics of §8.5): https://www.finra.org/filing-reporting/trace
+- iShares HYG: https://www.ishares.com/us/products/239565/ishares-iboxx-high-yield-corporate-bond-etf ; iShares HYGH: https://www.ishares.com/us/products/264544/ishares-interest-rate-hedged-high-yield-bond-etf ; SPDR JNK: https://www.ssga.com/us/en/intermediary/etfs/spdr-bloomberg-high-yield-bond-etf-jnk
+- CME Group (Treasury and credit futures specifications, canonical root): https://www.cmegroup.com
+- This book: `ido_engine.py` in §8.9; Appendix B for building a TRACE-based OAS history now that FRED's free window is three years.
+
+<!-- STATUS: COMPLETE -->
