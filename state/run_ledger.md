@@ -133,3 +133,17 @@ Next in line, as slots free: U2 on Part IV (Ch 13–17), U3b (Resource Graph upg
 | autosnap | bdca3onxd | commit + push every 10 min for 2 h | — | running |
 
 Scheduled restart: 09:33 UTC (trigger trig_016k2PhmaKrabSxxMUUnipys; user-set, 4h50m after 04:43, just after the 09:30 reset). At the 90% alarm, stop every workflow, list them here under "Stopped at cap" with their run IDs, and resume them at the restart.
+
+### 05:00 UTC: U1 complete everywhere except the three primers being finished (07_ch07b has 2 stubs, 12_ch12 has 0 after lane 1). Figures done: Ch 18, 19, 20, 22 (checked); Ch 13–16 (in their Part IV pipelines).
+
+| Run | Task ID | Stages | Owns | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| u1-lane-1 | w3worjqi3 | U1 | Ch 8–17, 6-B, App B | done |
+| u1-lane-2 | w14cc841q | U1 | Ch 18–28, App D, E | done |
+| figs-V-a | w4lyhs2cz | figures → figcheck | Ch 18, 19 | done |
+| figs-V-b | w8lexa6xs | figures → figcheck | Ch 20, 22 | done |
+| figs-VI-a | w24ff95yk | figures → figcheck | Ch 21, 23 | running |
+| figs-VI-b | wums0yjya | figures → figcheck | Ch 24, 25 | running |
+| figs-VII | w3c662d09 | figures → figcheck | Ch 26, 27 | running |
+
+Still to queue: figures for Ch 8–12, 17, 28, 1-B, 4-C, primers, Ch 1–7 (after their revisions); U2 for Ch 17, Part III, Parts V–VIII.

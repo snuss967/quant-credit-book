@@ -362,21 +362,15 @@ The mixture of §5.1 is a one-period object. Desks need a continuous-time versio
 
 A notation collision first. The book reserves $\lambda$ for the default intensity. In a structural jump model, the asset value jumps at some rate, and only some jumps cause default; we write the asset-jump arrival rate as $\lambda^{V}$ and keep $\lambda$ for the resulting default intensity, which we derive below.
 
+> **Math, Gently.** *Poisson processes, compound Poisson, and jump-diffusion.* Sit in a parked car in light rain and count the drops that hit a square of windshield. You are not measuring anything continuous; you are counting. Drops arrive independently, at a steady average rate, and the number that land in a minute is random. That count is a *Poisson process* $N_t$, and its rate, the average number of arrivals per unit of time, is the single number that describes it. With a rate of $\lambda^{V} = 0.5$ jumps a year, the chance of no jump in a year is $e^{-0.5} \approx 60.7\%$, of exactly one is $0.5\,e^{-0.5} \approx 30.3\%$, and of exactly two is $\tfrac{0.5^2}{2}e^{-0.5} \approx 7.6\%$; the general recipe is $e^{-\lambda T}(\lambda T)^n/n!$. Now let each drop have a random size, some big and some small: that is a *compound Poisson* process, which counts arrivals and adds up a random amount for each one. A *jump-diffusion* is the windshield in mixed weather: a steady drizzle that wets it a little all the time (the Brownian part, $\sigma_V\,dW_t$, from §5.2.3's random walk), plus occasional hailstones of random size that each make a dent (the compound Poisson part). For a firm's asset value, the drizzle is the ordinary week-to-week news and the hail is the lawsuit, the lost contract, the fraud. The full version is the equation just below and the density in *The Full Derivation* after §5.3.3.
+
 Merton's jump-diffusion for firm asset value is
 
 $$
 \frac{dV_t}{V_{t^-}} = \left(\mu - \lambda^{V} k\right)dt + \sigma_V\, dW_t + \left(e^{Y} - 1\right)dN_t,
 $$
 
-where $N_t$ is a Poisson process with rate $\lambda^{V}$, each jump multiplies $V$ by $e^{Y}$ with $Y \sim N(\mu_J, \sigma_J^2)$ i.i.d., and $k = \mathbb{E}[e^{Y} - 1] = e^{\mu_J + \sigma_J^2/2} - 1$ is the mean proportional jump, subtracted from the drift so that $\mu$ remains the total expected return. Conditional on $n$ jumps in $[0, T]$, the log-return $x = \ln(V_T/V_0)$ is Gaussian, so the unconditional density is a Poisson-weighted mixture of Gaussians:
-
-$$
-f(x) = \sum_{n=0}^{\infty} \frac{e^{-\lambda^{V} T}\left(\lambda^{V} T\right)^n}{n!}\;\phi\!\left(x;\; \left(\mu - \tfrac{1}{2}\sigma_V^2 - \lambda^{V} k\right)T + n\mu_J,\;\; \sigma_V^2 T + n\sigma_J^2\right),
-$$
-
-with $\phi(x; m, v)$ the normal density with mean $m$ and variance $v$. Read it as §5.1's mixture with infinitely many worlds: zero jumps, one jump, two jumps, each a Gaussian with its own center. For credit, the $n = 0$ and $n = 1$ terms carry nearly all the weight over horizons of a year or less, which is why the one-period mixture is a good approximation.
-
-**Implementation note for the specifier.** Truncate the sum at $n_{\max}$ where the Poisson tail mass $1 - \sum_{n \le n_{\max}} \Pr(N_T = n)$ is below $10^{-12}$, compute the Poisson weights in log space (`scipy.stats.poisson.logpmf`), and never let ROBO pick $n_{\max} = 10$ "because it looked converged" on a parameter set with $\lambda^{V}T = 30$.
+where $N_t$ is a Poisson process with rate $\lambda^{V}$, each jump multiplies $V$ by $e^{Y}$ with $Y \sim N(\mu_J, \sigma_J^2)$ i.i.d., and $k = \mathbb{E}[e^{Y} - 1] = e^{\mu_J + \sigma_J^2/2} - 1$ is the mean proportional jump, subtracted from the drift so that $\mu$ remains the total expected return. Conditional on the number of jumps, the log-return is Gaussian, so the unconditional distribution is a Poisson-weighted mixture of Gaussians: §5.1's mixture with infinitely many worlds, one for each possible count of hailstones. Over horizons of a year or less, the zero-jump and one-jump worlds carry nearly all the weight (with the box's numbers, 91% between them), which is why the one-period mixture is a good approximation. The density itself, and the truncation rule ROBO needs before it sums an infinite series, are in *The Full Derivation: the Merton density and its truncation*, after §5.3.3.
 
 ### 5.3.3 Kou (2002): double-exponential jumps, and why memorylessness is a gift
 
@@ -421,6 +415,18 @@ Now look at what one parameter does. Fatter downward jumps (smaller $\eta_2$) ra
 | 2 (50%) | 13.3% | 46.7% | 711 bp |
 
 Moving $\eta_2$ from 4 to 2 more than doubles the default intensity and costs nine points of recovery. A desk that models PD and recovery as independent, with recovery fixed at 40%, will price the 711 bp name as though it were cheap relative to the 260 bp name by a ratio that ignores half the story.
+
+#### The Full Derivation: the Merton density and its truncation
+
+Start from Merton's equation in §5.3.2. Conditional on $n$ jumps in $[0, T]$, the log-return $x = \ln(V_T/V_0)$ is Gaussian, so the unconditional density is a Poisson-weighted mixture of Gaussians:
+
+$$
+f(x) = \sum_{n=0}^{\infty} \frac{e^{-\lambda^{V} T}\left(\lambda^{V} T\right)^n}{n!}\;\phi\!\left(x;\; \left(\mu - \tfrac{1}{2}\sigma_V^2 - \lambda^{V} k\right)T + n\mu_J,\;\; \sigma_V^2 T + n\sigma_J^2\right),
+$$
+
+with $\phi(x; m, v)$ the normal density with mean $m$ and variance $v$. Read it as §5.1's mixture with infinitely many worlds: zero jumps, one jump, two jumps, each a Gaussian with its own center. For credit, the $n = 0$ and $n = 1$ terms carry nearly all the weight over horizons of a year or less, which is why the one-period mixture is a good approximation.
+
+**Implementation note for the specifier.** Truncate the sum at $n_{\max}$ where the Poisson tail mass $1 - \sum_{n \le n_{\max}} \Pr(N_T = n)$ is below $10^{-12}$, compute the Poisson weights in log space (`scipy.stats.poisson.logpmf`), and never let ROBO pick $n_{\max} = 10$ "because it looked converged" on a parameter set with $\lambda^{V}T = 30$.
 
 ### 5.3.4 What the jump model is for on a desk, and what it is not
 

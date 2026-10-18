@@ -188,6 +188,8 @@ With $q = \tfrac12$ and $\Delta = 2\sigma_V$ this collapses to (3.1). The small-
 
 ### 3.2.2 Making $\pi$ a function of the RFQ
 
+> **Math, Gently.** *Odds, log-odds, and why likelihood ratios multiply.* A probability of 0.1 can also be written as *odds* of 1 to 9: one chance for, nine against. Odds are the detective's currency. She opens a case with a prior, say 1:9 that the butler did it, and every clue arrives with a *likelihood ratio*: how much more likely she would be to find this clue if the butler did it than if he did not. Mud on the butler's boots is three times as likely if he was in the garden that night, so it carries a likelihood ratio of 3, and the odds become 3:9. A second, independent clue with the same ratio (his alibi witness turns out to be his brother) makes them 9:9, even money. In probability terms the butler went from 0.1 to 0.5 on two modest clues. Clues multiply because each one asks the same question of the evidence, "how much more likely under guilt than under innocence?", and independent answers compound. Multiplying is awkward, so take logarithms, and multiplication becomes addition: the *log-odds* is a running score to which each clue adds its own weight, $\ln 3 \approx 1.1$ per clue here. That is all a logistic regression is, a score that adds up weighted clues, $\beta_0 + \beta^\top x$, and then converts the total from log-odds back into a probability. The warning label is the word *independent*. If the mud and the brother are both explained by one fact (the butler walked his brother home through the garden), the detective has counted one clue twice. The full version is the equation below.
+
 A constant $\pi$ is a teaching device. In practice the probability that the sender is informed is a function of what the dealer can observe about the request. Let $x$ be the RFQ's feature vector and write the posterior as a logistic model, or equivalently, under conditional independence of the features, as naive Bayes in odds form:
 
 $$
@@ -195,15 +197,23 @@ $$
 \frac{\pi(x)}{1 - \pi(x)} = \frac{\pi_0}{1 - \pi_0}\prod_{k} \text{LR}_k(x_k) .
 $$
 
-The features that belong in $x$, and the reason for each:
+The features that belong in $x$ are easiest to meet the way Theo met them. After the close on Friday, Ines pulls the Brambleworth ticket back up and walks him through it one field at a time, the way she would replay a hand.
 
-- **Size relative to average daily volume**, $\log(Q/\text{ADV})$. Easley and O'Hara (1987) showed that informed traders prefer size, so size is a signal. The empirical corporate-bond evidence of a "size penalty" within client (Pintér, Wang and Zou, Bank of England Staff Working Paper 970, 2022) points the same way.
-- **Time to the next scheduled event and time since the last filing**: hours to earnings, a lender call, a coupon date, a grace-period expiry; days since the last 8-K. Informed bond trading concentrates before earnings announcements (Wei and Zhou, 2016).
-- **Counterparty type**: dealer, systematic fund, distressed fund, CLO manager, ETF authorized participant, retail aggregator. Di Maggio, Kermani and Song (2017) show trading relationships price liquidity differently in stress.
-- **Number of dealers in competition**, $n$, which the client chooses and which is therefore itself a signal (below).
-- **The sender's trailing, shrunken markout score**, built in §3.3.
-- **Axe alignment**: is the RFQ *against* the dealer's published axe? A client selling into your advertised bid is ordinary; a client selling when you have advertised an offer is asking you to take the other side of your own view.
-- **The issuer's Priming Risk Score**, $\text{PRS} \in [0,1]$ (Chapter 13), which says how exposed this tranche is to being left behind in a liability management transaction.
+"Start with size. Fifteen million against what?" Theo did not know Brambleworth's average daily volume at 2:58; he looked it up at 3:05, which is the wrong order. The feature is **size relative to average daily volume**, $\log(Q/\text{ADV})$, and the reason it belongs is old. Easley and O'Hara (1987) showed that informed traders prefer size: if you know something, you want to trade as much of it as you can before the price catches up. The corporate-bond evidence points the same way, with a "size penalty" within client (Pintér, Wang and Zou, Bank of England Staff Working Paper 970, 2022): the same client gets worse prices on its larger trades, as if dealers had learned what size tends to mean.
+
+"Then the clock." Two hours to the close on a Friday, a lender call on Monday at nine. The features here are **time to the next scheduled event and time since the last filing**: hours to earnings, a lender call, a coupon date or a grace-period expiry, and days since the last 8-K. Informed bond trading concentrates before earnings announcements (Wei and Zhou, 2016), and the hours before a lender call are the private-information version of the same calendar. "Somebody selling at two fifty-eight on the Friday before a lender call," Ines says, "is either very disorganized or very organized. Price it as both."
+
+"Counterparty." The field said "Client," which on this platform meant an anonymous request. That is a value of the feature, not a missing one. On a disclosed request the **counterparty type** would have been readable (dealer, systematic fund, distressed fund, CLO manager, ETF authorized participant, retail aggregator), and each has its own reasons to sell. Di Maggio, Kermani and Song (2017) show that trading relationships price liquidity differently in stress, so the same request from a long-standing counterparty and from a stranger are not the same request. A disclosed sell from a distressed-fund account on that Friday would have been the loudest clue on the ticket. Anonymity is quieter, but it is not silent.
+
+"Eight dealers." The **number of dealers in competition**, $n$, is chosen by the client, and anything the client chooses is itself a signal. A client who wants eight desks to see a sell request is saying something different from one who asks the two dealers it trusts (more on this below).
+
+"Who is it, historically?" **The sender's trailing, shrunken markout score**, built in §3.3, records how the bonds this sender sold behaved after it sold them. For an anonymous account with no history on the desk, the score shrinks all the way back to the population average, which is the honest way to write "I don't know."
+
+"Axe?" Theo had none. **Axe alignment** asks whether the RFQ runs *against* the dealer's published axe. A client selling into your advertised bid is ordinary: you asked for the bonds and someone sent them. A client selling when you have advertised an offer is asking you to take the other side of your own view. No axe leaves the feature neutral, which is less comforting than it sounds, because it means nothing on the ticket was your idea.
+
+"And the documents." The last feature is **the issuer's Priming Risk Score**, $\text{PRS} \in [0,1]$ (Chapter 13), which measures how exposed this tranche is to being left behind in a liability management transaction. Nobody on the desk had scored Brambleworth. "You read the Permitted Investments definition as far as clause (q)," Ines says. "That's half a PRS. Next time, finish it on a Tuesday."
+
+Seven fields, seven clues, and the logistic model adds up their weights in log-odds, exactly as the detective did.
 
 Each $\text{LR}_k$ is estimated from the desk's own labeled history. The natural label is the sign of the realized 20-day IDO markout, defined in §3.3. Under the symmetric model the link between the two is exact: a filled sell RFQ is followed by a down-move with probability $(1 + \pi)/2$, so a model for the probability of an adverse markout, $\hat{p}_{\text{adv}}(x)$, implies $\hat\pi(x) = 2\hat{p}_{\text{adv}}(x) - 1$, clipped to $[0, 1]$.
 

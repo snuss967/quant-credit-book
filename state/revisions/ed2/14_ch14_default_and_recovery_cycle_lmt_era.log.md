@@ -1,0 +1,25 @@
+# Progress Log, Edition 2 (U2): Chapter 14
+
+- [ ] 1. [Cold open] EXPAND-SCENE (Quillfeather, Serta comp, ~1,200 words)
+- [ ] 2. [14.1 opening] BRIDGE + MATH-GENTLY (rate vs. hazard, exponential)
+- [ ] 3. [14.1 Trend Watch] LIST-TO-NARRATIVE (CLO manager's chair lead-in)
+- [ ] 4. [14.1 after Moyer] SHOP-LIFE vignette (three default_flag columns)
+- [ ] 5. [14.2 opening] MATH-GENTLY (competing risks, CIF) + Full Derivation move
+- [ ] 6. [14.2.2] LIST-TO-NARRATIVE + MATH-GENTLY (estimators)
+- [ ] 7. [14.3 opening] WHEN-TO-APPLY (competing risks)
+- [ ] 8. [14.3.2] MATH-GENTLY (censoring, Weibull, cure) + Full Derivation
+- [ ] 9. [14.3.2 hazard regression] MATH-GENTLY (logit) + EXPAND-SCENE (runway, Mitel)
+- [ ] 10. [14.3 Trend Watch] BRIDGE (five p's; LME Doomscrolling; Incora dates)
+- [ ] 11. [14.4.1] MATH-GENTLY (Beta, mixtures, total variance)
+- [ ] 12. [14.4.2] LIST-TO-NARRATIVE + ANOTHER-SEAT (direct lender, ARCC Pluralsight)
+- [ ] 13. [14.5] NEW-SCENE (Lumen, 2,500-3,500 words)
+- [ ] 14. [14.5.1] MATH-GENTLY (binomial tail) + Full Derivation
+- [ ] 15. [14.5 Trend Watch] EXPAND-SCENE (Optimum) + ANOTHER-SEAT (CLO; opportunistic)
+- [ ] 16. [14.6 Docket Diary] EXPAND-SCENE (Robertshaw) + WHEN-TO-APPLY
+- [ ] 17. [14.6.1] BRIDGE + FULL-DERIVATION-MOVE (Lions Gate caution)
+- [ ] 18. [14.7.1] MATH-GENTLY (HMM, Bayes) + SHOP-LIFE beat
+- [ ] 19. [14.7.2] MATH-GENTLY (P vs Q) + WHEN-TO-APPLY
+- [ ] 20. [14.8.1 Serta] NEW-SCENE (3,000-4,000 words, three acts)
+- [ ] 21. [14.8.2 Mitel, 14.8.3 Del Monte] EXPAND-SCENE (~800 words each)
+- [ ] 22. [14.9 Five signals] LIST-TO-NARRATIVE + ANOTHER-SEAT (dealer desk)
+- [ ] 23. [Exercises, Resource Graph] BRIDGE (pointers; dated episodes)

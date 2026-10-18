@@ -9,7 +9,7 @@
 - [x] 7. [5.2.3 Spread: right-skewed] MATH-GENTLY (normal vs lognormal, random walk, Ito) -- drunk random walk, lognormal, Jensen and Ito correction box.
 - [x] 8. [5.2.4 Return: sign-flipping in distress] BRIDGE to the cold open -- Carvana payoff: q above half, stack 53.8 to 84.7.
 - [x] 9. [5.2.4 Ways This Blows Up: stale-price smoother] SHOP-LIFE vignette -- Hana TRACE vignette, SR 11-7 review, ends with ticket.
-- [ ] 10. [5.3.2 Merton (1976)] MATH-GENTLY + FULL-DERIVATION-MOVE
+- [x] 10. [5.3.2 Merton (1976)] MATH-GENTLY + FULL-DERIVATION-MOVE -- raindrop Poisson box; density and truncation moved after 5.3.3.
 - [ ] 11. [5.3.3 Kou (2002)] MATH-GENTLY + EXPAND-SCENE (short)
 - [ ] 12. [5.3.4 What the jump model is for] WHEN-TO-APPLY + LIST-TO-NARRATIVE
 - [ ] 13. [5.4 Levy processes] MATH-GENTLY + FULL-DERIVATION-MOVE + WHEN-TO-APPLY
