@@ -203,7 +203,7 @@ def fig_rollup_transfer():
     for xm, name, (tx, ty) in spots:
         yv = (Wv - xm) / (F - xm) * 100
         axr.plot([xm], [yv], "o", color=BLUE, markersize=5.5, zorder=5)
-        axr.annotate(f"{name}:\n{yv:.1f}% ({yv - base:+.1f} pts)".replace("-", "−"), (xm, yv), xytext=(tx, ty),
+        axr.annotate(f"{name}:\n{yv:.1f}% ({yv - base:+.1f} pts)".replace("(-", "(−"), (xm, yv), xytext=(tx, ty),
                      textcoords="data", ha="left", va="center", fontsize=8, color=INK,
                      arrowprops=dict(arrowstyle="-", color=INK_2, lw=0.7, shrinkA=2, shrinkB=3))
     axr.axvline(Wv, color=INK_2, linewidth=0.9, linestyle=(0, (3, 3)))
@@ -285,7 +285,7 @@ def fig_recovery_distributions():
                  textcoords="offset points", ha="left", va="center", fontsize=8, color=INK_2)
     axb.annotate("tail: almost all\ncommittee's expert", (22, 0.30), xycoords=("data", "axes fraction"),
                  ha="left", va="center", fontsize=8, color=INK_2)
-    axb.text(0.99, 0.55, "37 bins, equal in log recovery", transform=axb.transAxes, ha="right", va="center",
+    axb.text(0.99, 0.97, "37 bins, equal in\nlog recovery", transform=axb.transAxes, ha="right", va="top",
              fontsize=8, color=MUTED)
     return finish(fig, "ch12c_recovery_distributions")
 

@@ -239,6 +239,13 @@
      "resgraph"
     ]
    }
+  },
+  {
+   "name": "research-tsmom",
+   "task": "wbvxf1354",
+   "runId": "wf_845cc0c4-eec",
+   "scriptPath": "/root/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/research-resilient-wf_bd451f4f-5fb.js",
+   "args": "one item: trend_following_tsmom_credit (finish PARTIAL; feeds Ch 10; includes momentum as an RV overlay)"
   }
  ]
 }

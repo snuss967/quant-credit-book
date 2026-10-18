@@ -24,3 +24,6 @@
 ## Sources
 
 ## Book placement
+
+
+> **SUPERSEDED (2026-10-18).** This partial Edition 1 dossier is replaced by trend_part_v_market_structure_2026. Kept for history; do not resume it.

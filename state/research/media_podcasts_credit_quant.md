@@ -522,3 +522,6 @@ The board-flip, co-op and DQ-list episodes show fulcrum holders acting *before* 
    - HarbourVest's PC-secondaries run-rate above $50B (May 2026).
    - Davidson Kempner's $770B (Apr 2026); Magnetar's $600B (Sep 2026).
    - Man's 86× token-spend growth (Jul 2026); Fridson's 1,000bp call (May 2025).
+
+
+> **SUPERSEDED (2026-10-18).** This partial Edition 1 dossier is replaced by media_episodes_posts_parts_I_II / _III_IV / _V_VIII. Kept for history; do not resume it.
