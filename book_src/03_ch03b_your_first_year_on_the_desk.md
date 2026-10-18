@@ -361,8 +361,15 @@ Mags, passing again: "Back in my day we'd have found it at bonus time." A pause.
 - *Capital Allocators*, "Jonathan Lewinsohn – Credit Microcycles at Diameter (EP.484)" (2 February 2026): the discretionary view of credit's calendar. https://www.capitalallocators.com/podcast/credit-microcycles-at-diameter/
 - *Cloud 9fin*, "LME Doomscrolling — Just because you can, doesn't mean you should" (31 August 2026), with Bill Derrough: a restructuring banker's view of the contract clocks of §3B.4. https://share.transistor.fm/s/6a6999bb
 - *Signals and Threads*, Ep. 20, with Liora Friedberg (7 October 2024): production support rotas and alert hygiene, the boring half of §3B.2. https://signalsandthreads.com/solving-puzzles-in-production/
+- **Why the True Price of a Bond Can Still Be Hard To Know** (*Odd Lots*, with Maciej Kowara and Eric Jacobson of Morningstar, 5 April 2021). Evaluated prices for thinly traded bonds can disagree, which is why the vendor composite of mistake 1 and the 6:45 price file are priors, not prices. https://omny.fm/shows/odd-lots/why-the-true-price-of-a-bond-can-still-be-hard-to
+- **How to Forecast the Future** (*Odd Lots*, with Philip Tetlock, 26 August 2019). A non-technical introduction to judging forecasts and scoring them, the spirit behind the calibration and Brier score of §3B.7. https://omny.fm/shows/odd-lots/how-to-forecast-the-future
+- **Petter Kolm - 23/08/21** (*Risk.net Quantcast*, 25 August 2021). Transaction-cost analysis that ignores partial fills "might be off by 20% to 30%": the selection-bias cousin of the Friday markouts in §3B.2, where only fills have markouts. https://soundcloud.com/user-393208363/petter-kolm-230821
+- **EP 21 | How Bankruptcy Really Works: Inside the System with Josh Sussberg** (*The Octus Download*, 10 December 2025). A Kirkland & Ellis restructuring lawyer on how the 2005 Code amendments compressed timelines and pushed negotiation outside court: timing priors for the contract clocks of §3B.4. https://share.transistor.fm/s/81750469
 
 **Practitioner Writing**
+
+- **Seven Habits of Highly Ineffective Quants** (CXO Advisory Group, summarizing Marcos López de Prado's September 2017 talk, 21 September 2017). Path-aware testing, purged splits and a deflated Sharpe ratio: the case against mistake 8's retune in a drawdown. https://www.cxoadvisory.com/big-ideas/seven-habits-of-highly-ineffective-quants/
+- **Risk Revisited Again** (Howard Marks, Oaktree client memo, 8 June 2015). Risk as the possibility of permanent loss, with a probability "no more measurable than the probability of rain": the practitioner's footing for mistake 7 and the calibration of §3B.7. https://www.oaktreecapital.com/docs/default-source/memos/2015-06-08-risk-revisited-again.pdf
 
 - U.S. Senate Permanent Subcommittee on Investigations, *JPMorgan Chase Whale Trades: A Case History of Derivatives Risks and Abuses* (15 March 2013): marks and price testing. https://www.hsgac.senate.gov/wp-content/uploads/imo/media/doc/REPORT%20-%20JPMorgan%20Chase%20Whale%20Trades%20(3-15-13).pdf
 - Board of Governors of the Federal Reserve System and OCC, *Supervisory Guidance on Model Risk Management* (SR 11-7, 4 April 2011): the rules behind §3B.9's model review. https://www.federalreserve.gov/boarddocs/srletters/2011/sr1107a1.pdf
@@ -380,7 +387,7 @@ Mags, passing again: "Back in my day we'd have found it at bonus time." A pause.
 
 **Data & Code**
 
-- SIFMA holiday and early-close recommendations (canonical root): https://www.sifma.org/
+- SIFMA, **Holiday Schedule** (recommended U.S. bond market holiday dates; it lists Monday, 12 October 2026): the bond holiday table behind `desk_calendar.py`, and the page ROBO should have read before flagging Columbus Day as a credit event. https://www.sifma.org/resources/general/holiday-schedule/
 - SEC EDGAR full-text search, for cleansing 8-Ks filed under Item 7.01: https://www.sec.gov/edgar/search/
 - `desk_calendar.py`, this chapter's listing in Appendix F, and its neighbours `restructuring_state_machine.py` (Chapter 12-B) and `pnl_explain.py` (Chapter 8-C).
 
