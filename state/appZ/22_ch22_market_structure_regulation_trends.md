@@ -82,7 +82,7 @@ Convergence is fast because the only thing separating $\phi(N)$ from the floor i
 
 **Answer:** 2025-12-31 is the stale date. The December 2023 adopting release set it, and on 2025-02-25 the SEC moved cash compliance to 2026-12-31 and repo to 2027-06-30. Nothing became mandatory on 2025-12-31, so Kaz would be measuring a year-end and crediting it to a rule. Turned around, that same date is the best placebo the study has. The design:
 
-- **Event** $t_0 = $ 2026-12-31, a Thursday that is also year-end, a G-SIB measurement snapshot, and the eve of a market holiday.
+- **Event** $t_0$ = 2026-12-31, a Thursday that is also year-end, a G-SIB measurement snapshot, and the eve of a market holiday.
 - **Treated** are Treasury flows the mandate newly pulls into clearing: cash trades on interdealer-broker platforms, and trades between clearing members and non-member broker-dealers or government securities dealers that used to settle bilaterally. For the credit desk, that means its own Treasury hedges with in-scope counterparties.
 - **Controls** are flows that do not change on the date: trades already cleared member-to-member at FICC, and exempt ones (central banks, sovereigns, international financial institutions, natural persons, inter-affiliate).
 - **Placebos** are 2025-12-31 (the same calendar position and the same photograph, with no rule) and 2024-12-31, plus one or two mid-quarter fake dates whose post-windows end well before Q4 2026.
@@ -94,3 +94,19 @@ Convergence is fast because the only thing separating $\phi(N)$ from the floor i
 
 **If you got this wrong, read:** §22.8.1 (placebo dates and the affiliate-indicator run), §22.4 (the rule and its Trend Watch: "give each one a placebo twin"), and the fourth envelope of §22.2.3.
 
+**Z.22.6: ROBO maximizes transparency**
+
+**Answer:** With $\Delta = 0$ and $C = \infty$, every principal block pays the full leak on its full true size: $s_B^\ast/2 = \lambda Q + \gamma\sigma^2 Q T_u/6$. On the worked example, a \$15mm block unwound over two hours goes from 7.34bp today (15 minutes, priced as the pooled \$12.5mm) to 9.38bp, up 28%. A \$25mm block goes from 8.59bp to 15.63bp, up 82%. A \$15mm block unwound in fifteen minutes goes from 0.23bp to 7.73bp. A \$1mm ticket barely moves, from 0.56bp to 0.63bp.
+
+- **What survives:** small tickets; agency crosses; riskless-principal trades whose other side is done before the print; and trades the market reads as uninformative (small $\lambda$).
+- **What dies:** principal risk transfer of blocks worked over an hour or two, which are exactly the trades the delay and the cap were protecting.
+- **Where the rest goes:** portfolio trades (Chapter 19), where a basket price, flagged by the PT modifier, dilutes any one bond's signal; ETF creation and redemption (Chapter 20), where size moves in kind in the primary market and the price risk trades as a fund share; and agency and all-to-all protocols that match without warehousing.
+- **The result that should worry ROBO's sponsor:** Asquith, Covert and Pathak found that transparency cut costs (high-yield costs down 22.9%, about \$600mm a year in savings), but that "trading activity does not increase and, by one measure, decreases." By that measure, high-yield activity fell 71.1%. Maximum transparency lowers the price of liquidity and shrinks the quantity on offer.
+
+**How:** Put $\Delta = 0$ into (22.6). The positive part $(1 - 0/T_u)^+ = 1$ for every $T_u > 0$, so the dealer is fully exposed when the print appears. Only a trade with no inventory at execution ($T_u = 0$) escapes. With $C = \infty$, the inferred size is the true $Q$, so the pooling subsidy of (22.7) disappears for every block above \$12.5mm. Both terms are now linear in $Q$, so total cost grows like $Q^2$. That pushes size into protocols where nobody warehouses it or where the print says less. One honest caveat: (22.6) holds $\lambda$ fixed. Asquith, Covert and Pathak's cost result is the evidence that transparency lowers the average price too. Their volume result is the evidence that the block dealer's side of (22.6) is real.
+
+**The trap:** The usual answer is "more information means less asymmetry, so spreads fall everywhere." That is true of the average ticket, and the average ticket is a \$1mm trade the auto-quoter crosses riskless. In (22.6) the delay and the cap are subsidies to the block dealer. Removing them raises the price of the trades a principal dealer exists to do, and the volume moves elsewhere or does not happen.
+
+**If you got this wrong, read:** §22.2.1 (the delay as an option), §22.2.2 (pooling), and the Asquith, Covert and Pathak paragraph that opens §22.2; then Chapters 19 and 20 for the protocols.
+
+<!-- STATUS: COMPLETE -->

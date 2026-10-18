@@ -72,3 +72,33 @@ With $\kappa = 0.4$, ADV $= 0.5$ and $\theta = 1/20$: the dent is 5.12 on day 0 
 
 **If you got this wrong, read:** §1.8.1 (eqs. 1.6–1.7 and the half-life gloss), then Act 4 of §1.8.2 and "What happened, and the answer"; Listing 1.3 for the `run` you are extending.
 
+**Z.01.5: ROBO literalism**
+
+**Answer:** The vague spec: *"Using the RFQ history table, fit the toxicity model that best explains the desk's five-day markouts."* ROBO does exactly that. It uses every column, including the post-trade composite mid and the corrected prints that already contain the markout, adds issuer and date dummies until the in-sample fit is perfect, and reports a model that has memorised which names blew up in which weeks. The two clauses that prevent it:
+
+1. *Validation.* "Report only out-of-fold performance, with folds grouped by ultimate parent (no parent on both sides) and split in time, purging every training RFQ whose label window overlaps the test span and embargoing for the longest feature lookback; nest all tuning inside the training folds." (Chapter 7, §7.7.)
+2. *The label window.* "The label is the markout from the RFQ timestamp $t$ to $t + 5$ trading days, fixed before fitting; every feature must be computable from data as known at its arrival time strictly before $t$, so no column populated or corrected inside $(t, t+5]$ may enter the features, and the label horizon may not be tuned on the test folds."
+
+**How:** Find the two ways a toxicity model can see the answer. The first is *across rows*. RFQs in one name in one week share one jump: Halvorsen's Friday RFQs all mark out at about $-13$. A shuffled fold therefore puts siblings of the test RFQ in training, and an issuer dummy "predicts" them perfectly. Grouping by parent closes that door, and the time split, purge and embargo close the market-wide version of it. The second is *within a row*. If any feature is measured after $t$, or the label window starts before the features stop, the label leaks into the inputs. Pinning the label to $[t, t+h]$ and the features to as-of data before $t$ closes it. That is the Quant-Shop Life lesson in §1.3.3: keep every print with the time it arrived.
+
+**The trap:** "Use cross-validation" as the fix. Ordinary shuffled K-fold is the leak, not the cure: it passes the memorising model with flying colours, because every test fold contains the same events as training. A related trap is writing the label as "the markout" with no window. ROBO then picks whichever horizon fits best, which is one more parameter tuned on the answer.
+
+**If you got this wrong, read:** §1.3.3 (the Quant-Shop Life box and "What ROBO built from the vague version"), then §7.4 (labels with recorded intervals) and §7.7 (purged, embargoed, issuer-grouped cross-validation).
+
+**Z.01.6: Courtroom quant**
+
+**Answer:** Define $x_{\text{NPR}} = 1$ if the credit agreement's pro rata sharing clause carves out borrower purchases with no "open market" qualifier and no requirement that the offer be open to all lenders (Mitel's bare "purchase"), and $x_{\text{NPR}} = 0$ otherwise. It belongs in **both**, but in different roles. In $J$ it is a main effect, because the document sets how far left-behind paper can fall once a majority deal is done. Serta's remand numbers price that fall at about 29 points of par: \$261.13mm of damages on \$895mm of excluded loans, on top of the 25 cents those lenders kept. In $\pi$ it enters only through the prior and as an interaction. It raises the base rate $\mu$ of informed selling, and it scales up the likelihood ratios of sender features such as lender-group membership and minutes since the call. It never enters as a standalone sender likelihood ratio, because a public document is identical for every seller and cannot tell you who is selling.
+
+**How:** Split the bid's third term the way §1.3.3 does. $J$ is about the *bond*: what the informed seller knows the price is going to. A document that lets a bare majority prime the minority widens the distribution of $J$ and raises the chance that a jump is coming at all. $\pi$ is about the *sender*. The document makes information more valuable, so more of the people who hold it will be selling, which is why it moves $\mu$. It also makes "was on the call" a bigger tell, which is the interaction:
+
+$$
+\operatorname{logit}\pi = \operatorname{logit}\mu(x_{\text{NPR}}) + \theta_1 g + \theta_2\,g\,x_{\text{NPR}} + \dots,
+$$
+
+with $g$ the lender-group indicator. Mags's two June 2020 sellers share the same document and should still get bids several points apart; only the sender terms can do that. One more caution: the public, probability-weighted part of the document risk is already in $S_t$. Counting it a third time, as a sender feature, is the double-conditioning the spec forbids. As a scale for the stakes, the 9% New York prejudgment interest (simple) adds about \$142mm to the \$261.13mm over the six years to July 2026, about \$403mm in all.
+
+**The trap:** Treating $x_{\text{NPR}}$ as a sender feature, "toxic document, toxic seller". That charges the CLO the same as the lender-group regular, which is the mistake the decision point in §1.9.1 exists to prevent. The subtler trap is believing the binary feature would have caught Serta. It would have scored Serta 0: Serta's agreement *had* an open-market qualifier, merely an undefined one, and the uptier closed anyway, was upheld in 2023 and was reversed only on 31 December 2024. Mitel, scored 1, was upheld, and Wesco's multistep route was blessed in 2025. The feature's coefficient is a function of the court and the date. Ship it with a "qualifier present but undefined" level and a ruling-regime interaction, or it will be confidently wrong about the one case it is named after.
+
+**If you got this wrong, read:** §1.9.1 (the Docket Diary, the two-sellers decision point and the 2023–2026 coda) and §1.3.3 on what $\pi$ and $J$ each condition on. Chapter 13 builds the Priming Risk Score, and Chapter 25 scrapes the clauses.
+
+<!-- STATUS: COMPLETE -->
