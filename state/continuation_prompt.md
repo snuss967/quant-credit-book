@@ -129,4 +129,14 @@ Acceptance: every chapter's Python runs clean; `state/reviews/ed2/code_ledger.md
 2. `SYSTEM_PROMPT.md` §3 and `book_state.json["toc"]` list every new file; `CHANGELOG.md` has the Edition 2 entry filled in; the build passes; one tagged commit "Ship Edition 2".
 3. Edition 3 planning inputs exist: `state/reviews/ed2/*`, updated `state/exploratory_space.md`, writer returns consolidated.
 
+
+## Resume Checklist (paused 2026-10-18 01:30 UTC at ~92% usage; resume after the 04:30 UTC reset)
+
+Run `python3 tools/status.py` first. Workflow scripts live in ~/.claude/projects/-home-user-quant-credit-book/6416563a-50d0-5129-a66c-5b16ba7386c8/workflows/scripts/.
+1. **Synthesis and new chapters.** The three reader-lens reviews are COMPLETE in state/reviews/ed2/. Resume the reader-lens workflow so the cached reviews replay and the Fable synthesis runs live, followed by the 4 Opus writers: `Workflow({scriptPath: ".../ed2-reader-lens-reviews-wf_aa7ed3ed-60e.js", resumeFromRunId: "wf_aa7ed3ed-60e"})`.
+2. **Finish the primers.** 04_ch04b, 07_ch07b and 12_ch12b are PARTIAL. Run `ed2-wp2-primers-wf_a9d1dfae-4df.js` with those three stems. Writers resume and append; they never rewrite.
+3. **Research, on Sonnet with no Fable mapper.** Run `research-resilient-wf_bd451f4f-5fb.js` with `model: "sonnet"` and `no_map: true` for the PARTIAL or MISSING slugs in state/research_queue_ed2.json: case_lmt_private_and_european_2024_2026, case_courts_as_regime_variables, trend_re_default_and_recovery_dataset, trend_private_credit_marks_and_redemptions_2025_2026, trend_listed_credit_futures_and_index_microstructure, trend_part_v_market_structure_2026, case_carvana_svb_wolfspeed_capital_structure, case_manufactured_credit_events, trend_insurance_capital_forced_flow, trend_figure_data_series.
+4. **Then WP3 onward**, in this file's package order: canonical homes, the WP4 new chapters from the synthesis, WP5 figures, WP6 tightening, and WP7 code last.
+5. **Pacing.** Recalibrate the meter once the user gives a reading (`tools/usage_meter.py --window-start 2026-10-18T04:30:00+00:00 --calibrate PCT AT`). Run `pace_guard.py --target 97 --cap-only`. Fable handles judgment only; bulk research goes to Sonnet; Opus writers stay lean.
+
 <!-- STATUS: COMPLETE -->

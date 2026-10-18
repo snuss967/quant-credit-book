@@ -91,3 +91,12 @@ Edition 1 shipped at commit 8dffb93 (474k words, 1,212 pages). The Edition 2 pla
 | ed2-wp2-primers-2 | WP2 | Opus | 06_ch06b options and measures; 07_ch07b statistics | running |
 | ed2-wp2-appendices | WP2 | Opus | 94_appE Laws of the Desk; 93_appD plumbing | running |
 | ed2-reader-lens-reviews | review + WP4 | Fable ×3 → Fable synthesis → Opus ×2 lanes | Reviews as an RSSG partner, a desk head, and a transition coach → master gap list, TOC growth, briefs for the top 4 new files → write them | running |
+
+## Pause (2026-10-18 01:30 UTC, NEAR_CAP at ~92%)
+
+All workflows were stopped to protect the user's 97% cap. On disk at the pause:
+- COMPLETE: 06_ch06b, App D, App E, the three reader-lens reviews, and 5 research dossiers.
+- PARTIAL: 04_ch04b, 07_ch07b, 12_ch12b, and 4 dossiers.
+- MISSING: the synthesis and 6 dossiers.
+
+The resume checklist is in state/continuation_prompt.md, and a resume is scheduled for 04:35 UTC.
